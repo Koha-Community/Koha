@@ -427,7 +427,12 @@ if ($op eq "addbiblio") {
 		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
 		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
 		oldbiblioitemnumber         => $oldbiblioitemnumber );
+} elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
+	&NEWdelbiblio($dbh,$bibid);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=/cgi-bin/koha/search.marc/search.pl?type=intranet\"></html>";
+	exit;
+#------------------------------------------------------------------------------------------------------------------------------#------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
 	build_tabs ($template, $record, $dbh,$encoding);

@@ -9,6 +9,7 @@
 			<table width="100%" border=0 cellpadding=0 cellspacing=0>
 				<tr>
 					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png"></td>
+					<td width=8%><a href="javascript:confirm_deletion()"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png"></td>
 					<td width=8%><a href="detail.pl?bib=<TMPL_VAR name="biblionumber">">Normal</a></td>
 					<td align="center"><b>MARC biblio : <TMPL_VAR name="bibid"></b></td>
 				</tr>
@@ -245,6 +246,12 @@ for (i=0; i <= 10 ; i++ ) {
 	document.getElementById(link).style.backgroundImage="";
 }
 }
+}
+function confirm_deletion() {
+	var is_confirmed = confirm('Confirmez vous la suppression ?');
+	if (is_confirmed) {
+		window.location="acqui.simple/addbiblio.pl?op=delete&oldbiblionumber=<TMPL_VAR name="bibid">";
+	}
 }
 </script>
 </body>

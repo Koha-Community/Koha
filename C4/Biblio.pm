@@ -1,6 +1,13 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.68  2003/11/06 17:18:30  tipaul
+# bugfix for #384
+#
+# 1st draft for MARC biblio deletion.
+# Still does not work well, but at least, Biblio.pm compiles & it should'nt break too many things
+# (Note the trash in the MARCdetail, but don't use it, please :-) )
+#
 # Revision 1.67  2003/10/25 08:46:27  tipaul
 # minor fixes for bilbio deletion (still buggy)
 #
@@ -332,7 +339,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 #
-# don't forget MARCxxx subs are here only for testing purposes. Should not be used
+# don't forget MARCxxx subs are exported only for testing purposes. Should not be used
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT = qw(
@@ -357,6 +364,7 @@ $VERSION = 0.01;
 
 		&NEWnewbiblio &NEWnewitem
 		&NEWmodbiblio &NEWmoditem
+		&NEWdelbiblio
 
 	     &MARCaddbiblio &MARCadditem
 	     &MARCmodsubfield &MARCaddsubfield
@@ -818,6 +826,15 @@ sub MARCdelbiblio {
 # This flag is set when the delbiblio is called by modbiblio
 # due to a too complex structure of MARC (repeatable fields and subfields),
 # the best solution for a modif is to delete / recreate the record.
+
+# 1st of all, copy the MARC::Record to deletedbiblio table => if a true deletion, MARC data will be kept.
+# if deletion called before MARCmodbiblio => won't do anything, as the oldbiblionumber doesn't
+# exist in deletedbiblio table
+	my $record = MARCgetbiblio($dbh,$bibid);
+	my $oldbiblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	my $copy2deleted=$dbh->prepare("update deletedbiblio set marc=? where biblionumber=?");
+	$copy2deleted->execute($record->as_usmarc(),$oldbiblionumber);
+# now, delete in MARC tables.
 	if ($keep_items eq 1) {
 	#search item field code
 		my $sth = $dbh->prepare("select tagfield from marc_subfield_structure where kohafield like 'items.%'");
@@ -1346,6 +1363,18 @@ sub NEWmodbiblio {
 	return 1;
 }
 
+sub NEWdelbiblio {
+	my ($dbh,$bibid)=@_;
+	my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&OLDdelbiblio($dbh,$biblio);
+	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
+	$sth->execute($biblio);
+	while(my ($biblioitemnumber) = $sth->fetchrow) {
+		OLDdeletebiblioitem($dbh,$biblioitemnumber);
+ 	}
+	&MARCdelbiblio($dbh,$bibid,0);
+}
+
 
 sub NEWnewitem {
 	my ($dbh, $record,$bibid) = @_;
@@ -1456,7 +1485,7 @@ sub OLDnewbiblio {
   $query = "insert into biblio set biblionumber  = ?, title         = ?, author        = ?, copyrightdate = ?,
 									serial        = ?, seriestitle   = ?, notes         = ?, abstract      = ?";
   $sth = $dbh->prepare($query);
-  $sth->execute($bibnum,$biblio->{'title'},$biblio->{'author'},$biblio->{'copyright'},$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
+  $sth->execute($bibnum,$biblio->{'title'},$biblio->{'author'},$biblio->{'copyrightdate'},$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
 
   $sth->finish;
 #  $dbh->disconnect;
@@ -1789,20 +1818,19 @@ sub OLDdeletebiblioitem {
     my $query = "Select * from biblioitems
 where biblioitemnumber = $biblioitemnumber";
     my $sth   = $dbh->prepare($query);
-    my @results;
+    my $results;
 
     $sth->execute;
 
-    if (@results = $sth->fetchrow_array) {
-        $query = "Insert into deletedbiblioitems values (";
-        foreach my $value (@results) {
-            $value  = $dbh->quote($value);
-            $query .= "$value,";
-        } # foreach
+    if ($results = $sth->fetchrow_hashref) {
+    	$sth->finish;
+        $sth=$dbh->prepare("Insert into deletedbiblioitems (biblioitemnumber, biblionumber, volume, number, classification, itemtype,
+					isbn, issn ,dewey ,subclass ,publicationyear ,publishercode ,volumedate ,volumeddesc ,timestamp ,illus ,
+     					pages ,notes ,size ,url ,lccn ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-        $query =~ s/\,$/\)/;
-        $dbh->do($query);
-
+        $sth->execute($results->{biblioitemnumber}, $results->{biblionumber}, $results->{volume}, $results->{number}, $results->{classification}, $results->{itemtype},
+					$results->{isbn}, $results->{issn} ,$results->{dewey} ,$results->{subclass} ,$results->{publicationyear} ,$results->{publishercode} ,$results->{volumedate} ,$results->{volumeddesc} ,$results->{timestamp} ,$results->{illus} ,
+     					$results->{pages} ,$results->{notes} ,$results->{size} ,$results->{url} ,$results->{lccn} );
         $query = "Delete from biblioitems
                         where biblioitemnumber = $biblioitemnumber";
         $dbh->do($query);
@@ -1812,6 +1840,7 @@ where biblioitemnumber = $biblioitemnumber";
     $query = "Select * from items where biblioitemnumber = $biblioitemnumber";
     $sth   = $dbh->prepare($query);
     $sth->execute;
+    my @results;
     while (@results = $sth->fetchrow_array) {
 	$query = "Insert into deleteditems values (";
 	foreach my $value (@results) {
@@ -1834,12 +1863,14 @@ sub OLDdelbiblio{
   $sth->execute;
   if (my @data=$sth->fetchrow_array){
     $sth->finish;
+# FIXME => replace insert values by insert (field) values ($value)
     $query="Insert into deletedbiblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
       $query .= "'$temp',";
     }
-    $query=~ s/\,$/\)/;
+    #replacing the last , by ",?)"
+    $query=~ s/\,$/\,\?\)/;
     $sth=$dbh->prepare($query);
     $sth->execute;
     $sth->finish;
@@ -2122,11 +2153,11 @@ sub deletebiblioitem {
 
 
 sub delbiblio {
-  my ($biblio)=@_;
-  my $dbh = C4::Context->dbh;
-  &OLDdelbiblio($dbh,$biblio);
- my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblio);
- &MARCdelbiblio($dbh,$bibid,0);
+	my ($biblio)=@_;
+	my $dbh = C4::Context->dbh;
+	&OLDdelbiblio($dbh,$biblio);
+	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblio);
+	&MARCdelbiblio($dbh,$bibid,0);
 }
 
 sub getitemtypes {
