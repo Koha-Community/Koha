@@ -80,13 +80,13 @@ sub extract_attributes ($;$) {
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
 	warn "Warning: Attribute should be quoted"
-		. (defined $lc? " in line $lc": '') . ": $val_orig\n"
+		. (defined $lc? " near line $lc": '') . ": $val_orig\n"
 		if $pedantic_p
 		&& $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
     }
     if ($s =~ /\S/s) { # should never happen
 	warn "Warning: Strange attribute syntax"
-		. (defined $lc? " in line $lc": '') . ": $s\n";
+		. (defined $lc? " near line $lc": '') . ": $s\n";
     }
     return \%attr;
 }
@@ -111,7 +111,7 @@ sub next_token_internal (*) {
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
     } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
 	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
-	warn "Warning: Unescaped < in line $lc: $it\n" if $it =~ /</s;
+	warn "Warning: Unescaped < near line $lc_0: $it\n" if $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
 	for (;;) {
@@ -155,7 +155,7 @@ sub next_token_internal (*) {
 	    $syntaxerror_p = 1;
 	}
     }
-    warn "Warning: Unrecognizable token found in line $lc_0: $it\n"
+    warn "Warning: Unrecognizable token found near line $lc_0: $it\n"
 	    if $kind eq KIND_UNKNOWN;
     return defined $it? (wantarray? ($kind, $it):
 				    [$kind, $it]): undef;
@@ -169,7 +169,7 @@ sub next_token (*) {
 	if (defined $it && $it->[0] eq KIND_TAG) { # FIXME
 	    ($cdata_mode_p, $cdata_close) = (1, "</$1\\s*>")
 		    if $it->[1] =~ /^<(script|style|textarea)\b/i; #FIXME
-	    push @$it, extract_attributes($it->[1], $lc); #FIXME
+	    push @$it, extract_attributes($it->[1], $lc_0); #FIXME
 	}
     } else {
 	for (;;) {
