@@ -1,14 +1,25 @@
 #!/usr/bin/perl
 
 #
+# Modified saas@users.sf.net 12:00 01 April 2001
+# The biblioitemnumber was not correctly initialised
+# The max(barcode) value was broken - koha 'barcode' is a string value!
+# - If left blank, barcode value now defaults to max(biblionumber) 
+
+#
 # TODO
 #
 # Add info on biblioitems and items already entered as you enter new ones
 #
+# Add info on biblioitems and items already entered as you enter new ones
 
+use C4::Database;
 use CGI;
 use strict;
+use C4::Catalogue;
+use C4::Biblio;
 use C4::Output;
+use C4::Circulation::Circ2;
 
 my $input = new CGI;
 my $error   = $input->param('error');

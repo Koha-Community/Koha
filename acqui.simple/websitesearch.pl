@@ -2,7 +2,8 @@
 
 use CGI;
 use strict;
-use C4::Acquisitions;
+use C4::Catalogue;
+use C4::Biblio;
 use C4::Output;
 
 my $input    = new CGI;

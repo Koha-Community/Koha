@@ -31,7 +31,7 @@ use C4::Database;
 use CGI;
 use DBI;
 #use strict;
-use C4::Acquisitions;
+use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 my $dbh=C4Connect;
