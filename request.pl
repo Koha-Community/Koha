@@ -26,6 +26,7 @@
 use strict;
 use C4::Search;
 use C4::Output;
+use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Reserves2;
 use C4::Biblio;
@@ -189,4 +190,7 @@ $template->param(	optionloop =>\@optionloop,
 								bib => $bib,
 								title =>$dat->{title});
 # printout the page
-print $input->header(-expires=>'now'), $template->output;
+print $input->header(
+	-type => C4::Interface::CGI::Output::guesstype($template->output),
+	-expires=>'now'
+), $template->output;
