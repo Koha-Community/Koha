@@ -123,6 +123,7 @@ sub install_strhash
 		{
 			# escaping \|()[{}^$*+?.
 			%{$strhash}->{$text} =~ s/\\/\\\\/g;
+#			%{$strhash}->{$text} =~ s/\//\\\//g;
 			%{$strhash}->{$text} =~ s/\|/\\\|/g;
 			%{$strhash}->{$text} =~ s/\(/\\\(/g;
 			%{$strhash}->{$text} =~ s/\)/\\\)/g;
@@ -206,6 +207,7 @@ sub install_strhash
 						my $subst = %{$strhash}->{$text};
 						# escaping \|()[{}^$*+?.
 						$text =~ s/\\/\\\\/g;
+						$text =~ s/\//\\\//g;
 						$text =~ s/\|/\\\|/g;
 						$text =~ s/\(/\\\(/g;
 						$text =~ s/\)/\\\)/g;
@@ -218,6 +220,7 @@ sub install_strhash
 						$text =~ s/\*/\\\*/g;
 						$text =~ s/\+/\\\+/g;
 						$text =~ s/\?/\\\?/g;
+						$text =~ s/\./\\\./g;
 						$subst =~ s/^LIMITED;//g;
 						$lines =~ s/(.*)>$text/$1>$subst/g;
 						$lines =~ s/(.*) title="$text/$1 title="$subst/g;
@@ -227,6 +230,7 @@ sub install_strhash
 						my $subst = %{$strhash}->{$text};
 						# escaping \|()[{}^$*+?.
 						$text =~ s/\\/\\\\/g;
+						$text =~ s/\//\\\//g;
 						$text =~ s/\|/\\\|/g;
 						$text =~ s/\(/\\\(/g;
 						$text =~ s/\)/\\\)/g;
@@ -239,6 +243,7 @@ sub install_strhash
 						$text =~ s/\*/\\\*/g;
 						$text =~ s/\+/\\\+/g;
 						$text =~ s/\?/\\\?/g;
+						$text =~ s/\./\\\./g;
 						$lines =~ s/(\W)$text(\W)/$1$subst$2/g;
 					}
 				}
@@ -251,7 +256,12 @@ sub install_strhash
 		close($fh_in);
 		close($fh_out);
 		# check if fh_out and previous fh_out has changed or not.
-		my $diff = `diff $out_file $out_file_tmp`;
+		my $diff;
+		if(-f $out_file)  {
+			$diff = `diff $out_file $out_file_tmp`;
+		} else {
+			$diff = "write it, it's new";
+		}
 		if ($diff) {
 			print "WRITING : $out_file\n";
 			unlink $out_file;
