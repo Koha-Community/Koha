@@ -126,26 +126,29 @@ if ($findborrower) {
 if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
-#	unless ($invalidduedate) {
+	if ($issueconfirmed) {
+			warn "CONFIRMED";
+			issuebook(\%env, $borrower, $barcode, $datedue);
+	} else {
+	#	unless ($invalidduedate) {
 		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day);
 		my $noerror=1;
 		my $noquestion = 1;
 		foreach my $impossible (keys %$error) {
-			warn "Impossible : $impossible : ";#.%$error->{$impossible};
-			$template->param($impossible => 1,
+			$template->param($impossible => $$error{$impossible},
 							IMPOSSIBLE => 1);
 			$noerror = 0;
 		}
 		foreach my $needsconfirmation (keys %$question) {
-			warn "needsconfirmation : $needsconfirmation : "; #.%$error->{$needsconfirmation};
-			$template->param($needsconfirmation => 1,
+			$template->param($needsconfirmation => $$question{$needsconfirmation},
 							NEEDSCONFIRMATION => 1);
 			$noquestion = 0;
 		}
 		if ($noerror && ($noquestion || $issueconfirmed)) {
 			warn "NO ERROR";
-# 			issuebook(\%env, $borrower, $barcode, $datedue);
+			issuebook(\%env, $borrower, $barcode, $datedue);
 		}
+	}
 
 #	}
 }
