@@ -793,19 +793,6 @@ sub getcurrencies {
   return($i,\@results);
 }
 
-# FIXME - Never used
-sub getcurrency {
-  my ($cur)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from currency where currency='$cur'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
-
 =item updatecurrencies
 
   &updatecurrencies($currency, $newrate);
