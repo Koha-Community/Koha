@@ -35,6 +35,10 @@ if (! $biblionumber) {
 } else {
 
     $biblioitemnum = &newbiblioitem($biblioitem);
-
-    print $input->redirect("additem.pl?biblioitemnum=$biblioitemnum");
+    
+    if ($input->param('itemtype') eq "WEB") {
+	print $input->redirect("addbooks.pl?biblioitem=added");
+    } else {
+	print $input->redirect("additem.pl?biblioitemnum=$biblioitemnum");
+    } # else
 } # else

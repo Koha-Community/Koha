@@ -15,7 +15,7 @@ $VERSION = 0.01;
 &newordernum &modbiblio &modorder &getsingleorder &invoice &receiveorder
 &bookfundbreakdown &curconvert &updatesup &insertsup &newitems &modbibitem
 &getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems 
-&findall &needsmod &delitem &delbibitem &delbiblio &delorder &branches
+&findall &needsmod &delitem &deletebiblioitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
 &updatecost &checkitems &modnote &getitemtypes &getbiblio
 &getbiblioitem &getitemsbybiblioitem &isbnsearch &keywordsearch
@@ -1115,32 +1115,62 @@ sub delitem{
   $dbh->disconnect;
 }
 
-sub delbibitem{
-  my ($itemnum)=@_;
-  my $dbh=C4Connect;
-  my $query="select * from biblioitems where biblioitemnumber=$itemnum";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  if (my @data=$sth->fetchrow_array){
-    $sth->finish;
-    $query="Insert into deletedbiblioitems values (";
-    foreach my $temp (@data){
-      $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";
-    }
-    $query=~ s/\,$/\)/;
-#   print $query;
-    $sth=$dbh->prepare($query);
+
+sub deletebiblioitem {
+    my ($biblioitemnumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblioitems
+where biblioitemnumber = $biblioitemnumber";
+    my $sth   = $dbh->prepare($query);
+    my @results;
+
     $sth->execute;
+  
+    if (@results = $sth->fetchrow_array) {
+
+        $query = "Insert into deletedbiblioitems values (";
+        foreach my $value (@results) {
+            $value  = $dbh->quote($value);
+            $query .= "$value,";
+        } # foreach
+
+        $query =~ s/\,$/\)/;
+        $dbh->do($query);
+
+        $query = "Delete from biblioitems
+where biblioitemnumber = $biblioitemnumber";
+        $dbh->do($query);
+    } # if
+
     $sth->finish;
-    $query = "Delete from biblioitems where biblioitemnumber=$itemnum";
-    $sth=$dbh->prepare($query);
+
+# Now delete all the items attached to the biblioitem
+
+    $query = "Select * from items where biblioitemnumber = $biblioitemnumber";
+    $sth   = $dbh->prepare($query);
+
     $sth->execute;
+
+    while (@results = $sth->fetchrow_array) {
+
+	$query = "Insert into deleteditems values (";
+	foreach my $value (@results) {
+	    $value  = $dbh->quote($value);
+	    $query .= "$value,";
+	} # foreach
+
+	$query =~ s/\,$/\)/;
+	$dbh->do($query);
+    } # while
+
     $sth->finish;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-}
+
+    $query = "Delete from items where biblioitemnumber = $biblioitemnumber";
+    $dbh->do($query);
+    
+    $dbh->disconnect;
+} # sub deletebiblioitem
+
 
 sub delbiblio{
   my ($biblio)=@_;

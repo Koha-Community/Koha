@@ -11,7 +11,8 @@ use strict;
 use C4::Output;
 
 my $input = new CGI;
-my $error = $input->param('error');
+my $error   = $input->param('error');
+my $success = $input->param('biblioitem');
 
 print $input->header;
 print startpage();
@@ -33,7 +34,12 @@ EOF
 <font color="red" size="5">No items found</font>
 <p />
 EOF
-    } # if
+    } elsif ($success eq "added") {
+	print << "EOF";
+<font color="red" size="5">Website Biblioitem Added</font>
+<p />
+EOF
+    } # elsif
 
     print << "EOF";
 <table bgcolor="#ffcc00" width="80%" cellpadding="5">
