@@ -75,49 +75,50 @@
 		<tr>	
 			<td class="label">
 			Conference Title</td><td class="result"> <TMPL_VAR NAME="conference"></td></tr>
-				<TMPL_IF NAME="unititle">		
+	</TMPL_IF>	
+	<TMPL_IF NAME="unititle">		
 			<tr>
 			<td class="label">
 			Unititle</td><td class="result"><TMPL_VAR NAME="unititle"></td></tr>
-	</TMPL_IF>	
+	
 		
 	</TMPL_IF>
-		<TMPL_IF NAME="author">	
+	<TMPL_IF NAME="author">	
 		<tr>	
 			<td class="label">Author</td><td class="result"> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
 			NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td></tr>
 	</TMPL_IF>	
-		<TMPL_IF NAME="additional">		
+	<TMPL_IF NAME="additional">		
 			<tr>
 			<td class="label">
 			Additional Author</td><td class="result"> <TMPL_VAR NAME="additional"></td></tr>
 	</TMPL_IF>	
-		<TMPL_IF NAME="copyrightdate">		
+	<TMPL_IF NAME="copyrightdate">		
 			<tr>
 			<td class="label">
 			Copyright</td><td class="result"> <TMPL_VAR NAME="copyrightdate"></td></tr>
 	</TMPL_IF>	
 	
-		<TMPL_IF NAME="language">		
+	<TMPL_IF NAME="language">		
 			<tr>
 			<td class="label">
 			Language</td><td class="result"> <TMPL_VAR NAME="language"></td></tr>
 	</TMPL_IF>	
 	
-		<TMPL_IF NAME="subject">	
+	<TMPL_IF NAME="subject">	
 			<tr>
 			<td class="label">
 			Subjects</td><td class="result"> <TMPL_VAR NAME="subject"></td></tr>
 			
 	</TMPL_IF>	
-		<TMPL_IF NAME="notes">		
+	<TMPL_IF NAME="notes">		
 			
 			<tr>
 			<td class="label">
 			Notes</td><td class="result"> <TMPL_VAR NAME="notes"></td></tr>
 	</TMPL_IF>	
 	
-		<TMPL_IF NAME=serial">		
+	<TMPL_IF NAME=serial">		
 			<tr>
 			<td class="label">
 			Serial</td><td class="result"> <TMPL_VAR NAME="serial"></td></tr>
