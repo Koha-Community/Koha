@@ -1,86 +1,78 @@
 <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
 
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="authority">Authority number <!-- TMPL_VAR name="authid" --></h1>
+	<h1 class="authority">Authority number <!-- TMPL_VAR NAME="authid" --></h1>
 	<p>
 		<input type="hidden" name="op" value="add">
 		<input type="hidden" name="addfield_field">
-		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
-		<input type="hidden" name="authid" value="<!-- TMPL_VAR name="authid" -->">
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+		<input type="hidden" name="authid" value="<!-- TMPL_VAR NAME="authid" -->">
 		<!-- TMPL_IF name="authid" -->
-			<input type="button" value="Save" onClick='Check(this.form)' accesskey="w" class="button authority">
+			<input type="button" value="Save" onClick="Check(this.form)" accesskey="w" class="button authority">
 		<!-- TMPL_ELSE -->
-			<input type="button" value="Add authority" onClick='Check(this.form)' accesskey="w" class="button authority">
+			<input type="button" value="Add authority" onClick="Check(this.form)" accesskey="w" class="button authority">
 		<!-- /TMPL_IF -->
 <!--		<a href="javascript:PopupZ3950()" class="button authority">z3950 search</a> -->
 	</p>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<!-- TMPL_LOOP name="0XX" -->
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+<!-- TMPL_LOOP NAME="0XX" -->
 	<!-- TMPL_IF name="tag" -->
 		<p class="MARCtag">
-		<!-- TMPL_VAR name="tag" -->
-		<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-		<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+		<!-- TMPL_VAR NAME="tag" -->
+		<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->">
+		<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->"> - <TMPL_VAR NAME="tag_lib">
 		<!-- TMPL_IF name="repeatable" -->
-			<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
+			<a href="javascript:AddField(<!-- TMPL_VAR NAME="tag" -->)">+</a>
 		<!-- /TMPL_IF -->
 		</p>
 	<!-- /TMPL_IF -->
-	<!-- TMPL_LOOP name="subfield_loop" -->
+	<!-- TMPL_LOOP NAME="subfield_loop" -->
 		<p>
 			<label class="labelsubfield">
-				<b><!-- TMPL_VAR name="subfield" --></b>
+				<b><!-- TMPL_VAR NAME="subfield" --></b>
 				<!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
-				<!-- TMPL_VAR name="marc_lib" -->
+				<!-- TMPL_VAR NAME="marc_lib" -->
 				<!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
 			</label>
-			<!-- TMPL_VAR name="marc_value" -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
-			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
-			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+			<!-- TMPL_VAR NAME="marc_value" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
 		</p>
 	<!-- /tmpl_loop -->
 <!-- /tmpl_loop -->
 		
 		<div name="hidden" id="hidden" class="tab">
-		<!-- TMPL_LOOP name="hidden_loop" -->
-				<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
-				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
-				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
-				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+		<!-- TMPL_LOOP NAME="hidden_loop" -->
+				<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
+				<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
+				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
 		<!-- /TMPL_LOOP -->
 		</div>
 		<!-- TMPL_IF name="oldbiblionumtagfield" -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblionumtagfield" -->">
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblionumtagsubfield" -->">
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblionumber" -->">
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldbiblionumtagfield" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldbiblionumtagsubfield" -->">
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->">
 			<input type="hidden" name="mandatory" value="0">
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblioitemnumtagfield" -->">
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblioitemnumtagsubfield" -->">
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblioitemnumber" -->">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldbiblioitemnumtagfield" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldbiblioitemnumtagsubfield" -->">
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="oldbiblioitemnumber" -->">
 			<input type="hidden" name="mandatory" value="0">
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
-			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
 		<!-- /TMPL_IF -->
 	</form>
-<script LANGUAGE="JavaScript">
+<script language="JavaScript" type="text/javascript">
 function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
@@ -169,7 +161,7 @@ function PopupZ3950() {
 		    strQuery += "&issn="+document.forms[0].field_value[i].value;
 		}
 	}
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR name="bibid" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 
 function AddField(field) {

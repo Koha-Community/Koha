@@ -6,42 +6,42 @@
 		<table>
 			<tr>
 				<th class="catalogue">
-					Contents of <!-- TMPL_VAR Name="shelfname" -->
+					Contents of <!-- TMPL_VAR NAME="shelfname" -->
 				</th>
 			</tr>
 			<!-- TMPL_LOOP Name="itemsloop" -->
 				<tr>
-					<td bgcolor="<!-- TMPL_VAR Name="color" -->"><input type=checkbox name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
-					<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="barcode" --></td>
-					<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="title" --></td>
-					<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="author" --></td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="title" --></td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
 		<br>
 		<a href="shelves.pl" class="button">Shelf list</a>
-		<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
-		<input type=hidden name=modifyshelfcontents value=1>
-		<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
+		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+		<input type="hidden" name="modifyshelfcontents" value="1">
+		<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 		<!-- TMPL_IF name="manageshelf" -->
-			<input type=submit value="Remove Selected Items" class="button">
+			<input type="submit" value="Remove Selected Items" class="button">
 		<!-- /TMPL_IF -->
 	</form>
 
 	<!-- TMPL_IF name="manageshelf" -->
 	<form>
-		<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
-		<input type=hidden name=modifyshelfcontents value=1>
-		<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
+		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+		<input type="hidden" name="modifyshelfcontents" value="1">
+		<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 		<table>
 			<tr>
 				<td>
-					Add a book by barcode in <!-- TMPL_VAR name="shelfname" -->:
+					Add a book by barcode in <!-- TMPL_VAR NAME="shelfname" -->:
 				</td>
 				<td>
 					<input name="addbarcode">
-					<input type=hidden name=modifyshelfcontents value=1>
-					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->">
+					<input type="hidden" name="modifyshelfcontents" value="1">
+					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 					<input type="submit" value="Save" class="button">
 				</td>
 			</tr>
@@ -51,39 +51,39 @@
 <!-- TMPL_ELSE -->
 	<!-- TMPL_IF Name="shelves" -->
 		<!-- TMPL_IF Name="status1" -->
-			<font color=red><!-- TMPL_VAR Name="string1" --></font><p>
+			<font color="red"><!-- TMPL_VAR NAME="string1" --></font><p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP Name="paramsloop" -->
 			<!-- TMPL_IF Name="status" -->
-				<font color=red><!-- TMPL_VAR Name="string" --></font><p>
+				<font color="red"><!-- TMPL_VAR NAME="string" --></font><p>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
 		<h1 class="catalogue">Bookshelves</h1>
 		<div id="bloc25">
 					<h2 class="catalogue">Select Shelves to Delete</h2>
-					<form method=post>
-					<input type="hidden" name="shelves" value=1>
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
 						<!-- TMPL_LOOP Name="shelvesloop" -->
 						<!-- TMPL_IF name="canmanage" -->
 						<p>
 							<label>
-								<input type=checkbox name="DEL-<!-- TMPL_VAR Name="shelf" -->">
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
 							</label>
-								<!-- TMPL_VAR Name="shelfname" --> (<!-- TMPL_VAR Name="shelfbookcount" --> books)
+								<!-- TMPL_VAR NAME="shelfname" --> (<!-- TMPL_VAR NAME="shelfbookcount" --> books)
 						</p>
 						<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					<p>
-						<input type=submit value="Delete Shelves" class="button catalogue">
+						<input type="submit" value="Delete Shelves" class="button catalogue">
 					</p>
 					</form>
 		</div>
 		<div id="bloc25">
-			<form method=post>
-				<input type=hidden name=shelves value=1>
+			<form method="post">
+				<input type="hidden" name="shelves" value="1">
 				<h2 class="catalogue">Add Shelf</h2>
 				<p><label>Name</label><input type="text" name="addshelf" size="25"></p>
-				<p><label>Owner</label><input type="hidden" name="owner" value="<!-- TMPL_VAR name="loggedinuser" -->"><!-- TMPL_VAR name="loggedinusername" --></p>
+				<p><label>Owner</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
 				<p><label>Category</label>
 					<select name="category">
 						<option value="1">Private</option>
@@ -91,12 +91,12 @@
 						<option value="3">Free</option>
 					</select>
 				</p>
-				<p> <li>a private bookshelf is managed by you & can be seen only by you.</li>
+				<p> <li>a private bookshelf is managed by you &amp; can be seen only by you.</li>
 					<li> A public can be seen by everybody, but managed only by you.</li>
 					<li> A free can be managed by any user.</li>
 				</p>
 				<p>
-					<input type=submit value="Add New Shelf" class="button catalogue">
+					<input type="submit" value="Add New Shelf" class="button catalogue">
 					<a href="shelves.pl" class="button catalogue">back to shelf list</a>
 				</p>
 
@@ -111,9 +111,9 @@
 			</tr>
 			<!-- TMPL_LOOP Name="shelvesloop" -->
 			<tr>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->">
-					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->">
-						<!-- TMPL_VAR Name="shelfname" -->(<!-- TMPL_VAR Name="shelfbookcount" --> books)
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+						<!-- TMPL_VAR NAME="shelfname" -->(<!-- TMPL_VAR NAME="shelfbookcount" --> books)
 					</a>
 				</td>
 			</tr>
