@@ -33,7 +33,7 @@ $search_category=$input->param('category') unless $search_category;
 #my $toponly = $input->param('toponly');
 my $branch = $input->param('branch');
 my $searchstring = $input->param('searchstring');
-$searchstring=~ s/\,//g;
+# $searchstring=~ s/\,//g;
 my $id = $input->param('id');
 my $offset=$input->param('offset');
 my $father=$input->param('father');
@@ -103,13 +103,21 @@ if ($op eq 'add_form') {
 		$template->param(category => "<input type=text name=\"category\" size=8 maxlength=8>");
 	}
 ################## ADD_VALIDATE ##################################
-# called by add_form, used to insert/modify data in DB
+# called by add_form, used to insert data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	my $freelib = $input->param('freelib');
 	$freelib = $input->param('stdlib') unless ($input->param('freelib'));
 	newauthority($dbh,$input->param('category'),$input->param('father')." ".$input->param('stdlib'), $freelib,'',1,'');
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
+	exit;
+################## MOD_VALIDATE ##################################
+# called by add_form, used to modify data in DB
+} elsif ($op eq 'mod_validate') {
+	my $dbh = C4::Context->dbh;
+	my $freelib = $input->param('freelib');
+	modauthority($dbh,$id,$freelib);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&offset=$offset&searchstring=".CGI::escapeHTML($searchstring)."\"></html>";
 	exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB

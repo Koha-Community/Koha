@@ -34,9 +34,13 @@
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
+<H1><TMPL_IF name="search_category">Modify<TMPL_ELSE>Add</TMPL_IF></H1>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
+	<TMPL_IF name="search_category">
+		<input type=hidden name=op value='mod_validate'>
+	<TMPL_ELSE>
+		<input type=hidden name=op value='add_validate'>
+	</TMPL_IF>
 	<table cellpadding=3 cellspacing=3>
 	<tr>
 		<td>Category</td>
@@ -44,7 +48,11 @@
 	</tr>
 	<tr>
 		<td>Authority lib</td>
-		<td><TMPL_VAR name="father"><input type="text" name="stdlib" value="<TMPL_VAR name="stdlib">" maxlength="80" size="80"></td>
+		<TMPL_IF name="id">
+			<td><TMPL_VAR name="father"><TMPL_VAR name="stdlib"><input type="hidden" name="stdlib" value="<TMPL_VAR name="stdlib">" ></td>
+		<TMPL_ELSE>
+			<td><TMPL_VAR name="father"><input type="text" name="stdlib" value="<TMPL_VAR name="stdlib">" maxlength="80" size="80"></td>
+		</TMPL_IF>
 	</tr>
 	<tr>
 		<td>Other lib</td>

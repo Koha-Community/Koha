@@ -51,8 +51,8 @@ It contains every functions to manage/find authorities.
 @EXPORT = qw(	&newauthority
 						&searchauthority
 						&delauthority
+						&modauthority
 					);
-# FIXME - This is never used
 
 =item newauthority
 
@@ -133,6 +133,23 @@ sub newauthority  {
 	return $id;
 }
 
+=item ModAuthority
+
+  $id = &ModAuthority($dbh,$id,$freelib);
+
+  modify a free lib
+
+ C<$dbh> is a DBI::db handle for the Koha database.
+ C<$id> is the entry id
+ C<$freelib> is the new freelib
+
+=cut
+sub modauthority {
+	my ($dbh,$id,$freelib) = @_;
+	my $sth = $dbh->prepare("update bibliothesaurus set freelib=? where id=?");
+	$sth->execute($freelib,$id);
+}
+
 =item SearchAuthority
 
   $id = &SearchAuthority($dbh,$category,$branch,$searchstring,$type,$offset,$pagesize);
@@ -161,7 +178,7 @@ sub searchauthority  {
 	$query .= " and match (category,freelib) AGAINST ('$searchstring')" if ($searchstring);
 #	$query .= " and freelib like \"$searchstring%\"" if ($searchstring);
 	$query .= " order by category,freelib limit $offset,".($pagesize*4);
-#	warn "q : $query";
+	warn "q : $query";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
