@@ -1,243 +1,91 @@
 
-<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!-- TMPL_INCLUDE name="bull-top.inc" -->
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
-<h1>Collections</h1>
-<ul>
+<h1 class="bull">Subscription for XXX <!-- TMPL_VAR name="serial" --></h1>
 
+<div id="bloc25">
+	<h2 class="bull">Subscription summary</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Librarian</label><!-- TMPL_VAR name="user" --></p>
+		<p><label>Beginnning date (*)</label><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->"></p>
+		<p><label>End date</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>Arrived Numbers</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Gapped Numbers</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Opac's note</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<p>Intra's note</p>
+		<p>&nbsp;<textarea name="librariannote" COLS=60 ROWS=5><!-- TMPL_VAR name="librariannote" --></textarea></p>
+		<input type="submit" value="Save changes" class="button bull">
+	</form>
+</div>
 
-
-<div align="center"><font color="black" size="+1"><b><!-- TMPL_VAR name="serial" --> Collection's states</b> </div></font>
-<table>
-<form method="post" name="f">
-<tr>
-<td>	
-<div align="center"> </div>
-	<input type="hidden" name="op" value="modsubscriptionhistory">
-	<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
-	<input type="hidden" name="subsid" value="<!-- TMPL_VAR name="sid" -->">
-	<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-	Librarian identity :</td><td> <!-- TMPL_VAR name="user" --></td></tr>
-
-<tr><td>
-Beginnning date (*) :</td>
-<td>	<input type="text" name="begin" value="<!-- TMPL_VAR name="begin" -->"></td>
-<td>
-Enddate date (*) :</td>
-<td>	<input type="text" name="end" value="<!-- TMPL_VAR name="end" -->"></td>
-</tr>
-<tr>
-<td> Arrived Numbers  : </td><td><TEXTAREA NAME="arrived" COLS=25 ROWS=2><!-- TMPL_VAR name="arrived" --></TEXTAREA> </td>
-<td> Gapped Numbers  : </td><td><TEXTAREA NAME="gapped" COLS=25 ROWS=2><!-- TMPL_VAR name="gapped" --></TEXTAREA></td>
-</tr>
-<tr>
-<td> Opac's note  : </td><td><TEXTAREA NAME="opac" COLS=30 ROWS=2><!-- TMPL_VAR name="opac" --></TEXTAREA></td>
-<td> Intra's note  : </td><td><TEXTAREA NAME="intra" COLS=30 ROWS=2><!-- TMPL_VAR name="intra" --></TEXTAREA></td>
-</tr>
-</table><br><table>
-<tr>
-<td>
-Waited number : 
-</td>
-<td>
-	<input type="text" name="waited" value="<!-- TMPL_VAR name="waited" -->">
-</td>
-</tr>
-<tr>
-<td>
-Status :
-</td>
-<td>
-<select name="status" size="1">
-				<option value="">None</option>
-				<option value="1" selected>Waited</option>
-				<option value="2">Arrived</option>
-				<option value="3">Late</option>
+<div id="bloc25">
+<h2 class="bull">waited or late numbers</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="serialchangestatus">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	<table class="small">
+	<tr>
+		<th class="bull">
+			Numbered
+		</th>
+		<th class="bull">
+			planned for
+		</th>
+		<th class="bull">
+			Status
+		</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
+				<select name="status" size="1">
+					<option value="">None</option>
+					<!--TMPL_IF name="status1" -->
+						<option value="1" selected>Waited</option>
+					<!-- TMPL_ELSE -->
+						<option value="1" >Waited</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						<option value="2" selected>Arrived</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Arrived</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						<option value="3" selected>Late</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Late</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						<option value="4" selected>Missing</option>
+					<!-- TMPL_ELSE -->
+						<option value="4">Missing</option>
+					<!-- /TMPL_IF -->
 				</select>
-</td>
-</tr>
-<td>
-<bR>
-<input type="button" value="Save this new exemplary state" onclick="Check(this.form)" accesskey="w" class="button catalogue">
-
-</td>
-</tr>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="Save changes" accesskey="w" class="button bull">
+	</form>
 </div>
 
 </form>
 </table>
-<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
-
-<script language="JavaScript" type="text/javascript">
-
-select(0, 'X');
-select(0, 'Y');
-select(0, 'Z');
-
-function Plugin(f)
-{
-	 window.open("subscription-bib-search.pl","Find a bib index",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-function FindAcqui(f)
-{
-	 window.open("acqui-search.pl","Find a supplier",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-
-function Check(f)
-{
-	document.f.submit();
-	return false;
-}
-
-function Help()
-{
-  window.open("subscription-add-help.pl","Add subscription help page",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-function select(reponse, type)
-{
- if (type == 'X')
-     {
-	if (reponse == 0)
-	{
-	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
-	   document.f.Xstep.value = "";
-	   document.f.Xstep.disabled = true;
-	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Xfreq.value = "";
-	   document.f.Xfreq.disabled = true;
-	   document.f.X.style.backgroundColor="#DCDCDC";	
-	   document.f.X.value = "";
-	   document.f.X.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
-	   document.f.Xstep.disabled = false;
-	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Xfreq.value = "";
-	   document.f.Xfreq.disabled = true;
-	   document.f.X.style.backgroundColor="#FFFFFF";	
-	   document.f.X.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
-	   document.f.Xstep.disabled = false;
-	   document.f.Xfreq.style.backgroundColor="#FFFFFF";	
-	   document.f.Xfreq.disabled = false;
-	   document.f.X.style.backgroundColor="#FFFFFF";	
-	   document.f.X.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
-	   document.f.Xstep.value = "";
-	   document.f.Xstep.disabled = true;
-	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Xfreq.value = "";
-	   document.f.Xfreq.disabled = true;
-	   document.f.X.style.backgroundColor="#FFFFFF";	
-	   document.f.X.disabled = false;
-        }
-     }
- if (type == 'Y')
-     {
-	if (reponse == 0)
-	{
-	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
-	   document.f.Ystep.value = "";
-	   document.f.Ystep.disabled = true;
-	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Yfreq.value = "";
-	   document.f.Yfreq.disabled = true;
-	   document.f.Y.style.backgroundColor="#DCDCDC";	
-	   document.f.Y.value = "";
-	   document.f.Y.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
-	   document.f.Ystep.disabled = false;
-	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Yfreq.value = "";
-	   document.f.Yfreq.disabled = true;
-	   document.f.Y.style.backgroundColor="#FFFFFF";	
-	   document.f.Y.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
-	   document.f.Ystep.disabled = false;
-	   document.f.Yfreq.style.backgroundColor="#FFFFFF";	
-	   document.f.Yfreq.disabled = false;
-	   document.f.Y.style.backgroundColor="#FFFFFF";	
-	   document.f.Y.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
-	   document.f.Ystep.value = "";
-	   document.f.Ystep.disabled = true;
-	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Yfreq.value = "";
-	   document.f.Yfreq.disabled = true;
-	   document.f.Y.style.backgroundColor="#FFFFFF";	
-	   document.f.Y.disabled = false;
-        }
-
-     }
- if (type == 'Z')
-     {
-	if (reponse == 0)
-	{
-	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
-	   document.f.Zstep.value = "";
-	   document.f.Zstep.disabled = true;
-	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Zfreq.value = "";
-	   document.f.Zfreq.disabled = true;
-	   document.f.Z.style.backgroundColor="#DCDCDC";	
-	   document.f.Z.value = "";
-	   document.f.Z.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
-	   document.f.Zstep.disabled = false;
-	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Zfreq.value = "";
-	   document.f.Zfreq.disabled = true;
-	   document.f.Z.style.backgroundColor="#FFFFFF";	
-	   document.f.Z.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
-	   document.f.Zstep.disabled = false;
-	   document.f.Zfreq.style.backgroundColor="#FFFFFF";	
-	   document.f.Zfreq.disabled = false;
-	   document.f.Z.style.backgroundColor="#FFFFFF";	
-	   document.f.Z.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
-	   document.f.Zstep.value = "";
-	   document.f.Zstep.disabled = true;
-	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
-	   document.f.Zfreq.value = "";
-	   document.f.Zfreq.disabled = true;
-	   document.f.Z.style.backgroundColor="#FFFFFF";	
-	   document.f.Z.disabled = false;
-        }
-
-     }
-}
-
-</script>
+<!-- TMPL_INCLUDE name="bull-bottom.inc" -->

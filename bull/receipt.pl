@@ -30,13 +30,13 @@ if ($op eq 'search')
 
     
 
-    my $sth = $dbh->prepare("select subscriptionid, perioid from subscription");
+    my $sth = $dbh->prepare("select subscriptionid, biblionumber from subscription");
     $sth->execute();
     my @finalsolution;
     while (my $first_step = $sth->fetchrow_hashref)
     {
 	my $sth2 = $dbh->prepare("select b3.title from biblioitems b2, biblio b3 where b3.biblionumber = ? and b2.biblionumber = b3.biblionumber and (b2.issn = ? or b3.title like ?)");
-	$sth2->execute($first_step->{'perioid'},$search, "%$search%");
+	$sth2->execute($first_step->{'biblionumber'},$search, "%$search%");
 	my @answear;
 	@answear = $sth2->fetchrow_array;
 	$total = scalar @answear;

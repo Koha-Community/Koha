@@ -38,19 +38,12 @@
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR name="authid" -->" title="Serial number<!-- TMPL_VAR name="subscriptionid" -->">
 						</a> </div>
 					</td>
-	<td><div align="center"><a href="statecollection.pl?subsid=<!-- TMPL_VAR name="subscriptionid" -->&serial=<!-- TMPL_VAR name="serial" -->"> 
+	<td><div align="center"><a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&serial=<!-- TMPL_VAR name="serial" -->"> 
 
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/Fleche.jpg"  width="32" hspace="0" vspace="0" border="0" alt="Subscribtion serial<!-- TMPL_VAR name="subscriptionid" -->" title="Serial number<!-- TMPL_VAR name="subscriptionid" -->">
 
 
 </a></td></div>
-					<td><div align="center">
-						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:do_delete('authorities-home.pl?op=delete&suscrid=<!-- TMPL_VAR name="subscriptionid" -->')">
-							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
-						</a>
-						<!-- /TMPL_UNLESS -->
-</div>					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>

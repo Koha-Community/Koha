@@ -7,8 +7,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
-use C4::Catalogue;
-
+use C4::Acquisition;
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "bull/search-supply.tmpl",
@@ -20,7 +19,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 # budget
-my ($count,@results)=bookfunds;
+my ($count,@results)=&bookfunds;
 my $classlist='';
 my $total=0;
 my $totspent=0;

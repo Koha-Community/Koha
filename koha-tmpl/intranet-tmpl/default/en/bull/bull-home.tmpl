@@ -1,21 +1,41 @@
 <!-- TMPL_INCLUDE NAME="bull-top.inc" -->
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
-<h1>Serial</h1>
-<ul>
-
-
-
-<div align="center"><font color="black"><b> Serial Main menu</b> </div></font>
-<br>
-<br>
-<br>
-<br>
-
-	<li><a href="/cgi-bin/koha/bull/subscription.pl">Subscription:</a> Add a new subscription or watch each collection's informations</li>
-	<li><a href="/cgi-bin/koha/bull/receipt.pl">Receipt:</a> Use this menu to change status of serials and watch state of collection</li>
-	
-</ul>
+	<h1 class="bull">Serials subscriptions</h1>
+	<table>
+		<tr>
+			<th class="bull">Title</th>
+			<th class="bull">ISSN</th>
+			<th class="bull" colspan=2>&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="bull-home.pl" method="post">
+			<td>
+				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->">
+			</td>
+			<td>
+				<input type="text" size=11 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+			</td>
+			<td colspan=3>
+				<input type="submit" value="filter" class="button bull">
+			</td>
+		</tr>
+		<!-- TMPL_LOOP name="subscriptions" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR name="title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="ISSN" -->
+				</td>
+				<td>
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>
+					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<a href="/cgi-bin/koha/bull/subscription-add.pl" class="button bull">Add subscription</a>
 </div>
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
 

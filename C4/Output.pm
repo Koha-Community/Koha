@@ -79,8 +79,6 @@ if (!$query){
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
-	# XXX temporary patch for Bug 182 for themelang
-	warn "theme is $theme lang is $lang";
 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 							theme => $theme,
@@ -94,10 +92,9 @@ if (!$query){
 # FIXME - POD
 sub themelanguage {
   my ($htdocs, $tmpl, $section, $query) = @_;
-  if (!$query) {
-    warn "no query";
-    
-  }
+#   if (!$query) {
+#     warn "no query";
+#   }
   my $dbh = C4::Context->dbh;
   my @languages;
   my @themes;
