@@ -6,6 +6,7 @@ use Mail::Sendmail;
 
 use C4::Output;       # gettemplate
 use C4::Auth;         # checkauth, getborrowernumber.
+use C4::Context;
 use C4::Koha;
 use C4::Circulation::Circ2;
 
@@ -26,7 +27,18 @@ my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 # collect the form values and send an email.
 my @fields = ('title', 'surname', 'firstname', 'phone', 'faxnumber', 'streetaddress', 'emailaddress', 'city');
 my $update;
-my $updateemailaddress = "finlay\@katipo.co.nz";      #Will have to change this! !!!!!!!!!!!!!!!!!!!
+my $updateemailaddress= C4::Context->preference('KohaAdminEmailAddress');
+if ($updateemailaddress eq '') {
+    warn "KohaAdminEmailAddress system preference not set.  Couldn't send patron update information for $borr->{'firstname'} $borr->{'surname'} (#$borrowernumber)\n";
+    my $template = gettemplate("kohaerror.tmpl", "opac");
+
+    $template->param(errormessage => 'KohaAdminEmailAddress system preference
+    is not set.  Please visit the library to update your user record');
+
+    print $query->header(), $template->output;
+    exit;
+}
+
 if ($query->{'title'}) {
     # get all the fields:
     my $message = <<"EOF";
@@ -47,6 +59,7 @@ EOF
 # do something if it works....
 	warn "Mail sent ok\n";
 	print $query->redirect('/cgi-bin/koha/opac-user.pl');
+	exit;
     } else {
 # do something if it doesnt work....
         warn "Error sending mail: $Mail::Sendmail::error \n";
