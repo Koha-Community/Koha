@@ -265,6 +265,8 @@ system("rm -f $rootdir/intranet-cgi/testKoha.pl");
 system("rm -rf $rootdir/intranet-cgi/html-template");
 system("rm -rf $rootdir/intranet-cgi/t");
 
+# Set all .pl scripts executable
+system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;"); 
 # Copy all CVS files to intranet-html and opac-html
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
