@@ -76,7 +76,7 @@ where isbn=? and title=?");
 		if (ref($marcrecord) eq undef) {
 			$notmarcrecord++;
 		} else {
-			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord);
+			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
 			$oldbiblio->{title} = char_decode($oldbiblio->{title},$encoding);
 			$oldbiblio->{author} = char_decode($oldbiblio->{author},$encoding);
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
