@@ -37,10 +37,12 @@ my $biblio = {
 };    # my $biblio
 
 my $subjectheadings = $input->param('subjectheadings');
-my @subjects = split ( /\n/, $subjectheadings );
+# Different O.S.es use different codes to end lines. This ensures that all cases
+# are allowed for.
+my @subjects = split ( /\n|\r|\n\r|\r\n/, $subjectheadings );
 my $biblionumber;
 my $aauthors = $input->param('additionalauthors');
-my @authors  = split ( /\n/, $aauthors );
+my @authors  = split ( /\n|\r|\n\r|\r\n/, $aauthors );
 my $force    = $input->param('force');
 
 if ( !$biblio->{'title'} ) {
