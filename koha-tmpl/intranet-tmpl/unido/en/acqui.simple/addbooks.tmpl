@@ -1,0 +1,78 @@
+<html><TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+	
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > Add New Items</div>
+
+
+
+<h1>Add New Items</h1>
+<TMPL_IF name="noitemsfound">
+	<p />
+	<font color="red" size="4">No items found</font>
+</TMPL_IF>
+<TMPL_IF name="websiteadded">
+	<p />
+	<font color="red" size="4">Website Biblioitem Added</font>
+</TMPL_IF>
+
+<p />
+
+
+
+
+<form action="isbnsearch.pl">
+
+<table cellpadding="3" border=0>
+
+<tr><td colspan="3">
+<h2>Add Item</h2>
+
+</TD></TR>
+
+<tr valign="top">
+			<td class="lable">Title</td>
+			<td><input type="text" name="title" class="mid-field" /></td>
+<td><input type="submit" value="Go" class="go"/></td>
+		</tr>
+		<tr valign="top">
+			<td  class="lable">ISBN:</td>
+			<td ><input type="text" name="isbn" class="mid-field"/></td>
+<td><input type="submit" value="Go" class="go"/></td>
+			
+		</tr>
+
+</form>
+
+<tr><td colspan="3"><br><h2>Add Periodical</h2></td>
+	</tr>
+
+<form action="periodicalsearch.pl" method="post">
+
+	<tr>
+		<td>Title:</td>
+		<td><input type="text" name="title" class="mid-field" /></td>
+		<td><input type="submit" value="Go" class="go" /></td>
+	</tr>
+	
+</FORM>
+
+
+
+<tr><td colspan="3"><br><h2>Add New Website</H2></td>
+	</tr>
+
+<form action="websitesearch.pl" method="post">
+	
+	<tr>
+		<td>Keyword:</td>
+		<td><input type="text" name="keyword" class="mid-field" /></td>
+		<td><input type="submit" value="Go" class="go" /></td>
+	</tr>
+	</table>
+</FORM>
+<p />
+
+<div class="tip">
+<span class="tip-big">tip</span><span class="tip-text">
+If the ISBN or title is found in the biblio table, it will be retrieved and you can add another copy to it.</span>
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
