@@ -89,7 +89,14 @@ if ($missing !=1) {
     $data{'cardnumber_institution'} = C4::Members::fixup_cardnumber
 	    ($data{'cardnumber_institution'});
 
-    my $valid=checkdigit(\%env,$data{"cardnumber_institution"});
+    #check cardnumber is valid
+    my $nounique;
+    if ( $data{'type'} ne "Add" )    {
+	$nounique = 0;
+    } else {
+	$nounique = 1;
+    }
+    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
 
     $template->param( invalid => ($valid !=1));
 

@@ -88,7 +88,14 @@ for (my $i=0;$i<3;$i++){
       $string.=" Gender <br>";
       $missing=1;
     }
-    my $valid=checkdigit(\%env,$data{"cardnumber_child_$i"});
+    #check cardnumber is valid
+    my $nounique;
+    if ( $data{'type'} ne "Add" )    {
+	$nounique = 0;
+    } else {
+	$nounique = 1;
+    }
+    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
       $string.=" Invalid Cardnumber $number<br>";
       $missing=1;
