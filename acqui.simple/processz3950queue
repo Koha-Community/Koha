@@ -6,6 +6,26 @@ use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
 use Net::Z3950;
+
+
+if ($< == 0) {
+    # Running as root, switch privs 
+    if (-d "/var/run") {
+	open PID, ">/var/run/processz3950queue.pid";
+	print PID $$."\n";
+	close PID;
+    }
+    # Get real apacheuser from koha.conf or reparsing httpd.conf
+    my $apacheuser='www-data';  
+    my $uid=0;
+    unless ($uid = (getpwnam($apacheuser))[2]) { 
+	die "Attempt to run daemon as non-existent or superuser\n";
+    }
+    $>=$uid;
+    $<=$uid;
+}
+    
+
 my $dbh=C4Connect;
 
 my $sth=$dbh->prepare("update z3950results set active=0");
@@ -20,6 +40,7 @@ my $logdir=$ARGV[0];
 open PID, ">$logdir/processz3950queue.pid";
 print PID $$."\n";
 close PID;
+
 my $reapcounter=0;
 my $forkcounter=0;
 my $checkqueue=1;
