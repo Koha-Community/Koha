@@ -37,6 +37,7 @@ use C4::Date;
 my $query =new CGI;
 my $basketno = $query ->param('basket');
 my $booksellerid = $query->param('supplierid');
+my $order = $query->param('order');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basket.tmpl",
 			     query => $query,
@@ -57,7 +58,7 @@ my ($count2,@booksellers)=bookseller($booksellerid);
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});
 $basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});
-($count,@results)=getbasketcontent($basketno);
+($count,@results)=getbasketcontent($basketno,'',$order);
 
 my $line_total; # total of each line
 my $sub_total; # total of line totals

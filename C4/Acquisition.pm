@@ -102,7 +102,7 @@ number of elements in C<@orders>.
 =cut
 #'
 sub getbasketcontent {
-	my ($basketno,$supplier)=@_;
+	my ($basketno,$supplier,$orderby)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="Select *,biblio.title from aqorders,biblio,biblioitems
 	left join aqorderbreakdown on aqorderbreakdown.ordernumber=aqorders.ordernumber
@@ -114,7 +114,9 @@ sub getbasketcontent {
 	if ($supplier ne ''){
 		$query.=" and aqorders.booksellerid='$supplier'";
 	}
-	$query.=" order by biblioitems.publishercode";
+	
+	$orderby="biblioitems.publishercode" unless $orderby;
+	$query.=" order by $orderby";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;

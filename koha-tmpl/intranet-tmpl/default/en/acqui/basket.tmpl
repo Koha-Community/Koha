@@ -23,7 +23,7 @@
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
 				<th class="acquisition">Order</th>
-				<th class="acquisition">Publisher</th>
+				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode">[order]</a></th>
 				<th class="acquisition">Isbn</th>
 				<th class="acquisition">Title</th>
 				<th class="acquisition">Author</th>
@@ -31,7 +31,7 @@
 				<th class="acquisition">est</th>
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
-				<th class="acquisition">Book fund</th>
+				<th class="acquisition">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
