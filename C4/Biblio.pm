@@ -418,7 +418,7 @@ sub MARCaddsubfield {
     if ( not($subfieldcode) ) {
         $subfieldcode = ' ';
     }
-    my @subfieldvalues = split /\|/, $subfieldvalues;
+    my @subfieldvalues = split /\||#/, $subfieldvalues;
     foreach my $subfieldvalue (@subfieldvalues) {
         if ( length($subfieldvalue) > 255 ) {
             $dbh->do(
@@ -2540,6 +2540,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.104  2004/09/16 15:06:46  tipaul
+# enabling # (| still possible too) for repeatable subfields
+#
 # Revision 1.103  2004/09/06 14:17:34  tipaul
 # some commented warning added + 1 major bugfix => drop empty fields, NOT fields containing 0
 #
