@@ -18,11 +18,11 @@ CREATE TABLE marc_subfield_table (
 		tag char(3) NOT NULL default '',
 		bibid bigint(20) NOT NULL default '0',
 		subfieldorder tinyint(4) NOT NULL default '0',
-		subfieldmark char(1) NOT NULL default '',
+		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
 		PRIMARY KEY (subfieldid),
-		KEY (bibid,tagid,tag,subfieldmark),
+		KEY (bibid,tagid,tag,subfieldcode),
 		) TYPE=MyISAM;
 
 # marc_blob_tag containts tag longer than 255 car.
