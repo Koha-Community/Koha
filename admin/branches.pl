@@ -1,4 +1,19 @@
 #!/usr/bin/perl
+# NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
+
+#require '/u/acli/lib/cvs.pl';#DEBUG
+open(DEBUG,'>/tmp/koha.debug');
+
+# FIXME: individual fields in branch address need to be exported to templates,
+#        in order to fix bug 180; need to notify translators
+# FIXME: looped html (e.g., list of checkboxes) need to be properly
+#        TMPL_LOOP'ized; doing this properly will fix bug 130; need to
+#        notify translators
+# FIXME: need to implement the branch categories stuff
+# FIXME: heading() need to be moved to templates, need to notify translators
+# FIXME: there are too many TMPL_IF's; the proper way to do it is to have
+#        separate templates for each individual action; need to notify
+#        translators
 
 # Finlay working on this file from 26-03-2002
 # Reorganising this branches admin page.....
@@ -53,11 +68,11 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+    $template->param(script_name => $script_name,
+		     $op         => 1); # we show only the TMPL_VAR names $op
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+    $template->param(script_name => $script_name,
+		     else        => 1); # we show only the TMPL_VAR names $op
 }
 $template->param(action => $script_name);
 
@@ -101,6 +116,11 @@ if ($op eq 'add') {
     $template->param(else => 1);
     default("The branch with code $branchcode has been deleted.");
 
+} elsif ($op eq 'add_cat') {
+# If the user has pressed the "add new category" button.
+    heading("Branches: Add Branch");
+    editcatform();
+
 } else {
 # if no operation has been set...
     default();
@@ -122,6 +142,7 @@ sub default {
     
 }
 
+# FIXME: this function should not exist; otherwise headings are untranslatable
 sub heading {
     my ($head) = @_;
     $template->param(head => $head);
@@ -144,17 +165,19 @@ sub editbranchform {
         $template->param(branchemail => $data->{'branchemail'});
     }
 # make the checkboxs.....
+# FIXME: this way of doing it is wrong (bug 130)
     my $catinfo = getcategoryinfo();
     my $catcheckbox;
+    print DEBUG "catinfo=".cvs($catinfo)."\n";
     foreach my $cat (@$catinfo) {
 	my $checked = "";
 	my $tmp = $cat->{'categorycode'};
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
 	    $checked = "CHECKED";
-		}
-    $template->param(categoryname => $cat->{'categoryname'});
-    $template->param(categorycode => $cat->{'categorycode'});
-    $template->param(codedescription => $checked>$cat->{'codedescription'});    
+	}
+	$template->param(categoryname => $cat->{'categoryname'});
+	$template->param(categorycode => $cat->{'categorycode'});
+	$template->param(codedescription => $checked>$cat->{'codedescription'});
     }
    
 }
@@ -208,33 +231,34 @@ sub branchinfotable {
 	push(@value,$branch->{'branchcode'});
 	push(@action,"/cgi-bin/koha/admin/branches.pl");
 	while (@colors and @branch_name and @branch_code and @address and @categories and @value and @action) {
-	my %row_data;
-	$row_data{color} = shift @colors;
-	$row_data{branch_name} = shift @branch_name;
-	$row_data{branch_code} = shift @branch_code;
-	$row_data{address} = shift @address;
-	$row_data{categories} = shift @categories;
-	$row_data{value} = shift @value;
-	$row_data{action} = shift @action;
-	push(@loop_data, \%row_data);
-    }
+	    my %row_data;
+	    $row_data{color} = shift @colors;
+	    $row_data{branch_name} = shift @branch_name;
+	    $row_data{branch_code} = shift @branch_code;
+	    $row_data{address} = shift @address;
+	    $row_data{categories} = shift @categories;
+	    $row_data{value} = shift @value;
+	    $row_data{action} = shift @action;
+	    push(@loop_data, \%row_data);
+	}
     
     }
     $template->param(branches => \@loop_data);
 
 }
 
+# FIXME logic seems wrong
 sub branchcategoriestable {
 #Needs to be implemented...
 
     my $categoryinfo = getcategoryinfo();
-my $color;
+    my $color;
     foreach my $cat (@$categoryinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-$template->param(color => $color);
-$template->param(categoryname => $cat->{'categoryname'});
-$template->param(categorycode => $cat->{'categorycode'});
-$template->param(codedescription => $cat->{'codedescription'});
+	$template->param(color => $color);
+	$template->param(categoryname => $cat->{'categoryname'});
+	$template->param(categorycode => $cat->{'categorycode'});
+	$template->param(codedescription => $cat->{'codedescription'});
     }
 }
 
@@ -251,8 +275,9 @@ sub getbranchinfo {
     if ($branchcode) {
 	my $bc = $dbh->quote($branchcode);
 	$query = "Select * from branches where branchcode = $bc";
+    } else {
+	$query = "Select * from branches";
     }
-    else {$query = "Select * from branches";}
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
@@ -273,17 +298,20 @@ sub getbranchinfo {
     return \@results;
 }
 
+# FIXME This doesn't belong here; it should be moved into a module
 sub getcategoryinfo {
 # returns a reference to an array of hashes containing branches,
     my ($catcode) = @_;
     my $dbh = C4::Context->dbh;
     my $query;
+    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
     if ($catcode) {
 	my $cc = $dbh->quote($catcode);
 	$query = "select * from branchcategories where categorycode = $cc";
     } else {
 	$query = "Select * from branchcategories";
     }
+    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
@@ -291,6 +319,7 @@ sub getcategoryinfo {
 	push(@results, $data);
     }
     $sth->finish;
+    print DEBUG "getcategoryinfo: exit: returning ".cvs(\@results)."\n";
     return \@results;
 }
 
@@ -378,3 +407,7 @@ sub checkdatabasefor {
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+# Local Variables:
+# tab-width: 8
+# End:
