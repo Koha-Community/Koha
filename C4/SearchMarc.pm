@@ -239,8 +239,6 @@ sub catalogsearch {
 # 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
-						my $tag = substr(@$tags[$i],0,3);
-						my $subf = substr(@$tags[$i],3,1);
 						push @normal_tags, @$tags[$i];
 						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
 						push @normal_operator, @$operator[$i];
