@@ -68,7 +68,6 @@ my $bibid = $query->param('bibid');
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-warn "IT : $itemtype";
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
