@@ -79,7 +79,8 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 	height=37 name="search"
 			hspace=0 vspace=0 border=0></a></td>
 		</tr>
-		<FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
+
+
 		<tr valign=top >
 			<td background="" rowspan=3 align="right" colspan=5>
 				<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
@@ -90,6 +91,8 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td></td>
 			<td></td>
 			<td background="" colspan=3>
+		 <TMPL_IF NAME="NOTMARC">
+		                <FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
 				<input type="hidden" name="module" value="search">
 				<input type="hidden" name="type" value="intranet">
 				<input type=text size="27" name="keyword"><input type=reset value="clr"><br>
@@ -99,12 +102,11 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<font size=2 face="arial narrow,arial,helvetica">
 			<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow-purple.gif" width=27 height=22
 			alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search (More Options)</a><br>
-
+			</form>
+		  </TMPL_IF>
 			<img src="/images/holder.gif" width=1 height=8
 			alt=" " hspace=0 vspace=0></td>
-
-		</tr>
-		</form>
+		</tr>		
 
 		<!--------MEMBER SEARCH----->
 

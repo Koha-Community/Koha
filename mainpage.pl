@@ -18,4 +18,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+my $marc_p = C4::Context->boolean_preference("marc");
+$template->param(NOTMARC => !$marc_p);
+
 output_html_with_http_headers $query, $cookie, $template->output;
