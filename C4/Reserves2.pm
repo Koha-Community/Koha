@@ -79,7 +79,7 @@ sub CheckReserves {
 	    if ($res->{'itemnumber'} == $item) {
 		return ("Waiting", $res);
 	    } else {
-		if ($res->{'priority'} < $priority) {
+		if ($res->{'priority'} != 0 && $res->{'priority'} < $priority) {
 		    $priority = $res->{'priority'};
 		    $highest = $res;
 		}
