@@ -2,7 +2,7 @@
 #  These first three tables store the data from a MARC record.
 	
 # marc_biblio contains 1 record for each biblio in the DB
-	CREATE TABLE marc_biblio (
+CREATE TABLE marc_biblio (
 		bibid bigint(20) unsigned NOT NULL auto_increment,
 		datecreated date NOT NULL default '0000-00-00',
 		datemodified date default NULL,
@@ -11,23 +11,28 @@
 		KEY origincode (origincode)
 		) TYPE=MyISAM;
 
+CREATE TABLE marc_field_table_sergey (
+       fieldid  bigint(20) unsigned NOT NULL auto_increment,    # field identifier
+       bibid    bigint(20) NOT NULL default '0',                # biblio identifier
+       tagid    bigint(20) NOT NULL default '0',		# tag identifier
+       tag      char(3) NOT NULL default '',			# tag number (eg 110)
+       PRIMARY KEY (fieldid),
+       KEY (bibid),
+       KEY (tagid),
+       KEY (tag)
+);
 
-CREATE TABLE marc_subfield_table (
-		subfieldid bigint(20) unsigned NOT NULL auto_increment,
-		bibid bigint(20) NOT NULL default '0',			# biblio idendifier
-		tag char(3) NOT NULL default '',			# tag number (110)
-		tagorder tinyint(4) NOT NULL default '1',		# used when a tag is repeatable, from 1 to N
-		subfieldcode char(1) NOT NULL default '',		# subfieldcode (a)
-		subfieldorder tinyint(4) NOT NULL default '1',		# used when a subfield is repeatable, from 1 to N
-		subfieldvalue varchar(255) default NULL,		# the subfield value, is not longer than 255 char
-		valuebloblink bigint(20) default NULL,			# the link to the blob, if subfield value is longer than 255 char
-		PRIMARY KEY (subfieldid),
-		KEY bibid (bibid),					# BRUTE indexes : we index all the fields except subfieldvalue
-		KEY (tag),						# should have to be optimized later
-		KEY (tagorder),
-		KEY (subfieldcode),
-		KEY (subfieldorder)
-		) TYPE=MyISAM;
+CREATE TABLE marc_subfield_table_sergey (
+       subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
+       fieldid bigint(20),					# field identifier
+       subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields
+       subfieldcode char(1) NOT NULL default '',		# subfield code
+       subfieldvalue varchar(255) default NULL,			# the subfields value if not longer than 255 char
+       valuebloblink bigint(20) default NULL,			# the link to the blob, if value is longer than 255 char
+       PRIMARY KEY (subfieldid),
+       KEY (fieldid)
+);
+
 
 # marc_blob_subfield containts subfields longer than 255 car.
 # They are linked to a marc_subfield_table record by bloblink
