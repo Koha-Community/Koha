@@ -167,22 +167,38 @@ sub editbranchform {
         $template->param(branchfax => $data->{'branchfax'});
         $template->param(branchemail => $data->{'branchemail'});
     }
-# make the checkboxs.....
-# FIXME: this way of doing it is wrong (bug 130)
+
+    # make the checkboxs.....
+    #
+    # We export a "categoryloop" array to the template, each element of which
+    # contains separate 'categoryname', 'categorycode', 'codedescription', and
+    # 'checked' fields. The $checked field is either '' or 'checked'
+    # (see bug 130)
+    #
     my $catinfo = getcategoryinfo();
     my $catcheckbox;
 #    print DEBUG "catinfo=".cvs($catinfo)."\n";
+    my @categoryloop = ();
     foreach my $cat (@$catinfo) {
 	my $checked = "";
-	my $tmp = $cat->{'categorycode'};
+	my $tmp = quotemeta($cat->{'categorycode'});
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
 	    $checked = "CHECKED";
 	}
-	$template->param(categoryname => $cat->{'categoryname'});
-	$template->param(categorycode => $cat->{'categorycode'});
-	$template->param(codedescription => $checked>$cat->{'codedescription'});
+	push @categoryloop, {
+		categoryname    => $cat->{'categoryname'},
+		categorycode    => $cat->{'categorycode'},
+		codedescription => $cat->{'codedescription'},
+		checked         => $checked,
+	    };
     }
-   
+    $template->param(categoryloop => \@categoryloop);
+
+    # {{{ Leave this here until bug 130 is completely resolved in the templates
+    for my $obsolete ('categoryname', 'categorycode', 'codedescription') {
+	$template->param($obsolete => 'Your template is out of date (bug 130)');
+    }
+    # }}}
 }
 
 sub deleteconfirm {
