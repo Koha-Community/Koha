@@ -102,9 +102,9 @@ sub gettemplate {
 
     my $htdocs;
     if ($opac) {
-	$htdocs = $configfile->{'opachtdocs'};
+	$htdocs = C4::Context->config('opachtdocs');
     } else {
-	$htdocs = $configfile->{'intrahtdocs'};
+	$htdocs = C4::Context->config('intrahtdocs');
     }
 
     my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
