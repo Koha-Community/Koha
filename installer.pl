@@ -652,7 +652,7 @@ if ($input) {
 }
 
 unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir";
+    my $result = mkdir "$kohalogdir",  0770;
     if ($result==0) {
         my @dirs = split(m#/#, $kohalogdir);
 	my $checkdir='';
@@ -678,7 +678,7 @@ CREATING REQUIRED DIRECTORIES
 
 unless ( -d $kohadir ) {
    print "Creating $kohadir...\n";
-   my $result=mkdir ($kohadir, oct(770));
+   my $result=mkdir ($kohadir, 0770);
    if ($result==0) {
        my @dirs = split(m#/#, $kohadir);
 	my $checkdir='';
@@ -689,28 +689,28 @@ unless ( -d $kohadir ) {
 	    }
 	}
    }
-   chown (oct(0), (getgrnam($httpduser))[2], "$kohadir");
-   chmod (oct(770), "$kohadir");
+   chown (0, (getgrnam($httpduser))[2], "$kohadir");
+   chmod (0770, "$kohadir");
 }
 unless ( -d "$kohadir/htdocs" ) {
    print "Creating $kohadir/htdocs...\n";
-   mkdir ("$kohadir/htdocs", oct(750));
+   mkdir ("$kohadir/htdocs", 0750);
 }
 unless ( -d "$kohadir/cgi-bin" ) {
    print "Creating $kohadir/cgi-bin...\n";
-   mkdir ("$kohadir/cgi-bin", oct(750));
+   mkdir ("$kohadir/cgi-bin", 0750);
 }
 unless ( -d "$kohadir/modules" ) {
    print "Creating $kohadir/modules...\n";
-   mkdir ("$kohadir/modules", oct(750));
+   mkdir ("$kohadir/modules", 0750);
 }
 unless ( -d "$kohadir/scripts" ) {
    print "Creating $kohadir/scripts...\n";
-   mkdir ("$kohadir/scripts", oct(750));
+   mkdir ("$kohadir/scripts", 0750);
 }
 unless ( -d $opacdir ) {
    print "Creating $opacdir...\n";
-   my $result=mkdir ($opacdir, oct(770));
+   my $result=mkdir ($opacdir, 0770);
    if ($result==0) {
        my @dirs = split(m#/#, $opacdir);
 	my $checkdir='';
@@ -721,16 +721,16 @@ unless ( -d $opacdir ) {
 	    }
 	}
    }
-   chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
-   chmod (oct(770), "$opacdir");
+   chown (0, (getgrnam($httpduser))[2], "$opacdir");
+   chmod (0770, "$opacdir");
 }
 unless ( -d "$opacdir/htdocs" ) {
    print "Creating $opacdir/htdocs...\n";
-   mkdir ("$opacdir/htdocs", oct(750));
+   mkdir ("$opacdir/htdocs", 0750);
 }
 unless ( -d "$opacdir/cgi-bin" ) {
    print "Creating $opacdir/cgi-bin...\n";
-   mkdir ("$opacdir/cgi-bin", oct(750));
+   mkdir ("$opacdir/cgi-bin", 0750);
 }
 
 
