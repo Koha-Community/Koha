@@ -22,7 +22,11 @@ You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR
 <!-- TMPL_LOOP name="loop_suppliers" -->
 	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
 		<td>
-			<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<!-- TMPL_ELSE -->
+				Inactive
+			<!-- /TMPL_IF -->
 		</td>
 		<td>
 			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
