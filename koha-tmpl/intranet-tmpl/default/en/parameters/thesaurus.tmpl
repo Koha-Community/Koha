@@ -104,7 +104,7 @@
 	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
 	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
 	<input type="hidden" name="father" value="<TMPL_VAR name="father">">
-	<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
+	<br><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add thesaurus entry" ALT="Add" BORDER=0 ><br>
 	</form>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<TMPL_VAR name="tab_list">
@@ -123,8 +123,8 @@
 		<td background="/images/background-mem.gif"><b>Authority</b></td>
 		<td background="/images/background-mem.gif" width="5%"><b>Dig</b></td>
 		<td background="/images/background-mem.gif" width="5%"><b>Related</b></td>
-		<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
-		<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
+		<td background="/images/background-mem.gif" width="5%">Edit</td>
+		<td background="/images/background-mem.gif" width="5%">Delete</td>
 	<TMPL_LOOP name="loop">
 	</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 		<td>&nbsp;</td>
@@ -132,8 +132,8 @@
 		<td><TMPL_VAR name="father"> <TMPL_VAR name="stdlib"></td>
 		<td><TMPL_VAR name="dig">Dig</a></td>
 		<td><TMPL_VAR name="related">Related</a></td>
-		<td><a href="<TMPL_VAR name="edit">">Edit</a></td>
-		<td><a href="<TMPL_VAR name="delete">">Delete</a></td>
+		<td><a href="<TMPL_VAR name="edit">"><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="<TMPL_VAR name="delete">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 	</tr>
 	</TMPL_LOOP>
 	<form action='<TMPL_VAR name="script_name">' method=post>

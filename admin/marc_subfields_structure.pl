@@ -337,14 +337,14 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
-	$template->param(edit => "<a href='$script_name?op=add_form&tagfield=$tagfield'>Edit</a>");
+	$template->param(edit => "<a href='$script_name?op=add_form&tagfield=$tagfield'>");
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(prev =>"<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
+		$template->param(prev =>"<a href=$script_name?offset=$prevpage>");
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
+		$template->param(next => "<a href=$script_name?offset=$nextpage>");
 	}
 } #---- END $OP eq DEFAULT
 

@@ -76,7 +76,7 @@
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on "edit". </p>
 <p>The column <b>koha field</b> shows that the subfield is linked with a "koha field". Koha can manage a marc interface, or a koha interface. This link
 ensure that both DB are synchronized, thus you can change from MARC to KOHA interface easily.</p>
-<table border=0 cellspacing=0 cellpadding=2>
+<table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="/images/background-mem.gif" width=5%><b>Subfield</b></td>
 	<td background="/images/background-mem.gif" width=30%><b>Lib</b></td>
@@ -87,7 +87,7 @@ ensure that both DB are synchronized, thus you can change from MARC to KOHA inte
 	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
-	<td background="/images/background-mem.gif" width=8%>&nbsp;</td>
+	<td background="/images/background-mem.gif" width=8%>Delete</td>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><TMPL_VAR name="tagsubfield"></td>
@@ -99,16 +99,16 @@ ensure that both DB are synchronized, thus you can change from MARC to KOHA inte
 	<td><TMPL_VAR name="authorised_value"></td>
 	<td><TMPL_VAR name="thesaurus_category"></td>
 	<td><TMPL_VAR name="value_builder"></td>
-	<td><a href="<TMPL_VAR name="delete">">delete</a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 </table>
-<TMPL_VAR name="edit">
 <table width=60%>
 	<tr>
-		<td width=33%><TMPL_VAR name="previous"></td>
-		<td width=33%><TMPL_VAR name="next"></td>
-		<td width=33%><a href="marctagstructure.pl?searchfield=<TMPL_VAR name="tagfield">">Back to Tags</a></td>
+		<td width="25%"><TMPL_VAR name="edit"><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td width="25%"><a href="marctagstructure.pl?searchfield=<TMPL_VAR name="tagfield">"><img src="/<TMPL_VAR name="theme">/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0></a></td>
+		<td width="25%"><TMPL_IF name="previous"><input type=image src="/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a></TMPL_IF></td>
+		<td width="25%"><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
 	</tr>
 </table>
 </TMPL_IF>

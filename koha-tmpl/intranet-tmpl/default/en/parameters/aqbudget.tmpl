@@ -6,25 +6,28 @@
 </TMPL_IF>
 
 <TMPL_IF name="else">
-<FONT SIZE=6><em>Budget admin</em></FONT><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
-<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
-<TMPL_IF name=search>
-<br>You Searched for <b><TMPL_VAR name=searchfield><b><p><br>
-</TMPL_IF>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b>Start date</b></td><td background="/images/background-mem.gif"><b>End date</b></td><td background="/images/background-mem.gif"><b>Budget amount</b></td><td background="/images/background-mem.gif">&nbsp;</td><td background="/images/background-mem.gif">&nbsp;</td></tr>
-<TMPL_LOOP name="budget">
-	<tr valign=top bgcolor=<TMPL_VAR name="toggle"> >
-		<td><TMPL_VAR name="bookfundid"> (<TMPL_VAR name="bookfundname">)</td>
-		<td><TMPL_VAR name="startdate"></td>
-		<td><TMPL_VAR name="enddate"></td>
-		<td><TMPL_VAR name="budgetamount"></td>
-		<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid">">Edit</a></td>
-		<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">">Delete</a></td>
-	</tr>
-</TMPL_LOOP>
-</table>
-<form action='/cgi-bin/koha/admin/aqbudget.pl' method=post><input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br></form><br clear=all>
+	<FONT SIZE=6><em>Budget admin</em></FONT><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
+	<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
+	<TMPL_IF name=search>
+	<br>You Searched for <b><TMPL_VAR name=searchfield><b><p><br>
+	</TMPL_IF>
+	<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b>Start date</b></td><td background="/images/background-mem.gif"><b>End date</b></td><td background="/images/background-mem.gif"><b>Budget amount</b></td><td background="/images/background-mem.gif">&nbsp;</td><td background="/images/background-mem.gif">&nbsp;</td></tr>
+	<TMPL_LOOP name="budget">
+		<tr valign=top bgcolor=<TMPL_VAR name="toggle"> >
+			<td><TMPL_VAR name="bookfundid"> (<TMPL_VAR name="bookfundname">)</td>
+			<td><TMPL_VAR name="startdate"></td>
+			<td><TMPL_VAR name="enddate"></td>
+			<td><TMPL_VAR name="budgetamount"></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid">"><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+		</tr>
+	</TMPL_LOOP>
+	</table>
+	<form action='/cgi-bin/koha/admin/aqbudget.pl' method=post>
+	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add budget" ALT="Add" BORDER=0 ><br>
+	</form><br clear=all>
 </TMPL_IF>
 
 <TMPL_IF name="add_form">
