@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.24  2002/10/24 12:09:01  arensb
+# Fixed "no title" warning when generating HTML documentation from POD.
+#
 # Revision 1.23  2002/10/16 12:43:08  arensb
 # Added some FIXME comments.
 #
@@ -214,7 +217,7 @@ $VERSION = 0.01;
 
 =head1 NAME
 
-C4::Biblio : acquisition, catalog  management functions
+C4::Biblio - acquisition, catalog  management functions
 
 =head1 SYNOPSIS
 
