@@ -585,7 +585,6 @@ warn "current borrower  for $iteminformation->{'itemnumber'} : $currentborrower"
 #
 sub issuebook {
 	my ($env,$borrower,$barcode,$date) = @_;
-warn "1";
 	my $dbh = C4::Context->dbh;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -595,7 +594,6 @@ warn "1";
 #
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
 	if ($currentborrower eq $borrower->{'borrowernumber'}) {
-warn "2";
 		my ($charge,$itemtype) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
 		if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge);
@@ -608,16 +606,13 @@ warn "2";
 # NOT a renewal
 #
 		if ($currentborrower ne '') {
-warn "3";
 			# This book is currently on loan, but not to the person
 			# who wants to borrow it now. mark it returned before issuing to the new borrower
 			returnbook($iteminformation->{'barcode'}, $env->{'branchcode'});
 		}
-warn "4";
 		# See if the item is on reserve.
 		my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
 		if ($restype) {
-warn "5";
 			my $resbor = $res->{'borrowernumber'};
 			if ($resbor eq $borrower->{'borrowernumber'}) {
 				# The item is on reserve to the current patron
