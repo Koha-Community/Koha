@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
 <div id="main">
 <!-- TMPL_IF name="do_it" -->
 <!-- TMPL_LOOP name="mainloop" -->
@@ -34,7 +35,7 @@
 						<!-- TMPL_VAR name="issues" -->
 					</th>
 				<!-- /TMPL_LOOP -->
-				<th>&nbsp;</th>
+				<th><!-- TMPL_VAR NAME="grantotal" --></th>
 			</tr>
 	</table>
 <!-- /TMPL_LOOP -->

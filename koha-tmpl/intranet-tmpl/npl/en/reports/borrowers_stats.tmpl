@@ -1,0 +1,132 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1>Koha : Borrowers statistics </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Filtered on</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><label> <!-- TMPL_VAR NAME="crit"--> = </label><!-- TMPL_VAR NAME="filter"--></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<table>
+			<tr>
+				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+				<th>TOTAL</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+								<!-- TMPL_VAR NAME="value" -->
+							</td>
+						<!-- /TMPL_LOOP -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="totalrow" -->
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tr>
+					<th>TOTAL</th>
+					<!-- TMPL_LOOP NAME="loopfooter" -->
+						<th>
+							<!-- TMPL_VAR NAME="totalcol" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th><!-- TMPL_VAR NAME="total" --></th>
+				</tr>
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>Borrowers statistics</h1>
+	<form method="post" action="borrowers_stats.pl">
+	<table>
+		<thead>
+			<tr>
+			<th>Title</th>
+			<th>Row</th>
+			<th>Column</th>
+			<th>Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="highlighted">
+			<td>Borrower category</td>
+			<td><input type="radio" name="Line" value="categorycode" /></td>
+			<td><input type="radio" name="Column" value="categorycode" /></td>
+			<td ><!-- TMPL_VAR NAME="CGICatCode" --></td>
+			</tr>
+			<tr>
+			<td>Borrower status</td>
+			<td></td>
+			<td></td>
+			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td>
+			</tr>
+			<tr class="hilighted">
+			<td>
+			Zip Code
+			</td>
+			<td><input type="radio" name="Line" value="zipcode" /></td>
+			<td><input type="radio" name="Column" value="zipcode" /></td>
+			<td><input type="text"  name="Filter" /></td>
+			</tr>
+			<tr class="hilighted">
+			<td>&nbsp;</td>
+			<td colspan="2"><select name="digits">
+			<option value=""> </option>
+			<option value ="1">1</option>
+			<option value ="2">2</option>
+			<option value ="3">3</option>
+			<option value ="4">4</option>
+			<option value ="5">5</option>
+			<option value ="6">6</option>
+			<option value ="7">7</option>
+			<option value ="8">8</option>
+			<option value ="9">9</option>
+			<option value ="10">10</option>
+			</select>
+			digits 
+			</td>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+			<td>Sort1</td>
+			<td><input type="radio" name="Line" value="sort1" /></td>
+			<td><input type="radio" name="Column" value="sort1" /></td>
+			<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
+			</tr>
+			<tr class="hilighted" >
+			<td>Sort2</td>
+			<td><input type="radio" name="Line" value="sort2" /></td>
+			<td><input type="radio" name="Column" value="sort2" /></td>
+			<td><!-- TMPL_VAR NAME="CGISort2" --></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="details">
+		<h3> Output </h3>
+		<input type="radio" checked="checked" name="output" value="screen" /> To screen into the browser
+		<br />
+		<input type="radio" name="output" value="file" /> To file <input type="text" name="basename" value="Export"   /> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input type="submit" value="OK" class="submit" />
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+	<input type="hidden" name="do_it" value="1" />
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
