@@ -3,19 +3,16 @@ use strict;
 require Exporter;
 use CGI;
 
-use C4::Output;       # gettemplate
-use C4::Auth;         # checkauth
+use C4::Auth;       # get_template_and_user
 
 my $query = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-main.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			 });
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
-
-
-my $template = gettemplate("opac-main.tmpl", "opac");
-
-$template->param(loggedinuser => $loggedinuser);
-
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;

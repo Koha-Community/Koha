@@ -3,23 +3,21 @@ use strict;
 require Exporter;
 use CGI;
 
-use C4::Output;       # gettemplate
-use C4::Auth;         # checkauth, getborrowernumber.
+use C4::Auth;
 use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Reserves2;
 
 my $query = new CGI;
-
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
-
-my $template = gettemplate("opac-user.tmpl", "opac");
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-user.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 0,
+			     flagsrequired => {borrow => 1},
+			     });
 
 # get borrower information ....
-my $borrowernumber = getborrowernumber($loggedinuser);
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 $borr->{'dateenrolled'} = slashifyDate($borr->{'dateenrolled'});
@@ -95,5 +93,5 @@ foreach my $res (@$reserves) {
 $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount);
 
-$template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;
+
