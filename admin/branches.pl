@@ -64,6 +64,7 @@ my $pagesize=20;
 # Main loop....
 my $input = new CGI;
 my $branchcode=$input->param('branchcode');
+my $branchname=$input->param('branchname');
 my $categorycode = $input->param('categorycode');
 my $op = $input->param('op');
 
@@ -114,6 +115,7 @@ if ($op eq 'add') {
 		$template->param(else => 1);
 		default($message);
 	} else {
+		$template->param(branchname => $branchname);
 		$template->param(delete_confirm => 1);
 		$template->param(branchcode => $branchcode);
 	}
@@ -121,7 +123,7 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletebranch($branchcode);
 	$template->param(else => 1);
-	default("The branch with code $branchcode has been deleted.");
+	default("The branch \"$branchname\" ($branchcode) has been deleted.");
 } elsif ($op eq 'editcategory') {
 	# If the user has pressed the "add new category" or "modify" buttons.
 	heading("Branches: Edit Category");
