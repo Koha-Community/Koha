@@ -16,10 +16,11 @@
 # FIXME tentative: bookfund: 書籍採購資金
 # FIXME "request", "reserve" should be 預約 [http://www.tpml.edu.tw/chinese/service/service.htm]
 # XXX acquisition is always translated 採購 for libraries despite being translated as 購置 in HK Government's glossary
-# XXX Exact 在 goo 網站譯「完全一致」，可以參考
+# XXX Exact 日文譯「完全一致」，可以參考
 # XXX "borrower" HKPL 稱「借用人」
-# NOTE "Group"譯「群組」似乎是對的，「著錄」似乎是Biblio, 但「著錄」和「書目」有什麼不同就不清楚
+# NOTE "Group"譯「群組」似乎是對的，「著錄」似乎是Biblio, 「著錄」和「書目」似乎是動詞和名詞的分別
 # NOTE "Clear"要譯「重設」，不譯「清空」，因為某些欄位的預設值並非空白，按「Clear」只會重設成預設值，不會清空欄位
+# NOTE "Additional Author" 只在香港公共圖書館譯「附加著者」，其他圖書館多譯「其他著者」
 #
 msgid ""
 msgstr ""
@@ -402,7 +403,7 @@ msgstr "%s年%s月%s日"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:127
 #, c-format
 msgid "%sDig"
-msgstr ""
+msgstr "%s鑽探"
 
 #. %1$s: TMPL_VAR name=related
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:128
@@ -691,9 +692,8 @@ msgid "&nbsp; &nbsp; - Catalogue Search"
 msgstr "　　- 查詢館藏"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:246
-#, fuzzy
 msgid "&nbsp; &nbsp; - Check if Expired"
-msgstr "　　- 報表"
+msgstr "　　- 查看是否到期"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:129
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:140
@@ -803,10 +803,10 @@ msgstr "　　- 設定"
 msgid "&nbsp; &nbsp; - Shanon"
 msgstr "　　- Shanon"
 
+#  NOTE 見 http://www.4everhost.net/9394v2/ac/putonghua.asp?letter=s
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:292
-#, fuzzy
 msgid "&nbsp; &nbsp; - Stocktake"
-msgstr "　　- 設定"
+msgstr "　　- 盤點"
 
 #  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:187
@@ -814,9 +814,8 @@ msgid "&nbsp; &nbsp; - Supplier Details"
 msgstr "　　- 供應商詳情"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:189
-#, fuzzy
 msgid "&nbsp; &nbsp; - Supplier Resources"
-msgstr "　　- 供應商資料"
+msgstr "　　- 供應商"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:297
 msgid "&nbsp; &nbsp; - Telnet Help"
@@ -985,9 +984,8 @@ msgid "-> Renewals"
 msgstr "-> 續借"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:284
-#, fuzzy
 msgid "-> Resources"
-msgstr "-> 還書"
+msgstr "-> 資源"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:74
 msgid "-> Returns"
@@ -998,10 +996,10 @@ msgstr "-> 還書"
 msgid "-> Search"
 msgstr "-> 搜尋"
 
+#  NOTE 見 http://www.cnpedia.com/Result/Eword.Asp?Eword=stock%20report,%20inventory
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:147
-#, fuzzy
 msgid "-> Stock Reports"
-msgstr "->  進階報表"
+msgstr "-> 庫存清點報告"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:186
 msgid "-> Suppliers"
@@ -1096,14 +1094,10 @@ msgid "<a1></a> \" %s"
 msgstr "<a1></a> \" %s"
 
 #  XXX 暫譯，譯文有待改進
-#  TODO Untranslated
-#  NOTE "Credit" 不是「貸方」，見http://acct.ilongman.com/glossary_content.asp
-#  NOTE "Credit" 也不是「貸項通知單」(Credit Note)，因為沒有印出通知單，只入了電腦
-#  NOTE 圖書館的貸方是讀者的借方，這裡是在讀者的貸方記帳，但使用者是圖書館員，譯貸方好像有些問題
 #: ../../koha-tmpl/intranet-tmpl/default/en/boraccount.tmpl:6
 #, c-format
 msgid "<a1>Create Manual Invoice</a> &nbsp; <a2>Create Manual Credit</a>"
-msgstr "<a1>人手建立發票</a>　　<a2>Create Manual Credit</a>"
+msgstr "<a1>人手建立發票</a>　　<a2>人手記入讀者貸方</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:47
 #, c-format
@@ -1198,13 +1192,13 @@ msgstr "<b><a1>借出總數：</a></b>%s"
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:24
 #, c-format
 msgid "<b>Additional Author:</b> %s"
-msgstr "<b>附加著者：</b>%s"
+msgstr "<b>其他著者：</b>%s"
 
 #. %1$s: TMPL_VAR name=additional
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:30
 #, c-format
 msgid "<b>Additional Author:</b>%s"
-msgstr "<b>附加著者：</b>%s"
+msgstr "<b>其他著者：</b>%s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=AUTHOR
@@ -1329,9 +1323,10 @@ msgstr "<b>杜威分類號：</b>%s"
 msgid "<b>Dewey:</b> <a1>%s</a>"
 msgstr "<b>杜威分類號：</b><a1>%s</a>"
 
+#  XXX 暫譯，譯文有待改進
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:101
 msgid "<b>Dig</b>: see data depending on this one"
-msgstr ""
+msgstr "<b>鑽探</b>：參閱依存這項權威條目的相關條目"
 
 #. %1$s: TMPL_VAR name=biblioitemnumber
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:92
@@ -2085,15 +2080,15 @@ msgstr "新增書目"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:34
 msgid "Additional Author"
-msgstr "附加著者"
+msgstr "其他著者"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:151
 msgid "Additional Authors:"
-msgstr "附加著者："
+msgstr "其他著者："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:17
 msgid "Additional authors"
-msgstr "附加著者"
+msgstr "其他著者"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member.tmpl:19
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:43
@@ -2361,8 +2356,9 @@ msgstr "購物籃"
 
 #  XXX 在網上完全找不到相關資料，財經術語大概不可亂譯
 #: ../../koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:11
+#, fuzzy
 msgid "Baycorp Adjustment"
-msgstr ""
+msgstr "Baycorp 信貸調整"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/opac-bottom.inc:11
 msgid "Become a Member"
@@ -3282,7 +3278,7 @@ msgstr "杜威分類號："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:118
 msgid "Dig"
-msgstr ""
+msgstr "鑽探"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:154
 msgid "Discount"
@@ -3411,16 +3407,18 @@ msgstr "電郵"
 msgid "Email: %s"
 msgstr "電郵：%s"
 
+#  XXX 暫譯
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:129
 msgid "End date"
-msgstr ""
+msgstr "截至此日"
 
+#  XXX 暫譯
 #. %1$s: TMPL_VAR name=dateformat
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:96
 #, c-format
 msgid "End date <i>(%s)</i>"
-msgstr ""
+msgstr "截至此日 <i>(%s)</i>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:39
 msgid "English"
@@ -3963,9 +3961,12 @@ msgstr "移交中"
 msgid "Inactive"
 msgstr "非使用中"
 
+#  NOTE 微軟譯法，見 http://www.microsoft.com/taiwan/technet/Win2k/network/dcsiz/
+#  NOTE 我個人認為譯文很不通順
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:40
+#, fuzzy
 msgid "Initials"
-msgstr ""
+msgstr "中間名稱縮寫"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:40
 msgid "Institution Name"
@@ -4644,10 +4645,10 @@ msgstr "必備"
 msgid "Mandatory"
 msgstr "必備"
 
+#  XXX 暫譯，譯文有待改進
 #: ../../koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:3
-#, fuzzy
 msgid "Manual Credit"
-msgstr "鳴謝："
+msgstr "人手記入讀者貸方"
 
 #  XXX 暫譯，譯文有待改進
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:3
@@ -5111,14 +5112,14 @@ msgstr "非小說類"
 msgid "Normal"
 msgstr "一般"
 
+#  XXX 暫譯
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:57
-#, fuzzy
 msgid "Not Available"
-msgstr "下一個可用的"
+msgstr "不可取閱"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:131
 msgid "Not On Issue."
-msgstr "沒有借出"
+msgstr "沒有借出。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:126
 msgid "Not allowed"
@@ -5501,7 +5502,7 @@ msgstr "Perl版本："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_700_701_702.tmpl:3
 msgid "Personal Authorities builder"
-msgstr ""
+msgstr "人名權威建立程序"
 
 #. %1$s: TMPL_VAR name=phone
 #. %2$s: TMPL_VAR name=fax
@@ -5747,9 +5748,10 @@ msgstr "出版者"
 msgid "Publisher:"
 msgstr "出版者："
 
+#  NOTE 中文似乎不分「Publisher」及「Imprint」，一律稱「出版商」
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:108
 msgid "Publishers and Imprints"
-msgstr ""
+msgstr "代理下列出版者出版之圖書資料"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:30
 msgid "QTY"
@@ -5984,12 +5986,12 @@ msgstr "書價"
 msgid "Replacement Price:"
 msgstr "書價："
 
+#  NOTE 這似乎是法文，不是英文，即「Reporter」應為動詞而非名詞
 #. INPUT type=button
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_60X.tmpl:75
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_60X.tmpl:93
-#, fuzzy
 msgid "Reporter"
-msgstr "報表列印"
+msgstr "回報"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:57
@@ -6476,13 +6478,13 @@ msgstr "職員"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:125
 msgid "Start date"
-msgstr "開始日期"
+msgstr "由此日起"
 
 #. %1$s: TMPL_VAR name=dateformat
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:95
 #, c-format
 msgid "Start date <i>(%s)</i>"
-msgstr "開始日期 <i>(%s)</i>"
+msgstr "由此日起 <i>(%s)</i>"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:93
@@ -7221,10 +7223,10 @@ msgid "Volume"
 msgstr "集叢號"
 
 #  NOTE Koha 資料庫內的 volumedate 欄位，意義不詳
+#  XXX 暫譯，原文意義不詳，譯文可能有誤
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:23
-#, fuzzy
 msgid "Volume Date"
-msgstr "到期日"
+msgstr "集叢出版日期"
 
 #  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:24
@@ -7512,7 +7514,7 @@ msgstr "【顯示共%3$s個記錄中的第%1$s至%2$s個記錄】%4$s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:3
 msgid "\\n"
-msgstr ""
+msgstr "\\n"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:114
 msgid "a private bookshelf is managed by you & can be seen only by you."
@@ -7533,7 +7535,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:90
 msgid "and all entries depending on this one"
-msgstr ""
+msgstr "以及依存這項權威條目的所有相關條目"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:27
 msgid "and they must all be in the 10 (items) tab"
