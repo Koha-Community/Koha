@@ -34,13 +34,14 @@ foreach (sort keys %$issues) {
 }
 if ($input->param('newpassword')) {
     my $digest=md5_base64($input->param('newpassword'));
+    my $uid = $input->param('newuserid');
     my $dbh=C4Connect();
-    my $sth=$dbh->prepare("update borrowers set password=? where borrowernumber=?");
-    $sth->execute($digest, $member);
-    warn "$member $digest";
-    print $input->redirect("/members/");
+    my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
+    $sth->execute($uid, $digest, $member);
+    print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$member");
 } else {
     my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+    my $userid = $bor->{'userid'};
 
     my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     my $length=int(rand(2))+4;
@@ -67,6 +68,7 @@ if ($input->param('newpassword')) {
     <h2>$bor->{'surname'}, $bor->{'firstname'}</h2>
     <form method=post>
     <input type=hidden name=member value=$member>
+    New UserID: <input name=newuserid size=20 value=$userid> <br>
     New Password: <input name=newpassword size=20 value=$defaultnewpassword> (default is $spellitout)
     <p>
     <input type=submit value="Set Password">

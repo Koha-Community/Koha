@@ -42,7 +42,7 @@ if ($input->param('newflags')) {
     }
     my $sth=$dbh->prepare("update borrowers set flags=? where borrowernumber=?");
     $sth->execute($flags, $member);
-    print $input->redirect("/members/");
+    print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$member");
 } else {
     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
 
