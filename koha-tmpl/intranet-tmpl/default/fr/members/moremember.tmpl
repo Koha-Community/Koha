@@ -63,35 +63,28 @@
 		<TMPL_VAR NAME="borrowernotes"><!--</a>-->
 		<p align=right>
 		</font>
-		<TMPL_IF name="A">
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
-				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-				<INPUT TYPE=submit class="button" value="Modify">
-			</form>
-		</TMPL_IF>
-		<TMPL_IF name="C">
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
-				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-				<INPUT TYPE=submit class="button" value="Modify">
-			</form>
-		</TMPL_IF>
 		<TMPL_IF name="I">
 			<form action=/cgi-bin/koha/imemberentry.pl method=post>
 				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-				<INPUT TYPE=submit class="button" value="Modify">
+				<INPUT TYPE=submit class="button" value="Modifier">
+			</form>
+		<TMPL_ELSE>
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="button" value="Modifier">
 			</form>
 		</TMPL_IF>
 		<form action=/cgi-bin/koha/deletemem.pl method=post>
                         <input type=hidden name=member value="<TMPL_VAR NAME="bornum">">
-			<INPUT TYPE=submit class="button" value="Delete">
+			<INPUT TYPE=submit class="button" value="Supprimer">
 		</form>
 		<form action=/cgi-bin/koha/member-password.pl method=post>
 			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
-			<input type=submit class="button" value="Change Password">
+			<input type=submit class="button" value="Changer identifiant web">
 		</form>
 		<form action=/cgi-bin/koha/member-flags.pl method=post>
 			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
-			<input type=submit class="button" value="Modify User Flags">
+			<input type=submit class="button" value="Modifier autorisations">
 		</form>
 
 	</TD>
