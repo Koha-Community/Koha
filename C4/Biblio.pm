@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.36  2003/02/12 11:01:01  tipaul
+# Support for 000 -> 010 fields.
+# Those fields doesn't have subfields.
+# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
+# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
+#
 # Revision 1.35  2003/02/03 18:46:00  acli
 # Minor factoring in C4/Biblio.pm, plus change to export the per-tag
 # 'mandatory' property to a per-subfield 'tag_mandatory' template parameter,
@@ -445,35 +451,46 @@ sub MARCfind_MARCbibid_from_oldbiblionumber {
 
 sub MARCaddbiblio {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ($dbh,$record,$biblionumber) = @_;
-    my @fields=$record->fields();
-    my $bibid;
-    # adding main table, and retrieving bibid
-    $dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
-    my $sth=$dbh->prepare("insert into marc_biblio (datecreated,biblionumber) values (now(),?)");
-    $sth->execute($biblionumber);
-    $sth=$dbh->prepare("select max(bibid) from marc_biblio");
-    $sth->execute;
-    ($bibid)=$sth->fetchrow;
-    $sth->finish;
-    my $fieldcount=0;
-    # now, add subfields...
-    foreach my $field (@fields) {
-	my @subfields=$field->subfields();
-	$fieldcount++;
-	foreach my $subfieldcount (0..$#subfields) {
-		    &MARCaddsubfield($dbh,$bibid,
-				 $field->tag(),
-				 $field->indicator(1).$field->indicator(2),
-				 $fieldcount,
-				 $subfields[$subfieldcount][0],
-				 $subfieldcount+1,
-				 $subfields[$subfieldcount][1]
-				 );
+	my ($dbh,$record,$biblionumber) = @_;
+	my @fields=$record->fields();
+	my $bibid;
+	# adding main table, and retrieving bibid
+	$dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
+	my $sth=$dbh->prepare("insert into marc_biblio (datecreated,biblionumber) values (now(),?)");
+	$sth->execute($biblionumber);
+	$sth=$dbh->prepare("select max(bibid) from marc_biblio");
+	$sth->execute;
+	($bibid)=$sth->fetchrow;
+	$sth->finish;
+	my $fieldcount=0;
+	# now, add subfields...
+	foreach my $field (@fields) {
+		$fieldcount++;
+		if ($field->tag() <10) {
+				&MARCaddsubfield($dbh,$bibid,
+						$field->tag(),
+						'',
+						$fieldcount,
+						'',
+						1,
+						$field->data()
+						);
+		} else {
+			my @subfields=$field->subfields();
+			foreach my $subfieldcount (0..$#subfields) {
+				&MARCaddsubfield($dbh,$bibid,
+						$field->tag(),
+						$field->indicator(1).$field->indicator(2),
+						$fieldcount,
+						$subfields[$subfieldcount][0],
+						$subfieldcount+1,
+						$subfields[$subfieldcount][1]
+						);
+			}
+		}
 	}
-    }
-    $dbh->do("unlock tables");
-    return $bibid;
+	$dbh->do("unlock tables");
+	return $bibid;
 }
 
 sub MARCadditem {
@@ -501,12 +518,12 @@ sub MARCadditem {
 				 $subfields[$subfieldcount][1]
 				 );
 #				 warn "ADDING :$bibid,".
-				 $field->tag().
-				 $field->indicator(1).$field->indicator(2).",
-				 $fieldcount,
-				 $subfields[$subfieldcount][0],
-				 $subfieldcount+1,
-				 $subfields[$subfieldcount][1]";
+#				 $field->tag().
+#				 $field->indicator(1).$field->indicator(2).",
+#				 $fieldcount,
+#				 $subfields[$subfieldcount][0],
+#				 $subfieldcount+1,
+#				 $subfields[$subfieldcount][1]";
 	}
     }
     $dbh->do("unlock tables");
@@ -531,18 +548,14 @@ sub MARCaddsubfield {
 		$sth->execute;
 		my ($res)=$sth->fetchrow;
 		$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)");
-		if ($tagid<100) {
-		$sth->execute($bibid,'0'.$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
-		} else {
-		$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
-		}
+		$sth->execute($bibid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
 		if ($sth->errstr) {
 		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 		}
 #	$dbh->do("unlock tables");
 	} else {
 		my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
-		$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
+		$sth->execute($bibid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
 		if ($sth->errstr) {
 		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 		}
@@ -573,14 +586,18 @@ sub MARCgetbiblio {
 			$sth2->finish;
 			$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
 		}
+#		warn "prev : $prevtag . ".$row->{tag}." => ".$row->{subfieldvalue};
 		if ($row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag) {
-		    if (length($prevtag) <3) {
-				$prevtag = "0".$prevtag;
-			}
 			$previndicator.="  ";
-			my $field = MARC::Field->new( $prevtag, substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
+			my $field;
+			if ($prevtag <10) {
+				warn "add < $prevtag";
+				$record->add_fields((sprintf "%03s",$prevtag),%subfieldlist->{'@'});
+			} else {
+				$field = MARC::Field->new( (sprintf "%03s",$prevtag), substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
+				$record->add_fields($field);
+			}
 			undef %subfieldlist;
-			$record->add_fields($field);
 			$prevtagorder=$row->{tagorder};
 			$prevtag = $row->{tag};
 			$previndicator=$row->{tag_indicator};
@@ -593,8 +610,12 @@ sub MARCgetbiblio {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
-	$record->add_fields($field);
+	if ($prevtag <10) {
+		$record->add_fields($prevtag,%subfieldlist->{'@'});
+	} else {
+		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+		$record->add_fields($field);
+	}
 	return $record;
 }
 sub MARCgetitem {
@@ -645,42 +666,44 @@ sub MARCgetitem {
 }
 
 sub MARCmodbiblio {
-    my ($dbh,$bibid,$record,$delete)=@_;
-#    my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-    my $oldrecord=&MARCgetbiblio($dbh,$bibid);
-#    warn "OLD : ".$oldrecord->as_formatted();
-#    warn "----------------------------------\nNEW : ".$record->as_formatted();
-#    warn "\n";
-# if nothing to change, don't waste time...
-    if ($oldrecord eq $record) {
-#    warn "NOTHING TO CHANGE";
-	return;
-    }
-# otherwise, skip through each subfield...
-    my @fields = $record->fields();
-    my $tagorder=0;
-    foreach my $field (@fields) {
-	my $oldfield = $oldrecord->field($field->tag());
-	my @subfields=$field->subfields();
-	my $subfieldorder=0;
-	$tagorder++;
-	foreach my $subfield (@subfields) {
-	    $subfieldorder++;
-	    if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
-# just adding datas...
-		&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
-				 1,@$subfield[0],$subfieldorder,@$subfield[1]);
-	    } else {
-# modify the subfield if it's a different string
-		if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
-		    my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-		    &MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
-		} else {
-# FIXME ???
-		}
-	    }
+	my ($dbh,$bibid,$record,$delete)=@_;
+	my $oldrecord=&MARCgetbiblio($dbh,$bibid);
+	if ($oldrecord eq $record) {
+		return;
 	}
-    }
+	# otherwise, skip through each subfield...
+	my @fields = $record->fields();
+	my $tagorder=0;
+	foreach my $field (@fields) {
+		my $oldfield = $oldrecord->field($field->tag());
+		my @subfields=$field->subfields();
+		my $subfieldorder=0;
+		$tagorder++;
+		if ($field->tag() <10) {
+				if ($oldfield eq 0 or (! $oldfield->data()) ) {
+					&MARCaddsubfield($dbh,$bibid,$field->tag(),'',
+							1,'@',1,$field->data());
+				} else {
+						my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,'@',$subfieldorder);
+						&MARCmodsubfield($dbh,$subfieldid,$field->data());
+				}
+		} else {
+			foreach my $subfield (@subfields) {
+				$subfieldorder++;
+				if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
+			# just adding datas...
+					&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
+							1,@$subfield[0],$subfieldorder,@$subfield[1]);
+				} else {
+		# modify the subfield if it's a different string
+					if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
+						my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+						&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
+					}
+				}
+			}
+		}
+	}
 }
 sub MARCmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
@@ -930,24 +953,29 @@ sub MARCkoha2marcOnefield {
 sub MARChtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = @$rtags[0];
+	warn "prev : $prevtag";
 	my $record = MARC::Record->new();
 	my %subfieldlist={};
 	for (my $i=0; $i< @$rtags; $i++) {
 		# rebuild MARC::Record
 		if (@$rtags[$i] ne $prevtag) {
-			if ($prevtag<10) {
-				$prevtag='0'.10;
-			}
+#			if ($prevtag<10) {
+#				$prevtag='0'.10;
+#			}
 			$indicators{$prevtag}.='  ';
-			my $field = MARC::Field->new( $prevtag, substr($indicators{$prevtag},0,1),substr($indicators{$prevtag},1,1), %subfieldlist);
-			$record->add_fields($field);
+			if ($prevtag < 10) {
+				$record->add_fields((sprintf "%03s",$prevtag),%subfieldlist->{'@'});
+			} else {
+				my $field = MARC::Field->new( (sprintf "%03s",$prevtag), substr($indicators{$prevtag},0,1),substr($indicators{$prevtag},1,1), %subfieldlist);
+				$record->add_fields($field);
+			}
 			$prevtag = @$rtags[$i];
 			%subfieldlist={};
 			%subfieldlist->{@$rsubfields[$i]} = @$rvalues[$i];
 		} else {
-#			if (%subfieldlist->{@$rsubfields[$i]}) {
-#				%subfieldlist->{@$rsubfields[$i]} .= '|';
-#			}
+			if (%subfieldlist->{@$rsubfields[$i]}) {
+				%subfieldlist->{@$rsubfields[$i]} .= '|';
+			}
 			%subfieldlist->{@$rsubfields[$i]} .=@$rvalues[$i];
 			$prevtag= @$rtags[$i];
 		}
@@ -1215,27 +1243,12 @@ sub OLDnewbiblio {
   my $bibnum = $$data[0] + 1;
   my $series = 0;
 
-  $biblio->{'title'}       = $dbh->quote($biblio->{'title'});
-  $biblio->{'author'}      = $dbh->quote($biblio->{'author'});
-  $biblio->{'copyright'}   = $dbh->quote($biblio->{'copyright'});
-  $biblio->{'seriestitle'} = $dbh->quote($biblio->{'seriestitle'});
-  $biblio->{'notes'}	   = $dbh->quote($biblio->{'notes'});
-  $biblio->{'abstract'}    = $dbh->quote($biblio->{'abstract'});
   if ($biblio->{'seriestitle'}) { $series = 1 };
-
   $sth->finish;
-  $query = "insert into biblio set
-biblionumber  = $bibnum,
-title         = $biblio->{'title'},
-author        = $biblio->{'author'},
-copyrightdate = $biblio->{'copyright'},
-serial        = $series,
-seriestitle   = $biblio->{'seriestitle'},
-notes         = $biblio->{'notes'},
-abstract      = $biblio->{'abstract'}";
-
+  $query = "insert into biblio set biblionumber  = ?, title         = ?, author        = ?, copyrightdate = ?,
+									serial        = ?, seriestitle   = ?, notes         = ?, abstract      = ?";
   $sth = $dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bibnum,$biblio->{'title'},$biblio->{'author'},$biblio->{'copyright'},$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
 
   $sth->finish;
 #  $dbh->disconnect;
@@ -1247,15 +1260,6 @@ sub OLDmodbiblio {
 	#  my $dbh   = C4Connect;
 	my $query;
 	my $sth;
-
-	$biblio->{'title'}         = $dbh->quote($biblio->{'title'});
-	$biblio->{'author'}        = $dbh->quote($biblio->{'author'});
-	$biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
-	$biblio->{'copyrightdate'} = $dbh->quote($biblio->{'copyrightdate'});
-	$biblio->{'seriestitle'}   = $dbh->quote($biblio->{'serirestitle'});
-	$biblio->{'serial'}        = $dbh->quote($biblio->{'serial'});
-	$biblio->{'unititle'}      = $dbh->quote($biblio->{'unititle'});
-	$biblio->{'notes'}         = $dbh->quote($biblio->{'notes'});
 
 	$query = "Update biblio set title         = ?, author        = ?, abstract      = ?, copyrightdate = ?,
 					seriestitle   = ?, serial        = ?, unititle      = ?, notes         = ? where biblionumber = ?";
@@ -1475,13 +1479,12 @@ sub OLDnewsubject {
 sub OLDnewsubtitle {
     my ($dbh,$bibnum, $subtitle) = @_;
 #  my $dbh   = C4Connect;
-    $subtitle = $dbh->quote($subtitle);
     my $query = "insert into bibliosubtitle set
-                            biblionumber = $bibnum,
-                            subtitle = $subtitle";
+                            biblionumber = ?,
+                            subtitle = ?";
     my $sth   = $dbh->prepare($query);
 
-    $sth->execute;
+    $sth->execute($bibnum,$subtitle);
 
     $sth->finish;
 #  $dbh->disconnect;
