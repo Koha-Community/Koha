@@ -49,6 +49,10 @@ my $printer=$query->param('printer');
 ($branch) || ($branch=$query->cookie('branch'));
 ($printer) || ($printer=$query->cookie('printer'));
 
+($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+($printers->{$printer}) || ($printer=(keys %$printers)[0]);
+
+
 # is you force a selection....
 my $oldbranch = $branch;
 my $oldprinter = $printer;
@@ -68,13 +72,7 @@ my $branchoptions;
 my $printeroptions;
 foreach (keys %$branches) {
     (next) unless ($_);
-    # FIXME - What is this "IS" field? I suspect it's a leftover from
-    # some previous iteration of the code, and means "this is a branch
-    # that does issues". But it never gets set, so no branches ever
-    # get selected, and the user can't choose a branch.
-    # FIXME - Also, shouldn't librarians be able to select any branch,
-    # not just ones that handle issues?
-#    (next) unless ($branches->{$_}->{'IS'});
+    (next) unless ($branches->{$_}->{'IS'});
     $branchcount++;
     my $selected='';
     ($selected='selected') if ($_ eq $oldbranch);
@@ -105,7 +103,8 @@ if ($printercount>1) {
 EOF
 } else {
     my ($printer) = keys %$printers;
-}
+    $printerform.="Printer: ".$printers->{$printer}->{printername};
+} 
 
 if ($branchcount>1) {
     $branchform=<<"EOF";
@@ -113,7 +112,8 @@ if ($branchcount>1) {
 EOF
 } else {
     my ($branch) = keys %$branches;
-}
+    $branchform.= "Branch: ".$branches->{$branch}->{branchname};
+} 
 
 
 

@@ -5,7 +5,6 @@ package C4::Circulation::Circ2;
 #package to deal with Returns
 #written 3/11/99 by olwen@katipo.co.nz
 
-# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -247,10 +246,21 @@ sub getpatroninformation {
     $sth = $dbh->prepare($query);
     $sth->execute;
     my $borrower = $sth->fetchrow_hashref;
+    my $amount = checkaccount($env, $borrowernumber, $dbh);
+    $borrower->{'amountoutstanding'} = $amount;
     my $flags = patronflags($env, $borrower, $dbh);
+    my $accessflagshash;
+
+    $sth=$dbh->prepare("select bit,flag from userflags");
+    $sth->execute;
+    while (my ($bit, $flag) = $sth->fetchrow) {
+	if ($borrower->{'flags'} & 2**$bit) {
+	    $accessflagshash->{$flag}=1;
+	}
+    }
     $sth->finish;
     $borrower->{'flags'}=$flags;
-    return($borrower, $flags);
+    return ($borrower, $flags, $accessflagshash);
 }
 
 =item decode
@@ -723,7 +733,7 @@ sub issuebook {
 	    last SWITCH;
 	}
 	if ($iteminformation->{'notforloan'} == 1) {
-	    $rejected="Reference item: not for loan.";
+	    $rejected="Item not for loan.";
 	    last SWITCH;
 	}
 	if ($iteminformation->{'wthdrawn'} == 1) {
@@ -734,8 +744,10 @@ sub issuebook {
 	    $rejected="Restricted item.";
 	    last SWITCH;
 	}
-
-	# See who, if anyone, currently has this book.
+	if ($iteminformation->{'itemtype'} eq 'REF') {
+	    $rejected="Reference item:  Not for loan.";
+	    last SWITCH;
+	}
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
 	if ($currentborrower eq $patroninformation->{'borrowernumber'}) {
 # Already issued to current borrower. Ask whether the loan should
@@ -1012,6 +1024,7 @@ sub returnbook {
 # find reserves.....
     my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
     if ($resfound) {
+	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 	$resrec->{'ResFound'} = $resfound;
 	$messages->{'ResFound'} = $resrec;
     }
@@ -1485,21 +1498,28 @@ sub getissues {
     my ($borrower) = @_;
     my $dbh = C4::Context->dbh;
     my $borrowernumber = $borrower->{'borrowernumber'};
-    my $brn =$dbh->quote($borrowernumber);
     my %currentissues;
-    my $select = "select issues.timestamp, issues.date_due, items.biblionumber,
-                         items.barcode, biblio.title, biblio.author, biblioitems.dewey,
-                         biblioitems.subclass
-                    from issues,items,biblioitems,biblio
-                   where issues.borrowernumber = $brn
-                     and issues.itemnumber = items.itemnumber
-                     and items.biblionumber = biblio.biblionumber
-                     and items.biblioitemnumber = biblioitems.biblioitemnumber
-                     and issues.returndate is null
-                         order by issues.date_due";
-#    warn $select;
+    my $select = "SELECT issues.timestamp      AS timestamp, 
+                         issues.date_due       AS date_due, 
+                         items.biblionumber    AS biblionumber,
+                         items.itemnumber    AS itemnumber,
+                         items.barcode         AS barcode, 
+                         biblio.title          AS title, 
+                         biblio.author         AS author, 
+                         biblioitems.dewey     AS dewey, 
+                         itemtypes.description AS itemtype,
+                         biblioitems.subclass  AS subclass
+                    FROM issues,items,biblioitems,biblio, itemtypes
+                   WHERE issues.borrowernumber  = ?
+                     AND issues.itemnumber      = items.itemnumber 
+                     AND items.biblionumber     = biblio.biblionumber 
+                     AND items.biblioitemnumber = biblioitems.biblioitemnumber 
+                     AND itemtypes.itemtype     = biblioitems.itemtype
+                     AND issues.returndate      IS NULL
+                ORDER BY issues.date_due";
+#    print $select;
     my $sth=$dbh->prepare($select);
-    $sth->execute;
+    $sth->execute($borrowernumber);
     my $counter = 0;
     while (my $data = $sth->fetchrow_hashref) {
 	$data->{'dewey'} =~ s/0*$//;
@@ -1558,18 +1578,18 @@ sub checkaccount  {
   #take borrower number
   #check accounts and list amounts owing
   my ($env,$bornumber,$dbh,$date)=@_;
-  my $select="Select sum(amountoutstanding) from accountlines where
-  borrowernumber=$bornumber and amountoutstanding<>0";
+  my $select="SELECT SUM(amountoutstanding) AS total
+                FROM accountlines 
+               WHERE borrowernumber = $bornumber 
+                 AND amountoutstanding<>0";
   if ($date ne ''){
-    $select.=" and date < '$date'";
+    $select.=" AND date < '$date'";
   }
 #  print $select;
   my $sth=$dbh->prepare($select);
   $sth->execute;
-  my $total=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $total += $data->{'sum(amountoutstanding)'};
-  }
+  my $data=$sth->fetchrow_hashref;
+  my $total = $data->{'total'};
   $sth->finish;
   # output(1,2,"borrower owes $total");
   #if ($total > 0){
@@ -1701,7 +1721,7 @@ sub calc_charges {
     }
     $sth1->finish;
 #    close FILE;
-    return ($charge);
+    return ($charge, $itemtype);
 }
 
 # FIXME - A virtually identical function appears in

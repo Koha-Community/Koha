@@ -26,6 +26,7 @@ use CGI;
 use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Reserves2;
+use C4::Auth;
 
 ###############################################
 # constants
@@ -46,6 +47,7 @@ my $printers = getprinters(\%env);
 #  Getting state
 
 my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 
 
 my $branch = $query->param("branch");
@@ -54,6 +56,9 @@ my $printer = $query->param("printer");
 
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
+
+($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+($printers->{$printer}) || ($printer=(keys %$printers)[0]);
 
 my $request=$query->param('request');
 
@@ -64,10 +69,7 @@ my $frbranchcd='';
 # set up the branchselect options....
 my $tobranchoptions;
 foreach my $br (keys %$branches) {
-# FIXME - Dunno what this line was supposed to do, but "CU" never
-# appears anywhere else, so this was preventing this code from
-# working, by creating an empty <select> block later on.
-#    (next) unless $branches->{$br}->{'CU'};
+    (next) unless $branches->{$br}->{'CU'};
     my $selected='';
     ($selected='selected') if ($br eq $tobranchcd);
     $tobranchoptions.="<option value=$br $selected>$branches->{$br}->{'branchname'}\n";
@@ -296,7 +298,7 @@ EOF
 #######################################################################################
 # Make the page .....
 
-print $query->header;
+print $query->header(-cookie=>$sessioncookie);
 print startpage;
 #print startmenu('circulation');
 my @inp=startmenu('circulation');

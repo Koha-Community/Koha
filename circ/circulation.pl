@@ -27,6 +27,12 @@ use C4::Circulation::Circ2;
 use C4::Search;
 use C4::Output;
 use C4::Print;
+use DBI;
+use C4::Auth;
+
+my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
+
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -46,6 +52,11 @@ my $printer = $query->param("printer");
 
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
+
+($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+($printers->{$printer}) || ($printer=(keys %$printers)[0]);
+
+
 
 #set up cookie.....
 my $info = '';
@@ -480,9 +491,9 @@ EOF
 
 
 if ($branchcookie && $printercookie) {
-    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
 } else {
-    print $query->header();
+    print $query->header(-cookie=>[$sessioncookie]);
 }
 
 print startpage();
