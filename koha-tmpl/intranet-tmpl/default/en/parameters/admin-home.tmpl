@@ -1,103 +1,138 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
-
+<TMPL_IF name="CAN_user_management">
 <h1>Parameters</h1><br>
+</TMPL_IF>
+
 <div id="bloc100">
+<TMPL_IF name="CAN_user_management">
 	<div id="bloctitle">System parameters </div>
-<table>
-<tr>
-<td colspan="2"><b>Fill those tables in the order they appear to get a working Koha</b></td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></td>
-	<td>The different branches you manage with this Koha server.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></td>
-	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></td>
-	<td>Define exchange rates.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></td>
-	<td>Define item types.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></td>
-	<td>Define the categories of borrowers.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></td>
-	<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></td>
-	<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus Structure</a></td>
-	<td>Define categories and thesaurus/authority MARC structure.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio framework (MARC structure)</a></td>
-	<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></td>
-	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></td>
-	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
 
-<tr>
-<th colspan="2">Various parameters</th>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></td>
-	<td>Printers (UNIX paths).</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></td>
-	<td>Words deleted during searches.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></td>
-	<td>Servers to query for MARC data.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></td>
-	<td>System preferences.</td>
-</tr>
-</table>
+	<table>
+	<tr>
+	<td colspan="2"><b>Fill those tables in the order they appear to get a working Koha</b></td>
+	</tr>
+	<TMPL_IF name="CAN_user_parameters">	
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></td>
+			<td>The different branches you manage with this Koha server.</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_management">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></td>
+			<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
+		</tr>
 
-<h1>Tools</h1>
-<table>
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></td>
+			<td>Define exchange rates.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></td>
+			<td>Define item types.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></td>
+			<td>Define the categories of borrowers.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></td>
+			<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></td>
+			<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
+		</tr>
+	</TMPL_IF>
+		
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus Structure</a></td>
+			<td>Define categories and thesaurus/authority MARC structure.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio framework (MARC structure)</a></td>
+			<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></td>
+			<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></td>
+			<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td>
+		</tr>
+	</TMPL_IF>
+	
 	<tr>
-	<th colspan="2"> Export</th>
+	<th colspan="2">Various parameters</th>
 	</tr>
-	<tr>
-		<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></td>
-		<td> Exporting in MARC format.</td>
-	</tr>
-	<tr>
-	<th colspan="2">Import</th>
-	</tr>
-	<tr valign="top">
-		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records in reservoir</a></td>
-		<td>The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table.
-		</td>
-	</tr>
-	<th colspan="2">Barcode generator</th>
-	</tr>
-	<tr valign="top">
-		<td width="20%"><a href="/cgi-bin/koha/barcodes/barcodes.pl">Generate barcodes</a></td>
-		<td>the barcode generator deals with generating barcodes for items you acquire
-		</td>
-	</tr>
-</table>
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></td>
+			<td>Printers (UNIX paths).</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_management">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></td>
+			<td>Words deleted during searches.</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></td>
+			<td>Servers to query for MARC data.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></td>
+			<td>System preferences.</td>
+		</tr>
+	</TMPL_IF>
+	</table>
+</TMPL_IF>
+
+
+<TMPL_IF name="CAN_user_tools">
+	<h1>Tools</h1>
+	<table>
+		<tr>
+		<th colspan="2"> Export</th>
+		</tr>
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></td>
+			<td> Exporting in MARC format.</td>
+		</tr>
+		<tr>
+		<th colspan="2">Import</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records in reservoir</a></td>
+			<td>The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table.
+			</td>
+		</tr>
+		<tr>
+		<th colspan="2">Barcode generator</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/barcodes/barcodes.pl">Generate barcodes</a></td>
+			<td>the barcode generator deals with generating barcodes for items you acquire
+			</td>
+		</tr>
+	</table>
+</TMPL_IF>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
