@@ -6,7 +6,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;  # Only used for branches() routine which should probably
-		       # be elsewhere
+                       # be elsewhere
 
 my $env;
 my $input = new CGI;
@@ -222,10 +222,16 @@ while ($i < $count2){
 	      }
 	      my $shelfcount=$count-$circcount-$lostcount-$mending-$transit;
 	      if ($circcount) {
-		      $stuff[5]="Circ ($circcount) ";
+		      $stuff[5]="Circ ";
+		      if ($count>1) {
+			      $stuff[5].="($circcount) ";
+		      }
 	      }
 	      if ($shelfcount) {
-		      $stuff[5].="Shelf ($shelfcount) ";
+		      $stuff[5].="Shelf ";
+		      if ($count>1) {
+			      $stuff[5].="($shelfcount) ";
+		      }
 	      }
       }
       if ($lostcount > 0) {
