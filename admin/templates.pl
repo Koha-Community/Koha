@@ -14,6 +14,10 @@ use C4::Auth;
 my $input = new CGI;
 
 
+my $configfile=configfile();
+my $includes=$configfile->{'includes'};
+
+
 my $dbh=C4Connect();
 
 if ($input->param('settemplate')) {
@@ -33,7 +37,7 @@ $sth->execute;
 my ($template)=$sth->fetchrow;
 
 my $templateoptions='';
-opendir D, "/usr/local/koha/intranet/htdocs/includes/templates";
+opendir D, "$includes/templates";
 my @dirlist=readdir D;
 foreach (@dirlist) {
     (next) if (/^\./);
