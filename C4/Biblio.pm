@@ -1,8 +1,8 @@
 package C4::Biblio;
 # $Id$
 # $Log$
-# Revision 1.50  2003/07/02 13:57:13  tipaul
-# fix for #512 (not sure it's enogh. to be checked by NPL)
+# Revision 1.51  2003/07/02 14:47:17  tipaul
+# fix for #519 : items.dateaccessioned imports incorrectly
 #
 # Revision 1.49  2003/06/17 11:21:13  tipaul
 # improvments/fixes for z3950 support.
@@ -1619,23 +1619,40 @@ sub OLDnewitems {
 	$data       = $sth->fetchrow_hashref;
 	$itemnumber = $data->{'max(itemnumber)'} + 1;
 	$sth->finish;
-
-	$sth=$dbh->prepare("Insert into items set
-						itemnumber           = ?,				biblionumber         = ?,
-						biblioitemnumber     = ?,				barcode              = ?,
-						booksellerid         = ?,					dateaccessioned      = NOW(),
-						homebranch           = ?,				holdingbranch        = ?,
-						price                = ?,						replacementprice     = ?,
-						replacementpricedate = NOW(),	itemnotes            = ?,
-						notforloan = ?
-
-						");
-	$sth->execute($itemnumber,	$item->{'biblionumber'},
-							$item->{'biblioitemnumber'},$barcode,
-							$item->{'booksellerid'},
-							$item->{'homebranch'},$item->{'holdingbranch'},
-							$item->{'price'},$item->{'replacementprice'},
-							$item->{'itemnotes'},$item->{'loan'});
+# if dateaccessioned is provided, use it. Otherwise, set to NOW()
+	if ($item->{'dateaccessioned'}) {
+		$sth=$dbh->prepare("Insert into items set
+							itemnumber           = ?,				biblionumber         = ?,
+							biblioitemnumber     = ?,				barcode              = ?,
+							booksellerid         = ?,					dateaccessioned      = ?,
+							homebranch           = ?,				holdingbranch        = ?,
+							price                = ?,						replacementprice     = ?,
+							replacementpricedate = NOW(),	itemnotes            = ?,
+							notforloan = ?
+							");
+		$sth->execute($itemnumber,	$item->{'biblionumber'},
+								$item->{'biblioitemnumber'},$barcode,
+								$item->{'booksellerid'},$item->{'dateaccessioned'},
+								$item->{'homebranch'},$item->{'holdingbranch'},
+								$item->{'price'},$item->{'replacementprice'},
+								$item->{'itemnotes'},$item->{'loan'});
+	} else {
+		$sth=$dbh->prepare("Insert into items set
+							itemnumber           = ?,				biblionumber         = ?,
+							biblioitemnumber     = ?,				barcode              = ?,
+							booksellerid         = ?,					dateaccessioned      = NOW(),
+							homebranch           = ?,				holdingbranch        = ?,
+							price                = ?,						replacementprice     = ?,
+							replacementpricedate = NOW(),	itemnotes            = ?,
+							notforloan = ?
+							");
+		$sth->execute($itemnumber,	$item->{'biblionumber'},
+								$item->{'biblioitemnumber'},$barcode,
+								$item->{'booksellerid'},
+								$item->{'homebranch'},$item->{'holdingbranch'},
+								$item->{'price'},$item->{'replacementprice'},
+								$item->{'itemnotes'},$item->{'loan'});
+	}
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
 	}
