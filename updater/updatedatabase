@@ -18,23 +18,37 @@ my $sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
     $tables{$table}=1;
-    print "Table: $table\n";
 }
 
 
+# Add tables for virtual bookshelf management
+
+unless ($tables{'shelfcontents'}) {
+    print "Adding shelfcontents table...\n";
+    my $sti=$dbh->prepare("create table shelfcontents (shelfnumber int not null, itemnumber int not null, flags int)");
+    $sti->execute;
+}
+unless ($tables{'bookshelf'}) {
+    print "Adding bookshelf table...\n";
+    my $sti=$dbh->prepare("create table bookshelf (shelfnumber int auto_increment primary key, shelfname char(255))");
+    $sti->execute;
+}
 
 # Add tables required by Z-3950 scripts
 
-unless ($tables{'z3950queue') {
+unless ($tables{'z3950queue'}) {
+    print "Adding z3950queue table...\n";
     my $sti=$dbh->prepare("create table z3950queue (id int auto_increment primary key, term text, type char(10), startdate int, enddate int, done smallint, results longblob, numercords int, servers text, identifier char(30))");
     $sti->execute;
 }
 
 unless ($tables{'z3950results'}) {
+    print "Adding z3950results table...\n";
     my $sti=$dbh->prepare("create table z3950results (id int auto_increment primary key, queryid int, server char(255), startdate int, enddate int, results longblob, numrecords int, numdownloaded int, highestseen int, active smallint)");
     $sti->execute;
 }
 unless ($tables{'z3950servers'}) {
+    print "Adding z3950servers table...\n";
     my $sti=$dbh->prepare("create table z3950servers (host char(255), port int, db char(255), userid char(255), password char(255), name text, id int, checked smallint, rank int)");
     $sti->execute;
     $sti=$dbh->prepare("insert into z3950servers values ('z3950.loc.gov', 7090, 'voyager', '', '', 'Library of Congress', 1, 1, 1)");
@@ -52,13 +66,34 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 }
 unless ($types{'lccn'}) {
     # Add LCCN field to biblioitems db
+    print "Adding lccn field to biblioitems table...\n";
     my $sti=$dbh->prepare("alter table biblioitems add column lccn char(25)");
     $sti->execute;
 }
 unless ($types{'marc'}) {
     # Add MARC field to biblioitems db (not used anymore)
+    print "Adding marc field to biblioitems table...\n";
     my $sti=$dbh->prepare("alter table biblioitems add column marc text");
     $sti->execute;
+}
+
+# Get list of columns from biblioitems table
+my %itemtypes;
+
+my $sth=$dbh->prepare("show columns from items");
+$sth->execute;
+while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
+    $itemtypes{$column}=$type;
+}
+
+unless ($itemtypes{'barcode'} eq 'varchar(20)') {
+    $itemtypes{'barcode'}=~/varchar\((\d+)\)/;
+    my $oldlength=$1;
+    if ($oldlength<20) {
+	print "Setting maximum barcode length to 20 (was $oldlength).\n";
+	my $sti=$dbh->prepare("alter table items change barcode barcode varchar(20) not null");
+	$sti->execute;
+    }
 }
 
 
