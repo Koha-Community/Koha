@@ -614,222 +614,223 @@ rental fee notice.
 # various questions? Why not document the various problems and allow
 # the caller to decide?
 sub issuebook {
-    my ($env, $patroninformation, $barcode, $responses, $date) = @_;
-    my $dbh = C4::Context->dbh;
-    my $iteminformation = getiteminformation($env, 0, $barcode);
-    my ($datedue);
-    my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
-    my $message;
+	my ($env, $patroninformation, $barcode, $responses, $date) = @_;
+	my $dbh = C4::Context->dbh;
+	my $iteminformation = getiteminformation($env, 0, $barcode);
+	my ($datedue);
+	my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
+	my $message;
 
-    # See if there's any reason this book shouldn't be issued to this
-    # patron.
-    SWITCH: {	# FIXME - Yes, we know it's a switch. Tell us what it's for.
-	if ($patroninformation->{'gonenoaddress'}) {
-	    $rejected="Patron is gone, with no known address.";
-	    last SWITCH;
-	}
-	if ($patroninformation->{'lost'}) {
-	    $rejected="Patron's card has been reported lost.";
-	    last SWITCH;
-	}
-	if ($patroninformation->{'debarred'}) {
-	    $rejected="Patron is Debarred";
-	    last SWITCH;
-	}
-	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
-	# FIXME - "5" shouldn't be hardcoded. An Italian library might
-	# be generous enough to lend a book to a patron even if he
-	# does still owe them 5 lire.
-	if ($amount > 5 && $patroninformation->{'categorycode'} ne 'L' &&
-                           $patroninformation->{'categorycode'} ne 'W' &&
-                           $patroninformation->{'categorycode'} ne 'I' &&
-                           $patroninformation->{'categorycode'} ne 'B' &&
-                           $patroninformation->{'categorycode'} ne 'P') {
-                           # FIXME - What do these category codes mean?
-	    $rejected = sprintf "Patron owes \$%.02f.", $amount;
-	    last SWITCH;
-	}
-	# FIXME - This sort of error-checking should be placed closer
-	# to the test; in this case, this error-checking should be
-	# done immediately after the call to &getiteminformation.
-	unless ($iteminformation) {
-	    $rejected = "$barcode is not a valid barcode.";
-	    last SWITCH;
-	}
-	if ($iteminformation->{'notforloan'} == 1) {
-	    $rejected="Item not for loan.";
-	    last SWITCH;
-	}
-	if ($iteminformation->{'wthdrawn'} == 1) {
-	    $rejected="Item withdrawn.";
-	    last SWITCH;
-	}
-	if ($iteminformation->{'restricted'} == 1) {
-	    $rejected="Restricted item.";
-	    last SWITCH;
-	}
-	if ($iteminformation->{'itemtype'} eq 'REF') {
-	    $rejected="Reference item:  Not for loan.";
-	    last SWITCH;
-	}
-	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-	if ($currentborrower eq $patroninformation->{'borrowernumber'}) {
-# Already issued to current borrower. Ask whether the loan should
-# be renewed.
-	    my ($renewstatus) = renewstatus($env,$dbh,$patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-	    if ($renewstatus == 0) {
-		$rejected="No more renewals allowed for this item.";
-		last SWITCH;
-	    } else {
-		if ($responses->{4} eq '') {
-		    $questionnumber = 4;
-		    $question = "Book is issued to this borrower.\nRenew?";
-		    $defaultanswer = 'Y';
-		    last SWITCH;
-		} elsif ($responses->{4} eq 'Y') {
-		    my $charge = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
-		    if ($charge > 0) {
-			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
-			$iteminformation->{'charge'} = $charge;
-		    }
-		    &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
-		    renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-		    $noissue=1;
-		} else {
-		    $rejected=-1;
-		    last SWITCH;
+	# See if there's any reason this book shouldn't be issued to this
+	# patron.
+	SWITCH: {	# FIXME - Yes, we know it's a switch. Tell us what it's for.
+		if ($patroninformation->{'gonenoaddress'}) {
+			$rejected="Patron is gone, with no known address.";
+			last SWITCH;
 		}
-	    }
-	} elsif ($currentborrower ne '') {
-	    # This book is currently on loan, but not to the person
-	    # who wants to borrow it now.
-	    my ($currborrower, $cbflags) = getpatroninformation($env,$currentborrower,0);
-	    if ($responses->{1} eq '') {
-		$questionnumber=1;
-		$question = "Issued to $currborrower->{'firstname'} $currborrower->{'surname'} ($currborrower->{'cardnumber'}).\nMark as returned?";
-		$defaultanswer='Y';
+		if ($patroninformation->{'lost'}) {
+			$rejected="Patron's card has been reported lost.";
+			last SWITCH;
+		}
+		if ($patroninformation->{'debarred'}) {
+			$rejected="Patron is Debarred";
+			last SWITCH;
+		}
+		my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
+		# FIXME - "5" shouldn't be hardcoded. An Italian library might
+		# be generous enough to lend a book to a patron even if he
+		# does still owe them 5 lire.
+		if ($amount > 5 && $patroninformation->{'categorycode'} ne 'L' &&
+								$patroninformation->{'categorycode'} ne 'W' &&
+								$patroninformation->{'categorycode'} ne 'I' &&
+								$patroninformation->{'categorycode'} ne 'B' &&
+								$patroninformation->{'categorycode'} ne 'P') {
+		# FIXME - What do these category codes mean?
+		$rejected = sprintf "Patron owes \$%.02f.", $amount;
 		last SWITCH;
-	    } elsif ($responses->{1} eq 'Y') {
-		returnbook($iteminformation->{'barcode'}, $env->{'branch'});
-	    } else {
-		$rejected=-1;
-		last SWITCH;
-	    }
-	}
+		}
+		# FIXME - This sort of error-checking should be placed closer
+		# to the test; in this case, this error-checking should be
+		# done immediately after the call to &getiteminformation.
+		unless ($iteminformation) {
+			$rejected = "$barcode is not a valid barcode.";
+			last SWITCH;
+		}
+		if ($iteminformation->{'notforloan'} == 1) {
+			$rejected="Item not for loan.";
+			last SWITCH;
+		}
+		if ($iteminformation->{'wthdrawn'} == 1) {
+			$rejected="Item withdrawn.";
+			last SWITCH;
+		}
+		if ($iteminformation->{'restricted'} == 1) {
+			$rejected="Restricted item.";
+			last SWITCH;
+		}
+		if ($iteminformation->{'itemtype'} eq 'REF') {
+			$rejected="Reference item:  Not for loan.";
+			last SWITCH;
+		}
+		my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+		if ($currentborrower eq $patroninformation->{'borrowernumber'}) {
+	# Already issued to current borrower. Ask whether the loan should
+	# be renewed.
+			my ($renewstatus) = renewstatus($env,$dbh,$patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+			if ($renewstatus == 0) {
+				$rejected="No more renewals allowed for this item.";
+				last SWITCH;
+			} else {
+				if ($responses->{4} eq '') {
+					$questionnumber = 4;
+					$question = "Book is issued to this borrower.\nRenew?";
+					$defaultanswer = 'Y';
+					last SWITCH;
+				} elsif ($responses->{4} eq 'Y') {
+					my $charge = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+					if ($charge > 0) {
+						createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
+						$iteminformation->{'charge'} = $charge;
+					}
+					&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
+					renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+					$noissue=1;
+				} else {
+					$rejected=-1;
+					last SWITCH;
+				}
+			}
+		} elsif ($currentborrower ne '') {
+			# This book is currently on loan, but not to the person
+			# who wants to borrow it now.
+			my ($currborrower, $cbflags) = getpatroninformation($env,$currentborrower,0);
+			if ($responses->{1} eq '') {
+				$questionnumber=1;
+				$question = "Issued to $currborrower->{'firstname'} $currborrower->{'surname'} ($currborrower->{'cardnumber'}).\nMark as returned?";
+				$defaultanswer='Y';
+				last SWITCH;
+			} elsif ($responses->{1} eq 'Y') {
+				returnbook($iteminformation->{'barcode'}, $env->{'branch'});
+			} else {
+				$rejected=-1;
+				last SWITCH;
+			}
+		}
 
-	# See if the item is on reserve.
-	my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
-	if ($restype) {
-	    my $resbor = $res->{'borrowernumber'};
-	    if ($resbor eq $patroninformation->{'borrowernumber'}) {
-		# The item is on reserve to the current patron
-		FillReserve($res);
-	    } elsif ($restype eq "Waiting") {
-		# The item is on reserve and waiting, but has been
-		# reserved by some other patron.
-		my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-		my $branches = getbranches();
-		my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-		if ($responses->{2} eq '') {
-		    $questionnumber=2;
-		    # FIXME - Assumes HTML
-		    $question="<font color=red>Waiting</font> for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
-		    $defaultanswer='N';
-		    last SWITCH;
-		} elsif ($responses->{2} eq 'N') {
-		    $rejected=-1;
-		    last SWITCH;
-		} else {
-		    if ($responses->{3} eq '') {
-			$questionnumber=3;
-			$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
-			$defaultanswer='N';
-			last SWITCH;
-		    } elsif ($responses->{3} eq 'Y') {
-			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-		    }
+		# See if the item is on reserve.
+		my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
+		if ($restype) {
+			my $resbor = $res->{'borrowernumber'};
+			if ($resbor eq $patroninformation->{'borrowernumber'}) {
+				# The item is on reserve to the current patron
+				FillReserve($res);
+			} elsif ($restype eq "Waiting") {
+				# The item is on reserve and waiting, but has been
+				# reserved by some other patron.
+				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+				my $branches = getbranches();
+				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+				if ($responses->{2} eq '') {
+					$questionnumber=2;
+					# FIXME - Assumes HTML
+					$question="<font color=red>Waiting</font> for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
+					$defaultanswer='N';
+					last SWITCH;
+				} elsif ($responses->{2} eq 'N') {
+					$rejected=-1;
+					last SWITCH;
+				} else {
+					if ($responses->{3} eq '') {
+						$questionnumber=3;
+						$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
+						$defaultanswer='N';
+						last SWITCH;
+					} elsif ($responses->{3} eq 'Y') {
+						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+					}
+				}
+			} elsif ($restype eq "Reserved") {
+				# The item is on reserve for someone else.
+				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+				my $branches = getbranches();
+				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+				if ($responses->{5} eq '') {
+					$questionnumber=5;
+					$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
+					$defaultanswer='N';
+					last SWITCH;
+				} elsif ($responses->{5} eq 'N') {
+					if ($responses->{6} eq '') {
+						$questionnumber=6;
+						$question="Set reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) to waiting and transfer to $branchname?";
+						$defaultanswer='N';
+					} elsif ($responses->{6} eq 'Y') {
+						my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+						transferbook($tobrcd, $barcode, 1);
+						$message = "Item should now be waiting at $branchname";
+					}
+					$rejected=-1;
+					last SWITCH;
+				} else {
+					if ($responses->{7} eq '') {
+						$questionnumber=7;
+						$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
+						$defaultanswer='N';
+						last SWITCH;
+					} elsif ($responses->{7} eq 'Y') {
+						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+					}
+				}
+			}
 		}
-	    } elsif ($restype eq "Reserved") {
-		# The item is on reserve for someone else.
-		my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-		my $branches = getbranches();
-		my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-		if ($responses->{5} eq '') {
-		    $questionnumber=5;
-		    $question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
-		    $defaultanswer='N';
-		    last SWITCH;
-		} elsif ($responses->{5} eq 'N') {
-		    if ($responses->{6} eq '') {
-			$questionnumber=6;
-			$question="Set reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) to waiting and transfer to $branchname?";
-			$defaultanswer='N';
-		    } elsif ($responses->{6} eq 'Y') {
-			my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
-			transferbook($tobrcd, $barcode, 1);
-			$message = "Item should now be waiting at $branchname";
-		    }
-		    $rejected=-1;
-		    last SWITCH;
-		} else {
-		    if ($responses->{7} eq '') {
-			$questionnumber=7;
-			$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
-			$defaultanswer='N';
-			last SWITCH;
-		    } elsif ($responses->{7} eq 'Y') {
-			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-		    }
-		}
-	    }
 	}
-    }
     my $dateduef;
     unless (($question) || ($rejected) || ($noissue)) {
-	# There's no reason why the item can't be issued.
-	# FIXME - my $loanlength = $iteminformation->{loanlength} || 21;
-	my $loanlength=21;
-	if ($iteminformation->{'loanlength'}) {
-	    $loanlength=$iteminformation->{'loanlength'};
-	}
-	my $ti=time;		# FIXME - Never used
-	my $datedue=time+($loanlength)*86400;
-	# FIXME - Could just use POSIX::strftime("%Y-%m-%d", localtime);
-	# That's what it's for. Or, in this case:
-	#	$dateduef = $env->{datedue} ||
-	#		strftime("%Y-%m-%d", localtime(time +
-	#				     $loanlength * 86400));
-	my @datearr = localtime($datedue);
-	$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	if ($env->{'datedue'}) {
-	    $dateduef=$env->{'datedue'};
-	}
-	$dateduef=~ s/2001\-4\-25/2001\-4\-26/;
-		# FIXME - What's this for? Leftover from debugging?
+		# There's no reason why the item can't be issued.
+		# FIXME - my $loanlength = $iteminformation->{loanlength} || 21;
+		my $loanlength=21;
+		if ($iteminformation->{'loanlength'}) {
+			$loanlength=$iteminformation->{'loanlength'};
+		}
+		my $ti=time;		# FIXME - Never used
+		my $datedue=time+($loanlength)*86400;
+		# FIXME - Could just use POSIX::strftime("%Y-%m-%d", localtime);
+		# That's what it's for. Or, in this case:
+		#	$dateduef = $env->{datedue} ||
+		#		strftime("%Y-%m-%d", localtime(time +
+		#				     $loanlength * 86400));
+		my @datearr = localtime($datedue);
+		$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+		if ($env->{'datedue'}) {
+			$dateduef=$env->{'datedue'};
+		}
+		$dateduef=~ s/2001\-4\-25/2001\-4\-26/;
+			# FIXME - What's this for? Leftover from debugging?
 
-	# Record in the database the fact that the book was issued.
-	# FIXME - Use $dbh->do();
-	my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values ($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, '$dateduef', '$env->{'branchcode'}')");
-	$sth->execute;
-	$sth->finish;
-	$iteminformation->{'issues'}++;
-	# FIXME - Use $dbh->do();
-	$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'},datelastseen=now() where itemnumber=$iteminformation->{'itemnumber'}");
-	$sth->execute;
-	$sth->finish;
-	# If it costs to borrow this book, charge it to the patron's account.
-	my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
-	if ($charge > 0) {
-	    createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
-	    $iteminformation->{'charge'}=$charge;
+		# Record in the database the fact that the book was issued.
+		# FIXME - Use $dbh->do();
+		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values ($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, '$dateduef', '$env->{'branchcode'}')");
+		$sth->execute;
+		$sth->finish;
+		$iteminformation->{'issues'}++;
+		# FIXME - Use $dbh->do();
+		$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'},datelastseen=now() where itemnumber=$iteminformation->{'itemnumber'}");
+		$sth->execute;
+		$sth->finish;
+		# If it costs to borrow this book, charge it to the patron's account.
+		my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+		if ($charge > 0) {
+			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
+			$iteminformation->{'charge'}=$charge;
+		}
+		# Record the fact that this book was issued.
+		&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
 	}
-	# Record the fact that this book was issued.
-	&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
-    }
-    if ($iteminformation->{'charge'}) {
-	$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
-    }
-    return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
+
+	if ($iteminformation->{'charge'}) {
+		$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
+	}
+	return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
 }
 
 
@@ -951,7 +952,7 @@ sub returnbook {
     if ($resfound) {
 #	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 	$resrec->{'ResFound'} = $resfound;
-	$messages->{'ResFound'} = $resrec;
+# 	$messages->{'ResFound'} = $resrec;
     }
 # update stats?
 # Record the fact that this book was returned.

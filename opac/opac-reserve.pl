@@ -32,17 +32,16 @@ my ($template, $borrowernumber, $cookie)
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 my @bordat;
 $bordat[0] = $borr;
-$template->param(BORROWER_INFO => \@bordat);
 
 # get biblionumber.....
 my $biblionumber = $query->param('bib');
-$template->param(biblionumber => $biblionumber);
 
 my $bibdata = bibdata($biblionumber);
-$template->param($bibdata);
+ $template->param($bibdata);
+ $template->param(BORROWER_INFO => \@bordat, biblionumber => $biblionumber);
 
 # get the rank number....
-my ($rank,$reserves) = FindReserves($biblionumber);
+my ($rank,$reserves) = FindReserves($biblionumber,'');
 $template->param(reservecount => $rank);
 
 foreach my $res (@$reserves) {
@@ -163,7 +162,7 @@ for (my $rownum=0;$rownum<$publictypes[0]->{'count'} ;$rownum++) {
 	push @row, $items[$rownum] if defined $items[$rownum];
     }
     my $last = @row; 
-    $row[$last-1]->{'last'} =1 if $last == $width; 
+    $row[$last-1]->{'last'} =1 if $last == $width;
     my $fill = ($width - $last)*2;
     $fill-- if $fill;
     push @typerows, {ROW => \@row, fill => $fill};
@@ -235,7 +234,7 @@ if ($query->param('item_types_selected')) {
 	$noreserves = 1;
 	$template->param(too_much_oweing => $amount);
     }
-    my ($resnum, $reserves) = FindReserves(undef, $borrowernumber);
+    my ($resnum, $reserves) = FindReserves('', $borrowernumber);
     $template->param(RESERVES => $reserves);
     if ($resnum >= $MAXIMUM_NUMBER_OF_RESERVES) {
 	$template->param(message => 1);

@@ -49,10 +49,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 
 
 my %env;
-#my $headerbackgroundcolor='#99cc33';
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
-#my $backgroundimage="/images/background-mem.gif";
 
 my $branches = getbranches();
 my $printers = getprinters(\%env);
@@ -431,7 +429,7 @@ sub patrontable {
     my $patrontable= << "EOF";
 <br><p>
     <table border=1 cellpadding=5 cellspacing=0 align=right>
-    <tr><td colspan=2 background="/images/background-mem.gif"><font color=black><b>Patron Information</b></font></td></tr>
+    <tr><td colspan=2><font color=black><b>Patron Information</b></font></td></tr>
     <tr><td colspan=2>
     <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>$borrower->{'streetaddress'} $borrower->{'city'} Cat: $borrower->{'categorycode'} </td></tr>
 EOF
