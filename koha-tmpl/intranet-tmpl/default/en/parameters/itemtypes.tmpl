@@ -94,7 +94,7 @@ function Check(f) {
 				<input type="text" name="rentalcharge" size="10" value="<!-- TMPL_VAR NAME="rentalcharge" -->">
 			</p>
 			<p>
-				<input type="button" value="OK" onclick="Check(this.form)">
+				<input type="button" value="OK" class="button" onclick="Check(this.form)">
 			</p>
 	</form>
 <!-- /TMPL_IF -->
@@ -139,7 +139,12 @@ function Check(f) {
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><!-- TMPL_IF NAME="renewalsallowed" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_IF NAME="renewalsallowed" -->
+					<!-- TMPL_VAR name="renewalsallowed" --> time(s)
+				<!-- TMPL_ELSE -->
+					No
+				<!-- /TMPL_IF -->
+			</td>
 			<td><!-- TMPL_VAR NAME="rentalcharge" --></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR NAME="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&itemtype=<!-- TMPL_VAR NAME="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
