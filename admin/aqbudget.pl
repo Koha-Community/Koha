@@ -143,7 +143,15 @@ printend
 		print "<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=$bookfundid>$bookfundid</td></tr>";
 	        print "<tr><td>Book fund</td><td>$data->{'bookfundname'}</td></tr>";
 	} else {
-		print "<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>";
+		my $dbh = &C4Connect;
+		my $sth=$dbh->prepare("select bookfundid,bookfundname from aqbookfund");
+		$sth->execute;
+		my $bookfundoptions='';
+		while (my ($bfid, $bfname) = $sth->fetchrow) {
+		    $bookfundoptions.="<option value=$bfid>$bfname";
+		}
+		($bookfundoptions) || ($bookfundoptions='<option value=0>No Book Funds have been created');
+		print "<tr><td>Book fund</td><td><select name=bookfundid>$bookfundoptions</select></td></tr>";
 	}
 	print "<tr><td>Start date</td><td><input type=text name=startdate size=40 maxlength=80 value='$data->{'startdate'}'>&nbsp;</td></tr>";
 	print "<tr><td>End date</td><td><input type=text name=enddate value='$data->{'enddate'}'></td></tr>";
