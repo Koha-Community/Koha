@@ -43,7 +43,6 @@ use MARC::File::USMARC;
 use HTML::Template;
 use C4::Output;
 use C4::Auth;
-use MARC::Charset;
 
 #------------------
 # Constants
@@ -810,6 +809,10 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.29  2003/01/28 15:28:31  tipaul
+# removing use MARC::Charset
+# Was a buggy test
+#
 # Revision 1.28  2003/01/28 15:00:31  tipaul
 # user can now search in breeding farm with isbn/issn or title. Title/name are stored in breeding farm and showed when a search is done
 #
