@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Kreator w³asnych odpowiedzialno¶ci</title>
+</head>
+<body>
+	<form name="f_pop" action="plugin_launcher.pl" method="post">
+	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
+	<textarea name="result" rows=10 cols=60><TMPL_VAR name="result"></textarea></br>
+	<p><input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="op" value="search">
+	<input type="hidden" name="a" value="<TMPL_VAR name="a">">
+	<input type="hidden" name="b" value="<TMPL_VAR name="b">">
+	<input type="hidden" name="c" value="<TMPL_VAR name="c">">
+	<input type="hidden" name="f" value="<TMPL_VAR name="f">">
+	<input type="submit" value="Szukaj"><input type="button" value="Koniec" onClick="javascript:report()">
+	</form>
+<TMPL_IF name="search_string">
+	<form name="f2_pop"  action="plugin_launcher.pl" method="post">
+	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
+	<TMPL_VAR name="select_list">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="op" value="select">
+	<input type="hidden" name="result" value="<TMPL_VAR name="result">">
+	<input type="submit" name="OK" value="OK">
+	</form>
+</TMPL_IF>
+	<form name="f3_pop"  action="plugin_launcher.pl" method="post">
+	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="op" value="add">
+	wprowad¼ now± odpowiedzialno¶æ : <input type="text" name="insert" value="<TMPL_VAR name="search_string">">
+	<input type="submit" name="NEW" value="Nowa">
+	</form>
+		<script>
+		function report() {
+			var index_start=<TMPL_VAR name="index">;
+			opener.document.f.field_value[index_start].value= document.f_pop.result.value;
+			var whichfield = opener.document.f.tag[index_start].value;
+			for (i=index_start ; i<opener.document.f.field_value.length ; i++) {
+				if (opener.document.f.tag[i].value == whichfield && opener.document.f.subfield[i].value == 'a') {
+					opener.document.f.field_value[i].value = document.f_pop.a.value;
+				}
+			}
+			for (i=index_start ; i<opener.document.f.field_value.length ; i++) {
+				if (opener.document.f.tag[i].value == whichfield && opener.document.f.subfield[i].value == 'b') {
+					opener.document.f.field_value[i].value = document.f_pop.b.value;
+				}
+			}
+			for (i=index_start ; i<opener.document.f.field_value.length ; i++) {
+				if (opener.document.f.tag[i].value == whichfield && opener.document.f.subfield[i].value == 'c') {
+					opener.document.f.field_value[i].value = document.f_pop.c.value;
+				}
+			}
+			for (i=index_start ; i<opener.document.f.field_value.length ; i++) {
+				if (opener.document.f.tag[i].value == whichfield && opener.document.f.subfield[i].value == 'f') {
+					opener.document.f.field_value[i].value = document.f_pop.f.value;
+				}
+			}
+			self.close();
+			return false;
+		}
+		</script>
+</body>
+</html>
