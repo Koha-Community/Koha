@@ -133,9 +133,9 @@ $data->{'borrowernotes'}<!--</a>-->
 <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
 
 <p>
-<INPUT TYPE="image" name="password"  VALUE="password" height=42  WIDTH=154 BORDER=0 src="/images/password-mem.gif"> 
+<INPUT TYPE="image" name="password"  VALUE="password" height=42  WIDTH=124 BORDER=0 src="/images/password-mem.gif"> 
 </p>
-<a href=member-flags.pl?member=$bornum>Modify User Flags</a>
+<a href=member-flags.pl?member=$bornum><img height=42  WIDTH=187 BORDER=0 src="/images/modify-user-flags.gif"></a>
 
 </TD>
 </TR>
