@@ -49,7 +49,7 @@ C4::Members - Perl Module containing convenience functions for member handling
 @EXPORT = qw();
 
 @EXPORT = qw(
-	&fixup_cardnumber &findguarantees &modmember &newmember
+	&fixup_cardnumber &findguarantees &modmember &newmember &changepassword
     );
 
 
@@ -105,16 +105,33 @@ sub newmember {
 	$sth->execute;
 	$sth->finish;
 	$data{borrowernumber} =$dbh->{'mysql_insertid'};
-	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
-	# so when we update information for an adult we should check for guarantees and update the relevant part
-	# of their records, ie addresses and phone numbers
-	if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
-		# is adult check guarantees;
-		updateguarantees(%data);
-	}
 	return $data{borrowernumber};
 }
 
+sub changepassword {
+	my ($uid,$member,$digest) = @_;
+	my $dbh = C4::Context->dbh;
+	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+	#Then we need to tell the user and have them create a new one.
+	my $sth=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
+	$sth->execute($uid,$member);
+	if ( ($uid ne '') && ($sth->fetchrow) ) {
+		return 0;
+    } else {
+		#Everything is good so we can update the information.
+		$sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
+    		$sth->execute($uid, $digest, $member);
+		return 1;
+	}
+}
+
+sub getmemberfromuserid {
+	my ($userid) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select * from borrowers where userid=?");
+	$sth->execute($userid);
+	return $sth->fetchrow_hashref;
+}
 sub updateguarantees {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;

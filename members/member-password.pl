@@ -10,6 +10,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use C4::Context;
+use C4::Members;
 use C4::Circulation::Circ2;
 use CGI;
 use HTML::Template;
@@ -48,30 +49,18 @@ my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $newpassword = $input->param('newpassword');
 
 if ( $newpassword ) {
-    my $digest=md5_base64($input->param('newpassword'));
-    my $uid = $input->param('newuserid');
-    my $dbh=C4::Context->dbh;
-
-	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-	#Then we need to tell the user and have them create a new one.
-	my $sth2=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
-	$sth2->execute($uid,$member);
-
-	if ( ($uid ne '') && ($sth2->fetchrow) ) {
-		#The userid exists so we should display a warning.
-		my $warn = 1;
-        $template->param( warn => $warn,
-		        othernames => $bor->{'othernames'},
-                        surname     => $bor->{'surname'},
-                        firstname   => $bor->{'firstname'},
-                        userid      => $bor->{'userid'},
-                        defaultnewpassword => $newpassword );
-    } else {
-		#Everything is good so we can update the information.
-		my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
-    		$sth->execute($uid, $digest, $member);
+	my $digest=md5_base64($input->param('newpassword'));
+	my $uid = $input->param('newuserid');
+	my $dbh=C4::Context->dbh;
+	if (changepassword($uid,$member,$digest)) {
 		$template->param(newpassword => $newpassword);
 		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
+	} else {
+        $template->param(othernames => $bor->{'othernames'},
+						surname     => $bor->{'surname'},
+						firstname   => $bor->{'firstname'},
+						userid      => $bor->{'userid'},
+						defaultnewpassword => $newpassword );
 	}
 } else {
     my $userid = $bor->{'userid'};
