@@ -453,23 +453,15 @@ sub stopwords
 # hash with stopwords
 sub _new_stopwords
 {
-	my $dbh = &dbh;
+	my $dbh = C4::Context->dbh;
 	my $stopwordlist;
 	my $sth = $dbh->prepare("select word from stopwords");
 	$sth->execute;
 	while (my $stopword = $sth->fetchrow_array) {
-	my $retval = {};
-	$stopwordlist->{$stopword} = uc($stopword);
+		my $retval = {};
+		$stopwordlist->{$stopword} = uc($stopword);
 	}
 	return $stopwordlist;
-#	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
-#	my $db_name   = $context->{"config"}{"database"};
-#	my $db_host   = $context->{"config"}{"hostname"};
-#	my $db_user   = $context->{"config"}{"user"};
-#	my $db_passwd = $context->{"config"}{"pass"};
-
-#	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
-#			    $db_user, $db_passwd);
 }
 
 1;
