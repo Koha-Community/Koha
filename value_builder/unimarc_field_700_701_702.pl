@@ -121,8 +121,8 @@ sub plugin {
 	}
 	if ($search_string) {
 	#	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
-		my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where match (category,freelib) AGAINST ('$search_string') and category ='NP'");
-		$sti->execute;
+		my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where match (category,freelib) AGAINST (?) and category ='NP'");
+		$sti->execute($search_string);
 		while (my $line=$sti->fetchrow_hashref) {
 			$stdlib{$line->{'id'}} = "$line->{'freelib'}";
 			push(@freelib,$line->{'id'});
