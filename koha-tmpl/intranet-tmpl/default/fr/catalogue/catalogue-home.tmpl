@@ -4,11 +4,6 @@
 	<TMPL_INCLUDE NAME="cat-top.inc">
 </TMPL_IF>
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Connect&eacute; : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
 <!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
 
@@ -18,7 +13,7 @@
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
 	<TR VALIGN=TOP>
-		<TD>Nbre d'exemplaires</TD>
+		<TD>Code barre exemplaires</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
 		<td> <b> &nbsp; &nbsp; OU</b></TD>
 	</TR>
@@ -29,7 +24,7 @@
 	<TR VALIGN=TOP>
 		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
 			<span style="color:#FFFFFF;">
-				<b>Rechercher :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
+				<b>Note :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
 			</span>
 		</td>
 	</TR>
