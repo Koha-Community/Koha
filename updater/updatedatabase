@@ -559,7 +559,8 @@ my %fielddefinitions = (
             type    => 'tinyint(4)',
             null    => '',
             key     => 'PRI',
-            default => 'auto_increment'
+		  default =>'',
+            extra => 'auto_increment'
         },
     ],
     z3950servers => [
@@ -570,6 +571,24 @@ my %fielddefinitions = (
             key     => 'PRI',
             default => '',
             extra   => 'auto_increment'
+        },
+    ],
+	marc_breeding => [
+        {
+            field   => 'z3950random',
+            type    => 'varchar(40)',
+            null    => '',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+        {
+            field   => 'encoding',
+            type    => 'varchar(40)',
+            null    => '',
+            key     => '',
+            default => '',
+            extra   => ''
         },
     ],
 );
@@ -697,6 +716,7 @@ foreach $table ( keys %fielddefinitions ) {
 		my $null    = $row->{null};
 		my $key     = $row->{key};
 		my $default = $row->{default};
+		$default="''" unless $default;
 		my $extra   = $row->{extra};
 		my $def     = $definitions->{$field};
 		unless ( $type eq $def->{type}
@@ -715,12 +735,19 @@ foreach $table ( keys %fielddefinitions ) {
 			unless ( $extra eq 'auto_increment' ) {
 				$extra = '';
 			}
+			# if it's a new column use "add", if it's an old one, use "change".
+			my $action;
+			if ($definitions->{$field}->{type}) {
+				$action="change $field"
+			} else {
+				$action="add";
+			}
 # if it's a primary key, drop the previous pk, before altering the table
 			my $sth;
-			if ($key eq 'PRI') {
-				$sth =$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
+			if ($key ne 'PRIMARY KEY') {
+				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ?");
 			} else {
-				$sth =$dbh->prepare("alter table $table drop primary key, change $field $field $type $null $key $extra default ?");
+				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ?");
 			}
 			$sth->execute($default);
 			print "  Alter $field in $table\n";
@@ -869,6 +896,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.57  2003/07/11 11:50:29  tipaul
+# fixing a bug that occured when adding a field into a table.
+#
 # Revision 1.56  2003/07/07 15:37:20  tipaul
 # *** empty log message ***
 #
