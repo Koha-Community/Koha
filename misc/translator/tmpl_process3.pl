@@ -34,11 +34,9 @@ sub find_translation ($) {
     my($s) = @_;
     my $key = $s;
     if ($s =~ /\S/s) {
-    print STDERR "DEBUG: before: ($key)\n";
 	$key = TmplTokenizer::string_canon($key);
 	$key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
 	$key = TmplTokenizer::quote_po($key);
-    print STDERR "DEBUG: after: ($key)\n";
     }
     return defined $href->{$key}
 		&& !$href->{$key}->fuzzy
