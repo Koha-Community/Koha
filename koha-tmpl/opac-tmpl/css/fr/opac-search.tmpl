@@ -10,12 +10,12 @@
 		<p>
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-			<label class="label20">Mot Clé</label>
+			<label class="label20">Any word</label>
 			<input type="hidden" name="marclist" value="" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
 			<label class="label20">Titre</label>
@@ -23,14 +23,14 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
 			<label class="label20">Auteur</label> <input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
 			<label class="label20">Sujet</label>
@@ -38,7 +38,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
 			<label class="label20">Type de documents</label>
@@ -108,10 +108,24 @@
 				<option value="biblioitems.dewey">code Dewey</option>
 				<option value="biblioitems.publicationyear">Année de Publication</option>
 				<option value="biblioitems.publishercode">Editeur</option>
+				<option value="biblio.timestamp desc">date d'acquisition</option>
 			</select>
 		</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
+	</div>
+	<div id="bloc60">
+		<h2>Hints</h2>
+		<h3>Titre</h3>
+		<p>You can enter a complete or a part of a title. The search will also be done in subtitles & other title-related fields</p>
+		<h3>Auteur</h3>
+		<p>You can enter a name or a surname. The search will also be done is additional authors & other author-related fields (translator, illustrator...)</p>
+		<p>Remember that a title can concern a "physical" author (Victor Hugo) or a company, group, collective author (CNRS, Library of Congress)</p>
+		<h3>Branches</h3>
+		<p>Select a branch if you want to limit your search to items in a specific branch. By default the search is done on every branches of the library</p>
+		<h3>Partial search</h3>
+		<p>A search is done on every words you enter. Empty words are ignored. If you enter, for example "the two towers" in the title, the result list will contain all the books containing two AND tower in the title. The "the" will be discarded.</p>
+		<p>If you want to enter a partial word, add a * or a % at the end of the word. For example "two tower*" will retrieve "the two towers", "two white towers", "a tower and two cities"</p>
 	</div>
 </form>
 

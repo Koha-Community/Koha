@@ -3,9 +3,9 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css" />
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
 	<title><!--TMPL_VAR name="LibraryName"--></title>
-	<script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/basket.js"></script>
+	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script type="text/javascript" language="javascript">
 	var MSG_BASKET_EMPTY = "No biblio !";
 	var MSG_RECORD_IN_BASKET = "This biblio is already in the basket";

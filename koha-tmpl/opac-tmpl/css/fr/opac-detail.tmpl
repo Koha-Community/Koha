@@ -57,7 +57,7 @@
 	<table>
 	<!-- TMPL_IF name="MARCNOTES" -->
 		<tr>
-			<th><i>Detailed notes:</i></th>
+			<th><i>Notes détaillées</i></th>
 			<td>
 				<ul>
 					<!-- TMPL_LOOP NAME="MARCNOTES" -->
@@ -69,7 +69,7 @@
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="MARCSUBJCTS" -->
 		<tr>
-			<th>Related links:</th>
+			<th>Liens en relation</th>
 			<td>
 				<ul>
 					<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
@@ -96,7 +96,7 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 			<tr>
-				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><!-- TMPL_VAR NAME="barcode" --></td>
@@ -115,7 +115,7 @@
 	</table>
 	<!-- TMPL_IF name="subscriptionid" -->
 		<p>
-			This is a serial subscription. You can see which  <a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">  Issues  </a> we have and don't have
+			<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">numéros</a> que nous avons et/ou n'avons pas'>Il s'agit d'un abonnement. Vous pouvez voir les <a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">numéros</a> que nous avons et/ou n'avons pas
 		</p>
 	<!-- /TMPL_IF -->
 	</div>

@@ -47,16 +47,18 @@
 		<!-- Actual Search Results -->
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr>
-			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->"></td>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
 						<p><b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
 						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="timestamp" --> <i>(modifié le <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
 					</p>
 				</td>
 				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
@@ -64,7 +66,7 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_LOOP name="CN" -->
-						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
+						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
 					<!-- /TMPL_LOOP -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>

@@ -9,13 +9,16 @@
 		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà une réservation en cours pour ce document</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_items_selected" --><li>Vous devez sélectionner au moins un type de document !</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_branch_selected" --><li>vous devez saisie un site de retrait !</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="GNA" --><li>You are gone without address. Reservation is forbidden. Please contact the library</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lost" --><li>This card has been declared lost. Reserve impossible. Please contact the library</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="debarred" --><li>Votre compte est suspendu temporairement. Contactez la bibliothèque</li><!-- /TMPL_IF -->
 	</ul>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
 	<p> Il y a déjà <b><!-- TMPL_VAR NAME="reservecount" --></b> réservations pour ce document </p>
-	<p>Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.</p>
+	<p>Sélectionnez les types de documents qui vous conviennent. Le premier qui correspondra à votre souhait sera mis de coté lorsqu'il sera disponible</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="item_types_selected" value="1" />
@@ -62,7 +65,7 @@
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p>Merci de confirmer que vous souhaitez demander un document de ces types</p>
+	<p> Merci de confirmer que vous souhaitez demander un document de ces types</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1" />
@@ -82,7 +85,7 @@
 		</ul>
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
 		<!-- TMPL_IF NAME="fee" -->
-			<p><b><!-- TMPL_VAR NAME="fee" --></b> pour la réservation'>Notez qu'il y aura un coût de <b></b> pour la réservation</p>
+			<p> <b><!-- TMPL_VAR NAME="fee" --></b> pour la réservation'>Notez qu'il y aura un coût de <b></b> pour la réservation</p>
 		<!-- /TMPL_IF -->
 		<input class="button" type="submit" value="Faire une Réservation">
 	</form>

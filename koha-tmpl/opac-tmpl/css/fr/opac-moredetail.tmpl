@@ -13,12 +13,11 @@
 <input type=hidden name=biblio value="<!-- TMPL_VAR NAME="biblionumber" -->">
 <table>
 <tr>
-<td><b><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUP - <!-- TMPL_VAR NAME="description" --> </b> </td>
+<td><b><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUPE - <!-- TMPL_VAR NAME="description" --> </b> </td>
 </tr>
 <tr>
 <td width=210 >
-<input TYPE="image" name="submit"  value="modify" height=42  WIDTH=93
-border=0 src="/images/modify-mem.gif">
+<input type="image" name="submit" value="modifier" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input TYPE="image" name="delete"  value="delete" height=42  WIDTH=93
 border=0 src="/images/delete-mem.gif">
 <br>
@@ -47,7 +46,7 @@ border=0 src="/images/delete-mem.gif">
 <img src="/images/holder.gif" width=16 height=300 align=left>
 <TABLE>
 <tr>
-<td><b>BARCODE <!-- TMPL_VAR NAME="barcode" --></b></td>
+<td><b>code barre <!-- TMPL_VAR NAME="barcode" --></b></td>
 </tr>
 <tr>
 <td>
@@ -55,15 +54,14 @@ border=0 src="/images/delete-mem.gif">
 <input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblionumber" -->>
 <input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
 <input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-<input TYPE="image" name="submit"  value="modify" height=42  width=93
-border=0 src="/images/modify-mem.gif">
+<input type="image" name="submit" value="modifier" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input type="image" name="delete"  value="delete" height=42  width=93
 border=0 src="/images/delete-mem.gif">
 <br>
 <b>Home Branch:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
 <b>Last seen:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
 <b>Last borrowed:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
-on issue bit <!-- FIXME - What's this, then? -->
+Indicateur de prêt <!-- FIXME - What's this, then? -->
 <b>Last Borrower 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
 <b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
 <b>Current Branch:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
@@ -72,8 +70,8 @@ on issue bit <!-- FIXME - What's this, then? -->
 <b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 <b>Remarques:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 <b>Renewals:</b> <!-- TMPL_VAR NAME="renewals" --><br>
-<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Accession</a> Date:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
-<b>Cancelled: <!-- TMPL_VAR NAME="wthdrawn" --><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">vu le</a>:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
+<b>Annulé <!-- TMPL_VAR NAME="wthdrawn" --><br>
 <b><a
 href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Total Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
 <b>Group Number:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>

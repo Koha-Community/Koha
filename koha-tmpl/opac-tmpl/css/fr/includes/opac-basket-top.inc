@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Panier</title>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" ESCAPE=URL-->/includes/opac.css">
-	<script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/basket.js"></script>
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang">/includes/opac.css">
+	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<SCRIPT language='javascript'>
 		var MSG_NO_RECORD_SELECTED = "No biblio selected";
 		var MSG_NO_RECORD_ADDED = "No biblio added";

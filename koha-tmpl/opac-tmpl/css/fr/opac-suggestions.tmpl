@@ -2,8 +2,8 @@
 <div id="mainbloc">
 <!-- TMPL_IF name="op_add" -->
 	<h1>Saisir une nouvelle suggestion</h1>
-	<p>Fill this form to suggest the library a new acquisition. You will be mailed when the library treats you suggestion</p>
-	<p>No fields are mandatory. Fill whatever you know. The "Note" field can be used for whatever you want</p>
+	<p>Remplissez ce formulaire pour suggérer une nouvelle acquisition. Vous serez prévenu par messagerie lorsque la bibliothèque traitera votre suggestion</p>
+	<p>Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le champ</p>
 	<form>
 		<input type="hidden" name="op" value="add_confirm">
 		<p><label>Titre</label><input type="text" name="title" size=60 maxlentgh=80></p>
@@ -58,6 +58,11 @@
 						<!-- TMPL_ELSE -->
 							<option value="ASKED">Demandé</option>
 						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected>Accepté</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">Accepté</option>
+						<!-- /TMPL_IF -->
 						<!-- TMPL_IF name="ORDERED" -->
 							<option value="ORDERED" selected>Commandé</option>
 						<!-- TMPL_ELSE -->
@@ -110,9 +115,10 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_IF name="ASKED" -->Demandé<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ACCEPTED" -->Accepté, sera commandé rapidement<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ORDERED" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="REJECTED" -->Suggestion rejetée : ne sera pas acheté<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="AVAILABLE" -->Disponible dans la bibliothèque<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Recieved by the library<!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
@@ -144,7 +150,7 @@
 		<input type="hidden" name="op" value="add">
 		<input type="submit" class="button" value="Saisir une nouvelle suggestion">
 	<br />
-	<p>Note : if you ask suggestion done by anybody, the result will contain only new suggestions. Suggestions treated by a librarian will not be shown.</p>
+	<p>Note : si vous filtrez sur les suggestions faites par n'importe qui, la liste ne contiendra que les suggestions nouvelles. Les suggestions déjà traitées par un bibliothécaire n'apparaitront pas</p>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
