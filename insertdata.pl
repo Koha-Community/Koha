@@ -70,7 +70,7 @@ if (my $data2=$sth->fetchrow_hashref){
 }else{
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
-  $data{'expiry'}=format_date_in_iso($data{'expiry'}); 
+  $data{'expiry'}=format_date_in_iso($data{'expiry'});
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
@@ -80,7 +80,8 @@ if (my $data2=$sth->fetchrow_hashref){
   '$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
   '$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-  '$data{'ethnicity'}','$data{'borrowernumber'}','$data{'streetaddress'}','$data{'branchcode'}',$data{'zipcode'},$data{'homezipcode'})";
+  '$data{'ethnicity'}','$data{'borrowernumber'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
+  warn "".$query;
 }
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
