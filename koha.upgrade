@@ -1,8 +1,5 @@
 #!/usr/bin/perl -w
 
-use C4::Database;
-
-my $dbh=C4Connect();
 
 my %configfile;
 open (KC, "/etc/koha.conf");
@@ -30,7 +27,8 @@ my $user=$configfile{'user'};
 my $pass=$configfile{'pass'};
 
 
-my $newversion=`cat kohaversion`;
+($kohaversion) || ($kohaversion='unknown version');
+my $newversion=`cat koha.version`;
 chomp $newversion;
 
 print qq|
@@ -95,7 +93,7 @@ $month++;
 $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
-open (MD, "mysqldump -u$user -p$pass -h$host $database|");
+open (MD, "mysqldump --user=$user --password=$pass --host=$host $database|");
 
 open BF, ">$backupdir/Koha.backup_$date";
 
@@ -295,3 +293,29 @@ Upgrading Database
 |;
 system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 
+
+
+print qq|
+
+==========================
+= Koha Upgrade Completed =
+==========================
+The Koha Upgrade is finished.  If you are upgrading from a version of Koha
+prior to 1.2.1, it is likely that you will have to modify your Apache
+configuration to point it to the new files.
+
+In your INTRANET VirtualHost section you should have:
+  DocumentRoot $intranetdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $intranetroot/cgi-bin/
+  SetEnv PERL5LIB $intranetdir/modules
+
+In the OPAC VirtualHost section you should have:
+  DocumentRoot $opacdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $opacroot/cgi-bin/
+  SetEnv PERL5LIB $intranetdir/modules
+
+You may also need to uncomment a "LoadModules env_module ... " line and restart
+Apache.
+
+Please report any problems you encounter through http://bugs.koha.org/
+|;
