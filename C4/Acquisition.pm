@@ -1,12 +1,4 @@
-package C4::Catalogue;
-
-# Continue working on updateItem!!!!!!
-#
-# updateItem is looking not bad.  Need to add addSubfield and deleteSubfield
-# functions
-#
-# Trying to track down $dbh's that aren't disconnected....
-
+package C4::Acquisition;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -29,7 +21,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use MARC::Record;
-use C4::Biblio;
+# use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -38,11 +30,11 @@ $VERSION = 0.01;
 
 =head1 NAME
 
-C4::Catalogue - Koha functions for dealing with orders and acquisitions
+C4::Acquisition - Koha functions for dealing with orders and acquisitions
 
 =head1 SYNOPSIS
 
-  use C4::Catalogue;
+  use C4::Acquisition;
 
 =head1 DESCRIPTION
 
@@ -57,19 +49,19 @@ orders, converting money to different currencies, and so forth.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	     &basket &newbasket
+		&getbasket &getbasketcontent &newbasket &closebasket
 
-	     &getorders &getallorders &getrecorders
-	     &getorder &neworder &delorder
-	     &ordersearch
-	     &modorder &getsingleorder &invoice &receiveorder
-	     &updaterecorder &newordernum
+		&getorders &getallorders &getrecorders
+		&getorder &neworder &delorder
+		&ordersearch
+		&modorder &getsingleorder &invoice &receiveorder
+		&updaterecorder &newordernum
 
-	     &bookfunds &bookfundbreakdown &updatecost
-	     &curconvert &getcurrencies &updatecurrencies &getcurrency
+		&bookfunds &curconvert &getcurrencies &bookfundbreakdown
+		&updatecurrencies &getcurrency
 
-	     &findall &needsmod &branches &updatesup &insertsup
-	     &bookseller &breakdown &checkitems
+		&branches &updatesup &insertsup
+		&bookseller &breakdown
 );
 
 #
@@ -79,9 +71,24 @@ orders, converting money to different currencies, and so forth.
 #
 #
 #
-=item basket
+=item getbasket
 
-  ($count, @orders) = &basket($basketnumber, $booksellerID);
+  $aqbasket = &getbasket($basketnumber);
+
+get all basket informations in aqbasket for a given basket
+=cut
+
+sub getbasket {
+	my ($basketno)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("select aqbasket.*,borrowers.firstname+' '+borrowers.surname as authorisedbyname from aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where basketno=?");
+	$sth->execute($basketno);
+	return($sth->fetchrow_hashref);
+}
+
+=item getbasketcontent
+
+  ($count, @orders) = &getbasketcontent($basketnumber, $booksellerID);
 
 Looks up the pending (non-cancelled) orders with the given basket
 number. If C<$booksellerID> is non-empty, only orders from that seller
@@ -94,64 +101,65 @@ number of elements in C<@orders>.
 
 =cut
 #'
-sub basket {
-  my ($basketno,$supplier)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
-  where basketno='$basketno'
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
-  =aqorders.biblioitemnumber
-  and (datecancellationprinted is NULL or datecancellationprinted =
-  '0000-00-00')";
-  if ($supplier ne ''){
-    $query.=" and aqorders.booksellerid='$supplier'";
-  }
-  $query.=" order by biblioitems.publishercode";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-#  print $query;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return($i,@results);
+sub getbasketcontent {
+	my ($basketno,$supplier)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query="Select *,biblio.title from aqorders,biblio,biblioitems
+	where basketno='$basketno'
+	and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
+	=aqorders.biblioitemnumber
+	and (datecancellationprinted is NULL or datecancellationprinted =
+	'0000-00-00')";
+	if ($supplier ne ''){
+		$query.=" and aqorders.booksellerid='$supplier'";
+	}
+	$query.=" order by biblioitems.publishercode";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my @results;
+	#  print $query;
+	my $i=0;
+	while (my $data=$sth->fetchrow_hashref){
+		$results[$i]=$data;
+		$i++;
+	}
+	$sth->finish;
+	return($i,@results);
 }
 
 =item newbasket
 
   $basket = &newbasket();
 
-Finds the next unused basket number in the aqorders table of the Koha
-database, and returns it.
-
+Create a new basket in aqbasket table
 =cut
-#'
-# FIXME - There's a race condition here:
-#	A calls &newbasket
-#	B calls &newbasket (gets the same number as A)
-#	A updates the basket
-#	B updates the basket, and clobbers A's result.
-# A better approach might be to create a dummy order (with, say,
-# requisitionedby == "Dummy-$$" or notes == "dummy <time> <pid>"), and
-# see which basket number it gets. Then have a cron job periodically
-# remove out-of-date dummy orders.
+
 sub newbasket {
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select max(basketno) from aqorders");
-  $sth->execute;
-  my $data=$sth->fetchrow_arrayref;
-  my $basket=$$data[0];
-  $basket++;
-  $sth->finish;
-  return($basket);
+	my ($booksellerid,$authorisedby) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->do("insert into aqbasket (creationdate,booksellerid,authorisedby) values(now(),'$booksellerid','$authorisedby')");
+	#find & return basketno MYSQL dependant, but $dbh->last_insert_id always returns null :-(
+	my $basket = $dbh->{'mysql_insertid'};
+	return($basket);
+}
+
+=item closebasket
+
+  &newbasket($basketno);
+
+close a basket (becomes unmodifiable,except for recieves
+=cut
+
+sub closebasket {
+	my ($basketno) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("update aqbasket set closedate=now() where basketno=?");
+	$sth->execute($basketno);
 }
 
 =item neworder
 
-  &neworder($biblionumber, $title, $ordnum, $basket, $quantity, $listprice,
+  &neworder($basket, $biblionumber, $title, $quantity, $listprice,
 	$booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
 	$ecost, $gst, $budget, $unitprice, $subscription,
 	$booksellerinvoicenumber);
@@ -173,37 +181,36 @@ C<$subscription> may be either "yes", or anything else for "no".
 =cut
 #'
 sub neworder {
-  my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2)=@_;
-  if ($budget eq 'now'){
-    $budget="now()";
-  } else {
-    $budget="'2001-07-01'";
-  }
-  if ($sub eq 'yes'){
-    $sub=1;
-  } else {
-    $sub=0;
-  }
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("insert into aqorders (biblionumber,title,basketno,
-  quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
-  biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber,sort1,sort2)
-  values (?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?)");
-  $sth->execute($bibnum,$title,$basket,$quantity,$listprice,$supplier,
-  $who,$who,$notes,$bibitemnum,$rrp,$ecost,$gst,$cost,
-  $sub,$invoice,$sort1,$sort2);
-  $sth->finish;
-  $sth=$dbh->prepare("select * from aqorders where
-  biblionumber=? and basketno=? and ordernumber >=?");
-  $sth->execute($bibnum,$basket,$ordnum);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $ordnum=$data->{'ordernumber'};
-  $sth=$dbh->prepare("insert into aqorderbreakdown (ordernumber,bookfundid) values
-  (?,?)");
-#  print $query;
-  $sth->execute($ordnum,$bookfund);
-  $sth->finish;
+	my ($basketno,$bibnum,$title,$quantity,$listprice,$booksellerid,$authorisedby,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2)=@_;
+	if ($budget eq 'now'){
+		$budget="now()";
+	} else {
+		$budget="'2001-07-01'";
+	}
+	if ($sub eq 'yes'){
+		$sub=1;
+	} else {
+		$sub=0;
+	}
+	# if $basket empty, it's also a new basket, create it
+	unless ($basketno) {
+		$basketno=newbasket($booksellerid,$authorisedby);
+	}
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("insert into aqorders 
+								(biblionumber,title,basketno,quantity,listprice,notes,
+								biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2)
+								values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute($bibnum,$title,$basketno,$quantity,$listprice,$notes,
+					$bibitemnum,$rrp,$ecost,$gst,$cost,$sub,$sort1,$sort2);
+	$sth->finish;
+	#get ordnum MYSQL dependant, but $dbh->last_insert_id returns null
+	my $ordnum = $dbh->{'mysql_insertid'};
+	$sth=$dbh->prepare("insert into aqorderbreakdown (ordernumber,bookfundid) values
+	(?,?)");
+	$sth->execute($ordnum,$bookfund);
+	$sth->finish;
+	return $basketno;
 }
 
 =item delorder
@@ -256,11 +263,10 @@ sub modorder {
   my $sth=$dbh->prepare("update aqorders set title=?,
   quantity=?,listprice=?,basketno=?,
   rrp=?,ecost=?,unitprice=?,
-  booksellerinvoicenumber=?,
   sort1=?, sort2=?
   where
   ordernumber=? and biblionumber=?");
-  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$invoice,$sort1,$sort2,$ordnum,$bibnum);
+  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$sort1,$sort2,$ordnum,$bibnum);
   $sth->finish;
   $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
   ordernumber=?");
@@ -392,20 +398,19 @@ Results are ordered from most to least recent.
 =cut
 #'
 sub getorders {
-  my ($supplierid)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select count(*),authorisedby,entrydate,basketno from aqorders where
-  booksellerid=? and (quantity > quantityreceived or
-  quantityreceived is NULL)
-  and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')
-   group by basketno order by entrydate desc");
-  $sth->execute($supplierid);
-  my @results = ();
-  while (my $data=$sth->fetchrow_hashref){
-    push(@results,$data);
-  }
-  $sth->finish;
-  return (scalar(@results),\@results);
+	my ($supplierid)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Select count(*),authorisedby,creationdate,aqbasket.basketno,closedate from aqorders left join aqbasket on
+	aqbasket.basketno=aqorders.basketno where booksellerid=? and (quantity > quantityreceived or
+	quantityreceived is NULL)
+	group by basketno order by aqbasket.basketno");
+	$sth->execute($supplierid);
+	my @results = ();
+	while (my $data=$sth->fetchrow_hashref){
+		push(@results,$data);
+	}
+	$sth->finish;
+	return (scalar(@results),\@results);
 }
 
 =item getorder
@@ -420,9 +425,7 @@ fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
 tables of the Koha database.
 
 =cut
-#'
-# FIXME - This is effectively identical to &C4::Biblio::getorder.
-# Pick one and stick with it.
+
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
@@ -447,10 +450,7 @@ C<$order> are fields from the biblio, biblioitems, aqorders, and
 aqorderbreakdown tables of the Koha database.
 
 =cut
-#'
-# FIXME - This is effectively identical to
-# &C4::Biblio::getsingleorder.
-# Pick one and stick with it.
+
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -659,8 +659,13 @@ sub bookfunds {
   return(scalar(@results),@results);
 }
 
-# FIXME - POD. I can't figure out what this function is doing. Then
-# again, I don't think it's being used (anymore).
+=item bookfundbreakdown
+
+	returns the total comtd & spent for a given bookfund
+	used in acqui-home.pl
+=cut
+#'
+
 sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh = C4::Context->dbh;
@@ -684,6 +689,8 @@ sub bookfundbreakdown {
   $sth->finish;
   return($spent,$comtd);
 }
+
+
 
 =item curconvert
 
@@ -747,15 +754,6 @@ sub updatecurrencies {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("update currency set rate=? where currency=?");
   $sth->execute($rate,$currency);
-  $sth->finish;
-}
-
-# FIXME - This is never used
-sub updatecost{
-  my($price,$rrp,$itemnum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("update items set price=?,replacementprice=? where itemnumber=?");
-  $sth->execute($price,$rrp,$itemnum);
   $sth->finish;
 }
 
@@ -842,39 +840,6 @@ sub branches {
     return(scalar(@results), @results);
 } # sub branches
 
-# FIXME - Never used
-sub findall {
-  my ($biblionumber)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes where
-  biblioitems.biblionumber=?
-  and biblioitems.biblioitemnumber=items.biblioitemnumber and
-  itemtypes.itemtype=biblioitems.itemtype
-  order by items.biblioitemnumber");
-  $sth->execute($biblionumber);
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    push(@results,$data);
-  }
-  $sth->finish;
-  return(@results);
-}
-
-# FIXME - Never used
-sub needsmod{
-  my ($bibitemnum,$itemtype)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblioitems where biblioitemnumber=?
-  and itemtype=?");
-  $sth->execute($bibitemnum,$itemtype);
-  my $result=0;
-  if (my $data=$sth->fetchrow_hashref){
-    $result=1;
-  }
-  $sth->finish;
-  return($result);
-}
-
 =item updatesup
 
   &updatesup($bookseller);
@@ -911,7 +876,6 @@ sub updatesup {
    $data->{'invoiceincgst'},$data->{'specialty'},$data->{'discount'},
    $data->{'invoicedisc'},$data->{'nocalc'},$data->{'id'});
    $sth->finish;
-#   print $query;
 }
 
 =item insertsup

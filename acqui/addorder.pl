@@ -26,6 +26,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Acquisition;
+use C4::Suggestions;
 use C4::Biblio;
 use C4::Output;
 use C4::Interface::CGI::Output;
@@ -45,37 +46,43 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $existing=$input->param('existing');
+# get CGI parameters
+my $ordnum=$input->param('ordnum');
+my $basketno=$input->param('basketno');
+my $booksellerid = $input->param('booksellerid');
+my $existing=$input->param('existing'); # existing biblio, (not basket or order)
 my $title=$input->param('title');
 my $author=$input->param('author');
 my $copyrightdate=$input->param('copyrightdate');
 my $isbn=$input->param('ISBN');
 my $itemtype=$input->param('format');
-my $ordnum=$input->param('ordnum');
-my $basketno=$input->param('basket');
 my $quantity=$input->param('quantity');
 my $listprice=$input->param('list_price');
-my $series=$input->param('Series');
 if ($listprice eq ''){
-  $listprice=0;
+	$listprice=0;
 }
-my $supplier=$input->param('supplier');
+my $series=$input->param('Series');
+# my $supplier=$input->param('supplier');
 my $notes=$input->param('notes');
 my $bookfund=$input->param('bookfund');
 my $sort1=$input->param('sort1');
 my $sort2=$input->param('sort2');
-my $who=$loggedinuser;
-my $bibnum;
-my $bibitemnum;
 my $rrp=$input->param('rrp');
 my $ecost=$input->param('ecost');
 my $gst=$input->param('GST');
-my $orderexists=$input->param('orderexists');
 my $budget=$input->param('budget');
 my $cost=$input->param('cost');
 my $sub=$input->param('sub');
 my $invoice=$input->param('invoice');
 my $publishercode = $input->param('publishercode');
+my $suggestionid= $input->param('suggestionid');
+
+# create, modify or delete biblio
+# create if $quantity>=0 and $existing='no'
+# modify if $quantity>=0 and $existing='yes'
+# delete if $quantity has been se to 0 by the librarian
+my $bibnum;
+my $bibitemnum;
 if ($quantity ne '0'){
 	#check to see if biblio exists
 	if ($existing eq 'no'){
@@ -93,22 +100,18 @@ if ($quantity ne '0'){
 			if ($title) {
 				newsubtitle($bibnum,$title);
 			}
+		# change suggestion status if applicable
+		if ($suggestionid) {
+			changestatus($suggestionid,'ORDERED');
+		}
 	} else {
 		$bibnum=$input->param('biblio');
 		$bibitemnum=$input->param('bibitemnum');
 		my $oldtype=$input->param('oldtype');
-		if ($bibitemnum eq '' || $itemtype ne $oldtype){
-			$bibitemnum= &newbiblioitem({ biblionumber => $bibnum,
-									itemtype => $itemtype?$itemtype:"",
-									isbn => $isbn?$isbn:"" ,
-									publishercode => $publishercode?$publishercode:"",
-									});
-		} else {
-			&modbibitem({biblioitemnumber => $bibitemnum,
-							isbn            => $isbn,
-							publishercode   => $publishercode,
-			});
-		}
+		&modbibitem({biblioitemnumber => $bibitemnum,
+						isbn            => $isbn,
+						publishercode   => $publishercode,
+		});
 		&modbiblio({
 			biblionumber  => $bibnum,
 			title         => $title?$title:"",
@@ -117,14 +120,13 @@ if ($quantity ne '0'){
 			series        => $series?$series:"" },
 			);
 	}
-	if ($orderexists ne '') {
-		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
+	if ($ordnum) {
+		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}else {
-		neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
+		$basketno=neworder($basketno,$bibnum,$title,$quantity,$listprice,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}
 } else {
 	$bibnum=$input->param('biblio');
 	delorder($bibnum,$ordnum);
 }
-
 print $input->redirect("basket.pl?basket=$basketno");

@@ -24,38 +24,43 @@
 use strict;
 use CGI;
 use C4::Context;
-use C4::Acquisition;
-use C4::Search;
+use C4::Database;
 use C4::Auth;
+use C4::Acquisition;
+use C4::Suggestions;
+use C4::Search;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
 use HTML::Template;
 
 my $input=new CGI;
-my $id=$input->param('id');
+my $booksellerid=$input->param('booksellerid');
 my $title=$input->param('title');
 my $author=$input->param('author');
 my $copyright=$input->param('copyright');
-my ($count,@booksellers)=bookseller($id);
+my ($count,@booksellers)=bookseller($booksellerid);
 my $ordnum=$input->param('ordnum');
 my $biblio=$input->param('biblio');
-my $basket=$input->param('basket');
+my $basketno=$input->param('basketno');
+my $suggestionid = $input->param('suggestionid');
 my $data;
 my $new;
 my $dbh = C4::Context->dbh;
-if ($ordnum eq ''){
+if ($ordnum eq ''){ # create order
 	$new='yes';
-	$ordnum=newordernum;
+# 	$ordnum=newordernum;
 	if ($biblio) {
 			$data=bibdata($biblio);
+	}
+	if ($suggestionid) { # get suggestion fields if applicable.
+		$data = getsuggestion($suggestionid);
 	}
 	if ($data->{'title'} eq ''){
 		$data->{'title'}=$title;
 		$data->{'author'}=$author;
 		$data->{'copyrightdate'}=$copyright;
 	}
-}else {
+}else { #modify order
 	$data=getsingleorder($ordnum);
 	$biblio=$data->{'biblionumber'};
 }
@@ -68,7 +73,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-#my ($count2,$currencies)=getcurrencies;
+
+# get currencies (for change rates calcs if needed
 my ($count,$rates)=getcurrencies();
 my @loop_currency = ();
 for (my $i=0;$i<$count;$i++){
@@ -78,17 +84,15 @@ for (my $i=0;$i<$count;$i++){
 	push @loop_currency, \%line;
 }
 
+# build itemtype list
 my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
 $sth->execute;
 my  @itemtype;
 my %itemtypes;
-push @itemtype, "";
-$itemtypes{''} = "Please choose";
 while (my ($value,$lib) = $sth->fetchrow_array) {
 	push @itemtype, $value;
 	$itemtypes{$value}=$lib;
 }
-
 my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
 			-values   => \@itemtype,
 			-default  => $data->{'itemtype'},
@@ -97,6 +101,7 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
 			-multiple => 0 );
 $sth->finish;
 
+# build branches list
 my @branches;
 my @select_branch;
 my %select_branches;
@@ -112,18 +117,7 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-size     => 1,
 			-multiple => 0 );
 
-my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
-	# See whether barcodes should be automatically allocated.
-	# Defaults to 0, meaning "no".
-my $barcode;
-if ($auto_barcode eq '1') {
-	$sth=$dbh->prepare("Select max(barcode) from items");
-	$sth->execute;
-	my $data=$sth->fetchrow_hashref;
-	$barcode = $data->{'barcode'}+1;
-	$sth->finish;
-}
-
+# build bookfund list
 my @bookfund;
 my @select_bookfund;
 my %select_bookfunds;
@@ -139,11 +133,13 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-size     => 1,
 			-multiple => 0 );
 
+# fill template
 $template->param( existing => $biblio,
 						title => $title,
 						ordnum => $ordnum,
-						basket => $basket,
-						id => $id,
+						basketno => $basketno,
+						booksellerid => $booksellerid,
+						suggestionid => $suggestionid,
 						biblio => $biblio,
 						biblioitemnumber => $data->{'biblioitemnumber'},
 						itemtype => $data->{'itemtype'},
@@ -171,7 +167,6 @@ $template->param( existing => $biblio,
 						notes => $data->{'notes'},
 						sort1 => $data->{'sort1'},
 						sort2 => $data->{'sort2'},
-						barcode => $data->{'barcode'},
 						publishercode => $data->{'publishercode'});
 
 output_html_with_http_headers $input, $cookie, $template->output;

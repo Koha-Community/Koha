@@ -23,19 +23,21 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;
 use C4::Auth;
-use C4::Catalogue;
-use C4::Biblio;
+use C4::Koha;
+# use C4::Biblio;
 use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
+use C4::Acquisition;
 use C4::Date;
-use strict;
 
 my $query =new CGI;
-my $basket=$query ->param('basket');
+my $basketno = $query ->param('basket');
+my $supplierid = $query->param('id');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basket.tmpl",
 			     query => $query,
@@ -45,15 +47,14 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 my ($count,@results);
-if ($basket eq ''){
-	$basket=newbasket();
-	$results[0]->{'booksellerid'}=$query->param('id');
-	$results[0]->{'authorisedby'} = $loggedinuser;
-} else {
-	($count,@results)=basket($basket);
-}
 
-my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
+my ($count2,@booksellers)=bookseller($supplierid);
+
+my $basket = getbasket($basketno);
+# if new basket, pre-fill infos
+$basket->{creationdate} = "" unless ($basket->{creationdate});
+$basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});
+($count,@results)=getbasketcontent($basketno);
 
 my $line_total; # total of each line
 my $sub_total; # total of line totals
@@ -80,7 +81,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{publishercode} = $results[$i]->{'publishercode'};
 	$line{isbn} = $results[$i]->{'isbn'};
 	$line{booksellerid} = $results[$i]->{'booksellerid'};
-	$line{basket}=$basket;
+	$line{basketno}=$basketno;
 	$line{title} = $results[$i]->{'title'};
 	$line{author} = $results[$i]->{'author'};
 	$line{i} = $i;
@@ -96,11 +97,13 @@ my $prefgist =C4::Context->preference("gist");
 $gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
 
-$template->param(basket => $basket,
-				authorisedby => $results[0]->{'authorisedby'},
-				entrydate => format_date($results[0]->{'entrydate'}),
-				id=> $results[0]->{'booksellerid'},
+$template->param(basketno => $basketno,
+				creationdate => $basket->{creationdate},
+				authorisedby => $basket->{authorisedby},
+				authorisedbyname => $basket->{authorisedbyname},
+				booksellerid=> $booksellers[0]->{'id'},
 				name => $booksellers[0]->{'name'},
+				entrydate => format_date($results[0]->{'entrydate'}),
 				books_loop => \@books_loop,
 				count =>$count,
 				sub_total => $sub_total,

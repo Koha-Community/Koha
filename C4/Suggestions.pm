@@ -23,6 +23,8 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
+use C4::Output;
+# use C4::Interface::CGI::Output;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -57,7 +59,10 @@ Suggestions done by other can be seen when not "AVAILABLE"
 @ISA = qw(Exporter);
 @EXPORT = qw(	&newsuggestion
 				&searchsuggestion
+				&getsuggestion
 				&delsuggestion
+				&countsuggestion
+				&changestatus
 			);
 
 =item SearchSuggestion
@@ -81,9 +86,10 @@ sub searchsuggestion  {
 	my $query="Select suggestions.*,
 						U1.surname as surnamesuggestedby,U1.firstname as firstnamesuggestedby,
 						U2.surname as surnamemanagedby,U2.firstname as firstnamemanagedby 
-						from suggestions,borrowers as U1 
+						from suggestions
+						left join borrowers as U1 on suggestedby=U1.borrowernumber
 						left join borrowers as U2  on managedby=U2.borrowernumber
-						where suggestedby=U1.borrowernumber";
+						where 1=1";
 	my @sql_params;
 	if ($author) {
 		push @sql_params,"%".$author."%";
@@ -125,23 +131,77 @@ sub searchsuggestion  {
 }
 
 sub newsuggestion {
-	my ($borrowernumber,$title,$author,$publishercode,$note) = @_;
+	my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("insert into suggestions (suggestedby,title,author,publishercode,note) values (?,?,?,?,?)");
-	$sth->execute($borrowernumber,$title,$author,$publishercode,$note);
+	my $sth = $dbh->prepare("insert into suggestions (status,suggestedby,title,author,publishercode,note,copyrightdate,volumedesc,publicationyear,place,isbn) values ('ASKED',?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn);
+}
+
+sub getsuggestion {
+	my ($suggestionid) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select * from suggestions where suggestionid=?");
+	$sth->execute($suggestionid);
+	return($sth->fetchrow_hashref);
 }
 
 sub delsuggestion {
-	my ($borrowernumber,$suggestionnumber) = @_;
+	my ($borrowernumber,$suggestionid) = @_;
 	my $dbh = C4::Context->dbh;
 	# check that the suggestion comes from the suggestor
-	my $sth = $dbh->prepare("select suggestedby from suggestions where suggestionnumber=?");
-	$sth->execute($suggestionnumber);
+	my $sth = $dbh->prepare("select suggestedby from suggestions where suggestionid=?");
+	$sth->execute($suggestionid);
 	my ($suggestedby) = $sth->fetchrow;
 	if ($suggestedby eq $borrowernumber) {
-		$sth = $dbh->prepare("delete from suggestions where suggestionnumber=?");
-		$sth->execute($suggestionnumber);
+		$sth = $dbh->prepare("delete from suggestions where suggestionid=?");
+		$sth->execute($suggestionid);
 	}
+}
+
+sub countsuggestion {
+	my ($status) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select count(*) from suggestions where status=?");
+	$sth->execute($status);
+	my ($result) = $sth->fetchrow;
+	return $result;
+}
+
+sub changestatus {
+	my ($suggestionid,$status,$managedby) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+	if ($managedby>0) {
+		$sth = $dbh->prepare("update suggestions set status=?,managedby=? where suggestionid=?");
+		$sth->execute($status,$managedby,$suggestionid);
+	} else {
+		$sth = $dbh->prepare("update suggestions set status=? where suggestionid=?");
+		$sth->execute($status,$suggestionid);
+
+	}
+	# check mail sending.
+	$sth = $dbh->prepare("select suggestions.*,
+							boby.surname as bysurname, boby.firstname as byfirstname, boby.emailaddress as byemail,
+							lib.surname as libsurname,lib.firstname as libfirstname,lib.emailaddress as libemail
+						from suggestions left join borrowers as boby on boby.borrowernumber=suggestedby left join borrowers as lib on lib.borrowernumber=managedby where suggestionid=?");
+	$sth->execute($suggestionid);
+	my $emailinfo = $sth->fetchrow_hashref;
+	my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
+# 				 query =>'',
+# 			     authnotrequired => 1,
+# 			 });
+	$template->param(byemail => $emailinfo->{byemail},
+					libemail => $emailinfo->{libemail},
+					status => $emailinfo->{status},
+					title => $emailinfo->{title},
+					author =>$emailinfo->{author},
+					libsurname => $emailinfo->{libsurname},
+					libfirstname => $emailinfo->{libfirstname},
+					byfirstname => $emailinfo->{byfirstname},
+					bysurname => $emailinfo->{bysurname},
+					);
+	warn "mailing => ".$template->output;
+# 	warn "sending email to $emailinfo->{byemail} from $emailinfo->{libemail} to notice new status $emailinfo->{status} for $emailinfo->{title} / $emailinfo->{author}";
 }
 
 =back

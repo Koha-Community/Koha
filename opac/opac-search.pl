@@ -9,7 +9,7 @@ use CGI;
 use C4::Database;
 use HTML::Template;
 use C4::SearchMarc;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Biblio;
 
 my $classlist='';

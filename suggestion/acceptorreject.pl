@@ -24,42 +24,36 @@ my $op = $input->param('op');
 $op = 'else' unless $op;
 
 my $dbh = C4::Context->dbh;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-suggestions.tmpl",
-			     type => "opac",
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "suggestion/acceptorreject.tmpl",
+			     type => "intranet",
 			     query => $input,
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			 });
-if ($op eq "add_confirm") {
-	&newsuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn);
-	# empty fields, to avoid filter in "searchsuggestion"
-	$title='';
-	$author='';
-	$publishercode='';
-	$copyrightdate ='';
-	$volumedesc = '';
-	$publicationyear = '';
-	$place = '';
-	$isbn = '';
-	$op='else';
+if ($op eq "aorr_confirm") {
+	my @suggestionlist = $input->param("aorr");
+	foreach my $suggestion (@suggestionlist) {
+		if ($suggestion =~ /(A|R)(.*)/) {
+			my ($newstatus,$suggestionid) = ($1,$2);
+			$newstatus="REJECTED" if $newstatus eq "R";
+			$newstatus="ACCEPTED" if $newstatus eq "A";
+			changestatus($suggestionid,$newstatus,$loggedinuser);
+		}
+	}
+	$op="else";
 }
 
 if ($op eq "delete_confirm") {
 	my @delete_field = $input->param("delete_field");
 	foreach my $delete_field (@delete_field) {
-		&delsuggestion($borrowernumber,$delete_field);
+		&delsuggestion($loggedinuser,$delete_field);
 	}
 	$op='else';
 }
 
-my $suggestions_loop= &searchsuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
+my $suggestions_loop= &searchsuggestion("","","","",'ASKED',"");
 $template->param(suggestions_loop => $suggestions_loop,
-				title => $title,
-				author => $author,
-				publishercode => $publishercode,
-				status => $status,
-				suggestedbyme => $suggestedbyme,
 				"op_$op" => 1,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -47,32 +47,37 @@ my ($template, $loggedinuser, $cookie)
 my $supplier=$query->param('supplier');
 my ($count,@suppliers)=bookseller($supplier);
 
-my $colour='#EEEEEE';
+# check if we have to "close" a basket before building page
+my $op = $query->param('op');
+my $basket = $query->param('basket');
+if ($op eq 'close') {
+	closebasket($basket);
+}
+
+#build reult page
 my $toggle=0;
 my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {
 	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
 	my %line;
 	if ($toggle==0){
-		$line{color}='#EEEEEE';
+		$line{even}=1;
 		$toggle=1;
 	} else {
-		$line{color}='white';
+		$line{even}=0;
 		$toggle=0;
 	}
-	$line{id} =$suppliers[$i]->{'id'};
+	$line{supplierid} =$suppliers[$i]->{'id'};
 	$line{name} = $suppliers[$i]->{'name'};
 	$line{active} = $suppliers[$i]->{'active'};
-	$line{total} = $orders->[0]->{'count(*)'};
-	$line{authorisedby} = $orders->[0]->{'authorisedby'};
-	$line{entrydate} = $orders->[0]->{'entrydate'};
 	my @loop_basket;
 	for (my $i2=0;$i2<$ordcount;$i2++){
 		my %inner_line;
 		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
 		$inner_line{total} =$orders->[$i2]->{'count(*)'};
 		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-		$inner_line{entrydate} = format_date($orders->[$i2]->{'entrydate'});
+		$inner_line{creationdate} = format_date($orders->[$i2]->{'creationdate'});
+		$inner_line{closedate} = format_date($orders->[$i2]->{'closedate'});
 		push @loop_basket, \%inner_line;
 	}
 	$line{loop_basket} = \@loop_basket;
