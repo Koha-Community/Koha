@@ -442,6 +442,42 @@ sub _formalize ($) {
     return $t->type == TmplTokenType::DIRECTIVE? '%s': _quote_cformat($t->string);
 }
 
+sub _optimize {
+    my $this = shift;
+    my @structure = @_;
+    my $undo_trailing_blanks = sub {
+		for (my $i = $#structure; $i >= 0; $i -= 1) {
+		last if $structure[$i]->type != TmplTokenType::TEXT;
+		last if !blank_p($structure[$i]->string);
+		    push @{$this->{_queue}}, pop @structure;
+		}
+	    };
+    # FIXME: If the last token is a close tag but there are no tags
+    # FIXME: before it, drop the close tag back into the queue. This
+    # FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
+    if (@structure >= 2
+	    && $structure[$#structure]->type == TmplTokenType::TAG
+	    && $structure[$#structure]->string =~ /^<\//s) {
+	my $has_other_tags_p = 0;
+	    printf STDERR "last token %d is type %s: %s\n", $#structure, $structure[$#structure]->type->to_string, $structure[$#structure]->string;
+	for (my $i = 0; $i < $#structure; $i += 1) {
+	    printf STDERR "token %d is type %s: %s\n", $i, $structure[$i]->type->to_string, $structure[$i]->string;
+	    $has_other_tags_p = 1 if $structure[$i]->type == TmplTokenType::TAG;
+	last if $has_other_tags_p;
+	}
+	push @{$this->{_queue}}, pop @structure unless $has_other_tags_p;
+	&$undo_trailing_blanks;
+    }
+    # FIXME: Do the same ugly hack for the last token being a ( or [
+    if (@structure >= 2
+	    && $structure[$#structure]->type == TmplTokenType::TEXT
+	    && $structure[$#structure]->string =~ /^[\(\[]$/) { # not )]
+	push @{$this->{_queue}}, pop @structure;
+	&$undo_trailing_blanks;
+    }
+    return @structure;
+}
+
 sub next_token {
     my $this = shift;
     my $h = $this->_handle;
@@ -485,20 +521,7 @@ sub next_token {
 	    for (my $i = 0; $i < $n_trailing_spaces; $i += 1) {
 		push @{$this->{_queue}}, pop @structure;
 	    }
-	    # FIXME: If the last token is a close tag but there are no tags
-	    # FIXME: before it, drop the close tag back into the queue. This
-	    # FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
-	    if (@structure >= 2
-		    && $structure[$#structure]->type == TmplTokenType::TAG
-		    && $structure[$#structure]->string =~ /^<\//) {
-		my $has_other_tags_p = 0;
-		for (my $i = 0; $i < $#structure; $i += 1) {
-		    $has_other_tags_p = 1
-			    if $structure[$i]->type == TmplTokenType::TAG;
-		last if $has_other_tags_p;
-		}
-		push @{$this->{_queue}}, pop @structure unless $has_other_tags_p
-	    }
+	    @structure = $this->_optimize( @structure );
 	    if (@structure < 2) {
 		# Nothing to do
 		;

@@ -33,6 +33,7 @@ use vars qw( $charset_in $charset_out );
 sub find_translation ($) {
     my($s) = @_;
     my $key = TmplTokenizer::quote_po($s) if $s =~ /\S/;
+    $key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
     return defined $href->{$key}
 		&& !$href->{$key}->fuzzy
 		&& length Locale::PO->dequote($href->{$key}->msgstr)?
@@ -145,6 +146,9 @@ GetOptions(
 
 VerboseWarnings::set_application_name $0;
 VerboseWarnings::set_pedantic_mode $pedantic_p;
+
+# try to make sure .po files are backed up (see BUGS)
+$ENV{VERSION_CONTROL} = 't';
 
 # keep the buggy Locale::PO quiet if it says stupid things
 $SIG{__WARN__} = sub {
@@ -318,6 +322,9 @@ xgettext.pl must be present in the current directory; the
 msgmerge(1) command must also be present in the search path.
 The script currently does not check carefully whether these
 dependent commands are present.
+
+If xgettext.pl is interrupted by the user, a corrupted po file
+will result. This is very seriously wrong.
 
 Locale::PO(3) has a lot of bugs. It can neither parse nor
 generate GNU PO files properly; a couple of workarounds have
