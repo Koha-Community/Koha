@@ -6,28 +6,6 @@
 <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Subscription</a>
 
 <div id="bloc25">
-	<h2 class="bull">Subscription summary</h2>
-	<form method="post" name="f" action="statecollection.pl">
-		<input type="hidden" name="op" value="modsubscriptionhistory">
-		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
-		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-		<p><label>Librarian</label><!-- TMPL_VAR name="user" --></p>
-		<p><label>Beginnning date (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
-		<p><label>End date</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
-		<p>Arrived Numbers</p>
-		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
-		<p>Gapped Numbers</p>
-		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
-		<p>Opac's note</p>
-		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
-		<p>Intra's note</p>
-		<p>&nbsp;<textarea name="librariannote" COLS=60 ROWS=5><!-- TMPL_VAR name="librariannote" --></textarea></p>
-		<input type="submit" value="Save changes" class="button bull">
-	</form>
-</div>
-
-<div id="bloc25">
 <h2 class="bull">waited or late numbers</h2>
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus">
@@ -87,7 +65,26 @@
 	</form>
 </div>
 
-</form>
+<div id="bloc25">
+	<h2 class="bull">Subscription summary</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Librarian</label><!-- TMPL_VAR name="user" --></p>
+		<p><label class="label100">Beginnning date (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
+		<p><label class="label100">End date</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>Recieved issues</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Missing issues</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Opac's note</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<input type="submit" value="Save changes" class="button bull">
+	</form>
+</div>
+
 </table>
 <script language="JavaScript" type="text/javascript">
 
