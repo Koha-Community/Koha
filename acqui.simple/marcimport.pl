@@ -49,6 +49,7 @@ print $input->header(-cookie => $cookie);
 print startpage();
 print startmenu('acquisitions');
 
+
 print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
 
 #-------------
@@ -686,11 +687,15 @@ sub uploadmarc {
     requireDBI($dbh,"uploadmarc");
 
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
+    if (my $deleterecord=$input->param('deleterecord')) {
+	my $sth=$dbh->prepare("delete from uploadedmarc where id=$deleterecord");
+	$sth->execute;
+    }
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
     $sth->execute;
     print "<h2>Select a set of MARC records</h2>\n<ul>";
     while (my ($id, $name) = $sth->fetchrow) {
-	print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$id&menu=$menu>$name</a><br>\n";
+	print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$id&menu=$menu>$name</a> (<a href=marcimport.pl?menu=uploadmarc&deleterecord=$id>Delete</a>)<br>\n";
     }
     print "</ul>\n";
     print "<p>\n";
@@ -1149,6 +1154,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.36  2002/12/04 17:21:04  tonnesen
+# Added a link to delete uploaded marc records.
+#
 # Revision 1.6.2.35  2002/07/11 18:05:29  tonnesen
 # Committing changes to add authentication and opac templating to rel-1-2 branch
 #
