@@ -1,53 +1,30 @@
 <!-- TMPL_INCLUDE name="popup-top.inc" -->
 <div id="mainbloc">
-<h1 class="acquisition">Supplier Search Results</h1>
-<div id="bloc100">
-<h2 class="acquisition">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
-<table>
-<tr>
-	<th class="acquisition">Company</th>
-	<th class="acquisition">
-		<table class="noborder">
+	<h1>Supplier Search Results</h1>
+	<div id="bloc100">
+		<h2>You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
+		<table>
 			<tr>
-				<th class="acquisition">Basket</th>
-				<th class="acquisition">&nbsp;</th>
+				<th>Book seller</th>
+				<th>Select</th>
 			</tr>
+			<!-- TMPL_LOOP name="loop_suppliers" -->
+				<tr>
+					<td><!-- TMPL_VAR name="name" --></td>
+					<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">Get It !</td>
+				</tr>
+			<!-- /TMPL_LOOP -->
 		</table>
-	</td>
-</tr>
-
-<!-- TMPL_LOOP name="loop_suppliers" -->
-	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
-		<td><!-- TMPL_VAR name="name" --></td>
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=5 border=0>
-					<tr>
-						<th class="acquisition">Basket</th>
-						<th class="acquisition">Items</th>
-						<th class="acquisition">Created by</th>
-						<th class="acquisition">Date</th>
-						<th class="acquisition">&nbsp;</th>
-					</tr>
-					<!-- TMPL_LOOP NAME="loop_basket" -->
-						<tr>
-							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
-							<td><TMPL_VAR NAME="total"></td>
-							<td><!-- TMPL_VAR NAME="authorisedby" --></td>
-							<td><!-- TMPL_VAR NAME="creationdate" --></td>
-							<td>
-								<!-- TMPL_IF name="closedate" -->
-									closed on <!-- TMPL_VAR NAME="closedate" -->
-								<!-- TMPL_ELSE -->
-									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">...</a>
-								<!-- /TMPL_IF -->
-							</td>
-						</tr>
-					<!-- /TMPL_LOOP -->
-				</table>
-		</tr>
-	<!-- /TMPL_LOOP -->
-	</table>
 	</div>
-	<a class="button acquisition" href="supplier.pl?supplerid=0">Add supplier</a>
 </div>
+
+<script language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  self.close();
+}
+</script>
 <!-- TMPL_INCLUDE name="popup-bottom.inc" -->
