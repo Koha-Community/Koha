@@ -220,7 +220,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Bar Code</th>
 			<th class="circulation">Title</th>
 			<th class="circulation">Author</th>
-			<th class="circulation">Class</th>
+			<th class="circulation">Call number</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="todayissues" -->
 		<tr>
@@ -229,14 +229,11 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
 			</td>
 			<td>
-				<!-- TMPL_VAR NAME="title" -->
+				<!-- TMPL_VAR NAME="title" --><br/>
+				<i><!-- TMPL_VAR name="itemnotes" --></i>
 			</td>
-			<td>
-				<!-- TMPL_VAR NAME="author" -->
-			</td>
-			<td>
-				<!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" -->
-			</td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
@@ -252,7 +249,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Bar Code</th>
 			<th class="circulation">Title</th>
 			<th class="circulation">Author</th>
-			<th class="circulation">Class</th>
+			<th class="circulation">Call number</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="previssues" -->
 			<tr>
@@ -273,9 +270,12 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 					<td>
 						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
 					</td>
-					<td><!-- TMPL_VAR NAME="title" --></td>
+					<td>
+						<!-- TMPL_VAR NAME="title" --><br/>
+						<i><!-- TMPL_VAR name="itemnotes" --></i>
+					</td>
 					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" --></td>
+					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 				<!-- /TMPL_IF -->
 			</tr>
 		<!-- /TMPL_LOOP -->
