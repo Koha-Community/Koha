@@ -26,8 +26,9 @@ my $number_of_results = 20;
 my $startfrom = $query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 my $subjectitems=$query->param('subjectitems');
-my (@results) = newsearch($itemtype,$duration,$number_of_results,$startfrom);
-my $count= $#results+1;
+my $count;
+my @results;
+($count,@results) = newsearch($itemtype,$duration,$number_of_results,$startfrom);
 my $num = 1;
 foreach my $res (@results) {
 	my @items = ItemInfo(undef, $res->{'biblionumber'}, "intra");
@@ -59,7 +60,9 @@ $template->param(nextstartfrom => $nextstartfrom,
 				prevstartfrom => $prevstartfrom,
 				searchnew => 1,
 				itemtype => ItemType($itemtype),
-				duration => $duration);
+				itemtypecode => $itemtype,
+				duration => $duration,
+				opacnew => 1);
 
 $template->param(SEARCH_RESULTS => $resultsarray,
 			     LibraryName => C4::Context->preference("LibraryName"),
@@ -72,7 +75,7 @@ if ($count>$number_of_results) {
 		my $highlight=0;
 		my $themelang = $template->param('themelang');
 		($startfrom==($i-1)*$number_of_results+1) && ($highlight=1);
-		push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*$number_of_results+1 };
+		push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*$number_of_results };
 	}
 }
 
