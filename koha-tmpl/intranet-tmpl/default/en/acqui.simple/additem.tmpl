@@ -10,7 +10,7 @@
 <input type="hidden" name="op" value="<TMPL_VAR name="op">">
 <input type="hidden" name="bibid" value="<TMPL_VAR name="bibid">">
 <table width="80%" align="center" cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<td>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
@@ -26,12 +26,12 @@
 <center>
 <DIV name="10XX" id="10XX">
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
-	<tr  background="/images/background-mem.gif">
+	<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<th>Existing items</th>
 	</tr>
 </table>
 <table border=1 cellspacing=0 cellpadding=0 width=80%>
-	<tr  background="/images/background-mem.gif">
+	<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP><th colspan=2>&nbsp;</th>
 	</tr>
 		<TMPL_LOOP name="item_loop">
@@ -44,7 +44,7 @@
 </DIV>
 <br /><br />
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
-	<tr  background="/images/background-mem.gif">
+	<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<th>New Item</th>
 	</tr>
 </table><table width=80%  cellspacing=0 cellpadding=1 border=0>
@@ -82,7 +82,7 @@ function active(numlayer)
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
 			document.getElementById(link).style.backgroundColor="#11AA11";
-			document.getElementById(link).style.backgroundImage="url(/images/background-mem.gif)";
+			document.getElementById(link).style.backgroundImage="url(<TMPL_VAR name="themelang">/images/background-mem.gif)";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
 			document.getElementById(link).style.backgroundColor="#FFFFFF";

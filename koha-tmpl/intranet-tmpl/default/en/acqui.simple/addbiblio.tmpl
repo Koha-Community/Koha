@@ -9,7 +9,7 @@
 
 <form method="post" name="f">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
    <DIV name="0XX" id="0XX" style="position:absolute;left:40px;top:150px;visibility:visible;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
 	<TMPL_LOOP name="0XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -60,7 +60,7 @@
 	<DIV name="1XX" id="1XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100%  cellspacing=0 cellpadding=1 border=0>
 	<TMPL_LOOP name="1XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -82,7 +82,7 @@
 	<DIV name="2XX" id="2XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="2XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -104,7 +104,7 @@
 	<DIV name="3XX" id="3XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="3XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -126,7 +126,7 @@
 	<DIV name="4XX" id="4XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100%  cellspacing=0 cellpadding=2 border=0>
 	<TMPL_LOOP name="4XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -148,7 +148,7 @@
 	<DIV name="5XX" id="5XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="5XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -170,7 +170,7 @@
 	<DIV name="6XX" id="6XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=90% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="6XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -192,7 +192,7 @@
 	<DIV name="7XX" id="7XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100%  cellspacing=0 cellpadding=2 border=0>
 	<TMPL_LOOP name="7XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -214,7 +214,7 @@
 	<DIV name="8XX" id="8XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="8XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -236,7 +236,7 @@
 	<DIV name="9XX" id="9XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
 	<table width=90% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="9XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -296,7 +296,7 @@ function active(numlayer)
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
 			document.getElementById(link).style.backgroundColor="#11AA11";
-			document.getElementById(link).style.backgroundImage="url(/images/background-mem.gif)";
+			document.getElementById(link).style.backgroundImage="url(<TMPL_VAR name="themelang">/images/background-mem.gif)";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
 			document.getElementById(link).style.backgroundColor="#FFFFFF";
