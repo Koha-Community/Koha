@@ -369,8 +369,8 @@ sub ListFileRecords {
 	  <a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
 	  <p>
 	  <table border=0 cellpadding=10 cellspacing=0>
-	  <tr><th bgcolor=black>
-	    <font color=white>Select a Record to Import $recordsource</font>
+	  <tr><th background=/images/background-acq.gif>
+	    Select a Record to Import $recordsource
 	  </th></tr>
 	  <tr><td bgcolor=#dddddd>
 EOF
@@ -853,7 +853,7 @@ sub AcceptBiblioitem {
 	my $title=$input->param('title');
 	print << "EOF";
 	<table border=0 width=50% cellpadding=10 cellspacing=0>
-	  <tr><th bgcolor=black><font color=white>Record already in database</font>
+	  <tr><th background=/images/background-acq.gif>Record already in database
 	  </th></tr>
 	  <tr><td bgcolor=#dddddd>$title is already in the database with 
 		biblionumber $biblionumber and biblioitemnumber $biblioitemnumber
@@ -923,7 +923,7 @@ EOF
 	  my $title=$input->param('title');
 	  print << "EOF";
 	    <table cellpadding=10 cellspacing=0 border=0 width=50%>
-	    <tr><th bgcolor=black><font color=white>Record entered into database</font></th></tr>
+	    <tr><th background=/images/background-acq.gif>Record entered into database</th></tr>
 	    <tr><td bgcolor=#dddddd>$title has been entered into the database with biblionumber
 	    $biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
 	  </table>
@@ -964,8 +964,8 @@ sub ItemCopyForm {
 
     print << "EOF";
     <table border=0 cellpadding=10 cellspacing=0>
-      <tr><th bgcolor=black>
-	<font color=white> Add a New Item for $title </font>
+      <tr><th background=/images/background-acq.gif>
+	Add a New Item for $title
       </th></tr>
       <tr><td bgcolor=#dddddd>
       <form>
@@ -1059,8 +1059,8 @@ sub FormatMarcText {
     #-----------------------------------------
 
     $marctext="<table border=0 cellspacing=1>
-    	<tr><th colspan=4 bgcolor=black>
-		<font color=white>MARC RECORD</font>
+    	<tr><th colspan=4 background=/images/background-acq.gif>
+		MARC RECORD
 	</th></tr>\n";
 
     foreach $field ( @$fields ) {
@@ -1136,6 +1136,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.31  2002/06/28 18:50:46  tonnesen
+# Got rid of white text on black, replaced with black on background-acq.gif
+#
 # Revision 1.6.2.30  2002/06/28 18:07:27  tonnesen
 # marcimport.pl will print an error message if it can not signal the
 # processz3950queue program.  The message contains instructions for starting the
