@@ -4,4 +4,4 @@ use strict;
 use Test::Harness;
 
 
-runtests 't/koha.t';
+runtests 't/koha.t t/Catalogue.t';
