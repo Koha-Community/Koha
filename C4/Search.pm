@@ -2706,8 +2706,8 @@ sub isbnsearch {
 				biblio.biblionumber = biblioitems.biblionumber";
 	@bind=();
 	if ($isbn) {
-		$query .= " and isbn=?";
-		@bind=($isbn);
+		$query .= " and isbn like ?";
+		@bind=(uc($isbn)."%");
 	}
 	if ($title) {
 		$query .= " and title like ?";
