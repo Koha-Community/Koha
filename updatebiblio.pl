@@ -18,10 +18,11 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use CGI;
 use strict;
+use CGI;
 use C4::Acquisitions;
 use C4::Output;
+use HTML::Template;
 
 # FIXME - This script uses a bunch of functions that appear in both
 # C4::Acquisitions and C4::Biblio. But I gather that the latter are
@@ -66,25 +67,24 @@ for (my $i = 0; $i < $count; $i++) {
 $error = &modsubject($bibnum,$force,@sub);
 
 if ($error ne ''){
-    print $input->header;
-    print startpage();
-    print startmenu('catalogue');
-    print $error;
+	my $template = gettemplate("updatebiblio.tmpl");
+
     my @subs=split('\n',$error);
-    print "<p> Click submit to force the subject";
     my @names=$input->param;
-    my %data;
     my $count=@names;
+	my @dataloop;
     for (my $i=0;$i<$count;$i++) {
 	if ($names[$i] ne 'Force') {
-	    my $value=$input->param("$names[$i]");
-	    $data{$names[$i]}="hidden\t$value\t$i";
+		my %line;
+	    $line{'value'}=$input->param("$names[$i]");
+		$line{'name'}=$names[$i];
+		push(@dataloop, \%line);
 	} # if
     } # for
-    $data{"Force"}="hidden\t$subs[0]\t$count";
-    print mkform3('updatebiblio.pl',%data);
-    print endmenu();
-    print endpage();
+    template->param(substring =>$subs[0]);
+    template->param(error =>$error);
+    template->param(dataloop => \@dataloop);
+	print "Content-Type: text/html\n\n", $template->output;
 } else {
     print $input->redirect("detail.pl?type=intra&bib=$bibnum");
 } # else
