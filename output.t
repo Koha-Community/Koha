@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..17\n"; }
+BEGIN { $| = 1; print "1..20\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use C4::Output;
 $loaded = 1;
@@ -92,10 +92,6 @@ if ("</table>\n" eq mktableft()) {
 #
 
 #
-# skipping mkformnotable for now
-#
-
-#
 # skipping mkform2 for now
 #
 
@@ -167,3 +163,61 @@ if ("<b>foo</b>" eq bold('foo')) {
 } else {
     print "not ok\n";
 }
+
+#
+# ensure &mkformnotable returns a valid value
+#
+
+@inputHidden = qw(hidden hiddenname hiddenvalue);
+@inputRadio = qw(radio radioname radiovalue);
+@inputText = qw(text textname textvalue);
+#@inputTextarea = qw(textarea testareaname textareavalue);
+#@inputSubmit = qw(submit submitname submitvalue);
+#@inputReset = qw(reset resetname resetvalue);
+
+# 1 input; hidden
+@inputs = (\@inputHidden);
+$return ="<form action=actionurl method=post>\n";
+$return .= "<input type=hidden name=hiddenname value=\"hiddenvalue\">\n";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 18\n";
+} else {
+    print "not ok 18\n";
+}
+
+# 1 input; radio
+@inputs = (\@inputRadio);
+$return ="<form action=actionurl method=post>\n";
+$return .= "<input type=radio name=radioname value=radiovalue>radiovalue";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 19\n";
+} else {
+    print "not ok 19\n";
+}
+
+# 1 input; text
+@inputs = (\@inputText);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<input type=text name=textname value=\"textvalue\">";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 20\n";
+} else {
+    print "not ok 20\n";
+}
+
+
+# 1 input; textarea
+
+# 1 input; reset
+
+# 1 input; submit
+
+# 2 inputs; hidden and submit
+
+# 3 inputs; text, reset, and submit
