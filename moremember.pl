@@ -205,8 +205,8 @@ for (my $i=0;$i<$count;$i++){
   my ($rescount,$reserves)=FindReserves($issue->[$i]{'biblionumber'},'');
   if ($rescount >0){
     print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
-  } elsif ($issue->[$i]->{'renewals'} > 0) {
-      print "<TD>Previously Renewed - no renewals</td></tr>";
+#  } elsif ($issue->[$i]->{'renewals'} > 0) {
+#      print "<TD>Previously Renewed - no renewals</td></tr>";
   } else {
     print "<TD>";
   
