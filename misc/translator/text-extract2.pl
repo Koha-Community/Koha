@@ -61,7 +61,9 @@ use vars qw( $cdata_mode_p $cdata_close );
 sub extract_attributes ($;$) {
     my($s, $lc) = @_;
     my %attr;
-    $s = $1 if $s =~ /^<\S+(.*)\S$/s; # should be always true
+    $s = $1 if $s =~ /^<\S+(.*)\/\S$/s	# XML-style self-closing tags
+	    || $s =~ /^<\S+(.*)\S$/s;	# SGML-style tags
+
     for (my $i = 0; $s =~ /^\s+(?:([a-zA-Z][-a-zA-Z0-9]*)=)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|(($re_directive|[^\s<>])+))/os;) {
 	my($key, $val, $val_orig, $rest)
 		= ($1, (defined $3? $3: defined $4? $4: $5), $2, $');
