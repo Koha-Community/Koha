@@ -85,7 +85,6 @@
 <th colspan="2">Title</th>
 <th>Due</th>
 <!-- <th>Fines</th> -->
-<th>Status</th>
 </tr>
 
 <!-- TMPL_LOOP NAME="ISSUES" -->
@@ -96,13 +95,6 @@
 <!-- TMPL_VAR NAME="author" --> (<!-- TMPL_VAR NAME="itemtype" -->)</span></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
 <!-- <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td> -->
-<td>
-<!-- TMPL_IF NAME="status" -->
-<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="padded">Renew</a>
-<!-- TMPL_ELSE -->
-Not renewable
-<!-- /TMPL_IF -->
-</td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table></div>
