@@ -33,7 +33,7 @@ sub debug_dump (*) { # for testing only
     last unless defined $s;
 	printf "%s\n", ('-' x 79);
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-	printf "%s:\n", $kind;
+	printf "%s [line %d]:\n", $kind->to_string, $s->line_number;
 	printf "%4dH%s\n", length($t),
 		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $t));
 	if ($kind eq TmplTokenType::TAG && %$attr) {

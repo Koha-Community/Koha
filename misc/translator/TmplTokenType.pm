@@ -39,7 +39,7 @@ use vars qw( $_text $_cdata $_tag $_decl $_pi $_directive $_comment $_unknown );
 
 BEGIN {
     my $new = sub {
-	my $this = shift;
+	my $this = 'TmplTokenType';#shift;
 	my $class = ref($this) || $this;
 	my $self = {};
 	bless $self, $class;
