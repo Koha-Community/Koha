@@ -256,7 +256,7 @@ printend
 	    		$toggle="white";
 	  	}
 		print mktablerow(9,$toggle,$results->[$i]{'branchcode'},$results->[$i]{'branchname'},
-		$results->[$i]{'branchaddress1'}.$results->[$i]{'branchaddress2'}.$results->[$i]{'branchaddress3'},
+		$results->[$i]{'branchaddress1'}." ".$results->[$i]{'branchaddress2'}." ".$results->[$i]{'branchaddress3'},
 		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchemail'},,$results->[$i]{'issuing'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'branchcode'},'Edit'),
 		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete'));
