@@ -2306,7 +2306,7 @@ sub barcodes{
     #called from request.pl
     my ($biblioitemnumber)=@_;
     my $dbh=C4Connect;
-    my $query="SELECT barcode, itemlost FROM items
+    my $query="SELECT barcode, itemlost, holdingbranch FROM items
                            WHERE biblioitemnumber = ?
                              AND (wthdrawn <> 1 OR wthdrawn IS NULL)";
     my $sth=$dbh->prepare($query);
