@@ -961,21 +961,23 @@ sub updatesup {
    my ($data)=@_;
    my $dbh = C4::Context->dbh;
    my $query="Update aqbooksellers set
-   name='$data->{'name'}',address1='$data->{'address1'}',address2='$data->{'address2'}',
-   address3='$data->{'address3'}',address4='$data->{'address4'}',postal='$data->{'postal'}',
-   phone='$data->{'phone'}',fax='$data->{'fax'}',url='$data->{'url'}',
-   contact='$data->{'contact'}',contpos='$data->{'contpos'}',
-   contphone='$data->{'contphone'}', contfax='$data->{'contfax'}', contaltphone=
-   '$data->{'contaltphone'}', contemail='$data->{'contemail'}', contnotes=
-   '$data->{'contnotes'}', active=$data->{'active'},
-   listprice='$data->{'listprice'}', invoiceprice='$data->{'invoiceprice'}',
-   gstreg=$data->{'gstreg'}, listincgst=$data->{'listincgst'},
-   invoiceincgst=$data->{'invoiceincgst'}, specialty='$data->{'specialty'}',
-   discount='$data->{'discount'}',invoicedisc='$data->{'invoicedisc'}',
-   nocalc='$data->{'nocalc'}'
-   where id='$data->{'id'}'";
+   name=?,address1=?,address2=?,address3=?,address4=?,postal=?,
+   phone=?,fax=?,url=?,contact=?,contpos=?,contphone=?,contfax=?,contaltphone=?,
+   contemail=?,contnotes=?,active=?,
+   listprice=?, invoiceprice=?,gstreg=?, listincgst=?,
+   invoiceincgst=?, specialty=?,discount=?,invoicedisc=?,
+   nocalc=?
+   where id=?";
    my $sth=$dbh->prepare($query);
-   $sth->execute;
+   $sth->execute($data->{'name'},$data->{'address1'},$data->{'address2'},
+   $data->{'address3'},$data->{'address4'},$data->{'postal'},$data->{'phone'},
+   $data->{'fax'},$data->{'url'},$data->{'contact'},$data->{'contpos'},
+   $data->{'contphone'},$data->{'contfax'},$data->{'contaltphone'},
+   $data->{'contemail'},
+   $data->{'contnote'},$data->{'active'},$data->{'listprice'},
+   $data->{'invoiceprice'},$data->{'gstreg'},$data->{'listincgst'},
+   $data->{'invoiceincgst'},$data->{'specialty'},$data->{'discount'},
+   $data->{'invoicedisc'},$data->{'nocalc'},$data->{'id'});
    $sth->finish;
 #   print $query;
 }
