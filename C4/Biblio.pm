@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.30  2002/12/12 21:26:35  tipaul
+# YAB ! (Yet Another Bugfix) => related to biblio modif
+# (some warning cleaning too)
+#
 # Revision 1.29  2002/12/12 16:35:00  tipaul
 # adding authentification with Auth.pm and
 # MAJOR BUGFIX on marc biblio modification
@@ -454,7 +458,7 @@ sub MARCaddbiblio {
 sub MARCadditem {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
     my ($dbh,$record,$biblionumber) = @_;
-    warn "adding : ".$record->as_formatted();
+#    warn "adding : ".$record->as_formatted();
 # search for MARC biblionumber
     $dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
     my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
@@ -475,7 +479,7 @@ sub MARCadditem {
 				 $subfieldcount+1,
 				 $subfields[$subfieldcount][1]
 				 );
-				 warn "ADDING :$bibid,".
+#				 warn "ADDING :$bibid,".
 				 $field->tag().
 				 $field->indicator(1).$field->indicator(2).",
 				 $fieldcount,
@@ -547,8 +551,8 @@ sub MARCgetbiblio {
 			$sth2->finish;
 			$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
 		}
-#		warn "$row->{bibid} = $row->{tag} - $row->{subfieldcode}";
-		if ($row->{tagorder} ne $prevtagorder) {
+#		warn "$row->{bibid} = $row->{tag} - $row->{subfieldcode} -> value : $row->{subfieldvalue}";
+		if ($row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag) {
 		    if (length($prevtag) <3) {
 				$prevtag = "0".$prevtag;
 			}
@@ -563,7 +567,7 @@ sub MARCgetbiblio {
 			%subfieldlist={};
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
-			warn "subfieldcode : $row->{'subfieldcode'} / value : $row->{'subfieldvalue'}, tag : $row->{tag}";
+#			warn "subfieldcode : $row->{'subfieldcode'} / value : $row->{'subfieldvalue'}, tag : $row->{tag}";
 			if (%subfieldlist->{$row->{'subfieldcode'}}) {
 				%subfieldlist->{$row->{'subfieldcode'}}.='|';
 			}
@@ -627,9 +631,9 @@ sub MARCgetitem {
 sub MARCmodbiblio {
     my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
-    warn "OLD : ".$oldrecord->as_formatted();
-    warn "----------------------------------\nNEW : ".$record->as_formatted();
-    warn "\n";
+#    warn "OLD : ".$oldrecord->as_formatted();
+#    warn "----------------------------------\nNEW : ".$record->as_formatted();
+#    warn "\n";
 # if nothing to change, don't waste time...
     if ($oldrecord eq $record) {
 #    warn "NOTHING TO CHANGE";
@@ -669,8 +673,8 @@ sub MARCmoditem {
 #		warn "nothing to change";
 		return;
 	}
-	warn "MARCmoditem : ".$record->as_formatted;
-	warn "OLD : ".$oldrecord->as_formatted;
+#	warn "MARCmoditem : ".$record->as_formatted;
+#	warn "OLD : ".$oldrecord->as_formatted;
 
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
@@ -684,11 +688,11 @@ sub MARCmoditem {
 		my $subfieldorder=0;
 		foreach my $subfield (@subfields) {
 			$subfieldorder++;
-			warn "compare : $oldfield".$oldfield->subfield(@$subfield[0]);
+#			warn "compare : $oldfield".$oldfield->subfield(@$subfield[0]);
 			if ($oldfield eq 0 or (length($oldfield->subfield(@$subfield[0])) ==0) ) {
 		# just adding datas...
 #		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
-				warn "NEW subfield : $bibid,".$field->tag().",".$tagorder.",".@$subfield[0].",".$subfieldorder.",".@$subfield[1].")";
+#				warn "NEW subfield : $bibid,".$field->tag().",".$tagorder.",".@$subfield[0].",".$subfieldorder.",".@$subfield[1].")";
 				&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
 						$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
 			} else {
@@ -696,7 +700,7 @@ sub MARCmoditem {
 		# modify he subfield if it's a different string
 				if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-					warn "changing : $subfieldid, $bibid,".$field->tag(),",$tagorder,@$subfield[0],@$subfield[1],$subfieldorder";
+#					warn "changing : $subfieldid, $bibid,".$field->tag(),",$tagorder,@$subfield[0],@$subfield[1],$subfieldorder";
 					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 				} else {
 #FIXME ???
@@ -705,7 +709,6 @@ sub MARCmoditem {
 			}
 		}
 	}
-	warn "-----------------------";
 }
 
 
@@ -924,14 +927,12 @@ sub MARChtml2marc {
 			$prevtag = @$rtags[$i];
 			%subfieldlist={};
 			%subfieldlist->{@$rsubfields[$i]} = @$rvalues[$i];
-			warn " ==>@$rsubfields[$i]} = @$rvalues[$i];";
 		} else {
 #			if (%subfieldlist->{@$rsubfields[$i]}) {
 #				%subfieldlist->{@$rsubfields[$i]} .= '|';
 #			}
 			%subfieldlist->{@$rsubfields[$i]} .=@$rvalues[$i];
 			$prevtag= @$rtags[$i];
-			warn " ==>@$rsubfields[$i]} ,= @$rvalues[$i];";
 		}
 	}
 	# the last has not been included inside the loop... do it now !
