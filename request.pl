@@ -71,8 +71,8 @@ my ($count2,@data) = bibitems($bib);
 my $bibitemrows = "";
 
 
-for (my $i=0; $i<$count2; $i++) {
-    my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
+foreach my $dat (sort {$b->{'dateaccessioned'} cmp $a->{'dateaccessioned'}} @data) {
+    my @barcodes = barcodes($dat->{'biblioitemnumber'});
     my $barcodestext = "";
     foreach my $num (@barcodes) {
 	my $message = $num->{'itemlost'} == 1 ? "(lost)" :
@@ -81,26 +81,26 @@ for (my $i=0; $i<$count2; $i++) {
     }
     $barcodestext = substr($barcodestext, 0, -4);
 
-    $data[$i]->{'dewey'}="" if ($data[$i]->{'dewey'} == 0);
+    $dat->{'dewey'}="" if ($dat->{'dewey'} == 0);
 
-    $data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
-    $data[$i]->{'dewey'}=~ s/\.0000$//;
-    $data[$i]->{'dewey'}=~ s/00$//;
-    my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
+    $dat->{'volumeddesc'} = "&nbsp;" unless $dat->{'volumeddesc'};
+    $dat->{'dewey'}=~ s/\.0000$//;
+    $dat->{'dewey'}=~ s/00$//;
+    my $class="$dat->{'classification'}$dat->{'dewey'}$dat->{'subclass'}";
     my $select;
-    if (($data[$i]->{'notforloan'}) 
-	|| ($data[$i]->{'itemlost'} == 1))  {
+    if (($dat->{'notforloan'}) 
+	|| ($dat->{'itemlost'} == 1))  {
 	$select = "Cannot be reserved.";
     } else {
-	$select = " <input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}><input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>";
+	$select = " <input type=checkbox name=reqbib value=$dat->{'biblioitemnumber'}><input type=hidden name=biblioitem value=$dat->{'biblioitemnumber'}>";
     }
     $bibitemrows .= <<"EOF";
 <tr VALIGN=TOP>
 <TD>$select</td>
-<TD>$data[$i]->{'description'}</td>
+<TD>$dat->{'description'}</td>
 <TD>$class</td>
-<td>$data[$i]->{'volumeddesc'}</td>
-<td>$data[$i]->{'publicationyear'}</td>
+<td>$dat->{'volumeddesc'}</td>
+<td>$dat->{'publicationyear'}</td>
 <td>$barcodestext</td>
 </tr>
 EOF

@@ -1337,7 +1337,7 @@ sub itemcount {
     if (my $data2=$sth2->fetchrow_hashref){         
        $nacount++;         
     } else {         
-      if ($data->{'holdingbranch'} eq 'C'){         
+      if ($data->{'holdingbranch'} eq 'C' || $data->{'holdingbranch'} eq 'LT'){         
         $lcount++;               
       }                       
       if ($data->{'holdingbranch'} eq 'F' || $data->{'holdingbranch'} eq 'FP'){         
@@ -1437,7 +1437,10 @@ sub ItemType {
 sub bibitems {
     my ($bibnum) = @_;
     my $dbh   = C4Connect;
-    my $query = "SELECT biblioitems.*, itemtypes.*, MIN(items.itemlost) as itemlost
+    my $query = "SELECT biblioitems.*, 
+                        itemtypes.*, 
+                        MIN(items.itemlost)        as itemlost,
+                        MIN(items.dateaccessioned) as dateaccessioned
                           FROM biblioitems, itemtypes, items
                          WHERE biblioitems.biblionumber     = ?
                            AND biblioitems.itemtype         = itemtypes.itemtype
