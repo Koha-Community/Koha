@@ -24,6 +24,7 @@ use strict;
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
 use vars qw( $pedantic_p );
+use vars qw( $fatal_p );
 
 ###############################################################################
 
@@ -85,8 +86,15 @@ sub extract_attributes ($;$) {
 		&& $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
     }
     if ($s =~ /\S/s) { # should never happen
-	warn "Warning: Strange attribute syntax"
-		. (defined $lc? " near line $lc": '') . ": $s\n";
+	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
+	    warn "Error: Completely confused while extracting attributes"
+		    . (defined $lc? " near line $lc": '') . ": $1\n";
+	    warn "Error: " . (scalar split(/\n/, $s) - 1) . " more line(s) not shown.\n";
+	    $fatal_p = 1;
+	} else {
+	    warn "Warning: Strange attribute syntax"
+		    . (defined $lc? " near line $lc": '') . ": $s\n";
+	}
     }
     return \%attr;
 }
@@ -295,3 +303,4 @@ warn "Warning: This input will not work with Mozilla standards-compliant mode\n"
 
 close INPUT;
 
+exit(-1) if $fatal_p;
