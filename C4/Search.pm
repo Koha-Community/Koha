@@ -2162,10 +2162,13 @@ that branch.
 sub itemcount2 { 
   my ($env,$bibnum,$type)=@_; 
   my $dbh=C4Connect;   
-  my $query="SELECT items.*, branches.branchname FROM items LEFT JOIN branches ON items.holdingbranch = branches.branchcode WHERE biblionumber = ?";
+  my $query = "SELECT items.*, branches.branchname 
+                 FROM items LEFT JOIN branches 
+                                   ON items.holdingbranch = branches.branchcode 
+                WHERE biblionumber = ?";
   if ($type ne 'intra'){
     $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
-    (wthdrawn <> 1 or wthdrawn is NULL)";      
+                  (wthdrawn <> 1 or wthdrawn is NULL)";      
   }
   my $sth=$dbh->prepare($query);         
   #  print $query;           
@@ -2196,7 +2199,7 @@ sub itemcount2 {
   } 
   if ($bibnum) {
       my $query2="Select * from aqorders where biblionumber=$bibnum and
-      datecancellationprinted is NULL and quantity > quantityreceived";
+      (datecancellationprinted is NULL or datecancellationprinted ='')";
       my $sth2=$dbh->prepare($query2);
       $sth2->execute;
       if (my $data=$sth2->fetchrow_hashref){
