@@ -52,10 +52,10 @@ sub getuserflags {
 	    $userflags->{$flag}=1;
 	}
     }
-    warn "Userflags: \n";
-    foreach my $f (keys %$userflags) {
-	warn ":    Flag: $f  => $userflags->{$f}\n ";
-    }
+#    warn "Userflags: \n";
+#    foreach my $f (keys %$userflags) {
+#	warn ":    Flag: $f  => $userflags->{$f}\n ";
+#    }
     return $userflags;
 }
 
@@ -79,7 +79,6 @@ sub checkauth {
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	warn "userid, ip, lasttime = ".$userid.", ".$ip.", ".$lasttime."\n";
 	if ($lasttime<time()-7200) {
 	    # timed logout
 	    $message="You have been logged out due to inactivity.";
@@ -115,7 +114,6 @@ sub checkauth {
 		$flags->{'superlibrarian'}=1;
 	    }
 	    foreach (keys %$flagsrequired) {
-		warn "Checking required flag $_";
 		unless ($flags->{superlibrarian}) {
 		    unless ($flags->{$_}) {
 			print qq|Content-type: text/html

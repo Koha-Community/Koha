@@ -40,7 +40,7 @@ sub FindReserves {
   my $dbh=C4Connect;
   my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
                       FROM reserves,borrowers,biblio ";
-  if ($bib ne ''){
+  if ($bib){
       $bib = $dbh->quote($bib);
       if ($bor ne ''){
 	  $bor = $dbh->quote($bor);
@@ -120,7 +120,6 @@ sub CheckReserves {
 sub CancelReserve {
     my ($biblio, $item, $borr) = @_;
     my $dbh=C4Connect;
-    warn "In CancelReserve";
     if (($item and $borr) and (not $biblio)) {
 # removing a waiting reserve record....
 	$item = $dbh->quote($item);
@@ -202,7 +201,6 @@ sub fixpriority {
                                WHERE biblionumber     = $nbib 
                                  AND borrowernumber   = $nbor
                                  AND reservedate      = $nresd";
-	    warn $query;
 	    my $sth = $dbh->prepare($query);
 	    $sth->execute;
 	    $sth->finish;

@@ -136,6 +136,8 @@ sub getpatroninformation {
     $sth = $dbh->prepare($query);
     $sth->execute;
     my $borrower = $sth->fetchrow_hashref;
+    my $amount = checkaccount($env, $borrowernumber, $dbh);
+    $borrower->{'amountoutstanding'} = $amount;
     my $flags = patronflags($env, $borrower, $dbh);
     my $accessflagshash;
 
@@ -149,7 +151,7 @@ sub getpatroninformation {
     $sth->finish;
     $dbh->disconnect;
     $borrower->{'flags'}=$flags;
-    return($borrower, $flags, $accessflagshash);
+    return ($borrower, $flags, $accessflagshash);
 }
 
 sub decode {
@@ -709,7 +711,7 @@ sub patronflags {
 # Original subroutine for Circ2.pm
     my %flags;
     my ($env, $patroninformation, $dbh) = @_;
-    my $amount = checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
+    my $amount = $patroninformation->{'amountoutstanding'};
     if ($amount > 0) { 
 	my %flaginfo;
 	$flaginfo{'message'}= sprintf "Patron owes \$%.02f", $amount; 
@@ -909,6 +911,7 @@ sub getissues {
     my $select = "SELECT issues.timestamp      AS timestamp, 
                          issues.date_due       AS date_due, 
                          items.biblionumber    AS biblionumber,
+                         items.itemnumber    AS itemnumber,
                          items.barcode         AS barcode, 
                          biblio.title          AS title, 
                          biblio.author         AS author, 
@@ -966,32 +969,21 @@ sub checkwaiting {
 
 
 sub checkaccount  {
-# Stolen from Accounts.pm
-  #take borrower number
-  #check accounts and list amounts owing
+# returns total amount oweing.
   my ($env,$bornumber,$dbh,$date)=@_;
-  my $select="Select sum(amountoutstanding) from accountlines where
-  borrowernumber=$bornumber and amountoutstanding<>0";
+  my $select="SELECT SUM(amountoutstanding) AS total
+                FROM accountlines 
+               WHERE borrowernumber = $bornumber 
+                 AND amountoutstanding<>0";
   if ($date ne ''){
-    $select.=" and date < '$date'";
+    $select.=" AND date < '$date'";
   }
-#  print $select;
   my $sth=$dbh->prepare($select);
   $sth->execute;
-  my $total=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $total=$total+$data->{'sum(amountoutstanding)'};
-  }
+  my $data=$sth->fetchrow_hashref;
+  my $total = $data->{'total'};
   $sth->finish;
-  # output(1,2,"borrower owes $total");
-  #if ($total > 0){
-  #  # output(1,2,"borrower owes $total");
-  #  if ($total > 5){
-  #    reconcileaccount($env,$dbh,$bornumber,$total);
-  #  }
-  #}
-  #  pause();
-  return($total);
+  return ($total);
 }    
 
 sub renewstatus {
@@ -1073,7 +1065,6 @@ sub renewbook {
 sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
-    warn "Im in calc_charges!\n";
     my ($env, $dbh, $itemno, $bornum)=@_;
 
     $dbh=C4Connect() unless $dbh;
@@ -1085,7 +1076,7 @@ sub calc_charges {
     where (items.itemnumber ='$itemno')
     and (biblioitems.biblioitemnumber = items.biblioitemnumber) 
     and (biblioitems.itemtype = itemtypes.itemtype)";
-    warn "$q1\n";
+
     my $sth1= $dbh->prepare($q1);
 
     $sth1->execute;
