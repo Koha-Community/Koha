@@ -24,6 +24,7 @@
 use strict;
 use C4::Output;
 use CGI;
+use HTML::Template;
 use C4::Search;
 use C4::Accounts2;
 my $input=new CGI;
@@ -42,32 +43,7 @@ if ($add){
   manualinvoice($bornum,$itemnum,$desc,$type,$amount);
   print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
 } else {
-  print $input->header;
-  print startpage();
-  print startmenu('member');
-print <<printend
-<Center><h3>Manual Credit</h3></center>
-<form action=/cgi-bin/koha/mancredit.pl method=post>
-<table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name=bornum value=$bornum>
-<tr><td><b>Borrowernumber<b></td><td>$bornum</td></tr>
-<!--<tr><td><b>Cardnumber<b></td><td></td></tr>-->
-<tr><td><b>Type</b></td><Td>
-<select name=type>
-<option value=C>Credit</option>
-<option value=BAY>Baycorp Adjustment</option>
-<option value=WORK>Worked off</option>
-</select>
-</td></tr>
-<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>Description</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>Amount</b></td><td><input type=text name=amount></td></tr>
-<tr><td><input type=submit name=add value=Add></td></tr>
-</table>
-</form>
-printend
-;
-print endmenu('member');
-print endpage();
-
+	my $template = gettemplate("mancredit.tmpl");
+	$template->param( bornum => $bornum);
+	print "Content-Type: text/html\n\n", $template->output;
 }
