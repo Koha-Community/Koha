@@ -566,7 +566,6 @@ sub MARCmoditem {
 	if ($oldrecord eq $record) {
 		return;
 	}
-
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
 	# search old MARC item
@@ -694,7 +693,7 @@ sub MARCdelsubfield {
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
     $dbh->do("delete from marc_subfield_table where bibid='$bibid' and
 			tag='$tag' and tagorder='$tagorder'
-			and subfieldcode='$subfield' and subfieldorder='$subfieldorder
+			and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
 			");
 }
 
@@ -1471,8 +1470,8 @@ sub OLDmoditem {
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
 #  my $dbh=C4Connect;
 $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
-  my $query="update items set  barcode=?,itemnotes=? where itemnumber=?";
-  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'itemnum'});
+  my $query="update items set  barcode=?,itemnotes=?,bulk=?,notforloan=? where itemnumber=?";
+  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   if ($item->{'barcode'} eq ''){
   	$item->{'notforloan'}=0 unless $item->{'notforloan'};
     $query="update items set notforloan=? where itemnumber=?";
@@ -1484,9 +1483,11 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
                              itemnotes=?,
                              homebranch=?,
                              itemlost=?,
-                             wthdrawn=?
+                             wthdrawn=?,
+			     bulk=?,
+			     notforloan=?,
                           where itemnumber=?";
-    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'itemnum'});
+    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   }
   if ($item->{'replacement'} ne ''){
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
@@ -2192,6 +2193,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
+# dealing correctly "bulk" field
+#
 # Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
 # * minor html fixes
 # * adding publisher in acquisition process (& ordering basket by publisher)
