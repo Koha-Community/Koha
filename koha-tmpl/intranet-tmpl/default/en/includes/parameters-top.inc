@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
+<title>KOHA: INTRANET: Parameters</title>
 
 
 <style type="text/css">
