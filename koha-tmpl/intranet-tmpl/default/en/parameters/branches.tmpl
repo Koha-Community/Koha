@@ -43,10 +43,11 @@ Confirm delete:
 <td width='175'><b>Categories</b></td>
 <td width='50'><b>&nbsp;</b></td>
 </tr>
+<TMPL_LOOP name="branches">
 <tr bgcolor='<TMPL_VAR name=color>'>
     <td align='left' valign='top'><TMPL_VAR name=branch_name></td>
     <td align='left' valign='top'><TMPL_VAR name=branch_code></td>
-    <td align='left' valign='top'><TMPL_VAR name=adress></td>
+    <td align='left' valign='top'><TMPL_VAR name=address></td>
     <td align='left' valign='top'><TMPL_VAR name=categories></td>
     <td align='left' valign='top'> 
 <form action='<TMPL_VAR name=action>' method=post>
@@ -59,7 +60,9 @@ Confirm delete:
 <input type='hidden' name='op' value='delete'><input type=submit value=Delete>
 </form></td>
 </tr>
-</table><br>
+</TMPL_LOOP>
+</table>
+<br>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
 <font size='5'><b>Branches Categories</b></font></th> </tr> 
