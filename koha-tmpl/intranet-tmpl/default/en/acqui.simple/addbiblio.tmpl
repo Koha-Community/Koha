@@ -1,5 +1,4 @@
-<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 
 <div class="tabbed">
 	<form method="post" name="f">
@@ -10,9 +9,9 @@
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
 		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="oldbiblionumber" -->">
 		<!-- TMPL_IF name="bibid" -->
-			<input type="button" value="Save" onClick='Check(this.form)' accesskey="w" class="button catalogue">
+			<input type="button" value="Save" onclick="Check(this.form)" accesskey="w" class="button catalogue">
 		<!-- TMPL_ELSE -->
-			<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w" class="button catalogue">
+			<input type="button" value="Add biblio" onclick="Check(this.form)" accesskey="w" class="button catalogue">
 		<!-- /TMPL_IF -->
 		<a href="javascript:PopupZ3950()" class="button catalogue">z3950 search</a>
 	</p>
@@ -57,7 +56,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -88,7 +87,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -119,7 +118,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -150,7 +149,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -181,7 +180,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -212,7 +211,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -243,7 +242,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -274,7 +273,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -305,7 +304,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -336,7 +335,7 @@
 				<p class="MARCtag">
 				<!-- TMPL_VAR name="tag" -->
 				<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
-				<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+				<input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->"> - <!-- tmpl_var name="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
 					<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
 				<!-- /TMPL_IF -->
@@ -384,7 +383,7 @@
 			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
 		<!-- /TMPL_IF -->
 	</form>
-<script LANGUAGE="JavaScript">
+<script language="JavaScript" type="text/javascript">
 function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
