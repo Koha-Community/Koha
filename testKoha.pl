@@ -25,6 +25,7 @@ my @tests=(
 	't/require.t',
 	't/webscripts/catalog.t',
 	't/webscripts/circulation.t',
+	't/webscripts/acquisitions-simple.t',
 );
 
 
@@ -33,6 +34,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.1.2.11  2002/10/30 06:38:29  tonnesen
+# Test harness for simple acquisitions started
+#
 # Revision 1.1.2.10  2002/10/29 20:22:38  tonnesen
 # buildrelease now puts the test scripts in $intranetdir/scripts/t/
 #
