@@ -420,13 +420,24 @@ sub _next_token_intermediate {
     return $it;
 }
 
-sub _token_groupable_p ($) { # groupable into a TEXT_PARAMETRIZED token
+sub _token_groupable1_p ($) { # as first token, groupable into TEXT_PARAMETRIZED
     my($t) = @_;
-    return $t->type == TmplTokenType::TEXT
+    return ($t->type == TmplTokenType::TEXT && $t->string !~ /^[,\.:\|\s]+$/s)
 	|| ($t->type == TmplTokenType::DIRECTIVE
 		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
 	|| ($t->type == TmplTokenType::TAG
-		&& ($t->string =~ /^<\/?(?:b|em|h[123456]|i|u)\b/is
+		&& ($t->string =~ /^<(?:b|em|h[123456]|i|u)\b/is
+		|| ($t->string =~ /^<input/i
+		    && $t->attributes->{'type'} =~ /^(?:text)$/i)))
+}
+
+sub _token_groupable2_p ($) { # as other token, groupable into TEXT_PARAMETRIZED
+    my($t) = @_;
+    return ($t->type == TmplTokenType::TEXT && ($t->string =~ /^\s*$/s || $t->string !~ /^[\|\s]+$/s))
+	|| ($t->type == TmplTokenType::DIRECTIVE
+		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
+	|| ($t->type == TmplTokenType::TAG
+		&& ($t->string =~ /^<\/?(?:a|b|em|h[123456]|i|u)\b/is
 		|| ($t->string =~ /^<input/i
 		    && $t->attributes->{'type'} =~ /^(?:text)$/i)))
 }
@@ -439,7 +450,10 @@ sub _quote_cformat ($) {
 
 sub _formalize ($) {
     my($t) = @_;
-    return $t->type == TmplTokenType::DIRECTIVE? '%s': _quote_cformat($t->string);
+    return $t->type == TmplTokenType::DIRECTIVE? '%s':
+	   $t->type == TmplTokenType::TAG?
+		   ($t->string =~ /^<a\b/is? '<a>': _quote_cformat($t->string)):
+	       _quote_cformat($t->string);
 }
 
 sub _optimize {
@@ -452,6 +466,7 @@ sub _optimize {
 		    push @{$this->{_queue}}, pop @structure;
 		}
 	    };
+    &$undo_trailing_blanks;
     # FIXME: If the last token is a close tag but there are no tags
     # FIXME: before it, drop the close tag back into the queue. This
     # FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
@@ -514,46 +529,56 @@ sub next_token {
 	$it = $this->_next_token_intermediate($h);
 	if (!$this->cdata_mode_p && $this->allow_cformat_p && defined $it
 	    && ($it->type == TmplTokenType::TEXT?
-		!blank_p( $it->string ): _token_groupable_p( $it ))) {
+		!blank_p( $it->string ): _token_groupable1_p( $it ))) {
 	    my @structure = ( $it );
-	    my($n_trailing_spaces, $next) = (0, undef);
-	    my($nonblank_text_p, $parametrized_p, $next) = (0, 0);
+	    my @tags = ();
+	    my $next = undef;
+	    my($nonblank_text_p, $parametrized_p, $with_anchor_p) = (0, 0, 0);
 	    if ($it->type == TmplTokenType::TEXT) {
 		$nonblank_text_p = 1 if !blank_p( $it->string );
 	    } elsif ($it->type == TmplTokenType::DIRECTIVE) {
 		$parametrized_p = 1;
+	    } elsif ($it->type == TmplTokenType::TAG && $it->string =~ /^<([A-Z0-9]+)/is) {
+		push @tags, lc($1);
+		$with_anchor_p = 1 if lc($1) eq 'a';
 	    }
-	    for (my $i = 1, $n_trailing_spaces = 0;; $i += 1) {
+	    # We hate | and || in msgid strings, so we try to avoid them
+	    for (my $i = 1, my $quit_p = 0, my $quit_next_p = ($it->type == TmplTokenType::TEXT && $it->string =~ /^\|+$/s);; $i += 1) {
 		$next = $this->_next_token_intermediate($h);
 		push @structure, $next; # for consistency (with initialization)
-	    last unless defined $next && _token_groupable_p( $next );
+	    last unless defined $next && _token_groupable2_p( $next );
+	    last if $quit_next_p;
 		if ($next->type == TmplTokenType::TEXT) {
-		    if (blank_p( $next->string )) {
-			$n_trailing_spaces += 1;
-		    } else {
-			($n_trailing_spaces, $nonblank_text_p) = (0, 1);
-		    }
+		    $nonblank_text_p = 1 if !blank_p( $next->string );
+		    $quit_p = 1 if $next->string =~ /^\|+$/s; # We hate | and ||
 		} elsif ($next->type == TmplTokenType::DIRECTIVE) {
-		    $n_trailing_spaces = 0;
 		    $parametrized_p = 1;
-		} else {
-		    $n_trailing_spaces = 0;
+		} elsif ($next->type == TmplTokenType::TAG) {
+		    if ($next->string =~ /^<([A-Z0-9]+)/is) {
+			push @tags, lc($1);
+			$with_anchor_p = 1 if lc($1) eq 'a';
+		    } elsif ($next->string =~ /^<\/([A-Z0-9]+)/is) {
+			my $close = lc($1);
+			$quit_p = 1 unless @tags && $close eq $tags[$#tags];
+			$quit_next_p = 1 if $close =~ /^h\d$/;
+			pop @tags;
+		    }
 		}
+	    last if $quit_p;
 	    }
 	    # Undo the last token
 	    push @{$this->{_queue}}, pop @structure;
-	    # Undo trailing blank tokens
-	    for (my $i = 0; $i < $n_trailing_spaces; $i += 1) {
-		push @{$this->{_queue}}, pop @structure;
-	    }
+	    # Simply it a bit more
 	    @structure = $this->_optimize( @structure );
 	    if (@structure < 2) {
 		# Nothing to do
 		;
-	    } elsif ($nonblank_text_p && $parametrized_p) {
+	    } elsif ($nonblank_text_p && ($parametrized_p || $with_anchor_p)) {
 		# Create the corresponding c-format string
 		my $string = join('', map { $_->string } @structure);
 		my $form = join('', map { _formalize $_ } @structure);
+		my $a_counter = 0;
+		$form =~ s/<a>/ $a_counter += 1, "<a$a_counter>" /egs;
 		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED, $it->line_number, $it->pathname);
 		$it->set_form( $form );
 		$it->set_children( @structure );
@@ -604,10 +629,10 @@ sub quote_po ($) {
 }
 
 # Some functions that shouldn't be here... should be moved out some time
-sub parametrize ($@) {
-    my($fmt, @params) = @_;
+sub parametrize ($$$) {
+    my($fmt_0, $params, $anchors) = @_;
     my $it = '';
-    for (my $n = 0; length $fmt;) {
+    for (my $n = 0, my $fmt = $fmt_0; length $fmt;) {
 	if ($fmt =~ /^[^%]+/) {
 	    $fmt = $';
 	    $it .= $&;
@@ -619,7 +644,7 @@ sub parametrize ($@) {
 	    my($i, $width, $prec) = ((defined $1? $1: $n), $2, $3);
 	    $fmt = $';
 	    if (!defined $width && !defined $prec) {
-		$it .= $params[$i]
+		$it .= $params->[$i]
 	    } elsif (defined $width && defined $prec && !$width && !$prec) {
 		;
 	    } else {
@@ -631,6 +656,22 @@ sub parametrize ($@) {
 	    die "Unknown or unsupported format specification: $&\n"; #XXX
 	} else {
 	    die "Completely confused parametrizing: $fmt\n";#XXX
+	}
+    }
+    for (my $n = 0, my $fmt = $it, $it = ''; length $fmt;) {
+	if ($fmt =~ /^(?:(?!<a\d+>).)+/is) {
+	    $fmt = $';
+	    $it .= $&;
+	} elsif ($fmt =~ /^<a(\d+)>/is) {
+	    $n += 1;
+	    my $i  = $1;
+	    $fmt = $';
+	    my $anchor = $anchors->[$i - 1];
+	    warn_normal "$&: Anchor $1 not found for msgid \"$fmt_0\"", undef #FIXME
+		    unless defined $anchor;
+	    $it .= $anchor->string;
+	} else {
+	    die "Completely confused decoding anchors: $fmt\n";#XXX
 	}
     }
     return $it;

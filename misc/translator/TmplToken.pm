@@ -88,6 +88,12 @@ sub parameters {
 }
 
 # only meaningful for TEXT_PARAMETRIZED tokens
+sub anchors {
+    my $this = shift;
+    return map { $_->type == TmplTokenType::TAG && $_->string =~ /^<a\b/is? $_: ()} @{$this->{'_kids'}};
+}
+
+# only meaningful for TEXT_PARAMETRIZED tokens
 sub form {
     my $this = shift;
     return $this->{'_form'};

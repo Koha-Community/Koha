@@ -21,26 +21,43 @@ use vars qw( $charset_in $charset_out );
 
 ###############################################################################
 
-sub negligible_p ($) {
+sub string_negligible_p ($) {
     my($t) = @_;				# a string
     # Don't emit pure whitespace, pure numbers, pure punctuation,
     # single letters, or TMPL_VAR's.
     # Punctuation should arguably be translated. But without context
-    # they are untranslatable.
+    # they are untranslatable. Note that $t is a string, not a token object.
     return !$extract_all_p && (
-    	       TmplTokenizer::blank_p($t)		# blank or TMPL_VAR
+    	       TmplTokenizer::blank_p($t)	# blank or TMPL_VAR
 	    || $t =~ /^\d+$/			# purely digits
-	    || $t =~ /^[-\.,:;'"%\(\)\[\]\|]+$/	# pure punctuation w/o context
+	    || $t =~ /^[-\+\.,:;!\?'"%\(\)\[\]\|]+$/ # punctuation w/o context
 	    || $t =~ /^[A-Za-z]$/		# single letters
-	);
+	)
+}
+
+sub token_negligible_p( $ ) {
+    my($x) = @_;
+    my $t = $x->type;
+    return !$extract_all_p && (
+	    $t == TmplTokenType::TEXT? string_negligible_p( $x->string ):
+	    $t == TmplTokenType::DIRECTIVE? 1:
+	    $t == TmplTokenType::TEXT_PARAMETRIZED
+		&& join( '', map { my $t = $_->type;
+			$t == TmplTokenType::DIRECTIVE?
+				'1': $t == TmplTokenType::TAG?
+					'': token_negligible_p( $_ )?
+					'': '1' } @{$x->children} ) eq '' );
 }
 
 ###############################################################################
 
 sub remember ($$) {
     my($token, $string) = @_;
-    $text{$string} = [] unless defined $text{$string};
-    push @{$text{$string}}, $token;
+    # If we determine that the string is negligible, don't bother to remember
+    unless (string_negligible_p( $string ) || token_negligible_p( $token )) {
+	$text{$string} = [] unless defined $text{$string};
+	push @{$text{$string}}, $token;
+    }
 }
 
 ###############################################################################
@@ -69,10 +86,8 @@ sub text_extract (*) {
     last unless defined $s;
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
 	if ($kind eq TmplTokenType::TEXT) {
-	    #$t = TmplTokenizer::trim $t;
 	    remember( $s, $t ) if $t =~ /\S/s;
 	} elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
-	    #$t = TmplTokenizer::trim $t;
 	    remember( $s, $s->form ) if $s->form =~ /\S/s;
 	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    # value [tag=input], meta
@@ -96,7 +111,7 @@ sub text_extract (*) {
 sub generate_strings_list () {
     # Emit all extracted strings.
     for my $t (string_list) {
-	printf OUTPUT "%s\n", $t unless negligible_p($t);
+	printf OUTPUT "%s\n", $t # unless negligible_p($t);
     }
 }
 
@@ -127,7 +142,7 @@ msgstr ""
 EOF
     my $directory_re = quotemeta("$directory/");
     for my $t (string_list) {
-	next if negligible_p($t);
+	#next if negligible_p($t);
 	my $cformat_p;
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
@@ -316,17 +331,11 @@ the gettext format.
 
 =back
 
-Right now it does about the same thing as text-extract2.pl but
-generates gettext-style output; however, because it is scanner-
-instead of parser-based, it is able to address the 4 weaknesses
-listed in translator_doc.txt.  Ultimately, the goal is to make
-this able to do some kind of simple analysis on the input to
-produce gettext-style output with c-format strings, in order to
-facilitate translation to languages with a different word order
-than English.
+Note that this script is experimental and should still be
+considered unstable.
 
-When the above is finished, the generated po file may contain
-some HTML tags in addition to %s strings.
+Please refer to the explanation in tmpl_process3 for further
+details.
 
 If you want to generate GNOME-style POTFILES.in files, such
 files (passed to -f) can be generated thus:

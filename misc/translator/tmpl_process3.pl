@@ -88,10 +88,10 @@ sub text_replace (**) {
 	    print $output $pre, find_translation($trimmed), $post;
 	} elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
 	    my $fmt = find_translation($s->form);
-	    print $output TmplTokenizer::parametrize($fmt, map {
+	    print $output TmplTokenizer::parametrize($fmt, [ map {
 		my($kind, $t, $attr) = ($_->type, $_->string, $_->attributes);
 		$kind == TmplTokenType::TAG && %$attr?
-		    text_replace_tag($t, $attr): $t } $s->parameters);
+		    text_replace_tag($t, $attr): $t } $s->parameters ], [ $s->anchors ]);
 	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    print $output text_replace_tag($t, $attr);
 	} elsif (defined $t) {
@@ -297,7 +297,8 @@ exit 0;
 =head1 DESCRIPTION
 
 This is an experimental version of the tmpl_process.pl script,
-using standard gettext-style PO files.
+using standard gettext-style PO files.  Note that the behaviour
+of this script should still be considered unstable.
 
 Currently, the create, update, and install actions have all been
 reimplemented and seem to work.
@@ -315,8 +316,14 @@ file as c-format strings with %s.
 
 The --help option has not been implemented yet.
 
-There are probably some real bugs too, since this has not been
-tested very much.
+If an extracted string contain actual text (versus tags or
+TMPL_VAR directives), the strings are extracted verbatim,
+resulting in unwieldy things like multiple spaces, tabs,
+and/or newlines which are semantically indistinguishable
+from single blanks. If the template writer changes the
+spacing just a little bit, the new formatting would be
+considered new strings. This is arguably wrong, and in any
+case counter-productive.
 
 xgettext.pl must be present in the current directory; the
 msgmerge(1) command must also be present in the search path.
@@ -330,6 +337,9 @@ Locale::PO(3) has a lot of bugs. It can neither parse nor
 generate GNU PO files properly; a couple of workarounds have
 been written in TmplTokenizer and more is likely to be needed
 (e.g., to get rid of the "Strange line" warning for #~).
+
+There are probably some other bugs too, since this has not been
+tested very much.
 
 =head1 SEE ALSO
 
