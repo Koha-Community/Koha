@@ -1,0 +1,11 @@
+Dear Library member
+This is a reminder about some items you or your children borrowed from the library 
+recently, which are now overdue and incurring fines. 
+
+They are:
+<TMPL_LOOP NAME=BOOKDETAILS><TMPL_VAR NAME=DATE_DUE>	<TMPL_VAR NAME=TITLE>	<TMPL_VAR NAME=ITEMTYPE>	<TMPL_IF NAME=FINE>$<TMPL_VAR NAME=FINE></TMPL_IF>
+</TMPL_LOOP>
+
+Please return or renew them as soon as you can.
+Rosalie Blake
+Head of Libraries

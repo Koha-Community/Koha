@@ -1,0 +1,40 @@
+Dear <TMPL_VAR NAME="NAME"><p>
+
+Invoice for lost book(s)                                  <br>  
+This is an invoice for the replacement cost of items you or your children
+borrowed from the library which have not been returned.
+
+<p>
+<table border=\"1\">
+<TMPL_LOOP NAME=BOOKDETAILS>
+<tr>
+<td><TMPL_VAR NAME=DATE_DUE></td>
+<td><TMPL_VAR NAME=BARCODE></td>
+<td><TMPL_VAR NAME=TITLE></td>
+<td><TMPL_VAR NAME=ITEMTYPE></td>
+<td>$<TMPL_VAR NAME=FINE></td>
+<td>$<TMPL_VAR NAME=REP></td>
+</tr>
+</TMPL_LOOP>
+<table>
+Total Owing: $<TMPL_VAR NAME=OWING> <p> 
+If you return all overdue items, the total owing in fines will be $<TMPL_VAR NAME=FINES_TOTAL>                                     
+<br>                                     
+Please deal with this matter
+immediately. If you need more time to search or pay, or you think a mistake
+has been made, please contact the library straight away. If you do not
+respond to this letter,  this                
+account will be handed to a debt collection agency.
+
+
+
+
+
+
+
+
+
+
+
+
+

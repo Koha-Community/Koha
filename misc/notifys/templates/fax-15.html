@@ -1,0 +1,15 @@
+Dear <TMPL_VAR NAME="NAME"><p>
+According to the library's records, you or your children have the following overdue 
+items borrowed from a Horowhenua Library and not yet returned. Please return them immediately to avoid increasing fines.
+<p>
+<table border=\"1\">
+<TMPL_LOOP NAME=BOOKDETAILS>
+<tr>
+<td><TMPL_VAR NAME=DATE_DUE></td>
+<td><TMPL_VAR NAME=BARCODE></td>
+<td><TMPL_VAR NAME=TITLE></td>
+<td><TMPL_VAR NAME=ITEMTYPE></td>
+<td>$<TMPL_VAR NAME=FINE></td>
+</tr>
+</TMPL_LOOP>
+<table>
