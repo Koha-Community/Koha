@@ -30,7 +30,8 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 use HTML::Template;
 use MARC::File::USMARC;
 
-use vars qw( $tagslib );
+use vars qw( $tagslib);
+use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
 
 =item find_value
@@ -102,7 +103,7 @@ sub MARCfindbreeding {
 =cut
 
 sub build_authorized_values_list ($$$$$) {
-    my($tag, $subfield, $value, $dbh, $authorised_values_sth) = @_;
+    my($tag, $subfield, $value, $dbh,$authorised_values_sth) = @_;
 
     my @authorised_values;
     my %authorised_lib;
@@ -154,6 +155,36 @@ sub build_authorized_values_list ($$$$$) {
 				-multiple => 0 );
 }
 
+=item create_input
+ builds the <input ...> entry for a subfield.
+=cut
+sub create_input () {
+	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	my $dbh = C4::Context->dbh;
+	my %subfield_data;
+	$subfield_data{tag}=$tag;
+	$subfield_data{subfield}=$subfield;
+	$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
+	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
+	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
+	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
+	} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+		my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+		require $plugin;
+		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
+		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" DISABLE READONLY size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+	} else {
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>"; #"
+	}
+	return \%subfield_data;
+}
+
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
 
@@ -161,91 +192,72 @@ sub build_tabs ($$$$) {
     my @loop_data =();
     my $tag;
     my $i=0;
-    my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
-	from authorised_values
-	where category=? order by authorised_value");
+	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
+		from authorised_values
+		where category=? order by authorised_value");
 
-    # loop through each tab 0 through 9
-    for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
-    #	my @fields = $record->fields();
-	my @loop_data = ();
-	foreach my $tag (sort(keys (%{$tagslib}))) {
-		my $previous_tag = '';
-		my @subfields_data;
-		my $indicator;
-
-		# loop through each subfield
-		foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
-			next if subfield_is_koha_internal_p($subfield);
-			next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-			# if breeding is not empty
+# loop through each tab 0 through 9
+	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
+		my @loop_data = ();
+		foreach my $tag (sort(keys (%{$tagslib}))) {
+			my $previous_tag = '';
+			my $indicator;
+	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
+	# if MARC::Record is empty => use tab as master loop.
 			if ($record ne -1) {
-				my ($x,@value) = find_value($tag,$subfield,$record,$encoding);
-				push (@value,"") if ($#value eq -1);
-				foreach my $value (@value) {
-					my %subfield_data;
-					$subfield_data{tag}=$tag;
-					$subfield_data{subfield}=$subfield;
-					$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
-					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
-					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-					$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
-					$value=char_decode($value) unless ($is_a_modif);
-					$indicator = $x if $x; #XXX
-					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-						$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
-					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>"; #"
-					} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
-						my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
-						require $plugin;
-						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
-						my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,$tabloop);
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+				my @fields = $record->field($tag);
+				foreach my $field (@fields)  {
+					my @subfields_data;
+					if ($tag<10) {
+						my $value=$field->data();
+						my $subfield="@";
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+						$i++;
 					} else {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+						my @subfields=$field->subfields();
+						foreach my $subfieldcount (0..$#subfields) {
+							my $subfield=$subfields[$subfieldcount][0];
+							my $value=$subfields[$subfieldcount][1];
+							next if subfield_is_koha_internal_p($subfield);
+							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+							$i++;
+						}
 					}
-					push(@subfields_data, \%subfield_data);
-					$i++;
+# now, loop again to add parameter subfield that are not in the MARC::Record
+					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
+						next if subfield_is_koha_internal_p($subfield);
+						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+						next if (defined($record->field($tag)->subfield($subfield)));
+						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
+						$i++;
+					}
+					if ($#subfields_data >= 0) {
+						my %tag_data;
+						$tag_data{tag} = $tag;
+						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+						$tag_data{indicator} = $indicator;
+						$tag_data{subfield_loop} = \@subfields_data;
+						push (@loop_data, \%tag_data);
+					}
 				}
-		# if breeding is empty
+	# if breeding is empty
 			} else {
-				my ($x,$value);
-				($x,$value) = find_value($tag,$subfield,$record,$encoding) if ($record ne -1);
-# 				$value=char_decode($value) unless ($is_a_modif);
-					my %subfield_data;
-					$subfield_data{tag}=$tag;
-					$subfield_data{subfield}=$subfield;
- 					$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
-					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
-					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-					$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
-					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-						$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
-					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
-					} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
-						my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
-						require $plugin;
-						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
-						my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,$tabloop);
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  DISABLE READONLY size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
-					} else {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=50 maxlength=255>";
-					}
-					push(@subfields_data, \%subfield_data);
+				my @subfields_data;
+				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
+					next if subfield_is_koha_internal_p($subfield);
+					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
 				}
-			}
-			if ($#subfields_data >= 0) {
-				my %tag_data;
-				$tag_data{tag} = $tag;
-				$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-				$tag_data{indicator} = $indicator;
-				$tag_data{subfield_loop} = \@subfields_data;
-				push (@loop_data, \%tag_data);
+				if ($#subfields_data >= 0) {
+					my %tag_data;
+					$tag_data{tag} = $tag;
+					$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+					$tag_data{indicator} = $indicator;
+					$tag_data{subfield_loop} = \@subfields_data;
+					push (@loop_data, \%tag_data);
+				}
 			}
 		}
 		$template->param($tabloop."XX" =>\@loop_data);
@@ -346,6 +358,61 @@ if ($op eq "addbiblio") {
 # now, redirect to additem page
 	print $input->redirect("additem.pl?bibid=$bibid");
 	exit;
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "addfield") {
+#------------------------------------------------------------------------------------------------------------------------------
+	my $addedfield = $input->param('addfield_field');
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	splice(@tags,$addedfield,0,$tags[$addedfield]);
+	splice(@subfields,$addedfield,0,$subfields[$addedfield]);
+	splice(@values,$addedfield,0,$values[$addedfield]);
+	splice(@ind_tag,$addedfield,0,$ind_tag[$addedfield]);
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+# search the part of the array to duplicate.
+	my $start=0;
+	my $end=0;
+	my $started;
+	for (my $i=0;$i<=$#tags;$i++) {
+		$start=$i if ($start eq 0 && $tags[$i] == $addedfield);
+		$end=$i if ($start>0 && $tags[$i] eq $addedfield);
+		last if ($start>0 && $tags[$i] ne $addedfield);
+	}
+# add an empty line in all arrays. This forces a new field in MARC::Record.
+	splice(@tags,$end+1,0,'');
+	splice(@subfields,$end+1,0,'');
+	splice(@values,$end+1,0,'');
+	splice(@ind_tag,$end+1,0,'');
+	splice(@indicator,$end+1,0,'');
+# then duplicate the field.
+	splice(@tags,$end+2,0,@tags[$start..$end]);
+	splice(@subfields,$end+2,0,@subfields[$start..$end]);
+	splice(@values,$end+2,0,@values[$start..$end]);
+	splice(@ind_tag,$end+2,0,@ind_tag[$start..$end]);
+	splice(@indicator,$end+2,0,@indicator[$start..$end]);
+
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	build_tabs ($template, $record, $dbh,$encoding);
+	build_hidden_data;
+	$template->param(
+		oldbiblionumber             => $oldbiblionumber,
+		bibid                       => $bibid,
+		oldbiblionumtagfield        => $oldbiblionumtagfield,
+		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
+		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
+		oldbiblioitemnumber         => $oldbiblioitemnumber );
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
