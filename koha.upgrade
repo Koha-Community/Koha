@@ -2,6 +2,7 @@
 
 #use diagnostics;
 use strict; # please develop with the strict pragma
+use Install;
 
 
 if ($<) {
@@ -16,7 +17,7 @@ loadconfigfile();
 
 
 
-($kohaversion) || ($kohaversion='unknown version');
+($::kohaversion) || ($::kohaversion='unknown version');
 my $newversion=`cat koha.version`;
 chomp $newversion;
 if ($::kohaversion =~ /RC/) {
@@ -29,7 +30,7 @@ print qq|
 = Koha Upgrade =
 ================
 
-You are attempting to upgrade from Koha $kohaversion to $newversion.
+You are attempting to upgrade from Koha $::kohaversion to $newversion.
 
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
@@ -106,7 +107,7 @@ $month++;
 $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
-open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$hostname $database|");
+open (MD, "$mysqldir/bin/mysqldump --user=$::user --password=$::pass --host=$::hostname $::database|");
 
 (open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
 
@@ -161,13 +162,13 @@ Aborting.  The database dump is located in:
 
 
 
-if ($opacdir && $intranetdir) {
+if ($::opacdir && $::intranetdir) {
     print qq|
 
 I believe that your old files are located in:
 
-  OPAC:      $opacdir
-  INTRANET:  $intranetdir
+  OPAC:      $::opacdir
+  INTRANET:  $::intranetdir
 
 
 Does this look right?  ([Y]/N):
@@ -176,43 +177,43 @@ Does this look right?  ([Y]/N):
     chomp $answer;
 
     if ($answer =~/n/i) {
-	$intranetdir='';
-	$opacdir='';
+	$::intranetdir='';
+	$::opacdir='';
     } else {
 	print "Great! continuing upgrade... \n";
     }
 }
 
 
-if (!$opacdir || !$intranetdir) {
-    $intranetdir='';
-    $opacdir='';
-    while (!$intranetdir) {
+if (!$::opacdir || !$::intranetdir) {
+    $::intranetdir='';
+    $::opacdir='';
+    while (!$::intranetdir) {
 	print "Please specify the location of your INTRANET files: ";  
 
 	$answer = <STDIN>;
 	chomp $answer;
 
 	if ($answer) {
-	    $intranetdir=$answer;
+	    $::intranetdir=$answer;
 	}
-	if (! -e "$intranetdir/htdocs") {
+	if (! -e "$::intranetdir/htdocs") {
 	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
-	    $intranetdir='';
+	    $::intranetdir='';
 	}
     }
-    while (!$opacdir) {
+    while (!$::opacdir) {
 	print "Please specify the location of your OPAC files: ";  
 
 	$answer = <STDIN>;
 	chomp $answer;
 
 	if ($answer) {
-	    $opacdir=$answer;
+	    $::opacdir=$answer;
 	}
-	if (! -e "$opacdir/htdocs") {
+	if (! -e "$::opacdir/htdocs") {
 	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
-	    $opacdir='';
+	    $::opacdir='';
 	}
     }
 }
@@ -226,34 +227,34 @@ mkdir "$backupdir/kohafiles-$date", 0770;
 mkdir "$backupdir/kohafiles-$date/intranet", 0770;
 mkdir "$backupdir/kohafiles-$date/opac", 0770;
 
-my $result=system("cp -R $intranetdir/* $backupdir/kohafiles-$date/intranet/");
+my $result=system("cp -R $::intranetdir/* $backupdir/kohafiles-$date/intranet/");
 if ($result) {
-    print "Error encounted when copying $intranetdir to $backupdir/kohafiles-$date/intranet/\n";
+    print "Error encounted when copying $::intranetdir to $backupdir/kohafiles-$date/intranet/\n";
     exit;
 } else {
-    system("rm -rf $intranetdir/*");
+    system("rm -rf $::intranetdir/*");
 }
-$result=system("cp -R $opacdir/* $backupdir/kohafiles-$date/opac/");
+$result=system("cp -R $::opacdir/* $backupdir/kohafiles-$date/opac/");
 if ($result) {
-    print "Error encounted when copying $opacdir to $backupdir/kohafiles-$date/opac/\n";
+    print "Error encounted when copying $::opacdir to $backupdir/kohafiles-$date/opac/\n";
     exit;
 } else {
-    system("rm -rf $opacdir/*");
+    system("rm -rf $::opacdir/*");
 }
 
-   print "Creating $intranetdir/htdocs...\n";
-   mkdir ("$intranetdir/htdocs", oct(750));
-   print "Creating $intranetdir/cgi-bin...\n";
-   mkdir ("$intranetdir/cgi-bin", oct(750));
-   print "Creating $intranetdir/modules...\n";
-   mkdir ("$intranetdir/modules", oct(750));
-   print "Creating $intranetdir/scripts...\n";
-   mkdir ("$intranetdir/scripts", oct(750));
-   chmod (oct(770), "$opacdir");
-   print "Creating $opacdir/htdocs...\n";
-   mkdir ("$opacdir/htdocs", oct(750));
-   print "Creating $opacdir/cgi-bin...\n";
-   mkdir ("$opacdir/cgi-bin", oct(750));
+   print "Creating $::intranetdir/htdocs...\n";
+   mkdir ("$::intranetdir/htdocs", oct(750));
+   print "Creating $::intranetdir/cgi-bin...\n";
+   mkdir ("$::intranetdir/cgi-bin", oct(750));
+   print "Creating $::intranetdir/modules...\n";
+   mkdir ("$::intranetdir/modules", oct(750));
+   print "Creating $::intranetdir/scripts...\n";
+   mkdir ("$::intranetdir/scripts", oct(750));
+   chmod (oct(770), "$::opacdir");
+   print "Creating $::opacdir/htdocs...\n";
+   mkdir ("$::opacdir/htdocs", oct(750));
+   print "Creating $::opacdir/cgi-bin...\n";
+   mkdir ("$::opacdir/cgi-bin", oct(750));
 
 my $httpduser;
 my $realhttpdconf;
@@ -298,37 +299,37 @@ files using the "User" directive.
 
 print "\n\nINSTALLING KOHA...\n";
 print "\n\n==================\n";
-print "Copying internet-html files to $intranetdir/htdocs...\n";
-system("cp -R intranet-html/* $intranetdir/htdocs/");
-print "Copying intranet-cgi files to $intranetdir/cgi-bin...\n";
-system("cp -R intranet-cgi/* $intranetdir/cgi-bin/");
-print "Copying script files to $intranetdir/scripts...\n";
-system("cp -R scripts/* $intranetdir/scripts/");
-print "Copying module files to $intranetdir/modules...\n";
-system("cp -R modules/* $intranetdir/modules/");
-print "Copying opac-html files to $opacdir/htdocs...\n";
-system("cp -R opac-html/* $opacdir/htdocs/");
-print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
-system("cp -R opac-cgi/* $opacdir/cgi-bin/");
+print "Copying internet-html files to $::intranetdir/htdocs...\n";
+system("cp -R intranet-html/* $::intranetdir/htdocs/");
+print "Copying intranet-cgi files to $::intranetdir/cgi-bin...\n";
+system("cp -R intranet-cgi/* $::intranetdir/cgi-bin/");
+print "Copying script files to $::intranetdir/scripts...\n";
+system("cp -R scripts/* $::intranetdir/scripts/");
+print "Copying module files to $::intranetdir/modules...\n";
+system("cp -R modules/* $::intranetdir/modules/");
+print "Copying opac-html files to $::opacdir/htdocs...\n";
+system("cp -R opac-html/* $::opacdir/htdocs/");
+print "Copying opac-cgi files to $::opacdir/cgi-bin...\n";
+system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
 system("touch $::opacdir/cgi-bin/opac");
 
-system("chown -R root.$httpduser $opacdir");
-system("chown -R root.$httpduser $intranetdir");
+system("chown -R root.$httpduser $::opacdir");
+system("chown -R root.$httpduser $::intranetdir");
 
 
-unless ($kohalogdir && -e $kohalogdir) {
-    $kohalogdir='/var/log/koha';
-    print "\n\nDirectory for logging by Z39.50 daemon [$kohalogdir]: ";
+unless ($::kohalogdir && -e $::kohalogdir) {
+    $::kohalogdir='/var/log/koha';
+    print "\n\nDirectory for logging by Z39.50 daemon [$::kohalogdir]: ";
     chomp($input = <STDIN>);
     if ($input) {
-	$kohalogdir=$input;
+	$::kohalogdir=$input;
     }
 }
 
-unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir"; 
+unless (-e "$::kohalogdir") {
+    my $result = mkdir 0770, "$::kohalogdir"; 
     if ($result==0) {
-        my @dirs = split(m#/#, $kohalogdir);
+        my @dirs = split(m#/#, $::kohalogdir);
 	my $checkdir='';
 	foreach (@dirs) {
 	    $checkdir.="$_/";
@@ -339,11 +340,11 @@ unless (-e "$kohalogdir") {
     }
 }
 
-chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
-chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
-chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
-chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
+chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+chmod 0750, "$::intranetdir/scripts/z3950daemon/processz3950queue";
+chown(0, (getpwnam($httpduser)) [3], "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+chown(0, (getpwnam($httpduser)) [3], "$::intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $::intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 
 open (KC, "/etc/koha.conf");
@@ -351,7 +352,7 @@ my $kccontents='';
 my $kc;
 while (<KC>) {
     if (/^\s*includes\s*=/) {
-	$kccontents.="includes=$intranetdir/htdocs/includes\n";
+	$kccontents.="includes=$::intranetdir/htdocs/includes\n";
 	$kc->{'includes'}=1;
     } elsif (/^\s*httpduser\s*=/) {
 	$kccontents.="httpduser=$httpduser\n";
@@ -360,13 +361,13 @@ while (<KC>) {
 	$kccontents.="kohaversion=$newversion\n";
 	$kc->{'kohaversion'}=1;
     } elsif (/^\s*kohalogdir\s*=/) {
-	$kccontents.="kohalogdir=$kohalogdir\n";
+	$kccontents.="kohalogdir=$::kohalogdir\n";
 	$kc->{'kohalogdir'}=1;
     } elsif (/^\s*intranetdir\s*=/) {
-	$kccontents.="intranetdir=$intranetdir\n";
+	$kccontents.="intranetdir=$::intranetdir\n";
 	$kc->{'intranetdir'}=1;
     } elsif (/^\s*opacdir\s*=/) {
-	$kccontents.="opacdir=$opacdir\n";
+	$kccontents.="opacdir=$::opacdir\n";
 	$kc->{'opacdir'}=1;
     } else {
 	$kccontents.="$_";
@@ -377,19 +378,19 @@ unless (defined($kc->{'kohaversion'})) {
     $kccontents.="kohaversion=$newversion\n";
 }
 unless (defined($kc->{'includes'})) {
-    $kccontents.="includes=$intranetdir/htdocs/includes\n";
+    $kccontents.="includes=$::intranetdir/htdocs/includes\n";
 }
 unless (defined($kc->{'httpduser'})) {
     $kccontents.="httpduser=$httpduser\n";
 }
 unless (defined($kc->{'intranetdir'})) {
-    $kccontents.="intranetdir=$intranetdir\n";
+    $kccontents.="intranetdir=$::intranetdir\n";
 }
 unless (defined($kc->{'opacdir'})) {
-    $kccontents.="opacdir=$opacdir\n";
+    $kccontents.="opacdir=$::opacdir\n";
 }
 unless (defined($kc->{'kohalogdir'})) {
-    $kccontents.="kohalogdir=$kohalogdir\n";
+    $kccontents.="kohalogdir=$::kohalogdir\n";
 }
 
 
@@ -405,7 +406,7 @@ print qq|
 Upgrading Database
 ==================
 |;
-system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
+system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
 
 
 print qq|
@@ -438,14 +439,14 @@ prior to 1.2.1, it is likely that you will have to modify your Apache
 configuration to point it to the new files.
 
 In your INTRANET VirtualHost section you should have:
-  DocumentRoot $intranetdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $intranetdir/cgi-bin/
-  SetEnv PERL5LIB $intranetdir/modules
+  DocumentRoot $::intranetdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $::intranetdir/cgi-bin/
+  SetEnv PERL5LIB $::intranetdir/modules
 
 In the OPAC VirtualHost section you should have:
-  DocumentRoot $opacdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
-  SetEnv PERL5LIB $intranetdir/modules
+  DocumentRoot $::opacdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $::opacdir/cgi-bin/
+  SetEnv PERL5LIB $::intranetdir/modules
 
 You may also need to uncomment a "LoadModules env_module ... " line and restart
 Apache.
