@@ -51,7 +51,6 @@ while ( my ($itemno, $value) = each %data) {
      #means we want to renew this item
      #check its status
      my $status=renewstatus(\%env,$bornum,$itemno);
-# 	 warn "STATUS : $status";
      if ($status == 1){
        renewbook(\%env,$bornum,$itemno);
      }
