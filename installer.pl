@@ -697,11 +697,17 @@ To allow us to create the koha database please supply the
 mysql\'s root users password
 |;
 
-print "Enter mysql\'s root users password: ";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $mysqlpass = $input;
+my $needpassword=1;
+while ($needpassword) {
+    print "Enter mysql\'s root users password: ";
+    chomp($input = <STDIN>);
+    $mysqlpass = $input;
+    my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass proc > /dev/null 2>&1");
+    if ($result) {
+	print "\n\nInvalid password for the MySql root user.\n\n";
+    } else {
+	$needpassword=0;
+    }
 }
 
 
