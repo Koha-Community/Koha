@@ -6,7 +6,7 @@
 <tr valign="top">
 <td width="9"><img src="<TMPL_VAR NAME='themelang'>/images/styles/left-2ndrow.gif" width="9" height="13" border="0" alt="" /></td>
 <td width="124" colspan="2" class="navhead"><!--+Katipo+start name="leftheading" include="/includes/membership-left-nav.inc" lastmod="12 Jun, 2002 at 18:24:46"-->
-<a href="/membership/">Members</a><!--+Katipo+end--></td></tr>
+<a href="/cgi-bin/koha/opac-membership.pl">Members</a><!--+Katipo+end--></td></tr>
 <!--+Katipo+start name="leftnav" include="/includes/membership-left-nav.inc"-->
 
 
