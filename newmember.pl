@@ -42,7 +42,7 @@ use C4::Interface::CGI::Output;
 use CGI;
 use Date::Manip;
 use HTML::Template;
-
+use C4::Date;
 my %env;
 my $input = new CGI;
 
@@ -126,11 +126,11 @@ if ($ok == 0) {
     }
     if ($data{'joining'} eq ''){
 	$data{'joining'}=ParseDate('today');
-	$data{'joining'}=&UnixDate($data{'joining'},'%Y-%m-%d');
+	$data{'joining'}=format_date($data{'joining'});
     }
     if ($data{'expiry'} eq ''){
 	$data{'expiry'}=ParseDate('in 1 year');
-	$data{'expiry'}=&UnixDate($data{'expiry'},'%Y-%m-%d');
+	$data{'expiry'}=format_date($data{'expiry'});
     }
     my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
     my $postal=$data{'address'}."<br>".$data{'city'};
@@ -155,11 +155,11 @@ if ($ok == 0) {
 		     memcat => $data{'categorycode'},
 		     area => $data{'area'},
 		     fee => $data{'fee'},
-		     joindate => $data{'joining'},
-		     expdate => $data{'expiry'},
+		     joindate => format_date($data{'joining'}),
+		     expdate => format_date($data{'expiry'}),
 		     joinbranch => $data{'joinbranch'},
 		     ethnic => $ethnic,
-		     dob => $data{'dateofbirth'},
+		     dob => format_date($data{'dateofbirth'}),
 		     sex => $sex,
 		     postal => $postal,
 		     home => $home,
