@@ -1,0 +1,28 @@
+<html>
+<!-- added html tag to see the file in Konqueror while browsing directory, remove if necessary -->
+<TMPL_INCLUDE Name="members-top.inc">
+
+<Center><h3>Rachunek rêczny</h3></center>
+<form action=/cgi-bin/koha/maninvoice.pl method=post>
+<table cellpadding=2 cellspacing=0 border=0>
+<input type=hidden name=bornum value="<TMPL_VAR Name="bornum">">
+<tr><td><b>Numer czytelnika<b></td><td><TMPL_VAR Name="bornum"></td></tr>
+<tr><td><b>Typ</b></td><Td>
+<select name=type>
+<option value=L>Pozycja zagubiona</option>
+<option value=F>Kara</option>
+<option value=A>Op³ata za prowadzenie rachunku</option>
+<option value=N>Nowa Karta</option>
+<option value=M>Ró¿ne</option>
+<option value=REF>Zwrot gotówki</option>
+</select>
+</td></tr>
+<tr><td><b>Numer pozycji</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>Opis</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>Kwota</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value=Add></td></tr>
+</table>
+</form>
+
+<TMPL_INCLUDE Name="members-bottom.inc">
+</html>
