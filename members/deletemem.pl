@@ -29,9 +29,9 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Search;
+use C4::Interface::CGI::Output;
 use C4::Output;
 use C4::Circulation::Circ2;
-#use C4::Acquisitions;
 use C4::Auth;
 
 
@@ -47,14 +47,14 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 my $member=$input->param('member');
 my %env;
 $env{'nottodayissues'}=1;
- my %member2;
- $member2{'borrowernumber'}=$member;
- my $issues=currentissues(\%env,\%member2);
- my $i=0;
- foreach (sort keys %$issues) {
-  $i++;
- }
-  my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+my %member2;
+$member2{'borrowernumber'}=$member;
+my $issues=currentissues(\%env,\%member2);
+my $i=0;
+foreach (sort keys %$issues) {
+	$i++;
+}
+my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
 $sth->execute($member);
@@ -63,38 +63,56 @@ $sth->finish;
 
 
 if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
-  print $input->header;
-  print "<table border=1>";
-  if ($i > 0){
-      print "<TR><TD>Items on Issue</td><td align=right>$i</td></tr>";
-  }
-  if ($flags->{'CHARGES'} ne ''){
-      print "<TR><TD>Charges</td><td>$flags->{'CHARGES'}->{'message'}</tr>";
-  }
-  if ($data ne ''){
-      print "<TR><TD>Guarantees</td></tr>";
-  }
-  print "</table>";
+	my ($template, $borrowernumber, $cookie)
+		= get_template_and_user({template_name => "members/deletemem.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {circulate => 1},
+					debug => 1,
+					});
+	#   print $input->header;
+	if ($i >0) {
+		$template->param(ItemsOnIssues => $i);
+	}
+	if ($flags->{'CHARGES'} ne '') {
+		$template->param(charges => $flags->{'CHARGES'}->{'message'});
+	}
+	if ($data ne '') {
+		$template->param(guarantees => 1);
+	}
+# 	print "<table border=1>";
+# 	if ($i > 0){
+# 		print "<TR><TD>Items on Issue</td><td align=right>$i</td></tr>";
+# 	}
+# 	if ($flags->{'CHARGES'} ne ''){
+# 		print "<TR><TD>Charges</td><td>$flags->{'CHARGES'}->{'message'}</tr>";
+# 	}
+# 	if ($data ne ''){
+# 		print "<TR><TD>Guarantees</td></tr>";
+# 	}
+# 	print "</table>";
+output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-         delmember($member);
-         print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+	delmember($member);
+	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
 sub delmember{
-  my ($member)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-  $sth->execute($member);
-  my @data=$sth->fetchrow_array;
-  $sth->finish;
-  $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
-  $sth->execute(@data);
-  $sth->finish;
-  $sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
-  $sth->execute($member);
-  $sth->finish;
-  $sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
-  $sth->execute($member);
-  $sth->finish;
+	my ($member)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+	$sth->execute($member);
+	my @data=$sth->fetchrow_array;
+	$sth->finish;
+	$sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+	$sth->execute(@data);
+	$sth->finish;
+	$sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
+	$sth->execute($member);
+	$sth->finish;
+	$sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
+	$sth->execute($member);
+	$sth->finish;
 }

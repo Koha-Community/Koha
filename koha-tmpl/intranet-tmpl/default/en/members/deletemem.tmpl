@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<div id="mainbloc">
+	<div id="bloc25">
+	<h2 class="members">Deletion impossible</h2>
+		<!-- TMPL_IF name="ItemsOnIssues" -->
+			<p>Borrower has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) on issue</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="charges -->
+			<p>Borrower has <!-- TMPL_VAR name="charges" --> debt</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="guarantees" -->
+			<p>Borrower has guarantees</p>
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
