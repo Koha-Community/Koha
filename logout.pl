@@ -25,22 +25,6 @@ browser.
     exit;
 }
 
-my $sessions;
-open (S, "/tmp/sessions");
-while (my ($sid, $u, $lasttime) = split(/:/, <S>)) {
-    chomp $lasttime;
-    (next) unless ($sid);
-    (next) if ($sid eq $sessionID);
-    $sessions->{$sid}->{'userid'}=$u;
-    $sessions->{$sid}->{'lasttime'}=$lasttime;
-}
-open (S, ">/tmp/sessions");
-foreach (keys %$sessions) {
-    my $userid=$sessions->{$_}->{'userid'};
-    my $lasttime=$sessions->{$_}->{'lasttime'};
-    print S "$_:$userid:$lasttime\n";
-}
-
 my $dbh=C4Connect;
 
 # Check that this is the ip that created the session before deleting it
@@ -70,15 +54,4 @@ my $cookie=$query->cookie(-name => 'sessionID',
 # Should redirect to intranet home page after logging out
 
 print $query->redirect("mainpage.pl");
-
-exit;
-if ($sessionID) {
-    print "Logged out of $sessionID<br>\n";
-    print "<a href=shelves.pl>Login</a>";
-} else {
-    print "Not logged in.<br>\n";
-    print "<a href=shelves.pl>Login</a>";
-}
-
-
 
