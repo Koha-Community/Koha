@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+
+
+<html>
+<title>WELCOME TO THE  UNIDO OPAC (Online Public Access Catalogue) </title>
+<style type="text/css">
+<!--
+input {font-size:16px;
+
+      }
+
+input.ok  {
+  background-color: #d59b61;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+
+  text-align: center;
+  border: 1px;
+  border-color: #000000;
+  border-style: solid;
+  padding: 4px;
+ height : 28px;
+}
+
+.search-heading {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  
+  margin-bottom: 44px;
+  line-height: 60px;
+   
+}
+
+
+
+h1 {
+  font-family: ocean sans, garamond, times, serif;
+  font-size: 48px;
+  font-weight: normal;
+  font-style: oblique;
+  margin-bottom: 44px;
+  line-height: 60px; 
+
+  }
+  
+.menu {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 65px;
+  }
+  
+  
+  .credit {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: bold;
+  margin-left: 14px;
+  margin-top: 64px;
+  }
+  
+-->
+
+</style>
+
+</head>
+
+<body onload="document.catsearch.keyword.focus()"
+BGCOLOR="#FF9933" 
+text="black" 
+link="#0066FF" 
+vlink="#6699FF" 
+alink="white" 
+leftmargin=0 
+topmargin=0
+marginheight=0
+marginwidth=0 >
+
+
+<table cellspacing=0 cellpadding=0 border=0 align="center">
+<tr valign=top >
+<td>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+
+<td>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+<td>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+</tr>
+
+<tr valign=top >
+<td width=198 height=136 align="right">
+<img src="<TMPL_VAR NAME='themelang'>/images/unido-logo.gif" width=43 height=42 
+alt="UNIDO Logo " hspace=0 vspace=0>
+</td>
+<td><h1>Welcome to the<br>
+ UNIDO Library</h1>
+ </td></tr>
+
+
+<tr valign=top >
+<td align="right" ><img src="<TMPL_VAR NAME='themelang'>/images/unido-home-photos.jpg" width="198" height="198" border="0" alt="Photos of Wellington">
+<td>
+<form ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
+<input type=hidden name=type value=opac>
+<span class="search-heading">Search</span>
+
+<input type=text size="24" name="keyword">  <input type="submit" value="OK" class="ok">
+
+
+</form>
+<div class="menu"><a href="/cgi-bin/koha/opac-search.pl">More Search Options</a> | About | Contact  </div>
+<p> &nbsp; </p>
+<div class="credit">
+For more information on the koha libary system<br> 
+vist  <b><a href="http://www.koha.org">www.koha.org</a></b></center>
+</div>
+</td>
+
+</tr>
+
+
+</tr>
+
+</table>
+
+
+</html>
