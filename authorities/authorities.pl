@@ -339,7 +339,7 @@ if ($op eq "add") {
 	} else {
 		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 	}
-	print $input->redirect("authorities-home.pl");
+	print $input->redirect("detail.pl?authid=$authid");
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
