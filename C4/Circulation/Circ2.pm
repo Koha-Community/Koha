@@ -800,6 +800,7 @@ C<$date> contains the max date of return. calculated if empty.
 #
 sub issuebook {
 	my ($env,$borrower,$barcode,$date) = @_;
+	warn "D : $date";
 	my $dbh = C4::Context->dbh;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -854,8 +855,8 @@ sub issuebook {
 		my $datedue=time+($loanlength)*86400;
 		my @datearr = localtime($datedue);
 		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-		if ($env->{'datedue'}) {
-			$dateduef=$env->{'datedue'};
+		if ($date) {
+			$dateduef=$date;
 		}
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;

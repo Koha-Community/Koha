@@ -148,6 +148,9 @@ if ($barcode) {
 							NEEDSCONFIRMATION => 1);
 			$noquestion = 0;
 		}
+		$template->param(day => $day,
+						month => $month,
+						year => $year);
 		if ($noerror && ($noquestion || $issueconfirmed)) {
 			issuebook(\%env, $borrower, $barcode, $datedue);
 		}
