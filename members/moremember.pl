@@ -48,9 +48,19 @@ use HTML::Template;
 my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
+my $print = $input->param('print');
+my $template_name;
+
+if($print eq "page"){
+	$template_name = "members/moremember-print.tmpl";
+} elsif($print eq "slip"){
+	$template_name = "members/moremember-receipt.tmpl";
+} else {
+	$template_name = "members/moremember.tmpl";
+}
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/moremember.tmpl",
+    = get_template_and_user({template_name => $template_name,
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
