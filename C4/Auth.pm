@@ -124,9 +124,12 @@ sub get_template_and_user {
 		my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 		my @bordat;
 		$bordat[0] = $borr;
-
-		$template->param(USER_INFO => \@bordat);
+		$template->param(USER_INFO => \@bordat,
+		);
 	}
+	$template->param(
+			     LibraryName => C4::Context->preference("LibraryName"),
+		);
 	return ($template, $borrowernumber, $cookie);
 }
 
