@@ -47,31 +47,30 @@ returned.
 
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
-	my $result;
+	my @result;
 	my $indicator;
-	warn "tagfield : $tagfield /".$record->as_formatted;
 	if ($tagfield <10) {
 		if ($record->field($tagfield)) {
-			$result = $record->field($tagfield)->data();
+			push @result, $record->field($tagfield)->data();
 		} else {
-			$result="";
+			push @result,"";
 		}
 	} else {
 		foreach my $field ($record->field($tagfield)) {
 			my @subfields = $field->subfields();
 			foreach my $subfield (@subfields) {
 				if (@$subfield[0] eq $insubfield) {
-					$result .= @$subfield[1];
+					push @result,@$subfield[1];
 					$indicator = $field->indicator(1).$field->indicator(2);
 				}
 			}
 		}
 	}
-	return($indicator,$result);
+	return($indicator,@result);
 }
 
 
-=item find_value
+=item MARCfindbreeding
 
     $record = MARCfindbreeding($dbh, $breedingid);
 
@@ -88,7 +87,6 @@ sub MARCfindbreeding {
 	my ($file,$marc) = $sth->fetchrow;
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
-			warn "==> ".$record->as_formatted();
 		if (ref($record) eq undef) {
 			return -1;
 		} else {
@@ -180,36 +178,47 @@ sub build_tabs ($$$) {
 		foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 			next if subfield_is_koha_internal_p($subfield);
 			next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-			my %subfield_data;
-			$subfield_data{tag}=$tag;
-			$subfield_data{subfield}=$subfield;
-			$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
-			$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
-			$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-			$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 			# if breeding is not empty
 			if ($record ne -1) {
-				my ($x,$value) = find_value($tag,$subfield,$record);
-				$value=char_decode($value) unless ($is_a_modif);
-				$indicator = $x if $x; #XXX
-				if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-					$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
-				} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-					$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>"; #"
-				} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
-					my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
-					require $plugin;
-					my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
-					my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,$tabloop);
-					$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
-				} else {
-					$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+				my ($x,@value) = find_value($tag,$subfield,$record);
+				foreach my $value (@value) {
+					my %subfield_data;
+					$subfield_data{tag}=$tag;
+					$subfield_data{subfield}=$subfield;
+					$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
+					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
+					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+					$value=char_decode($value) unless ($is_a_modif);
+					$indicator = $x if $x; #XXX
+					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+						$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
+					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>"; #"
+					} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+						my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+						require $plugin;
+						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
+						my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,$tabloop);
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+					} else {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+					}
+					push(@subfields_data, \%subfield_data);
+					$i++;
 				}
 		# if breeding is empty
 			} else {
 				my ($x,$value);
 				($x,$value) = find_value($tag,$subfield,$record) if ($record ne -1);
 				$value=char_decode($value) unless ($is_a_modif);
+					my %subfield_data;
+					$subfield_data{tag}=$tag;
+					$subfield_data{subfield}=$subfield;
+					$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
+					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
+					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
 					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
@@ -223,9 +232,9 @@ sub build_tabs ($$$) {
 					} else {
 						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=50 maxlength=255>";
 					}
+					push(@subfields_data, \%subfield_data);
+					$i++;
 				}
-				push(@subfields_data, \%subfield_data);
-				$i++;
 			}
 			if ($#subfields_data >= 0) {
 				my %tag_data;

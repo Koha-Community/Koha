@@ -56,7 +56,6 @@ on what is passed to it, it calls the appropriate search function.
 
 # marcsearch : search in the MARC biblio table.
 # everything is choosen by the user : what to search, the conditions...
-# FIXME this is a 1st version of the Marc Search. It does not use fulltext searching or marc_words table
 
 sub catalogsearch {
 	my ($dbh, $tags, $subfields, $and_or, $excluding, $operator, $value, $offset,$length) = @_;
@@ -127,7 +126,6 @@ sub catalogsearch {
 		}
 	}
 	chop $sql_tables;
-	warn "select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)";
 	my $sth;
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");

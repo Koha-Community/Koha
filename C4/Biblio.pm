@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.41  2003/04/01 12:26:43  tipaul
+# fixes
+#
 # Revision 1.40  2003/03/11 15:14:03  tipaul
 # pod updating
 #
@@ -571,14 +574,14 @@ sub MARCaddsubfield {
 		$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)");
 		$sth->execute($bibid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
 		if ($sth->errstr) {
-		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+		warn "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 		}
 #	$dbh->do("unlock tables");
 	} else {
 		my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
 		$sth->execute($bibid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
 		if ($sth->errstr) {
-		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+		warn "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 		}
     }
     &MARCaddword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
@@ -691,6 +694,8 @@ sub MARCmodbiblio {
 	if ($oldrecord eq $record) {
 		return;
 	}
+#	warn "rec : ".$record->as_formatted;
+#	die;
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
 	my $tagorder=0;
@@ -718,6 +723,7 @@ sub MARCmodbiblio {
 		# modify the subfield if it's a different string
 					if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 						my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+						warn "subfieldid => $subfieldid";
 						&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 					}
 				}
@@ -969,35 +975,27 @@ sub MARCkoha2marcOnefield {
 
 sub MARChtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
-	my $prevtag = @$rtags[0];
+	my $prevtag = -1;
 	my $record = MARC::Record->new();
-	my %subfieldlist={};
+	my %subfieldlist=();
+	my $field;
 	for (my $i=0; $i< @$rtags; $i++) {
 		# rebuild MARC::Record
 		if (@$rtags[$i] ne $prevtag) {
-#			if ($prevtag<10) {
-#				$prevtag='0'.10;
-#			}
-			$indicators{$prevtag}.='  ';
 			if ($prevtag < 10) {
 				$record->add_fields((sprintf "%03s",$prevtag),%subfieldlist->{'@'});
 			} else {
-				my $field = MARC::Field->new( (sprintf "%03s",$prevtag), substr($indicators{$prevtag},0,1),substr($indicators{$prevtag},1,1), %subfieldlist);
 				$record->add_fields($field);
 			}
+			$indicators{@$rtags[$i]}.='  ';
+			$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 			$prevtag = @$rtags[$i];
-			%subfieldlist={};
-			%subfieldlist->{@$rsubfields[$i]} = @$rvalues[$i];
 		} else {
-			if (%subfieldlist->{@$rsubfields[$i]}) {
-				%subfieldlist->{@$rsubfields[$i]} .= '|';
-			}
-			%subfieldlist->{@$rsubfields[$i]} .=@$rvalues[$i];
+			$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
 			$prevtag= @$rtags[$i];
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
 	$record->add_fields($field);
 	return $record;
 }
@@ -1063,7 +1061,7 @@ sub MARCaddword {
 	if (length($word)>1 and !($stopwords->{uc($word)})) {
 	    $sth->execute($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
-		print STDERR "ERROR ==> insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
+		warn "ERROR ==> insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
 	    }
 	}
     }
@@ -1130,7 +1128,7 @@ sub NEWnewbiblio {
     $sth->execute("biblioitems.biblioitemnumber");
     (my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
     if ($tagfield1 != $tagfield2) {
-	print STDERR "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
+	warn "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
  	print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
 	die;
     }

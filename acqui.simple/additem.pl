@@ -74,7 +74,6 @@ if ($op eq "additem") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	warn "item before NEWnewitem : ".$record->as_formatted();
 # MARC::Record builded => now, record in DB
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
 	$nextop = "additem";

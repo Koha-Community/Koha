@@ -120,10 +120,11 @@ sub themelanguage {
   THEME:
   foreach my $th (@themes) {
     foreach my $la (@languages) {
-#	warn "File = $htdocs/$th/$la/$tmpl\n";
+	warn "File = $htdocs/$th/$la/$tmpl\n";
 	if (-e "$htdocs/$th/$la/$tmpl") {
 	    $theme = $th;
 	    $lang = $la;
+	    warn "FOUND";
 	    last THEME;
 	}
     }

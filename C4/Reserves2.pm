@@ -793,6 +793,5 @@ sub getreservetitle {
  $sth->execute;
  my $data=$sth->fetchrow_hashref;
  $sth->finish;
-# print $query;
  return($data);
 }

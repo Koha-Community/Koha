@@ -68,7 +68,7 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
-	#$template->param(result => \@results);
+	$template->param(result => \@results);
 
 } else {
 	($template, $loggedinuser, $cookie)
