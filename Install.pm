@@ -1146,6 +1146,8 @@ sub databasesetup {
 		$branchcode=substr($branchcode,0,4);
 
 		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
 		my $printername='Library Printer';
 		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
