@@ -77,7 +77,7 @@ if ($data{'cardnumber'} eq ''){
 } else {
     #check cardnumber is valid
     my $nounique;
-    if ( $data{'type'} ne "Add" )    {
+    if ( $data{'type'} eq "Add" )    {
 	$nounique = 0;
     } else {
 	$nounique = 1;
