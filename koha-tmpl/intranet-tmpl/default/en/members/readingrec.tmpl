@@ -4,8 +4,11 @@
 <br>Member Number: <TMPL_VAR NAME=bornum>
 <br>Card Number: <TMPL_VAR NAME=cardnumber>
 <P>
+<TMPL_IF NAME=showfulllink>
 <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
-<br/><br/>
+<br/>
+</TMPL_IF>
+<br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
 	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">

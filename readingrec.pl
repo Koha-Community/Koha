@@ -67,6 +67,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	push(@loop_reading,\%line);
 }
+
 $template->param(title => $data->{'title'},
 						initials => $data->{'initials'},
 						surname => $data->{'surname'},
@@ -74,6 +75,7 @@ $template->param(title => $data->{'title'},
 						limit => $limit,
 						firstname => $data->{'firstname'},
 						cardnumber => $data->{'cardnumber'},
+						showfulllink => ($count > 50),					
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
 
