@@ -50,6 +50,7 @@ sub MARCfindbreeding {
 	my $sth = $dbh->prepare("select file,marc from marc_breeding where isbn=?");
 	$sth->execute($isbn);
 	my ($file,$marc) = $sth->fetchrow;
+#	$marc = char_decode($marc);
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
 		if (ref($record) eq undef) {
@@ -59,8 +60,99 @@ sub MARCfindbreeding {
 		}
 	}
 	return -1;
-
 }
+
+# some special chars in ISO 2709 (ISO 6630 and ISO 646 set)
+
+my $IS3 = '\x1d' ;		# IS3 : record end
+my $IS2 = '\x1e' ;		# IS2 : field end
+my $IS1 = '\x1f' ;		# IS1 : begin subfield
+my $NSB = '\x88' ;		# NSB : begin Non Sorting Block
+my $NSE = '\x89' ;		# NSE : Non Sorting Block end
+
+sub char_decode {
+	# converts ISO 5426 coded string to ISO 8859-1
+	# sloppy code : should be improved in next issue
+	my ($string) = @_ ;
+	$_ = $string ;
+	if(/[\xc1-\xff]/) {
+		s/\xe1/Æ/gm ;
+		s/\xe2/Ð/gm ;
+		s/\xe9/Ø/gm ;
+		s/\xec/þ/gm ;
+		s/\xf1/æ/gm ;
+		s/\xf3/ð/gm ;
+		s/\xf9/ø/gm ;
+		s/\xfb/ß/gm ;
+		s/\xc1\x61/à/gm ;
+		s/\xc1\x65/è/gm ;
+		s/\xc1\x69/ì/gm ;
+		s/\xc1\x6f/ò/gm ;
+		s/\xc1\x75/ù/gm ;
+		s/\xc1\x41/À/gm ;
+		s/\xc1\x45/È/gm ;
+		s/\xc1\x49/Ì/gm ;
+		s/\xc1\x4f/Ò/gm ;
+		s/\xc1\x55/Ù/gm ;
+		s/\xc2\x41/Á/gm ;
+		s/\xc2\x45/É/gm ;
+		s/\xc2\x49/Í/gm ;
+		s/\xc2\x4f/Ó/gm ;
+		s/\xc2\x55/Ú/gm ;
+		s/\xc2\x59/Ý/gm ;
+		s/\xc2\x61/á/gm ;
+		s/\xc2\x65/é/gm ;
+		s/\xc2\x69/í/gm ;
+		s/\xc2\x6f/ó/gm ;
+		s/\xc2\x75/ú/gm ;
+		s/\xc2\x79/ý/gm ;
+		s/\xc3\x41/Â/gm ;
+		s/\xc3\x45/Ê/gm ;
+		s/\xc3\x49/Î/gm ;
+		s/\xc3\x4f/Ô/gm ;
+		s/\xc3\x55/Û/gm ;
+		s/\xc3\x61/â/gm ;
+		s/\xc3\x65/ê/gm ;
+		s/\xc3\x69/î/gm ;
+		s/\xc3\x6f/ô/gm ;
+		s/\xc3\x75/û/gm ;
+		s/\xc4\x41/Ã/gm ;
+		s/\xc4\x4e/Ñ/gm ;
+		s/\xc4\x4f/Õ/gm ;
+		s/\xc4\x61/ã/gm ;
+		s/\xc4\x6e/ñ/gm ;
+		s/\xc4\x6f/õ/gm ;
+		s/\xc8\x45/Ë/gm ;
+		s/\xc8\x49/Ï/gm ;
+		s/\xc8\x65/ë/gm ;
+		s/\xc8\x69/ï/gm ;
+		s/\xc8\x76/ÿ/gm ;
+		s/\xc9\x41/Ä/gm ;
+		s/\xc9\x4f/Ö/gm ;
+		s/\xc9\x55/Ü/gm ;
+		s/\xc9\x61/ä/gm ;
+		s/\xc9\x6f/ö/gm ;
+		s/\xc9\x75/ü/gm ;
+		s/\xca\x41/Å/gm ;
+		s/\xca\x61/å/gm ;
+		s/\xd0\x43/Ç/gm ;
+		s/\xd0\x63/ç/gm ;
+	}
+	# this handles non-sorting blocks (if implementation requires this)
+	$string = nsb_clean($_) ;
+	return($string) ;
+}
+
+sub nsb_clean {
+	# handles non sorting blocks
+	my ($string) = @_ ;
+	$_ = $string ;
+	s/$NSB/(/gm ;
+	s/[ ]{0,1}$NSE/) /gm ;
+	$string = $_ ;
+	return($string) ;
+}
+
 my $input = new CGI;
 my $error = $input->param('error');
 my $oldbiblionumber=$input->param('oldbiblionumber'); # if bib exists, it's a modif, not a new biblio.
@@ -156,6 +248,7 @@ if ($op eq "addbiblio") {
 				# if breeding is not empty
 				if ($record ne -1) {
 					my ($x,$value) = find_value($tag,$subfield,$record);
+					$value=char_decode($value);
 					$indicator = $x if $x;
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						my @authorised_values;
@@ -210,6 +303,7 @@ if ($op eq "addbiblio") {
 				} else {
 					my ($x,$value);
 					($x,$value) = find_value($tag,$subfield,$record) if ($record ne -1);
+					$value=char_decode($value);
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						my @authorised_values;
 						my %authorised_lib;

@@ -42,6 +42,7 @@ use MARC::File::USMARC;
 use HTML::Template;
 use C4::Output;
 use C4::Auth;
+use MARC::Charset;
 
 #------------------
 # Constants
@@ -86,7 +87,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 	my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
 	my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
 	my $searchbreeding = $dbh->prepare("select isbn from marc_breeding where isbn=?");
-	my $insertsql = $dbh->prepare("replace into marc_breeding (file,isbn,marc) values(?,?,?)");
+	my $insertsql = $dbh->prepare("replace into marc_breeding (file,isbn,title,marc) values(?,?,?,?)");
 	# fields used for import results
 	my $imported=0;
 	my $alreadyindb = 0;
@@ -125,10 +126,8 @@ if ($uploadmarc && length($uploadmarc)>0) {
 					}
 					if (!$breedingresult || $overwrite_biblio) {
 						my $recoded;
-#						warn "IMPORT => $marcarray[$i]\x1D')";
-						$recoded = $marcrecord->as_usmarc(); #MARC::File::USMARC::encode($marcrecord);
-#						warn "RECODED : $recoded";
-						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$recoded);
+						$recoded = $marcrecord->as_usmarc();
+						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$recoded);
 						$imported++;
 					} else {
 						$alreadyinfarm++;
@@ -804,6 +803,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.25  2003/01/21 08:13:50  tipaul
+# character encoding ISO646 => 8859-1, first draft
+#
 # Revision 1.24  2003/01/14 16:41:17  tipaul
 # bugfix : use gettemplate_and_user instead of gettemplate.
 # fix a blank screen in 1.3.3 in "import in breeding farm"
