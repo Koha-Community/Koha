@@ -58,7 +58,6 @@ if ($op eq "do_search") {
 		}
 	}
 	findseealso($dbh,\@tags);
-	warn "IN THERE";
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$orderby);
