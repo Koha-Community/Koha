@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# written 10/5/2002 by Paul
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,10 +27,32 @@ use C4::Search;
 use C4::Output;
 
 sub plugin_parameters {
-my ($dbh,$record,$tagslib) = @_;
+my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
 }
+sub plugin_javascript {
+my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+my $function_name= "100".(int(rand(100000))+1);
+my $res="
+<script>
+function Focus$function_name(subfield_managed) {
+return 1;
+}
 
+function Blur$function_name(subfield_managed) {
+	return 1;
+}
+
+function Clic$function_name(i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=500,height=400,toolbar=false,scrollbars=yes');
+
+}
+</script>
+";
+
+return ($function_name,$res);
+}
 sub plugin {
 my ($input) = @_;
 	my %env;
@@ -47,7 +69,6 @@ my ($input) = @_;
 	my $f2 = substr($result,8,1);
 	my $f3 = substr($result,9,4);
 	my $f4 = substr($result,13,4);
-	warn "f2 : $f2";
 	$template->param(index => $index,
 							f1 => $f1,
 							f3 => $f3,

@@ -26,6 +26,22 @@ use HTML::Template;
 use C4::Search;
 use C4::Output;
 
+=head1 NAME
+
+plugin unimarc_field_700-4
+
+=head1 SYNOPSIS
+
+This plug-in deals with unimarc field 700-4 (
+
+=head1 DESCRIPTION
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$morethan,$begin_tabloop) = @_;
 my $index2; # the resulting index
@@ -48,6 +64,11 @@ for (my $tabloop = $begin_tabloop; $tabloop<=9;$tabloop++) {
 }
 #	my $index2=6;
 	return "&index2=$index2";
+}
+
+sub plugin_javascript {
+my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+return ("","");
 }
 
 sub plugin {
