@@ -52,14 +52,15 @@ if ( $newpassword ) {
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
 
-    #Make sure the userid chosen is unique and not theirs. If it is not,
-    #Then we need to tell the user and have them create a new one.
-    my $sth2=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
-    $sth2->execute($uid,$member);
+	if ($uid eq '') { $uid = $bor->{userid'} }
+	#Make sure the userid chosen is unique and not theirs. If it is not,
+	#Then we need to tell the user and have them create a new one.
+	my $sth2=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
+	$sth2->execute($uid,$member);
 
-    if ( $sth2->fetchrow ) {
+	if ( $sth2->fetchrow ) {
 	#The userid exists so we should display a warning.
-	my $warn = 1;
+		my $warn = 1;
         $template->param( warn => $warn,
 		        othernames => $bor->{'othernames'},
                         surname     => $bor->{'surname'},
@@ -67,11 +68,11 @@ if ( $newpassword ) {
                         userid      => $bor->{'userid'},
                         defaultnewpassword => $newpassword );
     } else {
-	#Everything is good so we can update the information.
-	my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
+		#Everything is good so we can update the information.
+		my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
     	$sth->execute($uid, $digest, $member);
-	$template->param(newpassword => $newpassword);
-    }
+		$template->param(newpassword => $newpassword);
+	}
 
 } else {
     my $userid = $bor->{'userid'};
