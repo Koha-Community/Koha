@@ -336,7 +336,7 @@ foreach (@dirlist) {
 }
 
 opendir D, "$backupdir/kohafiles-$date/opac/htdocs/";
-my @dirlist=readdir D;
+@dirlist=readdir D;
 foreach (@dirlist) {
     (next) if (/^\./);
     (next) if ($_ eq 'default');

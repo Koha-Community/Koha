@@ -1282,7 +1282,7 @@ sub updatedatabase {
 		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
 	}
 
-	my $result=system ("perl -I $::intranetdir/modules scripts/marc/updatedb2marc.pl");
+	$result = system ("perl -I $::intranetdir/modules scripts/marc/updatedb2marc.pl");
 	if ($result) {
 		print "Problem updating database to MARC...\n";
 		exit;
