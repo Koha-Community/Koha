@@ -4,84 +4,105 @@
 
 <div id="main">
 <h1>Koha Administration</h1>
-
-<h3>Parameters</h3>
-<div class="menu"><table>
-<caption>Biblio related</caption>
+<div class="menu">
+<table>
+<caption>System Preferences</caption>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></th>
-	<td>the supports of an item.</td>
+	<th><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></th>
+	<td>Change essential system preferences like MARC flavor, date format, administrator e-mail, and templates.</td>
+</tr>
+</table>
+<table>
+<caption>System parameters </caption>
+<tr>
+<th class="header" colspan="2">For best results, configure these parameters in the order they appear</th>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
-	<td>Currencies of booksellers.</td>
+	<th><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></th>
+	<td>The different branches you manage with this Koha server.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/aqbudget.pl">Budget</a></th>
-	<td>The monies allocated to your book funds.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book Funds</a></th>
+	<th><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></th>
 	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised Values</a></th>
-	<td>Define here categories and authorised values for them.
-			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
+	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
+	<td>Define exchange rates.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/thesaurus.pl">Thesaurus</a></th>
-	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
-</tr>
-</table></div>
-<div class="menu"><table>
-<caption>MARC related</caption>
-<tr><th><a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC tag structure</a></th><td>MARC structure : tag then subfields</td></tr>
-<tr><th><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links koha - MARC DB</a></th><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
-<tr><th><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></th><td>Checks the MARC structure. USE IT before working with real data. It will warn you of mistakes that would BREAK the Koha database!</td></tr>
-</table></div>
-<div class="menu"><table>
-<caption>Various parameters</caption>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/branches.pl">Library Branches</a></th>
-	<td>the differents branches you manage with this Koha server</td>
+	<th><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></th>
+	<td>Define item types.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a></th>
-	<td>the differents types of patrons.</td>
+	<th><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></th>
+	<td>Define the categories of borrowers.</td>
 </tr>
-<tr><th><a href="/cgi-bin/koha/admin/charges.pl">Fines</a></th><td>Overdue fine amounts for item type-patron type combinations.</td></tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></th>
+	<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></th>
+	<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus Structure</a></th>
+	<td>Define categories and thesaurus/authority MARC structure.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio framework (MARC structure)</a></th>
+	<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></th>
+	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></th>
+	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
+
+<tr>
+<th colspan="2" class="header">Various parameters</th>
+</tr>
 <tr>
 	<th><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></th>
 	<td>Printers (UNIX paths).</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a></th>
-	<td>Words deleted during searches</td>
+	<th><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></th>
+	<td>Words deleted during searches.</td>
 </tr>
 <tr>
 	<th><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></th>
-	<td>Servers to query for MARC data</td>
+	<td>Servers to query for MARC data.</td>
 </tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></th>
-	<td>System preferences</td>
-</tr>
-</table></div>
-<h3>Tools</h3>
-<div class="menu"><table>
-<caption>Import/Export</caption>
-<tr>
-	<th><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></th>
-	<td>Exporting in MARC format</td>
-</tr>
+</table>
+
+<table>
+	<caption>Tools</caption>
 	<tr>
-		<th><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records</a> in Breeding Farm</th>
-		<td>The breeding farm is a table where imported MARC records are stored.<br/>
-			A MARC record is stored in the breeding farm as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the breeding farm.
-			If it is found, the biblio is added to Koha active table and removed from the breeding farm. <br/>
+	<th colspan="2" class="header">Export</th>
+	</tr>
+	<tr>
+		<th><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></th>
+		<td> Exporting in MARC format.</td>
+	</tr>
+	<tr>
+	<th colspan="2" class="header">Import</th>
+	</tr>
+	<tr>
+		<th><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records to the reservoir</a></th>
+		<td>The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table.
 		</td>
 	</tr>
-</table></div>
+	<th colspan="2" class="header">Barcode generator</th>
+	</tr>
+	<tr>
+		<th><a href="/cgi-bin/koha/barcodes/barcodes.pl">Generate barcodes</a></th>
+		<td>the barcode generator deals with generating barcodes for items you acquire
+		</td>
+	</tr>
+</table>
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
