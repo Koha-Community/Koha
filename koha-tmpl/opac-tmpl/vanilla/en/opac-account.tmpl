@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+ACCOUNT PAGE
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+The text about how to join the library comes from Horowhenua Library Trust, (www.library.org.nz) and is provided as a guide to the sort of information you might want to have on this page.  Please change  it to suit your own condititions.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Account Details</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-member-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<TMPL_INCLUDE name="vanilla-membership-left-nav.inc">
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-account.pl'>My Account</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT-->
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+<h1>Account for <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
+</TMPL_LOOP>
+<p>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr class="table-heading"><td colspan="2"><b>Fines & Charges</b></td>
+<td><b>Amount</b></td>
+<td>&nbsp</td>
+<td><b>Still Owing</b></td>
+<tr><td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+
+<TMPL_LOOP NAME="ACCOUNT_LINES">
+
+<tr valign=top class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"shaded"</TMPL_IF>>
+<td class="padded"><TMPL_VAR NAME="date"></td>
+<td class="padded"><TMPL_VAR NAME="description">
+<TMPL_IF NAME="print_title"><TMPL_VAR NAME="title"></TMPL_IF></td>
+<td class="padded">$<TMPL_VAR NAME="amount"></td>
+<td>&nbsp</td>
+<td class="padded"><TMPL_IF NAME="amountoutstanding">$<TMPL_VAR NAME="amountoutstanding"><TMPL_ELSE>&nbsp</TMPL_IF></td></tr>
+</TMPL_LOOP>
+
+<tr><td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<tr VALIGN=TOP >
+<TD>&nbsp</td>
+<TD colspan=3><b>Total Due</b></td>
+<TD><b><TMPL_IF NAME="total">$<TMPL_VAR NAME="total"><TMPL_ELSE>&nbsp</TMPL_IF></b></td>
+</tr>
+<tr><td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+</table>
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>

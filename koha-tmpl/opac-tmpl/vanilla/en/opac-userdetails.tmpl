@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+PERSONAL DETAILS PAGE
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+Change this template to control how a users personal details page works.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Personal Details</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+
+<body marginheight="0" marginwidth="0">
+
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE NAME="vanilla-member-menu.inc">
+
+
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE NAME="vanilla-left-nav.inc">
+<TMPL_INCLUDE NAME="vanilla-membership-left-nav.inc">
+
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE NAME="vanilla-cat-search.inc">
+
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-userdetails.pl'>Personal Details</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-end.inc">
+
+
+<!--CONTENT-->
+<h1><b>Personal Details:</b> <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
+
+
+<TABLE  CELLSPACING=0  CELLPADDING=0 border=0>
+
+<tr VALIGN=TOP>	
+<TD class="label">
+Name:</td><td class="data"> <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname">  (<TMPL_VAR NAME="surname">, <TMPL_VAR NAME="title"> <TMPL_VAR NAME="intials">)</td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">
+Card Number:</td><td class="data"><TMPL_VAR NAME="cardnumber"></td></tr>
+
+<tr VALIGN=TOP>	
+<tr><td >&nbsp; </td></tr>
+<TD colspan="2"><h3>Contact Details</h3></td></tr>
+<tr><td colspan="2" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Postal Address:</td>
+<td class="data"> <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"></td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Home Address:</td>
+<td class="data"> <TMPL_VAR NAME="altstreetaddress">, <TMPL_VAR NAME="altcity">   </td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Phone (Home):</td>
+<td class="data">  <TMPL_VAR NAME="phone"></td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Phone (Daytime):</td>
+<td class="data"> <TMPL_VAR NAME="phoneday">  </td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Fax:</td>
+<td class="data"> <TMPL_VAR NAME="faxnumber"></td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">E-mail:</td>
+<td class="data">  <a href="mailto:<TMPL_VAR NAME='emailaddress'>"><TMPL_VAR NAME="emailaddress"></a></td></tr>
+
+<tr VALIGN=TOP>	
+<TD class="label">Textmessaging:</td>
+<td class="data">  </td></tr>
+
+<tr><td >&nbsp; </td></tr>
+
+<tr VALIGN=TOP>	
+<TD colspan="2"><h3>Membership Details</h3></td></tr>
+<tr><td colspan="2" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Membership Number:</td><td class="data"> <TMPL_VAR NAME="borrowernumber"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Membership:</td><td class="data">  <TMPL_VAR NAME="categorycode"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Area:</td><td class="data">  <TMPL_VAR NAME="area"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Fee:</td><td class="data">  /year, Paid</td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Joined:</td><td class="data">  <TMPL_VAR NAME="dateenrolled">  </td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Expires:</td><td class="data"> <TMPL_VAR NAME="expiry"> </td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Joining Branch:</td><td class="data">   </td></tr>
+<tr><td >&nbsp; </td></tr>
+
+<tr VALIGN=TOP>	
+<TD colspan="2"><h3>Identity Details</h3></td></tr>
+<tr><td colspan="2" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">DoB:</td><td class="data"> <TMPL_VAR NAME="dateofbirth"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Sex:</td><td class="data">  <TMPL_VAR NAME="sex"></td></tr>
+<tr><td >&nbsp; </td></tr>
+
+<tr VALIGN=TOP>	
+<TD colspan="2"><h3>Alternative Contact Details</h3></td></tr>
+<tr><td colspan="2" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Alternative Contact:</td><td class="data"> <TMPL_VAR NAME="contactname"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Phone:</td><td class="data"> <TMPL_VAR NAME="altphone"></td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Relationship:</td><td class="data"> <TMPL_VAR NAME="altrelationship">  </td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Notes:</td><td class="data"> <TMPL_VAR NAME="altnotes"> </td></tr>
+<tr VALIGN=TOP>	
+<TD class="label">Guarantor:</td><td class="data"> <TMPL_VAR NAME="guarantor"> </td></tr>
+
+<P>
+
+
+<tr VALIGN=TOP>	
+<TD></td><td>
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+<input type="submit" name="Modify" value="Modify" class="submit">
+</form>
+</p>
+
+</TD>
+</TR>
+</TABLE>
+</FORM>
+
+
+
+
+
+<!--+Katipo+end-->
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE NAME="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE NAME="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE NAME="vanilla-end-main.inc">
+</body>
+</html>

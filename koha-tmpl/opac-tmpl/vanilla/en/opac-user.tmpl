@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+MY ACCOUNT
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+Edit this file to control how the My Account page looks, and behaves.  
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+
+<html>
+<head>
+<title>My Account</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-member-menu.inc">
+
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<TMPL_INCLUDE name="vanilla-membership-left-nav.inc">
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-user.pl'>My Home</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+
+<!--CONTENT-->
+<TMPL_LOOP NAME="BORROWER_INFO">
+<h1>Welcome <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
+<!--FINES BOX-->
+<TMPL_IF NAME="amountoverfive">
+
+<table border=0 cellspacing=0 cellpadding=0  class="fines-box">
+
+<tr><td valign="top" rowspan="5" WIDTH="56"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/fine.gif" WIDTH="56" HEIGHT="55" align="top" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" colspan="2"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="15" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top"  rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td><h3>Fines and Charges</h3></td><td valign="top"  WIDTH="25"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr>
+<tr><td><span class="small"><B>You currently owe fines and charges amounting to:&nbsp;</B></span></td>
+<td bgcolor="#ffffff" class="white-box"><span class="selected-lge"><TMPL_VAR NAME="amountoutstanding"></span></td></tr>
+
+<tr><td  valign="top"><span class="small">
+<A HREF="/cgi-bin/koha/opac-account.pl">View Details >></A></span></td>
+<td valign="top"  WIDTH="30"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td valign="top" colspan="3"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr></table><br />
+
+</TMPL_IF>
+<TMPL_IF NAME="amountoverzero">
+
+
+<table border=0 cellspacing=0 cellpadding=0  bgcolor="#66cc66" class="fines-box">
+
+<tr><td valign="top" rowspan="5" WIDTH="56"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/fine.gif" WIDTH="56" HEIGHT="55" align="top" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" colspan="2"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="15" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top"  rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr>
+ <td><h3>Fines and Charges</h3></td>
+ <td valign="top"  WIDTH="25"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+
+<tr>
+ <td><span class="small"><B>You currently owe fines and charges amounting to:&nbsp;</B></span></td>
+
+ <td bgcolor="#ffffff" class="white-box"><span class="selected-lge"><TMPL_VAR NAME="amountoutstanding"></span></td></tr>
+
+<tr>
+ <td  valign="top"><span class="small"><A HREF="/cgi-bin/koha/opac-account.pl">View Details >></A></span></td>
+ <td valign="top"  WIDTH="30"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td valign="top" colspan="3"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr></table><br />
+
+</TMPL_IF>
+
+</TMPL_LOOP>
+
+
+<TMPL_IF NAME="overdues_count">
+
+<table border=0 cellspacing=0 cellpadding=0 width=90%>
+
+
+<!--OVERDUES TABLE ROWS-->
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
+
+<tr>
+
+<td valign="top" colspan="2"><h2>Overdues</h2></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Due</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Fine to Date</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded">&nbsp;</div></td></tr>
+
+<tr><td colspan="8" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<TMPL_LOOP NAME="OVERDUES">
+
+<tr>
+<td valign="top" ><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
+
+<td valign="top" ><A HREF='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">' class="padded"><TMPL_VAR NAME="title"></A><br />
+<div class="padded"><TMPL_VAR NAME="author"> (<TMPL_VAR NAME="itemtype">)</div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><TMPL_VAR NAME="date_due"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><TMPL_VAR NAME="charges"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" >
+<TMPL_IF NAME="renewable">
+<A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
+<TMPL_ELSE>
+Not renewable
+</TMPL_IF>
+</td></tr>
+</TMPL_LOOP>
+
+<tr><td colspan="8"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" hspace=0 vspace=0 ALT=""></td></tr> </table>
+
+</TMPL_IF>
+
+<TMPL_IF NAME="reserves_count">
+<table border=0 cellspacing=0 cellpadding=0 width=90%>
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
+
+
+<!--RESERVES TABLE ROWS-->
+<tr><td valign="top" colspan="2" ><h2>Reserves</h2></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded">
+<B>Reserve <br />Placed</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Pick Up</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Status</div></td></tr>
+
+<tr><td colspan="8" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+
+<TMPL_LOOP NAME="RESERVES">
+
+
+<tr><td valign="top"><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
+
+<td valign="top" ><A HREF='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">' class="padded"><TMPL_VAR NAME="btitle"></A><br />
+<div class="padded"><TMPL_VAR NAME="author"> (<TMPL_VAR NAME="itemtype">)</div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><TMPL_VAR NAME="reservedate"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><TMPL_VAR NAME="branch"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="selected"><TMPL_IF NAME="waiting">Waiting for you<TMPL_ELSE>Not Ready</TMPL_IF></div></td></tr>
+
+</TMPL_LOOP>
+
+
+<tr><td colspan="8" ><div class="padded">If you no longer want a reserve, please <a href="mailto:librarian@library.org.nz">send us an e-mail</a>, or go to the counter at the library to get it removed.</div></td></tr>
+
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" ALT=""></td></tr>
+</table>
+
+</TMPL_IF>
+
+<TMPL_IF NAME="issues_count">
+<table border=0 cellspacing=0 cellpadding=0 width=90%>
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
+
+<!--ISSUES TABLE ROWS--><tr>
+<td valign="top" colspan="2" class="padded"><h2>Issues</h2></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top"  colspan="3"><div class="padded"><B>Due</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded">&nbsp; </div></td></tr>
+
+
+<tr><td colspan="8" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<tr><td colspan="8" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+
+<TMPL_LOOP NAME="ISSUES">
+
+<tr><td valign="top" ><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
+
+<td valign="top" ><A HREF='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">' class="padded"><TMPL_VAR NAME="title"></A><br />
+<div class="padded"><TMPL_VAR NAME="author"> (<TMPL_VAR NAME="itemtype">)</div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"  colspan="3"><div class="padded"><TMPL_VAR NAME="date_due"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" >
+<TMPL_IF NAME="renewable">
+<A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
+<TMPL_ELSE>
+Not renewable
+</TMPL_IF>
+</td></tr>
+</TMPL_LOOP>
+
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
+
+</table>
+
+</TMPL_IF>
+
+<TMPL_INCLUDE name="vanilla-key.inc">
+<br />
+<FORM ACTION="/cgi-bin/koha/opac-readingrecord.pl" method=post>
+<input type="submit" value="Reading Record" class="submit">
+</form>
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>
+
+

@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+RESERVES
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+This is definitly set up to suit Horowhenua Library Trust, if you don't have branches for example, you'll need to take that bit out.
+
+If you charge a different amount for a reserve then you may need to change the bit where it's hard coded in the text below.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Place a Reserve</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-search-menu.inc">
+
+
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a>&gt;<a href='/search/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber">'>Place a Reserve</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT-->
+<TMPL_IF NAME="message">
+<h3>
+<TMPL_IF NAME="too_much_oweing">Sorry, you cannot make reserves because you owe <TMPL_VAR NAME="too_much_oweing">.  </TMPL_IF>
+<TMPL_IF NAME="too_many_reserves">Sorry, you cannot make more than <TMPL_VAR NAME="too_many_reserves"> reserves. </TMPL_IF>
+<TMPL_IF NAME="already_reserved">You already have a reserve placed on this item.</TMPL_IF>
+<TMPL_IF NAME="no_items_selected">You must select at least one item.</TMPL_IF>
+</h3>
+</TMPL_IF>
+
+<TMPL_IF NAME="select_item_types">
+<!-- The first time round you select which bibitems you want -->
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="item_types_selected" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<P>
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td valign="top" class="head1bold">Reserving:</td>
+    <td valign="top" class="head1"><TMPL_VAR NAME="title"> <br/>( <TMPL_VAR NAME="author"> )</td>
+  </tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <TD VALIGN="TOP" class="main">Number of Copies</td>
+    <TD VALIGN="TOP" class="main"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="20" HEIGHT="1" BORDER="0" ALT=""></td>
+    <td VALIGN="TOP" colspan="3" class="main"><TMPL_VAR NAME="itemcount"></TD>
+  </tr>
+  <tr> 
+    <TD VALIGN="TOP" class="main">Requests already received for this title</td>
+    <TD VALIGN="TOP" class="main"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="20" HEIGHT="1" BORDER="0" ALT=""></td>
+    <td VALIGN="TOP" colspan="3" class="main"> <TMPL_VAR NAME="reservecount"></TD>
+  </tr>
+  <tr> 
+    <TD VALIGN="TOP" class="main">Items curently on issue, due back</td>
+    <TD VALIGN="TOP" class="main"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="20" HEIGHT="1" BORDER="0" ALT=""></td>
+    <td VALIGN="TOP" colspan="3" class="main"><TMPL_LOOP NAME="ITEMS"><TMPL_VAR NAME="date_due">, </TMPL_LOOP></TD>
+  </tr>
+</table><P>
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr> 
+    <TD VALIGN="TOP" class="head2bold">For:</td>
+    <td valign="top" class="head2"><TMPL_LOOP NAME="USER_INFO"><TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="cardnumber">)</TMPL_LOOP></td>
+  </tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr> 
+    <TD VALIGN="TOP">Pick up from:</td>
+    <TD VALIGN="TOP" class="main"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="20" HEIGHT="1" BORDER="0" ALT=""></td>
+    <TMPL_LOOP NAME="BRANCHES">
+    <td VALIGN="TOP"><INPUT TYPE="radio" name="branch" value='<TMPL_VAR NAME="branchcode">' class="checkbox"></td>
+    <td VALIGN="TOP"><TMPL_VAR NAME="branchname"></TD>
+    </TMPL_LOOP>
+  </tr>
+</table>
+
+<TMPL_IF NAME="onlyone">
+<!-- If there is only one types -->
+<input type="reset" class="reset" value="Clear">&nbsp&nbsp<input type="submit" class="submit" value="Submit">
+<input type="hidden" name="all" value="1">
+</form>
+
+<TMPL_ELSE>
+<!-- If there is more than one type -->
+
+<P>
+<table border="0" cellspacing="0" cellpadding="5">
+<tr>
+  <td valign="top" colspan="2">
+    <span class="head2">Either Tick</span>
+  </td>
+</tr>
+<tr>
+  <td valign="top">
+    <span class="heading4">
+      <input class="checkbox" type="checkbox" name="all" value="next-available">
+        Next Available Copy (any format)
+    </span>
+  </TD>
+  <td valign="top">
+     <span class="heading4">$1</span>
+  </TD>
+</tr>
+<tr>
+  <td valign="top" colspan="2">
+    <span class="head2">
+     Or Tick Acceptable Formats
+    </span>
+  </td>
+</tr>
+</table>
+
+<!--ACCEPTABLE FORMATS-->
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td colspan='<TMPL_VAR NAME="totalwidth">' class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<TMPL_LOOP NAME="TYPE_ROWS">
+<tr>
+<TMPL_LOOP NAME="ROW">
+<td class="padded">
+<table border="0" cellspacing=0 cellpadding=0>
+<tr><td valign="top" ><INPUT TYPE="checkbox" name="itemtype" value='<TMPL_VAR NAME="itemtype">' class="checkbox"></td>
+<td valign="top" class="padded"><TMPL_INCLUDE NAME="itemtype-image.inc"></td></tr>
+<tr><td colspan="2"><TMPL_VAR NAME="description"></td></tr>
+<tr><td colspan="2">Reserve Fee: <TMPL_VAR NAME="reservefee"></td></tr>
+</table>
+</td>
+<TMPL_UNLESS NAME="last">
+ <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+</TMPL_UNLESS>
+<TMPL_IF NAME="fill">
+ <td colspan='<TMPL_VAR NAME="fill">'><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" hspace=0 vspace=0 ALT=""></td>
+</TMPL_IF>
+</TMPL_LOOP>
+</tr>
+</TMPL_LOOP>
+
+<tr><td valign="top" colspan='<TMPL_VAR NAME="totalwidth">' align="right"><input type="reset" class="reset" value="Clear">&nbsp&nbsp<input type="submit" class="submit" value="Submit"></TD></tr>
+
+</table></form>
+
+<TMPL_INCLUDE name="vanilla-key.inc">
+
+</TMPL_IF>
+
+
+<!-- end of the first form -->
+</TMPL_IF>
+
+<TMPL_IF NAME="item_types_selected">
+<!-- if the bibitems have already been selected -->
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="place_reserve" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+
+
+<TMPL_IF NAME="all">
+<p>Please confirm that you wish to request any item.</p>
+<input type="hidden" name="all" value="1">
+
+<TMPL_ELSE>
+
+<p>
+Please confirm that you wish to request an item of these types:
+<p>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<TMPL_LOOP NAME="TYPES">
+<tr><td valign="top" class="padded"><TMPL_INCLUDE NAME="itemtype-image.inc">
+<input type="hidden" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
+<td colspan="2"><TMPL_VAR NAME="description"></td></tr>
+</TMPL_LOOP>
+
+</table>
+
+</TMPL_IF>
+
+<p>Which is to be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br/>
+<input type="hidden" name="branch" value="<TMPL_VAR NAME='branch'>">
+
+<TMPL_IF NAME="fee">
+<br>Note there will be a reserve charge of <b>$<TMPL_VAR NAME="fee"></b><br>
+</TMPL_IF>
+
+<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve" class="submit"></font>
+
+</FORM>
+
+<TMPL_INCLUDE name="vanilla-key.inc">
+
+
+</TMPL_IF>
+
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>

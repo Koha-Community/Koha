@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+OPAC AUTHORISATION/LOGIN
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+The text about how to join the library comes from Horowhenua Library Trust, (www.library.org.nz) and is provided as a guide to the sort of information you might want to have on this page.  Please change  it to suit your own condititions.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+
+<html>
+<head>
+<title>Login</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-member-menu.inc">
+
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<TMPL_INCLUDE name="vanilla-membership-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-user.pl'>Login</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT--><P>
+
+
+
+
+
+
+<TMPL_IF NAME="nopermission">
+<!-- This is what is displayed if user doesnt have permission -->
+<h3>Sorry, KOHA doesnt think you have permission for this page. </h3>
+</TMPL_IF>
+
+<TMPL_IF NAME="timed_out">
+<!-- This is what is displayed if login has timed out -->
+<h3>Sorry, your session has timed out, please login again.</h3>
+</TMPL_IF>
+
+<TMPL_IF NAME="different_ip">
+<!-- This is what is displayed if user doesnt have permission -->
+<h3>You are accessing koha from a different ip address, please login again.</h3>
+</TMPL_IF>
+
+<TMPL_IF NAME="invalid_username_or_password">
+<!-- This is what is displayed if user doesnt have permission -->
+<h3>You entered an incorrect username or password, please try again, usernames and passwords are case sensitive.</h3>
+</TMPL_IF>
+
+
+<TMPL_IF NAME="loginprompt">
+<!-- login prompt time-->
+
+<center>
+
+<form action='<TMPL_VAR NAME="url">' method="post">
+<TMPL_LOOP NAME="INPUTS">
+  <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
+</TMPL_LOOP>
+<TABLE cellpadding=0 cellspacing=5 border=0>
+<TR VALIGN=TOP>
+<TD>Your card number</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="userid"></TD></TR>
+<TR VALIGN=TOP>
+<TD>Password</TD> <TD><INPUT TYPE="password"  SIZE="25"   NAME="password"></TD>
+</tr><tr>
+<td colspan=2 align="right"><input type="submit" value="OK" SIZE="2"   class="submit"></td>
+</TR>
+</table></form>
+<p>If you don't have a password yet, next time you're in the library, take your card and some I.D. to the information counter and we'll happily issue you one.
+
+
+
+</TMPL_IF>
+
+
+
+<!--+Katipo+end-->
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+SEARCH
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+Add links to other searches etc to this page.
+
+If you don't wish people to search by these fields, or want to add others then this is the place to do it.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Search The Catalogue</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE NAME="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE NAME="vanilla-search-menu.inc">
+
+
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE NAME="vanilla-left-nav.inc">
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE NAME="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Search</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-end.inc">
+<!--CONTENT-->
+
+<h1>Search the Catalogue</h1>
+
+<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=post>
+<TABLE cellpadding=0 cellspacing=5 border=0>
+
+<TR VALIGN=TOP>
+<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+<td><input type=radio name=ttype value=normal checked>Normal<input
+type=radio name=ttype value=exact>Exact</td>
+</TR>
+<TR VALIGN=TOP> 
+<TD>Author</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+<TR VALIGN=TOP>
+<TD>Keywords</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Class</TD> <TD><select   SIZE="1"   NAME="class">
+	<option value="">Any
+	<!-- fetch class list -->
+	<TMPL_VAR name="classlist">
+</select>
+	
+</TD>
+</TR>
+
+<tr valign=top><td></td>
+<td><input type="submit" value="OK Start Search" SIZE="15" class="submit">
+</td></tr>
+<tr valign=top>
+<td colspan=3><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" ALT="">
+</td></tr>
+
+
+<TR VALIGN=TOP>
+<TD colspan=3><H3>Search by List of Subjects</H3></TD> </TR>
+
+<TR VALIGN=TOP>
+<TD>Subject</TD>
+
+<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+<td><input type="submit" value="OK" SIZE="2" class="submit"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" align="right" ALT=""></td></TR>
+<tr valign=top>
+<td colspan=3><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" ALT="">
+</td></tr>
+<TR VALIGN=TOP>
+<TD><H3>Search by Specific Item</H3></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Item Number</TD>
+<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
+<td><input type="submit" value="OK" SIZE="2"   class="green-box"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" align="right" ALT=""></td></TR>
+
+</TR>
+<TR VALIGN=TOP>
+<td></td>
+<TD><font size=4 face="arial,helvetica">
+<INPUT TYPE="reset"  value="Reset" SIZE="10" class="reset"></font></td></tr>
+
+</TABLE>
+</FORM>
+
+<TABLE cellpadding=5 cellspacing=5 border=0>
+
+</TABLE>
+
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE NAME="vanilla-botnav-all.inc">
+
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE NAME="vanilla-end-main.inc">
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+The text about how to join the library comes from Horowhenua Library Trust, (www.library.org.nz) and is provided as a guide to the sort of information you might want to have on this page.  Please change  it to suit your own condititions.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Search Results</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE NAME="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE NAME="vanilla-search-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+
+<TMPL_INCLUDE NAME="vanilla-left-nav.inc">
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE NAME="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-searchresults.pl?<TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>'>Search Results</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-end.inc">
+<!--CONTENT-->
+<TMPL_IF NAME="searchdesc">
+    <h1>Results for Search: <TMPL_VAR NAME="searchdesc"></h1>
+<TMPL_ELSE>
+    <h1>You did not specify any seach criteria</h1>
+</TMPL_IF>
+
+<TMPL_IF NAME="numrecords">
+
+
+<span>
+    <TMPL_LOOP NAME="numbers">
+	<TMPL_IF NAME="highlight">
+	   <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a>
+	<TMPL_ELSE>
+	    <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a>
+	</TMPL_IF>
+    </TMPL_LOOP>
+</span> 
+
+
+<P>Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.</p>
+
+<!-- If we have a subject table -->
+    <TMPL_IF NAME="subjectsearch">
+    <table border=0 cellspacing=0 cellpadding=2>
+    <tr>
+<tr><td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+	    <td class="table-heading">Subject</td>	    
+    </tr>
+<tr><td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+       <TMPL_LOOP NAME=SEARCH_RESULTS>
+       <tr class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"shaded"</TMPL_IF>>
+       <td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL> class="padded"><TMPL_VAR NAME=subject></a></td>
+       </tr>
+       </TMPL_LOOP>
+    <tr><td colspan=5 class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+    </table>
+    
+<!-- Else we have a list of items -->    
+    <TMPL_ELSE>
+
+
+ <table border=0 cellspacing=0 cellpadding=0>
+
+    <tr>
+<tr><td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr>	   
+ <td class="table-heading">Title</td>
+<td class="table-heading">Author</td>
+<td class="table-heading">&copy;</td>
+<td class="table-heading">Copies</td>
+<td class="table-heading">Location/Availability</td>
+	    
+    </tr>
+<tr><td colspan="5" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+
+<!-- Actual Search Results -->
+<TMPL_LOOP NAME="SEARCH_RESULTS">    
+      <tr class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"pink"</TMPL_IF>>
+      <td><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL> class="padded"><TMPL_VAR NAME="title"></a></td>
+      <td><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL> class="padded"><TMPL_VAR NAME="author"></a></td>
+      <td> <div class="padded"><TMPL_VAR NAME="copyrightdate"></div> </td>
+      <td align="center"> <div class="padded"><TMPL_VAR NAME="itemcount"></div> </td>
+      <td> <div class="padded"><TMPL_VAR NAME="location"></div> </td>
+      </tr>
+</TMPL_LOOP>
+
+    <tr><td colspan=5 class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+	</table>
+</TMPL_IF>
+   <P>
+
+<span>
+    <TMPL_LOOP NAME="numbers">
+	<TMPL_IF NAME="highlight">
+	   <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a>
+	<TMPL_ELSE>
+	    <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a>
+	</TMPL_IF>
+    </TMPL_LOOP>
+</span> 
+
+
+
+<TMPL_ELSE>
+Sorry, there were no results.
+</TMPL_IF>
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE NAME="vanilla-botnav-all.inc">
+
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE NAME="vanilla-end-main.inc">
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+The text about how to join the library comes from Horowhenua Library Trust, (www.library.org.nz) and is provided as a guide to the sort of information you might want to have on this page.  Please change  it to suit your own condititions.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+<html>
+<head>
+<title>Update My Account</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-member-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<TMPL_INCLUDE name="vanilla-membership-left-nav.inc">
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-user.pl'>My Account</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT-->
+
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<FORM ACTION="/cgi-bin/koha/opac-userupdate.pl" method=get>
+<TABLE >
+
+<TR VALIGN=TOP>
+<TD class="label">Surname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='surname'>"  NAME="surname"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">Title</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">Firstname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">Street address</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">City</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
+
+
+<TR VALIGN=TOP> 
+<TD class="label">Home phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">Work/Fax phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD class="label">Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+
+
+
+<TR VALIGN=TOP> <td></td>
+<td><INPUT type="submit" value="Submit"></td>
+</tr>
+
+</TABLE>
+</FORM>
+</CENTER>
+
+</TMPL_LOOP>
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+
+
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+The text about how to join the library comes from Horowhenua Library Trust, (www.library.org.nz) and is provided as a guide to the sort of information you might want to have on this page.  Please change  it to suit your own condititions.
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+
+
+<html>
+<head>
+<title>KOHA: Membership</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE NAME="script.js">
+</script>
+</head>
+
+
+<body marginheight="0" marginwidth="0">
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE NAME="vanilla-member-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE NAME="vanilla-left-nav.inc">
+<TMPL_INCLUDE NAME="vanilla-membership-left-nav.inc">
+
+
+<!--SEARCH FORM-->
+<TMPL_INCLUDE NAME="vanilla-cat-search.inc">
+
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-membership.pl'>Membership</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE NAME="vanilla-crumb-end.inc">
+<!--CONTENT-->
+<h1>Membership</h1>
+
+<h2>Joining the Library</h2>
+<ul><li>Membership is free for anyone who lives, or pays rates, in the District.<br />
+</li><li>You can join at any of our branches and may borrow and return items at any of these libraries.<br />
+</li><li>You'll need to bring 2 forms of ID - one that has your address printed on it like a bank statement or letter, and the other with your signature or photograph.<br />
+</li><li>When you sign your new card we'll ask you to agree to some <a href="#conditions">conditions</a><br />
+</li><li>If you're under 16 we need a guarantor - an adult (usually a parent) who agrees to be responsible for the books you borrow - your adult needs to come to the library with you when you sign up.<br />
+</li><li>Remember to get yourself a Password or PIN when you register. This means you will be able to access your record online.<br />
+</li><li>We have thousands of things you can borrow and do at the Library.
+</li></ul><p>
+</p><h2>Become an Online Member </h2>
+<p>
+You can become an online member when you join the library or any time after that.  If you've already got a new plastic library card, all you need is a password. Next time you're in alibrary, come to the Help desk with your library card and we'll issue you a password.
+</p><p>
+If you forget your password at any time, just come back to the counter,<br />
+with your card or other ID and we can reset it.
+</p><p>
+Using your library card and password you can review your borrower record with us, check the books you have out, renew them, make requests (reserves), and update your personal details all from the terminals in the library or your own PC at home.
+</p><p>
+<a name="conditions"></a>
+</p><h2>Conditions of use </h2>
+<p>
+In accepting and signing your new library card, you agree to:
+</p><ul><li>Return all items borrowed by the date due.<br />
+</li><li>Pay for overdue, damaged or lost item/s and any debt collection fees.<br />
+</li><li>Advise the library of any change of address.<br />
+</li><li>Acknowledge the same responsibility for any child you have registered.
+</li></ul>
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE NAME="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE NAME="vanilla-membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE NAME="vanilla-end-main.inc">
+</body>
+</html>

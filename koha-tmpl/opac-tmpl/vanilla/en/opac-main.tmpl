@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+
+
+<html>
+<title>WELCOME TO THE  KOHA OPAC (Online Public Access Catalogue) </title>
+<style type="text/css">
+<!--
+input {font-size:16px;
+      }
+
+input.ok  {
+  background-color: #CCBBCC;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 1px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.search-heading {
+  background-image: url(<TMPL_VAR NAME='themelang'>/images/heading-search-3.gif);
+  no-repeat;
+width: 350 ;
+  height: 38;
+   
+}
+
+.login-heading {
+  background-image: url(<TMPL_VAR NAME='themelang'>/images/heading-login-2.gif);
+  no-repeat;
+width: 350 ;
+  height: 38;
+   
+}
+
+
+h1 {
+  font-family: arial narrow, arial, helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: normal;
+  margin-bottom: 0px;
+  padding-top: 5px;
+  
+  
+
+  }
+  
+
+-->
+
+</style>
+
+</head>
+
+<body onload="document.catsearch.keyword.focus()"
+BGCOLOR="#339999" 
+text="black" 
+link="white" 
+vlink="white" 
+alink="#663366" 
+leftmargin=0 
+topmargin=0
+marginheight=0
+marginwidth=0 >
+
+<center>
+<table cellspacing=0 cellpadding=0 border=0 BGCOLOR="#339999" >
+<tr valign=top >
+<td background="<TMPL_VAR NAME='themelang'>/images/front-background-med.gif">
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=440 align=left alt=" " hspace=0 vspace=0>
+<table cellspacing=0 cellpadding=0 border=0>
+<tr valign=top >
+<td background=" " width=228 height=88 ><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=228 height=88 
+alt=" " hspace=0 vspace=0></td>
+<td background=" " width=57 height=88 ><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=57 height=88 
+alt=" " hspace=0 vspace=0></td>
+<td background=" " width=42 height=88 ><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=42 height=88 
+alt=" " hspace=0 vspace=0 border=0></td>
+<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=88 
+alt=" " hspace=0 vspace=0></td>
+<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="220" height=88 
+alt=" " hspace=0 vspace=0></td>
+</tr>
+
+<tr valign=top >
+<td background=" " rowspan=4 align="right" colspan=2><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
+width=1 height=30
+alt=" " hspace=0 vspace=0><br>
+<img src="<TMPL_VAR NAME='themelang'>/images/koha.gif" width=200 height=128
+alt="Koha: Public Catalogue and Member Services" hspace=0 vspace=0></td>
+
+<td background=" "  colspan=3 ><div class="search-heading"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="38" height="38" alt=" " align="left" ><h1>Search Catalogue</h1></div></td>
+
+</tr>
+
+
+<tr valign=top >
+<td></td>
+<form ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
+<input type=hidden name=type value=opac>
+<td background=" " colspan="2">
+
+<input type=text size="20" name="keyword">  <input type="submit" value="OK" class="ok"><br>
+</font>
+<a href="/cgi-bin/koha/opac-search.pl">
+<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22
+alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search (More Options)</a><br>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
+alt=" " hspace=0 vspace=0></td>
+</form>
+</tr>
+
+
+<TMPL_IF NAME="loggedinuser">
+<tr valign=top ><td background=" "  colspan=3><div class="login-heading"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="38" height="38" alt=" " align="left" ><h1>Logged in as </h1></div></td></tr>
+
+<TMPL_LOOP NAME="USER_INFO">
+<tr valign=top ><td></td><td>
+ <TMPL_VAR NAME="title"> <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname">
+</td></tr>
+</TMPL_LOOP>
+<tr valign=top ><td></td><td><form method="post">
+<input type="submit" name="logout" value="Log Out" align="absmiddle" border="0" />
+</form></td></tr>
+<TMPL_ELSE>
+
+  <tr valign=top ><form action="/cgi-bin/koha/opac-user.pl" method=post >
+<td background=" "  colspan=3><div class="login-heading"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="38" height="38" alt=" " align="left" ><h1>Member Login</h1></div></td>
+
+</tr>
+<tr valign=top >
+<td></td>
+
+<td background=" " >
+<font size=3 face="arial narrow,arial,helvetica">Card Number &nbsp;</font></td>
+<td background=" " ><input type=text size="12" name="userid"></td>
+
+</tr>
+
+<tr valign=top><td></td>
+<td></td>
+<td></td>
+<td background=" " >
+<font size=3 face="arial narrow,arial,helvetica">Password</font></td>
+<td background=" " ><input type=password size="12" name="password"><br>
+<input type="submit" value="OK" class="ok"><br>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
+alt=" " hspace=0 vspace=0></td>
+</font>
+</form>
+</tr>
+
+</TMPL_IF>
+</table>
+
+</td>
+</tr>
+</table>
+<p>
+For more information on the koha libary system<br> 
+vist  <b><a href="http://www.koha.org">www.koha.org</a></b></center>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+
+SEARCH RESULTS - ITEM DETAIL PAGE
+
+This is the part of the "vanilla" theme put together by Katipo Communications for general distribution with Koha. 
+
+
+If you see strange tags and comments you don't understand they may be out of Kea our content management system. If you'd like to use Kea to change your template & website text please contact Katipo.
+
+Cheers
+R
+
+12/1/03
+
+-->
+
+<html>
+<head>
+<title>Details</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-search-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">'>Details</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT--><P>
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<table border="0" cellspacing="0" cellpadding="3"><tr><td valign="top">
+<table border="0" cellspacing="0" cellpadding="3"><tr>
+<td valign="top" class="head1bold" colspan=2><TMPL_VAR NAME="title"><br/>
+ (<TMPL_VAR NAME="author">)</td>
+</tr>
+</table>
+<P><table border="0" cellspacing="0" cellpadding="2">
+<TMPL_IF NAME="subtitle">
+  <tr> 
+    <td VALIGN="TOP"><B>Subtitle:</B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="subtitle"></td>
+  </tr>
+</TMPL_IF>
+  <tr>
+    <td VALIGN="TOP"><B>Copyright:</B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="copyrightdate"></td>
+  </tr>
+  <TMPL_IF NAME="subjects">
+  <tr>
+    <td VALIGN="TOP"><B>Subject:</B> </TD>
+    <TD VALIGN="TOP"><TMPL_LOOP NAME="subjects"><a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<TMPL_VAR NAME="subject" ESCAPE="URL">"><TMPL_VAR NAME="subject"> </a>|</TMPL_LOOP></td>
+  </tr>
+  </TMPL_IF>
+  <tr>
+    <td VALIGN="TOP"><B>Biblio Record:</B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="biblionumber"></td>
+  </tr>
+</table>
+</td>
+<TMPL_UNLESS NAME="norequests">
+<TD valign="top">
+    <form action="/cgi-bin/koha/opac-reserve.pl" method=post>
+    <INPUT TYPE="submit" name="submit"  VALUE="Place Reserve" align=right class="submit">
+    <input type=hidden name=bib value=<TMPL_VAR NAME="biblionumber">>
+    </form>
+</TD>
+</TMPL_UNLESS>
+</tr></table>
+</TMPL_LOOP>
+<P>
+
+<H2>Holdings Information</H2>
+<table border=0 cellspacing=0 cellpadding=0>
+<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
+<tr><td colspan="12" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""></td></tr>
+<tr><TD>&nbsp;</TD>
+<td valign="top"><div class="padded"><B>Type/Format</B></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Class</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top"><div class="padded"><B>Location</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+<td valign="top" ><div class="padded"><B>Due Date</B></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+
+<td valign="top" ><div class="padded"><B>Last Seen</B></div></td>
+
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+
+
+<td valign="top" ><div class="padded"><B>Barcode</B></div></td></tr>
+<!--LINE-->
+<tr><td colspan="12" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<!--INFORMATION ROWS-->
+<tr><td valign="top"><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="description"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="class"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="branchname"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="datedue"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="datelastseen"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="barcode"></div></td></tr>
+</TMPL_LOOP>
+
+</table>
+<P>
+
+<!--+Katipo+end-->
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>
+
