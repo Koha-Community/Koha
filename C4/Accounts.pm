@@ -32,12 +32,47 @@ use vars qw($VERSION @ISA @EXPORT);
 # set the version for version checking
 $VERSION = 0.01;
     
+=head1 NAME
+
+C4::Accounts - FIXME
+
+=head1 SYNOPSIS
+
+  use C4::Accounts;
+
+FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+    
 @ISA = qw(Exporter);
 @EXPORT = qw(&checkaccount &reconcileaccount &getnextacctno);
+# FIXME - This is never used
 sub displayaccounts{
   my ($env)=@_;
 }
 
+=item checkaccount
+
+  $owed = &checkaccount($env, $borrowernumber, $dbh);
+
+Looks up the total amount of money owed by a borrower (fines, etc.).
+
+C<$borrowernumber> specifies the borrower to look up.
+
+C<$dbh> is a DBI::db handle for the Koha database.
+
+C<$env> is ignored.
+
+=cut
+#'
 sub checkaccount  {
   #take borrower number
   #check accounts and list amounts owing
@@ -47,7 +82,7 @@ sub checkaccount  {
   $sth->execute;
   my $total=0;
   while (my $data=$sth->fetchrow_hashref){
-    $total=$total+$data->{'sum(amountoutstanding)'};
+    $total += $data->{'sum(amountoutstanding)'};
   }
   $sth->finish;
   # output(1,2,"borrower owes $total");
@@ -61,6 +96,10 @@ sub checkaccount  {
   return($total);
 }    
 
+# XXX - POD. Need to figure out C4/Interface/AccountsCDK.pm first,
+# though
+# FIXME - It looks as though this function really wants to be part of
+# a curses-based script.
 sub reconcileaccount {
   #print put money owing give person opportunity to pay it off
   my ($env,$dummy,$bornumber,$total)=@_;
@@ -110,6 +149,8 @@ sub reconcileaccount {
 
 }
 
+# FIXME - This function is never used. Then again, it's not exported,
+# either.
 sub recordpayment{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$dbh,$data)=@_;
@@ -170,9 +211,24 @@ sub recordpayment{
 #  $sth-finish;
 }
 
+=item getnextacctno
+
+  $nextacct = &getnextacctno($env, $borrowernumber, $dbh);
+
+Returns the next unused account number for the patron with the given
+borrower number.
+
+C<$dbh> is a DBI::db handle to the Koha database.
+
+C<$env> is ignored.
+
+=cut
+# FIXME - Okay, so what does the above actually _mean_?
 sub getnextacctno {
   my ($env,$bornumber,$dbh)=@_;
   my $nextaccntno = 1;
+  # FIXME - This could just be
+  #	SELECT max(accountno)+1 from accountlines;
   my $query = "select * from accountlines
   where (borrowernumber = '$bornumber')
   order by accountno desc";
@@ -186,3 +242,13 @@ sub getnextacctno {
 }
 			
 END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+=back
+
+=head1 SEE ALSO
+
+L<DBI(3)|DBI>
+
+=cut
