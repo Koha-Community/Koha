@@ -507,6 +507,7 @@ sub _new_stopwords
 
 1;
 __END__
+
 =back
 
 =head1 ENVIRONMENT
@@ -521,10 +522,10 @@ Specifies the configuration file to read.
 
 =head1 SEE ALSO
 
-L<DBI(3)|DBI>
+DBI(3)
 
 =head1 AUTHOR
 
-Andrew Arensburger
+Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
