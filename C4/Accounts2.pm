@@ -200,7 +200,7 @@ sub returnlost{
   my @datearr = localtime(time);
   my $date = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
-  my $upitem="Update items set itemnotes='Paid for by $bor $date' where itemnumber='$itemnum'";
+  my $upitem="Update items set paidfor='Paid for by $bor $date' where itemnumber='$itemnum'";
   $sth=$dbh->prepare($upitem);
   $sth->execute;
   $sth->finish;
@@ -215,7 +215,7 @@ sub manualinvoice{
   my $accountno=getnextacctno('',$bornum,$dbh);
   my $amountleft=$amount;
   
-  if ($type eq 'C' || $type eq 'BAY'){
+  if ($type eq 'C' || $type eq 'BAY' || $type eq 'WORK'){
     my $amount2=$amount*-1;
     $amountleft=fixcredit('',$bornum,$amount2);
   }
@@ -261,7 +261,7 @@ sub fixcredit{
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
   my $query = "select * from accountlines 
-  where (borrowernumber = '$bornumber') and (amountoutstanding<>0)
+  where (borrowernumber = '$bornumber') and (amountoutstanding >0)
   order by date";
   my $sth = $dbh->prepare($query);
   $sth->execute;
@@ -272,7 +272,7 @@ sub fixcredit{
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
      }  else {
-        $newamtos = $accdata->{'amountoutstanding'} + $amountleft;
+        $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
      }
      my $thisacct = $accdata->{accountno};
