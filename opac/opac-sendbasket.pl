@@ -90,14 +90,27 @@ Content-Transfer-Encoding: quoted-printable
 
 $email_header
 
-$boundary
-Content-Type: text/plain; name="$email_file"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="$email_file"
-
 $mail{'body'}
+
 $boundary--
 END_OF_BODY
+
+#	$mail{body} = <<END_OF_BODY;
+#$boundary
+#Content-Type: text/plain; charset="iso-8859-1"
+#Content-Transfer-Encoding: quoted-printable
+#
+#$email_header
+#
+#$boundary
+#Content-Type: text/plain; name="$email_file"
+#Content-Transfer-Encoding: quoted-printable
+#Content-Disposition: attachment; filename="$email_file"
+#
+#$mail{'body'}
+#
+#$boundary--
+#END_OF_BODY
 
 	# Sending mail
 	if (sendmail %mail) {
