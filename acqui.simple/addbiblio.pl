@@ -381,17 +381,39 @@ if ($op eq "addbiblio") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-# MARC::Record built => now, record in DB
-	my $oldbibnum;
-	my $oldbibitemnum;
-	if ($is_a_modif) {
-		 NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
+	# check for a duplicate
+	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
+	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
+	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
+	if (!$duplicatebiblionumber or $confirm_not_duplicate) {
+		# MARC::Record built => now, record in DB
+		my $oldbibnum;
+		my $oldbibitemnum;
+		if ($is_a_modif) {
+			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
+		} else {
+			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
+		}
+	# now, redirect to additem page
+		print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");
+		exit;
 	} else {
-		($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
+	# it may be a duplicate, warn the user and do nothing
+		build_tabs ($template, $record, $dbh,$encoding);
+		build_hidden_data;
+		$template->param(
+			oldbiblionumber             => $oldbiblionumber,
+			bibid                       => $bibid,
+			oldbiblionumtagfield        => $oldbiblionumtagfield,
+			oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+			oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
+			oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
+			oldbiblioitemnumber         => $oldbiblioitemnumber,
+			duplicatebiblionumber		=> $duplicatebiblionumber,
+			duplicatebibid				=> $duplicatebibid,
+			duplicatetitle				=> $duplicatetitle,
+			 );
 	}
-# now, redirect to additem page
-	print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");
-	exit;
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -419,7 +441,6 @@ if ($op eq "addbiblio") {
 		$start=$i if ($end>0 && $tags[$i] eq $addedfield);
 		last if ($end>0 && $tags[$i] ne $addedfield);
 	}
-	warn "ST : $addedfield => $start / $end";
 	# add an empty line in all arrays. This forces a new field in MARC::Record.
 	splice(@tags,$end+1,0,'');
 	splice(@subfields,$end+1,0,'');
@@ -438,7 +459,6 @@ if ($op eq "addbiblio") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	warn "R=>".$record->as_formatted;
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
@@ -467,7 +487,8 @@ if ($op eq "addbiblio") {
 		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
 		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
 		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-		oldbiblioitemnumber         => $oldbiblioitemnumber );
+		oldbiblioitemnumber         => $oldbiblioitemnumber,
+		);
 }
 $template->param(
 		frameworkcode => $frameworkcode,

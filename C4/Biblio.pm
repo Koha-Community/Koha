@@ -67,6 +67,8 @@ $VERSION = 0.01;
   &MARCgetbiblio &MARCgetitem
   &MARCaddword &MARCdelword
   &char_decode
+  
+  &FindDuplicate
 );
 
 #
@@ -1094,7 +1096,6 @@ sub MARCmarc2koha {
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
-# 	warn "X";
 		$result=&MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
 	}
 	# additional authors : specific
@@ -2528,6 +2529,16 @@ sub nsb_clean {
     return ($string);
 }
 
+sub FindDuplicate {
+	my ($record)=@_;
+	my $dbh = C4::Context->dbh;
+	my $result = MARCmarc2koha($dbh,$record,'');
+	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
+	$sth->execute($result->{'isbn'});
+	my ($biblionumber,$bibid,$title) = $sth->fetchrow;
+	return $biblionumber,$bibid,$title;
+}
+
 END { }    # module clean-up code here (global destructor)
 
 =back
@@ -2542,6 +2553,13 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.106  2004/11/02 16:44:45  tipaul
+# new feature : checking for duplicate biblio.
+#
+# For instance, it's only done on ISBN only. Will be improved soon.
+#
+# When a duplicate is detected, the biblio is not saved, but the user is asked for a confirmations.
+#
 # Revision 1.105  2004/09/23 16:15:37  tipaul
 # indenting diff
 #
