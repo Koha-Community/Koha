@@ -87,11 +87,15 @@ if ($op eq 'add_form') {
 	}
 	if ($searchfield) {
 		$template->param(action => "Modify authorised value");
+		$template->param('heading-modify-authorized-value-p' => 1);
 	} elsif ( ! $data->{'category'} ) {
 		$template->param(action => "Add new category");
+		$template->param('heading-add-new-category-p' => 1);
 	} else {
 		$template->param(action => "Add authorised value");
+		$template->param('heading-add-authorized-value-p' => 1);
 	}
+	$template->param('use-heading-flags-p' => 1);
 	$template->param(category => $data->{'category'},
 							authorised_value => $data->{'authorised_value'},
 							lib => $data->{'lib'},

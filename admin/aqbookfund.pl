@@ -83,10 +83,10 @@ my ($template, $borrowernumber, $cookie)
 
 if ($op) {
 $template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+		$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+		else              => 1); # we show only the TMPL_VAR names $op
 }
 $template->param(action => $script_name);
 
@@ -106,10 +106,13 @@ if ($op eq 'add_form') {
 	    }
 	if ($bookfundid) {
 	    $header = "Modify book fund";
+	    $template->param('header-is-modify-p' => 1);
 	} else {
 	    $header = "Add book fund";
+	    $template->param('header-is-add-p' => 1);
 	}
-	$template->param(header => $header);
+	$template->param('use-header-flags-p' => 1);
+	$template->param(header => $header); # NOTE deprecated
 	my $add_or_modify=0;
 	if ($bookfundid) {
 	    $add_or_modify=1;
