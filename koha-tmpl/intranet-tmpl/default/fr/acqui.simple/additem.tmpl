@@ -63,6 +63,9 @@
 	</tmpl_loop>
 </table>
 <input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
+<TMPL_IF name="barcode_not_unique">
+	<div id="problem"><b>ERROR : Barcode already exists !<b></div>
+</TMPL_IF>
 <TMPL_IF name="opisadd">
 <input type="button" value="Enregistrer" onClick='Check(this.form)' accesskey="w">
 <TMPL_ELSE>

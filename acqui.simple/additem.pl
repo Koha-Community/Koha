@@ -27,6 +27,7 @@ use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
+use C4::Search;
 use HTML::Template;
 use MARC::File::USMARC;
 
@@ -58,6 +59,7 @@ my $tagslib = &MARCgettagslib($dbh,1);
 my $record = MARCgetbiblio($dbh,$bibid);
 my $itemrecord;
 my $nextop="additem";
+my @errors; # store errors found while checking data BEFORE saving item.
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "additem") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -73,9 +75,20 @@ if ($op eq "additem") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+# check for item barcode # being unique
+	my $oldbibid = MARCmarc2koha($dbh,$record);
+	my $exists = itemdata($oldbibid->{'barcode'});
+	push @errors,"barcode_not_unique" if($exists);
 # MARC::Record builded => now, record in DB
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
-	$nextop = "additem";
+	# if barcode exists, don't create, but report The problem.
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid) unless ($exists);
+	if ($exists) {
+		$nextop = "additem";
+		$itemrecord = $record;
+		warn "==>".$record->as_formatted;
+	} else {
+		$nextop = "additem";
+	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -253,4 +266,7 @@ $template->param(item_loop => \@item_value_loop,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
 						opisadd => ($nextop eq "saveitem")?0:1);
+foreach my $error (@errors) {
+	$template->param($error => 1);
+}
 output_html_with_http_headers $input, $cookie, $template->output;

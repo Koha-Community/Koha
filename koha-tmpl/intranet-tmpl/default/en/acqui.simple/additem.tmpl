@@ -24,6 +24,7 @@
 </table>
 <br />
 <center>
+
 <DIV name="10XX" id="10XX">
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
@@ -43,6 +44,7 @@
 </table>
 </DIV>
 <br /><br />
+
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<th>New Item</th>
@@ -63,6 +65,9 @@
 	</tmpl_loop>
 </table>
 <input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
+<TMPL_IF name="barcode_not_unique">
+	<div id="problem"><b>ERROR : Barcode already exists !<b></div>
+</TMPL_IF>
 <TMPL_IF name="opisadd">
 <input type="button" value="Add item" onClick='Check(this.form)' accesskey="w">
 <TMPL_ELSE>
