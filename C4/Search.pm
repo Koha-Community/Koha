@@ -359,6 +359,8 @@ sub KeywordSearch {
   #	field like 'string%' or field like '% string%'
   # can be rewritten (in MySQL, at least) as
   #	field regexp '(^| )string';
+  # However, this isn't portable. Though PostgreSQL allows you to use "~"
+  # instead of "regexp".
   my $query="Select biblionumber from biblio
   where ((title like '$key[0]%' or title like '% $key[0]%')";
   while ($i < $count){

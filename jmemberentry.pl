@@ -42,6 +42,7 @@ my $type=$input->param('type');
 my $data=borrdata('',$member);
 
 my @titles = ('Miss', 'Mrs', 'Ms', 'Mr', 'Dr', 'Sir');
+	# FIXME - Assumes English. This ought to be made part of i18n.
 my @titledata;
 while (@titles) {
   my $title = shift @titles;

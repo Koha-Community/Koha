@@ -108,6 +108,7 @@ if ($delete){
   } 
   
   my @titles = ('Miss', 'Mrs', 'Ms', 'Mr', 'Dr', 'Sir');
+	# FIXME - Assumes English. This ought to be made part of i18n.
   my @titledata;
   while (@titles) {
     my %row;

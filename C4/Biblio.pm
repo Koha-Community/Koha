@@ -1,6 +1,9 @@
 package C4::Biblio; 
 # $Id$
 # $Log$
+# Revision 1.10  2002/09/22 16:50:08  arensb
+# Added some FIXME comments.
+#
 # Revision 1.9  2002/09/20 12:57:46  tipaul
 # long is the road to 1.4.0
 # * MARCadditem and MARCmoditem now wroks
@@ -131,19 +134,21 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
 
 
 # non-exported package globals go here
-use vars qw(@more $stuff);
+use vars qw(@more $stuff);		# FIXME - These are never used
 
 # initalize package globals, first exported ones
 
+# FIXME - These are never used
 my $Var1   = '';
 my %Hashit = ();
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
+# FIXME - These are never used
 my $stuff  = '';
 my @more   = ();
 
@@ -151,11 +156,13 @@ my @more   = ();
 # the functions below that use them.
 
 # file-private lexicals go here
+# FIXME - These are never used
 my $priv_var    = '';
 my %secret_hash = ();
 
 # here's a file-private function as a closure,
 # callable as &$priv_func;  it cannot be prototyped.
+# FIXME - This is never used
 my $priv_func = sub {
   # stuff goes here.
   };
@@ -172,6 +179,7 @@ my $priv_func = sub {
 # ALLxxx subs (xxx deals with old-DB parameters, the ALLxxx deals with MARC-DB parameter)
 
 =head1 SYNOPSIS
+
   MARCxxx related subs
   all subs requires/use $dbh as 1st parameter.
   NOTE : all those subs are private and must be used only inside Biblio.pm (called by a old API sub, or the ALLsub)
