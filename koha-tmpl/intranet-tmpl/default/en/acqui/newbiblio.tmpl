@@ -53,106 +53,113 @@ win.document.write("</font></body></html>");
 	<form action="/cgi-bin/koha/acqui/addorder.pl" method=post name=frusin>
 	<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=no><!-- /TMPL_UNLESS -->
 	<!-- <!-- TMPL_VAR name="title" --> -->
-	<input type=hidden name=ordnum value="<!-- TMPL_VAR name="ordnum" -->">
-	<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
-	<input type=hidden name=supplier value="<!-- TMPL_VAR name="id" -->">
-	<input type=hidden name=biblio value="<!-- TMPL_VAR name="biblio" -->">
-	<input type=hidden name=bibitemnum value="<!-- TMPL_VAR name="biblioitemnumber" -->">
-	<input type=hidden name=oldtype value="<!-- TMPL_VAR name="itemtype" -->">
-	<input type=hidden name=discount value="<!-- TMPL_VAR name="discount" -->">
-	<input type=hidden name=listinc value="<!-- TMPL_VAR name="listincgst" -->">
-	<input type=hidden name=currency value="<!-- TMPL_VAR name="currency" -->">
-	<input type=hidden name=applygst value="<!-- TMPL_VAR name="gstreg" -->">
+	<input type="hidden" name="ordnum" value="<!-- TMPL_VAR name="ordnum" -->">
+	<input type="hidden" name="basketno" value="<!-- TMPL_VAR name="basketno" -->">
+	<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->">
+	<input type="hidden" name="biblio" value="<!-- TMPL_VAR name="biblio" -->">
+	<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR name="biblioitemnumber" -->">
+	<input type="hidden" name="oldtype" value="<!-- TMPL_VAR name="itemtype" -->">
+	<input type="hidden" name="discount" value="<!-- TMPL_VAR name="discount" -->">
+	<input type="hidden" name="listinc" value="<!-- TMPL_VAR name="listincgst" -->">
+	<input type="hidden" name="currency" value="<!-- TMPL_VAR name="currency" -->">
+	<input type="hidden" name="applygst" value="<!-- TMPL_VAR name="gstreg" -->">
+	<input type="hidden" name="suggestionid" value="<!-- TMPL_VAR name="suggestionid" -->">
 	<!-- TMPL_LOOP name="loop_currencies" -->
 		<input type=hidden name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">
 	<!-- /TMPL_LOOP -->
-	<!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=yes><!-- /TMPL_IF -->
 	<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button acquisition">View Basket</a>
-	<h1 class="acquisition"><!-- TMPL_VAR name="ordnum" --> - Order Details </h1>
+	<h1 class="acquisition">
+		<!-- TMPL_IF name="ordnum" -->
+			Modify order details (line #<!-- TMPL_VAR name="ordnum" -->)
+		<!-- TMPL_ELSE -->
+			New order
+		<!-- /TMPL_IF -->
+		 <!-- TMPL_IF name="suggestionid" -->(defined from suggestion #<!-- TMPL_VAR name="suggestionid" -->)<!-- /TMPL_IF -->
+	</h1>
 	Shopping Basket For <!-- TMPL_VAR name="name" -->
 	<div id="bloc25">
 		<h2 class="acquisition">catalogue details</h2>
 		<p>
-			<label><b>Title *</b></label>
+			<label class="label100"><b>Title *</b></label>
 			<input type=text size=20 name=title value="<!-- TMPL_VAR name="title" -->">
 		</p>
 		<p>
-			<label>Author</label>
+			<label class="label100">Author</label>
 			<input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" >
 		</p>
 		<p>
-			<label> Publisher</label>
+			<label class="label100"> Publisher</label>
 			<input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" >
 		</p>
 		<p>
-			<label>Copyright Date</label>
+			<label class="label100">Copyright Date</label>
 			<input type=text size=20 name=copyrightdate value="<!-- TMPL_VAR name="copyrightdate" -->">
 		</p>
 		<p>
-			<label>Format</label>
+			<label class="label100">Format</label>
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
 		<p>
-			<label>ISBN</label>
+			<label class="label100">ISBN</label>
 			<input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->">
 		</p>
 		<p>
-			<label>Series</label>
+			<label class="label100">Series</label>
 			<input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->">
 		</p>
 		<p>
-			<label>Branch</label>
+			<label class="label100">Branch</label>
 			<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
 	</div>
 	<div id="bloc25">
 		<h2 class="acquisition">Accounting details</h2>
 		<p>
-			<label>Quantity</label>
+			<label class="label100">Quantity</label>
 			<input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' >
 		</p>
 		<p>
-			<label>Bookfund</label>
+			<label class="label100">Bookfund</label>
 			<!-- TMPL_VAR name="CGIbookfund" -->
 		</p>
 		<p>
-			<label>Suppliers List Price</label>
+			<label class="label100">Suppliers List Price</label>
 			<input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='update(this.form)'>
 		</p>
 		<p>
-			<label>Replacement Cost </label>
+			<label class="label100">Replacement Cost </label>
 			<input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
 		</p>
 		<p>
-			<label>Budgeted Cost</label>
+			<label class="label100">Budgeted Cost</label>
 			<input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='update(this.form)'>
 		</p>
 		<p>
-			<label>Budgeted GST</label>
+			<label class="label100">Budgeted GST</label>
 			<input type=text size=20 name=GST value="" onchange='update(this.form)'>
 		</p>
 		<p>
-			<label><B>BUDGETED TOTAL</B></label>
+			<label class="label100"><B>BUDGETED TOTAL</B></label>
 			<input type=text size=20 name=total value="" onchange='update(this.form)'>
 		</p>
 		<p>
-			<label>Actual Cost</label>
+			<label class="label100">Actual Cost</label>
 			<input type=text size=20 name=cost>
 		</p>
 		<p>
-			<label>Invoice Number *</label>
+			<label class="label100">Invoice Number *</label>
 			<input type=text size=20 name=invoice >
 		<p>
-			<label>Notes</label>
+			<label class="label100">Notes</label>
 			<input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->">
 		</p>
 		<p>The 2 following fields are available for your own usage. They can be useful for stat purposes</p>
 		<p>
-			<label>Sort field 1</label>
+			<label class="label100">Sort field 1</label>
 			<input type=text size=20 name=sort1 value="<!-- TMPL_VAR name="sort1" -->">
 		</p>
 		<p>
-			<label>Sort field 2</label>
+			<label class="label100">Sort field 2</label>
 			<input type=text size=20 name=sort2 value="<!-- TMPL_VAR name="sort2" -->">
 		</p>
 		<p>

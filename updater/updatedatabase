@@ -286,7 +286,7 @@ my %requiretables = (
 				KEY sndx_word (sndx_word)
 			)",
 	suggestions => "(
-				suggestionnumber int(8) NOT NULL auto_increment,
+				suggestionid int(8) NOT NULL auto_increment,
 				suggestedby int(11) NOT NULL default '0',
 				managedby int(11) default NULL,
 				status varchar(10) NOT NULL default '',
@@ -296,11 +296,23 @@ my %requiretables = (
 				copyrightdate smallint(6) default NULL,
 				publishercode varchar(255) default NULL,
 				date timestamp(8) NOT NULL,
+				volumedesc char(255) default NULL,
+				publicationyear smallint(6) default NULL,
+				place char(255) default NULL,
+				isbn char(10) default NULL,
 				mailoverseeing smallint(1) default 0,
 				PRIMARY KEY  (suggestionnumber),
 				KEY suggestedby (suggestedby),
 				KEY managedby (managedby)
 			)",
+	aqbasket => "(basketno int(11) NOT NULL auto_increment,
+				creationdate date,
+				closedate date,
+				booksellerid varchar(10),
+				authorisedby varchar(10),
+				booksellerinvoicenumber text,
+				PRIMARY KEY (basketno)
+				)",
 );
 
 my %requirefields = (
@@ -369,6 +381,14 @@ my %dropable_table = (
     serialissues   => 'serialissues',
 );
 
+my %uselessfields = (
+	aqorders => "requisitionedby,authorisedby,booksellerid,
+			deliverydays,followupdays,
+			numberfollowupsallowed,numberfollowupssent,
+			dateprinted,sourced,quantityreceiveddamaged,
+			subscriptionfrom,subscriptionto
+			"
+	);
 # the other hash contains other actions that can't be done elsewhere. they are done
 # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
 
@@ -1200,6 +1220,26 @@ if ($marc_word{subfieldid}) {
 }
 # Populate tables with required data
 
+# fill aqbasket if it's empty and aqorder is not
+# => it means it has just been created & must be filled
+$sth = $dbh->prepare("select count(*) from aqbasket");
+$sth->execute;
+if ($sth->fetchrow == 0) {
+	$sth = $dbh->prepare("select count(*) from aqorders");
+	$sth->execute;
+	if ($sth->fetchrow >0) {
+		print "Populating new table aqbasket\n";
+		print "IMPORTANT NOTE: error message \"Duplicate entry 'X' for key 1\" may appear. it should not be a real trouble\n";
+		$sth=$dbh->prepare("select distinct basketno,booksellerid,authorisedby,entrydate,booksellerinvoicenumber from aqorders");
+		$sth->execute;
+		my ($basketno,$booksellerid,$authorisedby,$entrydate,$booksellerinvoicenumber);
+		my $sth2 = $dbh->prepare("insert into aqbasket (basketno,creationdate,booksellerid,authorisedby,booksellerinvoicenumber) values (?,?,?,?,?)");
+		while (($basketno,$booksellerid,$authorisedby,$entrydate,$booksellerinvoicenumber) = $sth->fetchrow) {
+			print "$basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber\n";
+			$sth2->execute($basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber);
+		}
+	}
+}
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
@@ -1244,11 +1284,34 @@ foreach my $table ( keys %tabledata ) {
     }
 }
 
+# at last, remove useless fields
+foreach $table ( keys %uselessfields ) {
+	my @fields = split /,/,$uselessfields{$table};
+	foreach my $fieldtodrop (@fields) {
+		$fieldtodrop =~ s/\t//g;
+		$fieldtodrop =~ s/\n//g;
+		print "deleting $fieldtodrop field in $table...\n" unless $silent;
+		my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+		$sth->execute;
+		if ( $sth->err ) {
+			print "Error : $sth->errstr \n";
+			$sth->finish;
+		}    # if error
+	}
+}    # foreach
+
+
 $sth->finish;
 
 exit;
 
 # $Log$
+# Revision 1.91  2004/07/15 09:52:28  tipaul
+# Acquisition & Suggestion :
+# * acquisition rewritte : create a aqbasket table to deal with "bookseller order header".
+# * add "close basket" feature : a closed basket can't be modified
+# * suggestion feature : manage suggestions in acquisition (after suggestion filled in OPAC)
+#
 # Revision 1.90  2004/07/06 08:24:18  tipaul
 # adding 2 free fields that can be used for sorting purposes
 #
