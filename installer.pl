@@ -368,7 +368,17 @@ CREATING REQUIRED DIRECTORIES
 
 unless ( -d $kohadir ) {
    print "Creating $kohadir...\n";
-   mkdir ($kohadir, oct(770));
+   my $result=mkdir ($kohadir, oct(770));
+   if ($result==0) {
+       my @dirs = split(m#/#, $kohadir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+   }
    chown (oct(0), (getgrnam($httpduser))[2], "$kohadir");
    chmod (oct(770), "$kohadir");
 }
@@ -386,7 +396,17 @@ unless ( -d "$kohadir/modules" ) {
 }
 unless ( -d $opacdir ) {
    print "Creating $opacdir...\n";
-   mkdir ($opacdir, oct(770));
+   my $result=mkdir ($opacdir, oct(770));
+   if ($result==0) {
+       my @dirs = split(m#/#, $opacdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+   }
    chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
    chmod (oct(770), "$opacdir");
 }
