@@ -74,7 +74,16 @@ if ($data{'cardnumber'} eq ''){
     $ok=1;
 } else {
     #check cardnumber is valid
-    my $valid=checkdigit(\%env,$data{'cardnumber'});
+    my $nounique;
+    if ( $data{'type'} ne "Add" )
+    {
+	$nounique = 1;
+    }
+    else
+    {
+	$nounique = 0;
+    }
+    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
         $ok=1;
         $string.=" Invalid Cardnumber<br>";

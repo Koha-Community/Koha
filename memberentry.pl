@@ -149,7 +149,7 @@ if ($delete){
 				-size     => 1,
 				-multiple => 0 );
 
-	$template->param(
+	$template->param(	type 		=> $type,
 				member          => $member,
 				address         => $data->{'streetaddress'},
 				firstname       => $data->{'firstname'},
