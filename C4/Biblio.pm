@@ -52,7 +52,7 @@ $VERSION = 0.01;
 	     &updateBiblio &updateBiblioItem &updateItem 
 	     &itemcount &newbiblio &newbiblioitem 
 	     &modnote &newsubject &newsubtitle
-	     &newordernum &modbiblio &checkitems
+	     &modbiblio &checkitems
 	     &newitems &modbibitem
 	     &modsubtitle &modsubject &modaddauthor &moditem &countitems 
 	     &delitem &deletebiblioitem &delbiblio  
@@ -200,7 +200,7 @@ sub MARCaddsubfield {
 	$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
 	$sth->execute;
 	my ($res)=$sth->fetchrow;
-	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?)");
+	$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?)");
 	$sth->execute($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$res);
 	$dbh->do("unlock tables");
     } else {
@@ -363,7 +363,8 @@ sub MARCmodsubfield {
     $sth->finish;
     $sth=$dbh->prepare("select bibid,tag,tagorder,subfieldcode,subfieldid,subfieldorder from marc_subfield_table where subfieldid=?");
     $sth->execute($subfieldid);
-    my ($bibid,$tagid,$tagorder,$subfieldcode,$subfieldid,$subfieldorder) = $sth->fetchrow;
+    my ($bibid,$tagid,$tagorder,$subfieldcode,$x,$subfieldorder) = $sth->fetchrow;
+    $subfieldid=$x;
     &MARCdelword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder);
     &MARCaddword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
     return($subfieldid, $subfieldvalue);
@@ -458,9 +459,9 @@ sub MARCdelsubfield {
 # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
 #    my $dbh=&C4Connect;
-    my $dbh->do("delete from marc_subfield_table where bibid='$bibid' and
+    $dbh->do("delete from marc_subfield_table where bibid='$bibid' and
 			tag='$tag' and tagorder='$tagorder' 
-			and subfieldcode='$subfield'and subfieldorder='$subfieldorder
+			and subfieldcode='$subfield' and subfieldorder='$subfieldorder
 			");
 }
 
@@ -971,7 +972,7 @@ sub OLDnewitems {
   my $sth   = $dbh->prepare($query);
   my $data;
   my $itemnumber;
-  my $error;
+  my $error = "";
 
   $sth->execute;
   $data       = $sth->fetchrow_hashref;
@@ -1006,9 +1007,9 @@ sub OLDnewitems {
 
     $sth = $dbh->prepare($query);
     $sth->execute;
-
-    $error .= $sth->errstr;
-
+    if (defined $sth->errstr) {
+	$error .= $sth->errstr;
+    }
     $sth->finish;
     $itemnumber++;
   } # for
@@ -1345,7 +1346,7 @@ sub getitemtypes {
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
-    @results[$count] = $data;
+    $results[$count] = $data;
     $count++;
   } # while
   

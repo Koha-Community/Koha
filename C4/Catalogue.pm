@@ -28,7 +28,7 @@ $VERSION = 0.01;
 	     &getorder &neworder &delorder
 	     &ordersearch
 	     &modorder &getsingleorder &invoice &receiveorder
-	     &updaterecorder
+	     &updaterecorder &newordernum 
 
 	     &bookfunds &bookfundbreakdown &updatecost 
 	     &curconvert &getcurrencies &updatecurrencies &getcurrency 

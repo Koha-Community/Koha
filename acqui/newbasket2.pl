@@ -6,7 +6,8 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Acquisitions;
+use C4::Catalogue;
+use C4::Biblio;
 
 my $env;
 my $input = new CGI;
@@ -142,7 +143,7 @@ while ($i < $count2){
       $word=~ s/\n//g;
       my $url="/cgi-bin/koha/search.pl?author=$word&type=$type";
       $result->{'author'}=mklink($url,$result->{'author'});
-      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=itemcount($env,$result->{'biblionumber'},$type);
+      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
       $itemcount=$count;
       if ($nacount > 0){
         $location=$location."On Loan";

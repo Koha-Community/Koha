@@ -3,7 +3,7 @@
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
-use C4::Acquisitions;
+use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -34,38 +34,65 @@ printend
 my $colour='#ffffcc';
 my $toggle=0;
 for (my $i=0; $i<$count; $i++) {
- if ($toggle==0){
-   $colour='#ffffcc';
-   $toggle=1;
- } else {
-   $colour='white';
-   $toggle=0;
- }
- my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
+    if ($toggle==0){
+	$colour='#ffffcc';
+	$toggle=1;
+    } else {
+	$colour='white';
+	$toggle=0;
+    }
+    my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
 # print $ordcount;
- print <<printend
- <tr valign=top bgcolor=$colour>
- <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a> 
- <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
- <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
- <td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[0]->{'basketno'}">HLT-$orders->[0]->{'basketno'}</a></td>
- <td>$orders->[0]->{'count(*)'}</td>
- <td>$orders->[0]->{'authorisedby'}</td>
- <td>$orders->[0]->{'entrydate'}</td></tr>
+    if ($orders->[0]->{'basketno'}>0) {
+	print <<printend
+	    <tr valign=top bgcolor=$colour>
+	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a> 
+	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
+	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
+	    <td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[0]->{'basketno'}">HLT-$orders->[0]->{'basketno'}</a></td>
+	    <td>$orders->[0]->{'count(*)'}</td>
+	    <td>$orders->[0]->{'authorisedby'}</td>
+	    <td>$orders->[0]->{'entrydate'}</td></tr>
 printend
 ;
- for (my $i2=1;$i2<$ordcount;$i2++){
-   print <<printend
-   <tr valign=top bgcolor=$colour>
-   <td> &nbsp; </td>
-   <td> &nbsp; </td>
-   <td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[$i2]->{'basketno'}">HLT-$orders->[$i2]->{'basketno'}</a></td>
-   <td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
-   <td>$orders->[$i2]->{'entrydate'}</td></tr>
-   
+    } else {
+	print <<printend
+	    <tr valign=top bgcolor=$colour>
+	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a> 
+	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
+	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
+	    <td>&nbsp;</a></td>
+	    <td>$orders->[0]->{'count(*)'}</td>
+	    <td>$orders->[0]->{'authorisedby'}</td>
+	    <td>$orders->[0]->{'entrydate'}</td></tr>
 printend
 ;
- }
+    }
+    for (my $i2=1;$i2<$ordcount;$i2++){
+	if ($orders->[$i2]->{'basketno'}>=1) {
+	    print <<printend
+		<tr valign=top bgcolor=$colour>
+		<td> &nbsp; </td>
+		<td> &nbsp; </td>
+		<td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[$i2]->{'basketno'}">HLT-$orders->[$i2]->{'basketno'}</a></td>
+		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
+		<td>$orders->[$i2]->{'entrydate'}</td></tr>
+		
+printend
+;
+	} else {
+	    print <<printend
+		<tr valign=top bgcolor=$colour>
+		<td> &nbsp; </td>
+		<td> &nbsp; </td>
+		<td> &nbsp;</td>
+		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
+		<td>$orders->[$i2]->{'entrydate'}</td></tr>
+		
+printend
+;
+	}
+    }
 }
 
 print <<printend

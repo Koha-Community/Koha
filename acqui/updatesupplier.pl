@@ -3,7 +3,7 @@
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
-use C4::Acquisitions;
+use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use CGI;
