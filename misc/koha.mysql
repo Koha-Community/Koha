@@ -270,7 +270,7 @@ CREATE TABLE `borexp` (
 
 CREATE TABLE `borrowers` (
   `borrowernumber` int(11) NOT NULL default '0',
-  `cardnumber` varchar(9) NOT NULL default '',
+  `cardnumber` varchar(16) NOT NULL default '',
   `surname` text NOT NULL,
   `firstname` text NOT NULL,
   `title` text,
@@ -311,7 +311,7 @@ CREATE TABLE `borrowers` (
   `preferredcont` char(1) default NULL,
   `physstreet` varchar(100) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
-  KEY `cardnumber` (`cardnumber`)
+  KEY `cardnumber` (`cardnumber`) UNIQUE
 );
 
 #
