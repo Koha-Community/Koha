@@ -250,6 +250,8 @@ sub catalogsearch {
 
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
+	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
+	# so if you dont' has an item, you get a not nice epty value.
 	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*, items.*,marc_biblio.bibid
 							FROM biblio, marc_biblio 
 							LEFT JOIN items on items.biblionumber = biblio.biblionumber
@@ -258,7 +260,6 @@ sub catalogsearch {
 							GROUP BY items.biblionumber, items.holdingbranch, items.itemcallnumber");
 	my @finalresult = ();
 	my @CNresults=();
-	my $oldbiblionumber=0;
 	my $totalitems=0;
 	my $oldline;
 # 	my ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid);
@@ -270,11 +271,13 @@ sub catalogsearch {
 		$sth->execute($result[$counter]);
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
-		$continue=0 unless $line;
+		my $oldbiblionumber=$line->{bn};
+		$continue=0 unless $line->{bn};
 		while ($continue) {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
 			# then all other fields in the main array
 			if ($oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline) {
+# 			warn "HERE $oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline";
 				my %newline;
 				%newline = %$oldline;
 				$newline{totitem} = $totalitems;
@@ -287,8 +290,9 @@ sub catalogsearch {
 				push @finalresult, \%newline;
 				$totalitems=0;
 			}
-			$continue=0 unless $line;
+			$continue=0 unless $line->{bn};
 			if ($continue) {
+# 			warn "IN ".$line->{bn}."<<" if($line->{bn});
 				$oldbiblionumber = $line->{bn};
 				$totalitems++ if ($line->{holdingbranch});
 				$oldline = $line;
