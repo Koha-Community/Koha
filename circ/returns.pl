@@ -328,15 +328,18 @@ $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
 EOF
     my $flags = $borrower->{'flags'};
     my $flaginfotext='';
+    my $displayflag = '';
     my $color = '';
     foreach my $flag (sort keys %$flags) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	if ($flags->{$flag}->{'noissues'}) {
-	    $flag = "<font color=red>$flag</font>";
+	    $displayflag = "<font color=red>$flag</font>";
+	} else {
+	    $displayflag = $flag;
 	}
 	if ($flag eq 'CHARGES') {
 	    $flaginfotext.= <<"EOF";
-<tr><td valign=top>$flag</td>
+<tr><td valign=top>$displayflag</td>
 <td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> 
 <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} 
 onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
@@ -353,7 +356,7 @@ $iteminformation->{'title'}
 ($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>
 EOF
             }
-            $flaginfotext.="<tr><td valign=top>$flag</td><td>$itemswaiting</td></tr>\n";
+            $flaginfotext.="<tr><td valign=top>$displayflag</td><td>$itemswaiting</td></tr>\n";
 	} elsif ($flag eq 'ODUES') {
 	    my $itemsoverdue = '';
 	    my $items = $flags->{$flag}->{'itemlist'};
@@ -367,10 +370,10 @@ $iteminformation->{'title'}
 <br>
 EOF
 	    }
-	    $flaginfotext .= "<tr><td valign=top>$flag</td><td>$itemsoverdue</td></tr>\n";
+	    $flaginfotext .= "<tr><td valign=top>$displayflag</td><td>$itemsoverdue</td></tr>\n";
         } else {
 	    $flaginfotext.= <<"EOF";
-<tr><td valign=top>$flag</td>
+<tr><td valign=top>$displayflag</td>
 <td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>
 EOF
 	}
