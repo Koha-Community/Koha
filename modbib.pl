@@ -12,9 +12,8 @@ use C4::Output;
 
 my $input = new CGI;
 
-my $submit = $input->param('submit.x');
-my $bibnum = $input->param('bibnum');
-my $data   = &bibdata($bibnum);
+my $bibnum=$input->param('bibnum');
+my $data=&bibdata($bibnum);
 my ($subjectcount, $subject)     = &subject($data->{'biblionumber'});
 my ($subtitlecount, $subtitle)   = &subtitle($data->{'biblionumber'});
 my ($addauthorcount, $addauthor) = &addauthor($data->{'biblionumber'});
@@ -22,7 +21,7 @@ my $sub        = $subject->[0]->{'subject'};
 my $additional = $addauthor->[0]->{'author'};
 my %inputs;
 my $dewey;
-
+my $submit=$input->param('submit.x');                                                                                              
 if ($submit eq '') {
   print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum");
 } # if
@@ -31,7 +30,8 @@ print $input->header;
 # my ($analytictitle)  = &analytic($biblionumber,'t');
 # my ($analyticauthor) = &analytic($biblionumber,'a');
 print startpage();
-print startmenu();
+print startmenu('catalogue');
+my %inputs;
 
 # have to get all subtitles, subjects and additional authors
 for (my $i = 1; $i < $subjectcount; $i++) {
