@@ -24,7 +24,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use C4::Auth;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Biblio;
 use C4::Output;
 use CGI;

@@ -6,8 +6,9 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
+use C4::Suggestions;
 use HTML::Template;
-use C4::Catalogue;
+use C4::Acquisition;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -51,11 +52,15 @@ for (my $i=0;$i<$count;$i++){
 	$line{rate} = $rates->[$i]->{'rate'};
 	push @loop_currency, \%line;
 }
+
+# suggestions ?
+my $suggestion = countsuggestion("ASKED");
 $template->param(classlist => $classlist,
 						type => 'intranet',
 						loop_budget => \@loop_budget,
 						loop_currency => \@loop_currency,
 						total => sprintf("%.2f",$total),
+						suggestion => $suggestion,
 						totspent => sprintf("%.2f",$totspent),
 						totcomtd => sprintf("%.2f",$totcomtd),
 						totavail => sprintf("%.2f",$totavail));

@@ -24,7 +24,7 @@
 use strict;
 use CGI;
 use C4::Context;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Search;
 use C4::Auth;
 use C4::Output;

@@ -97,15 +97,15 @@ $gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
 
 $template->param(basket => $basket,
-						authorisedby => $results[0]->{'authorisedby'},
-						entrydate => format_date($results[0]->{'entrydate'}),
-						id=> $results[0]->{'booksellerid'},
-						name => $booksellers[0]->{'name'},
-						books_loop => \@books_loop,
-						count =>$count,
-						sub_total => $sub_total,
-						gist => $gist,
-						grand_total =>$grand_total,
-						currency => $booksellers[0]->{'listprice'},
-						);
+				authorisedby => $results[0]->{'authorisedby'},
+				entrydate => format_date($results[0]->{'entrydate'}),
+				id=> $results[0]->{'booksellerid'},
+				name => $booksellers[0]->{'name'},
+				books_loop => \@books_loop,
+				count =>$count,
+				sub_total => $sub_total,
+				gist => $gist,
+				grand_total =>$grand_total,
+				currency => $booksellers[0]->{'listprice'},
+				);
 output_html_with_http_headers $query, $cookie, $template->output;

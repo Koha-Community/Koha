@@ -25,7 +25,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Biblio;
 
 my $input=new CGI;

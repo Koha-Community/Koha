@@ -70,7 +70,6 @@ orders, converting money to different currencies, and so forth.
 
 	     &findall &needsmod &branches &updatesup &insertsup
 	     &bookseller &breakdown &checkitems
-	     &websitesearch &addwebsite &updatewebsite &deletewebsite
 );
 
 #
@@ -942,124 +941,6 @@ sub insertsup {
   updatesup($data);
   return($data->{'id'});
 }
-
-=item websitesearch
-
-  ($count, @results) = &websitesearch($keywordlist);
-
-Looks up biblioitems by URL.
-
-C<$keywordlist> is a space-separated list of search terms.
-C<&websitesearch> returns those biblioitems whose URL contains at
-least one of the search terms.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash, whose keys are the fields of the biblio
-and biblioitems tables in the Koha database.
-
-=cut
-#'
-sub websitesearch {
-    my ($keywordlist) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth;
-    my @results = ();
-    my @keywords = split(/ +/, $keywordlist);
-
-	$sth    = $dbh->prepare("Select distinct biblio.* from biblio, biblioitems where
-    	biblio.biblionumber = biblioitems.biblionumber and ("
-		.(join(") or (",map { "url like ?" } @keywords)).")");
-    $sth->execute(map { s/([%_])/\\\1/g; "%$_%" } @keywords);
-
-    while (my $data = $sth->fetchrow_hashref) {
-        push(@results,$data);
-    } # while
-
-    $sth->finish;
-    return(scalar(@results), @results);
-} # sub websitesearch
-
-=item addwebsite
-
-  &addwebsite($website);
-
-Adds a new web site. C<$website> is a reference-to-hash, with the keys
-C<biblionumber>, C<title>, C<description>, and C<url>. All of these
-are mandatory.
-
-=cut
-#'
-sub addwebsite {
-    my ($website) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query;
-
-    # FIXME -
-    #	for (qw( biblionumber title description url )) # and any others
-    #	{
-    #		$website->{$_} = $dbh->quote($_);
-    #	}
-    # Perhaps extend this to building the query as well. This might allow
-    # some of the fields to be optional.
-    $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
-    $website->{'title'}        = $dbh->quote($website->{'title'});
-    $website->{'description'}  = $dbh->quote($website->{'description'});
-    $website->{'url'}          = $dbh->quote($website->{'url'});
-
-    $query = "Insert into websites set
-biblionumber = $website->{'biblionumber'},
-title        = $website->{'title'},
-description  = $website->{'description'},
-url          = $website->{'url'}";
-
-    $dbh->do($query);
-} # sub website
-
-=item updatewebsite
-
-  &updatewebsite($website);
-
-Updates an existing web site. C<$website> is a reference-to-hash with
-the keys C<websitenumber>, C<title>, C<description>, and C<url>. All
-of these are mandatory. C<$website-E<gt>{websitenumber}> identifies
-the entry to update.
-
-=cut
-#'
-sub updatewebsite {
-    my ($website) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query;
-
-    $website->{'title'}      = $dbh->quote($website->{'title'});
-    $website->{'description'} = $dbh->quote($website->{'description'});
-    $website->{'url'}        = $dbh->quote($website->{'url'});
-
-    $query = "Update websites set
-title       = $website->{'title'},
-description = $website->{'description'},
-url         = $website->{'url'}
-where websitenumber = $website->{'websitenumber'}";
-
-    $dbh->do($query);
-} # sub updatewebsite
-
-=item deletewebsite
-
-  &deletewebsite($websitenumber);
-
-Deletes the web site with number C<$websitenumber>.
-
-=cut
-#'
-sub deletewebsite {
-    my ($websitenumber) = @_;
-    my $dbh = C4::Context->dbh;
-    # FIXME - $query is unneeded
-    my $query = "Delete from websites where websitenumber = $websitenumber";
-
-    $dbh->do($query);
-} # sub deletewebsite
 
 END { }       # module clean-up code here (global destructor)
 

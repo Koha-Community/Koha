@@ -24,11 +24,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Biblio;
-#use CGI;
-#my $inp=new CGI;
-#print $inp->header;
 my ($count,@results)=bookfunds;
 
 

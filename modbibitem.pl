@@ -35,7 +35,7 @@ use CGI;
 use HTML::Template;
 use C4::Date;
 use C4::Biblio;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 

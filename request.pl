@@ -33,7 +33,7 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Circulation::Circ2;
 use HTML::Template;
-use C4::Catalogue;
+use C4::Acquisition;
 use CGI;
 use C4::Date;
 

@@ -26,7 +26,7 @@ require Exporter;
 use C4::Koha;
 use CGI;
 use C4::Search;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Output; # contains gettemplate
 use C4::Auth;
 use C4::Interface::CGI::Output;

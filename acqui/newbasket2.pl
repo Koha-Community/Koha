@@ -24,7 +24,7 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Catalogue;
+use C4::Acquisition;
 use C4::Biblio;
 use HTML::Template;
 use C4::Auth;
