@@ -71,14 +71,13 @@ sub extract_attributes ($;$) {
 	$i += 1;
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
-	warn "Warning: Attribute unquoted but needs quoting"
+	warn "Warning: Attribute should be quoted"
 		. (defined $lc? " in line $lc": '') . ": $val_orig\n"
 		if $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
     }
     if ($s =~ /\S/s) { # should never happen
 	warn "Warning: Strange attribute syntax"
 		. (defined $lc? " in line $lc": '') . ": $s\n";
-    } else {
     }
     return \%attr;
 }
