@@ -30,7 +30,7 @@ if ($query->param('selectnewbranchprinter')) {
 }
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
-$env{'queue'}=$printer;
+#$env{'queue'}=$printer;
 my $branchcount=0;
 my $printercount=0;
 my $branchoptions;
@@ -369,7 +369,8 @@ sub issues {
 
 	#print $i;
       }
-      remoteprint(\%env,$issues,$borrower);
+#      print $i;
+      remoteprint(\%env,\@issues,$borrower);
       $query->param('borrnumber','')
 
     }

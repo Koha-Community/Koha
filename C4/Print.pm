@@ -72,8 +72,9 @@ sub remoteprint {
   print PRINTER "$borrower->{'cardnumber'}\r\n";
   print PRINTER "$borrower->{'title'} $borrower->{'initials'} $borrower->{'surname'}\r\n";
   while ($items->[$i]){
+#    print $i;
     my $itemdata = $items->[$i];
-    print PRINTER "$itemdata->{'title'}\r\n";
+    print PRINTER "$i $itemdata->{'title'}\r\n";
     print PRINTER "$itemdata->{'barcode'}";
     print PRINTER " "x15;
     print PRINTER "$itemdata->{'date_due'}\r\n";
