@@ -1,4 +1,4 @@
-package C4::Circulation::Main; #asummes C4/Circulation/Main
+package C4::Circulation::Main; #assumes C4/Circulation/Main
 
 #package to deal with circulation 
 
@@ -40,7 +40,6 @@ use C4::Reserves;
 use C4::Search;
 use C4::InterfaceCDK;
 use C4::Security;
-use C4::Format;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   

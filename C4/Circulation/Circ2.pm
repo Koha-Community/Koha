@@ -29,7 +29,6 @@ use C4::Context;
 #use C4::Accounts;
 #use C4::InterfaceCDK;
 #use C4::Circulation::Main;
-#use C4::Format;
 #use C4::Circulation::Renewals;
 #use C4::Scan;
 use C4::Stats;

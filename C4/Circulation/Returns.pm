@@ -30,7 +30,6 @@ use C4::InterfaceCDK;
 use C4::Circulation::Main;
 	# FIXME - C4::Circulation::Main and C4::Circulation::Returns
 	# use each other, so functions get redefined.
-use C4::Format;
 use C4::Scan;
 use C4::Stats;
 use C4::Search;

@@ -1,4 +1,4 @@
-package C4::Interface::RenewalsCDK; #asummes C4/Interface/RenewalsCDK
+package C4::Interface::RenewalsCDK; #assumes C4/Interface/RenewalsCDK
 
 #uses Newt
 
@@ -21,7 +21,6 @@ package C4::Interface::RenewalsCDK; #asummes C4/Interface/RenewalsCDK
 
 use strict;
 use Cdk;
-use C4::Format;
 use C4::InterfaceCDK;
 use Date::Manip;
 #use C4::Circulation;

@@ -26,7 +26,6 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Print;
-use C4::Format;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
