@@ -91,7 +91,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Overdue Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Overdue Today
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Recieved
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Received
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Today
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Week
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Month
