@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
+<title>KOHA: INTRANET: Parameters</title>
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
@@ -41,15 +41,14 @@ a.catalogue {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	background-color:#ad11ad;
-	color:#FFFFFF;
+	color:#777777;
 	padding:4px;
 	font-weight: bold;
 	margin:0;
 	}
 a.catalogue:hover {
 	background-color: #ad11ad;
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: none;
 	font-weight: normal;
 	font-weight: bold;
@@ -88,7 +87,7 @@ a.reports {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #777777;
 	padding:4px;
 	font-weight: bold;
 	}
@@ -102,7 +101,7 @@ a.circulation {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #777777;
 	padding:4px;
 	font-weight: bold;
 	}
@@ -116,7 +115,7 @@ a.parameters {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #777777;
 	padding:4px;
 	font-weight: bold;
 	}
@@ -127,16 +126,17 @@ a.parameters:hover {
 	font-weight: bold;
 	}
 a.about {
+	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #FFFFFF;
 	padding:4px;
 	font-weight: bold;
 	}
 a.about:hover {
 	background-color: #86c268;
-	color: #000000;
+	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
 	}
@@ -175,7 +175,7 @@ a.about:hover {
 						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 					</td>
 					<td>
-						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
+						<a class="parameters" href="/cgi-bin/koha/admin-home.pl" alt="Paramètres">Parameters</a>
 					</td>
 					<td>
 						<a class="about" href="/cgi-bin/koha/about.pl">About</a>

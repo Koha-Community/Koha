@@ -113,7 +113,6 @@ a.circulation:hover {
 	text-decoration: normal;
 	font-weight: bold;
 	}
-
 a.parameters {
 	font-weight: normal;
 	text-decoration: none;
@@ -128,6 +127,21 @@ a.parameters:hover {
 	text-decoration: normal;
 	font-weight: bold;
 	}
+a.about {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#777777;
+	padding:4px;
+	font-weight: bold;
+	}
+a.about:hover {
+	background-color: #86c268;
+	color: #000000;
+	text-decoration: normal;
+	font-weight: bold;
+	}
+
 </style>
 
 <!------------------------MENUS-------------------------------->
@@ -166,7 +180,7 @@ a.parameters:hover {
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
 					</td>
 					<td>
-						<a class="parameters" href="/cgi-bin/koha/about.pl">About</a>
+						<a class="about" href="/cgi-bin/koha/about.pl">About</a>
 					</td>
 				</TR>
 			</TABLE>
