@@ -58,8 +58,8 @@ while (1) {
 			while (my ($id, $term, $type, $servers,$random) = $sth->fetchrow) {
 				if ($forkcounter<12) {
 					my $now=time();
-					my $stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
-					($stk->execute) || (next);
+					my $stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=?");
+					($stk->execute($id)) || (next);
 					my %serverdone;
 					unless ($stk->rows) {
 						my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=$id");

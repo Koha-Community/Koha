@@ -34,7 +34,6 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 
 # Creates the list of active tags using the active MARC configuration
 sub create_marclist {
-
 	my $dbh = C4::Context->dbh;
 	my $tagslib = &MARCgettagslib($dbh,1);
 	my @marcarray;
