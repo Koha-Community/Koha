@@ -153,6 +153,13 @@ my %tabledata=(
 );
 
 
+my %fielddefinitions=(
+printers => [
+	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default => '' },
+	],
+);
+
+
 
 #-------------------
 # Initialize
@@ -245,6 +252,44 @@ foreach $table ( keys %requirefields ) {
 	} # if column
     } # foreach column
 } # foreach table
+
+#my %fielddefinitions=(
+#printers => [
+#	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default='' },
+#);
+foreach $table ( keys %fielddefinitions ) {
+    print "Check table $table\n" if $debug;
+    $sth=$dbh->prepare("show columns from $table");
+    $sth->execute();
+    my $definitions;
+    while ( ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
+	$definitions->{$column}->{type}=$type;
+	$definitions->{$column}->{null}=$null;
+	$definitions->{$column}->{key}=$key;
+	$definitions->{$column}->{default}=$default;
+	$definitions->{$column}->{extra}=$extra;
+    } # while 
+    my $fieldrow=$fielddefinitions{$table};
+    foreach my $row ( @$fieldrow )  {
+	my $field = $row->{field};
+	my $type = $row->{type};
+	my $null = $row->{null};
+	my $key = $row->{key};
+	my $default = $row->{default};
+	my $def=$definitions->{$field};
+	unless ($type eq $def->{type} && $null eq $def->{null} && $key eq $def->{key} && $default eq $def->{default}) {
+	    if ($null eq '') {
+		$null='NOT NULL';
+	    }
+	    if ($key eq 'PRI') {
+		$key ='PRIMARY KEY';
+	    }
+	    my $sth=$dbh->prepare("alter table $table change $field $field $type $null $key default ?");
+	    $sth->execute($default);
+	    print "  Alter $field in $table\n";
+	}
+    }
+}
 
 # Get list of columns from items table
 my %itemtypes;
@@ -354,6 +399,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.21  2002/09/17 22:01:36  tonnesen
+# Added a routine to check the definitions of individual fields in a table.
+#
 # Revision 1.4.2.20  2002/09/09 19:45:40  uid41696
 # Adding authentication calls to intranet scripts
 #
