@@ -5,9 +5,9 @@
 <TMPL_LOOP NAME="BIBITEM_DATA">
 <a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">
 <img src=<TMPL_VAR name="themelang">/images/requests.gif width=120 height=42 border=0 align=right border=0></a>
-<FONT SIZE=6><em><a
+<h1><a
 href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
-(<TMPL_VAR NAME="author">)</a></em></FONT><P>
+(<TMPL_VAR NAME="author">)</a></h1><P>
 <p>
 <form action=/cgi-bin/koha/modbibitem.pl>
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>

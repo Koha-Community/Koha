@@ -1,14 +1,6 @@
 <TMPL_INCLUDE Name="cat-top.inc">
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-</TMPL_IF>
-
-<BLOCKQUOTE><FONT SIZE=6>
-<em><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
-Modify Group - <TMPL_VAR Name="description"></em></FONT><br>
+<h1><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
+Modify Group - <TMPL_VAR Name="description"></h1><br>
 
 <form action=updatebibitem.pl method=post>
 	<table border=0 cellspacing=0 cellpadding=5 align=left>
