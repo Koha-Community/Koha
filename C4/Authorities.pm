@@ -178,7 +178,7 @@ sub searchauthority  {
 	$query .= " and match (category,freelib) AGAINST ('$searchstring')" if ($searchstring);
 #	$query .= " and freelib like \"$searchstring%\"" if ($searchstring);
 	$query .= " order by category,freelib limit $offset,".($pagesize*4);
-	warn "q : $query";
+# 	warn "q : $query";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
