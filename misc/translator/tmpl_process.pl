@@ -233,7 +233,7 @@ sub update_strhash
 					if( !defined(%{$strhash}->{$str}) )
 					{
 						# the line is not already in the list so add it
-						%{$strhash}->{$str} = 1;
+						%{$strhash}->{$str}=1;
 					}
 				}
 			}
@@ -262,9 +262,9 @@ sub restore_strhash
 	while( my $line = <$fh> )
 	{
 		chomp $line;
-		
+
 		# extracts the two fields
-		my ($original, $translated) = split(/$split_char/, $line, 2);
+		my ($original, $translated,$nb) = split(/$split_char/, $line, 3);
 
 		if($translated ne "")
 		{
@@ -276,11 +276,11 @@ sub restore_strhash
 			# the key exist but has no translation.
 			%{$strhash}->{$original} = 1;
 		}
-		
+
 	}
-	
+
 	close($fh);
-	
+
 	return %{$strhash};
 }
 

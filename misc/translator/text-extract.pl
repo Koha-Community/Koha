@@ -9,9 +9,19 @@ getopt("f:");
 		my $x = $_[0];
 		foreach my $c ($x->content_list) {
 			next if (ref($c) && $c->tag() eq "~comment");
-			print "$c\n" unless ref($c);
+			next if (ref($c) && $c->tag() eq "script");
+			next if (ref($c) && $c->tag() eq "style");
+			if (!ref($c)) {
+				print "$c\n";
+			}
 			if (ref($c) && $c->attr('alt')) {
 				print $c->attr('alt')."\n";
+			}
+			if (ref($c) && $c->attr('title')) {
+				print $c->attr('title')."\n";
+			}
+			if (ref($c) && $c->tag() eq "input" && $c->attr('value')) {
+				print $c->attr('value')."\n";
 			}
 			if (ref($c) && $c->tag() eq 'meta') {
 				print $c->attr('content')."\n ";
