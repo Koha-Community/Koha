@@ -78,9 +78,7 @@
 					<input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="<!-- TMPL_VAR name="fieldlength" -->">
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="type-textarea" -->
-					<textarea name="value" rows="<!--TMPL_VAR name="rows" -->" cols="<!-- TMPL_VAR name="cols" -->">
-						<!-- TMPL_VAR name="value" escape="HTML" -->
-					</textarea>
+					<textarea name="value" rows="<!--TMPL_VAR name="rows" -->" cols="<!-- TMPL_VAR name="cols" -->"><!-- TMPL_VAR name="value" escape="HTML" --></textarea>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="type-choice" -->
 					<select name="value">
