@@ -57,7 +57,7 @@
 <TMPL_IF name="add_form">
 <!------------------------------------------------------------------------------------------------>
 	<TMPL_IF NAME=modify>
-		<h1>更改系統偏好</h1>
+		<h1>修改系統偏好</h1>
 	<TMPL_ELSE>
 		<H1>新增系統偏好</H1>
 	</TMPL_IF>
@@ -93,7 +93,7 @@
 	</tr>
 	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
 	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
-	<tr><td colspan=2 align=center>真的要刪除？</td></tr>
+	<tr><td colspan=2 align=center>確定要移除嗎？</td></tr>
 	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
 </table>
 
@@ -101,7 +101,7 @@
 
 <TMPL_IF name="delete_confirmed">
 <!------------------------------------------------------------------------------------------------>
-	成功刪除參數
+	成功移除參數
 	<form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=submit value=OK>
 	</form>
@@ -127,17 +127,17 @@
 	<td><TMPL_VAR name="variable"></td>
 	<td><TMPL_VAR name="value"></td>
 	<td><TMPL_VAR name="explanation"></td>
-	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0><br>更改</a></td>
-	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0><br>刪除</a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0><br>修改</a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0><br>移除</a></td>
 </tr>
 </TMPL_LOOP>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type=hidden name=op value=add_form>
 </table>
-<table width=40%>
+<table width="40%">
 	<tr>
-		<td width=50%><TMPL_VAR name="previous"></td>
-		<td width=50%><TMPL_VAR name="next"></td>
+		<td width="50%"><TMPL_VAR name="previous"></td>
+		<td width="50%"><TMPL_VAR name="next"></td>
 	</tr>
 </table>
 </form>
