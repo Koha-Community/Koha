@@ -389,7 +389,9 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
-	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield&frameworkcode=$frameworkcode\">");
+	$template->param(edit_tagfield => $tagfield,
+		edit_frameworkcode => $frameworkcode);
+	
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");
