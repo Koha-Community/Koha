@@ -66,6 +66,7 @@ $VERSION = 0.01;
   &MARCkoha2marcItem &MARChtml2marc
   &MARCgetbiblio &MARCgetitem
   &MARCaddword &MARCdelword
+  &MARCdelsubfield
   &char_decode
   
   &FindDuplicate
@@ -201,6 +202,7 @@ MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldo
 =item &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
 
 MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
+If $subfieldorder is not set, delete all the $tag$subfield subfields 
 
 =item &MARCdelbiblio($dbh,$bibid);
 
@@ -878,11 +880,26 @@ sub MARCdelsubfield {
 
     # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
     my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    $dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-			tag='$tag' and tagorder='$tagorder'
-			and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
-			"
-    );
+	if ($subfieldorder) {
+		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
+				tag='$tag' and tagorder='$tagorder'
+				and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
+				"
+		);
+		$dbh->do( "delete from marc_word where bibid='$bibid' and
+				tagsubfield='$tag$subfield' and tagorder='$tagorder'
+				and subfieldorder='$subfieldorder'
+				"
+		);
+	} else {
+		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
+				tag='$tag' and tagorder='$tagorder'
+				and subfieldcode='$subfield'"
+		);
+		$dbh->do( "delete from marc_word where bibid='$bibid' and
+				tagsubfield='$tag$subfield' and tagorder='$tagorder'"
+		);
+	}
 }
 
 sub MARCkoha2marcBiblio {
@@ -2636,6 +2653,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
+# exporting MARCdelsubfield sub. It's used in authority merging.
+# Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
+#
 # Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
 # bug in acquisition : the title was also stored as subtitle.
 #
