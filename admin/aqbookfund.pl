@@ -52,18 +52,15 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like \"%$data[0]%\") order by bookfundid";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like ?) order by bookfundid");
+	$sth->execute("%$data[0]%");
 	my @results;
-	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
 		push(@results,$data);
-		$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
-	return ($cnt,\@results);
+	return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
@@ -102,8 +99,8 @@ if ($op eq 'add_form') {
 	my $header;
 	if ($bookfundid) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid='$bookfundid'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
+		$sth->execute($bookfundid);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	    }
@@ -127,15 +124,11 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
         my $dbh = C4::Context->dbh;
 	my $bookfundid=uc($input->param('bookfundid'));
-	my $query = "delete from aqbookfund where bookfundid ='$bookfundid'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
+	$sth->execute($bookfundid);
 	$sth->finish;
-	$query = "replace aqbookfund (bookfundid,bookfundname) values (";
-	$query.= $dbh->quote($input->param('bookfundid')).",";
-	$query.= $dbh->quote($input->param('bookfundname')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
+	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -146,8 +139,8 @@ if ($op eq 'add_form') {
 #	$sth->execute;
 #	my $total = $sth->fetchrow_hashref;
 #	$sth->finish;
-	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid='$bookfundid'");
-	$sth->execute;
+	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
+	$sth->execute($bookfundid);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
@@ -158,10 +151,11 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	my $bookfundid=uc($input->param('bookfundid'));
-	my $query = "delete from aqbookfund where bookfundid='$bookfundid'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	$dbh->do("delete from aqbudget where bookfundid='$bookfundid'");
+	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid=?");
+	$sth->execute($bookfundid);
+	$sth->finish;
+	$sth=$dbh->prepare("delete from aqbudget where bookfundid=?");
+	$sth->execute($bookfundid);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

@@ -53,18 +53,15 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select * from itemtypes where (description like \"$data[0]%\") order by itemtype";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select * from itemtypes where (description like ?) order by itemtype");
+	$sth->execute("$data[0]%");
 	my @results;
-	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
-	return ($cnt,\@results);
+	return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
@@ -99,8 +96,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($itemtype) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype='$itemtype'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype=?");
+		$sth->execute($itemtype);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -164,9 +161,8 @@ if ($op eq 'add_form') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
 	my $itemtype=uc($input->param('itemtype'));
-	my $query = "delete from itemtypes where itemtype='$itemtype'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from itemtypes where itemtype=?");
+	$sth->execute($itemtype);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;

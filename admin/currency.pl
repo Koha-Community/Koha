@@ -68,9 +68,6 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $pkfield="currency";
-my $reqsel="select currency,rate from currency where $pkfield='$searchfield'";
-my $reqdel="delete from currency where $pkfield='$searchfield'";
 #my $branchcode=$input->param('branchcode');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/currency.pl";
@@ -100,8 +97,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select currency,rate from currency where currency='$searchfield'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select currency,rate from currency where currency=?");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -137,12 +134,12 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from aqbooksellers where currency='$searchfield'");
-	$sth->execute;
+	my $sth=$dbh->prepare("select count(*) as total from aqbooksellers where currency=?");
+	$sth->execute($searchfield);
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
-	my $sth2=$dbh->prepare($reqsel);
-	$sth2->execute;
+	my $sth2=$dbh->prepare("select currency,rate from currency where currency=?");
+	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
 
@@ -158,8 +155,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from currency where currency=?");
+	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

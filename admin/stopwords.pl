@@ -52,9 +52,9 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select word from stopwords where (word like \"$data[0]%\") order by word";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $query="";
+	my $sth=$dbh->prepare("Select word from stopwords where (word like ?) order by word");
+	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -68,9 +68,6 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $pkfield="word";
-my $reqsel="select word from stopwords where $pkfield='$searchfield'";
-my $reqdel="delete from stopwords where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/stopwords.pl";
 
@@ -99,8 +96,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select word from stopwords where word='$searchfield'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select word from stopwords where word=?");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -123,8 +120,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select word from stopwords where word=?");
+	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRM
@@ -133,8 +130,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from stopwords where word=?");
+	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

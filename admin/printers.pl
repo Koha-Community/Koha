@@ -52,9 +52,9 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select printername,printqueue,printtype from printers where (printername like \"$data[0]%\") order by printername";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $query="";
+	my $sth=$dbh->prepare("Select printername,printqueue,printtype from printers where (printername like ?) order by printername");
+	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -68,9 +68,9 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $pkfield="printername";
-my $reqsel="select printername,printqueue,printtype from printers where $pkfield='$searchfield'";
-my $reqdel="delete from printers where $pkfield='$searchfield'";
+my $pkfield="";
+my $reqsel="";
+my $reqdel="";
 #my $branchcode=$input->param('branchcode');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/printers.pl";
@@ -102,8 +102,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername='$searchfield'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=?");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -116,12 +116,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $query = "replace printers (printername,printqueue,printtype) values (";
-	$query.= $dbh->quote($input->param('printername')).",";
-	$query.= $dbh->quote($input->param('printqueue')).",";
-	$query.= $dbh->quote($input->param('printtype')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("replace printers (printername,printqueue,printtype) values (?,?,?)");
+	$sth->execute($input->param('printername'),$input->param('printqueue'),$input->param('printtype'));
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -129,8 +125,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=");
+	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(printqueue => $data->{'printqueue'},
@@ -143,8 +139,8 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirmed => 1);
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from printers where printername=?");
+	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

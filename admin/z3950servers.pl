@@ -35,25 +35,20 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name like \"$data[0]\%\") order by rank,name";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name like ?) order by rank,name");
+	$sth->execute("$data[0]\%");
 	my @results;
-	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref) {
 	    push(@results,$data);
-	    $cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
 	$dbh->disconnect;
-	return ($cnt,\@results);
+	return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $reqsel="select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = '$searchfield') order by rank,name";
-my $reqdel="delete from z3950servers where name='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
 
@@ -83,8 +78,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = '$searchfield') order by rank,name");
-		$sth->execute;
+		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -138,8 +133,8 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 
-	my $sth2=$dbh->prepare($reqsel);
-	$sth2->execute;
+	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
 
@@ -157,8 +152,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from z3950servers where name=?");
+	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

@@ -34,25 +34,20 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield >= $data[0]) order by tagfield";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield >= ?) order by tagfield");
+	$sth->execute($data[0]);
 	my @results;
-	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
-	return ($cnt,\@results);
+	return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 $searchfield=0 unless $searchfield;
-my $pkfield="tagfield";
-my $reqsel="select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
 
@@ -84,8 +79,8 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		my $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where $pkfield='$searchfield'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=?");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -145,8 +140,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=?");
+	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
@@ -158,7 +153,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from marc_tag_structure where $pkfield='$searchfield'");
+		$dbh->do("delete from marc_tag_structure where tagfield='$searchfield'");
 		$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield'");
 	}
 													# END $OP eq DELETE_CONFIRMED
