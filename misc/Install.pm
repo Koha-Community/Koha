@@ -126,10 +126,11 @@ $messages->{'continuing'}->{en}="Great!  Continuing...\n\n";
 $messages->{'WelcomeToKohaInstaller'}->{en} =
    heading('Welcome to the Koha Installer') . qq|
 This program will ask some questions and try to install koha for you.
-You need to know: where most koha files should be stored (you can set
-the prefix environment variable for this); the username and password of
-a mysql superuser; and details of your library setup.  You may also need
-to know details of your Apache setup.
+You need to know: 
+* where most koha files should be stored (you can set the prefix environment variable for this);
+* the username and password of a mysql superuser; 
+* Details of your library setup. 
+* Details of your Apache setup.
 
 If you want to install the Koha configuration files somewhere other than
 /etc (for multiple Koha versions on one system, for example), you should
@@ -140,7 +141,7 @@ Recommended answers are given in brackets after each question.  To accept
 the default value for any question (indicated by []), simply hit Enter
 at the prompt.
 
-You also can define an auto_install_file, that will answer every question automatically.
+Note that you also can define an auto_install_file, that will answer every question automatically.
 To use this feature, run ./installer.pl -i /path/to/auto_install_file 
 
 Are you ready to begin the installation? ([Y]/N): |;
@@ -265,7 +266,12 @@ You will be able to connect to your Librarian interface at:
    use the koha admin mysql login and password to connect to this interface.
 and the OPAC interface at:
    http://%s\:%s/
-Please read the Hints file and visit http://www.koha.org
+   
+NOTE: You need to add lines to your main httpd.conf to include
+/etc/koha-httpd.conf and to make sure it is listening on the right ports
+(using the Listen directive). Then, restart Apache.
+
+Please read the Hints file and visit http://www.koha.org (in english) or www.koha-fr.org (in french)
 Press <ENTER> to exit the installer: |;
 
 $messages->{'UpgradeCompleted'}->{en} = heading('UPGRADE COMPLETE') . qq|
@@ -1606,31 +1612,32 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 
 sub installfiles {
 
-	my ($auto_install) = @_;
-	#MJR: preserve old files, just in case
+	my ($is_first_install,$auto_install) = @_;
+	# $is_install is set if it's a fresh install and not an upgrade. If it's an upgrade, copy old files.
+	
 	sub neatcopy {
 		my $desc = shift;
 		my $src = shift;
 		my $tgt = shift;
-		if (-e $tgt) {
+		my $auto_install = shift;
+		my $is_first_install = shift;
+		if (!$is_first_install && -e $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]) unless ($auto_install->{NoPressEnter});
-			startsysout();
 			system("mv ".$tgt." ".$tgt.strftime("%Y%m%d%H%M",localtime()));
 		}
 		print getmessage('CopyingFiles', [$desc,$tgt]) unless ($auto_install->{NoPressEnter});
-		startsysout;
-		system("cp -R ".$src." ".$tgt);
+		system("cp -R ".$src."/* ".$tgt);
 	}
 
 # 	my ($auto_install) = @_;
 	showmessage(getmessage('InstallFiles'),'none') unless ($auto_install->{NoPressEnter});
 
-	neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
-	neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
-	neatcopy("main scripts", 'scripts', "$intranetdir/scripts");
-	neatcopy("perl modules", 'modules', "$intranetdir/modules");
-	neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs");
-	neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin");
+	neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs",$auto_install,$is_first_install);
+	neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin",$auto_install,$is_first_install);
+	neatcopy("main scripts", 'scripts', "$intranetdir/scripts",$auto_install,$is_first_install);
+	neatcopy("perl modules", 'modules', "$intranetdir/modules",$auto_install,$is_first_install);
+	neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs",$auto_install,$is_first_install);
+	neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin",$auto_install,$is_first_install);
 	startsysout();
 	system("touch $opacdir/cgi-bin/opac");
 
@@ -1667,7 +1674,6 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 	#MJR: does this contain any passwords?
 	chmod 0755, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh", "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh", "$intranetdir/scripts/z3950daemon/processz3950queue";
 
-	#MJR: generate our own settings, to remove the /home/paul hardwired links
 	open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
 	print FILE "RunAsUser=$httpduser\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
 	close(FILE);
@@ -1680,7 +1686,7 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 	else {
 		print "Please check permissions in $intranetdir/scripts/z3950daemon\n";
 	}
-	showmessage(getmessage('OldFiles'),'PressEnter') unless $auto_install->{NoPressEnter};
+	showmessage(getmessage('OldFiles'),'PressEnter') unless ($auto_install->{NoPressEnter} or $is_first_install);
 }
 
 
@@ -1810,7 +1816,7 @@ nothing will be added, and you must create them all yourself.
 Only choose N if you want to use a MARC format not listed here,
 such as DANMARC.  We would like to hear from you if you do.
 
-UPDATE : If you UPDATE your version from a previous 2.x.x, the right choice here is N (None) to preserve your local MARC setup.
+UPGRADE : If you UPGRADE your version from a previous 2.x.x, the right choice here is N (None) to preserve your local MARC setup.
 
 Choose MARC definition [1]: |;
 
@@ -1847,7 +1853,7 @@ sub updatedatabase {
 		$response=$auto_install->{UpdateMarcTables};
 		print ON_YELLOW.BLACK."auto-setting UpdateMarcTable to : $response".RESET."\n";
 	} else {
-		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
+		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12Nn', '1');
 	}
 	startsysout();
 	if ($response eq '1') {

@@ -35,11 +35,11 @@ Install::setdomainname $domainname;
 my $etcdir = $ENV{etcdir}||'/etc';
 system("mkdir -p $etcdir");
 
-my $auto_install_file;
+my ($auto_install_file,$auto_install);
 GetOptions(
     'i:s'    => \$auto_install_file,
 );
-my $auto_install = read_autoinstall_file($auto_install_file);
+$auto_install = read_autoinstall_file($auto_install_file) if $auto_install_file;
 
 Install::setetcdir $etcdir;
 
@@ -69,9 +69,9 @@ if (-e "$etcdir/koha.conf") {
     $installedversion=$1;
     my $installedversionmsg;
     if ($installedversion) {
-	$installedversionmsg=getmessage('KohaVersionInstalled', [$installedversion]);
+		$installedversionmsg=getmessage('KohaVersionInstalled', [$installedversion]);
     } else {
-	$installedversionmsg=getmessage('KohaUnknownVersionInstalled');
+		$installedversionmsg=getmessage('KohaUnknownVersionInstalled');
     }
 
     my $message=getmessage('KohaAlreadyInstalled', [$etcdir, $kohaversion, $installedversionmsg]);
@@ -113,7 +113,7 @@ updateapacheconf($auto_install);
 
 # basicauthentication();
 
-installfiles($auto_install);
+installfiles(1,$auto_install);
 
 backupmycnf();
 
