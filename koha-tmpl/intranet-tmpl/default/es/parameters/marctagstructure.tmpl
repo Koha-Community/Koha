@@ -1,5 +1,5 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-	
+<TMPL_INCLUDE NAME="parameters-top.inc">
+
 <script>
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
@@ -57,9 +57,9 @@
 	<form action='<TMPL_VAR name="script_name">' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<tr><td>Variable</td><td><TMPL_VAR name="searchfield"></td></tr>
-	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80></td></tr>
-	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td></tr>
+	<tr><td>Tag</td><td><TMPL_VAR name="searchfield"></td></tr>
+	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=80 maxlength=100></td></tr>
+	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<TMPL_VAR name="libopac">' size=80 maxlength=100></td></tr>
 	<tr><td>Repeatable</td><td><TMPL_VAR name="repeatable"></td></tr>
 	<tr><td>Mandatory</td><td><TMPL_VAR name="mandatory"></td></tr>
 	<tr><td>Authorised value</td><td><TMPL_VAR name="authorised_value"> (if you select a value here, the indicators will be limited to the authorised value list)</td></tr>
@@ -71,10 +71,10 @@
 
 <TMPL_IF name="delete_confirm">
 <!-------------------------------------------------------------------------------------------------->
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>tag</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>tag</b></td>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
 	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
@@ -98,26 +98,26 @@
 	<input type=reset name=reset value="clr">
 </form>
 <TMPL_VAR name="searchfield">
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Tag</b></td>
-	<td background="/images/background-mem.gif"><b>Lib</b></td>
-	<td background="/images/background-mem.gif"><b>Repeatable</b></td>
-	<td background="/images/background-mem.gif"><b>Mandatory</b></td>
-	<td background="/images/background-mem.gif"><b>Authorised<br />value</b></td>
-	<td background="/images/background-mem.gif"><b>Subfields</b></td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Tag</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Repeatable</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Mandatory</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Authorised<br />value</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Subfields</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif">Edit</td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif">Delete</td>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="tagfield"></td>
+	<td><b><TMPL_VAR name="tagfield"></b></td>
 	<td><TMPL_VAR name="liblibrarian"></td>
 	<td><TMPL_IF name="repeatable">Yes<TMPL_ELSE>No</TMPL_IF></td>
 	<td><TMPL_IF name="mandatory">Yes<TMPL_ELSE>No</TMPL_IF></td>
 	<td><TMPL_VAR name="authorised_value"></td>
 	<td><a href="<TMPL_VAR name="subfield_link">">subfields</a></td>
-	<td><a href="<TMPL_VAR name="edit">">Edit</a></td>
-	<td><a href="<TMPL_VAR name="delete">">Delete</a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 <form action='<TMPL_VAR name="script_name">' method=post>
@@ -127,12 +127,14 @@
 	<input type=hidden name=op value=add_form>
 <table width=40%>
 	<tr>
-		<td width=50%><TMPL_VAR name="previous"></td>
-		<td width=50%><TMPL_VAR name="next"></td>
+		<td width="33%">
+			<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" title="Add tag" ALT="Add" BORDER=0 >
+		</td>
+		<td width=33%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a></TMPL_IF></td>
+		<td width=33%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
 	</tr>
 </table>
-<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
 </form>
 </TMPL_IF>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<TMPL_INCLUDE NAME="parameters-bottom.inc">

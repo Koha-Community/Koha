@@ -1,5 +1,5 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-	
+<TMPL_INCLUDE NAME="parameters-top.inc">
+
 <script>
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
@@ -78,10 +78,10 @@
 
 <TMPL_IF name="delete_confirm">
 <!-------------------------------------------------------------------------------------------------->
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>Variable</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
 	</tr>
 	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
 	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
@@ -105,20 +105,20 @@
 	<input type=reset name=reset value="clr">
 </form>
 <TMPL_VAR name="searchfield">
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Variable</b></td>
-	<td background="/images/background-mem.gif"><b>Value</b></td>
-	<td background="/images/background-mem.gif"><b>Explanation</b></td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Value</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Explanation</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
 <TMPL_LOOP name="loop">
 </tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><TMPL_VAR name="variable"></td>
 	<td><TMPL_VAR name="value"></td>
 	<td><TMPL_VAR name="explanation"></td>
-	<td><a href="<TMPL_VAR name="edit">">Edit</a></td>
-	<td><a href="<TMPL_VAR name="delete">">Delete</a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 <form action='<TMPL_VAR name="script_name">' method=post>
@@ -132,8 +132,8 @@
 		<td width=50%><TMPL_VAR name="next"></td>
 	</tr>
 </table>
-<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
+<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add system parameter" ALT="Add" BORDER=0 ><br>
 </form>
 </TMPL_IF>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<TMPL_INCLUDE NAME="parameters-bottom.inc">

@@ -1,11 +1,5 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Registrado en el Sistema como: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Salir</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Entrar</a> a Koha</p>
-</TMPL_IF>
-
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 <font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
@@ -15,39 +9,35 @@
 <!-----------------BIBLIO RECORD TABLE--------->
 <tr valign="top">
 
-<td bgcolor="#99cccc">
-<b>REGISTRO BIBLIO</b>
-
-<TMPL_VAR NAME="biblionumber">
-</td>
+    <td bgcolor="#99cccc"> <b>REGISTRO DEL LIBRO</b><TMPL_VAR NAME="biblionumber"> 
+    </td>
 </tr>
 <tr valign="top">
 <td>
 <br>
-<FONT SIZE=2  face="arial, helvetica">
-<b>Subtítulo:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Autor:</b> <TMPL_VAR NAME="author"><br>
-<b>Autor Adicional:</b> <TMPL_VAR NAME="additional"><br>
-<b>Series Título:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Tema:</b> <TMPL_VAR NAME="subject"><br>
-<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notas:</b> <TMPL_VAR NAME="notes"><br>
-<b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
-<b>Número de Serie:</b> <TMPL_VAR NAME="serial"><br>
-<b>Cantidad Total de Artículos:</b> <TMPL_VAR NAME="count">
-<p>
-</font></td>
+      <FONT SIZE=2  face="arial, helvetica"> <b>Subt&iacute;tulo:</b> <TMPL_VAR NAME="subtitle"><br>
+      <b>Autor:</b> <TMPL_VAR NAME="author"><br>
+      <b>Autor Adicional:</b> <TMPL_VAR NAME="additional"><br>
+      <b>T&iacute;tulo de Serie:</b> <TMPL_VAR NAME="seriestitle"><br>
+      <b>Tema:</b> <TMPL_VAR NAME="subject"><br>
+      <b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
+      <b>Notas:</b> <TMPL_VAR NAME="notes"><br>
+      <b>T&iacute;tulo Unificado:</b> <TMPL_VAR NAME="unititle"><br>
+      <b>Serie:</b> <TMPL_VAR NAME="serial"><br>
+      <b>N&uacute;mero Total de Items:</b> <TMPL_VAR NAME="count"> 
+      <p> 
+      </font></td>
 </tr>
 </table>
 </TMPL_LOOP>
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#99cccc">
-<td>Tipo de Objeto</td>
-<td>Clase</td>
-<td>Localización</td>
-<td>Fecha de Devolución</td>
-<td>Last Seen</td>
+      <td>Tipo de Item</td>
+      <td>Clase</td>
+      <td>Ubicaci&oacute;n</td>
+<td>Date Due</td>
+      <td>Visto por &uacute;ltima vez</td>
 </tr>
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <tr>
@@ -61,9 +51,9 @@
 <TMPL_LOOP NAME="WEB_RESULTS">
 <tr>
 <td><TMPL_VAR NAME="itemtype"></td>
-<td>Sito Web</td>
+<td>Website</td>
 <td>Online</td>
-<td>Disponible</td>
+      <td>Disponible</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
 NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
@@ -71,7 +61,7 @@ NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
 </tr>
 </TMPL_LOOP>
 </table>
-<p>
+</center><p><center>
 </center>
 <br clear=all>
 <p />

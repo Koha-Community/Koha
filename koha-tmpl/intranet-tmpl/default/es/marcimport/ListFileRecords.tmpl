@@ -1,21 +1,21 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 <h1>Main Menu</h1>
 <ul>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Búsqueda Z39.50</a>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Subir Registros MARC</a>
+<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Z39.50 Search</a>
+<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 <center>
 <p>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Seleccionar un Nuevo Archivo</a>
+<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
 <p>
 <TMPL_IF name="IS_MARC">
 	<table border=0 cellpadding=10 cellspacing=0>
 	<tr>
 		<th background=/images/background-acq.gif>
-		 	Seleccionar un registro MARC <TMPL_VAR name="recordsource">
+		 	Select a Record to Import from <TMPL_VAR name="recordsource">
 		</th>
 	</tr>
 	<tr>
@@ -27,15 +27,15 @@
 		<td bgcolor=#dddddd>
 		<TMPL_IF name="HAS_NUMRECORDS">
 	            <a name=SERVER-<TMPL_VAR name="srvid">></a> " <TMPL_VAR name="srvname">
-		<font size=-1>[Mostrados desde el <TMPL_VAR name="startrecord"> hasta el <TMPL_VAR name="highest"> de un total de <TMPL_VAR name="numrecords"> registros]  <TMPL_VAR name="previous"> | <TMPL_VAR name="next"> </font><br>
+		<font size=-1>[Viewing <TMPL_VAR name="startrecord"> to <TMPL_VAR name="highest"> of <TMPL_VAR name="numrecords"> records]  <TMPL_VAR name="previous"> | <TMPL_VAR name="next"> </font><br>
 		</TMPL_IF>
 		<TMPL_IF name="PENDING">
-			<font color=red>Búsqueda pendiente...</font>
+			<font color=red>Search still pending...</font>
 		<TMPL_ELSE>
-			<font color=red>procesando... <TMPL_VAR name="elapsedtime"></font>
+			<font color=red>processing... <TMPL_VAR name="elapsedtime"></font>
 		</TMPL_IF>
 		<TMPL_IF name="NO_RECORDS">
-			<b>La búsqueda no produjo resultados <TMPL_VAR name="id"></b>
+			<b>No results found for query <TMPL_VAR name="id"></b>
 		</TMPL_IF>
 </TMPL_IF>
 	<TMPL_LOOP name="LINES">

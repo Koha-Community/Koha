@@ -1,10 +1,13 @@
 <html>
-<head><title>Resultados de la Búsqueda</title>
+<head><title>Resultados de la B&uacute;squeda</title>
 </head>
 <body>
 <TMPL_INCLUDE NAME="searchheader.tmpl">
 <table border=0 cellspacing=0 cellpadding=0>
-<tr bgcolor=#ccccff><th>Título</th><th>Autor</th><th>Dewey</th></tr>
+<tr bgcolor=#ccccff>
+    <th>T&iacute;tulo</th>
+    <th>Autor</th>
+    <th>Dewey</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
   <td><TMPL_VAR NAME=title></td>
@@ -14,16 +17,18 @@
 </TMPL_LOOP>
 <tr><td colspan=3 bgcolor=#ccccff>
     <table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr><td align=left>
-    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>Previous Records</a>
-    </td><td align=right>
-    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Next Records</a>
-    </td></tr>
+    <tr>
+          <td align=left> <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>Registros
+            Anteriores </a> </td>
+          <td align=right> <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Registros 
+            Siguientes </a> </td>
+        </tr>
     </table>
 </td></tr>
 </table>
 <br>
-Resultados desde el <TMPL_VAR NAME="startfrom"> hasta el <TMPL_VAR NAME="endat"> de un total <TMPL_VAR NAME="numrecords"> registros.
+Resultados<TMPL_VAR NAME="startfrom"> hasta<TMPL_VAR NAME="endat"> de<TMPL_VAR NAME="numrecords"> 
+registros. 
 <hr>
 </body>
 </html>

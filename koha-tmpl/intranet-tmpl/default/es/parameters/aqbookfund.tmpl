@@ -1,23 +1,34 @@
 <TMPL_INCLUDE NAME="parameters-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
-
 <TMPL_IF name=else>
 <FONT SIZE=6><em>bookfund admin</em></FONT><form action=<TMPL_VAR name=scriptname> method=post>
-<input type=text name=searchfield value=""><input type=reset name=reset value="borrar"></form>
+<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
 <TMPL_IF name=search>
-<br>Has buscado en <b><TMPL_VAR name=searchfield><b><p><br>
+	<br>You Searched for <b><TMPL_VAR name=searchfield><b><p><br>
 </TMPL_IF>
-<table border=0 cellspacing=0 cellpadding=2>
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b>Name</b></td><td background="/images/background-mem.gif"><b>Group</b></td><td background="/images/background-mem.gif"><b>Budget</b></td><td background="/images/background-mem.gif">&nbsp;</td><td background="/images/background-mem.gif"> &nbsp; </td><td background="/images/background-mem.gif"> &nbsp; </td></tr>
+<table border=0 cellspacing=0 cellpadding=2 width="80%">
+<tr valign=top bgcolor=#99cc33>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Book fund</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Name</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Group</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Budget</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Edit</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Delete</td>
+	</tr>
 <TMPL_LOOP name="bookfund">
-<tr valign=top bgcolor="<TMPL_VAR name="toggle">"<td><TMPL_VAR name="bookfundid"></td><td><TMPL_VAR name="bookfundname"></td><td><TMPL_VAR name="bookfundgroup"> &nbsp;</td><td><a href="aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> ">Budget</a></td><td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> ">Edit</a></td><td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">">Eliminar</a></td><td> &nbsp; </td></tr>
+	<tr valign=top bgcolor="<TMPL_VAR name="toggle">">
+		<td><TMPL_VAR name="bookfundid"></td>
+		<td><TMPL_VAR name="bookfundname"></td>
+		<td><TMPL_VAR name="bookfundgroup"> &nbsp;</td>
+		<td><a href="aqbudget.pl?bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filefind.png" width=32 hspace=0 vspace=0 border=0 title="budget"></a></td>
+		<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	</tr>
 </TMPL_LOOP>
 </table>
-<form action='<TMPL_VAR name=scriptname>' method=post><input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br></form><br clear=all>
+<form action='<TMPL_VAR name=scriptname>' method=post>
+	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 ><br>
+	<br></form><br clear=all>
 <p> &nbsp; </p>
 </TMPL_IF>
 
@@ -85,8 +96,8 @@
 <TMPL_ELSE>
 <tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 </TMPL_IF>
-<tr><td>Nombre</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<TMPL_VAR name="bookfundname">'>&nbsp;</td></tr>
-<tr><td>Grupo</td><td><input type=text name=bookfundgroup value='<TMPL_VAR name="bookfundgroup">'></td></tr>
+<tr><td>Name</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<TMPL_VAR name="bookfundname">'>&nbsp;</td></tr>
+<tr><td>Group</td><td><input type=text name=bookfundgroup value='<TMPL_VAR name="bookfundgroup">'></td></tr>
 <tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
@@ -101,16 +112,16 @@ data recorded
 
 <TMPL_IF name="delete_confirm">
 <table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
+<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Book fund</b></td><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
 <form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
 <tr><td>Name</td><td><TMPL_VAR name="bookfundname"></td></tr><tr><td>Group</td><td><TMPL_VAR name="bookfundgroup"></td></tr>
-<tr><td colspan=2 align=center>CONFIRMAR ELIMINACIÓN</td></tr>
-<tr><td><INPUT type=submit value='SI'></form></td><td><form action='<TMPL_VAR name="action">' method=post><input type=submit value=NO></form></td></tr><br clear=all>
+<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="action">' method=post><input type=submit value=NO></form></td></tr><br clear=all>
 <p> &nbsp; </p>
 </TMPL_IF>
 
 <TMPL_IF name="delete_confirmed">
-datos eliminados
+data deleted
 <form action='<TMPL_VAR name="action">' method=post>
 <input type=submit value=OK>
 "</form>"

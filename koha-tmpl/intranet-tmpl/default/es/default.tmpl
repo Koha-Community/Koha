@@ -3,7 +3,7 @@
 
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor=#ccccff background="/images/background-mem.gif">
-<th>Título</th><th>Autor</th><th>Número de Artículos</th><th>Bibliocódigo</th></tr>
+<th>Título</th><th>Autor</th><th>Cantidad de Items</th><th>Id de la Publicación</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
   <td><a href=/cgi-bin/koha/detail.pl?type=intra&bib=<TMPL_VAR NAME=biblionumber ESCAPE=HTML>><TMPL_VAR NAME=title></a></td>
@@ -17,12 +17,12 @@
     <tr><td align=left>
     <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>Registros Anteriores</a>
     </td><td align=right>
-    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Registros Posteriores</a>
+    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Registros Siguientes</a>
     </td></tr>
     </table>
 </td></tr>
 </table>
 <br>
-Resultados desde el <TMPL_VAR NAME="startfrom"> hasta el <TMPL_VAR NAME="endat"> de un total de <TMPL_VAR NAME="numrecords"> registros.
+Resultados <TMPL_VAR NAME="startfrom"> hasta <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> registros.
 <hr>
 <TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-bottom.inc">

@@ -4,17 +4,17 @@
 <form action=/cgi-bin/koha/mancredit.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
 <input type=hidden name="bornum" value="<TMPL_VAR Name="bornum">">
-<tr><td><b>Borrowernumber<b></td><td><TMPL_VAR Name="bornum"></td></tr>
-<tr><td><b>Tipo</b></td><Td>
+<tr><td><b>Id del usuario:<b></td><td><TMPL_VAR Name="bornum"></td></tr>
+<tr><td><b>Tipo Movimiento</b></td><Td>
 <select name=type>
-<option value=C>Crédito</option>
-<option value=BAY>Baycorp Adjustment</option>
+<option value=C>Credito</option>
+<option value=BAY>Ajuste</option>
 <option value=WORK>Worked off</option>
 </select>
 </td></tr>
-<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>Description</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>Amount</b></td><td><input type=text name=amount></td></tr>
+<tr><td><b>Número de Item</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>Descripción</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>Monto</b></td><td><input type=text name=amount></td></tr>
 <tr><td><input type=submit name=add value=Add></td></tr>
 </table>
 </form>

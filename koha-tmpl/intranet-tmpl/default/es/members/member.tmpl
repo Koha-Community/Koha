@@ -2,24 +2,24 @@
 
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<FONT SIZE=6><em>Búsqueda de Socios</em></FONT><br>
+<FONT SIZE=6><em>B&uacute;squeda de Usuarios</em></FONT><br>
 
 <form action="/cgi-bin/koha/member.pl" method=post>
   <input type=text name="member" value="<TMPL_VAR NAME=member>">
   <input type=reset name="reset" value="clr">
 </form>
 
-Ha buscado en <TMPL_VAR NAME=member><p>
+Usted busc&oacute; <TMPL_VAR NAME=member><p>
 <table>
   <tr bgcolor="#99cc33">
-    <td background="/images/background-mem.gif"><b>Tarjeta</b></td>
-    <td background="/images/background-mem.gif"><b>Apellido</b></td>
-    <td background="/images/background-mem.gif"><b>Nombre</b></td>
-    <td background="/images/background-mem.gif"><b>Categoría</b></td>
-    <td background="/images/background-mem.gif"><b>Dirección</b></td>
-    <td background="/images/background-mem.gif"><b>OD/Issues</b></td>
-    <td background="/images/background-mem.gif"><b>Cargos</b></td>
-    <td background="/images/background-mem.gif"><b>Notas</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Id</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Apellido</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nombre</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Categor&iacute;a</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Direcci&oacute;n</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>OD/Pr&eacute;stamos</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Deudas</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Notas</b></td>
   </tr>
 
   <TMPL_LOOP NAME=resultsloop>
@@ -41,12 +41,8 @@ Ha buscado en <TMPL_VAR NAME=member><p>
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" BORDER=0 ></a><br>
+<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  ALT="Agregar Usuario" BORDER=0 ></a>
 <INPUT TYPE="radio" name="chooseform" value="adult" checked>Adulto
-<INPUT TYPE="radio" name="chooseform" value="organisation" >Organización
+<INPUT TYPE="radio" name="chooseform" value="organisation" >Organizaci&oacute;n
 </form>
-
 <TMPL_INCLUDE NAME="members-bottom.inc">
-
-</body>
-</HTML>

@@ -1,8 +1,8 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 <h1><a href=<TMPL_VAR name="SCRIPT_NAME">>Main Menu</a></h1>
 <ul>
-	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Búsqueda Z39.50</a>
-	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Subir Registros MARC</a>
+	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Z39.50 Search</a>
+	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 <h2>Select a set of MARC records</h2><ul>
 <TMPL_LOOP name="marc">
@@ -12,10 +12,10 @@
 <p>
 <table border=1 bgcolor=#dddddd>
 	<tr><th bgcolor=#bbbbbb colspan=2>
-		Subir un conjunto de registros MARC</th>
+		Upload a set of MARC records</th>
 	</tr>
 	<tr>
-		<td>Subir un conjunto de registros MARC:</td>
+		<td>Upload a set of MARC records:</td>
 		<td>
 			<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">?menu=<TMPL_VAR name="menu">" enctype="multipart/form-data">
 			<input type="file" name="uploadmarc"/>
@@ -24,7 +24,7 @@
 	<tr>
 		<td>
 			<input type=hidden name=menu value=<TMPL_VAR name="menu">>
-			Nombre para este conjunto de registros MARC:
+			Name this set of MARC records:
 		</td>
 		<td>
 			<input type=text name=name>

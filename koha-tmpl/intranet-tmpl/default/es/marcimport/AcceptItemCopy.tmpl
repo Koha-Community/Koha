@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 <center>
 <TMPL_IF name="BARCODE_EXISTS">
-	<font color=red>El código de barras '<TMPL_VAR name="barcode">' ya ha sido asignado.</font><p>
+	<font color=red>Barcode '<TMPL_VAR name="barcode">' has already been assigned.</font><p>
 </TMPL_IF>
 <TMPL_IF name="ITEM_ERROR">
 	<font color=red>Error : <TMPL_VAR name="error"></font><p>
@@ -9,19 +9,19 @@
 <TMPL_IF name="ITEM_CREATED">
 	<table border=1 align=center cellpadding=10>
 		<tr><td bgcolor=yellow>
-			Artículo añadido con el código de barras <TMPL_VAR name="barcode">
+			Item added with barcode <TMPL_VAR name="barcode">
 		</td></tr>
 	</table>
 </TMPL_IF>
-<h1>Menú Principal</h1>
+<h1>Main Menu</h1>
 <ul>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Búsqueda Z39.50</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Z39.50 Search</a>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Subir Registros MARC</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 <TMPL_INCLUDE NAME="cat-bottom.inc">

@@ -1,6 +1,6 @@
 	<html>
 	<head>
-	<title>thesaurus value builder</title>
+	<title>Constructor de valores de tesauro para categoria <TMPL_VAR name="category"></title>
 	</head>
 	<body>
 	<form name="f_pop" action="thesaurus_popup.pl" method="post">
@@ -9,7 +9,8 @@
 	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
 	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 	<input type="hidden" name="op" value="search">
-	<input type="submit" value="Search"></p>
+	<input type="submit" value="Buscar">
+	<input type="button" value="END" onClick="javascript:report()">
 	</form>
 <TMPL_IF name="search_string">
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
@@ -18,13 +19,16 @@
 	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 	<input type="hidden" name="op" value="select">
 	<input type="hidden" name="result" value="<TMPL_VAR name="result">">
-	<input type="submit" name="OK" value="OK">
+	<input type="submit" name="Aceptar" value="OK">
 	</form>
 </TMPL_IF>
-		<form name="f3_pop" onSubmit="javascript:report()">
-		<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-		<input type="submit" value="END">
-		</form>
+	<form name="f3_pop"  action="thesaurus_popup.pl" method="post">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+	<input type="hidden" name="op" value="add">
+	insert a new authority : <input type="text" name="insert">
+	<input type="submit" name="Nuevo" value="NEW">
+	</form>
 		<script>
 		function report() {
 			opener.document.f.field_value[<TMPL_VAR name="index">].value= document.f_pop.result.value;

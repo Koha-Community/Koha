@@ -5,14 +5,14 @@
 
 <!-- the site -->
 
-<FONT SIZE=6><em>Artículos Atrasados hasta <TMPL_VAR NAME="todaysdate"></em></FONT><br><P>
+<FONT SIZE=6><em>Items atrasados en su devolución hasta fecha <TMPL_VAR NAME="todaysdate"></em></FONT><br><P>
 
 <TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
   <TR VALIGN=TOP>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Fecha de Devolución</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Dia Limite</b></td>
     <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Patron</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Teléfono</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Título</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Telefono</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Titulo</b></td>
     <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Autor</b></td>
   </tr>
 
@@ -20,7 +20,7 @@
     <tr>
       <td><TMPL_VAR NAME="duedate"></td>
     <TMPL_IF NAME=email>
-      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Atraso: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
+      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Prestamo Atrasado: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
     <TMPL_ELSE>
       <td><TMPL_VAR NAME="name"></td>
     </TMPL_IF>

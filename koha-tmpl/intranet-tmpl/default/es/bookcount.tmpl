@@ -9,22 +9,22 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 width=440 >
 	<TR VALIGN=TOP>
 		<TD  bgcolor="99cc33" background="/images/background-mem.gif">
-			<B>Código de Barras <TMPL_VAR Name="barcode"></B>
+			<B>BARCODE <TMPL_VAR Name="barcode"></B>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP  >
 		<TD width=440 >
 
-		<b>Rama Inicial: </b> <TMPL_VAR Name="homebranch"> <br>
-		<b>Rama Actual: </b> <TMPL_VAR Name="holdingbranch"><br>
-		<b>Fecha de Entrada en Rama Actual: </b> <TMPL_VAR Name="lastdate"> <br>
-		<b>Número de entregas desde la fecha anterior :</b> <TMPL_VAR Name="count"> <br>
+		<b>Biblioteca de orígen: </b> <TMPL_VAR Name="homebranch"> <br>
+		<b>Biblioteca actual: </b> <TMPL_VAR Name="holdingbranch"><br>
+		<b>Fecha arribo a la biblioteca actual: </b> <TMPL_VAR Name="lastdate"> <br>
+		<b>Número de préstamos desde el día de llegada: </b> <TMPL_VAR Name="count"> <br>
 
 		<table cellspacing =0 cellpadding=5 border=1 width = 440>
 			<TR>
-				<TD> <b>Rama</b></td>
-				<TD> <b>No. de Entregas</b></td>
-				<TD> <b>Último visto en Rama</b></td>
+				<TD> <b>Biblioteca</b></td>
+				<TD> <b>Número de Préstamos</b></td>
+				<TD> <b>Ultima localización en biblioteca</b></td>
 			</TR>
 			<TMPL_LOOP Name="branchloop">
 				<TR>

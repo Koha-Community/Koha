@@ -1,41 +1,46 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
+<FONT SIZE=6><em><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT>
+<br>Usuario N&uacute;mero: <TMPL_VAR NAME=bornum>
+<br>Identificaci&oacute;n: <TMPL_VAR NAME=cardnumber>
+<P>
+<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Salida completa</a>
+<br/><br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<TD bgcolor="white" colspan=4 >
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Salida Completa</a>
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITULO</b></a>
 	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TÍTULO</b></a>
-	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTOR</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>FECHA</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<b>Volumen</b>
 	</TD>
 </TR>
 <TMPL_LOOP name="loop_reading">
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">
+ 		<TMPL_VAR name="title">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">
+ 		<TMPL_VAR name="author">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">
+		<TMPL_VAR name="returndate">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">
+		<TMPL_VAR name="volumeddesc">&nbsp;
 	</TD>
 </TMPL_LOOP>
 </TABLE>
+
+<br>
+<a href="moremember.pl?bornum=<TMPL_VAR name="bornum">">Volver</a> al Registro de Usuario
+
 <TMPL_INCLUDE NAME="members-bottom.inc">
 
 

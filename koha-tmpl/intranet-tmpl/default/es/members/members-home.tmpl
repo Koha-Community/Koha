@@ -1,40 +1,34 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Registrado en el Sistema Como: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Salir</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Entrar</a> a Koha</p>
-</TMPL_IF>
-
-<FONT SIZE=6><em>Socios</em></FONT><P>
+<FONT SIZE=6><em>Usuarios</em></FONT><P>
 
 
-<img src="/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1"
+<img src="<TMPL_VAR name="themelang">/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1"
 hspace=5 align=left BORDER=0>
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
-<b>Búsqueda de Socios</B>
+<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
+<b>B&uacute;squeda de Usuarios</B>
 </FONT>
 <INPUT TYPE="text" size=50 name=member >
 <BR>
-Renew Items, view add, modify and delete records, or  by starting with this search.<BR>
-Escriba un nombre de prestatario, parte de un nombre o un número en el campo de arriba
-y pulse la tecla [Enter] para activar la búsqueda.
+Renueve Items, vea, agregue, modifique y borre registros, todo empezando con esta b&uacute;squeda.<BR>
+Ingrese el nombre de un usuario, parte del nombre,  o n&uacute;mero en el campo de arriba y presione <BR>
+la tecla ENTER para activar la b&uacute;squeda
 </td></form><tr>
 </table>
 
 <P>
 
-<img src="/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2"
+<img src="<TMPL_VAR name="themelang">/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2"
 hspace=5 align=left BORDER=0>
 
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FONT SIZE=4>
-<b>Browse Socios</B>
+<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FONT SIZE=4>
+<b>Listar Usuarios</B>
 </FONT>
 </td></form><tr>
 <TR VALIGN=TOP>

@@ -1,9 +1,10 @@
 <TMPL_INCLUDE NAME="acquisitions-top.inc">
 
+
 <font size="5"><em>MARC import and BIBLIO management</em></font>
 <TMPL_IF name="noitemsfound">
 	<p />
-	<font color="red" size="4">No se encontraron artículos</font>
+	<font color="red" size="4">No items found</font>
 </TMPL_IF>
 <TMPL_IF name="websiteadded">
 	<p />
@@ -13,83 +14,72 @@
 <p />
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Para añadir un nuevo biblio/item, escanee o teclee el ISBN:</font></td>
+	<td><font size="4">To add a new biblio/item, scan or type the ISBN/ISSN number:</font></td>
 	</tr>
 </table>
-<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-	<form action="isbnsearch.pl">
-		<td width="5%">ISBN:</td>
-		<td width="20%"><input type="text" name="isbn" /></td>
-		<td width="10%"><input type="submit" value="Go" /></td>
-		<td>Si el ISBN se encuentra en la biblio table, el registro será obtenido y podrá ser modificado.<br/>
-			Si el ISBN se encuentra en la breeding farm, el registro será obtenido y se añadirá una biblio.<br/>
-			En otro caso, una biblio podrá ser añadida desde cero.
-		</td>
-	</form>
-	</tr>
-</table>
+<form action="isbnsearch.pl">
+	<table cellpadding="3" border=0 width="100%">
+		<tr valign="top">
+			<td width="5%">ISBN:</td>
+			<td width="20%"><input type="text" name="isbn" /></td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
+			<td rowspan=2>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
+					If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
+					Otherwise, a biblio can be added from scratch.</td>
+		</tr>
+			<td width="5%">Title</td>
+			<td width="20%"><input type="text" name="title" /></td>
+		</tr>
+		<tr><td>&nbsp;</td>
+			<td colspan=2><a href=addbiblio.pl>Add biblio without ISBN/ISSN</a></td></tr>
+	</table>
+</form>
 
 <p />
 <p />
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-		<td><font size="4">Herramientas para importar registros MARC en breeding farm</font></td>
+		<td><font size="4">Tools for importing MARC records into breeding farm</font></td>
 	</tr>
 </table>
 <table cellpadding="3" border=0 width="100%">
 	<tr valign="top">
 		<td width="5%">&nbsp;</td>
-		<td width="20%"><li><a href=marcimport.pl>Subir registros MARC</a></li></td>
+		<td width="20%"><li><a href=marcimport.pl>Upload MARC records</a></li></td>
 		<td width="10%">&nbsp;</td>
-		<td>La breeding farm es una tabla donde se almacenan los registros MARC importados.<br/>
-			Un registro MARC es almacenado en la breeding farm si no existe el artículo. En caso contrario, el articulo se busca en la breeding farm.
-			Si se encuentra, la biblio es añadida a la tabla activa de koha, y eliminada del breeding farm.
+		<td>The breeding farm is a table where are stored imported MARC records.<br/>
+			A MARC record is stored in the breeding farm as long as you've no item. When you type the ISBN of a biblio, it's searched in the breeding farm.
+			If found, the biblio is added to koha active table, and removed from breeding farm.
 		</td>
+
+
 <table bgcolor="#ffcc00" width="80%" cellpadding"5">
 	<tr>
-		<td><font size="4">Herramientas para importar MARC de un servidor z3950</font></td>
+		<td><font size="4">Tools for importing MARC from a z3950 server</font></td>
 	</tr>
 </table>
 <table cellpadding="3" border=0 width="100%">
 	<tr valign="top">
 		<td width="5%">&nbsp;</td>
-		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Herramienta de Búsqueda Z39.50</a></li></td>
+		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Z39.50 Search Tool</a></li></td>
 		<td width="10%">&nbsp;</td>
-		<td>no funciona</td>
+		<td>does not work</td>
 	</tr>
 </table>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-		<td><FONT SIZE=4>Añadir un Nuevo Sitio Web</font></td>
+		<td><FONT SIZE=4>Add New Website</font></td>
 	</tr>
 </table>
 <form action="websitesearch.pl" method="post">
 	<table>
 	<tr>
-		<td>Palabras:</td>
+		<td>Keyword:</td>
 		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Buscar" /></td>
+		<td><input type="submit" value="Go" /></td>
 	</tr>
 	</table>
 </FORM>
-
-<p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><FONT SIZE=4>Ayuda</font></td>
-	</tr>
-</table>
-<FONT SIZE=5>Koha almacena los datos en tres secciones</font>
-<p />
-<h2>Biblio</h2>
-La primera sección almacena información bibliográfica como el título, autor y copyright de un trabajo particular.
-<p />
-<h2>Grupo</h2>
-La segunda almacena datos bibliográficos de una edición particular de ese trabajo, como el código ISBN, la descripción física, información de la editorial, etc.
-<p />
-<h2>Objeto</h2>
-La tercera sección contiene información específica correspondiente a un artículo, como el número del código de barras
 <p />
 <TMPL_INCLUDE NAME="acquisitions-bottom.inc">

@@ -1,79 +1,89 @@
 <TMPL_INCLUDE NAME="parameters-top.inc">
 <center>
-<FONT SIZE=6><em>Koha admin page</em></FONT><br><br><br>
+<FONT SIZE=6><em>Página de administración de Koha</em></FONT><br>
 <table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>Parámetros de la Biblio </th>
+<tr background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">
+	<th>Parametros </th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=3 width=80%>
+<table cellspacing=0 cellpadding=1 width=80%>
+<th colspan=2>Relacionados con los registros bibliográficos</th>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Tipos de Artículos</a></td>
-	<td>the supports of an item.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Tipos de Materiales</a></td>
+	<td>Define los tipos de Materiales usados por Koha, el tiempo de préstamo, etc</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>presupuestos</a></td>
-	<td>the budgets allowed to differents book funds.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>Presupuesto</a></td>
+	<td>Define las distintas proveniencias de fondos por las cuales es posible adquirir publicaciones</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
-	<td>the differents book funds.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>Fondos Bibliográficos</a></td>
+	<td>Administración de los fondos bibliográficos</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>valores autorizados</a></td>
-	<td>Define here categories and authorised values for them.
-			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>Valores Autorizados</a></td>
+	<td>Define categories and authorized values for them.  Authorised values are used in MARC form to limit/help editing MARC biblios.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
-	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
+	<td>Management of thesaurus and authorities files.</td>
 </tr>
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>parámetros MARC</th>
-</tr>
-</table>
-<table cellspacing=0 cellpadding=3 width=80%>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td><td>MARC structure : tag then subfields</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links koha - MARC DB</a></td><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>Checks MARC</a></td><td>Checks the MARC structure. USE IT before working with real datas. It will show mistakes that BREAKS koha database!</td></tr>
-</table>
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>Various datas : </th>
-</tr>
-</table>
-<table cellspacing=0 cellpadding=3 width="80%">
+<th colspan=2>MARC related</th>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>libraries branches</a></td>
-	<td>the differents branches you manage with this koha server</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td>
+	<td>MARC structure: tags then subfields.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>categorías</a></td>
-	<td>diferentes tipos de prestatarios.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links Koha - MARC DB</a></td>
+	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>MARC Check</a></td>
+	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
+
+<th colspan=2>Various parameters</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>Library branches</a></td>
+	<td>The differents branches you manage with this Koha server.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>Categories</a></td>
+	<td>Define the categories of borrowers.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/currency.pl>Currencies</a></td>
-	<td>Currencies of booksellers.</td>
+	<td>Define exchange rates.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Impresoras</a></td>
-	<td>Impresoras (rutas UNIX).</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Printers</a></td>
+	<td>Printers (UNIX paths).</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>stopwords</a></td>
-	<td>Palabras eliminadas durante las búsquedas</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>Stop words</a></td>
+	<td>Words deleted during searches.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Servers Z39.50</a></td>
-	<td>Servidores para solicitar información MARC</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Z39.50 Servers</a></td>
+	<td>Servers to query for MARC data.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>Preferencias del Sistema</a></td>
-	<td>Preferencias del Sistema</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>System preferences</a></td>
+	<td>System preferences.</td>
 </tr>
 </table>
 
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">
+	<th>Tools</th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=1 width=80%>
+<th colspan=2>Export</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>MARC biblio export</a></td>
+	<td>Exporting in MARC format.</td>
+</tr>
+</table>
 </center>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<TMPL_INCLUDE NAME="parameters-bottom.inc">

@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<TMPL_INCLUDE NAME="parameters-top.inc">
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
@@ -160,23 +160,23 @@
 <TMPL_VAR name="tablename"> <input type="submit" value="OK">
 </form>
 
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif" width=10%><b>koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=5%><b>Tag</b></td>
-	<td background="/images/background-mem.gif" width=5%><b>Subfield</b></td>
-	<td background="/images/background-mem.gif" width=42%><b>Lib</b></td>
-	<td background="/images/background-mem.gif" width=8%>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=10%><b>koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=5%><b>Tag</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=5%><b>Subfield</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=42%><b>Lib</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=8%>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><b><TMPL_VAR name="kohafield"></b></td>
 	<td><TMPL_VAR name="tagfield"></td>
 	<td><TMPL_VAR name="tagsubfield"></td>
 	<td><TMPL_VAR name="liblibrarian"></td>
-	<td><a href="<TMPL_VAR name="edit">">edit</a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 </table>
 </TMPL_IF>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<TMPL_INCLUDE NAME="parameters-bottom.inc">
