@@ -11,6 +11,8 @@
 # Bugs/ToDo: 
 # - Would also be a good idea to offer to do a backup at this time...
 
+# NOTE:  If you do something more than once in here, make it table driven.
+
 use strict;
 
 # CPAN modules
@@ -22,13 +24,14 @@ use C4::Database;
 my $debug=0;
 
 my (
-	$sth,
+	$sth, $sti,
 	$query,
 	%existingtables,	# tables already in database
 	%types,
 	$table,
 	$column,
     	$type, $null, $key, $default, $extra,
+	$prefitem,		# preference item in systempreferences table
 );
 
 #-------------------
@@ -87,6 +90,12 @@ my %requirefields=(
     statistics=>{'borrowernumber' =>'int(11)'},
 );
 
+# Default system preferences
+my %defaultprefs=(
+    'autoMemberNum'=> '1',
+    'acquisitions'=> 'simple',
+);
+
 #-------------------
 # Initialize
 my $dbh=C4Connect;
@@ -113,7 +122,7 @@ while (my ($table) = $sth->fetchrow) {
 
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
-    print "Checking $table table...\n" if $debug;;
+    print "Checking $table table...\n" if $debug;
     unless ($existingtables{$table} ) {
 	print "Adding $table table...\n";
 	my $sth=$dbh->prepare(
@@ -153,7 +162,7 @@ unless ($existingtables{'z3950servers'}) {
 # Columns
 
 foreach $table ( keys %requirefields ) {
-    print "Check table $table\n";
+    print "Check table $table\n" if $debug;
     $sth=$dbh->prepare("show columns from $table");
     $sth->execute();
     undef %types;
@@ -162,7 +171,7 @@ foreach $table ( keys %requirefields ) {
         $types{$column}=$type;
     } # while 
     foreach $column ( keys %{ $requirefields{$table} } )  {
-	print "  Check column $column\n";
+	print "  Check column $column\n" if $debug;
 	if ( ! $types{$column} ) {
 	    # column doesn't exist
 	    print "Adding $column field to $table table...\n";
@@ -251,18 +260,20 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 
 # Populate systempreferences if it is empty
 
-$sth=$dbh->prepare("select value from systempreferences where variable='autoMemberNum'");
-$sth->execute;
-unless ($sth->rows) {
-    my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('autoMemberNum', '1')");
-    $sth->execute;
-}
-$sth=$dbh->prepare("select value from systempreferences where variable='acquisitions'");
-$sth->execute;
-unless ($sth->rows) {
-    my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('acquisitions', 'simple')");
-    $sth->execute;
-}
+foreach $prefitem ( keys %defaultprefs ) {
+    $sth=$dbh->prepare("select value 
+	from systempreferences 
+	where variable=?");
+    $sth->execute($prefitem);
+    unless ($sth->rows) {
+	print "Adding system preference item $prefitem with value " .
+        	$defaultprefs{$prefitem} ."\n";
+        $sti=$dbh->prepare("
+	  insert into systempreferences (variable, value) 
+	  values (?,?)");
+        $sti->execute($prefitem,$defaultprefs{$prefitem});
+    } # unless
+} # foreach
 
 
 $sth->finish;
@@ -271,6 +282,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.11  2002/06/26 06:04:46  amillar
+# Clean up systempreferences code to be table-driven
+#
 # Revision 1.4.2.10  2002/06/25 18:24:33  tonnesen
 # Fixed missing semicolons.
 #
