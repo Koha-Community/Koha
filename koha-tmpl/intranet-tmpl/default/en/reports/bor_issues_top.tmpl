@@ -3,7 +3,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1 class="reports">Koha : Issues Average Period statistics </h1>
+		<h1 class="reports">Koha : Top <!-- TMPL_VAR NAME="limit"--> List On borrowers' Issues </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -13,55 +13,69 @@
 		<br>
 		<table>
 			<tr >
-				<th class="reports"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<th class="reports">Rank/Borrowers</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
-				<th class="reports">TOTAL</th>
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
 						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
-						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
-							<!-- TMPL_VAR NAME="totalrow" -->
-						</td>
 					</tr>
 				<!-- /TMPL_LOOP NAME="looprow" -->
-				<tr >
-					<th class="reports">TOTAL</th>
-					<!-- TMPL_LOOP NAME="loopfooter" -->
-						<th class="reports">
-							<!-- TMPL_VAR NAME="totalcol" -->
-						</th>
-					<!-- /TMPL_LOOP -->
-					<th class="reports"><!-- TMPL_VAR NAME="total" --></th>
-				</tr>
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1 class = "reports">Koha : Issues Average Period statistics </h1>
+	<h1 class = "reports">Koha : Top List On borrowers' Issues  </h1>
 	<form method="post">
+	
 	<table>
 		<thead>
 			<tr>
-			<th class="reports"><div class="label100">Title</div></th>
-			<th class="reports">Row</th>
-			<th class="reports">Column</th>
-			<th class="reports">Filter</th>
+			<th class="reports">Limit to </th>
+			<th class="reports">By </th>
+			<th class="reports" colspan="2">Filters</th>
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td>
+					<select name="Limit">
+						<option value ="5" checked> 5</option>
+						<option value ="10">10</option>
+						<option value ="15">15</option>
+						<option value ="20">20</option>
+	<!--					<option value ="25">25</option>
+						<option value ="40">40</option>
+						<option value ="50">50</option>
+						<option value ="100">100</option>-->
+					</select>
+				</td>
+				<td>
+					<select name="Criteria">
+						<option value ="" checked>None</option>
+						<option value ="issuingbranch">Branch</option>
+						<option value ="categorycode">Categorycode</option>
+						<option value ="itemtype">Itemtype</option>
+						<option value ="Day">Day</option>
+						<option value ="Week">Week</option>
+						<option value ="Month">Month</option>
+						<option value ="Year">Year</option>
+					</select>
+				</td>
+			</tr>
+			
 			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 				<td>Issue date</td>
-				<td align="center"><input type="radio" name="Line" value="timestamp"></td>
-				<td align="center"><input type="radio" name="Column" value="timestamp"></td>
-				<td > From <input type="text" readonly="readonly" size="10" id="from" name="Filter" >
+				<td> From <input type="text" readonly="readonly" size="10" id="from" name="Filter" >
 							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -121,22 +135,10 @@
 							</script>
 				</td>
 			</tr>
-			<tr class="hilighted"> 
-				<td>&nbsp;</td>
-				<td align="center" colspan="2">by <select name="IssueDisplay">
-					<option value=""> </option>
-					<option value ="1">Day</option>
-					<option value ="2">Month</option>
-					<option value ="3">Year</option>
-					</select>
-					
-				</td>
-				<td><!--Preparing Month and Day Selection--><input type="hidden" name="Filter" value=""><input type="hidden" name="Filter" value=""></td>
-			</tr>
 			<tr>
+				<td> &nbsp;</td>
+				<td> &nbsp;</td>
 				<td>Returns</td>
-				<td align="center"><input type="radio" name="Line" value="returndate"></td>
-				<td align="center"><input type="radio" name="Column" value="returndate"></td>
 				<td > From <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" >
 							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
 								<script language="JavaScript" type="text/javascript">
@@ -197,62 +199,42 @@
 							</script>
 				</td>
 			</tr>
-			<tr> 
+			<tr class="hilighted">
 				<td>&nbsp;</td>
-				<td align="center" colspan="2">by <select name="ReturnDisplay">
-					<option value=""> </option>
-					<option value ="1">Day</option>
-					<option value ="2">Month</option>
-					<option value ="3">Year</option>
-					</select>
-					
-				</td>
-				<td><input type="hidden" name="Filter" value=""><input type="hidden" name="Filter" value=""></td>
-			</tr>
-			<tr class="hilighted">
-				<td>Borrower Category</td>
-				<td align="center"><input type="radio" name="Line" value="borrowers.categorycode"></td>
-				<td align="center"><input type="radio" name="Column" value="borrowers.categorycode"></td>
-				<td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
-			</tr>
-			<tr>
-				<td>Document Type</td>
-				<td align="center"><input type="radio" name="Line" value="itemtype"></td>
-				<td align="center"><input type="radio" name="Column" value="itemtype"></td>
-				<td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
-			</tr>
-			<tr class="hilighted">
+				<td>&nbsp;</td>
 				<td>Branch</td>
-				<td align="center"><input type="radio" name="Line" value="branchcode"></td>
-				<td align="center"><input type="radio" name="Column" value="branchcode"></td>
-				<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+				<td><input type="text" name="Filter" value=""></td>
 			</tr>
-<!-- Modified according to statistics table
 			<tr>
-				<td>Issuing Branch</td>
-				<td align="center"><input type="radio" name="Line" value="issuingbranch"></td>
-				<td align="center"><input type="radio" name="Column" value="issuingbranch"></td>
-				<td ><! TMPL_VAR NAME="CGIBranch" ></td>
-			</tr> -->
-			<input type="hidden" name="Filter" value="">
-<!--End Modified -->
-			<!-- TMPL_IF Name="hassort1" -->
-				<tr class="hilighted"> 
-					<td>Sort1</td>
-					<td align="center"><input type="radio" name="Line" value="borrowers.sort1"></td>
-					<td align="center"><input type="radio" name="Column" value="borrowers.sort1"></td>
-					<td><!-- TMPL_VAR NAME="CGISort1" --> </td>
-				</tr>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF Name="hassort2" -->
-				<!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
-					<td>Sort2</td>
-					<td align="center"><input type="radio" name="Line" value="borrowers.sort2"></td>
-					<td align="center"><input type="radio" name="Column" value="borrowers.sort2"></td>
-					<td><!-- TMPL_VAR NAME="CGISort2" --> </td>
-				</tr>
-			<!-- /TMPL_IF -->
-			<tr></tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Document Type</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Borrower Category</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Day</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Month</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Year</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
 		</tbody>
 	</table>
 	

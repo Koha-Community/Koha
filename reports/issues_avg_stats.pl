@@ -412,21 +412,21 @@ sub calculate {
 	
 	if (($column=~/timestamp/) or ($column=~/returndate/)){
 		if ($colfilter[1] and ($colfilter[0])){
-			$strsth .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
+			$strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
 		} elsif ($colfilter[1]) {
-				$strsth .= " and $column < '$colfilter[1]' " ;
+				$strsth2 .= " and $column < '$colfilter[1]' " ;
 		} elsif ($colfilter[0]) {
-			$strsth .= " and $column > '$colfilter[0]' " ;
+			$strsth2 .= " and $column > '$colfilter[0]' " ;
 		}
 		if ($colfilter[2]){
-			$strsth .= " and dayname($column) = '$colfilter[2]' " ;
+			$strsth2 .= " and dayname($column) = '$colfilter[2]' " ;
 		}
 		if ($colfilter[3]){
-			$strsth .= " and monthname($column) = '$colfilter[3]' " ;
+			$strsth2 .= " and monthname($column) = '$colfilter[3]' " ;
 		}
 	} elsif ($colfilter[0]) {
 		$colfilter[0] =~ s/\*/%/g;
- 		$strsth .= " and $column LIKE '$colfilter[0]' " ;
+ 		$strsth2 .= " and $column LIKE '$colfilter[0]' " ;
  	}
 	$strsth2 .=" group by $colfield";
 	$strsth2 .=" order by $colorder";
