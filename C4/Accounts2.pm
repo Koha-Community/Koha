@@ -15,7 +15,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&recordpayment &fixaccounts &makepayment);
+@EXPORT = qw(&recordpayment &fixaccounts &makepayment &manualinvoice);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -196,7 +196,7 @@ sub returnlost{
   my $sth=$dbh->prepare($upiss);
   $sth->execute;
   $sth->finish;
-  my @datearr = localtime($time);
+  my @datearr = localtime(time);
   my $date = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
   my $upitem="Update items set itemnotes='Paid for by $bor $date' where itemnumber='$itemnum'";
@@ -206,4 +206,85 @@ sub returnlost{
   $dbh->disconnect;
 }
 
+sub manualinvoice{
+  my ($bornum,$itemnum,$desc,$type,$amount)=@_;
+  my $dbh=C4Connect;
+  my $insert;
+  $itemnum=~ s/ //g;
+  my $accountno=getnextacctno('',$bornum,$dbh);
+  my $amountleft=$amount;
+  
+  if ($type eq 'C' || $type eq 'BAY'){
+    my $amount2=$amount*-1;
+    $amountleft=fixcredit('',$bornum,$amount2);
+  }
+  if ($type eq 'N'){
+    $desc.="New Card";
+  }
+  if ($type eq 'L' && $desc eq ''){
+    $desc="Lost Item";
+  }
+  if ($itemnum ne ''){
+    my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
+    $sth->execute;
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
+    $desc.=" ".$itemnum;
+    $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+    values ($bornum,$accountno,now(),'$amount','$desc','$type','$amountleft','$data->{'itemnumber'}')";
+  } else {
+    $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
+    values ($bornum,$accountno,now(),'$amount','$desc','$type','$amountleft')";
+  }
+  
+  my $sth=$dbh->prepare($insert);
+  $sth->execute;
+  $sth->finish;
+  
+  $dbh->disconnect;
+}
+  
+sub fixcredit{
+  #here we update both the accountoffsets and the account lines
+  my ($env,$bornumber,$data)=@_;
+  my $dbh=C4Connect;
+  my $updquery = "";
+  my $newamtos = 0;
+  my $accdata = "";
+#  my $branch=$env->{'branchcode'};
+  my $amountleft = $data;
+  # begin transaction
+  my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
+  # get lines with outstanding amounts to offset
+  my $query = "select * from accountlines 
+  where (borrowernumber = '$bornumber') and (amountoutstanding<>0)
+  order by date";
+  my $sth = $dbh->prepare($query);
+  $sth->execute;
+  # offset transactions
+  while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
+     if ($accdata->{'amountoutstanding'} < $amountleft) {
+        $newamtos = 0;
+	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+     }  else {
+        $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+	$amountleft = 0;
+     }
+     my $thisacct = $accdata->{accountno};
+     $updquery = "update accountlines set amountoutstanding= '$newamtos'
+     where (borrowernumber = '$bornumber') and (accountno='$thisacct')";
+     my $usth = $dbh->prepare($updquery);
+     $usth->execute;
+     $usth->finish;
+     $updquery = "insert into accountoffsets 
+     (borrowernumber, accountno, offsetaccount,  offsetamount)
+     values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
+     my $usth = $dbh->prepare($updquery);
+     $usth->execute;
+     $usth->finish;
+  }
+  $sth->finish;
+  $dbh->disconnect;
+  return($amountleft);
+}
 END { }       # module clean-up code here (global destructor)
