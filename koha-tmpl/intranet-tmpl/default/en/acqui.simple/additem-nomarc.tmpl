@@ -65,7 +65,7 @@ GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
 <center>
 
 <form action="saveitem.pl" method="post">
-<input type="hidden" name="biblionumber" value="<TMPL_VAR NAME="biblionumber">">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR NAME="BIBNUM">">
 <table border="1" cellspacing="0" cellpadding="5">
 <tr valign="top" bgcolor="#CCCC99">
 <td background="/images/background-mem.gif" colspan="2"><b>ADD NEW
@@ -122,7 +122,7 @@ Group:</b></td>
 <td>Format:</td>
 <td><select name="itemtype">
 <TMPL_LOOP NAME="ITEMTYPES">
-<option value="$itemtypes[$i]->{'itemtype'}">$itemtypes[$i]->{'description'}</option>
+<option value="<TMPL_VAR NAME="itemtype">"><TMPL_VAR NAME="description"></option>
 </TMPL_LOOP>
 </select></td>
 </tr>
