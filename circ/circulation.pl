@@ -10,55 +10,157 @@ my %env;
 my $query=new CGI;
 print $query->header;
 print startpage();
-print startmenu('catalogue');
+print startmenu('circulation');
+my $branches=getbranches(\%env);
+my $printers=getprinters(\%env);
+my $branch=$query->param('branch');
+my $printer=$query->param('printer');
+$env{'branchcode'}=$branch;
+$env{'printer'}=$printer;
 
+my $branchname='';
+my $printername='';
+if ($branch && $printer) {
+    $branchname=$branches->{$branch}->{'branchname'};
+    $printername=$printers->{$printer}->{'printername'};
+}
 print << "EOF";
 <center>
-<a href=circulation.pl?module=issues>Issues</a> |
-<a href=circulation.pl?module=returns>Returns</a>
-<hr>
+<p>
+<table border=0 width=100%>
+<tr>
+<td width=5%></td>
+<td align=right width=30%><table border=1 bgcolor=black width=100%><tr><th><font color=white>$branchname</font></th></tr></table></td>
+<td align=center width=20%>
+<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><img src=/images/issues.gif border=0 width=60></a>
+<a href=circulation.pl?module=returns&branch=$branch&printer=$printer><img src=/images/returns.gif border=0 width=60></a>
+</td><td align=left width=30%>
+<table border=1 bgcolor=black width=100%><tr><th><font color=white>$printername</font></th></tr></table>
+</td>
+<td width=5%></td>
+</tr>
+</table>
+<br>
 EOF
 
-SWITCH: {
-    if ($query->param('module') eq 'issues') { issues(); last SWITCH; }
-    if ($query->param('module') eq 'returns') { returns(); last SWITCH; }
-    issues();
+
+
+if ($printer && $branch) {
+
+    SWITCH: {
+	if ($query->param('module') eq 'issues') { issues(); last SWITCH; }
+	if ($query->param('module') eq 'returns') { returns(); last SWITCH; }
+	issues();
+    }
+} else {
+    my $branchcount=0;
+    my $printercount=0;
+    my $branchoptions;
+    my $printeroptions;
+    foreach (keys %$branches) {
+	(next) unless ($_);
+	$branchcount++;
+	$branchoptions.="<option value=$_>$branches->{$_}->{'branchname'}\n";
+    }
+    foreach (keys %$printers) {
+	(next) unless ($_);
+	$printercount++;
+	$printeroptions.="<option value=$_>$printers->{$_}->{'printername'}\n";
+    }
+    my ($printerform, $branchform);
+    if ($printercount>1) {
+	$printerform=<<"EOF";
+<table border=1>
+<tr><th bgcolor=black><font color=white>Choose a Printer</font></td></tr>
+<tr><td>
+<select name=printer>
+$printeroptions
+</select>
+</td></tr>
+</table>
+EOF
+    } else {
+	my ($printer) = keys %$printers;
+	$printerform=<<"EOF";
+	<input type=hidden name=printer value=$printer>
+EOF
+    }
+
+    if ($branchcount>1) {
+	$branchform=<<"EOF";
+<table border=1>
+<tr><th bgcolor=black><font color=white>Choose a Branch</font></td></tr>
+<tr><td>
+<select name=branch>
+$branchoptions
+</select>
+</td></tr>
+</table>
+EOF
+    }
+    print << "EOF";
+    Select a printer and a branch
+    <form method=get>
+    <table border=0>
+    <tr><td>
+    $branchform
+    </td><td>
+    $printerform
+    </td></tr>
+    </table>
+    <input type=submit>
+    </form>
+EOF
 }
 
 
-print endmenu();
+print endmenu('circulation');
 print endpage();
 sub default {
 print << "EOF";
-<a href=circulation.pl?module=issues>Issues</a>
-<a href=circulation.pl?module=returns>Returns</a>
+<a href=circulation.pl?module=issues&branch=$branch&printer=$printer>Issues</a>
+<a href=circulation.pl?module=returns&branch=$branch&printer=$printer>Returns</a>
 EOF
 }
 
 
 sub returns {
+    print << "EOF";
+    <form method=get>
+    <table border=3 bgcolor=#dddddd>
+	<tr><td colspan=2 bgcolor=black align=center><font color=white><b><font size=+1>Returns</font><br>Enter Book Barcode</b></font></td></tr>
+	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
+    </table>
+    <input type=hidden name=module value=returns>
+    <input type=hidden name=branch value=$branch>
+    <input type=hidden name=printer value=$printer>
+    </form>
+EOF
     if (my $barcode=$query->param('barcode')) {
 	print "Returning $barcode<br>\n";
 	my ($iteminformation, $borrower, $messages, $overduecharge) = returnbook(\%env, $barcode);
+	my $itemtable=<<"EOF";
+<table border=1 bgcolor=#dddddd>
+<tr><th bgcolor=black><font color=white>Item Information</font></th></tr>
+<tr><td>
+Title: $iteminformation->{'title'}<br>
+Author: $iteminformation->{'author'}<br>
+Barcode: $iteminformation->{'barcode'}
+</td></tr>
+</table>
+EOF
 	if ($borrower) {
-	    print "Borrowed by $borrower->{'title'} $borrower->{'firstname'} $borrower->{'surname'}<p>\n";
+	    my ($patrontable, $flaginfotext) = patrontable($borrower);
+	    print "<table border=0><tr><td valign=top align=center>$patrontable</td><td valign=top align=center>$flaginfotext</td></tr><tr><td colspan=2 align=center>$itemtable</td></tr></table><br>\n";
 	} else {
 	    print "Not loaned out.\n";
 	}
     }
-    print << "EOF";
-    <form method=post name=barcode>
-    <table border=3 bgcolor=#dddddd>
-	<tr><td colspan=2 bgcolor=black><font color=white><b>Enter Book Barcode</b></font></td></tr>
-	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
-    </table>
-    <input type=hidden name=module value=returns>
-    </form>
-EOF
 }
 
 sub issues {
     if (my $borrnumber=$query->param('borrnumber')) {
+	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
 	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
 	my $year=$query->param('year');
 	my $month=$query->param('month');
@@ -97,11 +199,17 @@ sub issues {
 		$responses{$qnumber}=$query->param('answer');
 	    }
 	    unless ($invalidduedate) {
-		my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer) = issuebook(\%env, $borrower, $barcode, \%responses);
+		my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) = issuebook(\%env, $borrower, $barcode, \%responses);
 		if ($rejected) {
 		    if ($rejected == -1) {
 		    } else {
-			print "Error issuing book: $rejected<br>\n";
+			print << "EOF"
+			<table border=1 bgcolor=#dddddd>
+			<tr><th bgcolor=black><font color=white>Error Issuing Book</font></th></tr>
+			<tr><td><font color=red>$rejected</font></td></tr>
+			</table>
+			<br>
+EOF
 		    }
 		}
 		my $responsesform='';
@@ -114,9 +222,13 @@ sub issues {
 		    <table border=1 bgcolor=#dddddd>
 		    <tr><th bgcolor=black><font color=white><b>Issuing Question</b></font></td></tr>
 		    <tr><td>
+		    <table border=0 cellpadding=10>
+		    <tr><td>
 		    Attempting to issue $iteminformation->{'title'} by $iteminformation->{'author'} to $borrower->{'firstname'} $borrower->{'surname'}.
-		    <br>
+		    <p>
 		    $question
+		    </td></tr>
+		    </table>
 		    </td></tr>
 
 		    <tr><td align=center>
@@ -131,6 +243,8 @@ sub issues {
 		    <input type=hidden name=month value=$month>
 		    <input type=hidden name=year value=$year>
 		    <input type=hidden name=stickyduedate value=$stickyduedate>
+		    <input type=hidden name=branch value=$branch>
+		    <input type=hidden name=printer value=$printer>
 		    $responsesform
 		    <input type=hidden name=answer value=Y>
 		    <input type=submit value=Yes>
@@ -146,6 +260,8 @@ sub issues {
 		    <input type=hidden name=month value=$month>
 		    <input type=hidden name=year value=$year>
 		    <input type=hidden name=stickyduedate value=$stickyduedate>
+		    <input type=hidden name=branch value=$branch>
+		    <input type=hidden name=printer value=$printer>
 		    $responsesform
 		    <input type=hidden name=answer value=N>
 		    <input type=submit value=No>
@@ -157,6 +273,15 @@ sub issues {
 		    </table>
 EOF
 		    return;
+		}
+		if ($message) {
+		    print << "EOF";
+		    <table border=1 bgcolor=#dddddd>
+		    <tr><th bgcolor=black><font color=white>Message</font></th></tr>
+		    <tr><td>$message</td></tr>
+		    </table>
+		    <p>
+EOF
 		}
 	    }
 	}
@@ -173,13 +298,13 @@ EOF
 	    }
 	    $flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	    if ($flags->{$flag}->{'noissues'}) {
-		$flaginfotext.="<tr><td bgcolor=red><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
+		$flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
 	    } else {
-		$flaginfotext.="<tr><td>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
+		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
 	    }
 	}
 	if ($flaginfotext) {
-	    $flaginfotext="<table border=1 width=70%><tr><th bgcolor=black colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n";
+	    $flaginfotext="<table border=1 width=70% bgcolor=#dddddd><tr><th bgcolor=black colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n";
 	}
 	$env{'nottodaysissues'}=1;
 	my ($borrowerissues) = currentissues(\%env, $borrower);
@@ -213,7 +338,7 @@ EOF
 	    $dayoptions.="<option value=$i $selected>$i";
 	}
 	my $counter=1;
-	foreach (('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')) {
+	foreach (('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')) {
 	    my $selected='';
 	    if (($query->param('stickyduedate')) && ($month==$counter)) {
 		$selected='selected';
@@ -231,20 +356,20 @@ EOF
 
 	my $selected='';
 	($query->param('stickyduedate')) && ($selected='checked');
+	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
+	my ($patrontable, $flaginfotable) = patrontable($borrower);
 	print << "EOF";
 	<form method=get>
-    <table border=0 cellpadding=5>
+    <table border=0 cellpadding=5 width=90%>
     <tr>
-	<td align=left>
-	    <table border=1 bgcolor=#dddddd>
-	        <tr><td bgcolor=black><font color=white><b>Enter Book Barcode</b></font></td></tr>
-		<tr><td>
+	<td align=center>
+	    <table border=1 bgcolor=#dddddd width=100%>
+	        <tr><td align=center bgcolor=black><font color=white><b>Enter Book Barcode</b></font></td></tr>
+		<tr><td align=center>
 		<table border=0 bgcolor=#dddddd>
 		<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></tr>
 		<tr><td colspan=3 align=center>
-		<select name=day><option value=0>Day$dayoptions</select>
-		<select name=month><option value=0>Month$monthoptions</select>
-		<select name=year><option value=0>Year$yearoptions</select>
+		<select name=day><option value=0>Day$dayoptions</select><select name=month><option value=0>Month$monthoptions</select><select name=year><option value=0>Year$yearoptions</select>
 		<br>
 		<input type=checkbox name=stickyduedate $selected> Sticky Due Date
 		</td></tr>
@@ -253,17 +378,14 @@ EOF
 	    </table>
 	<input type=hidden name=module value=issues>
 	<input type=hidden name=borrnumber value=$borrnumber>
+	<input type=hidden name=branch value=$branch>
+	<input type=hidden name=printer value=$printer>
 	</form>
 	</td>
 	<td align=right valign=top>
-	<table border=1 bgcolor=#dddddd>
-	<tr><th bgcolor=black><font color=white><b>Patron Information</b></font></td></tr>
-	<tr><td>
-	$borrower->{'cardnumber'} $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
-	$borrower->{'streetaddress'} $borrower->{'city'}<br>
-	$borrower->{'categorycode'} $flagtext
-	</td></tr>
-	</table>
+	$patrontable
+	<br>
+	$flaginfotable
 	</td>
     </tr>
     <tr>
@@ -286,21 +408,28 @@ EOF
     </tr>
 </table>
 <p>
-$flaginfotext
 EOF
     } else {
 	if (my $findborrower=$query->param('findborrower')) {
 	    my ($borrowers, $flags) = findborrower(\%env, $findborrower);
-	    print "<form method=get>\n";
-	    print "<input type=hidden name=module value=issues>\n";
 	    my @borrowers=@$borrowers;
+	    if ($#borrowers == -1) {
+		$query->param('findborrower', '');
+		print "No borrower matched '$findborrower'<p>\n";
+		issues();
+		return;
+	    }
 	    if ($#borrowers == 0) {
 		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
 		issues();
 		return;
 	    } else {
+		print "<form method=get>\n";
+		print "<input type=hidden name=module value=issues>\n";
+		print "<input type=hidden name=branch value=$branch>\n";
+		print "<input type=hidden name=printer value=$printer>\n";
 		print "<table border=1 cellpadding=5 bgcolor=#dddddd>";
-		print "<tr><th bgcolor=black><font color=white><b>Select a borrower</b></font></th></tr>\n";
+		print "<tr><th bgcolor=black><font color=white><b><font size=+1>Issues</font><br>Select a borrower</b></font></th></tr>\n";
 		print "<tr><td align=center>\n";
 		print "<select name=borrnumber size=7>\n";
 		foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowers) {
@@ -312,15 +441,51 @@ EOF
 	    }
 	} else {
 	    print << "EOF";
-	    <h1>Issues Module</h1>
 <form method=get>
 <table border=1 bgcolor=#dddddd>
-<tr><th bgcolor=black><font color=white><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
+<tr><th bgcolor=black><font color=white><b><font size=+1>Issues</font><br>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
 </table>
 <input type=hidden name=module value=issues>
+<input type=hidden name=branch value=$branch>
+<input type=hidden name=printer value=$printer>
 </form>
 EOF
 	}
     }
+}
+
+
+sub patrontable {
+    my ($borrower) = @_;
+    my $flags=$borrower->{'flags'};
+    my $flagtext='';
+    my $flaginfotable='';
+    my $flaginfotext='';
+    my $flag;
+    foreach $flag (sort keys %$flags) {
+	if ($flags->{$flag}->{'noissues'}) {
+	    $flagtext.="<font color=red>$flag</font> ";
+	} else {
+	    $flagtext.="$flag ";
+	}
+	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
+	if ($flags->{$flag}->{'noissues'}) {
+	    $flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
+	} else {
+	    $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
+	}
+    }
+    ($flaginfotext) && ($flaginfotext="<table border=1 bgcolor=#dddddd><tr><th bgcolor=black colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n");
+    my $patrontable= << "EOF";
+    <table border=1 bgcolor=#dddddd>
+    <tr><th bgcolor=black><font color=white><b>Patron Information</b></font></td></tr>
+    <tr><td>
+    $borrower->{'cardnumber'} $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
+    $borrower->{'streetaddress'} $borrower->{'city'}<br>
+    $borrower->{'categorycode'} $flagtext
+    </td></tr>
+    </table>
+EOF
+    return($patrontable, $flaginfotext);
 }

@@ -23,7 +23,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook);
+@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -80,7 +80,7 @@ sub getprinters {
     my $sth=$dbh->prepare("select * from printers");
     $sth->execute;
     while (my $printer=$sth->fetchrow_hashref) {
-	$printers{$printer->{'printername'}}=$printer;
+	$printers{$printer->{'printqueue'}}=$printer;
     }
     return (\%printers);
 }
@@ -184,6 +184,11 @@ sub issuebook {
 	    $rejected="Patron's card has been reported lost.";
 	    last SWITCH;
 	}
+	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
+	if ($amount>5) {
+	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
+	    last SWITCH;
+	}
 	if ($iteminformation->{'notforloan'} == 1) {
 	    $rejected="Item not for loan.";
 	    last SWITCH;
@@ -214,6 +219,12 @@ sub issuebook {
 		    $defaultanswer='Y';
 		    last SWITCH;
 		} elsif ($responses->{4} eq 'Y') {
+		    my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+		    if ($charge > 0) {
+			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
+			$iteminformation->{'charge'}=$charge;
+		    }
+		    &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
 		    renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 		    $noissue=1;
 		} else {
@@ -289,9 +300,19 @@ sub issuebook {
 	$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'} where itemnumber=$iteminformation->{'itemnumber'}");
 	$sth->execute;
 	$sth->finish;
+	my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+	if ($charge > 0) {
+	    createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
+	    $iteminformation->{'charge'}=$charge;
+	}
+	&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
+    }
+    my $message='';
+    if ($iteminformation->{'charge'}) {
+	$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
     }
     $dbh->disconnect;
-    return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer);
+    return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
 }
 
 
@@ -384,7 +405,7 @@ sub patronflags {
     my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
     if ($amount>0) { 
 	my %flaginfo;
-	$flaginfo{'message'}='Patron owes $amount'; 
+	$flaginfo{'message'}=sprintf "Patron owes \$%.02f", $amount; 
 	if ($amount>5) {
 	    $flaginfo{'noissues'}=1;
 	}
@@ -404,7 +425,7 @@ sub patronflags {
     }
     if ($patroninformation->{'borrowernotes'}) {
 	my %flaginfo;
-	$flaginfo{'message'}="Note: $patroninformation->{'borrowernotes'}";
+	$flaginfo{'message'}="$patroninformation->{'borrowernotes'}";
 	$flags{'NOTES'}=\%flaginfo;
     }
     my ($odues, $itemsoverdue) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
@@ -628,6 +649,7 @@ sub renewbook {
 # Stolen from Renewals.pm
   # mark book as renewed
   my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
+  $datedue=$env->{'datedue'};
   if ($datedue eq "" ) {    
     my $loanlength=21;
     my $query= "Select * from biblioitems,items,itemtypes
@@ -663,6 +685,59 @@ sub renewbook {
   $sth->execute;
   $sth->finish;
   return($odatedue);
+}
+
+sub calc_charges {
+# Stolen from Issues.pm
+# calculate charges due
+    my ($env, $dbh, $itemno, $bornum)=@_;
+    my $charge=0;
+    my $item_type;
+    my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes where (items.itemnumber ='$itemno') and (biblioitems.biblioitemnumber = items.biblioitemnumber) and (biblioitems.itemtype = itemtypes.itemtype)";
+    my $sth1= $dbh->prepare($q1);
+    $sth1->execute;
+    if (my $data1=$sth1->fetchrow_hashref) {
+	$item_type = $data1->{'itemtype'};
+	$charge = $data1->{'rentalcharge'};
+	my $q2 = "select rentaldiscount from borrowers,categoryitem 
+	where (borrowers.borrowernumber = '$bornum') 
+	and (borrowers.categorycode = categoryitem.categorycode)
+	and (categoryitem.itemtype = '$item_type')";
+	my $sth2=$dbh->prepare($q2);
+	$sth2->execute;
+	if (my $data2=$sth2->fetchrow_hashref) {
+	    my $discount = $data2->{'rentaldiscount'};
+	    $charge = ($charge *(100 - $discount)) / 100;
+	}
+	$sth2->{'finish'};
+    }      
+    $sth1->finish;
+    return ($charge);
+}
+
+sub createcharge {
+#Stolen from Issues.pm
+    my ($env,$dbh,$itemno,$bornum,$charge) = @_;
+    my $nextaccntno = getnextacctno($env,$bornum,$dbh);
+    my $query = "insert into accountlines (borrowernumber,itemnumber,accountno,date,amount, description,accounttype,amountoutstanding) values ($bornum,$itemno,$nextaccntno,now(),$charge,'Rental','Rent',$charge)";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+}
+
+
+sub getnextacctno {
+# Stolen from Accounts.pm
+    my ($env,$bornumber,$dbh)=@_;
+    my $nextaccntno = 1;
+    my $query = "select * from accountlines where (borrowernumber = '$bornumber') order by accountno desc";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    if (my $accdata=$sth->fetchrow_hashref){
+	$nextaccntno = $accdata->{'accountno'} + 1;
+    }
+    $sth->finish;
+    return($nextaccntno);
 }
 
 
