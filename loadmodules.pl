@@ -53,8 +53,10 @@ sub acquisitions {
 
 sub catalogue_search {
 	my $aq_type = C4::Context->preference("marc") || "ON";
+	my $query = new CGI;
+	my $type = $query->param('type');
 	if ($aq_type eq 'ON') {
-		print $input->redirect("/cgi-bin/koha/search.marc/search.pl");
+		print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
 	} else {
 		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
 	}
