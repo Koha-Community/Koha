@@ -289,7 +289,7 @@ sub basket {
   =aqorders.biblioitemnumber 
   and (datecancellationprinted is NULL or datecancellationprinted =
   '0000-00-00')";
-  if ($supplier ne ''){
+  if (defined $supplier && $supplier ne ''){
     $query.=" and aqorders.booksellerid='$supplier'";
   } 
   $query.=" group by aqorders.ordernumber";
@@ -861,7 +861,7 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  my $price=$price / $cur;
+  $price=$price / $cur;
   return($price);
 }
 
@@ -1223,7 +1223,7 @@ sub getitemtypes {
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
-    @results[$count] = $data;
+    $results[$count] = $data;
     $count++;
   } # while
   
