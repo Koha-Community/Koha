@@ -130,6 +130,12 @@ if ($input =~ /^n/i) {
 	    $releaseversion=$input;
 	}
     }
+} else {
+    print "What should the new version be? [$releaseversion]: ";
+    chomp ($input=<STDIN>);
+    if ($input) {
+	$releaseversion=$input;
+    }
 }
 
 
