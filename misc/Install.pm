@@ -64,6 +64,21 @@ $VERSION = 0.01;
 		&loadconfigfile
 		);
 
+use vars qw( $kohaversion );			# set in installer.pl
+use vars qw( $language );			# set in installer.pl
+use vars qw( $domainname );			# set in installer.pl
+
+use vars qw( $etcdir );				# set in installer.pl, usu. /etc
+use vars qw( $intranetdir $opacdir $kohalogdir );
+use vars qw( $realhttpdconf $httpduser );
+use vars qw( $servername $svr_admin $opacport $intranetport );
+use vars qw( $mysqldir );
+use vars qw( $database $mysqluser );
+use vars qw( $mysqlpass );			# normally should not be used
+use vars qw( $mysqlpass_quoted );		# quoted, contains -p as needed
+use vars qw( $dbname $hostname $user $pass );	# virtual hosting
+
+use vars qw( $newversion );			# XXX this seems to be unused
 
 =item heading
 
@@ -204,7 +219,7 @@ For more information visit http://www.koha.org
 Press <ENTER> to exit the installer: |;
 
 sub releasecandidatewarning {
-    my $message=getmessage('ReleaseCandidateWarning', [$::newversion, $::newversion]);
+    my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
     my $answer=showmessage($message, 'yn', 'n');
 
     if ($answer =~ /y/i) {
@@ -216,6 +231,105 @@ sub releasecandidatewarning {
     };
 }
 
+
+=back
+
+=head2 Accessor functions (for installer.pl)
+
+=over 4
+
+=cut
+
+=item setlanguage
+
+    setlanguage('en');
+
+Sets the installation language, normally "en" (English).
+In fact, only "en" is supported.
+
+=cut
+
+sub setlanguage ($) {
+    ($language) = @_;
+}
+
+=item setdomainname
+
+    setdomainname('example.org');
+
+Sets the domain name of the host.
+
+The domain name should not contain a leading dot;
+otherwise, the results are undefined.
+
+=cut
+
+sub setdomainname ($) {
+    ($domainname) = @_;
+}
+
+=item setetcdir
+
+    setetcdir('/etc');
+
+Sets the sysconfdir, normally /etc.
+This should be an absolute path; a trailing / is not required.
+
+=cut
+
+sub setetcdir ($) {
+    ($etcdir) = @_;
+}
+
+=item setkohaversion
+
+    setkohaversion('1.3.3RC26');
+
+Sets the Koha version as known by the installer.
+
+=cut
+
+sub setkohaversion ($) {
+    ($kohaversion) = @_;
+}
+
+=item getservername
+
+    my $servername = getservername;
+
+Gets the name of the Koha virtual server as specified by the user.
+
+=cut
+
+sub getservername () {
+    $servername;
+}
+
+=item getopacport
+
+    $port = getopacport;
+
+Gets the port that will run the Koha OPAC virtual server,
+as specified by the user.
+
+=cut
+
+sub getopacport () {
+    $opacport;
+}
+
+=item getintranetport
+
+    $port = getintranetport;
+
+Gets the port that will run the Koha INTRANET virtual server,
+as specified by the user.
+
+=cut
+
+sub getintranetport () {
+    $intranetport;
+}
 
 =back
 
@@ -290,7 +404,7 @@ sub mkdir_parents ($;$) {
     checkabortedinstall;
 
 Checks whether a previous installation process has been abnormally
-aborted, by checking whether $::etcidr/koha.conf is a symlink or not.
+aborted, by checking whether $etcidr/koha.conf is a symlink or not.
 If an aborted installation is detected, gives the user a chance to
 abort, before trying to recover the aborted installation.
 
@@ -304,8 +418,8 @@ FIXME: The "roll back" is not complete!
 =cut
 
 sub checkabortedinstall () {
-    if (-l("$::etcdir/koha.conf")
-        && readlink("$::etcdir/koha.conf") =~ /\.tmp$/
+    if (-l("$etcdir/koha.conf")
+        && readlink("$etcdir/koha.conf") =~ /\.tmp$/
     ) {
         print qq|
 I have detected that you tried to install Koha before, but the installation
@@ -317,8 +431,8 @@ database is already created.
         <STDIN>;
 
         # Remove the symlink after the <STDIN>, so the user can back out
-        unlink "$::etcdir/koha.conf"
-            || die "Failed to remove incomplete $::etcdir/koha.conf: $!\n";
+        unlink "$etcdir/koha.conf"
+            || die "Failed to remove incomplete $etcdir/koha.conf: $!\n";
     }
 }
 
@@ -431,7 +545,7 @@ found.
 sub getmessage {
     my $messagename=shift;
     my $variables=shift;
-    my $message=$messages->{$messagename}->{$::language} || $messages->{$messagename}->{en} || "Error: No message named $messagename in Install.pm\n";
+    my $message=$messages->{$messagename}->{$language} || $messages->{$messagename}->{en} || "Error: No message named $messagename in Install.pm\n";
     if (defined($variables)) {
 	$message=sprintf $message, @$variables;
     }
@@ -489,6 +603,10 @@ empty string. This default response is used when the user does
 not specify a value (i.e., presses Enter without typing in
 anything), showmessage will assume that the default response is
 the user's response.
+
+Note that because the response type "yn" is equivalent to
+"restrictchar yn", the default value for response type "yn",
+if unspecified, is "y".
 
 The screen is normally cleared before the message is displayed;
 if a fourth argument is specified and is nonzero, this
@@ -598,59 +716,59 @@ function does not return any values.
 =cut
 
 sub getinstallationdirectories {
-    $::opacdir = '/usr/local/koha/opac';
-    $::intranetdir = '/usr/local/koha/intranet';
+    $opacdir = '/usr/local/koha/opac';
+    $intranetdir = '/usr/local/koha/intranet';
     my $getdirinfo=1;
     while ($getdirinfo) {
 	# Loop until opac directory and koha directory are different
-	my $message=getmessage('GetOpacDir', [$::opacdir]);
-	$::opacdir=showmessage($message, 'free', $::opacdir);
+	my $message=getmessage('GetOpacDir', [$opacdir]);
+	$opacdir=showmessage($message, 'free', $opacdir);
 
-	$message=getmessage('GetIntranetDir', [$::intranetdir]);
-	$::intranetdir=showmessage($message, 'free', $::intranetdir);
+	$message=getmessage('GetIntranetDir', [$intranetdir]);
+	$intranetdir=showmessage($message, 'free', $intranetdir);
 
-	if ($::intranetdir eq $::opacdir) {
+	if ($intranetdir eq $opacdir) {
 	    print qq|
 
 You must specify different directories for the OPAC and INTRANET files!
- :: $::intranetdir :: $::opacdir ::
+ :: $intranetdir :: $opacdir ::
 |;
 <STDIN>
 	} else {
 	    $getdirinfo=0;
 	}
     }
-    $::kohalogdir='/var/log/koha';
-    my $message=getmessage('GetKohaLogDir', [$::kohalogdir]);
-    $::kohalogdir=showmessage($message, 'free', $::kohalogdir);
+    $kohalogdir='/var/log/koha';
+    my $message=getmessage('GetKohaLogDir', [$kohalogdir]);
+    $kohalogdir=showmessage($message, 'free', $kohalogdir);
 
 
     # FIXME: Missing error handling for all mkdir calls here
-    unless ( -d $::intranetdir ) {
-       mkdir_parents (dirname($::intranetdir), 0775);
-       mkdir ($::intranetdir,                  0770);
-       chown (oct(0), (getgrnam($::httpduser))[2], "$::intranetdir");
-       chmod (oct(770), "$::intranetdir");
+    unless ( -d $intranetdir ) {
+       mkdir_parents (dirname($intranetdir), 0775);
+       mkdir ($intranetdir,                  0770);
+       chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir");
+       chmod (oct(770), "$intranetdir");
     }
-    mkdir_parents ("$::intranetdir/htdocs",    0750);
-    mkdir_parents ("$::intranetdir/cgi-bin",   0750);
-    mkdir_parents ("$::intranetdir/modules",   0750);
-    mkdir_parents ("$::intranetdir/scripts",   0750);
-    unless ( -d $::opacdir ) {
-       mkdir_parents (dirname($::opacdir),     0775);
-       mkdir ($::opacdir,                      0770);
-       chown (oct(0), (getgrnam($::httpduser))[2], "$::opacdir");
-       chmod (oct(770), "$::opacdir");
+    mkdir_parents ("$intranetdir/htdocs",    0750);
+    mkdir_parents ("$intranetdir/cgi-bin",   0750);
+    mkdir_parents ("$intranetdir/modules",   0750);
+    mkdir_parents ("$intranetdir/scripts",   0750);
+    unless ( -d $opacdir ) {
+       mkdir_parents (dirname($opacdir),     0775);
+       mkdir ($opacdir,                      0770);
+       chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
+       chmod (oct(770), "$opacdir");
     }
-    mkdir_parents ("$::opacdir/htdocs",        0750);
-    mkdir_parents ("$::opacdir/cgi-bin",       0750);
+    mkdir_parents ("$opacdir/htdocs",        0750);
+    mkdir_parents ("$opacdir/cgi-bin",       0750);
 
 
-    unless ( -d $::kohalogdir ) {
-       mkdir_parents (dirname($::kohalogdir),  0775);
-       mkdir ($::kohalogdir,                   0770);
-       chown (oct(0), (getgrnam($::httpduser))[2,3], "$::kohalogdir");
-       chmod (oct(770), "$::kohalogdir");
+    unless ( -d $kohalogdir ) {
+       mkdir_parents (dirname($kohalogdir),  0775);
+       mkdir ($kohalogdir,                   0770);
+       chown (oct(0), (getgrnam($httpduser))[2,3], "$kohalogdir");
+       chmod (oct(770), "$kohalogdir");
     }
 }
 
@@ -701,32 +819,32 @@ Press <ENTER> to try again:
 
 sub getdatabaseinfo {
 
-    $::dbname = 'Koha';
-    $::hostname = 'localhost';
-    $::user = 'kohaadmin';
-    $::pass = '';
+    $dbname = 'Koha';
+    $hostname = 'localhost';
+    $user = 'kohaadmin';
+    $pass = '';
 
 #Get the database name
 
-    my $message=getmessage('DatabaseName', [$::dbname]);
-    $::dbname=showmessage($message, 'free', $::dbname);
+    my $message=getmessage('DatabaseName', [$dbname]);
+    $dbname=showmessage($message, 'free', $dbname);
 
 #Get the hostname for the database
     
-    $message=getmessage('DatabaseHost', [$::hostname]);
-    $::hostname=showmessage($message, 'free', $::hostname);
+    $message=getmessage('DatabaseHost', [$hostname]);
+    $hostname=showmessage($message, 'free', $hostname);
 
 #Get the username for the database
 
-    $message=getmessage('DatabaseUser', [$::dbname, $::hostname, $::user]);
-    $::user=showmessage($message, 'free', $::user);
+    $message=getmessage('DatabaseUser', [$dbname, $hostname, $user]);
+    $user=showmessage($message, 'free', $user);
 
 #Get the password for the database user
 
-    while ($::pass eq '') {
-	my $message=getmessage('DatabasePassword', [$::user]);
-	$::pass=showmessage($message, 'free', $::pass);
-	if ($::pass eq '') {
+    while ($pass eq '') {
+	my $message=getmessage('DatabasePassword', [$user]);
+	$pass=showmessage($message, 'free', $pass);
+	if ($pass eq '') {
 	    my $message=getmessage('BlankPassword');
 	    showmessage($message,'PressEnter');
 	}
@@ -803,10 +921,10 @@ sub getapacheinfo {
     if ($#confpossibilities==-1) {
 	my $message=getmessage('NoApacheConfFiles');
 	my $choice='';
-	until (-f $::realhttpdconf) {
+	until (-f $realhttpdconf) {
 	    $choice=showmessage($message, "free", 1);
 	    if (-f $choice) {
-		$::realhttpdconf=$choice;
+		$realhttpdconf=$choice;
 	    } else {
 		showmessage(getmessage('NotAFile', [$choice]),'PressEnter', '', 1);
 	    }
@@ -822,18 +940,18 @@ sub getapacheinfo {
 	}
 	my $message=getmessage('FoundMultipleApacheConfFiles', [$conffiles]);
 	my $choice=showmessage($message, "restrictchar $options", 1);
-	$::realhttpdconf=$confpossibilities[$choice-1];
+	$realhttpdconf=$confpossibilities[$choice-1];
     } else {
-	$::realhttpdconf=$confpossibilities[0];
+	$realhttpdconf=$confpossibilities[0];
     }
-    unless (open (HTTPDCONF, "<$::realhttpdconf")) {
-	warn "Insufficient privileges to open $::realhttpdconf for reading.\n";
+    unless (open (HTTPDCONF, "<$realhttpdconf")) {
+	warn "Insufficient privileges to open $realhttpdconf for reading.\n";
 	sleep 4;
     }
 
     while (<HTTPDCONF>) {
 	if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
-	    $::httpduser = $1;
+	    $httpduser = $1;
 	}
     }
     close(HTTPDCONF);
@@ -841,22 +959,35 @@ sub getapacheinfo {
 
 
 
-    unless ($::httpduser) {
-	my $message=getmessage('EnterApacheUser', [$::etcdir]);
-	until (length($::httpduser) && getpwnam($::httpduser)) {
-	    $::httpduser=showmessage($message, "free", '');
-	    if (length($::httpduser)>0) {
-		unless (getpwnam($::httpduser)) {
-		    my $message=getmessage('InvalidUserid', [$::httpduser]);
+    unless ($httpduser) {
+	my $message=getmessage('EnterApacheUser', [$etcdir]);
+	until (length($httpduser) && getpwnam($httpduser)) {
+	    $httpduser=showmessage($message, "free", '');
+	    if (length($httpduser)>0) {
+		unless (getpwnam($httpduser)) {
+		    my $message=getmessage('InvalidUserid', [$httpduser]);
 		    showmessage($message,'PressEnter');
 		}
 	    } else {
 	    }
 	}
-	print "AU: $::httpduser\n";
+	print "AU: $httpduser\n";
     }
 }
 
+
+=item getapachevhostinfo
+
+    getapachevhostinfo;
+
+Gets various pieces of information related to virtual hosting:
+the webmaster email address, virtual hostname, and the ports
+that the OPAC and INTRANET modules run on.
+
+These pieces of information are saved to global variables; the
+function does not return any values.
+
+=cut
 
 $messages->{'ApacheConfigIntroduction'}->{en} =
    heading('APACHE CONFIGURATION') . qq|
@@ -900,20 +1031,20 @@ Enter the Intranet Port [%s]: |;
 
 sub getapachevhostinfo {
 
-    $::svr_admin = "webmaster\@$::domainname";
-    $::servername=`hostname`;
-    chomp $::servername;
-    $::opacport=80;
-    $::intranetport=8080;
+    $svr_admin = "webmaster\@$domainname";
+    $servername=`hostname`;
+    chomp $servername;
+    $opacport=80;
+    $intranetport=8080;
 
     showmessage(getmessage('ApacheConfigIntroduction'), 'PressEnter');
 
-    $::svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$::svr_admin]), 'email', $::svr_admin);
-    $::servername=showmessage(getmessage('GetServerName', [$::servername]), 'free', $::servername);
+    $svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$svr_admin]), 'email', $svr_admin);
+    $servername=showmessage(getmessage('GetServerName', [$servername]), 'free', $servername);
 
 
-    $::opacport=showmessage(getmessage('GetOpacPort', [$::opacport]), 'numerical', $::opacport);
-    $::intranetport=showmessage(getmessage('GetIntranetPort', [$::opacport, $::intranetport]), 'numerical', $::intranetport);
+    $opacport=showmessage(getmessage('GetOpacPort', [$opacport]), 'numerical', $opacport);
+    $intranetport=showmessage(getmessage('GetIntranetPort', [$opacport, $intranetport]), 'numerical', $intranetport);
 
 }
 
@@ -948,7 +1079,7 @@ configuration.
 Press <ENTER> to continue: |;
 
 sub updateapacheconf {
-    my $logfiledir=`grep ^ErrorLog "$::realhttpdconf"`;
+    my $logfiledir=`grep ^ErrorLog "$realhttpdconf"`;
     chomp $logfiledir;
 
     if ($logfiledir) {
@@ -966,7 +1097,7 @@ sub updateapacheconf {
     my $httpdconf;
     my $envmodule=0;
     my $includesmodule=0;
-    open HC, "<$::realhttpdconf";
+    open HC, "<$realhttpdconf";
     while (<HC>) {
 	if (/^\s*#\s*LoadModule env_module /) {
 	    s/^\s*#\s*//;
@@ -984,22 +1115,22 @@ sub updateapacheconf {
     }
 
     my $backupfailed=0;
-    $backupfailed=`cp -f $::realhttpdconf $::realhttpdconf\.prekoha`;
+    $backupfailed=`cp -f $realhttpdconf $realhttpdconf\.prekoha`;
     if ($backupfailed) {
-	showmessage(getmessage('ApacheConfigBackupFailed', [$::realhttpdconf,$backupfailed ]), 'PressEnter');
+	showmessage(getmessage('ApacheConfigBackupFailed', [$realhttpdconf,$backupfailed ]), 'PressEnter');
 	return;
     }
 
     if ($envmodule || $includesmodule) {
-	open HC, ">$::realhttpdconf";
+	open HC, ">$realhttpdconf";
 	print HC $httpdconf;
 	close HC;
     }
 
 
     
-    if (`grep 'VirtualHost $::servername' "$::realhttpdconf"`) {
-	showmessage(getmessage('ApacheAlreadyConfigured', [$::realhttpdconf, $::realhttpdconf]), 'PressEnter');
+    if (`grep 'VirtualHost $servername' "$realhttpdconf"`) {
+	showmessage(getmessage('ApacheAlreadyConfigured', [$realhttpdconf, $realhttpdconf]), 'PressEnter');
 	return;
     } else {
 	my $includesdirectives='';
@@ -1007,14 +1138,14 @@ sub updateapacheconf {
 	    $includesdirectives.="Options +Includes\n";
 	    $includesdirectives.="   AddHandler server-parsed .html\n";
 	}
-	open(SITE,">>$::realhttpdconf") or warn "Insufficient priveleges to open $::realhttpdconf for writing.\n";
+	open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
 	my $opaclisten = '';
-	if ($::opacport != 80) {
-	    $opaclisten="Listen $::opacport";
+	if ($opacport != 80) {
+	    $opaclisten="Listen $opacport";
 	}
 	my $intranetlisten = '';
-	if ($::intranetport != 80) {
-	    $intranetlisten="Listen $::intranetport";
+	if ($intranetport != 80) {
+	    $intranetlisten="Listen $intranetport";
 	}
 	print SITE <<EOP
 
@@ -1027,35 +1158,35 @@ $intranetlisten
 #NameVirtualHost 11.22.33.44
 
 # KOHA's OPAC Configuration
-<VirtualHost $::servername\:$::opacport>
-   ServerAdmin $::svr_admin
-   DocumentRoot $::opacdir/htdocs
-   ServerName $::servername
-   ScriptAlias /cgi-bin/koha/ $::opacdir/cgi-bin/
+<VirtualHost $servername\:$opacport>
+   ServerAdmin $svr_admin
+   DocumentRoot $opacdir/htdocs
+   ServerName $servername
+   ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
-   SetEnv PERL5LIB "$::intranetdir/modules"
+   SetEnv PERL5LIB "$intranetdir/modules"
    $includesdirectives
 </VirtualHost>
 
 # KOHA's INTRANET Configuration
-<VirtualHost $::servername\:$::intranetport>
-   ServerAdmin $::svr_admin
-   DocumentRoot $::intranetdir/htdocs
-   ServerName $::servername
-   ScriptAlias /cgi-bin/koha/ "$::intranetdir/cgi-bin/"
+<VirtualHost $servername\:$intranetport>
+   ServerAdmin $svr_admin
+   DocumentRoot $intranetdir/htdocs
+   ServerName $servername
+   ScriptAlias /cgi-bin/koha/ "$intranetdir/cgi-bin/"
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
-   SetEnv PERL5LIB "$::intranetdir/modules"
+   SetEnv PERL5LIB "$intranetdir/modules"
    $includesdirectives
 </VirtualHost>
 
 # If you want to use name based Virtual Hosting:
 #   1. remove the two Listen lines
-#   2. replace $::servername\:$::opacport wih your.opac.domain.name
-#   3. replace ServerName $::servername wih ServerName your.opac.domain.name
-#   4. replace $::servername\:$::intranetport wih your intranet domain name
-#   5. replace ServerName $::servername wih ServerName your.intranet.domain.name
+#   2. replace $servername\:$opacport wih your.opac.domain.name
+#   3. replace ServerName $servername wih ServerName your.opac.domain.name
+#   4. replace $servername\:$intranetport wih your intranet domain name
+#   5. replace ServerName $servername wih ServerName your.intranet.domain.name
 #
 # If you want to use NameVirtualHost'ing (using two names on one ip address):
 #   1.  Follow steps 1-5 above
@@ -1097,17 +1228,17 @@ sub basicauthentication {
 		($apacheauthpassword) = showmessage(getmessage('BasicAuthPasswordWasBlank'), 'none', '', 1);
 	    }
 	}
-	open AUTH, ">$::etcdir/kohaintranet.pass";
+	open AUTH, ">$etcdir/kohaintranet.pass";
 	my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	my $salt=substr($chars, int(rand(length($chars))),1);
 	$salt.=substr($chars, int(rand(length($chars))),1);
 	print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
 	close AUTH;
-	open(SITE,">>$::realhttpdconf") or warn "Insufficient priveleges to open $::realhttpdconf for writing.\n";
+	open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
 	print SITE <<EOP
 
-<Directory $::intranetdir>
-    AuthUserFile $::etcdir/kohaintranet.pass
+<Directory $intranetdir>
+    AuthUserFile $etcdir/kohaintranet.pass
     AuthType Basic
     AuthName "Koha Intranet (for librarians only)"
     Require  valid-user
@@ -1131,52 +1262,52 @@ sub installfiles {
 
 
     showmessage(getmessage('InstallFiles'),'none');
-    print getmessage('CopyingFiles', ['intranet-html', "$::intranetdir/htdocs" ]);
-    system("cp -R intranet-html/* $::intranetdir/htdocs/");
-    print getmessage('CopyingFiles', ['intranet-cgi', "$::intranetdir/cgi-bin" ]);
-    system("cp -R intranet-cgi/* $::intranetdir/cgi-bin/");
-    print getmessage('CopyingFiles', ['stand-alone scripts', "$::intranetdir/scripts" ]);
-    system("cp -R scripts/* $::intranetdir/scripts/");
-    print getmessage('CopyingFiles', ['perl modules', "$::intranetdir/modules" ]);
-    system("cp -R modules/* $::intranetdir/modules/");
-    print getmessage('CopyingFiles', ['opac-html', "$::opacdir/htdocs" ]);
-    system("cp -R opac-html/* $::opacdir/htdocs/");
-    print getmessage('CopyingFiles', ['opac-cgi', "$::opacdir/cgi-bin" ]);
-    system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
-    system("touch $::opacdir/cgi-bin/opac");
+    print getmessage('CopyingFiles', ['intranet-html', "$intranetdir/htdocs" ]);
+    system("cp -R intranet-html/* $intranetdir/htdocs/");
+    print getmessage('CopyingFiles', ['intranet-cgi', "$intranetdir/cgi-bin" ]);
+    system("cp -R intranet-cgi/* $intranetdir/cgi-bin/");
+    print getmessage('CopyingFiles', ['stand-alone scripts', "$intranetdir/scripts" ]);
+    system("cp -R scripts/* $intranetdir/scripts/");
+    print getmessage('CopyingFiles', ['perl modules', "$intranetdir/modules" ]);
+    system("cp -R modules/* $intranetdir/modules/");
+    print getmessage('CopyingFiles', ['opac-html', "$opacdir/htdocs" ]);
+    system("cp -R opac-html/* $opacdir/htdocs/");
+    print getmessage('CopyingFiles', ['opac-cgi', "$opacdir/cgi-bin" ]);
+    system("cp -R opac-cgi/* $opacdir/cgi-bin/");
+    system("touch $opacdir/cgi-bin/opac");
 
-    system("chown -R root:$::httpduser $::opacdir");
-    system("chown -R root:$::httpduser $::intranetdir");
+    system("chown -R root:$httpduser $opacdir");
+    system("chown -R root:$httpduser $intranetdir");
 
     # Create /etc/koha.conf
 
     my $old_umask = umask(027); # make sure koha.conf is never world-readable
-    open(SITES,">$::etcdir/koha.conf.tmp") or warn "Couldn't create file at $::etcdir. Must have write capability.\n";
+    open(SITES,">$etcdir/koha.conf.tmp") or warn "Couldn't create file at $etcdir. Must have write capability.\n";
     print SITES qq|
-database=$::dbname
-hostname=$::hostname
-user=$::user
-pass=$::pass
-includes=$::opacdir/htdocs/includes
-intranetdir=$::intranetdir
-opacdir=$::opacdir
-kohalogdir=$::kohalogdir
-kohaversion=$::kohaversion
-httpduser=$::httpduser
-intrahtdocs=$::intranetdir/htdocs/intranet-tmpl
-opachtdocs=$::opacdir/htdocs/opac-tmpl
+database=$dbname
+hostname=$hostname
+user=$user
+pass=$pass
+includes=$opacdir/htdocs/includes
+intranetdir=$intranetdir
+opacdir=$opacdir
+kohalogdir=$kohalogdir
+kohaversion=$kohaversion
+httpduser=$httpduser
+intrahtdocs=$intranetdir/htdocs/intranet-tmpl
+opachtdocs=$opacdir/htdocs/opac-tmpl
 |;
     close(SITES);
     umask($old_umask);
 
-    chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
-    chmod 0440, "$::etcdir/koha.conf.tmp";
+    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
+    chmod 0440, "$etcdir/koha.conf.tmp";
 
-    chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
-    chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
-    chmod 0750, "$::intranetdir/scripts/z3950daemon/processz3950queue";
-    chown(0, (getpwnam($::httpduser)) [3], "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-    chown(0, (getpwnam($::httpduser)) [3], "$::intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $::intranetdir/scripts/z3950daemon/processz3950queue: $!";
+    chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+    chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+    chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
+    chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+    chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 }
 
@@ -1242,23 +1373,23 @@ Press <ENTER> to continue:
 |;
 
 sub databasesetup {
-    $::mysqluser = 'root';
-    $::mysqlpass = '';
+    $mysqluser = 'root';
+    $mysqlpass = '';
 
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
 			  /usr
 			  )) {
        if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
-	    $::mysqldir=$mysql;
+	    $mysqldir=$mysql;
        }
     }
-    if (!$::mysqldir){
+    if (!$mysqldir){
 	print "I don't see mysql in the usual places.\n";
 	for (;;) {
 	    print "Where have you installed mysql? ";
-	    chomp($::mysqldir = <STDIN>);
-	    last if -f "$::mysqldir/bin/mysqladmin";
+	    chomp($mysqldir = <STDIN>);
+	    last if -f "$mysqldir/bin/mysqladmin";
 	print <<EOP;
 
 I can't find it there either. If you compiled mysql yourself,
@@ -1274,16 +1405,16 @@ EOP
 
     my $needpassword=1;
     while ($needpassword) {
-	$::mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
-	$::mysqlpass_quoted = $::mysqlpass;
-	$::mysqlpass_quoted =~ s/"/\\"/g;
-	$::mysqlpass_quoted="-p\"$::mysqlpass_quoted\"";
-	$::mysqlpass eq '' and $::mysqlpass_quoted='';
-	my $result=system("$::mysqldir/bin/mysqladmin -u$::mysqluser $::mysqlpass_quoted proc > /dev/null 2>&1");
+	$mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
+	$mysqlpass_quoted = $mysqlpass;
+	$mysqlpass_quoted =~ s/"/\\"/g;
+	$mysqlpass_quoted="-p\"$mysqlpass_quoted\"";
+	$mysqlpass eq '' and $mysqlpass_quoted='';
+	my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser $mysqlpass_quoted proc > /dev/null 2>&1");
 	if ($result) {
 	    print getmessage('InvalidMysqlRootPassword');
 	} else {
-	    if ($::mysqlpass eq '') {
+	    if ($mysqlpass eq '') {
 		showmessage(getmessage('BlankMysqlPassword'), 'PressEnter');
 	    }
 	    $needpassword=0;
@@ -1292,16 +1423,16 @@ EOP
 
     showmessage(getmessage('CreatingDatabase'),'none');
 
-    my $result=system("$::mysqldir/bin/mysqladmin", "-u$::mysqluser", "-p$::mysqlpass", "create", "$::dbname");
+    my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "-p$mysqlpass", "create", "$dbname");
     if ($result) {
 	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
     } else {
 	# Populate the Koha database
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname < koha.mysql");
+	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname < koha.mysql");
 	# Set up permissions
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
-	system("$::mysqldir/bin/mysqladmin -u$::mysqluser $::mysqlpass_quoted reload");
+	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
+	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysqladmin -u$mysqluser $mysqlpass_quoted reload");
 
 
 
@@ -1335,10 +1466,10 @@ pl : opac is translated (UNTESTED in this release)
 |;
 
 sub updatedatabase {
-    # At this point, $::etcdir/koha.conf must exist, for C4::Context
-    # We must somehow temporarily enable $::etcdir/koha.conf. A symlink can
+    # At this point, $etcdir/koha.conf must exist, for C4::Context
+    # We must somehow temporarily enable $etcdir/koha.conf. A symlink can
     # do this & at the same time facilitate detection of aborted installs.
-	my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
+	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
 		print "Problem updating database...\n";
 		exit;
@@ -1347,14 +1478,14 @@ sub updatedatabase {
 	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
 
 	if ($response == 1) {
-		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 	}
 	if ($response == 2) {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
-		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
+		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 	}
 
-	$result = system ("perl -I $::intranetdir/modules scripts/marc/updatedb2marc.pl");
+	$result = system ("perl -I $intranetdir/modules scripts/marc/updatedb2marc.pl");
 	if ($result) {
 		print "Problem updating database to MARC...\n";
 		exit;
@@ -1367,11 +1498,11 @@ sub updatedatabase {
 sub populatedatabase {
 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
 	if ($response =~/^y/i) {
-		system("gunzip -d < sampledata-1.2.gz | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
 		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
 	} else {
 		my $input;
@@ -1392,9 +1523,9 @@ sub populatedatabase {
 		$branchcode=substr($branchcode,0,4);
 		$branchcode or $branchcode='DEF';
 
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
 		my $printername='Library Printer';
 		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
@@ -1403,10 +1534,10 @@ sub populatedatabase {
 		my $printerqueue='lp';
 		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 		$printerqueue=~s/[^A-Za-z0-9]//g;
-		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 		}
 	my $language=showmessage(getmessage('Language'), 'free', 'en');
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
+	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
 }
 
@@ -1438,7 +1569,7 @@ sub restartapache {
 sub loadconfigfile {
     my %configfile;
 
-    open (KC, "<$::etcdir/koha.conf");
+    open (KC, "<$etcdir/koha.conf");
     while (<KC>) {
      chomp;
      (next) if (/^\s*#/);
@@ -1454,25 +1585,19 @@ sub loadconfigfile {
      }
     }
 
-    $::intranetdir=$configfile{'intranetdir'};
-    $::opacdir=$configfile{'opacdir'};
-    $::kohaversion=$configfile{'kohaversion'};
-    $::kohalogdir=$configfile{'kohalogdir'};
-    $::database=$configfile{'database'};
-    $::hostname=$configfile{'hostname'};
-    $::user=$configfile{'user'};
-    $::pass=$configfile{'pass'};
+    $intranetdir=$configfile{'intranetdir'};
+    $opacdir=$configfile{'opacdir'};
+    $kohaversion=$configfile{'kohaversion'};
+    $kohalogdir=$configfile{'kohalogdir'};
+    $database=$configfile{'database'};
+    $hostname=$configfile{'hostname'};
+    $user=$configfile{'user'};
+    $pass=$configfile{'pass'};
 }
 
 END { }       # module clean-up code here (global destructor)
 
 =back
-
-=head1 BUGS
-
-A lot of variables like $::opacdir. Because Perl does not check
-for strictness when a package name is explicitly specified,
-using such variables defeats the purpose of "use strict".
 
 =head1 SEE ALSO
 

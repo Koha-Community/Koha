@@ -7,11 +7,14 @@ use strict; # please develop with the strict pragma
 
 use vars qw( $input );
 
-$::language='en';
-$::domainname = `hostname -d`;
-chomp $::domainname;
-$::etcdir = '/etc';
+Install::setlanguage 'en';
 
+my $domainname = `hostname`; # Note: must not have any arguments (portability)
+$domainname = $domainname =~ /^[^\.]+\.(.*)$/? $1: undef;
+Install::setdomainname $domainname;
+
+my $etcdir = '/etc';
+Install::setetcdir $etcdir;
 
 unless ($< == 0) {
     print "You must be root to run this script.\n";
@@ -27,29 +30,30 @@ EOP
    exit 1;
 }
 
-$::kohaversion=`cat koha.version`;
-chomp $::kohaversion;
+my $kohaversion=`cat koha.version`;
+chomp $kohaversion;
+Install::setkohaversion $kohaversion;
 
 
-if ($::kohaversion =~ /RC/) {
+if ($kohaversion =~ /RC/) {
     releasecandidatewarning();
 }
 
 checkabortedinstall();
 
-if (-e "$::etcdir/koha.conf") {
-    $::installedversion=`grep kohaversion= $::etcdir/koha.conf`;
-    chomp $::installedversion;
-    $::installedversion=~m/kohaversion=(.*)/;
-    $::installedversion=$1;
+if (-e "$etcdir/koha.conf") {
+    my $installedversion=`grep kohaversion= $etcdir/koha.conf`;
+    chomp $installedversion;
+    $installedversion=~m/kohaversion=(.*)/;
+    $installedversion=$1;
     my $installedversionmsg;
-    if ($::installedversion) {
-	$installedversionmsg=getmessage('KohaVersionInstalled', [$::installedversion]);
+    if ($installedversion) {
+	$installedversionmsg=getmessage('KohaVersionInstalled', [$installedversion]);
     } else {
 	$installedversionmsg=getmessage('KohaUnknownVersionInstalled');
     }
 
-    my $message=getmessage('KohaAlreadyInstalled', [$::etcdir, $::kohaversion, $installedversionmsg]);
+    my $message=getmessage('KohaAlreadyInstalled', [$etcdir, $kohaversion, $installedversionmsg]);
     showmessage($message, 'none');
     exit;
 }
@@ -103,13 +107,13 @@ restartapache();
 
 # Installation is complete.  Rename the koha.conf.tmp file
 
-rename "$::etcdir/koha.conf.tmp", "$::etcdir/koha.conf" || warn "Couldn't rename file at $::etcdir. Must have write capability.\n";
+rename "$etcdir/koha.conf.tmp", "$etcdir/koha.conf" || warn "Couldn't rename file at $etcdir. Must have write capability.\n";
 
 
-showmessage(getmessage('AuthenticationWarning', [$::etcdir]), 'PressEnter');
+showmessage(getmessage('AuthenticationWarning', [$etcdir]), 'PressEnter');
 
 
-showmessage(getmessage('Completed', [ $::servername, $::intranetport, $::servername, $::opacport]), 'PressEnter');
+showmessage(getmessage('Completed', [ Install::getservername(), Install::getintranetport(), Install::getservername(), Install::getopacport()]), 'PressEnter');
 
 
 
