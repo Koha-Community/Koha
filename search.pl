@@ -191,7 +191,13 @@ if ($count>10) {
     ($title) && (push @$forminputs, { line => "title=$title"});
 	my $highlight=0;
 	($startfrom==($i-1)*10) && ($highlight=1);
-	push @$numbers, { number => $i, highlight => $highlight , FORMINPUTS => $forminputs, startfrom => ($i-1)*10, opac => ($type eq 'opac') ? (1) : (0)};
+	my $formelements='';
+	foreach (@$forminputs) {
+	    my $line=$_->{line};
+	    $formelements.="$line&";
+	}
+	$formelements=~s/ /+/g;
+	push @$numbers, { number => $i, highlight => $highlight , FORMELEMENTS => $formelements, FORMINPUTS => $forminputs, startfrom => ($i-1)*10, opac => (($type eq 'opac') ? (1) : (0))};
     }
 }
 
