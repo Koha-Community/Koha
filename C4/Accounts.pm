@@ -64,7 +64,7 @@ patron.
 
 =item checkaccount
 
-  $owed = &checkaccount($env, $borrowernumber, $dbh);
+  $owed = &checkaccount($env, $borrowernumber, $dbh, $date);
 
 Looks up the total amount of money owed by a borrower (fines, etc.).
 
@@ -79,24 +79,31 @@ C<$env> is ignored.
 sub checkaccount  {
   #take borrower number
   #check accounts and list amounts owing
-  my ($env,$bornumber,$dbh)=@_;
-  my $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
-  borrowernumber=$bornumber and amountoutstanding<>0");
-  $sth->execute;
-  my $total=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $total += $data->{'sum(amountoutstanding)'};
-  }
-  $sth->finish;
-  # output(1,2,"borrower owes $total");
-  #if ($total > 0){
-  #  # output(1,2,"borrower owes $total");
-  #  if ($total > 5){
-  #    reconcileaccount($env,$dbh,$bornumber,$total);
-  #  }
-  #}
-  #  pause();
-  return($total);
+	my ($env,$bornumber,$dbh,$date)=@_;
+	my $select="SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = ?
+			AND amountoutstanding<>0";
+	my @bind = ($bornumber);
+	if ($date ne ''){
+	$select.=" AND date < ?";
+	push(@bind,$date);
+	}
+	#  print $select;
+	my $sth=$dbh->prepare($select);
+	$sth->execute(@bind);
+	my $data=$sth->fetchrow_hashref;
+	my $total = $data->{'total'};
+	$sth->finish;
+	# output(1,2,"borrower owes $total");
+	#if ($total > 0){
+	#  # output(1,2,"borrower owes $total");
+	#  if ($total > 5){
+	#    reconcileaccount($env,$dbh,$bornumber,$total);
+	#  }
+	#}
+	#  pause();
+	return($total);
 }
 
 # XXX - POD. Need to figure out C4/Interface/AccountsCDK.pm first,
