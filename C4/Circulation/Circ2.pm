@@ -70,6 +70,7 @@ sub getbranches {
 #	(next) if ($branch->{'branchcode'} eq 'TR');
 	$branches{$branch->{'branchcode'}}=$branch;
     }
+    $dbh->disconnect;
     return (\%branches);
 }
 
@@ -83,6 +84,7 @@ sub getprinters {
     while (my $printer=$sth->fetchrow_hashref) {
 	$printers{$printer->{'printqueue'}}=$printer;
     }
+    $dbh->disconnect;
     return (\%printers);
 }
 
