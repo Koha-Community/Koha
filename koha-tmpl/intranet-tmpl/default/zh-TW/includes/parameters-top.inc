@@ -1,4 +1,4 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 
 <html>
 <head>
@@ -35,33 +35,17 @@ a.parameters:hover {
 		<tr>
 			<td>
 			<div id="menubar">
-			<table cellpadding=0 cellspacing=0  border=0 height=29 width=70%>
+			<table cellpadding=0 cellspacing=0  border=0 height=29 width="70%">
 				<tr>
-					<td class="koha"><b>KOHA</b></td>
-					<td>
-						<a class="home" href="/cgi-bin/koha/mainpage.pl">返回主頁</a>
-					</td>
-					<td>
-						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">館藏查詢</a>
-					</td>
-					<td>
-						<a class="members" href="/cgi-bin/koha/members-home.pl">讀者帳戶</a>
-					</td>
-					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">書藉購置</a>
-					</td>
-					<td>
-						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">流通服務</a>
-					</td>
-					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">報表列印</a>
-					</td>
-					<td>
-						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">系統設定</a>
-					</td>
-					<td>
-						<a class="about" href="/cgi-bin/koha/about.pl">有關<span lang=mi>Koha</span></a>
-					</td>
+					<td class="koha"><b lang=mi>KOHA</b></td>
+					<td class="home"><a href="/cgi-bin/koha/mainpage.pl">返回主頁</a></td>
+					<td class="catalogue"><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">館藏查詢</a></td>
+					<td class="members"><a href="/cgi-bin/koha/members-home.pl">讀者帳戶</a></td>
+					<td class="acquisition"><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">書藉購置</a></td>
+					<td class="circulation"><a href="/cgi-bin/koha/circ/circulation.pl">流通服務</a></td>
+					<td class="reports"><a href="/cgi-bin/koha/reports-home.pl">報表列印</a></td>
+					<td class="parameters"><a href="/cgi-bin/koha/admin-home.pl">系統設定</a></td>
+					<td class="about"><a href="/cgi-bin/koha/about.pl">關於<span lang=mi>Koha</span></a></td>
 				</TR>
 			</TABLE>
 			</div>
@@ -75,7 +59,7 @@ a.parameters:hover {
 					</td>
 					<td>
 						<div id="submenu">
-						<a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu">Auth value</a>
+						<a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu">容許值</a>
 						</div>
 					</td>
 					<td>
@@ -85,12 +69,12 @@ a.parameters:hover {
 					</td>
 					<td>
 						<div id="submenu">
-						<a href="/cgi-bin/koha/admin/currency.pl" class="submenu">Currencies</a>
+						<a href="/cgi-bin/koha/admin/currency.pl" class="submenu">貨幣匯率</a>
 						</div>
 					</td>
 					<td>
 						<div id="submenu">
-						<a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Printers</a>
+						<a href="/cgi-bin/koha/admin/printers.pl" class="submenu">打印機</a>
 						</div>
 					</td>
 				</tr>
