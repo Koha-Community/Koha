@@ -49,8 +49,13 @@ sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
 	my $result;
 	my $indicator;
+	warn "tagfield : $tagfield /".$record->as_formatted;
 	if ($tagfield <10) {
-		$result = $record->field($tagfield)->data();
+		if ($record->field($tagfield)) {
+			$result = $record->field($tagfield)->data();
+		} else {
+			$result="";
+		}
 	} else {
 		foreach my $field ($record->field($tagfield)) {
 			my @subfields = $field->subfields();
@@ -83,6 +88,7 @@ sub MARCfindbreeding {
 	my ($file,$marc) = $sth->fetchrow;
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
+			warn "==> ".$record->as_formatted();
 		if (ref($record) eq undef) {
 			return -1;
 		} else {

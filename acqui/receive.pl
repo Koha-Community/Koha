@@ -85,6 +85,7 @@ for (my$i=0;$i<$count;$i++){
 	$line{unitprice} = $results[$i]->{'unitprice'};
 	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 	$line{total} = $total;
+	$line{id} = $id;
 	push @loop_orders, \%line;
 	$totalprice+=$results[$i]->{'unitprice'};
 	$totalfreight+=$results[$i]->{'freight'};

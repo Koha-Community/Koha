@@ -104,13 +104,13 @@ if ($quantity != 0){
 		size             => $size?$size:"" });
 	my $barcode=$input->param('barcode');
 	my @barcodes;
-	if ($barcode =~ /\,/){
-		@barcodes=split(/\,/,$barcode);
-	}elsif ($barcode =~ /\|/){
-		@barcodes=split(/\|/,$barcode);
-	} else {
-		$barcodes[0]=$barcode;
-	}
+#	if ($barcode =~ /\,/){
+		@barcodes=split(/\,| |\|/,$barcode);
+#	}elsif ($barcode =~ /\|/){
+#		@barcodes=split(/\|/,$barcode);
+#	} else {
+#		$barcodes[0]=$barcode;
+#	}
 	my ($error) = newitems({ biblioitemnumber => $bibitemno,
 					biblionumber     => $biblionumber,
 					replacementprice => $replacement,

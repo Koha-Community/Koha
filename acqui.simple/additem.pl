@@ -47,10 +47,12 @@ sub find_value {
 	return($indicator,$result);
 }
 my $input = new CGI;
+my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $bibid = $input->param('bibid');
+my $oldbiblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+
 my $op = $input->param('op');
-my $dbh = C4::Context->dbh;
 my $itemnum = $input->param('itemnum');
 
 my $tagslib = &MARCgettagslib($dbh,1);
@@ -245,6 +247,7 @@ my ($template, $loggedinuser, $cookie)
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						bibid => $bibid,
+						biblionumber =>$oldbiblionumber,
 						item => \@loop_data,
 						itemnum => $itemnum,
 						itemtagfield => $itemtagfield,
