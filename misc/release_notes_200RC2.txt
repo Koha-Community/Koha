@@ -1,0 +1,84 @@
+RELEASE NOTES
+=============
+This version of Koha is the first in the 2.0 "stable" series.
+It does not mean that it has no bugs, but least five libraries are using it and don't encounter impossible problems.
+If you want to adopt Koha, please do, but you're warned that this release candidate version may still have some bugs and missing features. If you test it and let us know about any we haven't seen yet, it will help us to fix them.
+
+
+INSTALLATION
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+
+UPGRADE from previous 2.0.0preX version
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+
+UPGRADE from previous 1.2.x version
+
+This is the first koha 2 version that contains this upgrade.
+It may have bugs. Please take backups and be sure that you can go back to your previous version if needed.
+Otherwise, WAIT for 2.0.0RC2 or later.
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+* Open a browser to Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs
+* Open a command-line on the koha server
+* Enter :
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha/modules
+./koha2marc.pl
+This "copies" the old DB to the new MARC one.
+Now Koha 2.0.0RC1 is ready for you to test.
+
+
+BUGFIXES/IMPROVEMENTS
+
+BUGS FIXED:
+* biblio deletion now works in MARC & non MARC tables as well. tools for deletion added in MARCeditor (biblio & item deletion)
+* bug in circulation that breaked the 1st circ screen
+* biblio subject adding  when more than 1 subject.
+* bibliothesaurus : a fulltext index was missing. The updatedatabase script now creates it.
+* 621 ; Returns not marking reserves waiting
+* 649 : french word in english template
+* 639 : unclosed <form> & other HTML error
+* 592 : Re-issuing book does not renew correctly
+* 654 : missing image
+* 535 : major display problem with issues
+* 678 : odd case usage in opac
+* 634 : MARC21/USMARC confusion
+* 385 : crash when trying to open an empty MARC::Record
+* 564 : duplicate member number
+
+IMPROVEMENTS:
+* removing some unused code
+* improved polish version
+* improved installer & updater for non "standard" locations (/etc...)
+* adding the classification column to the variables available to the template
+* new plugin for unimarc, for field 60X.
+
+
+DB change :
+* fulltext index added in bibliothesaurus.
+* added missing columns in deletedXXX tables
+
+KNOWN BUGS :
+* some bugs in circulation : english-only messages, errors issuing books, or returning books with reserves, cancelling reserves.
+Note that those bugs doesn't appear everytime (they need specific circumstances it seems).
+* MARC upload fails silently (in breeding farm)
+* autobarcode not calculated even if autobarcode system parameter is set.
+* the MARC21 english default parameter setup is working, but some librarians reports that some choices are poor. If you use MARC21, tweak some setups to fit your needs.
