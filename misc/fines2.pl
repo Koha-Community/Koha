@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 
-#script to keep total of number of issues;
+#  This script loops through each overdue item, determines the fine,
+#  and updates the total amount of fines due by each user.  It relies on 
+#  the existence of /tmp/fines, which is created by ???
+#
+#  This script is meant to be run nightly out of cron.
 
 use C4::Database;
 use C4::Search;
@@ -9,40 +13,84 @@ use C4::Circulation::Fines;
 use Date::Manip;
 
 open (FILE,'>/tmp/fines') || die;
-my ($count,$data)=Getoverdues();
-#print $count;
-my $count2=0;
-#$count=1000;
+# FIXME
+# it looks like $count is just a counter, would it be
+# better to rely on the length of the array @$data and turn the
+# for loop below into a foreach loop?
+#
+my ($numOverdueItems,$data)=Getoverdues();
+print $numOverdueItems if $DEBUG;
+my $overdueItemsCounted=0 if $DEBUG;
+
+# FIXME
+# delete this?
+#$numOverdueItems=1000;
+
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $mon++;
 $year=$year+1900;
-my $date=Date_DaysSince1BC($mon,$mday,$year);
-#my $date=Date_DaysSince1BC(1,24,2002);
-my $bornum;
-#print $date;
-my $total=0;
-my $max=5;
-#my $bornum2=$data->[0]->{'borrowernumber'};
 
-my $i2=1;
-for (my $i=0;$i<$count;$i++){
+my $date=Date_DaysSince1BC($mon,$mday,$year);
+
+# FIXME
+# delete this?
+#my $date=Date_DaysSince1BC(1,24,2002);
+print $date if $DEBUG;
+
+my $bornum;
+
+# FIXME
+# $total isn't used anywhere else in the file,
+# can we delete it?
+#
+my $total=0;
+
+# FIXME
+# this probably ought to be a global variable or constant
+# defined in a central place
+#
+my $maxFine=5;
+
+# FIXME
+# delete both of these?
+#my $bornum2=$data->[0]->{'borrowernumber'};
+#my $i2=1;
+
+# FIXME
+# This should be rewritten to be a foreach loop
+# Also, this loop is really long, and could be better grokked if broken
+# into a number of smaller, separate functions
+#
+for (my $i=0;$i<$numOverdueItems;$i++){
   my @dates=split('-',$data->[$i]->{'date_due'});
   my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);    
   my $due="$dates[2]/$dates[1]/$dates[0]";
   my $borrower=BorType($data->[$i]->{'borrowernumber'});
   if ($date2 <= $date){
-    $count2++;
+    $overdueItemsCounted++ if $DEBUG;
     my $difference=$date-$date2;
-    my ($amount,$type,$printout)=CalcFine($data->[$i]->{'itemnumber'},$borrower->{'categorycode'},$difference);      
-    if ($amount > $max){
-      $amount=$max;
+    my ($amount,$type,$printout)=
+	CalcFine($data->[$i]->{'itemnumber'},
+		 $borrower->{'categorycode'},
+		 $difference);      
+    if ($amount > $maxFine){
+      $amount=$maxFine;
     }
     if ($amount > 0){
       UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
+
+#
+# FIXME
+# If this isn't needed it should be deleted
+#
+
 #      if ($amount ==5){
 #	      marklost();
 #      }
-       if ($borrower->{'categorycode'} eq 'C'){
+       if ($borrower->{'categorycode'} eq 'C'){  # FIXME
+	                                         # this should be a
+                                                 # separate function
+                                                 #
 	 my $dbh=C4Connect;
 	 my $query="Select * from borrowers where borrowernumber='$borrower->{'guarantor'}'";
 	 my $sth=$dbh->prepare($query);
@@ -53,10 +101,15 @@ for (my $i=0;$i<$count;$i++){
 	 $borrower->{'phone'}=$tdata->{'phone'};
        }
        print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$borrower->{'emailaddress'}\t$borrower->{'phone'}\t$borrower->{'streetaddress'}\t$borrower->{'city'}\t$amount\n";
-    } else {
+    } else { # FIXME
+	     # if this is really useless, the whole else clause should be 
+	     # deleted. 
+             #
 #      print "$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t0 fine\n";
     }
-    if ($difference >= 28){ 
+    if ($difference >= 28){ # FIXME
+	                    # this should be a separate function
+                            #
       my $borrower=BorType($data->[$i]->{'borrowernumber'});
       if ($borrower->{'cardnumber'} ne ''){
         my $cost=ReplacementCost($data->[$i]->{'itemnumber'});	
@@ -65,6 +118,9 @@ for (my $i=0;$i<$count;$i++){
 	my $accountno=C4::Circulation::Circ2::getnextacctno($env,$data->[$i]->{'borrowernumber'},$dbh);
 	my $item=itemnodata($env,$dbh,$data->[$i]->{'itemnumber'});
 	if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
+              # FIXME
+              # this should be a separate function
+              #
 	  $item->{'title'}=~ s/\'/\\'/g;
 	  my $query="Insert into accountlines
 	  (borrowernumber,itemnumber,accountno,date,amount,
@@ -78,8 +134,9 @@ for (my $i=0;$i<$count;$i++){
 	  $sth=$dbh->prepare($query);
 	  $sth->execute;
 	  $sth->finish;
-	} else {
-	  
+	} else { # FIXME
+	         # this should be deleted
+                 #
 	}
 	$dbh->disconnect;
       }
@@ -87,4 +144,14 @@ for (my $i=0;$i<$count;$i++){
 
   }
 }
+
+if ($DEBUG) {
+   print <<EOM
+
+Number of Overdue Items counted $overdueItemsCounted
+Number of Overdue Items reported $numOverdueItems
+
+EOM
+}
+
 close FILE;
