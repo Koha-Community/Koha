@@ -1,8 +1,4 @@
 <TMPL_INCLUDE NAME="members-top.inc">
-
-
-<!-- main site -->
-
 <FONT SIZE=6><em><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT><P>
 <p>
 
@@ -35,7 +31,7 @@
         Zone : <TMPL_VAR NAME="area"><BR>
         Frais d'inscription :30 &euro;/an, R&eacute;gl&eacute;s<BR>
         Inscription: <TMPL_VAR NAME="dateenrolled">, Fin d'abonnement: <TMPL_VAR NAME="expiry"><BR>
-        Biblioth&egrave;que de rattachement : <TMPL_VAR NAME="homebranch"> 
+        Biblioth&egrave;que de rattachement : <TMPL_VAR NAME="homebranch">
       <P> <TMPL_IF NAME="printethnicityline"> </TMPL_IF> Date de naissance :<TMPL_VAR NAME="dateofbirth"><BR>
         Sexe: <TMPL_VAR NAME="sex">
       <P> Autre contact : <TMPL_VAR NAME="contactname"><BR>
@@ -45,21 +41,24 @@
       <P>
       <TMPL_IF NAME="isguarantee">
          Guarantees:<TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME="cardnumber"></a><br>
-        </TMPL_LOOP> <TMPL_ELSE> Caution : <TMPL_IF NAME="guarantorborrowernumber"> 
+        </TMPL_LOOP> <TMPL_ELSE> Caution : <TMPL_IF NAME="guarantorborrowernumber">
         <A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
         <TMPL_ELSE> Pas de caution<br>
                     </TMPL_IF>
       </TMPL_IF>
-      <P> Remarques g&eacute;n&eacute;rales : 
+      <P> Remarques g&eacute;n&eacute;rales :
         <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
-        <TMPL_VAR NAME="borrowernotes"> 
+        <TMPL_VAR NAME="borrowernotes">
         <!--</a>-->
       <p align=right>
       <form action=/cgi-bin/koha/memberentry.pl method=post>
         <input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-        <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
-        <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
-        <p></p>
+          <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
+          <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif">
+	<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="/images/password-mem.gif" alt="Mot de passe">
+	</p>
+	<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="/images/modify-user-flags.gif" alt="Privilèges"></a>
+
       </form>
     </font></TD>
   </TR>
@@ -93,8 +92,8 @@
   <tr VALIGN=TOP  >
     <TD colspan=3 align=right>
       <nobr>
-        <a href=/cgi-bin/koha/boraccount.pl?bornum=><TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/view-account.gif"></a>
-        <a href=/cgi-bin/koha/pay.pl?bornum=><TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/pay-fines.gif"></a>
+        <a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/view-account.gif"></a>
+        <a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/pay-fines.gif"></a>
       </nobr>
     </td>
   </tr>
@@ -197,8 +196,4 @@
 <p align=right>
   <a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="/images/reading-record.gif"></a>
 </p>
-
-
-<!-- endmenu -->
-
 <TMPL_INCLUDE NAME="members-bottom.inc">

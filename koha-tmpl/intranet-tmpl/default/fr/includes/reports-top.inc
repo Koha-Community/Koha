@@ -170,3 +170,8 @@ a.parameters:hover {
 </tr>
 </table>
 <BLOCKQUOTE>
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> à Koha</p>
+</TMPL_IF>
