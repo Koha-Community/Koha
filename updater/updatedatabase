@@ -542,6 +542,20 @@ my %tabledata = (
             flagdesc            => 'Acquisition and/or suggestion management',
             defaulton           => 0
         },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 12,
+            flag                => 'management',
+            flagdesc            => 'Set library management parameters',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 13,
+            flag                => 'tools',
+            flagdesc            => 'Use tools (export, import, barcodes)',
+            defaulton           => 0
+        },        
     ],
     systempreferences => [
         {
@@ -1400,6 +1414,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.102  2005/03/23 09:23:04  doxulting
+# Adding 2 flags to separate the rights in the parameter section
+#
 # Revision 1.101  2005/02/24 11:28:35  hdl
 # Adding MIME and delimiter support to system preferences
 #
