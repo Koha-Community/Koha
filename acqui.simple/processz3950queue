@@ -123,6 +123,7 @@ while (1) {
 			    if ($serverdone{$serverinfo}==-1) {
 				my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
 				$stj->execute;
+				exit if $dbi->err;
 				($resultsid) = $stj->fetchrow;
 			    } else {
 				my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
@@ -254,6 +255,17 @@ EOF
 	    $lastrun=time();
 	}
 	sleep 10;
+	my $sth=$dbh->prepare("select id,startdate from z3950results where isnull(enddate)");
+	$sth->execute;
+	if ($sth->rows) {
+	    $checkqueue=1;
+	}
+	my $now=time();
+	while (my ($id, $startdate) = $sth->fetchrow) {
+	    if ($now-$startdate>1200) {
+		my $sti=$dbh->do("update z3950results set enddate=$now where id=$id");
+	    }
+	}
     }
 }
 
