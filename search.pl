@@ -5,6 +5,8 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
+use C4::Acquisitions;  # Only used for branches() routine which should probably
+		       # be elsewhere
 
 my $env;
 my $input = new CGI;
@@ -197,32 +199,52 @@ while ($i < $count2){
 	 $stuff[5].=" ";	
       }
       $stuff[5]='';
-      foreach my $branchcode (sort keys %$branchcount) {
-	  my $branchname=branchname($branchcode);
-	  my $c=$branchcount->{$branchcode};
-	  $stuff[5].="$branchname";
-	  if ($c>1) {
-	      $stuff[5].=" ($c)";
-	  }
-	  $stuff[5].=" ";
+      my ($numbranches, @branches) = branches();
+      my $branchinfo;
+      foreach (@branches) {
+	      my $branchcode=$_->{'branchcode'};
+	      my $branchname=$_->{'branchname'};
+	      $branchinfo->{$branchcode}=$branchname;
+      }
+      if ($numbranches>1) {
+	      foreach my $branchcode (sort keys %$branchcount) {
+		  my $c=$branchcount->{$branchcode};
+		  $stuff[5].=$branchinfo->{$branchcode};
+		  if ($c>1) {
+		      $stuff[5].=" ($c)";
+		  }
+		  $stuff[5].=" ";
+	      }
+      } else {
+	      my $circcount;
+	      foreach my $branchcode (sort keys %$branchcount) {
+		  $circcount=$branchcount->{$branchcode};
+	      }
+	      my $shelfcount=$count-$circcount-$lostcount-$mending-$transit;
+	      if ($circcount) {
+		      $stuff[5]="Circ ($circcount) ";
+	      }
+	      if ($shelfcount) {
+		      $stuff[5].="Shelf ($shelfcount) ";
+	      }
       }
       if ($lostcount > 0) {
         $stuff[5]=$stuff[5]."Lost";
-         if ($lostcount >1 ){                                                                                                         
+         if ($count >1 ){                                                                                                         
 	  $stuff[5]=$stuff[5]." ($lostcount)";                                                                                            
          }                                                                                                                         
 	 $stuff[5].=" ";	
       }
       if ($mending > 0){
         $stuff[5]=$stuff[5]."Mending";
-         if ($mending >1 ){                                                                                                         
+         if ($count >1 ){                                                                                                         
 	  $stuff[5]=$stuff[5]." ($mending)";                                                                                            
          }                                                                                                                         
 	 $stuff[5].=" ";	
       }
       if ($transit > 0){
         $stuff[5]=$stuff[5]."In Transiit";
-         if ($transit >1 ){                                                                                                         
+         if ($count >1 ){                                                                                                         
 	  $stuff[5]=$stuff[5]." ($transit)";                                                                                            
          }                                                                                                                         
 	 $stuff[5].=" ";	
