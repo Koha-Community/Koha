@@ -247,17 +247,17 @@ sub issuebook {
 	    my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 	    if ($responses->{2} eq '') {
 		$questionnumber=2;
-		$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) [$resbor]\nAllow issue?";
+		$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $resrec->{'reservedate'}\nAllow issue?";
 		$defaultanswer='N';
 		last SWITCH;
 	    } elsif ($responses->{2} eq 'N') {
-		printreserve($env, $resrec, $resborrower, $iteminformation);
+		#printreserve($env, $resrec, $resborrower, $iteminformation);
 		$rejected=-1;
 		last SWITCH;
 	    } else {
 		if ($responses->{3} eq '') {
 		    $questionnumber=3;
-		    $question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}?";
+		    $question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
 		    $defaultanswer='N';
 		    last SWITCH;
 		} elsif ($responses->{3} eq 'Y') {

@@ -55,6 +55,10 @@ sub issues {
 		    print "Error issuing book: $rejected<br>\n";
 		}
 	    }
+	    my $responsesform='';
+	    foreach (keys %responses) {
+		$responsesform.="<input type=hidden name=response-$_ value=$responses{$_}>\n";
+	    }
 	    if ($question) {
 		print << "EOF";
 		<table border=1 bgcolor=#dddddd>
@@ -73,6 +77,7 @@ sub issues {
 		<input type=hidden name=borrnumber value=$borrnumber>
 		<input type=hidden name=barcode value=$barcode>
 		<input type=hidden name=questionnumber value=$questionnumber>
+		$responsesform
 		<input type=hidden name=answer value=Y>
 		<input type=submit value=Yes>
 		</form>
@@ -83,6 +88,7 @@ sub issues {
 		<input type=hidden name=borrnumber value=$borrnumber>
 		<input type=hidden name=barcode value=$barcode>
 		<input type=hidden name=questionnumber value=$questionnumber>
+		$responsesform
 		<input type=hidden name=answer value=N>
 		<input type=submit value=No>
 		</form>
