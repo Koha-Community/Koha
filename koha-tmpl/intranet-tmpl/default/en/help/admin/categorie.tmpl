@@ -3,16 +3,23 @@
 
 <p>Here is where you define the types of users of your library and how they will be handled.</p>
 
+<h2 class="help">Category Code and Description</h2>
 <p>Start by assigning a Category Code and a Description to each borrower type. The code is limited on no more than two characters and may be anything you choose. Four codes, however, have special meaning for Koha :</p>
 <ul>
 	<li>"I" can be used for institutional members, like other libraries that borrow from you, in which case Koha expects slightly different information about the institution;</li>
 	<li>"A" (Adult) and "W" can be linked as "guarantors" to other borrowers who are their dependents.</li>
-	<li>"C" (Children) his a borrower category that has a "guarantor"</li>
+	<li>"C" (Children) is a borrower category that has a "guarantor"</li>
 </ul>
 
+<h2 class="help">Enrollment Period</h2>
 <p>Enrollment period is a number indicating how many years a user's enrollment is valid. If you consider enrollments to expire after four years for example (as in a school, perhaps), then set this number to 4. If enrollments never expire, set this to an impossibly high number (99).</p>
 
+<h2 class="help">Upper Age Limit and Age Required</h2>
 <p>Upper Age Limit and Age Required set the age parameters for this type of user. If you issue children's cards to users between the ages of 2 and 18, for example, then Age Required would be "2" and Upper Age Limit would be "18." If there is no upper age limit, set this value to 99 (the highest allowed).</p>
 
-<p>Enrollment Fee and Reserve Fee (if any) should be entered either as whole numbers or with six decimal places, with no currency notation (e.g. "1.250000" instead of "$1.25"). Overdue Notice Required lets you bypass generating overdue notices for this user type, and Issue Limit sets the highest number of items which this type of user may have borrowed.</p>
+<h2 class="help">Enrollment Fee and Reserve Fee</h2>
+<p>Enrollment Fee and Reserve Fee (if any) should be entered either as whole numbers or with six decimal places, with no currency notation (e.g. "1.250000" instead of "$1.25").</p>
+
+<h2 class="help">Overdue Notice Required</h2>
+<p>Overdue Notice Required lets you bypass generating overdue notices for this user type.</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
