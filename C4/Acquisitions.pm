@@ -99,11 +99,22 @@ sub getorders {
   return ($i,\@results);
 }
 
+sub biblioitemcount { 
+  my ($biblio)=@_;
+  my $dbh=C4Connect;
+  my $query="Select count(*) from biblioitems where biblionumber=$biblio";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $dbh->disconnect;
+  return($data->{'count(*)'});
+}
+
 sub itemcount{
   my ($biblio)=@_;
   my $dbh=C4Connect;
   my $query="Select count(*) from items where biblionumber=$biblio";
-#  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;

@@ -619,6 +619,9 @@ sub delbiblio{
     $query = "Delete from biblio where biblionumber=$biblio";
     $sth=$dbh->prepare($query);
     $sth->execute;
+    $query = "Delete from biblioitems where biblionumber=$biblio";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
     $sth->finish;
   }
 
@@ -999,6 +1002,10 @@ END { }       # module clean-up code here (global destructor)
 
 #---------------------------------------
 # $Log$
+# Revision 1.1.2.6  2003/01/15 21:37:19  tonnesen
+# Fixes dangling biblioitems problem.  Will no longer allow you to delete a
+# biblio without also removing the biblioitems.
+#
 # Revision 1.1.2.5  2002/08/14 18:30:50  tonnesen
 # Adding copyright statements to all .pl and .pm files in rel-1-2 branch
 #
