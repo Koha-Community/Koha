@@ -2,11 +2,6 @@
 	<TMPL_INCLUDE NAME="opac-top.inc">
 <TMPL_ELSE>
 	<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-   <p align=left>Connect&eacute; : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-   <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
 </TMPL_IF>
 
 <TMPL_IF NAME="loggedinuser">
@@ -38,7 +33,7 @@
 
 <TR VALIGN=TOP>
 <TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><b>HELP</b><br>
-<b>Rechercher :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-clés + auteur + cote) ralentira la recherche.<p>
+<b>Rechercher :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
 <b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>
 Maintenance du Catalogue:</a></b> Pour ajouter une <b>nouvelle</b> notice ou un <b>nouvel</b> exemplaire allez &agrave; la page
 <a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.<p>
@@ -50,7 +45,7 @@ Pour <b>commander, modifie ou effacer</b> une notice ou un exemplaire, cherchez-
 
 <TABLE >
 <TR VALIGN=TOP>
-<TD>Mots-clés</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
+<TD>Mots-cl&eacute;s</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
 <TR VALIGN=TOP>
 <TD>Titre</TD> <TD><INPUT TYPE="text"  SIZE="25"
 NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Normal<input
