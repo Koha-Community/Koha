@@ -24,7 +24,7 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook
-&find_reserves);
+&find_reserves &transferbook);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -183,6 +183,24 @@ sub findborrower {
     $sth->finish;
     $dbh->disconnect;
     return(\@borrowers);
+}
+
+
+sub transferbook {
+    my ($env, $iteminformation, $barcode) = @_;
+    my $messages;
+    my $dbh=&C4Connect;
+    #new entry in branchtransfers....
+    my $sth = $dbh->prepare("insert into branchtransfers (itemnumber, frombranch, datearrived, tobranch) values($iteminformation->{'itemnumber'}, '$env->{'frbranchcd'}', now(), '$env->{'tobranchcd'}')");
+    $sth->execute || return (0,"database error: $sth->errstr");
+    $sth->finish;
+    #update holdingbranch in items .....
+    $sth = $dbh->prepare("update items set holdingbranch='$env->{'tobranchcd'}' where items.itemnumber=$iteminformation->{'itemnumber'}");
+    $sth->execute || return (0,"database error: $sth->errstr");
+    $sth->execute;
+    $sth->finish;
+    $dbh->disconnect;
+    return (1, $messages);
 }
 
 
