@@ -346,6 +346,9 @@ sub _next_token_internal {
 	} elsif ($it =~ /^<!/) {
 	    $kind = TmplTokenType::DECL;
 	    $kind = TmplTokenType::COMMENT if $it =~ /^<!--(?:(?!-->).)*-->/;
+	    if ($kind == TmplTokenType::COMMENT && $it =~ /^<!--\s*#include/s) {
+		warn_normal "Apache #include directive found instead of HTML::Template directive <TMPL_INCLUDE>", $this->line_number_start;
+	    }
 	} elsif ($it =~ /^<\?/) {
 	    $kind = TmplTokenType::PI;
 	}
