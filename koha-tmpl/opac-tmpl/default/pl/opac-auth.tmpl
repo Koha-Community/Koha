@@ -1,22 +1,22 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>Sorry, KOHA doesnt think you have permission for this page.<h2>
+<h2>Niestety, nie masz uprawnień do tej strony.<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
 <!-- This is what is displayed if login has timed out -->
-<h2>Sorry, your session has timed out, please login again.<h2>
+<h2>Twoja sesja wygasła, zaloguj się ponownie.<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>You are accessing koha from a different ip address! please login again.<h2>
+<h2>Wchodzisz do systemu z innego adresu IP! Zaloguj się ponownie.<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>Zł hasło lub użytkownik/numer karty. Spróbuj raz jeszcze.<h2>
+<h2>Wprowadziłeś nieprawidłowe hasło lub uzytkownika, spróbuj raz jeszcze.<h2>
 <!-- /TMPL_IF -->
 
 
@@ -29,7 +29,7 @@
   <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
 <!-- /TMPL_LOOP -->
     <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0" align="center">
-    <tr><th colspan="2" background="/images/background-mem.gif"><h3>Wejście do Systemu</h3></th></tr>
+    <tr><th colspan="2" background="/images/background-mem.gif"><h3>Wstęp do Systemu</h3></th></tr>
     <tr><td>Numer Karty:</td><td><input type="text" name="userid"></td></tr>
     <tr><td>Hasło:</td><td><input type="password" name="password"></td></tr>
     <tr><td colspan="2" align="center"><input type="submit" value="Zaloguj"></td></tr>

@@ -12,10 +12,10 @@
 &nbsp;</td></tr>
 </table>
 <br>
-Rekordy od <!-- TMPL_VAR NAME="startfrom" --> do <!-- TMPL_VAR NAME="endat" --> z <!-- TMPL_VAR NAME="numrecords" --> znalezionych.
+Wyświetlono od <!-- TMPL_VAR NAME="startfrom" --> do <!-- TMPL_VAR NAME="endat" --> z <!-- TMPL_VAR NAME="numrecords" --> rekordów.
 <br>
     <!-- TMPL_IF NAME="displayprev" -->
-	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" width="15" height="14" border="0" alt="Previous Page"></a>
+	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" width="15" height="14" border="0" alt="Poprzednia Strona"></a>
     <!-- TMPL_ELSE -->
 	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" width="15" height="14" border="0" alt="">
     <!-- /TMPL_IF -->
@@ -27,7 +27,7 @@ Rekordy od <!-- TMPL_VAR NAME="startfrom" --> do <!-- TMPL_VAR NAME="endat" --> 
 	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     <!-- TMPL_IF NAME="displaynext" -->
-	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" width="15" height="14" border="0" alt="Next Page"></a>
+	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" width="15" height="14" border="0" alt="Następna Strona"></a>
     <!-- TMPL_ELSE -->
 	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" width="15" height="14" border="0" alt="">
     <!-- /TMPL_IF -->

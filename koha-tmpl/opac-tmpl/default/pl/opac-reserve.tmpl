@@ -6,34 +6,34 @@
 	<table  cellpadding="5" cellspacing="0" border="1">
 	<tr bgcolor="#fecc99" >
 	<td><font face="arial, helvetica, sans-serif" color="red" size="+1"><b>
-	<!-- TMPL_IF NAME="too_much_oweing" -->Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="too_many_reserves" -->Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves. <br><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="already_reserved" -->Już posiadasz rezerwację na tę pozycję.<br><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="no_items_selected" -->You must select at least one item type!<br><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="no_branch_selected" -->You must select a branch for pickup!<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="too_much_oweing" -->Przepraszamy, ale nie możesz rezerwować, gdyż masz dług <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="too_many_reserves" -->Przepraszamy, nie można mieć więcej jak <!-- TMPL_VAR NAME="too_many_reserves" --> rezerwacji. <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="already_reserved" -->Już zarezerwowałeś tę pozycję.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_items_selected" -->Musisz wybrać przynajmniej jeden typ pozycji!<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->Musisz wybrać oddział odbioru!<br><!-- /TMPL_IF -->
 	</b></font></td></tr></table>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
-	<p>Strona rezerwacji dla pozycji: <b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR name="biblionumber" -->)</b></p>
-	<p> Istnieje <b><!-- TMPL_VAR NAME="reservecount" --></b> rezerwacji na tę pozycję. </p>
-	<p>Prosimy wybrać żądany typ pozycji. Pierwszy z typów, który stanie się dostępny zostanie dla Ciebie zarezerwowany.</p>
+	<p>Strona rezerwacji dla: <b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR name="biblionumber" -->)</b></p>
+	<p> Złożono już <b><!-- TMPL_VAR NAME="reservecount" --><b> rezerwacje na tę pozycję. </p>
+	<p>Wybierz typ pozycji, która Ci odpowiada. Pierwszy z zaznaczonych typów, który stanie sie dostępny zostanie dla Ciebie zatrzymany.</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="item_types_selected" value="1">
 		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
 		<table border="1">
 			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
-				<th>Zamów</th>
-				<th>Typ pozycji</th>
-				<th>Copies</th>
+				<th>Zarezerwuj</th>
+				<th>Typ Pozycji</th>
+				<th>Egzempl</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
 					<!-- TMPL_UNLESS NAME="notforloan" -->
 						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"></td>
 					<!-- TMPL_ELSE -->
-						<td>Cannot be Reserved</td>
+						<td>Nie można rezerwować</td>
 					<!-- /TMPL_UNLESS -->
 					<td><!-- TMPL_VAR NAME="description" --></td>
 					<td><!-- TMPL_VAR NAME="copies" --></td>
@@ -41,14 +41,13 @@
 			<!-- /TMPL_LOOP -->
 		</table>
 		<p>
-		Prosimy wybrać oddział, z którego nastąpi odbiór pozycji:
-		<!-- TMPL_VAR NAME="CGIbranch" -->
+		Prosimy wybrać oddział, gdzie zostanie odebrana pozycja: <!-- TMPL_VAR NAME="CGIbranch" -->
 		</p>
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td>Rezerwacja tego dnia:</td>
+				<td>Dzień złożenie rezerwacji:</td>
 				<td>
-					<select name="required-day"><option value="0">Day</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+					<select name="required-day"><option value="0">Dzień</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
 </select>
 				</td>
 				<td>
@@ -56,14 +55,14 @@
 </select>
 				</td>
 				<td>
-					<select name="required-year"><option value="0">Year</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+					<select name="required-year"><option value="0">Rok</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
 </select>
 				</td>
 			</tr>
 			<tr>
-				<td>Rezygnacja tego dnia:</td>
+				<td>Dzień porzucenia rezerwacji:</td>
 				<td>
-					<select name="expires-day"><option value="0">Day</option><option value="1" >1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+					<select name="expires-day"><option value="0">Dzień</option><option value="1" >1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
 </select>
 				</td>
 				<td>
@@ -71,7 +70,7 @@
 </select>
 				</td>
 				<td>
-					<select name="expires-year"><option value="0">Year</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+					<select name="expires-year"><option value="0">Rok</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
 </select>
 				</td>
 			</tr>
@@ -82,7 +81,7 @@
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p>Prosimy o potwierdzenie rezerwacji:</p>
+	<p>Prosimy potwierdzić chęć rezerwacji następujących typów pozycji:</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1">
@@ -91,7 +90,7 @@
 		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->">
 		<table border="1">
 			<tr>
-				<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">Typ pozycji</th>
+				<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">Typ Pozycji</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
@@ -99,12 +98,12 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		której odbiór nastąpi z <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
+		która zostanie odebrana z <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
 		<!-- TMPL_IF NAME="fee" -->
-			<p>Uwaga, pobrana zostanie opłata w wysokości <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+			<p>Uwaga, pobrana zostanie opłata rezerwacyjna w wys. <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
 		<!-- /TMPL_IF -->
-		<input type="submit" value="Złóż zamówienie">
+		<input type="submit" value="Rezerwuj">
 	</form>
 <!-- /TMPL_IF -->
 

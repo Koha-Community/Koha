@@ -1,14 +1,14 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
-<p><font size="6"><em>Rachunek dla <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em></font></p>
+<p><font size="6"><em>Rachunek Dla <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em></font></p>
 <!-- /TMPL_LOOP -->
 
 <table border="1" cellspacing="0" cellpadding="5" align="center">
 <tr valign="top">
 <td  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif" colspan="2"><B>KARY &amp; OPŁATY</b></td>
 <td  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif" colspan="1"><B>KWOTA</b></TD>
-<td  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif" colspan="1"><B>POZOSTAŁO</b></td>
+<td  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif" colspan="1"><B>DŁUG</b></td>
 </TR>
 
 <!-- TMPL_LOOP NAME="ACCOUNT_LINES" -->
@@ -24,7 +24,7 @@
 
 <tr valign="top">
 <td></td>
-<td colspan="2"><b>Do zapłaty</b></td>
+<td colspan="2"><b>Do Zapłaty</b></td>
 
 <td><b><!-- TMPL_VAR NAME="total" --></b></td>
 

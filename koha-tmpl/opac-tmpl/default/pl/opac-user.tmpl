@@ -7,14 +7,14 @@
 		<td><b>CZY NASZE DANE SĄ POPRAWNE?</b></td>
 	</tr>
 	<tr>
-		<td><font size="2" face="arial, helvetica, sans-serif">Numer karty: <!-- TMPL_VAR NAME="cardnumber" --> <br>
+		<td><font size="2" face="arial, helvetica, sans-serif">Karta Biblioteczna: <!-- TMPL_VAR NAME="cardnumber" --> <br>
 			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) <br>
 			<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --><br>
 			<!-- TMPL_VAR NAME="phone" --> (hm)<br>
 			<!-- TMPL_VAR NAME="faxnumber" --> (wk)<br>
 			<!-- TMPL_VAR NAME="emailaddress" --><br>
-			<br>Zmieniło się coś?<br><br>
-			<a href="/cgi-bin/koha/opac-userupdate.pl">Wprowadź zmiany</a>
+			<br>Coś się zmieniło?<br><br>
+			<a href="/cgi-bin/koha/opac-userupdate.pl">Aktualizuj Wpis</a>
 			</font>
 		</td>
 	</tr>
@@ -25,7 +25,7 @@
 	<table cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>Masz outstanding charges and fines z <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
+				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>Zaległe opłaty i kary w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
 			</td>
 		</tr>
 	</table>
@@ -36,7 +36,7 @@
 		<tr bgcolor="#fecc99">
 			<td>
 				<font face="arial, helvetica, sans-serif" size="+2">
-					<b>Masz outstanding charges and fines z <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+					<b>Zaległe opłaty i kary w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
@@ -48,13 +48,13 @@
 		<tr bgcolor="#fecc99">
 			<td>
 				<font face="arial, helvetica, sans-serif" size="+2">
-					<b>Masz a credit z <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+					<b>Kredyt w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
 	</table>
 <!-- /TMPL_IF -->
-<p><a href="/cgi-bin/koha/opac-account.pl">Przejrzyj rachunki</a></p>
+<p><a href="/cgi-bin/koha/opac-account.pl">Przejrzyj Rachunki</a></p>
 
 <!-- /TMPL_LOOP -->
 
@@ -63,15 +63,15 @@
 		<tr bgcolor="#fecc99" >
 			<td colspan="4">
 				<font color="red" face="arial, helvetica, sans-serif" size="+2">
-					<b>	Masz reserved items waiting:</b>
+					<b>	Czekają na Ciebie zarezerwowane pozycje:</b>
 				</font>
 			</td>
 		</tr>
 		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 			<th>Tytuł</th>
 			<th>Autor</th>
-			<th>Dzień rezerwacji</th>
-			<th>Pick Up Branch</th>
+			<th>Data Rezerwacji</th>
+			<th>Oddział Odbioru</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="WAITING" -->
 			<tr>
@@ -87,15 +87,15 @@
 
 <!-- TMPL_IF NAME="issues_count" -->
 
-<p>	Masz <!-- TMPL_VAR NAME="issues_count" --> wypożyczone pozycje.</p>
+<p>	Posiadasz <!-- TMPL_VAR NAME="issues_count" --> wypożyczone pozycje.</p>
 	<table border="1" cellspacing="0" cellpadding="5">
 		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 			<th>Tytuł</th>
 			<th>Autor</th>
-			<th>Zwrot dnia</th>
-			<th>Typ</th>
+			<th>Do Zwrotu</th>
+			<th>typpozycji</th>
 			<th>Opłaty</th>
-			<th>Kredyt</th>
+			<th>Current Loan</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ISSUES" -->
 			<tr valign="top">
@@ -103,13 +103,13 @@
 				<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="date_due" --></td>
 				<td><!-- TMPL_VAR NAME="itemtype" --></td>
-				<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-				<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF NAME="charges" -->Tak<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF NAME="status" -->Tak<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 <!-- TMPL_ELSE -->
-<p>Nie masz żadnych wypożycznych pozycji.</p>
+<p>Nie masz wypożyczonych pozycji.</p>
 <!-- /TMPL_IF -->
 
 
@@ -119,7 +119,7 @@
 		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 			<th>Tytuł</th>
 			<th>Autor</th>
-			<th>Dzień rezerwacji</th>
+			<th>Data Rezerwacji</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="RESERVES" -->
 			<tr valign="top">
