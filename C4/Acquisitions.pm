@@ -340,10 +340,14 @@ sub newbasket {
 }
 
 sub bookfunds {
+  my ($day,$month,$year)=(localtime(time))[3,4,5];
+  $year+=1900;
+  $month++;
+  my $today=sprintf "%4d-%02d-%02d", $year, $monthm, $day;
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid 
-  and aqbudget.startdate='2001-07-01' 
+  and aqbudget.startdate<'$today' and aqbudget.enddate > '$today'
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
