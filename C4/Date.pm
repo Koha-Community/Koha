@@ -17,6 +17,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
              &display_date_format
              &format_date
+             &format_date_in_iso
 );
 
 
@@ -90,4 +91,35 @@ sub format_date
 	}
 }
 
+sub format_date_in_iso
+{
+        my $olddate = shift;
+        my $newdate;
+                
+        my $dateformat = get_date_format();
+
+        if ( $dateformat eq "us" )
+        {
+                Date_Init("DateFormat=US");
+                $olddate = ParseDate($olddate);
+        }
+        elsif ( $dateformat eq "metric" )
+        {
+                Date_Init("DateFormat=metric");
+                $olddate = ParseDate($olddate);
+        }
+        elsif ( $dateformat eq "iso" )
+        {
+                Date_Init("DateFormat=iso");
+                $olddate = ParseDate($olddate);
+        }
+        else
+        {
+                return "9999-99-99";
+        }
+
+	$newdate = UnixDate($olddate, '%Y-%m-%d');
+
+	return $newdate;
+}
 1;
