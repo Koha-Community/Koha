@@ -228,7 +228,7 @@ sub checkperlmodules {
     my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
     
-    unless (eval "require 5.6.0") {
+    unless (eval "require 5.006_000") {
 	die getmessage('PerlVersionFailure', ['5.6.0']);
     }
 
