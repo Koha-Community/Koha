@@ -32,13 +32,76 @@ if ($input) {
 }
 
 
-my $releaseversion="1.2.1RC2";
-print "\nWhat is the release name?  [$releaseversion]: ";
-chomp($input = <STDIN>);
-if ($input) {
-    $releaseversion=$input;
+print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
+chdir $kohadir;
+open (CVSLOG, "cvs log buildrelease|");
+my $symbolicnamessection=0;
+my $symbolicnames;
+my $highestversion;
+my $highestrc;
+my $released;
+while (<CVSLOG>) {
+    if (/^symbolic names:/) {
+	$symbolicnamessection=1;
+    }
+    if ($symbolicnamessection && (/^\s+([^:]*):/)) {
+	my $tag=$1;
+	if ($tag=~/R_(.*)/) {
+	    my $version='';
+	    my $rc=0;
+	    my $id=$1;
+	    $id=~s/-/\./g;
+	    if ($id =~/(.*)RC(.*)/) {
+		$version=$1;
+		$rc=$2;
+		if (versioncompare($version, $highestversion)) {
+		    $highestversion=$version;
+		    $released=0;
+		    $highestrc=$rc;
+		}
+	    } else {
+		$version=$id;
+		if (versioncompare($version, $highestversion)) {
+		    $highestversion=$version;
+		    $released=1;
+		    $highestrc=0;
+		}
+	    }
+	    $symbolicnames->{$version}->{$rc}=1;
+	}
+    }
 }
 
+
+my $releaseversion='';
+my $currentversion='';
+
+if ($released) {
+    $releaseversion=($highestversion+1)."RC1";
+    $currentversion=$highestversion;
+} else {
+    $releaseversion="$highestversion\RC".($highestrc+1);
+    $currentversion="$highestversion\RC$highestrc";
+}
+
+print "Current release tag is $currentversion.\n";
+print "Would you like to bump that up to $releaseversion?  [Y]/N: ";
+chomp($input = <STDIN>);
+if ($input =~ /^n/i) {
+    $releaseversion=$currentversion;
+    print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
+    chomp($input = <STDIN>);
+    if ($input =~ /^n/i || $input eq '') {
+	print "\nOkay, please re-run buildrelease now.\n";
+	exit;
+    }
+} else {
+    print "New release version [$releaseversion]: ";
+    chomp($input = <STDIN>);
+    if ($input) {
+	$releaseversion=$input;
+    }
+}
 
 
 my $sfuserid='';
@@ -54,6 +117,8 @@ if ($cvsroot=$ENV{'CVSROOT'}) {
     }
     $ENV{'CVSROOT'}="$sfuserid\@cvs.koha.sourceforge.net:/cvsroot/koha";
 }
+my $tagname=$releaseversion;
+$tagname=~s/\./-/g;
 
 print qq|
 Updating the 'koha' CVS files.  You may need to enter your SourceForge password.
@@ -62,11 +127,21 @@ Using $kohadir.
 chdir($kohadir);
 system("cvs update");
 print qq|
+Tagging koha with tag release-$tagname
+|;
+system("cvs tag -F R_$tagname");
+print qq|
 Updating the 'koha-html' CVS files.  You may need to enter your SourceForge password.
 Using $kohahtmldir.
 |;
 chdir($kohahtmldir);
 system("cvs update");
+print qq|
+Tagging koha-html with tag release-$tagname
+|;
+system("cvs tag -F R_$tagname");
+
+
 
 
 my $rootdir="/tmp/koha-".$releaseversion;
@@ -115,9 +190,30 @@ system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 # Copy all CVS files to intranet-html and opac-html
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
+system("rm -f $rootdir/opac-html/koha.mo");
+system("rm -f $rootdir/opac-html/koha.pot");
+system("rm -f $rootdir/opac-html/test");
 
 system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
+system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
+system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
+
+
+sub versioncompare {
+    my $v1=shift;
+    my $v2=shift;
+    my @v1=split(/\./, $v1);
+    my @v2=split(/\./, $v2);
+    my $count=$#v1;
+    ($#v2>$count) && ($count=$#v2);
+    for (my $index=0; $index<$count; $index++) {
+	if ($v1[$index]>$v2[$index]) {
+	    return 1;
+	}
+    }
+    return 0;
+}
