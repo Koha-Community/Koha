@@ -44,7 +44,7 @@ added to</font>
 </tr>
 <tr valign="top">
 <td>Item Barcode:</td>
-<td><input type="text" name="barcode" size="40"></td>
+<td><input type="text" name="barcode" size="40" class="important"></td>
 </tr>
 <tr valign="top">
 <td>Branch:</td>
@@ -74,17 +74,23 @@ added to</font>
 </select></td>
 </tr>
 
-<tr valign="top">
+<!--tr valign="top">
 <td>Volume:</td>
 <td><input name="volume" size="40" value="<TMPL_VAR NAME="volume">"></td>
 </tr>
 <tr valign="top">
 <td>Number:</td>
 <td><input name="number" size="40" value="<TMPL_VAR NAME="number">"></td>
-</tr>
+</tr-->
 <tr valign="top">
-<td>Volume Description:</td>
-<td><input name="volumeddesc" size="40" value="<TMPL_VAR NAME="volumeddesc">"></td>
+<td>Volume:</td>
+<td><input name="volumeddesc" size="40" value="<TMPL_VAR NAME="volumeddesc">" class="important"></td>
+</tr>
+
+<tr valign="top">
+<td>Publication Year:</td>
+<td><input name="publicationyear" size="40" value="<TMPL_VAR
+NAME="publicationyear">" class="important"></td>
 </tr>
 
 <tr valign="top">
@@ -109,11 +115,7 @@ added to</font>
 <td><input name="publishercode" size="40" value="<TMPL_VAR
 NAME="publishercode">"></td>
 </tr>
-<tr valign="top">
-<td>Publication Year:</td>
-<td><input name="publicationyear" size="40" value="<TMPL_VAR
-NAME="publicationyear">"></td>
-</tr>
+
 <tr valign="top">
 <td>Place of Publication:</td>
 <td><input name="place" size="40" value="<TMPL_VAR NAME="place">"></td>
