@@ -113,8 +113,8 @@ sub text_replace (**) {
     }
 }
 
-sub listfiles ($$) {
-    my($dir, $type) = @_;
+sub listfiles ($$$) {
+    my($dir, $type, $action) = @_;
     my @it = ();
     if (opendir(DIR, $dir)) {
 	my @dirent = readdir DIR;	# because DIR is shared when recursing
@@ -125,9 +125,9 @@ sub listfiles ($$) {
 	    || (defined $exclude_regex && $dirent =~ /^(?:$exclude_regex)$/)) {
 		;
 	    } elsif (-f $path) {
-		push @it, $path ;#if !defined $type || $dirent =~ /\.(?:$type)$/;
+		push @it, $path if (!defined $type || $dirent =~ /\.(?:$type)$/) || $action eq 'install';
 	    } elsif (-d $path && $recursive_p) {
-		push @it, listfiles($path, $type);
+		push @it, listfiles($path, $type, $action);
 	    }
 	}
     } else {
@@ -176,10 +176,10 @@ Create or update PO files from templates, or install translated templates.
   -q, --quiet                 no output to screen (except for errors)
 
 The -o option is ignored for the "create" and "update" actions.
-Try `perldoc $0' for perhaps more information.
+Try `perldoc $0 for perhaps more information.
 EOF
     exit($exitcode);
-}
+}#`
 
 ###############################################################################
 
@@ -187,7 +187,7 @@ sub usage_error (;$) {
     for my $msg (split(/\n/, $_[0])) {
 	print STDERR "$msg\n";
     }
-    print STDERR "Try `$0 --help' for more information.\n";
+    print STDERR "Try `$0 --help for more information.\n";
     exit(-1);
 }
 
@@ -238,7 +238,7 @@ if (-d $in_files[0]) {
     # input is a directory, generates list of files to process
     $in_dir = $in_files[0];
     $in_dir =~ s/\/$//; # strips the trailing / if any
-    @in_files = listfiles($in_dir, $type);
+    @in_files = listfiles($in_dir, $type, $action);
 } else {
     for my $input (@in_files) {
 	die "You cannot specify input files and directories at the same time.\n"
