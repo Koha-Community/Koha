@@ -225,7 +225,7 @@ sub install_strhash
 		if(-f $out_file)  {
 			$diff = `diff $out_file $out_file_tmp`;
 		} else {
-			$diff = "write it, it's new";
+			$diff = "write it, it's new";#'
 		}
 		if ($diff) {
 			print "WRITING : $out_file\n";
@@ -267,7 +267,7 @@ sub update_strhash
 		{
 			$str =~ s/[\n\r\f]+$//; # chomps the trailing \n (or <cr><lf> if file was edited with Windows)
 			$str =~ s/^[\s+:\(]*//; # remove useless characters
-			$str =~ s/[\s\*:\[*\(|\.,\)]*$//;
+			$str =~ s/[\s\*:\[*\(|\.,\)]*$//;#]
 
 			# the line begins with letter(s) followed by optional words and/or spaces
 			if($str =~ /^[ ]*[\w]+[ \w]*/)
@@ -388,7 +388,7 @@ sub listfiles
 		{
 			@{$in_files} = listfiles($in_files, "$dir/$tmp_file", $type);
 		}
-		elsif( $tmp_file =~ /\.$type$/ )
+		elsif( $tmp_file =~ /\.$type$/  && !($tmp_file =~ /^\./))
 		{
 			push(@{$in_files}, "$dir/$tmp_file");
 		}
