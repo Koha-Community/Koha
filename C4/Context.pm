@@ -15,6 +15,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 package C4::Context;
 use strict;
 use DBI;
@@ -347,6 +349,9 @@ sub AUTOLOAD
 sub _new_dbh
 {
 	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
+		# FIXME - It should be possible to use "MySQL" instead
+		# of "mysql", "PostgreSQL" instead of "Pg", and so
+		# forth.
 	my $db_name   = $context->{"config"}{"database"};
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
