@@ -92,6 +92,7 @@ my $mysqldir;
 
 foreach my $mysql (qw(/usr/local/mysql
                       /opt/mysql
+		      /usr/local
 		    )) {
     if ( -d $mysql ) {
 	    $mysqldir=$mysql;
@@ -336,7 +337,7 @@ foreach (@dirlist) {
 }
 
 opendir D, "$backupdir/kohafiles-$date/opac/htdocs/";
-my @dirlist=readdir D;
+@dirlist=readdir D;
 foreach (@dirlist) {
     (next) if (/^\./);
     (next) if ($_ eq 'default');

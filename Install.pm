@@ -1131,6 +1131,7 @@ sub databasesetup {
 
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
+			  /usr/local
 			  /usr
 			  )) {
        if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
