@@ -40,7 +40,6 @@ my ($count,@booksellers)=bookseller($id);
 my $invoice=$input->param('invoice');
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
-my $user=$input->remote_user;
 my $date=localtime(time);
 
 my ($template, $loggedinuser, $cookie)
@@ -65,7 +64,6 @@ my $tototal;
 my $toggle;
 my @loop_orders = ();
 for (my$i=0;$i<$count;$i++){
-	warn "nb : ".$results[$i]->{'ordernumber'};
 	$total=($results[$i]->{'unitprice'} + $results[$i]->{'freight'}) * $results[$i]->{'quantityreceived'};
 	$results[$i]->{'unitprice'}+=0;
 	my %line;
@@ -98,9 +96,10 @@ $totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
-						user => $user,
+						user => $loggedinuser,
 						date => $date,
 						name => $booksellers[0]->{'name'},
+						id => $id,
 						gst => $gst,
 						freight => $freight,
 						invoice => $invoice,

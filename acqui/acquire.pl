@@ -46,7 +46,7 @@ my $freight=$input->param('freight');
 my $biblio=$input->param('biblio');
 my $catview=$input->param('catview');
 my $gst=$input->param('gst');
-my ($count,@results)=ordersearch($search,$biblio,$catview);
+my ($count,@results)=ordersearch($search,$id,$biblio,$catview);
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
 my @date=split('-',$results[0]->{'entrydate'});
 my $date="$date[2]/$date[1]/$date[0]";
@@ -165,6 +165,9 @@ if ($count == 1){
 	for (my $i=0;$i<$count;$i++){
 		my %line;
 		$line{isbn} = $results[$i]->{'isbn'};
+		$line{basketno} = $results[$i]->{'basketno'};
+		$line{quantity} = $results[$i]->{'quantity'};
+		$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 		$line{ordernumber} = $results[$i]->{'ordernumber'};
 		$line{biblionumber} = $results[$i]->{'biblionumber'};
 		$line{invoice} = $invoice;
@@ -172,9 +175,16 @@ if ($count == 1){
 		$line{gst} = $gst;
 		$line{title} = $results[$i]->{'title'};
 		$line{author} = $results[$i]->{'author'};
+		$line{id} = $id;
 		push @loop,\%line;
 	}
-	$template->param( loop => \@loop);
+	$template->param( loop => \@loop,
+						user => $loggedinuser,
+						date => $date,
+						name => $booksellers[0]->{'name'},
+						id => $id,
+						invoice => $invoice,
+);
 
 }
 output_html_with_http_headers $input, $cookie, $template->output;

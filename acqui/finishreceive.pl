@@ -53,8 +53,6 @@ my $branch=$input->param('branch');
 my $bookfund=$input->param('bookfund');
 my $itemtype=$input->param('format');
 my $isbn=$input->param('ISBN');
-my $bookseller = $input->param('bookseller');
-my $id         = $bookseller;
 my $biblio = {
 	biblionumber  => $biblionumber,
 	title         => $input->param('title')?$input->param('title'):"",
@@ -70,6 +68,7 @@ if ($quantrec != 0){
 my $gst=$input->param('gst');
 my $freight=$input->param('freight');
 my $volinf=$input->param('volinf');
+my $id = $input->param('id');
 my $loan=0;
 if ($itemtype =~ /REF/){
 	$loan=1;
@@ -84,8 +83,8 @@ if ($itemtype =~ /PER/){
 		volumeddesc    => $volinf?$volinf:"",
 		classification => $class?$class:"" });
 }
-warn "qty : $quantity";
 if ($quantity != 0){
+	warn "receive : $biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund";
 	receiveorder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund);
 	modbiblio($biblio);
 	&modbibitem({
@@ -116,16 +115,16 @@ if ($quantity != 0){
 					biblionumber     => $biblionumber,
 					replacementprice => $replacement,
 					price            => $cost,
-					booksellerid     => $bookseller,
+					booksellerid     => $id,
 					homebranch       => $branch,
 					loan             => $loan },
 				@barcodes);
 	if ($error eq ''){
-	if ($itemtype ne 'PER'){
-		print $input->redirect("/cgi-bin/koha/acqui/receive.pl?invoice=$invoiceno&id=$id&freight=$freight&gst=$gst");
-	} else {
-		print $input->redirect("/acquisitions/");
-	}
+		if ($itemtype ne 'PER'){
+			print $input->redirect("/cgi-bin/koha/acqui/receive.pl?invoice=$invoiceno&id=$id&freight=$freight&gst=$gst");
+		} else {
+			print $input->redirect("/acquisitions/");
+		}
 	} else {
 		print $input->header;
 		print $error;
