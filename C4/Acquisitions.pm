@@ -13,11 +13,49 @@ $VERSION = 0.01;
 @EXPORT = qw(&getorders &bookseller &breakdown &basket &newbasket &bookfunds
 &ordersearch &newbiblio &newbiblioitem &newsubject &newsubtitle &neworder
  &newordernum &modbiblio &modorder &getsingleorder &invoice &receiveorder
- &bookfundbreakdown &curconvert &updatesup &insertsup &makeitems &modbibitem
+&bookfundbreakdown &curconvert &updatesup &insertsup &newitems &modbibitem
 &getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems 
 &findall &needsmod &delitem &delbibitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
-&updatecost &checkitems &modnote &getitemtypes &getbiblio);
+&updatecost &checkitems &modnote &getitemtypes &getbiblio
+&getbiblioitem &getitemsbybiblioitem &isbnsearch &keywordsearch
+&websitesearch);
+%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+
+# your exported package globals go here,
+# as well as any optionally exported functions
+
+@EXPORT_OK   = qw($Var1 %Hashit);
+
+
+# non-exported package globals go here
+use vars qw(@more $stuff);
+
+# initalize package globals, first exported ones
+
+my $Var1   = '';
+my %Hashit = ();
+
+
+
+# then the others (which are still accessible as $Some::Module::stuff)
+my $stuff  = '';
+my @more   = ();
+
+# all file-scoped lexicals must be created before
+# the functions below that use them.
+
+# file-private lexicals go here
+my $priv_var    = '';
+my %secret_hash = ();
+
+# here's a file-private function as a closure,
+# callable as &$priv_func;  it cannot be prototyped.
+my $priv_func = sub {
+  # stuff goes here.
+  };
+  
+# make all your functions, whether exported or not;
 
 sub getorders {
   my ($supplierid)=@_;
@@ -160,10 +198,10 @@ sub ordersearch {
   my ($search,$biblio,$catview)=@_;
   my $dbh=C4Connect;
   my $query="Select *,biblio.title from aqorders,biblioitems,biblio
-  where aqorders.biblioitemnumber=
-  biblioitems.biblioitemnumber and biblio.biblionumber=aqorders.biblionumber 
-  and (datecancellationprinted is NULL or datecancellationprinted =
-'000-00-00')
+	where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+	and biblio.biblionumber=aqorders.biblionumber
+	and ((datecancellationprinted is NULL)
+	or (datecancellationprinted = '0000-00-00')
   and ((";
   my @data=split(' ',$search);
   my $count=@data;
@@ -387,13 +425,19 @@ sub newbiblio {
 sub modbiblio {
   my ($bibnum,$title,$author,$copyright,$seriestitle,$serial,$unititle,$notes)=@_;
   my $dbh=C4Connect;
-  my $query="update biblio set title='$title',
-  author='$author',copyrightdate='$copyright',
-  seriestitle='$seriestitle',serial='$serial',unititle='$unititle',notes='$notes'
-  where
-  biblionumber=$bibnum";
+  my $query = "Update biblio set
+title         = '$title',
+author        = '$author',
+copyrightdate = '$copyright',
+seriestitle   = '$seriestitle',
+serial        = '$serial',
+unititle      = '$unititle',
+notes         = '$notes'
+where biblionumber = $bibnum";
   my $sth=$dbh->prepare($query);
+
   $sth->execute;
+
   $sth->finish;
   $dbh->disconnect;
     return($bibnum);
@@ -414,16 +458,24 @@ sub modaddauthor {
   my $dbh=C4Connect;
   my $query="Delete from additionalauthors where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
+
   $sth->execute;
   $sth->finish;
+
   if ($author ne ''){
-      $query="insert into additionalauthors (author,biblionumber) values ('$author','$bibnum')";
+        $query = "Insert into additionalauthors set
+author       = '$author',
+biblionumber = '$bibnum'";
     $sth=$dbh->prepare($query);
+
     $sth->execute;
+
     $sth->finish;
-  }
+    } # if
+
   $dbh->disconnect;
-} 
+} # sub modaddauthor
+
 
 sub modsubject {
   my ($bibnum,$force,@subject)=@_;
@@ -524,6 +576,7 @@ sub newbiblioitem {
   $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
   $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
   $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
+  $biblioitem->{'url'}             = $dbh->quote($biblioitem->{'url'});
   $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
   $biblioitem->{'issn'}            = $dbh->quote($biblioitem->{'issn'});
   $biblioitem->{'dewey'}           = $dbh->quote($biblioitem->{'dewey'});
@@ -550,6 +603,7 @@ volume		 = $biblioitem->{'volume'},
 number		 = $biblioitem->{'number'},
 classification   = $biblioitem->{'classification'},
 itemtype         = $biblioitem->{'itemtype'},
+url              = $biblioitem->{'url'},
 isbn		 = $biblioitem->{'isbn'},
 issn		 = $biblioitem->{'issn'},
 dewey		 = $biblioitem->{'dewey'},
@@ -746,7 +800,7 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  $price=$price / $cur;
+  my $price=$price / $cur;
   return($price);
 }
 
@@ -830,31 +884,53 @@ sub insertsup {
   return($data->{'id'});
 }
 
-sub makeitems {
-  my
-($count,$bibitemno,$biblio,$replacement,$price,$booksellerid,$branch,$loan,@barcodes)=@_;
+
+sub newitems {
+  my ($item, @barcodes) = @_;
   my $dbh=C4Connect;
-  my $sth=$dbh->prepare("Select max(itemnumber) from items");
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  my $item=$data->{'max(itemnumber)'};
-  $sth->finish;
-  $item++;
+  my $query = "Select max(itemnumber) from items";
+  my $sth   = $dbh->prepare($query);
+  my $data;
+  my $itemnumber;
   my $error;
-  for (my $i=0;$i<$count;$i++){
-    $barcodes[$i]=uc $barcodes[$i];
-    my $query="Insert into items (biblionumber,biblioitemnumber,itemnumber,barcode,
-    booksellerid,dateaccessioned,homebranch,holdingbranch,price,replacementprice,
-    replacementpricedate,notforloan) values
-    ($biblio,$bibitemno,$item,'$barcodes[$i]','$booksellerid',now(),'$branch',
-    '$branch','$price','$replacement',now(),$loan)";
-    my $sth=$dbh->prepare($query);
+
+  $sth->execute;
+  $data       = $sth->fetchrow_hashref;
+  $itemnumber = $data->{'max(itemnumber)'} + 1;
+  $sth->finish;
+  
+  $item->{'booksellerid'}     = $dbh->quote($item->{'bookselletid'});
+  $item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
+  $item->{'price'}            = $dbh->quote($item->{'price'});
+  $item->{'replacementprice'} = $dbh->quote($item->{'replacementprice'});
+  $item->{'itemnotes'}        = $dbh->quote($item->{'itemnotes'});
+
+  foreach my $barcode (@barcodes) {
+    $barcode = uc($barcode);
+    $query   = "Insert into items set
+itemnumber           = $itemnumber,
+biblionumber         = $item->{'biblionumber'},
+biblioitemnumber     = $item->{'biblioitemnumber'},
+barcode              = $barcode,
+booksellerid         = $item->{'booksellerid'},
+dateaccessioned      = NOW(),
+homebranch           = $item->{'branch'},
+holdingbranch        = $item->{'branch'},
+price                = $item->{'price'},
+replacementprice     = $item->{'replacementprice'},
+replacementpricedate = NOW(),
+notforloan           = $item->{'loan'},
+itemnotes            = $item->{'itemnotes'}";
+
+    $sth = $dbh->prepare($query);
     $sth->execute;
+
     $error.=$sth->errstr;
+
     $sth->finish;
-    $item++;
-#    print $query;
-  }
+    $itemnumber++;
+  } # for
+
   $dbh->disconnect;
   return($error);
 }
@@ -1050,7 +1126,7 @@ sub getitemtypes {
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
-    $results[$count] = $data;
+    @results[$count] = $data;
     $count++;
   } # while
   
@@ -1065,12 +1141,12 @@ sub getbiblio {
     my $dbh   = C4Connect;
     my $query = "Select * from biblio where biblionumber = $biblionumber";
     my $sth   = $dbh->prepare($query);
-      # || die "Cannot prepare $query" . $dbh->errstr;
+      # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
     
     $sth->execute;
-      # || die "Cannot execute $query" . $sth->errstr;
+      # || die "Cannot execute $query\n" . $sth->errstr;
     while (my $data = $sth->fetchrow_hashref) {
       $results[$count] = $data;
       $count++;
@@ -1080,6 +1156,160 @@ sub getbiblio {
     $dbh->disconnect;
     return($count, @results);
 } # sub getbiblio
+
+
+sub getbiblioitem {
+    my ($biblioitemnum) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblioitems where
+biblioitemnumber = $biblioitemnum";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+
+    $sth->execute;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getbiblioitem
+
+
+sub getitemsbybiblioitem {
+    my ($biblioitemnum) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from items, biblio where
+biblio.biblionumber = items.biblionumber and biblioitemnumber
+= $biblioitemnum";
+    my $sth   = $dbh->prepare($query);
+      # || die "Cannot prepare $query\n" . $dbh->errstr;
+    my $count = 0;
+    my @results;
+    
+    $sth->execute;
+      # || die "Cannot execute $query\n" . $sth->errstr;
+    while (my $data = $sth->fetchrow_hashref) {
+      $results[$count] = $data;
+      $count++;
+    } # while
+    
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getitemsbybiblioitem
+
+
+sub isbnsearch {
+    my ($isbn) = @_;
+    my $dbh   = C4Connect;
+    my $count = 0;
+    my $query;
+    my $sth;
+    my @results;
+    
+    $isbn  = $dbh->quote($isbn);
+    $query = "Select * from biblioitems where isbn = $isbn";
+    $sth   = $dbh->prepare($query);
+    
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub isbnsearch
+
+
+sub keywordsearch {
+  my ($keywordlist) = @_;
+  my $dbh   = C4Connect;
+  my $query = "Select * from biblio where";
+  my $count = 0;
+  my $sth;
+  my @results;
+  my @keywords = split(/ +/, $keywordlist);
+  my $keyword = shift(@keywords);
+
+  $keyword =~ s/%/\\%/g;
+  $keyword =~ s/_/\\_/;
+  $keyword = "%" . $keyword . "%";
+  $keyword = $dbh->quote($keyword);
+  $query  .= " (author like $keyword) or
+(title like $keyword) or (unititle like $keyword) or
+(notes like $keyword) or (seriestitle like $keyword) or
+(abstract like $keyword)";
+
+  foreach $keyword (@keywords) {
+    $keyword =~ s/%/\\%/;
+    $keyword =~ s/_/\\_/;
+    $keyword = "%" . $keyword . "%";
+    $keyword = $dbh->quote($keyword);
+    $query  .= " or (author like $keyword) or
+(title like $keyword) or (unititle like $keyword) or 
+(notes like $keyword) or (seriestitle like $keyword) or
+(abstract like $keyword)";
+  } # foreach
+  
+  $sth = $dbh->prepare($query);
+  $sth->execute;
+  
+  while (my $data = $sth->fetchrow_hashref) {
+    $results[$count] = $data;
+    $count++;
+  } # while
+  
+  $sth->finish;
+  $dbh->disconnect;
+  return($count, @results);
+} # sub keywordsearch
+
+
+sub websitesearch {
+    my ($keywordlist) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select distinct biblio.* from biblio, biblioitems where
+biblio.biblionumber = biblioitems.biblionumber and (";
+    my $count = 0;
+    my $sth;
+    my @results;
+    my @keywords = split(/ +/, $keywordlist);
+    my $keyword = shift(@keywords);
+
+    $keyword =~ s/%/\\%/g;
+    $keyword =~ s/_/\\_/;
+    $keyword = "%" . $keyword . "%";
+    $keyword = $dbh->quote($keyword);
+    $query  .= " (url like $keyword)";
+
+    foreach $keyword (@keywords) {
+        $keyword =~ s/%/\\%/;
+	$keyword =~ s/_/\\_/;
+	$keyword = "%" . $keyword . "%";
+        $keyword = $dbh->quote($keyword);
+	$query  .= " or (url like $keyword)";
+    } # foreach
+
+    $query .= ")";
+    $sth    = $dbh->prepare($query);
+    $sth->execute;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub websitesearch
 
 
 END { }       # module clean-up code here (global destructor)
