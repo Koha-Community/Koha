@@ -124,7 +124,7 @@ while ( my $record = $batch->next() ) {
 		my $item = MARC::Record->new();
 		$item->append_fields($field);
 		push @items,$item;
-		$record->delete_field($field);
+		$newRecord->delete_field($field);
 		$nbitems++;
 	}
 	print "$i : $nbitems items found\n" if $verbose;
