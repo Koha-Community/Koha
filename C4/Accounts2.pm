@@ -196,7 +196,8 @@ sub returnlost{
   my $sth=$dbh->prepare($upiss);
   $sth->execute;
   $sth->finish;
-  my $date='2001-04-18';
+  my @datearr = localtime($time);
+  my $date = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
   my $upitem="Update items set itemnotes='Paid for by $bor $date' where itemnumber='$itemnum'";
   $sth=$dbh->prepare($upitem);
