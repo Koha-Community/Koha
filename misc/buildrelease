@@ -218,27 +218,13 @@ You may need to enter your SourceForge password.
 Using $kohadir.
 |;
 chdir($kohadir) || die "$kohadir: $!\n";
-system("cvs update");
+system("cvs update -P");
 if ($cvstag) {
     print qq|
 Tagging koha with tag R_$tagname
 |;
     system("cvs tag -F R_$tagname");
 }
-#print qq|
-#Updating your checked-out copy of the 'koha-html' CVS files.
-#You may need to enter your SourceForge password.
-#Using $kohahtmldir.
-#|;
-#chdir($kohahtmldir) || die "$kohahtmldir: $!\n";
-#system("cvs update");
-
-#if ($cvstag) {
-#    print qq|
-#Tagging koha-html with tag R_$tagname
-#|;
-#    system("cvs tag -F R_$tagname");
-#}
 
 #----------------------------------------------------------
 # MOVE files to /tmp and build tar.gz
@@ -294,9 +280,6 @@ system("rmdir $rootdir/intranet-cgi/opac");
 
 
 # Move files from intranet-cgi to /scripts/ directory
-system("mv $rootdir/intranet-cgi/telnet $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/tkperl $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
@@ -326,16 +309,6 @@ system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/intranet-tmpl", "$rootdir/in
 system("cp $rootdir/intranet-cgi/koha-tmpl/opac.html $rootdir/opac-html/index.html");
 system("cp $rootdir/intranet-cgi/koha-tmpl/intranet.html $rootdir/intranet-html/index.html");
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
-
-# Remove extraneous files from opac-html
-#system("rm -f $rootdir/opac-html/koha.mo");
-#system("rm -f $rootdir/opac-html/koha.pot");
-#system("rm -f $rootdir/opac-html/test");
-
-# Remove extraneous files from intranet-html
-#system("rm -f $rootdir/intranet-html/koha.pot");
-#system("rm -f $rootdir/intranet-html/results.html");
-#system("rm -f $rootdir/intranet-html/test");
 
 # Remove junk from directory
 system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
