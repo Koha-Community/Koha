@@ -42,11 +42,11 @@ my $startfrom=$query->param('startfrom');
 
 my $subject=$query->param('subject');
 my $template;
-# if its a subject we need to use the subject.tmpl
+# if it's a subject we need to use the subject.tmpl
 if ($subject) {
 	$template = gettemplate("catalogue/subject.tmpl",0);
 } else {
-	$template = gettemplate("catalogue/searchresults.tmpl",);
+	$template = gettemplate("catalogue/searchresults.tmpl", 0);
 }
 
 my $env;
