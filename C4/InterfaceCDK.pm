@@ -19,7 +19,8 @@ package C4::InterfaceCDK; #assumes C4/InterfaceCDK
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# FIXME - This module doesn't compile!
+# FIXME - This module doesn't compile! But I'm pretty sure it, like
+# the rest of the CDK-based stuff, is obsolete.
 
 use C4::Format;
 use strict;

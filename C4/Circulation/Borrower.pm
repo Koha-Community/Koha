@@ -21,6 +21,8 @@ package C4::Circulation::Borrower; #assumes C4/Circulation/Borrower
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This module is never used. Obsolete?
+
 use strict;
 require Exporter;
 use DBI;
@@ -85,7 +87,7 @@ my $priv_func = sub {
 
 sub findborrower  {
   my ($env,$dbh) = @_;
-  C4::InterfaceCDK::helptext('');
+  C4::InterfaceCDK::helptext('');	# FIXME - This looks useless
   C4::InterfaceCDK::clearscreen();
   my $bornum = "";
   my $sth = "";
@@ -371,7 +373,28 @@ sub reserveslist {
   $sth->finish;
   reservesdisplay($env,$borrower,$amount,$odues,\@items);
 }
-  
+
+=item NewBorrowerNumber
+
+  $num = &NewBorrowerNumber();
+
+Allocates a new, unused borrower number, and returns it.
+
+=cut
+#'
+# FIXME - This is identical to C4::Search::NewBorrowerNumber.
+# Pick one (preferably this one) and stick with it.  
+
+# FIXME - Race condition: this function just says what the next unused
+# number is, but doesn't allocate it. Hence, two clients adding
+# patrons at the same time could get the same new borrower number and
+# clobber each other.
+# A better approach might be to change the database to make
+# borrowers.borrowernumber a unique key and auto_increment. Then, to
+# allocate a new borrower number, use "insert" to create a new record
+# (leaving the database daemon with the job of serializing requests),
+# and use the newly-created record.
+
 sub NewBorrowerNumber {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");

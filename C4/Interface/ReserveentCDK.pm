@@ -19,6 +19,9 @@ package C4::Interface::ReserveentCDK; #asummes C4/Interface/ReserveCDK
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - I'm pretty sure that this, along with the rest of the
+# CDK-based stuff, is obsolete.
+
 use C4::Format;
 use C4::InterfaceCDK;
 use strict;
