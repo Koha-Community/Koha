@@ -93,7 +93,7 @@ $template->param ( biblionumber => $bibnum,
 						additionalauthor => $additional,
 						subtitle => $data->{'subtitle'},
 						unititle => $data->{'unititle'},
-						notes => $data->{'binotes'},
+						notes => $data->{'bnotes'},
 						serial => $data->{'serial'});
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.56  2003/07/15 11:34:52  slef
+# fixes from paul email
+#
 # Revision 1.55  2003/07/15 00:02:49  slef
 # Work on bug 515... can we do a single-side rename of notes to bnotes?
 #
@@ -1599,7 +1602,7 @@ sub OLDnewbiblioitem {
 						$biblioitem->{'subclass'},			$biblioitem->{'publicationyear'},
 						$biblioitem->{'publishercode'},	$biblioitem->{'volumedate'},
 						$biblioitem->{'volumeddesc'},		$biblioitem->{'illus'},
-						$biblioitem->{'pages'},				$biblioitem->{'binotes'},
+						$biblioitem->{'pages'},				$biblioitem->{'bnotes'},
 						$biblioitem->{'size'},				$biblioitem->{'lccn'},
 						$biblioitem->{'marc'},				$biblioitem->{'place'});
 	$sth->finish;
