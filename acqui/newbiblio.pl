@@ -24,7 +24,9 @@ my $new;
 if ($ordnum eq ''){
   $new='yes';
   $ordnum=newordernum;
-  $data=bibdata($biblio);
+  if ($biblio) {
+  		$data=bibdata($biblio);
+	}
   if ($data->{'title'} eq ''){
     $data->{'title'}=$title;
     $data->{'author'}=$author;
