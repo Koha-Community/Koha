@@ -67,7 +67,7 @@ sub text_extract ($) {
 		if ($attr->{$a}) {
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] eq 'hidden')); # FIXME
+			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio)$/)); # FIXME
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
 		    $val = TmplTokenizer::trim $val;
 		    $text{$val} = 1 if $val =~ /\S/s;
