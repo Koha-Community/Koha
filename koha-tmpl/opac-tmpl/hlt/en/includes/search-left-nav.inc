@@ -9,8 +9,7 @@
 
 <tr><td colspan="3"><img height="5" alt="" src="<TMPL_VAR NAME='themelang'>/images/holder.gif" border="0" width="1" /></td></tr>    <tr valign="top"><td></td><td><img height="13" alt="" src="<TMPL_VAR NAME='themelang'>/images/styles/nav-dot.gif" border="0" width="9" /></td>      <td class="sidenav" width="115"><!--+Katipo+start name="historical" include="/includes/search-left-nav.inc" --><a href="http://horowhenuahistory.library.org.nz/">Horowhenua Historical Database</a><!--+Katipo+end--></td></tr>
  
- <tr><td colspan="3"><img height="5" alt="" src="<TMPL_VAR NAME='themelang'>/images/holder.gif" border="0" width="1" /></td></tr>    <tr valign="top"><td></td><td><img height="13" alt="" src="<TMPL_VAR NAME='themelang'>/images/styles/nav-dot.gif" border="0" width="9" /></td>      <td class="sidenav" width="115"><!--+Katipo+start name="internet" include="/includes/search-left-nav.inc" --><a href="/search/internet/">Search the Internet</a><!--+Katipo+end--></td></tr>
 
- <tr><td colspan="3"><img height="5" alt="" src="<TMPL_VAR NAME='themelang'>/images/holder.gif" border="0" width="1" /></td></tr>    <tr valign="top"><td></td><td><img height="13" alt="" src="<TMPL_VAR NAME='themelang'>/images/styles/nav-dot.gif" border="0" width="9" /></td>      <td class="sidenav" width="115"><!--+Katipo+start name="tutorial" include="/includes/search-left-nav.inc" --><a href="/search/internet/search-help.html">Search Tutorial</a><!--+Katipo+end--></td></tr>
+
   <tr><td colspan="3"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="1" height="10" border="0" alt="" /></td></tr>
   </table>
