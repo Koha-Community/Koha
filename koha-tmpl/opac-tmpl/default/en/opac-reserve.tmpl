@@ -3,7 +3,7 @@
 <center>
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-logout.pl>Log Out</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
@@ -53,9 +53,33 @@ Please select which item types are ok for you. The first of these item that matc
 </TMPL_LOOP>
 
 </table>
+<p>
 Please select the branch from which you want to collect the item:
 <select name="branch"><TMPL_VAR NAME="branchoptions"></select><br>
 
+<p>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>Reserve on this date:</td><td>
+<select name=required-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+
+</td><td>
+<select name=required-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+</td><td>
+<select name=required-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+
+</td></tr>
+<tr><td>End reserve on this date:</td><td>
+<select name=expires-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+
+</td><td>
+<select name=expires-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+</td><td>
+<select name=expires-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+
+</td></tr>
+</table>
+
+<p>
 
 <font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
 
@@ -73,6 +97,8 @@ Please confirm that you wish to request an item of these types:
 <FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
 <input type="hidden" name="place_reserve" value="1">
 <input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<input type="hidden" name="required_date" value="<TMPL_VAR NAME='required_date'>">
+<input type="hidden" name="expires_date" value="<TMPL_VAR NAME='expires_date'>">
 <TABLE border=1>
 <tr><th bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>Item Type</th></tr>
 
@@ -88,7 +114,7 @@ Please confirm that you wish to request an item of these types:
 </table>
 
 Which is to be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
-<input type="hidden" name="bib" value="<TMPL_VAR NAME='branch'>">
+<input type="hidden" name="branch" value="<TMPL_VAR NAME='branch'>">
 
 <TMPL_IF NAME="fee">
 <br>Note there will be a reserve charge of <b>$<TMPL_VAR NAME="fee"></b><br>
