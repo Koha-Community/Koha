@@ -53,7 +53,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select bookfundid,startdate,enddate,budgetamount from aqbudget where (bookfundid like \"$data[0]%\") order by bookfundid";
+	my $query="Select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where (bookfundid like \"$data[0]%\") order by bookfundid,aqbudgetid";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -72,6 +72,7 @@ my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/aqbudget.pl";
 my $bookfundid=$input->param('bookfundid');
+my $aqbudgetid=$input->param('aqbudgetid');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
@@ -100,66 +101,59 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $dataaqbudget;
 	my $dataaqbookfund;
-	if ($bookfundid) {
+	if ($aqbudgetid) {
 		my $dbh = C4::Context->dbh;
-	        my $query="select bookfundid,startdate,enddate,budgetamount from aqbudget where bookfundid='$bookfundid'";
+	        my $query="select aqbudgetid,bookfundname,aqbookfund.bookfundid,startdate,enddate,budgetamount from aqbudget,aqbookfund where aqbudgetid='$aqbudgetid' and aqbudget.bookfundid=aqbookfund.bookfundid";
 #	        print $query;
 		my $sth=$dbh->prepare($query);
 		$sth->execute;
 		$dataaqbudget=$sth->fetchrow_hashref;
 		$sth->finish;
-		my $query="select bookfundid,bookfundname from aqbookfund where bookfundid='$bookfundid'";
-#	        print $query;
-		my $sth=$dbh->prepare($query);
-		$sth->execute;
-		$dataaqbookfund=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
 	my $header;
-	if ($bookfundid) {
+	if ($aqbudgetid) {
 		$header = "Modify budget";
 	} else {
 		$header = "Add budget";
 	}
 	$template->param(header => $header);
-	if ($bookfundid) {
+	if ($aqbudgetid) {
 	    $template->param(modify => 1);
-	    $template->param(bookfundid => $bookfundid);
-	    $template->param(bookfundname => $dataaqbookfund->{bookfundname});
+	    $template->param(bookfundid => $dataaqbudget->{bookfundid});
+	    $template->param(bookfundname => $dataaqbudget->{bookfundname});
 	} else {
 	    $template->param(adding => 1);
 	}
-	$template->param(dateformat => display_date_format() );
-	$template->param(startdate => format_date($dataaqbudget->{'startdate'}));
-	$template->param(enddate => format_date($dataaqbudget->{'enddate'}));
-	$template->param(budgetamount => $dataaqbudget->{'budgetamount'});
+	$template->param(dateformat => display_date_format(),
+							aqbudgetid => $dataaqbudget->{'aqbudgetid'},
+							startdate => format_date($dataaqbudget->{'startdate'}),
+							enddate => format_date($dataaqbudget->{'enddate'}),
+							budgetamount => $dataaqbudget->{'budgetamount'}
+	);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace aqbudget (bookfundid,startdate,enddate,budgetamount) values (";
-	$query.= $dbh->quote($input->param('bookfundid')).",";
-	$query.= $dbh->quote(format_date_in_iso($input->param('startdate'))).",";
-	$query.= $dbh->quote(format_date_in_iso($input->param('enddate'))).",";
-	$query.= $dbh->quote($input->param('budgetamount')).")";
+	my $query = "replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount) values (?,?,?,?,?)";
 	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	$sth->execute($input->param('aqbudgetid'),$input->param('bookfundid'),
+						format_date_in_iso($input->param('startdate')),
+						format_date_in_iso($input->param('enddate')),
+						$input->param('budgetamount')
+						);
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-#	my $sth=$dbh->prepare("select count(*) as total from categoryitem where itemtype='$itemtype'");
-#	$sth->execute;
-#	my $total = $sth->fetchrow_hashref;
-#	$sth->finish;
-	my $sth=$dbh->prepare("select bookfundid,startdate,enddate,budgetamount from aqbudget where bookfundid='$bookfundid'");
+	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where aqbudgetid='$aqbudgetid'");
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
+	$template->param(aqbudgetid => $data->{'aqbudgetid'});
 	$template->param(startdate => format_date($data->{'startdate'}));
 	$template->param(enddate => format_date($data->{'enddate'}));
 	$template->param(budgetamount => $data->{'budgetamount'});
@@ -168,11 +162,13 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $bookfundid=uc($input->param('bookfundid'));
-	my $query = "delete from aqbudget where bookfundid='$bookfundid'";
+	my $aqbudgetid=uc($input->param('aqbudgetid'));
+	my $query = "delete from aqbudget where aqbudgetid='$aqbudgetid'";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
+	 print $input->redirect("aqbookfund.pl");
+	 return;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT

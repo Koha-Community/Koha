@@ -97,7 +97,7 @@
 <tr><td>Start date (<TMPL_VAR NAME=dateformat>)</td><td><input type=text name=startdate size=11 value='<TMPL_VAR name="startdate">'>&nbsp;</td></tr>
 <tr><td>End date (<TMPL_VAR NAME=dateformat>)</td><td><input type=text name=enddate size=11 value='<TMPL_VAR name="enddate">'></td></tr>
 <tr><td>Budget amount</td><td><input type=text name=budgetamount value='<TMPL_VAR name="budgetamount">'></td></tr>
-<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+<tr><td>&nbsp;</td><td><input type="hidden" name="aqbudgetid" value="<TMPL_VAR name="aqbudgetid">"><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
 <br clear=all>
@@ -122,7 +122,7 @@ Data recorded
 		</td>
 	</tr>
 
-	<form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
+	<form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=aqbudgetid value='<TMPL_VAR name="aqbudgetid">'>
 	<tr>
 		<td>Start date</td>
 		<td><TMPL_VAR name="startdate"></td>

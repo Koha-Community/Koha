@@ -13,12 +13,8 @@
 	<td>Define item types.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>Budget</a></td>
-	<td>The monies allocated to your book funds.</td>
-</tr>
-<tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>Book funds</a></td>
-	<td>Book fund administration.</td>
+	<td>Book fund and budget administration.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>Authorised values</a></td>
@@ -78,12 +74,20 @@
 	<th>Tools</th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=1 width=80%>
-<th colspan=2>Export</th>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>MARC biblio export</a></td>
-	<td>Exporting in MARC format.</td>
-</tr>
+<table cellspacing=5 cellpadding=1 width=80%>
+	<th colspan=2>Export</th>
+	<tr>
+		<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></td>
+		<td>Exporting in MARC format.</td>
+	</tr>
+	<th colspan=2>Import</th>
+	<tr valign="top">
+		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records</a> in Breeding Farm</td>
+		<td>The breeding farm is a table where imported MARC records are stored.<br/>
+			A MARC record is stored in the breeding farm as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the breeding farm.
+			If it is found, the biblio is added to Koha active table and removed from the breeding farm. <br/>
+		</td>
+	</tr>
 </table>
 </center>
 <TMPL_INCLUDE NAME="parameters-bottom.inc">

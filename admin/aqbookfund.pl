@@ -161,43 +161,40 @@ if ($op eq 'add_form') {
 	my $query = "delete from aqbookfund where bookfundid='$bookfundid'";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
+	$dbh->do("delete from aqbudget where bookfundid='$bookfundid'");
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-       $template->param(scriptname => $script_name);
-       if  ($searchfield ne '') {
+	$template->param(scriptname => $script_name);
+	if  ($searchfield ne '') {
 		$template->param(search => 1);
 		$template->param(searchfield => $searchfield);
 	}
-       my $env;
-       my ($count,$results)=StringSearch($env,$searchfield,'web');
-       my $toggle="white";
-       my @loop_data =();
-       for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		#find out stats
-	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
-	#  	$fines=$fines+0;
-	   my @toggle = ();
-	   my @bookfundid = ();
-	   my @bookfundname = ();
-	   push(@toggle,$toggle);
-	   push(@bookfundid,$results->[$i]{'bookfundid'});
-	   push(@bookfundname,$results->[$i]{'bookfundname'});
-	   if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-	while (@toggle and @bookfundid and @bookfundname) {
-	   my %row_data;
-	   $row_data{toggle} = shift @toggle;
-	   $row_data{bookfundid} = shift @bookfundid;
-	   $row_data{bookfundname} = shift @bookfundname;
-	   push(@loop_data, \%row_data);
-       }
-       }
-       $template->param(bookfund => \@loop_data);
+	my $env;
+	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my $toggle="white";
+	my @loop_data =();
+	my $dbh = C4::Context->dbh;
+	my $sth2 = $dbh->prepare("Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where bookfundid = ? order by bookfundid");
+	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+		my %row_data;
+		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
+		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+		$sth2->execute($row_data{bookfundid});
+		my @budget_loop;
+		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
+			my %budgetrow_data;
+			$budgetrow_data{aqbudgetid} = $aqbudgetid;
+			$budgetrow_data{startdate} = $startdate;
+			$budgetrow_data{enddate} = $enddate;
+			$budgetrow_data{budgetamount} = $budgetamount;
+			push @budget_loop,\%budgetrow_data;
+		}
+		$row_data{budget} = \@budget_loop;
+		push @loop_data,\%row_data;
+	}
+	$template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT
 
 output_html_with_http_headers $input, $cookie, $template->output;
