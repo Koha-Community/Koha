@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# $Id$
+
 # Script to start Koha background Z39.50 search daemon
 
 # Part of the Koha Library Mgmt System -  www.koha.org
@@ -15,17 +17,17 @@
 # User ID to run the daemon as.  Don't use "root"
 RunAsUser=apache
 
-KohaDir=/usr/local/www/koha/htdocs/cgi-bin/koha/acqui.simple
-export KohaDir
+KohaZ3950Dir=/usr/local/www/koha/htdocs/cgi-bin/koha/acqui.simple
+export KohaZ3950Dir
 
 #----------------------------
-if [ ! -d $KohaDir ]
+if [ ! -d $KohaZ3950Dir ]
 then
-	echo ERROR: Cannot find Koha directory $KohaDir
+	echo ERROR: Cannot find Koha directory $KohaZ3950Dir
 	exit 1
 fi
 
-KohaZ3950Shell=$KohaDir/z3950-daemon-shell.sh
+KohaZ3950Shell=$KohaZ3950Dir/z3950-daemon-shell.sh
 
 if [ ! -x $KohaZ3950Shell ]
 then
@@ -34,3 +36,11 @@ then
 fi
 
 su -s /bin/sh -c '$KohaZ3950Shell &' - $RunAsUser &
+
+exit
+
+#--------------
+# $Log$
+# Revision 1.1.2.2  2002/06/26 16:25:51  amillar
+# Make directory variable name more explanatory
+#
