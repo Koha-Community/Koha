@@ -57,6 +57,14 @@
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
+			<label class="label20">Subject</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />  
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
 			<label class="label20">Item Type</label>
 			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
@@ -72,7 +80,6 @@
 				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
-
 	</div>
 	<div>
 		<p>Results per page :

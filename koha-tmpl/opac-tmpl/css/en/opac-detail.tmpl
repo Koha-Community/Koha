@@ -40,7 +40,7 @@
 		<tr>
 			<td>
 				<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle" -->
-				<!-- TMPL_IF name="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-search.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE=URL -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br />
+				<!-- TMPL_IF name="author" --><b>Author:</b> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
 				<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
 				<!-- TMPL_IF name="publicationyear" --><b>in </b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
@@ -48,7 +48,10 @@
 				<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br />
 				<!-- TMPL_IF name="isbn" --><b>ISBN:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="isbn" --><br />
 				<!-- TMPL_IF name="seriestitle" --><b>Collection:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="seriestitle" --><br />
-				<!-- TMPL_IF name="subject" --><b>Subject:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subject" --><br />
+				<!-- TMPL_IF name="subject" --><b>Subject:</b><!-- /TMPL_IF --> 
+					<!-- TMPL_LOOP name="subjects" -->
+						<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" -->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP -->
+					<br />
 				<!-- TMPL_IF name="copyrightdate" --><b>Year :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="copyrightdate" --><br />
 				<!-- TMPL_IF name="notes" --><b>Notes:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="notes" --><br />
 				<!-- TMPL_IF name="unititle" --><b>Unititle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="unititle" --><br />
@@ -68,7 +71,6 @@
 			<th colspan="6">Item</th>
 		</tr>
 		<tr>
-			<th>class</th>
 			<th>location</th>
 			<th>date Due</th>
 			<th>last Seen</th>
@@ -76,7 +78,6 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 			<tr>
-				<td><!-- TMPL_VAR NAME="class" --></td>
 				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
