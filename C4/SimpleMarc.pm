@@ -323,7 +323,7 @@ sub extractmarcfields {
 	}
 
 	if ( $bib->{isbn} ) {
-	    $bib->{isbn}=~s/[^\d-X]*//g;	# drop non-digits
+	    $bib->{isbn}=~s/[^\dX]*//g;	# drop non-digits
 	};
 
 	if ( $bib->{issn} ) {
@@ -465,6 +465,11 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.1.2.7  2002/11/01 18:15:29  tonnesen
+# Put stripping '-' back in.  Technically, an ISBN isn't necessarily unique
+# without the hyphens, but it makes searching a lot more difficult (because the
+# hyphens have to be in place to do the searches then...)
+#
 # Revision 1.1.2.6  2002/11/01 18:13:46  tonnesen
 # No longer removes - or X characters from ISBNs.
 #
