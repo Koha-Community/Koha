@@ -251,17 +251,37 @@ sub catalogsearch {
 				}
 			}
 			my $locationtext='';
+			my $locationtextonly='';
 			my $notavailabletext='';
 			foreach (sort keys %{$data->{'locationhash'}}) {
 				if ($_ eq 'notavailable') {
 					$notavailabletext="Not available";
 					my $c=$data->{'locationhash'}->{$_};
+					$data->{'not-available-p'}=$totalitemcounts;
 					if ($totalitemcounts>1) {
 					$notavailabletext.=" ($c)";
+					$data->{'not-available-plural-p'}=1;
 					}
 				} else {
 					$locationtext.="$_";
 					my $c=$data->{'locationhash'}->{$_};
+					if ($_ eq 'Item Lost') {
+					$data->{'lost-p'}=$totalitemcounts;
+					$data->{'lost-plural-p'}=1
+							if $totalitemcounts > 1;
+					} elsif ($_ eq 'Withdrawn') {
+					$data->{'withdrawn-p'}=$totalitemcounts;
+					$data->{'withdrawn-plural-p'}=1
+							if $totalitemcounts > 1;
+					} elsif ($_ eq 'On Loan') {
+					$data->{'on-loan-p'}=$totalitemcounts;
+					$data->{'on-loan-plural-p'}=1
+							if $totalitemcounts > 1;
+					} else {
+					$locationtextonly.=$_;
+					$locationtextonly.=" ($c), "
+							if $totalitemcounts>1;
+					}
 					if ($totalitemcounts>1) {
 					$locationtext.=" ($c), ";
 					}
@@ -273,7 +293,9 @@ sub catalogsearch {
 				$locationtext=~s/, $//;
 			}
 			$data->{'location'}=$locationtext;
+			$data->{'location-only'}=$locationtextonly;
 			$data->{'subject2'}=$subject2;
+			$data->{'use-location-flags-p'}=1; # XXX
 		}
 	}
 	return ($count,@results);
