@@ -1,3 +1,6 @@
+# -*- tab-width: 8 -*-
+# NOTE: This file uses standard 8-character tabs
+
 package C4::Reserves2;
 
 # $Id$
@@ -52,7 +55,21 @@ FIXME
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &UpdateReserve &getreservetitle &Findgroupreserve);
+# FIXME Take out CalcReserveFee after it can be removed from opac-reserves.pl
+@EXPORT = qw(
+    &FindReserves
+    &CheckReserves
+    &CheckWaiting
+    &CancelReserve
+    &CalcReserveFee
+    &FillReserve
+    &ReserveWaiting
+    &CreateReserve
+    &updatereserves
+    &UpdateReserve
+    &getreservetitle
+    &Findgroupreserve
+);
 
 # make all your functions, whether exported or not;
 
@@ -594,6 +611,7 @@ sub CreateReserve {
 # FIXME - A functionally identical version of this function appears in
 # C4::Reserves. Pick one and stick with it.
 # XXX - Internal use only
+# FIXME - opac-reserves.pl need to use it, temporarily put into @EXPORT
 sub CalcReserveFee {
   my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;
   #check for issues;
