@@ -219,7 +219,7 @@ sub catalogsearch {
 
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
-	$sth = $dbh->prepare("SELECT biblio.*, biblioitems.*, items.*
+	$sth = $dbh->prepare("SELECT biblio.*, biblioitems.*, items.*,marc_biblio.bibid
 							FROM biblio, marc_biblio 
 							LEFT JOIN items on items.biblionumber = biblio.biblionumber
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
