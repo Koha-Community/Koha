@@ -74,7 +74,7 @@ a.acquisition {
 	text-decoration: none;
 	background-color: #ffdf61;
 	cursor: hand;
-	color:#000000;
+	color:#FFFFFF;
 	padding:4px;
 	font-weight: bold;
 	}

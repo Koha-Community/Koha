@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Circulation</title>
+<title>KOHA: INTRANET: Acquisitions</title>
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
@@ -19,6 +19,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	padding:4px;
 	font-weight: bold;
 	text-align:center;
+	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
 	}
 
 a.home {
@@ -36,6 +37,7 @@ a.home:hover {
 	font-weight: normal;
 	font-weight: bold;
 	}
+
 a.catalogue {
 	font-weight: normal;
 	text-decoration: none;
@@ -53,6 +55,7 @@ a.catalogue:hover {
 	font-weight: bold;
 	margin:0;
 	}
+
 a.members {
 	font-weight: normal;
 	text-decoration: none;
@@ -82,6 +85,25 @@ a.acquisition:hover {
 	text-decoration: normal;
 	font-weight: bold;
 	}
+a.marc {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	background-color: #ad11ad;
+	color:#FFFFFF;
+	padding:4px;
+	font-weight: bold;
+	margin:0;
+	}
+a.marc:hover {
+	background-color: #ad11ad;
+	color: #000000;
+	text-decoration: none;
+	font-weight: normal;
+	font-weight: bold;
+	margin:0;
+	}
+
 a.reports {
 	font-weight: normal;
 	text-decoration: none;
@@ -96,21 +118,22 @@ a.reports:hover {
 	text-decoration: normal;
 	font-weight: bold;
 	}
+
 a.circulation {
 	font-weight: normal;
 	text-decoration: none;
-	background-color: #be6170;
 	cursor: hand;
-	color:#FFFFFF;
+	color:#777777;
 	padding:4px;
 	font-weight: bold;
 	}
 a.circulation:hover {
 	background-color: #be6170;
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: normal;
 	font-weight: bold;
 	}
+
 a.parameters {
 	font-weight: normal;
 	text-decoration: none;
@@ -165,7 +188,7 @@ a.about:hover {
 						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
+						<a class="marc" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
