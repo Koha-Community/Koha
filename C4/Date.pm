@@ -56,6 +56,11 @@ sub format_date
 	my $olddate = shift;
 	my $newdate;
 
+	if ( ! $olddate )
+	{
+		return "";
+	}
+
 	my $dateformat = get_date_format();
 	
 	if ( $dateformat eq "us" )
@@ -86,6 +91,11 @@ sub format_date_in_iso
 {
         my $olddate = shift;
         my $newdate;
+
+        if ( ! $olddate )
+        {
+                return "";
+        }
                 
         my $dateformat = get_date_format();
 

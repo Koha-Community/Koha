@@ -39,14 +39,13 @@
 
 use strict;
 use CGI;
+use C4::Date;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use HTML::Template;
-
-
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -130,8 +129,9 @@ if ($op eq 'add_form') {
 	} else {
 	    $template->param(adding => 1);
 	}
-	$template->param(startdate => $dataaqbudget->{'startdate'});
-	$template->param(enddate => $dataaqbudget->{'enddate'});
+	$template->param(dateformat => display_date_format() );
+	$template->param(startdate => format_date($dataaqbudget->{'startdate'}));
+	$template->param(enddate => format_date($dataaqbudget->{'enddate'}));
 	$template->param(budgetamount => $dataaqbudget->{'budgetamount'});
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -140,8 +140,8 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 	my $query = "replace aqbudget (bookfundid,startdate,enddate,budgetamount) values (";
 	$query.= $dbh->quote($input->param('bookfundid')).",";
-	$query.= $dbh->quote($input->param('startdate')).",";
-	$query.= $dbh->quote($input->param('enddate')).",";
+	$query.= $dbh->quote(format_date_in_iso($input->param('startdate'))).",";
+	$query.= $dbh->quote(format_date_in_iso($input->param('enddate'))).",";
 	$query.= $dbh->quote($input->param('budgetamount')).")";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
@@ -160,8 +160,8 @@ if ($op eq 'add_form') {
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
-	$template->param(startdate => $data->{'startdate'});
-	$template->param(enddate => $data->{'enddate'});
+	$template->param(startdate => format_date($data->{'startdate'}));
+	$template->param(enddate => format_date($data->{'enddate'}));
 	$template->param(budgetamount => $data->{'budgetamount'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -205,8 +205,8 @@ if ($op eq 'add_form') {
 		push(@toggle,$toggle);
 		push(@bookfundid,$results->[$i]{'bookfundid'});
 		push(@bookfundname,$dataaqbookfund->{'bookfundname'});
-		push(@startdate,$results->[$i]{'startdate'});
-		push(@enddate,$results->[$i]{'enddate'});
+		push(@startdate,format_date($results->[$i]{'startdate'}));
+		push(@enddate,format_date($results->[$i]{'enddate'}));
 		push(@budgetamount,$results->[$i]{'budgetamount'});
 	  	if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";
