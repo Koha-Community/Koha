@@ -48,29 +48,24 @@ my @more   = ();
 my %configfile;
 open (KC, "/etc/koha.conf");
 while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
+    chomp;
+    (next) if (/^\s*#/);
+    if (/(.*)\s*=\s*(.*)/) {
+        my $variable=$1;
+        my $value=$2;
+
+        $variable =~ s/^\s*//g;
+        $variable =~ s/\s*$//g;
+        $value    =~ s/^\s*//g;
+        $value    =~ s/\s*$//g;
+        $configfile{$variable}=$value;
+    } # if
+} # while
+close(KC);
+
 my $path=$configfile{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-# stuff goes here.
-  };
-   
 # make all your functions, whether exported or not;
 
 sub picktemplate {
@@ -123,7 +118,8 @@ sub startmenu{
   } elsif ($type eq 'member') {
     open (FILE,"$path/members-top.inc") || die;
   } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/acquisitions-top.inc")|| die;
+    open (FILE,"$path/acquisitions-top.inc")
+      || die "Cannot open $path/acquisitions-top.inc";
   } elsif ($type eq 'report'){
     open (FILE,"$path/reports-top.inc") || die;
   } elsif ($type eq 'circulation') {
@@ -139,9 +135,9 @@ sub startmenu{
 }
 
 
-sub endmenu{
-  my ($type)=@_;
-  if ($type eq 'issue'){
+sub endmenu {
+  my ($type) = @_;
+  if ($type eq 'issue') {
     open (FILE,"$path/issues-bottom.inc") || die;
   } elsif ($type eq 'opac') {
     open (FILE,"$path/opac-bottom.inc") || die;
@@ -370,7 +366,7 @@ sub mkform2{
       if ($reqd eq "R") {
         $ltext = $ltext." (Req)";
 	}
-      @order[$posn] =mktablerow(2,'white',$ltext,$text);
+      $order[$posn] =mktablerow(2,'white',$ltext,$text);
     }
   }
   $string=$string.join("\n",@order);

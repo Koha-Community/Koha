@@ -19,7 +19,7 @@ print startpage();
 print startmenu('acquisitions');
 
 &searchscreen();
-print endmenu();
+print endmenu('acquisitions');
 print endpage();
 
 
