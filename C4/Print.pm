@@ -23,7 +23,7 @@ sub remoteprint {
   if ($queue eq "" || $queue eq 'nulllp') {
     open (PRINTER,">/tmp/kohaiss");
   } else {  
-    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue\n";
+    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue!\n";
   }  
 #  print $queue;
   #open (FILE,">/tmp/$file");
