@@ -54,8 +54,10 @@ to perform an actual installation.
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(	&checkperlmodules
-                &checkabortedinstall
+@EXPORT = qw(
+		&read_autoinstall_file
+		&checkperlmodules
+		&checkabortedinstall
 		&getmessage
 		&showmessage
 		&releasecandidatewarning
@@ -137,6 +139,9 @@ details of how to set that.
 Recommended answers are given in brackets after each question.  To accept
 the default value for any question (indicated by []), simply hit Enter
 at the prompt.
+
+You also can define an auto_install_file, that will answer every question automatically.
+To use this feature, run ./installer.pl -i /path/to/auto_install_file 
 
 Are you ready to begin the installation? ([Y]/N): |;
 
@@ -306,6 +311,7 @@ Please report any problems you encounter through http://bugs.koha.org/
 
 Press <ENTER> to exit the installer: |;
 
+#'
 sub releasecandidatewarning {
     my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
     my $answer=showmessage($message, 'yn', 'n');
@@ -319,6 +325,39 @@ sub releasecandidatewarning {
     };
 }
 
+sub read_autoinstall_file
+{
+	my $fname = shift;	# Config file to read
+	my $retval = {};	# Return value: ref-to-hash holding the
+				# configuration
+
+	open (CONF, $fname) or return undef;
+
+	while (<CONF>)
+	{
+		my $var;		# Variable name
+		my $value;		# Variable value
+
+		chomp;
+		s/#.*//;		# Strip comments
+		next if /^\s*$/;	# Ignore blank lines
+
+		# Look for a line of the form
+		#	var = value
+		if (!/^\s*(\w+)\s*=\s*(.*?)\s*$/)
+		{
+			next;
+		}
+
+		# Found a variable assignment
+		# variable that was already set.
+		$var = $1;
+		$value = $2;
+		$retval->{$var} = $value;
+	}
+	close CONF;
+	return $retval;
+}
 
 =back
 
@@ -809,7 +848,7 @@ sub checkperlmodules {
 #
 # Test for Perl and Modules
 #
-
+	my ($auto_install) = @_;
     my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
 
@@ -856,7 +895,7 @@ sub checkperlmodules {
 	print "\n";
 	exit;
     } else {
-	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1);
+	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1) unless $auto_install->{NoPressEnter};
     }
 
 
@@ -913,18 +952,28 @@ function does not return any values.
 =cut
 
 sub getinstallationdirectories {
-	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
+	my ($auto_install) = @_;
+	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; } #"
     $opacdir = $ENV{prefix}.'/koha/opac';
     $intranetdir = $ENV{prefix}.'/koha/intranet';
     my $getdirinfo=1;
     while ($getdirinfo) {
 	# Loop until opac directory and koha directory are different
-	my $message=getmessage('GetOpacDir', [$opacdir]);
-	$opacdir=showmessage($message, 'free', $opacdir);
-
-	$message=getmessage('GetIntranetDir', [$intranetdir]);
-	$intranetdir=showmessage($message, 'free', $intranetdir);
-
+	my $message;
+	if ($auto_install->{GetOpacDir}) {
+		$opacdir=$auto_install->{GetOpacDir};
+		print "auto-setting OpacDir to $opacdir\n";
+	} else {
+		$message=getmessage('GetOpacDir', [$opacdir]);
+		$opacdir=showmessage($message, 'free', $opacdir);
+	}
+	if ($auto_install->{GetIntranetDir}) {
+		$intranetdir=$auto_install->{GetIntranetDir};
+		print "auto-setting IntranetDir to $intranetdir\n";
+	} else {
+		$message=getmessage('GetIntranetDir', [$intranetdir]);
+		$intranetdir=showmessage($message, 'free', $intranetdir);
+	}
 	if ($intranetdir eq $opacdir) {
 	    print qq|
 
@@ -937,8 +986,13 @@ You must specify different directories for the OPAC and INTRANET files!
 	}
     }
     $kohalogdir=$ENV{prefix}.'/koha/log';
-    my $message=getmessage('GetKohaLogDir', [$kohalogdir]);
-    $kohalogdir=showmessage($message, 'free', $kohalogdir);
+	if ($auto_install->{GetOpacDir}) {
+		$kohalogdir=$auto_install->{KohaLogDir};
+		print "auto-setting OpacDir to $opacdir\n";
+	} else {
+	    my $message=getmessage('GetKohaLogDir', [$kohalogdir]);
+    	$kohalogdir=showmessage($message, 'free', $kohalogdir);
+	}
 
 
     # FIXME: Need better error handling for all mkdir calls here
@@ -985,14 +1039,14 @@ please give the value of --prefix when you ran configure.
 The file mysqladmin should be in bin/mysqladmin under the directory that you give here.
 
 MySQL installation directory: |;
-
+#'
 sub getmysqldir {
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
 			  /usr/local
 			  /usr
 			  )) {
-       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
+       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") { #"
 	    $mysqldir=$mysql;
        }
     }
@@ -1055,36 +1109,54 @@ Press <ENTER> to try again:
 |;
 
 sub getdatabaseinfo {
-
+	my ($auto_install) = @_;
     $database = 'Koha';
     $hostname = 'localhost';
     $user = 'kohaadmin';
     $pass = '';
 
 #Get the database name
-
-    my $message=getmessage('DatabaseName', [$database]);
-    $database=showmessage($message, 'free', $database);
-
+	my $message;
+	
+	if ($auto_install->{database}) {
+		$database=$auto_install->{database};
+		print "auto-setting database to $database\n";
+	} else {
+		$message=getmessage('DatabaseName', [$database]);
+		$database=showmessage($message, 'free', $database);
+	}
 #Get the hostname for the database
     
-    $message=getmessage('DatabaseHost', [$hostname]);
-    $hostname=showmessage($message, 'free', $hostname);
-
+	if ($auto_install->{DatabaseHost}) {
+		$hostname=$auto_install->{DatabaseHost};
+		print "auto-setting database host to $hostname\n";
+	} else {
+		$message=getmessage('DatabaseHost', [$hostname]);
+		$hostname=showmessage($message, 'free', $hostname);
+	}
 #Get the username for the database
 
-    $message=getmessage('DatabaseUser', [$database, $hostname, $user]);
-    $user=showmessage($message, 'free', $user);
-
+	if ($auto_install->{DatabaseUser}) {
+		$user=$auto_install->{DatabaseUser};
+		print "auto-setting DB user to $user\n";
+	} else {
+		$message=getmessage('DatabaseUser', [$database, $hostname, $user]);
+		$user=showmessage($message, 'free', $user);
+	}
 #Get the password for the database user
 
     while ($pass eq '') {
-	my $message=getmessage('DatabasePassword', [$user, $user]);
-	$pass=showmessage($message, 'free', $pass);
-	if ($pass eq '') {
-	    my $message=getmessage('BlankPassword');
-	    showmessage($message,'PressEnter');
-	}
+		my $message=getmessage('DatabasePassword', [$user, $user]);
+		if ($auto_install->{DatabasePassword}) {
+			$pass=$auto_install->{DatabasePassword};
+			print "auto-setting database password to $pass\n";
+		} else {
+				$pass=showmessage($message, 'free', $pass);
+		}
+		if ($pass eq '') {
+			my $message=getmessage('BlankPassword');
+			showmessage($message,'PressEnter');
+		}
     }
 }
 
@@ -1139,6 +1211,7 @@ The userid %s is not a valid userid on this system.
 Press <ENTER> to continue: |;
 
 sub getapacheinfo {
+	my ($auto_install) = @_;
     my @confpossibilities;
 
     foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
@@ -1156,37 +1229,37 @@ sub getapacheinfo {
 			  /etc/httpd/httpd.conf
 			  /etc/httpd/2.0/conf/httpd2.conf
 			  )) {
-	if ( -f $httpdconf ) {
-	    push @confpossibilities, $httpdconf;
-	}
+		if ( -f $httpdconf ) {
+			push @confpossibilities, $httpdconf;
+		}
     }
 
     if ($#confpossibilities==-1) {
-	my $message=getmessage('NoApacheConfFiles');
-	my $choice='';
-	$realhttpdconf='';
-	until (-f $realhttpdconf) {
-	    $choice=showmessage($message, "free", 1);
-	    if (-f $choice) {
-		$realhttpdconf=$choice;
-	    } else {
-		showmessage(getmessage('NotAFile', [$choice]),'PressEnter', '', 1);
-	    }
-	}
+		my $message=getmessage('NoApacheConfFiles');
+		my $choice='';
+		$realhttpdconf='';
+		until (-f $realhttpdconf) {
+			$choice=showmessage($message, "free", 1);
+			if (-f $choice) {
+			$realhttpdconf=$choice;
+			} else {
+			showmessage(getmessage('NotAFile', [$choice]),'PressEnter', '', 1);
+			}
+		}
     } elsif ($#confpossibilities>0) {
-	my $conffiles='';
-	my $counter=1;
-	my $options='';
-	foreach (@confpossibilities) {
-	    $conffiles.="   $counter: $_\n";
-	    $options.="$counter";
-	    $counter++;
-	}
-	my $message=getmessage('FoundMultipleApacheConfFiles', [$conffiles]);
-	my $choice=showmessage($message, "restrictchar $options", 1);
-	$realhttpdconf=$confpossibilities[$choice-1];
+		my $conffiles='';
+		my $counter=1;
+		my $options='';
+		foreach (@confpossibilities) {
+			$conffiles.="   $counter: $_\n";
+			$options.="$counter";
+			$counter++;
+		}
+		my $message=getmessage('FoundMultipleApacheConfFiles', [$conffiles]);
+		my $choice=showmessage($message, "restrictchar $options", 1);
+		$realhttpdconf=$confpossibilities[$choice-1];
     } else {
-	$realhttpdconf=$confpossibilities[0];
+		$realhttpdconf=$confpossibilities[0];
     }
     unless (open (HTTPDCONF, "<$realhttpdconf")) {
 	warn RED."Insufficient privileges to open $realhttpdconf for reading.\n";
@@ -1194,25 +1267,35 @@ sub getapacheinfo {
     }
 
     while (<HTTPDCONF>) {
-	if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
-	    $httpduser = $1;
-	}
+		if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+			$httpduser = $1;
+		}
     }
     close(HTTPDCONF);
 
     unless (defined($httpduser)) {
-	my $message=getmessage('EnterApacheUser', [$etcdir]);
-	until (defined($httpduser) && length($httpduser) && getpwnam($httpduser)) {
-	    $httpduser=showmessage($message, "free", '');
-	    if (length($httpduser)>0) {
-		unless (getpwnam($httpduser)) {
-		    my $message=getmessage('InvalidUserid', [$httpduser]);
-		    showmessage($message,'PressEnter');
+		my $message;
+		if ($auto_install->{EnterApacheUser}) {
+			$message = $auto_install->{EnterApacheUser};
+			print "auto-setting ApacheUser to $message\n";
+		} else {
+			$message=getmessage('EnterApacheUser', [$etcdir]);
 		}
-	    } else {
-	    }
+		until (defined($httpduser) && length($httpduser) && getpwnam($httpduser)) {
+			if ($auto_install->{EnterApacheUser}) {
+				$httpduser = $auto_install->{EnterApacheUser};
+			} else {
+				$httpduser=showmessage($message, "free", '');
+			}
+			if (length($httpduser)>0) {
+				unless (getpwnam($httpduser)) {
+					my $message=getmessage('InvalidUserid', [$httpduser]);
+					showmessage($message,'PressEnter');
+				}
+			} else {
+			}
+		}
 	}
-    }
 }
 
 
@@ -1275,21 +1358,38 @@ Enter the Intranet Port [%s]: |;
 
 
 sub getapachevhostinfo {
-
+	my ($auto_install) = @_;
     $svr_admin = "webmaster\@$domainname";
     $servername=`hostname`;
     chomp $servername;
     $opacport=80;
     $intranetport=8080;
 
-    showmessage(getmessage('ApacheConfigIntroduction',[$etcdir,$etcdir]), 'PressEnter');
-
-    $svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$svr_admin]), 'email', $svr_admin);
-    $servername=showmessage(getmessage('GetServerName', [$servername]), 'free', $servername);
-
-
-    $opacport=showmessage(getmessage('GetOpacPort', [$opacport]), 'numerical', $opacport);
-    $intranetport=showmessage(getmessage('GetIntranetPort', [$opacport, $intranetport]), 'numerical', $intranetport);
+	if ($auto_install->{GetVirtualHostEmail}) {
+		$svr_admin=$auto_install->{GetVirtualHostEmail};
+		print "auto-setting VirtualHostEmail to $svr_admin\n";
+	} else {
+		showmessage(getmessage('ApacheConfigIntroduction',[$etcdir,$etcdir]), 'PressEnter');
+		$svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$svr_admin]), 'email', $svr_admin);
+	}
+	if ($auto_install->{servername}) {
+		$servername=$auto_install->{servername};
+		print "auto-setting server name to $servername\n";
+	} else {
+    	$servername=showmessage(getmessage('GetServerName', [$servername]), 'free', $servername);
+	}
+	if ($auto_install->{opacport}) {
+		$opacport=$auto_install->{opacport};
+		print "auto-setting opac port to $opacport\n";
+	} else {
+	    $opacport=showmessage(getmessage('GetOpacPort', [$opacport]), 'numerical', $opacport);
+	}
+	if ($auto_install->{intranetport}) {
+		$servername=$auto_install->{intranetport};
+		print "auto-setting intranet port to $intranetport\n";
+	} else {
+	    $intranetport=showmessage(getmessage('GetIntranetPort', [$opacport, $intranetport]), 'numerical', $intranetport);
+	}
 
 }
 
@@ -1447,54 +1547,54 @@ function does not return any values.
 
 =cut
 
-$messages->{'IntranetAuthenticationQuestion'}->{en} =
-   heading('LIBRARIAN AUTHENTICATION') . qq|
-The Librarian site can be password protected using
-Apache's Basic Authorization instead of Koha user details.
-
-This method going to be phased out very soon.  Most users should answer N here.
-
-Would you like to do this (Y/[N]): |;	#'
-
-$messages->{'BasicAuthUsername'}->{en}="Please enter a username for librarian access [%s]: ";
-$messages->{'BasicAuthPassword'}->{en}="Please enter a password for %s: ";
-$messages->{'BasicAuthPasswordWasBlank'}->{en}="\nYou cannot use a blank password!\n\n";
-
-sub basicauthentication {
-    my $message=getmessage('IntranetAuthenticationQuestion');
-    my $answer=showmessage($message, 'yn', 'n');
-    my $httpdconf = $etcdir."/koha-httpd.conf";
-
-    my $apacheauthusername='librarian';
-    my $apacheauthpassword='';
-    if ($answer=~/^y/i) {
-	($apacheauthusername) = showmessage(getmessage('BasicAuthUsername', [ $apacheauthusername]), 'free', $apacheauthusername, 1);
-	$apacheauthusername=~s/[^a-zA-Z0-9]//g;
-	while (! $apacheauthpassword) {
-	    ($apacheauthpassword) = showmessage(getmessage('BasicAuthPassword', [ $apacheauthusername]), 'free', 1);
-	    if (!$apacheauthpassword) {
-		($apacheauthpassword) = showmessage(getmessage('BasicAuthPasswordWasBlank'), 'none', '', 1);
-	    }
-	}
-	open AUTH, ">$etcdir/kohaintranet.pass";
-	my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	my $salt=substr($chars, int(rand(length($chars))),1);
-	$salt.=substr($chars, int(rand(length($chars))),1);
-	print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
-	close AUTH;
-	open(SITE,">>$httpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
-	print SITE <<EOP
-
-<Directory $intranetdir>
-    AuthUserFile $etcdir/kohaintranet.pass
-    AuthType Basic
-    AuthName "Koha Intranet (for librarians only)"
-    Require  valid-user
-</Directory>
-EOP
-    }
-    close(SITE);
-}
+# $messages->{'IntranetAuthenticationQuestion'}->{en} =
+#    heading('LIBRARIAN AUTHENTICATION') . qq|
+# The Librarian site can be password protected using
+# Apache's Basic Authorization instead of Koha user details.
+# 
+# This method going to be phased out very soon.  Most users should answer N here.
+# 
+# Would you like to do this (Y/[N]): |;	#'
+# 
+# $messages->{'BasicAuthUsername'}->{en}="Please enter a username for librarian access [%s]: ";
+# $messages->{'BasicAuthPassword'}->{en}="Please enter a password for %s: ";
+# $messages->{'BasicAuthPasswordWasBlank'}->{en}="\nYou cannot use a blank password!\n\n";
+# 
+# sub basicauthentication {
+#     my $message=getmessage('IntranetAuthenticationQuestion');
+#     my $answer=showmessage($message, 'yn', 'n');
+#     my $httpdconf = $etcdir."/koha-httpd.conf";
+# 
+#     my $apacheauthusername='librarian';
+#     my $apacheauthpassword='';
+#     if ($answer=~/^y/i) {
+# 	($apacheauthusername) = showmessage(getmessage('BasicAuthUsername', [ $apacheauthusername]), 'free', $apacheauthusername, 1);
+# 	$apacheauthusername=~s/[^a-zA-Z0-9]//g;
+# 	while (! $apacheauthpassword) {
+# 	    ($apacheauthpassword) = showmessage(getmessage('BasicAuthPassword', [ $apacheauthusername]), 'free', 1);
+# 	    if (!$apacheauthpassword) {
+# 		($apacheauthpassword) = showmessage(getmessage('BasicAuthPasswordWasBlank'), 'none', '', 1);
+# 	    }
+# 	}
+# 	open AUTH, ">$etcdir/kohaintranet.pass";
+# 	my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+# 	my $salt=substr($chars, int(rand(length($chars))),1);
+# 	$salt.=substr($chars, int(rand(length($chars))),1);
+# 	print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
+# 	close AUTH;
+# 	open(SITE,">>$httpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
+# 	print SITE <<EOP
+# 
+# <Directory $intranetdir>
+#     AuthUserFile $etcdir/kohaintranet.pass
+#     AuthType Basic
+#     AuthName "Koha Intranet (for librarians only)"
+#     Require  valid-user
+# </Directory>
+# EOP
+#     }
+#     close(SITE);
+# }
 
 
 =item installfiles
@@ -1537,7 +1637,6 @@ sub installfiles {
 		my $desc = shift;
 		my $src = shift;
 		my $tgt = shift;
-		
 		if (-e $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]);
 			startsysout();
@@ -1549,6 +1648,7 @@ sub installfiles {
 	    system("cp -R ".$src." ".$tgt);
 	}
 
+	my ($auto_install) = @_;
     showmessage(getmessage('InstallFiles'),'none');
 
     neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
@@ -1607,7 +1707,7 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 		print "Please check permissions in $intranetdir/scripts/z3950daemon\n";
 	}
 
-    showmessage(getmessage('OldFiles'),'PressEnter');
+    showmessage(getmessage('OldFiles'),'PressEnter') unless $auto_install->{NoPressEnter};
 }
 
 
@@ -1672,19 +1772,24 @@ $messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
 $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
 
 sub databasesetup {
+	my ($auto_install) = @_;
     $mysqluser = 'root';
     $mysqlpass = '';
 	my $mysqldir = getmysqldir();
 
-    # we must not put the mysql root password on the command line
-	$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'silentfree');
+	if ($auto_install->{MysqlRootPassword}) {
+		$mysqlpass=$auto_install->{MysqlRootPassword};
+	} else {
+    	# we must not put the mysql root password on the command line
+		$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'silentfree');
+	}
 	
-	showmessage(getmessage('CreatingDatabase'),'none');
+	showmessage(getmessage('CreatingDatabase'),'none') unless ($auto_install->{NoPressEnter});
 	# set the login up
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
 	startsysout();
-	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
+	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");#"
 	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
 	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
 	# Change to admin user login

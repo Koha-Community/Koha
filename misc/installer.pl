@@ -3,6 +3,8 @@
 #use diagnostics;
 
 use Install;
+use Getopt::Long;
+
 use strict; # please develop with the strict pragma
 
 use vars qw( $input );
@@ -32,6 +34,12 @@ Install::setdomainname $domainname;
 ###############################################
 my $etcdir = $ENV{etcdir}||'/etc';
 system("mkdir -p $etcdir");
+
+my $auto_install_file;
+GetOptions(
+    'i:s'    => \$auto_install_file,
+);
+my $auto_install = read_autoinstall_file($auto_install_file);
 
 Install::setetcdir $etcdir;
 
@@ -90,26 +98,26 @@ at http://www.koha.org for more information.
 };
 
 # Check for missing Perl Modules
-checkperlmodules();
+checkperlmodules($auto_install);
 
 # Ask for installation directories
-getapacheinfo();
+getapacheinfo($auto_install);
 
-getinstallationdirectories();
+getinstallationdirectories($auto_install);
 
-getdatabaseinfo();
+getdatabaseinfo($auto_install);
 
-getapachevhostinfo();
+getapachevhostinfo($auto_install);
 
 updateapacheconf();
 
-basicauthentication();
+# basicauthentication();
 
-installfiles();
+installfiles($auto_install);
 
 backupmycnf();
 
-databasesetup();
+databasesetup($auto_install);
 
 updatedatabase();
 
