@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# WARNING: 4-character tab stops here
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -89,13 +90,28 @@ if ($op eq "do_search") {
 	}
 	my @marcarray;
 	push @marcarray,"";
-	for (my $tabloop = 0; $tabloop<=9;$tabloop++) {
-	push @marcarray,"--------------------------------------- $tabloop ---------------------------------------";
-		foreach my $tag (sort(keys (%{$tagslib}))) {
-			foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
-				next if subfield_is_koha_internal_p($subfield);
-				next unless ($tagslib->{$tag}->{$subfield}->{tab} eq $tabloop);
-				push @marcarray, "$tag$subfield - $tagslib->{$tag}->{$subfield}->{lib}";
+	my $widest_menu_item_width = 0;
+	for (my $pass = 1; $pass <= 2; $pass += 1) {
+		for (my $tabloop = 0; $tabloop<=9;$tabloop++) {
+			my $separator_inserted_p = 0; # FIXME... should not use!!
+			foreach my $tag (sort(keys (%{$tagslib}))) {
+				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
+					next if subfield_is_koha_internal_p($subfield);
+					next unless ($tagslib->{$tag}->{$subfield}->{tab} eq $tabloop);
+					my $menu_item = "$tag$subfield - $tagslib->{$tag}->{$subfield}->{lib}";
+					if ($pass == 1) {
+						$widest_menu_item_width = length $menu_item
+								if $widest_menu_item_width < length $menu_item;
+					} else {
+						if (!$separator_inserted_p) {
+							my $w = int(($widest_menu_item_width - 3 + 0.5)/2);
+							my $s = ('-' x ($w * 4/5));
+							push @marcarray,  "$s $tabloop $s";
+							$separator_inserted_p = 1;
+						}
+						push @marcarray, $menu_item;
+					}
+				}
 			}
 		}
 	}
@@ -109,3 +125,8 @@ if ($op eq "do_search") {
 }
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
+
+
+# Local Variables:
+# tab-width: 4
+# End:
