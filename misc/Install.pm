@@ -620,9 +620,8 @@ sub checkperlmodules {
     my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
 
-    # FIXME: Perl 5.6 is BUGGY!!! IT SHOULD NOT BE USED in production!!!
-    unless (eval "require 5.006_000") {
-	die getmessage('PerlVersionFailure', ['5.6.0']);
+    unless ($] >= 5.006001) {			# Bug 179
+	die getmessage('PerlVersionFailure', ['5.6.1']);
     }
 
     my @missing = ();
