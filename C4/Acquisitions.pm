@@ -18,6 +18,11 @@ package C4::Acquisitions; #assumes C4/Acquisitions.pm
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# ***
+# NOTE: This module is deprecated in Koha 1.3.x, and will shortly be
+# deleted.
+# ***
+
 use strict;
 require Exporter;
 use C4::Database;
@@ -26,6 +31,24 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 0.01;
+
+=head1 NAME
+
+C4::Acquisitions - FIXME
+
+=head1 SYNOPSIS
+
+  use C4::Acquisitions;
+
+=head1 DESCRIPTION
+
+FIXME
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&getorders &bookseller &breakdown &basket &newbasket &bookfunds
@@ -44,20 +67,21 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Never used
 
 
 # non-exported package globals go here
-use vars qw(@more $stuff);
+use vars qw(@more $stuff);		# FIXME - Never used
 
 # initalize package globals, first exported ones
-
+# FIXME - Never used
 my $Var1   = '';
 my %Hashit = ();
 
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
+# FIXME - Never used
 my $stuff  = '';
 my @more   = ();
 
@@ -65,9 +89,11 @@ my @more   = ();
 # the functions below that use them.
 
 # file-private lexicals go here
+# FIXME - Never used
 my $priv_var    = '';
 my %secret_hash = ();
 
+# FIXME - Never used
 # here's a file-private function as a closure,
 # callable as &$priv_func;  it cannot be prototyped.
 my $priv_func = sub {
@@ -76,6 +102,40 @@ my $priv_func = sub {
   
 # make all your functions, whether exported or not;
 
+=item getorders
+
+  ($count, $orders) = &getorders($booksellerid);
+
+Finds pending orders from the bookseller with the given ID. Ignores
+completed and cancelled orders.
+
+C<$count> is the number of elements in C<@{$orders}>.
+
+C<$orders> is a reference-to-array; each element is a
+reference-to-hash with the following fields:
+
+=over 4
+
+=item C<count(*)>
+
+Gives the number of orders in with this basket number.
+
+=item C<authorizedby>
+
+=item C<entrydate>
+
+=item C<basketno>
+
+These give the value of the corresponding field in the aqorders table
+of the Koha database.
+
+=back
+
+Results are ordered from most to least recent.
+
+=cut
+#'
+# FIXME - This exact function already exists in C4::Catalogue
 sub getorders {
   my ($supplierid)=@_;
   my $dbh=C4Connect;
@@ -98,6 +158,9 @@ sub getorders {
   return ($i,\@results);
 }
 
+# Only used internally
+# FIXME - This is the same as &C4::Biblio::itemcount, but not
+# the same as &C4::Search::itemcount
 sub itemcount{
   my ($biblio)=@_;
   my $dbh=C4Connect;
@@ -111,6 +174,22 @@ sub itemcount{
   return($data->{'count(*)'});
 }
 
+=item getorder
+
+  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
+
+Looks up the order with the given biblionumber and biblioitemnumber.
+
+Returns a two-element array. C<$ordernumber> is the order number.
+C<$order> is a reference-to-hash describing the order; its keys are
+fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
+tables of the Koha database.
+
+=cut
+#'
+# FIXME - There are functions &getorder and &getorders. Isn't this
+# somewhat likely to cause confusion?
+# FIXME - Almost the exact same function is already in C4::Catalogue
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh=C4Connect;
@@ -127,6 +206,20 @@ sub getorder{
   return ($order,$ordnum->{'ordernumber'});
 }
 
+=item getsingleorder
+
+  $order = &getsingleorder($ordernumber);
+
+Looks up an order by order number.
+
+Returns a reference-to-hash describing the order. The keys of
+C<$order> are fields from the biblio, biblioitems, aqorders, and
+aqorderbreakdown tables of the Koha database.
+
+=cut
+#'
+# FIXME - This is practically the same function as
+# &C4::Catalogue::getsingleorder and &C4::Biblio::getsingleorder.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
@@ -143,6 +236,20 @@ sub getsingleorder {
   return($data);
 }
 
+=item invoice
+
+  ($count, @results) = &invoice($booksellerinvoicenumber);
+
+Looks up orders by invoice number.
+
+Returns an array. C<$count> is the number of elements in C<@results>.
+C<@results> is an array of references-to-hash; the keys of each
+elements are fields from the aqorders, biblio, and biblioitems tables
+of the Koha database.
+
+=cut
+#'
+# FIXME - This exact function is already in C4::Catalogue
 sub invoice {
   my ($invoice)=@_;
   my $dbh=C4Connect;
@@ -163,6 +270,23 @@ sub invoice {
   return($i,@results);
 }
 
+=item getallorders
+
+  ($count, @results) = &getallorders($booksellerid);
+
+Looks up all of the pending orders from the supplier with the given
+bookseller ID. Ignores cancelled orders.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash. The keys of each element are fields from
+the aqorders, biblio, and biblioitems tables of the Koha database.
+
+C<@results> is sorted alphabetically by book title.
+
+=cut
+#'
+# FIXME - Almost (but not quite) the same function appears in C4::Catalogue
+# That one only lists incomplete orders.
 sub getallorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
@@ -187,6 +311,8 @@ sub getallorders {
   return($i,@results);
 }
 
+# FIXME - There's a getrecorders in C4::Catalogue
+# FIXME - Never used (neither is the other one, actually)
 sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
@@ -213,6 +339,42 @@ sub getrecorders {
   return($i,@results);
 }
 
+=item ordersearch
+
+  ($count, @results) = &ordersearch($search, $biblionumber, $complete);
+
+Searches for orders.
+
+C<$search> may take one of several forms: if it is an ISBN,
+C<&ordersearch> returns orders with that ISBN. If C<$search> is an
+order number, C<&ordersearch> returns orders with that order number
+and biblionumber C<$biblionumber>. Otherwise, C<$search> is considered
+to be a space-separated list of search terms; in this case, all of the
+terms must appear in the title (matching the beginning of title
+words).
+
+If C<$complete> is C<yes>, the results will include only completed
+orders. In any case, C<&ordersearch> ignores cancelled orders.
+
+C<&ordersearch> returns an array. C<$count> is the number of elements
+in C<@results>. C<@results> is an array of references-to-hash with the
+following keys:
+
+=over 4
+
+=item C<author>
+
+=item C<seriestitle>
+
+=item C<branchcode>
+
+=item C<bookfundid>
+
+=back
+
+=cut
+#'
+# FIXME - The same function (modulo whitespace) appears in C4::Catalogue
 sub ordersearch {
   my ($search,$biblio,$catview)=@_;
   my $dbh=C4Connect;
@@ -262,7 +424,20 @@ sub ordersearch {
   return($i,@results);
 }
 
+=item bookseller
 
+  ($count, @results) = &bookseller($searchstring);
+
+Looks up a book seller. C<$searchstring> may be either a book seller
+ID, or a string to look for in the book seller's name.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of of the
+aqbooksellers table in the Koha database.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub bookseller {
   my ($searchstring)=@_;
   my $dbh=C4Connect;
@@ -281,6 +456,19 @@ sub bookseller {
   return($i,@results);
 }
 
+=item breakdown
+
+  ($count, $results) = &breakdown($ordernumber);
+
+Looks up an order by order ID, and returns its breakdown.
+
+C<$count> is the number of elements in C<$results>. C<$results> is a
+reference-to-array; its elements are references-to-hash, whose keys
+are the fields of the aqorderbreakdown table in the Koha database.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue.
 sub breakdown {
   my ($id)=@_;
   my $dbh=C4Connect;
@@ -298,6 +486,23 @@ sub breakdown {
   return($i,\@results);
 }
 
+=item basket
+
+  ($count, @orders) = &basket($basketnumber, $booksellerID);
+
+Looks up the pending (non-cancelled) orders with the given basket
+number. If C<$booksellerID> is non-empty, only orders from that seller
+are returned.
+
+C<&basket> returns a two-element array. C<@orders> is an array of
+references-to-hash, whose keys are the fields from the aqorders,
+biblio, and biblioitems tables in the Koha database. C<$count> is the
+number of elements in C<@orders>.
+
+=cut
+#'
+# FIXME - Almost the same function (with less error-checking) appears in
+# C4::Catalogue.pm
 sub basket {
   my ($basketno,$supplier)=@_;
   my $dbh=C4Connect;
@@ -325,6 +530,25 @@ sub basket {
   return($i,@results);
 }
 
+=item newbasket
+
+  $basket = &newbasket();
+
+Finds the next unused basket number in the aqorders table of the Koha
+database, and returns it.
+
+=cut
+#'
+# FIXME - There's a race condition here:
+#	A calls &newbasket
+#	B calls &newbasket (gets the same number as A)
+#	A updates the basket
+#	B updates the basket, and clobbers A's result.
+# A better approach might be to create a dummy order (with, say,
+# requisitionedby == "Dummy-$$" or notes == "dummy <time> <pid>"), and
+# see which basket number it gets. Then have a cron job periodically
+# remove out-of-date dummy orders.
+# FIXME - This function appears in C4::Catalogue.pm
 sub newbasket {
   my $dbh=C4Connect;
   my $query="Select max(basketno) from aqorders";
@@ -338,6 +562,21 @@ sub newbasket {
   return($basket);
 }
 
+=item bookfunds
+
+  ($count, @results) = &bookfunds();
+
+Returns a list of all book funds started on Sep 1, 2001.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are fields from the aqbookfund
+and aqbudget tables of the Koha database. Results are ordered
+alphabetically by book fund name.
+
+=cut
+#'
+# FIXME - An identical function (without the hardcoded date) appears in
+# C4::Catalogue
 sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
@@ -357,6 +596,19 @@ sub bookfunds {
   return($i,@results);
 }
 
+=item branches
+
+  ($count, @results) = &branches();
+
+Returns a list of all library branches.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of the branches
+table of the Koha database.
+
+=cut
+#'
+# FIXME - This function (modulo whitespace) appears in C4::Catalogue
 sub branches {
   my $dbh=C4Connect;
   my $query="Select * from branches";
@@ -375,6 +627,8 @@ sub branches {
   return($i, @results);
 } # sub branches
 
+# FIXME - POD. But I can't figure out what this function is doing
+# FIXME - An almost identical function appears in C4::Catalogue
 sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh=C4Connect;
@@ -403,7 +657,7 @@ sub bookfundbreakdown {
   return($spent,$comtd);
 }
       
-
+# XXX - POD
 sub newbiblio {
   my ($biblio) = @_;
   my $dbh    = &C4Connect;
@@ -441,7 +695,7 @@ abstract      = $biblio->{'abstract'}";
   return($bibnum);
 }
 
-
+# XXX - POD
 sub modbiblio {
   my ($biblio) = @_;
   my $dbh   = C4Connect;
@@ -476,7 +730,7 @@ where biblionumber = $biblio->{'biblionumber'}";
   return($biblio->{'biblionumber'});
 } # sub modbiblio
 
-
+# XXX - POD
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4Connect;
@@ -490,7 +744,8 @@ where biblionumber = $bibnum";
   $dbh->disconnect;
 } # sub modsubtitle
 
-
+# XXX - POD
+# FIXME - This is functionally identical to &C4::Biblio::modaddauthor
 sub modaddauthor {
     my ($bibnum, $author) = @_;
     my $dbh   = C4Connect;
@@ -514,7 +769,7 @@ biblionumber = '$bibnum'";
   $dbh->disconnect;
 } # sub modaddauthor
 
-
+# XXX - POD
 sub modsubject {
   my ($bibnum, $force, @subject) = @_;
   my $dbh   = C4Connect;
@@ -583,12 +838,17 @@ values ('$subject[$i]', $bibnum)");
   return($error);
 } # sub modsubject
 
-
+# XXX - POD
 sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh   = C4Connect;
     my $query;
 
+    # FIXME -
+    #	foreach my $field (qw( ... ))
+    #	{
+    #		$biblioitem->{$field} = $dbh->quote($biblioitem->{$field});
+    #	}
     $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
     $biblioitem->{'url'}             = $dbh->quote($biblioitem->{'url'});
     $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
@@ -626,7 +886,7 @@ where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
     $dbh->disconnect;
 } # sub modbibitem
 
-
+# XXX - POD
 sub modnote {
   my ($bibitemnum,$note)=@_;
   my $dbh=C4Connect;
@@ -638,6 +898,8 @@ sub modnote {
   $dbh->disconnect;
 }
 
+# XXX - POD
+# FIXME - &C4::Biblio::newbiblioitem is quite similar to this
 sub newbiblioitem {
   my ($biblioitem) = @_;
   my $dbh   = C4Connect;
@@ -705,6 +967,7 @@ place		 = $biblioitem->{'place'}";
   return($bibitemnum);
 }
 
+# XXX - POD
 sub newsubject {
   my ($bibnum)=@_;
   my $dbh=C4Connect;
@@ -717,6 +980,8 @@ sub newsubject {
   $dbh->disconnect;
 }
 
+# XXX - POD
+# FIXME - This is in effect the same as &C4::Biblio::newsubtitle
 sub newsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4Connect;
@@ -732,6 +997,30 @@ subtitle = $subtitle";
   $dbh->disconnect;
 }
 
+=item neworder
+
+  &neworder($biblionumber, $title, $ordnum, $basket, $quantity, $listprice,
+	$booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
+	$ecost, $gst, $budget, $unitprice, $subscription,
+	$booksellerinvoicenumber);
+
+Adds a new order to the database. Any argument that isn't described
+below is the new value of the field with the same name in the aqorders
+table of the Koha database.
+
+C<$ordnum> is a "minimum order number." After adding the new entry to
+the aqorders table, C<&neworder> finds the first entry in aqorders
+with order number greater than or equal to C<$ordnum>, and adds an
+entry to the aqorderbreakdown table, with the order number just found,
+and the book fund ID of the newly-added order.
+
+C<$budget> is effectively ignored.
+
+C<$subscription> may be either "yes", or anything else for "no".
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub neworder {
   my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice)=@_;
   if ($budget eq 'now'){
@@ -773,6 +1062,21 @@ sub neworder {
   $dbh->disconnect;
 }
 
+=item delorder
+
+  &delorder($biblionumber, $ordernumber);
+
+Cancel the order with the given order and biblio numbers. It does not
+delete any entries in the aqorders table, it merely marks them as
+cancelled.
+
+If there are no items remaining with the given biblionumber,
+C<&delorder> also deletes them from the marc_subfield_table and
+marc_biblio tables of the Koha database.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub delorder {
   my ($bibnum,$ordnum)=@_;
   my $dbh=C4Connect;
@@ -790,6 +1094,24 @@ sub delorder {
   $dbh->disconnect;
 }
 
+=item modorder
+
+  &modorder($title, $ordernumber, $quantity, $listprice,
+	$biblionumber, $basketno, $supplier, $who, $notes,
+	$bookfundid, $bibitemnum, $rrp, $ecost, $gst, $budget,
+	$unitprice, $booksellerinvoicenumber);
+
+Modifies an existing order. Updates the order with order number
+C<$ordernumber> and biblionumber C<$biblionumber>. All other arguments
+update the fields with the same name in the aqorders table of the Koha
+database.
+
+Entries with order number C<$ordernumber> in the aqorderbreakdown
+table are also updated to the new book fund ID.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh=C4Connect;
@@ -812,6 +1134,17 @@ sub modorder {
   $dbh->disconnect;
 }
 
+=item newordernum
+
+  $order = &newordernum();
+
+Finds the next unused order number in the aqorders table of the Koha
+database, and returns it.
+
+=cut
+#'
+# FIXME - Race condition
+# FIXME - This function appears in C4::Catalogue
 sub newordernum {
   my $dbh=C4Connect;
   my $query="Select max(ordernumber) from aqorders";
@@ -825,6 +1158,24 @@ sub newordernum {
   return($ordnum);
 }
 
+=item receiveorder
+
+  &receiveorder($biblionumber, $ordernumber, $quantityreceived, $user,
+	$unitprice, $booksellerinvoicenumber, $biblioitemnumber,
+	$freight, $bookfund, $rrp);
+
+Updates an order, to reflect the fact that it was received, at least
+in part. All arguments not mentioned below update the fields with the
+same name in the aqorders table of the Koha database.
+
+Updates the order with bibilionumber C<$biblionumber> and ordernumber
+C<$ordernumber>.
+
+Also updates the book fund ID in the aqorderbreakdown table.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
   my $dbh=C4Connect;
@@ -846,6 +1197,22 @@ sub receiveorder {
   $sth->finish;  
   $dbh->disconnect;
 }
+
+=item updaterecorder
+
+  &updaterecorder($biblionumber, $ordernumber, $user, $unitprice,
+	$bookfundid, $rrp);
+
+Updates the order with biblionumber C<$biblionumber> and order number
+C<$ordernumber>. C<$bookfundid> is the new value for the book fund ID
+in the aqorderbreakdown table of the Koha database. All other
+arguments update the fields with the same name in the aqorders table.
+
+C<$user> is ignored.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub updaterecorder{
   my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
   my $dbh=C4Connect;
@@ -866,6 +1233,20 @@ sub updaterecorder{
   $dbh->disconnect;
 }
 
+=item curconvert
+
+  $foreignprice = &curconvert($currency, $localprice);
+
+Converts the price C<$localprice> to foreign currency C<$currency> by
+dividing by the exchange rate, and returns the result.
+
+If no exchange rate is found, C<&curconvert> assumes the rate is one
+to one.
+
+=cut
+#'
+# FIXME - An almost identical version of this function appears in
+# C4::Catalogue
 sub curconvert {
   my ($currency,$price)=@_;
   my $dbh=C4Connect;
@@ -883,6 +1264,19 @@ sub curconvert {
   return($price);
 }
 
+=item getcurrencies
+
+  ($count, $currencies) = &getcurrencies();
+
+Returns the list of all known currencies.
+
+C<$count> is the number of elements in C<$currencies>. C<$currencies>
+is a reference-to-array; its elements are references-to-hash, whose
+keys are the fields from the currency table in the Koha database.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub getcurrencies {
   my $dbh=C4Connect;
   my $query="Select * from currency";
@@ -899,6 +1293,7 @@ sub getcurrencies {
   return($i,\@results);
 } 
 
+# FIXME - This function appears in C4::Catalogue. Neither one is used.
 sub getcurrency {
   my ($cur)=@_;
   my $dbh=C4Connect;
@@ -912,6 +1307,15 @@ sub getcurrency {
   return($data);
 } 
 
+=item updatecurrencies
+
+  &updatecurrencies($currency, $newrate);
+
+Sets the exchange rate for C<$currency> to be C<$newrate>.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub updatecurrencies {
   my ($currency,$rate)=@_;
   my $dbh=C4Connect;
@@ -922,6 +1326,22 @@ sub updatecurrencies {
   $dbh->disconnect;
 } 
 
+=item updatesup
+
+  &updatesup($bookseller);
+
+Updates the information for a given bookseller. C<$bookseller> is a
+reference-to-hash whose keys are the fields of the aqbooksellers table
+in the Koha database. It must contain entries for all of the fields.
+The entry to modify is determined by C<$bookseller-E<gt>{id}>.
+
+The easiest way to get all of the necessary fields is to look up a
+book seller with C<&booksellers>, modify what's necessary, then call
+C<&updatesup> with the result.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub updatesup {
    my ($data)=@_;
    my $dbh=C4Connect;
@@ -946,6 +1366,7 @@ sub updatesup {
 #   print $query;
 }
 
+# XXX - POD
 sub insertsup {
   my ($data)=@_;
   my $dbh=C4Connect;
@@ -963,7 +1384,19 @@ sub insertsup {
   return($data->{'id'});
 }
 
+=item insertsup
 
+  $id = &insertsup($bookseller);
+
+Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
+keys are the fields of the aqbooksellers table in the Koha database.
+All fields must be present.
+
+Returns the ID of the newly-created bookseller.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub newitems {
   my ($item, @barcodes) = @_;
   my $dbh   = C4Connect;
@@ -1019,6 +1452,7 @@ notforloan           = $item->{'loan'}";
   return($error);
 }
 
+# XXX - POD
 sub checkitems{
   my ($count,@barcodes)=@_;
   my $dbh=C4Connect;
@@ -1037,6 +1471,7 @@ sub checkitems{
   return($error);
 }
 
+# XXX - POD
 sub moditem {
   my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
   my $dbh=C4Connect;
@@ -1061,6 +1496,7 @@ sub moditem {
   $dbh->disconnect;
 }
 
+# FIXME - This function appears in C4::Catalogue. Neither one is used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
   my $dbh=C4Connect;
@@ -1071,6 +1507,8 @@ sub updatecost{
   $sth->finish;
   $dbh->disconnect;
 }
+
+# XXX - POD
 sub countitems{
   my ($bibitemnum)=@_;
   my $dbh=C4Connect;
@@ -1083,6 +1521,7 @@ sub countitems{
   return($data->{'count(*)'});
 }
 
+# FIXME - This function appears in C4::Catalogue. Neither one is used.
 sub findall {
   my ($biblionumber)=@_;
   my $dbh=C4Connect;
@@ -1104,6 +1543,7 @@ sub findall {
   return(@results);
 }
 
+# FIXME - This function appears in C4::Catalogue. Neither one is used
 sub needsmod{
   my ($bibitemnum,$itemtype)=@_;
   my $dbh=C4Connect;
@@ -1120,6 +1560,8 @@ sub needsmod{
   return($result);
 }
 
+# FIXME - A nearly-identical function, appears in C4::Biblio
+# XXX - POD
 sub delitem{
   my ($itemnum)=@_;
   my $dbh=C4Connect;
@@ -1144,7 +1586,7 @@ sub delitem{
   $dbh->disconnect;
 }
 
-
+# XXX - POD
 sub deletebiblioitem {
     my ($biblioitemnumber) = @_;
     my $dbh   = C4Connect;
@@ -1200,7 +1642,7 @@ where biblioitemnumber = $biblioitemnumber";
     $dbh->disconnect;
 } # sub deletebiblioitem
 
-
+# XXX - POD
 sub delbiblio{
   my ($biblio)=@_;
   my $dbh=C4Connect;
@@ -1229,7 +1671,7 @@ sub delbiblio{
   $dbh->disconnect;
 }
 
-
+# XXX - POD
 sub getitemtypes {
   my $dbh   = C4Connect;
   my $query = "select * from itemtypes";
@@ -1250,7 +1692,7 @@ sub getitemtypes {
   return($count, @results);
 } # sub getitemtypes
 
-
+# XXX - POD
 sub getbiblio {
     my ($biblionumber) = @_;
     my $dbh   = C4Connect;
@@ -1272,7 +1714,7 @@ sub getbiblio {
     return($count, @results);
 } # sub getbiblio
 
-
+# XXX - POD
 sub getbiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4Connect;
@@ -1294,7 +1736,7 @@ biblioitemnumber = $biblioitemnum";
     return($count, @results);
 } # sub getbiblioitem
 
-
+# XXX - POD
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
     my $dbh   = C4Connect;
@@ -1316,7 +1758,7 @@ $biblionumber";
     return($count, @results);
 } # sub
 
-
+# XXX - POD
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4Connect;
@@ -1340,7 +1782,7 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     return($count, @results);
 } # sub getitemsbybiblioitem
 
-
+# XXX - POD
 sub isbnsearch {
     my ($isbn) = @_;
     my $dbh   = C4Connect;
@@ -1366,7 +1808,23 @@ and isbn = $isbn";
     return($count, @results);
 } # sub isbnsearch
 
+=item websitesearch
 
+  ($count, @results) = &websitesearch($keywordlist);
+
+Looks up biblioitems by URL.
+
+C<$keywordlist> is a space-separated list of search terms.
+C<&websitesearch> returns those biblioitems whose URL contains at
+least one of the search terms.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of the biblio
+and biblioitems tables in the Koha database.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub websitesearch {
     my ($keywordlist) = @_;
     my $dbh   = C4Connect;
@@ -1406,7 +1864,17 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     return($count, @results);
 } # sub websitesearch
 
+=item addwebsite
 
+  &addwebsite($website);
+
+Adds a new web site. C<$website> is a reference-to-hash, with the keys
+C<biblionumber>, C<title>, C<description>, and C<url>. All of these
+are mandatory.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub addwebsite {
     my ($website) = @_;
     my $dbh = C4Connect;
@@ -1428,7 +1896,18 @@ url          = $website->{'url'}";
     $dbh->disconnect;
 } # sub website
 
+=item updatewebsite
 
+  &updatewebsite($website);
+
+Updates an existing web site. C<$website> is a reference-to-hash with
+the keys C<websitenumber>, C<title>, C<description>, and C<url>. All
+of these are mandatory. C<$website-E<gt>{websitenumber}> identifies
+the entry to update.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub updatewebsite {
     my ($website) = @_;
     my $dbh = C4Connect;
@@ -1449,7 +1928,15 @@ where websitenumber = $website->{'websitenumber'}";
     $dbh->disconnect;
 } # sub updatewebsite
 
+=item deletewebsite
 
+  &deletewebsite($websitenumber);
+
+Deletes the web site with number C<$websitenumber>.
+
+=cut
+#'
+# FIXME - This function appears in C4::Catalogue
 sub deletewebsite {
     my ($websitenumber) = @_;
     my $dbh = C4Connect;
@@ -1462,3 +1949,18 @@ sub deletewebsite {
 
 
 END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+=cut
