@@ -83,7 +83,8 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "parameters/currency.tmpl",
                              query => $input,
                              type => "intranet",
-                             authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     authnotrequired => 0,
                              debug => 1,
                              });
 

@@ -80,11 +80,12 @@ $searchfield=~ s/\,//g;
 
 my ($template, $loggedinuser, $cookie) 
     = get_template_and_user({template_name => "parameters/stopwords.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 0,
-                             debug => 1,
-                             });
+                            query => $input,
+                            type => "intranet",
+ 			    flagsrequired => {parameters => 1},
+			    authnotrequired => 0,
+                            debug => 1,
+                            });
 
 $template->param(script_name => $script_name,
 		 searchfield => $searchfield);
