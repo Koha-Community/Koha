@@ -99,7 +99,7 @@ if ($query->param('resbarcode')) {
     my $slip = $query->param('resslip');
     printslip(\%env, $slip);
     if ($tobranchcd ne $branch) {
-	my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $resbarcode, 1);
+#	my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $resbarcode, 1);
 	$reservetext .= <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
     Item: $iteminfo->{'title'} ($iteminfo->{'author'})<br>
