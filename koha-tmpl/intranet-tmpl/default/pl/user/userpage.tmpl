@@ -1,0 +1,91 @@
+<html>
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
+	<p>
+	<center>
+	<h3>Ta strona to po prostu prowizorka</h3>
+
+	<table border=0 cellspacing=15>
+	<tr><td valign=top>
+
+	<table border=1 cellpadding=10>
+	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Rezerwacje</font></th></tr>
+	<tr><td>
+	<b>Czekaj± na Ciebie do odebrania nastêpuj±ce ksi±¿ki:</b>
+	<ul>
+	<li>The Great Mom Swap by Betsy Hanes at Main Library
+	<li>Between Brothers by Irene Morck at Main Library
+	</ul>
+	<p>
+	<b>Posiadasz nastepuj±ce pozycje, które zosta³y zamówione przez innych:</b>
+	<ul>
+	<li>The Amazing Apple Book by Paulette Bourgeois
+	<li>Tracey the Great by Alan Cliburn
+	<li>The biography of a grizzly by Ernest Thompson Seton
+	</ul>
+	</td></tr>
+	</table>
+
+	</td><td valign=top>
+
+		<form method=post>
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Preferencja U¿ytkownika</font></th></tr>
+		<tr><td align =center>
+		<table border=0 cellpadding=5>
+			<tr><td>Jêzyk</td><td>
+			<select name=language>
+			<option value=english>English
+			<option value=english>French
+			<option value=english>German
+			<option value=english>Polski
+			</select>
+			</td></tr>
+			<tr><td>Adres E-mail</td><td><input name=email size=30 value=<TMPL_VAR NAME=loggedinuser>@mylibrary.com></td></tr>
+			<tr><td>Preferowany oddzia³<br>do odbioru zamówieñ</td><td>
+			<select name=pickupbranch>
+			<option value=MAIN>Biblioteka G³ówna
+			<option value=SEDGE>Sedgewick Library
+			<option value=HANSEN selected>Rick Hansen Library
+			<option value=CAT>Cataline Library
+			</select>
+			</td></tr>
+			<tr><td colspan=2>
+			<input name=specialeventsbyemail type=checkbox checked> Powiadom mnie e-poczt± o specjalnych imprezach<br>
+			<input name=overduesbyemail type=checkbox checked> Powiadom mnie e-poczt± o zaleg³ych pozycjach<br>
+			<input name=recordreadingrecord type=checkbox> Zachowaj historiê ksi±¿ek, które czyta³em/am<br>
+			<input name=recordreadingrecord type=checkbox> Zezwalam obs³udze biblioteki na przegl±danie historii wypo¿yczeñ<br>
+			</td></tr>
+			<tr><td align=center colspan=2>
+			<input type=submit value="Zapisz preferencje">
+			</td>
+			</tr>
+		</table>
+		</td></tr>
+	</table>
+	</form>
+
+	</td></tr>
+	</table>
+
+	</center>
+<TMPL_ELSE>
+	<center>
+	<form method=post>
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>Preferencja u¿ytkownika</font></th></tr>
+		<tr><td>Nazwa:</td><td><input name="userid"></td></tr>
+		<tr><td>Has³o:</td><td><input type=password name=password></td></tr>
+		<tr><td align=center colspan=2>
+		    <input type=submit value="Wejd¼">
+		</td>
+		</tr>
+	    </table>
+	</form>
+	</center>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="members-bottom.inc">
+<html>
