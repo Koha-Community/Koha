@@ -56,9 +56,9 @@
         </SCRIPT>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		<h1>­×§ï³f¹ô</h1>
+		<h1>ä¿®æ”¹è²¨å¹£</h1>
 	<!-- TMPL_ELSE -->
-		<h1>·s¼W³f¹ô</h1>
+		<h1>æ–°å¢è²¨å¹£</h1>
 	<!-- /TMPL_IF -->
 
         <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
@@ -68,14 +68,14 @@
 
 	<!-- TMPL_IF NAME=searchfield -->
 		<tr>
-			<td>³f¹ô</td>
+			<td>è²¨å¹£</td>
 			<td>
 				<input type=hidden name=currency value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>³f¹ô</td>
+			<td>è²¨å¹£</td>
 			<td>
 				<input type=text name=currency size=50 maxlength=50 onBlur=toUC(this)>
 			</td>
@@ -83,14 +83,14 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>¶×²v</td>
+			<td>åŒ¯ç‡</td>
 			<td>
 				<input type=text name=rate size=10 maxlength=10 value='<!-- TMPL_VAR NAME=rate -->'>
 			</td>
 		</tr>
         	<tr>
 			<td> </td>
-			<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
+			<td><input type=button value="å¥½ï¼" onclick='Check(this.form)'></td>
 		</tr>
         </table>
         </form>
@@ -98,16 +98,16 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=add_validate -->
-	¦¨¥\¼g¤J¸ê®Æ
+	è³‡æ–™å·²å¯«å…¥
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-        <input type=submit value="¦n">
+        <input type=submit value="å¥½ï¼">
         </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirm -->
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>³f¹ô</b></td>
+			<td background='/images/background-mem.gif'><b>è²¨å¹£</b></td>
 			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
 		</tr>
 
@@ -116,35 +116,35 @@
 			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
         
         	<tr>
-			<td>¶×²v</td>
+			<td>åŒ¯ç‡</td>
 			<td><!-- TMPL_VAR NAME=rate --></td>
 		</tr>
 		<!-- TMPL_IF NAME=totalgtzero -->
 		<tr>
 			<td colspan=2 align=center>
-				<b>³o­Ó°O¿ı¤w³Q¨Ï¥Î<!-- TMPL_VAR NAME=total -->¦¸¡A¤£¥i²¾°£¡C</b>
+				<b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b>
 			</td>
 		</tr>
 		<tr>
 			<td colspan=2>
 				</form>
 				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-					<input type=submit value="¦n">
+					<input type=submit value="å¥½ï¼">
 				</form>
 			</td>
 		</tr>
 		<!-- TMPL_ELSE -->
 		<tr>
-			<td colspan=2 align=center>½T©w­n²¾°£¶Ü¡H</td>
+			<td colspan=2 align=center>ç¢ºå®šè¦ç§»é™¤å—</td>
 		</tr>
 		<tr>
 			<td>
-				<INPUT type=submit value='²¾°£'>
+				<input type=submit value="æ˜¯">
 				</form>
 			</td>
 			<td>
 				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-					<input type=submit value="¨ú®ø">
+					<input type=submit value="å¦">
 				</form>
 			</td>
 		</tr>
@@ -153,27 +153,27 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirmed -->
-	¦¨¥\²¾°£¸ê®Æ
+	è³‡æ–™å·²ç§»é™¤
 	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-		<input type=submit value="¦n">
+		<input type=submit value="å¥½ï¼">
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-	<h2>³f¹ô¶×²v</h2>
+	<h2>è²¨å¹£ç®¡ç†</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="²MªÅ">
+                <input type=reset name=reset value="æ¸…ç©º">
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		±z¬d¸ß<b><!-- TMPL_VAR NAME=searchfield --></b>
+		æ‚¨æŸ¥è©¢ <b><!-- TMPL_VAR NAME=searchfield --></b>
 	<!-- /TMPL_IF -->
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>³f¹ô</b></td>
-			<td background='/images/background-mem.gif'><b>¶×²v</b></td>
+			<td background='/images/background-mem.gif'><b>è²¨å¹£</b></td>
+			<td background='/images/background-mem.gif'><b>åŒ¯ç‡</b></td>
 			<td background='/images/background-mem.gif'> </td>
 			<td background='/images/background-mem.gif'> </td>
 		</tr>
@@ -181,8 +181,8 @@
 		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
 			<td><!-- TMPL_VAR NAME=currency --></td>
 			<td><!-- TMPL_VAR NAME=rate --></td>
-			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->">­×§ï</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->">²¾°£</a></td>
+			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">ä¿®æ”¹</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">ç§»é™¤</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
@@ -191,17 +191,17 @@
         <input type=hidden name=op value=add_form>
 	
 	<!-- TMPL_IF NAME=offsetgtzero -->
-		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< ¤W¤@­¶</a>
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->">&lt;&lt; ä¸Šä¸€é </a>
 	<!-- /TMPL_IF -->
 
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<!-- TMPL_IF NAME=ltcount -->
-		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">¤U¤@­¶ >></a>	
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">ä¸‹ä¸€é  >></a>	
 	<!-- /TMPL_iF -->
 
         <br>
-	<input type=submit class="button" value="·s¼W³f¹ô" alt="·s¼W³f¹ô">
+	<input type=submit class="button" value="æ–°å¢è²¨å¹£" alt="æ–°å¢è²¨å¹£">
 	<br>
         </form>
 

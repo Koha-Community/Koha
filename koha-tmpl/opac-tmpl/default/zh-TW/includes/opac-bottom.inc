@@ -5,11 +5,8 @@
 <center>
 
 
-<A HREF="/cgi-bin/koha/opac-search.pl">¬d¸ßÀ]ÂÃ</a> || 
-<!--<A HREF="/members/">ÅªªÌµn¤J</a> || 
--->
-<A HREF="/join.html">ÅªªÌµn°O</a> || 
-<A HREF="/cgi-bin/koha/opac-main.pl">ªð¦^¥D­¶</a> 
+<A HREF="/cgi-bin/koha/opac-search.pl">é¤¨è—æŸ¥è©¢</a> || 
+<A HREF="/cgi-bin/koha/opac-main.pl">è¿”å›žé¦–é </a> 
 
 </font>
 </center>

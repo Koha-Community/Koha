@@ -1,0 +1,52 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<h1>供應商查詢結果</h1><br />
+<CENTER>
+您查詢<b>供應商「<!-- TMPL_VAR name="supplier" -->」</b>，找到 <!-- TMPL_VAR name="count" --> 個<p>
+<table border=0 cellspacing=0 cellpadding=5 width="80%">
+<tr valign=top bgcolor="#ffdf61">
+	<td width="10%"><b>訂單</b></td>
+	<td width="10%"><b>收貨<b></td>
+	<td width="30%"><b>公司</b></td>
+	<td width="50%">
+		<table width="100%" border=0 cellspacing=0 cellpadding=5>
+			<tr>
+				<td width="15%"><b>購物籃</b></td>
+				<td width="15%"><b>圖書資料</b></td>
+				<td width="40%"><b>職員</b></td>
+				<td width="30%"><b>日期</b></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
+		<td>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="新增訂單" alt="新增" border=0></a>
+			<!-- TMPL_ELSE -->
+				不使用
+			<!-- /TMPL_IF -->
+		</td>
+		<td>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="收貨" alt="新增" border=0></a>
+		</td>
+		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=5 border=0>
+				<!-- TMPL_LOOP name="loop_basket" -->
+					<tr>
+						<td width="15%"><a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
+						<td width="15%"><TMPl_VAR name="total"></td>
+						<td width="40%"><!-- TMPL_VAR name="authorisedby" --></td>
+						<td width="30%"><!-- TMPL_VAR name="entrydate" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+</CENTER>
+<br>
+<a class="button" href="supplier.pl?id=0">新增供應商</a>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

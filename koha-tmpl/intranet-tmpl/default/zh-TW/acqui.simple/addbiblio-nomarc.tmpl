@@ -1,0 +1,55 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+
+<FONT SIZE=6><em>新增書目</em></FONT><br>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="5">
+  <tr>
+  <td><FONT SIZE=5>第一步：填寫出版資料 </font></td>
+  </tr>
+</table>
+
+<!-- TMPL_IF NAME="ERROR" -->
+<p />
+<center>
+<font color="#FF0000">請輸入題名</font>
+</center>
+<!-- /TMPL_IF -->
+
+<FORM action="savebiblio.pl" method="post">
+<table align="center">
+<tr>
+<td>題名：*</td>
+<td><INPUT name="title" size="40" /></td>
+</tr>
+<tr>
+<td>副題：</td>
+<td><INPUT name="subtitle" size="40" /></td>
+</tr>
+<tr>
+<td>著者：</td>
+<td><INPUT name="author" size="40" /></td>
+</tr>
+<tr valign="top">
+<td>集叢題名：<br />
+<i>(如適用)</i></td>
+<td><INPUT name="seriestitle" size="40" /></td>
+</tr>
+<tr>
+<td>版權日期：</td>
+<td><INPUT name="copyrightdate" size="40" /></td>
+</tr>
+<tr valign="top">
+<td>Abstract:</td>
+<td><textarea cols="30" rows="6" name="abstract"></textarea></td>
+</tr>
+<tr valign="top">
+<td>備註：</td>
+<td><textarea cols="30" rows="6" name="notes"></textarea></td>
+</tr>
+<tr valign="top">
+<td colspan="2"><center><input type="submit" value="Submit"></center></td>
+</tr>
+</table>
+</FORM>
+* 必需填寫
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -61,38 +61,52 @@ function Check(f) {
 </SCRIPT>
 <!-- TMPL_IF name="add_form" -->
 	<!-- TMPL_IF name="itemtype" -->
-		<h1>�ק��]�����O</h1>
+		<h1>修改圖書資料類別</h1>
 	<!-- TMPL_ELSE -->
-		<h1>�s�W�]�����O</h1>
+		<h1>新增圖書資料類別</h1>
 	<!-- /TMPL_IF -->
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
 		<input type=hidden name=checked value=0>
 		<table>
 			<!-- TMPL_IF name="itemtype" -->
-				<tr><td>�]�����O</td><td><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
+				<tr><td>圖書資料類別</td><td><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
 			<!-- TMPL_ELSE -->
-				<tr><td>�]�����O</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+				<tr><td>圖書資料類別</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
 			<!-- /TMPL_IF -->
 			<tr>
-				<td>����</td>
+				<td>說明</td>
 				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td>�i�ɦh�[ (�H��p)</td>
-				<td><input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'></td>
+				<td>不可借出</td>
+				<td>
+					<!-- TMPL_IF name="notforloan" -->
+						<input type=checkbox name=notforloan checked value=1>
+					<!-- TMPL_ELSE -->
+						<input type=checkbox name=notforloan value=1>
+					<!-- /TMPL_IF -->
+					選擇「不可借出」，這類圖書資料將全部都不可借出；如果不選，這類圖書資料將全部可以借出，但個別圖書資料可以分別設定成不可借出。
+				</td>
 			</tr>
 			<tr>
-				<td>�i�_���</td>
+				<td>借閱期限</td>
+				<td>
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
+					只適用於可以外借之圖書資料
+				</td>
+			</tr>
+			<tr>
+				<td>可以續借</td>
 				<td><input type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
 			</tr>
 			<tr>
-				<td>�ɾ\�O��</td>
+				<td>借書費用</td>
 				<td><input type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-				<td><INPUT type=button value='�n' onClick='Check(this.form)'></td>
+				<td><input type=button value="好！" onclick='Check(this.form)'></td>
 			</tr>
 		</table>
 	</form>
@@ -101,45 +115,45 @@ function Check(f) {
 <!-- TMPL_IF name="delete_confirm" -->
 	<TABLE bg="#99cc33">
 		<tr>
-			<th>�]�����O</th>
+			<th>圖書資料類別</th>
 			<th><!-- TMPL_VAR name="itemtype" --></th>
 		</tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
-	<tr><td>����</td><td><!-- TMPL_VAR name="description" --></td></tr>
-	<tr><td>�i�ɦh�[</td><td><TMPL_IF name="loanlength"><span class=en><!-- TMPL_VAR name="loanlength" --></span>��<TMPL_ELSE>���i�ɥX</TMPL_IF></td></tr>
-	<tr><td>�i�_���</td><td><!-- TMPL_IF name="renewalsallowed" -->�i�H���<!-- TMPL_ELSE -->���i���<!-- /TMPL_IF --></td></tr>
-	<tr><td>�ɾ\�O��</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
+	<tr><td>說明</td><td><!-- TMPL_VAR name="description" --></td></tr>
+	<tr><td>借閱期限</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
+	<tr><td>續借</td><td><!-- TMPL_IF name="renewalsallowed" -->批准<!-- TMPL_ELSE -->不可<!-- /TMPL_IF --></td></tr>
+	<tr><td>借書費用</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
 	<!-- TMPL_IF name="total" -->
-		<tr><td colspan=2 align=center><b>�o�ӰO���Q��<!-- TMPL_VAR name="total" -->���A���ಾ���C</b></td></tr>
-		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="�n"></form></td></tr>
+		<tr><td colspan=2 align=center><b>This record is used <!-- TMPL_VAR name="total" --> times. Deletion not possible</b></td></tr>
+		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="好！"></form></td></tr>
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=2 align=center>�T�w�n�����ܡH</td></tr>
-		<tr><td><INPUT type=submit value='����'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value='����'></form></td></tr>
+		<tr><td colspan=2 align=center>確定要移除嗎</td></tr>
+		<tr><td><input type=submit value="是"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="否"></form></td></tr>
 	<!-- /TMPL_IF -->
 
 	</table>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-<h1>�]�w�]�����O</h1>
+<h1>圖書資料類別管理</h1>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 	<tr>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>�s�X</b></th>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>����</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>�i�ɦh�[</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>�i�_���</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>�ɾ\�O��</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">�ק�</td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">����</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>編碼</b></th>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>借閱期限</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>可以續借</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>費用</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">修改</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">移除</td>
 	</tr>
 	<!-- TMPL_LOOP name="loop" -->
 		<tr>
 			<td><!-- TMPL_VAR name="itemtype" --></td>
 			<td><!-- TMPL_VAR name="description" --></td>
-			<td><span class=en><!-- TMPL_VAR name="loanlength" --></span></td>
-			<td><!-- TMPL_IF name="renewalsallowed" -->�i�H���<!-- TMPL_ELSE -->���i���<!-- /TMPL_IF --></td>
-			<td><span class=en><!-- TMPL_VAR name="rentalcharge" --></span></td>
+			<td><!-- TMPL_VAR name="loanlength" --></td>
+			<td><!-- TMPL_IF name="renewalsallowed" -->是<!-- TMPL_ELSE -->否<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR name="rentalcharge" --></td>
 			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 		</tr>
@@ -151,10 +165,10 @@ function Check(f) {
 <table width=40%>
 	<tr>
 		<td width="33%">
-			<input type=submit class="button" value="�s�W�]�����O" title="�s�W�]�����O" alt="�s�W�]�����O" >
+			<input type=submit class="button" value="新增圖書資料類別" title="新增圖書資料類別" alt="新增圖書資料類別">
 		</td>
-		<td width="33%"><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="�W�@��" ALT="�W�@��" BORDER=0></a><!-- /TMPL_IF --></td>
-		<td width="33%"><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="�U�@��" ALT="�U�@��" BORDER=0></a><!-- /TMPL_IF --></td>
+		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="上一頁" alt="上一頁" border=0></a><!-- /TMPL_IF --></td>
+		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="下一頁" alt="下一頁" border=0></a><!-- /TMPL_IF --></td>
 	</tr>
 </table>
 </form>

@@ -1,44 +1,91 @@
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<span style="font-size:2em; text-align:left;">機讀格式查詢結果</span>
+<br>
 
 <center>
+<table align=middle border=0 cellpadding=0 cellspacing=0 width="80%">
+<tr>
+	</tr>
+		<tr><tr height=20></tr>
+		<td align=middle>
+			<!-- TMPL_IF NAME=displayprev -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/prev.gif" border=0></a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+			 	 <img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+			  	  <a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border=0></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/next.gif" border=0></a>
+				<!-- /TMPL_IF -->
+				</td>
+			</tr>
 
-<table border=0 cellspacing=0 cellpadding=2>
+		</table>
+</center>
+
+<!-- TMPL_IF name=total -->
+&nbsp<b>共<!-- TMPL_VAR name="total" -->筆記錄中的第<!-- TMPL_VAR name="from" -->至<!-- TMPL_VAR name="to" -->項</b><br><br>
+<!-- TMPL_ELSE -->
+　找不到。<br>
+<!-- /TMPL_IF -->
+
+<center>
+<table border=0 cellspacing=0 cellpadding=2 width="90%">
 <thead>
-	<tr
-	<TMPL_IF NAME="opac">
-			bgcolor=#99cccc background=/images/background-opac.gif
-		<TMPL_ELSE>
-			background="/images/background-mem.gif"
-		</TMPL_IF>
-	>
-<!--
-		<th colspan=5>Result</th>
--->
-	<th>Biblio#</th>
-	<th>Author</th>
-	<th>Title</th>
+	<!-- TMPL_IF NAME="opac" -->
+	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
+		<!-- TMPL_ELSE -->
+	<tr bgcolor="#ad11ad">
+		<!-- /TMPL_IF -->
+	<th align="left"><span style="color:#FFFFFF;">書目記錄號碼</span></th>
+	<th align="left"><span style="color:#FFFFFF;">著者</span></th>
+	<th align="left"><span style="color:#FFFFFF;">題名</span></th>
 	</tr>
 <tbody>
-	<TMPL_LOOP name="result">
+	<!-- TMPL_LOOP name="result" -->
 		<tr>
-			<td><TMPL_VAR name="bibid"></td>
-			<td><TMPL_VAR name="author"></td>
-			<td><TMPL_VAR name="title"></td>
+			<td><a href="../MARCdetail.pl?bibid=<!-- TMPL_VAR name="bibid" -->"><!-- TMPL_VAR name="bibid" --></a></td>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="title" --></td>
 		</tr>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 </table>
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-bottom.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-bottom.inc">
-</TMPL_IF>
+
+<table align=middle border=0 cellpadding=0 cellspacing=0 width="80%">
+<tr>
+	</tr>
+		<tr><tr height=20></tr>
+		<td align=middle>
+			<!-- TMPL_IF NAME=displayprev -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/prev.gif" border=0></a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+			 	 <img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+			  	  <a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border=0></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/next.gif" border=0></a>
+				<!-- /TMPL_IF -->
+				</td>
+			</tr>
+
+		</table>
+</center>
+
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->

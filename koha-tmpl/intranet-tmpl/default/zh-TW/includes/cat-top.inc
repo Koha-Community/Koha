@@ -1,120 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
-<!--Authored by rachel@katipo.co.nz 104:38 1/11/99-->
-<!--updated by rachel@katipo.co.nz 12:24 12/01/00-->
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 
 <html>
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>KOHA：INTRANET：線上目錄</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-
-<style type="text/css">
-<!--
-select,option {font-size:12px}
--->
-
-</style>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-
-// go to page selected from options menu
-
-function leapto(form) {
-var myindex=form.dest.selectedIndex
-parent.location.href=(form.dest.options[myindex].value);
+<script language="JavaScript">
+<!-- Hide from old browsers
+function openWindow(targeturl, windowname) {
+newwin =
+window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
-
-function focusinput() {
-    window.onerror=null;
-    if (document.forms[0]) {
-	document.forms[0].elements[0].focus();
-    }
-}
-
-if (document.images){
-
-menu=new Image;
-menu.src ="/images/cat-cat.gif"
-
-}
-
-function messenger(url){
-  window1=window.open(url,"window1","height=250,width=350,left=150,top=50,350,screenY=50");
-
-}
-
-//-->
-
+// end hiding -->
 </script>
 
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<style>
+a.catalogue {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	background-color:#ad11ad;
+	color:#FFFFFF;
+	padding:4px;
+	font-weight: bold;
+	margin:0;
+	}
+a.catalogue:hover {
+	background-color: #ad11ad;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: normal;
+	font-weight: bold;
+	margin:0;
+	}
+</style>
 </head>
-<body text="black" bgcolor="white" link="#0000ff"
-vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0
-onLoad=focusinput()>
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 
-
-
-<!--HDL Colours
-
-	Yellow = ffcc00
-	light blue = ccccff
-	bright blue links = 0000ff
-	aubergine = 663266
-	light green/grey = cccc99
-
-
--->
 
 <!------------------------MENUS-------------------------------->
-
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr bgcolor=663266 >
-
-	<td  valign=top>
-	<table cellpadding=0 cellspacing=0  border=0 height=29>
-	<tr valign=top bgcolor=663266 >
-	<td background="/images/catalogue-spot-1.gif" width="224"
-	height="29"><font size=1 face="arial"><img src="/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0><br>
-	<img src="/images/holder.gif"
-	width=35 height=21 align=left alt=" " hspace=0 vspace=0><font size="+1">KOHA: <a href="/cgi-bin/koha/mainpage.pl">�D���</a></font><br>
-	<img src="/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0></FONT></td>
-
-	</TR></TABLE> </td>
-
-
-	<td  valign=bottom align=right>
-<img src="/images/holder.gif"  WIDTH=1  HEIGHT=38 HSPACE=0 vspace=0></td>
-<td  valign=bottom align=right>
-	<table cellpadding=0 cellspacing=0  border=0 height=29><tr><td>
-<img src=/images/cat-cat.gif border="0" name=menu usemap="#map" HSPACE=0 vspace=0 ></td>
-
-	</TR></TABLE></TD>
+<tr height="65">
+	<td valign="bottom" align="left">
+		<table width="100%" cellpadding=0 cellspacing=0 height=60>
+		<tr>
+			<td>
+			<div id="menubar">
+			<table cellpadding=0 cellspacing=0  border=0 height=29 width="70%">
+				<tr>
+					<td class="koha"><b>KOHA</b></td>
+					<td>
+						<a class="home" href="/cgi-bin/koha/mainpage.pl">主頁</a>
+					</td>
+					<td>
+						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">目錄</a>
+					</td>
+					<td>
+						<a class="members" href="/cgi-bin/koha/members-home.pl">讀者</a>
+					</td>
+					<td>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">購置</a>
+					</td>
+					<td>
+						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">流通</a>
+					</td>
+					<td>
+						<a class="reports" href="/cgi-bin/koha/reports-home.pl">報表</a>
+					</td>
+					<td>
+						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">設定</a>
+					</td>
+					<td>
+						<a class="about" href="/cgi-bin/koha/about.pl">關於</a>
+					</td>
+				</TR>
+			</TABLE>
+			</div>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
+				<tr>
+					<td width="100"></td>
+					<td><b>選項 &gt;&gt;　</b></td>
+					<td>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">快速查詢</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">以機讀格式查詢</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/shelves.pl" class="submenu">虛擬書架</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">新增書目</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">目錄維護</a>
+					</td>
+				</tr>
+			</table>
+		</td></tr></table>
+	</TD>
 </tr>
-
-</tr>
-<TR VALIGN=TOP BGCOLOR="000000"><TD  COLSPAN=3><img src="/images/blackdot.gif"  WIDTH=1  HEIGHT=2  HSPACE=0 vspace=0></TD></TR>
-
 </table>
-
-
-<map name="map">
-<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/cat-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-
-<area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/cat-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-
-<area shape="rect" coords="154,9,212,29" alt="Acquisitions"   href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.menu.src='/images/cat-acq.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-
-<area  shape="rect"alt="Reports"  coords="217,7,289,27"href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.menu.src='/images/cat-rep.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-
-<area shape="rect" coords="306,8,352,27" href="/cgi-bin/koha/circ/circulation.pl" alt="Circulation" onMouseOver="if(document.images)document.menu.src='/images/cat-crc.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-
-<area  shape="rect" alt="Home" coords="374,9,419,29" href="/cgi-bin/koha/mainpage.pl" onMouseOver="if(document.images)document.menu.src='/images/cat-hom.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
-<area shape="default" nohref>
-</map>
-
-
-
 <BLOCKQUOTE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>】</p>
+<!-- TMPL_ELSE -->
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> Koha</p>
+<!-- /TMPL_IF -->

@@ -1,107 +1,59 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-</TMPL_IF>
-
-<font size="5"><em>¾÷Åª®æ¦¡¤§¶×¤J¤Î®Ñ¥Ø¤§ºŞ²z</em></font>
-<TMPL_IF name="noitemsfound">
+<font size="5"><em>æ©Ÿè®€æ ¼å¼æ›¸ç›®ç®¡ç†</em></font>
+<!-- TMPL_IF name="noitemsfound" -->
 	<p />
-	<font color="red" size="4">No items found</font>
-</TMPL_IF>
-<TMPL_IF name="websiteadded">
+	<font color="red" size="4">æ‰¾ä¸åˆ°åœ–æ›¸è³‡æ–™</font>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="websiteadded" -->
 	<p />
 	<font color="red" size="4">Website Biblioitem Added</font>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 <p />
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">­n¥[¤@­Ó·s®Ñ¥Ø©Î¶µ¥Ø¡Ascan or type the ISBN/ISSN number:</font></td>
+	<td><font size="4">æ–°å¢æ›¸ç›®æˆ–åœ–æ›¸è³‡æ–™ï¼Œæƒææˆ–è¼¸å…¥ISBN/ISSNå³å¯ï¼š</font></td>
 	</tr>
 </table>
-<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-	<form action="isbnsearch.pl">
-		<td width="5%">ISBN:</td>
-		<td width="20%"><input type="text" name="isbn" /></td>
-		<td width="10%"><input type="submit" value="Go" /></td>
-		<td>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
-				If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
-				Otherwise, a biblio can be added from scratch.</td>
-	</form>
-	</tr>
-	<tr><td>&nbsp;</td>
-		<td colspan=2><a href=addbiblio.pl>¥[¤@­Ó¨S¦³ <abbr lang=en>ISBN</abbr> / <abbr lang=en>ISSN</abbr> ªº®Ñ¥Ø</a></td></tr>
-</table>
+<form action="isbnsearch.pl">
+	<table cellpadding="3" border=0 width="100%">
+		<tr valign="top">
+			<td width="5%">åœ‹éš›æ¨™æº–æ›¸è™Ÿï¼š</td>
+			<td width="20%"><input type="text" name="isbn" /></td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="åŸ·è¡Œ" class="button"></td>
+			<td rowspan=2>If the ISBN or title is found in the biblio table, it will be retrieved and can be modified.<br/>
+					If the ISBN or title is found in the breeding farm, it will be retrieved and a biblio will be added.<br/>
+					Otherwise, a biblio can be added from scratch.</td>
+		</tr>
+			<td width="5%">é¡Œå</td>
+			<td width="20%"><input type="text" name="title" /></td>
+		</tr>
+		<tr><td>&nbsp;</td>
+		<!-- TMPL_IF NAME="NOTMARC" -->
+			<td colspan=2><a href="addbiblio-nomarc.pl" class="button">å»ºç«‹ç©ºç™½æ›¸ç›®</a></td></tr>
+		<!-- TMPL_ELSE -->
+			<td colspan=2><a href="addbiblio.pl" class="button">å»ºç«‹ç©ºç™½æ›¸ç›®</a></td></tr>
+		<!-- /TMPL_IF -->
+	</table>
+</form>
 
 <p />
 <p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><font size="4">Tools for importing MARC records into breeding farm</font></td>
-	</tr>
-</table>
-<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-		<td width="5%">&nbsp;</td>
-		<td width="20%"><li><a href=marcimport.pl>¤W¸ü <abbr lang=en>MARC</abbr> °O¿ı</a></li></td>
-		<td width="10%">&nbsp;</td>
-		<td>The breeding farm is a table where are stored imported MARC records.<br/>
-			A MARC record is stored in the breeding farm as long as you've no item. When you type the ISBN of a biblio, it's searched in the breeding farm.
-			If found, the biblio is added to koha active table, and removed from breeding farm.
-		</td>
-
-
-<table bgcolor="#ffcc00" width="80%" cellpadding"5">
-	<tr>
-		<td><font size="4">Tools for importing MARC from a z3950 server</font></td>
-	</tr>
-</table>
-<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-		<td width="5%">&nbsp;</td>
-		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Z39.50 ¬d¸ß</a></li></td>
-		<td width="10%">&nbsp;</td>
-		<td>¼È®ÉµLªk¨Ï¥Î</td>
-	</tr>
-</table>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-		<td><FONT SIZE=4>¥[¤J¤@­Óºô¯¸</font></td>
+		<td><FONT SIZE=4>æ–°å¢ç¶²ç«™</font></td>
 	</tr>
 </table>
 <form action="websitesearch.pl" method="post">
 	<table>
 	<tr>
-		<td>ÃöÁä¦r¡G</td>
+		<td>é—œéµå­—ï¼š</td>
 		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Go" /></td>
+		<td><input type="submit" value="åŸ·è¡Œ" class="button"></td>
 	</tr>
 	</table>
 </FORM>
-
 <p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><FONT SIZE=4>»¡©ú</font></td>
-	</tr>
-</table>
-<FONT SIZE=5><span lang=mi>Koha</span> ±N¤@¥»®Ñªº¸ê®Æ¤À¤T³¡¤À¤À§OÀx¦s¡G</font>
-<p />
-<h2>®Ñ¥Ø (<span lang=en>Biblio</span>)</h2>
-²Ä¤@­Ó³¡¤À°O¿ı¤@³¡µÛ§@ªº®Ñ¥Ø¸ê®Æ¡A
-§Y®Ñ¦W¡B§@ªÌ¡BµÛ§@¦~¤Àµ¥¡C
-<p />
-<h2>µÛ¿ı (<span lang=en>Group</span>)</h2>
-²Ä¤G­Ó³¡¤À°O¿ı¤@³¡µÛ§@ªº¬Y¤@ª©ªº®Ñ¥Ø¸ê®Æ¡A
-§Y°ê»Ú¼Ğ·Ç®Ñ¸¹¡B­¶¼Æ¡B¥U¼Æ¡B¥Xª©ªÌ¡B¥Xª©¦~¤Àµ¥¡C
-<p />
-<h2>¶µ¥Ø (<span lang=en>Item</span>)</h2>
-¤T²Ä³¡­Ó¤À°O¿ı¤@¥»®Ñªº­Ó§O¸ê®Æ¡A
-§Y±ø½Xµ¥¡C
-<p />
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

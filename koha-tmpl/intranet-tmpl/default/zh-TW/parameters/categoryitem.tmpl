@@ -1,0 +1,306 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<!-- TMPL_IF NAME=add_form -->
+        <script>
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+   return false;
+                }
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull==0 && v.value=='') {
+                return false;
+        }
+        return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.categorycode.value.length==0) {
+                        _alertString += "- categorycode missing\n";
+                }
+//              alert(window.document.Aform.description.value);
+                if (!(isNotNull(window.document.Aform.description,1))) {
+                        _alertString += "- description missing\n";
+                }
+                if (!isNum(f.upperagelimit,0)) {
+                        _alertString += "- upperagelimit is not a number\n";
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2 += _alertString;
+                }
+        }
+        </SCRIPT>
+
+        <!-- TMPL_IF NAME=categorycode -->
+                <h1>修改類別</h1>
+        <!-- TMPL_ELSE -->
+                <h1>新增類別</h1>
+        <!-- /TMPL_IF -->
+
+        <form action=<!-- TMPL_VAR NAME=script_name --> name=Aform method=post>
+        <input type=hidden name=op value='add_validate'>
+        <input type=hidden name=checked value=0>
+                        
+        <table>  
+        <!-- TMPL_IF NAME=categorycode -->
+                <tr>
+                        <td>類別編號</td>
+                        <td>
+                                <input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>
+                        </td>
+                </tr>
+        <!-- TMPL_ELSE -->
+                <tr>
+                        <td>類別編號</td>
+                        <td>
+                                <input type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)>
+                        </td>
+                </tr>
+        <!-- /TMPL_IF -->
+                <tr>
+                        <td>說明</td>
+                        <td>
+                                <input type=text name=description size=40 maxlength=80 value=<!-- TMPL_VAR NAME=description escape=HTML -->>
+                                &nbsp;
+                        </td>
+                </tr>
+                <tr>
+                        <td>登記有效期</td>
+                        <td>
+                                <input type=text name=enrolmentperiod value=<!-- TMPL_VAR NAME=enrolmentperiod -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>年齡上限</td>
+                        <td>
+                                <input type=text name=upperagelimit value=<!-- TMPL_VAR NAME=upperagelimit -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>必須填寫年齡</td>
+                        <td>
+                                <input type=text name=dateofbirthrequired value=<!-- TMPL_VAR NAME=dateofbirthrequired -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>罰款類別</td>
+                        <td>
+                                <input type=text name=finetype size=30 maxlength=30 value=<!-- TMPL_VAR NAME=finetype -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>Bulk</td>
+                        <td>
+                                <input type=text name=bulk value=<!-- TMPL_VAR NAME=bulk -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>登記手續費</td>
+                        <td>
+                                <input type=text name=enrolmentfee value=<!-- TMPL_VAR NAME=enrolmentfee -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>要發過期通知</td>
+                        <td>
+                                <input type=text name=overduenoticerequired value=<!-- TMPL_VAR NAME=overduenoticerequired -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>限借數量</td>
+                        <td>
+                                <input type=text name=issuelimit value=<!-- TMPL_VAR NAME=issuelimit -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>預約手續費</td>
+                        <td>
+                                <input type=text name=reservefee value=<!-- TMPL_VAR NAME=reservefee -->>
+                        </td>
+                </tr>
+                <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                                <input type=button value="好！" onclick='Check(this.form)'>
+                        </td>
+                </tr>
+        </table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=add_validate -->
+        資料已寫入
+        <form action=<!-- TMPL_VAR NAME=script_name --> method=post>
+                <input type=submit value="好！">
+        </form>
+<!-- /TMPL_IF -->
+
+        總計：<!-- TMPL_VAR NAME=categorycode -->：<!-- TMPL_VAR NAME=total --><br>
+                    
+        <table border=0 cellspacing=0 cellpadding=5>
+                <tr bgcolor='#99cc33'>
+                        <td background='/images/background-mem.gif'>
+                                <b>類別編號</b>
+                        </td>
+                        <td background='/images/background-mem.gif'>
+                                <!-- TMPL_VAR NAME=categorycode -->
+                        </td>
+                </tr>
+                <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                        <input type=hidden name=op value=delete_confirmed>
+                        <input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>
+                <tr>
+                        <td>說明</td>
+                        <td><!-- TMPL_VAR NAME=description --></td>
+                </tr>
+                <tr>
+                        <td>登記有效期</td>
+                        <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
+                </tr>
+                <tr>
+                        <td>年齡上限</td>
+                        <td><!-- TMPL_VAR NAME=upperagelimit --></td>
+                </tr>
+                <tr>
+                        <td>必須填寫年齡</td>
+                        <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
+                </tr>
+                <tr>
+                        <td>罰款類別</td>
+                        <td><!-- TMPL_VAR NAME=finetype --></td>
+                </tr>
+                <tr>
+                        <td>Bulk</td>
+                        <td><!-- TMPL_VAR NAME=bulk --></td>
+                </tr>
+                <tr>
+                        <td>登記手續費</td>
+                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
+                </tr>
+                <tr>
+                        <td>要發過期通知</td>
+                        <td><!-- TMPL_VAR NAME=overduenoticerequired --></td>
+                </tr>
+                <tr>
+                        <td>限借數量</td>
+                        <td><!-- TMPL_VAR NAME=issuelimit --></td>
+                </tr>
+                <tr>
+                        <td>預約手續費</td>
+                        <td><!-- TMPL_VAR NAME=reservefee --></td>
+                </tr>
+                <!-- TMPL_IF NAME=totalgtzero -->
+                <tr>
+                        <td colspan=2 align=center><b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b></td>
+                </tr>
+               <tr>
+                        <td colspan=2>
+                                </form><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                                <input type=submit value="好！">
+                                </form>
+                        </td>
+                </tr>
+                <!-- TMPL_ELSE -->
+                <tr>
+                        <td colspan=2 align=center>確定要移除嗎</td>
+                </tr>
+                <tr>
+                        <td><input type=submit value="是"></form></td>
+                        <td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value="否"></form></td>
+                </tr>
+                <!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=delete_confirmed -->
+        資料已移除
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+        <input type=submit value="好！">
+        </form>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=else -->
+        <h2>類別管理</h2>
+        <!-- TMPL_IF NAME=searchfield -->
+                您查詢 <!-- TMPL_VAR NAME=searchfield -->
+        <!-- /TMPL_IF -->
+
+        <form action='<TMP_VAR NAME=script_name>' method=post>
+                <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
+                <input type=reset name=reset value="清空">
+        </form>
+
+        <table border=0 cellspacing=0 cellpadding=5>
+                <tr bgcolor='#99cc33'>
+                        <td background='/images/background-mem.gif'><b>類別</b></td>
+                        <td background='/images/background-mem.gif'><b>說明</b></td>
+                        <td background='/images/background-mem.gif'><b>登記</b></td>
+                        <td background='/images/background-mem.gif'><b>年齡上限</b></td>
+                        <td background='/images/background-mem.gif'><b>必須填寫年齡</b></td>
+                        <td background='/images/background-mem.gif'><b>罰款</b></td>
+                        <td background='/images/background-mem.gif'><b>Bulk</b></td>
+                        <td background='/images/background-mem.gif'><b>費用</b></td>
+                        <td background='/images/background-mem.gif'><b>過期</b></td>
+                        <td background='/images/background-mem.gif'><b>限借數量</b></td>
+                        <td background='/images/background-mem.gif'><b>預約</b></td>
+                        <td background='/images/background-mem.gif'> </td>
+                        <td background='/images/background-mem.gif'> </td>
+                </tr>
+                <!-- TMPL_LOOP NAME=loop -->
+                <tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
+                        <td><!-- TMPL_VAR NAME=categorycode --></td>
+                        <td><!-- TMPL_VAR NAME=description --></td>
+                        <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
+                        <td><!-- TMPL_VAR NAME=upperagelimit --></td>
+                        <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
+                        <td><!-- TMPL_VAR NAME=finetype --></td>
+                        <td><!-- TMPL_VAR NAME=bulk --></td>
+                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
+                        <td><!-- TMPL_VAR NAME=overduenoticerequired --></td>
+                        <td><!-- TMPL_VAR NAME=issuelimit --></td>
+                        <td><!-- TMPL_VAR NAME=reservefee --></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&categorycode=<!-- TMPL_VAR NAME=categorycode -->">修改</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&categorycode=<!-- TMPL_VAR NAME=categorycode -->">移除</a></td>
+		</tr>
+                <!-- /TMPL_LOOP -->
+
+        </table>
+        <p><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                <input type=hidden name=op value=add_form>
+                <input type=submit class="button" value="新增類別" alt="新增類別"><br>
+        </form></p>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
+
+
+
+

@@ -1,0 +1,164 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+
+<form action=updatesupplier.pl method=post>
+
+<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
+
+<!-- TMPL_IF NAME=id -->
+	<h1>更新：<!-- TMPL_VAR name="name" --></h1>
+<!-- TMPL_ELSE -->
+	<h1><em>新增供應商</h1>
+<!-- /TMPL_IF -->
+
+<P>
+<CENTER>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
+	<tr valign=top bgcolor="#ffdf61">
+		<td colspan=2><B>公司細節</B></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD><b>公司名稱</b></td>
+		<td><input type=text size=20 name=company value="<!-- TMPL_VAR name="name" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>郵址</td>
+		<td>
+			<textarea name="company_postal" cols=20 rows=3><!-- TMPL_VAR name="postal" --></textarea>
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>實際地址</td>
+		<td><textarea name=physical cols=20 rows=4><!-- TMPL_VAR name="address1" --><!-- TMPL_VAR name="address2" --><!-- TMPL_VAR name="address3" --><!-- TMPL_VAR name="address4" --></textarea>
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>電話</td>
+		<td><input type=text size=20 name=company_phone value="<!-- TMPL_VAR name="phone" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>傳真</td>
+		<td><input type=text size=20 name=company_fax value="<!-- TMPL_VAR name="fax" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>網站</td>
+		<td><input type=text size=20 name=website value="<!-- TMPL_VAR name="url" -->">
+		</td>
+	</tr>
+	<tr valign=top bgcolor="#ffdf61">
+		<td colspan=2><B>聯絡人細節</B></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>聯絡人姓名</td>
+		<td><input type=text size=20 name=company_contact_name value="<!-- TMPL_VAR name="contact" -->"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>職位</td>
+		<td><input type=text size=20 name=company_contact_position value="<!-- TMPL_VAR name="contpos" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>電話</td>
+		<td><input type=text size=20 name=contact_phone value="<!-- TMPL_VAR name="contphone" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Alternative Phone</td>
+		<td><input type=text size=20 name=contact_phone_2 value="<!-- TMPL_VAR name="contaltphone" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>傳真</td>
+		<td><input type=text size=20 name=contact_fax value="<!-- TMPL_VAR name="contfax" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>電郵</td>
+		<td><input type=text size=20 name=company_email value="<!-- TMPL_VAR name="contemail" -->">
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>備註</td>
+		<td><textarea name=notes cols=20 rows=4><!-- TMPL_VAR name="contnotes" --></textarea>
+		</td>
+	</tr>
+</table>
+
+<table border=1 cellspacing=0 cellpadding=5 width="40%">
+	<tr valign=top bgcolor="#ffdf61">
+		<td colspan=2><B>目前狀態</B></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>供應商為</td>
+		<td>
+			 <!-- TMPL_IF name="active" -->
+				<input type="radio" name="status" value="1" checked>使用中
+				<input type="radio" name="status" value="0">不使用</td>
+			<!-- TMPL_ELSE -->
+				<input type="radio" name="status" value="1">使用中
+				<input type="radio" name="status" value="0" checked>不使用</td>
+			<!-- /TMPL_IF -->
+	</tr>
+	<tr valign=top bgcolor="#ffdf61">
+		<td colspan=2><B>ORDERING INFORMATION</B></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Publishers and Imprints</td>
+		<td><textarea name="publishers_imprints" cols=20 rows=4><!-- TMPL_VAR name="specialty" --></textarea>
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>標價為</td>
+		<td>
+			<select name=list_currency size=1>
+			<!-- TMPL_LOOP name="loop_pricescurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>發票上之價錢為</td>
+		<td>
+			<select name=invoice_currency size=1>
+			<!-- TMPL_LOOP name="loop_invoicecurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>已登記貨勞稅號碼</td>
+		<td>
+			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>是
+			<input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>否
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>List Item Price Includes GST</td>
+		<td>
+			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>是
+			<input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>否
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>發票上之價錢已包括貨勞稅</td>
+		<td>
+			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>是
+			<input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>否
+		</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>折扣</td>
+		<td><input type=text size=3 name=discount value=<!-- TMPL_VAR name="discount" -->> %
+	</tr>
+</table>
+<br/>
+<br/><input type=image name=submit src="/<!-- TMPL_VAR name="theme" -->/images/filesave.png" border=0 title="儲存" alt="儲存" class="button">
+</form>
+</center>
+
+
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

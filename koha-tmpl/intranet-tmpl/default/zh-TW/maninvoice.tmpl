@@ -1,25 +1,25 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<Center><h3>¤âµo¦¬¾Ú</h3></center>
+<Center><h3>Manual Invoice</h3></center>
 <form action=/cgi-bin/koha/maninvoice.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name=bornum value="<TMPL_VAR Name="bornum">">
-<tr><td><b>ÅªªÌ½s¸¹<b></td><td><TMPL_VAR Name="bornum"></td></tr>
-<tr><td><b>Ãþ§O</b></td><Td>
+<input type=hidden name=bornum value="<!-- TMPL_VAR Name="bornum" -->">
+<tr><td><b>è®€è€…è™Ÿç¢¼<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+<tr><td><b>é¡žåˆ¥</b></td><Td>
 <select name=type>
-<option value=L>½ßÀv</option>
-<option value=F>»@´Ú</option>
-<option value=A>¤á¤f¤âÄò¶O</option>
-<option value=N>·sÃÒ</option>
-<option value=M>Âø¶µ</option>
-<option value=REF>°h´Ú</option>
+<option value=L>éºå¤±åœ–æ›¸è³‡æ–™</option>
+<option value=F>ç½°æ¬¾</option>
+<option value=A>Account Management Fee</option>
+<option value=N>æ–°å€Ÿæ›¸è­‰</option>
+<option value=M>Sundry</option>
+<option value=REF>ç¾é‡‘é€€æ¬¾</option>
 </select>
 </td></tr>
-<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>»¡©ú</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>ª÷ÃB</b></td><td><input type=text name=amount></td></tr>
-<tr><td><input type=submit name=add value=Add></td></tr>
+<tr><td><b>åœ–æ›¸è³‡æ–™è™Ÿç¢¼</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>èªªæ˜Ž</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>é‡‘é¡</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value="æ–°å¢ž"></td></tr>
 </table>
 </form>
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

@@ -1,258 +1,255 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<H1> Confirm Record </H1>
-<TMPL_IF Name="OK">
+<!-- TMPL_IF Name="OK" -->
+	<H1> 請核對記錄 </H1>
 	<table border=0 cellspacing=0 cellpadding=5>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B> NEW MEMBER </B>
-			</td>
-			<td>
-				&nbsp;
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> 新增讀者 </B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Name</B>
+				<B>名稱</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="name">
+				<!-- TMPL_VAR Name="name" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B> MEMBERSHIP DETAILS </B>
-			</td>
-			<td>
-				&nbsp;
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> 讀者細節 </B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Membership Number</B>
+				<B>讀者號碼</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="bornum">
+				<!-- TMPL_VAR Name="bornum" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Card Number</B>
+				<B>借書證號碼</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="cardnum">
+				<!-- TMPL_VAR Name="cardnum" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Membership Category</B>
+				<B>讀者類別</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="membercat">
+				<!-- TMPL_VAR Name="memcat" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Area </B>
+				<B>費用</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="area">
+				<!-- TMPL_VAR Name="fee" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Fee</B>
+				<B>登記日期</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="fee">
+				<!-- TMPL_VAR Name="joindate" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Joining Date</B>
+				<B>過期日</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="joindate">
+				<!-- TMPL_VAR Name="expdate" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Expiry Date</B>
+				<B>登記之館別</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="expdate">
+				<!-- TMPL_VAR Name="branchcode" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>個人資料</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Joining Branch</B>
+				<B>出生日期</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="joinbranch">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B>PERSONAL DETAILS</B>
-			</td>
-			<td>
-				&nbsp;
+				<!-- TMPL_VAR Name="dob" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Ethnicity</B>
+				<B>性別</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="ethnic">
+				<!-- TMPL_IF Name="sex" -->
+					男
+				<!-- TMPL_ELSE -->
+					女
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>讀者地址</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Date Of Birth</B>
+				<B>郵址</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="dob">
+				<!-- TMPL_VAR Name="postal" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Sex</B>
+				<B>住宅地址</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="sex">
+				<!-- TMPL_VAR Name="home" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B>MEMBER ADRESS</B>
-			</td>
-			<td>
-				&nbsp;
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>讀者聯絡資料細節</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Postal Adress</B>
+				<B>電話 (住宅)</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="postal">
+				<!-- TMPL_VAR Name="phone" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Home Adress</B>
+				<B>電話 (日間)</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="home">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B>MEMBER CONTACT DETAIL</B>
-			</td>
-			<td>
-				&nbsp;
+				<!-- TMPL_VAR Name="phoneday" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Home)</B>
+				<B>傳真</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="phone">
+				<!-- TMPL_VAR Name="faxnumber" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Daytime)</B>
+				<B>電郵</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="phoneday">
+				<!-- TMPL_VAR Name="emailaddress" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Fax</B>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>短訊</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="faxnumber">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>E-mail</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="emailaddress">
+				<!-- TMPL_VAR NAME=textmessaging -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<B>ALTERNATIVE CONTACT DETAIL</B>
 			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
 			<td>
-				&nbsp;
+				<B>名稱</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="contactname" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Name</B>
+				<B>電話</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="contactname">
+				<!-- TMPL_VAR Name="altphone" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone</B>
+				<B>關係</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altphone">
+				<!-- TMPL_VAR Name="altrelationship" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Relationship</B>
+				<B>備註</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altrelationship">
+				<!-- TMPL_VAR Name="altnotes" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>備註</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Notes</B>
+				<B>一般備註</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altnotes">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B>NOTES</B>
-			</td>
-			<td>
-				&nbsp;
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>General Notes</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="bornotes">
+				<!-- TMPL_VAR Name="bornotes" -->
 			</td>
 		</tr>
 		</TABLE><p>
 		<form action="/cgi-bin/koha/insertdata.pl" method=post>
-			<TMPL_LOOP NAME=inputsloop>
-				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-			</TMPL_LOOP>
-			<input type=submit name=submit value=submit>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value=Submit>
 		</form>
-<TMPL_ELSE>
-	<TMPL_VAR Name="string">
-</TMPL_IF>
+<!-- TMPL_ELSE -->
+	<h1>錯誤</H1>
+	<p>The following fields have a forbidden value. Please push the back button and try again : </p>
+	<!-- TMPL_IF name="cardnumber" -->
+		借書證號碼<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="invalid_cardnumber" -->
+		借書證號碼無效<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="gender" -->
+		性別<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="firstname" -->
+		名<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="surname" -->
+		姓<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="address" -->
+		Postal Street Address<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="city" -->
+		Postal city<br/>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

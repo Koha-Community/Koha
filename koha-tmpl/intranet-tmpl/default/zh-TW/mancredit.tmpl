@@ -1,22 +1,22 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
 <Center><h3>Manual Credit</h3></center>
 <form action=/cgi-bin/koha/mancredit.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name="bornum" value="<TMPL_VAR Name="bornum">">
-<tr><td><b>Ū�̽s��<b></td><td><TMPL_VAR Name="bornum"></td></tr>
-<tr><td><b>���O</b></td><Td>
+<input type=hidden name="bornum" value="<!-- TMPL_VAR Name="bornum" -->">
+<tr><td><b>讀者號碼<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+<tr><td><b>類別</b></td><Td>
 <select name=type>
 <option value=C>Credit</option>
 <option value=BAY>Baycorp Adjustment</option>
-<option value=WORK>Worked off</option>
+<option value=WORK>已以工作抵償</option>
 </select>
 </td></tr>
-<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>����</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>���B</b></td><td><input type=text name=amount></td></tr>
-<tr><td><input type=submit name=add value=Add></td></tr>
+<tr><td><b>圖書資料號碼</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>說明</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>金額</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value="新增"></td></tr>
 </table>
 </form>
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

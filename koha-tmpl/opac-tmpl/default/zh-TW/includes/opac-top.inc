@@ -1,72 +1,48 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<!--Authored by rachel@katipo.co.nz 10:46 24/12/99-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
-<title>KOHA: OPAC Catalogue Search</title>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
-
+<title>KOHA：查詢館藏</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css">
 </head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
+
+<body>
 
 
 
-<!--HDL Colours
+<!-- MENUS -->
 
-        Yellow = ffcc00 
-        light blue = ccccff
-        bright blue links = 0000ff
-        aubergine = 663266 
-        light green/grey = cccc99
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr bgcolor="#339999">
 
+	<td width="7%">
+		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" border="0" alt=""><b>KOHA</b>
+	</td>
+        <td width="10%">
+		<a href="/cgi-bin/koha/opac-search.pl" title="查詢館藏" class="white">
+			查詢
+		</a>
+	</td>
+        <td width="10%">
+		<a href="/cgi-bin/koha/opac-user.pl" title="辦理讀者登記手續" class="white">
+			讀者登記
+		</a>
+	</td>
+	<td align="left" width="10%">
+		<a href="/cgi-bin/koha/opac-main.pl" title="返回首頁" class="white">返回首頁</a>
+	</td>
+	<td width="60%">
+		&nbsp;
+	</td>
+        </tr>
+</table>
 
--->
+<!-- MAIN BODY OF PAGE -->
 
-<!------------------------MENUS-------------------------------->
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align="left">目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href="/cgi-bin/koha/opac-user.pl">個人主頁</a>】【<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">登出</a>】</p>
+<!-- TMPL_ELSE -->
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">登入</a> Koha</p>
+<!-- /TMPL_IF -->
 
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr BGCOLOR="#339999" >
-
-        <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-search.gif" 
-	width=349 height=50 alt="KOHA: �d���]��" hspace=0 vspace=0 border=0></td>
-
-
-      
-        <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img 
-	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
-	width=71 height=30 alt="�d��" hspace=0 vspace=0 border=0 name="menu-search"></a>
-	
-<!--	<a href="/members/"
-	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-login.gif" 
-	width=111 height=30 alt="�n�J" hspace=0 vspace=0 border=0 name="menu-login"></a>
--->
-	<a href="/join.html"
-	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-join.gif" 
-	width=54 height=30 alt="�n�O" hspace=0 vspace=0 border=0 name="menu-join"></a>
-
-	<a href="/cgi-bin/koha/opac-main.pl" 
-	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-home.gif" 
-	width=60 height=30 alt="�D��" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
-        
-        </TR>
-
-
-<tr valign=top>
-
-        <td><img src="<TMPL_VAR NAME='themelang'>/images/inside-koha-bottom.gif" 
-	width=69 height=44 alt="KOHA" hspace=0 vspace=0 border=0 ></td>
-
-        <td align=right><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" 
-	width=300 height=48 alt="" hspace=0 vspace=0 name="mouseover" ></a></td>
-
-        </TR>
-
-
-
-</TABLE>
-
-
-
-<!-------------------------MAIN BODY OF PAGE-------------------------->
-<BLOCKQUOTE>

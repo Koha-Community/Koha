@@ -1,0 +1,71 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></em></font><p>
+<!-- FIXME - "callpadding" should be "cellpadding", right? -->
+<table cellspacing="0" callpadding="5" border="1" align="left" width="220">
+<!-----------------BIBLIO RECORD TABLE--------->
+<tr valign="top">
+
+<td bgcolor="#99cccc">
+<b>書目記錄</b> <!-- TMPL_VAR NAME="biblionumber" -->
+</td>
+</tr>
+<tr valign="top">
+<td>
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>副題：</b><!-- TMPL_VAR NAME="subtitle" --><br>
+<b>著者：</b><!-- TMPL_VAR NAME="author" --><br>
+<b>附加著者：</b><!-- TMPL_VAR NAME="additional" --><br>
+<b>集叢題名：</b><!-- TMPL_VAR NAME="seriestitle" --><br>
+<b>主題：</b><!-- TMPL_VAR NAME="subject" --><br>
+<b>版權：</b><!-- TMPL_VAR NAME="copyrightdate" --><br>
+<b>備註：</b><!-- TMPL_VAR NAME="notes" --><br>
+<b>劃一題名：</b><!-- TMPL_VAR NAME="unititle" --><br>
+<b>期刊：</b><!-- TMPL_VAR NAME="serial" --><br>
+<b>圖書資料總數：</b><!-- TMPL_VAR NAME="count" -->
+<p>
+</font></td>
+</tr>
+</table>
+<!-- /TMPL_LOOP -->
+<center>
+<table border=0 cellspacing=0 cellpadding=2>
+<tr bgcolor="#99cccc">
+<td>圖書資料類別</td>
+<td>類別</td>
+<td>館藏地</td>
+<td>到期日</td>
+<td>最近出現</td>
+</tr>
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<tr>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
+<tr>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td>網站</td>
+<td>上線</td>
+<td>可用</td>
+<td></td>
+<td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
+NAME="itemnumber">&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
+NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<p>
+</center>
+<br clear=all>
+<p />
+<p />
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

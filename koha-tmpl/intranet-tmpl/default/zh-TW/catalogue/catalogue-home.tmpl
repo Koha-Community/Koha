@@ -1,0 +1,109 @@
+<!-- TMPL_IF name="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+
+<!------------------------ MAIN BODY OF PAGE ---------------------------->
+<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
+
+<h1>館藏查詢</h1>
+
+<CENTER>
+
+<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
+	<TR VALIGN=TOP>
+		<TD>條碼</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
+		<td><b> 　　或</b></TD></TR>
+	<!-- <TR VALIGN=TOP>
+	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+	-->
+	<TR VALIGN=TOP>
+		<TD colspan=2 > &nbsp;</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="#ad11ad" colspan=2>
+			<span style="color:#FFFFFF;">
+				<b>說明</b><br>
+				<b>查詢：</b>使用愈多欄位查詢，查詢就愈慢。<p>
+			</span>
+		</td>
+	</TR>
+</table>
+
+
+
+<TABLE border=0>
+	<TR VALIGN=TOP>
+		<TD>關鍵字</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>題名</TD>
+		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
+		<td>
+			<input type=radio name=ttype value=normal checked>Normal
+			<input type=radio name=ttype value=exact>Exact
+		</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>著者</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>繪圖</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	</TR>
+		<TR VALIGN=TOP>
+		<TD>杜威分類號</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
+	</TR>
+
+	<TR VALIGN=TOP>
+	<TD>類別</TD>
+		<td>
+			<select name="class" size="1">
+			<option value=""> 任一 <!-- TMPL_VAR name="classlist" -->
+			</select>
+		</td>
+	</tr>
+	<!-- <TR VALIGN=TOP>
+	<td>Branch</td><td><select name=branch>
+	<option value="F">Foxton
+	</select>
+	</td></tr> -->
+
+	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	-->
+	<TR VALIGN=TOP>
+	<TD><b>或</b></TD>
+	</TR>
+
+	<TR VALIGN=TOP>
+		<TD>主題</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	</TR>
+	<tr>
+		<TD colspan=3>
+			<table width="100%" cellpadding=0 cellspacing=0>
+				<tr align="center">
+					<td>
+						<input type="hidden" name="type" value="intra">
+						<input type="submit" class="button" value="開始查詢">
+					</td>
+					<td>
+						<input type="reset" value="清空" class="button">
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/shelves.pl" class="button">虛擬書架</a>
+					</td>
+				</tr>
+			</table>
+		</TD>
+	</TR>
+</TABLE>
+	</FORM>
+	<p>
+	</CENTER>
+<!--#include virtual="/includes/cat-bottom.inc" -->
+

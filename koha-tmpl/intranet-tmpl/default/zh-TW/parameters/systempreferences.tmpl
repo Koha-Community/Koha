@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,100 +54,100 @@
 	}
 	</SCRIPT>
 
-<TMPL_IF name="add_form">
+<!-- TMPL_IF name="add_form" -->
 <!------------------------------------------------------------------------------------------------>
-	<TMPL_IF NAME=modify>
-		<h1>�ק�t�ΰ��n</h1>
-	<TMPL_ELSE>
-		<H1>�s�W�t�ΰ��n</H1>
-	</TMPL_IF>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+	<!-- TMPL_IF NAME=modify -->
+		<h1>修改系統偏好</h1>
+	<!-- TMPL_ELSE -->
+		<H1>新增系統偏好</H1>
+	<!-- /TMPL_IF -->
+	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<TMPL_IF NAME=searchfield>
-		<tr><td>�Ѽ�</td><td><TMPL_VAR name="searchfield"><input type=hidden name=variable value='<TMPL_VAR NAME=searchfield>'></td></tr>
-	<TMPL_ELSE>
-		<tr><td>�Ѽ�</td><td><input type=text name=variable></td></tr>
-	</TMPL_IF>
-	<tr><td>�Ѽƭ�</td><td><input type=text name=value value='<TMPL_VAR name="value" escape=HTML>'></td></tr>
-	<tr><td>����</td><td><input type=text name=explanation size=80 value='<TMPL_VAR name="explanation" escape=HTML>'></td></tr>
-	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+	<!-- TMPL_IF NAME=searchfield -->
+		<tr><td>變數</td><td><!-- TMPL_VAR name="searchfield" --><input type=hidden name=variable value='<!-- TMPL_VAR NAME=searchfield -->'></td></tr>
+	<!-- TMPL_ELSE -->
+		<tr><td>變數</td><td><input type=text name=variable></td></tr>
+	<!-- /TMPL_IF -->
+	<tr><td>值</td><td><input type=text name=value value="<!-- TMPL_VAR name="value" escape=HTML -->"></td></tr>
+	<tr><td>說明</td><td><input type=text name=explanation size=80 value="<!-- TMPL_VAR name="explanation" escape=HTML -->"></td></tr>
+	<tr><td>&nbsp;</td><td><input type=button value="好！" onclick='Check(this.form)'></td></tr>
 	</table>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="add_validate">
+<!-- TMPL_IF name="add_validate" -->
 <!------------------------------------------------------------------------------------------------>
-	���\�g�J�Ѽ�
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=submit value=OK>
+	資料已寫入
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<input type=submit value="好！">
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirm">
+<!-- TMPL_IF name="delete_confirm" -->
 <!------------------------------------------------------------------------------------------------>
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor="#99cc33">
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>變數</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
-	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
-	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
-	<tr><td colspan=2 align=center>�T�w�n�����ܡH</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
+	<tr><td>值</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
+	<tr><td colspan=2 align=center>確定要移除嗎</td></tr>
+	<tr><td><input type=submit value="是"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="否"></form></td></tr>
 </table>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirmed">
+<!-- TMPL_IF name="delete_confirmed" -->
 <!------------------------------------------------------------------------------------------------>
-	���\�����Ѽ�
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=submit value=OK>
+	資料已移除
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<input type=submit value="好！">
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 <!------------------------------------------------------------------------------------------------>
-<TMPL_IF name="else">
-<h1>�]�w�t�ΰ��n</h1>
+<!-- TMPL_IF name="else" -->
+<h1>系統偏好管理</h1>
 <form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
 	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="�M��">
+	<input type=reset name=reset value="清空">
 </form>
-<TMPL_VAR name="searchfield">
+<!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor="#99cc33">
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>�Ѽ�</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>�Ѽƭ�</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>����</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
-<TMPL_LOOP name="loop">
-</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="variable"></td>
-	<td><TMPL_VAR name="value"></td>
-	<td><TMPL_VAR name="explanation"></td>
-	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0><br>�ק�</a></td>
-	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0><br>����</a></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>變數</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>值</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
+<!-- TMPL_LOOP name="loop" -->
+</tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+	<td><!-- TMPL_VAR name="variable" --></td>
+	<td><!-- TMPL_VAR name="value" --></td>
+	<td><!-- TMPL_VAR name="explanation" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>修改</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0>移除</a></td>
 </tr>
-</TMPL_LOOP>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<!-- /TMPL_LOOP -->
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <input type=hidden name=op value=add_form>
 </table>
-<table width="40%">
+<table width=40%>
 	<tr>
-		<td width="50%"><TMPL_VAR name="previous"></td>
-		<td width="50%"><TMPL_VAR name="next"></td>
+		<td width=50%><!-- TMPL_VAR name="previous" --></td>
+		<td width=50%><!-- TMPL_VAR name="next" --></td>
 	</tr>
 </table>
 </form>
 
-<form action=<TMPL_VAR name="script_name"> method=post>
+<form action=<!-- TMPL_VAR name="script_name" --> method=post>
         <input type='hidden' name='op' value='add_form'>
-        <input type=submit class="button" value='�s�W�t�ΰѼ�'>
+        <input type=submit class="button" value="新增系統偏好">
 </form>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>UNIMARC 欄 225a 建立程序</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>選擇館藏</td>
+		<td><!-- TMPL_VAR name="collection" --></td>
+	</tr>
+	<tr><td colspan=2><input type="submit" value="好！"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

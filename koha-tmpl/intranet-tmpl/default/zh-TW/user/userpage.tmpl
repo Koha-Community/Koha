@@ -1,0 +1,89 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- TMPL_IF NAME="loggedinuser" -->
+	<p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinuser" --> 【<a href=/cgi-bin/koha/logout.pl>登出</a>】</p>
+	<p>
+	<center>
+	<h3>This page is just a mock up</h3>
+
+	<table border=0 cellspacing=15>
+	<tr><td valign=top>
+
+	<table border=1 cellpadding=10>
+	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>預約</font></th></tr>
+	<tr><td>
+	<b>以下的圖書資料，您已經可以取書了：</b>
+	<ul>
+	<li>《The Great Mom Swap》，Betsy Hanes 著，位於總館
+	<li>《Between Brothers》，Irene Morck著，位於總館
+	</ul>
+	<p>
+	<b>您預約了下列已借出的圖書資料：</b>
+	<ul>
+	<li>《The Amazing Apple Book》，Paulette Bourgeois 著
+	<li>《Tracey the Great》，Alan Cliburn 著
+	<li>《The biography of a grizzly》，Ernest Thompson Seton 著
+	</ul>
+	</td></tr>
+	</table>
+
+	</td><td valign=top>
+
+		<form method=post>
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>使用者偏好</font></th></tr>
+		<tr><td align =center>
+		<table border=0 cellpadding=5>
+			<tr><td>語言</td><td>
+			<select name=language>
+			<option value=english>英文
+			<option value=english>法文
+			<option value=english>德文
+			<option value=english>波蘭文
+			</select>
+			</td></tr>
+			<tr><td>電郵地址</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
+			<tr><td>Preferred Branch<br>for reserve pickups</td><td>
+			<select name=pickupbranch>
+			<option value=MAIN>總館
+			<option value=SEDGE>Sedgewick圖書館
+			<option value=HANSEN selected>Rick Hansen 圖書館
+			<option value=CAT>Cataline 圖書館
+			</select>
+			</td></tr>
+			<tr><td colspan=2>
+			<input name=specialeventsbyemail type=checkbox checked> 有特備活動時，請以電郵通知我<br>
+			<input name=overduesbyemail type=checkbox checked> 以電郵通知我過期<br>
+			<input name=recordreadingrecord type=checkbox> 記錄我讀過什麼書<br>
+			<input name=recordreadingrecord type=checkbox> 批准圖書館員看我的閱讀記錄<br>
+			</td></tr>
+			<tr><td align=center colspan=2>
+			<input type=submit value="設定偏好">
+			</td>
+			</tr>
+		</table>
+		</td></tr>
+	</table>
+	</form>
+
+	</td></tr>
+	</table>
+
+	</center>
+<!-- TMPL_ELSE -->
+	<center>
+	<form method=post>
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>使用者偏好</font></th></tr>
+		<tr><td>姓名：</td><td><input name="userid"></td></tr>
+		<tr><td>密碼：</td><td><input type=password name=password></td></tr>
+		<tr><td align=center colspan=2>
+		    <input type=submit value="登入">
+		</td>
+		</tr>
+	    </table>
+	</form>
+	</center>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

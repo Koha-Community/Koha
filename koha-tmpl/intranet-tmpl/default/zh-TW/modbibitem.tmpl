@@ -1,8 +1,6 @@
-<TMPL_INCLUDE Name="cat-top.inc">
-
-<BLOCKQUOTE><FONT SIZE=6>
-<em><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
-Modify Group - <TMPL_VAR Name="description"></em></FONT><br>
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+<h1><a href=/cgi-bin/koha/detail.pl?bib="<!-- TMPL_VAR Name="biblionumber" -->"&type=intra><!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a><br>
+修改群組 - <!-- TMPL_VAR Name="description" --></h1><br>
 
 <form action=updatebibitem.pl method=post>
 	<table border=0 cellspacing=0 cellpadding=5 align=left>
@@ -14,50 +12,50 @@ Modify Group - <TMPL_VAR Name="description"></em></FONT><br>
 		<tr valign=top>
 			<td colspan=3>
 				<select name=existinggroup><br>
-					<TMPL_LOOP Name="bibitemloop">
-						<option value="<TMPL_VAR Name="biblioitemnumber">"><TMPL_VAR Name="description"> - <TMPL_VAR Name="isbn"><br>
-					</TMPL_LOOP>
+					<!-- TMPL_LOOP Name="bibitemloop" -->
+						<option value="<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="description" --> - <!-- TMPL_VAR Name="isbn" --><br>
+					<!-- /TMPL_LOOP -->
 				</select>
 			</td>
 		</tr>
 
 		<TR VALIGN=TOP  bgcolor="99cc33">
-			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >OR MODIFY DETAILS</b></td>
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >或修改細節</b></td>
 		</tr>
 
-		<tr valign=top bgcolor=white><td>Item Type</td><td><input type=text name=Item Type value="<TMPL_VAR Name="itemtype">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>圖書資料類別</td><td><input type=text name=Item Type value="<!-- TMPL_VAR Name="itemtype" -->" size=20></td></tr>
 
 		<tr valign="top" bgcolor="white">
-			<td>URL</td>
-			<td><input type="text" name="url" value="<TMPL_VAR Name="url">" size="20"></td>
+			<td>網址</td>
+			<td><input type="text" name="url" value="<!-- TMPL_VAR Name="url" -->" size="20"></td>
 		</tr>
 
-		<tr valign=top bgcolor=white><td>Class</td><td><input type=text name=Class value="<TMPL_VAR Name="classification"><TMPL_VAR Name="dewey"><TMPL_VAR Name="subclass">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>類別</td><td><input type=text name=Class value="<!-- TMPL_VAR Name="classification" --><!-- TMPL_VAR Name="dewey" --><!-- TMPL_VAR Name="subclass" -->" size=20></td></tr>
 
 
 
-		<tr valign=top bgcolor=white><td>Publisher</td><td><input type=text name=Publisher value="<TMPL_VAR Name="publishercode">" size=20></td></tr>
-		<tr valign=top bgcolor=white><td>Place</td><td><input type=text name=Place value="<TMPL_VAR Name="place">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>出版者</td><td><input type=text name=Publisher value="<!-- TMPL_VAR Name="publishercode" -->" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>出版地</td><td><input type=text name=Place value="<!-- TMPL_VAR Name="place" -->" size=20></td></tr>
 
 
-		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<TMPL_VAR Name="isbn">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<!-- TMPL_VAR Name="isbn" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Publication Year</td><td><input type=text name=Publication Year value="<TMPL_VAR Name="publicationyear">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>出版年</td><td><input type=text name=Publication Year value="<!-- TMPL_VAR Name="publicationyear" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Pages</td><td><input type=text name=Pages value="<TMPL_VAR Name="pages">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>頁數</td><td><input type=text name=Pages value="<!-- TMPL_VAR Name="pages" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Illustrations</td><td><input type=text name=Illustrations value="<TMPL_VAR Name="illustration">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>圖</td><td><input type=text name=Illustrations value="<!-- TMPL_VAR Name="illustration" -->" size=20></td></tr>
 
 		<tr valign=top bgcolor=white><td>Volume</td>
-		<td><input type=text name=Volume value="<TMPL_VAR Name="volumeddesc">" size=20></td></tr>
-		<tr valign=top bgcolor=white><td>Notes</td>
-		<td><input name="Notes" size="20" value="<TMPL_VAR name="bnotes">"></td></tr>
-		<tr valign=top bgcolor=white><td>Size</td>
-		<td><input type=text name=Size value="<TMPL_VAR Name="size">" size=20></td></tr>
+		<td><input type=text name=Volume value="<!-- TMPL_VAR Name="volumeddesc" -->" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>備註</td>
+		<td><input name="Notes" size="20" value="<!-- TMPL_VAR name="bnotes" -->"></td></tr>
+		<tr valign=top bgcolor=white><td>大小</td>
+		<td><input type=text name=Size value="<!-- TMPL_VAR Name="size" -->" size=20></td></tr>
 
-		<input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
+		<input type=hidden name=bibnum value="<!-- TMPL_VAR Name="biblionumber" -->">
 
-		<input type=hidden name=bibitemnum value="<TMPL_VAR Name="biblioitemnumber">">
+		<input type=hidden name=bibitemnum value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
 
 	</table>
 
@@ -75,21 +73,21 @@ Modify Group - <TMPL_VAR Name="description"></em></FONT><br>
 
 		<tr valign=top bgcolor=99cc33>
 			<td background="/images/background-mem.gif">&nbsp;</td>
-			<td background="/images/background-mem.gif">Barcode</td>
-			<td background="/images/background-mem.gif">Location</td>
-			<td background="/images/background-mem.gif">Date Due</td>
-			<td background="/images/background-mem.gif">Last Seen</td>
+			<td background="/images/background-mem.gif">條碼</td>
+			<td background="/images/background-mem.gif">館藏地</td>
+			<td background="/images/background-mem.gif">到期日</td>
+			<td background="/images/background-mem.gif">最近出現</td>
 		</tr>
 
-		<TMPL_LOOP Name="itemloop">
-			<tr valign=top gcolor=#ffffcc>
-				<td><input type=checkbox name="<TMPL_VAR Name="barcode">"></td>
-				<td><a href="/cgi-bin/koha/moredetail.pl?item="<TMPL_VAR Name="itemnumber">"&bib="<TMPL_VAR Name="biblionumber">"&bi="<TMPL_VAR Name="biblioitemnumber">""><TMPL_VAR Name="barcode"></a></td>
-				<td><TMPL_VAR Name="holdingbranch"></td>
+		<!-- TMPL_LOOP Name="itemloop" -->
+			<tr valign=top gcolor="#ffffcc">
+				<td><input type=checkbox name="check_group_<!-- TMPL_VAR Name="barcode" -->"></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR Name="itemnumber" -->&bib=<!-- TMPL_VAR Name="biblionumber" -->&bi=<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
+				<td><!-- TMPL_VAR Name="holdingbranch" --></td>
 				<td></td>
-				<td><TMPL_VAR Name="datelastseen"></td>
+				<td><!-- TMPL_VAR Name="datelastseen" --></td>
 			</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</table>
 	<p>
 
@@ -105,4 +103,4 @@ Modify Group - <TMPL_VAR Name="description"></em></FONT><br>
  <br clear=all>
  <p> &nbsp; </p>
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

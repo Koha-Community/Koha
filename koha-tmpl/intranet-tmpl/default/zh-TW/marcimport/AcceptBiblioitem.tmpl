@@ -1,59 +1,57 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <center>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>
-<TMPL_IF name="BIBLIO_EXISTS">
+<a href=$ENV{'SCRIPT_NAME'}?file=$file>新增記錄</a> | <a href=marcimport.pl>新增檔案</a><br>
+<!-- TMPL_IF name="BIBLIO_EXISTS" -->
 	<table border=0 width=50% cellpadding=10 cellspacing=0>
 		<tr>
-			<th background=/images/background-acq.gif>Record already in database
+			<th background=/images/background-acq.gif>記錄已在資料庫內
 			</th>
 		</tr>
 		<tr>
 			<td bgcolor="#dddddd">
-				<TMPL_VAR name="title"> is already in the database with 
-				biblionumber <TMPL_VAR name="biblionumber"> and biblioitemnumber <TMPL_VAR name="biblioitemnumber">
+				<!-- TMPL_VAR name="title" --> 已在資料庫內，既有的書目號碼為 <!-- TMPL_VAR name="biblionumber" -->，biblioitemnumber 為 <!-- TMPL_VAR name="biblioitemnumber" -->。
 			  </td>
 		</tr>
 	</table>
 	<p>
-</TMPL_IF>
-<TMPL_IF name="BIBLIO_CREATE">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="BIBLIO_CREATE" -->
     <table cellpadding=10 cellspacing=0 border=0 width=50%>
 		<tr>
-			<th background=/images/background-acq.gif>Record entered into database</th>
+			<th background=/images/background-acq.gif>記錄已寫入至資料庫</th>
 		</tr>
 		<tr>
 			<td bgcolor=#dddddd>
-				<TMPL_VAR name="title">has been entered into the database with biblionumber
-				<TMPL_VAR name="biblionumber"> and biblioitemnumber <TMPL_VAR name="biblioitemnumber"></td>
+				<!-- TMPL_VAR name="title" --> 已存入資料庫內，書目號碼為 <!-- TMPL_VAR name="biblionumber" -->，biblioitemnumber 為 <!-- TMPL_VAR name="biblioitemnumber" -->。</td>
 		</tr>
 	  </table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
     <table border=0 cellpadding=10 cellspacing=0>
       <tr><th background=/images/background-acq.gif>
-	Add a New Item for <TMPL_VAR name="title">
+	給 <!-- TMPL_VAR name="title" --> 新增圖書資料
       </th></tr>
       <tr><td bgcolor=#dddddd>
       <form>
         <input type=hidden name=newitem value=1>
-        <input type=hidden name=biblionumber value="<TMPL_VAR name="biblionumber">">
-        <input type=hidden name=biblioitemnumber value="<TMPL_VAR name="biblioitemnumber">">
-        <input type=hidden name=file value="<TMPL_VAR name="file">">
+        <input type=hidden name=biblionumber value="<!-- TMPL_VAR name="biblionumber" -->">
+        <input type=hidden name=biblioitemnumber value="<!-- TMPL_VAR name="biblioitemnumber" -->">
+        <input type=hidden name=file value="<!-- TMPL_VAR name="file" -->">
         <table border=0>
-          <tr><td>BARCODE</td><td><input name=barcode size=10 value="<TMPL_VAR name="barcode">">
-          Home Branch: <select name=homebranch><TMPL_VAR name="branchselect"></select>
+          <tr><td>條碼</td><td><input name=barcode size=10 value="<!-- TMPL_VAR name="barcode" -->">
+          所屬分館： <select name=homebranch><!-- TMPL_VAR name="branchselect" --></select>
 	  </td></tr>
-          <tr><td>Replacement Price:</td>
+          <tr><td>書價：</td>
 	  <td><input name=replacementprice size=10></td></tr>
-          <tr><td>Notes</td>
+          <tr><td>備註</td>
 	  <td><textarea name=notes rows=4 cols=40 wrap=physical></textarea>
 	  </td></tr>
         </table>
         <p>
-        <input type=submit value="Add Item">
+        <input type=submit value="新增圖書資料">
       </form>
       </td></tr>
     </table>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

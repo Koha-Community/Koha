@@ -1,41 +1,55 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
+<h1><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></h1>
+<br>讀者號碼：<!-- TMPL_VAR NAME=bornum -->
+<br>借書證號碼：<!-- TMPL_VAR NAME=cardnumber -->
+<P>
+<!-- TMPL_IF NAME=showfulllink -->
+<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=full">Full output</a>
+<br/>
+<!-- /TMPL_IF -->
+<br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<TD bgcolor="white" colspan=4 >
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">�Ҧ�����</a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=title&limit=<!-- TMPL_VAR name="limit" -->"><b>題名</b></a>
 	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>�ѦW</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=author&limit=<!-- TMPL_VAR name="limit" -->"><b>著者</b></a>
 	</TD>
-	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>�@��</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>到期日</b></a>
 	</TD>
-	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>���</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>還書日期</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 		<b>Volume</b>
 	</TD>
 </TR>
-<TMPL_LOOP name="loop_reading">
+<!-- TMPL_LOOP name="loop_reading" -->
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">
+ 		<!-- TMPL_VAR name="title" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">
+ 		<!-- TMPL_VAR name="author" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">
+		<!-- TMPL_VAR name="date_due" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">
+		<!-- TMPL_VAR name="returndate" -->&nbsp;
 	</TD>
-</TMPL_LOOP>
+	<TD  bgcolor="white">
+		<!-- TMPL_VAR name="volumeddesc" -->&nbsp;
+	</TD>
+<!-- /TMPL_LOOP -->
 </TABLE>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+
+<br>
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">返回</a> 至讀者記錄
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
 

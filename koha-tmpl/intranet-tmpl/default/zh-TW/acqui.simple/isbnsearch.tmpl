@@ -1,86 +1,104 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
-
-<font size="6"><em>®Ñ¥Ø´M§äµ²ªG</em></font><br />
+  <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<font size="6"><em>æ›¸ç›®æŸ¥è©¢çµæœ</em></font><br />
 <CENTER>
-±z¥H<b>°ê»Ú®Ñ¸¹</b>¬d¸ß <b><TMPL_VAR name="isbn"></b><br />
-<TMPL_IF name="total">
-²{¥¿Åã¥Ü²Ä <TMPL_VAR name="showoffset"> ¦Ü <TMPL_VAR name="total"> ­Ó¶µ¥Ø
-</TMPL_IF>
+æ‚¨çš„æŸ¥è©¢æ˜¯æŒ‰ <b><!-- TMPL_IF name="isbn" -->åœ‹éš›æ¨™æº–æ›¸è™Ÿ <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->é¡Œå <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --></b><br />
+<!-- TMPL_IF name="total" -->
+æ‰¾åˆ° <!-- TMPL_VAR NAME=total --> ç­†çµæœ<br />
+åœ¨é¡¯ç¤ºç¬¬<b><!-- TMPL_VAR name="showoffset" --></b>è‡³<b><!-- TMPL_VAR name="total" --></b>é …çµæœ
+<!-- /TMPL_IF -->
 <p />
+<!-- Row of numbers corresponding to search result pages -->
+<!-- TMPL_IF NAME=displayprev -->
+	<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/prev.gif border=0></a>
+<!-- TMPL_ELSE -->
+	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME=numbers -->
+	<!-- TMPL_IF NAME=highlight -->
+	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif>
+	<!-- TMPL_ELSE -->
+	<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->.gif border=0></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME=displaynext -->
+	<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- TMPL_ELSE -->
+	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+<!-- /TMPL_IF -->
 
 <table width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4"><span lang=mi>Koha</span> ¤º¬J¦³®Ñ¥Ø</font></td>
+	<td><font size="4">Kohaå…§çš„æ›¸ç›®</font></td>
 	</tr>
 </table>
 <table border="0" cellspacing="0" cellpadding="5" width="80%">
 	<tr valign=top bgcolor=#ffcc00>
-		<td><b>®Ñ¦W</b></td>
-		<td><b>µÛªÌ</b></td>
-		<td><b>µÛ§@¦~</b></td>
+		<td><b>é¡Œå</b></td>
+		<td><b>è‘—è€…</b></td>
+		<td><b>&copy;</b></td>
 		<td>&nbsp;</td>
 	</tr>
-	<TMPL_IF name="loop">
-	<TMPL_LOOP name="loop">
-		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
-			<td><TMPL_VAR name="title"></a>
-			<td><TMPL_VAR name="author"></td>
-			<td><TMPL_VAR name="copyrightdate"></td>
-			<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">§ó§ï</a></td>
+	<!-- TMPL_IF name="loop" -->
+	<!-- TMPL_LOOP name="loop" -->
+		<tr valign="top" bgcolor="<!-- TMPL_VAR name="toggle" -->">
+			<td><!-- TMPL_VAR name="title" --></a>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="copyrightdate" --></td>
+			<!-- TMPL_IF NAME="NOTMARC" -->
+			  <td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">æ–°å¢åœ–æ›¸è³‡æ–™</a></td>
+			<!-- TMPL_ELSE -->
+			  <td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->">ä¿®æ”¹...</a></td>
+			<!-- /TMPL_IF -->
 		</tr>
-	</TMPL_LOOP>
-	<TMPL_ELSE>
-	<tr><td colspan=4>¤°»ò¤]§ä¤£¨ì</td></tr>
-	</TMPL_IF>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+	<tr><td colspan=4>ä»€éº¼ä¹Ÿæ‰¾ä¸åˆ°</td></tr>
+	<!-- /TMPL_IF -->
 </table>
 <br />
 <table width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">¡u<span lang=en>Breeding farm</span>¡v¤º¬J¦³®Ñ¥Ø</font></td>
+	<td><font size="4">åœ¨Breeding Farmå…§çš„æ›¸ç›®</font></td>
 	</tr>
 </table>
 <table border="0" cellspacing="0" cellpadding="5" width="80%">
 	<tr valign=top bgcolor=#ffcc00>
-		<td><b>®Ñ¦W</b></td>
-		<td><b>µÛªÌ</b></td>
+		<td><b>é¡Œå</b></td>
+		<td><b>è‘—è€…</b></td>
 		<td><b>ISBN</b></td>
-		<td><b>¨Ó·½</b></td>
+		<td><b>coming from</b></td>
 		<td><b>&nbsp;</b></td>
 		<td>&nbsp;</td>
 	</tr>
-	<TMPL_IF name="breeding_loop">
-	<TMPL_LOOP name="breeding_loop">
-		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
-			<td><TMPL_VAR name="title"></a>
-			<td><TMPL_VAR name="author"></td>
-			<td><TMPL_VAR name="isbn"></td>
-			<td><TMPL_VAR name="file"></td>
-			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Add biblio</a></td>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr valign="top" bgcolor="<!-- TMPL_VAR name="toggle" -->">
+			<td><!-- TMPL_VAR name="title" --></a>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="file" --></td>
+			<!-- TMPL_IF NAME="NOTMARC" -->
+			
+			<!-- TMPL_ELSE -->
+			<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR name="id" -->">æ–°å¢æ›¸ç›®</a></td>
+			<!-- /TMPL_IF -->
 		</tr>
-	</TMPL_LOOP>
-	<TMPL_ELSE>
-	<tr><td colspan=6>¤°»ò¤]§ä¤£¨ì</td></tr>
-	</TMPL_IF>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+	<tr><td colspan=6>ä»€éº¼ä¹Ÿæ‰¾ä¸åˆ°</td></tr>
+	<!-- /TMPL_IF -->
 	<tr>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
-		<td><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">¥[¤@·s®Ñ¥Ø</a></td>
+		<td>&nbsp;</td>
+		<!-- TMPL_IF NAME="NOTMARC" -->
+		<td><a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR name="isbn" -->">æ–°å¢æ›¸ç›®</a></td>
+		<!-- TMPL_ELSE -->
+		<td><a href="addbiblio.pl?isbn=<!-- TMPL_VAR name="isbn" -->">æ–°å¢æ›¸ç›®</a></td>
+		<!-- /TMPL_IF -->
 	</tr>
 </table>
 
 <br />
-<TMPL_LOOP name="loop_links">
-	<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="newoffset">&num=<TMPL_VAR name="num">"><TMPL_VAR name="shownumber"></a>
-</TMPL_LOOP>
-<p />
-¨C­¶Åã¥Ü
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=5">5</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=10">10</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=20">20</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=50">50</a>
-­Ó¶µ¥Ø
-</CENTER>
-<br clear="all" />
-<p>&nbsp;</p>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

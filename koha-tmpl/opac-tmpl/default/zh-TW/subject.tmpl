@@ -1,49 +1,40 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=./logout.pl>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=./userpage.pl>Log In</a> to Koha</p>
-</TMPL_IF>
-
-<center>
-
-<table border=0 cellspacing=0 cellpadding=2>
-<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-<th>Subject</th></tr>
-<TMPL_LOOP NAME=SEARCH_RESULTS>
+<table border="0" cellspacing="0" cellpadding="2" align="center">
+<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+<th>主題</th></tr>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr>
-  <td><a href=./dosearch.pl?&subjectitems=<TMPL_VAR NAME=subject2 ESCAPE=URL>><TMPL_VAR NAME=subject></a></td>
+  <td><a href="./dosearch.pl?&amp;subjectitems=<!-- TMPL_VAR NAME="subject2" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=subject --></a></td>
   </tr>
-</TMPL_LOOP>
-<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td colspan=4>
+<!-- /TMPL_LOOP -->
+<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif"><td colspan=4>
 &nbsp;</td></tr>
 </table>
 <br>
-Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.
+共<!-- TMPL_VAR NAME="numrecords" -->筆結果中的第<!-- TMPL_VAR NAME="startfrom" -->至<!-- TMPL_VAR NAME="endat" -->項結果
 <br>
-    <TMPL_IF NAME="displayprev">
-	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/prev.gif border=0></a>
-    <TMPL_ELSE>
-	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
-    </TMPL_IF>
-    <TMPL_LOOP NAME="numbers">
-	<TMPL_IF NAME="highlight">
-	    <img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif> 
-	<TMPL_ELSE>
-	    <a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
-	</TMPL_IF>
-    </TMPL_LOOP>
-    <TMPL_IF NAME="displaynext">
-	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/next.gif border=0></a>
-    <TMPL_ELSE>
-	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
-    </TMPL_IF>
+    <!-- TMPL_IF NAME="displayprev" -->
+	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" width="15" height="14" border="0" alt="上一頁"></a>
+    <!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" width="15" height="14" border="0" alt="">
+    <!-- /TMPL_IF -->
+    <!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	    <img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif" width="15" height="14" border="0" alt="<!-- TMPL_VAR NAME="number" -->"> 
+	<!-- TMPL_ELSE -->
+	    <a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" width="15" height="14" border="0" alt="<!-- TMPL_VAR NAME="number" -->"></a> 
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_IF NAME="displaynext" -->
+	<a href="./dosearch.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" width="15" height="14" border="0" alt="下一頁"></a>
+    <!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" width="15" height="14" border="0" alt="">
+    <!-- /TMPL_IF -->
 
 
 <hr>
 
 
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

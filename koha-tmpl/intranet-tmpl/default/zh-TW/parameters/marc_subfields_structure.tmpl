@@ -1,112 +1,112 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>±z¥Ø«eµn¤J¬°: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>µn¥X</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>µn¤J</a> to Koha</p>
-</TMPL_IF>
+<html>
+<!-- clarification needed about this page. many questions... what is Lib? a Library? -->
 
-<TMPL_IF name="add_form">
-<!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<!-- TMPL_IF name="add_form" -->
+<!---------------------------------------------------------------------------->
+	<H1><!-- TMPL_VAR name="action" --></H1>
+	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<tr><th>Äæ¸¹</th>
-		<th>µ¹¹Ï®ÑÀ]­û¬İªº»¡©ú / µ¹ÅªªÌ¬İªº»¡©ú</th>
-		<th nowrap>¥i§_­«ÂĞ</th>
-		<th nowrap>¬O§_¥²³Æ</th>
-		<th>Koha Äæ¦ì</th>
-		<th>¦b¨º®æ¥X²{</th>
-		<th>Authorised value or<br/>
-				Thesaurus category</th>
+	<tr><th>æ¬„ä½</th>
+		<th>Lib for librarians / for opac</th>
+		<th>å¯é‡è¦†</th>
+		<th>å¿…å‚™</th>
+		<th>Kohaæ¬„ä½</th>
+		<th>Tab</th>
+		<th>å®¹è¨±å€¼æˆ–<br/>
+				åŒç¾©å­—é¡åˆ¥</th>
 	</tr>
-	<TMPL_LOOP name="loop">
-		<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-		<td><TMPL_VAR name="tagfield"> - <TMPL_VAR name="tagsubfield"></td>
-		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
-				<input type=text name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
-		<td><TMPL_VAR name="repeatable"></td>
-		<td><TMPL_VAR name="mandatory"></td>
-		<td><TMPL_VAR name="kohafield"></td>
-		<td><TMPL_VAR name="tab"></td>
-		<td><TMPL_VAR name="authorised_value"><br/>
-				or <TMPL_VAR name="thesaurus_category"><br/>
-				or <TMPL_VAR name="value_builder"></td>
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP name="loop" -->
+		<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+		<td><!-- TMPL_VAR name="tagfield" --> - <!-- TMPL_VAR name="tagsubfield" --></td>
+		<td><input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80><br/>
+				<input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80></td>
+		<td><!-- TMPL_VAR name="repeatable" --></td>
+		<td><!-- TMPL_VAR name="mandatory" --></td>
+		<td><!-- TMPL_VAR name="kohafield" --></td>
+		<td><!-- TMPL_VAR name="tab" --></td>
+		<td><!-- TMPL_VAR name="authorised_value" --><br/>
+				æˆ– <!-- TMPL_VAR name="thesaurus_category" --><br/>
+				æˆ– <!-- TMPL_VAR name="value_builder" --></td>
+	<!-- /TMPL_LOOP -->
 	</table>
-	<INPUT type=submit value='OK'>
-	<p>Note : in the last column, you can choose :
-	<ul><li>An "authorised value" : it refers to a list of authorised value for this subfield. See the corresponding admin table</li>
-	<li>A "thesaurus category" : it refers to a thesaurus category. See the corresponding admin table</li>
-	<li>A "value builder" : values builders are perl programm that helps you select the value of the field. They are MARC-flavor dependant and sometimes fills an other subfield automaticaly</li>
+	<input type=submit value="å¥½ï¼">
+	<p>Note: in the last column, you can choose:
+	<ul><li>An "authorised value": it refers to a list of authorised values for this subfield. See the corresponding admin table.</li>
+	<li>A "thesaurus category": it refers to a thesaurus category. See the corresponding admin table.</li>
+	<li>A "value builder": values builders are perl programs that help you select the value of the field. They are MARC-flavor dependant and sometimes fill another subfield automatically.</li>
 	</ul>
 	</p>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirm">
-<!-------------------------------------------------------------------------------------------------->
+<!-- TMPL_IF name="delete_confirm" -->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>¤ÀÄæ</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="tagsubfield"></b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>åˆ†æ¬„</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="tagsubfield" --></b></td>
 	</tr>
-	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
-	<form action='<TMPL_VAR name="delete_link">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
-	<input type=hidden name=tagfield value='<TMPL_VAR name="tagfield">'>
-	<input type=hidden name=tagsubfield value='<TMPL_VAR name="tagsubfield">'>
-	<tr><td colspan=2 align=center>¯uªº­n§R°£¶Ü¡H</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">"><input type=submit value=NO></form></td></tr>
-</TMPL_IF>
+	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
+	<form action='<!-- TMPL_VAR name="delete_link" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
+	<input type=hidden name=tagfield value='<!-- TMPL_VAR name="tagfield" -->'>
+	<input type=hidden name=tagsubfield value='<!-- TMPL_VAR name="tagsubfield" -->'>
+	<tr><td colspan=2 align=center>ç¢ºå®šè¦ç§»é™¤å—</td></tr>
+	<tr><td><input type=submit value="æ˜¯"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->"><input type=submit value="å¦"></form></td></tr>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirmed">
-<!-------------------------------------------------------------------------------------------------->
-	data deleted
-	<form action='<TMPL_VAR name="script_name"> method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">">
-	<input type=submit value=OK>
+<!-- TMPL_IF name="delete_confirmed" -->
+<!---------------------------------------------------------------------------->
+	è³‡æ–™å·²ç§»é™¤
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
+	<input type=submit value="å¥½ï¼">
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-<font SIZE=6><em><TMPL_VAR name="tagfield"> ¸¹Äæ¤§µ²ºc©w¸q</em></font>
-<p>³o­Óµe­±Åã¥Ü±z´z¿ï¤FªºÄæªº¦U­Ó¤ÀÄæ¡C±z¥i¥H«ö¡u<span lang=en>Edit</span>¡v§ó§ï³o¨Ç¤ÀÄæ¡A©Î¥[¤J¥¼¦³Åã¥Üªº¤ÀÄæ¡C</p>
-<p>¡u<span lang=mi>koha</span> Äæ¦ì¡vÅã¥Ü¹ïÀ³¬Y¤@¤ÀÄæªº¡u<span lang=mi>koha</span> Äæ¦ì¡v¡C±z¥i¥H¿ï¾Ü¨Ï¥Î¤@­Ó¡u<span lang=mi>Koha</span>¦¡¤¶­±¡v©Î¤@­Ó¡u¾÷Åª®æ¦¡¤¶­±¡v¨Ó¾Ş§@ <span lang=mi>Koha</span>¡C©w¸q³o¨Ç¡u<span lang=mi>koha</span> Äæ¦ì¡v¨Ï <span lang=mi>Koha</span> ¥i¥Hª¾¹D <span lang=mi>Koha</span> ¸ê®Æ®w©M¾÷Åª®æ¦¡¸ê®Æ®w¶¡ªºÃö«Y¡A±q¦Ó¨Ï¨â­Ó¸ê®Æ®w¯à¦P¨B§ó·s¡A¦Ó±z¤]¦]¦¹¥i¥H¶¶§QªºÂà´«¾Ş§@¤¶­±¦Ó¤£·|µo¥Í¨â²Õ¸ê®Æ¤£¦P¨B©Ò¤ŞµoªººØºØ°İÃD¡C</p>
-<table border=0 cellspacing=0 cellpadding=2>
+<!---------------------------------------------------------------------------->
+<!-- TMPL_IF name="else" -->
+<h1>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></h1>
+<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
+<p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, or a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
+
+<table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif" width=5%><b>¤ÀÄæ</b></td>
-	<td background="/images/background-mem.gif" width=30%><b>»¡©ú</b></td>
-	<td background="/images/background-mem.gif" width=10%><b>koha Äæ¦ì</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b title="¦¹¤ÀÄæ¥i§_­«ÂĞ">¥i§_­«ÂĞ</b></span></td>
-	<td background="/images/background-mem.gif" width=8%><b title="¦¹¤ÀÄæ¬O§_¥²³Æ (mandatory)¡AÁÙ¬O¥i¥H¦Û¥Ñ¨Ï¥Î (optional)">¬O§_¥²³Æ</b></span></td>
-	<td background="/images/background-mem.gif" width=8%><b title="¦b¿é¤J®Ñ¥Ø®É¡A¦¹¤ÀÄæ¦bµe­±ªº¨º¤@®æ(tab) Åã¥Ü (0 ¦Ü 9¡BItems)¡A§í©Î¤£Åã¥Ü (-1)">®æ¸¹</b></span></td>
-	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
-	<td background="/images/background-mem.gif" width=8%>&nbsp;</td>
-<TMPL_LOOP name="loop">
-<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="tagsubfield"></td>
-	<td><TMPL_VAR name="liblibrarian"></td>
-	<td><TMPL_VAR name="kohafield"></td>
-	<td nowrap><TMPL_IF name="repeatable">¥i­«ÂĞ<TMPL_ELSE>¤£¥i­«ÂĞ</TMPL_IF></td>
-	<td nowrap><TMPL_IF name="mandatory">¥²³Æ<TMPL_ELSE>¦Û¥Ñ¨Ï¥Î</TMPL_IF></td>
-	<td><TMPL_VAR name="tab"></td>
-	<td><TMPL_VAR name="authorised_value"></td>
-	<td><TMPL_VAR name="thesaurus_category"></td>
-	<td><TMPL_VAR name="value_builder"></td>
-	<td><a href="<TMPL_VAR name="delete">">§R°£</a></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>åˆ†æ¬„</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Kohaæ¬„ä½</b> <span style="font-size:8;color:red" title="éˆçµè‡³æ­¤åˆ†æ¬„çš„ Koha è³‡æ–™åº«æ¬„ä½">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>å¯é‡è¦†</b> <span style="font-size:8;color:red" title="åˆ†æ¬„æ˜¯å¦å¯é‡è¦† (1=å¯é‡è¦†ï¼Œ0=ä¸å¯é‡è¦†)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>å¿…å‚™</b> <span style="font-size:8;color:red" title="åˆ†æ¬„æ˜¯å¦å¿…å‚™ (1=å¿…å‚™ï¼Œ0=è‡ªç”±ä½¿ç”¨)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>å®¹è¨±å€¼</b> <span style="font-size:8;color:red" title="æ­¤åˆ†æ¬„å¯ç”¨ä¹‹å€¼">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>åŒç¾©å­—å…¸</b> <span style="font-size:8;color:red" title="éˆçµè‡³æ­¤åˆ†æ¬„çš„åŒç¾©å­—å…¸">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>å»ºç«‹æ­¤å€¼</b> <span style="font-size:8;color:red" title="å€¼å»ºç«‹ç¨‹åº">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%">ç§»é™¤</td>
+<!-- TMPL_LOOP name="loop" -->
+<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+	<td><!-- TMPL_VAR name="tagsubfield" --></td>
+	<td><!-- TMPL_VAR name="liblibrarian" --></td>
+	<td><!-- TMPL_VAR name="kohafield" --></td>
+	<td><!-- TMPL_IF name="repeatable" -->æ˜¯<!-- TMPL_ELSE -->å¦<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_IF name="mandatory" -->æ˜¯<!-- TMPL_ELSE -->å¦<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_VAR name="tab" --></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><!-- TMPL_VAR name="thesaurus_category" --></td>
+	<td><!-- TMPL_VAR name="value_builder" --></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
-<TMPL_VAR name="edit">
 <table width=60%>
 	<tr>
-		<td width=33%><TMPL_VAR name="¤W¤@­¶"></td>
-		<td width=33%><TMPL_VAR name="¤U¤@­¶"></td>
-		<td width=33%><a href="marctagstructure.pl?searchfield=<TMPL_VAR name="tagfield">">ªğ¦^Äæ¸¹³]©w</a></td>
+		<td width="25%"><!-- TMPL_VAR name="edit" --><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td width="25%"><a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0></a></td>
+		<td width="25%"><!-- TMPL_IF name="previous" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="ä¸Šä¸€é " alt="ä¸Šä¸€é " border=0></a><!-- /TMPL_IF --></td>
+		<td width="25%"><!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="ä¸‹ä¸€é " alt="ä¸‹ä¸€é " border=0></a><!-- /TMPL_IF --></td>
 	</tr>
 </table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
+</html>

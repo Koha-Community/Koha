@@ -1,0 +1,103 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+<center>
+<br>
+<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
+<table border=0 cellpadding=10 align=right>
+<tr>
+	<td>
+		<a class="button" href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>預約</a>
+	</td>
+</tr>
+</table>
+<h1><a
+href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intra><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)</a></h1><P>
+<p>
+<form action=/cgi-bin/koha/modbibitem.pl>
+<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+<input type=hidden name=biblio value=<!-- TMPL_VAR NAME="biblionumber" -->>
+<!------------------BIBLIO ITEM------------------>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"
+><B><!-- TMPL_VAR NAME="biblioitemnumber" --> 群組 - <!-- TMPL_VAR NAME="description" --> </b> </TD>
+</TR>
+<tr VALIGN=TOP  >
+<TD width=210 >
+<input type="image" name="submit" value="修改" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
+<input type="image" name="delete" value="移除" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>書目記錄號碼：</b><!-- TMPL_VAR NAME="biblionumber" --><br>
+<b>圖書資料類別：</b><!-- TMPL_VAR NAME="itemtype" --><br>
+<b>網址：</b><!-- TMPL_VAR NAME="url" --><br>
+<b>借閱期限：</b><!-- TMPL_VAR NAME="loanlength" --><br>
+<b>借書費用：</b><!-- TMPL_VAR NAME="rentalcharge" --><br>
+<b>分類：</b><!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --><br>
+<b>ISBN：</b><!-- TMPL_VAR NAME="isbn" --><br>
+<b>出版者：</b><!-- TMPL_VAR NAME="publishercode" --> <br>
+<b>出版地：</b><!-- TMPL_VAR NAME="place" --><br>
+<b>日期：</b><!-- TMPL_VAR NAME="publicationyear" --><br>
+<b>集叢號：</b><!-- TMPL_VAR NAME="volumeddesc" --><br>
+<b>頁數：</b><!-- TMPL_VAR NAME="pages" --><br>
+<b>繪圖：</b><!-- TMPL_VAR NAME="illus" --><br>
+<b>大小：</b><!-- TMPL_VAR NAME="size" --><br>
+<b>備註：</b><!-- TMPL_VAR NAME="bnotes" --><br>
+<b>數量：</b><!-- TMPL_VAR NAME="count" -->
+</font>
+</TD>
+</tr>
+</table>
+</form>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="ITEM_DATA" -->
+<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=16 height=300 align=left>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>條碼 <!-- TMPL_VAR NAME="barcode" --></B></TD>
+</TR>
+<tr VALIGN=TOP>
+<TD width=220>
+<form action=/cgi-bin/koha/moditem.pl method=post>
+<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+<input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
+<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
+<input type="image" name="submit" value="修改" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
+<input type="image" name="delete" value="移除" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>所屬分館：</b><!-- TMPL_VAR NAME="homebranch" --><br>
+<b>最近見過：</b><!-- TMPL_VAR NAME="datelastseen" --><br>
+<b>上次借出日期：</b><!-- TMPL_VAR NAME="timestamp0" --><br>
+<!-- on issue bit -->
+<!-- TMPL_VAR NAME="issue" -->
+<!-- after -->
+<b>上次借書讀者1：</b><!-- TMPL_VAR NAME="card0" --><br>
+<b>上次借書讀者2：</b><!-- TMPL_VAR NAME="card1" --><br>
+<b>目前館別：</b><!-- TMPL_VAR NAME="holdingbranch" --><br>
+<b>書價：</b><!-- TMPL_VAR NAME="replacementprice" --><br>
+<b>圖書資料已遺失：</b><!-- TMPL_VAR NAME="itemlost" --><br>
+<b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+<b>備註：</b><!-- TMPL_VAR NAME="itemnotes" --><br>
+<b>續借：</b><!-- TMPL_VAR NAME="renewals" --><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">登錄</a>日期：<!-- TMPL_VAR NAME="dateaccessioned" --><br>
+<b>已取消：<!-- TMPL_VAR NAME="wthdrawn" --><br>
+<b><a
+href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>總借出：</a></b><!-- TMPL_VAR NAME="issues" --><br>
+<b>群組號碼：</b><!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
+<b>書目記錄號碼：</b><!-- TMPL_VAR NAME="biblionumber" --> <br>
+
+
+
+</font>
+</TD>
+</tr>
+</table>
+</form>
+<!-- /TMPL_LOOP -->
+
+<p>
+</form>
+</center>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

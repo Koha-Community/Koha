@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <!--Authored by rachel@katipo.co.nz 10:46 24/12/99-->
 
 <html>
 <head>
-<title>KOHA: OPAC Catalogue Search</title>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>KOHA：查詢線上目錄</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
@@ -23,48 +23,42 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 -->
 
-<!------------------------MENUS-------------------------------->
+<!--------------------------MENUS---------------------------------->
 
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr BGCOLOR="#339999" >
 
-        <td valign=bottom><img src="/images/inside-top-search.gif" 
-	width=349 height=50 alt="KOHA: Catalogue Search" hspace=0 vspace=0 border=0></td>
+        <td valign=bottom><img src="<!-- TMPL_VAR name="themelang" -->/images/inside-top-search.gif" width=349 height=50 alt="KOHA：查詢館藏" hspace=0 vspace=0 border=0></td>
 
 
-        <td align=right><a href="/cgi-bin/koha/catalogue-home.pl" 		onMouseOver="document.mouseover.src='/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
-	src="/images/menu-search.gif" 
-	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
+        <td align=right><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" 		onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="<!-- TMPL_VAR name="themelang" -->/images/menu-search.gif" width=71 height=30 alt="查詢" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	
 <!--	<a href="/member/"
 	onMouseOver="document.mouseover.src='/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-login.gif" 
 	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
 -->
-	<TMPL_IF NAME=loggedinuser>
+	<!-- TMPL_IF NAME="loggedinusername" -->
 	    <a href="/cgi-bin/koha/userpage.pl"
-	    onMouseOver="document.mouseover.src='/images/mouseover-mysettings.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'">
-	    <img src="/images/menu-mysettings.gif"
-	    width=90 height=30 alt="My Settings" hspace=0 vspace=0 border=0 name="menu-mysettings"></a>
-	<TMPL_ELSE>
+	    onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-mysettings.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'">
+	    <img src="<!-- TMPL_VAR name="themelang" -->/images/menu-mysettings.gif" width=90 height=30 alt="我的設定" hspace=0 vspace=0 border=0 name="menu-mysettings"></a>
+	<!-- TMPL_ELSE -->
 	    <a href="/join.html"
-	    onMouseOver="document.mouseover.src='/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'">
-	    <img src="/images/menu-join.gif"
-	    width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
-	</TMPL_IF>
+	    onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'">
+	    <img src="<!-- TMPL_VAR name="themelang" -->/images/menu-join.gif" width=54 height=30 alt="讀者登記" hspace=0 vspace=0 border=0 name="menu-join"></a>
+	<!-- /TMPL_IF -->
 
 	<a href="/cgi-bin/koha/mainpage.pl"
-	onMouseOver="document.mouseover.src='/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-home.gif"
-	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
+	onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'"><img src="<!-- TMPL_VAR name="themelang" -->/images/menu-home.gif" width=60 height=30 alt="主頁" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
 
         </TR>
 
 
 <tr valign=top>
 
-        <td><img src="/images/inside-koha-bottom.gif"
+        <td><img src="<!-- TMPL_VAR name="themelang" -->/images/inside-koha-bottom.gif"
 	width=69 height=44 alt="KOHA" hspace=0 vspace=0 border=0 ></td>
 
-        <td align=right><img src="/images/holder.gif"
+        <td align=right><img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif"
 	width=300 height=48 alt="" hspace=0 vspace=0 name="mouseover" ></a></td>
 
         </TR>
@@ -75,5 +69,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 
-<!-------------------------MAIN BODY OF PAGE-------------------------->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
 <BLOCKQUOTE>

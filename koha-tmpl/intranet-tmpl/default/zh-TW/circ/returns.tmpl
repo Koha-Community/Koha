@@ -1,239 +1,238 @@
-<TMPL_INCLUDE Name="circulation-top.inc">
+<!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
-<table align="right"><tr><td>
-<a href=circulation.pl>
-<img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Issues"></a>
-&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
+<table align="right" cellpadding=10><tr><td>
+	<a class="button" href=circulation.pl>
+	å€Ÿå‡º</a>&nbsp;
+	<a class="button" href=branchtransfers.pl>
+	Transfers</a>
 </td></tr></table>
-<FONT SIZE=6><em>¬y³qªA°È¡GÁÙ®Ñ</em></FONT><br>
-<b>À]§O¡G</b><TMPL_VAR Name="genbrname"> &nbsp
-<b>¥´¦L¾÷¡G</b><TMPL_VAR Name="genprname"><br>
-<a href=selectbranchprinter.pl>Âà´«À]§O¢¬¥´¦L¾÷</a>
-<input type=hidden name=branch value=<TMPL_VAR Name="branch">>
-<input type=hidden name=printer value=<TMPL_VAR Name="printer">>
+<h1>æµé€šï¼šé‚„æ›¸</h1><br>
+<b>é¤¨åˆ¥ï¼š</b><!-- TMPL_VAR Name="genbrname" -->ã€€ã€€<b>æ‰“å°æ©Ÿï¼š</b><!-- TMPL_VAR Name="genprname" --><br>
+<a href=selectbranchprinter.pl>è¨­å®š</a>
+<input type=hidden name=branch value=<!-- TMPL_VAR Name="branch" -->>
+<input type=hidden name=printer value=<!-- TMPL_VAR Name="printer" -->>
 <p>
 
 <table cellpadding=5 cellspacing=0 width=100%>
 
-<TMPL_IF Name="found">
+<!-- TMPL_IF Name="found" -->
 	<tr>
 	<td colspan=2>
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>¤w³Q¹w¬ù</font></th></tr>
+		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>æ‰¾åˆ°é ç´„</font></th></tr>
 		<tr><td>
-		<TMPL_IF Name="waiting">
+		<!-- TMPL_IF Name="waiting" -->
 			<font color='red' size='+2'>Item marked Waiting:</font><br>
-		Item <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">) <br>
-	is marked waiting at <b><TMPL_VAR Name="branchname"></b> for <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>).
+		åœ–æ›¸è³‡æ–™ã€Œ<!-- TMPL_VAR Name="itemtitle" -->ã€(<!-- TMPL_VAR Name="itemauthor" -->) <br>
+	is marked waiting at <b><!-- TMPL_VAR Name="branchname" --></b> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
 			<center><form method=post action='returns.pl'>
-			<TMPL_LOOP Name="inputloop">
-				<input type=hidden name=ri-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
-				<input type=hidden name=dd-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="duedate">>
-				<input type=hidden name=bn-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="bornum">>
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
+				<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
+				<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+			<!-- /TMPL_LOOP -->
 			<input type=hidden name=barcode value=0>
-			<input type=submit value="OK">
+			<input type=submit value="å¥½ï¼">
 			</form></center>
-		</TMPL_IF>
-		<TMPL_IF Name="diffbranch">
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="diffbranch" -->
 			<font color='red' size='+2'>Item marked Waiting:</font><br>
-    Item: <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">)<br>
- needs to be transfered to <b><TMPL_VAR Name="branchname"></b> <br>
-to be picked up by <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>).
+    åœ–æ›¸è³‡æ–™ï¼š<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)<br>
+ needs to be transfered to <b><!-- TMPL_VAR Name="branchname" --></b> <br>
+åœ¨ <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>) å–æ›¸ã€‚
 			<center><form method=post action='returns.pl'>
-			<TMPL_LOOP Name="inputloop">
-				<TMPL_UNLESS Name="first">
-					<input type=hidden name=ri-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
-					<input type=hidden name=dd-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="duedate">>
-					<input type=hidden name=bn-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="bornum">>
-				</TMPL_UNLESS>
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<!-- TMPL_UNLESS Name="first" -->
+					<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
+					<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
+					<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+				<!-- /TMPL_UNLESS -->
+			<!-- /TMPL_LOOP -->
 			<input type=hidden name=barcode value=0>
-			<input type=submit value="OK">
+			<input type=submit value="å¥½ï¼">
 			</form></center>
-		</TMPL_IF>
-		<TMPL_IF Name="reserved">
-			<font color='red' size='+2'>Reserve found:</font> Item: <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">) <a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\"><TMPL_VAR Name="itembarcode"></a> <br>
-			for <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>) to be collected at <b><TMPL_VAR Name="branchname"></b>.
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="reserved" -->
+			<font color='red' size='+2'>æ‰¾åˆ°é ç´„</font> åœ–æ›¸è³‡æ–™ï¼š<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->) <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Item'); return false;"><!-- TMPL_VAR Name="itembarcode" --></a> <br>
+			for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false"><!-- TMPL_VAR Name="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR Name="branchname" --></b>.
 			<table cellpadding=5 cellspacing=0>
 			<tr><td valign="top">Change status to waiting and print<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
 			<td valign="top">
 			<form method=post action='returns.pl'>
-			<TMPL_LOOP Name="inputloop">
-				<input type=hidden name=ri-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
-				<input type=hidden name=dd-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="duedate">>
-				<input type=hidden name=bn-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="bornum">>
-			</TMPL_LOOP>
-			<input type=hidden name=itemnumber value=<TMPL_VAR Name="itemnumber">>
-			<input type=hidden name=borrowernumber value=<TMPL_VAR Name="borrowernumber">>
-			<input type=hidden name=resbarcode value=<TMPL_VAR Name="barcode">>
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
+				<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
+				<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+			<!-- /TMPL_LOOP -->
+			<input type=hidden name=itemnumber value=<!-- TMPL_VAR Name="itemnumber" -->>
+			<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="bornum" -->>
+			<input type=hidden name=resbarcode value=<!-- TMPL_VAR Name="barcode" -->>
 			<input type=hidden name=resslip value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Date: <TMPL_VAR Name="today">
+Date: <!-- TMPL_VAR Name="today" -->
 
-ITEM RESERVED:<TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">)
-barcode: <TMPL_VAR Name="itembarcode">
-itemtype: <TMPL_VAR Name="itemtype">
-COLLECT AT: <TMPL_VAR Name="branchname">
+ITEM RESERVED:<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)
+barcode: <!-- TMPL_VAR Name="itembarcode" -->
+itemtype: <!-- TMPL_VAR Name="itemtype" -->
+COLLECT AT: <!-- TMPL_VAR Name="branchname" -->
 
 BORROWER:
-<TMPL_VAR Name="bortitle"> <TMPL_VAR Name="borfirstname"> <TMPL_VAR Name="borsurname">
-card number: <TMPL_VAR Name="borcnum">
-Phone: <TMPL_VAR Name="borphone">
-<TMPL_VAR Name="borstraddress">
-<TMPL_VAR Name="borsub">
-<TMPL_VAR Name="bortown">
-<TMPL_VAR Name="boremail">
+<!-- TMPL_VAR Name="bortitle" --> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
+card number: <!-- TMPL_VAR Name="borcnum" -->
+Phone: <!-- TMPL_VAR Name="borphone" -->
+<!-- TMPL_VAR Name="borstraddress" -->
+<!-- TMPL_VAR Name="borsub" -->
+<!-- TMPL_VAR Name="bortown" -->
+<!-- TMPL_VAR Name="boremail" -->
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ">
-			<input type=submit value="Print">
+			<input type=submit value="åˆ—å°">
 			</form>
 			</td></tr>
 			</table>
-		</TMPL_IF>
+		<!-- /TMPL_IF -->
 		</td></tr></table>
 	</td>
 	</tr>
 	<tr>
 	<td colspan=2>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 	<td valign=top align=left>
 		<form method=post action=/cgi-bin/koha/circ/returns.pl>
 			<table border=1 cellpadding=5 cellspacing=0>
-			<tr><td colspan=2 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> align=center background=<TMPL_VAR Name="bckgdimg">>
-			<font color=black><b>¿é¤J®ÑÄy¤§±ø½X</b></font></td></tr>
-			<tr><td>±ø½X¡G</td><td><input name=barcode size=10></td></tr>
+			<tr><td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+			<font color=black><b>è¼¸å…¥åœ–æ›¸æ¢ç¢¼</b></font></td></tr>
+			<tr><td>åœ–æ›¸è³‡æ–™ä¹‹æ¢ç¢¼ï¼š</td><td><input name=barcode size=10></td></tr>
 			</table>
-			<TMPL_LOOP Name="inputloop">
-				<input type=hidden name=ri-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
-				<input type=hidden name=dd-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="duedate">>
-				<input type=hidden name=bn-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="bornum">>
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
+				<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
+				<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+			<!-- /TMPL_LOOP -->
 		</form>
 	</td>
 	<td valign=top align=left>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>³Æµù</font></th></tr>
+		<tr><th  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>è¨Šæ¯</font></th></tr>
 		<tr><td>
-			<TMPL_LOOP Name="errmsgloop">
+			<!-- TMPL_LOOP Name="errmsgloop" -->
 				<font color='red' size='+2'>
-				<TMPL_IF Name="badbarcode">
-					¨S¦³±ø½X¬° <TMPL_VAR Name="msg"> ªº¶µ¥Ø
-				</TMPL_IF>
-				<TMPL_IF Name="ispermanent">
-					Please return to  <TMPL_VAR Name="msg">
-				</TMPL_IF>
-				<TMPL_IF Name="notissued">
-					¨S¦³­É¥X¦¹¶µ¥Ø
-				</TMPL_IF>
-				<TMPL_IF Name="waslost">
-					Item was lost, now found.
-				</TMPL_IF>
-				<TMPL_IF Name="withdrawn">
-					¦¹¶µ¥Ø¤w±qÀ]ÂÃ¤¤²¾°£
-				</TMPL_IF>
+				<!-- TMPL_IF Name="badbarcode" -->
+					ç„¡æ¢ç¢¼ç‚º <!-- TMPL_VAR Name="msg" --> ä¹‹åœ–æ›¸è³‡æ–™
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="ispermanent" -->
+					è«‹é‚„çµ¦ <!-- TMPL_VAR Name="msg" -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="notissued" -->
+					æ²’æœ‰å€Ÿå‡º
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="waslost" -->
+					åœ–æ›¸è³‡æ–™éºå¤±äº†ï¼Œç¾å·²æ‰¾å›ã€‚
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="withdrawn" -->
+					å·²è¨»æ¶ˆ
+				<!-- /TMPL_IF -->
 				</font>
 				<BR>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 		</td></tr></table>
 	</td>
 	</tr>
-<TMPL_IF Name="returned">
+<!-- TMPL_IF Name="returned" -->
 	<tr>
 	<td valign=top align=left>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
-		<font color=black>ÂkÁÙ¤Fªº¶µ¥Ø</font></th></tr>
+		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<font color=black>å·²é‚„åœ–æ›¸è³‡æ–™ç´°ç¯€</font></th></tr>
 		<tr><td>
-		®Ñ¦W¡G<TMPL_VAR Name="itemtitle"><br>
+		é¡Œåï¼š<!-- TMPL_VAR Name="itemtitle" --><br>
 		</td></tr>
 		</table>
 	</td>
 	<td valign=top align=left>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><td colspan=2 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
-		<font color=black><b>ÁÙ®Ñ¤§ÅªªÌ</b></font></td></tr>
+		<tr><td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<font color=black><b>è®€è€…è³‡æ–™</b></font></td></tr>
 		<tr><td colspan=2>
-		<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="ribornum"> onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="riborcnum"></a>
-		<TMPL_VAR Name="riborsurname">, <TMPL_VAR Name="ribortitle"> <TMPL_VAR Name="riborfirstname"><br>
+		<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Member'); return false;"><!-- TMPL_VAR Name="riborcnum" --></a>
+		<!-- TMPL_VAR Name="riborsurname" --> <!-- TMPL_VAR Name="riborfirstname" --> <!-- TMPL_VAR Name="ribortitle" --><br>
 		</td></tr>
-		<TMPL_IF Name="flagset">
-			<tr><td bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg"> colspan=2>
-			<b>Flags</b></td></tr>
-			<TMPL_LOOP Name="flagloop">
-				<tr><td valign=top><TMPL_IF Name="redfont"><font color="red"></TMPL_IF><TMPL_VAR Name="flag"><TMPL_IF Name="redfont"></font></TMPL_IF></td>
-				<TMPL_IF Name="charges">
-					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="borrowernumber"> onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
-				</TMPL_IF>
-				<TMPL_IF Name="waiting">
-					<td bgcolor=<TMPL_VAR Name="color">>
-					<TMPL_LOOP Name="itemloop">
-						<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intraonClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR Name="barcode"></a><TMPL_VAR Name="title">(<TMPL_VAR Name="brname">)<br>
-					</TMPL_LOOP>
+		<!-- TMPL_IF Name="flagset" -->
+			<tr><td  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2>
+			<b>æ——æ¨™</b></td></tr>
+			<!-- TMPL_LOOP Name="flagloop" -->
+				<tr><td valign=top><!-- TMPL_IF Name="redfont" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR Name="flag" --><!-- TMPL_IF Name="redfont" --></font><!-- /TMPL_IF --></td>
+				<!-- TMPL_IF Name="charges" -->
+					<td bgcolor=<!-- TMPL_VAR Name="color" -->><b><!-- TMPL_VAR Name="msg" --></b><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Payment'); return false;">ä»˜æ¬¾</a></td></tr>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="waiting" -->
+					<td bgcolor=<!-- TMPL_VAR Name="color" -->>
+					<!-- TMPL_LOOP Name="itemloop" -->
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra','Item'); return false;"><!-- TMPL_VAR Name="barcode" --></a><!-- TMPL_VAR Name="title" -->(<!-- TMPL_VAR Name="brname" --><br>
+					<!-- /TMPL_LOOP -->
 					</td></tr>
-				</TMPL_IF>
-				<TMPL_IF Name="overdue">
-					<td bgcolor=<TMPL_VAR Name="color">>
-					<TMPL_LOOP Name="itemloop">
-					<font color=red><TMPL_VAR Name="duedate"></font>
-						<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type='intra' onClick="openWindow(this, 'Item', 480, 640)">
-							<TMPL_VAR Name="barcode">
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="overdue" -->
+					<td bgcolor=<!-- TMPL_VAR Name="color" -->>
+					<!-- TMPL_LOOP Name="itemloop" -->
+					<font color=red><!-- TMPL_VAR Name="duedate" --></font>
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra', 'Item'); return false;">
+							<!-- TMPL_VAR Name="barcode" -->
 						</a>
-						<TMPL_VAR Name="title">
+						<!-- TMPL_VAR Name="title" -->
 						<br>
-					</TMPL_LOOP>
+					<!-- /TMPL_LOOP -->
 					</td></tr>
-				</TMPL_IF>
-				<TMPL_IF Name="other">
-					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b></td></tr>
-				</TMPL_IF>
-			</TMPL_LOOP>
-		</TMPL_IF>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="other" -->
+					<td bgcolor=<!-- TMPL_VAR Name="color" -->><b><!-- TMPL_VAR Name="msg" --></b></td></tr>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF -->
 	</td>
 	<tr>
-</TMPL_IF>
-<TMPL_IF Name="returneditems">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF Name="returneditems" -->
     <tr><td colspan=2>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><th colspan=6 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
-		<font color=black>Returned Items</font></th></tr>
-		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
-		<TMPL_LOOP Name="returneditemloop">
-			<tr><td bgcolor=<TMPL_VAR Name="color">>
-				<TMPL_IF Name="duedate">
-					<TMPL_IF Name="early">
+		<tr><th colspan=6 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<font color=black>å·²é‚„åœ–æ›¸è³‡æ–™</font></th></tr>
+		<tr><th>åˆ°æœŸæ—¥</th><th>æ¢ç¢¼</th><th>é¡Œå</th><th>è‘—è€…</th><th>é¡åˆ¥</th><th>è®€è€…</th></tr>
+		<!-- TMPL_LOOP Name="returneditemloop" -->
+			<tr><td bgcolor=<!-- TMPL_VAR Name="color" -->>
+				<!-- TMPL_IF Name="duedate" -->
+					<!-- TMPL_IF Name="early" -->
 						<font color=red>
-					</TMPL_IF>
-						<TMPL_VAR Name="year">/<TMPL_VAR Name="month">/<TMPL_VAR Name="day">
-					<TMPL_IF Name="early">
+					<!-- /TMPL_IF -->
+						<!-- TMPL_VAR Name="year" -->å¹´<!-- TMPL_VAR Name="month" -->æœˆ<!-- TMPL_VAR Name="day" -->æ—¥
+					<!-- TMPL_IF Name="early" -->
 						</font>
-					</TMPL_IF>
-				<TMPL_ELSE>
-					Not on Issue.
-				</TMPL_IF>
+					<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+					æ²’æœ‰å€Ÿå‡ºã€‚
+				<!-- /TMPL_IF -->
 			</td>
-			<td bgcolor=<TMPL_VAR Name="color">> align=center>
-			<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\"><TMPL_VAR Name="barcode"></a></td>
-			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="itemtitle"></td>
-			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="itemauthor"></td>
-			<td bgcolor=<TMPL_VAR Name="color"> align=center><TMPL_VAR Name="itemtype"></td>
-			<td bgcolor=<TMPL_VAR Name="color">>
-			<TMPL_IF Name="duedate">
-				<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick=\"openWindow(this,'Member', 480, 640)\">
-					<TMPL_VAR Name="borcnum">
-				</a> <TMPL_VAR Name="borfirstname"> <TMPL_VAR Name="borsurname">
-			<TMPL_ELSE>
-				<TMPL_VAR Name="bornum">
-			</TMPL_IF>
+			<td align=center bgcolor=<!-- TMPL_VAR Name="color" -->>> <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Item'); return false;"><!-- TMPL_VAR Name="barcode" --></a></td>
+			<td bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="itemtitle" --></td>
+			<td bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="itemauthor" --></td>
+			<td align=center bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="itemtype" --></td>
+			<td bgcolor=<!-- TMPL_VAR Name="color" -->>
+			<!-- TMPL_IF Name="duedate" -->
+				<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->','Member'); return false;">
+					<!-- TMPL_VAR Name="borcnum" -->
+				</a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_VAR Name="bornum" -->
+			<!-- /TMPL_IF -->
 			</td></tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 		</table>
 	</td></tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 </table>
 
-<TMPL_INCLUDE Name="circulation-bottom.inc">
+<!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->

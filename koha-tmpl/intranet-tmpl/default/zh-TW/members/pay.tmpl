@@ -1,44 +1,48 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<FONT SIZE=6><em>�� <TMPL_VAR name="firstname"> <TMPL_VAR name="surname"> ú��ڶ�</em></FONT><P>
+<H1>替 <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> 繳交罰款</H1><P>
 <center>
 <p>
-	<form action="/cgi-bin/koha/pay.pl" method=post>
+	<form action=/cgi-bin/koha/pay.pl method=post>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>�@�ڡB����O��</B></TD>
-	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>�|��</B></TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>罰款及費用</B></TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>欠款額</B></TD>
 </TR>
-	<input type="hidden" name="bornum" value="<TMPL_VAR name="bornum">">
-<TMPL_LOOP name="loop_pay">
+	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
+<!-- TMPL_LOOP name="loop_pay" -->
 <tr VALIGN=TOP  >
-	<TD><input type=radio name="payfine<TMPL_VAR name="i">" value="no" checked>Unpaid
-	<input type=radio name="payfine<TMPL_VAR name="i">" value="yes">ú��
-	<input type=radio name="payfine<TMPL_VAR name="i">" value="wo">���P
-	<input type=hidden name="itemnumber<TMPL_VAR name="i">" value="<TMPL_VAR name="itemnumber">">
-	<input type=hidden name="accounttype<TMPL_VAR name="i">" value="<TMPL_VAR name="accounttype">">
-	<input type=hidden name="amount<TMPL_VAR name="i">" value="<TMPL_VAR name="amount'}">">
-	<input type=hidden name="out<TMPL_VAR name="i">" value="<TMPL_VAR name="amountoutstanding">">
-	<input type=hidden name="bornum<TMPL_VAR name="i">" value="<TMPL_VAR name="bornum">">
-	<input type=hidden name="accountno<TMPL_VAR name="i">" value="<TMPL_VAR name="accountno">">
+	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>未付款
+	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="yes">繳交
+	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">註銷
+	<input type=hidden name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
+	<input type=hidden name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->">
+	<input type=hidden name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->">
+	<input type=hidden name="out<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amountoutstanding" -->">
+	<input type=hidden name="bornum<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="bornum" -->">
+	<input type=hidden name="accountno<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accountno" -->">
 	</td>
-	<TD><TMPL_VAR name="description"> <TMPL_VAR name="title"></td>
-	<TD><TMPL_VAR name="accounttype"></td>
-	<td><TMPL_VAR name="amount"></td>
-	<TD><TMPL_VAR name="amountoutstanding"></td>
+	<TD><!-- TMPL_VAR name="description" --> <!-- TMPL_VAR name="title" --></td>
+	<TD><!-- TMPL_VAR name="accounttype" --></td>
+	<td><!-- TMPL_VAR name="amount" --></td>
+	<TD><!-- TMPL_VAR name="amountoutstanding" --></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <tr VALIGN=TOP  >
-	<TD colspan=4 align=right><b>�@���ڶ�</b></td>
-	<TD><b><TMPL_VAR name="total"></b></td>
+	<TD colspan=4 align=right><b>共欠</b></td>
+	<TD><b><!-- TMPL_VAR name="total" --></b></td>
 	</tr>
 	<tr VALIGN=TOP  >
 	<TD colspan=5 align=right>
-	<INPUT TYPE="image" name="submit"  VALUE="pay" height=42  WIDTH=187 BORDER=0 src="/images/pay-fines.gif"></td>
+	<input type="submit" name="submit" value="繳交" class="button"></td>
 </tr>
 </table>
 </form>
 <br clear=all>
 <p> &nbsp; </p>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+
+<br>
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">返回</a> 至讀者記錄
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
