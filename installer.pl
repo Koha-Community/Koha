@@ -94,3 +94,10 @@ showmessage(getmessage('AuthenticationWarning'), 'PressEnter');
 showmessage(getmessage('Completed', [ $::servername, $::intranetport, $::servername, $::opacport]), 'PressEnter');
 
 
+
+
+my $reply=showmessage('Would you like to complete a survey about your library?', 'yn', 'y');
+if ($reply=~/y/i) {
+    system("perl kohareporter");
+}
+

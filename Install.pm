@@ -115,6 +115,7 @@ They can be installed by running (as root) the following:
 
 %s
 |;
+
 $messages->{'AllPerlModulesInstalled'}->{en}=qq|
 
 ==============================
@@ -206,7 +207,7 @@ For more information visit http://www.koha.org
 Press <ENTER> to exit the installer: |;
 
 sub releasecandidatewarning {
-    my $message=getmessage('ReleaseCandidateWarning', [$::kohaversion, $::kohaversion]);
+    my $message=getmessage('ReleaseCandidateWarning', [$::newversion, $::newversion]);
     my $answer=showmessage($message, 'yn', 'n');
 
     if ($answer =~ /y/i) {
@@ -263,8 +264,39 @@ sub checkperlmodules {
     }
 
 
+    unless (-x "/usr/bin/perl") {
+	my $realperl=`which perl`;
+	chomp $realperl;
+	$realperl = showmessage(getmessage('NoUsrBinPerl'), 'none');
+	until (-x $realperl) {
+	    $realperl=showmessage(getmessage('AskLocationOfPerlExecutable', $realperl), 'free', $realperl, 1);
+	}
+	my $response=showmessage(getmessage('ConfirmPerlExecutableSymlink', $realperl), 'yn', 'y', 1);
+	unless ($response eq 'n') {
+	    system("ln -s $realperl /usr/bin/perl");
+	}
+    }
+
+
 }
 
+$messages->{'NoUsrBinPerl'}->{en}=qq|
+
+========================================
+= Perl is not located in /usr/bin/perl =
+========================================
+
+The Koha perl scripts expect to find the perl executable in the /usr/bin
+directory.  It is not there on your system.
+
+|;
+
+$messages->{'AskLocationOfPerlExecutable'}->{en}=qq|Location of Perl Executable: [%s]: |;
+$messages->{'ConfirmPerlExecutableSymlink'}->{en}=qq|
+The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
+
+May I create this symlink? ([Y]/N): 
+: |;
 
 sub getmessage {
     my $messagename=shift;

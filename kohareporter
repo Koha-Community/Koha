@@ -36,7 +36,10 @@ print qq|
 = Koha Installation Survey =
 ============================
 
-Feel free to skip any questions that you do not want to answer,
+Feel free to skip any questions that you do not want to answer.
+
+There will be a comments section at the end if you would like to provide
+additional information that does not fit within these questions.
 
 
 |;
@@ -62,6 +65,8 @@ $params.="&$param";
 
 print "\n\nAdditional Comments: [leave two blank lines to end]\n";
 
+
+
 my $additionalcomments='%0D%0D';
 my $lastlineblank=0;
 while (<STDIN>) {
@@ -79,6 +84,22 @@ while (<STDIN>) {
 $additionalcomments=urlencode($additionalcomments);
 $params.="&AdditionalComments=$additionalcomments";
 
+print "\n\n";
+print qq|
+====================
+= Survey Completed =
+====================
+
+Thank you for completing our survey.  We will now connect to a web server on
+$host to transfer your responses.
+
+Do you wish to continue submitting your survey results ([Y]/N)?  |;
+my $reply=<STDIN>;
+if ($reply=~/n/i) {
+    print "Aborting survey submission...\n";
+    sleep 3;
+    exit;
+}
 
 
 $remote = IO::Socket::INET->new( Proto     => "tcp",
