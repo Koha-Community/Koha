@@ -4,7 +4,7 @@ use diagnostics;
 use strict; # please develop with the strict pragma
 
 system('clear');
-print <<EOM;
+print qq|
 **********************************
 * Welcome to the Koha Installer  *
 **********************************
@@ -22,7 +22,7 @@ on some type of Unix or Unix-like operating system
 
 Are Apache, Perl, and a database from the list above installed 
 on this system? (Y/[N]):
-EOM
+|;
 
 my $answer = <STDIN>;
 chomp $answer;
@@ -30,13 +30,13 @@ chomp $answer;
 if ($answer eq "Y" || $answer eq "y") {
 	print "Great! continuing setup... \n";
     } else {
-    print <<EOM;
+    print qq|
 This installer currently does not support an completely automated 
 setup.
 
 Please be sure to read the documentation, or visit the Koha website 
 at http://www.koha.org for more information.
-EOM
+|;
     exit;
 };
 
@@ -106,10 +106,10 @@ print "Testing for mysql - still to be done\n";
     # can this be done from dbi?
 #    system("grant all privileges on Koha.* to koha@localhost identified by 'kohapassword'; ");
 #} else {
-#    print <<EOM;
+#    print qq|
 #You will need to use the MySQL database system for your application.
 #The installer currently does not support an automated setup with this database.
-#EOM
+#|;
 #  };
 
 print "\n";
@@ -122,44 +122,102 @@ print "\n";
 #
 #KOHA conf
 #
-print <<EOM;
-Koha uses a small configuration file that is usually placed in 
-the /etc/ directory (although technically you could place it
-anywhere you wish).
+print qq|
+Koha uses a small configuration file that is usually placed in your
+/etc/ files directory (although you can technically place
+it anywhere you wish).
 
-Checking to see if koha.conf already exists...
-EOM
+Please enter the full path to your configuration files
+directory (the default Koha conf file is "koha.conf").
+The path is usually something like /etc/ by default.  The
+configuration file, will be created here.
+|;
 
-# Check to see if the koha.conf file exists.
-# and what its contents may be.
-#
-#
-my($file) = "/etc/koha.conf";
-my($content);
-open(FILE, "<", "$file") or die "cannot open $file for reading : $!";
-$content = <FILE>;
+#Get the path to the koha.conf directory
+my $conf_path;
+my $dbname;
+my $hostname;
+my $user;
+my $pass;
+do {
+	print "Enter path:";
+	chomp($conf_path = <STDIN>);
+	print "$conf_path is not a directory.\n" if !-d $conf_path;
+} until -d $conf_path;
+
+
 print "\n";
-print "Contents of koha.conf ...\n";
-print $content;
-print <FILE>;
-close (FILE);
+print "\n";
+print qq|
+Please provide the name of the mysql database for koha. 
+This is normally "Koha".
+|;
+
+#Get the database name
+do {
+	print "Enter database name:";
+	chomp($dbname = <STDIN>);
+};
 
 
-# FIXME
-# is there a reason we don't just create the conf file here?
-# We could ask where the file is to be kept, update our 
-# scripts to look for it there, and just write out to the
-# new file (possibly allowing the installer.pl user to edit the
-# file first).
-#
-#print <<EOM;
-#You will need to add the following to the Koha configuration file\n";
-#database=Koha\n";
-#hostname=localhost\n";
-#user=Koha\n";
-#pass=$password\n";
-#includes=/usr/local/www/koha/htdocs/includes\n";
-#EOM
+print "\n";
+print "\n";
+print qq|
+Please provide the hostname for mysql.  Unless the database is located 
+on another machine this is likely to be "localhost".
+|;
+
+#Get the hostname for the database
+do {
+	print "Enter hostname:";
+	chomp($hostname = <STDIN>);
+};
+
+
+print "\n";
+print "\n";
+print qq|
+Please provide the name of the user, who has full administrative 
+rights to the $dbname database, when authenicating from $hostname.
+|;
+
+#Get the username for the database
+do {
+	print "Enter username:";
+	chomp($user = <STDIN>);
+};
+
+
+print "\n";
+print "\n";
+print qq|
+Please provide the password for the user $user.
+|;
+
+#Get the password for the database user
+do {
+	print "Enter password:";
+	chomp($pass = <STDIN>);
+};
+
+
+#Create the configuration file
+open(SITES,">$conf_path/koha.conf") or die "Couldn't create file
+at $conf_path.  Must have write capability.\n";
+#print SITES qq|\database=$dbname\n|;
+#print SITES qq|\hostname=$hostname\n|;
+#print SITES qq|\user=$user\n|;
+#print SITES qq|\password=$pass\n|;
+print SITES <<EOP
+database=$dbname
+hostname=$hostname
+user=$user
+password=$pass
+EOP
+;
+close(SITES);
+
+print "Successfully created configuration file.\n";
 
 
 # FIXME
