@@ -28,8 +28,8 @@ use C4::Context;
 use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
-use Net::LDAP;
-use Net::LDAP qw(:all);
+# use Net::LDAP;
+# use Net::LDAP qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -347,71 +347,7 @@ sub checkauth {
 
 sub checkpw {
 
-# This should be modified to allow a selection of authentication schemes
-# (e.g. LDAP), as well as local authentication through the borrowers
-# tables passwd field
-#
 	my ($dbh, $userid, $password) = @_;
-# LDAP
-#	my $sth=$dbh->prepare("select value from systempreferences where variable=?");
-#	$sth->execute("ldapserver");
-	my $ldapserver = C4::Context->preferences('ldapserver');
-	if ($ldapserver) {
-		my $ldapinfos = C4::Context->preferences('ldapinfos');
-		my %bindargs;
-		my $name  = "uid=$userid, $ldapinfos";
-		my $db = Net::LDAP->new( $ldapserver );
-		$bindargs{dn}=$name;
-		$bindargs{password}=$password;
-		my $res =$db->bind(%bindargs);
-		if($res->code) {
-		# auth refused
-			return 0;
-		} else {
-			#get the cardnumber
-			my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
-			$sth->execute($userid);
-			if ($sth->rows) {
-				my $cardnumber = $sth->fetchrow;
-				#we have the cardnumber
-				return 1,$cardnumber;
-			} else {
-				# retrieve the LDAP informations & create the user
-				my $borrower = $db->search(base => %bindargs,
-							filter => "(sn=$userid)",
-							);
-				 my $href = $borrower->as_struct;
-				# get an array of the DN names
-				my @arrayOfDNs  = keys %$href;        # use DN hashes
-				# process each DN using it as a key
-				my %borrower;
-				foreach ( @arrayOfDNs ) {
-					print $_, "\n";
-					my $valref = $$href{$_};
-					# get an array of the attribute names
-					# passed for this one DN.
-					my @arrayOfAttrs = sort keys %$valref; #use Attr hashes
-					my $attrName;        
-					foreach $attrName (@arrayOfAttrs) {
-						# skip any binary data: yuck!
-						next if ( $attrName =~ /;binary$/ );
-						# get the attribute value (pointer) using the
-						# attribute name as the hash
-						my $attrVal =  @$valref{$attrName};
-						print "\t $attrName: @$attrVal \n";
-						$borrower{$attrName}= @$attrVal;
-					}
-				}
-				# create the user in Koha DB
-				newmember(%borrower);
-				
-			}
-			if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-				# Koha superuser account
-				return 2;
-			}
-		}
-	}
 # INTERNAL AUTH
 	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
 	$sth->execute($userid);
