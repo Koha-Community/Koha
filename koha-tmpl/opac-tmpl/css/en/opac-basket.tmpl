@@ -4,6 +4,7 @@
 <!-- TMPL_ELSE -->
 <body style="padding-bottom:20px;">
 <!-- TMPL_INCLUDE NAME="opac-basket-menu.inc" -->
+<form name='myform'><input type='hidden' name='records'></form>
 <!-- /TMPL_IF -->
 <div id="mainbloc" style="margin-top:10px;margin-bottom:20px;padding-top:10px;padding-bottom:10px;">
 <!-- TMPL_IF NAME="verbose" -->
@@ -160,5 +161,11 @@
 	<!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 </div>
+<!-- TMPL_IF NAME="print_basket" -->
+<body onload='print()' style="padding-bottom:20px;">
+<!-- TMPL_ELSE -->
+<body style="padding-bottom:20px;">
+<!-- TMPL_INCLUDE NAME="opac-basket-menu.inc" -->
+<!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->
