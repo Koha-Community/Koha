@@ -28,7 +28,7 @@ use HTML::Template;
 
 my $input = new CGI;
 my $tablename=$input->param('tablename');
-$tablename="biblio." unless ($tablename);
+$tablename="biblio" unless ($tablename);
 my $kohafield = $input->param('kohafield');
 my $op=$input->param('op');
 my $script_name = 'koha2marclinks.pl';
