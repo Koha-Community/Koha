@@ -87,7 +87,7 @@ a.reports {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #777777;
 	padding:4px;
 	font-weight: bold;
 	}
@@ -101,7 +101,7 @@ a.circulation {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#777777;
+	color: #777777;
 	padding:4px;
 	font-weight: bold;
 	}
@@ -116,7 +116,7 @@ a.parameters {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#FFFFFFF;
+	color: #FFFFFF;
 	padding:4px;
 	font-weight: bold;
 	}
