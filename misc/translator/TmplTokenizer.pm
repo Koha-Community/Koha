@@ -265,97 +265,11 @@ sub next_token (*) {
 
 ###############################################################################
 
-sub debug_dump (*) { # for testing only
-    my($h) = @_;
-    print "re_tag_compat is /$re_tag_compat/\n";
-    for (;;) {
-	my $s = next_token $h;
-    last unless defined $s;
-	printf "%s\n", ('-' x 79);
-	my($kind, $t, $attr) = @$s; # FIXME
-	printf "%s:\n", $kind;
-	printf "%4dH%s\n", length($t),
-		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $t));
-	if ($kind eq KIND_TAG && %$attr) {
-	    printf "Attributes:\n";
-	    for my $a (keys %$attr) {
-		my($key, $val, $val_orig, $order) = @{$attr->{$a}};
-		printf "%s = %dH%s -- %s\n", $a, length $val,
-		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $val)),
-		$val_orig;
-	    }
-	}
-    }
-}
-
-###############################################################################
-
 sub trim ($) {
     my($s) = @_;
     $s =~ s/^(?:\s|\&nbsp$re_end_entity)+//os;
     $s =~ s/(?:\s|\&nbsp$re_end_entity)+$//os;
     return $s;
-}
-
-###############################################################################
-
-sub text_extract (*) {
-    my($h) = @_;
-    my %text = ();
-    for (;;) {
-	my $s = next_token $h;
-    last unless defined $s;
-	my($kind, $t, $attr) = @$s; # FIXME
-	if ($kind eq KIND_TEXT) {
-	    $t = trim $t;
-	    $text{$t} = 1 if $t =~ /\S/s;
-	} elsif ($kind eq KIND_TAG && %$attr) {
-	    # value [tag=input], meta
-	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
-	    for my $a ('alt', 'content', 'title', 'value') {
-		if ($attr->{$a}) {
-		    next if $a eq 'content' && $tag ne 'meta';
-		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] eq 'hidden')); # FIXME
-		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
-		    $val = trim $val;
-		    $text{$val} = 1 if $val =~ /\S/s;
-		}
-	    }
-	}
-    }
-    # Emit all extracted strings.
-    # Don't emit pure whitespace, pure numbers, or TMPL_VAR's.
-    for my $t (keys %text) {
-	printf "%s\n", $t
-	    unless $t =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var)*$/os || $t =~ /^\d+$/;
-    }
-}
-
-###############################################################################
-
-sub usage ($) {
-    my($exitcode) = @_;
-    my $h = $exitcode? *STDERR: *STDOUT;
-    print $h <<EOF;
-Usage: $0 [OPTIONS]
-Extract strings from HTML file.
-
-      --debug-dump-only     Do not extract strings; but display scanned tokens
-  -f, --file=FILE           Extract from the specified FILE
-      --pedantic-warnings   Issue warnings even for detected problems which
-			    are likely to be harmless
-      --help                Display this help and exit
-EOF
-    exit($exitcode);
-}
-
-###############################################################################
-
-sub usage_error (;$) {
-    print STDERR "$_[0]\n" if @_;
-    print STDERR "Try `$0 --help' for more information.\n";
-    exit(-1);
 }
 
 ###############################################################################

@@ -50,15 +50,6 @@ sub debug_dump (*) { # for testing only
 
 ###############################################################################
 
-sub trim ($) {
-    my($s) = @_;
-    $s =~ s/^(?:\s|\&nbsp$TmplTokenizer::re_end_entity)+//os;
-    $s =~ s/(?:\s|\&nbsp$TmplTokenizer::re_end_entity)+$//os;
-    return $s;
-}
-
-###############################################################################
-
 sub text_extract (*) {
     my($h) = @_;
     my %text = ();
@@ -67,7 +58,7 @@ sub text_extract (*) {
     last unless defined $s;
 	my($kind, $t, $attr) = @$s; # FIXME
 	if ($kind eq TmplTokenizer::KIND_TEXT) {
-	    $t = trim $t;
+	    $t = TmplTokenizer::trim $t;
 	    $text{$t} = 1 if $t =~ /\S/s;
 	} elsif ($kind eq TmplTokenizer::KIND_TAG && %$attr) {
 	    # value [tag=input], meta
@@ -78,7 +69,7 @@ sub text_extract (*) {
 		    next if $a eq 'value' && ($tag ne 'input'
 			|| (ref $attr->{'type'} && $attr->{'type'}->[1] eq 'hidden')); # FIXME
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
-		    $val = trim $val;
+		    $val = TmplTokenizer::trim $val;
 		    $text{$val} = 1 if $val =~ /\S/s;
 		}
 	    }
