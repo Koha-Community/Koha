@@ -141,7 +141,7 @@ sub catalogsearch {
 	}
 
 	# Finds the basic results without the NOT requests
-	my ($sql_tables, $sql_where1, $sql_where2) = create_request(\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
+	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
 	my $sth;
 	if ($sql_where2) {
@@ -159,7 +159,7 @@ sub catalogsearch {
 
 	if( ($sth->rows) && $any_not )	# some results to tune up and some NOT statements
 	{
-		($not_sql_tables, $not_sql_where1, $not_sql_where2) = create_request(\@not_tags, \@not_and_or, \@not_operator, \@not_value);
+		($not_sql_tables, $not_sql_where1, $not_sql_where2) = create_request($dbh,\@not_tags, \@not_and_or, \@not_operator, \@not_value);
 
 		my @tmpresult;
 
@@ -221,7 +221,7 @@ sub catalogsearch {
 # Creates the SQL Request
 
 sub create_request {
-	my ($tags, $and_or, $operator, $value) = @_;
+	my ($dbh,$tags, $and_or, $operator, $value) = @_;
 
 	my $sql_tables; # will contain marc_subfield_table as m1,...
 	my $sql_where1; # will contain the "true" where
@@ -235,21 +235,21 @@ sub create_request {
 			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue like '@$value[$i]%'";
+					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
 					$sql_tables .= "marc_word as m$nb_table,";
-					$sql_where1 .= "(m1.word  like '@$value[$i]%'";
+					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tag+m1.subfieldid in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} else {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] '@$value[$i]' ";
+					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
@@ -259,7 +259,7 @@ sub create_request {
 				if (@$operator[$i] eq "start") {
 					$nb_table++;
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like '@$value[$i]%'";
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 					 	$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
 					}
@@ -269,14 +269,14 @@ sub create_request {
 					if (@$and_or[$i] eq 'and') {
 						$nb_table++;
 						$sql_tables .= "marc_word as m$nb_table,";
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like '@$value[$i]%'";
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
 						if (@$tags[$i]) {
 							$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldid in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					} else {
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like '@$value[$i]%'";
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
 						if (@$tags[$i]) {
 							$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldid in (@$tags[$i])";
 						}
@@ -286,7 +286,7 @@ sub create_request {
 				} else {
 					$nb_table++;
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] '@$value[$i]'";
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] ".$dbh->quote(@$value[$i]);
 					if (@$tags[$i]) {
 					 	$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
 					}
