@@ -38,7 +38,7 @@ $VERSION = 0.01;
 
 ###############################################################################
 
-use vars qw( $appName $input $input_abbr $pedantic_p $pedantic_tag );
+use vars qw( $appName $input $input_abbr $pedantic_p $pedantic_tag $quiet);
 use vars qw( $warned $erred );
 
 sub set_application_name ($) {
@@ -98,10 +98,10 @@ sub warn_pedantic ($$$) {
     my($msg, $lc, $flag) = @_;
     my $prefix = construct_warn_prefix("Warning$pedantic_tag", $lc);
     $msg .= "\n" unless $msg =~ /\n$/s;
-    warn "$prefix$msg" if $pedantic_p || !$$flag;
+    warn "$prefix$msg" if ($pedantic_p || !$$flag) && $quiet;
     if (!$pedantic_p) {
 	$prefix = construct_warn_prefix("Warning$pedantic_tag", undef);
-	warn $prefix."Further similar negligible warnings will not be reported, use --pedantic for details\n" unless $$flag;
+	warn $prefix."Further similar negligible warnings will not be reported, use --pedantic for details\n" unless ($$flag || !$quiet);
 	$$flag = 1;
     }
     $warned += 1;
