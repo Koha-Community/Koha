@@ -94,8 +94,12 @@ while (<CVSLOG>) {
 my $releaseversion='';
 my $currentversion='';
 
+
 if ($released) {
-    $releaseversion=($highestversion+1)."RC1";
+    my @components=split(/\./, $highestversion);
+    $components[$#components]++;
+    $nexthighestversion=join '.', @components;
+    $releaseversion=$nexthighestversion."RC1";
     $currentversion=$highestversion;
 } else {
     $releaseversion="$highestversion\RC".($highestrc+1);
@@ -103,7 +107,7 @@ if ($released) {
 }
 
 print "Current release tag is $currentversion.\n";
-print "\nWould you like to bump that up to $releaseversion?  [Y]/N: ";
+print "\nWould you like to bump that up to $releaseversion (or manually enter version)?  [Y]/N: ";
 chomp($input = <STDIN>);
 if ($input =~ /^n/i) {
     print "\nWould you like to rebuild the $currentversion tarball?  Y/[N]: ";
@@ -126,6 +130,14 @@ if ($input =~ /^n/i) {
 	    $releaseversion=$input;
 	}
     }
+}
+
+
+print "\nWould you like to tag the CVS repository?\n(answer yes if releasing tarball)  [Y]/N: ";
+chomp ($input=<STDIN>);
+my $cvstag=1;
+if ($input=~/^n/i) {
+    $cvstag=0;
 }
 
 
@@ -154,7 +166,7 @@ system("cvs update");
 print qq|
 Tagging koha with tag R_$tagname
 |;
-system("cvs tag -F R_$tagname");
+($cvstag) && (system("cvs tag -F R_$tagname"));
 print qq|
 Updating the 'koha-html' CVS files.  You may need to enter your SourceForge password.
 Using $kohahtmldir.
@@ -164,7 +176,7 @@ system("cvs update");
 print qq|
 Tagging koha-html with tag R_$tagname
 |;
-system("cvs tag -F R_$tagname");
+($cvstag) && (system("cvs tag -F R_$tagname"));
 
 
 
@@ -203,7 +215,6 @@ system("mv $rootdir/intranet-cgi/LICENSE $rootdir");
 system("mv $rootdir/intranet-cgi/News $rootdir");
 system("mv $rootdir/intranet-cgi/README $rootdir");
 system("mv $rootdir/intranet-cgi/TODO $rootdir");
-system("mv $rootdir/intranet-cgi/databaseinstall.sh $rootdir");
 system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
 system("mv $rootdir/intranet-cgi/koha.upgrade $rootdir"); 
 chmod 0770, "$rootdir/installer.pl";
