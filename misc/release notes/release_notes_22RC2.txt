@@ -1,0 +1,130 @@
+RELEASE NOTES
+=============
+
+Koha is the 1st Open-Source Integrated Library System.
+Released at first in New zealand, in 2000 januaray, it is maintained by a team of volunteers from around the globe, the Koha system is a full catalogue, opac, circulation and acquisitions system.
+
+Koha 2.2 is more than 247 000 lines of code, developped by more than 30 differents developpers (excluding translators !).
+
+With the 2.2 version, Koha is now a mature product, with a lot of nice features. It's used in more than 50 libraries, from all kinds (public, schools, search, religious...), of all size (from 1 to 8 branches, from 1000 to 300 000 items).
+
+========
+WARNING
+========
+* This version is in the stable tree of Koha, but still evaluated as "Release Candidate". A few bugs are still known or have to be found, maybe by you. But it's stable enough to be used in production.
+* This version is ONLY available in ENGLISH and FRENCH. Many languages to come.
+* Biblio frameworks :
+  - In UNIMARC - french. Frameworks are defined and can be set up during installation for : old documents, cartographies, electronic documents, microfilms, monographies, serials, films and images, "tire à part"
+  - In English, only a default framework is provided. If you define specific frameworks, mail paul _at_ koha-fr.org or a koha mailing list to know how to add them to official release.
+* the librarian interface is tested only with mozilla/firefox. Should work (partially) with IE. OPAC should work fine with any navigator.
+* Any 2.1.x install must be uninstalled before installing 2.2.0 No update is provided for 2.1.0.
+
+=======
+DIFFS
+=======
+
+Diff 2.2RC1 => 2.2RC2
+*********************
+* bugfix for import in reservoir : title and isbn where not extracted.
+* bugfix in OPAC : it was possible to reserve books that where "notforloan"
+* bugfix in circulation : no warning when a reserve was made on a book that you try to issue to someone else. 
+* bugfix & improvement for catalogue management behaviour when MARC=OFF
+* bugfix in bookshelves (in CVS, probably not in official tar.gz)
+* bugfix in online help (in CVS, probably not in official tar.gz)
+
+
+=============
+INSTALLATION
+=============
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* READ and FOLLOW the instructions
+
+READING what is on screen during installation is VERY important. Some decisions you make during install stage are very hard to reproduce after.
+
+
+UPGRADE from previous 2.0.0preX or RCx version
+*******
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+UPGRADE from previous 1.2.x version :
+********
+UPGRADE TO A 2.0.0 version before upgrading
+
+UPGRADE from a 2.1.x version is NOT AVAILABLE. Don't install 2.2 on a 2.1.x test database. A lot of DB changes have been done since 2.1.x & cannot be handled by the DB updater.
+
+=============
+NEW FEATURES
+=============
+Koha 2.2 has, of course, all the previous features from Koha (acquisition, cataloguing, circulation, members modules, OPAC, complete MARC support...) plus the following new ones :
+
+General :
+*********
+* (almost) complete rewrite of librarian GUI : now Koha uses CSS, and is easier to use. However, users of Koha 2.0.0 won't be lost, as the general organisation of the product has not changed.
+* Online Help : an online help is available everywhere in the librarian interface. It's complete in the parameters section of Koha and for new features. It will be completed for the rest of the product.
+* Better LDAP suport : Koha 2.2 can be "connected" to a LDAP server and get all borrower informations from there (including borrower category where applicable). However, to avoid problems for libraries without LDAP server, the LDAP features have been stored in modules/C4/Auth_with_ldap.pm file. The standard Auth.pm don't use it. If you want LDAP, just perldoc Auth_with_ldap.pm and manually tune your Auth package !
+
+Acquisition :
+*************
+* suggestion : borrowers can suggest items to buy in OPAC. Then, the librarian can manage (accept or refuse) and order them.
+* possibility to close a basket, he can't be modified then
+* order a basket by publisher or by bookfund/publisher
+* search order history
+
+Cataloguing :
+*************
+* Cataloguing frameworks : you can define as many frameworks as you want. A framework describes how a material is catalogued (which fields, subfields, which constraints on them...)
+* MARC authorities : Koha now supports authorities in MARC. You can define the MARC structure for authorities like for biblios.
+* New contraints can be set for subfields :
+  - subfield is hidden : appears in MARC editor, but not in OPAC.
+  - subfield is an URL : the field can be cliqued
+  - related fields : a search made on a subfield also uses other subfields automatically. Using this feature, a search on "title" can search title, but also subtitle, uniform title,...
+* Item location can now be done on 3 levels : the branch, the location (room), the callnumber.
+* The callnumber can now be calculated from the LC, the dewey, or be freely (and manually) entered.
+* Duplicate finder : this powerful feature help your cataloguers avoiding duplicate biblios.
+* ISBD view : in librarian interface as well as in OPAC biblios can be shown in standard (default) presentation, in MARC (human readable) or ISBD. The ISBD view can be tuned by the librarian team.
+
+Serial cataloguing :
+********************
+Koha 2.2 manage serial subscriptions and issuing of those subscriptions.
+
+Catalogue search :
+******************
+* Search in OPAC and librarian interface has been improved. They now are exactly the same.
+* Spelling suggestion : before sending a request, the user can ask for spelling suggestion. This shows other forms of words entered that would give results.
+* The user can select the order of the results
+
+Circulation :
+*************
+* New issuing rules : Issuing can be set for branch / borrower type / item category, by number of days and number of items available.
+* "joker" issuing rules : the library can set issuing rules for "any branch" or "any borrower type", or "any item category".
+Both issuing rules are cumulative : a library can set issuing rules to 10 books, 5 CD, but 12 total (books or CD).
+
+OPAC :
+******
+In Koha 2.2, koha has :
+* baskets. A basket can be printed or sent by mail to the borrower
+* virtual shelves : a virtual shelf can be created and filled by any logged borrower. A given virtual shelf can be private or public. Or even free-for-all.
+* language chooser : the borrower can change the language on the fly. The default language being still choosen by the library
+
+Barcode printing :
+******************
+A new module has been added to the parameters section : barcode printing. It requires the PDF::Api2 Perl package and can print barcode on 
+
+============
+KNOWN BUGS
+============
+* bug with biblio management for libraries with MARC=OFF systempreference
+* modifying an order seems to duplicate the order line
+* french OPAC is OK, french librarian interface seems to be a little buggy.
+
+============
+Koha Future
+============
+The future of Koha is being discussed on mailing lists and on koha wiki : http://www.saas.nsw.edu.au/koha_wiki/index.php?page=KohaRoadmap2.2.x
