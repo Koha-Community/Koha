@@ -20,7 +20,8 @@ package C4::Circmain; #assumes C4/Circulation
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# FIXME - This module doesn't compile!
+# FIXME - This module doesn't compile! Then again, it's never used, so
+# presumably this file is obsolete, right?
 
 use strict;
 require Exporter;
