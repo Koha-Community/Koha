@@ -24,7 +24,7 @@ while (1) {
 	    if ($forkcounter<12) {
 		my $now=time();
 		$stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
-		$stk->execute;
+		($stk->execute) || (next);
 		my %serverdone;
 		unless ($stk->rows) {
 		    my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=$id");
@@ -81,89 +81,102 @@ while (1) {
 			    $stj->execute;
 			    ($resultsid) = $stj->fetchrow;
 			} else {
-			    my $stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
+			    my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
 			    $stj->execute;
-			    $resultsid=$dbi->{'mysql_insertid'};
+			    ($resultsid) = $stj->fetchrow;
+			    unless ($resultsid) {
+				my $stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
+				$stj->execute;
+				$resultsid=$dbi->{'mysql_insertid'};
+			    }
 			}
 			my $stj=$dbh->prepare("update z3950results set active=1 where id=$resultsid");
 			$stj->execute;
 			my $conn;
 			my $noconnection=0;
+			my $error=0;
 			if ($user) {
 			    eval { $conn= new Net::Z3950::Connection($servername, $port, databaseName => $database, user => $user, password => $password); };
 			    if ($@) {
 				$noconnection=1;
+			    } else {
+				$error=pe();
 			    }
-			    pe();
 			} else {
 			    eval { $conn= new Net::Z3950::Connection($servername, $port, databaseName => $database); };
 			    if ($@) {
 				$noconnection=1;
+			    } else {
+				$error=pe();
 			    }
-			    pe();
 			}
-			if ($noconnection) {
+			if ($noconnection || $error) {
 			} else {
+			    print "Q: $query\n";
 			    my $rs=$conn->search($query);
 			    pe();
-			    $rs->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);
-			    pe();
-			    my $numresults=$rs->size();
-			    pe();
-			    my $i;
-			    my $result='';
-			    my $scantimerstart=time();
-			    for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
-				my $rec=$rs->record($i);
-				my $marcdata=$rec->rawdata();
-				$result.=$marcdata;
-			    }
-			    my $scantimerend=time();
-			    my $numrecords;
-			    ($numresults<80) ? ($numrecords=$numresults) : ($numrecords=80);
-			    my $elapsed=$scantimerend-$scantimerstart;
-			    if ($elapsed) {
-				my $speed=int($numresults/$elapsed*100)/100;
-				print "  SPEED: $speed  $server done $numrecords\n";
-			    }
-
-			    my $q_result=$dbi->quote($result);
-			    ($q_result) || ($q_result='""');
-			    $now=time();
-			    my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results=$q_result,enddate=$now where id=$resultsid";
-			    my $stj=$dbi->prepare($task);
-			    $stj->execute;
-			    my $counter=0;
-			    while ($counter<60 && $numrecords<$numresults) {
-				$counter++;
-				my $stj=$dbi->prepare("select highestseen from z3950results where id=$resultsid");
-				$stj->execute;
-				my ($highestseen) = $stj->fetchrow;
-				if ($highestseen>($numrecords-30)) {
-				    $counter=0;
-				    print "   $server rescanning\n";
-				    my $scantimerstart=time();
-				    for ($i=$numrecords+1; $i<=(($numresults<($numrecords+40)) ? ($numresults) : ($numrecords+40)); $i++) {
-					my $rec=$rs->record($i);
-					my $marcdata=$rec->rawdata();
-					$result.=$marcdata;
-				    }
-				    my $scantimerend=time();
-				    ($numresults<$numrecords+40) ? ($numrecords=$numresults) : ($numrecords=$numrecords+40);
-				    my $elapsed=$scantimerend-$scantimerstart;
-				    if ($elapsed) {
-					my $speed=int($numresults/$elapsed*100)/100;
-					print "  SPEED: $speed  $server done $numrecords\n";
-				    }
-
-				    my $q_result=$dbi->quote($result);
-				    ($q_result) || ($q_result='""');
-				    $now=time();
-				    my $task="update z3950results set numdownloaded=$numrecords,results=$q_result where id=$resultsid";
-				    my $stj=$dbi->prepare($task);
-				    $stj->execute;
+			    eval { $rs->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
+			    if ($@) {
+				print "ERROR: $@\n";
+			    } else {
+				pe();
+				my $numresults=$rs->size();
+				pe();
+				my $i;
+				my $result='';
+				my $scantimerstart=time();
+				for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
+				    my $rec=$rs->record($i);
+				    my $marcdata=$rec->rawdata();
+				    $result.=$marcdata;
 				}
-				sleep 5;
+				my $scantimerend=time();
+				my $numrecords;
+				($numresults<80) ? ($numrecords=$numresults) : ($numrecords=80);
+				my $elapsed=$scantimerend-$scantimerstart;
+				if ($elapsed) {
+				    my $speed=int($numresults/$elapsed*100)/100;
+				    print "  SPEED: $speed  $server done $numrecords\n";
+				}
+
+				my $q_result=$dbi->quote($result);
+				($q_result) || ($q_result='""');
+				$now=time();
+				my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results=$q_result,enddate=$now where id=$resultsid";
+				my $stj=$dbi->prepare($task);
+				$stj->execute;
+				my $counter=0;
+				while ($counter<60 && $numrecords<$numresults) {
+				    $counter++;
+				    my $stj=$dbi->prepare("select highestseen from z3950results where id=$resultsid");
+				    $stj->execute;
+				    my ($highestseen) = $stj->fetchrow;
+				    if ($highestseen>($numrecords-30)) {
+					$counter=0;
+					print "   $server rescanning\n";
+					my $scantimerstart=time();
+					for ($i=$numrecords+1; $i<=(($numresults<($numrecords+40)) ? ($numresults) : ($numrecords+40)); $i++) {
+					    my $rec=$rs->record($i);
+					    my $marcdata=$rec->rawdata();
+					    $result.=$marcdata;
+					}
+					my $scantimerend=time();
+					($numresults<$numrecords+40) ? ($numrecords=$numresults) : ($numrecords=$numrecords+40);
+					my $elapsed=$scantimerend-$scantimerstart;
+					if ($elapsed) {
+					    my $speed=int($numresults/$elapsed*100)/100;
+					    print "  SPEED: $speed  $server done $numrecords\n";
+					}
+
+					my $q_result=$dbi->quote($result);
+					($q_result) || ($q_result='""');
+					$now=time();
+					my $task="update z3950results set numdownloaded=$numrecords,results=$q_result where id=$resultsid";
+					my $stj=$dbi->prepare($task);
+					$stj->execute;
+				    }
+				    sleep 5;
+				}
 			    }
 			}
 			my $stj=$dbi->prepare("update z3950results set active=0 where id=$resultsid");
@@ -173,7 +186,7 @@ while (1) {
 			print "    $server done.\n";
 			exit;
 			sub pe {
-			    (return) unless ($code);
+			    return 0;
 			    my $code=$conn->errcode();
 			    my $msg=$conn->errmsg();
 			    my $ai=$conn->addinfo();
@@ -183,6 +196,10 @@ while (1) {
 			ADDTL: $ai
 
 EOF
+			#    if ($msg =~/not yet available/) {
+		#		return 1;
+	#		    }
+			    return 0;
 			}
 		    }
 		} unless ($stillprocessing) {
@@ -203,7 +220,7 @@ EOF
 	}
 	$lastrun=time();
     }
-    sleep 1;
+    sleep 10;
 }
 
 sub getrecord {

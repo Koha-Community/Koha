@@ -828,13 +828,13 @@ EOF
 			}
 			($author) && ($author="by $author");
 			if ($isbn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&isbn=$isbn>$title$subtitle $author</a> $donetext<br>\n";
+			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&isbn=$isbn>$title $subtitle $author</a> $donetext<br>\n";
 			} elsif ($lccn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&lccn=$lccn>$title$subtitle $author</a> $donetext<br>\n";
+			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&lccn=$lccn>$title $subtitle $author</a> $donetext<br>\n";
 			} elsif ($issn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&issn=$issn>$title$subtitle $author</a><br> $donetext\n";
+			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&issn=$issn>$title $subtitle $author</a><br> $donetext\n";
 			} elsif ($controlnumber) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&controlnumber=$controlnumber>$title $author</a><br> $donetext\n";
+			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&controlnumber=$controlnumber>$title $subtitle $author</a><br> $donetext\n";
 			} else {
 			    print "Error: Contact steve regarding $title by $author<br>\n";
 			}
