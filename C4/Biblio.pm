@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.34  2003/01/28 14:50:04  tipaul
+# fixing MARCmodbiblio API and reindenting code
+#
 # Revision 1.33  2003/01/23 12:22:37  tipaul
 # adding char_decode to decode MARC21 or UNIMARC extended chars
 #
@@ -324,7 +327,7 @@ adds a subfield in a biblio (in the MARC tables only).
 
 Returns a MARC::Record for the biblio $bibid.
 
-=item &MARCmodbiblio($dbh,$bibid,$delete,$record);
+=item &MARCmodbiblio($dbh,$bibid,$record,$delete);
 
 MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
 if $delete == 1, every field/subfield not found is deleted in the biblio
@@ -634,7 +637,8 @@ sub MARCgetitem {
 }
 
 sub MARCmodbiblio {
-    my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
+    my ($dbh,$bibid,$record,$delete)=@_;
+#    my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
 #    warn "OLD : ".$oldrecord->as_formatted();
 #    warn "----------------------------------\nNEW : ".$record->as_formatted();
@@ -1091,7 +1095,7 @@ sub NEWnewbiblio {
 
 sub NEWmodbiblio {
 my ($dbh,$record,$bibid) =@_;
-&MARCmodbiblio($dbh,$record,$bibid);
+&MARCmodbiblio($dbh,$bibid,$record,0);
 my $oldbiblio = MARCmarc2koha($dbh,$record);
 my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
 OLDmodbibitem($dbh,$oldbiblio);
@@ -1231,35 +1235,28 @@ abstract      = $biblio->{'abstract'}";
 }
 
 sub OLDmodbiblio {
-    my ($dbh,$biblio) = @_;
-#  my $dbh   = C4Connect;
-    my $query;
-    my $sth;
+	my ($dbh,$biblio) = @_;
+	#  my $dbh   = C4Connect;
+	my $query;
+	my $sth;
 
-    $biblio->{'title'}         = $dbh->quote($biblio->{'title'});
-    $biblio->{'author'}        = $dbh->quote($biblio->{'author'});
-    $biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
-    $biblio->{'copyrightdate'} = $dbh->quote($biblio->{'copyrightdate'});
-    $biblio->{'seriestitle'}   = $dbh->quote($biblio->{'serirestitle'});
-    $biblio->{'serial'}        = $dbh->quote($biblio->{'serial'});
-    $biblio->{'unititle'}      = $dbh->quote($biblio->{'unititle'});
-    $biblio->{'notes'}         = $dbh->quote($biblio->{'notes'});
+	$biblio->{'title'}         = $dbh->quote($biblio->{'title'});
+	$biblio->{'author'}        = $dbh->quote($biblio->{'author'});
+	$biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
+	$biblio->{'copyrightdate'} = $dbh->quote($biblio->{'copyrightdate'});
+	$biblio->{'seriestitle'}   = $dbh->quote($biblio->{'serirestitle'});
+	$biblio->{'serial'}        = $dbh->quote($biblio->{'serial'});
+	$biblio->{'unititle'}      = $dbh->quote($biblio->{'unititle'});
+	$biblio->{'notes'}         = $dbh->quote($biblio->{'notes'});
 
-    $query = "Update biblio set
-title         = $biblio->{'title'},
-author        = $biblio->{'author'},
-abstract      = $biblio->{'abstract'},
-copyrightdate = $biblio->{'copyrightdate'},
-seriestitle   = $biblio->{'seriestitle'},
-serial        = $biblio->{'serial'},
-unititle      = $biblio->{'unititle'},
-notes         = $biblio->{'notes'}
-where biblionumber = $biblio->{'biblionumber'}";
-    $sth   = $dbh->prepare($query);
-    $sth->execute;
+	$query = "Update biblio set title         = ?, author        = ?, abstract      = ?, copyrightdate = ?,
+					seriestitle   = ?, serial        = ?, unititle      = ?, notes         = ? where biblionumber = ?";
+	$sth   = $dbh->prepare($query);
+	$sth->execute($biblio->{'title'},$biblio->{'author'},$biblio->{'abstract'},$biblio->{'copyrightdate'},
+						$biblio->{'seriestitle'},$biblio->{'serial'},$biblio->{'unititle'},$biblio->{'notes'},$biblio->{'biblionumber'});
 
-    $sth->finish;
-    return($biblio->{'biblionumber'});
+	$sth->finish;
+	return($biblio->{'biblionumber'});
 } # sub modbiblio
 
 sub OLDmodsubtitle {
@@ -1816,7 +1813,7 @@ sub modbibitem {
     my $dbh   = C4::Context->dbh;
     &OLDmodbibitem($dbh,$biblioitem);
     my $MARCbibitem = MARCkoha2marcBiblio($dbh,$biblioitem);
-    &MARCmodbiblio($dbh,$biblioitem->{biblionumber},0,$MARCbibitem);
+    &MARCmodbiblio($dbh,$biblioitem->{biblionumber},$MARCbibitem,0);
 } # sub modbibitem
 
 sub modnote {
