@@ -1,9 +1,5 @@
 #!/usr/bin/perl
 #script to provide intranet (librarian) advanced search facility
-#modified 9/11/1999 by chris@katipo.co.nz
-#adding an extra comment to play with CVS (Si, 19/11/99)
-#modified 29/12/99 by chris@katipo.co.nz to be usavle by opac as well
-#modified by chris 10/11/00 to fix dewey search
 
 use strict;
 use C4::Search;
@@ -31,7 +27,7 @@ if ($type eq 'opac'){
   $secondary='#ffffcc';                                                                                        
 }       
 
-#print $input->dump;
+#print $input->Dump;
 my $blah;
 my %search;
 #build hash of users input
@@ -57,6 +53,8 @@ $search{'class'}=$class;
 $search{'ttype'}=$ttype;
 my $dewey=validate($input->param('dewey'));
 $search{'dewey'}=$dewey;
+my $branch=validate($input->param('branch'));
+$search{'branch'}=$branch;
 my @results;
 my $offset=$input->param('offset');
 if ($offset eq ''){
@@ -68,9 +66,12 @@ if ($num eq ''){
 }
 print startpage();
 print startmenu($type);
+#print $type;
 #print $search{'ttype'};
-if ($type ne 'opac'){
+if ($type eq 'intra'){
   print mkheadr(1,'Catalogue Search Results');
+} elsif ($type eq 'catmain'){
+  print mkheadr(1,'Catalogue Maintenance');
 } else {
   print mkheadr(1,'Opac Search Results');
 }
@@ -84,14 +85,9 @@ if ($itemnumber ne '' || $isbn ne ''){
     ($count,@results)=&CatSearch(\$blah,'subject',\%search,$num,$offset);
   } else {
     if ($keyword ne ''){
-#      print "hey";
       ($count,@results)=&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
-    } elsif ($search{'front'} ne '') {
-    ($count,@results)&FrontSearch(\$blah,'intra',\%search,$num,$offset);
-#    print "hey";
     }elsif ($title ne '' || $author ne '' || $illustrator ne '' || $dewey ne '' || $class ne '') {
       ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
-#            print "hey";
     }
   }
 }
