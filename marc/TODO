@@ -1,0 +1,38 @@
+MARC ToDo list
+
+1.  Finish cataloguing api (Catalogue.pm)
+
+2.  Modify existing code to use the new cataloguing api
+  a. start with all write routines
+  b. then all read routines
+
+3.  Polish up MARC editor.  Must include some sanity checks to prevent
+    modifications with the MARC editor rendering the data unusable by Koha.  
+  a. don't delete the barcode, warning before modifying barcode
+  b. don't mess up linkages between 852 and 876 tags
+  c. Home branch and holding branch info should require warnings before
+     updating.
+  d. others?
+
+4.  Need to create some indexes of the MARC data to aid in searches.  Soundex
+    searches would be nice.
+  a. subject index
+  b. title index
+  c. author index
+  d. dewey index
+  e. itemtype index
+  f. soundex indexes would require an index with 1 word in each record.  For
+     example, a book with the title "The Habitat and Lifestyle of the Elephant"
+     would have entries for "Habitat", "Lifestyle" and "Elephant" all pointing
+     to the book's record.  An sql query like "select Record_ID from
+     soundex_index where soundex(word) like soundex('elefant')" would return a
+     point to "The Habitat and Lifestyle of the Elephant".  (Personally, I
+     think this is pretty silly, but I had some librarians ask for it, and it
+     isn't overly difficult to implement).  Soundex searches should be
+     configurable as an option somewhere.  For example, have a special
+     interface for young children where they just type in a word and hit enter
+     and soundex searches are used, but normal searches do not use soundex.  It
+     would be annoying for titles with the words 'Rode' and 'Road' to show up
+     when you search for 'Rhode', for example.
+
+5.  A million other things, probably...
