@@ -233,6 +233,10 @@ $ethnicitylabels
 <td><FONT SIZE=2>Membership Category*</FONT></td>
 </tr>
 <tr><td>&nbsp; </TD></TR>
+printend
+;
+if ($data->{'categorycode'} ne 'C'){
+  print <<printend
 
 <tr valign=top bgcolor="99cc33" ><td  COLSPAN=5 background="/images/background-mem.gif">
 <B>MEMBER ADDRESS</b></td></tr>
@@ -393,6 +397,37 @@ print <<printend
 <tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
 printend
 ;
+} else {
+  my $guarantor=findguarantor($data->{'borrowernumber'});
+  if ($guarantor->{'borrowernumber'} == 0){
+      $guarantor->{'cardnumber'} = '';
+  }
+  print "<tr valign=top><td><input name=guarantor value=\"$guarantor->{'cardnumber'}\"><td></tr>";
+  print "<tr><td>Guarantor</td></tr>";
+  print <<printend
+      <tr valign=top >                                                                                                                          
+                                                                                                                                                
+    <td><FONT SIZE=2>Notes</font></td>                                                                                                        
+      <td  COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3>$data->{'borrowernotes'}</textarea></td></tr>                    
+      <tr><td>&nbsp; </TD></TR>
+<input type=hidden name=city size=20 value="$data->{'city'}">
+      <input type=hidden name=area value="$data->{'area'}">
+      <input type=hidden name=streetaddress size=40 value="$data->{'physstreet'}">
+      <input type=hidden name=streetcity size=20 value="$data->{'streetcity'}">
+      <input type=hidden name=phone size=20 value="$data->{'phone'}">
+      <input type=hidden name=phoneday size=20 value="$data->{'phoneday'}">
+      <input type=hidden name=faxnumber size=20 value="$data->{'faxnumber'}">
+      <input type=hidden name=emailaddress size=20 value="$data->{'emailaddress'}">
+      <input type=hidden name=textmessaging value="$data->{'textmessaging'}">
+      <input type=hidden name=contactname size=40 value="$data->{'contactname'}">
+      <input type=hidden name=altphone size=20 value="$data->{'altphone'}">
+      <input type=hidden name=altrelationship value="$data->{'altrelationship'}">
+      <input type=hidden name=altnotes value="$data->{'altnotes'}">
+
+printend
+;
+}    
+
 if ($modify){                                                                                                                                      
   print <<printend                                                                                                                                 
   <tr><td><Font size=2>FLAGS</font></td></tr>                                                                                                        
