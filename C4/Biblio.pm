@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.31  2002/12/13 16:22:04  tipaul
+# 1st draft of marc export
+#
 # Revision 1.30  2002/12/12 21:26:35  tipaul
 # YAB ! (Yet Another Bugfix) => related to biblio modif
 # (some warning cleaning too)
@@ -534,6 +537,7 @@ sub MARCgetbiblio {
     my ($dbh,$bibid)=@_;
     my $record = MARC::Record->new();
 #---- TODO : the leader is missing
+	$record->leader('                   ');
     my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
 		 		 from marc_subfield_table
 		 		 where bibid=? order by tag,tagorder,subfieldcode
