@@ -124,7 +124,7 @@ sub ProcessFile {
     use strict;
     # Input params
     my (
-	$dbh,
+	$dbh,		# FIXME - Unused argument
 	$input,
     )=@_;
 
@@ -136,7 +136,7 @@ sub ProcessFile {
 
     my $debug=0;
 
-    requireDBI($dbh,"ProcessFile");
+    $dbh = C4::Context->dbh;
 
     # See if a particular result item was specified
     my $numrecord = $input->param('numrecord');
@@ -172,13 +172,14 @@ sub ProcessRecord {
     
     my $file=MARC::File::USMARC->indata ($data);
     my $oldkoha;
+    # FIXME - This "==" should be "=", right?
     for (my $i==1;$i<$numrecord;$i++) {
 	$record = $file->next;
     }
     if ($record) {
 	$oldkoha=MARCmarc2koha($dbh,$record);
     }
-    my $template=gettemplate('marcimport/marcimportdetail.tmpl";
+    my $template=gettemplate('marcimport/marcimportdetail.tmpl');
     $oldkoha->{additionalauthors} =~ s/ \| /\n/g;
     $oldkoha =~ s/\|/\n/g;
     $template->param($oldkoha);
@@ -223,7 +224,7 @@ sub ListFileRecords {
 
     # Input parameters
     my (
-	$dbh,
+	$dbh,		# FIXME - Unused argument
 	$input,
     )=@_;
 
@@ -243,9 +244,9 @@ sub ListFileRecords {
     my ($numrecords,$resultsid,$data,$startdate,$enddate);
 		# FIXME - there's already a $data a few lines above.
     
-    requireDBI($dbh,"ListFileRecords");
+    $dbh = C4::Context->dbh;
 
-    my $template=gettemplate('marcimport/ListFileRecords.tmpl";
+    my $template=gettemplate('marcimport/ListFileRecords.tmpl');
 
     # File can be z3950 search query or uploaded MARC data
     
@@ -282,7 +283,7 @@ sub ListFileRecords {
 		my ($srvid, $server, $database, $auth) = split(/\//, $serverstring, 4);
 		if ( $server ) {
 			my $srvname=&z3950servername($dbh,$srvid,"$server/$database");
-			$template->parram(srvid => $srvid);
+			$template->param(srvid => $srvid);
 			$template->param(srvname => $srvname);
 		} # if $server
 		my $startrecord=$input->param("ST-$srvid");
@@ -373,6 +374,7 @@ sub ListFileRecords {
 sub ResultRecordLink {
     use strict;
     my ($dbh,$oldkoha,$resultsid, $num)=@_; 	# input
+		# FIXME - $dbh as argument is no longer used
     my (
 	$sth,
 	$bib,	# hash ref to named fields
@@ -381,7 +383,8 @@ sub ResultRecordLink {
 	$fieldname,
 	);
     my %row = ();
-    requireDBI($dbh,"PrintResultRecordLink");
+
+    $dbh = C4::Context->dbh;
 
 #    $bib=extractmarcfields($record);
 
@@ -424,7 +427,7 @@ sub ResultRecordLink {
 sub z3950menu {
     use strict;
     my (
-	$dbh,
+	$dbh,			# FIXME - Unused argument
 	$input,
     )=@_;
 
@@ -441,7 +444,17 @@ sub z3950menu {
 	$record,$bib,$title,
     );
 
-    requireDBI($dbh,"z3950menu");
+    $dbh = C4::Context->dbh;
+
+    # FIXME - This print statement doesn't belong here. It's just here
+    # so the script will display SOMEthing. But this section really
+    # ought to be properly templated.
+    print <<EOT;
+Content-Type: text/html;
+
+<HTML>
+<BODY>
+EOT
 
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     print "<table border=0><tr><td valign=top>\n";
@@ -570,11 +583,11 @@ EOF
 
 sub uploadmarc {
     use strict;
-    my ($dbh)=@_;
+    my ($dbh)=@_;		# FIXME - Unused argument
 
-    requireDBI($dbh,"uploadmarc");
+    $dbh = C4::Context->dbh;
 
-    my $template=gettemplate('marcimport/uploadmarc.tmpl";
+    my $template=gettemplate('marcimport/uploadmarc.tmpl');
     $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'});
 #    print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
@@ -598,7 +611,7 @@ sub manual {
 
 
 sub mainmenu {
-	my $template=gettemplate('marcimport/mainmenu.tmpl";
+	my $template=gettemplate('marcimport/mainmenu.tmpl');
 	$template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'});
 	print "Content-Type: text/html\n\n", $template->output;
 } # sub mainmenu
@@ -611,13 +624,14 @@ sub AcceptZ3950Queue {
     # input parameters
     my (
 	$dbh, 		# DBI handle
+			# FIXME - Unused argument
 	$input,		# CGI parms
     )=@_;
 
     my @serverlist;
     my $error;
 
-    requireDBI($dbh,"AcceptZ3950Queue");
+    $dbh = C4::Context->dbh;
 
     my $query=$input->param('query');
 
@@ -676,10 +690,11 @@ sub AcceptMarcUpload {
     use strict;
     my (
 	$dbh,		# DBI handle
+			# FIXME - Unused argument
 	$input,		# CGI parms
     )=@_;
 
-    requireDBI($dbh,"AcceptMarcUpload");
+    $dbh = C4::Context->dbh;
 
     my $name=$input->param('name');
     my $data=$input->param('uploadmarc');
@@ -703,7 +718,7 @@ sub AcceptMarcUpload {
 sub AcceptBiblioitem {
     use strict;
     my (
-	$dbh,
+	$dbh,			# FIXME - Unused argument
 	$input,
     )=@_;
 
@@ -712,7 +727,7 @@ sub AcceptBiblioitem {
     my $sth;
     my $record;
 
-    requireDBI($dbh,"AcceptBiblioitem");
+    $dbh = C4::Context->dbh;
 
 #    my $isbn=$input->param('isbn');
 #    my $issn=$input->param('issn');
@@ -737,10 +752,11 @@ sub AcceptBiblioitem {
 	print STDERR "Error in marcimport.pl/Acceptbiblioitem : numrecord not defined\n";
 	print "Error in marcimport.pl/Acceptbiblioitem : numrecord not defined : contact administrator\n";
     }
-    my $template=gettemplate('marcimport/AcceptBiblioitem.tmpl";
+    my $template=gettemplate('marcimport/AcceptBiblioitem.tmpl');
 
     my $oldkoha = MARCmarc2koha($dbh,$record);
     # See if it already exists
+    # FIXME - There's already a $sth in this context.
     my $sth=$dbh->prepare("select biblionumber,biblioitemnumber 
 	from biblioitems 
 	where isbn=? or issn=? or lccn=?");
@@ -840,12 +856,13 @@ sub AcceptBiblioitem {
 sub AcceptItemCopy {
     use strict;
     my ( $dbh, $input )=@_;
+			# FIXME - $dbh argument unused
 
-    my $template=gettemplate('marcimport/AcceptItemCopy.tmpl";
+    my $template=gettemplate('marcimport/AcceptItemCopy.tmpl');
 
     my $error;
 
-    requireDBI($dbh,"AcceptItemCopy");
+    $dbh = C4::Context->dbh;
 
     my $barcode=$input->param('barcode');
     my $replacementprice=($input->param('replacementprice') || 0);
@@ -981,6 +998,12 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.16  2002/10/11 12:45:10  arensb
+# Replaced &requireDBI with C4::Context->dbh, thus making the "use
+# Fixed muffed quotes in &gettemplate calls.
+# Added a temporary print statement in &z3950menu, so it'll print
+# something instead of giving a browser error.
+#
 # Revision 1.15  2002/10/09 18:09:16  tonnesen
 # switched from picktemplate() to gettemplate()
 #
