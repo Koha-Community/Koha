@@ -64,6 +64,7 @@ my $number_of_results_per_page = 20;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
+($startfrom) || ($startfrom=0);
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
     @results = subsearch($env,$subjectitems, $number_of_results_per_page, $startfrom);
@@ -87,8 +88,6 @@ foreach my $res (@results) {
 }
 
 
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
 
 my $resultsarray=\@results;
 ($resultsarray) || (@$resultsarray=());
@@ -98,8 +97,8 @@ my $resultsarray=\@results;
 $template->param(startfrom => $startfrom+1);
 ($startfrom+$num<=$count) ? ($template->param(endat => $startfrom+$num)) : ($template->param(endat => $count));
 $template->param(numrecords => $count);
-my $nextstartfrom=($startfrom+$num<$count) ? ($startfrom+$num) : (-1);
-my $prevstartfrom=($startfrom-$num>=0) ? ($startfrom-$num) : (-1);
+my $nextstartfrom=($startfrom+$number_of_results_per_page<$count) ? ($startfrom+$number_of_results_per_page) : (-1);
+my $prevstartfrom=($startfrom-$number_of_results_per_page>=0) ? ($startfrom-$number_of_results_per_page) : (-1);
 $template->param(nextstartfrom => $nextstartfrom);
 my $displaynext=1;
 my $displayprev=0;
