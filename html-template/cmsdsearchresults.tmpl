@@ -4,12 +4,12 @@
 <body>
 <TMPL_INCLUDE NAME="searchheader.tmpl">
 <table border=1>
-<tr><th>Title</th><th>Author</th><th>Biblionumber</th></tr>
+<tr><th>Title</th><th>Author</th><th>Notes</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
   <td> <TMPL_VAR NAME=title> </td>
   <td> <TMPL_VAR NAME=author> </td>
-  <td> <TMPL_VAR NAME=biblionumber> </td>
+  <td> <TMPL_VAR NAME=notes> </td>
   </tr>
 </TMPL_LOOP>
 </table>
