@@ -76,6 +76,8 @@ for (my $i=0; $i<$count; $i++) {
 		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
 		$inner_line{total} =$orders->[$i2]->{'count(*)'};
 		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
+		$inner_line{surname} = $orders->[$i2]->{'firstname'};
+		$inner_line{firstname} = $orders->[$i2]->{'surname'};
 		$inner_line{creationdate} = format_date($orders->[$i2]->{'creationdate'});
 		$inner_line{closedate} = format_date($orders->[$i2]->{'closedate'});
 		push @loop_basket, \%inner_line;

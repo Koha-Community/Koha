@@ -46,7 +46,7 @@ my $biblio=$input->param('biblio');
 my $catview=$input->param('catview');
 my $gst=$input->param('gst');
 my ($count,@results)=ordersearch($search,$supplierid,$biblio,$catview);
-warn "C:$count for ordersearch($search,$supplierid,$biblio,$catview);";
+# warn "C:$count for ordersearch($search,$supplierid,$biblio,$catview);";
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
 my $date = $results[0]->{'entrydate'};
 

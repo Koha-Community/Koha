@@ -62,7 +62,7 @@ if ($num eq ''){
   $num=10;
 }
 my $booksellerid=$input->param('booksellerid');
-my $basket=$input->param('basket');
+my $basketno=$input->param('basketno');
 my $sub=$input->param('sub');
 #print $sub;
 my ($count,@booksellers)=bookseller($booksellerid);
@@ -217,7 +217,7 @@ while ($i < $count2){
 	$lineres{title2}=$title2;
 	$lineres{copyright}=$result->{'copyrightdate'};
 	$lineres{booksellerid}=$booksellerid;
-	$lineres{basket}=$basket;
+	$lineres{basketno}=$basketno;
 	$lineres{sub}=$sub;
 	$lineres{biblionumber}=$result->{biblionumber};
 	$lineres{title}=$result->{title};
@@ -233,7 +233,7 @@ while ($i < $count2){
 $offset=$num+$offset;
 $template->param(	bookselname => $booksellers[0]->{'name'},
 								booksellerid => $booksellerid,
-								basket => $basket,
+								basketno => $basketno,
 								parsub => $sub,
 								count => $count,
 								offset2 =>$offset2,
@@ -242,7 +242,6 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								num => $num,
 								offset => $offset,
 								type =>  $type,
-								basket => $basket,
 								title => $title,
 								author => $author,
 								loopsearch =>\@loopsearch,

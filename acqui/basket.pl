@@ -50,7 +50,7 @@ my ($count,@results);
 my $basket = getbasket($basketno);
 # FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
-warn "=>".$basket->{booksellerid};
+# warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
 
