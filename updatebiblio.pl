@@ -58,7 +58,7 @@ my $error;
 &modaddauthor($bibnum, $addauthor);
 
 $subject = uc($subject);
-@sub     = split(/\|/, $subject);
+@sub     = split(/\||\n/, $subject);
 $count   = @sub;
 
 for (my $i = 0; $i < $count; $i++) {
