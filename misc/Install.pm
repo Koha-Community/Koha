@@ -1016,13 +1016,18 @@ function does not return any values.
 
 $messages->{'ApacheConfigIntroduction'}->{en} =
    heading('APACHE CONFIGURATION') . qq|
-Koha needs to setup your Apache configuration file for the
+Koha needs to write an Apache configuration file for the
 OPAC and LIBRARIAN virtual hosts.  By default this installer
 will do this by using one ip address and two different ports
 for the virtual hosts.  There are other ways to set this up,
-and the installer will leave comments in httpd.conf detailing
+and the installer will leave comments in
+$etcdir/koha-httpd.conf detailing
 what these other options are.
 
+NOTE: You will need to add lines to your main httpd.conf to
+  Include $etcdir/koha-httpd.conf
+and to make sure it is listening on the right ports
+(using the Listen directive).
 
 Press <ENTER> to continue: |;
 
