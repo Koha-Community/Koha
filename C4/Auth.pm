@@ -170,7 +170,7 @@ sub checkauth {
 	    }
 	}
     }
-    unless ($sessionID) {
+    unless ($userid) {
 	$sessionID=int(rand()*100000).'-'.time();
 	$userid=$query->param('userid');
 	my $password=$query->param('password');
@@ -194,7 +194,7 @@ sub checkauth {
 	    }
 	} else {
 	    if ($userid) {
-		$info{'invalid_username_or_password'};
+		$info{'invalid_username_or_password'} = 1;
 	    }
 	}
     }
@@ -211,22 +211,21 @@ sub checkauth {
     }
     # else we have a problem...
     # get the inputs from the incoming query
-    my @inputs;
+    my @inputs =();
     foreach my $name (param $query) {
 	(next) if ($name eq 'userid' || $name eq 'password');
 	my $value = $query->param($name);
 	push @inputs, {name => $name , value => $value};
     }
-    @inputs = () unless @inputs;
 
     my $template = gettemplate("opac-auth.tmpl", "opac");
     $template->param(INPUTS => \@inputs);
     $template->param(loginprompt => 1) unless $info{'nopermission'};
 
-    my $self_url = $query->self_url();
+    my $self_url = $query->url(-absolute => 1);
     # Strip userid and password parameters off the self_url variable
-    $self_url=~s/\?*userid=[^;]*;*//g;
-    $self_url=~s/\?*password=[^;]*;*//g;    
+#    $self_url=~s/\?*userid=[^;]*;*//g;
+#    $self_url=~s/\?*password=[^;]*;*//g;    
     $template->param(url => $self_url);
 
     $template->param(\%info);
