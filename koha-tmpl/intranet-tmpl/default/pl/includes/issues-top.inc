@@ -174,9 +174,9 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>AKWIZYCJE
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Zamówienia
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Order Books
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Order Serials
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Order Other
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Zamów Książki
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Zamów Wydawnictwa Ciągłe
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Zamów Inne
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Anuluj Zamówienie
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Reporty
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Zamówione w tym tygodniu
@@ -226,7 +226,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Raporty Roczne
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Next Years Commitment
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Zobowiązania na Natępny Rok
 
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
@@ -242,9 +242,9 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>CZYTELNICY
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Nowy Czytelnik
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Setup
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Ustawienia
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Check if Expired
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Policy
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Strategia
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Reporty
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Suma czytelników

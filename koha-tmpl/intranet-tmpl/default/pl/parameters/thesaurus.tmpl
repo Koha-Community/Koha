@@ -96,7 +96,7 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 	<h1>Zarządzanie Tezaurusem</h1>
-	<p>Zarządzanie tezaurusem i plikami odpowiedzialności.<br />
+	<p>Zarządzanie tezaurusem i kartoteką haseł wzorcowych.<br />
 	<ul>
 		<b>Dig</b>: zobacz dane zależne od tego<br />
 		<b>Related</b>: zobacz inne formy tego wpisu HW</p>
@@ -115,8 +115,8 @@
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%">&nbsp;</td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wyrażenie dowolne</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>HW</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Dig</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="10%"><b>Related</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Głębsze</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="10%"><b>Pokrewne</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Edytuj</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Wymaż</b></td>
 	<!-- TMPL_LOOP name="loop" -->
@@ -124,8 +124,8 @@
 		<td>&nbsp;</td>
 		<td><!-- TMPL_VAR name="freelib" --></td>
 		<td><!-- TMPL_VAR name="father" --> <!-- TMPL_VAR name="stdlib" --></td>
-		<td><!-- TMPL_VAR name="dig" -->Dig</a>&nbsp;&nbsp;</td>
-		<td><!-- TMPL_VAR name="related" -->Related</a></td>
+		<td><!-- TMPL_VAR name="dig" -->Głębsze</a>&nbsp;&nbsp;</td>
+		<td><!-- TMPL_VAR name="related" -->Pokrewne</a></td>
 		<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 		<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 	</tr>

@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,16 +40,16 @@
                 var _alertString="";
                 var alertString2;
                 if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\n";
+                        _alertString += "\n- " + _("brak nazwy drukarki");
                 }
                 if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\n";
+                        _alertString += "\n- " + _("Brakuje kolejki");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("Formularz odrzucono z powodu następujących błędów(u)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
@@ -151,7 +152,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-	<h2>Drukarka Admin (fixme)</h2>
+	<h2>Drukarka - zarządzanie</h2>
         <form action='<TMP_VAR NAME=script_name>' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
                 <input type=reset name=reset value="wyczyść">

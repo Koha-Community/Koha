@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script language="JavaScript" type="text/javascript">
+	function _(s) { return s } // dummy function for gettext
 	//
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -38,16 +39,16 @@
 		var _alertString="";
 		var alertString2;
 		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\n";
+			_alertString += "\n- " + _("brak zmiennej");
 		}
 		if (f.value.value.length==0) {
-			_alertString += "- value missing\n";
+			_alertString += "\n- " + _("brak wartości");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Formularz odrzucono z powodu następujących błędów(u)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
@@ -126,8 +127,8 @@
 	<td><!-- TMPL_VAR name="variable" --></td>
 	<td><!-- TMPL_VAR name="value" --></td>
 	<td><!-- TMPL_VAR name="explanation" --></td>
-	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0">Edytuj</a></td>
-	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">Wymaż</a></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"><br>Edytuj</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"><br>Wymaż</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 <form action="<!-- TMPL_VAR name="script_name" -->" method="post">

@@ -65,7 +65,15 @@ Szukano
 			<!-- TMPL_VAR name="itemcount" -->
 		</TD>
 		<TD>
+			<!-- TMPL_IF name="use-location-flags-p" -->
+			<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR name="location-only" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="on-loan-p" -->Wypożyczona<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="lost-p" -->Zgubiono<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="mending-p" -->Naprawa<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="in-transit-p" -->W drodze<br><!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR name="location" -->
+			<!-- /TMPL_IF -->
 		</TD>
 	</TR>
 

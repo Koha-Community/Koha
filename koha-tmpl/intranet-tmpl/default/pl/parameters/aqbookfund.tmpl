@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <!-- TMPL_IF name=else -->
-<h1>Fundusz Książkowy admin</h1>
+<h1>Fundusz Książkowy - zarządzanie</h1>
 <form action=<!-- TMPL_VAR name=scriptname --> method=post>
 <input type=text name=searchfield value=""><input type=reset name=reset value="wyczyść"></form>
 <!-- TMPL_IF name=search -->
@@ -48,6 +48,7 @@
 
 <!-- TMPL_IF name="add_form" -->
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -85,22 +86,29 @@
 		var _alertString="";
 		var alertString2;
 		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\n";
+			_alertString += "\n- " + _("Brak funduszu");
 		}
 		if (f.bookfundname.value.length==0) {
-			_alertString += "- bookfundname missing\n";
+			_alertString += "\n- " + _("Brak nazwy funduszu");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Formularz odrzucono z powodu następujących błędów(u)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
 	}
 	</SCRIPT>
-<h1><!-- TMPL_VAR name="header" --></h1>
+<h1>
+<!-- TMPL_IF name=use-header-flags-p -->
+<!-- TMPL_IF name=header-is-add-p -->Dodaj fundusz<!-- /TMPL_IF -->
+<!-- TMPL_IF name=header-is-modify-p -->Zmień fundusz<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_VAR name="header" -->
+<!-- /TMPL_IF -->
+</h1>
 <form action='<!-- TMPL_VAR name="action" -->' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
 <input type=hidden name=checked value=0>

@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+function _(s) { return s } // dummy function for gettext
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function isNotNull(f,noalert) {
 	if (f.value.length ==0) {
@@ -38,22 +39,22 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.itemtype.value.length==0) {
-		_alertString += "- Itemtype missing\n";
+		_alertString += "\n- " + _("Brak typu dokumentu");
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "- Description missing\n";
+		_alertString += "\n- " + _("Brak opisu");
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "- Loan length is not a number\n";
+		_alertString += "\n- " + _("Długość wypożyczenia nie jest cyfrą");
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "- Rental charge is not a number\n";
+		_alertString += "\n- " + _("Opłata wynajmu nie jest cyfrą");
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2  = _("Formularz odrzucono z powodu następujących błędów(u)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
 		alertString2 += _alertString;
 		alert(alertString2);
 	}
@@ -86,7 +87,7 @@ function Check(f) {
 					<!-- TMPL_ELSE -->
 						<input type=checkbox name=notforloan value=1>
 					<!-- /TMPL_IF -->
-					jeśli zaznaczone to żaden dokument tego typu nie może być wypożyczony. Jeśli pozostawiony pusty, to każdy dokument tego typu może być wypożyczony, chyba, że dla konkretnego egzemplarza ustawiono flagę &quot;nienawynos.&quote;
+					Jeśli zaznaczone to żaden dokument tego typu nie może być wypożyczony. Jeśli pozostawiony pusty, to każdy dokument tego typu może być wypożyczony, chyba, że dla konkretnego egzemplarza ustawiono flagę &quot;nienawynos.&quot;
 				</td>
 			</tr>
 			<tr>
@@ -135,7 +136,7 @@ function Check(f) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-<h1>Typ Pozycji Admin</h1>
+<h1>Typ Pozycji - zarządzanie</h1>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 	<tr>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kod</b></th>
