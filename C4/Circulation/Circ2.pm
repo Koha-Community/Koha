@@ -684,7 +684,7 @@ sub canbookbeissued {
 #
 # ITEM CHECKING
 #
-	unless ($iteminformation) {
+	unless ($iteminformation->{barcode}) {
 		$issuingimpossible{UNKNOWN_BARCODE} = 1;
 	}
 	if ($iteminformation->{'notforloan'} == 1) {

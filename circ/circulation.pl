@@ -82,12 +82,6 @@ my @datearr = localtime(time());
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 
-# get the borrower information.....
-my $borrower;
-if ($borrowernumber) {
-    $borrower = getpatroninformation(\%env,$borrowernumber,0);
-}
-
 # my $message;
 
 #
@@ -103,10 +97,18 @@ if ($findborrower) {
 	} elsif ($#borrowers == 0) {
 		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
 		$query->param('barcode','');
+		$borrowernumber=$borrowers[0]->{'borrowernumber'};
 	} else {
 		$borrowerslist = \@borrowers;
 	}
 }
+
+# get the borrower information.....
+my $borrower;
+if ($borrowernumber) {
+    $borrower = getpatroninformation(\%env,$borrowernumber,0);
+}
+
 
 #
 # STEP 3 : ISSUING
