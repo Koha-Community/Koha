@@ -391,138 +391,6 @@ sub mkdir_parents ($;$) {
     return $ok;
 }
 
-=back
-
-=head2 Subtasks of doing an installation
-
-=over 4
-
-=cut
-
-=item checkabortedinstall
-
-    checkabortedinstall;
-
-Checks whether a previous installation process has been abnormally
-aborted, by checking whether $etcidr/koha.conf is a symlink or not.
-If an aborted installation is detected, gives the user a chance to
-abort, before trying to recover the aborted installation.
-
-(Assuming that Koha will be installed on a modern Unix with symlinks,
-it is possible to code the installer so that aborted installs can be
-detected. In case of such an event we can do our best to "roll back"
-the aborted install.)
-
-FIXME: The "roll back" is not complete!
-
-=cut
-
-sub checkabortedinstall () {
-    if (-l("$etcdir/koha.conf")
-        && readlink("$etcdir/koha.conf") =~ /\.tmp$/
-    ) {
-        print qq|
-I have detected that you tried to install Koha before, but the installation
-was aborted.  I will try to continue, but there might be problems if the
-database is already created.
-
-|;
-        print "Please press <ENTER> to continue: ";
-        <STDIN>;
-
-        # Remove the symlink after the <STDIN>, so the user can back out
-        unlink "$etcdir/koha.conf"
-            || die "Failed to remove incomplete $etcdir/koha.conf: $!\n";
-    }
-}
-
-
-=item checkperlmodules
-
-    checkperlmodules;
-
-Test whether the version of Perl is new enough, whether Perl is
-found at the expected location, and whether all required modules
-have been installed.
-
-=cut
-
-sub checkperlmodules {
-#
-# Test for Perl and Modules
-#
-
-    my $message = getmessage('CheckingPerlModules');
-    showmessage($message, 'none');
-
-    # FIXME: Perl 5.6 is BUGGY!!! IT SHOULD NOT BE USED in production!!!
-    unless (eval "require 5.006_000") {
-	die getmessage('PerlVersionFailure', ['5.6.0']);
-    }
-
-    my @missing = ();
-    unless (eval {require DBI})               { push @missing,"DBI" };
-    unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
-    unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
-    unless (eval {require HTML::Template})          { push @missing,"HTML::Template" };
-    unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-    unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
-    unless (eval {require MARC::Record})       { push @missing,"MARC::Record" };
-    unless (eval {require Net::Z3950})        {
-	my $message = getmessage('NETZ3950Missing');
-	showmessage($message, 'PressEnter', '', 1);
-	if ($#missing>=0) {
-	    push @missing, "Net::Z3950";
-	}
-    }
-
-#
-# Print out a list of any missing modules
-#
-
-    if (@missing > 0) {
-	my $missing='';
-	foreach my $module (@missing) {
-	    $missing.="   perl -MCPAN -e 'install \"$module\"'\n";
-	}
-	my $message=getmessage('MissingPerlModules', [$missing]);
-	showmessage($message, 'none');
-	exit;
-    } else {
-	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1);
-    }
-
-
-    unless (-x "/usr/bin/perl") {
-	my $realperl=`which perl`;
-	chomp $realperl;
-	$realperl = showmessage(getmessage('NoUsrBinPerl'), 'none');
-	until (-x $realperl) {
-	    $realperl=showmessage(getmessage('AskLocationOfPerlExecutable', $realperl), 'free', $realperl, 1);
-	}
-	my $response=showmessage(getmessage('ConfirmPerlExecutableSymlink', $realperl), 'yn', 'y', 1);
-	unless ($response eq 'n') {
-	    system("ln -s $realperl /usr/bin/perl");
-	}
-    }
-
-
-}
-
-$messages->{'NoUsrBinPerl'}->{en} =
-   heading('Perl is not located in /usr/bin/perl') . qq|
-The Koha perl scripts expect to find the perl executable in the /usr/bin
-directory.  It is not there on your system.
-
-|;
-
-$messages->{'AskLocationOfPerlExecutable'}->{en}=qq|Location of Perl Executable: [%s]: |;
-$messages->{'ConfirmPerlExecutableSymlink'}->{en}=qq|
-The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
-
-May I create this symlink? ([Y]/N):
-: |;
-
 
 =item getmessage
 
@@ -701,6 +569,136 @@ sub showmessage {
 	}
     }
 }
+
+
+=back
+
+=head2 Subtasks of doing an installation
+
+=over 4
+
+=cut
+
+=item checkabortedinstall
+
+    checkabortedinstall;
+
+Checks whether a previous installation process has been abnormally
+aborted, by checking whether $etcidr/koha.conf is a symlink matching
+a particular pattern.  If an aborted installation is detected, give
+the user a chance to abort, before trying to recover the aborted
+installation.
+
+FIXME: The recovery is not complete; it only partially rolls back
+some changes.
+
+=cut
+
+sub checkabortedinstall () {
+    if (-l("$etcdir/koha.conf")
+        && readlink("$etcdir/koha.conf") =~ /\.tmp$/
+    ) {
+        print qq|
+I have detected that you tried to install Koha before, but the installation
+was aborted.  I will try to continue, but there might be problems if the
+database is already created.
+
+|;
+        print "Please press <ENTER> to continue: ";
+        <STDIN>;
+
+        # Remove the symlink after the <STDIN>, so the user can back out
+        unlink "$etcdir/koha.conf"
+            || die "Failed to remove incomplete $etcdir/koha.conf: $!\n";
+    }
+}
+
+
+=item checkperlmodules
+
+    checkperlmodules;
+
+Test whether the version of Perl is new enough, whether Perl is
+found at the expected location, and whether all required modules
+have been installed.
+
+=cut
+
+sub checkperlmodules {
+#
+# Test for Perl and Modules
+#
+
+    my $message = getmessage('CheckingPerlModules');
+    showmessage($message, 'none');
+
+    # FIXME: Perl 5.6 is BUGGY!!! IT SHOULD NOT BE USED in production!!!
+    unless (eval "require 5.006_000") {
+	die getmessage('PerlVersionFailure', ['5.6.0']);
+    }
+
+    my @missing = ();
+    unless (eval {require DBI})               { push @missing,"DBI" };
+    unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
+    unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
+    unless (eval {require HTML::Template})          { push @missing,"HTML::Template" };
+    unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
+    unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
+    unless (eval {require MARC::Record})       { push @missing,"MARC::Record" };
+    unless (eval {require Net::Z3950})        {
+	my $message = getmessage('NETZ3950Missing');
+	showmessage($message, 'PressEnter', '', 1);
+	if ($#missing>=0) {
+	    push @missing, "Net::Z3950";
+	}
+    }
+
+#
+# Print out a list of any missing modules
+#
+
+    if (@missing > 0) {
+	my $missing='';
+	foreach my $module (@missing) {
+	    $missing.="   perl -MCPAN -e 'install \"$module\"'\n";
+	}
+	my $message=getmessage('MissingPerlModules', [$missing]);
+	showmessage($message, 'none');
+	exit;
+    } else {
+	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1);
+    }
+
+
+    unless (-x "/usr/bin/perl") {
+	my $realperl=`which perl`;
+	chomp $realperl;
+	$realperl = showmessage(getmessage('NoUsrBinPerl'), 'none');
+	until (-x $realperl) {
+	    $realperl=showmessage(getmessage('AskLocationOfPerlExecutable', $realperl), 'free', $realperl, 1);
+	}
+	my $response=showmessage(getmessage('ConfirmPerlExecutableSymlink', $realperl), 'yn', 'y', 1);
+	unless ($response eq 'n') {
+	    system("ln -s $realperl /usr/bin/perl");
+	}
+    }
+
+
+}
+
+$messages->{'NoUsrBinPerl'}->{en} =
+   heading('Perl is not located in /usr/bin/perl') . qq|
+The Koha perl scripts expect to find the perl executable in the /usr/bin
+directory.  It is not there on your system.
+
+|;
+
+$messages->{'AskLocationOfPerlExecutable'}->{en}=qq|Location of Perl Executable: [%s]: |;
+$messages->{'ConfirmPerlExecutableSymlink'}->{en}=qq|
+The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
+
+May I create this symlink? ([Y]/N):
+: |;
 
 
 =item getinstallationdirectories
