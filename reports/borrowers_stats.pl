@@ -49,6 +49,11 @@ my $column = $input->param("Column");
 my @filters = $input->param("Filter");
 my $digits = $input->param("digits");
 my $borstat = $input->param("status");
+my $output = $input->param("output");
+my $basename = $input->param("basename");
+my $mime = $input->param("MIME");
+my $del = $input->param("sep");
+
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
 				query => $input,
@@ -60,16 +65,38 @@ my ($template, $borrowernumber, $cookie)
 $template->param(do_it => $do_it);
 if ($do_it) {
 	my $results = calculate($line, $column, $digits, $borstat, \@filters);
-	$template->param(mainloop => $results);
-# 	print $input->header(-type => 'application/vnd.ms-excel', -name=>"export.csv");
-# 	my $lines = @$results[0]->{looprow};
-# 	foreach my $line (@$lines) {
-# 		my $x = $line->{loopcell};
-# 		foreach my $cell (@$x) {
-# 			print $cell->{value}.";";
-# 		}
-# 		print "\n";
-# 	}
+	if ($output eq "screen"){
+		$template->param(mainloop => $results);
+		output_html_with_http_headers $input, $cookie, $template->output;
+		exit(1);
+	} else {
+		print $input->header(-type => 'application/vnd.sun.xml.calc', -name=>"$basename.csv" );
+		my $cols = @$results[0]->{loopcol};
+		my $lines = @$results[0]->{looprow};
+		my $sep;
+		$sep =C4::Context->preference("delimiter");
+		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
+		foreach my $col ( @$cols ) {
+			print $col->{coltitle}.$sep;
+		}
+		print "\n";
+		foreach my $line ( @$lines ) {
+			my $x = $line->{loopcell};
+			print $line->{rowtitle}.$sep;
+			foreach my $cell (@$x) {
+				print $cell->{value}.$sep;
+			}
+			print $line->{totalrow};
+ 			print "\n";
+	 	}
+		print "TOTAL";
+		$cols = @$results[0]->{loopfooter};
+		foreach my $col ( @$cols ) {
+			print $sep.$col->{totalcol};
+		}
+		print $sep.@$results[0]->{total};
+		exit(1);
+	}
 } else {
 	my $dbh = C4::Context->dbh;
 	my @values;
@@ -117,9 +144,32 @@ if ($do_it) {
 				-values   => \@select_sort2,
 				-size     => 1,
 				-multiple => 0 );
+	
+	my @mime = ( C4::Context->preference("MIME") );
+	foreach my $mime (@mime){
+		warn "".$mime;
+	}
+	
+	my $CGIextChoice=CGI::scrolling_list(
+				-name => 'MIME',
+				-id => 'MIME',
+				-values   => \@mime,
+				-size     => 1,
+				-multiple => 0 );
+	
+	my @dels = ( C4::Context->preference("delimiter") );
+	my $CGIsepChoice=CGI::scrolling_list(
+				-name => 'sep',
+				-id => 'sep',
+				-values   => \@dels,
+				-size     => 1,
+				-multiple => 0 );
+	
 	$template->param(CGICatcode => $CGICatCode,
 					CGISort1 => $CGIsort1,
-					CGISort2 => $CGIsort2
+					CGISort2 => $CGIsort2,
+					CGIextChoice => $CGIextChoice,
+					CGIsepChoice => $CGIsepChoice
 					);
 
 }
@@ -132,6 +182,7 @@ sub calculate {
 	my @mainloop;
 	my @loopfooter;
 	my @loopcol;
+	my @loopline;
 	my @looprow;
 	my %globalline;
 	my $grantotal =0;
@@ -139,24 +190,29 @@ sub calculate {
 	my $dbh = C4::Context->dbh;
 
 # Filters
-	my $linefilter = "";
-	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
-	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
-	$linefilter = @$filters[2] if ($line =~ /sort1/ ) ;
-	$linefilter = @$filters[3] if ($line =~ /sort2/ ) ;
-
-	my $colfilter = "";
-	$colfilter = @$filters[0] if ($column =~ /categorycode/);
-	$colfilter = @$filters[1] if ($column =~ /zipcode/);
-	$colfilter = @$filters[2] if ($column =~ /sort1/);
-	$colfilter = @$filters[3] if ($column =~ /sort2/);
+ 	my $linefilter = "";
+#	warn "filtres ".@filters[0];
+#	warn "filtres ".@filters[1];
+#	warn "filtres ".@filters[2];
+#	warn "filtres ".@filters[3];
+	
+ 	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
+ 	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
+ 	$linefilter = @$filters[2] if ($line =~ /sort1/ ) ;
+ 	$linefilter = @$filters[3] if ($line =~ /sort2/ ) ;
+# 
+ 	my $colfilter = "";
+ 	$colfilter = @$filters[0] if ($column =~ /categorycode/);
+ 	$colfilter = @$filters[1] if ($column =~ /zipcode/);
+ 	$colfilter = @$filters[2] if ($column =~ /sort1/);
+ 	$colfilter = @$filters[3] if ($column =~ /sort2/);
 
 	my @loopfilter;
 	for (my $i=0;$i<=3;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			$cell{filter} .= @$filters[$i];
-			$cell{crit} .="Category Code " if ($i==0);
+			$cell{crit} .="Cat Code " if ($i==0);
 			$cell{crit} .="Zip Code" if ($i==1);
 			$cell{crit} .="Sort1" if ($i==2);
 			$cell{crit} .="Sort2" if ($i==3);
@@ -167,16 +223,22 @@ sub calculate {
 		push @loopfilter,{crit=>"Status",filter=>$status}
 	}
 # 1st, loop rows.
-#problem with NULL Values.
+	my $linefield;
+	if (($line =~/zipcode/) and ($digits)) {
+		$linefield .="left($line,$digits)";
+	} else{
+		$linefield .= $line;
+	}
+	
 	my $strsth;
-	$strsth .= "select distinctrow $line from borrowers where $line is not null ";
+	$strsth .= "select distinctrow $linefield from borrowers where $line is not null ";
 	$linefilter =~ s/\*/%/g;
 	if ( $linefilter ) {
-		$strsth .= " and $line LIKE ? " ;
+		$strsth .= " and $linefield LIKE ? " ;
 	}
 	$strsth .= " and $status='1' " if ($status);
-	$strsth .=" order by $line";
-	warn "". $strsth;
+	$strsth .=" order by $linefield";
+#	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
 	if ( $linefilter ) {
@@ -192,19 +254,25 @@ sub calculate {
 			$cell{rowtitle} = "";
 		}
  		$cell{totalrow} = 0;
-		push @looprow, \%cell;
+		push @loopline, \%cell;
  	}
 
 # 2nd, loop cols.
+	my $colfield;
+	if (($column =~/zipcode/) and ($digits)) {
+		$colfield .= "left($column,$digits)";
+	} else{
+		$colfield .= $column;
+	}
 	my $strsth2;
 	$colfilter =~ s/\*/%/g;
-	$strsth2 .= "select distinctrow $column from borrowers where $column is not null";
+	$strsth2 .= "select distinctrow $colfield from borrowers where $column is not null";
 	if ( $colfilter ) {
-		$strsth2 .= " and $column LIKE ? ";
+		$strsth2 .= " and $colfield LIKE ? ";
 	} 
 	$strsth2 .= " and $status='1' " if ($status);
-	$strsth2 .= " order by $column";
-	warn "". $strsth2;
+	$strsth2 .= " order by $colfield";
+#	warn "". $strsth2;
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if ($colfilter) {
 		$sth2->execute($colfilter);
@@ -217,46 +285,74 @@ sub calculate {
 		$cell{coltitle} = $celvalue;
  		$ft{totalcol} = 0;
 		push @loopcol, \%cell;
-		push @loopfooter, \%ft;
  	}
-# now, parse each category. Before filling the result array, fill it with 0 to have every itemtype column.
- 	my $strcalc .= "SELECT  count( * ) FROM borrowers WHERE $line = ? and $column= ? ";
-	$strcalc .= " AND categorycode like '" . @$filters[1] ."%' " if ( @$filters[1] );
-	$strcalc .= " AND sort1 like ' " . @$filters[2] ."%'" if ( @$filters[2] );
-	$strcalc .= " AND sort2 like ' " . @$filters[3] ."%'" if ( @$filters[3] );
-	$strcalc .= " AND zipcode like ' " . @$filters[4] ."%'" if ( @$filters[4] );
-	$strcalc .= " and $status='1' " if ($status);
-	warn "". $strcalc;
-	my $dbcalc = $dbh->prepare($strcalc);
+	
+
 	my $i=0;
 	my @totalcol;
 	my $hilighted=-1;
-	# for each line
-	for (my $i=0; $i<=$#looprow; $i++) {
-		my $row = $looprow[$i]->{'rowtitle'};
-		my @loopcell;
-		my $totalrow=0;
-		# for each column
-		for (my $j=0;$j<=$#loopcol;$j++) {
-			my $col = $loopcol[$j]->{'coltitle'};
-			$dbcalc->execute($row,$col);
-			my ($value) = $dbcalc->fetchrow;
-# 			warn "$row / $col / $value";
-			$totalrow += $value;
-			$grantotal += $value;
-			$loopfooter[$j]->{'totalcol'} +=$value;
-			push @loopcell,{value => $value};
+	
+	#Initialization of cell values.....
+	my %table;
+#	warn "init table";
+	foreach my $row ( @loopline ) {
+		foreach my $col ( @loopcol ) {
+#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
+			$table{$row->{rowtitle}}->{$col->{coltitle}}=0;
 		}
-		$looprow[$i]->{'totalrow'}=$totalrow;
-		$looprow[$i]->{'loopcell'}=\@loopcell;
-		$looprow[$i]->{'hilighted'} = 1 if $hilighted eq 1;
-		$hilighted = -$hilighted;
+		$table{$row->{rowtitle}}->{totalrow}=0;
 	}
 
-# 	# the header of the table
- 	$globalline{loopfilter}=\@loopfilter;
+# preparing calculation
+	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM borrowers WHERE $line is not null AND $column is not null";
+	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
+	$strcalc .= " AND categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
+	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
+	$strcalc .= " AND zipcode like '" . @$filters[1] ."'" if ( @$filters[1] );
+	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
+	$strcalc .= " AND sort1 like '" . @$filters[2] ."'" if ( @$filters[2] );
+	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
+	$strcalc .= " AND sort2 like '" . @$filters[3] ."'" if ( @$filters[3] );
+	$strcalc .= " AND $status='1' " if ($status);
+	$strcalc .= " group by $linefield, $colfield";
+#	warn "". $strcalc;
+	my $dbcalc = $dbh->prepare($strcalc);
+	$dbcalc->execute;
+#	warn "filling table";
+	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
+#		warn "filling table $row / $col / $value ";
+		$table{$row}->{$col}=$value;
+		$table{$row}->{totalrow}+=$value;
+		$grantotal += $value;
+	}
+	
+	foreach my $row ( keys %table ) {
+		my @loopcell;
+		#@loopcol ensures the order for columns is common with column titles
+		foreach my $col ( @loopcol ) {
+			push @loopcell, {value => $table{$row}->{$col->{coltitle}}} ;
+		}
+		push @looprow,{ 'rowtitle' => $row,
+						'loopcell' => \@loopcell,
+						'hilighted' => 1 ,
+						'totalrow' => $table{$row}->{totalrow}
+					};
+		$hilighted = -$hilighted;
+	}
+	
+	foreach my $col ( @loopcol ) {
+		my $total=0;
+		foreach my $row ( @loopline ) {
+			$total += $table{$row->{rowtitle}}->{$col->{coltitle}};
+		}
+		push @loopfooter, {'totalcol' => $total};
+	}
+			
+
+	# the header of the table
+	$globalline{loopfilter}=\@loopfilter;
+	# the core of the table
 	$globalline{looprow} = \@looprow;
-# 	# the core of the table
  	$globalline{loopcol} = \@loopcol;
 # 	# the foot (totals by borrower type)
  	$globalline{loopfooter} = \@loopfooter;
