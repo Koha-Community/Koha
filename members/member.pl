@@ -64,6 +64,7 @@ my $theme = $input->param('theme') || "default";
 
 my $member=$input->param('member');
 my $orderby=$input->param('orderby');
+$orderby = "surname,firstname" unless $orderby;
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 my $env;
