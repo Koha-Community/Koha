@@ -1,3 +1,18 @@
+2002-10-12  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* C4/Auth.pm: Turn off authentication entirely if systempreference
+	"insecure" is set to "yes".
+	* search.pl: Sorted "use" statements in esthetic order.
+
+	* t/require.t, koha.upgrade, installer.pl, installer-lite.pl,
+	INSTALL: Removed the dependency on Set::Scalar.
+
+	* C4/Search.pm: Got rid of the dependency on Set::Scalar. Yay! One
+	fewer package that the user has to install! Redid the way SQL
+	queries are built up, to make it more readable and maintainable.
+	Removed a couple of unused variables. Got rid of some un-Perl-like
+	bogosity.
+
 2002-10-11  Andrew Arensburger  <arensb@baa.ooblick.com>
 
 	* C4/Search.pm: Added a FIXME comment.
