@@ -69,9 +69,9 @@ if ($input->param('newpassword')) {
     <form method=post>
     <input type=hidden name=member value=$member>
     New UserID: <input name=newuserid size=20 value=$userid> <br>
-    New Password: <input name=newpassword size=20 value=$defaultnewpassword> (default is $spellitout)
+    New Password: <input name=newpassword size=20 value=$defaultnewpassword>
     <p>
-    <input type=submit value="Set Password">
+    <input type=submit value="Confirm Password">
     </form>
     |;
 
