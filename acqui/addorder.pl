@@ -98,4 +98,4 @@ if ($quantity ne '0'){
 	delorder($bibnum,$ordnum);
 }
 
-print $input->redirect("newbasket.pl?id=$supplier&basket=$basketno");
+print $input->redirect("basket.pl?basket=$basketno");

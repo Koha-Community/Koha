@@ -40,12 +40,6 @@ my $type=$input->param('type');
 if ($type eq ''){
   $type = 'intra';
 }
-#setup colours
-my $main;
-my $secondary;
-  $main='#cccc99';
-  $secondary='#ffffcc';
-
 
 #print $input->dump;
 my $blah;
@@ -131,7 +125,7 @@ my @loopresult;
 
 while ($i < $count2){
 		my %lineres;
-		my $coltab;
+		my $toggle;
 
 	my $result=$results[$i];
 	$result->{'title'}=~ s/\`/\\\'/g;
@@ -145,70 +139,70 @@ while ($i < $count2){
 		my $itemcount;
 	my $location='';
 	my $word=$result->{'author'};
-		$word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
-		$word=~ s/  //g;
-		$word=~ s/ /%20/g;
-		$word=~ s/\,/\,%20/g;
-		$word=~ s/\n//g;
-		$lineres{word}=$word;
-		$lineres{type}=$type;
+	$word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
+	$word=~ s/  //g;
+	$word=~ s/ /%20/g;
+	$word=~ s/\,/\,%20/g;
+	$word=~ s/\n//g;
+	$lineres{word}=$word;
+	$lineres{type}=$type;
 
-		my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
-		if ($nacount > 0){
-			$location .= "On Loan";
-			if ($nacount >1 ){
-				$location .= " ($nacount)";
-			}
-			$location.=" ";
+	my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
+	if ($nacount > 0){
+		$location .= "On Loan";
+		if ($nacount >1 ){
+			$location .= " ($nacount)";
 		}
-		if ($lcount > 0){
-			$location .= "Levin";
-			if ($lcount >1 ){
-				$location .= " ($lcount)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($lcount > 0){
+		$location .= "Levin";
+		if ($lcount >1 ){
+			$location .= " ($lcount)";
 		}
-		if ($fcount > 0){
-			$location .= "Foxton";
-			if ($fcount >1 ){
-				$location .= " ($fcount)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($fcount > 0){
+		$location .= "Foxton";
+		if ($fcount >1 ){
+			$location .= " ($fcount)";
 		}
-		if ($scount > 0){
-			$location .= "Shannon";
-			if ($scount >1 ){
-				$location .= " ($scount)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($scount > 0){
+		$location .= "Shannon";
+		if ($scount >1 ){
+			$location .= " ($scount)";
 		}
-		if ($lostcount > 0){
-			$location .= "Lost";
-			if ($lostcount >1 ){
-				$location .= " ($lostcount)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($lostcount > 0){
+		$location .= "Lost";
+		if ($lostcount >1 ){
+			$location .= " ($lostcount)";
 		}
-		if ($mending > 0){
-			$location .= "Mending";
-			if ($mending >1 ){
-				$location .= " ($mending)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($mending > 0){
+		$location .= "Mending";
+		if ($mending >1 ){
+			$location .= " ($mending)";
 		}
-		if ($transit > 0){
-			$location .= "In Transit";
-			if ($transit >1 ){
-				$location .= " ($transit)";
-			}
-			$location.=" ";
+		$location.=" ";
+	}
+	if ($transit > 0){
+		$location .= "In Transit";
+		if ($transit >1 ){
+			$location .= " ($transit)";
 		}
-		if ($colour == 1){
-			$coltab=$secondary;
-			$colour=0;
+		$location.=" ";
+	}
+	if ($colour == 1){
+		$toggle='#ffffcc';
+		$colour = 0;
 	} else{
-			$coltab=$main;
-			$colour=1;
+		$colour = 1;
+		$toggle='white';
 	}
 	$lineres{author2}=$author2;
 	$lineres{title2}=$title2;
@@ -219,7 +213,7 @@ while ($i < $count2){
 	$lineres{biblionumber}=$result->{biblionumber};
 	$lineres{title}=$result->{title};
 	$lineres{author}=$result->{author};
-	$lineres{coltab}=$coltab;
+	$lineres{toggle}=$toggle;
 	$lineres{itemcount}=$count;
 	$lineres{location}=$location;
 	push(@loopresult,\%lineres);

@@ -68,12 +68,11 @@ for (my $i=0; $i<$count; $i++) {
 	my @loop_basket;
 	for (my $i2=0;$i2<$ordcount;$i2++){
 		my %inner_line;
-	warn "bask : ".$orders->[$i2]->{'basketno'};
-			$inner_line{basketno} =$orders->[$i2]->{'basketno'};
-			$inner_line{total} =$orders->[$i2]->{'count(*)'};
-			$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-			$inner_line{entrydate} = $orders->[$i2]->{'entrydate'};
-			push @loop_basket, \%inner_line;
+		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
+		$inner_line{total} =$orders->[$i2]->{'count(*)'};
+		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
+		$inner_line{entrydate} = $orders->[$i2]->{'entrydate'};
+		push @loop_basket, \%inner_line;
 	}
 	$line{loop_basket} = \@loop_basket;
 	push @loop_suppliers, \%line;

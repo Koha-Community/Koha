@@ -31,8 +31,8 @@ You searched on
 
 <br> Results <TMPL_VAR name="dispnum"> to <TMPL_VAR name="offset2"> displayed.
 
-<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 background="/images/background-mem.gif" Color="<TMPL_VAR name="main">">
-	<TR  VALIGN=TOP>
+<TABLE  CELLSPACING=0  CELLPADDING=6 border=0>
+	<TR  VALIGN=TOP bgcolor="#ffdf61">
 		<TD><b>TITLE</b></TD>
 		<TD><b>AUTHOR</b></TD>
 		<TD><b>&copy;</b></TD>
@@ -41,7 +41,7 @@ You searched on
 	</TR>
 
 <TMPL_LOOP name="loopresult">
-	<TR VALIGN=TOP bgcolor="<TMPL_VAR name="coltab">">
+	<TR VALIGN=TOP bgcolor="<TMPL_VAR name="toggle">">
 		<TD>
 			<TMPL_IF name="testdonation">
 				<A HREF="/cgi-bin/koha/acqui/newbiblio.pl?sub=<TMPL_VAR name="sub">&author=<TMPL_VAR name="author2">&copyright=<TMPL_VAR name="copyright">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&biblio=<TMPL_VAR name="biblionumber">&title=<TMPL_VAR name="title2">">
@@ -71,7 +71,7 @@ You searched on
 
 </TMPL_LOOP>
 
-	<TR VALIGN=TOP>
+	<TR VALIGN=TOP bgcolor="#ffdf61">
 		<TD>
 			&nbsp;
 		</TD>

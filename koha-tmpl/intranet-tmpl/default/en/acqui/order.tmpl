@@ -6,10 +6,10 @@
 <CENTER>
 You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="count"> results found<p>
 <table border=0 cellspacing=0 cellpadding=5 width="80%">
-<tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif" width="20%">&nbsp;</td>
-	<td background="/images/background-mem.gif" width="30%"><b>Company</b></td>
-	<td background="/images/background-mem.gif" width="50%">
+<tr valign=top bgcolor="#ffdf61">
+	<td width="20%">&nbsp;</td>
+	<td width="30%"><b>Company</b></td>
+	<td width="50%">
 		<table width="100%" border=0 cellspacing=0 cellpadding=5>
 			<tr>
 				<td width="15%"><b>Basket</b></td>
@@ -24,7 +24,7 @@ You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="coun
 <TMPL_LOOP name="loop_suppliers">
 	<tr valign=top bgcolor=<TMPL_VAR name="color">>
 		<td>
-			<a href="newbasket.pl?id=<TMPL_VAR name="id">"><img src="/images/new-basket-short.gif" alt="New Basket" width=70 height=30 border=0 ></a>
+			<a href="basket.pl?id=<TMPL_VAR name="id">"><img src="/images/new-basket-short.gif" alt="New Basket" width=70 height=30 border=0 ></a>
 			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><img src="/images/receive-order-short.gif" alt="Receive Order" width=70 height=30 border=0 ></a>
 		</td>
 		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>

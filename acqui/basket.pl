@@ -23,117 +23,85 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use CGI;
+use C4::Interface::CGI::Output;
+use C4::Database;
+use HTML::Template;
+use C4::Catalogue;
 use strict;
 
-my $input=new CGI;
-print $input->header();
-my $basket=$input->param('basket');
-my ($count,@results)=basket($basket);
-print startpage;
+my $query =new CGI;
+my $basket=$query ->param('basket');
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/basket.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
 
-my @inp=startmenu('acquisitions');
+my ($count,@results);
+if ($basket eq ''){
+	$basket=newbasket();
+	$results[0]->{'booksellerid'}=$query->param('id');
+	$results[0]->{'authorisedby'} = $loggedinuser;
+} else {
+	($count,@results)=basket($basket);
+}
 
-my $count3=@inp;
-for (my $i=0;$i<$count3;$i++){
-      $inp[$i]=~ s/leftmargin=0 topmargin=0\>/leftmargin=0 topmargin=0 onload='update(orderform)'\>/;
-    }
-print @inp;
-# print $count;
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
-
-print <<printend
-<div align=right>
-Our Reference: $basket<br>
-Authorised By: $results[0]->{'authorisedby'}<br>
-$results[0]->{'entrydate'};
-</div>
-<FONT SIZE=6><em>Shopping Basket For: <a href=supplier.pl?id=$results[0]->{'booksellerid'}></a> $booksellers[0]->{'name'}</em></FONT>
-<a href=newbasket.pl?id=$results[0]->{'booksellerid'}&basket=$basket>Add more orders</a>
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
- <b>Search ISBN, Title or Author:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
-</form>
-<p>
-<FORM ACTION="/cgi-bin/koha/acqui/modorders.pl" method=post name=orderform>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33>
-  <td background="/images/background-mem.gif"><b>ORDER</b></td>
-  <td background="/images/background-mem.gif"><b>ISBN</b></td>
-  <td background="/images/background-mem.gif"><b>TITLE</b></td>
-  <td background="/images/background-mem.gif"><b>AUTHOR</b></td>
-  <td background="/images/background-mem.gif"><b>RRP</b></td>
-  <td background="/images/background-mem.gif"><b>\$EST</b></td>
-  <td background="/images/background-mem.gif"><b>QUANTITY</b></td>
-  <td background="/images/background-mem.gif"><b>TOTAL</b></td></tr>
-printend
-;
-
 
 my $line_total; # total of each line
 my $sub_total; # total of line totals
 my $gist;      # GST
 my $grand_total; # $subttotal + $gist
+my $toggle=0;
 
+my @books_loop;
 for (my $i=0;$i<$count;$i++){
-my $rrp=$results[$i]->{'listprice'};
-if ($results[$i]->{'currency'} ne 'NZD'){
-$rrp=curconvert($results[$i]->{'currency'},$rrp);
+	my $rrp=$results[$i]->{'listprice'};
+	$rrp=curconvert($results[$i]->{'currency'},$rrp);
+
+	$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
+	$sub_total+=$line_total;
+	$gist=sprintf("%.2f",$sub_total*0.125);
+	$grand_total=$sub_total+$gist;
+	my %line;
+	if ($toggle==0){
+		$line{color}='#ffffcc';
+		$toggle=1;
+	} else {
+		$line{color}='white';
+		$toggle=0;
+	}
+	$line{ordernumber} = $results[$i]->{'ordernumber'};
+	$line{isbn} = $results[$i]->{'isbn'};
+	$line{booksellerid} = $results[$i]->{'booksellerid'};
+	$line{basket}=$basket;
+	$line{title} = $results[$i]->{'title'};
+	$line{author} = $results[$i]->{'author'};
+	$line{i} = $i;
+	$line{rrp} = $results[$i]->{'rrp'};
+	$line{ecost} = $results[$i]->{'ecost'};
+	$line{quantity} = $results[$i]->{'quantity'};
+	$line{line_total} = $line_total;
+	$line{biblionumber} = $results[$i]->{'biblionumber'};
+	push @books_loop, \%line;
 }
-
-$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
-$sub_total+=$line_total;
-$gist=sprintf("%.2f",$sub_total*0.125);
-$grand_total=$sub_total+$gist;
-
-print <<EOP
-<tr valign=top bgcolor=#ffffcc>
-  <td>$results[$i]->{'ordernumber'}</td>
-  <td>$results[$i]->{'isbn'}</td>
-  <td><a href="newbiblio.pl?ordnum=$results[$i]->{'ordernumber'}&id=$results[$i]->{'booksellerid'}&basket=$basket">$results[$i]->{'title'}</a></td>
-  <td>$results[$i]->{'author'}</td>
-  <td>\$<input type=text name=rrp$i size=6 value="$results[$i]->{'rrp'}"></td>
-  <td>\$<input type=text name=eup$i size=6 value="$results[$i]->{'ecost'}"></td>
-  <td><input type=text name=quantity$i size=6 value=$results[$i]->{'quantity'} onchange='update(this.form)'></td>
-  <td>\$<input type=text name=total$i size=10 value=$line_total></td>
-  <input type=hidden name=ordnum$i value=$results[$i]->{'ordernumber'}>
-  <input type=hidden name=bibnum$i value=$results[$i]->{'biblionumber'}>
-</tr>
-EOP
-;
-}
-#
-print "<input type=hidden name=number value=$count>
-<input type=hidden name=basketno value=\"$basket\">";
-print <<EOP
-<tr valign=top bgcolor=white><td colspan=6 rowspan=3  bgcolor=#cccc99  background="/images/background-mem.gif">
-  <b>HELP</b><br>
-  To cancel an order, just change the quantity to 0 and click "save changes".<br>
-  To change any of the catalogue or accounting information attached to an order,  click on the title.<br>
-  To add new orders to this supplier, start with a search. </td>
-  <td><b>SubTotal</b></td>
-  <td>\$<input type=text name=subtotal size=10 value=$sub_total></td></tr>
-<tr valign=top bgcolor=white>
-  <td><b>GST</b></td>
-  <td>\$<input type=text name=gst size=10 value=$gist></td></tr>
-<tr valign=top bgcolor=white><td><b>TOTAL</b></td>
-  <td>\$<input type=text name=grandtotal size=10 value=$grand_total></td></tr>
-<tr valign=top bgcolor=white>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td colspan=3><input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right></td></tr>
-</table>
-</CENTER>
-EOP
-  ;
-
-print endmenu('acquisitions');
-
-print endpage;
+$template->param(basket => $basket,
+						authorisedby => $results[0]->{'authorisedby'},
+						entrydate =>$results[0]->{'entrydate'},
+						id=> $results[0]->{'booksellerid'},
+						name => $booksellers[0]->{'name'},
+						books_loop => \@books_loop,
+						count =>$count,
+						subtotal => $sub_total,
+						gist => $gist,
+						grand_total =>$grand_total,
+						);
+output_html_with_http_headers $query, $cookie, $template->output;

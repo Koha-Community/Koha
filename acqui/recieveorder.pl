@@ -22,58 +22,27 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-
-use C4::Catalogue;
-use C4::Biblio;
-use C4::Output;
-use CGI;
 use strict;
+use CGI;
+use C4::Auth;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Database;
+use HTML::Template;
+use C4::Catalogue;
 
 my $input=new CGI;
-print $input->header();
 my $id=$input->param('id');
 my ($count,@booksellers)=bookseller($id);
-print startpage;
 
-print startmenu('acquisitions');
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/recieveorder.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
+$template->param(name => $booksellers[0]->{'name'},id => $id,);
 
-print <<EOP
-
-<FONT SIZE=6><em>Receive Orders From Supplier <a href=whitcoulls.html>$booksellers[0]->{'name'}</a></em></FONT>
-<p>
-<CENTER>
-<form method=post action="receive.pl">
-<input type=hidden name=id value=$id>
-<p>
-<table border=1 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif" colspan=2><B>SUPPLIER INVOICE INFORMATION</B></td></tr>
-<TR VALIGN=TOP >
-<TD>Supplier Invoice Number</td>
-<td><input type=text size=20 name=invoice>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>GST</td>
-<td><input type=text size=20 name=gst>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Freight</td>
-<td><input type=text size=20 name=freight>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD></td>
-<td><input type=image  name=submit src=/images/continue.gif border=0 width=120 height=42>
-</td>
-</tr>
-</table>
-</CENTER>
-
-EOP
-;
-
-
-print endmenu('acquisitions');
-
-print endpage;
+output_html_with_http_headers $input, $cookie, $template->output;

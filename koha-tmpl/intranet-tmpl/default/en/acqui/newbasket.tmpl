@@ -1,0 +1,36 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+
+<FONT SIZE=6><em>Shopping Basket <TMPL_VAR name="basket"> for <TMPL_VAR name="name"></em></FONT><br />
+(Our Reference: <TMPL_VAR name="entrydate">, #<TMPL_VAR name="basket">, authorised by: <TMPL_VAR name="user">)<br />
+Ph: <TMPL_VAR name="phone">, Fax: <TMPL_VAR name="fax"><br />
+<TMPL_VAR name="address1">, <TMPL_VAR name="address2"><br />
+<TMPL_VAR name="address3">, <TMPL_VAR name="address4"><br />
+<p>
+<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
+<input type=hidden name=id value="<TMPL_VAR name="id">">
+<input type=hidden name=basket value="<TMPL_VAR name="basket">">
+<b> Search Keyword or Title: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+
+</form>
+
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor="#ffdf61">
+		<td width="5%"><b>Order</b></td>
+		<td width="10%"><b>Isbn</b></td>
+		<td width="30%"><b>Title</b></td>
+		<td width="20%"><b>Author</b></td>
+		<td width="8%"><b>Qty</b></td>
+	</tr>
+	<TMPL_LOOP name="books_loop">
+		<tr valign=top bgcolor=<TMPL_VAR name="color">>
+			<td><TMPL_VAR name="ordernumber"></td>
+			<td><TMPL_VAR name="isbn"></td>
+			<td><TMPL_VAR name="title"></td>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="quantity"></td>
+		</tr>
+	</TMPL_LOOP>
+</table>
+<TMPL_INCLUDE name="acquisitions-bottom.inc">
+
+

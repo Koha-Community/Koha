@@ -1,0 +1,86 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+
+<div align=right>
+Invoice: <TMPL_VAR name="invoice"><br>
+Received By: <TMPL_VAR name="user"><br>
+<TMPL_VAR name="date">
+</div>
+<FONT SIZE=6><em>Receipt Summary For : <a href=whitcoulls.html><TMPL_VAR name="name"></a> </em></FONT>
+<CENTER>
+
+<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl">
+<input type=hidden name=gst value="<TMPL_VAR name="gst">">
+<input type=hidden name=freight value="<TMPL_VAR name="freight">">
+<input type=hidden name=invoice value="<TMPL_VAR name="invoice">">
+
+<b>Search ISBN or Title:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
+</form>
+<p>
+<FORM ACTION="" method=post name=orderform>
+
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor="#ffdf61">
+		<td><b>BASKET</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>TITLE</b></td>
+		<td><b>AUTHOR</b></td>
+		<td><b>ACTUAL</b></td>
+		<td><b>P&P</b></td>
+		<td><b>QTY</b></td>
+		<td><b>TOTAL</b></td>
+	</tr>
+	<TMPL_VAR name="count">
+	<TMPL_LOOP name="loop_orders">
+		<tr valign=top bgcolor="<TMPL_VAR name="color">">
+			<td><TMPL_VAR name="basketno"></td>
+			<td><TMPL_VAR name="isbn"></td>
+			<td><a href="acquire.pl?recieve=<TMPL_VAR name="ordernumber">&biblio=<TMPL_VAR name="biblionumber">&invoice=<TMPL_VAR name="invoice">&gst=<TMPL_VAR name="gst">&freight=<TMPL_VAR name="freight">"><TMPL_VAR name="title"></a></td>
+			<td><TMPL_VAR name="author"></td>
+			<td>$<TMPL_VAR name="unitprice"></td>
+			<td></td>
+			<td><TMPL_VAR name="quantityrecieved"></td>
+			<td>$<TMPL_VAR name="total"></td>
+		</tr>
+	</TMPL_LOOP>
+	<tr valign=top bgcolor=white>
+		<td colspan=8><hr>
+		</td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><b>SUBTOTALS</b></td>
+		<td>$<TMPL_VAR name="totalprice"></td>
+		<td><TMPL_VAR name="totalfreight"></td>
+		<td><TMPL_VAR name="totalquantity"></td>
+		<td>$<TMPL_VAR name="tototal"></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td colspan=5 rowspan=2  bgcolor="#ffdf61">
+		<b>HELP</b>
+		<br>
+		The total at the bottom of the page should be within a few cents of the total for the invoice.<p>
+		When you have finished this invoice save the changes.
+		</td>
+		<td colspan=2 align=right><b>GST</b></td>
+		<td>$<TMPL_VAR name="gst"></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td colspan=2 align=right ><b>TOTAL</b></td>
+		<td>$<TMPL_VAR name="grandtot"></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td colspan=3>
+			<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right>
+		</td>
+	</tr>
+</table>
+</CENTER>
+
