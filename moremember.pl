@@ -90,8 +90,8 @@ print <<printend
 
 <P>
 
-General Notes: <A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
-$data->{'borrowernotes'}</a>
+General Notes: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
+$data->{'borrowernotes'}<!--</a>-->
 <p align=right>
 <form action=/cgi-bin/koha/memberentry.pl method=post>
 <input type=hidden name=bornum value=$bornum>
@@ -180,7 +180,9 @@ for (my $i=0;$i<$count;$i++){
   if ($datedue < $today){  
     print "<font color=red>";
   }
-  print "$issue->[$i]{'title'} $issue->[$i]{'barcode'}</td>
+  print "$issue->[$i]{'title'} 
+  <a href=/cgi-bin/koha/moredetail.pl?item=$issue->[$i]->{'itemnumber'}&bib=$issue->[$i]->{'biblionumber'}&bi=$issue->[$i]->{'biblioitemnumber'}>
+  $issue->[$i]{'barcode'}</a></td>
   <TD>$issue->[$i]{'date_due'}</td>";
   #find the charge for an item
   my ($charge,$itemtype)=calc_charges(\%env,$issue->[$i]{'itemnumber'},$bornum);
@@ -196,6 +198,8 @@ for (my $i=0;$i<$count;$i++){
   my ($rescount,$reserves)=FindReserves($issue->[$i]{'biblionumber'},'');
   if ($rescount >0){
     print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
+  } elsif ($issue->[$i]->{'renewals'} > 0) {
+      print "<TD>Previously Renewed - no renewals</td></tr>";
   } else {
     print "<TD>";
   
