@@ -102,21 +102,21 @@ if ($do_it) {
 	my $dbh = C4::Context->dbh;
 	my @values;
 	my %labels;
+	my %select;
 	my $req;
 	$req = $dbh->prepare("select distinctrow id,name from aqbooksellers order by name");
 	$req->execute;
 	my @select;
-	my %select;
 	push @select,"";
-	$select{""}="";
+#	$select{""}="";
 	while (my ($value, $desc) =$req->fetchrow) {
-		push @select, $value;
-		$select{$value}=$desc;
+		push @select, $desc;
+#		$select{$value}=$desc;
 	}
 	my $CGIBookSellers=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'Filter',
 				-values   => \@select,
-				-labels   => \%select,
+#				-labels   => \%select,
 				-size     => 1,
 				-multiple => 0 );
 	
@@ -222,7 +222,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=11;$i++) {
+	for (my $i=0;$i<=7;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			if ((($i==1) or ($i==3)) and (@$filters[$i-1])) {
@@ -255,7 +255,7 @@ sub calculate {
  	$linefilter[0] = @$filters[5] if ($line =~ /bookfund/ )  ;
  	$linefilter[0] = @$filters[6] if ($line =~ /sort1/ )  ;
  	$linefilter[0] = @$filters[7] if ($line =~ /sort2/ ) ;
-warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
+#warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /closedate/ ) ;
@@ -311,11 +311,11 @@ warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
  	}
 	$strsth .=" group by $linefield";
 	$strsth .=" order by $linefield";
- 	warn "". $strsth;
+	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
 	if (( @linefilter ) and ($linefilter[1])){
-		$sth->execute($linefilter[0],$linefilter[1]);
+		$sth->execute("'".$linefilter[0]."'","'".$linefilter[1]."'");
 	} elsif ($linefilter[0]) {
 		$sth->execute($linefilter[0]);
 	} else {
@@ -380,7 +380,8 @@ warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
 	
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if (( @colfilter ) and ($colfilter[1])){
-		$sth2->execute($colfilter[0],$colfilter[1]);
+		warn "from : ".$colfilter[0]." To  :".$colfilter[1];
+		$sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
 	} elsif ($colfilter[0]) {
 		$sth2->execute($colfilter[0]);
 	} else {
@@ -390,11 +391,12 @@ warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
  	while (my ($celvalue) = $sth2->fetchrow) {
  		my %cell;
 		my %ft;
+#		warn "coltitle :".$celvalue;
 		$cell{coltitle} = $celvalue;
- 		$ft{totalcol} = 0;
+		$ft{totalcol} = 0;
 		push @loopcol, \%cell;
  	}
-	
+#	warn "fin des titres colonnes";
 
 	my $i=0;
 	my @totalcol;
@@ -416,34 +418,26 @@ warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
 	$strcalc .= "SELECT $linefield, $colfield, ";
 	$strcalc .= "COUNT( aqorders.ordernumber ) " if ($process ==1);
 	$strcalc .= "SUM( aqorders.quantity * aqorders.listprice ) " if ($process ==2);
-	$strcalc.="FROM aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) and $column is not null and $line is not null ";
+	$strcalc .= "FROM aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) and $column is not null and $line is not null ";
 
-# 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
-# 	$strcalc .= " AND dewey >" . @$filters[0] ."" if ( @$filters[0] );
-# 	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
-# 	$strcalc .= " AND dewey <" . @$filters[1] ."" if ( @$filters[1] );
-# 	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
-# 	$strcalc .= " AND lccn >" . @$filters[2] ."" if ( @$filters[2] );
-# 	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
-# 	$strcalc .= " AND lccn <" . @$filters[3] ."" if ( @$filters[3] );
-# 	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
-# 	$strcalc .= " AND items.itemcallnumber >" . @$filters[4] ."" if ( @$filters[4] );
-# 	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-# 	$strcalc .= " AND items.itemcallnumber <" . @$filters[5] ."" if ( @$filters[5] );
-# 	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
-# 	$strcalc .= " AND biblioitems.itemtype like '" . @$filters[6] ."'" if ( @$filters[6] );
-# 	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
-# 	$strcalc .= " AND biblioitems.publishercode like '" . @$filters[7] ."'" if ( @$filters[7] );
-# 	@$filters[8]=~ s/\*/%/g if (@$filters[8]);
-# 	$strcalc .= " AND publicationyear >" . @$filters[8] ."" if ( @$filters[8] );
-# 	@$filters[9]=~ s/\*/%/g if (@$filters[9]);
-# 	$strcalc .= " AND publicationyear <" . @$filters[9] ."" if ( @$filters[9] );
-# 	@$filters[10]=~ s/\*/%/g if (@$filters[10]);
-# 	$strcalc .= " AND items.homebranch like '" . @$filters[10] ."'" if ( @$filters[10] );
-# 	@$filters[11]=~ s/\*/%/g if (@$filters[11]);
-# 	$strcalc .= " AND items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
- 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
- 	warn "". $strcalc;
+	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
+	$strcalc .= " AND aqbasket.closedate > '" . @$filters[0] ."'" if ( @$filters[0] );
+	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
+	$strcalc .= " AND aqbasket.closedate < '" . @$filters[1] ."'" if ( @$filters[1] );
+	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
+	$strcalc .= " AND aqorderdelivery.deliverydate > '" . @$filters[2] ."'" if ( @$filters[2] );
+	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
+	$strcalc .= " AND aqorderdelivery.deliverydate < '" . @$filters[3] ."'" if ( @$filters[3] );
+	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
+	$strcalc .= " AND aqbooksellers.name like '" . @$filters[4] ."'" if ( @$filters[4] );
+	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
+	$strcalc .= " AND aqbookfund.bookfundid like '" . @$filters[5] ."'" if ( @$filters[5] );
+	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
+	$strcalc .= " AND aqorders.sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
+	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
+	$strcalc .= " AND aqorders.sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
+	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
+	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
@@ -484,10 +478,10 @@ warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
 	$globalline{loopfilter}=\@loopfilter;
 	# the core of the table
 	$globalline{looprow} = \@looprow;
- 	$globalline{loopcol} = \@loopcol;
+	$globalline{loopcol} = \@loopcol;
 # 	# the foot (totals by borrower type)
- 	$globalline{loopfooter} = \@loopfooter;
- 	$globalline{total}= $grantotal;
+	$globalline{loopfooter} = \@loopfooter;
+	$globalline{total}= $grantotal;
 	$globalline{line} = $line;
 	$globalline{column} = $column;
 	push @mainloop,\%globalline;

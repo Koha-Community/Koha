@@ -137,7 +137,7 @@
 				<td>Received On</td>
 				<td align="center"><input type="radio" name="Line" value="aqorderdelivery.deliverydate"></td>
 				<td align="center"><input type="radio" name="Column" value="aqorderdelivery.deliverydate"></td>
-				<td > From <input type="text" readonly="readonly" size="10" id="fromRO" name="fromRO" >
+				<td > From <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" >
 							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -166,7 +166,7 @@
 										}
 									);
 								</script>
-					To <input type="text" readonly="readonly" size="10" id="toRO" name="toRO" value="" >
+					To <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" >
 						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
 							<script type="text/javascript">
 								function validate2(date) {
@@ -211,8 +211,8 @@
 			</tr>
 			<tr class="hilighted">
 				<td>Book Seller</td>
-				<td align="center"><input type="radio" name="Line" value="aqbooksellers.id"></td>
-				<td align="center"><input type="radio" name="Column" value="aqbooksellers.id"></td>
+				<td align="center"><input type="radio" name="Line" value="aqbooksellers.name"></td>
+				<td align="center"><input type="radio" name="Column" value="aqbooksellers.name"></td>
 				<td ><!-- TMPL_VAR NAME="CGIBookSeller" --></td>
 			</tr>
 			<tr>
