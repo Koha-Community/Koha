@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Issues & Returns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"

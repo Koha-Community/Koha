@@ -4,6 +4,7 @@
 <html>
 <head>
 <title>KOHA: OPAC Catalogue Search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"

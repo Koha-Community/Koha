@@ -4,6 +4,7 @@
 <head>
 <title>KOHA: INTRANET: Parameters</title>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" Alink="#cc3300"
