@@ -30,8 +30,8 @@ use C4::Print;
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
-my $circbackgroundcolor='#ffffcc';
-my $circbackgroundcolor='white';	# FIXME - Duplicate
+my $circbackgroundcolor='#ffffcc';	# FIXME - Never used
+my $circbackgroundcolor='white';	# FIXME - Never used
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
@@ -61,8 +61,9 @@ $env{'printer'}=$printer;
 $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
-my $tday = localtime(time());
-warn "today: $tday \n";
+my $tday = localtime(time());		# FIXME - Unused
+#warn "today: $tday \n";
+# FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 #warn $todaysdate;
 
