@@ -24,6 +24,23 @@ require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+=head1 NAME
+
+Install.pm - Perl module containing the bulk of the installation logic
+
+=head1 DESCRIPTION
+
+The Install.pm module contains the bulk
+of the code to do installation;
+this code is used by installer.pl
+to perform an actual installation.
+
+=head2 Internal functions (not meant to be used outside of Install.pm)
+
+=over 4
+
+=cut
+
 # set the version for version checking
 $VERSION = 0.01;
 
@@ -48,13 +65,32 @@ $VERSION = 0.01;
 		);
 
 
+=item heading
+
+    $messages->{'WelcomeToKohaInstaller'
+	= heading('Welcome to the Koha Installer') . qq|...|;
+
+The heading function takes one string, the text to be displayed as
+the heading, and returns a formatted heading (currently formatted
+in the "traditional Koha installer" style, i.e., surrounded by a
+box of equal signs).
+
+This reduces the likelihood of pod2man(1) etc. misinterpreting
+a line of equal signs as POD directives.
+
+=cut
+
+sub heading ($) {
+   my($s) = @_;
+   my $n = length($s) + 4;
+   my $line = ('=' x $n) . "\n";
+   "\n$line= $s =\n$line\n";
+}
+
 my $messages;
 $messages->{'continuing'}->{en}="Great!  Continuing setup.\n\n";
-$messages->{'WelcomeToKohaInstaller'}->{en}=qq|
-=================================
-= Welcome to the Koha Installer =
-=================================
-
+$messages->{'WelcomeToKohaInstaller'}->{en} =
+   heading('Welcome to the Koha Installer') . qq|
 Welcome to the Koha install script!  This script will prompt you for some
 basic information about your desired setup, then install Koha according to
 your specifications.  To accept the default value for any question, simply hit
@@ -64,11 +100,8 @@ Please be sure to read the documentation, or visit the Koha website at
 http://www.koha.org for more information.
 
 Are you ready to begin the installation? (Y/[N]): |;
-$messages->{'ReleaseCandidateWarning'}->{en}=qq|
-=====================
-= RELEASE CANDIDATE =
-=====================
-
+$messages->{'ReleaseCandidateWarning'}->{en} =
+   heading('RELEASE CANDIDATE') . qq|
 WARNING WARNING WARNING WARNING WARNING
 
 You are about to install Koha version %s.  This version of Koha is a
@@ -96,23 +129,13 @@ perl -MCPAN -e 'install Net::Z3950'
 
 Press the <ENTER> key to continue: |;
 
-$messages->{'CheckingPerlModules'}->{en}=qq|
-
-==================
-= PERL & MODULES =
-==================
-
+$messages->{'CheckingPerlModules'}->{en} = heading('PERL & MODULES') . qq|
 Checking perl modules ...
 |;
 
 $messages->{'PerlVersionFailure'}->{en}="Sorry, you need at least Perl %s\n";
 
-$messages->{'MissingPerlModules'}->{en}=qq|
-
-========================
-= MISSING PERL MODULES =
-========================
-
+$messages->{'MissingPerlModules'}->{en} = heading('MISSING PERL MODULES') . qq|
 You are missing some Perl modules which are required by Koha.
 Once these modules have been installed, rerun this installer.
 They can be installed by running (as root) the following:
@@ -120,22 +143,15 @@ They can be installed by running (as root) the following:
 %s
 |;
 
-$messages->{'AllPerlModulesInstalled'}->{en}=qq|
-
-==============================
-= ALL PERL MODULES INSTALLED =
-==============================
-
+$messages->{'AllPerlModulesInstalled'}->{en} =
+   heading('ALL PERL MODULES INSTALLED') . qq|
 All mandatory perl modules are installed.
 
 Press <ENTER> to continue: |;
 $messages->{'KohaVersionInstalled'}->{en}="You currently have Koha %s on your system.";
 $messages->{'KohaUnknownVersionInstalled'}->{en}="I am not able to determine what version of Koha is installed now.";
-$messages->{'KohaAlreadyInstalled'}->{en}=qq|
-==========================
-= Koha already installed =
-==========================
-
+$messages->{'KohaAlreadyInstalled'}->{en} =
+   heading('Koha already installed') . qq|
 It looks like Koha is already installed on your system (%s/koha.conf exists
 already).  If you would like to upgrade your system to %s, please use
 the koha.upgrade script in this directory.
@@ -143,40 +159,25 @@ the koha.upgrade script in this directory.
 %s
 
 |;
-$messages->{'GetOpacDir'}->{en}=qq|
-==================
-= OPAC DIRECTORY =
-==================
-
+$messages->{'GetOpacDir'}->{en} = heading('OPAC DIRECTORY') . qq|
 Please supply the directory you want Koha to store its OPAC files in.  This
 directory will be auto-created for you if it doesn't exist.
 
 OPAC Directory [%s]: |;
 
-$messages->{'GetIntranetDir'}->{en}=qq|
-=================================
-= INTRANET/LIBRARIANS DIRECTORY =
-=================================
-
+$messages->{'GetIntranetDir'}->{en} =
+   heading('INTRANET/LIBRARIANS DIRECTORY') . qq|
 Please supply the directory you want Koha to store its Intranet/Librarians
 files in.  This directory will be auto-created for you if it doesn't exist.
 
 Intranet Directory [%s]: |;
 
-$messages->{'GetKohaLogDir'}->{en}=qq|
-======================
-= KOHA LOG DIRECTORY =
-======================
-
+$messages->{'GetKohaLogDir'}->{en} = heading('KOHA LOG DIRECTORY') . qq|
 Specify a log directory where any Koha daemons can create log files.
 
 Koha Log Directory [%s]: |;
 
-$messages->{'AuthenticationWarning'}->{en}=qq|
-==================
-= Authentication =
-==================
-
+$messages->{'AuthenticationWarning'}->{en} = heading('Authentication') . qq|
 This release of Koha has a new authentication module.  If you are not already
 using basic authentication on your intranet, you will be required to log in to
 access some of the features of the intranet.  You can log in using the userid
@@ -185,11 +186,7 @@ and password from the %s/koha.conf configuration file at any time.  Use the
 
 Press the <ENTER> key to continue: |;
 
-$messages->{'Completed'}->{en}=qq|
-==============================
-= KOHA INSTALLATION COMPLETE =
-==============================
-
+$messages->{'Completed'}->{en} = heading('KOHA INSTALLATION COMPLETE') . qq|
 Congratulations ... your Koha installation is complete!
 
 You will be able to connect to your Librarian interface at:
@@ -219,6 +216,14 @@ sub releasecandidatewarning {
     };
 }
 
+
+=back
+
+=head2 Miscellaneous utility functions
+
+=over 4
+
+=cut
 
 =item dirname
 
@@ -270,6 +275,14 @@ sub mkdir_parents ($;$) {
     }
     return $ok;
 }
+
+=back
+
+=head2 Subtasks of doing an installation
+
+=over 4
+
+=cut
 
 =item checkabortedinstall
 
@@ -364,12 +377,8 @@ sub checkperlmodules {
 
 }
 
-$messages->{'NoUsrBinPerl'}->{en}=qq|
-
-========================================
-= Perl is not located in /usr/bin/perl =
-========================================
-
+$messages->{'NoUsrBinPerl'}->{en} =
+   heading('Perl is not located in /usr/bin/perl') . qq|
 The Koha perl scripts expect to find the perl executable in the /usr/bin
 directory.  It is not there on your system.
 
@@ -526,30 +535,18 @@ You must specify different directories for the OPAC and INTRANET files!
 
 
 
-$messages->{'DatabaseName'}->{en}=qq|
-==========================
-= Name of MySQL database =
-==========================
-
+$messages->{'DatabaseName'}->{en} = heading('Name of MySQL database') . qq|
 Please provide the name of the mysql database for your koha installation.
 
 Database name [%s]: |;
 
-$messages->{'DatabaseHost'}->{en}=qq|
-=================
-= Database Host =
-=================
-
+$messages->{'DatabaseHost'}->{en} = heading('Database Host') . qq|
 Please provide the hostname for mysql.  Unless the database is located on
 another machine this will be "localhost".
 
 Database host [%s]: |;
 
-$messages->{'DatabaseUser'}->{en}=qq|
-=================
-= Database User =
-=================
-
+$messages->{'DatabaseUser'}->{en} = heading('Database User') . qq|
 Please provide the name of the user, who will have full administrative rights
 to the %s database, when authenticating from %s.
 
@@ -557,20 +554,12 @@ This user will also be used to access Koha's INTRANET interface.
 
 Database user [%s]: |;
 
-$messages->{'DatabasePassword'}->{en}=qq|
-=====================
-= Database Password =
-=====================
-
+$messages->{'DatabasePassword'}->{en} = heading('Database Password') . qq|
 Please provide a good password for the user %s.
 
 Database Password: |;
 
-$messages->{'BlankPassword'}->{en}=qq|
-==================
-= BLANK PASSWORD =
-==================
-
+$messages->{'BlankPassword'}->{en} = heading('BLANK PASSWORD') . qq|
 You must not use a blank password for your MySQL user!
 
 Press <ENTER> to try again: 
@@ -612,42 +601,28 @@ sub getdatabaseinfo {
 
 
 
-$messages->{'FoundMultipleApacheConfFiles'}->{en}=qq|
-================================
-= MULTIPLE APACHE CONFIG FILES =
-================================
-
+$messages->{'FoundMultipleApacheConfFiles'}->{en} = 
+   heading('MULTIPLE APACHE CONFIG FILES') . qq|
 I found more than one possible Apache configuration file:
 
 %s
 
 Choose the correct file [1]: |;
 
-$messages->{'NoApacheConfFiles'}->{en}=qq|
-===============================
-= NO APACHE CONFIG FILE FOUND =
-===============================
-
+$messages->{'NoApacheConfFiles'}->{en} =
+   heading('NO APACHE CONFIG FILE FOUND') . qq|
 I was not able to find your Apache configuration file.
 
 The file is usually called httpd.conf or apache.conf.
 
 Please specify the location of your config file: |;
 
-$messages->{'NotAFile'}->{en}=qq|
-=======================
-= FILE DOES NOT EXIST =
-=======================
-
+$messages->{'NotAFile'}->{en} = heading('FILE DOES NOT EXIST') . qq|
 The file %s does not exist.
 
 Please press <ENTER> to continue: |;
 
-$messages->{'EnterApacheUser'}->{en}=qq|
-====================
-= NEED APACHE USER =
-====================
-
+$messages->{'EnterApacheUser'}->{en} = heading('NEED APACHE USER') . qq|
 I was not able to determine the user that Apache is running as.  This
 information is necessary in order to set the access privileges correctly on
 %s/koha.conf.  This user should be set in one of the Apache configuration
@@ -655,11 +630,7 @@ files using the "User" directive.
 
 Enter the Apache userid: |;
 
-$messages->{'InvalidUserid'}->{en}=qq|
-==================
-= INVALID USERID =
-==================
-
+$messages->{'InvalidUserid'}->{en} = heading('INVALID USERID') . qq|
 The userid %s is not a valid userid on this system.
 
 Press <ENTER> to continue: |;
@@ -740,11 +711,8 @@ sub getapacheinfo {
 }
 
 
-$messages->{'ApacheConfigIntroduction'}->{en}=qq|
-========================
-= APACHE CONFIGURATION =
-========================
-
+$messages->{'ApacheConfigIntroduction'}->{en} =
+   heading('APACHE CONFIGURATION') . qq|
 Koha needs to setup your Apache configuration file for the
 OPAC and LIBRARIAN virtual hosts.  By default this installer
 will do this by using one ip address and two different ports
@@ -755,41 +723,28 @@ what these other options are.
 
 Press <ENTER> to continue: |;
 
-$messages->{'GetVirtualHostEmail'}->{en}=qq|
-=============================
-= WEB SERVER E-MAIL CONTACT =
-=============================
-
+$messages->{'GetVirtualHostEmail'}->{en} =
+   heading('WEB SERVER E-MAIL CONTACT') . qq|
 Enter the e-mail address to be used as a contact for the virtual hosts (this
 address is displayed if any errors are encountered).
 
 E-mail contact [%s]: |;
 
-$messages->{'GetServerName'}->{en}=qq|
-======================================
-= WEB SERVER HOST NAME OR IP ADDRESS =
-======================================
-
+$messages->{'GetServerName'}->{en} =
+   heading('WEB SERVER HOST NAME OR IP ADDRESS') . qq|
 Please enter the domain name or ip address of your computer.
 
 Host name or IP Address [%s]: |;
 
-$messages->{'GetOpacPort'}->{en}=qq|
-==========================
-= OPAC VIRTUAL HOST PORT =
-==========================
-
+$messages->{'GetOpacPort'}->{en} = heading('OPAC VIRTUAL HOST PORT') . qq|
 Please enter the port for your OPAC interface.  This defaults to port 80, but
 if you are already serving web content from this server, you should change it
 to a different port (8000 might be a good choice).
 
 Enter the OPAC Port [%s]: |;
 
-$messages->{'GetIntranetPort'}->{en}=qq|
-==============================
-= INTRANET VIRTUAL HOST PORT =
-==============================
-
+$messages->{'GetIntranetPort'}->{en} =
+   heading('INTRANET VIRTUAL HOST PORT') . qq|
 Please enter the port for your Intranet interface.  This must be different from
 the OPAC port (%s).
 
@@ -815,11 +770,8 @@ sub getapachevhostinfo {
 
 }
 
-$messages->{'StartUpdateApache'}->{en}=qq|
-=================================
-= UPDATING APACHE CONFIGURATION =
-=================================
-
+$messages->{'StartUpdateApache'}->{en} =
+   heading('UPDATING APACHE CONFIGURATION') . qq|
 Checking for modules that need to be loaded...
 |;
 
@@ -827,11 +779,8 @@ $messages->{'LoadingApacheModuleModEnv'}->{en}="Loading SetEnv Apache module.\n"
 
 $messages->{'LoadingApacheModuleModInc'}->{en}="Loading Includes Apache module.\n";
 
-$messages->{'ApacheConfigBackupFailed'}->{en}=qq|
-======================================
-= APACHE CONFIGURATION BACKUP FAILED =
-======================================
-
+$messages->{'ApacheConfigBackupFailed'}->{en} =
+   heading('APACHE CONFIGURATION BACKUP FAILED') . qq|
 An error occurred while trying to make a backup copy of %s.
 
   %s
@@ -841,11 +790,8 @@ No changes will be made to the apache configuration file at this time.
 Press <ENTER> to continue: |;
 
 
-$messages->{'ApacheAlreadyConfigured'}->{en}=qq|
-=============================
-= APACHE ALREADY CONFIGURED =
-=============================
-
+$messages->{'ApacheAlreadyConfigured'}->{en} =
+   heading('APACHE ALREADY CONFIGURED') . qq|
 %s appears to already have an entry for Koha
 Virtual Hosts.  You may need to edit %s
 f anything has changed since it was last set up.  This
@@ -974,11 +920,8 @@ EOP
     }
 }
 
-$messages->{'IntranetAuthenticationQuestion'}->{en}=qq|
-===========================
-= INTRANET AUTHENTICATION =
-===========================
-
+$messages->{'IntranetAuthenticationQuestion'}->{en} =
+   heading('INTRANET AUTHENTICATION') . qq|
 I can set it up so that the Intranet/Librarian site is password protected using
 Apache's Basic Authorization.
 
@@ -1027,11 +970,7 @@ EOP
     close(SITE);
 }
 
-$messages->{'InstallFiles'}->{en}=qq|
-====================
-= INSTALLING FILES =
-====================
-
+$messages->{'InstallFiles'}->{en} = heading('INSTALLING FILES') . qq|
 Copying files to installation directories:
 
 |;
@@ -1094,11 +1033,8 @@ opachtdocs=$::opacdir/htdocs/opac-tmpl
 
 }
 
-$messages->{'MysqlRootPassword'}->{en}=qq|
-============================
-= MYSQL ROOT USER PASSWORD =
-============================
-
+$messages->{'MysqlRootPassword'}->{en} =
+   heading('MYSQL ROOT USER PASSWORD') . qq|
 To allow us to create the koha database please supply your
 mysql server's root user password:
 
@@ -1106,30 +1042,19 @@ Enter MySQL root user password: |;
 
 $messages->{'InvalidMysqlRootPassword'}->{en}="Invalid Password.  Please try again.";
 
-$messages->{'CreatingDatabase'}->{en}=qq|
-=====================
-= CREATING DATABASE =
-=====================
-
+$messages->{'CreatingDatabase'}->{en} = heading('CREATING DATABASE') . qq|
 Creating the MySQL database for Koha...
 
 |;
 
-$messages->{'CreatingDatabaseError'}->{en}=qq|
-===========================
-= ERROR CREATING DATABASE =
-===========================
-
+$messages->{'CreatingDatabaseError'}->{en} =
+   heading('ERROR CREATING DATABASE') . qq|
 Couldn't connect to the MySQL server for the reason given above.
 This is a serious problem, the database will not get installed.
 
 Press <ENTER> to continue: |;
 
-$messages->{'SampleData'}->{en}=qq|
-===============
-= SAMPLE DATA =
-===============
-
+$messages->{'SampleData'}->{en} = heading('SAMPLE DATA') . qq|
 If you are installing Koha for evaluation purposes,  I have a batch of sample
 data that you can install now.
 
@@ -1138,11 +1063,8 @@ data, you probably don't want this sample data installed.
 
 Would you like to install the sample data? Y/[N]: |;
 
-$messages->{'SampleDataInstalled'}->{en}=qq|
-=========================
-= SAMPLE DATA INSTALLED =
-=========================
-
+$messages->{'SampleDataInstalled'}->{en} =
+   heading('SAMPLE DATA INSTALLED') . qq|
 Sample data has been installed.  For some suggestions on testing Koha, please
 read the file doc/HOWTO-Testing.  If you find any bugs, please submit them at
 http://bugs.koha.org/.  If you need help with testing Koha, you can post a
@@ -1156,24 +1078,16 @@ You can find instructions for subscribing to the Koha mailing lists at:
 
 Press <ENTER> to continue: |;
 
-$messages->{'AddBranchPrinter'}->{en}=qq|
-==========================
-= Add Branch and Printer =
-==========================
-
+$messages->{'AddBranchPrinter'}->{en} = heading('Add Branch and Printer') . qq|
 Would you like to install an initial branch and printer? [Y]/N: |;
 
 $messages->{'BranchName'}->{en}="Branch Name [%s]: ";
 $messages->{'BranchCode'}->{en}="Branch Code (4 letters or numbers) [%s]: ";
 $messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
 $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
-$messages->{'BlankMysqlPassword'}->{en}=qq|
-========================
-= Blank MySql Password =
-========================
-
-Do not leave your MySql root password blank unless you know exactly what you
-are doing.  To change your MySql root password use the mysqladmin command:
+$messages->{'BlankMysqlPassword'}->{en} = heading('Blank MySQL Password') . qq|
+Do not leave your MySQL root password blank unless you know exactly what you
+are doing.  To change your MySQL root password use the mysqladmin command:
 
 mysqladmin password NEWPASSWORDHERE
 
@@ -1250,11 +1164,8 @@ EOP
 
 }
 
-$messages->{'UpdateMarcTables'}->{en}=qq|
-=========================================
-= UPDATING MARC FIELD DEFINITION TABLES =
-=========================================
-
+$messages->{'UpdateMarcTables'}->{en} =
+   heading('UPDATING MARC FIELD DEFINITION TABLES') . qq|
 You can import marc parameters for :
 
   1 MARC21
@@ -1266,10 +1177,7 @@ nothing will be added, and it can be a BIG job to manually create those tables
 
 Choose MARC definition [1]: |;
 
-$messages->{'Language'}->{en}=qq|
-====================
-= CHOOSE LANGUAGES  =
-====================
+$messages->{'Language'}->{en} = heading('CHOOSE LANGUAGES') . qq|
 This version of koha supports a few languages.
 Enter you languages preferences : either en, fr, es or pl.
 Note that the en is always choosen when the system does not finds the
@@ -1355,11 +1263,7 @@ sub populatedatabase {
 	}
 }
 
-$messages->{'RestartApache'}->{en}=qq|
-==================
-= RESTART APACHE =
-==================
-
+$messages->{'RestartApache'}->{en} = heading('RESTART APACHE') . qq|
 Apache needs to be restarted to load the new configuration for Koha.
 
 Would you like to restart Apache now?  [Y]/N: |;
@@ -1414,5 +1318,14 @@ sub loadconfigfile {
 }
 
 END { }       # module clean-up code here (global destructor)
+
+=back
+
+=head1 SEE ALSO
+
+buildrelease.pl,
+installer.pl
+
+=cut
 
 1;
