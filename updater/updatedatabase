@@ -46,7 +46,7 @@ unless ($tables{'bookshelf'}) {
 
 unless ($tables{'z3950queue'}) {
     print "Adding z3950queue table...\n";
-    my $sti=$dbh->prepare("create table z3950queue (id int auto_increment primary key, term text, type char(10), startdate int, enddate int, done smallint, results longblob, numercords int, servers text, identifier char(30))");
+    my $sti=$dbh->prepare("create table z3950queue (id int auto_increment primary key, term text, type char(10), startdate int, enddate int, done smallint, results longblob, numrecords int, servers text, identifier char(30))");
     $sti->execute;
 }
 
