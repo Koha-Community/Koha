@@ -393,7 +393,7 @@ my %tabledata = (
             variable            => 'dateformat',
             value               => 'metric',
             explanation         =>
-            'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
+            'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
 	    type		=> 'Choice',
 	    options 		=> 'metric|us|iso'
         },
@@ -981,6 +981,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.71  2003/12/18 17:23:22  tipaul
+# fix for 625
+#
 # Revision 1.70  2003/12/15 14:40:09  tipaul
 # OPAC now show a systempref variable in main/home screen => easier to change for a library.
 #
