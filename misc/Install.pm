@@ -845,32 +845,33 @@ sub checkperlmodules {
 # Test for Perl and Modules
 #
 	my ($auto_install) = @_;
-    my $message = getmessage('CheckingPerlModules');
-    showmessage($message, 'none');
+	my $message = getmessage('CheckingPerlModules');
+	showmessage($message, 'none');
 
-    unless ($] >= 5.006001) {			# Bug 179
-	die getmessage('PerlVersionFailure', ['5.6.1']);
-    }
+	unless ($] >= 5.006001) {			# Bug 179
+		die getmessage('PerlVersionFailure', ['5.6.1']);
+	}
 	startsysout();
 
-    my @missing = ();
-    unless (eval {require DBI})              { push @missing,"DBI" };
-    unless (eval {require Date::Manip})      { push @missing,"Date::Manip" };
-    unless (eval {require DBD::mysql})       { push @missing,"DBD::mysql" };
-    unless (eval {require HTML::Template})   { push @missing,"HTML::Template" };
+	my @missing = ();
+	unless (eval {require DBI})              { push @missing,"DBI" };
+	unless (eval {require Date::Manip})      { push @missing,"Date::Manip" };
+	unless (eval {require DBD::mysql})       { push @missing,"DBD::mysql" };
+	unless (eval {require HTML::Template})   { push @missing,"HTML::Template" };
 #    unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
-    unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
-    unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
-    unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
-    unless (eval {require Event})       {
+	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
+	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
+	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
+	unless (eval {require Net::LDAP})   { push @missing,"Net::LDAP" };
+	unless (eval {require Event})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-		    push @missing, "Event";
-		}
+				push @missing, "Event";
+			}
     }
     unless (eval {require Net::Z3950})       {
-	showmessage(getmessage('NETZ3950Missing'), 'PressEnter', '', 1);
+		showmessage(getmessage('NETZ3950Missing'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
-		    push @missing, "Net::Z3950";
+			push @missing, "Net::Z3950";
 		}
     }
 
