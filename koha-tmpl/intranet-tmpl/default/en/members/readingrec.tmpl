@@ -18,7 +18,10 @@
 		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=author&limit=<!-- TMPL_VAR name="limit" -->"><b>AUTHOR</b></a>
 	</TD>
 	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>DATE</b></a>
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>DATE DUE</b></a>
+	</TD>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>RETURNED</b></a>
 	</TD>
 	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 		<b>Volume</b>
@@ -31,6 +34,9 @@
 	</TD>
 	<TD  bgcolor="white">
  		<!-- TMPL_VAR name="author" -->&nbsp;
+	</TD>
+	<TD  bgcolor="white">
+		<!-- TMPL_VAR name="date_due" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
 		<!-- TMPL_VAR name="returndate" -->&nbsp;
