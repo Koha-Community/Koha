@@ -527,15 +527,15 @@ sub Findgroupreserve {
                       reserves.itemnumber                 AS itemnumber
                  FROM reserves LEFT JOIN reserveconstraints
                    ON reserves.biblionumber = reserveconstraints.biblionumber
-                WHERE reserves.biblionumber = $biblio
-                  AND ( ( reserveconstraints.biblioitemnumber = $bibitem
+                WHERE reserves.biblionumber = ?
+                  AND ( ( reserveconstraints.biblioitemnumber = ?
                       AND reserves.borrowernumber = reserveconstraints.borrowernumber
                       AND reserves.reservedate    =reserveconstraints.reservedate )
                    OR reserves.constrainttype='a' )
                   AND reserves.cancellationdate is NULL
                   AND (reserves.found <> 'F' or reserves.found is NULL)";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($biblio, $bibitem);
   # FIXME - $i is unnecessary and bogus
   my $i=0;
   my @results;
