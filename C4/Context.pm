@@ -433,8 +433,6 @@ sub dbh
 	    return $context->{"dbh"} if (defined($sth->execute));
 	}
 
-	warn "Database died";
-
 	# No database handle or it died . Create one.
 	$context->{"dbh"} = &_new_dbh();
 
