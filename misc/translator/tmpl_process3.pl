@@ -371,18 +371,20 @@ can be used.
 =item -
 
 Minor changes in whitespace in source templates
-do not generally require new strings to be re-translated.
+do not generally require strings to be re-translated.
 
 =item -
 
 Able to handle <TMPL_VAR> variables in the templates;
-<TMPL_VAR> variables are usually extracted in proper context.
+<TMPL_VAR> variables are usually extracted in proper context,
+represented by a short %s placeholder.
 
 =item -
 
 Able to handle text input and radio button INPUT elements
 in the templates; these INPUT elements are also usually
-extracted in proper context.
+extracted in proper context,
+represented by a short %S or %p placeholder.
 
 =item -
 
@@ -392,19 +394,34 @@ of the variables).
 
 =item -
 
+The %I<n>$s (or %I<n>$p, etc.) notation can be used
+for change the ordering of the variables,
+if such a reordering is required for correct translation.
+
+=item -
+
+If a particular <TMPL_VAR> should not appear in the
+translation, it can be suppressed with the %0.0s notation.
+
+=item -
+
 Using the PO format also means translators can add their
 own comments in the translation files, if necessary.
 
 =item -
 
 Create, update, and install actions are all based on the
-same scanner module. This ensures that when installing the
-translation file, nothing that should not be translated is
+same scanner module. This ensures that update and install
+have the same idea of what is a translatable string;
+attribute names in tags, for example, will not be
 accidentally translated.
 
 =back
 
 =head1 NOTES
+
+Anchors are represented by an <AI<n>> notation.
+The meaning of this non-standard notation might not be obvious.
 
 The create action calls xgettext.pl to do the actual work;
 the update action calls xgettext.pl and msgmerge(1) to do the
@@ -434,5 +451,7 @@ TmplTokenizer.pm,
 msgmerge(1),
 Locale::PO(3),
 translator_doc.txt
+
+http://www.saas.nsw.edu.au/koha_wiki/index.php?page=DifficultTerms
 
 =cut
