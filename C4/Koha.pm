@@ -13,11 +13,32 @@ $VERSION = 0.01;
 	     &fixEthnicity
 	     &borrowercategories
 	     &ethnicitycategories
+	     &configfile
 	     $DEBUG); 
 
 use vars qw();
 	
 my $DEBUG = 0;
+
+sub configfile {
+    my $configfile;
+    open (KC, "/etc/koha.conf");
+    while (<KC>) {
+	chomp;
+	(next) if (/^\s*#/);
+	if (/(.*)\s*=\s*(.*)/) {
+	    my $variable=$1;
+	    my $value=$2;
+	    # Clean up white space at beginning and end
+	    $variable=~s/^\s*//g;
+	    $variable=~s/\s*$//g;
+	    $value=~s/^\s*//g;
+	    $value=~s/\s*$//g;
+	    $configfile->{$variable}=$value;
+	}
+    }
+    return $configfile;
+}
 
 sub slashifyDate {
     # accepts a date of the form xx-xx-xx[xx] and returns it in the 
@@ -29,7 +50,7 @@ sub slashifyDate {
 sub fixEthnicity($) { 
 
     my $ethnicity = shift;
-    my $dbh=C4Connect;
+    my $dbh=C4Connect();
     my $sth=$dbh->prepare("Select name from ethnicity where code = ?");
     $sth->execute($ethnicity);
     my $data=$sth->fetchrow_hashref;
@@ -39,7 +60,7 @@ sub fixEthnicity($) {
 }
 
 sub borrowercategories {
-    my $dbh=C4Connect;
+    my $dbh=C4Connect();
     my $sth=$dbh->prepare("Select categorycode,description from categories order by description");
     $sth->execute;
     my %labels;
@@ -54,7 +75,7 @@ sub borrowercategories {
 }
 
 sub ethnicitycategories {
-    my $dbh=C4Connect;
+    my $dbh=C4Connect();
     my $sth=$dbh->prepare("Select code,name from ethnicity order by name");
     $sth->execute;
     my %labels;

@@ -6,6 +6,7 @@ use Digest::MD5 qw(md5_base64);
 
 require Exporter;
 use C4::Database;
+use C4::Koha;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -162,7 +163,9 @@ sub checkpw {
 # This should be modified to allow a select of authentication schemes (ie LDAP)
 # as well as local authentication through the borrowers tables passwd field
 #
+
     my ($dbh, $userid, $password) = @_;
+    warn "Checking $userid $password";
     my $sth=$dbh->prepare("select password from borrowers where userid=?");
     $sth->execute($userid);
     if ($sth->rows) {
@@ -178,6 +181,12 @@ sub checkpw {
 	if (md5_base64($password) eq $md5password) {
 	    return 1;
 	}
+    }
+    my $configfile=configfile();
+    warn "$userid $configfile->{'user'} $password $configfile->{'pass'}";
+    if ($userid eq $configfile->{'user'} && $password eq $configfile->{'pass'}) {
+        # Koha superuser account
+	return 1;
     }
     return 0;
 }
