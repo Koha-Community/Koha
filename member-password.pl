@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to delete items
+#script to set the password, and optionally a userid, for a borrower
 #written 2/5/00
 #by chris@katipo.co.nz
 
@@ -11,7 +11,7 @@ use CGI;
 use Digest::MD5 qw(md5_base64);
 use C4::Output;
 use C4::Auth;
-use C4::Database;
+use C4::Context;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
 
@@ -35,7 +35,7 @@ foreach (sort keys %$issues) {
 if ($input->param('newpassword')) {
     my $digest=md5_base64($input->param('newpassword'));
     my $uid = $input->param('newuserid');
-    my $dbh=C4Connect();
+    my $dbh=C4::Context->dbh;
     my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
     $sth->execute($uid, $digest, $member);
     print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$member");
