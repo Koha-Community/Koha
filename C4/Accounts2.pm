@@ -26,18 +26,57 @@ use C4::Stats;
 use C4::Search;
 use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
-$VERSION = 0.01;
-    
+$VERSION = 0.01;	# FIXME - Should probably be different from
+			# the version for C4::Accounts
+
+=head1 NAME
+
+C4::Accounts - Functions for dealing with Koha accounts
+
+=head1 SYNOPSIS
+
+  use C4::Accounts;
+
+=head1 DESCRIPTION
+
+The functions in this module deal with the monetary aspect of Koha,
+including looking up and modifying the amount of money owed by a
+patron.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&recordpayment &fixaccounts &makepayment &manualinvoice
 &getnextacctno);
 
+# FIXME - Never used
 sub displayaccounts{
   my ($env)=@_;
 }
 
+=item recordpayment
+
+  &recordpayment($env, $borrowernumber, $payment);
+
+Record payment by a patron. C<$borrowernumber> is the patron's
+borrower number. C<$payment> is a floating-point number, giving the
+amount that was paid. C<$env> is a reference-to-hash;
+C<$env-E<gt>{branchcode}> is the code of the branch where payment was
+made.
+
+Amounts owed are paid off oldest first. That is, if the patron has a
+$1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
+of $1.50, then the oldest fine will be paid off in full, and $0.50
+will be credited to the next one.
+
+=cut
+#'
 sub recordpayment{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data)=@_;
@@ -50,7 +89,7 @@ sub recordpayment{
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
-  my $query = "select * from accountlines 
+  my $query = "select * from accountlines
   where (borrowernumber = '$bornumber') and (amountoutstanding<>0)
   order by date";
   my $sth = $dbh->prepare($query);
@@ -70,7 +109,7 @@ sub recordpayment{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
-     $updquery = "insert into accountoffsets 
+     $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
      $usth = $dbh->prepare($updquery);
@@ -78,8 +117,8 @@ sub recordpayment{
      $usth->finish;
   }
   # create new line
-  $updquery = "insert into accountlines 
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)  
+  $updquery = "insert into accountlines
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
   values ($bornumber,$nextaccntno,now(),0-$data,'Payment,thanks',
   'Pay',0-$amountleft)";
   my $usth = $dbh->prepare($updquery);
@@ -90,9 +129,26 @@ sub recordpayment{
   $dbh->disconnect;
 }
 
+=item makepayment
+
+  &makepayment($borrowernumber, $acctnumber, $amount, $branchcode);
+
+Records the fact that a patron has paid off the entire amount he or
+she owes.
+
+C<$borrowernumber> is the patron's borrower number. C<$acctnumber> is
+the account that was credited. C<$amount> is the amount paid (this is
+only used to record the payment. It is assumed to be equal to the
+amount owed). C<$branchcode> is the code of the branch where payment
+was made.
+
+=cut
+#'
+# FIXME - I'm not at all sure about the above, because I don't
+# understand what the acct* tables in the Koha database are for.
 sub makepayment{
   #here we update both the accountoffsets and the account lines
-  #updated to check, if they are paying off a lost item, we return the item 
+  #updated to check, if they are paying off a lost item, we return the item
   # from their card, and put a note on the item record
   my ($bornumber,$accountno,$amount,$user)=@_;
   my $env;
@@ -106,26 +162,30 @@ sub makepayment{
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
+  # FIXME - This prepare/execute/finish sequence could be done with
+  # $dbh->do(), no?
   my $updquery="Update accountlines set amountoutstanding=0 where
   borrowernumber=$bornumber and accountno=$accountno";
   $sth=$dbh->prepare($updquery);
   $sth->execute;
   $sth->finish;
 #  print $updquery;
-  $updquery = "insert into accountoffsets 
+  $updquery = "insert into accountoffsets
   (borrowernumber, accountno, offsetaccount,  offsetamount)
   values ($bornumber,$accountno,$nextaccntno,$newamtos)";
   my $usth = $dbh->prepare($updquery);
   $usth->execute;
-  $usth->finish;  
+  $usth->finish;
   # create new line
   my $payment=0-$amount;
-  $updquery = "insert into accountlines 
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)  
+  $updquery = "insert into accountlines
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
   values ($bornumber,$nextaccntno,now(),$payment,'Payment,thanks - $user', 'Pay',0)";
   $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
+  # FIXME - The second argument to &UpdateStats is supposed to be the
+  # branch code.
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
   $sth->finish;
   $dbh->disconnect;
@@ -135,6 +195,20 @@ sub makepayment{
   }
 }
 
+=item getnextacctno
+
+  $nextacct = &getnextacctno($env, $borrowernumber, $dbh);
+
+Returns the next unused account number for the patron with the given
+borrower number.
+
+C<$dbh> is a DBI::db handle to the Koha database.
+
+C<$env> is ignored.
+
+=cut
+#'
+# FIXME - Okay, so what does the above actually _mean_?
 sub getnextacctno {
   my ($env,$bornumber,$dbh)=@_;
   my $nextaccntno = 1;
@@ -150,6 +224,13 @@ sub getnextacctno {
   return($nextaccntno);
 }
 
+=item fixaccounts
+
+  &fixaccounts($borrowernumber, $accountnumber, $amount);
+
+=cut
+#'
+# FIXME - I don't understand what this function does.
 sub fixaccounts {
   my ($borrowernumber,$accountno,$amount)=@_;
   my $dbh=C4Connect;
@@ -158,6 +239,7 @@ sub fixaccounts {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
+	# FIXME - Error-checking
   my $diff=$amount-$data->{'amount'};
   my $outstanding=$data->{'amountoutstanding'}+$diff;
   $sth->finish;
@@ -170,6 +252,7 @@ sub fixaccounts {
    $dbh->disconnect;
  }
 
+# FIXME - Never used, but not exported, either.
 sub returnlost{
   my ($borrnum,$itemnum)=@_;
   my $dbh=C4Connect;
@@ -189,6 +272,21 @@ sub returnlost{
   $dbh->disconnect;
 }
 
+=item manualinvoice
+
+  &manualinvoice($borrowernumber, $itemnumber, $description, $type,
+                 $amount, $user);
+
+C<$borrowernumber> is the patron's borrower number.
+C<$description> is a description of the transaction.
+C<$type> may be one of C<CS>, C<CB>, C<CW>, C<CF>, C<CL>, C<N>, C<L>,
+or C<REF>.
+C<$itemnumber> is the item involved, if pertinent; otherwise, it
+should be the empty string.
+
+=cut
+#'
+# FIXME - Okay, so what does this function do, really?
 sub manualinvoice{
   my ($bornum,$itemnum,$desc,$type,$amount,$user)=@_;
   my $dbh=C4Connect;
@@ -197,10 +295,10 @@ sub manualinvoice{
   my %env;
   my $accountno=getnextacctno('',$bornum,$dbh);
   my $amountleft=$amount;
-  
+
   if ($type eq 'CS' || $type eq 'CB' || $type eq 'CW'
   || $type eq 'CF' || $type eq 'CL'){
-    my $amount2=$amount*-1;
+    my $amount2=$amount*-1;	# FIXME - $amount2 = -$amount
     $amountleft=fixcredit(\%env,$bornum,$amount2,$itemnum,$type,$user);
   }
   if ($type eq 'N'){
@@ -210,7 +308,7 @@ sub manualinvoice{
     $desc="Lost Item";
   }
   if ($type eq 'REF'){
-    $amountleft=refund('',$bornum,$amount);    
+    $amountleft=refund('',$bornum,$amount);
   }
   if ($itemnum ne ''){
     my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
@@ -226,14 +324,19 @@ sub manualinvoice{
     $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
     values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft')";
   }
-  
+
   my $sth=$dbh->prepare($insert);
   $sth->execute;
   $sth->finish;
-  
+
   $dbh->disconnect;
 }
-  
+
+# fixcredit
+# $amountleft = &fixcredit($env, $bornumber, $data, $barcode, $type, $user);
+#
+# This function is only used internally.
+# FIXME - Figure out what this function does, and write it down.
 sub fixcredit{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data,$barcode,$type,$user)=@_;
@@ -242,7 +345,7 @@ sub fixcredit{
   my $newamtos = 0;
   my $accdata = "";
   my $amountleft = $data;
-  if ($barcode ne ''){    
+  if ($barcode ne ''){
     my $item=getiteminformation($env,'',$barcode);
     my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
     my $query="Select * from accountlines where (borrowernumber='$bornumber'
@@ -259,7 +362,7 @@ sub fixcredit{
     my $sth=$dbh->prepare($query);
     $sth->execute;
     $accdata=$sth->fetchrow_hashref;
-    $sth->finish;   
+    $sth->finish;
     if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
@@ -273,7 +376,7 @@ sub fixcredit{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
-     $updquery = "insert into accountoffsets 
+     $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
      $usth = $dbh->prepare($updquery);
@@ -283,7 +386,7 @@ sub fixcredit{
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
-  my $query = "select * from accountlines 
+  my $query = "select * from accountlines
   where (borrowernumber = '$bornumber') and (amountoutstanding >0)
   order by date";
   my $sth = $dbh->prepare($query);
@@ -304,7 +407,7 @@ sub fixcredit{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
-     $updquery = "insert into accountoffsets 
+     $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
      $usth = $dbh->prepare($updquery);
@@ -318,9 +421,10 @@ sub fixcredit{
   UpdateStats($env,$user,$type,$data,$user,'','',$bornumber);
   $amountleft*=-1;
   return($amountleft);
-  
+
 }
 
+# FIXME - Figure out what this function does, and write it down.
 sub refund{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data)=@_;
@@ -330,11 +434,11 @@ sub refund{
   my $accdata = "";
 #  my $branch=$env->{'branchcode'};
   my $amountleft = $data *-1;
-  
+
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
-  my $query = "select * from accountlines 
+  my $query = "select * from accountlines
   where (borrowernumber = '$bornumber') and (amountoutstanding<0)
   order by date";
   my $sth = $dbh->prepare($query);
@@ -357,7 +461,7 @@ sub refund{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
-     $updquery = "insert into accountoffsets 
+     $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
      $usth = $dbh->prepare($updquery);
@@ -368,4 +472,15 @@ sub refund{
   $dbh->disconnect;
   return($amountleft);
 }
+
 END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+=back
+
+=head1 SEE ALSO
+
+L<DBI(3)|DBI>
+
+=cut

@@ -27,11 +27,48 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::Stats - Update Koha statistics (log)
+
+=head1 SYNOPSIS
+
+  use C4::Stats;
+
+=head1 DESCRIPTION
+
+The C<&UpdateStats> function adds an entry to the statistics table in
+the Koha database, which acts as an activity log.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&UpdateStats &statsreport &Count &Overdues &TotalOwing
 &TotalPaid &getcharges &Getpaidbranch &unfilledreserves);
 
+=item UpdateStats
 
+  &UpdateStats($env, $branch, $type, $value, $other, $itemnumber,
+               $itemtype, $borrowernumber);
+
+Adds a line to the statistics table of the Koha database. In effect,
+it logs an event.
+
+C<$branch>, C<$type>, C<$value>, C<$other>, C<$itemnumber>,
+C<$itemtype>, and C<$borrowernumber> correspond to the fields of the
+statistics table in the Koha database.
+
+If C<$branch> is the empty string, the branch code will be taken from
+C<$env-E<gt>{branchcode}>.
+
+C<$env-E<gt>{usercode} specifies the value of the C<usercode> field.
+
+=cut
+#'
 sub UpdateStats {
   #module to insert stats data into stats table
   my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber)=@_;
@@ -41,9 +78,10 @@ sub UpdateStats {
   }
   my $user = $env->{'usercode'};
   print $borrowernumber;
+  # FIXME - Use $dbh->do() instead?
   my $sth=$dbh->prepare("Insert into statistics
   (datetime,branch,type,usercode,value,
-  other,itemnumber,itemtype,borrowernumber) 
+  other,itemnumber,itemtype,borrowernumber)
   values (now(),'$branch','$type','$user','$amount',
   '$other','$itemnum','$itemtype','$borrowernumber')");
   $sth->execute;
@@ -51,6 +89,11 @@ sub UpdateStats {
   $dbh->disconnect;
 }
 
+# XXX - POD
+# FIXME - Why does this function exist? Why not just rename &circrep
+# to &statsreport?
+# Then again, it only appears to be used in reports.pl which, in turn,
+# doesn't appear to be used. So presumably this function is obsolete.
 sub statsreport {
   #module to return a list of stats for a given day,time,branch type
   #or to return search stats
@@ -63,11 +106,14 @@ sub statsreport {
   return(@data);
 }
 
+# XXX - Doc. Only used internally. Probably useless: see comment for
+# &statsreport.
 sub circrep {
   my ($time,$type)=@_;
   my $dbh=C4Connect;
   my $query="Select * from statistics";
   if ($time eq 'today'){
+    # FIXME - What is this supposed to do? MySQL 3.23.42 barfs on it.
     $query=$query." where type='$type' and datetime
     >=datetime('yesterday'::date)";
   }
@@ -86,6 +132,8 @@ sub circrep {
 
 }
 
+# XXX - POD
+# FIXME - This is only used in stats.pl, which in turn is never used.
 sub Count {
   my ($type,$branch,$time,$time2)=@_;
   my $dbh=C4Connect;
@@ -100,6 +148,7 @@ sub Count {
   return($data->{'count(*)'});
 }
 
+# XXX - POD. Doesn't appear to be used
 sub Overdues{
   my $dbh=C4Connect;
   my $query="Select count(*) from issues where date_due >= now()";
@@ -108,9 +157,10 @@ sub Overdues{
   my $count=$sth->fetchrow_hashref;
   $sth->finish;
   $dbh->disconnect;
-  return($count->{'count(*)'});  
+  return($count->{'count(*)'});
 }
 
+# XXX - POD. Never used
 sub TotalOwing{
   my ($type)=@_;
   my $dbh=C4Connect;
@@ -123,10 +173,11 @@ sub TotalOwing{
   $sth->execute;
    my $total=$sth->fetchrow_hashref;
    $sth->finish;
-  $dbh->disconnect; 
+  $dbh->disconnect;
   return($total->{'sum(amountoutstanding)'});
 }
 
+# XXX - POD. Never used
 sub TotalPaid {
   my ($time)=@_;
   my $dbh=C4Connect;
@@ -157,11 +208,12 @@ or accounttype ='W')
     $i++;
   }
    $sth->finish;
-  $dbh->disconnect; 
+  $dbh->disconnect;
 #  print $query;
   return(@results);
 }
 
+# XXX - POD. Only used in stats.pl, which in turn is never used.
 sub getcharges{
   my($borrowerno,$timestamp)=@_;
   my $dbh=C4Connect;
@@ -184,6 +236,8 @@ sub getcharges{
   return(@results);
 }
 
+# XXX - POD. This is only used in stats.pl and stats2.pl, neither of
+# which is used.
 sub Getpaidbranch{
   my($date,$borrno)=@_;
   my $dbh=C4Connect;
@@ -198,6 +252,8 @@ sub Getpaidbranch{
   return($data->{'branch'});
 }
 
+# XXX - POD. This is only used in reservereport.pl and
+# reservereport.xls, neither of which is used.
 sub unfilledreserves {
   my $dbh=C4Connect;
   my $query="select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
@@ -235,5 +291,13 @@ biblio.title,reserves.reservedate";
 }
 
 END { }       # module clean-up code here (global destructor)
-  
-    
+
+1;
+__END__
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
