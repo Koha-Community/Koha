@@ -176,22 +176,22 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?category=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"47\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?category=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=\"47\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
 		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255 DISABLE READONLY>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" DISABLE READONLY>";
 	# it's a standard field
 	} else {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>"; #"
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\">"; #"
 	}
 	return \%subfield_data;
 }
