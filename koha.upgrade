@@ -102,7 +102,6 @@ Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
 };
 
 
-
 #
 # Test for Perl and Modules
 #
@@ -123,23 +122,21 @@ unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
 unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
-unless (eval {require HTML::Template})       { push @missing,"HTML::Template" };
-#unless (eval {require Net::Z3950})        { 
-#    print qq|
-#
-#The Net::Z3950 module is missing.  This module is necessary if you want to use
-#Koha's Z39.50 client to download bibliographic records from other libraries.
-#To install this module, you will need the yaz client installed from
-#http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-#command:
-#
-#perl -MCPAN -e 'install Net::Z3950'
-#
-#Press the <ENTER> key to continue:
-#|;
-#    <STDIN>;
-#}
+unless (eval {require Net::Z3950})        { 
+    print qq|
+
+The Net::Z3950 module is missing.  This module is necessary if you want to use
+Koha's Z39.50 client to download bibliographic records from other libraries.
+To install this module, you will need the yaz client installed from
+http://www.indexdata.dk/yaz/ and then you can install the perl module with the
+command:
+
+perl -MCPAN -e 'install Net::Z3950'
+
+Press the <ENTER> key to continue:
+|;
+    <STDIN>;
+}
 
 #
 # Print out a list of any missing modules
@@ -155,7 +152,6 @@ if (@missing > 0) {
     }} else{
     print "All modules appear to be installed, continuing...\n";
 };
-
 
 
 my $backupdir='/usr/local/koha/backups';
@@ -546,25 +542,6 @@ Upgrading Database
 ==================
 |;
 system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
-
-
-print qq|
-
-==================
-= Authentication =
-==================
-
-This release of Koha has a new authentication module.  If you are not already
-using basic authentication on your intranet, you will be required to log in to
-access some of the features of the intranet.  You can log in using the userid
-and password from the /etc/koha.conf configuration file at any time.  Use the
-"Members" module to add passwords for other accounts and set their permissions.
-
-[NOTE PERMISSIONS ARE NOT COMPLETED AS OF 1.2.3RC1.  Do not give passwords to
- any patrons unless you want them to have full access to your intranet.]
-|;
-print "Press the <ENTER> key to continue: ";
-<STDIN>;
 
 
 
