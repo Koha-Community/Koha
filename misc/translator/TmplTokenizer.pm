@@ -540,13 +540,14 @@ sub _optimize {
     my @structure = @_;
     my $undo_trailing_blanks = sub {
 		for (my $i = $#structure; $i >= 0; $i -= 1) {
-		last if $structure[$i]->type != TmplTokenType::TEXT;
-		last if !blank_p($structure[$i]->string);
+		last unless ($structure[$i]->type == TmplTokenType::TEXT && blank_p($structure[$i]->string)) ;#|| ($structure[$i]->type == TmplTokenType::TAG && $structure[$i]->string =~ /^<br\b/is);
 		    # Queue element structure: [reanalysis-p, token]
 		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 	    };
+	    print "DEBUG: optimize: entry: checking: ", join('', map {$_->string} @structure), "\n";
     &$undo_trailing_blanks;
+	    print "DEBUG: optimize: structure length is ", scalar @structure, "\n";
     while (@structure >= 2) {
 	my $something_done_p = 0;
 	# FIXME: If the last token is a close tag but there are no tags
@@ -556,16 +557,19 @@ sub _optimize {
 		&& $structure[$#structure]->type == TmplTokenType::TAG
 		&& $structure[$#structure]->string =~ /^<\//s) {
 	    my $has_other_tags_p = 0;
+	    print "DEBUG: checking for unmatched close tag: ", join('', map {$_->string} @structure), "\n";
 	    for (my $i = 0; $i < $#structure; $i += 1) {
 		$has_other_tags_p = 1
 			if $structure[$i]->type == TmplTokenType::TAG;
 	    last if $has_other_tags_p;
 	    }
 	    if (!$has_other_tags_p) {
+	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
 		push @{$this->{_queue}}, [0, pop @structure]
 		&$undo_trailing_blanks;
 		$something_done_p = 1;
 	    }
+	    print "DEBUG: finished checking for unmatched closed tag\n";
 	}
 	# FIXME: Do the same ugly hack for the last token being a ( or [
 	if (@structure >= 2
@@ -575,16 +579,44 @@ sub _optimize {
 	    &$undo_trailing_blanks;
 	    $something_done_p = 1;
 	}
+	# FIXME: If the first token is an open tag, but there is no
+	# FIXME: corresponding close tag, "drop the open tag", i.e.,
+	# FIXME: requeue everything for reanalysis, except the frist tag. :-(
+	if (@structure >= 2
+		&& $structure[0]->type == TmplTokenType::TAG
+		&& $structure[0]->string =~ /^<([a-z0-9]+)/is
+		&& (my $tag = $1) !~ /^(?:br|hr|img|input)\b/is
+	) {
+	    print "DEBUG: checking for unmatched open tag: ", join('', map {$_->string} @structure), "\n";
+	    my $tag_open_count = 1;
+	    for (my $i = 1; $i <= $#structure; $i += 1) {
+		if ($structure[$i]->type == TmplTokenType::TAG) {
+		    if ($structure[$i]->string =~ /^<(\/?)$tag\b/is) {
+			$tag_open_count += ($1? -1: +1);
+		    }
+		}
+	    }
+	    if ($tag_open_count > 0) {
+	    print "DEBUG: tag open count is $tag_open_count, requeuing...\n";
+		for (my $i = $#structure; $i; $i -= 1) {
+	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
+		    push @{$this->{_queue}}, [1, pop @structure];
+		}
+		$something_done_p = 1;
+	    }
+	    print "DEBUG: finished checking structure\n\n";
+	}
 	# FIXME: If the first token is an open tag, the last token is the
 	# FIXME: corresponding close tag, and there are no other close tags 
 	# FIXME: inbetween, requeue the tokens from the second token on,
 	# FIXME: flagged as ok for re-analysis
 	if (@structure >= 3
 		&& $structure[0]->type == TmplTokenType::TAG
-		&& $structure[0]->string =~ /^<([a-z0-9])/is && (my $tag = $1)
+		&& $structure[0]->string =~ /^<([a-z0-9]+)/is && (my $tag = $1)
 		&& $structure[$#structure]->type == TmplTokenType::TAG
 		&& $structure[$#structure]->string =~ /^<\/$1\s*>$/is) {
 	    my $has_other_open_or_close_tags_p = 0;
+	    print "DEBUG: checking for matching open and close tags: ", join('', map {$_->string} @structure), "\n";
 	    for (my $i = 1; $i < $#structure; $i += 1) {
 		$has_other_open_or_close_tags_p = 1
 			if $structure[$i]->type == TmplTokenType::TAG
@@ -593,10 +625,12 @@ sub _optimize {
 	    }
 	    if (!$has_other_open_or_close_tags_p) {
 		for (my $i = $#structure; $i; $i -= 1) {
+	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
 		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 		$something_done_p = 1;
 	    }
+	    print "DEBUG: finished checking for matching open and close tags\n";
 	}
     last if !$something_done_p;
     }
@@ -610,11 +644,13 @@ sub looks_plausibly_like_groupable_text_p (@) {
     my $error_p = 0;
     for (my $i = 0; $i <= $#structure; $i += 1) {
 	if ($structure[$i]->type == TmplTokenType::TAG) {
-	    if ($structure[$i]->string =~ /^<([A-Z0-9]+)/is) {
+	    my $form = $structure[$i]->string;
+	    if ($form =~ /^<([A-Z0-9]+)/is) {
 		my $tag = lc($1);
-		push @tags, $tag unless $tag =~ /^<(?:input)/is
-			|| $tag =~ /\/>$/is;
-	    } elsif ($structure[$i]->string =~ /^<\/([A-Z0-9]+)/is) {
+		if ($tag !~ /^(?:br|input)$/is && $form !~ /\/>$/is) {
+		    push @tags, $tag;
+		}
+	    } elsif ($form =~ /^<\/([A-Z0-9]+)/is) {
 		if (@tags && lc($1) eq $tags[$#tags]) {
 		    pop @tags;
 		} else {
@@ -657,9 +693,10 @@ sub next_token {
 	    } elsif ($it->type == TmplTokenType::DIRECTIVE) {
 		$parametrized_p = 1;
 	    } elsif ($it->type == TmplTokenType::TAG && $it->string =~ /^<([A-Z0-9]+)/is) {
-		push @tags, lc($1);
-		$with_anchor_p = 1 if lc($1) eq 'a';
-		$with_input_p = 1 if lc($1) eq 'input';
+		my $tag = lc($1);
+		push @tags, $tag if $tag !~ /^(?:br|input)$/i;
+		$with_anchor_p = 1 if $tag eq 'a';
+		$with_input_p = 1 if $tag eq 'input';
 	    }
 	    # We hate | and || in msgid strings, so we try to avoid them
 	    for (my $i = 1, my $quit_p = 0, my $quit_next_p = ($it->type == TmplTokenType::TEXT && $it->string =~ /^\|+$/s);; $i += 1) {
@@ -678,11 +715,10 @@ sub next_token {
 		    $parametrized_p = 1;
 		} elsif ($next->type == TmplTokenType::TAG) {
 		    if ($next->string =~ /^<([A-Z0-9]+)/is) {
-			my $candidate = lc($1);
-			push @tags, $candidate
-				unless $candidate =~ /^(?:input)$/is;
-			$with_anchor_p = 1 if lc($1) eq 'a';
-			$with_input_p = 1 if lc($1) eq 'input';
+			my $tag = lc($1);
+			push @tags, $tag if $tag !~ /^(?:br|input)$/i;
+			$with_anchor_p = 1 if $tag eq 'a';
+			$with_input_p = 1 if $tag eq 'input';
 		    } elsif ($next->string =~ /^<\/([A-Z0-9]+)/is) {
 			my $close = lc($1);
 			$quit_p = 1 unless @tags && $close eq $tags[$#tags];
