@@ -123,7 +123,12 @@ my @waiting;
 my $wcount = 0;
 foreach my $res (@$reserves) {
     if ($res->{'itemnumber'}) {
+	my $item = getiteminformation('',$res->{'itemnumber'},'');
+	$res->{'holdingbranch'} = $branches->{$item->{'holdingbranch'}}->{'branchname'};
 	$res->{'branch'} = $branches->{$res->{'branchcode'}}->{'branchname'};
+	if($res->{'holdingbranch'} eq $res->{'branch'}){
+			$res->{'atdestination'} = 1;
+		}
 	push @waiting, $res;
 	$wcount++;
     }
