@@ -1,6 +1,14 @@
 #  $Id$
 #  
 #  $Log$
+#  Revision 1.13  2002/06/04 07:56:56  tipaul
+#  New and hopefully last version of the MARC-DB. Is the fastest in benchmark, everybody agree ;-) (Sergey, Steve and me, Paul)
+#
+#  Revision 1.13 2002/06/04 Paul
+#  should be the last version... remains only 2 tables : the main table and the subfield one.
+#  benchmark shows this structure is the fastest. I had to add indicator in the subfield table. should be in a tag_table, but as it's the
+#  only real information that should be in this table, it has been thrown to subfield table (not a normal form, but an optimized one...)
+#
 #  Revision 1.12  2002/05/31 20:03:17  tonnesen
 #  removed another _sergey
 #
@@ -22,38 +30,30 @@ CREATE TABLE marc_biblio (
 		KEY origincode (origincode)
 		) TYPE=MyISAM;
 
-CREATE TABLE marc_tag_table (
-       tagid    bigint(20) unsigned NOT NULL auto_increment,	# tag identifier
-       bibid    bigint(20) NOT NULL default '0',                # biblio identifier
-       tag      char(3) NOT NULL default '',			# tag number (eg 110)
-       tagorder tinyint(4) NOT NULL default '0',		# display order of tag within a record
-       PRIMARY KEY (tagid),
-       KEY (bibid),
-       KEY (tag)
-);
-
 CREATE TABLE marc_subfield_table (
-       subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
-       tagid bigint(20),					# tag identifier
-       subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields within a tag
-       subfieldcode char(1) NOT NULL default '',		# subfield code
-       subfieldvalue varchar(255) default NULL,			# the subfields value if not longer than 255 char
-       valuebloblink bigint(20) default NULL,			# the link to the blob, if value is longer than 255 char
-       PRIMARY KEY (subfieldid),
-       KEY (tagid)
+	subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
+	tagid bigint(20),					# tag identifier
+	indicator char(2)					# tag indicator
+	subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields within a tag
+	subfieldcode char(1) NOT NULL default '',		# subfield code
+	subfieldvalue varchar(255) default NULL,			# the subfields value if not longer than 255 char
+	valuebloblink bigint(20) default NULL,			# the link to the blob, if value is longer than 255 char
+	PRIMARY KEY (subfieldid),
+	KEY tagid (tagid),
+	KEY tag (tag),
+	KEY bibid (bibid),
+	KEY subfieldorder (subfieldorder),
+	KEY subfieldcode (subfieldcode),
+	KEY subfieldvalue (subfieldvalue)
 );
-
 
 # marc_blob_subfield containts subfields longer than 255 car.
 # They are linked to a marc_subfield_table record by bloblink
-	CREATE TABLE marc_blob_tag (
+	CREATE TABLE marc_blob_subfield (
 		blobidlink bigint(20) NOT NULL auto_increment,
 		subfieldvalue longtext NOT NULL,
 		PRIMARY KEY  (blobidlink)
 		) TYPE=MyISAM;
-
-
-
 
 # The next two tables are used for labelling the tags and subfields for
 # different implementions of marc USMARC, UNIMARC, CANMARC, UKMARC, etc.
