@@ -24,6 +24,7 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Output;
+use Mail::Sendmail;
 # use C4::Interface::CGI::Output;
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -108,8 +109,11 @@ sub searchsuggestion  {
 		$query .= " and status=?";
 	}
 	if ($suggestedbyme) {
-		push @sql_params,$user;
-		$query .= " and suggestedby=?";
+		if ($suggestedbyme eq -1) {
+		} else {
+			push @sql_params,$user;
+			$query .= " and suggestedby=?";
+		}
 	} else {
 		$query .= " and managedby is NULL";
 	}
@@ -200,7 +204,12 @@ sub changestatus {
 					byfirstname => $emailinfo->{byfirstname},
 					bysurname => $emailinfo->{bysurname},
 					);
-	warn "mailing => ".$template->output;
+	my %mail = ( To => $emailinfo->{byemail},
+				 From => $emailinfo->{libemail},
+				 Subject => 'Koha suggestion',
+				 Message => "".$template->output
+				 );
+sendmail(%mail);
 # 	warn "sending email to $emailinfo->{byemail} from $emailinfo->{libemail} to notice new status $emailinfo->{status} for $emailinfo->{title} / $emailinfo->{author}";
 }
 
