@@ -111,15 +111,14 @@ if ($op eq "do_search") {
 
 	# builds tag and subfield arrays
 	my @tags;
-	my @subfields;
 
 	foreach my $marc (@marclist) {
-		push @tags, substr($marc,0,3);
-		push @subfields, substr($marc,3,1);
+		push @tags, $dbh->quote(substr($marc,0,4));
 	}
-	my ($results,$total) = catalogsearch($dbh, \@tags, \@subfields, \@and_or,
-											\@excluding, \@operator, \@value,
-											$startfrom*$resultsperpage, $resultsperpage);
+	findseealso($dbh,\@tags);
+	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
+										\@excluding, \@operator, \@value,
+										$startfrom*$resultsperpage, $resultsperpage);
 
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",

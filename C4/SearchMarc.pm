@@ -21,6 +21,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -51,14 +52,25 @@ on what is passed to it, it calls the appropriate search function.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&catalogsearch);
+@EXPORT = qw(&catalogsearch &findseealso);
+
 # make all your functions, whether exported or not;
 
+sub findseealso {
+	my ($dbh, $fields) = @_;
+	my $tagslib = MARCgettagslib ($dbh,1);
+	for (my $i=0;$i<=$#{$fields};$i++) {
+		my ($tag) =substr(@$fields[$i],1,4);
+		my ($subfield) =substr(@$fields[$i],4,1);
+		warn "$tag / $subfield =>".$tagslib->{$tag}->{$subfield}->{seealso};
+	}
+}
 # marcsearch : search in the MARC biblio table.
 # everything is choosen by the user : what to search, the conditions...
 
 sub catalogsearch {
-	my ($dbh, $tags, $subfields, $and_or, $excluding, $operator, $value, $offset,$length) = @_;
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length) = @_;
+	warn "=>@$tags / @$and_or, $excluding = $operator / $value";
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -67,14 +79,13 @@ sub catalogsearch {
 
 	# "Normal" statements
 	my @normal_tags = ();
-	my @normal_subfields = ();
+#	my @normal_subfields = ();
 	my @normal_and_or = ();
 	my @normal_operator = ();
 	my @normal_value = ();
-
 	# Extracts the NOT statements from the list of statements
 	my @not_tags = ();
-	my @not_subfields = ();
+#	my @not_subfields = ();
 	my @not_and_or = ();
 	my @not_operator = ();
 	my @not_value = ();
@@ -91,7 +102,7 @@ sub catalogsearch {
 				{
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
-						push @not_subfields, @$subfields[$i];
+#						push @not_subfields, @$subfields[$i];
 						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 						push @not_operator, @$operator[$i];
 						push @not_value, $word;
@@ -101,7 +112,7 @@ sub catalogsearch {
 			else
 			{
 				push @not_tags, @$tags[$i];
-				push @not_subfields, @$subfields[$i];
+#				push @not_subfields, @$subfields[$i];
 				push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 				push @not_operator, @$operator[$i];
 				push @not_value, @$value[$i];
@@ -115,7 +126,7 @@ sub catalogsearch {
 				{
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @normal_tags, @$tags[$i];
-						push @normal_subfields, @$subfields[$i];
+#						push @normal_subfields, @$subfields[$i];
 						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
 						push @normal_operator, @$operator[$i];
 						push @normal_value, $word;
@@ -125,7 +136,7 @@ sub catalogsearch {
 			else
 			{
 				push @normal_tags, @$tags[$i];
-				push @normal_subfields, @$subfields[$i];
+#				push @normal_subfields, @$subfields[$i];
 				push @normal_and_or, @$and_or[$i];
 				push @normal_operator, @$operator[$i];
 				push @normal_value, @$value[$i];
@@ -134,18 +145,15 @@ sub catalogsearch {
 	}
 
 	# Finds the basic results without the NOT requests
-	my ($sql_tables, $sql_where1, $sql_where2) = create_request(\@normal_tags, \@normal_subfields, \@normal_and_or, \@normal_operator, \@normal_value);
+	my ($sql_tables, $sql_where1, $sql_where2) = create_request(\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
 	my $sth;
-#	warn "HERE (NORMAL)";
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
-#		warn("-->select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
 	} else {
 		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where1");
-#		warn("==>select m1.bibid from $sql_tables where $sql_where1");
 	}
-
+	warn "===> select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)";
 	$sth->execute();
 	my @result = ();
 
@@ -154,7 +162,7 @@ sub catalogsearch {
 
 	if( ($sth->rows) && $any_not )	# some results to tune up and some NOT statements
 	{
-		($not_sql_tables, $not_sql_where1, $not_sql_where2) = create_request(\@not_tags, \@not_subfields, \@not_and_or, \@not_operator, \@not_value);
+		($not_sql_tables, $not_sql_where1, $not_sql_where2) = create_request(\@not_tags, \@not_and_or, \@not_operator, \@not_value);
 
 		my @tmpresult;
 
@@ -162,13 +170,10 @@ sub catalogsearch {
 			push @tmpresult,$bibid;
 		}
 		my $sth_not;
-#		warn "HERE (NOT)";
 		if ($not_sql_where2) {
 			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)");
-#			warn("-->select m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)");
 		} else {
 			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where1");
-#			warn("==>select m1.bibid from $not_sql_tables where $not_sql_where1");
 		}
 
 		$sth_not->execute();
@@ -219,7 +224,7 @@ sub catalogsearch {
 # Creates the SQL Request
 
 sub create_request {
-	my ($tags, $subfields, $and_or, $operator, $value) = @_;
+	my ($tags, $and_or, $operator, $value) = @_;
 
 	my $sql_tables; # will contain marc_subfield_table as m1,...
 	my $sql_where1; # will contain the "true" where
@@ -235,21 +240,21 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
-						$sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
+						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
 					$sql_tables .= "marc_word as m$nb_table,";
 					$sql_where1 .= "(m1.word  like '@$value[$i]%'";
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldid='@$subfields[$i]'";
+						 $sql_where1 .=" and m1.tag+m1.subfieldid in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} else {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] '@$value[$i]' ";
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
+						 $sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				}
@@ -259,7 +264,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
-					 	$sql_where1 .=" and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldcode='@$subfields[$i]'";
+					 	$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
@@ -269,14 +274,14 @@ sub create_request {
 						$sql_tables .= "marc_word as m$nb_table,";
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like '@$value[$i]%'";
 						if (@$tags[$i]) {
-							$sql_where1 .=" and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldid='@$subfields[$i]'";
+							$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldid in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					} else {
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like '@$value[$i]%'";
 						if (@$tags[$i]) {
-							$sql_where1 .="  and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldid='@$subfields[$i]'";
+							$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldid in (@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
@@ -286,7 +291,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] '@$value[$i]'";
 					if (@$tags[$i]) {
-					 	$sql_where1 .="  and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldcode='@$subfields[$i]'";
+					 	$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					$sql_where1.=")";

@@ -231,7 +231,7 @@ sub MARCgettagslib {
 		$res->{$tag}->{mandatory}=$mandatory;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield from marc_subfield_structure order by tagfield,tagsubfield");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso from marc_subfield_structure order by tagfield,tagsubfield");
 	$sth->execute;
 
 	my $subfield;
@@ -239,7 +239,8 @@ sub MARCgettagslib {
 	my $thesaurus_category;
 	my $value_builder;
 	my $kohafield;
-	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield) = $sth->fetchrow) {
+	my $seealso;
+	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield,$seealso) = $sth->fetchrow) {
 		$res->{$tag}->{$subfield}->{lib}=$lib;
 		$res->{$tag}->{$subfield}->{tab}=$tab;
 		$res->{$tag}->{$subfield}->{mandatory}=$mandatory;
@@ -248,6 +249,7 @@ sub MARCgettagslib {
 		$res->{$tag}->{$subfield}->{thesaurus_category}=$thesaurus_category;
 		$res->{$tag}->{$subfield}->{value_builder}=$value_builder;
 		$res->{$tag}->{$subfield}->{kohafield}=$kohafield;
+		$res->{$tag}->{$subfield}->{seealso}=$seealso;
 	}
 	return $res;
 }
@@ -2191,6 +2193,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.81  2004/03/06 20:26:13  tipaul
+# adding seealso feature in MARC searches
+#
 # Revision 1.80  2004/02/12 13:40:56  tipaul
 # deleting subs duplicated by error
 #

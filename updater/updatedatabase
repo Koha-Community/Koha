@@ -248,6 +248,7 @@ my %requirefields = (
     		 	   'type' => 'char(20)',
 			   'options' => 'text' },
     z3950servers      => { 'syntax'      => 'char(80)' },
+    marc_subfield_structure =>{'seealso'  => 'char(80)'},
 );
 
 my %dropable_table = (
@@ -544,6 +545,24 @@ my %tabledata = (
 	    			     'type' => 1 },
             value               => '0.125',
             explanation => 'the gist rate. NOT in %, but in numeric form (0.12 for 12%)',
+	    type		=> 'free'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'ldapserver',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '',
+            explanation => 'your ldap server',
+	    type		=> 'free'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'ldapinfos',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '',
+            explanation => 'ldap info. The ldap will be used in dn : uid=xxx, <ldapinfos>',
 	    type		=> 'free'
         },
     ],
@@ -996,241 +1015,6 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.72  2004/02/11 08:44:29  tipaul
-# synch'ing 2.0.0 branch (RC4 tag) and head
-#
-# Revision 1.70.2.2  2004/01/20 09:46:53  tipaul
-# new index in z3950results table
-#
-# Revision 1.70.2.1  2003/12/18 17:22:24  tipaul
-# fix for 625
-#
-# Revision 1.70  2003/12/15 14:40:09  tipaul
-# OPAC now show a systempref variable in main/home screen => easier to change for a library.
-#
-# Revision 1.69  2003/12/04 12:51:41  tipaul
-# setting default acquisition to NORMAL, which is better, imho (it's always possible to add a biblio directly through catalogue menu entry)
-#
-# Revision 1.68  2003/12/03 17:47:14  tipaul
-# bugfixes for biblio deletion
-#
-# Revision 1.67  2003/11/28 10:08:33  tipaul
-# * removing too verbose messages.
-# * creating a fulltext index on bibliothesaurus
-#
-# Revision 1.66  2003/11/12 16:14:42  slef
-# lengthen cardnumber to 16 and make it unique
-#
-# Revision 1.65  2003/11/06 15:07:11  tipaul
-# adding marc fields in deletedbiblio & deleteditems
-#
-# Revision 1.64  2003/10/23 20:33:53  rangi
-# Making the borrowenumber an auto_increment field
-#
-# Revision 1.63  2003/10/20 16:13:01  slef
-# Omitted annotation added. Closes: 624
-#
-# Revision 1.62  2003/10/20 16:10:19  slef
-# Adding USMARC to LOC z3950 entry
-#
-# Revision 1.61  2003/10/01 15:03:45  tipaul
-# oups... typo fix in z3950random field definition
-#
-# Revision 1.59  2003/09/30 16:22:05  tipaul
-# adding barcode NOT mandatory feature. Just run updatedatabase to get it.
-# Note it's impossible to issue an item without barcode, as issue/returns is based on barcode...
-#
-# Revision 1.58  2003/07/16 04:08:29  acli
-# Minor spelling correction
-#
-# Revision 1.57  2003/07/11 11:50:29  tipaul
-# fixing a bug that occured when adding a field into a table.
-#
-# Revision 1.56  2003/07/07 15:37:20  tipaul
-# *** empty log message ***
-#
-# Revision 1.53  2003/07/07 14:11:16  tipaul
-# fixing bug #526 : gst rate is now calculated through systempref gist entry.
-# Before this fix :
-# * was harcoded to 12,5%
-# * some bugs in template parameters prevented the javascript to work.
-# * some bugs prevented some calculations to be done properly.
-#
-# Revision 1.52  2003/06/23 15:54:32  tipaul
-# *** empty log message ***
-#
-# Revision 1.51  2003/06/23 11:27:29  tipaul
-# *** empty log message ***
-#
-# Revision 1.50  2003/06/11 21:28:22  tonnesen
-# Added modifications required to the systempreferences table by the new
-# systempreferences.pl script.  The systempreferences.pl script will not work
-# properly until this table is updated.
-#
-# Revision 1.49  2003/05/26 10:41:53  tipaul
-# bugfix : borrowers modifs overwritten by stupid hash entry existing twice.
-#
-# Revision 1.48  2003/05/20 19:50:45  slef
-# Initial fix to bug 456: hardwired paths
-#
-# Revision 1.47  2003/05/15 12:23:33  tipaul
-# adding zipcode and homezipcode into borrowers table (bug #246
-#
-# Revision 1.46  2003/05/08 12:48:24  wolfpac444
-# Added "noissuescharge" parameter
-#
-# Revision 1.45  2003/05/08 12:26:16  wolfpac444
-# Bug fixes
-#
-# Revision 1.44  2003/05/03 05:39:57  rangi
-# Fixing bug 429
-# (Wording changes in the explanation fields in system preferences)
-#
-# Revision 1.43  2003/05/02 23:01:09  rangi
-# Adding the textmessaging column to the borrowers table.
-# insertdata.pl is expecting this to exist, and hence modifying/adding
-# borrowers was broken.
-#
-# Also ran they script thru perltidy
-#
-# Revision 1.42  2003/04/29 16:53:25  tipaul
-# really proud of this commit :-)
-# z3950 search and import seems to works fine.
-# Let me explain how :
-# * a "search z3950" button is added in the addbiblio template.
-# * when clicked, a popup appears and z3950/search.pl is called
-# * z3950/search.pl calls addz3950search in the DB
-# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
-# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
-# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
-#
-# Note :
-# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
-# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
-#
-# Revision 1.41  2003/04/29 08:09:44  tipaul
-# z3950 support is coming...
-# * adding a syntax column in z3950 table = this column will say wether the z3950 must be called with PerferedRecordsyntax => USMARC or PerferedRecordsyntax => UNIMARC. I tried some french UNIMARC z3950 servers, and some only send USMARC, some only UNIMARC, some can answer with both.
-# Note this is a 1st draft. More to follow (today ? I hope).
-#
-# Revision 1.40  2003/04/22 10:48:27  wolfpac444
-# Added "father" column to bibliothesaurus table
-#
-# Revision 1.39  2003/04/04 08:45:00  tipaul
-# last commits before 1.9.1
-#
-# Revision 1.38  2003/03/18 10:58:19  tipaul
-# adding checkdigit parameter that choose how to check the members cardnumber.
-# At the moment :
-# * none = no checking
-# * katipo = checked as before
-#
-# Revision 1.37  2003/01/30 01:47:48  acli
-# Corrected syntax error reported by Benedict
-#
-# Made the indentation somewhat easier to read; the messiness probably caused
-# the original syntax error.
-#
-# Revision 1.36  2003/01/28 15:13:30  tipaul
-# userflag table now created in upgrade script (bugfix #171)
-#
-# Revision 1.35  2003/01/27 03:12:49  acli
-# Reworded the description for "acquisitions" to make it fit on the screen
-#
-# Added "iso" to dateformat, since dateformat is not yet being used anyway
-#
-# Revision 1.34  2003/01/23 12:30:02  tipaul
-# introducint marcflavour in systempref file : used for character decoding
-#
-# Revision 1.33  2003/01/21 09:03:27  tipaul
-# bugfix (NOTE : this bugs makes installation of the 1.3.3 a little fuzzy. Please fix your DB if you installed 1.3.3)
-#
-# Revision 1.32  2003/01/16 10:29:45  tipaul
-# adding a MARC parameter in systempref ( which is ON or OFF)
-# the search will be a marc search if MARC=ON
-# and a standard (v1.2) search if MARC=OFF
-#
-# Revision 1.31  2003/01/06 13:32:43  tipaul
-# *** empty log message ***
-#
-# Revision 1.29  2003/01/06 11:14:11  tipaul
-# last bugfixes before 1.3.3 : systempref table correctly filled
-#
-# Revision 1.28  2002/12/10 13:27:47  tipaul
-# bugfixes (davide mails in koha-dev)
-#
-# Revision 1.27  2002/11/26 15:04:54  tipaul
-# road to 1.3.2. Updating db structure during installation
-#
-# Revision 1.26  2002/11/12 17:42:40  tonnesen
-# Merged some features over from rel-1-2, including primary key checking.
-#
-# Revision 1.25  2002/11/12 16:44:38  tipaul
-# road to 1.3.2 :
-# * many bugfixes
-# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
-#
-# Revision 1.24  2002/10/30 14:00:23  arensb
-# (bug fix): Fixed typo.
-#
-# Revision 1.23  2002/10/25 10:55:46  tipaul
-# Road to 1.3.2
-# * bugfixes and improvements
-# * manage mandatory MARC subfields
-# * new table : authorised_values. this table contains categories and authorised values for the category. On MARC management, you can map a subfield to a authorised_values category. If you do this, the subfield can only be filled with a authorised_value of the selected category.
-# this submit contains everything needed :
-# * updatedatabase
-# * admin screens
-# * "links" management
-# * creation of a html-list if a subfield is mapped to an authorised value.
-#
-# Note this is different from authorities support, which will come soon.
-# The authorised_values is supposed to contains a "small" number of authorised values for a category (less than 50-100). If you enter more authorised values than this, it should be hard to find what you want in a BIG list...
-#
-# Revision 1.22  2002/10/15 10:08:19  tipaul
-# fixme corrected, re-indent and adding the marc_breeding table (see commit of marcimport.pl for more explanations about breeding)
-#
-# Revision 1.21  2002/10/14 11:48:59  tipaul
-# bugfix
-#
-# Revision 1.20  2002/10/10 04:49:41  arensb
-# Added some FIXME comments.
-#
-# Revision 1.19  2002/10/05 10:17:17  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.18.2.2  2002/10/05 06:18:43  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.18.2.1  2002/10/04 02:46:00  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.18  2002/09/24 13:50:55  tipaul
-# long WAS the road to 1.3.0...
-# coming VERY SOON NOW...
-# modifying installer and buildrelease to update the DB
-#
-# Revision 1.17  2002/09/24 12:57:35  tipaul
-# long WAS the road to 1.3.0...
-# coming VERY SOON NOW...
-# modifying installer and buildrelease to update the DB
-#
-# Revision 1.16  2002/07/31 02:34:27  finlayt
-#
-# added "notforloan" field to the itemtypes table.
-#
-# Revision 1.15  2002/07/20 22:30:06  rangi
-# Making sure fix makes it into the main branch as well
-# Fix for bug 69
-#
-# Revision 1.14  2002/07/08 16:20:26  tonnesen
-# Added sessionqueries table and password/userid fields to borrowers table
-#
-# Revision 1.13  2002/07/04 18:05:36  tonnesen
-# bug fix
-#
-# Revision 1.12  2002/07/04 16:41:06  tonnesen
-# Merged changes from rel-1-2.  Abstracted table structure changes by alan.
+# Revision 1.73  2004/03/06 20:26:13  tipaul
+# adding seealso feature in MARC searches
 #
