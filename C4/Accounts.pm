@@ -1,5 +1,11 @@
 package C4::Accounts; #assumes C4/Accounts
 
+# This module uses the CDK modules, and crashes if called from a web script
+# Hence the existence of Accounts2
+#
+# This module will be deprecated when we build a new curses/slang/character
+# based interface.
+
 # $Id$
 
 # Copyright 2000-2002 Katipo Communications
