@@ -61,9 +61,9 @@ function Check(f) {
 </SCRIPT>
 <TMPL_IF name="add_form">
 	<TMPL_IF name="itemtype">
-		<h1>Modify item type</h1>
+		<h1>更改館藏類別</h1>
 	<TMPL_ELSE>
-		<h1>Add item type</h1>
+		<h1>加一館藏類別</h1>
 	</TMPL_IF>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
@@ -79,11 +79,11 @@ function Check(f) {
 				<td><input type=text name=description size=40 maxlength=80 value='<TMPL_VAR name="description">'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td>可借多久</td>
+				<td>可借多久？（以日計）</td>
 				<td><input type=text name=loanlength value='<TMPL_VAR name="loanlength">'></td>
 			</tr>
 			<tr>
-				<td>可否續借</td>
+				<td>可否續借？</td>
 				<td><input type=checkbox name=renewalsallowed <TMPL_IF name="renewalsallowed">checked</TMPL_IF> value=1></td>
 			</tr>
 			<tr>
@@ -101,17 +101,17 @@ function Check(f) {
 <TMPL_IF name="delete_confirm">
 	<TABLE bg="#99cc33">
 		<tr>
-			<th>Item type</th>
+			<th>館藏類別</th>
 			<th><TMPL_VAR name="itemtype"></th>
 		</tr>
 	<form action='<TMPL_VAR name="script_name">' method=post>
 		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<TMPL_VAR name="itemtype">'>
 	<tr><td>說明</td><td><TMPL_VAR name="description"></td></tr>
-	<tr><td>可借多久</td><td><TMPL_VAR name="loanlength"></td></tr>
-	<tr><td>可否續借</td><td><TMPL_VAR name="renewalsallowed"></td></tr>
+	<tr><td>可借多久</td><td><TMPL_IF name="loanlength"><TMPL_VAR name="loanlength"> 日<TMPL_ELSE>不可借出</TMPL_IF></td></tr>
+	<tr><td>可否續借</td><td><TMPL_IF name="renewalsallowed">可以續借<TMPL_ELSE>不可續借</TMPL_IF></td></tr>
 	<tr><td>費用</td><td><TMPL_VAR name="rentalcharge"></td></tr>
 	<TMPL_IF name="total">
-		<tr><td colspan=2 align=center><b>目錄內已存有這種館藏 <TMPL_VAR name="total"> 項，不可刪除。</b></td></tr>
+		<tr><td colspan=2 align=center><b>這種館藏類別有系統內已出現了 <TMPL_VAR name="total"> 次，不可刪除。</b></td></tr>
 		<tr><td colspan=2></form><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=OK></form></td></tr>
 	<TMPL_ELSE>
 		<tr><td colspan=2 align=center>真的要刪除嗎？</td></tr>
@@ -136,8 +136,8 @@ function Check(f) {
 		<tr>
 			<td><TMPL_VAR name="itemtype"></td>
 			<td><TMPL_VAR name="description"></td>
-			<td><TMPL_VAR name="loanlength"></td>
-			<td><TMPL_IF name="renewalsallowed">可續借<TMPL_ELSE>不可續借</TMPL_IF></td>
+			<td align=right nowrap><TMPL_IF name="loanlength"><TMPL_VAR name="loanlength"> 日<TMPL_ELSE>不可借出</TMPL_IF></td>
+			<td><TMPL_IF name="renewalsallowed">可以續借<TMPL_ELSE>不可續借</TMPL_IF></td>
 			<td><TMPL_VAR name="rentalcharge"></td>
 			<td><a href="<TMPL_VAR name="script_name">?op=add_form&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">更改</a></td>
 			<td><a href="<TMPL_VAR name="script_name">?op=delete_confirm&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">刪除</a></td>
