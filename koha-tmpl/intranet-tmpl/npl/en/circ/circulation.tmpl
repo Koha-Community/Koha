@@ -173,8 +173,8 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 	<div class="details">
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
-<label for="barcode">Enter Item Barcode: </label><input name="barcode" size="14" maxlength="14"class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" /> <input type="submit" value="Issue" class="submit" />
-	<!-- Hide from NPL	<p>
+<label for="barcode">Enter Item Barcode: </label><input name="barcode" size="14" maxlength="14"class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" /> <input type="submit" value="Issue" class="submit" /><!-- Display for NPL <input type="hidden" name="day" value="0" /><input type="hidden" name="month" value="0" /><input type="hidden" name="year" value="0" /> /Display for NPL -->
+	<!-- Hide from NPL	--><p>
 			<label for="day">Specify Due Date: </label><select name="day" id="day">
 				<option value="0">Day</option>
 				<option value="1"<!-- TMPL_IF NAME="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
@@ -232,7 +232,7 @@
 				<option value="2007"<!-- TMPL_IF NAME="year2007" --> selected="selected"<!-- /TMPL_IF -->>2007</option>
 				<option value="2008"<!-- TMPL_IF NAME="year2008" --> selected="selected"<!-- /TMPL_IF -->>2008</option>
 			</select>
-<label for="stickyduedate">Remember for Session:</label><input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />   /Hide from NPL -->
+<label for="stickyduedate">Remember for Session:</label><input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />   <!-- /Hide from NPL -->
 		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
 		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
