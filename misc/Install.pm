@@ -2,7 +2,7 @@ package Install; #assumes Install.pm
 
 
 # Copyright 2000-2002 Katipo Communications
-# Contains parts Copyright 2003 MJ Ray
+# Contains parts Copyright 2003-4 MJ Ray
 #
 # This file is part of Koha.
 #
@@ -26,9 +26,10 @@ use strict;
 use POSIX;
 #MJR: everyone will have these modules, right?
 # They look like part of perl core to me
-use Term::Cap;
+#use Term::Cap;
 use Term::ANSIColor qw(:constants);
 use Text::Wrap;
+use File::Temp qw/ :mktemp /;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -60,6 +61,7 @@ $VERSION = 0.01;
 		&checkabortedinstall
 		&getmessage
 		&showmessage
+		&completeupgrade
 		&releasecandidatewarning
 		&getinstallationdirectories
 		&getdatabaseinfo
@@ -85,7 +87,7 @@ use vars qw( $domainname );			# set in installer.pl
 
 use vars qw( $etcdir );				# set in installer.pl, usu. /etc
 use vars qw( $intranetdir $opacdir $kohalogdir );
-use vars qw( $realhttpdconf $httpduser );
+use vars qw( $realhttpdconf $httpduser $httpdgroup );
 use vars qw( $servername $svr_admin $opacport $intranetport );
 use vars qw( $mysqldir );
 use vars qw( $database $mysqluser );
@@ -106,10 +108,10 @@ a line of equal signs as illegal POD directives.
 
 =cut
 
-my $termios = POSIX::Termios->new();
-$termios->getattr();
-my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
-my $clear_string = "\n";
+#my $termios = POSIX::Termios->new();
+#$termios->getattr();
+#my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
+my $clear_string = "\n\n"; #MJR: was $terminal->Tputs('cl');
 
 sub heading ($) {
   my $title = shift;
@@ -118,7 +120,7 @@ sub heading ($) {
 }
 
 my $mycnf = $ENV{HOME}."/.my.cnf";
-my $mytmpcnf = `mktemp my.cnf.koha.XXXXXX`;
+my $mytmpcnf = mktemp("my.cnf.koha.XXXXXX");
 chomp($mytmpcnf);
 
 my $messages;
@@ -126,14 +128,13 @@ $messages->{'continuing'}->{en}="Great!  Continuing...\n\n";
 $messages->{'WelcomeToKohaInstaller'}->{en} =
    heading('Welcome to the Koha Installer') . qq|
 This program will ask some questions and try to install koha for you.
-You need to know: 
-* where most koha files should be stored (you can set the prefix environment variable for this);
-* the username and password of a mysql superuser; 
-* Details of your library setup. 
-* Details of your Apache setup.
+You need to know: where most koha files should be stored (you can set
+the prefix environment variable for this); the username and password of
+a mysql superuser; and details of your library setup.  You may also need
+to know details of your Apache setup.
 
 If you want to install the Koha configuration files somewhere other than
-/etc (for multiple Koha versions on one system, for example), you should
+/etc (for installing not as root, or to have many Kohas on one system, for example), you should
 set the etcdir environment variable.  Please look at your manuals for
 details of how to set that.
 
@@ -148,7 +149,7 @@ Are you ready to begin the installation? ([Y]/N): |;
 
 $messages->{'WelcomeToUpgrader'}->{en} =
    heading('Welcome to the Koha Upgrader') . qq|
-You are attempting to upgrade to Koha %s.
+You are attempting to upgrade from Koha %s to Koha %s.
 
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
@@ -261,10 +262,14 @@ Press the <ENTER> key to continue: |;
 
 $messages->{'Completed'}->{en} = heading('INSTALLATION COMPLETE') . qq|
 Congratulations ... your Koha installation is complete!
+
 You will be able to connect to your Librarian interface at:
+
    http://%s\:%s/
+
    use the koha admin mysql login and password to connect to this interface.
 and the OPAC interface at:
+
    http://%s\:%s/
    
 NOTE: You need to add lines to your main httpd.conf to include
@@ -282,6 +287,20 @@ Please report any problems you encounter through http://bugs.koha.org/
 Press <ENTER> to exit the installer: |;
 
 #'
+
+=item completeupgrade
+
+   completeupgrade
+
+Display a message describing what may need changing in httpd.conf
+and any other instructions
+
+=cut
+
+sub completeupgrade {
+	showmessage(getmessage('UpgradeCompleted',[$intranetdir,$intranetdir,$intranetdir,$opacdir,$opacdir,$intranetdir]),'PressEnter');
+}
+
 sub releasecandidatewarning {
     my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
     my $answer=showmessage($message, 'yn', 'n');
@@ -289,7 +308,7 @@ sub releasecandidatewarning {
     if ($answer =~ /y/i) {
 	print getmessage('continuing');
     } else {
-	my $message=getmessage('WatchForReleaseAnnouncements','');
+	my $message=getmessage('WatchForReleaseAnnouncements');
 	print $message."\n";
 	exit;
     };
@@ -374,11 +393,13 @@ sub setdomainname ($) {
 
 Sets the sysconfdir, normally /etc.
 This should be an absolute path; a trailing / is not required.
+Must be writeable, else we die.
 
 =cut
 
 sub setetcdir ($) {
     ($etcdir) = @_;
+    if (! ((-d $etcdir) && (-w $etcdir))) { die("Cannot write to $etcdir! Please set the etcdir environment variable to a writeable directory.\nFailed"); }
 }
 
 =item getkohaversion
@@ -932,7 +953,7 @@ function does not return any values.
 
 sub getinstallationdirectories {
 	my ($auto_install) = @_;
-	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; } #"
+	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
     $opacdir = $ENV{prefix}.'/koha/opac';
     $intranetdir = $ENV{prefix}.'/koha/intranet';
     my $getdirinfo=1;
@@ -1025,7 +1046,7 @@ sub getmysqldir {
 			  /usr/local
 			  /usr
 			  )) {
-       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") { #"
+       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
 	    $mysqldir=$mysql;
        }
     }
@@ -1302,7 +1323,9 @@ and the installer will leave comments in
 
 NOTE: You will need to add lines to your main httpd.conf to
 include %s/koha-httpd.conf
+(using the Include directive)
 and to make sure it is listening on the right ports
+and host names
 (using the Listen directive).
 
 Press <ENTER> to continue: |;
@@ -1462,12 +1485,22 @@ sub updateapacheconf {
 	}
 	print SITE <<EOP
 
+# Koha 2.2 Apache Virtual Host Config File
+#
+# Please include this file in your apache configuration.
+# The best way to do that depends on your site setup.
+# Some like an Include adding to /etc/apache/httpd.conf
+# and some prefer a symlink to this file from some dir.
+# Please refer to your system manuals.
+
 # Ports to listen to for Koha
 # uncomment these if they aren't already in main httpd.conf
 #$opaclisten
 #$intranetlisten
 
 # NameVirtualHost is used by one of the optional configurations detailed below
+# Please make sure this line is correct before uncommenting.
+# See http://httpd.apache.org/docs/vhosts/ for some guides.
 
 #NameVirtualHost 11.22.33.44
 
@@ -1477,6 +1510,7 @@ sub updateapacheconf {
    DocumentRoot $opacdir/htdocs
    ServerName $servername
    ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
+   Redirect permanent index.html http://$servername\:$opacport/cgi-bin/koha/opac-main.pl
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
    SetEnv PERL5LIB "$intranetdir/modules"
@@ -1490,6 +1524,7 @@ sub updateapacheconf {
    DocumentRoot $intranetdir/htdocs
    ServerName $servername
    ScriptAlias /cgi-bin/koha/ "$intranetdir/cgi-bin/"
+   Redirect permanent index.html http://$servername\:$intranetport/cgi-bin/koha/mainpage.pl
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
    SetEnv PERL5LIB "$intranetdir/modules"
