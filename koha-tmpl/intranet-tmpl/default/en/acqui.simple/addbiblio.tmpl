@@ -7,7 +7,7 @@
 	font-size:10pt;}
 </STYLE-->
 
-<form method="post" name="f_add">
+<form method="post" name="f">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
@@ -64,7 +64,7 @@
 
 	<DIV name="1XX" id="1XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="1XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -89,7 +89,7 @@
 
 	<DIV name="2XX" id="2XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="2XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -114,7 +114,7 @@
 
 	<DIV name="3XX" id="3XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="3XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -139,7 +139,7 @@
 
 	<DIV name="4XX" id="4XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="4XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -164,7 +164,7 @@
 
 	<DIV name="5XX" id="5XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="5XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -189,7 +189,7 @@
 
 	<DIV name="6XX" id="6XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="6XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -214,7 +214,7 @@
 
 	<DIV name="7XX" id="7XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="7XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -239,7 +239,7 @@
 
 	<DIV name="8XX" id="8XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="8XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -264,7 +264,7 @@
 
 	<DIV name="9XX" id="9XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=2 border=0>
-	<TMPL_LOOP name="0XX">
+	<TMPL_LOOP name="9XX">
 			<TMPL_IF name="tag">
 				<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<TMPL_VAR name="tag">)">+</a></td></tr>
 			</TMPL_IF>
@@ -420,7 +420,7 @@ function PopupZ3950(link,i) {
 function AddField(field) {
 	document.forms[0].op.value = "addfield";
 	document.forms[0].addfield_field.value=field;
-	document.f_add.submit();
+	document.f.submit();
 }
 </script>
 </body>
