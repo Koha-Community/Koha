@@ -202,7 +202,7 @@ sub catalogsearch {
   }
   if ($env->{itemcount}) {
     foreach my $data (@results){
-      my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+      my ($counts) = itemcount2($env, $data->{'biblionumber'}, $type);
       my $subject2=$data->{'subject'};
       $subject2=~ s/ /%20/g;
       $data->{'itemcount'}=$counts->{'total'};
