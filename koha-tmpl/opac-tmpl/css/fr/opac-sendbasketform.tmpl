@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="opac-basket-top.inc" -->
+
+<div id="mainbloc" style="padding-bottom:20px;margin-top:10px;margin-bottom:10px;">
+<h1>Envoi du panier</h1>
+<!-- TMPL_IF NAME="email_add" -->
+	<!-- TMPL_IF NAME="SENT" -->
+	<p>Le panier a été envoyé à l'adresse : <!-- TMPL_VAR NAME="email_add" --></p>
+	<!-- TMPL_ELSE -->
+	<p>Problème lors de l'envoi du panier...</p>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<TABLE style="border:0;">
+		<TR><TD style="border:0;"><b>Adresse électronique</b></TD>
+		<TD style="border:0;"><input name="email_add" size="25" /></TD></TR>
+		<TR><TD colspan="2" style="border:0;">&nbsp;</TD>
+		<TR><TD style="border:0;"></TD>
+		<TD style="border:0;text-align:right;"><input type="submit" value="Envoyer" class="button" /></TD></TR>
+	</TABLE>
+	<input type='hidden' name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
+</form>
+<!-- /TMPL_IF -->
+</div>
+<div id="bottombloc">
+	<p><a href="javascript:this.close()">Fermer</a></p>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->
