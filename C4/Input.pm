@@ -137,6 +137,7 @@ sub checkvalidisbn {
                 $c+=$digit*(10-$i);
             }
 	    $c=$c%11;  # % is the modulus function
+			# FIXME - %=
             ($c==10) && ($c='X');
             # FIXME - $isbngood = $c eq $checksum;
             if ($c eq $checksum) {

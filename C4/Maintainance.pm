@@ -196,7 +196,7 @@ sub undeletebib{
     $query="Insert into biblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";
+      $query=$query."'$temp',";		# FIXME - .=
     }
     $query=~ s/\,$/\)/;
     #   print $query;
