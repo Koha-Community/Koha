@@ -33,9 +33,7 @@ use HTML::Template;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'memberentry.tmpl', theme => $theme );
-my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+my $template = gettemplate("members/memberentry.tmpl");
 
 my $member=$input->param('bornum');
 if ($member eq ''){
@@ -130,7 +128,7 @@ if ($delete){
   my $ethnicitycategoriescount=$#{$categories};
   my $ethcatpopup;
   if ($ethnicitycategoriescount>=0) {
-  	$ethcatpopup = popup_menu(-name=>'ethnicity',
+  	$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
   			        -values=>$categories,
   			        -default=>$data->{'ethnicity'},
   			        -labels=>$labels);

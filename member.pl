@@ -33,11 +33,12 @@ my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
 			# only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
+#my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
 	# FIXME - Error-checking
-my $template = HTML::Template->new( filename => $tmpldata{'path'},
-				    die_on_bad_params => 0,
-				    loop_context_vars => 1 );
+#my $template = HTML::Template->new( filename => $tmpldata{'path'},
+#				    die_on_bad_params => 0,
+#				    loop_context_vars => 1 );
+my $template = gettemplate("members/member.tmpl");
 
 my $member=$input->param('member');
 $member=~ s/\,//g;

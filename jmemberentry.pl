@@ -29,9 +29,7 @@ use HTML::Template;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'jmemberentry.tmpl', theme => $theme );
-my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+my $template = gettemplate("members/jmemberentry.tmpl");
 
 my $member=$input->param('bornum');
 if ($member eq ''){

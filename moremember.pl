@@ -46,9 +46,7 @@ my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'moremember.tmpl', theme => $theme );
-my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+my $template = gettemplate("members/moremember.tmpl");
 
 my $bornum=$input->param('bornum');
 
