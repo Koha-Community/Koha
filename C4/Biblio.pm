@@ -1,8 +1,8 @@
 package C4::Biblio;
 # $Id$
 # $Log$
-# Revision 1.53  2003/07/10 12:24:20  tipaul
-# typo fix
+# Revision 1.54  2003/07/11 11:51:32  tipaul
+# *** empty log message ***
 #
 # Revision 1.52  2003/07/10 10:37:19  tipaul
 # fix for copyrightdate problem, #514
