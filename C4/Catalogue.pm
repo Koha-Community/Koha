@@ -834,7 +834,7 @@ aqbooksellers table in the Koha database.
 sub bookseller {
   my ($searchstring)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqbooksellers where name like '%$searchstring%' or
+  my $query="Select * from aqbooksellers where name like '$searchstring%' or
   id = '$searchstring'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
