@@ -54,8 +54,8 @@ if ($member eq ''){
 	$member=NewBorrowerNumber();
 }
 my $type=$input->param('type') || '';
-my $modify=$input->param('modify.x');
-my $delete=$input->param('delete.x');
+my $modify=$input->param('modify');
+my $delete=$input->param('delete');
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
 } else {  # this else goes down the whole script
@@ -180,6 +180,7 @@ if ($delete){
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $data->{'dateofbirth'},
 				dateformat      => display_date_format(),
+			        modify          => $modify,
 				CGIbranch => $CGIbranch);
 	output_html_with_http_headers $input, $cookie, $template->output;
 
