@@ -23,21 +23,26 @@ use strict;
 
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
-use vars qw( $pedantic_p $pedantic_error_occurred_in_nonpedantic_mode_p );
+use vars qw( $pedantic_p $pedantic_tag );
+use vars qw( $pedantic_attribute_error_in_nonpedantic_mode_p );
+use vars qw( $pedantic_tmpl_var_use_in_nonpedantic_mode_p );
 use vars qw( $fatal_p );
 
 ###############################################################################
 
 # Hideous stuff
 use vars qw( $re_directive $re_tmpl_var $re_tmpl_var_escaped $re_tmpl_include );
+use vars qw( $re_tmpl_endif_endloop );
 BEGIN {
     # $re_directive must not do any backreferences
     $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
-    # As above but only TMPL_VAR and TMPL_INCLUDE (those that can emit a value)
-    $re_tmpl_var = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
-    $re_tmpl_include = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    # TMPL_VAR or TMPL_INCLUDE
+    $re_tmpl_var = q{<(?:(?i)(?:!--\s*)?TMPL_(?:VAR)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    $re_tmpl_include = q{<(?:(?i)(?:!--\s*)?TMPL_(?:INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # TMPL_VAR ESCAPE=1/HTML/URL
-    $re_tmpl_var_escaped = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s+ESCAPE=(?:1|HTML|URL)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    $re_tmpl_var_escaped = q{<(?:(?i)(?:!--\s*)?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s+ESCAPE=(?:1|HTML|URL)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    # /LOOP or /IF or /UNLESS
+    $re_tmpl_endif_endloop = q{<(?:(?i)(?:!--\s*)?\/TMPL_(?:LOOP|IF|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
 }
 
 # Hideous stuff from subst.pl, slightly modified to use the above hideous stuff
@@ -73,6 +78,19 @@ sub KIND_UNKNOWN   () { 'ERROR' }
 use vars qw( $readahead $lc_0 $lc $syntaxerror_p );
 use vars qw( $cdata_mode_p $cdata_close );
 
+###############################################################################
+
+sub warn_pedantic ($$) {
+    my($flag, $msg) = @_;
+    warn "Warning$pedantic_tag: $msg\n" if $pedantic_p || !$$flag;
+    if (!$pedantic_p) {
+	warn "Warning$pedantic_tag: Further similar negligible warnings will not be reported, use --pedantic for details\n" unless $$flag;
+	$$flag = 1;
+    }
+}
+
+###############################################################################
+
 sub extract_attributes ($;$) {
     my($s, $lc) = @_;
     my %attr;
@@ -88,25 +106,20 @@ sub extract_attributes ($;$) {
 	if ($val =~ /$re_tmpl_include/os) {
 	    warn "Warning: TMPL_INCLUDE in attribute"
 		. (defined $lc? " near line $lc": '') . ": $val_orig\n";
+	} elsif ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
+	    warn_pedantic \$pedantic_tmpl_var_use_in_nonpedantic_mode_p,
+		    "Unescaped TMPL_VAR in attribute"
+		    . (defined $lc? " near line $lc": '') . ": $val_orig"
+		if $pedantic_p || !$pedantic_tmpl_var_use_in_nonpedantic_mode_p;
 	} elsif ($val_orig !~ /^['"]/) {
-	    if ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
-		warn "Warning: TMPL_VAR without ESCAPE in unquoted attribute"
-		    . (defined $lc? " near line $lc": '') . ": $val_orig\n";
-	    } elsif ($val =~ /[^-\.A-Za-z0-9]/s) {
-		if ($pedantic_p) {
-		    warn "Warning: Unquoted attribute containing character(s) that must be quoted"
-			. (defined $lc? " near line $lc": '') . ": $val_orig\n";
-		} else {
-		    warn "Warning: Negligible minor syntax error in token detected"
-			. (defined $lc? " near line $lc": '')
-			. ", use --pedantic to show\n"
-			unless $pedantic_error_occurred_in_nonpedantic_mode_p;
-		    $pedantic_error_occurred_in_nonpedantic_mode_p = 1;
-		}
-	    }
+	    warn_pedantic \$pedantic_attribute_error_in_nonpedantic_mode_p,
+		"Unquoted attribute contains character(s) that should be quoted"
+		. (defined $lc? " near line $lc": '') . ": $val_orig"
+		if $val =~ /[^-\.A-Za-z0-9]/s;
 	}
     }
-    if ($s =~ /\S/s) { # should never happen
+    my $s2 = $s; $s2 =~ s/$re_tmpl_endif_endloop//g; # for the next check
+    if ($s2 =~ /\S/s) { # should never happen
 	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
 	    warn "Error: Completely confused while extracting attributes"
 		    . (defined $lc? " near line $lc": '') . ": $1\n";
@@ -320,6 +333,7 @@ GetOptions(
     'pedantic-warnings'	=> sub { $pedantic_p = 1 },
     'help'		=> sub { usage(0) },
 ) || usage_error;
+$pedantic_tag = $pedantic_p? '': ' (negligible)';
 usage_error('Missing mandatory option -f') unless defined $input;
 
 open(INPUT, "<$input") || die "$0: $input: $!\n";
