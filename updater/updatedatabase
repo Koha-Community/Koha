@@ -435,6 +435,20 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
+            variable            => 'maxoutstanding',
+            value               => '5',
+            explanation         =>
+            'maximum amount withstanding to be able make reserves '
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'maxreserves',
+            value               => '5',
+            explanation         =>
+            'maximum number of reserves a member can make '
+        },
+        {
+            uniquefieldrequired => 'variable',
             variable            => 'KohaAdminEmailAddress',
             value               => 'your.mail@here',
             explanation => 'the email adress where borrowers modifs are sent'
@@ -757,6 +771,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.45  2003/05/08 12:26:16  wolfpac444
+# Bug fixes
+#
 # Revision 1.44  2003/05/03 05:39:57  rangi
 # Fixing bug 429
 # (Wording changes in the explanation fields in system preferences)

@@ -13,8 +13,9 @@ use C4::Reserves2;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Date;
+use C4::Context;
 
-my $MAXIMUM_NUMBER_OF_RESERVES = 5;
+my $MAXIMUM_NUMBER_OF_RESERVES = C$::Context->preference("maxreserves");
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie)
@@ -227,7 +228,8 @@ if ($query->param('item_types_selected')) {
 } else {
 	# Here we check that the borrower can actually make reserves Stage 1.
 	my $noreserves = 0;
-	if ($borr->{'amountoutstanding'} > 5) {
+	my $maxoutstanding = C4::Context->preference("maxoustanding");
+	if ($borr->{'amountoutstanding'} > $maxoutstanding) {
 		my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
 		$template->param(message => 1);
 		$noreserves = 1;
