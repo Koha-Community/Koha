@@ -38,26 +38,28 @@ a.catalogue:hover {
 </head>
 
 <body>
-<!-- MENUS -->
-<div id="menubar">
-	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
-	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
-	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
-	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
-	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
-	<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
-	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
-	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
-	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
-</div>
-<div id="submenu">
-	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
-	<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>
-	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
-</div>
+<!-- TMPL_UNLESS name="popup" -->
+	<!-- MENUS -->
+	<div id="menubar">
+		<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
+		<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
+		<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
+		<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
+		<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
+		<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+		<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
+		<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
+		<a class="about" href="/cgi-bin/koha/about.pl">About</a>
+		<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
+	</div>
+	<div id="submenu">
+		<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
+		<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
+		<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
+		<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>
+		<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
+	</div>
+<!-- /TMPL_UNLESS -->
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
 <!-- TMPL_ELSE -->

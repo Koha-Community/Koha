@@ -1,43 +1,44 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 
-<div class="tabbed">
-	<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="bibid" --></h1>
-	<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
-		Edit biblio
-	</a>
-	<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
-		Edit item
-	</a>
-
-	<a href="javascript:confirm_deletion()" class="button catalogue">
-		delete
-	</a>
-	<a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
-		Normal
-	</a>
-	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
-		ISBD
-	</a>
-	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
-		Add to shelf
-	</a>
-	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
-		Print
-	</a>
-	<!-- TMPL_IF name="subscriptionid" -->
-	<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue">
-		Subscription
-	</a>
-	<a href="bull/serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
-		Issues
-	</a>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="norequests" -->
-	<!-- TMPL_ELSE -->
-		<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
-	<!-- /TMPL_IF -->
-</div>
-
+<!-- TMPL_UNLESS name="popup" -->
+	<div class="tabbed">
+		<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="bibid" --></h1>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Edit biblio
+		</a>
+		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
+			Edit item
+		</a>
+	
+		<a href="javascript:confirm_deletion()" class="button catalogue">
+			delete
+		</a>
+		<a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Normal
+		</a>
+		<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			ISBD
+		</a>
+		<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+			Add to shelf
+		</a>
+		<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+			Print
+		</a>
+		<!-- TMPL_IF name="subscriptionid" -->
+		<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue">
+			Subscription
+		</a>
+		<a href="bull/serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+			Issues
+		</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="norequests" -->
+		<!-- TMPL_ELSE -->
+			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
+		<!-- /TMPL_IF -->
+	</div>
+<!-- /TMPL_UNLESS -->
 	<div class="tabs">
 		<!-- TMPL_IF NAME="0XX" -->
 			<div id="link0"><a href="javascript:active(0)">0</a></div>

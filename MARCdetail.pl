@@ -65,6 +65,8 @@ my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
 my $bibid = $query->param('bibid');
+my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
+
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
@@ -185,6 +187,7 @@ $template->param(item_loop => \@item_value_loop,
 						bibid => $bibid,
 						biblionumber => $biblionumber,
 						subscriptionid => $subscriptionid,
+						popup => $popup,
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
 
