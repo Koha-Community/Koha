@@ -11,7 +11,7 @@ use CGI;
 use strict;
 use C4::Acquisitions;
 use C4::Output;
-
+use C4::Circulation::Circ2;
 
 my $input = new CGI;
 my $dbh=C4Connect;
@@ -155,6 +155,8 @@ EOF
 
 
 sub newbiblioitem {
+    #print 
+#    print "in here";
     my $biblionumber=$input->param('biblionumber');
     my $volume=$input->param('volume');
     my $q_volume=$dbh->quote($volume);
@@ -197,13 +199,15 @@ sub newbiblioitem {
     ($biblioitemnumber) = $sth->fetchrow;
     $biblioitemnumber++;
     ($q_isbn='') if ($q_isbn eq 'NULL');
-    $sth=$dbh->prepare("insert into biblioitems (biblioitemnumber,
+    my $query="insert into biblioitems (biblioitemnumber,
     biblionumber, volume, number, classification, itemtype, isbn, issn, lccn, dewey, subclass,
     publicationyear, publishercode, volumedate, volumeddesc, illus, pages,
     notes, size, place) values ($biblioitemnumber, $biblionumber, $q_volume,
     $q_number, $q_classification, $q_itemtype, $q_isbn, $q_issn, $q_lccn, $q_dewey, $q_subclass,
     $q_publicationyear, $q_publishercode, $q_volumedate, $q_volumeddesc,
-    $q_illus, $q_pages, $q_notes, $q_size, $q_place)");
+    $q_illus, $q_pages, $q_notes, $q_size, $q_place)";
+    $sth=$dbh->prepare($query);
+#    print $query;
     $sth->execute;
     my @subjectheadings=split(/\n/,$subjectheadings);
     my $subjectheading;
@@ -310,7 +314,18 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> Home Branch: <select name=homebranch><option value='STWE'>Stewart Elementary<option value='MEZ'>Meziadin Elementary</select></td></tr>
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> 
+Home Branch: <select name=homebranch>
+EOF
+	  
+my $branches=getbranches();
+foreach my $key (sort(keys %$branches)) {
+     print "<option value=\"$key\">$branches->{$key}->{'branchname'}</option>";
+#      $key, '=', $branches->{$key}, "\n";
+         }  
+#	  <option value='STWE'>Stewart Elementary<option value='MEZ'>Meziadin Elementary
+print << "EOF";
+	  </select></td></tr>
 </tr><td colspan=2>Replacement Price: <input name=replacementprice size=10></td></tr>
 <tr><td>Notes</td><td><textarea name=notes rows=4 cols=40
 wrap=physical></textarea></td></tr>
