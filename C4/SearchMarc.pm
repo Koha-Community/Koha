@@ -274,18 +274,20 @@ sub catalogsearch {
 	}
 # add the last line, that is not reached byt the loop / if ($oldbiblionumber...)
 	my %newline;
-	%newline = %$oldline;
-	$newline{totitem} = $totalitems;
-	$newline{biblionumber} = $oldbiblionumber;
-	my @CNresults2= @CNresults;
-	$newline{CN} = \@CNresults2;
-	$newline{'even'} = 1 if $counter % 2 == 0;
-	$newline{'odd'} = 1 if $counter % 2 == 1;
-	@CNresults = ();
-	my @CNresults2= @CNresults;
-	$newline{CN} = \@CNresults2;
-	@CNresults = ();
-	push @finalresult, \%newline;
+	if ($oldline) {
+		%newline = %$oldline;
+		$newline{totitem} = $totalitems;
+		$newline{biblionumber} = $oldbiblionumber;
+		my @CNresults2= @CNresults;
+		$newline{CN} = \@CNresults2;
+		$newline{'even'} = 1 if $counter % 2 == 0;
+		$newline{'odd'} = 1 if $counter % 2 == 1;
+		@CNresults = ();
+		my @CNresults2= @CNresults;
+		$newline{CN} = \@CNresults2;
+		@CNresults = ();
+		push @finalresult, \%newline;
+	}
 	my $nbresults = $#result + 1;
 	return (\@finalresult, $nbresults);
 }
@@ -316,7 +318,7 @@ sub create_request {
 					$sql_tables .= "marc_word as m$nb_table,";
 					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tag+m1.subfieldid in (@$tags[$i])";
+						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} else {
@@ -343,14 +345,14 @@ sub create_request {
 						$sql_tables .= "marc_word as m$nb_table,";
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
 						if (@$tags[$i]) {
-							$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldid in(@$tags[$i])";
+							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					} else {
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
 						if (@$tags[$i]) {
-							$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldid in (@$tags[$i])";
+							$sql_where1 .="  and m$nb_table.tagsubfield in (@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";

@@ -551,7 +551,7 @@ sub MARCdelbiblio {
 		$sth->execute;
 		my $itemtag = $sth->fetchrow_hashref->{tagfield};
 		$dbh->do("delete from marc_subfield_table where bibid=$bibid and tag<>$itemtag");
-		$dbh->do("delete from marc_word where bibid=$bibid and tag<>$itemtag");
+		$dbh->do("delete from marc_word where bibid=$bibid and not (tagsubfield like \"$itemtag%\")");
 	} else {
 		$dbh->do("delete from marc_biblio where bibid=$bibid");
 		$dbh->do("delete from marc_subfield_table where bibid=$bibid");
@@ -947,14 +947,14 @@ sub MARCaddword {
     $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
     my @words = split / /,$sentence;
     my $stopwords= C4::Context->stopwords;
-    my $sth=$dbh->prepare("insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
-			values (?,?,?,?,?,?,soundex(?))");
+    my $sth=$dbh->prepare("insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word)
+			values (?,concat(?,?),?,?,?,soundex(?))");
     foreach my $word (@words) {
 # we record only words one char long and not in stopwords hash
 	if (length($word)>=1 and !($stopwords->{uc($word)})) {
 	    $sth->execute($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
-		warn "ERROR ==> insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
+		warn "ERROR ==> insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($bibid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
 	    }
 	}
     }
@@ -963,8 +963,8 @@ sub MARCaddword {
 sub MARCdelword {
 # delete words. this sub deletes all the words from a sentence. a subfield modif is done by a delete then a add
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
-    my $sth=$dbh->prepare("delete from marc_word where bibid=? and tag=? and tagorder=? and subfieldid=? and subfieldorder=?");
-    $sth->execute($bibid,$tag,$tagorder,$subfield,$subfieldorder);
+    my $sth=$dbh->prepare("delete from marc_word where bibid=? and tagsubfield=concat(?,?) and tagorder=? and subfieldorder=?");
+    $sth->execute($bibid,$tag,$subfield,$tagorder,$subfieldorder);
 }
 
 #
@@ -2191,6 +2191,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.94  2004/06/17 08:16:32  tipaul
+# merging tag & subfield in marc_word for better perfs
+#
 # Revision 1.93  2004/06/11 15:38:06  joshferraro
 # Changes MARCaddword to index words >= 1 char ... needed for more accurate
 # searches using SearchMarc routines.
