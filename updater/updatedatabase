@@ -1,20 +1,67 @@
 #!/usr/bin/perl
 
-# This script will check for required updates to the database.  Would also be a
-# good idea to offer to do a backup at this time...
+# Database Updater
+# This script checks for required updates to the database.  
 
+# Part of the Koha Library Software www.koha.org
+# Licensed under the GPL.
 
-use C4::Database;
-use C4::Catalogue;
+# Bugs/ToDo: 
+# - Would also be a good idea to offer to do a backup at this time...
+
+use strict;
+
+# CPAN modules
 use DBI;
-use C4::Acquisitions;
-use C4::Output;
+
+# Koha modules
+use C4::Database;
+
+my %existingtables;	# tables already in database
+my %types;
+my $table;
+
+#-------------------
+# Defines
+
+# Tables to add if they don't exist
+my %requiretables=(
+    shelfcontents=>"( shelfnumber int not null, 
+	itemnumber int not null, 
+	flags int)",
+    bookshelf=>"( shelfnumber int auto_increment primary key, 
+	shelfname char(255))",
+    z3950queue=>"( id int auto_increment primary key, 
+	term text, 
+	type char(10), 
+	startdate int, 
+	enddate int, 
+	done smallint, 
+	results longblob, 
+	numrecords int, 
+	servers text, 
+	identifier char(30))",
+    z3950results=>"( id int auto_increment primary key, 
+	queryid int, 
+	server char(255), 
+	startdate int, 
+	enddate int, 
+	results longblob, 
+	numrecords int, 
+	numdownloaded int, 
+	highestseen int, 
+	active smallint)",
+    branchrelations=>"( branchcode varchar(4), 
+	categorycode varchar(4))",
+);
+
+#-------------------
+# Initialize
 my $dbh=C4Connect;
 
-my %tables;
-my %types;
+# Start checking
 
-
+# Get version of MySQL database engine.
 my $mysqlversion=`mysqld --version`;
 $mysqlversion=~/Ver (\S*) /;
 $mysqlversion=$1;
@@ -22,47 +69,56 @@ if ($mysqlversion ge '3.23') {
     print "Could convert to MyISAM database tables...\n";
 }
 
+#---------------------------------
+# Tables
+
+# Collect all tables into a list
 my $sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
-    $tables{$table}=1;
+    $existingtables{$table}=1;
 }
 
+# Now add any missing tables
+foreach $table ( keys %requiretables ) {
+    unless ($existingtables{$table} ) {
+	print "Adding $table table...\n";
+	my $sth=$dbh->prepare(
+		"create table $table $requiretables{$table}" );
+	$sth->execute;
+        if ($sth->err) {
+                print "Error : $sth->errstr \n";
+                $sth->finish;
+        } # if error
+    } # unless exists
+} # foreach
+exit;
 
-# Add tables for virtual bookshelf management
-
-unless ($tables{'shelfcontents'}) {
-    print "Adding shelfcontents table...\n";
-    my $sti=$dbh->prepare("create table shelfcontents (shelfnumber int not null, itemnumber int not null, flags int)");
-    $sti->execute;
-}
-unless ($tables{'bookshelf'}) {
-    print "Adding bookshelf table...\n";
-    my $sti=$dbh->prepare("create table bookshelf (shelfnumber int auto_increment primary key, shelfname char(255))");
-    $sti->execute;
-}
-
-# Add tables required by Z-3950 scripts
-
-unless ($tables{'z3950queue'}) {
-    print "Adding z3950queue table...\n";
-    my $sti=$dbh->prepare("create table z3950queue (id int auto_increment primary key, term text, type char(10), startdate int, enddate int, done smallint, results longblob, numercords int, servers text, identifier char(30))");
-    $sti->execute;
-}
-
-unless ($tables{'z3950results'}) {
-    print "Adding z3950results table...\n";
-    my $sti=$dbh->prepare("create table z3950results (id int auto_increment primary key, queryid int, server char(255), startdate int, enddate int, results longblob, numrecords int, numdownloaded int, highestseen int, active smallint)");
-    $sti->execute;
-}
-unless ($tables{'z3950servers'}) {
+unless ($existingtables{'z3950servers'}) {
     print "Adding z3950servers table...\n";
-    my $sti=$dbh->prepare("create table z3950servers (host char(255), port int, db char(255), userid char(255), password char(255), name text, id int, checked smallint, rank int)");
+    my $sti=$dbh->prepare("create table z3950servers (
+	host char(255), 
+	port int, 
+	db char(255), 
+	userid char(255), 
+	password char(255), 
+	name text, 
+	id int, 
+	checked smallint, 
+	rank int)");
     $sti->execute;
-    $sti=$dbh->prepare("insert into z3950servers values ('z3950.loc.gov', 7090, 'voyager', '', '', 'Library of Congress', 1, 1, 1)");
+    $sti=$dbh->prepare("insert into z3950servers 
+	values ('z3950.loc.gov', 
+	7090, 
+	'voyager', 
+	'', '', 
+	'Library of Congress', 
+	1, 1, 1)");
     $sti->execute;
 }
 
+#---------------------------------
+# Columns
 
 
 # Get list of columns from biblioitems table
@@ -75,13 +131,15 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 unless ($types{'lccn'}) {
     # Add LCCN field to biblioitems db
     print "Adding lccn field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems add column lccn char(25)");
+    my $sti=$dbh->prepare("alter table biblioitems 
+	add column lccn char(25)");
     $sti->execute;
 }
 unless ($types{'marc'}) {
     # Add MARC field to biblioitems db (not used anymore)
     print "Adding marc field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems add column marc text");
+    my $sti=$dbh->prepare("alter table biblioitems 
+	add column marc text");
     $sti->execute;
 }
 
@@ -137,22 +195,23 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
     print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
     my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
-    $sti->execute;
-    $sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
-    $sti->execute;
+    $sth->execute;
+    $sth=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
+    $sth->execute;
 }
 
 unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
-    print "Setting type of branchcode in branchcategories to varchar(4).\n";
-    my $sti=$dbh->prepare("alter table branchcategories change branchcode branchcode varchar(4)");
-    $sti->execute;
+    print "Changing branchcode in branchcategories to categoryname text.\n";
+    my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
+    $sth->execute;
 }
 
 unless ($branchcategories{'codedescription'} eq 'text') {
     print "Replacing branchholding in branchcategories with codedescription text.\n";
-    my $sti=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
-    $sti->execute;
+    my $sth=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
+    $sth->execute;
 }
+
 
 $sth->finish;
 $dbh->disconnect;
