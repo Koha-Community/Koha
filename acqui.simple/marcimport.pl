@@ -261,78 +261,57 @@ if ($input->param('insertnewrecord')) {
 EOF
     } else {
 	use strict;
+	my $error;
+	my %biblio;
+	my %biblioitem;
 
-	# It doesn't exist; add it.
+	# convert to upper case and split on lines
+	my $subjectheadings=$input->param('subject');
+	my @subjectheadings=split(/[\r\n]+/,$subjectheadings);
 
-	$biblionumber=GetOrAddBiblio($dbh,
-		{ title		=>$input->param('title'),
-		 author		=>$input->param('author'),
-		 copyright	=>$input->param('copyrightdate'),
-		 seriestitle	=>$input->param('seriestitle'),
-		 notes		=>$input->param('notes'),
-		 abstract	=>$input->param('abstract'),
-		 subtitle	=>$input->param('subtitle'),
-		}
+	my $additionalauthors=$input->param('additionalauthors');
+	my @additionalauthors=split(/[\r\n]+/,uc($additionalauthors));
+
+	# Use individual assignments to hash buckets, in case
+	#  any of the input parameters are empty or don't exist
+	$biblio{title}		=$input->param('title');
+	$biblio{author}		=$input->param('author');
+	$biblio{copyright}	=$input->param('copyrightdate');
+	$biblio{seriestitle}	=$input->param('seriestitle');
+	$biblio{notes}		=$input->param('notes');
+	$biblio{abstract}	=$input->param('abstract');
+	$biblio{subtitle}	=$input->param('subtitle');
+
+	$biblioitem{volume}		=$input->param('volume');
+	$biblioitem{number}		=$input->param('number');
+	$biblioitem{itemtype}		=$input->param('itemtype');
+	$biblioitem{isbn}		=$input->param('isbn');
+	$biblioitem{issn}		=$input->param('issn');
+	$biblioitem{dewey}		=$input->param('dewey');
+	$biblioitem{subclass}		=$input->param('subclass');
+	$biblioitem{publicationyear}	=$input->param('publicationyear');
+	$biblioitem{publishercode}	=$input->param('publishercode');
+	$biblioitem{volumedate}		=$input->param('volumedate');
+	$biblioitem{volumeddesc}	=$input->param('volumeddesc');
+	$biblioitem{illus}		=$input->param('illustrator');
+	$biblioitem{pages}		=$input->param('pages');
+	$biblioitem{notes}		=$input->param('notes');
+	$biblioitem{size}		=$input->param('size');
+	$biblioitem{place}		=$input->param('place');
+	$biblioitem{lccn}		=$input->param('lccn');
+	$biblioitem{marc}	 	=$input->param('marc');
+
+	print "<PRE>subjects=@subjectheadings</PRE>\n";
+	print "<PRE>auth=@additionalauthors</PRE>\n";
+		
+	($biblionumber, $biblioitemnumber, $error)=
+ 	  NewBiblioItem($dbh,
+		\%biblio,
+		\%biblioitem,
+		\@subjectheadings,
+		\@additionalauthors
 	);
 
-	$sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	$sth->execute;
-	($biblioitemnumber) = $sth->fetchrow;
-	$biblioitemnumber++;
-	my $q_isbn=$dbh->quote($isbn);
-	my $q_issn=$dbh->quote($issn);
-	my $q_lccn=$dbh->quote($lccn);
-	my $q_volume=$dbh->quote($input->param('volume'));
-	my $q_number=$dbh->quote($input->param('number'));
-	my $q_itemtype=$dbh->quote($input->param('itemtype'));
-	my $q_dewey=$dbh->quote($input->param('dewey'));
-	my $q_subclass=$dbh->quote($input->param('subclass'));
-	my $q_publicationyear=$dbh->quote($input->param('publicationyear'));
-	my $q_publishercode=$dbh->quote($input->param('publishercode'));
-	my $q_volumedate=$dbh->quote($input->param('volumedate'));
-	my $q_volumeddesc=$dbh->quote($input->param('volumeddesc'));
-	my $q_illus=$dbh->quote($input->param('illustrator'));
-	my $q_pages=$dbh->quote($input->param('pages'));
-	my $q_notes=$dbh->quote($input->param('note'));
-	my $q_size=$dbh->quote($input->param('size'));
-	my $q_place=$dbh->quote($input->param('place'));
-	my $q_marc=$dbh->quote($input->param('marc'));
-
-	$sth=$dbh->prepare("insert into biblioitems (biblioitemnumber, biblionumber, volume, number, itemtype, isbn, issn, dewey, subclass, publicationyear, publishercode, volumedate, volumeddesc, illus, pages, notes, size, place, lccn, marc) values ($biblioitemnumber, $biblionumber, $q_volume, $q_number, $q_itemtype, $q_isbn, $q_issn, $q_dewey, $q_subclass, $q_publicationyear, $q_publishercode, $q_volumedate, $q_volumeddesc, $q_illus, $q_pages, $q_notes, $q_size, $q_place, $q_lccn, $q_marc)");
-	$sth->execute;
-	my $subjectheadings=$input->param('subject');
-	my $additionalauthors=$input->param('additionalauthors');
-	my @subjectheadings=split(/\n/,$subjectheadings);
-	my $subjectheading;
-	foreach $subjectheading (@subjectheadings) {
-	    # remove any line ending characters (Ctrl-J or M)
-	    $subjectheading=~s/\013//g;
-	    $subjectheading=~s/\010//g;
-	    # convert to upper case
-	    $subjectheading=uc($subjectheading);
-	    chomp ($subjectheading);
-	    while (ord(substr($subjectheading, length($subjectheading)-1, 1))<14) {
-		chop $subjectheading;
-	    }
-	    # quote value
-	    my $q_subjectheading=$dbh->quote($subjectheading);
-	    $sth=$dbh->prepare("insert into bibliosubject (biblionumber,subject)
-		values ($biblionumber, $q_subjectheading)");
-	    $sth->execute;
-	}
-	my @additionalauthors=split(/\n/,$additionalauthors);
-	my $additionalauthor;
-	foreach $additionalauthor (@additionalauthors) {
-	    # remove any line ending characters (Ctrl-L or Ctrl-M)
-	    $additionalauthor=~s/\013//g;
-	    $additionalauthor=~s/\010//g;
-	    # convert to upper case
-	    $additionalauthor=uc($additionalauthor);
-	    # quote value
-	    my $q_additionalauthor=$dbh->quote($additionalauthor);
-	    $sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values ($biblionumber, $q_additionalauthor)");
-	    $sth->execute;
-	}
 
 	my $title=$input->param('title');
 	print << "EOF";
@@ -342,7 +321,8 @@ EOF
 	$biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
 	</table>
 EOF
-    }
+    } # if new record
+
     my $title=$input->param('title');
 
     # Get next barcode, or pick random one if none exist yet
@@ -390,6 +370,102 @@ print endpage();
 exit;
 }
 
+sub NewBiblioItem {
+	use strict;
+
+	my ( $dbh,		# DBI handle
+	  $biblio,		# hash ref to biblio record
+	  $biblioitem,		# hash ref to biblioitem record
+	  $subjects,		# list ref of subjects
+	  $addlauthors,		# list ref of additional authors
+	)=@_ ;
+
+	my ( $biblionumber, $biblioitemnumber, $error);		# return values
+
+	my $debug=1;
+	my $sth;
+	my $subjectheading;
+	my $additionalauthor;
+
+	#--------
+
+	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
+		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
+
+	# Make sure master biblio entry exists
+	$biblionumber=GetOrAddBiblio($dbh, $biblio);
+
+	# Get next biblioitemnumber
+	$sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	$sth->execute;
+	($biblioitemnumber) = $sth->fetchrow;
+	$biblioitemnumber++;
+
+	print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
+
+	$sth=$dbh->prepare("insert into biblioitems (
+	  biblioitemnumber,
+	  biblionumber,
+	  volume,
+	  number,
+	  itemtype,
+	  isbn,
+	  issn,
+	  dewey,
+	  subclass,
+	  publicationyear,
+	  publishercode,
+	  volumedate,
+	  volumeddesc,
+	  illus,
+	  pages,
+	  notes,
+	  size,
+	  place,
+	  lccn,
+	  marc)
+	values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
+
+	$sth->execute(
+	  $biblioitemnumber,
+	  $biblionumber,
+	  $biblioitem->{volume},
+	  $biblioitem->{number},
+	  $biblioitem->{itemtype},
+	  $biblioitem->{isbn},
+	  $biblioitem->{issn},
+	  $biblioitem->{dewey},
+	  $biblioitem->{subclass},
+	  $biblioitem->{publicationyear},
+	  $biblioitem->{publishercode},
+	  $biblioitem->{volumedate},
+	  $biblioitem->{volumeddesc},
+	  $biblioitem->{illus},
+	  $biblioitem->{pages},
+	  $biblioitem->{notes},
+	  $biblioitem->{size},
+	  $biblioitem->{place},
+	  $biblioitem->{lccn},
+	  $biblioitem->{marc} );
+
+	$sth=$dbh->prepare("insert into bibliosubject 
+		(biblionumber,subject)
+		values (?, ? )" );
+	foreach $subjectheading (@{$subjects} ) {
+	    $sth->execute($biblionumber, $subjectheading);
+	}
+
+	$sth=$dbh->prepare("insert into additionalauthors 
+		(biblionumber,author)
+		values (?, ? )");
+	foreach $additionalauthor (@{$addlauthors} ) {
+	    $sth->execute($biblionumber, $additionalauthor);
+	}
+
+	return ( $biblionumber, $biblioitemnumber, $error);
+
+} # sub NewBiblioItem
+
 #---------------------------------------
 # Find a biblio entry, or create a new one if it doesn't exist.
 sub GetOrAddBiblio {
@@ -403,9 +479,11 @@ sub GetOrAddBiblio {
 	# return
 	my $biblionumber;
 
+	my $debug=1;
 	my $sth;
 	
 	#-----
+	print "<PRE>Looking for biblio </PRE>\n" if $debug;
 	$sth=$dbh->prepare("select biblionumber 
 		from biblio 
 		where title=? and author=? 
@@ -415,9 +493,12 @@ sub GetOrAddBiblio {
 		$biblio->{copyright}, $biblio->{seriestitle} );
 	if ($sth->rows) {
 	    ($biblionumber) = $sth->fetchrow;
+	    print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
 	} else {
 	    # Doesn't exist.  Add new one.
+	    print "<PRE>Adding biblio</PRE>\n" if $debug;
 	    $biblionumber=&newbiblio($biblio);
+	    print "<PRE>Added with biblio number $biblionumber</PRE>\n" if $debug;
 	    &newsubtitle($biblionumber,$biblio->{subtitle} );
 	}
 
@@ -562,7 +643,7 @@ if ($file) {
 	}
 RECORD:
 	foreach $record (@records) {
-	    my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $additionalauthors, $illustrator, $copyrightdate, $seriestitle);
+	    my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $additionalauthors, $illustrator, $copyrightdate, $seriestitle);
 	    my $marctext=$marctext{$record};
 	    my $marc=$marc{$record};
 	    foreach $field (@$record) {
@@ -660,7 +741,7 @@ RECORD:
 		    }
 		}
 		if ($field->{'tag'} =~/^5/) {
-		    $note.="$field->{'subfields'}->{'a'}\n";
+		    $notes.="$field->{'subfields'}->{'a'}\n";
 		}
 		if ($field->{'tag'} =~/65\d/) {
 		    my $subject=$field->{'subfields'}->{'a'};
@@ -715,7 +796,7 @@ RECORD:
 		$subject.="$_\n";
 	    }
 	    $subjectinput=$input->textarea(-name=>'subject', -default=>$subject, -rows=>4, -cols=>40);
-	    $noteinput=$input->textarea(-name=>'note', -default=>$note, -rows=>4, -cols=>40, -wrap=>'physical');
+	    $noteinput=$input->textarea(-name=>'notes', -default=>$notes, -rows=>4, -cols=>40, -wrap=>'physical');
 	    $copyrightinput=$input->textfield(-name=>'copyrightdate', -default=>$copyrightdate);
 	    $seriestitleinput=$input->textfield(-name=>'seriestitle', -default=>$seriestitle);
 	    $volumeinput=$input->textfield(-name=>'volume', -default=>$volume);
@@ -895,7 +976,7 @@ EOF
 		    foreach $record (@records) {
 			$counter++;
 			#(next) unless ($counter>=$startrecord && $counter<=$startrecord+10);
-			my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $controlnumber);
+			my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $controlnumber);
 			foreach $field (@$record) {
 			    if ($field->{'tag'} eq '001') {
 				$controlnumber=$field->{'indicator'};
@@ -983,7 +1064,7 @@ EOF
 	    
 	    my @records=parsemarcdata($data);
 	    foreach $record (@records) {
-		my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $controlnumber);
+		my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $controlnumber);
 		foreach $field (@$record) {
 		    if ($field->{'tag'} eq '001') {
 			$controlnumber=$field->{'indicator'};
