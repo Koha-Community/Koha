@@ -235,6 +235,9 @@ system("cp $rootdir/intranet-cgi/detail.pl $rootdir/opac-cgi");
 system("cp $rootdir/intranet-cgi/moredetail.pl $rootdir/opac-cgi");
 system("cp $rootdir/intranet-cgi/search.pl $rootdir/opac-cgi");
 system("cp $rootdir/intranet-cgi/subjectsearch.pl $rootdir/opac-cgi");
+system("cp $rootdir/intranet-cgi/logout.pl $rootdir/opac-cgi");
+system("mv $rootdir/intranet-cgi/opac/* $rootdir/opac-cgi");
+system("rmdir $rootdir/intranet-cgi/opac");
 
 
 # Move files from intranet-cgi to /scripts/ directory
