@@ -1235,7 +1235,7 @@ sub CatSearch  {
 	my $i=0;
 	my $limit= $num+$offset;
 	while (my $data=$sth->fetchrow_hashref){
-		my $query="select dewey,subclass,publishercode from biblioitems where biblionumber=?";
+		my $query="select classification,dewey,subclass,publishercode from biblioitems where biblionumber=?";
 		my @bind=($data->{'biblionumber'});
 		if ($search->{'class'} ne ''){
 			my @temp=split(/\|/,$search->{'class'});
@@ -1262,6 +1262,7 @@ sub CatSearch  {
 		}
 		my $sti=$dbh->prepare($query);
 		$sti->execute(@bind);
+		my $classification;
 		my $dewey;
 		my $subclass;
 		my $true=0;
@@ -1269,6 +1270,7 @@ sub CatSearch  {
 		my $bibitemdata;
 		if ($bibitemdata = $sti->fetchrow_hashref()){
 			$true=1;
+			$classification=$bibitemdata->{'classification'};
 			$dewey=$bibitemdata->{'dewey'};
 			$subclass=$bibitemdata->{'subclass'};
 			$publishercode=$bibitemdata->{'publishercode'};
@@ -1278,6 +1280,7 @@ sub CatSearch  {
 		$dewey=~s/\.*0*$//;
 		($dewey == 0) && ($dewey='');
 		($dewey) && ($dewey.=" $subclass");
+		$data->{'classification'}=$classification;
 		$data->{'dewey'}=$dewey;
 		$data->{'publishercode'}=$publishercode;
 		$sti->finish;
