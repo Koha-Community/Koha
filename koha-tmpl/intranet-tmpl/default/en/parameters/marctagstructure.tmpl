@@ -146,9 +146,9 @@
 		<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 		<td><!-- TMPL_IF NAME="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 		<td><!-- TMPL_VAR NAME="authorised_value" --></td>
-		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">subfields</a></td>
-		<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
-		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
+		<td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->" class="button">subfields</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+		<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkdcode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
