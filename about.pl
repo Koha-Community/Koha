@@ -24,6 +24,7 @@ my $osVersion = `uname -a`;
 my $perlVersion = $];
 my $mysqlVersion = `mysql -V`;
 my $apacheVersion =  `httpd -v`;
+$apacheVersion =  `httpd2 -v` unless $apacheVersion;
 
 $template->param(
 					kohaVersion => $kohaVersion,
