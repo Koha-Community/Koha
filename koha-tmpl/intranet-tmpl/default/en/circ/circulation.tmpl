@@ -184,8 +184,11 @@
 				<p>Not an issue but a renewal</p>
 			<!-- /TMPL_IF -->	
 			<!-- TMPL_IF NAME="RESERVE_WAITING" -->
-				<p>Reserve waiting</p>
-			<!-- /TMPL_IF -->	
+				<p>Reserve waiting for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="RESERVED" -->
+				<p>Reserved by <!-- TMPL_VAR NAME="RESERVED" --></p>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
 				<p>Item issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return &amp; issue?</p>
 			<!-- /TMPL_IF -->

@@ -319,7 +319,6 @@ sub patrontable {
     my $flag;
     my $color='';
     foreach $flag (sort keys %$flags) {
-    	warn $flag;
 #    	my @itemswaiting='';
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {

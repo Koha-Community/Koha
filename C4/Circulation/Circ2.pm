@@ -766,6 +766,7 @@ sub canbookbeissued {
 			my $branches = getbranches();
 			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 			$needsconfirmation{RESERVE_WAITING} = "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
+			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 		} elsif ($restype eq "Reserved") {
 			# The item is on reserve for someone else.
 			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
