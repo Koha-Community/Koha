@@ -69,6 +69,7 @@ $VERSION = 0.01;
   &char_decode
   
   &FindDuplicate
+  &branches
 );
 
 #
@@ -2623,6 +2624,21 @@ sub FindDuplicate {
 	return;
 }
 
+sub branches {                                                                                                                   
+        my $dbh   = C4::Context->dbh;                                                                                                
+        my $sth   = $dbh->prepare("Select * from branches order by branchname");                                                     
+        my @results = ();                                                                                                            
+                                                                                                                                     
+        $sth->execute();                                                                                                             
+        while (my $data = $sth->fetchrow_hashref) {                                                                                  
+	            push(@results,$data);                                                                                                    
+	        } # while                                                                                                                    
+                                                                                                                                     
+        $sth->finish;                                                                                                                
+        return(scalar(@results), @results);                                                                                          
+} # sub branches
+
+
 END { }    # module clean-up code here (global destructor)
 
 =back
@@ -2637,6 +2653,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.108  2004/11/19 19:41:22  rangi
+# Shifting branches() from deprecated C4::Catalogue to C4::Biblio
+# Allowing the non marc interface acquisitions to work.
+#
 # Revision 1.107  2004/11/05 10:15:27  tipaul
 # Improving FindDuplicate to find duplicate records on adding biblio
 #
