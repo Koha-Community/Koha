@@ -13,7 +13,7 @@ input{font-size:16px}
 </HEAD>
 
 <BODY   onload="document.catsearch.keyword.focus()"
-	BGCOLOR="#339999" 
+	BGCOLOR="#339999"
 	text="black" 
 	link="white" 
 	vlink="white" 
@@ -30,7 +30,7 @@ input{font-size:16px}
 	<td background="<TMPL_VAR NAME='themelang'>/images/front-background-med.gif"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" 
 	width=1 height=440 align=left alt=" " hspace=0 vspace=0><table
 cellspacing=0 cellpadding=0 border=0 >
-	
+
   <tr valign=top >
 	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=228 height=88 
 	alt=" " hspace=0 vspace=0></td>
@@ -67,17 +67,18 @@ cellspacing=0 cellpadding=0 border=0 >
 	</font>
 	<b>Entrez votre recherche et tapez sur la touche Entr&eacute;e.</b><br>
 	<a href="/cgi-bin/koha/opac-search.pl">
-      
-	<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >Recherche avanc&eacute;e (plus d'options)</a><br>
+
+	<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22 alt="-" hspace=0 vspace=0 border=0 align=middle >Recherche avanc&eacute;e (plus d'options)</a><br>
 
 	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0>
 	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>Connect&eacute; : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil usagers</a>][<a href="/cgi-bin/koha/logout.pl">D&eacute;connexion</a>]</p>
+	<TMPL_IF NAME="loggedinusername">
+	    <p align=left> <b>Bienvenue <TMPL_VAR NAME="loggedinusername"></b><br/>
+	    <img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22 alt="-" hspace=0 vspace=0 border=0 align=middle ><a href=/cgi-bin/koha/opac-user.pl>Votre compte lecteur</a><br/>
+	    <img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22 alt="-" hspace=0 vspace=0 border=0 align=middle ><a href="/cgi-bin/koha/logout.pl">D&eacute;connexion</a></p>
 	<TMPL_ELSE>
-	    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Se connecter</a> &agrave; Koha</p>
+	    <p align=left><img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22 alt="-" hspace=0 vspace=0 border=0 align=middle ><a href="/cgi-bin/koha/opac-user.pl">Voir votre compte lecteur</a></p>
 	</TMPL_IF>
 	</td>
 	</form>

@@ -1,11 +1,4 @@
-<TMPL_INCLUDE NAME="members-top.inc">
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connect&eacute;: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
-
+<TMPL_INCLUDE NAME="opac-top.inc">
 <i>Si des informations sont erronées, vous pouvez les corriger. <b>Notez</b> qu'un <b>mail</b> sera envoyé à la bibliothèque, qui <b>validera</b> vos modifications.<br/>
 en conséquence, vos modifications n'apparaitront pas immédiatement.</i><br/><br/>
 <TMPL_LOOP NAME="BORROWER_INFO">

@@ -42,7 +42,7 @@ if ($borr->{'amountoutstanding'} < 0) {
     $borr->{'amountoutstanding'} = -1*($borr->{'amountoutstanding'});
 }
 
-$borr->{'amountoutstanding'} = sprintf "\$%.02f", $borr->{'amountoutstanding'};
+$borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 
 my @bordat;
 $bordat[0] = $borr;

@@ -1,11 +1,11 @@
 <TMPL_INCLUDE NAME="members-top.inc">
- 
+
 <FONT SIZE=6><em>Compte de<TMPL_VAR NAME=firstname>
-<TMPL_VAR NAME=surname></em></FONT> 
+<TMPL_VAR NAME=surname></em></FONT>
 <P>
-<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=<TMPL_VAR name="themelang">/images/create-man-invoice.gif border=0></a>
+<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<TMPL_VAR NAME=bornum>">Ajouter une dette</a>
 &nbsp;
-<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=<TMPL_VAR name="themelang">/images/create-man-credit.gif border=0></a>
+<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<TMPL_VAR NAME=bornum>">Encaisser</a>
 <center>
 <p>
 

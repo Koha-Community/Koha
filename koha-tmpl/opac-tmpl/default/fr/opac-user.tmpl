@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_LOOP NAME="BORROWER_INFO">
 
@@ -21,17 +21,14 @@ Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&
 
 </td></tr></table>
 
-
-
-<font size=6><em>Bonjour, <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font> 
-[<a href="/cgi-bin/koha/opac-logout.pl">D&eacute;connexion</a>]<p>
-
+<font size=6><em>Bonjour, <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
+<p>[<a href="/cgi-bin/koha/opac-logout.pl">D&eacute;connexion</a>] [<a href='/cgi-bin/koha/opac-account.pl'>Voir vos finances</a>]<p>
 
 <TMPL_IF NAME="amountoverfive">
 <table cellpadding=5 cellspacing=0 border=1>
 <tr bgcolor="#fecc99">
 <td>
-<font face="arial,helvetica" color="red" size=+2><B>Vous avez une amende de <TMPL_VAR NAME="amountoutstanding"></B></font>
+<font face="arial,helvetica" color="red" size=+2><B>Vous devez <TMPL_VAR NAME="amountoutstanding"> Euros à la bibliothèque</B></font>
 </td></tr></table>
 
 </TMPL_IF>
@@ -40,7 +37,7 @@ Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&
 <table cellpadding=5 cellspacing=0 border=1>
 <tr bgcolor="#fecc99">
 <td>
-<td><font face="arial,helvetica" size=+2><B>Vous avez une amende de <TMPL_VAR NAME="amountoutstanding"></B></font>
+<td><font face="arial,helvetica" size=+2><B>Vous devez <TMPL_VAR NAME="amountoutstanding"> Euros à la bibliothèque</B></font>
 </td></tr></table>
 </TMPL_IF>
 
@@ -48,10 +45,9 @@ Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&
 <table cellpadding=5 cellspacing=0 border=1>
 <tr bgcolor="#fecc99">
 <td>
-<td><font face="arial,helvetica" size=+2><B>Vous avez un cr&eacute;dit de <TMPL_VAR NAME="amountoutstanding"></B></font>
+<td><font face="arial,helvetica" size=+2><B>Vous avez un cr&eacute;dit de <TMPL_VAR NAME="amountoutstanding"> Euros</B></font>
 </td></tr></table>
 </TMPL_IF>
-<a href='/cgi-bin/koha/opac-account.pl'>Voir votre compte</a>
 
 </TMPL_LOOP>
 
@@ -69,63 +65,48 @@ Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&
 <p>
 
 <TMPL_IF NAME="issues_count">
+	<p>Vous avez <TMPL_VAR NAME="issues_count"> document(s) en pr&ecirc;t actuellement :</p>
+	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+	<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+		<TD><B>Titre</B></TD>
+		<TD><B>Auteur</B></TD>
+		<TD><B>Date de retour</B></TD>
+		<TD><B>Type de doc.</B></TD>
+		<TD><B>Amendes</B></TD>
+		<TD><B>Pr&ecirc;ts en cours</B></TD>
+	</TR>
 
-Vous avez <TMPL_VAR NAME="issues_count"> documents en pr&ecirc;t actuellement.<br>
-
-<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-
-<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Titre</B></TD>
-<TD><B>Auteur</B></TD>
-<TD><B>Date de retour</B></TD>
-<TD><B>Type de doc.</B></TD>
-<TD><B>Amendes</B></TD>
-<TD><B>Pr&ecirc;ts en cours</B></TD>
-</TR>
-
-<TMPL_LOOP NAME="ISSUES">
-
-<TR VALIGN=TOP>
-<TD><TMPL_VAR NAME="title"></TD>
-<TD><TMPL_VAR NAME="author"></TD>
-<TD><TMPL_VAR NAME="date_due"></TD>
-<TD><TMPL_VAR NAME="itemtype"></TD>
-<TD><TMPL_IF NAME="charges">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
-<TD><TMPL_IF NAME="status">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
-</TR>
-
-</TMPL_LOOP>
-</table>
-
+	<TMPL_LOOP NAME="ISSUES">
+		<TR VALIGN=TOP>
+		<TD><TMPL_VAR NAME="title"></TD>
+		<TD><TMPL_VAR NAME="author"></TD>
+		<TD><TMPL_VAR NAME="date_due"></TD>
+		<TD><TMPL_VAR NAME="itemtype"></TD>
+		<TD><TMPL_IF NAME="charges">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
+		<TD><TMPL_IF NAME="status">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
+		</TR>
+	</TMPL_LOOP>
+	</table>
 <TMPL_ELSE>
-Vous n'avez aucun pr&ecirc;t en cours.
+	<p>Vous n'avez aucun pr&ecirc;t en cours.</p>
 </TMPL_IF>
 
-<p>
-
-
 <TMPL_IF NAME="reserves_count">
-
-Vous avez r&eacute;serv&eacute; <TMPL_VAR NAME="reserves_count"> documents.<br>
-
-<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-
-<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Titre</B></TD>
-<TD><B>Auteur</B></TD>
-<TD><B>Date de r&eacute;servation</B></TD>
-</TR>
-
-<TMPL_LOOP NAME="RESERVES">
-
-<TR VALIGN=TOP>
-<TD><TMPL_VAR NAME="btitle"></TD>
-<TD><TMPL_VAR NAME="author"></TD>
-<TD><TMPL_VAR NAME="reservedate"></TD>
-</TR>
-
-</TMPL_LOOP>
-</table>
+	<p>Vous avez r&eacute;serv&eacute; <TMPL_VAR NAME="reserves_count"> document(s) :</p>
+	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+		<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+		<TD><B>Titre</B></TD>
+		<TD><B>Auteur</B></TD>
+		<TD><B>Date de r&eacute;servation</B></TD>
+		</TR>
+		<TMPL_LOOP NAME="RESERVES">
+			<TR VALIGN=TOP>
+			<TD><TMPL_VAR NAME="btitle"></TD>
+			<TD><TMPL_VAR NAME="author"></TD>
+			<TD><TMPL_VAR NAME="reservedate"></TD>
+			</TR>
+		</TMPL_LOOP>
+	</table>
 </TMPL_IF>
 
 

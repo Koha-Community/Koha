@@ -84,7 +84,7 @@ if ($itemtype =~ /PER/){
 		classification => $class?$class:"" });
 }
 if ($quantity != 0){
-	warn "receive : $biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund";
+# 	warn "receive : $biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund";
 	receiveorder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund);
 	modbiblio($biblio);
 	&modbibitem({

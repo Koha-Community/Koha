@@ -4,7 +4,6 @@
 <html>
 <head>
 <title>KOHA: Rechercher dans le catalogue</title>
-
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
@@ -27,7 +26,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr BGCOLOR="#339999" >
 
-        <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-member.gif" 
+        <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-member.gif"
 	width=353 height=50 alt="KOHA: services en ligne" hspace=0 vspace=0 border=0></td>
 
         <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 

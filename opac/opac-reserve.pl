@@ -49,8 +49,6 @@ foreach my $res (@$reserves) {
     }
 }
 
-
-
 $rank++;
 $template->param(rank => $rank);
 
@@ -69,8 +67,10 @@ my @select_branch;
 my %select_branches;
 
 foreach my $branch (keys %$branches) {
-	push @select_branch, $branch;
-	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	if ($branch) {
+		push @select_branch, $branch;
+		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	}
 }
 my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-values   => \@select_branch,
@@ -161,7 +161,7 @@ for (my $rownum=0;$rownum<$publictypes[0]->{'count'} ;$rownum++) {
 	my @items = @{$pty->{'items'}};
 	push @row, $items[$rownum] if defined $items[$rownum];
     }
-    my $last = @row; 
+    my $last = @row;
     $row[$last-1]->{'last'} =1 if $last == $width;
     my $fill = ($width - $last)*2;
     $fill-- if $fill;

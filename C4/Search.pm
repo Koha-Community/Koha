@@ -1231,7 +1231,7 @@ If this is set, it is set to C<One Order>.
 sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM items, biblio, biblioitems left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
+    my $query = "SELECT *,items.notforloan as itemnotforloan FROM items, biblio, biblioitems left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
                   WHERE items.biblionumber = ?
                     AND biblioitems.biblioitemnumber = items.biblioitemnumber
                     AND biblio.biblionumber = items.biblionumber";
@@ -1453,6 +1453,15 @@ sub bibdata {
     } # while
 	chop $data->{'subject'};
 	chop $data->{'subject'};
+    $sth->finish;
+    $query = "Select * from additionalauthors where biblionumber = ?";
+    $sth   = $dbh->prepare($query);
+    $sth->execute($bibnum);
+    while (my $dat = $sth->fetchrow_hashref){
+        $data->{'additionalauthors'} .= "$dat->{'author'}, ";
+    } # while
+	chop $data->{'additionalauthors'};
+	chop $data->{'additionalauthors'};
     $sth->finish;
     return($data);
 } # sub bibdata

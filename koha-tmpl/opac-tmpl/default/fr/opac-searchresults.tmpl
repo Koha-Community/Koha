@@ -1,14 +1,6 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <center>
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connect&eacute;: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil usagers</a>][<a href=/cgi-bin/koha/opac-logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
-
-
 <TMPL_IF NAME="searchdesc">
     Votre recherche &eacute;tait <b><TMPL_VAR NAME="searchdesc"></b>
 <TMPL_ELSE>
@@ -65,7 +57,13 @@
 
     <table border=0 cellspacing=0 cellpadding=2 width=90%>
     <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-	    <th align=left>Titre</th><th align=left>Auteur</th><th>Ann&eacute;e</th><th>Nbre d'exemplaires</th><th>Localisation</th><th>&nbsp</th>
+	    <th align=left>Titre</th>
+	    <th align=left>Auteur</th>
+	    <th>Ann&eacute;e</th>
+	    <th>Nbre d'exemplaires</th>
+	    <th>Localisation</th>
+	    <th>Cote</th>
+	    <th>&nbsp</th>
     </tr>
 
 
@@ -79,18 +77,17 @@
       <td align=center> <TMPL_VAR NAME="copyrightdate"> </td>
       <td align=center> <TMPL_VAR NAME="itemcount"> </td>
       <td> <TMPL_VAR NAME="location"> </td>
+      <td><TMPL_VAR name="classification"> <TMPL_VAR name="dewey"></td>
       <td>
 <TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>R&eacute;servation</a>
 <TMPL_ELSE>
 Non r&eacute;servable
 </TMPL_UNLESS>
-</td> 
+</td>
       </tr>
     </TMPL_LOOP>
 
-
-
-    <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td colspan=6>
+    <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td colspan=7>
 	<table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td align=left>
 	<TMPL_IF NAME="displayprev">
