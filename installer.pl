@@ -508,7 +508,56 @@ Listen $kohaport
 
 EOP
 ;
+
+
+    print qq|
+
+Intranet Authentication
+=======================
+
+I can set it up so that the Intranet/Librarian site is password protected.
+|;
+print "Would you like to do this? ([Y]/N): ";
+chomp($input = <STDIN>);
+
+my $apacheauthusername='librarian';
+my $apacheauthpassword='';
+unless ($input=~/^n/i) {
+    print "\nEnter a userid to login with [$apacheauthusername]: ";
+    chomp ($input = <STDIN>);
+    if ($input) {
+	$apacheauthusername=$input;
+	$apacheauthusername=~s/[^a-zA-Z0-9]//g;
+    }
+    while (! $apacheauthpassword) {
+	print "\nEnter a password for the $apacheauthusername user: ";
+	chomp ($input = <STDIN>);
+	if ($input) {
+	    $apacheauthpassword=$input;
+	}
+	if (!$apacheauthpassword) {
+	    print "\nPlease enter a password.\n";
+	}
+    }
+    open AUTH, ">/etc/kohaintranet.pass";
+    my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    my $salt=substr($chars, int(rand(length($chars))),1);
+    $salt.=substr($chars, int(rand(length($chars))),1);
+    print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
+    close AUTH;
+    print SITE <<EOP
+
+<Directory $kohadir>
+    AuthUserFile /etc/kohaintranet.pass
+    AuthType Basic
+    AuthName "Koha Intranet (for librarians only)"
+    Require  valid-user
+</Directory>
+EOP
+}
+
     close(SITE);
+
     print "Successfully updated Apache Configuration file.\n";
 }
 
