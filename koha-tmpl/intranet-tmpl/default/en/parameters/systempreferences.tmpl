@@ -63,16 +63,45 @@
 			<h1>Add a system preference</h1>
 		<!-- /TMPL_IF -->
 		<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
-		<input type="hidden" name="op" value="add_validate">
-		<!-- TMPL_IF NAME="searchfield" -->
-			<label>Variable</label><!-- TMPL_VAR name="searchfield" -->
-				<input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
-		<!-- TMPL_ELSE -->
-			<label>Variable</label><input type="text" name="variable" size="60">
-		<!-- /TMPL_IF -->
-		<p><label>Value</label><input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="100"></p>
-		<p><label>Explanation</label><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></p>
-		<p><label>&nbsp;</label><INPUT type="button" value="OK" class="button" onclick="Check(this.form)"></p>
+		<div id="bloc25">
+			<h2 class="parameters"><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></h2>
+			<input type="hidden" name="op" value="add_validate">
+			<p>
+			<!-- TMPL_IF NAME="searchfield" -->
+				<label>Variable</label><!-- TMPL_VAR name="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<!-- TMPL_ELSE -->
+				<label>Variable</label><input type="text" name="variable" size="60">
+			<!-- /TMPL_IF -->
+			</p>
+			<p><label>Value</label>
+				<!-- TMPL_IF name="type-free" -->
+					<input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="<!-- TMPL_VAR name="fieldlength" -->">
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="type-textarea" -->
+					<textarea name="value" rows="<!--TMPL_VAR name="rows" -->" cols="<!-- TMPL_VAR name="cols" -->">
+						<!-- TMPL_VAR name="value" escape="HTML" -->
+					</textarea>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="type-choice" -->
+					<select name="value">
+						<!-- TMPL_LOOP name="options" -->
+							<option value="<!-- TMPL_VAR name="option" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="option" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="type-yesno" -->
+					<input type="radio" name="value" value="1" <!-- TMPL_IF name="value-yes" -->checked<!-- /TMPL_IF -->>Yes
+					<input type="radio" name="value" value="0" <!-- TMPL_IF name="value-no" -->checked<!-- /TMPL_IF -->>No
+				<!-- /TMPL_IF -->
+	
+			</p>
+			<p><label>&nbsp;</label><input type="submit" value="OK" class="button"></p>
+		</div>
+		<div id="bloc25">
+			<h2 class="parameters">Koha internal (you should have no reasons to modify the following default values)</h2>
+			<p>Variable type: <input type="text" name="preftype" value="<!--TMPL_VAR name="preftype" -->" size=40 maxlength=40> (Choice, YesNo,Integer,Textarea,Float,Themes,Languages)</p>
+			Variable options :<input type="text" name="prefoptions" value="<!-- TMPL_VAR name="prefoptions" -->" size=80 maxlength=80> (choice list for Choice (separated by |) and cols|rows for Texarea)
+		</div>
 		</form>
 	<!-- /TMPL_IF -->
 	

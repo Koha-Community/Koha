@@ -131,14 +131,14 @@ if ($op eq 'update_and_reedit') {
 	$sth->execute($input->param('variable'));
 	if ($sth->rows) {
 		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=? where variable=?");
-			$sth->execute($value, $input->param('explanation'), $input->param('variable'));
+			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
+			$sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
 			$sth->finish;
 		}
     } else {
 		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?)");
-			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
+			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
+			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
 			$sth->finish;
 		}
 	}
@@ -173,17 +173,18 @@ if ($op eq 'add_form') {
 		$template->param('type-yesno' => 1);
 		$data->{'value'}=C4::Context->boolean_preference($data->{'variable'});
 		($data->{'value'} eq '1') ? ($template->param('value-yes'=>1)) : ($template->param('value-no'=>1));
-	} elsif ($data->{'type'} eq 'free') {
-		$template->param('type-free' => 1);
-		$template->param('fieldlength' => $data->{'options'});
 	} elsif ($data->{'type'} eq 'Integer') {
 		$template->param('type-free' => 1);
 		$template->param('fieldlength' => $data->{'options'});
+	} elsif ($data->{'type'} eq 'Textarea') {
+		$template->param('type-textarea' => 1);
+		$data->{options} =~ /(.*)\|(.*)/;
+		$template->param('cols' => $1, 'rows' => $2);;
 	} elsif ($data->{'type'} eq 'Float') {
 		$template->param('type-free' => 1);
 		$template->param('fieldlength' => $data->{'options'});
 	} elsif ($data->{'type'} eq 'Themes') {
-		$template->param('type-reorderlist' => 1);
+		$template->param('type-choice' => 1);
 		my $type='';
 		($data->{'variable'}=~m#opac#i) ? ($type='opac') : ($type='intranet');
 		@options=();
@@ -201,7 +202,7 @@ if ($op eq 'add_form') {
 			$counter++;
 		}
 	} elsif ($data->{'type'} eq 'Languages') {
-		$template->param('type-reorderlist' => 1);
+		$template->param('type-choice' => 1);
 		my $type='';
 		@options=();
 		my $currently_selected_languages;
@@ -219,11 +220,16 @@ if ($op eq 'add_form') {
 			push @options, { option => $language, counter => $counter };
 			$counter++;
 		}
+	} else {
+		$template->param('type-free' => 1);
+		$template->param('fieldlength' => $data->{'options'}>0?$data->{'options'}:60);
 	}
 	$template->param(explanation => $data->{'explanation'},
 			 value => $data->{'value'},
 			 type => $data->{'type'},
 			 options => \@options,
+			 preftype => $data->{'type'},
+			 prefoptions => $data->{'options'},
 			 searchfield => $searchfield);
 
 ################## ADD_VALIDATE ##################################
@@ -234,14 +240,14 @@ if ($op eq 'add_form') {
 	$sth->execute($input->param('variable'));
 	if ($sth->rows) {
 		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=? where variable=?");
-			$sth->execute($input->param('value'), $input->param('explanation'), $input->param('variable'));
+			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
+			$sth->execute($input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
 			$sth->finish;
 		}
 	} else {
 		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?)");
-			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
+			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?)");
+			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
 			$sth->finish;
 		}
 	}
