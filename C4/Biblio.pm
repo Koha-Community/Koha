@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.61  2003/09/17 10:24:39  tipaul
+# notforloan value in itemtype was overwritting notforloan value in a given item.
+# I changed this behaviour :
+# if notforloan is set for a given item, and NOT for all items from this itemtype, the notforloan is kept.
+# If notforloan is set for itemtype, it's used (and impossible to loan a specific item from this itemtype)
+#
 # Revision 1.60  2003/09/04 14:11:23  tipaul
 # fix for 593 (data duplication in MARC-DB)
 #
@@ -557,7 +563,7 @@ sub MARCaddbiblio {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
 	my ($dbh,$record,$biblionumber,$bibid) = @_;
 	my @fields=$record->fields();
-	warn "IN MARCaddbiblio $bibid => ".$record->as_formatted;
+# 	warn "IN MARCaddbiblio $bibid => ".$record->as_formatted;
 # my $bibid;
 # adding main table, and retrieving bibid
 # if bibid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
@@ -1710,7 +1716,8 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
   my $query="update items set  barcode='$item->{'barcode'}',itemnotes='$item->{'notes'}'
                           where itemnumber=$item->{'itemnum'}";
   if ($item->{'barcode'} eq ''){
-    $query="update items set notforloan=$item->{'loan'} where itemnumber=$item->{'itemnum'}";
+  	$item->{'notforloan'}=0 unless $item->{'notforloan'};
+    $query="update items set notforloan=$item->{'notforloan'} where itemnumber=$item->{'itemnum'}";
   }
   if ($item->{'lost'} ne ''){
     $query="update items set biblioitemnumber=$item->{'bibitemnum'},
@@ -1725,6 +1732,7 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
   }
   my $sth=$dbh->prepare($query);
+  warn "$query";
   $sth->execute;
   $sth->finish;
 #  $dbh->disconnect;
