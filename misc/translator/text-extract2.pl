@@ -180,7 +180,7 @@ sub next_token (*) {
 	    push @$it, extract_attributes($it->[1], $lc_0); #FIXME
 	}
     } else {
-	for (;;) {
+	for ($it = '';;) {
 	    my $lc_prev = $lc;
 	    my $next = next_token_internal($h);
 	last if !defined $next;
@@ -191,7 +191,7 @@ sub next_token (*) {
 	last unless $cdata_mode_p;
 	    $it .= $next->[1]; #FIXME
 	}
-	$it = [KIND_CDATA, $it] if defined $it; #FIXME
+	$it = [KIND_CDATA, $it]; #FIXME
 	$cdata_close = undef;
     }
     return defined $it? (wantarray? @$it: $it): undef;
