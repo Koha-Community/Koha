@@ -4,7 +4,7 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jan 03, 2003 at 05:01 PM
+# Generation Time: Feb 13, 2003 at 04:04 PM
 # Server version: 3.23.52
 # PHP Version: 4.2.3
 # Database : `koha_dombes`
@@ -1291,7 +1291,7 @@ INSERT INTO marc_subfield_structure VALUES ('992', '2', 'code du système d\'inde
 INSERT INTO marc_subfield_structure VALUES ('992', '5', 'identifiant de l\'exemplaire', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'a', 'origine du document, texte libre', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'b', 'origine du document, donnée codée', '', 0, 1, 'items.homebranch', 10, 'branches', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'c', 'dépositaire permanent, texte libre', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'c', 'dépositaire permanent, texte libre', '', 0, 1, 'items.holdingbranch', 10, 'branches', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'v', 'code à barres de l\'exemplaire', '', 0, 1, 'items.barcode', 10, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'd', 'Etablissement prêteur ou déposant, donnée codée', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'g', 'code à barres, préfixe', '', 0, 0, '', -1, '', '', '');
@@ -1307,10 +1307,10 @@ INSERT INTO marc_subfield_structure VALUES ('995', 'r', 'type de document et sup
 INSERT INTO marc_subfield_structure VALUES ('995', 's', 'élément de tri', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'u', 'note sur l\'exemplaire', '', 0, 0, 'items.itemnotes', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('090', 'a', 'Numéro biblioitem (koha)', '', 0, 0, 'biblioitems.biblioitemnumber', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('001', '', 'Numéro d\'identification notice', '', 0, 0, '', -1, '', '', NULL);
 INSERT INTO marc_subfield_structure VALUES ('995', '9', 'itemnumber (koha)', '', 0, 0, 'items.itemnumber', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'e', 'niveau de localisation', '', 0, 1, '', 10, 'LOCAL', '', '');
 INSERT INTO marc_subfield_structure VALUES ('127', 'z', 'zz', 'ee', 0, 0, 'biblio.author', -1, '', '', NULL);
+INSERT INTO marc_subfield_structure VALUES ('001', '@', 'Numéro d\'identification notice', '', 0, 0, '', 0, '', '', '');
 
 #
 # Dumping data for table `marc_tag_structure`
@@ -1320,7 +1320,7 @@ INSERT INTO marc_tag_structure VALUES ('090', 'Numéro biblio (koha)', 'Numéro bi
 INSERT INTO marc_tag_structure VALUES ('001', 'numéro d\'identification de la notice', 'notice numéro', 1, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('005', 'numéro d\'identification de la version', '', 0, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('010', 'ISBN', 'ISBN', 0, 1, '');
-INSERT INTO marc_tag_structure VALUES ('011', 'ISSN', 'ISSN', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('011', 'ISSN', 'ISSN', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('012', 'empreinte identifiant le document', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('013', 'numéeo international normalisé de document musical (ISMN)', 'ISMN', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('014', 'numéro d\'identification d\'un article de périodique', '', 0, 1, NULL);
@@ -1336,7 +1336,7 @@ INSERT INTO marc_tag_structure VALUES ('105', 'zone de données codées :textes, m
 INSERT INTO marc_tag_structure VALUES ('106', 'zone de données codées :textes, caractéristiques physiques', '', 0, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('110', 'zone de données codées :publications en série', '', 0, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('115', 'zone de données codées : images projetés, enregistrements vidéo et films', '', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('116', 'zone de données codées : documents graphiques', '', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('116', 'zone de données codées : documents graphiques', '', 0, 1, '');
 INSERT INTO marc_tag_structure VALUES ('117', 'zone de données codées : objets en trois dimensions, artefacts', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('120', 'zone de données codées : documents cartographiques, généralités', '', 0, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('121', 'zone de données codées : documents cartographiques, caractéristiques physiques', '', 0, 0, NULL);
@@ -1362,7 +1362,7 @@ INSERT INTO marc_tag_structure VALUES ('211', 'date de publication prévue', 'dat
 INSERT INTO marc_tag_structure VALUES ('215', 'collation', 'description', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('225', 'collection', 'collection', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('230', 'zone particulière à certains types de documents : ressources électroniques', '', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('300', 'note générale', 'note', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('300', 'note générale', 'note', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('301', 'note sur les numéros d\'identification', 'note', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('302', 'note sur les informations codées', 'note', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('303', 'note générale sur la description bibliographique', 'note', 0, 1, NULL);
@@ -1431,9 +1431,9 @@ INSERT INTO marc_tag_structure VALUES ('470', 'document analysé', '', 0, 1, NULL
 INSERT INTO marc_tag_structure VALUES ('481', 'est relié avec ce volume', 'est rélié avec ce volume', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('482', 'relié avec', 'relié avec', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('488', 'autres œuvres en liaison', '', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('500', 'titre uniforme', 'titre', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('500', 'titre uniforme', 'titre', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('501', 'rubrique de classement', '', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('503', 'titre de forme', '', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('503', 'titre de forme', '', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('510', 'titre parallèle', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('512', 'titre de couverture', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('513', 'titre figurant sur une autre page de titre', '', 0, 1, NULL);
@@ -1467,10 +1467,10 @@ INSERT INTO marc_tag_structure VALUES ('670', 'PRECIS', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('675', 'Classification Décimale Universelle', 'classification', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('676', 'classification décimale Dewey', 'classification', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('680', 'classification de la Bibliothèque du Congrès', 'classification', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('686', 'autres classifications', 'classification', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('686', 'autres classifications', 'classification', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('700', 'nom de personne - responsabilité principale', 'auteur', 0, 0, NULL);
-INSERT INTO marc_tag_structure VALUES ('701', 'nom de personne - coauteur', 'coauteur', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('702', 'nom de personne - mention de responsabilité secondaire', '', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('701', 'nom de personne - coauteur', 'coauteur', 0, 0, '');
+INSERT INTO marc_tag_structure VALUES ('702', 'nom de personne - mention de responsabilité secondaire', '', 0, 0, '');
 INSERT INTO marc_tag_structure VALUES ('710', 'collectivité - mention de responsabilité principale', 'auteur', 0, 0, NULL);
 INSERT INTO marc_tag_structure VALUES ('711', 'collectivité - coauteur', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('712', 'collectivité - mention de responsabilité secondaire', '', 0, 1, NULL);
