@@ -1071,19 +1071,23 @@ while (my $data=$sth->fetchrow_hashref){
 	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
 	    }
 #print STDERR "$query\n";
-  my $sti=$dbh->prepare($query);
-  $sti->execute;
   my $dewey;
   my $subclass;
   my $true=0;
-  if (($dewey, $subclass) = $sti->fetchrow || $type eq 'subject'){
-    $true=1;
+  if ($type eq 'subject') {
+      $true=1;
+  } else {
+      my $sti=$dbh->prepare($query);
+      $sti->execute;
+      if (($dewey, $subclass) = $sti->fetchrow){
+	$true=1;
+      }
+      $dewey=~s/\.*0*$//;
+      ($dewey == 0) && ($dewey='');
+      ($dewey) && ($dewey.=" $subclass");
+      $data->{'dewey'}=$dewey;
+      $sti->finish;
   }
-  $dewey=~s/\.*0*$//;
-  ($dewey == 0) && ($dewey='');
-  ($dewey) && ($dewey.=" $subclass");
-  $data->{'dewey'}=$dewey;
-  $sti->finish;
   if ($true == 1){
     if ($count > $offset && $count <= $limit){
       $results[$i]=$data;
@@ -2182,14 +2186,16 @@ sub itemcount2 {
    }
     $sth2->finish;     
   } 
-  my $query2="Select * from aqorders where biblionumber=$bibnum and
-  datecancellationprinted is NULL and quantity > quantityreceived";
-  my $sth2=$dbh->prepare($query2);
-  $sth2->execute;
-  if (my $data=$sth2->fetchrow_hashref){
-      $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
+  if ($bibnum) {
+      my $query2="Select * from aqorders where biblionumber=$bibnum and
+      datecancellationprinted is NULL and quantity > quantityreceived";
+      my $sth2=$dbh->prepare($query2);
+      $sth2->execute;
+      if (my $data=$sth2->fetchrow_hashref){
+	  $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
+      }
+      $sth2->finish;
   }
-  $sth2->finish;
   $sth->finish; 
   $dbh->disconnect;                   
   return (\%counts); 
