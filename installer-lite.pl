@@ -74,7 +74,6 @@ my @missing = ();
 unless (eval require DBI)               { push @missing,"DBI" };
 unless (eval require Date::Manip)       { push @missing,"Date::Manip" };
 unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" };
-unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" };
 
 #
 # Print out a list of any missing modules
