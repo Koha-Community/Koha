@@ -6,6 +6,7 @@ use CGI;
 use C4::Auth;
 use C4::Koha;
 use C4::Circulation::Circ2;
+use C4::Circulation::Renewals2;
 use C4::Reserves2;
 
 my $query = new CGI;
@@ -43,6 +44,7 @@ my @bordat;
 $bordat[0] = $borr;
 
 $template->param(BORROWER_INFO => \@bordat);
+$template->param(borrowernumber => $borrowernumber);
 
 #get issued items ....
 my $issues = getissues($borr);
@@ -54,24 +56,32 @@ my @issuedat;
 foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
     $issue->{'date_due'}  = slashifyDate($issue->{'date_due'});
-# check for reserves
+
+    # check for reserves
     my ($restype, $res) = CheckReserves($issue->{'itemnumber'});
     if ($restype) {
-	$issue->{'status'} .= " Reserved";
+	$issue->{'reserved'} = 1;
     }
     my ($charges, $itemtype) = calc_charges(undef, undef, $issue->{'itemnumber'}, $borrowernumber);
     $issue->{'charges'} = $charges;
 
+    # get publictype for icon
+    
     my $publictype = $issue->{'publictype'};
     $issue->{$publictype} = 1;
 
+    # check if item is renewable
+    my %env;
+    my $status = renewstatus(\%env,$borrowernumber, $issue->{'itemnumber'});
 
+    $issue->{'renewable'} = $status;
+    
     if ($issue->{'overdue'}) {
 	push @overdues, $issue;
 	$overdues_count++;
-	$issue->{'status'} = "<font color='red'>OVERDUE</font>";
+	$issue->{'overdue'} = 1;
     } else {
-	$issue->{'status'} = "Issued";
+	$issue->{'issued'} = 1;
     }
     push @issuedat, $issue;
     $count++;
