@@ -499,6 +499,11 @@ sub returnbook {
     if ($branches->{$hbr}->{'PE'}) {
 	$messages->{'IsPermanent'} = $hbr;
     }
+# check that the book has been cancelled
+    if ($iteminformation->{'wthdrawn'}) {
+	$messages->{'wthdrawn'} = 1;
+	$doreturn = 0;
+    }
 # update issues, thereby returning book (should push this out into another subroutine
     my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
     if ($doreturn) {
