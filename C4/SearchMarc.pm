@@ -52,10 +52,28 @@ on what is passed to it, it calls the appropriate search function.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&catalogsearch &findseealso);
+@EXPORT = qw(&catalogsearch &findseealso &findsuggestion);
 
 # make all your functions, whether exported or not;
 
+sub findsuggestion {
+	my ($dbh,$values) = @_;
+	my $sth = $dbh->prepare("SELECT count( * ) AS total, word FROM marc_word WHERE sndx_word = soundex( ? ) AND word <> ? GROUP BY word ORDER BY total DESC");
+	my @results;
+	for(my $i = 0 ; $i <= $#{$values} ; $i++) {
+		if (length(@$values[$i]) >=5) {
+			$sth->execute(@$values[$i],@$values[$i]);
+			my $resfound = 1;
+			my @resline;
+			while ((my ($count,$word) = $sth->fetchrow) and $resfound <=10) {
+				push @results, "@$values[$i]|$word|$count";
+#				$results{@$values[$i]} = \@resline;
+				$resfound++;
+			}
+		}
+	}
+	return \@results;
+}
 sub findseealso {
 	my ($dbh, $fields) = @_;
 	my $tagslib = MARCgettagslib ($dbh,1);

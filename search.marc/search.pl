@@ -30,6 +30,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::SearchMarc;
+use C4::Catalogue;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 
 # Creates the list of active tags using the active MARC configuration
@@ -182,7 +183,6 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
-
 	$template->param(result => $results,
 							startfrom=> $startfrom,
 							displaynext=> $displaynext,
@@ -194,7 +194,7 @@ if ($op eq "do_search") {
 							total=>$total,
 							from=>$from,
 							to=>$to,
-							numbers=>\@numbers
+							numbers=>\@numbers,
 							);
 
 } elsif ($op eq "AddStatement") {
@@ -297,8 +297,47 @@ else {
 	push @statements, { "marclist" => $marclist, "first" => 1 };
 	push @statements, { "marclist" => $marclist, "first" => 0 };
 	push @statements, { "marclist" => $marclist, "first" => 0 };
+	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
+	$sth->execute;
+	my  @itemtype;
+	my %itemtypes;
+	push @itemtype, "";
+	$itemtypes{''} = "";
+	while (my ($value,$lib) = $sth->fetchrow_array) {
+		push @itemtype, $value;
+		$itemtypes{$value}=$lib;
+	}
 
-	$template->param("statements" => \@statements, "nbstatements" => 3);
+	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
+				-values   => \@itemtype,
+ 				-labels   => \%itemtypes,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
+
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my ($count2,@branches)=branches();
+	push @select_branch, "";
+	$select_branches{''} = "";
+	for (my $i=0;$i<$count2;$i++){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+				-values   => \@select_branch,
+				-labels   => \%select_branches,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
+
+
+	$template->param("statements" => \@statements,
+			"nbstatements" => 3,
+			CGIitemtype => $CGIitemtype,
+			CGIbranch => $CGIbranch,
+			);
 }
 
 
