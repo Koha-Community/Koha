@@ -226,12 +226,13 @@ msgstr "%S 年"
 msgid "%S years"
 msgstr "%S 年"
 
+# XXX
 #. %1$p: type=radio name=label value=<!-- TMPL_VAR NAME="tagname" -->
 #. %2$s: TMPL_VAR name=labelname
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/barcodes.tmpl:162
 #, c-format
 msgid "%p Label %s"
-msgstr ""
+msgstr "%p 標籤 %s"
 
 #. %1$p: type=radio name=existing value=YES
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:9
@@ -467,6 +468,7 @@ msgstr "%s 網址 (如被點選，即表示此分欄為可點擊的網址"
 msgid "%s biblio(s)"
 msgstr "%s 個書目記錄"
 
+#  FIXME poor translation
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=hidden
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:38
@@ -476,6 +478,7 @@ msgid ""
 "%s hidden (subfield is managed, but hidden. -should be filled by a plugin or "
 "thesaurus-)"
 msgstr ""
+"%s 隱藏（分欄會被管理，但不會顯示；其值應由模組或同義字典填寫）"
 
 #  NOTE 譯文更動 by Arthur
 #. For the first occurrence,
@@ -787,6 +790,7 @@ msgid ""
 "table. Many academic libraries publish their stopwords list on the Internet, "
 "or you can ask other Koha libraries if they would share their stopword list.)"
 msgstr ""
+"（提示：如果您熟悉 MySQL，較快的做法可能會是先找一個既有的忽略字清單，作出所需之修改，將其轉為 MySQL 要求的格式，再使用 MySQL 的「Load Data Infile」指令匯入至忽略字表。很多學術性圖書館都把它們的忽略字清單上網，您也可以向其他使用 Koha 的圖書館詢問可否給您分享它們的忽略字清單。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/printers.tmpl:4
 msgid ""
@@ -852,9 +856,10 @@ msgstr "(沒有輸入)"
 msgid "(subscription for"
 msgstr "說明"
 
+# XXX
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:91
 msgid "(that all costs are for 1 item)"
-msgstr ""
+msgstr "（所有價錢應為單位成本）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:81
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:112
@@ -935,13 +940,15 @@ msgstr ""
 "的圖書資料。落訂後及收到圖書資料後將以電郵通知　閣下。如　閣下有任何問題，請"
 "電郵至 %s 聯絡我們。%s謹啟"
 
+# FIXME bug in tokenizer
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-add.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-add.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:23
 msgid ". Begins with"
-msgstr ""
+msgstr "。開始數值為"
 
+#  FIXME 要找懂得寫這種信的人核對這個！！
 #. %1$s: TMPL_VAR name=libemail
 #. %2$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/intranet-tmpl/default/en/suggestion/mail_suggestion_ORDERED.tmpl:3
@@ -951,8 +958,9 @@ msgid ""
 "arrive soon, at which time it will be processed for addition to the "
 "collection. You will be notified again when the book is available. If you "
 "have any questions, please email us at %s Thank you, %s"
-msgstr ""
+msgstr "。本館已訂購　閣下所建議之圖書資料，本館望於不日收到該項資料。當辦妥一切手續後，該項資料將成為本館館藏之一部分，介時本館將以電郵方式通知　閣下。如有疑問，請　閣下電郵至 %s 向本館查詢。%s 謹啟"
 
+#  FIXME 要找懂得寫這種信的人核對這個！！
 #. %1$s: TMPL_VAR name=libemail
 #. %2$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/intranet-tmpl/default/en/suggestion/mail_suggestion_AVAILABLE.tmpl:3
@@ -962,6 +970,7 @@ msgid ""
 "of the Nelsonville Public Library. If you have any questions, please email "
 "us at %s. Thank you, %s"
 msgstr ""
+"。　閣下所建議之圖書資料已成為本館館藏之一部分。如　閣下有任何疑問，請電郵 %s 向本館查詢。%s 謹啟"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/issuingrules.tmpl:49
 msgid "/"
@@ -1046,7 +1055,7 @@ msgstr "1/4 吋"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:102
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:104
 msgid "1/8"
-msgstr "1/8"
+msgstr "1/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:348
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:350
@@ -1189,7 +1198,7 @@ msgstr "2 年"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:109
 msgid "2/8"
-msgstr ""
+msgstr "2/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:419
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:421
@@ -1228,7 +1237,7 @@ msgstr "3 × 5 吋（8 × 13 公分）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:112
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:114
 msgid "3/8"
-msgstr ""
+msgstr "3/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:154
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:156
@@ -1273,7 +1282,7 @@ msgstr "4/10 吋/秒"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:117
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:119
 msgid "4/8"
-msgstr ""
+msgstr "4/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:277
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:279
@@ -1298,7 +1307,7 @@ msgstr "2 1/4 × 4 吋（圓形錄音筒）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:122
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:124
 msgid "5/8"
-msgstr ""
+msgstr "5/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:424
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:426
@@ -1313,7 +1322,7 @@ msgstr "6 × 9 吋（16 × 23 公分）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:127
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:129
 msgid "6/8"
-msgstr ""
+msgstr "6/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:1283
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:1285
@@ -1338,7 +1347,7 @@ msgstr "3 吋"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:132
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:134
 msgid "7/8"
-msgstr ""
+msgstr "7/8 雲量"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:120
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:122
@@ -2454,9 +2463,8 @@ msgstr "接納"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:79
-#, fuzzy
 msgid "Acceptable"
-msgstr "可重覆"
+msgstr "可"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/suggestion-select.tmpl:8
 msgid "Accepted by"
@@ -2902,7 +2910,7 @@ msgstr "進階查詢（更多選項）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:25
 msgid "Aerienne"
-msgstr ""
+msgstr "航空"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_110.tmpl:344
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_110.tmpl:346
@@ -3000,7 +3008,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:9
 msgid "Altitude du capteur:"
-msgstr ""
+msgstr "感測器高度："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_128b.tmpl:178
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_128b.tmpl:180
@@ -3296,7 +3304,7 @@ msgstr "雅典（希臘）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124b.tmpl:18
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124b.tmpl:20
 msgid "Atlas"
-msgstr ""
+msgstr "地圖集（包括散葉之地圖集）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:115
 msgid "Aug"
@@ -3776,12 +3784,12 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:189
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:192
 msgid "Autre procede non-photographique"
-msgstr ""
+msgstr "其他非照相媒體"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:219
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:222
 msgid "Autre procede photographique"
-msgstr ""
+msgstr "其他照相類媒體"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115b.tmpl:237
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115b.tmpl:239
@@ -4090,7 +4098,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:57
 msgid ""
 "Bandes spectrales (nombre a deux chiffres 01->99 ou xx (ecrire 01 pour 1):"
-msgstr ""
+msgstr "光譜段數（01–99，不適用者填xx）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:349
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:351
@@ -4533,9 +4541,8 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:522
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:82
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:84
-#, fuzzy
 msgid "Bonne"
-msgstr "無"
+msgstr "佳"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/aqbookfund.tmpl:3
 msgid "Book Fund Administration"
@@ -5298,7 +5305,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:305
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:308
 msgid "Ce n'est pas une reproduction"
-msgstr ""
+msgstr "非複製品"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:1013
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115a.tmpl:1015
@@ -5318,7 +5325,7 @@ msgstr "重設"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:234
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:236
 msgid "Centimetres"
-msgstr ""
+msgstr "公分（厘米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:257
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:259
@@ -6184,7 +6191,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:93
 msgid "Couverture nuageuse exprimee en huitieme:"
-msgstr ""
+msgstr "雲量（以 1/8 為單位）："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124g.tmpl:65
 msgid "Couverture passive par onde micrometrique"
@@ -6197,7 +6204,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:137
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:139
 msgid "Couverture totale"
-msgstr ""
+msgstr "全部雲遮"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:336
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:338
@@ -6512,15 +6519,13 @@ msgstr "十二月"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:249
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:251
-#, fuzzy
 msgid "Decametres"
-msgstr "移除"
+msgstr "公丈（十米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:239
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:241
-#, fuzzy
 msgid "Decimetres"
-msgstr "移除"
+msgstr "公寸（分米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:24
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:96
@@ -7368,7 +7373,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:363
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:366
 msgid "En parties (CAD publie en serie, en periodique...)"
-msgstr ""
+msgstr "陸續出版"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:605
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:607
@@ -7820,7 +7825,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:72
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:74
 msgid "Faible"
-msgstr ""
+msgstr "劣"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:171
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:173
@@ -8184,7 +8189,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:348
 msgid "Forme materielle d'edition:"
-msgstr ""
+msgstr "出版形式："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1522
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1524
@@ -8710,9 +8715,8 @@ msgstr "希伯來文"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:254
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:256
-#, fuzzy
 msgid "Hectometres"
-msgstr "住宅地址"
+msgstr "公引（百米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:925
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:927
@@ -9584,7 +9588,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:155
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:157
 msgid "Inferieure au cm"
-msgstr ""
+msgstr "小於 1 公分"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124c.tmpl:103
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124c.tmpl:105
@@ -10292,7 +10296,7 @@ msgstr "關鍵詞："
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:259
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:261
 msgid "Kilometres"
-msgstr ""
+msgstr "公里（千米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:57
 msgid "Kip DeGraaf"
@@ -11145,7 +11149,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:80
 msgid "Manuelle et par releve"
-msgstr ""
+msgstr "手繪及繪圖儀輔助繪製（如使用立體圖繪製，有時並連接電腦；用人工繪製之地圖或上墨等）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_105.tmpl:449
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_105.tmpl:452
@@ -11158,6 +11162,7 @@ msgstr ""
 msgid "Manuels d'enseignement programme"
 msgstr ""
 
+# XXX
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_106.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_106.tmpl:52
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:235
@@ -11165,7 +11170,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:283
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:285
 msgid "Manuscrit"
-msgstr ""
+msgstr "手製（手繪、含特製品如石刻、模型等）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124b.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124b.tmpl:40
@@ -11283,7 +11288,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:137
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:139
 msgid "Materiaux synthetiques"
-msgstr ""
+msgstr "合成物（如塑膠板、合成皮等）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:186
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:188
@@ -11567,7 +11572,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:244
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:246
 msgid "Metres"
-msgstr ""
+msgstr "公尺（米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:920
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:922
@@ -11637,7 +11642,7 @@ msgstr "卡式微縮捲片 (microform cassette)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:250
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:252
 msgid "Microphotographie"
-msgstr ""
+msgstr "縮影照相製版"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:221
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_126a.tmpl:223
@@ -11732,7 +11737,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:226
 msgid "Mode de realisation technique:"
-msgstr ""
+msgstr "製圖技術："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:162
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_117.tmpl:164
@@ -12039,7 +12044,7 @@ msgstr "MySQL 版本"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:260
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:263
 msgid "N'est pas le produit final"
-msgstr ""
+msgstr "尚未至最後使用之製圖技術"
 
 #. INPUT type=submit name=NEW
 #: ../../koha-tmpl/intranet-tmpl/default/en/thesaurus_popup.tmpl:36
@@ -12171,16 +12176,17 @@ msgstr "負片 (photonegative)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:201
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:204
 msgid "Negatif sur base flexible"
-msgstr ""
+msgstr "透明或不透明彈性負片基底"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:213
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:216
 msgid "Negatif sur base rigide"
-msgstr ""
+msgstr "透明或不透明非彈性負片基底"
 
+# FIXME need to fix the template
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:4
 msgid "New"
-msgstr ""
+msgstr "新"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:13
 msgid "New Card"
@@ -13421,12 +13427,12 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:45
 msgid "Oblique faible"
-msgstr ""
+msgstr "低傾斜"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:48
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:50
 msgid "Oblique forte"
-msgstr ""
+msgstr "高傾斜"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124e.tmpl:28
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124e.tmpl:30
@@ -13652,7 +13658,7 @@ msgstr "過期"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:34
 msgid "Orientation du capteur :"
-msgstr ""
+msgstr "感測器角度："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115b.tmpl:18
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_115b.tmpl:20
@@ -13912,7 +13918,7 @@ msgstr "紙"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:169
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:171
 msgid "Papier calque"
-msgstr ""
+msgstr "描圖紙"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1549
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1551
@@ -13947,27 +13953,27 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:88
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:90
 msgid "Par ordinateur"
-msgstr ""
+msgstr "電腦繪製（例如以電腦繪圖機繪製之地圖）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:54
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:93
 msgid "Par techique de teledetection active"
-msgstr ""
+msgstr "主動遙測繪製（a、b、c 所述技術外）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:61
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:100
 msgid "Par techique de teledetection passive"
-msgstr ""
+msgstr "被動遙測繪製（a、b、c 所述技術外）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:96
 msgid "Par technique de teledetection active"
-msgstr ""
+msgstr "主動遙測繪製（a、b、c 所述技術外）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:64
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:103
 msgid "Par technique de teledetection passive"
-msgstr ""
+msgstr "被動遙測繪製（a、b、c 所述技術外）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1387
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_140.tmpl:1389
@@ -14123,7 +14129,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:321
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:323
 msgid "Pas de repere"
-msgstr ""
+msgstr "未平差"
 
 #  NOTE CMARC 無正式譯文
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:211
@@ -14206,7 +14212,7 @@ msgstr "皮革（牛皮、羊皮等）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:142
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:145
 msgid "Peau (parchemin, velin...)"
-msgstr ""
+msgstr "皮革（牛皮、羊皮等）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:28
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:30
@@ -14326,7 +14332,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:293
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:295
 msgid "Photographie"
-msgstr ""
+msgstr "照像製版"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124g.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124g.tmpl:25
@@ -14341,7 +14347,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:85
 msgid "Photographique"
-msgstr ""
+msgstr "照像（例如以傳統可見光譜航空照像技術所製作之地圖）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:960
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:962
@@ -14775,12 +14781,12 @@ msgstr "正片 (positive)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:195
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:198
 msgid "Positif sur base flexible"
-msgstr ""
+msgstr "透明或不透明彈性正片基底"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:207
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:210
 msgid "Positif sur base rigide"
-msgstr ""
+msgstr "透明或不透明非彈性正片基底"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:45
 msgid "Position"
@@ -15038,7 +15044,7 @@ msgstr "出版年："
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:357
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:360
 msgid "Publication autonome"
-msgstr ""
+msgstr "單件"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_100.tmpl:279
 msgid "Publication officielle"
@@ -15097,7 +15103,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:63
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:144
 msgid "Qualite de l'image:"
-msgstr ""
+msgstr "影像品質："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:142
 msgid "Quantity"
@@ -15357,7 +15363,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:382
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:385
 msgid "Reliee dans une revue, une monographie"
-msgstr ""
+msgstr "刊於叢刊或書籍內"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:116
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:118
@@ -15505,16 +15511,16 @@ msgstr "可重覆，"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:333
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:336
 msgid "Repere avec systeme de coordonnees"
-msgstr ""
+msgstr "按座標系統平差"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:326
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:329
 msgid "Repere mais sans systeme de coordonnees"
-msgstr ""
+msgstr "未按座標系統平差"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:312
 msgid "Reperes geodesiques:"
-msgstr ""
+msgstr "大地平差法："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_105.tmpl:433
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_105.tmpl:435
@@ -16699,15 +16705,15 @@ msgstr ""
 msgid "Spacelab"
 msgstr ""
 
+# XXX
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:28
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:30
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_122.tmpl:32
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_122.tmpl:34
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:28
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:30
-#, fuzzy
 msgid "Spatiale"
-msgstr "可重覆"
+msgstr "太空"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:15
 msgid "Special thanks to the following funders"
@@ -16840,15 +16846,17 @@ msgstr "不要重設應歸還日期"
 msgid "Still %s requests to go"
 msgstr "還有 %s 個請求"
 
+#  XXX THis is the official translation in CMARC, but it looks wrong
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:155
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:158
 msgid "Stockage sur support magnetique - informatique"
-msgstr ""
+msgstr "適於電腦磁性儲存媒體"
 
+#  XXX THis is the official translation in CMARC, but it looks wrong
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:162
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:165
 msgid "Stockage sur support magnetique - non informatique"
-msgstr ""
+msgstr "非適於電腦磁性儲存媒體"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:998
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:1000
@@ -17138,7 +17146,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:375
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:378
 msgid "Supplement separe d'une revue, d'une monographie"
-msgstr ""
+msgstr "以叢刊或書籍補篇之形式出版"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/histsearch.tmpl:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-add.tmpl:18
@@ -17215,7 +17223,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:108
 msgid "Support physique:"
-msgstr ""
+msgstr "媒體："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:80
 msgid "Support primaire"
@@ -17550,9 +17558,8 @@ msgstr "集叢題名"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:20
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:18
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_124d.tmpl:20
-#, fuzzy
 msgid "Terrestre"
-msgstr "測試"
+msgstr "地面"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:7
 msgid "Test"
@@ -17688,7 +17695,7 @@ msgstr "紡織物（包括人造纖維）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:148
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:151
 msgid "Textile (y compris les fibres synthetiques)"
-msgstr ""
+msgstr "紡織品（包含人造纖維，如絲綢、布匹、尼龍等）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_100.tmpl:617
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_100.tmpl:619
@@ -18462,7 +18469,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:87
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121b.tmpl:89
 msgid "Tres bonne"
-msgstr ""
+msgstr "最佳"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:186
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_130.tmpl:188
@@ -18472,7 +18479,7 @@ msgstr "極高縮率（61–90 倍）"
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:25
 msgid "Tri-dimensionnel"
-msgstr ""
+msgstr "立體"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_110.tmpl:143
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_110.tmpl:145
@@ -20555,7 +20562,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:44
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_121a.tmpl:83
 msgid "photographique"
-msgstr ""
+msgstr "照像（例如以傳統可見光譜航空照像技術所製作之地圖）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:21
 msgid "planned for"
