@@ -1,8 +1,8 @@
 package C4::Biblio;
 # $Id$
 # $Log$
-# Revision 1.59  2003/09/04 10:17:07  tipaul
-# fix for 583 (values in marc_word table should have quotation marks, etc, stripped)
+# Revision 1.60  2003/09/04 14:11:23  tipaul
+# fix for 593 (data duplication in MARC-DB)
 #
 # Revision 1.58  2003/08/06 12:54:52  tipaul
 # fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
@@ -557,6 +557,7 @@ sub MARCaddbiblio {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
 	my ($dbh,$record,$biblionumber,$bibid) = @_;
 	my @fields=$record->fields();
+	warn "IN MARCaddbiblio $bibid => ".$record->as_formatted;
 # my $bibid;
 # adding main table, and retrieving bibid
 # if bibid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
@@ -965,9 +966,9 @@ sub MARCkoha2marcBiblio {
 						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
 						volumedate,volumeddesc,timestamp,illus,pages,notes AS bnotes,size,place
 					FROM biblioitems
-					WHERE biblionumber=? and biblioitemnumber=?
+					WHERE biblioitemnumber=?
 					");
-	$sth2->execute($biblionumber,$biblioitemnumber);
+	$sth2->execute($biblioitemnumber);
 	my $row=$sth2->fetchrow_hashref;
 	my $code;
 	foreach $code (keys %$row) {
@@ -1909,11 +1910,10 @@ sub newbiblio {
 	my $dbh    = C4::Context->dbh;
 	my $bibnum=OLDnewbiblio($dbh,$biblio);
 	# finds new (MARC bibid
-	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+# 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
 	my $record = &MARCkoha2marcBiblio($dbh,$bibnum);
 	MARCaddbiblio($dbh,$record,$bibnum);
-# FIXME : MARC add
-  return($bibnum);
+	return($bibnum);
 }
 
 =item modbiblio
@@ -2011,14 +2011,13 @@ sub modnote {
 }
 
 sub newbiblioitem {
-  my ($biblioitem) = @_;
-  my $dbh   = C4::Context->dbh;
-  my $bibitemnum = &OLDnewbiblioitem($dbh,$biblioitem);
-#  print STDERR "bibitemnum : $bibitemnum\n";
-  my $MARCbiblio= MARCkoha2marcBiblio($dbh,$biblioitem->{biblionumber},$bibitemnum);
-#  print STDERR $MARCbiblio->as_formatted();
-  &MARCaddbiblio($dbh,$MARCbiblio,$biblioitem->{biblionumber});
-  return($bibitemnum);
+	my ($biblioitem) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $bibitemnum = &OLDnewbiblioitem($dbh,$biblioitem);
+	my $MARCbiblio= MARCkoha2marcBiblio($dbh,0,$bibitemnum); # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
+	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblioitem->{biblionumber});
+	&MARCaddbiblio($dbh,$MARCbiblio,$biblioitem->{biblionumber},$bibid);
+	return($bibitemnum);
 }
 
 sub newsubject {
