@@ -4,11 +4,11 @@ require Exporter;
 
 use C4::Auth;
 use CGI;
-use C4::Context;
+use C4::Database;
 
 my $classlist='';
 
-my $dbh=C4::Context->dbh();
+my $dbh=C4Connect;
 my $sth=$dbh->prepare("select groupname,itemtypes from itemtypesearchgroups order by groupname");
 $sth->execute;
 while (my ($groupname,$itemtypes) = $sth->fetchrow) {
