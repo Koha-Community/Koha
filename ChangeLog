@@ -1,5 +1,29 @@
 2002-10-05  Andrew Arensburger  <arensb@baa.ooblick.com>
 
+	* search.pl: Added "use C4::Context" (how did I forget it
+	earlier?)
+
+	* C4/Circulation/Circ2.pm: Replaced several
+	prepare()/execute()/finish() sequences with do().
+
+	* C4/Search.pm: Fixed some bogosity. Added some FIXMEs.
+
+	* C4/Acquisitions.pm, C4/Accounts2.pm: Replaced several
+	prepare()/execute()/finish() sequences with do().
+
+	* memberentry.pl, loadmodules.pl, acqui/newbiblio.pl,
+	acqui/acquire.pl: Use C4::Context->preference, rather than getting
+	all system preferences and picking out only what's needed.
+
+	* C4/Context.pm: Added "preference" method, for fetching a single
+	value from systempreferences (which is all most scripts need).
+
+	* INSTALL: Clarified need for File::Spec. Rewrote sections on
+	writing and installing koha.conf for clarity, and to reflect the
+	fact that the config file no longer needs to go in /etc/koha.conf.
+	Fixed typo in "SetEnv" example. Replaced "ur" with the English
+	equivalent throughout.
+
 	* C4/Output.pm: Added a couple of FIXME comments.
 
 	* C4/Output.pm: Switched new functions to using C4::Context.
