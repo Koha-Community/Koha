@@ -1,7 +1,31 @@
 #!/usr/bin/perl -w
 
+# $Id$
+
 use strict;
 use Test::Harness;
 
+# please add many tests here
+# Please make the test name the same as the module name where possible
 
-runtests ('t/koha.t', 't/Catalogue.t');
+my @tests=(
+	't/format.t',
+	't/Input.t',
+	't/koha.t',
+	't/output.t',
+	't/require.t',
+	't/Catalogue.t',
+);
+
+
+runtests (@tests);
+
+exit;
+
+# $Log$
+# Revision 1.5  2002/06/20 18:04:46  tonnesen
+# Are we getting sick of merging yet?  Not me!
+#
+# Revision 1.1.2.7  2002/06/20 15:19:33  amillar
+# Test valid ISBN numbers in Input.pm
+#
