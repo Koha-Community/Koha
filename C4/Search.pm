@@ -1264,6 +1264,7 @@ sub ItemInfo {
       # FIXME - The date ought to be properly parsed, and printed
       # according to local convention.
       my @temp=split('-',$idata->{'date_due'});
+      $data->{'date_due'} = $idata->{'date_due'};
       $datedue = "$temp[2]/$temp[1]/$temp[0]";
     }
     if ($data->{'itemlost'} eq '2'){
@@ -1300,7 +1301,6 @@ sub ItemInfo {
 	$data->{'description'} = $bdata->{'description'};
 	$data->{'publictype'} = $bdata->{'publictype'};
     }
-
 
     my $class = $data->{'classification'};
     my $dewey = $data->{'dewey'};
