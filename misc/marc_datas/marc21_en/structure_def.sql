@@ -1,16 +1,15 @@
 # phpMyAdmin MySQL-Dump
-# version 2.2.6-rc1
-# http://phpwizard.net/phpMyAdmin/
-# http://phpmyadmin.sourceforge.net/ (download page)
+# version 2.4.0
+# http://www.phpmyadmin.net/ (download page)
 #
-# Host: localhost
-# Generation Time: Nov 22, 2002 at 10:51 AM
-# Server version: 3.23.52
-# PHP Version: 4.2.3
-# Database : `koha`
+# Serveur: localhost
+# Généré le : Jeudi 20 Mars 2003 à 12:44
+# Version du serveur: 3.23.52
+# Version de PHP: 4.2.3
+# Base de données: `koha_190`
 
 #
-# Dumping data for table `marc_subfield_structure`
+# Contenu de la table `marc_subfield_structure`
 #
 
 INSERT INTO marc_subfield_structure VALUES ('010', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 1, '', 0, '', 'HISTORY', '');
@@ -228,7 +227,7 @@ INSERT INTO marc_subfield_structure VALUES ('080', 'x', 'Common auxiliary subdiv
 INSERT INTO marc_subfield_structure VALUES ('082', '2', 'Edition number', 'Edition number', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('082', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('082', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('082', 'a', 'Classification number', 'Classification number', 1, 0, 'biblioitems.dewey', -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('082', 'a', 'Classification number', 'Classification number', 1, 0, '', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('082', 'b', 'Item number', 'Item number', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('084', '2', 'Source of number', 'Source of number', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('084', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
@@ -381,7 +380,7 @@ INSERT INTO marc_subfield_structure VALUES ('245', 'b', 'Remainder of title', 'R
 INSERT INTO marc_subfield_structure VALUES ('245', 'c', 'Statement of responsibility, etc', 'Statement of responsibility, etc', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'd', 'Designation of section (SE) [OBSOLETE]', 'Designation of section (SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'e', 'Name of part/section  (SE) [OBSOLETE]', 'Name of part/section  (SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('245', 'f', 'Inclusive dates', 'Inclusive dates', 0, 0, 'biblio.copyrightdate', -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('245', 'f', 'Inclusive dates', 'Inclusive dates', 0, 0, '', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'g', 'Bulk dates', 'Bulk dates', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'h', 'Medium', 'Medium', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'k', 'Form', 'Form', 1, 0, NULL, -1, NULL, NULL, '');
@@ -502,15 +501,15 @@ INSERT INTO marc_subfield_structure VALUES ('270', 'p', 'Contact person (R)', 'C
 INSERT INTO marc_subfield_structure VALUES ('270', 'q', 'Title of contact person (R)', 'Title of contact person (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('270', 'r', 'Hours (R)', 'Hours (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('270', 'z', 'Public note (R)', 'Public note (R)', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', '3', 'Materials specified', 'Materials specified', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'a', 'Extent', 'Extent', 1, 0, 'biblioitems.pages', -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'b', 'Other physical details', 'Other physical details', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'c', 'Dimensions', 'Dimensions', 1, 0, 'biblioitems.size', -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'e', 'Accompanying material', 'Accompanying material', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'f', 'Type of unit', 'Type of unit', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'g', 'Size of unit', 'Size of unit', 1, 0, NULL, -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('300', '3', 'Materials specified', 'Materials specified', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'a', 'Extent', 'Extent', 1, 0, 'biblioitems.pages', 2, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'b', 'Other physical details', 'Other physical details', 0, 0, 'biblioitems.illus', 2, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'c', 'Dimensions', 'Dimensions', 1, 0, 'biblioitems.size', 2, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'e', 'Accompanying material', 'Accompanying material', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'f', 'Type of unit', 'Type of unit', 1, 0, 'biblioitems.itemtype', 2, 'itemtypes', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'g', 'Size of unit', 'Size of unit', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('301', 'a', 'Extent of item (NR)', 'Extent of item (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('301', 'b', 'Sound characteristics (NR)', 'Sound characteristics (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('301', 'c', 'Color characteristics (NR)', 'Color characteristics (NR)', 0, 0, NULL, -1, NULL, NULL, '');
@@ -662,7 +661,7 @@ INSERT INTO marc_subfield_structure VALUES ('400', 'p', 'Name of part/section of
 INSERT INTO marc_subfield_structure VALUES ('400', 'q', 'Fuller form of name (NR) [OBSOLETE]', 'Fuller form of name (NR) [OBSOLETE]', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('400', 't', 'Title of a work (NR)', 'Title of a work (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('400', 'u', 'Affiliation (NR)', 'Affiliation (NR)', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('400', 'v', 'Volume number/sequential designation  (NR)', 'Volume number/sequential designation  (NR)', 0, 0, NULL, -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('400', 'v', 'Volume number/sequential designation  (NR)', 'Volume number/sequential designation  (NR)', 0, 0, 'biblio.serial', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('400', 'x', 'International Standard Serial Number  (NR)', 'International Standard Serial Number  (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('410', '4', 'Relator code (R)', 'Relator code (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('410', '6', 'Linkage (NR)', 'Linkage (NR)', 0, 0, NULL, -1, NULL, NULL, '');
@@ -718,7 +717,7 @@ INSERT INTO marc_subfield_structure VALUES ('500', '3', 'Materials specified', '
 INSERT INTO marc_subfield_structure VALUES ('500', '5', 'Institution to which field applies "See "', 'Institution to which field applies "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('500', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('500', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'a', 'General note', 'General note', 0, 0, 'biblioitems.notes', -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'a', 'General note', 'General note', 0, 0, 'biblio.notes', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'l', 'Library of Congress call number (SE) [OBSOLETE]', 'Library of Congress call number (SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'x', 'International Standard Serial Number  (SE) [OBSOLETE]', 'International Standard Serial Number  (SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'z', 'Source of note information (AM SE) [OBSOLETE]', 'Source of note information (AM SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
@@ -733,7 +732,7 @@ INSERT INTO marc_subfield_structure VALUES ('503', '6', 'Linkage (NR)', 'Linkage
 INSERT INTO marc_subfield_structure VALUES ('503', 'a', 'Bibliographic history note (NR)', 'Bibliographic history note (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('504', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('504', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('504', 'a', 'Bibliography, etc', 'Bibliography, etc', 0, 0, 'biblio.notes', -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('504', 'a', 'Bibliography, etc', 'Bibliography, etc', 0, 0, '', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('504', 'b', 'Number of references', 'Number of references', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('505', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('505', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
@@ -807,7 +806,7 @@ INSERT INTO marc_subfield_structure VALUES ('518', 'a', 'Date/time and place of 
 INSERT INTO marc_subfield_structure VALUES ('520', '3', 'Materials specified', 'Materials specified', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('520', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('520', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('520', 'a', 'Summary, etc', 'Summary, etc', 0, 0, NULL, -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('520', 'a', 'Summary, etc', 'Summary, etc', 0, 0, 'biblio.abstract', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('520', 'b', 'Expansion of summary note', 'Expansion of summary note', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('520', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('520', 'z', 'Source of note information (NR)  [OBSOLETE]', 'Source of note information (NR)  [OBSOLETE]', 0, 0, NULL, -1, NULL, NULL, '');
@@ -1852,10 +1851,10 @@ INSERT INTO marc_subfield_structure VALUES ('852', 'c', 'Shelving location', 'Sh
 INSERT INTO marc_subfield_structure VALUES ('852', 'e', 'Address', 'Address', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'f', 'Coded location qualifier', 'Coded location qualifier', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'g', 'Non-coded location qualifier (R)', 'Non-coded location qualifier (R)', 1, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('852', 'h', 'Classification part (NR)', 'Classification part (NR)', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('852', 'h', 'Classification part (NR)', 'Classification part (NR)', 0, 0, 'biblioitems.classification', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'i', 'Item part (R)', 'Item part (R)', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'j', 'Shelving control number (NR)', 'Shelving control number (NR)', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('852', 'k', 'Call number prefix (NR)', 'Call number prefix (NR)', 0, 1, 'biblioitems.itemtype', 0, 'itemtypes', '', '');
+INSERT INTO marc_subfield_structure VALUES ('852', 'k', 'Call number prefix (NR)', 'Call number prefix (NR)', 0, 1, 'biblioitems.dewey', 0, 'itemtypes', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'l', 'Shelving form of title (NR)', 'Shelving form of title (NR)', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'm', 'Call number suffix (NR)', 'Call number suffix (NR)', 0, 0, 'biblioitems.subclass', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'n', 'Country code (NR)', 'Country code (NR)', 0, 0, '', -1, '', '', '');
@@ -1916,7 +1915,7 @@ INSERT INTO marc_subfield_structure VALUES ('856', 'q', 'Electronic format type 
 INSERT INTO marc_subfield_structure VALUES ('856', 'r', 'Settings (NR)', 'Settings (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('856', 's', 'File size (R)', 'File size (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('856', 't', 'Terminal emulation (R)', 'Terminal emulation (R)', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('856', 'u', 'Uniform Resource Identifier (R)', 'Uniform Resource Identifier (R)', 1, 0, NULL, -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('856', 'u', 'Uniform Resource Identifier (R)', 'Uniform Resource Identifier (R)', 1, 0, 'biblioitems.url', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('856', 'v', 'Hours access method available (R)', 'Hours access method available (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('856', 'w', 'Record control number (R)', 'Record control number (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('856', 'x', 'Nonpublic note (R)', 'Nonpublic note (R)', 1, 0, NULL, -1, NULL, NULL, '');
@@ -1936,15 +1935,16 @@ INSERT INTO marc_subfield_structure VALUES ('880', '6', 'Linkage (NR) -z Same as
 INSERT INTO marc_subfield_structure VALUES ('886', '2', 'Source of data (NR) -z - Foreign MARC subfield (R)', 'Source of data (NR) -z - Foreign MARC subfield (R)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('886', 'a', 'Tag of the foreign MARC field (NR)', 'Tag of the foreign MARC field (NR)', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('886', 'b', 'Content of the foreign MARC field  (NR)', 'Content of the foreign MARC field  (NR)', 0, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'd', 'homebranch', 'homebranch', 1, 0, 'items.homebranch', 10, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'f', 'barcode', 'barcode', 1, 0, 'items.barcode', 10, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'm', 'dateaccessioned', 'dateaccessioned', 1, 0, 'items.dateaccessioned', 10, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'o', 'notforloan', 'notforloan', 1, 0, 'items.notforloan', 10, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 's', 'Koha item number', 'Koha item number', 1, 0, 'items.itemnumber', 10, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'u', 'item notes', 'item notes', 1, 0, 'items.itemnotes', 10, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'd', 'homebranch', 'homebranch', 1, 0, 'items.homebranch', 10, 'branches', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'f', 'barcode', 'barcode', 1, 0, 'items.barcode', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'm', 'dateaccessioned', 'dateaccessioned', 1, 0, 'items.dateaccessioned', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'o', 'notforloan', 'notforloan', 1, 0, 'items.notforloan', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 's', 'Koha item number', 'Koha item number', 1, 0, 'items.itemnumber', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'u', 'item notes', 'item notes', 1, 0, 'items.itemnotes', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'c', 'holdingbranch', 'holdingbranch', 0, 0, 'items.holdingbranch', 10, 'branches', '', NULL);
 
 #
-# Dumping data for table `marc_tag_structure`
+# Contenu de la table `marc_tag_structure`
 #
 
 INSERT INTO marc_tag_structure VALUES ('010', 'LIBRARY OF CONGRESS CONTROL NUMBER', 'LIBRARY OF CONGRESS CONTROL NUMBER', 0, 0, '');
