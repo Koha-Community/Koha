@@ -54,7 +54,6 @@ my @names;
 my $count;
 my $error;
 
-&modbiblio($biblio);
 &modsubtitle($bibnum, $subtitle);
 &modaddauthor($bibnum, $addauthor);
 
@@ -67,6 +66,8 @@ for (my $i = 0; $i < $count; $i++) {
 } # for
 
 $error = &modsubject($bibnum,$force,@sub);
+
+&modbiblio($biblio);
 
 if ($error ne ''){
 		my ($template, $loggedinuser, $cookie) = get_template_and_user({
