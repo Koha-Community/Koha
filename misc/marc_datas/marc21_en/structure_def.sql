@@ -12,9 +12,9 @@
 # Contenu de la table `marc_subfield_structure`
 #
 
-INSERT INTO marc_subfield_structure VALUES ('010', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 1, '', 0, '', 'HISTORY', '');
-INSERT INTO marc_subfield_structure VALUES ('010', 'a', 'LC control number', 'LC control number', 0, 0, 'biblioitems.lccn', 0, 'YESNO', '', '');
-INSERT INTO marc_subfield_structure VALUES ('010', 'b', 'NUCMC control number', 'NUCMC control number', 1, 0, '', 0, '', 'WOMEN', '');
+INSERT INTO marc_subfield_structure VALUES ('010', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 1, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('010', 'a', 'LC control number', 'LC control number', 0, 0, 'biblioitems.lccn', 0, NULL, '', '');
+INSERT INTO marc_subfield_structure VALUES ('010', 'b', 'NUCMC control number', 'NUCMC control number', 1, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('010', 'z', 'Canceled or invalid LC control number', 'Canceled or invalid LC control number', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('011', 'a', 'Linking LC control number (R)', 'Linking LC control number (R)', 1, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('013', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
