@@ -3,6 +3,8 @@
 #
 # $Header$
 #
+# Change log is at the bottom of the file
+#
 
 use strict;
 use C4::Search;
@@ -114,6 +116,9 @@ EOF
 
 #
 # $Log$
+# Revision 1.2  2001/02/07 23:47:43  tonnesen
+# Added header and log substition variables
+#
 # Revision 1.1  2001/02/07 20:27:16  tonnesen
 # Start of code to implement virtual bookshelves in Koha.
 #

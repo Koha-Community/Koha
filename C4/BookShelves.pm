@@ -3,6 +3,9 @@ package C4::BookShelves; #asummes C4/BookShelves
 #
 # $Header$
 #
+#
+# Change log is at the bottom of the file
+#
 #requires DBI.pm to be installed
 
 use strict;
@@ -139,6 +142,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.2  2001/02/07 23:47:43  tonnesen
+# Added header and log substition variables
+#
 # Revision 1.1  2001/02/07 20:27:17  tonnesen
 # Start of code to implement virtual bookshelves in Koha.
 #
