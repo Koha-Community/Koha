@@ -25,16 +25,11 @@ use C4::Output;  # contains picktemplate
 use CGI;
 use C4::Search;
 use C4::Auth;
- 
+
 my $query=new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
 
-my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-my $templatebase="user/userpage.tmpl";
-my $theme=picktemplate($includes, $templatebase);
-
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+my $template = gettemplate("user/userpage.tmpl",0);
 
 $template->param(loggedinuser => $loggedinuser);
 
