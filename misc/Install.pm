@@ -19,6 +19,7 @@ package Install; #assumes Install.pm
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use POSIX;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -219,16 +220,71 @@ sub releasecandidatewarning {
 }
 
 
-#
-# Assuming that Koha will be installed on a modern Unix with symlinks,
-# it is possible to code the installer so that aborted installs can be
-# detected. In case of such an event we can do our best to "roll back"
-# the aborted install.
-#
-# FIXME: The "roll back" is not complete!
-#
+=item dirname
 
-sub checkabortedinstall {
+    dirname $path;
+
+Does the equivalent of dirname(1). Given a path $path, return the
+parent directory of $path (best guess), except when $path seems to
+be the same as /, in which case $path itself is returned unchanged.
+
+=cut
+
+sub dirname ($;$) {
+    my($path) = @_;
+    if ($path =~ /[^\/]/s) {
+	if ($path =~ /\//) {
+	    $path =~ s/\/+[^\/]+\/*$//s;
+	} else {
+	    $path = '.';
+	}
+    }
+    return $path;
+}
+
+=item mkdir_parents
+
+    mkdir_parents $path;
+    mkdir_parents $path, $mode;
+
+Does the equivalent of mkdir -p. Given a path $path, create the path
+$path, recursively creating any intermediate directories. If $mode
+is given, the directory will be created with mode $mode.
+
+WARNING: If $path already exists, mkdir_parents will just return
+successfully (just like mkdir -p), whether the mode of $path conforms
+to $mode or not.
+
+=cut
+
+sub mkdir_parents ($;$) {
+    my($path, $mode) = @_;
+    my $ok = -d($path)? 1: defined $mode? mkdir($path, $mode): mkdir($path);
+
+    if (!$ok && $! == ENOENT) {
+	my $parent = dirname($path);
+	$ok = mkdir_parents($parent, $mode);
+
+	# retry and at the same time make sure that $! is set correctly
+	$ok = defined $mode? mkdir($path, $mode): mkdir($path);
+    }
+    return $ok;
+}
+
+=item checkabortedinstall
+
+    checkabortedinstall;
+
+Assuming that Koha will be installed on a modern Unix with symlinks,
+it is possible to code the installer so that aborted installs can be
+detected. In case of such an event we can do our best to "roll back"
+the aborted install.
+
+FIXME: The "roll back" is not complete!
+
+=cut
+
+sub checkabortedinstall () {
     if (-l("$::etcdir/koha.conf")
         && readlink("$::etcdir/koha.conf") =~ /\.tmp$/
     ) {
@@ -439,69 +495,30 @@ You must specify different directories for the OPAC and INTRANET files!
     $::kohalogdir=showmessage($message, 'free', $::kohalogdir);
 
 
+    # FIXME: Missing error handling for all mkdir calls here
     unless ( -d $::intranetdir ) {
-       my $result=mkdir ($::intranetdir, oct(770));
-       if ($result==0) {
-	   my @dirs = split(m#/#, $::intranetdir);
-	    my $checkdir='';
-	    foreach (@dirs) {
-		$checkdir.="$_/";
-		unless (-e "$checkdir") {
-		    mkdir($checkdir, 0775);
-		}
-	    }
-       }
+       mkdir_parents (dirname($::intranetdir), 0775);
+       mkdir ($::intranetdir,                  0770);
        chown (oct(0), (getgrnam($::httpduser))[2], "$::intranetdir");
        chmod (oct(770), "$::intranetdir");
     }
-    unless ( -d "$::intranetdir/htdocs" ) {
-       mkdir ("$::intranetdir/htdocs", oct(750));
-    }
-    unless ( -d "$::intranetdir/cgi-bin" ) {
-       mkdir ("$::intranetdir/cgi-bin", oct(750));
-    }
-    unless ( -d "$::intranetdir/modules" ) {
-       mkdir ("$::intranetdir/modules", oct(750));
-    }
-    unless ( -d "$::intranetdir/scripts" ) {
-       mkdir ("$::intranetdir/scripts", oct(750));
-    }
+    mkdir_parents ("$::intranetdir/htdocs",    0750);
+    mkdir_parents ("$::intranetdir/cgi-bin",   0750);
+    mkdir_parents ("$::intranetdir/modules",   0750);
+    mkdir_parents ("$::intranetdir/scripts",   0750);
     unless ( -d $::opacdir ) {
-       my $result=mkdir ($::opacdir, oct(770));
-       if ($result==0) {
-	   my @dirs = split(m#/#, $::opacdir);
-	    my $checkdir='';
-	    foreach (@dirs) {
-		$checkdir.="$_/";
-		unless (-e "$checkdir") {
-		    mkdir($checkdir, 0775);
-		}
-	    }
-       }
+       mkdir_parents (dirname($::opacdir),     0775);
+       mkdir ($::opacdir,                      0770);
        chown (oct(0), (getgrnam($::httpduser))[2], "$::opacdir");
        chmod (oct(770), "$::opacdir");
     }
-    unless ( -d "$::opacdir/htdocs" ) {
-       mkdir ("$::opacdir/htdocs", oct(750));
-    }
-    unless ( -d "$::opacdir/cgi-bin" ) {
-       mkdir ("$::opacdir/cgi-bin", oct(750));
-    }
+    mkdir_parents ("$::opacdir/htdocs",        0750);
+    mkdir_parents ("$::opacdir/cgi-bin",       0750);
 
 
     unless ( -d $::kohalogdir ) {
-       my $result=mkdir ($::kohalogdir, oct(770));
-       if ($result==0) {
-	   my @dirs = split(m#/#, $::kohalogdir);
-	    my $checkdir='';
-	    foreach (@dirs) {
-		$checkdir.="$_/";
-		unless (-e "$checkdir") {
-		    mkdir($checkdir, 0775);
-		}
-	    }
-       }
-
+       mkdir_parents (dirname($::kohalogdir),  0775);
+       mkdir ($::kohalogdir,                   0770);
        chown (oct(0), (getgrnam($::httpduser))[2,3], "$::kohalogdir");
        chmod (oct(770), "$::kohalogdir");
     }
