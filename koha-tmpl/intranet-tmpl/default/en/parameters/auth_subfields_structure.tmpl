@@ -57,41 +57,25 @@
 
 <!-- TMPL_IF name="delete_confirm" -->
 <!---------------------------------------------------------------------------->
-<table>
-	<tr>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Subfield</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="tagsubfield" --></b></td>
-	</tr>
-	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
+<div id="bloc25">
+	<h2 class="parameters">
+		Subfield <!-- TMPL_VAR name="tagsubfield" -->
+		<!-- TMPL_VAR name="liblibrarian" -->
+	</h2>
 	<form action='<!-- TMPL_VAR name="delete_link" -->' method=post>
 		<input type=hidden name=op value=delete_confirmed>
 		<input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
 		<input type=hidden name=tagfield value='<!-- TMPL_VAR name="tagfield" -->'>
 		<input type=hidden name=tagsubfield value='<!-- TMPL_VAR name="tagsubfield" -->'>
-		<tr>
-			<td colspan=2 align=center>CONFIRM DELETION</td>
-		</tr>
-		<tr>
-			<td>
-				<INPUT type=submit value='YES'>
-				</form>
-			</td>
-			<td>
-				<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-					<input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
-					<input type=submit value=NO>
-				</form>
-			</td>
-		</tr>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="delete_confirmed" -->
-<!---------------------------------------------------------------------------->
-	Data deleted
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+		<p>CONFIRM DELETION</p>
+		<input type=submit value='YES' class="button parameters">
+	</form>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
-		<input type=submit value=OK>
+		<input type=submit value="NO" class="button parameters">
 	</form>
+</div>
 <!-- /TMPL_IF -->
 
 <!---------------------------------------------------------------------------->
@@ -140,7 +124,7 @@
 <!-- TMPL_VAR name="edit" -->
 	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
 </a>
-<a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->">
+<a href="auth_tag_structure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->&authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
 	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0>
 </a>
 <!-- TMPL_IF name="previous" -->

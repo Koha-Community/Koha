@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <div id="mainbloc">
-<h1 class="parameters">MARC tag structure admin for <!-- TMPL_IF name="itemtype" --><!-- TMPL_VAR name="itemtype" --><!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
+<h1 class="parameters">MARC tag structure admin for <!-- TMPL_IF name="frameworkcode" --><!-- TMPL_VAR name="frameworktext" --> (<!-- TMPL_VAR name="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
 <script>
 	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@
 	</h1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 		<input type=hidden name=op value='add_validate'>
-		<input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->">
+		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
 		<p><label>Tag<label><!-- TMPL_VAR name="searchfield" --></p>
 		<p><label>Lib for librarians</label><input type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></p>
 		<p><label>Lib for opac</label><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></p>
@@ -96,16 +96,16 @@
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="itemtype_create" -->
+<!-- TMPL_IF name="framework_create" -->
 <!---------------------------------------------------------------------------->
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-		<input type="hidden" name="op" value="itemtype_create_confirm">
-		<input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->">
-		Create itemtype framework for <!-- TMPL_VAR name="itemtype" --> (<!-- TMPL_VAR name="ITdescription" -->) using
-		<select name="existingitemtype">
+		<input type="hidden" name="op" value="framework_create_confirm">
+		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
+		Create framework for <!-- TMPL_VAR name="frameworkcode" --> (<!-- TMPL_VAR name="frameworktext" -->) using
+		<select name="existingfarmeworkcode">
 			<option value="">Default</option>
-		<!-- TMPL_LOOP name="existingitemtypeloop" -->
-			<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" --></option>
+		<!-- TMPL_LOOP name="existingframeworkloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="frameworktext" --></option>
 		<!-- /TMPL_LOOP -->
 		</select>
 		<input type=submit value="OK" class="button">
@@ -115,12 +115,12 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <div id="bloc25">
-<h2 class="parameters">Select an itemtype</h2>
+<h2 class="parameters">Select a framework</h2>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<select name="itemtype">
+	<select name="frameworkcode">
 		<option value="">Default</option>
-	<!-- TMPL_LOOP name="itemtypeloop" -->
-		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+	<!-- TMPL_LOOP name="frameworkloop" -->
+		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
 	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
