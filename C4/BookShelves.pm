@@ -53,7 +53,8 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio
+@EXPORT = qw(&GetShelfList &GetShelfContents &GetShelf
+				&AddToShelf &AddToShelfFromBiblio
 				&RemoveFromShelf &AddShelf &RemoveShelf
 				&ShelfPossibleAction);
 
@@ -134,6 +135,12 @@ sub GetShelfList {
     return(\%shelflist);
 }
 
+sub GetShelf {
+	my ($shelfnumber) = @_;
+	my $sth=$dbh->prepare("select shelfnumber,shelfname,owner,category from bookshelf where shelfnumber=?");
+	$sth->execute($shelfnumber);
+	return $sth->fetchrow;
+}
 =item GetShelfContents
 
   $itemlist = &GetShelfContents($env, $shelfnumber);
@@ -239,11 +246,12 @@ sub AddShelf {
     my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
 	$sth->execute($shelfname);
     if ($sth->rows) {
-	return(1, "Shelf \"$shelfname\" already exists");
+		return(1, "Shelf \"$shelfname\" already exists");
     } else {
-	$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
-	$sth->execute($shelfname,$owner,$category);
-	return (0, "Done");
+		$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
+		$sth->execute($shelfname,$owner,$category);
+		my $shelfnumber = $dbh->{'mysql_insertid'};
+		return (0, "Done",$shelfnumber);
     }
 }
 
@@ -282,6 +290,11 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.14  2004/12/15 17:28:23  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf (this being not finished, will commit the rest soon)
+#
 # Revision 1.13  2004/03/11 16:06:20  tipaul
 # *** empty log message ***
 #

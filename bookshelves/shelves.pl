@@ -66,6 +66,7 @@ $template->param({	loggedinuser => $loggedinuser,
 					headerbackgroundcolor => $headerbackgroundcolor,
 					circbackgroundcolor => $circbackgroundcolor });
 SWITCH: {
+	if ($query->param('op') eq 'modif') {  editshelf($query->param('shelf')); last SWITCH;}
 	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
 	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
@@ -80,6 +81,7 @@ foreach my $element (sort keys %$shelflist) {
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+		$line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
 		$line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
 ;
@@ -89,6 +91,14 @@ $template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
+sub editshelf {
+	my ($shelfnumber) = @_;
+	my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($shelfnumber);
+	warn "($shelfnumber,$shelfname,$owner,$category)";
+	$template->param(edit => 1,
+					shelfname => $shelfname,
+					"category$category" => 1);
+}
 sub shelves {
 	if (my $newshelf=$query->param('addshelf')) {
 		my ($status, $string) = AddShelf($env,$newshelf,$query->param('owner'),$query->param('category'));
@@ -157,6 +167,11 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.4  2004/12/15 17:28:23  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf (this being not finished, will commit the rest soon)
+#
 # Revision 1.3  2004/12/02 16:38:50  tipaul
 # improvement in book shelves
 #

@@ -6,6 +6,14 @@
 	<p><label>Title</label><!-- TMPL_VAR NAME="title" --></p>
 	<p><label>Author</label><!-- TMPL_VAR NAME="author" --></p>
 	<p><label>Add to virtual shelf</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
+	<p>or add to a new bookshelf </p>
+	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
+		<select name="category">
+			<option value="1">Private</option>
+			<option value="2">Public</option>
+			<option value="3">Free</option>
+		</select>
+	</p>
 	<input type="submit" value="Add to virtual shelf" class="button catalogue">
 </form>
 <!-- TMPL_INCLUDE Name="popup-bottom.inc" -->

@@ -36,6 +36,20 @@ my $env;
 my $query = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $shelfnumber = $query->param('shelfnumber');
+my $newbookshelf = $query->param('newbookshelf');
+my $category = $query->param('category');
+
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "bookshelves/addbookbybiblionumber.tmpl",
+							query => $query,
+							type => "intranet",
+							authnotrequired => 0,
+							flagsrequired => {catalogue => 1},
+						});
+
+my $x; # for trash
+($x,$x,$shelfnumber) = AddShelf('',$newbookshelf,$loggedinuser,$category) if $newbookshelf;
+
 if ($shelfnumber) {
 	&AddToShelfFromBiblio($env, $biblionumber, $shelfnumber);
 	print "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
@@ -43,13 +57,6 @@ if ($shelfnumber) {
 } else {
 
 	my  ( $bibliocount, @biblios )  = getbiblio($biblionumber);
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "bookshelves/addbookbybiblionumber.tmpl",
-								query => $query,
-								type => "intranet",
-								authnotrequired => 0,
-								flagsrequired => {catalogue => 1},
-							});
 
 	my ($shelflist) = GetShelfList($loggedinuser,3);
 	my @shelvesloop;
@@ -74,6 +81,11 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.3  2004/12/15 17:28:22  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf (this being not finished, will commit the rest soon)
+#
 # Revision 1.2  2004/11/19 16:31:30  tipaul
 # bugfix for bookshelves not in official CVS
 #

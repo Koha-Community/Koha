@@ -110,6 +110,7 @@
 				<tr>
 					<th class="catalogue">Shelf name</th>
 					<th class="catalogue">Content size</th>
+					<th class="catalogue">Modify</th>
 				</tr>
 				<!-- TMPL_LOOP Name="shelvesloop" -->
 				<tr>
@@ -119,8 +120,11 @@
 						</a>
 					</td>
 					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
-					<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
+						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
 					</td>
+					<!-- TMPL_IF name="mine" -->
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a></td>
+					<!-- /TMPL_IF -->
 				</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -129,6 +133,45 @@
 			<a href="shelves.pl?shelves=1" class="button catalogue">Add or Remove Book Shelves</a>
 		</div>
 	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="edit" -->
+	<div id="bloc25">
+		<form method="post">
+			<input type="hidden" name="op" value="modifsave">
+			<h2 class="catalogue">Modify shelf</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+			<p><label>Name</label><input type="text" name="addshelf" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
+			<p><label>Owner</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+			<p><label>Category</label>
+				<select name="category">
+					<!-- TMPL_IF name="category1" -->
+						<option value="1" selected>Private</option>
+					<!-- TMPL_ELSE -->
+						<option value="1">Private</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category2" -->
+						<option value="2" selected>Public</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Public</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category3" -->
+						<option value="3" selected>Free</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Free</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</p>
+			<p> <li>a private bookshelf is managed by you &amp; can be seen only by you.</li>
+				<li> A public can be seen by everybody, but managed only by you.</li>
+				<li> A free can be managed by any user.</li>
+			</p>
+			<p>
+				<input type="submit" value="Save" class="button catalogue">
+			</p>
+
+		</form>
+	</div>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE Name="cat-bottom.inc" -->
