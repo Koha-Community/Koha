@@ -375,7 +375,7 @@ INSERT INTO marc_subfield_structure VALUES ('243', 'r', 'Key for music', 'Key fo
 INSERT INTO marc_subfield_structure VALUES ('243', 's', 'Version', 'Version', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', '6', 'Linkage "See "', 'Linkage "See "', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, NULL, -1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('245', 'a', 'Title', 'Title', 0, 0, 'biblio.title', -1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('245', 'a', 'Title', 'Title', 0, 0, 'biblio.title', 1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'b', 'Remainder of title', 'Remainder of title', 0, 0, 'biblio.subtitle', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'c', 'Statement of responsibility, etc', 'Statement of responsibility, etc', 0, 0, NULL, -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('245', 'd', 'Designation of section (SE) [OBSOLETE]', 'Designation of section (SE) [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '');
