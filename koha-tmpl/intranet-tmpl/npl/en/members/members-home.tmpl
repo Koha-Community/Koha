@@ -8,7 +8,10 @@
 <dl><dt>Patron Search</dt>
 			<dd>Start with a search to add, update, or delete a record, check accounts, &amp; renew items.
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-	<label for="member">Enter Name or Barcode</label><input id="member" type="text" size="25" name="member" />
+	<label for="member">Enter Name or Barcode</label><input id="member" type="text" size="25" name="member" />  <select name="orderby" id="orderby">
+			<option value="surname,firstname">Order by Last Name</option>
+			<option value="cardnumber">Order by Card Number</option>
+		</select><br />
 	<input type="submit" value="Search" class="submit" />
 	</form></dd>
 <dt>Browse Patrons</dt>
