@@ -10,6 +10,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;
+use C4::Biblio;
 
 my $input = new CGI;
 #print $input->header;
@@ -27,6 +28,6 @@ if ($count > 0){
   print "This biblio has $count items attached, please delete them before deleting this biblio<p>
   ";
 } else {
-    delbiblio($biblio);
-    print $input->redirect("/catalogue/");
+	delbiblio($biblio);
+	print $input->redirect("/catalogue/");
 }

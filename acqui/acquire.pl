@@ -4,6 +4,7 @@
 #written by chris@katipo.co.nz 24/2/2000
 
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use C4::Database;
 use C4::Search;
@@ -190,7 +191,8 @@ print <<EOP
 <td><select name=bookfund size=1>
 EOP
 ;
-my ($count2,@bookfund)=bookfunds;                                                    
+my @bookfund;
+($count2,@bookfund)=bookfunds();                                                    
 for (my $i=0;$i<$count2;$i++){                                                       
   print "<option value=$bookfund[$i]->{'bookfundid'}";
   if ($bookfund[$i]->{'bookfundid'}==$results[0]->{'bookfundid'}){

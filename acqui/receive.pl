@@ -4,6 +4,7 @@
 #written by chris@katipo.co.nz 24/2/2000
 
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use CGI;
 use strict;
@@ -54,11 +55,10 @@ $date
 
 EOP
 ;
-my ($count,@results);
+my @results;
+($count,@results)=invoice($invoice);
 if ($invoice eq ''){
-	($count,@results)=getallorders($id);
-} else {
-	($count,@results)=invoice($invoice);
+  ($count,@results)=getallorders($id);
 }
 print $count;
 my $totalprice=0;

@@ -32,6 +32,7 @@ use CGI;
 use DBI;
 #use strict;
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 my $dbh=C4Connect;
 my $userid=$ENV{'REMOTE_USER'};
