@@ -32,10 +32,11 @@
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
 				<th class="acquisition doNotPrint">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
-				<!-- TMPL_UNLESS name="closedate" -->
-					<th class="acquisition doNotPrint">Remove</th>
-				<!-- /TMPL_UNLESS -->
-
+				<!-- TMPL_IF name="active" -->
+					<!-- TMPL_UNLESS name="closedate" -->
+						<th class="acquisition doNotPrint">Remove</th>
+					<!-- /TMPL_UNLESS -->
+				<!-- /TMPL_IF -->
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
@@ -53,13 +54,15 @@
 					<td><!-- TMPL_VAR NAME="quantity" --></td>
 					<td><!-- TMPL_VAR NAME="line_total" --></td>
 					<td class="doNotPrint"><!-- TMPL_VAR NAME="bookfundid" --></td>
-					<!-- TMPL_UNLESS name="closedate" -->
-						<td class="doNotPrint">
-							<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
-								<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
-							</a>
-						</td>
-					<!-- /TMPL_UNLESS -->
+					<!-- TMPL_IF name="active" -->
+						<!-- TMPL_UNLESS name="closedate" -->
+							<td class="doNotPrint">
+								<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+									<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
+								</a>
+							</td>
+						<!-- /TMPL_UNLESS -->
+					<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
@@ -84,23 +87,25 @@
 		<p>Basket empty</p>
 	<!-- /TMPL_IF -->
 	</div>
-	<!-- TMPL_UNLESS name="closedate" -->
-	<div id="bloc25">
-		<h2 class="acquisition">Add order line</h2>
-		<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
-			<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
-			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
-			<p>from an existing biblio: </b><input type="text"  size="25"   name="search"><input type="submit" class="button acquisition" value="Search"></p>
-			<p>or
-				<a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
-					from a suggestion
-				</a>
-				<a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
-					New biblio
-				</a>
-			</p>
-		</form>
-	</div>
-	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF name="active" -->
+		<!-- TMPL_UNLESS name="closedate" -->
+		<div id="bloc25">
+			<h2 class="acquisition">Add order line</h2>
+			<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
+				<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
+				<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+				<p>from an existing biblio: </b><input type="text"  size="25"   name="search"><input type="submit" class="button acquisition" value="Search"></p>
+				<p>or
+					<a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
+						from a suggestion
+					</a>
+					<a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
+						New biblio
+					</a>
+				</p>
+			</form>
+		</div>
+		<!-- /TMPL_UNLESS -->
+	<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
