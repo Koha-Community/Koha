@@ -146,6 +146,11 @@ sub getiteminformation {
 	$sth->finish;
 	#$iteminformation->{'dewey'}=~s/0*$//;
 	($iteminformation->{'dewey'} == 0) && ($iteminformation->{'dewey'}='');
+	$sth=$dbh->prepare("select * from itemtypes where itemtype='$iteminformation->{'itemtype'}'");
+	$sth->execute;
+	my $itemtype=$sth->fetchrow_hashref;
+	$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
+	$sth->finish;
     }
     $dbh->disconnect;
     return($iteminformation);
