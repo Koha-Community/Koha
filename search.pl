@@ -149,106 +149,109 @@ my $i=0;
 my $colour=1;
 while ($i < $count2){
 #    print $results[$i]."\n";
-    my @stuff=split('\t',$results[$i]);
-    $stuff[1]=~ s/\`/\\\'/g;
-    my $title2=$stuff[1];
+#    my @stuff=split('\t',$results[$i]);
+    my $result=$results[$i];
+    $result->{'title'}=~ s/\`/\\\'/g;
+    my $title2=$result->{'title'};
     $title2=~ s/ /%20/g;
+    my $location='';
+    my $itemcount;
     if ($subject eq ''){
-#      print $stuff[0];
-      $stuff[1]=mklink("/cgi-bin/koha/detail.pl?type=$type&bib=$stuff[2]&title=$title2",$stuff[1]);
-      my $word=$stuff[0];
-#      print $word;
+      $result->{'title'}=mklink("/cgi-bin/koha/detail.pl?type=$type&bib=$result->{'biblionumber'}&title=$title2",$result->{'title'});
+      my $word=$result->{'author'};
       $word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
       $word=~ s/  //g;
       $word=~ s/ /%20/g;
       $word=~ s/\,/\,%20/g;
       $word=~ s/\n//g;
       my $url="/cgi-bin/koha/search.pl?author=$word&type=$type";
-      $stuff[7]=$stuff[5];
-      $stuff[5]='';
-      $stuff[0]=mklink($url,$stuff[0]);
-      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount)=itemcount($env,$stuff[2],$type);
-      $stuff[4]=$count;
+      $result->{'author'}=mklink($url,$result->{'author'});
+      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount)=itemcount($env,$result->{'biblionumber'},$type);
+      $itemcount=$count;
+      ####
+      # Fix this chunk below, remove all hardcoded branch references
+      # need to fix itemcount as well
+      ###
       if ($nacount > 0){
-        $stuff[5]=$stuff[5]."On Loan";
+        $location=$location."On Loan";
 	if ($nacount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($nacount)";                                                                                            
+	  $location=$location." ($nacount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";
+	 $location.=" ";
       }
       if ($lcount > 0){
-         $stuff[5]=$stuff[5]."Levin";
+         $location=$location."Levin";
          if ($lcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($lcount)";                                                                                            
+	  $location=$location." ($lcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";
+	 $location.=" ";
       }
       if ($fcount > 0){
-        $stuff[5]=$stuff[5]."Foxton";
+        $location=$location."Foxton";
          if ($fcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($fcount)";                                                                                            
+	  $location=$location." ($fcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($scount > 0){
-        $stuff[5]=$stuff[5]."Shannon";
+        $location=$location."Shannon";
          if ($scount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($scount)";                                                                                            
+	  $location=$location." ($scount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($lostcount > 0){
-        $stuff[5]=$stuff[5]."Lost";
+        $location=$location."Lost";
          if ($lostcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($lostcount)";                                                                                            
+	  $location=$location." ($lostcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($mending > 0){
-        $stuff[5]=$stuff[5]."Mending";
+        $location=$location."Mending";
          if ($mending >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($mending)";                                                                                            
+	  $location=$location." ($mending)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($transit > 0){
-        $stuff[5]=$stuff[5]."In Transiit";
+        $location=$location."In Transiit";
          if ($transit >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($transit)";                                                                                            
+	  $location=$location." ($transit)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($ocount > 0){
-        $stuff[5]=$stuff[5]."On Order";
+        $location=$location."On Order";
          if ($ocount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($ocount)";                                                                                            
+	  $location=$location." ($ocount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       
-      if ($type ne 'opac'){
-        $stuff[6]=mklink("/cgi-bin/koha/request.pl?bib=$stuff[2]","Request");
-      }
+#      if ($type ne 'opac'){
+#        $result->{'request'}=mklink("/cgi-bin/koha/request.pl?bib=$stuff[2]","Request");
+#      }
     } else {
-      my $word=$stuff[1];
+      my $word=$result->{'subject'};
       $word=~ s/ /%20/g;
       
-        $stuff[1]=mklink("/cgi-bin/koha/subjectsearch.pl?subject=$word&type=$type",$stuff[1]);
+        $result->{'title'}=mklink("/cgi-bin/koha/subjectsearch.pl?subject=$word&type=$type",$result->{'subject'});
 
     }
 
     if ($colour == 1){
       if ($illustrator) {
-	  print mktablerow(7,$secondary,$stuff[1],$stuff[0],$stuff[7],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+	  print mktablerow(7,$secondary,$result->{'title'},$result->{'author'},$result->{'illus'},$result->{'copyrightdate'},$itemcount,$location);
       } else {
-	  print mktablerow(6,$secondary,$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+	  print mktablerow(6,$secondary,$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
       }
       $colour=0;
     } else {
       if ($illustrator) {
-	  print mktablerow(7,'white',$stuff[1],$stuff[0],$stuff[7],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+	  print mktablerow(7,'white',$result->{'title'},$result->{'author'},$result->{'illus'},$result->{'copyrightdate'},$itemcount,$location);
       } else {
-	  print mktablerow(6,'white',$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+	  print mktablerow(6,'white',$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
       }
       $colour=1;
     }

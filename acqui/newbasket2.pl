@@ -29,9 +29,9 @@ my %search;
 #build hash of users input
 my $title=$input->param('search');
 $search{'title'}=$title;
-my $keyword=$input->param('search');
+my $keyword=$input->param('d');
 $search{'keyword'}=$keyword;
-my $author=$input->param('search');
+my $author=$input->param('author');
 $search{'author'}=$author;
 
 my @results;
@@ -45,17 +45,25 @@ if ($num eq ''){
 }
 my $id=$input->param('id');
 my $basket=$input->param('basket');
-
+my $sub=$input->param('sub');
+my $donation;
+if ($id == 72){
+  $donation='yes';
+}
+#print $sub;
 my ($count,@booksellers)=bookseller($id);
-																																   print startpage();       
 
 print startpage();
 print startmenu('acquisitions');
 print mkheadr(1,"Shopping Basket For: $booksellers[0]->{'name'}");
 
+if ($donation ne 'yes'){
+  print "<a href=newbiblio.pl?id=$id&basket=$basket&sub=$sub>";
+} else {
+  print "<a href=newdonation.pl?id=$id&basket=$basket&sub=$sub>";
+}
 print <<printend
-
-<a href=newbiblio.pl?id=$id&basket=$basket><img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Add New Biblio"></a>
+<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Add New Biblio"></a>
 <a href=basket.pl?basket=$basket><img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
 
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
@@ -71,15 +79,9 @@ print center();
 my $count;
 my @results;
 
-    if ($keyword ne ''){
-#      print "hey";
-      ($count,@results)=&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
-    } elsif ($search{'front'} ne '') {
-    ($count,@results)&FrontSearch(\$blah,'intra',\%search,$num,$offset);
-    }else {
+
       ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
-#            print "hey";
-    }
+
 
 print "You searched on ";
 while ( my ($key, $value) = each %search) {                                 
@@ -110,81 +112,88 @@ my $i=0;
 my $colour=1;
 while ($i < $count2){
 #    print $results[$i]."\n";
-    my @stuff=split('\t',$results[$i]);
-    $stuff[1]=~ s/\`/\\\'/g;
-    my $title2=$stuff[1];
-    my $author2=$stuff[0];
-    my $copyright=$stuff[3];
+#    my @stuff=split('\t',$results[$i]);
+    my $result=$results[$i];
+    $result->{'title'}=~ s/\`/\\\'/g;
+    my $title2=$result->{'title'};
+    my $author2=$result->{'author'};
+    my $copyright=$result->{'copyrightdate'};
     $author2=~ s/ /%20/g;
     $title2=~ s/ /%20/g;
     $title2=~ s/\#/\&\#x23;/g;
-      $stuff[1]=mklink("/cgi-bin/koha/acqui/newbiblio.pl?title=$title2&author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$stuff[2]",$stuff[1]);
-      my $word=$stuff[0];
-#      print $word;
+    $title2=~ s/\"/\&quot\;/g;
+    my $itemcount;
+    my $location='';
+    if ($donation eq 'yes'){
+      $result->{'title'}=mklink("/cgi-bin/koha/acqui/newdonation.pl?author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
+    } else {
+      $result->{'title'}=mklink("/cgi-bin/koha/acqui/newbiblio.pl?sub=$sub&author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
+    }  
+    my $word=$result->{'author'};
       $word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
       $word=~ s/  //g;
       $word=~ s/ /%20/g;
       $word=~ s/\,/\,%20/g;
       $word=~ s/\n//g;
       my $url="/cgi-bin/koha/search.pl?author=$word&type=$type";
-      $stuff[0]=mklink($url,$stuff[0]);
-      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=itemcount($env,$stuff[2],$type);
-      $stuff[4]=$count;
+      $result->{'author'}=mklink($url,$result->{'author'});
+      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=itemcount($env,$result->{'biblionumber'},$type);
+      $itemcount=$count;
       if ($nacount > 0){
-        $stuff[5]=$stuff[5]."On Loan";
+        $location=$location."On Loan";
 	if ($nacount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($nacount)";                                                                                            
+	  $location=$location." ($nacount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";
+	 $location.=" ";
       }
       if ($lcount > 0){
-         $stuff[5]=$stuff[5]."Levin";
+         $location=$location."Levin";
          if ($lcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($lcount)";                                                                                            
+	  $location=$location." ($lcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";
+	 $location.=" ";
       }
       if ($fcount > 0){
-        $stuff[5]=$stuff[5]."Foxton";
+        $location=$location."Foxton";
          if ($fcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($fcount)";                                                                                            
+	  $location=$location." ($fcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($scount > 0){
-        $stuff[5]=$stuff[5]."Shannon";
+        $location=$location."Shannon";
          if ($scount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($scount)";                                                                                            
+	  $location=$location." ($scount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($lostcount > 0){
-        $stuff[5]=$stuff[5]."Lost";
+        $location=$location."Lost";
          if ($lostcount >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($lostcount)";                                                                                            
+	  $location=$location." ($lostcount)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($mending > 0){
-        $stuff[5]=$stuff[5]."Mending";
+        $location=$location."Mending";
          if ($mending >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($mending)";                                                                                            
+	  $location=$location." ($mending)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       if ($transit > 0){
-        $stuff[5]=$stuff[5]."In Transiit";
+        $location=$location."In Transiit";
          if ($transit >1 ){                                                                                                         
-	  $stuff[5]=$stuff[5]." ($transit)";                                                                                            
+	  $location=$location." ($transit)";                                                                                            
          }                                                                                                                         
-	 $stuff[5].=" ";	
+	 $location.=" ";	
       }
       
     if ($colour == 1){
-      print mktablerow(6,$secondary,$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      print mktablerow(6,$secondary,$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
       $colour=0;
     } else{
-      print mktablerow(6,'white',$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      print mktablerow(6,'white',$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
       $colour=1;
     }
     $i++;
@@ -195,7 +204,7 @@ $offset=$num+$offset;
 
 print mktableft();
 if ($offset < $count){
-    my $search="num=$num&offset=$offset&type=$type&id=$id&basket=$basket&search=$keyword";
+    my $search="num=$num&offset=$offset&type=$type&id=$id&basket=$basket&search=$title&author=$author";
     my $stuff=mklink("/cgi-bin/koha/acqui/newbasket2.pl?$search",'Next');
     print $stuff;
 }
