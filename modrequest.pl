@@ -32,11 +32,11 @@ use C4::Reserves2;
 my $input = new CGI;
 #print $input->header;
 
-#print $input->dump;
+#print $input->Dump;
 
 my @rank=$input->param('rank-request');
 my @biblio=$input->param('biblio');
-my @borrower=$input->param('borrower');
+my @borrower=$input->param('borrowernumber');
 my @branch=$input->param('pickup');
 my $count=@rank;
 
@@ -44,6 +44,7 @@ my $count=@rank;
 # no attempt is made to check consistency.
 for (my $i=0;$i<$count;$i++){
     UpdateReserve($rank[$i],$biblio[$i],$borrower[$i],$branch[$i]); #from C4::Reserves2
+      print "updating reserve";
 }
 
 my $from=$input->param('from');
