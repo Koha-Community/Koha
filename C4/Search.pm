@@ -777,9 +777,10 @@ sub subsearch {
 sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = &C4Connect;
-    my $query = "SELECT * FROM items, biblio, biblioitems
-                  WHERE items.biblionumber = '$biblionumber'
+    my $query = "SELECT * FROM items, biblio, biblioitems, itemtypes
+                  WHERE items.biblionumber = ?
                     AND biblioitems.biblioitemnumber = items.biblioitemnumber
+                    AND biblioitems.itemtype = itemtypes.itemtype
                     AND biblio.biblionumber = items.biblionumber";
   if ($type ne 'intra'){
     $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
@@ -789,7 +790,7 @@ sub ItemInfo {
   $query .= " order by items.dateaccessioned desc";
     #warn $query;
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($biblionumber);
   my $i=0;
   my @results;
 #  print $query;
@@ -804,18 +805,21 @@ sub ItemInfo {
       my @temp=split('-',$idata->{'date_due'});
       $datedue = "$temp[2]/$temp[1]/$temp[0]";
     }
-    if ($data->{'itemlost'} eq '1' || $data->{'itemlost'} eq '2'){
-        $datedue='Itemlost';
+    if ($data->{'itemlost'} eq '2'){
+        $datedue='Very Overdue';
+    }
+    if ($data->{'itemlost'} eq '1'){
+        $datedue='Lost';
     }
     if ($data->{'wthdrawn'} eq '1'){
-      $datedue="Cancelled";
+	$datedue="Cancelled";
     }
     if ($datedue eq ''){
-       $datedue="Available";
-       my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
-       if ($restype){                                
-          $datedue=$restype;
-       }
+	$datedue="Available";
+	my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
+	if ($restype){
+	    $datedue=$restype;
+	}
     }
     $isth->finish;
 #get branch information.....
