@@ -8,7 +8,6 @@
 #
 #  This script is meant to be run nightly out of cron.
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -26,6 +25,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
@@ -42,6 +43,8 @@ my ($numOverdueItems,$data)=Getoverdues();
 print $numOverdueItems if $DEBUG;
 my $overdueItemsCounted=0 if $DEBUG;
 
+# FIXME - There's got to be a better way to figure out what day
+# today is.
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $mon++;
 $year=$year+1900;
