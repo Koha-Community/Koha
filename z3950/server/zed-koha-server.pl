@@ -1,0 +1,396 @@
+#!/usr/bin/perl -w
+#
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+#-----------------------------------
+# Script Name: npl-search.pl
+# Script Version: 0.01
+# Date:  2003/10/02
+# Author:  Joshua Ferraro (jmf@kados.org)
+# Description: A very basic Z3950 Server 
+# Usage: zed-koha-server.pl
+# Revision History:
+#    0.00  2003/08/14: 	original version; search works
+#    0.01  2003/10/02: 	first functional version; search and fetch working
+#                      	records returned in USMARC (ISO2709) format     
+#			Bath compliant to Level 1 in Functional Areas A, B 
+#-----------------------------------
+# Note: After installing SimpleServer (indexdata.dk/simpleserver) and 
+# changing the leader information in Koha's MARCgetbiblio subroutine in
+# Biblio.pm you can run this script as root:
+# ./zed-koha-server.pl
+# and the server will start running on port 9999 and will allow searching
+# and retrieval of records in MARC21
+# ----------------------------------
+use DBI;
+use Net::Z3950::OID;
+use Net::Z3950::SimpleServer;
+use MARC::Record;
+use C4::Context;
+use C4::Biblio;
+use strict;
+my $dbh = C4::Context->dbh;
+my @bib_list;		## Stores the list of biblionumbers in a query 
+			## I should eventually move this to different scope
+
+my $handler = Net::Z3950::SimpleServer->new(INIT => \&init_handler,
+					    SEARCH => \&search_handler,
+					    FETCH => \&fetch_handler);
+
+$handler->launch_server("npl-search.pl", @ARGV);
+
+sub init_handler {
+        my $args = shift;
+        my $session = {};
+
+        $args->{IMP_NAME} = "NPLKoha";
+        $args->{IMP_VER} = "0.01";
+        $args->{ERR_CODE} = 0;
+        $args->{HANDLE} = $session;
+        if (defined($args->{PASS}) && defined($args->{USER})) {
+            printf("Received USER/PASS=%s/%s\n", $args->{USER},$args->{PASS});
+        }
+
+}
+
+
+sub run_query {		## Run the query and store the biblionumbers: 
+	my ($sql_query, $query, $args) = @_;
+       	my $sth_get = $dbh->prepare("$sql_query");
+
+       	## Send the query to the database:
+       	$sth_get->execute($query);
+	my $count = 0;
+	while(my ($data)=$sth_get->fetchrow_array) {
+		
+		## Store Biblioitem info for later
+		$bib_list[$count] = "$data";
+  
+  		## Implement count:
+       		$count ++;
+       	}
+       	$args->{HITS} = $count;
+       	print "got search: ", $args->{RPN}->{query}->render(), "\n";
+}
+
+sub search_handler {		
+    	my($args) = @_;
+	## Place the user's query into a variable 
+	my $query = $args->{QUERY};
+	
+	## The actual Term
+	my $term = $args->{term};
+	$term =~ s| |\%|g;
+        $term .= "\%";         ## Add the wildcard to search term
+        $term .= "\%";         ## Add the wildcard to search term
+        $term = "\%" . "$term";
+
+	$_ = "$query";
+             	   
+                ## Strip out the junk and call the mysql query subroutine:
+	if (/1=7/) {         	## isbn
+		$query =~ s|\@attrset 1.2.840.10003.3.1 \@attr 1=7 ||g;
+		$query  =~ s|"||g;
+		$query =~ s| |%|g;
+	
+		## Bib-1 Structure Attributes:
+		$query =~ s|\@attr||g;
+
+		$query =~ s|4=1||g;	## Phrase
+                $query =~ s|4=2||g;	## Keyword
+                $query =~ s|4=3||g;	## Key 
+                $query =~ s|4=4||g;	## year 
+		$query =~ s|4=5||g;	## Date (normalized)
+		$query =~ s|4=6||g;	## word list
+		$query =~ s|4=100||g;	## date (un-normalized)
+		$query =~ s|4=101||g;	## name (normalized)	
+		$query =~ s|4=102||g;	## sme (un-normalized)
+        
+	        $query =~ s|\@and ||g;
+		$query =~ s|2=3||g;
+
+		$query =~ s|,|%|g;	## replace commas with wildcard
+		$query .= "\%";         ## Add the wildcard to search term
+	 	$query .= "\%";         ## Add the wildcard to search term
+		print "The term was:\n";
+		print "$term\n";        
+		print "The query was:\n";        
+		print "$query\n";
+		my $sql_query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
+		&run_query($sql_query, $query, $args);
+
+	} 
+        elsif (/1=1003/) {	## author
+        	$query =~ s|\@attrset||g;
+		$query =~ s|1.2.840.10003.3.1||g;
+		$query =~ s|1=1003||g;
+ 
+               ## Bib-1 Structure Attributes:
+                $query =~ s|\@attr ||g;
+
+                $query =~ s|4=1||g;    ## Phrase
+                $query =~ s|4=2||g;    ## Keyword
+                $query =~ s|4=3||g;    ## Key
+                $query =~ s|4=4||g;    ## year
+                $query =~ s|4=5||g;    ## Date (normalized)
+                $query =~ s|4=6||g;    ## word list
+                $query =~ s|4=100||g;  ## date (un-normalized)
+                $query =~ s|4=101||g;  ## name (normalized)
+                $query =~ s|4=102||g;  ## sme (un-normalized)
+
+		$query =~ s|2=3||g;
+		$query =~ s|"||g;
+        	$query =~ s| |%|g;
+		$query .= "\%";		## Add the wildcard to search term
+		print "$query\n";
+		my $sql_query = "SELECT biblionumber FROM biblio WHERE author LIKE ?";
+                &run_query($sql_query, $query, $args);
+## used for debugging--works!
+##              print "@bib_list\n";
+        } 
+	elsif (/1=4/) {      	## title
+        	$query =~ s|\@attrset||g;
+		$query =~ s|1.2.840.10003.3.1||g;
+		$query =~ s|1=4||g;
+        	$query  =~ s|"||g;
+ 		$query  =~ s| |%|g;
+		
+		## Bib-1 Structure Attributes:
+                $query =~ s|\@attr||g;
+
+                $query =~ s|4=1||g;    ## Phrase
+                $query =~ s|4=2||g;    ## Keyword
+                $query =~ s|4=3||g;    ## Key
+                $query =~ s|4=4||g;    ## year
+                $query =~ s|4=5||g;    ## Date (normalized)
+                $query =~ s|4=6||g;    ## word list
+                $query =~ s|4=100||g;  ## date (un-normalized)
+                $query =~ s|4=101||g;  ## name (normalized)
+                $query =~ s|4=102||g;  ## sme (un-normalized)
+
+		$query =~ s|2=3||g;
+		#$query =~ s|\@and||g;
+		$query .= "\%";         ## Add the wildcard to search term
+		print "The term was:\n";
+                print "$term\n";
+                print "The query was:\n";
+                print "$query\n";
+		my $sql_query = "SELECT biblionumber FROM biblio WHERE title LIKE ?";
+        	&run_query($sql_query, $query, $args);
+	}
+	elsif (/1=21/) {         ## subject 
+                $query =~ s|\@attrset 1.2.840.10003.3.1 \@attr 1=21 ||g;
+                $query  =~ s|"||g;
+                $query  =~ s| |%|g;
+              
+		## Bib-1 Structure Attributes:
+                $query =~ s|\@attr ||g;
+
+                $query =~ s|4=1||g;    ## Phrase
+                $query =~ s|4=2||g;    ## Keyword
+                $query =~ s|4=3||g;    ## Key
+                $query =~ s|4=4||g;    ## year
+                $query =~ s|4=5||g;    ## Date (normalized)
+                $query =~ s|4=6||g;    ## word list
+                $query =~ s|4=100||g;  ## date (un-normalized)
+                $query =~ s|4=101||g;  ## name (normalized)
+                $query =~ s|4=102||g;  ## sme (un-normalized)
+
+		$query .= "\%";         ## Add the wildcard to search term
+                print "$query\n";
+		my $sql_query = "SELECT biblionumber FROM bibliosubject WHERE subject LIKE ?";
+                &run_query($sql_query, $query, $args);
+        }
+	elsif (/1=1016/) {       ## any 
+                $query =~ s|\@attrset 1.2.840.10003.3.1 \@attr 1=1016 ||g;
+                $query  =~ s|"||g;
+                $query  =~ s| |%|g;
+                
+		## Bib-1 Structure Attributes:
+                $query =~ s|\@attr||g;
+
+                $query =~ s|4=1||g;    ## Phrase
+                $query =~ s|4=2||g;    ## Keyword
+                $query =~ s|4=3||g;    ## Key
+                $query =~ s|4=4||g;    ## year
+                $query =~ s|4=5||g;    ## Date (normalized)
+                $query =~ s|4=6||g;    ## word list
+                $query =~ s|4=100||g;  ## date (un-normalized)
+                $query =~ s|4=101||g;  ## name (normalized)
+                $query =~ s|4=102||g;  ## sme (un-normalized)
+               
+		$query .= "\%";         ## Add the wildcard to search term
+                print "$query\n";
+		my $sql_query = "SELECT bibid FROM marc_word WHERE word LIKE?";
+                &run_query($sql_query, $query, $args);
+        }
+}
+sub fetch_handler {
+        my ($args) = @_;
+        # warn "in fetch_handler";      ## troubleshooting
+        my $offset = $args->{OFFSET};
+        $offset -= 1;                   ## because $args->{OFFSET} 1 = record #1
+        chomp (my $bibid = $bib_list[$offset]); ## Not sure about this
+                ## print "the bibid is:$bibid\n";
+                my $MARCRecord = &MARCgetbiblio($dbh,$bibid);
+                my $recordstring=$MARCRecord->as_usmarc();
+                ## print "here is my record: $recordstring\n";
+
+		## Troubleshooting:
+		## use Data::Dumper;
+		## Dumper $recordstring;
+		## open (MARC, ">/root/marc.dump");
+                ## print MARC "$recordstring";
+		## close MARC;
+		
+		## Convert from 852/4 to 952:
+		## 942a --> 852a  Organization code
+		## 952b --> 852b  Home branch
+		## 942k --> 852h  Classification
+		## 952p --> 852p  Barcode
+
+my $record = MARC::Record->new_from_usmarc($recordstring);
+    my @fields942 = $record->field('942');
+    my $field842 = $fields942[0];
+	my ($field952, $sub852a, $sub852k, $sub852b, $sub852p, $sub852h);
+       
+
+## while ( my $record = $batch->next() ) {
+  ##  my @fields942 = $record->field('942');
+  ##  my $field842 = $fields942[0];
+  ##     #grab first 942 (only need one, they are same for all items)
+  ##  my $sub852a = ($field842->subfield('a') || '');
+  ##  my $sub852h = ($field842->subfield('k') || '');
+
+  ##  my @fields952 = $record->field('952');
+  ##  foreach my $field952 (@fields952) {   #get all 952s
+  ##      my $sub852b = ($field952->subfield('b') || '');
+  ##      my $sub852p = ($field952->subfield('p') || '');
+
+
+#grab first 942 (only need one, they are same for all items)
+	unless (! $field952){
+		$sub852a = ($field952->subfield('a') || '') ;
+}
+	unless (! $field952){ #->subfield('k')) { 
+		$sub852k = ($field952->subfield('k') || '') ;
+
+}
+
+    my @fields952 = $record->field('952');
+    foreach my $field952 (@fields952) {   #get all 952s
+        
+        unless (! $field952) { #->subfield('b')) { 
+		$sub852b = ($field952->subfield('b') || '') ;
+} 
+ unless (! $field952) { #->subfield('p')) { 
+		$sub852p = ($field952->subfield('p') || '') ;
+}
+     #make it one big happy family
+        my $new852 = MARC::Field->new(
+                                      852,'','',
+                                      'a' => $sub852a,
+				      'b' => $sub852b,
+                                      'h' => $sub852h,
+                                      'p' => $sub852p,
+                                      );
+        $record->append_fields($new852);
+
+}
+
+my $recordstringdone = $record->as_usmarc();
+
+		## Set the REP_FORM
+		$args->{REP_FORM} = &Net::Z3950::OID::usmarc;
+		
+		## Return the record string to the client 
+	        $args->{RECORD} = $recordstringdone;
+
+}
+
+# That's all folks!
+# 
+# OLD OLD OLD OLD
+
+sub fetch_handler_old {
+	my ($args) = @_;	
+	# warn "in fetch_handler";	## troubleshooting
+	my $offset = $args->{OFFSET};
+	$offset -= 1;			## because $args->{OFFSET} 1 = record #1
+	chomp (my $bibid = $bib_list[$offset]);	## Not sure about this
+        my $sql_query = "SELECT tag, subfieldcode, subfieldvalue FROM marc_subfield_table where bibid=?";
+	my $sth_get = $dbh->prepare("$sql_query");
+        $sth_get->execute($bibid);
+	
+	## create a MARC::Record object 
+        my $rec = MARC::Record->new();
+
+	## create the fields
+        while (my @data=$sth_get->fetchrow_array) {
+
+        	my $tag = $data[0];
+       		my $subfieldcode = $data[1];
+        	my $subfieldvalue = $data[2];
+
+        	my $field = MARC::Field->new(
+                	                          $tag,'','',
+                        	                  $subfieldcode => $subfieldvalue,
+                                	    );
+
+ 	       	$rec->append_fields($field);
+		
+		## build the marc string and put into $record         
+        	my $tmp_record = $rec->as_usmarc();
+		my $reclen = length $tmp_record;
+		my $baseaddr = "$reclen + dirlen";
+#		set_leader_lengths($reclen,$baseaddr);
+		my $record = $rec->as_usmarc(); 	
+		$args->{RECORD} = $record;
+	}
+
+}
+
+	
+## This stuff doesn't work yet...I should include boolean searching someday
+## though
+package Net::Z3950::RPN::Term;
+sub render {
+    my $self = shift;
+    return '"' . $self->{term} . '"';
+}
+
+package Net::Z3950::RPN::And;
+sub render {
+    my $self = shift;
+    return '(' . $self->[0]->render() . ' AND ' .
+                 $self->[1]->render() . ')';
+}
+
+package Net::Z3950::RPN::Or;
+sub render {
+    my $self = shift;
+    return '(' . $self->[0]->render() . ' OR ' .
+                 $self->[1]->render() . ')';
+}
+
+package Net::Z3950::RPN::AndNot;
+sub render {
+    my $self = shift;
+    return '(' . $self->[0]->render() . ' ANDNOT ' .
+                 $self->[1]->render() . ')';
+}
