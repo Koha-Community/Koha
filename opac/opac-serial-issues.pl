@@ -32,6 +32,7 @@ my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
 # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
 
 $template->param(
+	biblionumber => $query->param('biblionumber'),
 	subscription_LOOP => $subscriptions
 # 	startdate => format_date($subscription->{startdate}),
 # 	periodicity => $subscription->{periodicity},
