@@ -27,16 +27,27 @@ Are any of our records incorrect? Have you moved recently, got a new phone numbe
 [<a href="/cgi-bin/koha/opac-logout.pl">Logout</a>]<p>
 
 
-</TMPL_LOOP>
 
-<P>We are still developing these services, but would love to know what you'd like to see here, so feel free to send us your feedback - koha@library.org.nz</P>
+<TMPL_IF NAME="amountoverfive">
 
-
-<!--
 <table  cellpadding=10 cellspacing=0 border=1 >
 <tr   bgcolor="#fecc99" >
-<td><font face="arial,helvetica"><B>You have Outstanding charges and fines of <A HREF="error.html" onclick="fines(); return false">$4.00</B></font><P></td></tr></table>
--->
+<td><font face="arial,helvetica" color="red" size=+2><B>You have Outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font><P></td></tr></table>
+
+</TMPL_IF>
+
+</TMPL_LOOP>
+
+<TMPL_IF NAME="waiting_count">
+   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
+   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
+   You have reserved items waiting:
+   </B></font><P></td></tr>
+      <TMPL_LOOP NAME="WAITING">
+      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>pick up at: <b><TMPL_VAR NAME="branch"></b></td></tr>
+      </TMPL_LOOP>
+   </table>
+</TMPL_IF>
 
 <p>
 
@@ -44,7 +55,7 @@ Are any of our records incorrect? Have you moved recently, got a new phone numbe
 
 You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
 
-<TABLE  CELLPADDING=10  CELLSPACING=0 border=0 >
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 
 <TR VALIGN=TOP  bgcolor="#99cccc">
 <TD><B>Title</B></TD>
@@ -71,6 +82,33 @@ You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
 
 <TMPL_ELSE>
 You have no items on issue.
+</TMPL_IF>
+
+<p>
+
+
+<TMPL_IF NAME="reserves_count">
+
+You have <TMPL_VAR NAME="reserves_count"> items currently reserved.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc">
+<TD><B>Title</B></TD>
+<TD><B>Author</B></TD>
+<TD><B>Reserve date</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="RESERVES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="btitle"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="reservedate"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
 </TMPL_IF>
 
 
