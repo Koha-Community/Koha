@@ -33,6 +33,7 @@ sub find_translation ($) {
     my($s) = @_;
     my $key = TmplTokenizer::quote_po($s) if $s =~ /\S/;
     return defined $href->{$key}
+		&& !$href->{$key}->fuzzy
 		&& length Locale::PO->dequote($href->{$key}->msgstr)?
 	   Locale::PO->dequote($href->{$key}->msgstr): $s;
 }
