@@ -1,7 +1,12 @@
 #!/usr/bin/perl -w # please develop with -w
 
 #use diagnostics;
+
+use Install;
 use strict; # please develop with the strict pragma
+
+
+my $language='en';
 
 if ($<) {
     print "\n\nYou must run koha.upgrade as root.\n\n";
@@ -17,35 +22,7 @@ chomp $kohaversion;
 
 
 if ($kohaversion =~ /RC/) {
-    print qq|
-=====================
-= RELEASE CANDIDATE =
-=====================
-
-WARNING WARNING WARNING WARNING WARNING
-
-You are about to install Koha version $kohaversion.  This version of Koha is a
-release candidate.  It is not intended to be installed on production systems.
-It is being released so that users can test it before we release a final
-version.
-
-|;
-    print "Are you sure you want to install Koha $kohaversion? (Y/[N]): ";
-
-    my $answer = <STDIN>;
-    chomp $answer;
-
-    if ($answer eq "Y" || $answer eq "y") {
-	print "Great! continuing setup... \n";
-    } else {
-	print qq|
-
-Watch for announcements of Koha releases on the Koha mailing list or the Koha
-web site (http://www.koha.org/).
-
-|;
-	exit;
-    };
+    releasecandidatewarning($language, $kohaversion);
 }
 
 if (-e "/etc/koha.conf") {
@@ -54,47 +31,23 @@ if (-e "/etc/koha.conf") {
     $installedversion=~m/kohaversion=(.*)/;
     $installedversion=$1;
     if ($installedversion) {
-	$installedversion="You currently have Koha $installedversion on your system.\n";
+	$installedversion=getmessage('KohaVersionInstalled', $language, [$installedversion]);
     } else {
-	$installedversion="I am not able to determine what version of Koha is installed now.\n";
+	$installedversion=getmessage('KohaUnknownVersionInstalled', $language);
     }
 
-    print qq|
-			==========================
-			= Koha already installed =
-			==========================
-
-It looks like Koha is already installed on your system (/etc/koha.conf exists
-already).  If you would like to upgrade your system to $kohaversion, please use
-the koha.upgrade script in this directory.
-
-$installedversion
-
-|;
+    my $message=getmessage('KohaAlreadyInstalled', $language, [$kohaversion, $installedversion]);
+    showmessage($message, 'none');
     exit;
 }
 
-system('clear');
-print qq|
-**********************************
-* Welcome to the Koha Installer  *
-**********************************
-Welcome to the Koha install script!  This script will prompt you for some
-basic information about your desired setup, then install Koha according to
-your specifications.  To accept the default value for any question, simply hit
-Enter at the prompt.
+my $continuingmsg=getmessage('continuing', $language);
 
-Please be sure to read the documentation, or visit the Koha website at 
-http://www.koha.org for more information.
-
-Are you ready to begin the installation? (Y/[N]):
-|;
-
-my $answer = <STDIN>;
-chomp $answer;
+my $message=getmessage('WelcomeToKohaInstaller', $language);
+my $answer=showmessage($message, 'yn');
 
 if ($answer eq "Y" || $answer eq "y") {
-	print "Great! continuing setup... \n";
+	print $continuingmsg;
     } else {
     print qq|
 This installer currently does not support a completely automated 
@@ -106,206 +59,45 @@ at http://www.koha.org for more information.
     exit;
 };
 
-print "\n";
-
-#
-# Test for Perl and Modules
-#
-print qq|
-
-PERL & MODULES
-==============
-
-|;
-
-print "\nChecking perl modules ...\n";
-    unless (eval "require 5.004") {
-    die "Sorry, you need at least Perl 5.004\n";
-}
-
-my @missing = ();
-unless (eval {require DBI})               { push @missing,"DBI" };
-unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
-unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
-unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-unless (eval {require Net::Z3950})        { 
-    print qq|
-
-The Net::Z3950 module is missing.  This module is necessary if you want to use
-Koha's Z39.50 client to download bibliographic records from other libraries.
-To install this module, you will need the yaz client installed from
-http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-command:
-
-perl -MCPAN -e 'install Net::Z3950'
-
-Press the <ENTER> key to continue:
-|;
-    <STDIN>;
-}
-
-#
-# Print out a list of any missing modules
-#
-if (@missing > 0) {
-    print "\n\n";
-    print "You are missing some Perl modules which are required by Koha.\n";
-    print "Once these modules have been installed, rerun this installer.\n";
-    print "They can be installed by running (as root) the following:\n";
-    foreach my $module (@missing) {
-	print "   perl -MCPAN -e 'install \"$module\"'\n";
-	exit(1);
-    }} else{
-    print "All modules appear to be installed, continuing...\n";
-};
-
-
-print "\n";
 my $input;
 my $domainname = `hostname -d`;
 chomp $domainname;
-my $opacdir = '/usr/local/koha/opac';
-my $kohadir = '/usr/local/koha/intranet';
-my $getdirinfo=1;
-while ($getdirinfo) {
-    # Loop until opac directory and koha directory are different
-    print qq|
-
-OPAC DIRECTORY
-==============
-Please supply the directory you want Koha to store its OPAC files in.  Leave off
-the trailing slash.  This directory will be auto-created for you if it doesn't
-exist.
-
-Usually $opacdir
-|;
-
-    print "Enter directory [$opacdir]: ";
-    chomp($input = <STDIN>);
-
-    if ($input) {
-      $opacdir = $input;
-    }
 
 
-    print qq|
+# Check for missing Perl Modules
 
-INTRANET/LIBRARIANS DIRECTORY
-=============================
-Please supply the directory you want Koha to store its Intranet/Librarians files 
-in.  Leave off the trailing slash.  This directory will be auto-created for you if 
-it doesn't exist.
+checkperlmodules($language);
 
-|;
 
-    print "Enter directory [$kohadir]: ";
-    chomp($input = <STDIN>);
+# Ask for installation directories
 
-    if ($input) {
-      $kohadir = $input;
-    }
-    if ($kohadir eq $opacdir) {
-	print qq|
+my ($opacdir, $intranetdir) = getinstallationdirectories($language);
 
-You must specify different directories for the OPAC and INTRANET files!
 
-|;
-    } else {
-	$getdirinfo=0;
-    }
-}
 
-#
-#KOHA conf
-#
+
 my $etcdir = '/etc';
+
+
+
 my $dbname = 'Koha';
 my $hostname = 'localhost';
 my $user = 'kohaadmin';
 my $pass = '';
 
+
+($dbname, $hostname,$user, $pass) = getdatabaseinfo($language,$dbname,$hostname,$user,$pass);
+
 print qq|
-
-KOHA.CONF
-=========
-Koha uses a small configuration file that is placed in your /etc/ files
-directory. The configuration file, will be created in this directory.
-
+DBNAME:		$dbname
+HOSTNAME:	$hostname
+USER:		$user
+PASS:		$pass
 |;
-
-#Get the path to the koha.conf directory
-#print "Enter the path to your configuration directory [$etcdir]: ";
-#chomp($input = <STDIN>);
-#
-#if ($input) {
-#  $etcdir = $input;
-#}
-
-
-#Get the database name
-print qq|
-
-Please provide the name of the mysql database for your koha installation.
-This is normally "$dbname".
-
-|;
-
-print "Enter database name [$dbname]: ";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $dbname = $input;
-}
-
-
-#Get the hostname for the database
-print qq|
-
-Please provide the hostname for mysql.  Unless the database is located on another 
-machine this will be "localhost".
-|;
-
-print "Enter hostname [$hostname]: ";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $hostname = $input;
-}
-
-#Get the username for the database
-print qq|
-
-Please provide the name of the user, who will have full administrative rights
-to the $dbname database, when authenticating from $hostname.
-
-If no user is entered it will default to $user.
-|;
-
-print "Enter username [$user]:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $user = $input;
-}
-
-#Get the password for the database user
-print qq|
-
-Please provide a good password for the user $user.
-|;
-
-print "Enter password:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $pass = $input;
-}
-
-print "\n";
+exit;
 
 
 
-print "Successfully created the Koha configuration file.\n";
 
 my $httpduser;
 my $realhttpdconf;
@@ -537,19 +329,19 @@ Listen $kohaport
    ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
-   SetEnv PERL5LIB "$kohadir/modules"
+   SetEnv PERL5LIB "$intranetdir/modules"
    $includesdirectives
 </VirtualHost>
 
 # KOHA's INTRANET Configuration
 <VirtualHost $servername\:$kohaport>
    ServerAdmin $svr_admin
-   DocumentRoot $kohadir/htdocs
+   DocumentRoot $intranetdir/htdocs
    ServerName $servername
-   ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin/"
+   ScriptAlias /cgi-bin/koha/ "$intranetdir/cgi-bin/"
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
-   SetEnv PERL5LIB "$kohadir/modules"
+   SetEnv PERL5LIB "$intranetdir/modules"
    $includesdirectives
 </VirtualHost>
 
@@ -605,7 +397,7 @@ unless ($input=~/^n/i) {
     close AUTH;
     print SITE <<EOP
 
-<Directory $kohadir>
+<Directory $intranetdir>
     AuthUserFile /etc/kohaintranet.pass
     AuthType Basic
     AuthName "Koha Intranet (for librarians only)"
@@ -657,11 +449,11 @@ CREATING REQUIRED DIRECTORIES
 |;
 
 
-unless ( -d $kohadir ) {
-   print "Creating $kohadir...\n";
-   my $result=mkdir ($kohadir, oct(770));
+unless ( -d $intranetdir ) {
+   print "Creating $intranetdir...\n";
+   my $result=mkdir ($intranetdir, oct(770));
    if ($result==0) {
-       my @dirs = split(m#/#, $kohadir);
+       my @dirs = split(m#/#, $intranetdir);
 	my $checkdir='';
 	foreach (@dirs) {
 	    $checkdir.="$_/";
@@ -670,24 +462,24 @@ unless ( -d $kohadir ) {
 	    }
 	}
    }
-   chown (oct(0), (getgrnam($httpduser))[2], "$kohadir");
-   chmod (oct(770), "$kohadir");
+   chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir");
+   chmod (oct(770), "$intranetdir");
 }
-unless ( -d "$kohadir/htdocs" ) {
-   print "Creating $kohadir/htdocs...\n";
-   mkdir ("$kohadir/htdocs", oct(750));
+unless ( -d "$intranetdir/htdocs" ) {
+   print "Creating $intranetdir/htdocs...\n";
+   mkdir ("$intranetdir/htdocs", oct(750));
 }
-unless ( -d "$kohadir/cgi-bin" ) {
-   print "Creating $kohadir/cgi-bin...\n";
-   mkdir ("$kohadir/cgi-bin", oct(750));
+unless ( -d "$intranetdir/cgi-bin" ) {
+   print "Creating $intranetdir/cgi-bin...\n";
+   mkdir ("$intranetdir/cgi-bin", oct(750));
 }
-unless ( -d "$kohadir/modules" ) {
-   print "Creating $kohadir/modules...\n";
-   mkdir ("$kohadir/modules", oct(750));
+unless ( -d "$intranetdir/modules" ) {
+   print "Creating $intranetdir/modules...\n";
+   mkdir ("$intranetdir/modules", oct(750));
 }
-unless ( -d "$kohadir/scripts" ) {
-   print "Creating $kohadir/scripts...\n";
-   mkdir ("$kohadir/scripts", oct(750));
+unless ( -d "$intranetdir/scripts" ) {
+   print "Creating $intranetdir/scripts...\n";
+   mkdir ("$intranetdir/scripts", oct(750));
 }
 unless ( -d $opacdir ) {
    print "Creating $opacdir...\n";
@@ -718,23 +510,31 @@ unless ( -d "$opacdir/cgi-bin" ) {
 
 print "\n\nINSTALLING KOHA...\n";
 print "\n\n==================\n";
-print "Copying internet-html files to $kohadir/htdocs...\n";
-system("cp -R intranet-html/* $kohadir/htdocs/");
-print "Copying intranet-cgi files to $kohadir/cgi-bin...\n";
-system("cp -R intranet-cgi/* $kohadir/cgi-bin/");
-print "Copying script files to $kohadir/scripts...\n";
-system("cp -R scripts/* $kohadir/scripts/");
-print "Copying module files to $kohadir/modules...\n";
-system("cp -R modules/* $kohadir/modules/");
+print "Copying internet-html files to $intranetdir/htdocs...\n";
+system("cp -R intranet-html/* $intranetdir/htdocs/");
+print "Copying intranet-cgi files to $intranetdir/cgi-bin...\n";
+system("cp -R intranet-cgi/* $intranetdir/cgi-bin/");
+print "Copying script files to $intranetdir/scripts...\n";
+system("cp -R scripts/* $intranetdir/scripts/");
+print "Copying module files to $intranetdir/modules...\n";
+system("cp -R modules/* $intranetdir/modules/");
 print "Copying opac-html files to $opacdir/htdocs...\n";
 system("cp -R opac-html/* $opacdir/htdocs/");
 print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
 system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
 system("chown -R root.$httpduser $opacdir");
-system("chown -R root.$httpduser $kohadir");
+system("chown -R root.$httpduser $intranetdir");
 
 
+print qq|
+
+KOHA.CONF
+=========
+Koha uses a small configuration file that is placed in your /etc/ files
+directory. The configuration file, will be created in this directory.
+
+|;
 
 #Create the configuration file
 open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
@@ -744,8 +544,8 @@ database=$dbname
 hostname=$hostname
 user=$user
 pass=$pass
-includes=$kohadir/htdocs/includes
-intranetdir=$kohadir
+includes=$intranetdir/htdocs/includes
+intranetdir=$intranetdir
 opacdir=$opacdir
 kohalogdir=$kohalogdir
 kohaversion=$kohaversion
@@ -761,6 +561,7 @@ chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown ko
 chmod 0440, "$etcdir/koha.conf";
 
 
+print "Successfully created the Koha configuration file.\n";
 
 print qq|
 
@@ -819,7 +620,7 @@ if ($result) {
     system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
     system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
-    system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
+    system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 
 
     print qq|
@@ -911,19 +712,19 @@ chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdi
 # LAUNCH SCRIPT
 print "Modifying Z39.50 daemon launch script...\n";
 my $newfile='';
-open (L, "$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh");
+open (L, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh");
 while (<L>) {
     if (/^RunAsUser=/) {
 	$newfile.="RunAsUser=$httpduser\n";
     } elsif (/^KohaZ3950Dir=/) {
-	$newfile.="KohaZ3950Dir=$kohadir/scripts/z3950daemon\n";
+	$newfile.="KohaZ3950Dir=$intranetdir/scripts/z3950daemon\n";
     } else {
 	$newfile.=$_;
     }
 }
 close L;
-system("mv $kohadir/scripts/z3950daemon/z3950-daemon-launch.sh $kohadir/scripts/z3950daemon/z3950-daemon-launch.sh.orig");
-open L, ">$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh";
+system("mv $intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh $intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh.orig");
+open L, ">$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
 print L $newfile;
 close L;
 
@@ -931,12 +732,12 @@ close L;
 # SHELL SCRIPT
 print "Modifying Z39.50 daemon wrapper script...\n";
 $newfile='';
-open (S, "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh");
+open (S, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh");
 while (<S>) {
     if (/^KohaModuleDir=/) {
-	$newfile.="KohaModuleDir=$kohadir/modules\n";
+	$newfile.="KohaModuleDir=$intranetdir/modules\n";
     } elsif (/^KohaZ3950Dir=/) {
-	$newfile.="KohaZ3950Dir=$kohadir/scripts/z3950daemon\n";
+	$newfile.="KohaZ3950Dir=$intranetdir/scripts/z3950daemon\n";
     } elsif (/^LogDir=/) {
 	$newfile.="LogDir=$kohalogdir\n";
     } else {
@@ -945,15 +746,15 @@ while (<S>) {
 }
 close S;
 
-system("mv $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh.orig");
-open S, ">$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh";
+system("mv $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh.orig");
+open S, ">$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
 print S $newfile;
 close S;
-chmod 0750, "$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh";
-chmod 0750, "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh";
-chmod 0750, "$kohadir/scripts/z3950daemon/processz3950queue";
-chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/processz3950queue") or warn "can't chown $kohadir/scripts/z3950daemon/processz3950queue: $!";
+chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
+chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 print qq|
 
