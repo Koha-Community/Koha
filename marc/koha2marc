@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+# TODO
+# add subtitle entry to marcimport (for stewelm)
+# swap illustrator and additional authors for marcimport.pl
+# fix replacement price entry (always coming up as zero)
+# Check serial title when determining if biblio already exists
+
+
+my $lc1='#dddddd';
+my $lc2='#ddaaaa';
+
+
+system("mysql Koha -ptestpass < deletemarc");
+
+use C4::Database;
+use C4::Catalogue;
+use CGI;
+use DBI;
+#use strict;
+use C4::Acquisitions;
+use C4::Output;
+my $dbh=C4Connect;
+my $userid=$ENV{'REMOTE_USER'};
+
+
+my $dbh=C4Connect;
+
+
+my $sth=$dbh->prepare("select * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber");
+$sth->execute;
+my $env;
+
+while (my $biblioitem=$sth->fetchrow_hashref) {
+    print "Processing $biblioitem->{'title'}\n";
+    my $Record_ID;
+    ($env, $Record_ID) = newBiblioItem($env,$biblioitem);
+    my $sti=$dbh->prepare("select * from items,biblioitems where items.biblioitemnumber=biblioitems.biblioitemnumber and biblioitems.biblioitemnumber=$biblioitem->{'biblioitemnumber'}");
+    $sti->execute;
+    while (my $item=$sti->fetchrow_hashref) {
+	newItem($env, $Record_ID, $item);
+    }
+}
