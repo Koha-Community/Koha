@@ -6,11 +6,15 @@ use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Print;
 use DBI;
+use C4::Auth;
 
 
 # this is a reorganisation of circulation.pl 
 # dividing it up into three scripts......
 # this will be the first one that chooses branch and printer settings....
+my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
+
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -20,7 +24,6 @@ my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 
-my $query=new CGI;
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');
@@ -107,11 +110,12 @@ EOF
 
 
 # set header with cookie....
-print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
 
 
 print startpage();
 print startmenu('circulation');
+print "<p align=left>Logged in as: $loggedinuser [<a href=logout.pl>Log Out</a>]</p>\n";
 
 if ($branch and $printer) {
     print << "EOF";

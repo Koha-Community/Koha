@@ -18,8 +18,8 @@ $VERSION = 0.02;
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
-&findguarantor &branchname); 
-
+&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2 &branchname);
+# make all your functions, whether exported or not;
 sub findguarantees{         
   my ($bornum)=@_;         
   my $dbh=C4Connect;           
@@ -79,6 +79,73 @@ sub NewBorrowerNumber {
   $dbh->disconnect;
   return($data->{'max(borrowernumber)'}); 
 }    
+
+sub catalogsearch {
+  my ($env,$type,$search,$num,$offset)=@_;
+  my $dbh = C4Connect();
+#  foreach my $key (%$search){
+#    $search->{$key}=$dbh->quote($search->{$key});
+#  }
+  my ($count,@results);
+#  print STDERR "Doing a search \n";
+  if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
+        print STDERR "Doing a precise search\n";
+    ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+
+  } else {
+    if ($search->{'subject'} ne ''){
+      ($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
+    } else {
+      if ($search->{'keyword'} ne ''){
+         ($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
+       } else {
+	($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
+
+      }
+    }
+  }
+  if ($env->{itemcount}) {
+    foreach my $data (@results){
+      my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+      my $subject2=$data->{'subject'};
+      $subject2=~ s/ /%20/g;
+      $data->{'itemcount'}=$counts->{'total'};
+      my $totalitemcounts=0;
+      foreach my $key (keys %$counts){
+        if ($key ne 'total'){
+          #$data->{'location'}.="$key $counts->{$key} ";
+	  $totalitemcounts+=$counts->{$key};
+          $data->{'locationhash'}->{$key}=$counts->{$key};
+         }
+      }
+      my $locationtext='';
+      my $notavailabletext='';
+      foreach (sort keys %{$data->{'locationhash'}}) {
+	  if ($_ eq 'notavailable') {
+	      $notavailabletext="Not available";
+	      my $c=$data->{'locationhash'}->{$_};
+	      if ($totalitemcounts>1) {
+		  $notavailabletext.=" ($c)";
+	      }
+	  } else {
+	      $locationtext.="$_";
+	      my $c=$data->{'locationhash'}->{$_};
+	      if ($totalitemcounts>1) {
+		  $locationtext.=" ($c), ";
+	      }
+	  }
+      }
+      if ($notavailabletext) {
+	  $locationtext.=$notavailabletext;
+      } else {
+	  $locationtext=~s/, $//;
+      }
+      $data->{'location'}=$locationtext;
+      $data->{'subject2'}=$subject2;
+    }
+  }
+  return ($count,@results);
+}
 
   
 sub KeywordSearch {
@@ -206,7 +273,10 @@ sub KeywordSearch {
 	  }
 #	  print $i4;
 	  if ($i4 <=$end && $i4 > $offset){
-	    $res2[$i3]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";	
+	    $data2->{'dewey'}=$dewey;
+	    $res2[$i3]=$data2;
+	    
+#	    $res2[$i3]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";	
             $i3++;
             $i4++;
 #	    print "in here $i3<br>";
@@ -246,8 +316,10 @@ sub KeywordSearch {
 	$dewey=~s/\.*0*$//;     
         ($dewey == 0) && ($dewey='');               
         ($dewey) && ($dewey.=" $subclass") ;                      
-        $sth->finish;                                                        
-	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
+        $sth->finish;                                             
+	$data2->{'dewey'}=$dewey;
+	$res2[$i]=$data2;
+#	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
         $i++;
     }
     $i2++;
@@ -467,7 +539,11 @@ sub CatSearch  {
 	   #$query=$query. " and (title like '%$search->{'title'}%' 
 	   #or seriestitle like '%$search->{'title'}%')";
 	 }
-	 	 
+	 if ($search->{'abstract'} ne ''){
+	    $query.= " and (abstract like '%$search->{'abstract'}%')";
+	 }
+	 
+
 	 $query.=" group by biblio.biblionumber";
       } else {
           if ($search->{'title'} ne '') {
@@ -510,6 +586,9 @@ sub CatSearch  {
 	    }
 	    $query=$query."))";
 	   }
+	   if ($search->{'abstract'} ne ''){
+	    $query.= " and (abstract like '%$search->{'abstract'}%')";
+	   }
 	  } elsif ($search->{'class'} ne ''){
 	     $query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
 	     my @temp=split(/\|/,$search->{'class'});
@@ -530,10 +609,15 @@ sub CatSearch  {
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.dewey like '$search->{'dewey'}%'";
 	  } elsif ($search->{'illustrator'} ne '') {
-	     $query="select * from biblioitems,biblio 
+      	     $query="select * from biblioitems,biblio 
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.illus like '%".$search->{'illustrator'}."%'";
-	}
+	  } elsif ($search->{'publisher'} ne ''){
+	    $query.= "Select * from biblio,biblioitems where biblio.biblionumber
+	    =biblioitems.biblionumber and (publishercode like '%$search->{'publisher'}%')";
+	  } elsif ($search->{'abstract'} ne ''){
+	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
+	  }
           $query .=" group by biblio.biblionumber";	 
       }
   } 
@@ -559,8 +643,9 @@ sub CatSearch  {
     }  
   }
   if ($type eq 'precise'){
-      $query="select * from items,biblio ";
+      
       if ($search->{'item'} ne ''){
+        $query="select * from items,biblio ";
         my $search2=uc $search->{'item'};
         $query=$query." where 
         items.biblionumber=biblio.biblionumber 
@@ -584,7 +669,9 @@ sub CatSearch  {
 	   $dewey=~s/\.*0*$//;
 	   ($dewey == 0) && ($dewey='');
 	   ($dewey) && ($dewey.=" $subclass");
-           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
+	   $data->{'dewey'}=$dewey;
+	   $results[$i2]=$data;
+#           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
            $i2++; 
 	   $sth->finish;
 	}
@@ -626,7 +713,10 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'illustrator'} ne ''){
 	      $query.=" and illus like '%".$search->{'illustrator'}."%' ";
 	    }
-#print $query;
+	    if ($search->{'publisher'} ne ''){
+	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
+	    }
+#print STDERR "$query\n";
   my $sti=$dbh->prepare($query);
   $sti->execute;
   my $dewey;
@@ -638,19 +728,14 @@ while (my $data=$sth->fetchrow_hashref){
   $dewey=~s/\.*0*$//;
   ($dewey == 0) && ($dewey='');
   ($dewey) && ($dewey.=" $subclass");
+  $data->{'dewey'}=$dewey;
   $sti->finish;
   if ($true == 1){
-  if ($count > $offset && $count <= $limit){
-    if ($type ne 'subject' && $type ne 'precise'){
-       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-    } elsif ($search->{'isbn'} ne '' || $search->{'item'} ne ''){
-       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-    } else {  
-     $results[$i]="$data->{'author'}\t$data->{'subject'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
+    if ($count > $offset && $count <= $limit){
+      $results[$i]=$data;
+      $i++;
     }
-    $i++;
-  }
-  $count++;
+    $count++;
   }
 }
 $sth->finish;
@@ -670,17 +755,56 @@ sub subsearch {
   my ($env,$subject)=@_;
   my $dbh=C4Connect();
   $subject=$dbh->quote($subject);
-  my $query="Select * from biblio,bibliosubject where
-  biblio.biblionumber=bibliosubject.biblionumber and
+  my $query="Select * from biblio,biblioitems,bibliosubject where
+  biblio.biblionumber=bibliosubject.biblionumber and biblio.biblionumber=biblioitems.biblionumber and
   bibliosubject.subject=$subject group by biblio.biblionumber
   order by biblio.title";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
-#  print $query;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]="$data->{'title'}\t$data->{'author'}\t$data->{'biblionumber'}";
+    #$results[$i]="$data->{'title'}\t$data->{'author'}\t$data->{'biblionumber'}";
+    my $dewey= $data->{'dewey'};                
+    my $subclass=$data->{'subclass'};          
+    $dewey=~s/\.*0*$//;           
+    ($dewey == 0) && ($dewey=''); 
+    ($dewey) && ($dewey.=" $subclass") ;                                    
+    $data->{'dewey'}=$dewey;
+    my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+    $data->{'itemcount'}=$counts->{'total'};
+    my $totalitemcounts=0;
+    foreach my $key (keys %$counts){
+      if ($key ne 'total'){
+        #$data->{'location'}.="$key $counts->{$key} ";
+	$totalitemcounts+=$counts->{$key};
+        $data->{'locationhash'}->{$key}=$counts->{$key};
+       }
+    }
+    my $locationtext='';
+    my $notavailabletext='';
+    foreach (sort keys %{$data->{'locationhash'}}) {
+	if ($_ eq 'notavailable') {
+	    $notavailabletext="Not available";
+	    my $c=$data->{'locationhash'}->{$_};
+	    if ($totalitemcounts>1) {
+		$notavailabletext.=" ($c)";
+	    }
+	} else {
+	    $locationtext.="$_";
+	    my $c=$data->{'locationhash'}->{$_};
+	    if ($totalitemcounts>1) {
+		$locationtext.=" ($c), ";
+	    }
+	}
+    }
+    if ($notavailabletext) {
+	$locationtext.=$notavailabletext;
+    } else {
+	$locationtext=~s/, $//;
+    }
+    $data->{'location'}=$locationtext;
+    $results[$i]=$data;
     $i++;
   }
   $sth->finish;
@@ -690,19 +814,18 @@ sub subsearch {
 
 
 sub ItemInfo {
-  my ($env,$biblionumber,$type)=@_;
-  my $dbh = &C4Connect;
-  my $query="Select * from items,biblio,biblioitems,branches 
-  where (items.biblioitemnumber = biblioitems.biblioitemnumber)
-  and biblioitems.biblionumber=biblio.biblionumber
-  and biblio.biblionumber='$biblionumber' and branches.branchcode=
-  items.holdingbranch ";
-#  print $type;
+    my ($env,$biblionumber,$type) = @_;
+    my $dbh   = &C4Connect;
+    my $query = "SELECT * FROM items, biblio, biblioitems
+                  WHERE items.biblionumber = '$biblionumber'
+                    AND biblioitems.biblioitemnumber = items.biblioitemnumber
+                    AND biblio.biblionumber = items.biblionumber";
   if ($type ne 'intra'){
-    $query.=" and (items.itemlost<>1 or items.itemlost is NULL)
+    $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
+    or items.itemlost is NULL)
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
-  $query=$query."order by items.dateaccessioned desc";
+  $query .= " order by items.dateaccessioned desc";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
@@ -719,20 +842,29 @@ sub ItemInfo {
       my @temp=split('-',$idata->{'date_due'});
       $datedue = "$temp[2]/$temp[1]/$temp[0]";
     }
-    if ($data->{'itemlost'} eq '1'){
+    if ($data->{'itemlost'} eq '1' || $data->{'itemlost'} eq '2'){
         $datedue='Itemlost';
     }
     if ($data->{'wthdrawn'} eq '1'){
       $datedue="Cancelled";
     }
     if ($datedue eq ''){
-       my ($rescount,$reserves)=Findgroupreserve($data->{'biblioitemnumber'},$biblionumber);
-
-       if ($rescount >0){                                
-          $datedue='Request';
+       $datedue="Available";
+       my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
+       if ($restype){                                
+          $datedue=$restype;
        }
     }
     $isth->finish;
+#get branch information.....
+    my $bquery = "SELECT * FROM branches
+                          WHERE branchcode = '$data->{'holdingbranch'}'";
+    my $bsth=$dbh->prepare($bquery);
+    $bsth->execute;
+    if (my $bdata=$bsth->fetchrow_hashref){
+	$data->{'branchname'} = $bdata->{'branchname'};
+    }
+
     my $class = $data->{'classification'};
     my $dewey = $data->{'dewey'};
     $dewey =~ s/0+$//;
@@ -750,8 +882,10 @@ sub ItemInfo {
  #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
     my @temp=split('-',$data->{'datelastseen'});
     my $date="$temp[2]/$temp[1]/$temp[0]";
-    $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$class\t$data->{'itemnumber'}\t$data->{'itemtype'}\t$date\t$data->{'biblioitemnumber'}\t$data->{'volumeddesc'}";
-#    print "$results[$i] <br>";
+    $data->{'datelastseen'}=$date;
+    $data->{'datedue'}=$datedue;
+    $data->{'class'}=$class;
+    $results[$i]=$data;
     $i++;
   }
  $sth->finish;
@@ -763,7 +897,9 @@ sub ItemInfo {
   if ($data=$sth2->fetchrow_hashref){                   
     $ocount=$data->{'quantity'} - $data->{'quantityreceived'};                                                  
     if ($ocount > 0){
-      $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$ocount\tOn Order\t\t$data->{'itemnumber'}\t$data->{'itemtype'}\t\t$data->{'biblioitemnumber'}\t$data->{'volumeddesc'}";
+      $data->{'ocount'}=$ocount;
+      $data->{'order'}="One Order";
+      $results[$i]=$data;
     }
   } 
   $sth2->finish;
@@ -826,48 +962,55 @@ sub itemdata {
   return($data);
 }
 
-sub bibdata {
-  my ($bibnum,$type)=@_;
-  my $dbh=C4Connect;
-  my $query="Select *,biblio.notes  
-  from biblio,biblioitems 
-  left join bibliosubtitle on                                                
-  biblio.biblionumber=bibliosubtitle.biblionumber
-  
-  where biblio.biblionumber=$bibnum
-  and biblioitems.biblionumber=$bibnum"; 
-#  print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $query="Select * from bibliosubject where biblionumber='$bibnum'";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
-  while (my $dat=$sth->fetchrow_hashref){
-    $data->{'subject'}.=" | $dat->{'subject'}";
 
-  }
-  #print $query;
-  $sth->finish;
-  $dbh->disconnect;
-  return($data);
-}
+sub bibdata {
+    my ($bibnum, $type) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select *, biblio.notes  
+    from biblio, biblioitems 
+    left join bibliosubtitle on
+    biblio.biblionumber = bibliosubtitle.biblionumber
+    where biblio.biblionumber = $bibnum
+    and biblioitems.biblionumber = $bibnum";
+    my $sth   = $dbh->prepare($query);
+    my $data;
+
+    $sth->execute;
+    $data  = $sth->fetchrow_hashref;
+    $sth->finish;
+
+    $query = "Select * from bibliosubject where biblionumber = '$bibnum'";
+    $sth   = $dbh->prepare($query);
+    $sth->execute;
+    while (my $dat = $sth->fetchrow_hashref){
+        $data->{'subject'} .= " | $dat->{'subject'}";
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($data);
+} # sub bibdata
+
 
 sub bibitemdata {
-  my ($bibitem)=@_;
-  my $dbh=C4Connect;
-  my $query="Select *,biblioitems.notes as bnotes from biblio,biblioitems,itemtypes where biblio.biblionumber=
-  biblioitems.biblionumber and biblioitemnumber=$bibitem and
-  biblioitems.itemtype=itemtypes.itemtype";
-#  print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $dbh->disconnect;
-  return($data);
-}
+    my ($bibitem) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select *,biblioitems.notes as bnotes from biblio, biblioitems,itemtypes
+where biblio.biblionumber = biblioitems.biblionumber
+and biblioitemnumber = $bibitem
+and biblioitems.itemtype = itemtypes.itemtype";
+    my $sth   = $dbh->prepare($query);
+    my $data;
+
+    $sth->execute;
+
+    $data = $sth->fetchrow_hashref;
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($data);
+} # sub bibitemdata
+
 
 sub subject {
   my ($bibnum)=@_;
@@ -889,9 +1032,9 @@ sub subject {
 sub addauthor {
   my ($bibnum)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from additionalauthors where biblionumber=?";
+  my $query="Select * from additionalauthors where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
-  $sth->execute($bibnum);
+  $sth->execute;
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -906,9 +1049,9 @@ sub addauthor {
 sub subtitle {
   my ($bibnum)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from bibliosubtitle where biblionumber=?";
+  my $query="Select * from bibliosubtitle where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
-  $sth->execute($bibnum);
+  $sth->execute;
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -923,50 +1066,65 @@ sub subtitle {
 
 
 sub itemissues {
-  my ($bibitem,$biblio)=@_;
-  my $dbh=C4Connect;
-  my $query="Select * from items where 
-  items.biblioitemnumber='$bibitem'";
-  my $sth=$dbh->prepare($query) || die $dbh->errstr;
-  $sth->execute || die $sth->errstr;
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref) {
-    my $query2="select * from issues,borrowers where itemnumber=$data->{'itemnumber'}
-    and returndate is NULL and issues.borrowernumber=borrowers.borrowernumber";
-    my $sth2=$dbh->prepare($query2);
-    $sth2->execute;
-    if (my $data2=$sth2->fetchrow_hashref) {
-      $data->{'date_due'}=$data2->{'date_due'};
-      $data->{'card'}=$data2->{'cardnumber'};
-    } else {
-      if ($data->{'wthdrawn'} eq '1') {
-        $data->{'date_due'}='Cancelled';
-      } else {
-          $data->{'date_due'}='Available';
-      }
+    my ($bibitem, $biblio)=@_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from items where 
+items.biblioitemnumber = '$bibitem'";
+    my $sth   = $dbh->prepare($query)
+      || die $dbh->errstr;
+    my $i     = 0;
+    my @results;
+  
+    $sth->execute
+      || die $sth->errstr;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        my $query2 = "select * from issues,borrowers
+where itemnumber = $data->{'itemnumber'}
+and returndate is NULL
+and issues.borrowernumber = borrowers.borrowernumber";
+        my $sth2   = $dbh->prepare($query2);
+
+        $sth2->execute;	
+        if (my $data2 = $sth2->fetchrow_hashref) {
+            $data->{'date_due'} = $data2->{'date_due'};
+            $data->{'card'}     = $data2->{'cardnumber'};
+        } else {
+            if ($data->{'wthdrawn'} eq '1') {
+                $data->{'date_due'} = 'Cancelled';
+            } else {
+                $data->{'date_due'} = 'Available';
+            } # else
+        } # else
+
+        $sth2->finish;
+        $query2 = "select * from issues, borrowers
+where itemnumber = '$data->{'itemnumber'}'
+and issues.borrowernumber = borrowers.borrowernumber 
+order by date_due desc";
+        $sth2 = $dbh->prepare($query2)
+          || die $dbh->errstr;
+        $sth2->execute
+          || die $sth2->errstr;
+
+        for (my $i2 = 0; $i2 < 2; $i2++) {
+            if (my $data2 = $sth2->fetchrow_hashref) {
+                $data->{"timestamp$i2"} = $data2->{'timestamp'};
+                $data->{"card$i2"}      = $data2->{'cardnumber'};
+                $data->{"borrower$i2"}  = $data2->{'borrowernumber'};
+            } # if
+        } # for
+
+        $sth2->finish;
+        $results[$i] = $data;
+        $i++;
     }
-    $sth2->finish;
-    $query2="select * from issues,borrowers where itemnumber='$data->{'itemnumber'}'
-    and issues.borrowernumber=borrowers.borrowernumber 
-    order by date_due desc";
-    $sth2=$dbh->prepare($query2) || die $dbh->errstr;
-    $sth2->execute || die $sth2->errstr;
-    for (my $i2=0;$i2<2;$i2++){
-      if (my $data2=$sth2->fetchrow_hashref){
-        $data->{"timestamp$i2"}=$data2->{'timestamp'};
-        $data->{"card$i2"}=$data2->{'cardnumber'};
-	$data->{"borrower$i2"}=$data2->{'borrowernumber'};
-      }
-    }
-    $sth2->finish;
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return(@results);
+
+    $sth->finish;
+    $dbh->disconnect;
+    return(@results);
 }
+
 
 sub itemnodata {
   my ($env,$dbh,$itemnumber) = @_;
@@ -1143,13 +1301,14 @@ borrowernumber=$params->{'borrowernumber'} order by date desc,timestamp desc";
    return ($numlines,\@acctlines,$total);
 }
 
+
 sub itemcount { 
   my ($env,$bibnum,$type)=@_; 
   my $dbh=C4Connect;   
   my $query="Select * from items where     
   biblionumber=$bibnum ";
   if ($type ne 'intra'){
-    $query.=" and (itemlost <>1 or itemlost is NULL) and
+    $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
     (wthdrawn <> 1 or wthdrawn is NULL)";      
   }
   my $sth=$dbh->prepare($query);         
@@ -1164,13 +1323,14 @@ sub itemcount {
   my $mending=0;
   my $transit=0;
   my $ocount=0;
-  my $branchcount;
-  while (my $data=$sth->fetchrow_hashref) {
+  while (my $data=$sth->fetchrow_hashref){
     $count++;                     
     my $query2="select * from issues,items where issues.itemnumber=                          
     '$data->{'itemnumber'}' and returndate is NULL
-    and items.itemnumber=issues.itemnumber and (items.itemlost <>1 or
-    items.itemlost is NULL)"; 
+    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
+    items.itemlost <> 2) or items.itemlost is NULL) 
+    and (wthdrawn <> 1 or wthdrawn is NULL)"; 
+    
     my $sth2=$dbh->prepare($query2);     
     $sth2->execute;         
     if (my $data2=$sth2->fetchrow_hashref){         
@@ -1188,29 +1348,77 @@ sub itemcount {
       if ($data->{'itemlost'} eq '1'){
         $lostcount++;
       }
+      if ($data->{'itemlost'} eq '2'){
+        $lostcount++;
+      }
       if ($data->{'holdingbranch'} eq 'FM'){
         $mending++;
       }
       if ($data->{'holdingbranch'} eq 'TR'){
         $transit++;
       }
-      unless ($data->{'itemlost'} || $data->{'holdingbranch'} eq 'FM' || $data->{'holdingbranch'} eq 'TR') {
-	  $branchcount->{$data->{'holdingbranch'}}++;
-      }
     }                             
     $sth2->finish;     
   } 
+#  if ($count == 0){
     my $query2="Select * from aqorders where biblionumber=$bibnum";
     my $sth2=$dbh->prepare($query2);
     $sth2->execute;
     if (my $data=$sth2->fetchrow_hashref){
       $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
     }
+#    $count+=$ocount;
     $sth2->finish;
   $sth->finish; 
   $dbh->disconnect;                   
-  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount, $branchcount); 
+  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount); 
 }
+
+
+sub itemcount2 { 
+  my ($env,$bibnum,$type)=@_; 
+  my $dbh=C4Connect;   
+  my $query="Select * from items,branches where     
+  biblionumber=$bibnum and items.holdingbranch=branches.branchcode";
+  if ($type ne 'intra'){
+    $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
+    (wthdrawn <> 1 or wthdrawn is NULL)";      
+  }
+  my $sth=$dbh->prepare($query);         
+  #  print $query;           
+  $sth->execute;           
+  my %counts;
+  $counts{'total'}=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $counts{'total'}++;                     
+    my $query2="select * from issues,items where issues.itemnumber=                          
+    '$data->{'itemnumber'}' and returndate is NULL
+    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
+    items.itemlost <> 2) or items.itemlost is NULL) 
+    and (wthdrawn <> 1 or wthdrawn is NULL)"; 
+    
+    my $sth2=$dbh->prepare($query2);     
+    $sth2->execute;         
+    if (my $data2=$sth2->fetchrow_hashref){         
+       $counts{'notavailable'}++;         
+    } else {         
+       $counts{$data->{'branchname'}}++;
+    }                             
+    $sth2->finish;     
+  } 
+  my $query2="Select * from aqorders where biblionumber=$bibnum and
+  datecancellationprinted is NULL and quantity > quantityreceived";
+  my $sth2=$dbh->prepare($query2);
+  $sth2->execute;
+  if (my $data=$sth2->fetchrow_hashref){
+      $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
+  }
+  $sth2->finish;
+  $sth->finish; 
+  $dbh->disconnect;                   
+  return (\%counts); 
+}
+
 
 sub ItemType {
   my ($type)=@_;
@@ -1224,31 +1432,41 @@ sub ItemType {
   return ($dat->{'description'});
 }
 
+
 sub bibitems {
-  my ($bibnum)=@_;
-  my $dbh=C4Connect;
-  my $query="Select * from biblioitems,itemtypes,items where
-  biblioitems.biblionumber='$bibnum' and biblioitems.itemtype=itemtypes.itemtype and
-  biblioitems.biblioitemnumber=items.biblioitemnumber group by
-  items.biblioitemnumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return($i,@results);
-}
+    my ($bibnum) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblioitems, itemtypes, items
+where biblioitems.biblionumber = '$bibnum'
+and biblioitems.itemtype = itemtypes.itemtype
+and biblioitems.biblioitemnumber = items.biblioitemnumber
+group by items.biblioitemnumber";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+
+    $sth->execute;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+        $count++;
+    } # while
+    
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub bibitems
+
 
 sub barcodes{
+  #called from request.pl
   my ($biblioitemnumber)=@_;
   my $dbh=C4Connect;
   my $query="Select barcode from items where
-   biblioitemnumber='$biblioitemnumber'";
+   biblioitemnumber='$biblioitemnumber'
+   and ((itemlost <> 1 and itemlost <> 2) or itemlost is NULL) and
+   (wthdrawn <> 1 or wthdrawn is NULL)";
+
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @barcodes;
@@ -1260,7 +1478,51 @@ sub barcodes{
   $sth->finish;
   $dbh->disconnect;
   return(@barcodes);
+  
 }
+
+
+sub getwebsites {
+    my ($biblionumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from websites where biblionumber = $biblionumber";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $data->{'url'} =~ s/^http:\/\///;
+        $results[$count] = $data;
+    	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getwebsites
+
+
+sub getwebbiblioitems {
+    my ($biblionumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblioitems where biblionumber = $biblionumber
+and itemtype = 'WEB'";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+    
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $data->{'url'} =~ s/^http:\/\///;
+        $results[$count] = $data;
+        $count++;
+    } # while
+    
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getwebbiblioitems
 
 sub branchname {
   my ($branchcode)=@_;
@@ -1277,8 +1539,34 @@ sub branchname {
 
 END { }       # module clean-up code here (global destructor)
 
+=head1 NAME
 
+C4::Search - Module that provides Catalog searching for Koha
 
+=head1 SYNOPSIS
 
+  use C4::Search;
+  my ($count,@results)=catalogsearch($env,$type,$search,$num,$offset);
 
+=head1 DESCRIPTION
 
+This module provides the searching facilities for the Catalog.
+Here I should go through and document each function thats exported and what it does. But I havent yet.
+
+my ($count,@results)=catalogsearch($env,$type,$search,$num,$offset);
+This is a front end to all the other searches, depending on what is passed
+to it, it calls the appropriate search
+
+=head2 EXPORT
+
+catalogsearch
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+=cut

@@ -24,6 +24,7 @@ $VERSION = 0.01;
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
+	     &picktemplate
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -74,6 +75,32 @@ my $path=$configfile{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
 # make all your functions, whether exported or not;
+
+sub picktemplate {
+  my ($includes, $base) = @_;
+  my $dbh=C4Connect;
+  my $templates;
+  opendir (D, "$includes/templates");
+  my @dirlist=readdir D;
+  foreach (@dirlist) {
+    (next) if (/^\./);
+    #(next) unless (/\.tmpl$/);
+    (next) unless (-e "$includes/templates/$_/$base");
+    $templates->{$_}=1;
+  }							    
+  my $sth=$dbh->prepare("select value from systempreferences where
+  variable='template'");
+  $sth->execute;
+  my ($preftemplate) = $sth->fetchrow;
+  $sth->finish;
+  $dbh->disconnect;
+  if ($templates->{$preftemplate}) {
+    return $preftemplate;
+  } else {
+    return 'default';
+  }
+  
+}
  
 sub startpage() {
   return("<html>\n");

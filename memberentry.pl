@@ -18,8 +18,11 @@ if ($member eq ''){
 my $type=$input->param('type');
 my $modify=$input->param('modify.x'); 
 my $delete=$input->param('delete.x');
+my $password=$input->param('password.x');
 if ($delete){
   print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+} elsif ($password) {
+  print $input->redirect("/cgi-bin/koha/member-password.pl?member=$member");
 } else {
 print $input->header;
 print startpage();

@@ -20,17 +20,23 @@ use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
+use C4::Auth;
 
 my $input = new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($input);
+
+
 my $dbh=C4Connect;
 
 my $isbn=$input->param('isbn');
 my $q_isbn=$dbh->quote($isbn);
 my $biblioitemnumber;
 
-print $input->header;
+print $input->header(-cookie=>$sessioncookie);
 print startpage();
 print startmenu('acquisitions');
+print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
+
 
 ($input->param('checkforbiblio')) && (checkforbiblio());
 ($input->param('newbiblioitem')) && (newbiblioitem());

@@ -10,10 +10,12 @@ use CGI;
 use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
+use C4::Auth;
 
 my $env;
 my $query = new CGI;
-print $query->header;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
+print $query->header(-cookie => $cookie);
 my $headerbackgroundcolor='#663266';
 my $circbackgroundcolor='#555555';
 my $circbackgroundcolor='#550000';
@@ -24,6 +26,7 @@ print startpage();
 print startmenu('catalogue');
 
 
+print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
 
 
 my ($shelflist) = GetShelfList();
@@ -157,7 +160,7 @@ EOF
     <input type=hidden name=shelfnumber value=$shelfnumber>
     <input type=hidden name=modifyshelfcontents value=1>
     <input type=hidden name=viewshelf value=$shelfnumber>
-    <input type=submit value="Modify Shelf List">
+    <input type=submit value="Remove Selected Items">
     </form>
 EOF
 }
@@ -166,6 +169,15 @@ EOF
 
 #
 # $Log$
+# Revision 1.2.2.2  2002/07/11 18:05:28  tonnesen
+# Committing changes to add authentication and opac templating to rel-1-2 branch
+#
+# Revision 1.5  2002/07/04 19:42:48  tonnesen
+# Minor changes
+#
+# Revision 1.4  2002/07/04 19:21:29  tonnesen
+# Beginning of authentication api.  Applied to shelves.pl for now as a test case.
+#
 # Revision 1.2.2.1  2002/06/26 20:28:15  tonnesen
 # Some udpates that I made here locally a while ago.  Still won't be useful, but
 # should be functional

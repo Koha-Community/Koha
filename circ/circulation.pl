@@ -5,7 +5,10 @@ use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Print;
 use DBI;
+use C4::Auth;
 
+my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -14,7 +17,6 @@ my $circbackgroundcolor='white';
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
-my $query=new CGI;
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');
@@ -70,7 +72,7 @@ if ($branch && $printer) {
 my $branchcookie=$query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
 my $printercookie=$query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 
-print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
 #print $query->dump;
 print startpage();
 #print startmenu('circulation');
@@ -83,6 +85,7 @@ if ($query->param('module') eq 'issues' && $query->param('barcode') eq '' && $qu
  }
 }
 print @inp;
+print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
 
 print <<EOF
 <script language="javascript" type="text/javascript">
@@ -822,7 +825,7 @@ EOF
 <form method=get>
 <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
-<tr><td><input name=findborrower></td></tr>
+<tr><td><input name=findborrower> <input type=submit value=Go></td></tr>
 </table>
 <input type=hidden name=module value=issues>
 <input type=hidden name=branch value=$branch>

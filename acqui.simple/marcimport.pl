@@ -23,8 +23,10 @@ use C4::Input;
 use C4::Biblio;
 use C4::SimpleMarc;
 use C4::Z3950;
+use C4::Auth;
 
 my $input = new CGI;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input);
 
 #------------------
 # Constants
@@ -43,10 +45,11 @@ my $dbh=C4Connect;
 
 #-------------
 # Display output
-print $input->header();
+print $input->header(-cookie => $cookie);
 print startpage();
 print startmenu('acquisitions');
 
+print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
 
 #-------------
 # Process input parameters
@@ -1146,6 +1149,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.35  2002/07/11 18:05:29  tonnesen
+# Committing changes to add authentication and opac templating to rel-1-2 branch
+#
 # Revision 1.6.2.34  2002/07/05 19:30:14  amillar
 # Second arg of requireDBI is calling subroutine name
 #
