@@ -74,10 +74,11 @@ if ($query->param('resbarcode')) {
     my $resbarcode = $query->param('resbarcode');
     my $tobranchcd = ReserveWaiting($item, $borrnum);
     my $branchname = $branches->{$tobranchcd}->{'branchname'};
-    my ($borr) = getpatroninformation(\%env, $borrnum);
+    my ($borr) = getpatroninformation(\%env, $borrnum, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
     my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
-
+    my $slip = $query->param('resslip');
+    printslip(\%env, $slip);
     if ($tobranchcd ne $branch) {
 	my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $resbarcode, 1);
 	$reservetext .= <<"EOF";
@@ -91,8 +92,6 @@ $ritext
 </form></center>
 EOF
     }
-    my ($iteminfo) = getiteminformation(\%env, $item);
-    printreserve(\%env, $branchname, $borr, $iteminfo);
 }
 
 
@@ -177,6 +176,8 @@ if ($messages->{'ResFound'}) {
     my ($borr) = getpatroninformation(\%env, $res->{'borrowernumber'}, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
     my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
+    my ($iteminfo) = getiteminformation(\%env, 0, $barcode);
+
     if ($res->{'ResFound'} eq "Waiting") {
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
@@ -189,16 +190,42 @@ $ritext
 EOF
     } 
     if ($res->{'ResFound'} eq "Reserved") {
+	my @da = localtime(time());
+	my $todaysdate = sprintf ("%0.2d", ($da[3]+1))."/".sprintf ("%0.2d", ($da[4]+1))."/".($da[5]+1900);
+	my $slip =  <<"EOF";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Date: $todaysdate;
+
+ITEM RESERVED: 
+$iteminfo->{'title'} ($iteminfo->{'author'})
+barcode: $iteminfo->{'barcode'}
+
+COLLECT AT: $branchname
+
+BORROWER:
+$borr->{'surname'}, $borr->{'firstname'}
+card number: $borr->{'cardnumber'}
+Phone: $borr->{'phone'}
+$borr->{'streetaddress'}
+$borr->{'suburb'}
+$borr->{'town'}
+$borr->{'emailaddress'}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+EOF
+
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Reserved found:</font> for $name ($number).
 <table cellpadding=5 cellspacing=0>
-<tr><td valign="top">Change status to waiting and print slip?: </td>
+<tr><td valign="top">Change status to waiting and print 
+<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
 <td valign="top">
 <form method=post action='returns.pl'>
 $ritext
 <input type=hidden name=itemnumber value=$res->{'itemnumber'}>
 <input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
 <input type=hidden name=resbarcode value=$barcode>
+<input type=hidden name=resslip value="$slip">
 <input type=submit value="Print">
 </form>
 </td></tr>
