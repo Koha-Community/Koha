@@ -19,7 +19,8 @@ $VERSION = 0.01;
 &itemdata &bibdata &GetItems &borrdata &getacctlist &itemnodata &itemcount
 &OpacSearch &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &FrontSearch &subject &subtitle
-&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs); 
+&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
+&findguarantor); 
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -71,7 +72,24 @@ sub findguarantees{
   $dbh->disconnect;         
   return($i,\@dat);             
 }
-
+sub findguarantor{  
+  my ($bornum)=@_;  
+  my $dbh=C4Connect;    
+  my $query="select guarantor from borrowers where      
+  borrowernumber='$bornum'";        
+  my $sth=$dbh->prepare($query);          
+  $sth->execute;            
+  my $data=$sth->fetchrow_hashref;              
+  $sth->finish;                
+  $query="Select * from borrowers where
+  borrowernumber='$data->{'guarantor'}'";  
+  $sth=$dbh->prepare($query);  
+  $sth->execute;    
+  $data=$sth->fetchrow_hashref;      
+  $sth->finish;        
+  $dbh->disconnect;          
+  return($data);            
+}
 
 sub systemprefs {
     my %systemprefs;
