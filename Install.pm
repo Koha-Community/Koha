@@ -1005,9 +1005,9 @@ sub installfiles {
 
     # Create /etc/koha.conf
 
-    open(KC,">$::etcdir/koha.conf") or warn "Couldn't create file
-    at $::etcdir.  Must have write capability.\n";
-    print KC qq|
+    my $old_umask = umask(027); # make sure koha.conf is never world-readable
+    open(SITES,">$::etcdir/koha.conf.tmp") or warn "Couldn't create file at $::etcdir. Must have write capability.\n";
+    print SITES qq|
 database=$::dbname
 hostname=$::hostname
 user=$::user
@@ -1019,10 +1019,11 @@ kohalogdir=$::kohalogdir
 kohaversion=$::kohaversion
 httpduser=$::httpduser
 |;
-    close(KC);
+    close(SITES);
+    umask($old_umask);
 
-    chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf") or warn "can't chown koha.conf: $!";
-    chmod 0440, "$::etcdir/koha.conf";
+    chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
+    chmod 0440, "$::etcdir/koha.conf.tmp";
 
     chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
     chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
@@ -1113,20 +1114,37 @@ sub databasesetup {
 
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
+			  /usr
 			  )) {
-       if ( -d $mysql ) {
-		$mysqldir=$mysql;
+       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
+	    $mysqldir=$mysql;
        }
     }
     if (!$mysqldir){
-	$mysqldir='/usr';
+	print "I don't see mysql in the usual places.\n";
+	for (;;) {
+	    print "Where have you installed mysql? ";
+	    chomp($mysqldir = <STDIN>);
+	    last if -f "$mysqldir/bin/mysqladmin";
+	print <<EOP;
+
+I can't find it there either. If you compiled mysql yourself,
+please give the value of --prefix when you ran configure.
+
+The file mysqladmin should be in bin/mysqladmin under the directory that you
+provide here.
+
+EOP
+	}
     }
 
 
     my $needpassword=1;
     while ($needpassword) {
 	$::mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
-	my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass proc > /dev/null 2>&1");
+	$::mysqlpass_quoted = $::mysqlpass;
+	$::mysqlpass_quoted =~ s/"/\\"/g;
+	my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" proc > /dev/null 2>&1");
 	if ($result) {
 	    print getmessage('InvalidMysqlRootPassword');
 	} else {
@@ -1140,10 +1158,12 @@ sub databasesetup {
     if ($result) {
 	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
     } else {
-	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname < koha.mysql");
-	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
-	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
-	system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass reload");
+	# Populate the Koha database
+	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname < koha.mysql");
+	# Set up permissions
+	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
+	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" reload");
 
 	system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
 
@@ -1225,6 +1245,10 @@ sub restartapache {
     }
 
 }
+
+# Installation is complete.  Rename the koha.conf.tmp file
+
+rename "$::etcdir/koha.conf.tmp", "$::etcdir/koha.conf" || warn "Couldn't rename file at $::etcdir. Must have write capability.\n";
 
 sub loadconfigfile {
     my %configfile;

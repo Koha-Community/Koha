@@ -8,13 +8,18 @@ use strict; # please develop with the strict pragma
 
 $::language='en';
 
-if ($<) {
-    print "\n\nYou must run koha.upgrade as root.\n\n";
-    exit;
-}
 unless ($< == 0) {
     print "You must be root to run this script.\n";
     exit 1;
+}
+
+
+unless (-d 'intranet-html') {
+   print <<EOP;
+You seem to be installing from CVS. Please run the "buildrelease" script
+and install from the resulting release tarball.
+EOP
+   exit 1;
 }
 
 $::kohaversion=`cat koha.version`;
