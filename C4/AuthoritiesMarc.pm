@@ -132,7 +132,7 @@ sub authoritysearch {
 					my $subfieldcode = $subf[$i][0];
 					my $subfieldvalue = $subf[$i][1];
 					my $tagsubf = $tag.$subfieldcode;
-					$summary =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2$3/g;
+					$summary =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 				}
 			}
 		}
@@ -837,6 +837,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9  2004/12/23 09:48:11  tipaul
+# Minor changes in summary "exploding" (the 3 digits AFTER the subfield were not on the right place).
+#
 # Revision 1.8  2004/11/05 10:11:39  tipaul
 # export auth_count_usage (bugfix)
 #
