@@ -1,5 +1,7 @@
 #!/usr/bin/perl
-# Please use 8-character tabs for this file (indents are 4 spaces)
+# WARNING: This file contains mixed-sized tabs! (some 4-character, some 8)
+# WARNING: Currently, 4-character tabs seem to be dominant
+# WARNING: But there are still lots of 8-character tabs
 
 #written 11/3/2002 by Finlay
 #script to execute returns of books
@@ -230,28 +232,32 @@ my @errmsgloop;
 foreach my $code (keys %$messages) {
 #    warn $code;
 	my %err;
+	my $exit_required_p = 0;
     if ($code eq 'BadBarcode'){
 		$err{badbarcode}=1;
 		$err{msg}= $messages->{'BadBarcode'};
-    }
-    if ($code eq 'NotIssued'){
+    } elsif ($code eq 'NotIssued'){
 		$err{notissued}=1;
 		$err{msg}= $branches->{$messages->{'IsPermanent'}}->{'branchname'};
-    }
-    if ($code eq 'WasLost'){
+    } elsif ($code eq 'WasLost'){
 		$err{waslost}=1;
-    }
-    if ($code eq 'wthdrawn'){
+    } elsif ($code eq 'WasReturned'){
+		;	# FIXME... anything to do here?
+    } elsif ($code eq 'WasTransfered'){
+		;	# FIXME... anything to do here?
+    } elsif ($code eq 'wthdrawn'){
 		$err{withdrawn}=1;
-	last;
-    }
-    if (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
+		$exit_required_p = 1;
+    } elsif (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
 		if ($messages->{'IsPermanent'} ne $branch) {
 				$err{ispermanent}=1;
 				$err{msg}=$branches->{$messages->{'IsPermanent'}}->{'branchname'} ;
 		}
+    } else {
+		die "Unknown error code $code"; # XXX
     }
 	push (@errmsgloop, \%err);
+last if $exit_required_p;
 }
 $template->param(errmsgloop => \@errmsgloop);
 
@@ -384,5 +390,5 @@ sub cuecatbarcodedecode {
     }}
 
 # Local Variables:
-# tab-width: 8
+# tab-width: 4
 # End:
