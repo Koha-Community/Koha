@@ -1,4 +1,4 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
@@ -14,14 +14,14 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 // end hiding -->
 </script>
 
-<script>
+<script language="JavaScript" type="text/javascript">
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
-<style>
+<style type="text/css">
 .catalogue {
 	background-color:#ad11ad;
 	color:#FFFFFF;
@@ -35,12 +35,13 @@ a.catalogue:hover {
 	}
 </style>
 </head>
+
 <body>
-<!------------------------MENUS-------------------------------->
+<!-- MENUS -->
 <div id="menubar">
 	<span class="koha">KOHA</span>
 	<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
-	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
+	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
 	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
@@ -52,15 +53,15 @@ a.catalogue:hover {
 </div>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">search</a>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Add biblio</a>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+    <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
 <a href="
 javascript:(

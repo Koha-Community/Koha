@@ -1,12 +1,11 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
 <title>popup</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
-<style>
+<style type="text/css">
 .authority {
 	background-color: #6b7cbe;
 	color:#FFFFFF;
@@ -22,5 +21,6 @@ a.authority:hover {
 	}
 </style>
 </head>
+
 <body>
-<!------------------------NO MENUS for popup-top-------------------------------->
+<!-- NO MENUS for popup-top -->
