@@ -230,11 +230,7 @@ This release of Koha has a new authentication module.  If you are not already
 using basic authentication on your intranet, you will be required to log in to
 access some of the features of the intranet.
 
-IMPORTANT :
-
-============
-
-You can log in using the userid and password from the %s/koha.conf configuration file at any time.
+IMPORTANT: You can log in using the userid and password from the %s/koha.conf configuration file at any time.
 Use the "Members" module to add passwords for other accounts and set their permissions.
 
 Press the <ENTER> key to continue: |;
@@ -718,6 +714,9 @@ sub checkperlmodules {
 
     if (@missing > 0) {
 	my $missing='';
+	if (POSIX::setlocale(LC_ALL) != "C") {
+		$missing.="   export LC_ALL=C\n";  
+	}
 	foreach my $module (@missing) {
 	    $missing.="   perl -MCPAN -e 'install \"$module\"'\n";
 	}
@@ -877,11 +876,8 @@ Database user [%s]: |;
 $messages->{'DatabasePassword'}->{en} = heading('Database Password') . qq|
 Please provide a good password for the user %s.
 
-IMPORTANT :
+IMPORTANT: You can log in using this userid and password at any time.
 
-============
-
-You can log in using this userid and password at any time.
 Password for database user %s: |;
 
 $messages->{'BlankPassword'}->{en} = heading('BLANK PASSWORD') . qq|
