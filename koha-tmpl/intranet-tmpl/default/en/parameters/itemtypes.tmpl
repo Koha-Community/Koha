@@ -38,16 +38,16 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.itemtype.value.length==0) {
-		_alertString += "- itemtype missing\n";
+		_alertString += "- Itemtype missing\n";
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "- description missing\n";
+		_alertString += "- Description missing\n";
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "- loan length is not a number\n";
+		_alertString += "- Loan length is not a number\n";
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "- rental charge is not a number\n";
+		_alertString += "- Rental charge is not a number\n";
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
@@ -126,9 +126,9 @@ function Check(f) {
 	<tr>
 		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Code</b></th>
 		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Description</b></td>
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>loan length</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Loan length</b></td>
 		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Renewable</b></td>
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>charge</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Charge</b></td>
 		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Edit</td>
 		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Delete</td>
 	</tr>
