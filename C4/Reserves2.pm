@@ -299,10 +299,14 @@ sub CancelReserve {
 	$sth->finish;
     }
     if (($biblio and $borr) and (not $item)) {
+
 	# removing a reserve record....
 	my $q_biblio = $dbh->quote($biblio);
 	$borr = $dbh->quote($borr);
+
 	# get the prioritiy on this record....
+	my $priority;
+	{
 	my $query = "SELECT priority FROM reserves
                                     WHERE biblionumber   = $q_biblio
                                       AND borrowernumber = $borr
@@ -310,10 +314,12 @@ sub CancelReserve {
                                       AND (found <> 'F' or found is NULL)";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
-	my ($priority) = $sth->fetchrow_array;
+	($priority) = $sth->fetchrow_array;
 	$sth->finish;
+	}
+
 	# update the database, removing the record...
-        # FIXME - There's already a $query in this scope.
+	{
         my $query = "update reserves set cancellationdate = now(),
                                          found            = Null,
                                          priority         = 0
@@ -321,10 +327,11 @@ sub CancelReserve {
                                      and borrowernumber   = $borr
                                      and cancellationdate is NULL
                                      and (found <> 'F' or found is NULL)";
-        # FIXME - There's already a $sth in this scope.
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
+	}
+
 	# now fix the priority on the others....
 	fixpriority($priority, $biblio);
     }
@@ -345,31 +352,38 @@ whose keys are fields from the reserves table in the Koha database.
 sub FillReserve {
     my ($res) = @_;
     my $dbh = C4::Context->dbh;
+
     # fill in a reserve record....
     # FIXME - Remove some of the redundancy here
     my $biblio = $res->{'biblionumber'}; my $qbiblio = $dbh->quote($biblio);
     my $borr = $res->{'borrowernumber'}; $borr = $dbh->quote($borr);
     my $resdate = $res->{'reservedate'}; $resdate = $dbh->quote($resdate);
+
     # get the priority on this record....
+    my $priority;
+    {
     my $query = "SELECT priority FROM reserves
                                 WHERE biblionumber   = $qbiblio
                                   AND borrowernumber = $borr
                                   AND reservedate    = $resdate)";
     my $sth=$dbh->prepare($query);
     $sth->execute;
-    my ($priority) = $sth->fetchrow_array;
+    ($priority) = $sth->fetchrow_array;
     $sth->finish;
+    }
+
     # update the database...
-    # FIXME - There's already a $query in this scope.
+    {
     my $query = "UPDATE reserves SET found            = 'F',
                                      priority         = 0
                                WHERE biblionumber     = $qbiblio
                                  AND reservedate      = $resdate
                                  AND borrowernumber   = $borr";
-    # FIXME - There's already a $sth in this scope.
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
+    }
+
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ($priority == 0) {
