@@ -78,7 +78,6 @@ if ($op) {
 				else        => 1); # we show only the TMPL_VAR names $op
 }
 $template->param(action => $script_name);
-
 if ($op eq 'add') {
 	# If the user has pressed the "add new branch" button.
 	heading("Branches: Add Branch");
