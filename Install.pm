@@ -181,9 +181,6 @@ access some of the features of the intranet.  You can log in using the userid
 and password from the /etc/koha.conf configuration file at any time.  Use the
 "Members" module to add passwords for other accounts and set their permissions.
 
-[NOTE PERMISSIONS ARE NOT COMPLETED AS OF THIS RELEASE.  Do not give passwords
-to any patrons unless you want them to have full access to your intranet.]
-
 Press the <ENTER> key to continue: |;
 
 $messages->{'Completed'}->{en}=qq|
