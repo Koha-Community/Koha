@@ -21,7 +21,7 @@
 
     <!-- Row of numbers corresponding to search result pages -->
     <TMPL_IF NAME="displayprev">
-	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='prevstartfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME=themelang'>/images/numbers/prev.gif border=0></a>
+	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='prevstartfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME='themelang'>/images/numbers/prev.gif border=0></a>
     <TMPL_ELSE>
 	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
     </TMPL_IF>
