@@ -1,6 +1,5 @@
 package C4::Koha;
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -23,9 +22,9 @@ require Exporter;
 use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 $VERSION = 0.01;
-    
+
 =head1 NAME
 
 C4::Koha - Perl Module containing convenience functions for Koha scripts
@@ -55,10 +54,10 @@ Koha.pm provides many functions for Koha scripts.
 	     &fixEthnicity
 	     &borrowercategories
 	     &ethnicitycategories
-	     $DEBUG); 
+	     $DEBUG);
 
 use vars qw();
-	
+
 my $DEBUG = 0;
 
 =item slashifyDate
@@ -71,7 +70,7 @@ dashes), converts it to the form "YYYY/MM/DD", and returns the result.
 =cut
 
 sub slashifyDate {
-    # accepts a date of the form xx-xx-xx[xx] and returns it in the 
+    # accepts a date of the form xx-xx-xx[xx] and returns it in the
     # form xx/xx/xx[xx]
     my @dateOut = split('-', shift);
     return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
@@ -88,7 +87,7 @@ Koha database ("European" or "Pacific Islander").
 =cut
 #'
 
-sub fixEthnicity($) { 
+sub fixEthnicity($) {
 
     my $ethnicity = shift;
     my $dbh = C4::Context->dbh;
