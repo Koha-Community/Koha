@@ -343,7 +343,6 @@ $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;
 my $encoding="";
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
-# warn "R".$record->as_formatted;
 ($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
 
 $is_a_modif=0;

@@ -178,7 +178,7 @@ adds a subfield in a biblio (in the MARC tables only).
 
 Returns a MARC::Record for the biblio $bibid.
 
-=item &MARCmodbiblio($dbh,$bibid,$record,$delete);
+=item &MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,$delete);
 
 MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
 It 1st delete the biblio, then recreates it.
@@ -320,12 +320,10 @@ sub MARCfind_MARCbibid_from_oldbiblionumber {
 sub MARCaddbiblio {
 
 # pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ( $dbh, $record, $biblionumber, $frameworkcode, $bibid ) = @_;
-    my @fields = $record->fields();
-
-    # 	warn "IN MARCaddbiblio $bibid => ".$record->as_formatted;
-    # my $bibid;
-    # adding main table, and retrieving bibid
+	my ($dbh,$record,$biblionumber,$frameworkcode,$bibid) = @_;
+	my @fields=$record->fields();
+# my $bibid;
+# adding main table, and retrieving bibid
 # if bibid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
     # if bibid empty => true add, find a new bibid number
     unless ($bibid) {
@@ -374,18 +372,12 @@ sub MARCaddbiblio {
 sub MARCadditem {
 
 # pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ( $dbh, $record, $biblionumber ) = @_;
-
-    #    warn "adding : ".$record->as_formatted();
-    # search for MARC biblionumber
-    $dbh->do(
-"lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ"
-    );
-    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $biblionumber );
-    my @fields = $record->fields();
-    my $sth    =
-      $dbh->prepare(
-        "select max(tagorder) from marc_subfield_table where bibid=?");
+    my ($dbh,$record,$biblionumber) = @_;
+# search for MARC biblionumber
+    $dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
+    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
+    my @fields=$record->fields();
+    my $sth = $dbh->prepare("select max(tagorder) from marc_subfield_table where bibid=?");
     $sth->execute($bibid);
     my ($fieldcount) = $sth->fetchrow;
 
@@ -630,17 +622,16 @@ sub MARCgetitem {
 }
 
 sub MARCmodbiblio {
-    my ( $dbh, $bibid, $record, $delete ) = @_;
-    my $oldrecord = &MARCgetbiblio( $dbh, $bibid );
-    if ( $oldrecord eq $record ) {
-        return;
-    }
-
-    # 1st delete the biblio,
-    # 2nd recreate it
-    my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    &MARCdelbiblio( $dbh, $bibid, 1 );
-    &MARCaddbiblio( $dbh, $record, $biblionumber, $bibid );
+	my ($dbh,$bibid,$record,$frameworkcode,$delete)=@_;
+	my $oldrecord=&MARCgetbiblio($dbh,$bibid);
+	if ($oldrecord eq $record) {
+		return;
+	}
+# 1st delete the biblio,
+# 2nd recreate it
+	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&MARCdelbiblio($dbh,$bibid,1);
+	&MARCaddbiblio($dbh,$record,$biblionumber,$frameworkcode,$bibid);
 }
 
 sub MARCdelbiblio {
@@ -710,67 +701,37 @@ sub MARCdelitem {
 }
 
 sub MARCmoditem {
-    my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
-    my $oldrecord = &MARCgetitem( $dbh, $bibid, $itemnumber );
-
-    # if nothing to change, don't waste time...
-    if ( $oldrecord eq $record ) {
-        return;
-    }
-
-    # otherwise, skip through each subfield...
-    my @fields = $record->fields();
-
-    # search old MARC item
-    my $sth2 =
-      $dbh->prepare(
-"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
-    );
-    $sth2->execute( $bibid, $itemnumber );
-    my ($tagorder) = $sth2->fetchrow_array();
-    foreach my $field (@fields) {
-        my $oldfield      = $oldrecord->field( $field->tag() );
-        my @subfields     = $field->subfields();
-        my $subfieldorder = 0;
-        foreach my $subfield (@subfields) {
-            $subfieldorder++;
-
-            #			warn "compare : $oldfield".$oldfield->subfield(@$subfield[0]);
-            if ( $oldfield eq 0
-                or ( length( $oldfield->subfield( @$subfield[0] ) ) == 0 ) )
-            {
-
-                # just adding datas...
-#		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
-#				warn "NEW subfield : $bibid,".$field->tag().",".$tagorder.",".@$subfield[0].",".$subfieldorder.",".@$subfield[1].")";
-                &MARCaddsubfield(
-                    $dbh,
-                    $bibid,
-                    $field->tag(),
-                    $field->indicator(1) . $field->indicator(2),
-                    $tagorder,
-                    @$subfield[0],
-                    $subfieldorder,
-                    @$subfield[1]
-                );
-            }
-            else {
-
-#		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
-                # modify he subfield if it's a different string
-                if ( $oldfield->subfield( @$subfield[0] ) ne @$subfield[1] ) {
-                    my $subfieldid = &MARCfindsubfieldid(
-                        $dbh,          $bibid,
-                        $field->tag(), $tagorder,
-                        @$subfield[0], $subfieldorder
-                    );
-
-#					warn "changing : $subfieldid, $bibid,".$field->tag(),",$tagorder,@$subfield[0],@$subfield[1],$subfieldorder";
-                    &MARCmodsubfield( $dbh, $subfieldid, @$subfield[1] );
-                }
-            }
-        }
-    }
+	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
+	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
+	# if nothing to change, don't waste time...
+	if ($oldrecord eq $record) {
+		return;
+	}
+	# otherwise, skip through each subfield...
+	my @fields = $record->fields();
+	# search old MARC item
+	my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
+	$sth2->execute($bibid,$itemnumber);
+	my ($tagorder) = $sth2->fetchrow_array();
+	foreach my $field (@fields) {
+		my $oldfield = $oldrecord->field($field->tag());
+		my @subfields=$field->subfields();
+		my $subfieldorder=0;
+		foreach my $subfield (@subfields) {
+			$subfieldorder++;
+			if ($oldfield eq 0 or (length($oldfield->subfield(@$subfield[0])) ==0) ) {
+		# just adding datas...
+				&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
+						$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
+			} else {
+		# modify he subfield if it's a different string
+				if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
+					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
+				}
+			}
+		}
+	}
 }
 
 sub MARCmodsubfield {
@@ -1068,123 +1029,90 @@ sub MARCkoha2marcOnefield {
 }
 
 sub MARChtml2marc {
-    my ( $dbh, $rtags, $rsubfields, $rvalues, %indicators ) = @_;
-    my $prevtag = -1;
-    my $record  = MARC::Record->new();
-
-    # 	my %subfieldlist=();
-    my $prevvalue;    # if tag <10
-    my $field;        # if tag >=10
-    for ( my $i = 0 ; $i < @$rtags ; $i++ ) {
-
-        # rebuild MARC::Record
-        if ( @$rtags[$i] ne $prevtag ) {
-            if ( $prevtag < 10 ) {
-                if ($prevvalue) {
-                    $record->add_fields( ( sprintf "%03s", $prevtag ),
-                        $prevvalue );
-                }
-            }
-            else {
-                if ($field) {
-                    $record->add_fields($field);
-                }
-            }
-            $indicators{ @$rtags[$i] } .= '  ';
-            if ( @$rtags[$i] < 10 ) {
-                $prevvalue = @$rvalues[$i];
-            }
-            else {
-                $field = MARC::Field->new(
-                    ( sprintf "%03s", @$rtags[$i] ),
-                    substr( $indicators{ @$rtags[$i] }, 0, 1 ),
-                    substr( $indicators{ @$rtags[$i] }, 1, 1 ),
-                    @$rsubfields[$i] => @$rvalues[$i]
-                );
-            }
-            $prevtag = @$rtags[$i];
-        }
-        else {
-            if ( @$rtags[$i] < 10 ) {
-                $prevvalue = @$rvalues[$i];
-            }
-            else {
-                if ( @$rvalues[$i] ) {
-                    $field->add_subfields( @$rsubfields[$i] => @$rvalues[$i] );
-                }
-            }
-            $prevtag = @$rtags[$i];
-        }
-    }
-
-    # the last has not been included inside the loop... do it now !
-    $record->add_fields($field);
-
-    # 	warn $record->as_formatted;
-    return $record;
+	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
+	my $prevtag = -1;
+	my $record = MARC::Record->new();
+# 	my %subfieldlist=();
+	my $prevvalue; # if tag <10
+	my $field; # if tag >=10
+	for (my $i=0; $i< @$rtags; $i++) {
+		# rebuild MARC::Record
+		if (@$rtags[$i] ne $prevtag) {
+			if ($prevtag < 10) {
+				if ($prevvalue) {
+					$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+				}
+			} else {
+				if ($field) {
+					$record->add_fields($field);
+				}
+			}
+			$indicators{@$rtags[$i]}.='  ';
+			if (@$rtags[$i] <10) {
+				$prevvalue= @$rvalues[$i];
+			} else {
+				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+			}
+			$prevtag = @$rtags[$i];
+		} else {
+			if (@$rtags[$i] <10) {
+				$prevvalue=@$rvalues[$i];
+			} else {
+				if (@$rvalues[$i]) {
+					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+				}
+			}
+			$prevtag= @$rtags[$i];
+		}
+	}
+	# the last has not been included inside the loop... do it now !
+	$record->add_fields($field);
+	return $record;
 }
 
 sub MARCmarc2koha {
-    my ( $dbh, $record ) = @_;
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
-    );
-    my $result;
-    my $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
-    $sth2->execute;
-    my $field;
-
-    #    print STDERR $record->as_formatted;
-    while ( ($field) = $sth2->fetchrow ) {
-        $result =
-          &MARCmarc2kohaOneField( $sth, "biblio", $field, $record, $result );
-    }
-    $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
-    $sth2->execute;
-    while ( ($field) = $sth2->fetchrow ) {
-        if ( $field eq 'notes' ) { $field = 'bnotes'; }
-        $result =
-          &MARCmarc2kohaOneField( $sth, "biblioitems", $field, $record,
-            $result );
-    }
-    $sth2 = $dbh->prepare("SHOW COLUMNS from items");
-    $sth2->execute;
-    while ( ($field) = $sth2->fetchrow ) {
-        $result =
-          &MARCmarc2kohaOneField( $sth, "items", $field, $record, $result );
-    }
-
-    # additional authors : specific
-    $result =
-      &MARCmarc2kohaOneField( $sth, "bibliosubtitle", "subtitle", $record,
-        $result );
-    $result =
-      &MARCmarc2kohaOneField( $sth, "additionalauthors", "additionalauthors",
-        $record, $result );
-
-    # modify copyrightdate to keep only the 1st year found
-    my $temp = $result->{'copyrightdate'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'copyrightdate'} = $1;
-    }
-    else {    # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'copyrightdate'} = $1;
-    }
-
-    # modify publicationyear to keep only the 1st year found
-    my $temp = $result->{'publicationyear'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'publicationyear'} = $1;
-    }
-    else {    # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'publicationyear'} = $1;
-    }
-    return $result;
+	my ($dbh,$record) = @_;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
+	my $result;
+	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
+	$sth2->execute;
+	my $field;
+	while (($field)=$sth2->fetchrow) {
+		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result);
+	}
+	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
+	$sth2->execute;
+	while (($field)=$sth2->fetchrow) {
+		if ($field eq 'notes') { $field = 'bnotes'; }
+		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
+	}
+	$sth2=$dbh->prepare("SHOW COLUMNS from items");
+	$sth2->execute;
+	while (($field)=$sth2->fetchrow) {
+		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
+	}
+	# additional authors : specific
+	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result);
+	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
+# modify copyrightdate to keep only the 1st year found
+	my $temp = $result->{'copyrightdate'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'copyrightdate'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$temp =~ m/(\d\d\d\d)/;
+		$result->{'copyrightdate'} = $1;
+	}
+# modify publicationyear to keep only the 1st year found
+	my $temp = $result->{'publicationyear'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'publicationyear'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$temp =~ m/(\d\d\d\d)/;
+		$result->{'publicationyear'} = $1;
+	}
+	return $result;
 }
 
 sub MARCmarc2kohaOneField {
@@ -1229,18 +1157,13 @@ sub MARCaddword {
 			values (?,concat(?,?),?,?,?,soundex(?))"
     );
     foreach my $word (@words) {
-
-        # we record only words one char long and not in stopwords hash
-        if ( length($word) >= 1 and !( $stopwords->{ uc($word) } ) ) {
-            $sth->execute(
-                $bibid,         $tag,  $tagorder, $subfieldid,
-                $subfieldorder, $word, $word
-            );
-            if ( $sth->err() ) {
-                warn
-"ERROR ==> insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($bibid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
-            }
-        }
+# we record only words one char long and not in stopwords hash
+	if (length($word)>=1 and !($stopwords->{uc($word)})) {
+	    $sth->execute($bibid,$tag,$subfieldid,$tagorder,$subfieldorder,$word,$word);
+	    if ($sth->err()) {
+		warn "ERROR ==> insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($bibid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
+	    }
+	}
     }
 }
 
@@ -1352,46 +1275,40 @@ sub NEWnewbiblio {
 }
 
 sub NEWmodbiblio {
-    my ( $dbh, $record, $bibid, $frameworkcode ) = @_;
-    $frameworkcode = "" unless $frameworkcode;
-    &MARCmodbiblio( $dbh, $bibid, $record, 0 );
-    my $oldbiblio = MARCmarc2koha( $dbh, $record );
-    my $oldbiblionumber = OLDmodbiblio( $dbh, $oldbiblio );
-    OLDmodbibitem( $dbh, $oldbiblio );
-
-    # now, modify addi authors, subject, addititles.
-    my ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "additionalauthors.author" );
-    my @addiauthfields = $record->field($tagfield);
-    foreach my $addiauthfield (@addiauthfields) {
-        my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#addiauthsubfields ) {
-            OLDmodaddauthor( $dbh, $oldbiblionumber,
-                $addiauthsubfields[$subfieldcount] );
-        }
-    }
-    ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.subtitle" );
-    my @subtitlefields = $record->field($tagfield);
-    foreach my $subtitlefield (@subtitlefields) {
-        my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#subtitlesubfields ) {
-            OLDmodsubtitle( $dbh, $oldbiblionumber,
-                $subtitlesubfields[$subfieldcount] );
-        }
-    }
-    ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubject.subject" );
-    my @subj = $record->field($tagfield);
-    my @subjects;
-    foreach my $subject (@subj) {
-        my @subjsubfield = $subject->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#subjsubfield ) {
-            push @subjects, $subjsubfield[$subfieldcount];
-        }
-    }
-    OLDmodsubject( $dbh, $oldbiblionumber, 1, @subjects );
-    return 1;
+	my ($dbh,$record,$bibid,$frameworkcode) =@_;
+	$frameworkcode="" unless $frameworkcode;
+	&MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
+	my $oldbiblio = MARCmarc2koha($dbh,$record);
+	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
+	OLDmodbibitem($dbh,$oldbiblio);
+	# now, modify addi authors, subject, addititles.
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
+	my @addiauthfields = $record->field($tagfield);
+	foreach my $addiauthfield (@addiauthfields) {
+		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#addiauthsubfields) {
+			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
+	my @subtitlefields = $record->field($tagfield);
+	foreach my $subtitlefield (@subtitlefields) {
+		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#subtitlesubfields) {
+			OLDmodsubtitle($dbh,$oldbiblionumber,$subtitlesubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
+	my @subj = $record->field($tagfield);
+	my @subjects;
+	foreach my $subject (@subj) {
+		my @subjsubfield = $subject->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#subjsubfield) {
+			push @subjects,$subjsubfield[$subfieldcount];
+		}
+	}
+	OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
+	return 1;
 }
 
 sub NEWdelbiblio {
@@ -2139,16 +2056,15 @@ successful or not.
 =cut
 
 sub modbiblio {
-    my ($biblio) = @_;
-    my $dbh = C4::Context->dbh;
-    my $biblionumber = OLDmodbiblio( $dbh, $biblio );
-    my $record = MARCkoha2marcBiblio( $dbh, $biblionumber, $biblionumber );
-
-    # finds new (MARC bibid
-    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $biblionumber );
-    MARCmodbiblio( $dbh, $bibid, $record, 0 );
-    return ($biblionumber);
-}    # sub modbiblio
+	my ($biblio) = @_;
+	my $dbh  = C4::Context->dbh;
+	my $biblionumber=OLDmodbiblio($dbh,$biblio);
+	my $record = MARCkoha2marcBiblio($dbh,$biblionumber,$biblionumber);
+	# finds new (MARC bibid
+	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
+	MARCmodbiblio($dbh,$bibid,$record,"",0);
+	return($biblionumber);
+} # sub modbiblio
 
 =item modsubtitle
 
@@ -2673,6 +2589,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.96  2004/06/29 16:07:10  tipaul
+# last sync for 2.1.0 release
+#
 # Revision 1.95  2004/06/26 23:19:59  rangi
 # Fixing modaddauthor, and adding getitemtypes.
 # Also tidying up formatting of code

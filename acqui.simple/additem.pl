@@ -200,6 +200,15 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 		my ($x,$value);
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
+		# search for itemcallnumber if applicable
+		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
+			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
+			my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
+			my $temp = $record->field($CNtag);
+			if ($temp) {
+				$value = $temp->subfield($CNsubfield);
+			}
+		}
 		if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 			my @authorised_values;
 			my %authorised_lib;
@@ -240,6 +249,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 																		);
 		} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+			#"
 		} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 			my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
 			require $plugin;
