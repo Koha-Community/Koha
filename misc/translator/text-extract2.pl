@@ -168,7 +168,7 @@ sub next_token_internal (*) {
 	    } elsif ($readahead =~ /^$re_tag_compat/os) {
 		($kind, $it, $readahead) = (KIND_TAG, "$1>", $3);
 		$ok_p = 1;
-		warn "Warning: SGML \"closed start tag\" notation near line $lc_0: $1$2\n" if $2 eq '';
+		warn "Warning: SGML \"closed start tag\" notation near line $lc_0: $1<\n" if $2 eq '';
 	    } elsif ($readahead =~ /^<!--(?:(?!-->).)*-->/s) {
 		($kind, $it, $readahead) = (KIND_COMMENT, $&, $');
 		$ok_p = 1;
