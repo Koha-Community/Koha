@@ -203,6 +203,12 @@ my %requiretables=(
   									PRIMARY KEY  (id),
   									KEY name (category)
 								)",
+	userflags =>		"( bit int(11) NOT NULL default '0',
+  							flag char(30), flagdesc char(255),
+  							defaulton int(11)
+						)",
+);
+
 	);
 
 
@@ -247,7 +253,7 @@ my %dropable_table=(
 # modified.
 
 my %tabledata=(
-    userflags => [ 
+    userflags => [
     	{ uniquefieldrequired => 'bit', bit => 0, flag => 'superlibrarian', flagdesc => 'Access to all librarian functions', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 1, flag => 'circulate', flagdesc => 'Circulate books', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 2, flag => 'catalogue', flagdesc => 'View Catalogue (Librarian Interface)', defaulton => 0 },
@@ -538,6 +544,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.36  2003/01/28 15:13:30  tipaul
+# userflag table now created in upgrade script (bugfix #171)
+#
 # Revision 1.35  2003/01/27 03:12:49  acli
 # Reworded the description for "acquisitions" to make it fit on the screen
 #
