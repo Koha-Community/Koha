@@ -442,12 +442,16 @@ sub MARCgetbiblio {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	if ($prevtag <10) {
- 		$record->add_fields($prevtag,$prevvalue);
- 	} else {
-#  		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
- 		$record->add_fields($field);
- 	}
+	if ($prevtag ne "XXX") { # check that we have found something. Otherwise, prevtag is still XXX and we
+						# must return an empty record, not make MARC::Record fail because we try to
+						# create a record with XXX as field :-(
+		if ($prevtag <10) {
+			$record->add_fields($prevtag,$prevvalue);
+		} else {
+	#  		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+			$record->add_fields($field);
+		}
+	}
 	return $record;
 }
 sub MARCgetitem {
@@ -2209,6 +2213,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.72  2003/11/24 17:40:14  tipaul
+# fix for #385
+#
 # Revision 1.71  2003/11/24 16:28:49  tipaul
 # biblio & item deletion now works fine in MARC editor.
 # Stores deleted biblio/item in the marc field of the deletedbiblio/deleteditem table.
