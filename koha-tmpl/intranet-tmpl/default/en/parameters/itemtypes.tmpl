@@ -108,7 +108,7 @@ function Check(f) {
 		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<TMPL_VAR name="itemtype">'>
 	<tr><td>Description</td><td><TMPL_VAR name="description"></td></tr>
 	<tr><td>Loan length</td><td><TMPL_VAR name="loanlength"></td></tr>
-	<tr><td>Renewals allowed</td><td><TMPL_VAR name="renewalsallowed"></td></tr>
+	<tr><td>Renewals</td><td><TMPL_IF name="renewalsallowed">Allowed<TMPL_ELSE>Not allowed</TMPL_IF></td></tr>
 	<tr><td>Rental charge</td><td><TMPL_VAR name="rentalcharge"></td></tr>
 	<TMPL_IF name="total">
 		<tr><td colspan=2 align=center><b>This record is used <TMPL_VAR name="total"> times. Deletion not possible</b></td></tr>
