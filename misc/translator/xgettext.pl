@@ -406,8 +406,9 @@ the gettext format.
 
 =back
 
-Note that this script is experimental and should still be
-considered unstable.
+This script has already been in use for over a year and should
+be reasonable stable. Nevertheless, it is still somewhat
+experimental and there are still some issues.
 
 Please refer to the explanation in tmpl_process3 for further
 details.
@@ -439,7 +440,7 @@ A suitable definition of such a function can be
 
 =head1 SEE ALSO
 
-tmpl_process.pl,
+tmpl_process3.pl,
 xgettext(1),
 Locale::PO(3),
 translator_doc.txt
@@ -459,5 +460,9 @@ Its sort order (-s option) seems to be different than the real
 xgettext(1)'s sort option. This will result in translation
 strings inside the generated PO file spuriously moving about
 when tmpl_process3.pl calls msgmerge(1) to update the PO file.
+
+It sometimes generates strings with spurious leading spaces,
+leading to failure to match the strings when actually generating
+translated files.  The cause of this is not yet known.
 
 =cut
