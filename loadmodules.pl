@@ -30,6 +30,7 @@ my $module=$input->param('module');
 
 SWITCH: {
 	if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
+	if ($module eq 'search') { catalogue_search(); last SWITCH; }
 	if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
 }
 
@@ -50,6 +51,14 @@ sub acquisitions {
 	}
 }
 
+sub catalogue_search {
+	my $aq_type = C4::Context->preference("marc") || "ON";
+	if ($aq_type eq 'ON') {
+		print $input->redirect("/cgi-bin/koha/search.marc/search.pl");
+	} else {
+		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
+	}
+}
 
 sub somethingelse {
 # just an example subroutine

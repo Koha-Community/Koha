@@ -265,6 +265,7 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'opaclanguages', value => 'en', explanation => 'languages' },
     	{ uniquefieldrequired => 'variable', variable => 'opacthemes', value => 'default', explanation => 'theme' },
     	{ uniquefieldrequired => 'variable', variable => 'timeout', value => '12000000', explanation => 'login timeout' },
+    	{ uniquefieldrequired => 'variable', variable => 'marc', value => 'ON', explanation => 'MARC support (ON or OFF)' },
     ],
 
 );
@@ -530,6 +531,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.32  2003/01/16 10:29:45  tipaul
+# adding a MARC parameter in systempref ( which is ON or OFF)
+# the search will be a marc search if MARC=ON
+# and a standard (v1.2) search if MARC=OFF
+#
 # Revision 1.31  2003/01/06 13:32:43  tipaul
 # *** empty log message ***
 #
