@@ -388,10 +388,14 @@ Results are ordered from most to least recent.
 sub getorders {
 	my ($supplierid)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select count(*),authorisedby,creationdate,aqbasket.basketno,closedate from aqorders left join aqbasket on
-	aqbasket.basketno=aqorders.basketno where booksellerid=? and (quantity > quantityreceived or
-	quantityreceived is NULL)
-	group by basketno order by aqbasket.basketno");
+	my $sth=$dbh->prepare("Select count(*),authorisedby,creationdate,aqbasket.basketno,
+		closedate,surname,firstname 
+		from aqorders 
+		left join aqbasket on aqbasket.basketno=aqorders.basketno 
+		left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
+		where booksellerid=? and (quantity > quantityreceived or
+		quantityreceived is NULL)
+		group by basketno order by aqbasket.basketno");
 	$sth->execute($supplierid);
 	my @results = ();
 	while (my $data=$sth->fetchrow_hashref){
@@ -473,7 +477,8 @@ sub getallorders {
   my ($supid)=@_;
   my $dbh = C4::Context->dbh;
   my @results = ();
-  my $sth=$dbh->prepare("Select * from aqorders,biblio,biblioitems where booksellerid=?
+  my $sth=$dbh->prepare("Select * from aqorders,biblio,biblioitems,aqbasket where aqbasket.basketno=aqorders.basketno
+  and booksellerid=?
   and (cancelledby is NULL or cancelledby = '')
   and (quantityreceived < quantity or quantityreceived is NULL)
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
