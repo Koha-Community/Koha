@@ -1119,7 +1119,8 @@ and issues.borrowernumber = borrowers.borrowernumber";
         $query2 = "select * from issues, borrowers
 where itemnumber = '$data->{'itemnumber'}'
 and issues.borrowernumber = borrowers.borrowernumber 
-order by date_due desc";
+and returndate is not NULL
+order by returndate desc, timestamp desc";
         $sth2 = $dbh->prepare($query2)
           || die $dbh->errstr;
         $sth2->execute
