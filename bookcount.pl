@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Output;
+use HTML::Template;
 
 # get all the data ....
 my %env;
@@ -59,56 +60,31 @@ if (not $lastmove) {
     $count = issuessince($itm ,$lastdate);
 }
 
-
 # make the page ...
-print $input->header;
+my $template = gettemplate("bookcount.tmpl");
 
-
-print startpage;
-print startmenu('report');
-print center;
-
-print <<"EOF";
-<br>
-<FONT SIZE=6><em><a href=/cgi-bin/koha/detail.pl?bib=$bib&type=intra>$data->{'title'} ($data->{'author'})</a></em></FONT><P>
-<p>
-<img src="/images/holder.gif" width=16 height=200 align=left>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 width=440 >
-  <TR VALIGN=TOP><td  bgcolor="99cc33" background="/images/background-mem.gif">
-  <B>BARCODE $idata->{'barcode'}</b></TD>
-</TR>
-<TR VALIGN=TOP  >
-<TD width=440 >
-
-<b>Home Branch: </b> $homebranch <br>
-<b>Current Branch: </b> $holdingbranch<br>
-<b>Date arrived at current branch: </b> $lastdate <br>
-<b>Number of issues since since the above date :</b> $count <br>
-
-<table cellspacing =0 cellpadding=5 border=1 width = 440>
-<TR><TD > <b>Branch</b></td>  <TD >   <b>No. of Issues</b></td>   <td><b>Last seen at branch</b></td></TR>
-EOF
+my @branchloop;
 
 foreach my $branchcode (keys %$branches) {
-    my $issues = issuesat($itm, $branchcode);
+	my %linebranch;
+    $linebranch{issues} = issuesat($itm, $branchcode);
     my $date = lastseenat($itm, $branchcode);
-    my $seen = slashdate($date);
-    print << "EOF";
-<TR><TD > <b>$branches->{$branchcode}->{'branchname'}</b></td>
-<TD >    <b> $issues </b></td>             <td><b> $seen</b></td></TR>
-EOF
+    $linebranch{seen} = slashdate($date);
+	$linebranch{branchname}=$branches->{$branchcode}->{'branchname'};
+	push(@branchloop,\%linebranch);
 }
-print <<"EOF";
-</table>
-</TR>
 
-</table>
-EOF
+$template->param(	bib => $bib,
+								title => $data->{'title'},
+								author => $data->{'author'},
+								barcode => $idata->{'barcode'},
+								homebranch =>$homebranch,
+								holdingbranch => $holdingbranch,
+								lastdate =>  $lastdate,
+								count =>  $count,
+								branchloop => \@branchloop);
 
-
-print endmenu('report');
-print endpage;
-
+print "Content-Type: text/html\n\n", $template->output;
 
 ##############################################
 # This stuff should probably go into C4::Search
