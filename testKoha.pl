@@ -15,6 +15,7 @@ my @tests=(
 	't/output.t',
 	't/require.t',
 	't/webscripts/catalog.t',
+	't/webscripts/circulation.t',
 );
 
 
@@ -23,6 +24,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.1.2.9  2002/10/29 19:47:57  tonnesen
+# New test script for circulation module.
+#
 # Revision 1.1.2.8  2002/10/29 19:26:27  tonnesen
 # Added some more tests to catalog.t
 #
