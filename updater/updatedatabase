@@ -580,7 +580,7 @@ my %fielddefinitions = (
         {
             field   => 'z3950random',
             type    => 'varchar(40)',
-            null    => '',
+            null    => 'YES',
             key     => '',
             default => '',
             extra   => ''
@@ -795,6 +795,9 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 }
 $dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )") unless ($nullenabled{barcode} eq 'YES');
 
+# changing z3950daemon field to NULL in marc_breeding
+$dbh->do("ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )");
+
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
 
@@ -914,6 +917,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.60  2003/10/01 13:43:48  tipaul
+# fixing "z3950daemon not null" problem by changing the field to "null" instead of "not null".
+#
 # Revision 1.59  2003/09/30 16:22:05  tipaul
 # adding barcode NOT mandatory feature. Just run updatedatabase to get it.
 # Note it's impossible to issue an item without barcode, as issue/returns is based on barcode...
