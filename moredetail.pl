@@ -30,16 +30,10 @@ my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||
 	"/usr/local/www/hdl/htdocs/includes";
-my $templatebase="catalogue/moredetail.tmpl";
 my $startfrom=$query->param('startfrom') || 0;
-my $theme=picktemplate($includes, $templatebase);
 
-my $subject=$query->param('subject');
-# if its a subject we need to use the subject.tmpl
-if ($subject){
-  $templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
-}
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+
+my $template = gettemplate("catalogue/moredetail.tmpl");
 
 # get variables 
 
