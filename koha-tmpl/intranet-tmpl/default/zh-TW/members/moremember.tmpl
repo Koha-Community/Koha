@@ -116,7 +116,7 @@
       <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>書名</b></TD>
       <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>何時到期</b></TD>
       <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>類別</b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Charge</b></TD>
+      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>費用</b></TD>
       <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>續借</b></TD>
     </TR>
 
@@ -133,10 +133,9 @@
       <td><TMPL_VAR NAME="charge"></td>
       <td>
         <TMPL_IF NAME=norenew>
-          <a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">">On Request - no renewals</a>
+          <a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">">項目被預訂，不可續借</a>
         <TMPL_ELSE>
-          <input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=y>Y
-          <input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=n>N
+          <input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=y>嘗試續借<br><input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=n>毋須續借
         </TMPL_IF>
         <TMPL_IF NAME=red></font></TMPL_IF>
       </td>
