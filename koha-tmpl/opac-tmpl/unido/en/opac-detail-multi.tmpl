@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//Dtd HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+SEARCH RESULTS - ITEM DETAIL PAGE
+This is the part of the "vanilla" theme put together by Katipo
+Communications for general distribution with Koha. 
+If you see strange tags and comments you don't understand they may be out of
+Kea our content management system. If you'd like to use Kea to change your
+template & website text please contact Katipo.
+Cheers
+R
+12/1/03
+-->
+<html>
+<head>
+<title>Details</title>
+<link rel="stylesheet" href="<TMPL_VAR
+NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-search-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a
+href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a
+href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR
+NAME="biblionumber">'>Details</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT--><p>
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<table border="0" cellspacing="0" cellpadding="3">
+<tr valign="top"><td valign="top" class="head1bold" colspan="2"><TMPL_VAR
+NAME="title"><br />
+<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</TMPL_IF></td>
+    <td>
+<TMPL_UNLESS NAME="norequests">
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+    <input type="submit" name="submit" value="Place Reserve" align="right" class="submit">
+    <input type="hidden" name="bib" value=<TMPL_VAR NAME="biblionumber">>
+    </form>
+</TMPL_UNLESS>
+    </td></tr>
+</table>
+</TMPL_LOOP>
+<p style="font-size:110%;font-style:italic">There are multiple copies of
+this title with different catalogue information. Click on an item to see its full record.</p>
+
+<table border="0" cellspacing="0" cellpadding="3">
+<TMPL_LOOP NAME="ITEM_RESULTS">
+
+<tr valign="top"><td> &nbsp; </td>
+    <td><div class="padded">
+
+     <a href="/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR
+NAME="biblionumber">&bibitem=<TMPL_VAR NAME="biblioitemnumber">"><TMPL_IF NAME="volumeddesc">
+  Volume: <TMPL_VAR NAME="volumeddesc">
+<TMPL_ELSE>
+  <TMPL_IF NAME="isbn">
+    <TMPL_VAR NAME="isbn">
+  <TMPL_ELSE>
+    <TMPL_IF NAME="issn">
+      <TMPL_VAR NAME="issn">
+    </TMPL_IF>
+  </TMPL_IF>
+</TMPL_IF>
+</a>     
+    </div></td>
+    <td><div class="padded">
+		   
+    <a href="/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR
+NAME="biblionumber">&bibitem=<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="description"></a>
+
+    </div></td></tr>
+</TMPL_LOOP>
+<table>
+      
+
+      
+      
+      
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+      
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>
