@@ -34,6 +34,7 @@ sub re_tag ($) {
    my $etag = $compat? '>': '<>\/';
    # See the file "subst.pl.test1" for how the following mess is derived
    # Unfortunately, inserting $re_directive's has made this even messier
+   # FIXME: The following is somehow wrong. Paul's 1st report shouldn't happen.
    q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:} . $re_directive . q{|[^-"'} . $etag . q{]|-[^-]))+))([} . $etag . q{])(.*)};
 }
 BEGIN {
@@ -70,6 +71,9 @@ sub extract_attributes ($;$) {
 	$i += 1;
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
+	warn "Warning: Attribute unquoted but needs quoting"
+		. (defined $lc? " in line $lc": '') . ": $val_orig\n"
+		if $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
     }
     if ($s =~ /\S/s) { # should never happen
 	warn "Warning: Strange attribute syntax"
