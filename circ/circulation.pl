@@ -7,16 +7,48 @@ use DBI;
 
 
 my %env;
+my $headerbackgroundcolor='#990000';
 my $query=new CGI;
-print $query->header;
-print startpage();
-print startmenu('circulation');
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');
 my $printer=$query->param('printer');
+($branch) || ($branch=$query->cookie('branch'));
+($printer) || ($printer=$query->cookie('printer'));
+my ($oldbranch, $oldprinter);
+if ($query->param('selectnewbranchprinter')) {
+    $oldbranch=$branch;
+    $oldprinter=$printer;
+    $branch='';
+    $printer='';
+}
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
+my $branchcount=0;
+my $printercount=0;
+my $branchoptions;
+my $printeroptions;
+foreach (keys %$branches) {
+    (next) unless ($_);
+    $branchcount++;
+    my $selected='';
+    ($selected='selected') if ($_ eq $oldbranch);
+    $branchoptions.="<option value=$_ $selected>$branches->{$_}->{'branchname'}\n";
+}
+foreach (keys %$printers) {
+    (next) unless ($_);
+    $printercount++;
+    my $selected='';
+    ($selected='selected') if ($_ eq $oldprinter);
+    $printeroptions.="<option value=$_ $selected>$printers->{$_}->{'printername'}\n";
+}
+if ($printercount==1) {
+    ($printer)=keys %$printers;
+}
+if ($branchcount==1) {
+    ($branch)=keys %$branches;
+}
+
 
 my $branchname='';
 my $printername='';
@@ -24,25 +56,36 @@ if ($branch && $printer) {
     $branchname=$branches->{$branch}->{'branchname'};
     $printername=$printers->{$printer}->{'printername'};
 }
+
+
+my $branchcookie=$query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
+my $printercookie=$query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
+
+print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+print startpage();
+print startmenu('circulation');
+
+
 print << "EOF";
 <center>
 <p>
 <table border=0 width=100%>
 <tr>
 <td width=5%></td>
-<td align=right width=30%><table border=1 bgcolor=black width=100%><tr><th><font color=white>$branchname</font></th></tr></table></td>
+<td align=right width=30%><table border=1 bgcolor=$headerbackgroundcolor width=100%><tr><th><font color=white>$branchname</font></th></tr></table></td>
 <td align=center width=20%>
 <a href=circulation.pl?module=issues&branch=$branch&printer=$printer><img src=/images/issues.gif border=0 width=60></a>
 <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><img src=/images/returns.gif border=0 width=60></a>
+<br>
+<a href=circulation.pl?selectnewbranchprinter=1>Set Branch/Printer</a>
 </td><td align=left width=30%>
-<table border=1 bgcolor=black width=100%><tr><th><font color=white>$printername</font></th></tr></table>
+<table border=1 bgcolor=$headerbackgroundcolor width=100%><tr><th><font color=white>$printername</font></th></tr></table>
 </td>
 <td width=5%></td>
 </tr>
 </table>
 <br>
 EOF
-
 
 
 if ($printer && $branch) {
@@ -53,25 +96,11 @@ if ($printer && $branch) {
 	issues();
     }
 } else {
-    my $branchcount=0;
-    my $printercount=0;
-    my $branchoptions;
-    my $printeroptions;
-    foreach (keys %$branches) {
-	(next) unless ($_);
-	$branchcount++;
-	$branchoptions.="<option value=$_>$branches->{$_}->{'branchname'}\n";
-    }
-    foreach (keys %$printers) {
-	(next) unless ($_);
-	$printercount++;
-	$printeroptions.="<option value=$_>$printers->{$_}->{'printername'}\n";
-    }
     my ($printerform, $branchform);
     if ($printercount>1) {
 	$printerform=<<"EOF";
 <table border=1>
-<tr><th bgcolor=black><font color=white>Choose a Printer</font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor><font color=white>Choose a Printer</font></td></tr>
 <tr><td>
 <select name=printer>
 $printeroptions
@@ -89,7 +118,7 @@ EOF
     if ($branchcount>1) {
 	$branchform=<<"EOF";
 <table border=1>
-<tr><th bgcolor=black><font color=white>Choose a Branch</font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor><font color=white>Choose a Branch</font></td></tr>
 <tr><td>
 <select name=branch>
 $branchoptions
@@ -99,7 +128,7 @@ $branchoptions
 EOF
     }
     print << "EOF";
-    Select a printer and a branch
+    Select a branch and a printer
     <form method=get>
     <table border=0>
     <tr><td>
@@ -125,36 +154,93 @@ EOF
 
 
 sub returns {
+    my %returneditems;
+    foreach ($query->param) {
+	(next) unless (/ri-(\d*)/);
+	my $counter=$1;
+	(next) if ($counter>20);
+	my $barcode=$query->param("ri-$counter");
+	$counter++;
+	$returneditems{$counter}=$barcode;
+	$ritext.="<input type=hidden name=ri-$counter value=$barcode>\n";
+    }
+    if (my $barcode=$query->param('barcode')) {
+	$ritext.="<input type=hidden name=ri-0 value=$barcode>\n";
+	$returneditems{0}=$barcode;
+    }
+	
     print << "EOF";
     <form method=get>
     <table border=3 bgcolor=#dddddd>
-	<tr><td colspan=2 bgcolor=black align=center><font color=white><b><font size=+1>Returns</font><br>Enter Book Barcode</b></font></td></tr>
+	<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center><font color=white><b><font size=+1>Returns</font><br>Enter Book Barcode</b></font></td></tr>
 	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
     </table>
     <input type=hidden name=module value=returns>
     <input type=hidden name=branch value=$branch>
     <input type=hidden name=printer value=$printer>
+    $ritext
     </form>
 EOF
     if (my $barcode=$query->param('barcode')) {
-	print "Returning $barcode<br>\n";
 	my ($iteminformation, $borrower, $messages, $overduecharge) = returnbook(\%env, $barcode);
+	(my $nosuchitem=1) unless ($iteminformation);
 	my $itemtable=<<"EOF";
 <table border=1 bgcolor=#dddddd>
-<tr><th bgcolor=black><font color=white>Item Information</font></th></tr>
+<tr><th bgcolor=$headerbackgroundcolor><font color=white>Item Information</font></th></tr>
 <tr><td>
 Title: $iteminformation->{'title'}<br>
 Author: $iteminformation->{'author'}<br>
-Barcode: $iteminformation->{'barcode'}
+Barcode: <a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a><br>
+Date Due: $iteminformation->{'date_due'}
 </td></tr>
 </table>
 EOF
-	if ($borrower) {
-	    my ($patrontable, $flaginfotext) = patrontable($borrower);
-	    print "<table border=0><tr><td valign=top align=center>$patrontable</td><td valign=top align=center>$flaginfotext</td></tr><tr><td colspan=2 align=center>$itemtable</td></tr></table><br>\n";
+	if ($nosuchitem) {
+	    print << "EOF";
+	    <table border=1 bgcolor=#dddddd>
+	    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+	    <tr><td>
+	    <table border=0 cellpadding=5>
+	    <tr><td>
+	    $barcode is not a valid barcode.
+	    </td></tr>
+	    </table>
+	    </td></tr>
+	    </table>
+EOF
 	} else {
-	    print "Not loaned out.\n";
+	    if ($borrower) {
+		my ($patrontable, $flaginfotext) = patrontable($borrower);
+		print "<hr><p><table border=0><tr><td valign=top align=center>$patrontable</td><td valign=top align=center>$flaginfotext</td></tr><tr><td colspan=2 align=center>$itemtable</td></tr></table><br>\n";
+	    } else {
+		print << "EOF";
+		<table border=1 bgcolor=#dddddd>
+		<tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+		<tr><td>
+		<table border=0 cellpadding=5>
+		<tr><td>
+		$iteminformation->{'title'} by $iteminformation->{'author'} was not loaned out.
+		</td></tr>
+		</table>
+		</td></tr>
+		</table>
+EOF
+	    }
 	}
+	print << "EOF";
+	<p>
+	<hr>
+	<p>
+	<table border=1 bgcolor=#dddddd>
+	<tr><th colspan=4 bgcolor=$headerbackgroundcolor><font color=white>Returned Items</font></th></tr>
+	<tr><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
+EOF
+	foreach (sort {$a <=> $b} keys %returneditems) {
+	    my $barcode=$returneditems{$_};
+	    my ($iteminformation) = getiteminformation(\$env, 0, $barcode);
+	    print "<tr><td align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td>$iteminformation->{'title'}</td><td>$iteminformation->{'author'}</td><td align=center>$iteminformation->{'dewey'} $iteminformation->{'subclass'}</td></tr>\n";
+	}
+	print "</table>\n";
     }
 }
 
@@ -200,12 +286,26 @@ sub issues {
 	    }
 	    unless ($invalidduedate) {
 		my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) = issuebook(\%env, $borrower, $barcode, \%responses);
+		unless ($iteminformation) {
+		    print << "EOF";
+		    <table border=1 bgcolor=#dddddd>
+		    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+		    <tr><td>
+		    <table border=0 cellpadding=5>
+		    <tr><td>
+		    $barcode is not a valid barcode.
+		    </td></tr>
+		    </table>
+		    </td></tr>
+		    </table>
+EOF
+		}
 		if ($rejected) {
 		    if ($rejected == -1) {
 		    } else {
 			print << "EOF"
 			<table border=1 bgcolor=#dddddd>
-			<tr><th bgcolor=black><font color=white>Error Issuing Book</font></th></tr>
+			<tr><th bgcolor=$headerbackgroundcolor><font color=white>Error Issuing Book</font></th></tr>
 			<tr><td><font color=red>$rejected</font></td></tr>
 			</table>
 			<br>
@@ -220,7 +320,7 @@ EOF
 		    my $stickyduedate=$query->param('stickyduedate');
 		    print << "EOF";
 		    <table border=1 bgcolor=#dddddd>
-		    <tr><th bgcolor=black><font color=white><b>Issuing Question</b></font></td></tr>
+		    <tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Issuing Question</b></font></td></tr>
 		    <tr><td>
 		    <table border=0 cellpadding=10>
 		    <tr><td>
@@ -277,7 +377,7 @@ EOF
 		if ($message) {
 		    print << "EOF";
 		    <table border=1 bgcolor=#dddddd>
-		    <tr><th bgcolor=black><font color=white>Message</font></th></tr>
+		    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Message</font></th></tr>
 		    <tr><td>$message</td></tr>
 		    </table>
 		    <p>
@@ -304,7 +404,7 @@ EOF
 	    }
 	}
 	if ($flaginfotext) {
-	    $flaginfotext="<table border=1 width=70% bgcolor=#dddddd><tr><th bgcolor=black colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n";
+	    $flaginfotext="<table border=1 width=70% bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n";
 	}
 	$env{'nottodaysissues'}=1;
 	my ($borrowerissues) = currentissues(\%env, $borrower);
@@ -323,12 +423,13 @@ EOF
 	    if ($datedue < $todaysdate) {
 		$bgcolor="bgcolor=red";
 	    }
-	    $previssues.="<tr $bgcolor><td>$bookissue->{'date_due'}</td><td>$bookissue->{'barcode'}</td><td>$bookissue->{'title'}</td><td>$bookissue->{'author'}</td><td>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
+	    #$previssues.="<tr $bgcolor><td>$bookissue->{'date_due'}</td><td>$bookissue->{'barcode'}</td><td>$bookissue->{'title'}</td><td>$bookissue->{'author'}</td><td>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
+	    $previssues.="<tr><td align=center>$bookissue->{'date_due'}</td><td align=center><a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td><td>$bookissue->{'title'}</td><td>$bookissue->{'author'}</td><td align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
 	}
 	my $todaysissues='';
 	foreach (sort keys %$today) {
 	    my $bookissue=$today->{$_};
-	    $todaysissues.="<tr><td>$bookissue->{'date_due'}</td><td>$bookissue->{'barcode'}</td><td>$bookissue->{'title'}</td><td>$bookissue->{'author'}</td><td>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
+	    $todaysissues.="<tr><td align=center>$bookissue->{'date_due'}</td><td align=center><a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td><td>$bookissue->{'title'}</td><td>$bookissue->{'author'}</td><td align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
 	}
 	for ($i=1; $i<32; $i++) {
 	    my $selected='';
@@ -362,9 +463,9 @@ EOF
 	<form method=get>
     <table border=0 cellpadding=5 width=90%>
     <tr>
-	<td align=center>
+	<td align=center valign=top>
 	    <table border=1 bgcolor=#dddddd width=100%>
-	        <tr><td align=center bgcolor=black><font color=white><b>Enter Book Barcode</b></font></td></tr>
+	        <tr><td align=center bgcolor=$headerbackgroundcolor><font color=white><b>Enter Book Barcode</b></font></td></tr>
 		<tr><td align=center>
 		<table border=0 bgcolor=#dddddd>
 		<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></tr>
@@ -382,7 +483,7 @@ EOF
 	<input type=hidden name=printer value=$printer>
 	</form>
 	</td>
-	<td align=right valign=top>
+	<td align=center valign=top>
 	$patrontable
 	<br>
 	$flaginfotable
@@ -391,7 +492,7 @@ EOF
     <tr>
 	<td colspan=2 align=center>
 	<table border=1 width=100% bgcolor=#dddddd>
-	    <tr><th colspan=5 bgcolor=black><font color=white><b>Issues Today</b></font></th></tr>
+	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor><font color=white><b>Issues Today</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $todaysissues
 	</table>
@@ -400,7 +501,7 @@ EOF
     <tr>
 	<td colspan=2 align=center>
 	<table border=1 width=100% bgcolor=#dddddd>
-	    <tr><th colspan=5 bgcolor=black><font color=white><b>Previous Issues</b></font></th></tr>
+	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor><font color=white><b>Previous Issues</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $previssues
 	</table>
@@ -429,7 +530,7 @@ EOF
 		print "<input type=hidden name=branch value=$branch>\n";
 		print "<input type=hidden name=printer value=$printer>\n";
 		print "<table border=1 cellpadding=5 bgcolor=#dddddd>";
-		print "<tr><th bgcolor=black><font color=white><b><font size=+1>Issues</font><br>Select a borrower</b></font></th></tr>\n";
+		print "<tr><th bgcolor=$headerbackgroundcolor><font color=white><b><font size=+1>Issues</font><br>Select a borrower</b></font></th></tr>\n";
 		print "<tr><td align=center>\n";
 		print "<select name=borrnumber size=7>\n";
 		foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowers) {
@@ -443,7 +544,7 @@ EOF
 	    print << "EOF";
 <form method=get>
 <table border=1 bgcolor=#dddddd>
-<tr><th bgcolor=black><font color=white><b><font size=+1>Issues</font><br>Enter borrower card number<br> or partial last name</b></font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor><font color=white><b><font size=+1>Issues</font><br>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
 </table>
 <input type=hidden name=module value=issues>
@@ -471,17 +572,25 @@ sub patrontable {
 	}
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
-	    $flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
+	    if ($flag eq 'CHARGES') {
+		$flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td><b>$flags->{$flag}->{'message'}</b> <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
+	    } else {
+		$flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
+	    }
 	} else {
-	    $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
+	    if ($flag eq 'CHARGES') {
+		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
+	    } else {
+		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
+	    }
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<table border=1 bgcolor=#dddddd><tr><th bgcolor=black colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n");
+    ($flaginfotext) && ($flaginfotext="<table border=1 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n");
     my $patrontable= << "EOF";
     <table border=1 bgcolor=#dddddd>
-    <tr><th bgcolor=black><font color=white><b>Patron Information</b></font></td></tr>
+    <tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Patron Information</b></font></td></tr>
     <tr><td>
-    $borrower->{'cardnumber'} $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
+    <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
     $borrower->{'streetaddress'} $borrower->{'city'}<br>
     $borrower->{'categorycode'} $flagtext
     </td></tr>

@@ -137,8 +137,15 @@ sub getiteminformation {
     $sth->execute;
     my $iteminformation=$sth->fetchrow_hashref;
     $sth->finish;
+    if ($iteminformation) {
+	$sth=$dbh->prepare("select date_due from issues where itemnumber=$iteminformation->{'itemnumber'} and isnull(returndate)");
+	$sth->execute;
+	my ($date_due) = $sth->fetchrow;
+	$iteminformation->{'date_due'}=$date_due;
+	$sth->finish;
+	$iteminformation->{'dewey'}=~s/0*$//;
+    }
     $dbh->disconnect;
-    $iteminformation->{'dewey'}=~s/0*$//;
     return($iteminformation);
 }
 
@@ -187,6 +194,10 @@ sub issuebook {
 	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
 	if ($amount>5) {
 	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
+	    last SWITCH;
+	}
+	unless ($iteminformation) {
+	    $rejected="$barcode is not a valid barcode.";
 	    last SWITCH;
 	}
 	if ($iteminformation->{'notforloan'} == 1) {
