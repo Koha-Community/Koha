@@ -170,7 +170,7 @@ sub new
 	my $self = {};
 
 	# check that the specified config file exists
-	undef $conf_fname unless (-e $conf_fname);
+	undef $conf_fname unless (defined $conf_fname && -e $conf_fname);
 	# Figure out a good config file to load if none was specified.
 	if (!defined($conf_fname))
 	{
