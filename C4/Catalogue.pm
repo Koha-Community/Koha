@@ -98,27 +98,25 @@ number of elements in C<@orders>.
 sub basket {
   my ($basketno,$supplier)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
-  where basketno='$basketno'
+  my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblio,biblioitems
+  where basketno=?
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
   =aqorders.biblioitemnumber
   and (datecancellationprinted is NULL or datecancellationprinted =
-  '0000-00-00')";
-  if ($supplier ne ''){
-    $query.=" and aqorders.booksellerid='$supplier'";
+  '0000-00-00')"
+  .(($supplier ne '')?" and aqorders.booksellerid=?":"")
+  ." group by aqorders.ordernumber");
+  if ($supplier ne '') {
+    $sth->execute($basketno,$supplier);
+  } else {
+    $sth->execute($basketno);
   }
-  $query.=" group by aqorders.ordernumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-#  print $query;
-  my $i=0;
+  my @results = ();
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 =item newbasket
@@ -141,8 +139,7 @@ database, and returns it.
 # remove out-of-date dummy orders.
 sub newbasket {
   my $dbh = C4::Context->dbh;
-  my $query="Select max(basketno) from aqorders";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select max(basketno) from aqorders");
   $sth->execute;
   my $data=$sth->fetchrow_arrayref;
   my $basket=$$data[0];
@@ -225,12 +222,9 @@ marc_biblio tables of the Koha database.
 sub delorder {
   my ($bibnum,$ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update aqorders set datecancellationprinted=now()
-  where biblionumber='$bibnum' and
-  ordernumber='$ordnum'";
-  my $sth=$dbh->prepare($query);
-  #print $query;
-  $sth->execute;
+  my $sth=$dbh->prepare("update aqorders set datecancellationprinted=now()
+  where biblionumber=? and ordernumber=?");
+  $sth->execute($bibnum,$ordnum);
   $sth->finish;
   my $count=itemcount($bibnum);
   if ($count == 0){
@@ -258,18 +252,16 @@ table are also updated to the new book fund ID.
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update aqorders set title='$title',
-  quantity='$quantity',listprice='$listprice',basketno='$basketno',
-  rrp='$rrp',ecost='$ecost',unitprice='$cost',
-  booksellerinvoicenumber='$invoice'
+  my $sth=$dbh->prepare("update aqorders set title=?,
+  quantity=?,listprice=?,basketno=?,
+  rrp=?,ecost=?,unitprice=?,
+  booksellerinvoicenumber=?
   where
-  ordernumber=$ordnum and biblionumber=$bibnum";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  ordernumber=? and biblionumber=?");
+  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$invoice,$ordnum,$bibnum);
   $sth->finish;
-  $query="update aqorderbreakdown set bookfundid=? where
-  ordernumber=?";
-  $sth=$dbh->prepare($query);
+  $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
+  ordernumber=?");
   $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
@@ -286,8 +278,7 @@ database, and returns it.
 # FIXME - Race condition
 sub newordernum {
   my $dbh = C4::Context->dbh;
-  my $query="Select max(ordernumber) from aqorders";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select max(ordernumber) from aqorders");
   $sth->execute;
   my $data=$sth->fetchrow_arrayref;
   my $ordnum=$$data[0];
@@ -316,15 +307,13 @@ Also updates the book fund ID in the aqorderbreakdown table.
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
+  my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
   										biblioitemnumber=?,unitprice=?,freight=?,rrp=?
-  						where biblionumber=? and ordernumber=?";
-  my $sth=$dbh->prepare($query);
+  						where biblionumber=? and ordernumber=?");
   $sth->execute($quantrec,$invoiceno,$bibitemno,$cost,$freight,$rrp,$biblio,$ordnum);
   $sth->finish;
-  $query="update aqorderbreakdown set bookfundid=? where
-  ordernumber=?";
-  $sth=$dbh->prepare($query);
+  $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
+  ordernumber=?");
   $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
@@ -346,19 +335,14 @@ C<$user> is ignored.
 sub updaterecorder{
   my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update aqorders set
-  unitprice='$cost', rrp='$rrp'
-  where biblionumber=$biblio and ordernumber=$ordnum
-  ";
-#  print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("update aqorders set
+  unitprice=?, rrp=?
+  where biblionumber=? and ordernumber=?
+  ");
+  $sth->execute($cost,$rrp,$biblio,$ordnum);
   $sth->finish;
-  $query="update aqorderbreakdown set bookfundid=$bookfund where
-  ordernumber=$ordnum";
-  $sth=$dbh->prepare($query);
-#  print $query;
-  $sth->execute;
+  $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where ordernumber=?");
+  $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
 
@@ -404,22 +388,18 @@ Results are ordered from most to least recent.
 sub getorders {
   my ($supplierid)=@_;
   my $dbh = C4::Context->dbh;
-  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where
-  booksellerid='$supplierid' and (quantity > quantityreceived or
+  my $sth=$dbh->prepare("Select count(*),authorisedby,entrydate,basketno from aqorders where
+  booksellerid=? and (quantity > quantityreceived or
   quantityreceived is NULL)
-  and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')";
-  $query.=" group by basketno order by entrydate desc";
-  #print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-  my $i=0;
+  and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')
+   group by basketno order by entrydate desc");
+  $sth->execute($supplierid);
+  my @results = ();
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return ($i,\@results);
+  return (scalar(@results),\@results);
 }
 
 =item getorder
@@ -440,15 +420,13 @@ tables of the Koha database.
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select ordernumber from aqorders where biblionumber=? and biblioitemnumber=?";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select ordernumber from aqorders where biblionumber=? and biblioitemnumber=?");
   $sth->execute($bib,$bi);
   # FIXME - Use fetchrow_array(), since we're only interested in the one
   # value.
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
-#  print $query;
   return ($order,$ordnum->{'ordernumber'});
 }
 
@@ -470,13 +448,12 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
-  where aqorders.ordernumber='$ordnum'
+  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  where aqorders.ordernumber=?
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  aqorders.ordernumber=aqorderbreakdown.ordernumber");
+  $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   return($data);
@@ -501,24 +478,21 @@ sub getallorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
+  my @results = ();
+  my $sth=$dbh->prepare("Select * from aqorders,biblio,biblioitems where booksellerid=?
   and (cancelledby is NULL or cancelledby = '')
   and (quantityreceived < quantity or quantityreceived is NULL)
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
   aqorders.biblioitemnumber
   group by aqorders.biblioitemnumber
   order by
-  biblio.title";
-  my $i=0;
-  my @results;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  biblio.title");
+  $sth->execute($supid);
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 # FIXME - Never used
@@ -526,7 +500,8 @@ sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
+  my @results= ();
+  my $sth=$dbh->prepare("Select * from aqorders,biblio,biblioitems where booksellerid=?
   and (cancelledby is NULL or cancelledby = '')
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
   aqorders.biblioitemnumber and
@@ -534,17 +509,13 @@ sub getrecorders {
   and aqorders.datereceived >=now()
   group by aqorders.biblioitemnumber
   order by
-  biblio.title";
-  my $i=0;
-  my @results;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  biblio.title");
+  $sth->execute($supid);
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 =item ordersearch
@@ -585,30 +556,23 @@ following keys:
 sub ordersearch {
 	my ($search,$id,$biblio,$catview) = @_;
 	my $dbh   = C4::Context->dbh;
-	my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
-							where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
-									and aqorders.booksellerid = '$id'
-									and biblio.biblionumber=aqorders.biblionumber
-									and ((datecancellationprinted is NULL)
-									or (datecancellationprinted = '0000-00-00'))
-									and ((";
 	my @data  = split(' ',$search);
-	my $count = @data;
-	for (my $i = 0; $i < $count; $i++) {
-		$query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
-	}
-	$query=~ s/ and $//;
-			# FIXME - Redo this properly instead of hacking off the
-			# trailing 'and'.
-	$query.=" ) or biblioitems.isbn='$search' or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
-	if ($catview ne 'yes'){
-		$query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
-	}
-	$query.=" group by aqorders.ordernumber";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	my $i=0;
-	my @results;
+	my @searchterms = ($id);
+	map { push(@searchterms,"$_%","% $_%") } @data;
+	push(@searchterms,$search,$search,$biblio);
+	my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblioitems,biblio
+		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+		and aqorders.booksellerid = ?
+		and biblio.biblionumber=aqorders.biblionumber
+		and ((datecancellationprinted is NULL)
+		or (datecancellationprinted = '0000-00-00'))
+		and (("
+		.(join(" and ",map { "(biblio.title like ? or biblio.title like ?)" } @data))
+		.") or biblioitems.isbn=? or (aqorders.ordernumber=? and aqorders.biblionumber=?)) "
+		.(($catview ne 'yes')?" and (quantityreceived < quantity or quantityreceived is NULL)":"")
+		." group by aqorders.ordernumber");
+	$sth->execute(@searchterms);
+	my @results = ();
 	my $sth2=$dbh->prepare("Select * from biblio where biblionumber=?");
 	my $sth3=$dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
 	while (my $data=$sth->fetchrow_hashref){
@@ -620,13 +584,12 @@ sub ordersearch {
 		my $data3=$sth3->fetchrow_hashref;
 		$data->{'branchcode'}=$data3->{'branchcode'};
 		$data->{'bookfundid'}=$data3->{'bookfundid'};
-		$results[$i]=$data;
-		$i++;
+		push(@results,$data);
 	}
 	$sth->finish;
 	$sth2->finish;
 	$sth3->finish;
-	return($i,@results);
+	return(scalar(@results),@results);
 }
 
 #
@@ -650,20 +613,17 @@ of the Koha database.
 sub invoice {
   my ($invoice)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorders,biblio,biblioitems where
-  booksellerinvoicenumber='$invoice'
+  my @results = ();
+  my $sth=$dbh->prepare("Select * from aqorders,biblio,biblioitems where
+  booksellerinvoicenumber=?
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber group by aqorders.ordernumber,aqorders.biblioitemnumber";
-  my $i=0;
-  my @results;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  aqorders.biblioitemnumber group by aqorders.ordernumber,aqorders.biblioitemnumber");
+  $sth->execute($invoice);
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 =item bookfunds
@@ -681,19 +641,16 @@ alphabetically by book fund name.
 #'
 sub bookfunds {
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
+  my $sth=$dbh->prepare("Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid
-  group by aqbookfund.bookfundid order by bookfundname";
-  my $sth=$dbh->prepare($query);
+  group by aqbookfund.bookfundid order by bookfundname");
   $sth->execute;
-  my @results;
-  my $i=0;
+  my @results = ();
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 # FIXME - POD. I can't figure out what this function is doing. Then
@@ -701,13 +658,12 @@ sub bookfunds {
 sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
-  from aqorders,aqorderbreakdown where bookfundid='$id' and
+  my $sth=$dbh->prepare("Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
+  from aqorders,aqorderbreakdown where bookfundid=? and
   aqorders.ordernumber=aqorderbreakdown.ordernumber
   and (datecancellationprinted is NULL or
-  datecancellationprinted='0000-00-00')";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  datecancellationprinted='0000-00-00')");
+  $sth->execute($id);
   my $comtd=0;
   my $spent=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -738,12 +694,10 @@ to one.
 sub curconvert {
   my ($currency,$price)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select rate from currency where currency='$currency'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
+  my $sth=$dbh->prepare("Select rate from currency where currency=?");
+  $sth->execute($currency);
+  my $cur=($sth->fetchrow_array())[0];
   $sth->finish;
-  my $cur=$data->{'rate'};
   if ($cur==0){
     $cur=1;
   }
@@ -764,17 +718,14 @@ keys are the fields from the currency table in the Koha database.
 #'
 sub getcurrencies {
   my $dbh = C4::Context->dbh;
-  my $query="Select * from currency";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select * from currency");
   $sth->execute;
-  my @results;
-  my $i=0;
+  my @results = ();
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,\@results);
+  return(scalar(@results),\@results);
 }
 
 =item updatecurrencies
@@ -788,9 +739,8 @@ Sets the exchange rate for C<$currency> to be C<$newrate>.
 sub updatecurrencies {
   my ($currency,$rate)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update currency set rate=$rate where currency='$currency'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("update currency set rate=? where currency=?");
+  $sth->execute($rate,$currency);
   $sth->finish;
 }
 
@@ -798,10 +748,8 @@ sub updatecurrencies {
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update items set price='$price',replacementprice='$rrp'
-  where itemnumber=$itemnum";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("update items set price=?,replacementprice=? where itemnumber=?");
+  $sth->execute($price,$rrp,$itemnum);
   $sth->finish;
 }
 
@@ -827,18 +775,14 @@ aqbooksellers table in the Koha database.
 sub bookseller {
   my ($searchstring)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqbooksellers where name like '$searchstring%' or
-  id = '$searchstring'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from aqbooksellers where name like ? or id = ?");
+  $sth->execute("$searchstring%",$searchstring);
   my @results;
-  my $i=0;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,@results);
+  return(scalar(@results),@results);
 }
 
 =item breakdown
@@ -856,17 +800,14 @@ are the fields of the aqorderbreakdown table in the Koha database.
 sub breakdown {
   my ($id)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorderbreakdown where ordernumber='$id'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-  my $i=0;
+  my $sth=$dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
+  $sth->execute($id);
+  my @results = ();
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
-  return($i,\@results);
+  return(scalar(@results),\@results);
 }
 
 =item branches
@@ -883,37 +824,31 @@ table of the Koha database.
 #'
 sub branches {
     my $dbh   = C4::Context->dbh;
-    my $query = "Select * from branches order by branchname";
-    my $sth   = $dbh->prepare($query);
-    my $i     = 0;
-    my @results;
+    my $sth   = $dbh->prepare("Select * from branches order by branchname");
+    my @results = ();
 
-    $sth->execute;
+    $sth->execute();
     while (my $data = $sth->fetchrow_hashref) {
-        $results[$i] = $data;
-    	$i++;
+        push(@results,$data);
     } # while
 
     $sth->finish;
-    return($i, @results);
+    return(scalar(@results), @results);
 } # sub branches
 
 # FIXME - Never used
 sub findall {
   my ($biblionumber)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblioitems,items,itemtypes where
-  biblioitems.biblionumber=$biblionumber
+  my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes where
+  biblioitems.biblionumber=?
   and biblioitems.biblioitemnumber=items.biblioitemnumber and
   itemtypes.itemtype=biblioitems.itemtype
-  order by items.biblioitemnumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  order by items.biblioitemnumber");
+  $sth->execute($biblionumber);
   my @results;
-  my $i;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+    push(@results,$data);
   }
   $sth->finish;
   return(@results);
@@ -923,10 +858,9 @@ sub findall {
 sub needsmod{
   my ($bibitemnum,$itemtype)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblioitems where biblioitemnumber=$bibitemnum
-  and itemtype='$itemtype'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from biblioitems where biblioitemnumber=?
+  and itemtype=?");
+  $sth->execute($bibitemnum,$itemtype);
   my $result=0;
   if (my $data=$sth->fetchrow_hashref){
     $result=1;
@@ -953,15 +887,14 @@ C<&updatesup> with the result.
 sub updatesup {
    my ($data)=@_;
    my $dbh = C4::Context->dbh;
-   my $query="Update aqbooksellers set
+   my $sth=$dbh->prepare("Update aqbooksellers set
    name=?,address1=?,address2=?,address3=?,address4=?,postal=?,
    phone=?,fax=?,url=?,contact=?,contpos=?,contphone=?,contfax=?,contaltphone=?,
    contemail=?,contnotes=?,active=?,
    listprice=?, invoiceprice=?,gstreg=?, listincgst=?,
    invoiceincgst=?, specialty=?,discount=?,invoicedisc=?,
    nocalc=?
-   where id=?";
-   my $sth=$dbh->prepare($query);
+   where id=?");
    $sth->execute($data->{'name'},$data->{'address1'},$data->{'address2'},
    $data->{'address3'},$data->{'address4'},$data->{'postal'},$data->{'phone'},
    $data->{'fax'},$data->{'url'},$data->{'contact'},$data->{'contpos'},
@@ -995,8 +928,8 @@ sub insertsup {
   my $data2=$sth->fetchrow_hashref;
   $sth->finish;
   $data2->{'max(id)'}++;
-  $sth=$dbh->prepare("Insert into aqbooksellers (id) values ($data2->{'max(id)'})");
-  $sth->execute;
+  $sth=$dbh->prepare("Insert into aqbooksellers (id) values (?)");
+  $sth->execute($data2->{'max(id)'});
   $sth->finish;
   $data->{'id'}=$data2->{'max(id)'};
   updatesup($data);
@@ -1022,43 +955,21 @@ and biblioitems tables in the Koha database.
 sub websitesearch {
     my ($keywordlist) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "Select distinct biblio.* from biblio, biblioitems where
-biblio.biblionumber = biblioitems.biblionumber and (";
-    my $count = 0;
     my $sth;
-    my @results;
+    my @results = ();
     my @keywords = split(/ +/, $keywordlist);
-    my $keyword = shift(@keywords);
 
-    # FIXME - Can use
-    #	$query .= join(" and ",
-    #		apply { url like "%$_%" } @keywords
-
-    $keyword =~ s/%/\\%/g;
-    $keyword =~ s/_/\\_/;
-    $keyword = "%" . $keyword . "%";
-    $keyword = $dbh->quote($keyword);
-    $query  .= " (url like $keyword)";
-
-    foreach $keyword (@keywords) {
-        $keyword =~ s/%/\\%/;
-	$keyword =~ s/_/\\_/;
-	$keyword = "%" . $keyword . "%";
-        $keyword = $dbh->quote($keyword);
-	$query  .= " or (url like $keyword)";
-    } # foreach
-
-    $query .= ")";
-    $sth    = $dbh->prepare($query);
-    $sth->execute;
+	$sth    = $dbh->prepare("Select distinct biblio.* from biblio, biblioitems where
+    	biblio.biblionumber = biblioitems.biblionumber and ("
+		.(join(") or (",map { "url like ?" } @keywords)).")");
+    $sth->execute(map { s/([%_])/\\\1/g; "%$_%" } @keywords);
 
     while (my $data = $sth->fetchrow_hashref) {
-        $results[$count] = $data;
-	$count++;
+        push(@results,$data);
     } # while
 
     $sth->finish;
-    return($count, @results);
+    return(scalar(@results), @results);
 } # sub websitesearch
 
 =item addwebsite
