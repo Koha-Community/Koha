@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w # please develop with -w
 
-use diagnostics;
+#use diagnostics;
 use strict; # please develop with the strict pragma
 
 if ($<) {
