@@ -907,7 +907,8 @@ sub ItemInfo {
       $datedue="Cancelled";
     }
     if ($datedue eq ''){
-       my ($rescount,$reserves)=FindReserves($biblionumber,'');   
+       my ($rescount,$reserves)=Findgroupreserve($data->{'biblioitemnumber'},$biblionumber);
+
        if ($rescount >0){                                
           $datedue='Request';
        }

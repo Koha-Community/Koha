@@ -91,14 +91,21 @@ sub FindReserves {
 }
 
 sub Findgroupreserve {
-  my ($bibitem)=@_;
+  my ($bibitem,$biblio)=@_;
   my $dbh=C4Connect;
   $bibitem=$dbh->quote($bibitem);
-  my $query="Select * from reserves,reserveconstraints where
-  reserves.biblionumber=reservesconstraints.biblionumber and
-  and reserveconstraints.biblioitemnumber=$bibitem
+  my $query="Select * from reserves 
+  left join reserveconstraints on
+  reserves.biblionumber=reserveconstraints.biblionumber
+  where
+  reserves.biblionumber=$biblio and
+  ((reserveconstraints.biblioitemnumber=$bibitem 
+  and reserves.borrowernumber=reserveconstraints.borrowernumber
+  and reserves.reservedate=reserveconstraints.reservedate)
+  or reserves.constrainttype='a')
   and reserves.cancellationdate is NULL
   and (reserves.found <> 'F' or reserves.found is NULL)";
+#  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
