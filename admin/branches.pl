@@ -167,6 +167,7 @@ sub branchinfotable {
 	$branchinfo = getbranchinfo();
     }
     my $color;
+    my @loop_data =();
     foreach my $branch (@$branchinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	my $address = '';
@@ -183,13 +184,34 @@ sub branchinfotable {
 	    $categories .= $catinfo->{'categoryname'}."<br>";
 	}
 	$categories = '(no categories set)' unless ($categories);
-$template->param(color => $color);
-$template->param(branch_name => $branch->{'branchname'});
-$template->param(adress => $address);
-$template->param(categories => $categories);
-$template->param(branch_code => $branch->{'branchcode'});
-$template->param(value => $branch->{'branchcode'});
+	my @colors = ();
+	my @branch_name = ();
+	my @branch_code = ();
+	my @address = ();
+	my @categories = ();
+	my @value = ();
+	my @action =();
+	push(@colors,$color);
+	push(@branch_name,$branch->{'branchname'});
+	push(@branch_code,$branch->{'branchcode'});
+	push(@address,$address);
+	push(@categories,$categories);
+	push(@value,$branch->{'branchcode'});
+	push(@action,"/cgi-bin/koha/admin/branches.pl");
+	while (@colors and @branch_name and @branch_code and @address and @categories and @value and @action) {
+	my %row_data;
+	$row_data{color} = shift @colors;
+	$row_data{branch_name} = shift @branch_name;
+	$row_data{branch_code} = shift @branch_code;
+	$row_data{address} = shift @address;
+	$row_data{categories} = shift @categories;
+	$row_data{value} = shift @value;
+	$row_data{action} = shift @action;
+	push(@loop_data, \%row_data);
     }
+    
+    }
+    $template->param(branches => \@loop_data);
 
 }
 
