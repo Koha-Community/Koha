@@ -85,10 +85,11 @@ sub menu {
   # end of menu
 }
 
-  
+# FIXME - Is this a placeholder?
 sub clearscreen { 
 }
 
+# FIXME - Is this a placeholder?
 sub pause {
  
 }
