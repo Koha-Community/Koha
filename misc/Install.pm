@@ -259,7 +259,7 @@ sub releasecandidatewarning {
 	print getmessage('continuing');
     } else {
 	my $message=getmessage('WatchForReleaseAnnouncements');
-	print $message;
+	print $message."\n";
 	exit;
     };
 }
@@ -717,6 +717,7 @@ sub checkperlmodules {
 	}
 	my $message=getmessage('MissingPerlModules', [$missing]);
 	showmessage($message, 'none');
+	print "\n";
 	exit;
     } else {
 	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1);
