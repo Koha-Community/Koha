@@ -3,8 +3,6 @@
 #
 # $Header$
 #
-# Change log is at the bottom of the file
-#
 
 use strict;
 use C4::Search;
@@ -45,6 +43,7 @@ if ($query->param('modifyshelfcontents')) {
 
 SWITCH: {
     if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
+    if ($query->param('shelves')) {  shelves(); last SWITCH;}
     print << "EOF";
     <center>
     <table border=0 cellpadding=4 cellspacing=0>
@@ -62,7 +61,58 @@ EOF
 	print "<tr><td bgcolor=$color><a href=shelves.pl?viewshelf=$_>$shelflist->{$_}->{'shelfname'} ($shelflist->{$_}->{'count'} books)</a></td></tr>\n";
     }
     print "</table>\n";
+    print "<P><a href=shelves.pl?shelves=1>Add or Remove Book Shelves</a>\n";
 }
+
+
+
+sub shelves {
+    if (my $newshelf=$query->param('addshelf')) {
+	my ($status, $string) = AddShelf($env,$newshelf);
+	if ($status) {
+	    print "<font color=red>$string</font><p>\n";
+	}
+    }
+    foreach ($query->param()) {
+	if (/DEL-(\d+)/) {
+	    my $delshelf=$1;
+	    my ($status, $string) = RemoveShelf($env,$delshelf);
+	    if ($status) {
+		print "<font color=red>$string</font><p>\n";
+	    }
+	}
+    }
+    my ($shelflist) = GetShelfList();
+    print << "EOF";
+<center>
+<a href=shelves.pl>Modify Shelf Contents</a><p>
+<h1>Bookshelves</h1>
+<table border=0 cellpadding=7>
+<tr><td align=center>
+<form method=post>
+<input type=hidden name=shelves value=1>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><th bgcolor=$headerbackgroundcolor>
+<font color=white>Select Shelves to Delete</font>
+</th></tr>
+EOF
+    my $color='';
+    my $color='';
+    foreach (sort keys %$shelflist) {
+	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	print "<tr><td bgcolor=$color><input type=checkbox name=DEL-$_> $shelflist->{$_}->{'shelfname'} ($shelflist->{$_}->{'count'} books)</td></tr>\n";
+    }
+    print "</table>\n";
+    print '<p><input type=submit value="Delete Shelves"><p>';
+    print "</td><td align=center valign=top>\n";
+    print "<form method=post>\n";
+    print "<input type=hidden name=shelves value=1>\n";
+    print "<p>Add Shelf: <input name=addshelf size=25><p>\n";
+    print '<p><input type=submit value="Add New Shelf"><p>';
+    print "</form>\n";
+    print "</td></tr></table>\n";
+}
+
 
 
 sub viewshelf {
@@ -116,14 +166,14 @@ EOF
 
 #
 # $Log$
-# Revision 1.2  2001/02/07 23:47:43  tonnesen
-# Added header and log substition variables
-#
-# Revision 1.1  2001/02/07 20:27:16  tonnesen
-# Start of code to implement virtual bookshelves in Koha.
+# Revision 1.2.2.1  2002/06/26 20:28:15  tonnesen
+# Some udpates that I made here locally a while ago.  Still won't be useful, but
+# should be functional
 #
 #
 #
 
 
 
+print endpage();
+print endmenu('catalogue');
