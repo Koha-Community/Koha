@@ -1434,14 +1434,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							notforloan = ?
+							bulk	=?, 							notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},$item->{'dateaccessioned'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
 	} else {
 		$sth=$dbh->prepare("Insert into items set
 							itemnumber           = ?,				biblionumber         = ?,
@@ -1450,14 +1450,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							notforloan = ?
+							bulk = ? , notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
 	}
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
@@ -2192,6 +2192,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
+# * minor html fixes
+# * adding publisher in acquisition process (& ordering basket by publisher)
+#
 # Revision 1.78  2003/12/09 15:57:28  tipaul
 # rolling back to working char_decode sub
 #

@@ -169,7 +169,8 @@ $template->param( existing => $biblio,
 						rrp => $data->{'rrp'},
 						ecost => $data->{'ecost'},
 						notes => $data->{'notes'},
-						barcode => $data->{'barcode'},);
+						barcode => $data->{'barcode'},
+						publishercode => $data->{'publishercode'});
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
