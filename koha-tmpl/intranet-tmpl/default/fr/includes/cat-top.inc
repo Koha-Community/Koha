@@ -85,6 +85,11 @@ a.catalogue:hover {
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Ajout notice</a>
 						</div>
 					</td>
+					<td>
+						<div id="submenu">
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Maintenance catalogue</a>
+						</div>
+					</td>
 				</tr>
 			</table>
 			</div>
