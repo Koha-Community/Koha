@@ -334,12 +334,30 @@ if ($op eq "add") {
 	}
 	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record built => now, record in DB
-	if ($is_a_modif) {
-		 AUTHmodauthority($dbh,$authid,$record,$authtypecode);
+	# check for a duplicate
+	my ($duplicateauthnumber,$duplicateauthid,$duplicateauthvalue) = FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
+	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
+	if (!$duplicateauthnumber or $confirm_not_duplicate) {
+		# MARC::Record built => now, record in DB
+		if ($is_a_modif) {
+			AUTHmodauthority($dbh,$authid,$record,$authtypecode);
+		} else {
+			($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
+		}
+	# now, redirect to additem page
+		print $input->redirect("detail.pl?authid=$authid");
+		exit;
 	} else {
-		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
+	# it may be a duplicate, warn the user and do nothing
+#		build_tabs ($template, $record, $dbh,$encoding);
+#		build_hidden_data;
+		$template->param(
+ 			duplicateauthnumber		=> $duplicateauthnumber,
+ 			duplicateauthid				=> $duplicateauthid,
+ 			duplicateauthvalue				=> $duplicateauthvalue,
+			 );
 	}
-	print $input->redirect("detail.pl?authid=$authid");
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------

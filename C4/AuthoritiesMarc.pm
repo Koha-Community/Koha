@@ -51,6 +51,7 @@ $VERSION = 0.01;
 	&AUTHaddword
 	&MARCaddword &MARCdelword
 	&char_decode
+	&FindDuplicate
  );
 
 sub authoritysearch {
@@ -844,6 +845,46 @@ sub nsb_clean {
 	return($string) ;
 }
 
+sub FindDuplicate {
+	my ($record,$authtypecode)=@_;
+	my $dbh = C4::Context->dbh;
+	
+	warn "".$record->as_formatted;
+	# search duplicate on ISBN, easy and fast...
+	my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
+	$sth->execute($authtypecode);
+	my ($auth_tag_to_report) = $sth->fetchrow;
+	$sth->finish;
+	# a more complex search : build a request for authoritysearch
+	my (@tags, @and_or, @excluding, @operator, @value, $offset, $length);
+	# search on biblio.title
+	warn " tag a reporter : $auth_tag_to_report";
+	if ($record->fields($auth_tag_to_report)) {
+		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? and tab >= 0");
+		$sth->execute($auth_tag_to_report,$authtypecode);
+		warn " Champ $auth_tag_to_report present";
+		while (my ($tag,$subfield) = $sth->fetchrow){
+			if ($record->field($tag)->subfields($subfield)) {
+				warn "tag :".$tag." subfield: $subfield value : $record->field($tag)->subfield($subfield)->as_formatted";
+				push @tags, "'".$tag.$subfield."'";
+				push @and_or, "and";
+				push @excluding, "";
+				push @operator, "contains";
+				push @value, $record->field($tag)->subfield($subfield);
+			}
+		}
+	}
+ 
+	my ($finalresult,$nbresult) = authoritysearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10,$authtypecode);
+	# there is at least 1 result => return the 1st one
+	if ($nbresult) {
+		warn "$nbresult => ".@$finalresult[0]->{authid},@$finalresult[0]->{summary};
+		return @$finalresult[0]->{authid},@$finalresult[0]->{authid},@$finalresult[0]->{summary};
+	}
+	# no result, returns nothing
+	return;
+}
+
 END { }       # module clean-up code here (global destructor)
 
 =back
@@ -858,6 +899,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.12  2005/04/05 09:58:48  hdl
+# Adding double authority search before creating a new authority
+#
 # Revision 1.11  2005/03/07 08:55:29  tipaul
 # synch'ing with 2.2
 #
