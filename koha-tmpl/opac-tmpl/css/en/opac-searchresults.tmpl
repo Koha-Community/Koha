@@ -42,6 +42,7 @@
 	<table>
 		<tr>
 			<th colspan="2">Summary</th>
+			<th>Item type</th>
 			<th>Item Count</th>
 			<th>Location</th>
 			<th>&nbsp;</th>
@@ -72,6 +73,9 @@
 						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
 					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="description" -->
 				</td>
 				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="totitem" -->
