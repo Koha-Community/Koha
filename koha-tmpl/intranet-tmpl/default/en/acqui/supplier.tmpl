@@ -3,7 +3,13 @@
 <form action=updatesupplier.pl method=post>
 
 <input type=hidden name=id value=<TMPL_VAR name="id">>
-<FONT SIZE=6><em>Update: <TMPL_VAR name="name"></em></FONT>
+
+<TMPL_IF NAME=id>
+	<FONT SIZE=6><em>Update: <TMPL_VAR name="name"></em></FONT>
+<TMPL_ELSE>
+	<FONT SIZE=6><em>Add supplier</em></FONT>
+</TMPL_IF>
+
 <P>
 <CENTER>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
