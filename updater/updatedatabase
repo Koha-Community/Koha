@@ -677,8 +677,8 @@ unless ( $existingtables{'z3950servers'} ) {
 								7090,
 								'voyager',
 								'', '',
-								'Library of Congress',
-								1, 1, 1, 'USMARC')"
+								'LibraryOfCongress',
+								1, 1, 1, 'MARC21')"
     );
     $sti->execute;
 }
@@ -996,6 +996,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.70.2.3  2004/03/25 13:58:28  tipaul
+# bugfix for LoC z3950 entry
+#
 # Revision 1.70.2.2  2004/01/20 09:46:53  tipaul
 # new index in z3950results table
 #
