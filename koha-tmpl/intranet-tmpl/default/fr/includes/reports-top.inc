@@ -154,6 +154,9 @@ a.parameters:hover {
 						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
 					</td>
 					<td>
+						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
+					</td>
+					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 					</td>
 					<td>

@@ -15,7 +15,7 @@
 <TMPL_IF NAME="norequests">
 <TMPL_ELSE>
 <a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
-src="/images/requests.gif" align="right" border="0"></a>
+src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"></a>
 </TMPL_IF>
 
 <font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
@@ -26,22 +26,22 @@ src="/images/requests.gif" align="right" border="0"></a>
 <tr valign="top">
 
 <td bgcolor="#cccc99" background="/images/background-mem.gif">
-<b>BIBLIO RECORD</b>
-
-
-
-
-<TMPL_VAR NAME="biblionumber">
+<b>Notice biblio N° <TMPL_VAR NAME="biblionumber"></b>
 </td>
 </tr>
 <tr valign="top">
 <td>
 <form action="/cgi-bin/koha/modbib.pl" method="post">
-<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
-<input type="image" name="submit" value="modify" height="42" width="93"
-border="0" src="/images/modify-mem.gif">
-<input type="image" name="delete" value="delete" height="42" width="93"
-border="0" src="/images/delete-mem.gif">
+			<table width="100%" border=0 cellspacing=0 cellpadding=0>
+				<tr>
+					<td width="33%">
+						<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
+						<input type="image" name="submit" value="modify" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
+					</td>
+					<td width="33%"><input type="image" name="delete" value="delete" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0"></td>
+					<td width="33%"><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">MARC</a></td>
+				</tr>
+			</table>
 </form>
 <br>
 <FONT SIZE=2  face="arial, helvetica">

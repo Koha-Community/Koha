@@ -39,10 +39,10 @@ Votre recherche<TMPL_VAR NAME=member>
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" BORDER=0 ><br>
-<INPUT TYPE="radio" name="chooseform" value="adulte" checked>
+<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  ALT="Ajout de lecteur" BORDER=0 ></a>
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>
   Adulte
-  <INPUT TYPE="radio" name="chooseform" value="organisation" >
+  <INPUT TYPE="radio" name="chooseform" value="organization" >
   Organisme
 </form>
 <TMPL_INCLUDE NAME="members-bottom.inc">

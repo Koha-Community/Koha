@@ -1,13 +1,8 @@
 <TMPL_INCLUDE NAME="parameters-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> à Koha</p>
-</TMPL_IF>
 <center>
 <FONT SIZE=6><em>Page d'administration de koha</em></FONT><br>
 <table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<th>Paramètres </th>
 </tr>
 </table>
@@ -72,7 +67,7 @@
 </table>
 
 <table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<th>Utilitaires</th>
 </tr>
 </table>

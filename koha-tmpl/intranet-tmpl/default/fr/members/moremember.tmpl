@@ -4,7 +4,7 @@
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=270>
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>FICHE DE 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>FICHE DE
       LECTEUR</b></TD>
   </TR>
 
@@ -12,7 +12,7 @@
     <TD>
       <p align=right>
       <form action=/cgi-bin/koha/jmemberentry.pl method=post>
-        <INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="/images/add-child.gif">
+        <INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
         <input type=hidden name=type value=Add>
         <input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
       </form>
@@ -53,22 +53,22 @@
       <p align=right>
       <form action=/cgi-bin/koha/memberentry.pl method=post>
         <input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-          <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
-          <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif">
-	<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="/images/password-mem.gif" alt="Mot de passe">
+          <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/modify-mem.gif">
+          <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/delete-mem.gif">
+	<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="<TMPL_VAR name="themelang">/images/password-mem.gif" alt="Mot de passe">
 	</p>
-	<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="/images/modify-user-flags.gif" alt="Privilèges"></a>
+	<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/modify-user-flags.gif" alt="Privilèges"></a>
 
       </form>
     </font></TD>
   </TR>
 </TABLE>
 
-<img src="/images/holder.gif" width=16 height=800 align=left>
+<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=16 height=800 align=left>
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=4><B>AMENDES 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=4><B>AMENDES 
       & FRAIS</b></TD>
   </TR>
 
@@ -92,8 +92,8 @@
   <tr VALIGN=TOP  >
     <TD colspan=3 align=right>
       <nobr>
-        <a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/view-account.gif"></a>
-        <a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="/images/pay-fines.gif"></a>
+        <a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/view-account.gif"></a>
+        <a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/pay-fines.gif"></a>
       </nobr>
     </td>
   </tr>
@@ -106,18 +106,18 @@
   <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
     <TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=6><B>DOCUMENTS 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=6><B>DOCUMENTS 
         EN COURS DE PRET</b></TD>
     </TR>
 
     <TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Titre</b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><b>Retour 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Titre</b></TD>
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Retour 
         le </b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Type de 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Type de 
         document </b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Frais</b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Renouvellement</b></TD>
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Frais</b></TD>
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Renouvellement</b></TD>
     </TR>
 
     <TMPL_LOOP NAME=issueloop>
@@ -144,7 +144,7 @@
     
     <tr VALIGN=TOP  >
       <TD colspan=5 align=right>
-        <INPUT TYPE="image" name="submit"  VALUE="update" height=42  WIDTH=187 BORDER=0 src="/images/update-renewals.gif">
+        <INPUT TYPE="image" name="submit"  VALUE="update" height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/update-renewals.gif">
       </td>
     </tr>
 
@@ -156,14 +156,14 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5><B>DOCUMENTS 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=5><B>DOCUMENTS 
       DEMANDES </b></TD>
   </TR>
 
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Titre</b></TD>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Demande</b></TD>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif"><b>Supprimer</b></TD>
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Titre</b></TD>
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Demande</b></TD>
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Supprimer</b></TD>
   </TR>
 
   <form action=/cgi-bin/koha/modrequest.pl method=post>
@@ -188,12 +188,12 @@
 
     <tr VALIGN=TOP  >
       <td colspan=5 align=right>
-        <INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="/images/cancel-requests.gif">
+        <INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
       </td>
     </tr>
   </form>
 </table>
 <p align=right>
-  <a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="/images/reading-record.gif"></a>
+  <a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
 </p>
 <TMPL_INCLUDE NAME="members-bottom.inc">

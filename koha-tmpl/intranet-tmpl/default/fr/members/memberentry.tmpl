@@ -21,9 +21,9 @@
         </font></td>
     </tr>
     <tr valign=top> 
-      <td COLSPAN=3 background="/images/background-mem.gif"><b>DETAILS PERSONNELS 
+      <td COLSPAN=3 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>DETAILS PERSONNELS 
         LECTEUR</b></td>
-      <td COLSPAN=2 ALIGN=RIGHT background="/images/background-mem.gif">* 
+      <td COLSPAN=2 ALIGN=RIGHT background="<TMPL_VAR name="themelang">/images/background-mem.gif">* 
         <input type="radio" name="sex" value="F" <TMPL_IF NAME=female>checked</TMPL_IF>>F
         <input type="radio" name="sex" value="M" <TMPL_UNLESS NAME=female>checked</TMPL_UNLESS>> M <B>Date
         de naissance</B> (jj/mm/aa) 
@@ -94,7 +94,7 @@
       <td>&nbsp; </TD>
     </TR>
     <tr valign=top bgcolor="99cc33" > 
-      <td COLSPAN=5 background="/images/background-mem.gif"><B>ADRESSE DU LECTEUR</b></td>
+      <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>ADRESSE DU LECTEUR</b></td>
     </tr>
     <tr valign=top bgcolor=white> 
       <td COLSPAN=3>
@@ -136,7 +136,7 @@
       <td>&nbsp; </TD>
     </TR>
     <tr valign=top bgcolor="99cc33"> 
-      <td COLSPAN=5 background="/images/background-mem.gif"><B>CONTACTER LE LECTEUR</b></td>
+      <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>CONTACTER LE LECTEUR</b></td>
     </tr>
     <tr valign=top bgcolor=white> 
       <td COLSPAN=2>
@@ -162,7 +162,7 @@
       <td>&nbsp; </TD>
     </TR>
     <tr valign=top bgcolor="99cc33"> 
-      <td  COLSPAN=5  background="/images/background-mem.gif"><B>AUTRE CONTACT</b></td>
+      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>AUTRE CONTACT</b></td>
     </tr>
     <tr valign=top bgcolor=white> 
       <td COLSPAN=3 >
@@ -197,7 +197,7 @@
       <td>&nbsp; </TD>
     </TR>
     <tr valign=top bgcolor="99cc33">
-      <td  COLSPAN=5  background="/images/background-mem.gif"><B>UTILISATION DE 
+      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>UTILISATION DE 
         LA BIBLIOTHEQUE</B></td>
     </tr>
     <tr valign=top > 
@@ -221,18 +221,11 @@
         <input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>Non </td>
     </tr>
     </TMPL_LOOP> </TMPL_IF> 
-    <tr> <TMPL_UNLESS NAME=modify>
-      <!-- Don't know what's this unless for -->
-      <td></td>
-      <td>
-        <input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 >
-      </td>
-      <TMPL_ELSE> 
-      <td></td>
-      <td>
-        <input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 >
-      </td>
-      </TMPL_UNLESS> </tr>
+    <tr>
+        <td></td>
+	   <td><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" ALT="Add New Member" border=0 ></td>
+    </tr>
+
   </table>
 </form>
 <TMPL_INCLUDE NAME="members-bottom.inc">

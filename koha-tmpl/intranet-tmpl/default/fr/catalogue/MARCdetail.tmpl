@@ -1,34 +1,56 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
-</tr>
+<table width="100%" cellspacing=0 cellpadding=5>
 <tr>
+	<td width="80%">
+		<table width=100% cellspacing=0 cellpadding=5 border=1>
+		<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+			<td>
+			<table width="100%" border=0 cellpadding=0 cellspacing=0>
+				<tr>
+					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png"></td>
+					<td width=8%><a href="detail.pl?bib=<TMPL_VAR name="biblionumber">">Normal</a></td>
+					<td align="center"><b>MARC biblio : <TMPL_VAR name="bibid"></b></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3>
+			<table width=100% border=0 colspacing=0 cellpadding=0>
+			<tr>
+				<td width=9% align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(1)" ><div id="link1">1</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(2)"><div  id="link2">2</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(3)"><div  id="link3">3</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(4)"><div  id="link4">4</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(5)"><div  id="link5">5</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(6)"><div  id="link6">6</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(7)"><div  id="link7">7</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(8)"><div  id="link8">8</div></a></td>
+				<td width=9% align="center"><a href="javascript:active(9)"><div  id="link9">9</div></a></td>
+				<td width=10% align="center"><a href="javascript:active(10)"><div  id="link10">Exemplaire</div></a></td>
+			</tr>
+			</table>
+			</td>
+		</tr>
+		</table>
+	</td>
 	<td>
-	<table width=100% border=0 colspacing=0 cellpadding=0>
-	<tr>
-		<td width=9% align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(1)" ><div id="link1">1</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(2)"><div  id="link2">2</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(3)"><div  id="link3">3</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(4)"><div  id="link4">4</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(5)"><div  id="link5">5</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(6)"><div  id="link6">6</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(7)"><div  id="link7">7</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(8)"><div  id="link8">8</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(9)"><div  id="link9">9</div></a></td>
-		<td width=10% align="center"><a href="javascript:active(10)"><div  id="link10">Exemplaire</div></a></td>
-	</tr>
-	</table>
+		<TMPL_IF NAME="norequests">
+		<TMPL_ELSE>
+			<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
+			src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"></a>
+		</TMPL_IF>
 	</td>
 </tr>
 </table>
 
-   <DIV name="0XX" id="0XX" style="position:absolute;left:40px;top:150px;visibility:visible;width:90%">
+
+   <DIV name="0XX" id="0XX" style="position:absolute;visibility:visible;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
 	<TMPL_LOOP name="0XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -41,10 +63,10 @@
      </table>
      </DIV>
 
-    <DIV name="1XX" id="1XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="1XX" id="1XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
 	<TMPL_LOOP name="1XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -57,10 +79,10 @@
      </table>
      </DIV>
 
-    <DIV name="2XX" id="2XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="2XX" id="2XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="2XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -73,10 +95,10 @@
      </table>
      </DIV>
 
-    <DIV name="3XX" id="3XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="3XX" id="3XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="3XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -89,10 +111,10 @@
      </table>
      </DIV>
 
-    <DIV name="4XX" id="4XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="4XX" id="4XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
 	<TMPL_LOOP name="4XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -105,10 +127,10 @@
      </table>
      </DIV>
 
-    <DIV name="5XX" id="5XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="5XX" id="5XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="5XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -121,10 +143,10 @@
      </table>
      </DIV>
 
-	<DIV name="6XX" id="6XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<DIV name="6XX" id="6XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=90% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="6XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -137,10 +159,10 @@
      </table>
      </DIV>
 
-    <DIV name="7XX" id="7XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="7XX" id="7XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
 	<TMPL_LOOP name="7XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -153,10 +175,10 @@
      </table>
      </DIV>
 
-    <DIV name="8XX" id="8XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="8XX" id="8XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="8XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -169,10 +191,10 @@
      </table>
      </DIV>
 
-    <DIV name="9XX" id="9XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="9XX" id="9XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=90% cellspacing=0 cellpadding=5  border=0>
 	<TMPL_LOOP name="9XX">
-	<tr background="/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
+	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=4><b><tmpl_var name="tag"></td></tr>
 	<TMPL_LOOP name="subfield">
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -185,9 +207,9 @@
      </table>
      </DIV>
 
-    <DIV name="10XX" id="10XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+    <DIV name="10XX" id="10XX" style="position:absolute;visibility:hidden;width:90%">
     <table border=1 cellspacing=0 cellpadding=5>
-		<tr  background="/images/background-mem.gif">
+		<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 			<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP>
 		</tr>
 		<TMPL_LOOP name="item_loop">
@@ -207,7 +229,7 @@ for (i=0; i <= 10 ; i++ ) {
     if (numlayer==i) {
 	document.getElementById(ong).style.visibility="visible";
 	document.getElementById(link).style.backgroundColor="#11AA11";
-	document.getElementById(link).style.backgroundImage="url(/images/background-mem.gif)";
+	document.getElementById(link).style.backgroundImage="url(<TMPL_VAR name="themelang">/images/background-mem.gif)";
 } else {
 	document.getElementById(ong).style.visibility="hidden";
 	document.getElementById(link).style.backgroundColor="#FFFFFF";
