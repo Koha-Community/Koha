@@ -107,8 +107,9 @@ sub extract_attributes ($;$) {
 	    warn "Warning: TMPL_INCLUDE in attribute"
 		. (defined $lc? " near line $lc": '') . ": $val_orig\n";
 	} elsif ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
+	    my $suggest = ($key =~ /^(?:action|archive|background|cite|classid|codebase|data|datasrc|for|href|longdesc|profile|src|usemap)$/? 'URL': 'HTML');
 	    warn_pedantic \$pedantic_tmpl_var_use_in_nonpedantic_mode_p,
-		    "Unescaped TMPL_VAR in attribute"
+		    "Suggest ESCAPE=$suggest for TMPL_VAR in attribute \"$key\""
 		    . (defined $lc? " near line $lc": '') . ": $val_orig"
 		if $pedantic_p || !$pedantic_tmpl_var_use_in_nonpedantic_mode_p;
 	} elsif ($val_orig !~ /^['"]/) {
