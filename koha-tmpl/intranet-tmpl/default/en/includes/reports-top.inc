@@ -20,6 +20,7 @@ function Help() {
 	color:#FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
+	background-image:none;
 	}
 a.reports:hover {
 	background-color: #6b7cbe;
