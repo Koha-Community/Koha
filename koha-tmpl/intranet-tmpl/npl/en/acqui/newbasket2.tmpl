@@ -1,0 +1,74 @@
+<!-- TMPL_INCLUDE name="main-top.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+ <h1>Shopping Basket For: <!-- TMPL_VAR name="bookselname" --></h1>
+
+<!-- TMPL_IF name ="testdonation" -->
+	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
+<!-- TMPL_ELSE -->
+	<a href="newdonation.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
+<!-- /TMPL_IF --> | <a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">View Basket</a> | 
+<form class="inline" action="/cgi-bin/koha/acqui/newbasket2.pl">
+<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+<input type="hidden" name="basket" value="<!-- TMPL_VAR name="basket" -->" />
+New Search: <input type="text"  size="25" name="search" /></form>
+
+
+<h3>You searched for <span class="ex">
+<!-- TMPL_LOOP name="loopsearch" -->
+	<!-- TMPL_VAR name="key" --> <!-- TMPL_VAR name="value" -->
+<!-- /TMPL_LOOP -->
+</span>
+</h3>
+<div id="results">Results <!-- TMPL_VAR name="dispnum" --> to <!-- TMPL_VAR name="offset2" --> of <!-- TMPL_VAR name="count" --> results displayed.
+
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>&copy;</th>
+		<th>Count</th>
+		<th>Location</th>
+	</tr>
+
+<!-- TMPL_LOOP name="loopresult" -->
+	<tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
+		<td>
+			<!-- TMPL_IF name="testdonation" -->
+				<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR name="sub" -->&amp;author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
+				<!-- TMPL_VAR name="title" -->
+				</a>
+			<!-- TMPL_ELSE -->
+				<a href="/cgi-bin/koha/acqui/newdonation.pl?author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
+				<!-- TMPL_VAR name="title" -->
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
+		<td>
+			<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR name="word" -->&amp;type=<!-- TMPL_VAR name="type" -->">
+			<!-- TMPL_VAR name="author" -->
+			</a>
+		</td>
+		<td>
+			<!-- TMPL_VAR name="copyright" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR name="itemcount" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR name="location" -->
+		</td>
+	</tr>
+
+<!-- /TMPL_LOOP -->
+
+</table>
+
+<!-- TMPL_IF name="offsetover" -->
+<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">Next</a>
+<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

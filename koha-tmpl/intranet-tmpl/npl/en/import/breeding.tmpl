@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>MARC acquisition system</h1>
+<h4>Import into the breeding farm</h4>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Import results :</p>
+<ul>
+	<li><!-- TMPL_VAR name="imported" --> imported records</li>
+	<li><!-- TMPL_VAR name="alreadyindb" --> not imported because already in DB</li>
+	<li><!-- TMPL_VAR name="alreadyinfarm" --> not imported because already in farm</li>
+	<li><!-- TMPL_VAR name="notmarcrecord" --> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</li>
+	<li><!-- TMPL_VAR name="total" -->  records parsed</li>
+	<li><a href="/cgi-bin/koha/admin-home.pl">Back</a></li>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
+	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
+	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<div class="form"><table>
+	<tr>
+		<th><label for="uploadmarc">Select the file to import:</label></th>
+		<td>
+			<input type="file" id="uploadmarc" name="uploadmarc" /><br />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="filename">Name of this import:</label></th>
+		<td>
+			<input type="text" id="filename" name="filename" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="syntax">Character encoding (USMARC or UNIMARC)</label></th>
+		<td>
+			<select name="syntax" id="syntax"><option value="USMARC">USMARC</option><option value="UNIMARC">UNIMARC</option></select>
+		</td>
+	</tr>
+	<tr>
+		<th>If ISBN already in breeding farm: </th>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked="checked" />Ignore this one, keep the existing one<br/>
+			<input type="radio" name="overwrite_biblio" value="1" />Overwrite the existing one with this</td>
+	</tr>
+</table></div><input type="submit" value="Import" class="submit" />
+</form>
+<!-- /TMPL_IF -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

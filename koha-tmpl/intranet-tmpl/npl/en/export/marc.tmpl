@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><h1>MARC Export</h1>
+<div class="details"><h4>Export in MARC format the following biblios:</h4>
+<form method="post">
+<p>From biblio number: <input type="text" name="start_bib" />
+to biblio number: <input type="text" name="end_bib" /></p>
+<p>(leave blank to export every biblio)</p>
+<input type="hidden" name="op" value="export" />
+<input type="submit" value="Export" class="submit" />
+</form></div>
+<p>Note : the items are NOT exported by this tool</p>
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

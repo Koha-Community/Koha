@@ -1,0 +1,106 @@
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
+
+<div id="main">
+
+
+<h1>Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --></h1>
+<div class="tabitem">
+<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form>
+</div>
+<!-- TMPL_IF NAME="item_loop" -->
+<div class="table">
+<table>
+	<caption>Existing Items</caption>
+	<tr>
+		<!-- TMPL_LOOP name="item_header_loop" --><th><tmpl_var name="header_value"></th><!-- /TMPL_LOOP --><th colspan="2">&nbsp;</th>
+	</tr>
+		<!-- TMPL_LOOP name="item_loop" -->
+		<tr>
+			<!-- TMPL_VAR name="item_value" -->
+			<td><a href="/cgi-bin/koha/acqui.simple/additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR name="bibid" -->&amp;itemnum=<!-- TMPL_VAR name="itemnum" -->">Edit</a> </td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+</table>
+</div>
+<!-- /TMPL_IF -->
+	 <!-- TMPL_IF name="barcode_not_unique" -->
+ 	         <div class="error">ERROR: Barcode already exists!</div>
+ 	 <!-- /TMPL_IF -->
+<div class="form">
+<h3><!-- TMPL_IF name="opisadd" -->Add New Item<!-- TMPL_ELSE -->Update Item<!-- /TMPL_IF --></h3>
+<form method="post" action="additem.pl" name="f">
+<input type="hidden" name="op" value="<!-- TMPL_VAR name="op" -->">
+<input type="hidden" name="bibid" value="<!-- TMPL_VAR name="bibid" -->">
+<table>
+	<!-- TMPL_LOOP name="item" -->
+	<tr>
+	<th><!-- TMPL_IF name="mandatory" --><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *<!-- /TMPL_IF --></th>
+		<td>
+			<!-- TMPL_VAR name="marc_value" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
+			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
+		</td>
+	</tr>
+	</tmpl_loop>
+</table>
+<input type="hidden" name="itemnum" value="<!-- TMPL_VAR name="itemnum" -->">
+
+<!-- TMPL_IF name="opisadd" -->
+<input type="button" value="Add Item" onClick="Check(this.form); return false;" class="submit" accesskey="w">
+<!-- TMPL_ELSE -->
+<input type="hidden" name="tag" value="<!-- TMPL_VAR name="itemtagfield" -->">
+<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="itemtagsubfield" -->">
+<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="itemnum" -->">
+<input type="button" value="Save Changes" onClick="Check(this.form); return false;" class="submit"  accesskey="w">
+<!-- /TMPL_IF -->
+</form>
+</div></div>
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+	for (i=10; i < 11 ; i++ ) {
+		ong = i+"XX";
+			link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+			document.getElementById(link).style.backgroundColor="#11AA11";
+			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif)";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+			document.getElementById(link).style.backgroundColor="#FFFFFF";
+			document.getElementById(link).style.backgroundImage="";
+		}
+	}
+}
+function Check(f) {
+	var total_errors=0;
+//	alert(f.field_value.length);
+	for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+			total_errors++;
+		} else {
+//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+		}
+	}
+	var alertString2;
+	if (total_errors==0) {
+		document.f.submit();
+	} else {
+		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2 += "- "+ total_errors+" mandatory fields empty (see bold subfields)";
+		alert(alertString2);
+	}
+}
+function Dopop(link,i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+</body>
+</html>

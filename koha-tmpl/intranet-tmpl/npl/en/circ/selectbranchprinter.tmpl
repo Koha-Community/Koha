@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE NAME="doc-head-circ-open.inc" -->Koha -- Circulation: Select Your Home Branch<!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Circulation: Select Your Home Branch</h1>
+
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+<!-- TMPL_VAR NAME="branch" -->
+<div class="details">
+<label for="branch">Choose your Branch:</label>
+<!--branchselection-->
+	<select name="branch" id="branch">
+	<!-- TMPL_LOOP Name="branchloop" -->
+		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" --></option>
+	<!-- /TMPL_LOOP -->
+	</select>
+</div>
+<div class="details">
+<!-- <label for="printer">Choose a Network Printer:</label> -->
+<!--printerselection-->
+<!-- 	<select name="printer" id="printer">
+	<!-- TMPL_LOOP Name="printerloop" -->
+		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
+	</select>
+ --><input type="hidden" name="setcookies" value="1" />
+<p><input type="submit" class="submit" value="Submit" name="changesettings" /></p></div>
+</form>
+
+
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
+

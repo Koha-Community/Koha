@@ -1,0 +1,49 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+
+<div id="main">
+<h1>Catalogue Search</h1>
+<h3>Search by Number</h3>
+<div class="form">
+<form action="/cgi-bin/koha/search.pl" method="post">
+<table>
+<tr><th>Barcode</th><td><input type="text" size="25" name="itemnumber" /></td></tr>
+<tr><th>ISBN</th><td><input type="text" size="25" name="isbn" /></td></tr>
+</table>
+<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
+</form>
+</div>
+<h3>Search by Details</h3>
+<div class="form">
+<form action="/cgi-bin/koha/search.pl" method="post">
+<table><tr><th>Keywords</th><td><input type="text"  size="25"   name="keyword" /></td></tr>
+<tr><th>Title</th><td><input type="text"  size="25" name="title" /></td></tr>
+<tr><th>Author</th><td><input type="text"  size="25"   name="author" /></td></tr>
+
+<tr><th>Collection</th><td><select name="class" size="1">
+			<option value="">Any</option>
+			<!-- TMPL_VAR name="classlist" -->
+			</select></td></tr>
+<tr><th>Branch</th><td><select name="branch"><option value="">-- Choose a Branch -- </option><option value="ALB">Wells (Albany) Public Library</option><option value="PPL">The Plains Public Library</option><option value="COV">Coolville Public Library</option><option  value="APL">Athens Public Library</option><option value="GPL">Glouster Public Library</option><option value="CPL">Chauncey Public Library</option><option value="NPL">Nelsonville Public Library</option><option value="BKM">Bookmobile</option></select></td></tr>
+<tr><th>Pub Date</th><td>(before) <input type="text" size="8" name="date-before">  (after) <input type="text" size="8" name="date-after" /></td></tr>
+<tr><th>Search Type</th><td><input type="radio" name="ttype" value="normal" checked="checked" />Normal	<input type="radio" name="ttype" value="exact" />Exact</td></tr>
+</table>
+<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
+</form>
+</div>
+
+<h3>Search by Subject</h3>
+<div class="form">
+<form action="/cgi-bin/koha/search.pl" method="post">
+<table>
+<tr><th>Subject</th><td><input type="text"  size="25"   name="subject" /></td></tr>
+</table>
+<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
+</form>
+</div>
+	</div>
+	</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

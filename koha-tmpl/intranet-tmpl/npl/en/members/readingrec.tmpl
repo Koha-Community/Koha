@@ -1,0 +1,43 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><div class="table">
+<table>
+<caption>Reading Record for <a href="moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></caption>
+<!-- TMPL_IF NAME="showfulllink" -->
+<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Full output</a></td></tr>
+<!-- /TMPL_IF --><tr>
+	<th>
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
+	</th>
+	<th>
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
+	</th>
+	<th>
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
+	</th>
+</tr>
+<!-- TMPL_LOOP name="loop_reading" -->
+<tr>
+	<td>
+ 		<!-- TMPL_VAR name="title" -->&nbsp;
+	</td>
+	<td>
+ 		<!-- TMPL_VAR name="author" -->&nbsp;
+	</td>
+	<td>
+		<!-- TMPL_VAR name="returndate" -->&nbsp;
+	</td>
+<!-- /TMPL_LOOP -->
+</table>
+
+<p><form action="moremember.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->"><input type="submit" class="submit" value="Return to Member Record" /></form></p>
+
+</div></div>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+

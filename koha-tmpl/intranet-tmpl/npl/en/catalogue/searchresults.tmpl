@@ -1,0 +1,87 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<!-- Search Results Table -->
+<div id="main">
+<h3><!-- TMPL_IF NAME="searchdesc" -->
+	You searched for <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span>
+<!-- TMPL_ELSE -->
+	You did not specify any seach criteria
+<!-- /TMPL_IF -->
+</h3>
+<!-- TMPL_IF NAME="numrecords" -->
+<div id="pages"><!-- TMPL_IF NAME="displayprev" -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">&lt;&lt;Prev</a>
+<!-- TMPL_ELSE -->
+&nbsp;
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	<span class="current"><!-- TMPL_VAR NAME="number" --></span>
+	<!-- TMPL_ELSE -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="number" --></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->&nbsp;
+<!-- TMPL_IF NAME="displaynext" -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Next &gt;&gt;</a>
+</div>
+<!-- TMPL_ELSE -->
+&nbsp;
+<!-- /TMPL_IF -->
+<div class="results">Results <!-- TMPL_VAR NAME="startfrom" --> through <!-- TMPL_VAR NAME="endat" --> of <!-- TMPL_VAR NAME="numrecords" --> records.</div>
+
+
+<div class="table"><table>
+<tr>
+	<th>Title</th><th>Author</th><th>&copy;</th><th>Call Number</th><th>Item Count</th><th>Location</th>
+	<!-- TMPL_IF NAME="opac" -->
+	<!-- TMPL_ELSE -->
+	<th>&nbsp;</th>
+	<!-- /TMPL_IF -->
+</tr>
+<!-- Actual Search Results -->
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+	<tr>
+		<td class="data"><a href="/cgi-bin/koha/detail.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> (<!-- TMPL_VAR NAME="isbn" -->)<!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a></td>
+		<td class="data"><!-- TMPL_IF NAME="author" --><a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+		<td class="data"> <!-- TMPL_IF NAME="copyrightdate" --><!-- TMPL_VAR NAME="copyrightdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
+		<td><!-- TMPL_IF NAME="classification" --><!-- TMPL_VAR NAME="classification" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+		<td class="data"> <!-- TMPL_IF NAME="itemcount" --><!-- TMPL_VAR NAME="itemcount" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
+		<td class="data"> <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
+		<!-- TMPL_IF NAME="opac" -->
+		<!-- TMPL_ELSE -->
+			<td class="data"> <a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserves</a></td>
+		<!-- /TMPL_IF -->
+	</tr>
+<!-- /TMPL_LOOP -->
+</table></div>
+
+<div class="pages"><!-- TMPL_IF NAME="displayprev" -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">&lt;&lt;Prev</a>
+<!-- TMPL_ELSE -->
+&nbsp;
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	<span class="current"><!-- TMPL_VAR NAME="number" --></span>
+	<!-- TMPL_ELSE -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="number" --></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->&nbsp;
+<!-- TMPL_IF NAME="displaynext" -->
+	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Next &gt;&gt;</a>
+<!-- TMPL_ELSE -->
+&nbsp;
+<!-- /TMPL_IF -->
+</div>
+
+<div class="results">Results <!-- TMPL_VAR NAME="startfrom" --> through <!-- TMPL_VAR NAME="endat" --> of <!-- TMPL_VAR NAME="numrecords" --> records. Try another <a href="/cgi-bin/koha/catalogue-home.pl">search</a></div>
+
+
+<!-- TMPL_ELSE -->
+    Try another <a href="/cgi-bin/koha/catalogue-home.pl">search</a>
+<!-- /TMPL_IF -->
+</div>
+</div>
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

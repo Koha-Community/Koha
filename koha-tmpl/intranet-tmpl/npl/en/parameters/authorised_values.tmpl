@@ -1,0 +1,88 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<!-- TMPL_IF name="add_form" -->
+<!-- -->
+	
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+	<h1><!-- TMPL_VAR name="action" --></h1>
+	<table>
+	<tr>
+		<td>Category</td>
+		<td><!-- TMPL_VAR name="category" --></td>
+	</tr>
+	<tr>
+		<td>Authorised value</td>
+		<td><input type="text" name="authorised_value" value="<!-- TMPL_VAR name=" authorised_value" -->" /></td>
+	</tr>
+	<tr>
+		<td>Lib</td>
+		<td><input type="text" name="lib" value="<!-- TMPL_VAR name="lib" -->" /></td>
+	</tr>
+	</table><p><input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+			<input type="submit" value="OK" class="submit" /></p>
+	</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="delete_confirm" -->
+<!-- -->
+<h3>Confirm Deletion</h3>
+<table>
+	<tr>
+		<td><b>Variable</b></td>
+		<td><b>Lib</b></td>
+		<td><b><!-- TMPL_VAR name="searchfield" --></b></td>
+	</tr>
+	<tr><td>Value</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	</table>
+<div class="tabitem">	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed" />
+		<input type="hidden" name="id" value="<!-- TMPL_VAR name=" id " -->" />
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" class="cancel" value="Confirm Deletion" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" class="submit" value="Do Not Delete" /></form>
+</div><!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="else" -->
+
+
+<!-- TMPL_VAR name="searchfield" -->
+<h1>Authorised values admin</h1>
+<p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
+<p>When you define the MARC subfield structure, you can link a subfield to a authorised-value category. When the user ask for adding of modifying a biblio,
+the subfield is not entered through a free field, but though a list of authorised values</p>
+<div class="tabitem"><form action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="Search" class="submit" /></form>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="get"><input type="hidden" value="add_form" name="op" /><input type="submit" class="submit" value="New Category" /></form></div>
+<table>
+<tr>
+	<th>Category</th>
+	<th>Authorised value</th>
+	<th>Lib</th>
+	<th>Edit</th>
+	<th>Delete</th>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+<tr>
+	<td><a href="<!-- TMPL_VAR name="edit " -->"><!-- TMPL_VAR name="category" --></a></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><!-- TMPL_VAR name="lib" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+
+<tr><td><!-- TMPL_VAR name="previous" --></td><td colspan="3"><form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
+<input type="hidden" name="op" value="add_form" />
+<input type="hidden" name="category" value="<!-- TMPL_VAR name=" category " -->" />
+<input type="submit" value="Add Category" class="submit" />
+</form></td><td><!-- TMPL_VAR name="next" --></td></tr>
+</table>
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

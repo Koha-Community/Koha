@@ -1,0 +1,129 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+
+<div id="main">
+
+<div class="details"><!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+			<div style="float: right;"><img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" /></div>
+<h3><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
+	<!-- TMPL_VAR NAME="class" --></h3><h4>Biblio Record <!-- TMPL_VAR NAME="biblionumber" --></h4>
+	<div class="tabitem"><form action="MARCdetail.pl" method="get">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form>
+</div>
+	<!-- /TMPL_IF -->
+<ul>
+			<!-- TMPL_IF NAME="subtitle" --><li><b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="author" --><li><b>Author:</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR
+			NAME="author" ESCAPE=URL>"><!-- TMPL_VAR NAME="author" --></a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="additional" --><li><b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="isbn" --><li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><li><b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="copyrightdate" --><li><b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="notes" --><li><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="unititle" --><li><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="serial" --><li><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="count" --><li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li><!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+		<!-- TMPL_IF NAME="subjects" -->	
+		<li><b>Subject: </b><!-- TMPL_LOOP NAME="SUBJECTS" -->
+	<a href="/cgi-bin/koha/search.pl?type=intra&amp;subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>
+	<!-- /TMPL_LOOP --></li>
+		<!-- /TMPL_IF -->
+			</ul>
+			</div>
+<div class="table"><table>
+	<tr>
+		<th>Item Type</th>
+		<th>Call Number</th>
+		<th>Location</th>
+		<th>Date Due</th>
+		<th>Last Seen</th>
+		<th>Barcode</th>
+		<!-- <th>Volume</th> -->
+	</tr>
+	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td><!-- TMPL_IF NAME="class" --><!-- <a href="/cgi-bin/koha/search.pl?class=<!-- TMPL_VAR NAME="class" ESCAPE=URL -->"> --><!-- TMPL_VAR NAME="class" --><!-- </a> --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="branchname" --></td>
+			<td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#<!-- TMPL_VAR NAME="barcode" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+			<!-- <td><!-- TMPL_IF NAME="volumedesc" --><!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td> -->
+			<!-- TMPL_IF NAME="type" -->
+				<td>
+					<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
+				</td>
+			<!-- /TMPL_IF -->
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td>Website</td>
+			<td>Online</td>
+			<td>Available</td>
+			<td></td>
+			<td>
+				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table></div>
+<!-- 
+<p>
+<table border="1" cellpadding="0" cellspacing="0" align="center" class="results" width="80%">
+	<tr>
+		<td class="cell">
+			<b>HELP</b><br>
+			<b>Update Biblio for all Items:</b> Click on the <b>Modify</b>
+			button [left] to amend the biblio.  Any changes you make will update
+			the record for <b>all</b> the items listed above. <p>
+			<b>Updating the Biblio for only ONE or SOME Items:</b>
+			If some of the items listed above need a different biblio, or are on the
+			wrong biblio, you must use the
+			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>
+			process to fix this. You will need to "re-order" the items, and delete them
+			from this biblio.
+		</td>
+	</tr>
+</table>
+</center>
+<br clear=all>
+<p />
+ -->
+<!--
+<table border="1" cellspacing="0" cellpadding="5" width="90%">
+<tr>
+<td bgcolor="$main"
+background="/images/background-mem.gif"><b>Abstract</b></td>
+</tr>
+<tr>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<td><!-- TMPL_VAR NAME="abstract" --></td>
+<!-- /TMPL_LOOP -->
+</tr>
+</table>
+<p />
+<table border="1" cellspacing="0" cellpadding="5" width="90%">
+<tr>
+<td bgcolor="$main" background="/images/background-mem.gif"><b>Links to
+Associated Websites<b></td>
+</tr>
+<!-- TMPL_LOOP NAME="SITE_RESULTS" -->
+<tr>
+<td><b>Title:</b> <!-- TMPL_VAR name="title" --><br>
+<b>Description:</b> <!-- TMPL_VAR name="description" --><br>
+<b>URL:</b><a href="http://<!-- TMPL_VAR name="url" -->">http://<TMPL_VAR
+name="url"></a><br>
+</td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+-->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

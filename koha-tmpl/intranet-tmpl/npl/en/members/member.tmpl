@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<div class="table"><table>
+	<caption>Patron Search Results</caption>
+  <tr>
+    <th>Card</th>
+    <th>Name</th>
+    <th>Cat</th>
+    <th>Address</th>
+    <th>OD/Issues</th>
+<!--     <th>Charges</th> -->
+    <th>Notes</th>
+  </tr>
+  <!-- TMPL_IF NAME="resultsloop" -->
+  <!-- TMPL_LOOP NAME="resultsloop" -->
+    <!-- TMPL_IF NAME="background" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
+    <tr>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME="cardnumber" --> (<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" title="Issue to this Patron">ISS</a>)</td>
+      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a></td>
+      <td><!-- TMPL_VAR NAME="categorycode" --></td>
+      <td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city --></td>
+      <td><!-- TMPL_VAR NAME="odissue" --></td>
+<!--       <td><!-- TMPL_VAR NAME="fines" --></td> -->
+      <td><div class="notes"><!-- TMPL_VAR NAME="borrowernotes" --></div></td>
+    </tr>
+  <!-- /TMPL_LOOP -->
+  <!-- TMPL_ELSE --><td colspan="6">No results found</td><!-- /TMPL_IF -->
+</table></div>
+<div class="tabitem"><form action="/cgi-bin/koha/simpleredirect.pl" method="post">
+<input type="submit" class="submit" value="Add New Patron" />
+<input type="hidden" name="chooseform" value="adult" />
+</form><form action="/cgi-bin/koha/simpleredirect.pl" method="post">
+<input type="submit" class="submit" value="Add New Institution" />
+<input type="hidden" name="chooseform" value="organisation" />
+</form></div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

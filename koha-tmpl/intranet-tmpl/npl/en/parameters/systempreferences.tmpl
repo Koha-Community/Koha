@@ -1,0 +1,146 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+	//
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	//
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	//
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	//
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	//
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.variable.value.length==0) {
+			_alertString += "- variable missing\n";
+		}
+		if (f.value.value.length==0) {
+			_alertString += "- value missing\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</script>
+
+<div id="main"><!-- TMPL_IF name="add_form" -->
+<!-- -->
+	
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+<!-- TMPL_IF NAME="modify" -->
+		<h1>Modify a system preference</h1>
+	<!-- TMPL_ELSE -->
+		<h1>Add a system preference</h1>
+	<!-- /TMPL_IF -->
+<div class="details">
+<table>
+	<!-- TMPL_IF NAME="searchfield" -->
+<tr>		<td><label for="variable">Variable</label></td><td><!-- TMPL_VAR name="searchfield" --><input type="hidden" id="variable" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->" /></td></tr>
+	<!-- TMPL_ELSE -->
+<tr>		<td><label for="variable">Variable</label></td><td><input id="variable" type="text" name="variable" /></td></tr>
+	<!-- /TMPL_IF -->
+<tr>		<td><label for="value">Value</label></td><td><input id="value" type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" /></td></tr>
+<tr>	<td><label for="explanation">Explanation</label></td><td><input type="text" id="explanation" name="explanation" size="50" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->" /></td></tr>
+</table></div>
+	<p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Update Parameter<!-- TMPL_ELSE -->Add Parameter<!-- /TMPL_IF -->" onclick="Check(this.form); return false;" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
+		</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add_validate" -->
+<!-- -->
+<div id="main">
+<h3>Data Recorded</h3>
+<div class="details"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="submit" value="OK" class="submit" />
+	</form></div>
+	</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirm" -->
+<!-- -->
+<h3>Confirm Deletion of Parameter <em><!-- TMPL_VAR name="searchfield" --></em></h3></caption>
+<div class="form">
+<table>
+<tr>		<td><label>Variable:</label> </td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
+<tr>		<td><label>Value:</label> </td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	</dl>
+</table>
+</div>
+<div class="tabitem"><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit"  class="cancel" value="Delete this Parameter" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="Do not Delete" /></form></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+<!-- -->
+		<div id="main"><h3>Parameter Deleted</h3>
+		<span class="form"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="submit" value="OK" class="submit" />
+	</form></span></div>
+<!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="else" -->
+
+<!-- TMPL_VAR name="searchfield" -->
+<h1>System Preferences Administration</h1>
+<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+	<input type="text" name="searchfield" value="" />
+	<input type="submit" class="submit" value="Search" />
+</form>
+<div class="table"><table>
+<tr>
+	<th>Variable</th>
+	<th>Value</th>
+	<th>Explanation</th>
+	<th colspan="2">&nbsp;</th>
+</tr>
+<!-- TMPL_LOOP name="loop" -->
+
+<tr>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><!-- TMPL_VAR name="variable" --></a></td>
+	<td><!-- TMPL_VAR name="value" --></td>
+	<td><!-- TMPL_VAR name="explanation" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table></div>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<p><input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Parameter" class="submit" /></p></form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

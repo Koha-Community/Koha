@@ -1,0 +1,51 @@
+<!-- TMPL_INCLUDE name="main-top.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main"><div class="results">You searched on <span class="ex">supplier <!-- TMPL_VAR name="supplier" -->,</span> <!-- TMPL_VAR name="count" --> results found</div>
+<table>
+<caption>Supplier Search Results</caption>
+<tr>
+	<th>Order</th>
+	<th>Receive</th>
+	<th>Company</th>
+	<th>
+		<table>
+			<tr>
+				<th>Basket</th>
+				<th>Items</th>
+				<th>Staff</th>
+				<th>Date</th>
+			</tr>
+		</table>
+	</th>
+</tr>
+
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr>
+		<td>
+			<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" border="0" ></a>
+		</td>
+		<td>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" border="0" ></a>
+		</td>
+		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td>
+			<table>
+				<!-- TMPL_LOOP name="loop_basket" -->
+					<tr>
+						<td><a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
+						<td><TMPl_VAR name="total"></td>
+						<td><!-- TMPL_VAR name="authorisedby" --></td>
+						<td><!-- TMPL_VAR name="entrydate" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<form action="supplier.pl" method="get">
+	<input type="hidden" name="id" value="0" />
+	<input type="submit" class="submit" value="Add Supplier" /> 
+</form>
+</div><!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

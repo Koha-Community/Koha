@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE name="main-top.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Receive Orders From Supplier <a href="whitcoulls.html"><!-- TMPL_VAR name="name" --></a></h1>
+
+<form method="get" action="receive.pl">
+<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+<div class="details table">
+<table>
+<caption>Supplier Invoice Information</caption>
+<tr >
+<th>Supplier Invoice Number</th>
+<td><input type="text" size="20" name="invoice" />
+</td>
+</tr>
+<tr>
+<th>GST</th>
+<td><input type="text" size="20" name="gst" />
+</td>
+</tr>
+<tr>
+<th>Freight</th>
+<td><input type="text" size="20" name="freight" />
+</td>
+</tr>
+</table><input type="submit"  name="submit" class="submit" value="Save" />
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

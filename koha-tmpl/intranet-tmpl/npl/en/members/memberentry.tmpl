@@ -1,0 +1,134 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<form action="/cgi-bin/koha/newmember.pl" method="post">
+<h1><!-- TMPL_VAR NAME="header" -->:</h1><!-- TMPL_IF NAME="modify" --> <h2><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --></h2><!-- /TMPL_IF -->
+  
+	<div class="table">
+	<table>
+<tr>
+		
+		<td><label for="surname">Last Name:</label></td><td><input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" /></td>	<td><label for="sex">Sex:</label> </td>
+		<td><input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF --> />F
+		<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME="female" --> checked="checked"<!-- /TMPL_UNLESS --> /> M</td></tr>
+	<tr>
+		<td><label for="firstname">First Name:</label></td>
+			
+			<td><input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" /></td><td><label for="dateofbirth">Date of Birth:</label></td>
+	  <td><input type="text" id="dateofbirth" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+(<!-- TMPL_VAR NAME=dateformat -->) </td>
+   
+	</tr>
+
+	<tr>
+		<td><label for="address">Address:</label> </td>
+		<td colspan="3"><input type="text" id="address" name="address" size="25" value="<!-- TMPL_VAR NAME="address" -->" /></td>
+	</tr>
+	
+	<tr>
+	  <td><label for="city">City, State:</label></td>
+	  <td colspan="3"><input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" /></td>
+	  
+    </tr>
+	<tr>
+		<td><label for="zipcode">Zip:</label></td>
+		<td colspan="3"><input id="zipcode" name="zipcode" type="text" value="<!-- TMPL_VAR NAME="zipcode" -->" size="20" />
+		</td>
+	</tr>
+
+	<tr>
+		<td><label for="phone">Phone (Home):</label></td>
+		<td colspan="3"><input id="phone" type="text" name="phone" size="20" value="<!-- TMPL_VAR NAME="phone" -->" />
+	  </td>
+	</tr>
+
+	<tr>
+      <td><label for="phoneday">Phone (Day):</label></td>
+      <td colspan="3"><input id="phoneday" type="text" name="phoneday" size="20" value="<!-- TMPL_VAR NAME="phoneday" -->" />
+      </td>
+    </tr>
+	<tr>
+		<td><label for="faxnumber"> Fax:</label></td>
+		<td colspan="3"><input id="faxnumber" type="text" name="faxnumber" size="20" value="<!-- TMPL_VAR NAME="faxnumber" -->" /></td>
+	</tr>
+
+
+	<tr>
+	  <td><label for="emailaddress">Email:</label></td>
+	  <td colspan="3"><input type="text" id="emailaddress" name="emailaddress" size="30" value="<!-- TMPL_VAR NAME="emailaddress" -->" /></td>
+    </tr>
+	<tr>
+	  <td><label for="borrowernotes">Notes:</label></td>
+      <td colspan="3"><textarea id="borrowernotes" name="borrowernotes" cols="30" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
+    </tr>
+	</table>
+</div>
+<div class="table">
+	<table>
+	<caption>Alternate Contact</caption>
+	<tr>
+		<td><label for="contactname">Name:</label></td>
+
+		<td colspan="3"><input type="text" id="contactname" name="contactname" size="40" value="<!-- TMPL_VAR NAME="contactname" -->" /></td>
+	</tr>
+	<tr>
+		<td><label for="altphone">Phone:</label></td>
+		<td><input type="text" id="altphone" name="altphone" size="20" value="<!-- TMPL_VAR NAME="altphone" -->" /></td>
+		<td><label for="altrelationship">Relationship:</label></td>
+		<td>
+		<select name="altrelationship" id="altrelationship">
+		<option value=""></option>
+		<!-- TMPL_LOOP NAME="relshiploop" -->
+			<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
+		<!-- /TMPL_LOOP -->
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="altnotes">Notes:</label></td>
+	    <td colspan="3"><textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR NAME="altnotes" --></textarea></td>
+    </tr>
+	</table>
+</div>	
+		<!-- TMPL_IF NAME="modify" -->
+		<div class="table">
+		<table>
+		<caption>Flags</caption>
+		<!-- TMPL_LOOP NAME="flagloop" -->
+		<tr>
+			<td><label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" --></label></td>
+			<td><input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" --> />Yes
+			<input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" --> />No
+			</td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+		</table></div>
+	<!-- /TMPL_IF -->
+	
+	<div class="table"><table>
+		<caption>Patron Details</caption>
+  	<tr><td><label for="membernumber">Member Number:</label></td><td><span class="ex"><!-- TMPL_VAR NAME="member" --></span></td></tr>		<tr><td><label for="categorycode">Category:</label></td>
+		<td><!-- TMPL_VAR NAME="catcodepopup" --></td></tr>
+		<tr> <td><label for="branchcode">Branch:</label></td>
+      <td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
+<tr>	  <td><label for="cardnumber">Card Number:</label></td>
+      <td>
+	  <input type="text" name="cardnumber" id="cardnumber" size="10" value="<!-- TMPL_IF NAME="modify" --><!-- TMPL_VAR NAME="cardnumber" --><!-- /TMPL_IF -->" maxlength="7" />
+	<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
+	<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->" />
+	<input type="hidden" name="type" value="borrowers" />
+	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->" />
+	<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" /></td>
+	    </tr>
+
+	</table></div>
+
+	  			<p><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input name="submit" type="submit" class="submit" value="<!-- TMPL_IF NAME="modify" -->Update<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> This Member" />
+<input class="cancel" type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="member" -->'; return false;" /></p>
+
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,82 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Advanced MARC Search</h1>
+<form name="f" method="post" action="search.pl">
+
+<input type="hidden" name="op" value="do_search" />
+<input type="hidden" name="type" value="intranet" />
+<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+<div class="table">
+<table>
+		<tr>
+			<td colspan="2"><h5>Help:</h5>
+					<p>Build your request using MARC fields and subfields. Add criteria lets you add another criteria to your search.	Search commits the request and displays the results.</p>
+				<div id="sql">
+				<textarea name="sql" rows="5" cols="60" disabled="disabled" readonly="readonly"></textarea>
+				</div>
+			</td>
+		</tr>
+
+		<!-- TMPL_LOOP NAME="statements" -->
+		<tr>
+			<td>
+				<!-- TMPL_IF NAME="first" -->
+					<input type="hidden" name="and_or" value="" />&nbsp;
+				<!-- TMPL_ELSE -->
+					<select name="and_or" size="1" onchange="sql_update()">
+						<option value="and">and</option>
+						<option<!-- TMPL_IF NAME="or" --> selected="selected"<!-- /TMPL_IF --> value="or">or</option>
+					</select>
+				<!-- /TMPL_IF -->
+			</td>
+			<td><!-- TMPL_VAR name="marclist" --> <select name="excluding" size="1" onchange="sql_update()">
+					<option value="0"> </option>
+					<option<!-- TMPL_IF NAME="not" --> selected="selected"<!-- /TMPL_IF --> value="1">not</option>
+				</select> <select name="operator" size="1" onchange="sql_update()">
+					<option<!-- TMPL_IF NAME="eq" --> selected="selected"<!-- /TMPL_IF --> value="=">Is equal to</option>
+					<option<!-- TMPL_IF NAME="start" --> selected="selected"<!-- /TMPL_IF --> value="start">Starts with</option>
+					<option<!-- TMPL_IF NAME="contains" --> selected="selected"<!-- /TMPL_IF --> value="contains">Contains</option>
+					<option<!-- TMPL_IF NAME="gt" --> selected="selected"<!-- /TMPL_IF --> value=">">Is greater than</option>
+					<option<!-- TMPL_IF NAME="ge" --> selected="selected"<!-- /TMPL_IF --> value=">=">Is greater or equal to</option>
+					<option<!-- TMPL_IF NAME="lt" --> selected="selected"<!-- /TMPL_IF --> value="<">Is lower than</option>
+					<option<!-- TMPL_IF NAME="le" --> selected="selected"<!-- /TMPL_IF --> value="<=">Is lower or equal to</option>
+				</select> <input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->value="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF --> /></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+			<tr>
+	<td colspan="2"><input type="button" value="Add criteria" onclick="AddStatement(); return false;" class="submit" /> <input type="submit" class="submit" value="Search" /> Results per page :
+		<select name="resultsperpage" size="1">
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select></td></tr></table></div>
+</form>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+<!-- 
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.marclist[i].value != '') {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+// -->
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

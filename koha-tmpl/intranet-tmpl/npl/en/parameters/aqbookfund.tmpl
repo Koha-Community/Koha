@@ -1,0 +1,143 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><!-- TMPL_IF name="else" -->
+<h1>Bookfund Administration</h1>
+<!-- TMPL_IF NAME="bookfund" --><form action="<!-- TMPL_VAR name=scriptname -->" method="post">
+<input type="text" name="searchfield" value="" /> <input type="submit" name="search" value="Search" class="submit" /></form>
+<!-- TMPL_IF name="search" -->
+	<div id="results">You Searched for <span class="ex"><!-- TMPL_VAR name="searchfield" --></span></div>
+<!-- /TMPL_IF -->
+
+<table>
+<tr>
+	<th>Book fund</th>
+	<th>Name</th>
+	<th>Edit</th>
+	<th>Delete</th>
+	</tr>
+<!-- TMPL_LOOP name="bookfund" -->
+	<tr>
+		<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> "><!-- TMPL_VAR name="bookfundid" --></a></td>
+		<td><!-- TMPL_VAR name="bookfundname" --></td>
+		<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> ">Edit</a></td>
+		<td><a href="<!-- TMPL_VAR name="action" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Delete</a></td>
+	</tr>
+		<tr>
+		<td>&nbsp;</td>
+		<td><b>Budget</b></td>
+		<td><a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Add Budget</a></td>
+		<td></td>
+	</tr>
+	<!-- TMPL_LOOP name="budget" -->
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" --> : <b><!-- TMPL_VAR name="budgetamount" --></b>
+			</td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Edit</a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Delete</a></td>
+
+		</tr>
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
+</table><!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name=scriptname -->" method="post">
+	<p><input type="hidden" name="op" value="add_form" /></p>
+<input type="submit"value="Add bookfund" class="submit" /></form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add_form" -->
+<script>
+	//
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	//
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	//
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=="") {
+		return false;
+	}
+	return true;
+	}
+	//
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	//
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.bookfundid.value.length==0) {
+			_alertString += "- bookfundid missing\n";
+		}
+		if (f.bookfundname.value.length==0) {
+			_alertString += "- bookfundname missing\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</SCRIPT>
+<h1><!-- TMPL_VAR name="header" --></h1>
+<form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
+<input type="hidden" name="op" value="add_validate" />
+<input type="hidden" name="checked" value="0" />
+<table>
+<!-- TMPL_IF name="add_or_modify" -->
+<tr><td>Book fund</td><td><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><!-- TMPL_VAR name="bookfundid" --></td></tr>
+<!-- TMPL_ELSE -->
+<tr><td>Book fund</td><td><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)" /></td></tr>
+<!-- /TMPL_IF -->
+<tr><td>Name</td><td><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" /></td></tr>
+</table><p><input type="button" value="OK" onclick="Check(this.form); return false;" class="submit" /> <input type="submit" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="action" -->'; return false;" /></p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add_validate" -->
+<h3>Data Recorded</h3>
+<form action="<!-- TMPL_VAR name="action" -->" method="post">
+<input type="submit" value="OK" class="submit" />
+</form></td></tr></table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirm" -->
+<h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundname" --></em></h3>
+<table>
+<tr><td>Book fund</td><td><!-- TMPL_VAR name="bookfundid" --></td></tr>
+<tr><td>Name</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr><tr><td>Group</td><td><!-- TMPL_VAR name="bookfundgroup" --></td></tr>
+</table><div class="tabitem"><form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><input type="submit" value="Delete this Fund" class="cancel" /></form> <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="submit" value="Do not Delete" class="submit" /></form></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+<h3>Data Deleted</h3>
+<div class="form"><form action="<!-- TMPL_VAR name="action" -->" method="post">
+<input type="submit" value="OK" class="submit" /></form></div>
+<!-- /TMPL_IF -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

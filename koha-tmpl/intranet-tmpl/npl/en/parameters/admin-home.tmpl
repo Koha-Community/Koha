@@ -1,0 +1,86 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Koha Admin Page</h1>
+
+<h3>Parameters</h3>
+<div class="menu"><table>
+<caption>Biblio related</caption>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></th>
+	<td>the supports of an item.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/aqbudget.pl">Budget</a></th>
+	<td>The monies allocated to your book funds.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book Funds</a></th>
+	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised Values</a></th>
+	<td>Define here categories and authorised values for them.
+			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/thesaurus.pl">Thesaurus</a></th>
+	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
+</tr>
+</table></div>
+<div class="menu"><table>
+<caption>MARC related</caption>
+<tr><th><a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC tag structure</a></th><td>MARC structure : tag then subfields</td></tr>
+<tr><th><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links koha - MARC DB</a></th><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
+<tr><th><a href="/cgi-bin/koha/admin/checkmarc.pl">Checks MARC</a></th><td>Checks the MARC structure. USE IT before working with real datas. It will show mistakes that BREAKS koha database!</td></tr>
+</table></div>
+<div class="menu"><table>
+<caption>Various parameters</caption>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/branches.pl">Library Branches</a></th>
+	<td>the differents branches you manage with this Koha server</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/categorie.pl">Borrower Categories</a></th>
+	<td>the differents types of borrowers.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
+	<td>Currencies of booksellers.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></th>
+	<td>Printers (UNIX paths).</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a></th>
+	<td>Words deleted during searches</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></th>
+	<td>Servers to query for MARC data</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></th>
+	<td>System preferences</td>
+</tr>
+</table></div>
+<h3>Tools</h3>
+<div class="menu"><table>
+<caption>Import/Export</caption>
+<tr>
+	<th><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></th>
+	<td>Exporting in MARC format</td>
+</tr>
+	<tr>
+		<th><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records</a> in Breeding Farm</th>
+		<td>The breeding farm is a table where imported MARC records are stored.<br/>
+			A MARC record is stored in the breeding farm as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the breeding farm.
+			If it is found, the biblio is added to Koha active table and removed from the breeding farm. <br/>
+		</td>
+	</tr>
+</table></div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

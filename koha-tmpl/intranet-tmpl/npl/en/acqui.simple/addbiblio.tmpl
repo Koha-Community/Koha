@@ -1,0 +1,441 @@
+<!-- TMPL_INCLUDE NAME="main-top-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
+
+<div id="main">
+<form method="post" name="f" action="addbiblio.pl" />
+<input type="hidden" name="op" value="addbiblio" />
+<input type="hidden" name="addfield_field" />
+<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="oldbiblionumber" -->" />
+
+<h3><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h3><input type="button" value="<!-- TMPL_IF NAME="oldbiblionumtagfield" -->Save Bibliographic Record and Go To Items<!-- TMPL_ELSE -->Add Bibliographic Record and Go To Items<!-- /TMPL_IF -->" onclick="Check(this.form);" class="submit" accesskey="w" />
+<input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" />
+	
+<div id="tabholder" class="tabholder">
+   <span id="tab1" class="tab" onclick =" showPanel(1);" onmouseover="hover(this);" onmouseout="setState(1)">007-130</span>
+   <span id="tab2" class="tab" onclick =" showPanel(2);" onmouseover="hover(this);" onmouseout="setState(2)">240-490</span>
+	   <span id="tab3" class="tab" onclick =" showPanel(3);" onmouseover="hover(this);" onmouseout="setState(3)">500-586</span>
+	    <span id="tab4" class="tab" onclick =" showPanel(4);" onmouseover="hover(this);" onmouseout="setState(4)">600-655</span>
+	    <span id="tab5" class="tab" onclick =" showPanel(5);" onmouseover="hover(this);" onmouseout="setState(5)">700-856</span>
+	    <span id="tab6" class="tab" onclick =" showPanel(6);" onmouseover="hover(this);" onmouseout="setState(6)">942</span>
+	 </div>
+	
+<div class="panelholder">
+	<div class="panel" id="panel1" style="visibility:visible; background-color:#FFC;"><div id="0XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="0XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel2"><div id="1XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="1XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel3"><div id="2XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="2XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel4"><div id="3XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="3XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel5"><div id="4XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="4XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel6"><div id="5XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="5XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel7"><div id="6XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="6XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel8"><div id="7XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="7XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel9"><div  id="8XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="8XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div class="panel" id="panel10"><div id="9XX">
+    <div class="table"><table>
+	<!-- TMPL_LOOP name="9XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<tr><td colspan="4"><b><!-- TMPL_VAR name="tag" --></b>  <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->" /><input type="text" name="indicator" size="3" maxlength="2" value="<!-- TMPL_VAR name="indicator" -->" /> - <tmpl_var name="tag_lib"> <a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a></td></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP name="subfield_loop" -->
+				<tr>
+					<td width="3%">&nbsp;</td>
+					<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+					<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+					<td width="40%">
+						<!-- TMPL_VAR name="marc_value" -->
+						<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+						<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+						<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+						<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+					</td>
+				</tr>
+			</tmpl_loop>
+	</tmpl_loop>
+		</table></div>
+		</div></div>
+
+	<div name="hidden" id="hidden">
+	<div class="table"><table>
+	<!-- TMPL_LOOP name="hidden_loop" -->
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><!-- TMPL_VAR name="subfield" --></b></td>
+		<td width="55%" align="right"><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></td>
+		<td width="40%">
+			<!-- TMPL_VAR name="marc_value" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->" />
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->" />
+			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->" />
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	</table></div>
+	</div>
+	<!-- TMPL_IF name="oldbiblionumtagfield" -->
+		<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblionumtagfield" -->" />
+		<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblionumtagsubfield" -->" />
+		<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblionumber" -->" />
+		<input type="hidden" name="mandatory" value="0">
+		<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+		<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblioitemnumtagfield" -->" />
+		<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblioitemnumtagsubfield" -->" />
+		<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblioitemnumber" -->" />
+		<input type="hidden" name="mandatory" value="0">
+		<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+		<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->" />
+	<!-- /TMPL_IF -->
+</form>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+
+function Check(f) {
+	// Scan for nonempty fields
+	var field_is_nonempty_p = new Array();
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    field_is_nonempty_p[f.tag[i].value] = 0;
+	}
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    if (f.field_value[i].value.length != 0) {
+		field_is_nonempty_p[f.tag[i].value] += 1;
+	    }
+	}
+
+	// Scan for missing mandatory subfields
+	var total_missing_mandatory_subfields = 0;
+	for (i=0 ; i<f.field_value.length-2 ; i++) {
+		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+		    // We should not flag an error unless the tag is also
+		    // mandatory, or if something else in the tag is entered
+
+		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
+			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+			total_missing_mandatory_subfields++;
+		    }
+		} else {
+			document.getElementById("error"+i).style.backgroundColor="#FFFFcc";
+		}
+	}
+
+	// Scan for missing mandatory tags
+	var total_missing_mandatory_tags = 0;
+	var seen_mandatory_tag_p = new Array();
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    var j = f.tag[i].value;
+	    if (!field_is_nonempty_p[j] && f.tag_mandatory[i].value == 1) {
+		if (seen_mandatory_tag_p[j] != 1) {
+		    seen_mandatory_tag_p[j] = 1;
+		    total_missing_mandatory_tags++;
+		}
+		document.getElementById("error"+i).style.backgroundColor="#ffff00";
+	    }
+	}
+
+	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
+	var alertString2;
+	if (total_errors!=0) {
+		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2 += "- "+ total_missing_mandatory_tags +" mandatory tags empty\n";
+		alertString2 += "- "+ total_missing_mandatory_subfields +" mandatory fields empty (see bold subfields)";
+		alert(alertString2);
+	} else {
+		document.forms[0].submit();
+	}
+}
+function Dopop(link,i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(link+"&amp;result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function PopupZ3950(link,i) {
+    var strQuery="";
+	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
+		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&amp;isbn="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.title" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&amp;title="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.author" &&document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&amp;author="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblioitems.issn" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&amp;issn="+document.forms[0].field_value[i].value;
+		}
+	}
+	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR name="bibid" -->"+strQuery,"z3950 search",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function AddField(field) {
+	document.forms[0].op.value = "addfield";
+	document.forms[0].addfield_field.value=field;
+	document.f.submit();
+}
+
+// tabs functions
+
+ var currentPanel;
+   function showPanel(panelNum) {
+      //hide visible panel, show selected panel, 
+      //set tab
+      if (currentPanel != null) {
+         hidePanel();
+      }
+      document.getElementById 
+         ('panel'+panelNum).style.display = 'block';
+         currentPanel = panelNum;
+         setState(panelNum);
+   }
+   function hidePanel() {
+      //hide visible panel, unhilite tab
+      document.getElementById
+        ('panel'+currentPanel).style.display = 'none';
+      document.getElementById
+        ('tab'+currentPanel).style.backgroundColor = 
+        '#D8DEB8';
+      document.getElementById
+        ('tab'+currentPanel).style.color = '#000066';
+   }
+   function setState(tabNum) {
+      if (tabNum==currentPanel) {
+         document.getElementById 
+           ('tab'+tabNum).style.backgroundColor = 
+           '#FFFFCC';
+         document.getElementById
+           ('tab'+tabNum).style.color = '#000066';
+      }
+      else {
+         document.getElementById
+           ('tab'+tabNum).style.backgroundColor = 
+           '#D8DEB8';
+         document.getElementById
+           ('tab'+tabNum).style.color = '#000066';
+      }
+   }
+   function hover(tab) {
+      tab.style.backgroundColor = '#ccff99';
+			tab.style.color = '#330000';
+   }
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+
+<font size="6"><em>Adding a new Biblio</em></font><br>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="5">
+  <tr>
+  <td><font size="5">Section One: Copyright Information </font></td>
+  </tr>
+</table>
+
+<TMPL_IF name="ERROR">
+<p>&nbsp;</p>
+<center>
+<font color="#FF0000">Please Specify a Title</font>
+</center>
+</TMPL_IF>
+
+<form action="savebiblio.pl" method="post">
+<table align="center">
+<tr>
+<td>Title: *</td>
+<td><input name="title" size="40"></td>
+</tr>
+<tr>
+<td>Subtitle:</td>
+<td><input name="subtitle" size="40"></td>
+</tr>
+<tr>
+<td>Author:</td>
+<td><input name="author" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Series Title:<br>
+<i>(if applicable)</i></td>
+<td><input name="seriestitle" size="40"></td>
+</tr>
+<tr>
+<td>Copyright Date:</td>
+<td><input name="copyrightdate" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Abstract:</td>
+<td><textarea cols="30" rows="6" name="abstract"></textarea></td>
+</tr>
+<tr valign="top">
+<td>Notes:</td>
+<td><textarea cols="30" rows="6" name="notes"></textarea></td>
+</tr>
+<tr valign="top">
+<td colspan="2"><center><input type="submit" value="Submit"></center></td>
+</tr>
+</table>
+</form>
+* Required
+<TMPL_INCLUDE name="acquisitions-bottom.inc">

@@ -1,0 +1,208 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+test
+<font size="6"><em><TMPL_VAR NAME="TITLE"></em></font>
+<p>
+<TMPL_IF name="NOBARCODE">
+<font size="5" color="red">You must give the item a barcode</font>
+<p>
+</TMPL_IF>
+<TMPL_IF name="NOBIBLIOITEM">
+<font size="5" color="red">You must create a new group for your item to be
+added to</font>
+<p>
+</TMPL_IF>
+<TMPL_IF name="BARCODEINUSE">
+<font size="5" color="red">Sorry, that barcode is already in use</font>
+<p>
+</TMPL_IF>
+<table align="left" cellpadding="5" cellspacing="0" border="1" width="220">
+<tr valign="top" bgcolor="#CCCC99">
+<td background="/images/background-mem.gif"><b>BIBLIO RECORD <TMPL_VAR NAME="BIBNUM"></b></td>
+</tr>
+<tr valign="top">
+<td><b>Author:</b> <TMPL_VAR NAME="AUTHOR"><br>
+<b>Copyright:</b> <TMPL_VAR NAME="COPYRIGHT"><br>
+<b>Series Title:</b> <TMPL_VAR NAME="SERIES"><br>
+<b>Notes:</b> <TMPL_VAR NAME="NOTES"></td>
+</tr>
+<TMPL_LOOP name="BIBITEMS">
+<TMPL_IF name="WEB">
+<tr valign="top" bgcolor="#CCCC99">
+<td
+background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber"> GROUP -
+<TMPL_VAR name="itemtype"></b></td>
+</tr>
+<tr valign="top">
+<td><b>URL:</b> <TMPL_VAR NAME="url"><br>
+<b>Date:</b> <TMPL_VAR NAME="publicationyear"><br>
+<b>Notes:</b> <TMPL_VAR NAME="notes"></td>
+</tr>
+<TMPL_ELSE>
+<tr valign="top" bgcolor="#CCCC99">
+<td
+background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber">
+GROUP - <TMPL_VAR name="itemtype"></b></td>
+</tr>
+<tr valign="top">
+<td><b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
+<b>Dewey:</b> <TMPL_VAR NAME="dewey"><br>
+<b>Publisher:</b> <TMPL_VAR NAME="publishercode"><br>
+<b>Place:</b> <TMPL_VAR NAME="place"><br>
+<b>Date:</b> <TMPL_VAR NAME="publicationyear"></td>
+</tr>
+<TMPL_LOOP name="ITEMS>
+<tr valign="top" bgcolor="#FFFFCC">
+<td><b>Item:</b> <TMPL_VAR NAME="barcode"><br>
+<b>Home Branch:</b> <TMPL_VAR name="homebranch"><br>
+<b>Notes:</b> <TMPL_VAR NAME="itemnotes"></td>
+</tr>
+</TMPL_LOOP>
+</TMPL_IF>
+</TMPL_LOOP>
+</table>
+<img src="/images/holder.gif" width="16" height="650" align="left">
+
+<center>
+
+<form action="saveitem.pl" method="post">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR name="bibnum">">
+<table border="1" cellspacing="0" cellpadding="5">
+<tr valign="top" bgcolor="#CCCC99">
+<td background="/images/background-mem.gif" colspan="2"><b>ADD NEW
+ITEM:</b><br>
+<small><i>For a website add the group only</i></small></td>
+</tr>
+<tr valign="top">
+<td>Item Barcode:</td>
+<td><input type="text" name="barcode" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Branch:</td>
+<td><select name="homebranch">
+<TMPL_LOOP name="BRANCHES">
+<option value="$branches[$i]->{'branchcode'}"><TMPL_VAR name="branchname"></option>
+</TMPL_LOOP>
+</select></td>
+</tr>
+<tr valign="top">
+<td>Replacement Price:</td>
+<td><input type="text" name="replacementprice" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Notes:</td>
+<td><textarea name="itemnotes" cols="30" rows="6"></textarea></td>
+</tr>
+<tr valign="top" bgcolor="#CCCC99">
+<td colspan="2" background="/images/background-mem.gif"><b>Add to existing group:</b></td>
+</tr>
+<tr valign="top">
+<td>Group:</td>
+<td><select name="biblioitemnumber">
+
+<TMPL_LOOP NAME="BIBITEMS">
+<TMPL_IF NAME="WEB">
+<TMPL_ELSE>
+    <option value="<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="itemtype"></option>
+
+</TMPL_IF>
+
+</TMPL_LOOP>
+</select></td>
+</tr>
+<tr valign="top">
+<td colspan="2" align="center"><input type="submit" name="existinggroup"
+value="Add New Item to Existing Group"></td>
+</tr>
+<tr valign="top" bgcolor="#CCCC99">
+<td colspan="2" background="/images/background-mem.gif"><b>OR Add to a new
+Group:</b></td>
+</tr>
+<tr valign="top">
+<td>Format:</td>
+<td><select name="itemtype">
+<TMPL_LOOP name="ITEMTYPES">
+<option value="$itemtypes[$i]->{'itemtype'}"><TMPL_VAR name="description"></option>
+</TMPL_LOOP>
+</select></td>
+</tr>
+<tr valign="top">
+<td>ISBN:</td>
+<td><input name="isbn" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Publisher:</td>
+<td><input name="publishercode" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Publication Year:</td>
+<td><input name="publicationyear" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Place of Publication:</td>
+<td><input name="place" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Illustrator:</td>
+<td><input name="illus" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Additional Authors:<br><i>One Author per line</i></td>
+<td><textarea name="additionalauthors" cols="30" rows="6"></textarea></td>
+</tr>
+<tr valign="top">
+<td>Subject Headings:<br><i>One Subject per line</i></td>
+<td><textarea name="subjectheadings" cols="30" rows="6"></textarea></td>
+</tr>
+<tr valign="top">
+<td>Website URL:</td>
+<td><input name="url" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Dewey:</td>
+<td><input name="dewey" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Dewey Subclass:</td>
+<td><input name="subclass" size="40"></td>
+</tr>
+<tr valign="top">
+<td>ISSN:</td>
+<td><input name="issn" size="40"></td>
+</tr>
+<tr valign="top">
+<td>LCCN:</td>
+<td><input name="lccn" size="40"</td>
+</tr>
+<tr valign="top">
+<td>Volume:</td>
+<td><input name="volume" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Number:</td>
+<td><input name="number" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Volume Description:</td>
+<td><input name="volumeddesc" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Pages:</td>
+<td><input name="pages" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Size:</td>
+<td><input name="size" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Notes:</td>
+<td><textarea name="notes" cols="30" rows="6"></textarea></td>
+</tr>
+<tr valign="top">
+<td colspan="2" align="center"><input type="submit" name="newgroup"
+value="Add New Item to New Group"></td>
+</tr>
+</table>
+
+</form>
+</center>
+<TMPL_INCLUDE name="acquisitions-bottom.inc">

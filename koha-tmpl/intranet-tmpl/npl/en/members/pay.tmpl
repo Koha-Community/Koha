@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+	<form class="inline" action="/cgi-bin/koha/pay.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" />
+<div class="table"><table>
+<caption>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></caption>
+<tr>
+	<th>Fines &amp; Charges</th>
+	<th>Description</th>
+	<th>Account Type</th>
+	<th>Amount</th>
+	<th>Amount Outstanding</th>
+</tr>
+	
+<!-- TMPL_LOOP name="loop_pay" -->
+<tr>
+	<td><fieldset><label for="payfine<!-- TMPL_VAR name="i" -->">Unpaid</label><input id="payfine<!-- TMPL_VAR name="i" -->" type="radio" name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked="checked" /><br>
+	<label for="payfine<!-- TMPL_VAR name="i" -->">Pay</label><input type="radio" id="payfine<!-- TMPL_VAR name="i" -->" name="payfine<!-- TMPL_VAR name="i" -->" value="yes" /><br>
+	<label for="payfine<!-- TMPL_VAR name="i" -->">Writeoff</label><input type="radio" id="payfine<!-- TMPL_VAR name="i" -->" name="payfine<!-- TMPL_VAR name="i" -->" value="wo" /></fieldset>
+	<input type="hidden" name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->" />
+	<input type="hidden" name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->" />
+	<input type="hidden" name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->" />
+	<input type="hidden" name="out<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amountoutstanding" -->" />
+	<input type="hidden" name="bornum<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="bornum" -->" />
+	<input type="hidden" name="accountno<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accountno" -->" />
+	</td>
+	<td><!-- TMPL_VAR name="description" --><!-- TMPL_VAR name="title" --></td>
+	<td><!-- TMPL_VAR name="accounttype" --></td>
+	<td><!-- TMPL_VAR name="amount" --></td>
+	<td><!-- TMPL_VAR name="amountoutstanding" --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+<tr>
+	<td colspan="4">Total Due</td>
+	<td><!-- TMPL_VAR name="total" --></td>
+	</tr>
+</table></div>
+<input type="submit" name="submit"  value="Make Payment" class="submit" /></form> <form class="inline" action="moremember.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="bornum" -->" name="bornum" /> <input type="submit" class="submit" value="Return to Member Record" /></form>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

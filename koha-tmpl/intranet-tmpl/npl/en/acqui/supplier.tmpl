@@ -1,0 +1,155 @@
+<!-- TMPL_INCLUDE name="main-top.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main"><form action="updatesupplier.pl" method="post">
+
+<input type="hidden" name="id" value=<!-- TMPL_VAR name="id" -->>
+
+<!-- TMPL_IF NAME=id -->
+	<h1>Update: <!-- TMPL_VAR name="name" --></h1>
+<!-- TMPL_ELSE -->
+	<h1>Add supplier</h1>
+<!-- /TMPL_IF -->
+
+<div class="details"><table>
+	<caption>Company Details</caption>
+	<tr>
+		<th><label for="company">Company Name</label></td>
+		<td><input type="text" size="20" id="company"  name="company" value="<!-- TMPL_VAR name="name" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_postal">Postal Address</label></th>
+		<td>
+			<textarea name="company_postal" id="company_postal" cols="20" rows="3"><!-- TMPL_VAR name="postal" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="physical">Physical Address</label></th>
+		<td><textarea id="physical" name="physical" cols="20" rows="4"><!-- TMPL_VAR name="address1" --><!-- TMPL_VAR name="address2" --><!-- TMPL_VAR name="address3" --><!-- TMPL_VAR name="address4" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_phone">Phone</label></th>
+		<td><input type="text" size="20" id="company_phone" name="company_phone" value="<!-- TMPL_VAR name="phone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_fax">Fax</label></th>
+		<td><input type="text" size="20" id="company_fax" name="company_fax" value="<!-- TMPL_VAR name="fax" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="website">Web Site</label></th>
+		<td><input type="text" size="20" name="website" id="website" value="<!-- TMPL_VAR name="url" -->" />
+		</td>
+	</tr>
+</table></div>
+<div class="details"><table>
+<caption>Contact Details</caption>
+	<tr>
+		<th><label for="company_contact_name">Contact Name</label></th>
+		<td><input type="text" size="20" id="company_contact_name" name="company_contact_name" value="<!-- TMPL_VAR name="contact" -->" /></td>
+	</tr>
+	<tr>
+		<th><label for="company_contact_position">Position</label></th>
+		<td><input type="text" size="20" id="company_contact_position" name="company_contact_position" value="<!-- TMPL_VAR name="contpos" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_phone">Phone</label></th>
+		<td><input type="text" size="20" id="contact_phone" name="contact_phone" value="<!-- TMPL_VAR name="contphone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_phone_2">Alternative Phone</label></th>
+		<td><input type="text" size="20" id="conatct_phone_2" name="contact_phone_2" value="<!-- TMPL_VAR name="contaltphone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_fax">Fax</label></th>
+		<td><input type="text" size="20" id="contact_fax"  name="contact_fax" value="<!-- TMPL_VAR name="contfax" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_email">E-mail</label></th>
+		<td><input type="text" size="20" id="company_email" name="company_email" value="<!-- TMPL_VAR name="contemail" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="notes">Notes</label></th>
+		<td><textarea id="notes" name="notes" cols="20" rows="4"><!-- TMPL_VAR name="contnotes" --></textarea>
+		</td>
+	</tr>
+</table></div>
+
+<div class="details"><table>
+	<caption>Current Status</caption>
+	<tr>
+		<th><label for="status">Supplier is</label></th>
+		<td><input type="radio" id="status" name="status" value="1"<!-- TMPL_IF name="active" --> checked="checked"<!-- /TMPL_IF --> />Active
+			<input type="radio" name="status" value="0"<!-- TMPL_UNLESS name="active" --> checked="checked"<!-- /TMPL_UNLESS --> />Inactive</td>
+	</tr>
+</table></div>
+
+<div class="details">
+<table>
+	<caption>Ordering Information</caption>
+	<tr>
+		<th><label for="publishers_imprints">Publishers and Imprints</label></th>
+		<td><textarea name="publishers_imprints" id="publishers_imprints" cols="20" rows="4"><!-- TMPL_VAR name="specialty" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="list_currency">List Prices are</label></th>
+		<td>
+			<select name="list_currency" id="list_currency" size="1">
+			<!-- TMPL_LOOP name="loop_pricescurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="invoice_currency">Invoice Prices are</label></th>
+		<td>
+			<select name="invoice_currency" id="invoice_currency" size="1">
+			<!-- TMPL_LOOP name="loop_invoicecurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="gst">GST Registered</label></th>
+		<td>
+			<input type="radio" id="gst" name="gst" value="1"<!-- TMPL_IF name="gstreg" --> checked="checked"<!-- /TMPL_IF --> />Yes
+			<input type="radio" name="gst" value="0"<!-- TMPL_UNLESS name="gstreg" --> checked="checked"<!-- /TMPL_UNLESS --> />No
+		</td>
+	</tr>
+	<tr>
+		<th><label for="list_gst">List Item Price Includes GST</label></th>
+		<td>
+			<input type="radio" id="list_gst" name="list_gst"<!-- TMPL_IF name="listincgst" --> checked="checked"<!-- /TMPL_IF --> />Yes
+			<input type="radio" name="list_gst" value="0"<!-- TMPL_UNLESS name="listincgst" --> checked="checked"<!-- /TMPL_UNLESS --> />No
+		</td>
+	</tr>
+	<tr>
+		<th><label for="invoice_gst">Invoice Item Price Includes GST</label></th>
+		<td>
+			<input type="radio" id="invoice_gst" name="invoice_gst" value="1"<!-- TMPL_IF name= "invoiceincgst" --> checked="checked"<!-- /TMPL_IF --> />Yes
+			<input type="radio" name="invoice_gst" value="0"<!-- TMPL_UNLESS name="invoiceincgst" --> checked="checked"<!-- /TMPL_UNLESS --> />No
+		</td>
+	</tr>
+	<tr>
+		<th><label for="discount">Discount</label></th>
+		<td><input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR name="discount" -->" /> %
+	</tr>
+</table>
+</div>
+<input type="submit" value="Save Changes" class="submit" />
+</form>
+</div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

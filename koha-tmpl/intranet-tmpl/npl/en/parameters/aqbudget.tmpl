@@ -1,0 +1,129 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<!-- TMPL_IF name="else" -->
+<h1>Budget admin</h1><form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
+	<input type="text" name="searchfield" value="" /> <input type="submit" name="search" value="Search" class="submit" /></form>
+	<!-- TMPL_IF name="search" -->
+	<div id="results">You Searched for <span class="ex"><!-- TMPL_VAR name="searchfield" --></span></div>
+	<!-- /TMPL_IF -->
+<table>
+	<tr><th>Book fund</th><th>Start date</th><th>End date</th><th>Budget amount</th><th colspan="2">&nbsp;</th></tr>
+	<!-- TMPL_LOOP name="budget" -->
+		<tr>
+			<td><!-- TMPL_VAR name="bookfundid" --> (<!-- TMPL_VAR name="bookfundname" -->)</td>
+			<td><!-- TMPL_VAR name="startdate" --></td>
+			<td><!-- TMPL_VAR name="enddate" --></td>
+			<td><!-- TMPL_VAR name="budgetamount" --></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Edit</a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Delete</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<tr><td colspan="6"></td></tr>
+	</table>
+	<form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
+	<p><input type="hidden" name="op" value="add_form" /><input type="submit" class="submit" value="Add Budget" /></p></form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add_form" -->
+<script language="JavaScript" type="text/javascript">
+	//
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	//
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	//
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	//
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	//
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.bookfundid.value.length==0) {
+			_alertString += "- bookfundid missing\n";
+		}
+		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
+			_alertString += "- Budget missing\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</script>
+
+<form action="/cgi-bin/koha/admin/aqbudget.pl" name="Aform" method="post">
+<input type="hidden" name="op" value="add_validate" />
+<input type="hidden" name="checked" value="0" />
+<h1><!-- TMPL_VAR name="header" --></h1>
+<table>
+<!-- TMPL_IF name="modify" -->
+<tr><td>Book fund</td><td><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><!-- TMPL_VAR name="bookfundid" --></td></tr>
+<tr><td>Book fund name</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="adding" -->
+<tr><td>Bookfund</td><td><input type="hidden" name="bookfundid" size="5" maxlength="5" value="<!-- TMPL_VAR name="bookfundid" -->" /><!-- TMPL_VAR name="bookfundid" --></td></tr>
+<!-- /TMPL_IF -->
+<tr><td>Start date (<!-- TMPL_VAR NAME="dateformat" -->)</td><td><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" />&nbsp;</td></tr>
+<tr><td>End date (<!-- TMPL_VAR NAME="dateformat" -->)</td><td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" /></td></tr>
+<tr><td>Budget amount</td><td><input type="text" name="budgetamount" value="<!-- TMPL_VAR name="budgetamount" -->" /></td></tr>
+</table>
+<input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->" /><input type="button" value="Add" class="submit" onclick="Check(this.form)" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" /></form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add_validate" -->
+<h3>Budget Data Recorded</h3><table><tr><td>
+<form action="<!-- TMPL_VAR name="action" -->" method="post">
+<input type="submit" value="Continue" class="submit" />
+</form></td></tr></table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirm" -->
+<h3>Delete Book Fund '<!-- TMPL_VAR name="bookfundid" -->'?</h3>
+<table>
+<tr><td>Start date</td><td><!-- TMPL_VAR name="startdate" --></td></tr>
+<tr><td>End date</td><td><!-- TMPL_VAR name="enddate" --></td></tr>
+<tr><td>budgetamount</td><td><!-- TMPL_VAR name="budgetamount" --></td></tr>
+<tr><td></td></tr></table><div class="tabitem"><form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->" /><input type="submit" value="Delete this Book Fund" class="cancel" /></form> <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="submit" value="Do Not Delete" class="submit" /></form></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+<h3>Book fund deleted</h3>
+<div class="form"><form action="<!-- TMPL_VAR name="action" -->" method="post">
+<input type="submit" value="Continue" class="submit" />
+</form></div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,140 @@
+<!-- TMPL_INCLUDE NAME="doc-head-circ-open.inc" -->Koha -- Circulation: Transfers<!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Circulation: Transfers</h1>
+
+<!-- TMPL_IF Name="found" -->
+	<h3 class="alert">Reserve Found</h3>
+		
+	<div class="form">
+		<table>
+		<caption><!-- TMPL_IF Name="reserved" -->Reserve found for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow(this,'Member', 480, 640)"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="waiting" -->
+    Item is marked waiting at <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow(this,'Member', 480, 640)"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF --></caption>
+		<tr><th>
+			<!-- TMPL_IF Name="reserved" -->Set reserve to waiting and transfer book to <b><!-- TMPL_VAR Name="branchname" --> </b>: <!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="waiting" -->Cancel reservation and then attempt transfer: <!-- /TMPL_IF -->
+		</th>
+		<td>
+			<form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+				<!-- TMPL_LOOP Name="trsfitemloop" -->
+					<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+					<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+					<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+				<!-- /TMPL_LOOP -->
+				<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="bornum" -->" />
+				<!-- TMPL_IF Name="waiting" --><input type="hidden" name="barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
+					<input type="hidden" name="request" value="KillWaiting" />
+					<input type="submit" value="Cancel" class="cancel" />
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="reserved" --><input type="hidden" name="request" value="SetWaiting" />
+					<input type="submit" value="Waiting" class="submit" /><!-- /TMPL_IF -->
+			</form>
+		</td></tr>
+		<!-- TMPL_IF Name="reserved" --><tr><th>Cancel reservation and then attempt transfer:</th>
+			<td>
+			<form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+
+			<!-- TMPL_LOOP Name="trsfitemloop" -->
+				<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+				<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+			<!-- /TMPL_LOOP -->
+
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
+			<input type="hidden" name="barcode" value=<!-- TMPL_VAR Name="barcode" --> />
+			<input type="hidden" name="request" value="KillReserved" />
+			<input type="submit" class="cancel" value="Cancel" />
+			</form>
+		<!-- /TMPL_IF -->
+		</td></tr>
+		<tr><th>Ignore and return to transfers: </th>
+			<td>
+			<form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
+			<input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR Name="tobranchcd" --> />
+			<input type="hidden" name="barcode" />
+			<!-- TMPL_LOOP Name="trsfitemloop" -->
+				<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+				<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+			<!-- /TMPL_LOOP -->
+			<input type="submit" value="Ignore" class="submit" />
+			</form>
+			</td>
+		</tr></table></div>
+
+<!-- TMPL_ELSE -->
+	<div class="table"><table>
+	<caption>Messages</caption>
+	<tr><td>
+	<!-- TMPL_IF Name="reqmessage" -->
+		<!-- TMPL_IF Name="cancelled" -->
+			Reserve Cancelled<br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="setwaiting" -->
+			Item should now be waiting at branch: <!-- TMPL_VAR Name="reqbrchname" --><br>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP Name="errmsgloop" -->
+		<font color='red' size='+2'>
+		<!-- TMPL_IF Name="errbadcode" -->
+			No Item with barcode: <!-- TMPL_VAR Name="msg" -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errispermanent" -->
+			Please return item to home branch: <!-- TMPL_VAR Name="msg" -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errdesteqholding" -->
+			Item is already at destination branch.
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errwasreturned" -->
+			Item was on loan to <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"
+onClick="openWindow(this,'Member', 480, 640)"><!-- TMPL_VAR Name="borcnum" --></a>
+<!-- TMPL_VAR Name="name" --> and has been returned.
+		<!-- /TMPL_IF -->
+		</font>
+		<br />
+	<!-- /TMPL_LOOP -->
+	</td></tr></table></div>
+	<form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
+	<h3>Transfer</h3><div class="form">
+	<table><tr><th>Destination Branch:</th><td><select name="tobranchcd">
+			<!-- TMPL_LOOP Name="branchoptionloop" -->
+				<option value="<!-- TMPL_VAR Name="code" -->" <!-- TMPL_VAR Name="selected" -->><!-- TMPL_VAR Name="name" --></option>
+			<!-- /TMPL_LOOP -->
+		</select></td></tr>
+<tr><th>Enter Book Barcode</th><td><input name="barcode" size="15" /></td></tr>
+</table>
+	<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
+	<!-- TMPL_LOOP Name="trsfitemloop" -->
+		<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+		<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+		<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+	<!-- /TMPL_LOOP -->
+	<input type="submit" class="submit" value="Transfer" /></div>
+	</form>
+	
+	<!-- TMPL_IF Name="transferred" -->
+		<div class="table"><table>
+		<caption>Transfered Items</caption>
+		<tr><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>From</th><th>To</th></tr>
+		<!-- TMPL_LOOP Name="trsfitemloop" -->
+			<tr><td>
+			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640)"><!-- TMPL_VAR Name="barcode" --></a></td>
+			<td><!-- TMPL_VAR Name="title" --></td>
+			<td><!-- TMPL_VAR Name="author" --></td>
+			<td><!-- TMPL_VAR Name="itemtype" --></td>
+			<td><!-- TMPL_VAR Name="frbrname" --></td>
+			<td><!-- TMPL_VAR Name="tobrname" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table></div>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

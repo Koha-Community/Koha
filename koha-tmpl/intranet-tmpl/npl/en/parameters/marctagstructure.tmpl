@@ -1,0 +1,130 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=="") {
+		return false;
+	}
+	return true;
+	}
+
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.tagfield.value.length==0) {
+			_alertString += "- tag number missing\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</script>
+
+<div id="main">	
+<!-- TMPL_IF name="add_form" -->
+<!-- -->
+	<h1><!-- TMPL_VAR name="action" --></h1>
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+	<table>
+		<tr><td>Tag</td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
+<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" escape="HTML" -->" size="80" maxlength="100" /></td></tr>
+	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value="<!-- TMPL_VAR name="libopac" escape="HTML" -->" size="80" maxlength="100" /></td></tr>
+	<tr><td>Repeatable</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
+	<tr><td>Mandatory</td><td><!-- TMPL_VAR name="mandatory" --></td></tr>
+	<tr><td>Authorised value</td><td><!-- TMPL_VAR name="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</td></tr>
+	</table><p><input type="button" value="OK" onclick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
+	</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="delete_confirm" -->
+<!-- -->
+<h3>Confirm Deletion of Tag <em><!-- TMPL_VAR name="searchfield" --></em></h3>
+<table>
+	<tr>
+		<td>Tag</td>
+		<td><!-- TMPL_VAR name="searchfield" --></td>
+	</tr>
+	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
+	</table><div class="form"><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Delete this Tag" class="cancel" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do not Delete" class="submit" /></form></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+<!-- -->
+<h3>Data Deleted</h3>
+<div class="form"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="submit" value="OK" class="submit" />
+	</form></div>
+<!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="else" -->
+
+<h1>MARC tag structure admin</h1>
+
+<!-- TMPL_IF NAME="searchfield" --><div id="results"><!-- TMPL_VAR name="searchfield" --></div><!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="text" name="searchfield" value="" />
+	<input type="submit" name="submit" value="Search" class="submit" />
+</form>
+<table><tr>
+	<th>Tag</th>
+	<th>Lib</th>
+	<th>Repeatable</th>
+	<th>Mandatory</th>
+	<th>Authorised value</th>
+	<th>Subfields</th>
+	<th>Edit/Delete</th>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+<tr>
+	<td><!-- TMPL_VAR name="tagfield" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><!-- TMPL_VAR name="liblibrarian" --></a></td>
+	<td><!-- TMPL_IF name="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_IF name="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">subfields</a></td>
+	<td><a class="edit" href="<!-- TMPL_VAR name="edit" -->">Edit</a> <a class="delete" href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<div class="tabitem"><!-- TMPL_IF name="previous" --><!-- TMPL_VAR name="previous" -->&lt;&lt;Previous Tags</a><!-- TMPL_ELSE --><!-- /TMPL_IF -->
+<!-- /TMPL_IF --> <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form" /><input type="submit" value="Add tag" class="submit" /></form> <!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" -->Next Tags &gt;&gt;</a><!-- /TMPL_IF --></div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,98 @@
+<!-- TMPL_INCLUDE name="main-top.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+
+<h1>Acquisitions</h1>
+
+<div class="details"><form action="/cgi-bin/koha/acqui/order.pl" method="post"><table>
+<caption>Start, Recieve, or Modify Any Order</caption>
+<tr>
+	<th><label for="supplier">Supplier ID or Name</label></th>
+	<td>
+		
+		<input type="text" size="25" name="supplier" id="supplier" />
+		
+	</td>
+</tr>
+</table>
+<input type="submit" class="submit" value="Search" /></form>
+</div>
+<div class="details">
+<form action="/cgi-bin/koha/acqui/acquire.pl" method="post"><table>
+<caption>Receive or Modify a Periodical Order</caption>
+<tr>
+	<th><label for="recieve">Title Search</label></th>
+	<td>
+		
+		<input type="text"  size="25" name="recieve" id="recieve">
+		
+	</td>
+</tr>
+</table>
+<input type="submit" class="submit" value="Search" /></form>
+</div>
+
+<!-- currencies-->
+<div class="details">
+<!-- TMPL_IF NAME="loop_currency" -->
+<table>
+	<caption>Exchange Rates</caption>
+
+	<!-- TMPL_LOOP name="loop_currency" -->
+		<tr>
+			<th>
+				<label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
+			</th>
+			<td>	<form action="/cgi-bin/koha/currency.pl">
+	<input type="hidden" name="type" value="change">
+				<input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">	</form>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table><input type="submit" class="submit" value="Save Exchange Rate" />
+<!-- TMPL_ELSE --><form action="/cgi-bin/koha/admin/currency.pl" method="post">
+        <input type="hidden" name="op" value="add_form" /><input type="submit" class="submit" value="Add Currency" />
+
+        </form><!-- /TMPL_IF -->
+</div>
+
+<!-- showbudget-->
+	<div class="table"><table>
+		<caption>Budgets and Bookfunds</caption>
+			<tr>
+				<th>Budgets</th>
+				<th>Total</th>
+				<th>Spent</th>
+				<th>Comtd</th>
+				<th>Avail</th>
+			</tr>
+			<!-- TMPL_LOOP name="loop_budget" -->
+				<tr>
+					<td><!-- TMPL_VAR name="bookfundname" --></td>
+					<td><!-- TMPL_VAR name="budgetamount" --></td>
+					<td><!-- TMPL_VAR name="spent" --></td>
+					<td><!-- TMPL_VAR name="comtd" --></td>
+					<td><!-- TMPL_VAR name="avail" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			<tr>
+				<td><b>Total</b></td>
+				<td><b><!-- TMPL_VAR name="total" --></b></td>
+				<td><b><!-- TMPL_VAR name="totspent" --></b></td>
+				<td><b><!-- TMPL_VAR name="totcomtd" --></b></td>
+				<td><b><!-- TMPL_VAR name="totavail" --></b></td>
+			</tr>
+		</table></div>
+<p>		Use your reload button [ctrl + r] to get the most recent figures.
+		Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
+
+<div class="details">
+		<h4>Help</h4> <p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
+		<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </p>
+		<p>To start a new shopping basket with a new supplier return to this page and just start a new supplier search.</p>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and the click on "confirm basket".</p>
+</div></div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

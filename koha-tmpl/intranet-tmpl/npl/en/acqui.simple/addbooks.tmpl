@@ -1,0 +1,108 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Catalog Maintenance</h1>
+<!-- TMPL_IF name="noitemsfound" -->
+	<p>&nbsp;</p>
+	<font color="red" size="4">No items found</font>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="websiteadded" -->
+	<p>&nbsp;</p>
+	<font color="red" size="4">Website Biblioitem Added</font>
+<!-- /TMPL_IF -->
+
+<!-- Commented section used in NPL custom template version -->
+<!-- <div class="form">
+<form method="post" action="addbiblio-simple.pl">
+<input type="hidden" name="op" value="addbiblio" />
+<input type="hidden" name="addfield_field" />
+<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="oldbiblionumber" -->" />
+    <table>
+	<caption>Create Brief Record</caption>
+				<tr>
+					<th><label for="field_value">Title</label></th>
+					<td>
+						<input type="text" name="field_value" id="field_value" value="" size="50" maxlength="255" />
+						<input type="hidden" name="tag" value="245" />
+						<input type="hidden" name="subfield" value="a" />
+
+						<input type="hidden" name="mandatory" value="0" />
+						<input type="hidden" name="kohafield" value="biblio.title" />
+						<input type="hidden" name="tag_mandatory" value="1" />
+					</td>
+				</tr>
+	<tr>
+			<th><label for="field_value">Item Type</label></th>
+					<td>
+						<select name="field_value" id="field_value" size="1">
+<option value=""></option>
+<option  value="AB">Audiobook</option>
+<option  value="AF">Fiction</option>
+<option  value="AV">Videocassette</option>
+
+<option  value="AVJ">Juvenile videocassette</option>
+<option  value="AVNF">Non-fiction videocassette</option>
+<option  value="BIO">Biography</option>
+<option  value="DVD">Digital video disc</option>
+<option  value="EASY">Children's picture books</option>
+<option  value="JB">Juvenile biography</option>
+<option  value="JNF">Juvenile non-fiction</option>
+<option  value="JF">Juvenile fiction</option>
+
+<option  value="JREF">Juvenile reference</option>
+<option  value="LH">Local history</option>
+<option  value="LP">Large print fiction</option>
+<option  value="LPNF">Large print non-fiction</option>
+<option  value="MYS">Mystery</option>
+<option  value="NF">Non-fiction</option>
+<option  value="REF">Reference</option>
+<option  value="SCI">Science fiction/Fantasy</option>
+<option  value="WES">Western</option>
+
+<option  value="YA">Young Adult fiction</option>
+<option  value="YANF">Young Adult non-fiction</option>
+<option  value="CDM">Music CD</option>
+<option  value="AVJN">Juvenile non-fiction videocassette</option>
+<option  value="CDR">CD-ROM software</option>
+<option  value="JAC">Juvenile audiobook</option>
+<option  value="KIT">Children's book/tape kit</option>
+<option  value="PB">Paperback romance</option>
+
+<option  value="YAC">Young Adult audiobook</option>
+<option selected="selected" value="MZ">Magazine</option>
+</select>
+
+						<input type="hidden" name="tag" value="942" />
+						<input type="hidden" name="subfield" value="c" />
+						<input type="hidden" name="mandatory" value="0" />
+						<input type="hidden" name="kohafield" value="biblioitems.itemtype" />
+						<input type="hidden" name="tag_mandatory" value="0" />
+					</td>
+				</tr>
+	</table>
+	<input type="submit" value="Save Bibliographic Record and Go To Items" class="submit" />
+</form>
+	</div>
+<br /> -->
+	<form class="inline" action="isbnsearch.pl"><div class="form">
+	<h3>Search Existing Records</h3>
+	<ul class="notes"><li>If the ISBN is found into the biblio table, it will be retrieved and can be modified.</li>
+	<li>If the ISBN is found into the breeding farm, it will be retrieved, and a biblio added.</li>
+	<li>Otherwise, a biblio can be added from scratch.</li></ul>
+	<table>
+<tr><th><label for="isbn">ISBN:</label></th><td><input type="text" id="isbn" name="isbn" /></td></tr>
+<tr><th><label for="title">Title</label></th><td><input type="text" id="title" name="title" /></td></tr>
+</table>
+<input type="submit" class="submit" value="Search" /></div> </form>
+
+<form action="addbiblio.pl"><p> <input type="submit" value="Add Record Without Search" class="submit" /></p></form>
+<br />
+<form action="websitesearch.pl" method="post">
+	<div class="form"><table>
+	<caption>Add New Website</caption>
+	<tr><th><label for="keyword">Keyword:</label></th><td><input type="text" id="keyword" name="keyword" /> </td></tr></table><input type="submit" value="Search" class="submit" /></div>
+</form>
+
+</div><!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,51 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table border="0" cellpadding="0" cellspacing="0" align="center" class="results" width="80%">
+<tr><td class="header" colspan="2"><h1>MARC acquisition system</h1></td></tr>
+	<tr>
+	<td class="bheader" colspan="2"><h3>Import into breeding farm</h3></td>
+	</tr>
+<tr><td class="cell" colspan="2">
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Import results :</p>
+<ul>
+	<p><!-- TMPL_VAR name="imported" --> imported records</p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> not imported because already in DB</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> not imported because already in farm</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</p>
+	<p><!-- TMPL_VAR name="total" -->  records parsed</p>
+	<p><a href="addbooks.pl">Back to acquisition</a>
+</ul>
+<!-- TMPL_ELSE -->
+<ul class="notes"><li>Select a file to import into breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in breeding farm.
+If an ISBN already exists in the breeding farm, you can choose wether to ignore the new one, or overwrite the old one.</li>
+<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested marc data comes !</li>
+<li>Of course, if the ISBN already exists in active DB, the biblio will be ignored.</li></ul>
+</td></tr>
+	<tr>
+		<td class="label">Select the file to import :</td>
+		<td class="input">
+			<input type="file" name="uploadmarc"><br>
+		</td>
+	</tr>
+	<tr>
+		<td class="label">Name of this import :</td>
+		<td class="input">
+			<input type="text" name="filename"><br>
+		</td>
+	</tr>
+	<tr>
+		<td class="label">If ISBN already in breeding farm : </td>
+		<td class="input"><input type="radio" name="overwrite_biblio" value="0" checked>Ignore this one, keep the existing one<br>
+			<input type="radio" name="overwrite_biblio" value="1">Overwrite the existing one with this</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="action"><input type="submit" value="Import Data" class="submit">
+
+</td></tr></table></form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

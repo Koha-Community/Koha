@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h3>MARC search results</h3>
+
+<!-- TMPL_IF name="total" --><div id="pages">
+<!-- TMPL_IF NAME="displayprev" -->
+			<a class="pages" href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search>&lt;&lt;</a> 
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" -->
+			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
+				<!-- TMPL_ELSE -->
+			  	  <a class="pages" href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search><!-- TMPL_VAR NAME=number --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
+
+<div id="results">Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --> records.</div>
+
+<div class="table"><table>
+	<tr>
+	<th>Biblio #</th>
+	<th>Title</th>
+	<th>Author</th>
+	</tr>
+<tbody>
+	<!-- TMPL_LOOP name="result" -->
+		<tr>
+			<td><a href="../MARCdetail.pl?bibid=<!-- TMPL_VAR name="bibid" -->"><!-- TMPL_VAR name="bibid" --></a></td>
+			<td><a href="../MARCdetail.pl?bibid=<!-- TMPL_VAR name="bibid" -->"><!-- TMPL_VAR name="title" --></a></td>
+<td><!-- TMPL_VAR name="author" --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table></div>
+
+<!-- TMPL_IF name="total" --><div id="pages">
+<!-- TMPL_IF NAME="displayprev" -->
+			<a class="pages" href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search>&lt;&lt;</a> 
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" -->
+			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
+				<!-- TMPL_ELSE -->
+			  	  <a class="pages" href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search><!-- TMPL_VAR NAME=number --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

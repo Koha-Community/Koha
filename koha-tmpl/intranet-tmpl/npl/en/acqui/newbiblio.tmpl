@@ -1,0 +1,161 @@
+<!-- TMPL_INCLUDE NAME="main-top-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
+<script language="javascript" type="text/javascript">
+
+<!--
+function update(f){
+  //collect values
+  quantity=f.quantity.value
+  discount=f.discount.value
+  listinc=parseInt(f.listinc.value)
+  currency=f.currency.value
+  applygst=parseInt(f.applygst.value)
+  listprice=f.list_price.value
+  //  rrp=f.rrp.value
+  //  ecost=f.ecost.value  //budgetted cost
+  //  GST=f.GST.value
+  //  total=f.total.value
+  //make useful constants out of the above
+  exchangerate=f.elements[currency].value      //get exchange rate
+  gst_on=(!listinc && applygst);
+  //do real stuff
+  rrp=listprice*exchangerate;
+  ecost=rrp*(100-discount)/100
+  GST=0;
+  if (gst_on){
+    rrp=rrp*(1+<!-- TMPL_VAR name="gstrate" -->);
+    GST=ecost*(<!-- TMPL_VAR name="gstrate" -->);
+  }
+
+  total=(ecost+GST)*quantity
+
+
+  f.rrp.value=rrp
+  f.ecost.value=ecost
+  f.GST.value=GST
+  f.total.value=total
+
+}
+
+
+
+function messenger(X,Y,etc){
+win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+win.focus();
+win.document.close();
+win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size=2><p><br>");
+win.document.write(etc);
+win.document.write("<center><form><input type=button onclick='self.close()' value=Close></form></center>");
+win.document.write("</font></body></html>");
+}
+//-->
+
+</script>
+<div id="main"><form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin" />
+<!-- TMPL_UNLESS name="existing" --><input type="hidden" name="existing" value="no" /><!-- /TMPL_UNLESS -->
+<!-- <!-- TMPL_VAR name="title" --> -->
+<input type="hidden" name="ordnum" value="<!-- TMPL_VAR name="ordnum" -->" />
+<input type="hidden" name="basket" value="<!-- TMPL_VAR name="basket" -->" />
+<input type="hidden" name="supplier" value="<!-- TMPL_VAR name="id" -->" />
+<input type="hidden" name="biblio" value="<!-- TMPL_VAR name="biblio" -->" />
+<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR name="biblioitemnumber" -->" />
+<input type="hidden" name="oldtype" value="<!-- TMPL_VAR name="itemtype" -->" />
+<input type="hidden" name="discount" value="<!-- TMPL_VAR name="discount" -->" />
+<input type="hidden" name="listinc" value="<!-- TMPL_VAR name="listincgst" -->" />
+<input type="hidden" name="currency" value="<!-- TMPL_VAR name="currency" -->" />
+<input type="hidden" name="applygst" value="<!-- TMPL_VAR name="gstreg" -->" />
+<!-- TMPL_LOOP name="loop_currencies" -->
+	<input type="hidden" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF name="orderexists" --><input type="hidden" name="orderexists" value="yes" /><!-- /TMPL_IF -->
+
+<h1><!-- TMPL_VAR name="ordnum" --> - Order Details </h1>
+<h2>Shopping Basket For: <!-- TMPL_VAR name="name" --></h2>
+<a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">View Basket</a>
+<div class="details"><table>
+	<caption>Catalogue Details</caption>
+	<tr>
+		<th>Title *</th>
+		<td><input type="text" size="20" name="title" value="<!-- TMPL_VAR name="title" -->" /></td>
+	</tr>
+	<tr>
+		<th>Author</th>
+		<td><input type="text" size="20" name="author" value="<!-- TMPL_VAR name="author" -->" /></td>
+	</tr>
+	<tr>
+	<th>Copyright Date</th>
+	<td><input type="text" size="20" name="copyright" value="<!-- TMPL_VAR name="copyrightdate" -->" />
+	</td>
+	</tr>
+	<tr>
+		<th>Format</th>
+		<td><!-- TMPL_VAR name="CGIitemtype" --></td>
+	</tr>
+	<tr>
+		<th>ISBN</th>
+		<td><input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR name="isbn" -->"></td>
+	</tr>
+	<tr>
+		<th>Series</th>
+		<td><input type="text" size="20" name="Series" value="<!-- TMPL_VAR name="seriestitle" -->"></td>
+	</tr>
+	<tr valign="top">
+		<th>Branch</th>
+		<td><!-- TMPL_VAR name="CGIbranch" --></td>
+	</tr>
+</table></div>
+
+<div class="details"><table>
+	<caption>Accounting Details</caption>
+	<tr>
+		<th>Quantity</th>
+		<td><input type="text" size="20" name="quantity" value="<!-- TMPL_VAR name="quantity" -->" onchange="update(this.form)" /></td>
+	</tr>
+	<tr>
+		<th>Bookfund</th>
+		<td><!-- TMPL_VAR name="CGIbookfund" --></td>
+	</tr>
+	<tr>
+		<th>Suppliers List Price</th>
+		<td><input type="text" size="20" name="list_price" value="<!-- TMPL_VAR name="listprice" -->" onchange="update(this.form)" /></td>
+	</tr>
+	<tr>
+		<th>Replacement Cost <br><FONT SIZE=2></th>
+		<td><input type="text" size="20" name="rrp" value="<!-- TMPL_VAR name="rrp" -->" onchange="update(this.form)" />
+	</tr>
+	<tr>
+		<th>Budgeted Cost<BR><FONT SIZE=2>(ex GST, inc discount)</FONT> </th>
+		<td><input type="text" size="20" name="ecost" value="<!-- TMPL_VAR name="ecost" -->" onchange="update(this.form)" /></td>
+	</tr>
+	<tr>
+		<th>Budgeted GST</th>
+		<td><input type="text" size="20" name="GST" value="" onchange="update(this.form)"></td>
+	</tr>
+	<tr>
+		<th><B>BUDGETED TOTAL</B></th>
+		<td><input type="text" size="20" name="total" value="" onchange="update(this.form)"></td>
+	</tr>
+	<tr class="highlight">
+		<th>Actual Cost</th>
+		<td><input type="text" size="20" name="cost" /></td>
+	</tr>
+	<tr class="highlight">
+		<th>Invoice Number *</th>
+		<td><input type="text" size="20" name="invoice" /></td>
+	<tr>
+		<th>Notes</th>
+		<td><input type="text" size="20" name="notes" value="<!-- TMPL_VAR name="notes" -->" /></td>
+	</tr>
+</table></div>
+<input type="submit" value="Submit" class="submit" />
+</form>
+<div class="notice"><h3>HELP</h3>
+<UL>
+<LI><B>Bold</B> fields must be filled in to create a new bibilo and item.<p>
+<LI>Shaded fields can be used to do a "quick" receive, when items have been purchased locally or gifted. In this case the quantity "ordered" will also  be entered into the database as the quantity received.
+</UL>
+</div></div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+
+
