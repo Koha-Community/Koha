@@ -10,7 +10,18 @@ use vars qw( $input );
 Install::setlanguage 'en';
 
 my $domainname = `hostname`; # Note: must not have any arguments (portability)
-$domainname = $domainname =~ /^[^\.]+\.(.*)$/? $1: undef;
+if ($domainname =~ /^[^\s\.]+\.([-a-z0-9\.]+)$/) {
+   $domainname = $1;
+} else {
+   undef $domainname;
+   if (open(INPUT, "</etc/resolv.conf")) {
+      while (<INPUT>) {
+	 $domainname = $1 if /^domain\s+([-a-z0-9\.]+)\s*$/i;
+      last if defined $domainname;
+      }
+      close INPUT;
+   }
+}
 Install::setdomainname $domainname;
 
 my $etcdir = '/etc';
@@ -98,16 +109,13 @@ databasesetup();
 
 updatedatabase();
 
-#updatemarc();
-
 populatedatabase();
+
+finalizeconfigfile();
 
 restartapache();
 
 
-# Installation is complete.  Rename the koha.conf.tmp file
-
-rename "$etcdir/koha.conf.tmp", "$etcdir/koha.conf" || warn "Couldn't rename file at $etcdir. Must have write capability.\n";
 
 
 showmessage(getmessage('AuthenticationWarning', [$etcdir]), 'PressEnter');

@@ -61,6 +61,7 @@ $VERSION = 0.01;
 		&updatedatabase
 		&populatedatabase
 		&restartapache
+		&finalizeconfigfile
 		&loadconfigfile
 		);
 
@@ -91,7 +92,7 @@ in the "traditional Koha installer" style, i.e., surrounded by a
 box of equal signs).
 
 This reduces the likelihood of pod2man(1) etc. misinterpreting
-a line of equal signs as POD directives.
+a line of equal signs as illegal POD directives.
 
 =cut
 
@@ -440,7 +441,7 @@ Shows a message and optionally gets a response from the user.
 
 The first two arguments, the message and the response type,
 are mandatory.  The message must be the actual string to
-display. The caller is responsible for calling getmessage if
+display; the caller is responsible for calling getmessage if
 required.
 
 The response type must be one of "none", "yn", "free",
@@ -460,7 +461,8 @@ guarantee that the returned value is a well-formed RFC-822
 email address, nor does it accept all well-formed RFC-822 email
 addresses. What it does is to restrict the returned value to a
 string that is looks reasonably likely to be an email address
-in the "real world".
+in the "real world", given the premise that the user is trying
+to enter a real email address.
 
 If a response type other than "none" or "PressEnter" is
 specified, a third argument, specifying the default value, can
@@ -481,7 +483,9 @@ if a fourth argument is specified and is nonzero, this
 screen-clearing is not done.
 
 FIXME: A response type of "yn" should allow the user to specify
-"y" or "n" in either upercase or lowercase.
+"y" or "n" in either uppercase or lowercase. This is especially
+true since the message shown to the user will contain uppercase
+characters as valid choices.
 
 FIXME: If the response type is "free", the user cannot specify
 an empty string; showmessage will return "1" as the result.
@@ -806,6 +810,8 @@ Database user [%s]: |;
 
 $messages->{'DatabasePassword'}->{en} = heading('Database Password') . qq|
 Please provide a good password for the user %s.
+
+This password will also be used to access Koha's INTRANET interface.
 
 Database Password: |;
 
@@ -1563,6 +1569,43 @@ sub restartapache {
 
 }
 
+
+=item finalizeconfigfile
+
+   finalizeconfigfile;
+
+This function must be called when the installation is complete,
+to rename the koha.conf.tmp file to koha.conf.
+
+Currently, failure to rename the file results only in a warning.
+
+=cut
+
+sub finalizeconfigfile {
+   rename "$etcdir/koha.conf.tmp", "$etcdir/koha.conf"
+      || showmessage(<<EOF, 'PressEnter', undef, 1);
+An unexpected error, $!, occurred
+while the Koha config file is being saved to its final location,
+$etcdir/koha.conf.
+
+Couldn't rename file at $etcdir. Must have write capability.
+
+Press Enter to continue.
+EOF
+}
+
+
+=item loadconfigfile
+
+   loadconfigfile
+
+Open the existing koha.conf file and get its values,
+saving the values to some global variables.
+
+If the existing koha.conf file cannot be opened for any reason,
+the file is silently ignored.
+
+=cut
 
 sub loadconfigfile {
     my %configfile;
