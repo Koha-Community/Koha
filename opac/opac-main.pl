@@ -36,6 +36,6 @@ my ($template, $borrowernumber, $cookie)
 			 });
 $template->param(CGIitemtype => $CGIitemtype,
 				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
 );
-warn "X : ".C4::Context->preference("suggestion");
 output_html_with_http_headers $input, $cookie, $template->output;
