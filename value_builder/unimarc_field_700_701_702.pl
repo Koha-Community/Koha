@@ -147,7 +147,7 @@ sub plugin {
 	$template->param(index => $index,
 							result =>$result,
 							select_list => $select_list,
-							search_string => $search_string,
+							search_string => $search_string?$search_string:$result,
 							a => $a,
 							b => $b,
 							c => $c,
