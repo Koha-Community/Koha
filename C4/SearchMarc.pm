@@ -72,7 +72,7 @@ sub catalogsearch {
 	for(my $i=0; $i<=@$value;$i++) {
 		if (@$value[$i]) {
 			if ($nb==1) {
-				if (@$operator[$i] eq "starts") {
+				if (@$operator[$i] eq "start") {
 					$sql_tables .= "marc_subfield_table as m$nb,";
 					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
@@ -95,7 +95,7 @@ sub catalogsearch {
 					$sql_where1.=")";
 				}
 			} else {
-				if (@$operator[$i] eq "starts") {
+				if (@$operator[$i] eq "start") {
 					$sql_tables .= "marc_subfield_table as m$nb,";
 					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
@@ -126,6 +126,7 @@ sub catalogsearch {
 	}
 	chop $sql_tables;
 	my $sth;
+	warn "HERE";
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
 		warn("-->select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
