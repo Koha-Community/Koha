@@ -13,7 +13,7 @@
 <A HREF="/cgi-bin/koha/circ/circulation.pl">流通服務</a> ||
 <A HREF="/cgi-bin/koha/reports-home.pl">報表列印</a> ||
 <A HREF="/cgi-bin/koha/admin-home.pl">系統參數</a> ||
-<A HREF="/cgi-bin/koha/about.pl">有關<mi>Koha</mi></a> || 
+<A HREF="/cgi-bin/koha/about.pl">關於<mi>Koha</mi></a> || 
 Help
 </FONT>
 </CENTER>
