@@ -265,12 +265,23 @@ EOF
     exit($exitcode);
 }
 
+###############################################################################
+
+sub usage_error (;$) {
+    print STDERR "$_[0]\n" if @_;
+    print STDERR "Try `$0 --help' for more information.\n";
+    exit(-1);
+}
+
+###############################################################################
+
 GetOptions(
     'f|file=s'		=> \$input,
     'debug-dump-only'	=> \$debug_dump_only_p,
     'pedantic-warnings'	=> sub { $pedantic_p = 1 },
     'help'		=> sub { usage(0) },
-) || exit(-1);
+) || usage_error;
+usage_error('Missing mandatory option -f') unless defined $input;
 
 open(INPUT, "<$input") || die "$0: $input: $!\n";
 if ($debug_dump_only_p) {
