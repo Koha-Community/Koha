@@ -68,26 +68,23 @@ sub writeoff{
   $user=~ s/Shannon/S/;
   my $dbh = C4::Context->dbh;
   my $env;
-  my $query="Update accountlines set amountoutstanding=0 where ";
+  my $sth;
   if ($accounttype eq 'Res'){
-    $query.="accounttype='Res' and accountno='$accountnum' and borrowernumber='$bornum'";
+    $sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype='Res' and accountno=? and borrowernumber=?");
+    $sth->execute($accountnum,$bornum);
   } else {
-    $query.="accounttype='$accounttype' and itemnumber='$itemnum' and borrowernumber='$bornum'";
+    $sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype=? and itemnumber=? and borrowernumber=?");
+    $sth->execute($accounttype,$itemnum,$bornum);
   }
-  my $sth=$dbh->prepare($query);
-#  print $query;
-  $sth->execute;
   $sth->finish;
-  $query="select max(accountno) from accountlines";
-  $sth=$dbh->prepare($query);
+  $sth=$dbh->prepare("select max(accountno) from accountlines");
   $sth->execute;
   my $account=$sth->fetchrow_hashref;
   $sth->finish;
   $account->{'max(accountno)'}++;
-  $query="insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)
-  values ('$bornum','$account->{'max(accountno)'}','$itemnum',now(),'$amount','Writeoff','W')";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)
+  values (?,?,?,now(),?,'Writeoff','W')");
+  $sth->execute($bornum,$account->{'max(accountno)'},$itemnum,$amount);
   $sth->finish;
 #  print $query;
   UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);

@@ -28,8 +28,8 @@ use C4::Context;
 use C4::Format;
 use C4::Accounts;
 use C4::Stats;
-use C4::InterfaceCDK;
-use C4::Interface::ReserveentCDK;
+#use C4::InterfaceCDK;
+#use C4::Interface::ReserveentCDK;
 use C4::Circulation::Main;
 use C4::Circulation::Borrower;
 use C4::Search;
@@ -116,14 +116,13 @@ sub EnterReserves{
         my @items = GetItems($env,$biblionumber);
       	my $cnt_it = @items;
 	my $dbh = C4::Context->dbh;
-        my $query = "Select * from biblio where biblionumber = $biblionumber";
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
+        my $query = "";
+	my $sth = $dbh->prepare("Select * from biblio where biblionumber = ?");
+	$sth->execute($biblionumber);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
         my @branches;
-        my $query = "select * from branches where issuing=1 order by branchname";
-        my $sth=$dbh->prepare($query);
+        my $sth=$dbh->prepare("select * from branches where issuing=1 order by branchname");
         $sth->execute;
         while (my $branchrec=$sth->fetchrow_hashref) {
           my $branchdet =
@@ -164,11 +163,10 @@ sub CalcReserveFee {
   #check for issues;
   my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);
-  my $query = "select * from borrowers,categories
-    where (borrowernumber = '$borrnum')
-    and (borrowers.categorycode = categories.categorycode)";
-  my $sth = $dbh->prepare($query);
-  $sth->execute;
+  my $sth = $dbh->prepare("select * from borrowers,categories
+    where (borrowernumber = ?)
+    and (borrowers.categorycode = categories.categorycode)");
+  $sth->execute($borrnum);
   my $data = $sth->fetchrow_hashref;
   $sth->finish();
   my $fee = $data->{'reservefee'};
@@ -177,11 +175,10 @@ sub CalcReserveFee {
     # check for items on issue
     # first find biblioitem records
     my @biblioitems;
-    my $query1 = "select * from biblio,biblioitems
-       where (biblio.biblionumber = '$biblionumber')
-       and (biblio.biblionumber = biblioitems.biblionumber)";
-    my $sth1 = $dbh->prepare($query1);
-    $sth1->execute();
+    my $sth1 = $dbh->prepare("select * from biblio,biblioitems
+       where (biblio.biblionumber = ?)
+       and (biblio.biblionumber = biblioitems.biblionumber)");
+    $sth1->execute($biblionumber);
     while (my $data1=$sth1->fetchrow_hashref) {
       if ($const eq "a") {
         push @biblioitems,$data1;
@@ -205,24 +202,21 @@ sub CalcReserveFee {
     my $allissued = 1;
     while ($x < $cntitemsfound) {
       my $bitdata = @biblioitems[$x];
-      my $query2 = "select * from items
-        where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";
-      my $sth2 = $dbh->prepare($query2);
-      $sth2->execute;
+      my $sth2 = $dbh->prepare("select * from items
+        where biblioitemnumber = ?");
+      $sth2->execute($bitdata->{'biblioitemnumber'});
       while (my $itdata=$sth2->fetchrow_hashref) {
-        my $query3 = "select * from issues
-           where itemnumber = '$itdata->{'itemnumber'}' and returndate is null";
-        my $sth3 = $dbh->prepare($query3);
-	$sth3->execute();
+        my $sth3 = $dbh->prepare("select * from issues
+           where itemnumber = ? and returndate is null");
+	$sth3->execute($itdata->{'itemnumber'});
 	if (my $isdata=$sth3->fetchrow_hashref) { } else {$allissued = 0; }
       }
       $x++;
     }
     if ($allissued == 0) {
-      my $rquery = "select * from reserves
-        where biblionumber = '$biblionumber'";
-      my $rsth = $dbh->prepare($rquery);
-      $rsth->execute();
+      my $rsth = $dbh->prepare("select * from reserves
+        where biblionumber = ?");
+      $rsth->execute($biblionumber);
       if (my $rdata = $rsth->fetchrow_hashref) { } else {
         $fee = 0;
       }
@@ -245,26 +239,23 @@ sub CreateReserve {
     # updates take place here
     if ($fee > 0) {
       my $nextacctno = &getnextacctno($env,$borrnum,$dbh);
-      my $updquery = "insert into accountlines
+      my $usth = $dbh->prepare("insert into accountlines
          (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-          values ($borrnum,$nextacctno,now(),$fee,'Reserve Charge','Res',$fee)";
-      my $usth = $dbh->prepare($updquery);
-      $usth->execute;
+          values (?,?,now(),?,'Reserve Charge','Res',?)");
+      $usth->execute($borrnum,$nextacctno,$fee,$fee);
       $usth->finish;
     }
-    my $query="insert into reserves (borrowernumber,biblionumber,reservedate,branchcode,constrainttype) values ('$borrnum','$biblionumber','$resdate','$branch','$const')";
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
+    my $sth = $dbh->prepare("insert into reserves (borrowernumber,biblionumber,reservedate,branchcode,constrainttype) values (?,?,?,?,?)");
+    $sth->execute($borrnum,$biblionumber,$resdate,$branch,$const);
     if (($const eq "o") || ($const eq "e")) {
       my $numitems = @$bibitems;
       my $i = 0;
       while ($i < $numitems) {
         my $biblioitem = @$bibitems[$i];
-    	my $query = "insert into reserveconstraints
+        my $sth = $dbh->prepare("insert into reserveconstraints
     	   (borrowernumber,biblionumber,reservedate,biblioitemnumber)
-    	   values ('$borrnum','$biblionumber','$resdate','$biblioitem')";
-        my $sth = $dbh->prepare($query);
-    	$sth->execute();
+    	   values (?,?,?,?)");
+    	$sth->execute($borrnum,$biblionumber,$resdate,$biblioitem);
 	$i++;
       }
     }
