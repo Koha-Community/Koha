@@ -38,6 +38,7 @@ print <<printend
 <select name=type>
 <option value=C>Credit</option>
 <option value=BAY>Baycorp Adjustment</option>
+<option value=WORK>Worked off</option>
 </select>
 </td></tr>
 <tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>

@@ -16,6 +16,7 @@ my $bornum=$input->param('bornum');
 my $data=borrdata('',$bornum);
 my $add=$input->param('add');
 if ($add){
+#  print $input->header;
   my $itemnum=$input->param('itemnum');
   my $desc=$input->param('desc');
   my $amount=$input->param('amount');
@@ -40,6 +41,7 @@ print <<printend
 <option value=A>Account Management Fee</option>
 <option value=N>New Card</option>
 <option value=M>Sundry</option>
+<option value=REF>Cash Refund</option>
 </select>
 </td></tr>
 <tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
