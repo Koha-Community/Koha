@@ -68,12 +68,28 @@
 		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="tagsubfield" --></b></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td></tr>
-	<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
-	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->">
-	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
 	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
-	<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->"><input type="submit" value="NO"></form></td></tr>
+	<tr>
+		<td>
+			<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post">
+				<input type="hidden" name="op" value="delete_confirmed">
+				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->">
+				<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+				<input type="submit" value="YES">
+			</form>
+		</td>
+		<td>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->">
+				<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+				<input type="submit" value="NO">
+			</form>
+		</td>
+	</tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
