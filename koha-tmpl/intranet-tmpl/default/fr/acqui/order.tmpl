@@ -1,6 +1,5 @@
 <TMPL_INCLUDE name="acquisitions-top.inc">
 <FONT SIZE=6><em>Recherche fournisseur</em></FONT><br />
-<a href=supplier.pl?id=0><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add supplier" ALT="Add" BORDER=0 ></a>
 <CENTER>
 vous avez cherché le <b>fournisseur <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="count"> réponses trouvées<p>
 <table border=0 cellspacing=0 cellpadding=5 width="80%">
@@ -40,8 +39,14 @@ vous avez cherché le <b>fournisseur <TMPL_VAR name="supplier">,</b> <TMPL_VAR na
 					</tr>
 				</TMPL_LOOP>
 			</table>
+		</td>
 	</tr>
 </TMPL_LOOP>
+<tr>
+<td colspan=4><br/>
+<a class="button" href="supplier.pl?id=0">Ajouter fournisseur</a>
+<br/><br/>
+</tr>
 </table>
 </CENTER>
 <TMPL_INCLUDE name="acquisitions-bottom.inc">
