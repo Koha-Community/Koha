@@ -226,7 +226,7 @@ printend
 		print "You Searched for <b>$searchfield<b><p>";
 	}
 	print mktablehdr;
-	print mktablerow(6,'#99cc33',bold('Book fund'),bold('Start date'),bold('End date'),bold('Budget amount'),
+	print mktablerow(6,'#99cc33',bold('Book fund'),bold('Name'),'&nbsp;','&nbsp;',
 	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
