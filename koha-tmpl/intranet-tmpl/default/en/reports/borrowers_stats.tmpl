@@ -109,6 +109,17 @@
 			</tr>
 		</tbody>
 	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
 	<input TYPE="submit" value="OK" class="button reports">
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
 	<input type="hidden" name="do_it" value="1">
