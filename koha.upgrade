@@ -41,14 +41,14 @@ Would you like to proceed?  ([Y]/N):
 my $answer = <STDIN>;
 chomp $answer;
 
-if ($answer eq "Y" || $answer eq "y") {
-	print "Great! continuing upgrade... \n";
-    } else {
+if ($answer =~/n/i) {
     print qq|
 
 Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
 |;
     exit;
+} else {
+    print "Great! continuing upgrade... \n";
 };
 
 
