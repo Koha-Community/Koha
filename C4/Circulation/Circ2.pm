@@ -490,8 +490,9 @@ sub returnbook {
 # fix up the overdues in accounts...
     fixoverduesonreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 # find reserves.....
-    my ($resfound, $resrec) = FindReserves($iteminformation->{'biblionumber'}, 0);
+    my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
     if ($resfound) {
+	$resrec->{'ResFound'} = $resfound;
 	$messages->{'ResFound'} = $resrec;
     }
 # update stats?
