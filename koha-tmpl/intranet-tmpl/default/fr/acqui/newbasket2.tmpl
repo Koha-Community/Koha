@@ -65,7 +65,15 @@ Recherche effectuée sur
 			<!-- TMPL_VAR name="itemcount" -->
 		</TD>
 		<TD>
+			<!-- TMPL_IF name="use-location-flags-p" -->
+			<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR name="location-only" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="on-loan-p" -->Emprunté<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="lost-p" -->Perdu<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="mending-p" -->En attente<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="in-transit-p" -->En transit<br><!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR name="location" -->
+			<!-- /TMPL_IF -->
 		</TD>
 	</TR>
 

@@ -98,7 +98,7 @@
 				<input type="radio" name="status" value="0">Inactif</td>
 			<!-- TMPL_ELSE -->
 				<input type="radio" name="status" value="1">Actif
-				<input type="radio" name="status" value="0"checked>Inactif</td>
+				<input type="radio" name="status" value="0" checked>Inactif</td>
 			<!-- /TMPL_IF -->
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
@@ -130,21 +130,21 @@
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>GST enregistré</td>
+		<TD>TVA à payer</td>
 		<td>
 			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Oui
 			<input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>Non
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Prix catalogue de l'ouvrage inclus le GST</td>
+		<TD>Prix catalogue de l'ouvrage inclus la TVA</td>
 		<td>
 			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>Oui
 			<input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>Non
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Prix de la facture de l'ouvrage inclus le GST</td>
+		<TD>Prix de la facture de l'ouvrage inclus la TVA</td>
 		<td>
 			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>Oui
 			<input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>Non

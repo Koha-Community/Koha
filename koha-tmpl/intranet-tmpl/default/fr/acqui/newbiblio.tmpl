@@ -12,7 +12,7 @@ function update(f){
   listprice=f.list_price.value
   //  rrp=f.rrp.value
   //  ecost=f.ecost.value  //budgetted cost
-  //  GST=f.GST.value
+  //  TVA=f.TVA.value
   //  total=f.total.value
   //make useful constants out sur the above
   exchangerate=f.elements[currency].value      //get exchange rate
@@ -20,17 +20,17 @@ function update(f){
   //do real stuff
   rrp=listprice*exchangerate;
   ecost=rrp*(100-discount)/100
-  GST=0;
+  TVA=0;
   if (gst_on){
     rrp=rrp*(1+<!-- TMPL_VAR name="gstrate" -->);
-    GST=ecost*(<!-- TMPL_VAR name="gstrate" -->);
+    TVA=ecost*(<!-- TMPL_VAR name="gstrate" -->);
   }
 
-  total=(ecost+GST)*quantity
+  total=(ecost+TVA)*quantity
 
   f.rrp.value=rrp;
   f.ecost.value=ecost;
-  f.GST.value=GST;
+  f.TVA.value=TVA;
   f.total.value=total;
 
 }
@@ -101,8 +101,8 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Séries</td>
-		<td><input type=text size=20 name=Séries value="<!-- TMPL_VAR name="seriestitle" -->"></td>
+		<TD>Titre périodique ou collection</td>
+		<td><input type=text size=20 name=Titre périodique ou collection value="<!-- TMPL_VAR name="seriestitle" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Annexe</td>
@@ -129,12 +129,12 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Coûts budgetés<BR><FONT SIZE=2>(ex TVA, remise)</FONT> </td>
+		<TD>Coûts budgétés<BR><FONT SIZE=2>(ex TVA, remise)</FONT> </td>
 		<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>GST budgeté</td>
-		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
+		<TD>TVA budgétée</td>
+		<td><input type=text size=20 name=TVA value="" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD><B>TOTAL BUDGETE</B></td>
