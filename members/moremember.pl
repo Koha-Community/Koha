@@ -71,7 +71,7 @@ $data->{'expiry'} = format_date($data->{'expiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
-if($data->{'debarred'} || $data->{'gonenoaddress'} || $data->{'lost'}){
+if($data->{'debarred'} || $data->{'gonenoaddress'} || $data->{'lost'} || $data->{'borrowernotes'}){
 	$template->param(flagged =>1);
 }
 
