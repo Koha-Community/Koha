@@ -214,7 +214,7 @@ sub addz3950queue {
 
 	my $serverlist='';
 
-	$serverlist = join(" ", @serverlist);
+	$serverlist = join("|", @serverlist);
 # 	chop $serverlist;
 
 	# FIXME - Is this test supposed to test whether @serverlist is
@@ -306,6 +306,9 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.10  2003/10/01 15:08:14  tipaul
+# fix fog bug #622 : processz3950queue fails
+#
 # Revision 1.9  2003/04/29 16:50:51  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.

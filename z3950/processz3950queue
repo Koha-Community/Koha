@@ -96,7 +96,7 @@ while (1) {
 					my $globalname;
 					my $globalsyntax;
 					my $globalencoding;
-					foreach $serverinfo (split(/\s+/, $servers)) {
+					foreach $serverinfo (split(/\|/, $servers)) {
 						(next) if ($serverdone{$serverinfo} == 1);
 						my $stillprocessing=1;
 						if (my $pid=fork()) {
