@@ -55,7 +55,7 @@ my $record2=MARCkoha2marc("123456","author","title","unititle","notes","abstract
 	"volumedate","illus","pages","notes",
 	"size","place","lccn");
 &MARCaddMarcBiblio($record2);
-# parse all subfields 
+# parse all subfields
 #my @fields = $record->fields();
 #foreach my $field (@fields) {
 #    my @subf=$field->subfields;

@@ -49,7 +49,7 @@ print startpage();
 print startmenu('admin');
 
 if ($op eq 'add') {
-# If the user has pressed the "add new branch" button. 
+# If the user has pressed the "add new branch" button.
     print heading("Branches: Add Branch");
     print editbranchform();
 
@@ -144,18 +144,18 @@ $catcheckbox
 <tr><td>Phone</td><td><input type=text name=branchphone value='$data->{'branchphone'}'></td></tr>
 <tr><td>Fax</td><td><input type=text name=branchfax value='$data->{'branchfax'}'></td></tr>
 <tr><td>E-mail</td><td><input type=text name=branchemail value='$data->{'branchemail'}'></td></tr>
-<tr><td>&nbsp;</td><td><input type=submit value='Submit'></td></tr> 
+<tr><td>&nbsp;</td><td><input type=submit value='Submit'></td></tr>
 </table>
-</form> 
+</form>
 EOF
     return $form;
 }
 
 sub deleteconfirm {
-# message to print if the 
+# message to print if the
     my ($branchcode) = @_;
     my $output = <<EOF;
-Confirm delete: 
+Confirm delete:
 <form action='$script_name' method=post><input type='hidden' name='op' value='delete_confirmed'>
 <input type='hidden' name='branchcode' value=$branchcode>
 <input type=submit value=YES></form>
@@ -179,10 +179,10 @@ sub branchinfotable {
     my $table = <<EOF;
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Branches</b></font></th> </tr> 
-<tr bgcolor='#889999'> 
-<td width='175'><b>Name</b></td> 
-<td width='25'><b>Code</b></td> 
+<font size='5'><b>Branches</b></font></th> </tr>
+<tr bgcolor='#889999'>
+<td width='175'><b>Name</b></td>
+<td width='25'><b>Code</b></td>
 <td width='175'><b>Address</b></td>
 <td width='175'><b>Categories</b></td>
 <td width='50'><b>&nbsp;</b></td>
@@ -212,7 +212,7 @@ EOF
     <td align='left' valign='top'>$branch->{'branchcode'}</td>
     <td align='left' valign='top'>$address</td>
     <td align='left' valign='top'>$categories</td>
-    <td align='left' valign='top'> 
+    <td align='left' valign='top'>
 <form action='$script_name' method=post>
 <input type='hidden' name='op' value='edit'>
 <input type='hidden' name='branchcode' value='$branch->{'branchcode'}'>
@@ -236,10 +236,10 @@ sub branchcategoriestable {
     my $table = <<EOF;
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Branches Categories</b></font></th> </tr> 
-<tr bgcolor='#889999'> 
-<td width='175'><b>Name</b></td> 
-<td width='25'><b>Code</b></td> 
+<font size='5'><b>Branches Categories</b></font></th> </tr>
+<tr bgcolor='#889999'>
+<td width='175'><b>Name</b></td>
+<td width='25'><b>Code</b></td>
 <td width='200'><b>Description</b></td>
 </tr>
 EOF
@@ -276,7 +276,7 @@ sub getbranchinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
-    while (my $data = $sth->fetchrow_hashref) { 
+    while (my $data = $sth->fetchrow_hashref) {
 	my $tmp = $data->{'branchcode'}; my $brc = $dbh->quote($tmp);
 	$query = "select categorycode from branchrelations where branchcode = $brc";
 	my $nsth = $dbh->prepare($query);
@@ -307,7 +307,7 @@ sub getcategoryinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
-    while (my $data = $sth->fetchrow_hashref) { 
+    while (my $data = $sth->fetchrow_hashref) {
 	push(@results, $data);
     }
     $sth->finish;
@@ -355,7 +355,7 @@ sub setbranchinfo {
 	unless (grep {/^$ccat$/} @$branchcats) {
 	    push(@addcats, $ccat);
 	}
-    }	
+    }
     # FIXME - There's already a $dbh in this scope.
     my $dbh = C4::Context->dbh;
     foreach my $cat (@addcats) {
@@ -393,7 +393,7 @@ sub checkdatabasefor {
     my $message;
     if ($total) {
 	$message = "Branch cannot be deleted because there are $total items using that branch.";
-    } 
+    }
     return $message;
 }
 

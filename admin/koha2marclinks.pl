@@ -42,7 +42,7 @@ $template->param(script_name => $script_name,
 $template->param(script_name => $script_name,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
-	
+
 my $dbh = C4::Context->dbh;
 
 ################## ADD_FORM ##################################

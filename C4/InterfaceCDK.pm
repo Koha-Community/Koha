@@ -34,10 +34,10 @@ use C4::Circulation::Renewals;
 require Exporter;
 use DBI;
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&dialog &startint &endint &output &clearscreen &pause &helptext
 &textbox &menu &issuewindow &msg_yn &msg_ny &borrower_dialog &debug_msg &error_msg
@@ -47,7 +47,7 @@ $VERSION = 0.01;
 sub suspend_cb {
     # is this planned for something?
 }
-      
+
 sub startint {
   my ($env,$msg)=@_;
   Cdk::init();
@@ -64,21 +64,21 @@ sub menu {
   while ($items[$x] ne "") {
     $mitems[$x]="<C>".$items[$x];
     $x++;
-  }  
+  }
   if ($type eq 'console'){
     my $menucnt = @items;
     my $menu = new Cdk::Scroll ('Title'=>"  ",
       'List'=>\@mitems,
       'Height'=> $menucnt+4,
       'Width'=> 26);
-    # Activate the object.         
+    # Activate the object.
     my ($menuItem) = $menu->activate();
     # Check the results.
     undef $menu;
-    if (!defined $menuItem) {      
+    if (!defined $menuItem) {
       $data = "Quit";
     }
-    else { 
+    else {
       $data = $items[$menuItem];
     }
   }
@@ -87,12 +87,12 @@ sub menu {
 }
 
 # FIXME - Is this a placeholder?
-sub clearscreen { 
+sub clearscreen {
 }
 
 # FIXME - Is this a placeholder?
 sub pause {
- 
+
 }
 
 sub output {
@@ -162,7 +162,7 @@ sub debug_msg {
     popupLabel (["Debug </R>$text"]);
 #  } else {
 #    print "****DEBUG $text****";
-  }  
+  }
   return();
 }
 
@@ -190,19 +190,19 @@ sub brmenu {
   my @mitems;
   my $x = 0;
   while (@$brrecs[$x] ne "") {
-    my $brrec =@$brrecs[$x]; 
+    my $brrec =@$brrecs[$x];
     $mitems[$x]=fmtstr($env,$brrec->{'branchcode'},"L6");
     $mitems[$x]=$mitems[$x].fmtstr($env,$brrec->{'branchname'},"L20");
     $x++;
-  }  
+  }
   my $menu = new Cdk::Scroll ('Title'=>"  ",
       'List'=>\@mitems,
       'Height'=> 16,
       'Width'=> 30);
-  # Activate the object.         
+  # Activate the object.
   my ($menuItem) = $menu->activate();
   # Check the results.
-  if (defined $menuItem) {      
+  if (defined $menuItem) {
     my $brrec = @$brrecs[$menuItem];
     $env->{'branchcode'} = $brrec->{'branchcode'};
     $env->{'branchname'} = $brrec->{'branchname'};
@@ -210,7 +210,7 @@ sub brmenu {
   undef $menu;
   undef $titlebar;
   return();
-  
+
 }
 
 sub prmenu {
@@ -220,26 +220,26 @@ sub prmenu {
   my @mitems;
   my $x = 0;
   while (@$prrecs[$x] ne "") {
-    my $prrec =@$prrecs[$x]; 
+    my $prrec =@$prrecs[$x];
     $mitems[$x]=fmtstr($env,$prrec->{'printername'},"L20");
     $x++;
-  }  
+  }
   my $menu = new Cdk::Scroll ('Title'=>"  ",
       'List'=>\@mitems,
       'Height'=> 16,
       'Width'=> 30);
-  # Activate the object.         
+  # Activate the object.
   my ($menuItem) = $menu->activate();
   undef $menu;
   undef $titlebar;
   # Check the results.
-  if (defined $menuItem) {      
+  if (defined $menuItem) {
     my $prrec = @$prrecs[$menuItem];
     $env->{'queue'} = $prrec->{'printqueue'};
     $env->{'printtype'} = $prrec->{'printtype'};
   }
   return();
-  
+
 }
 
 
@@ -254,15 +254,15 @@ sub borrower_dialog {
   my @colwidths = (12,12);
   my $matrix = new Cdk::Matrix (
      'ColTitles'=> \@coltitles,
-     'RowTitles'=> \@rowtitles, 
+     'RowTitles'=> \@rowtitles,
      'ColWidths'=> \@colwidths,
      'ColTypes'=>  \@coltypes,
-     'Vrows'=>     1, 
+     'Vrows'=>     1,
      'Vcols'=>     2);
   borrbind($env,$matrix);
   #$matrix->draw();
-  my ($rows,$cols,$info) = $matrix->activate(); 
-  if ((!defined $rows) && ($info->[0][0] eq "")) { 
+  my ($rows,$cols,$info) = $matrix->activate();
+  if ((!defined $rows) && ($info->[0][0] eq "")) {
     $result = "Circ";
   } else {
     $borrower = $info->[0][0];
@@ -284,7 +284,7 @@ sub selborrower {
   my $returnValue = $scroll->activate ();
   if (!defined $returnValue) {
     #$result = "Circ";
-  } else {  
+  } else {
     $result = substr(@$borrows[$returnValue],0,9);
   }
   $scroll->erase();
@@ -319,13 +319,13 @@ sub issuewindow {
   $scroll2->draw();
   $scroll1->draw();
   $funcmenu->draw();
-  $loanlength->draw(); 
-  $borrbox->draw();   
+  $loanlength->draw();
+  $borrbox->draw();
   #$env->{'loanlength'} = "";
   #debug_msg($env,"clear len");
   my $x;
   my $barcode;
-  $entryBox->preProcess ('Function' => 
+  $entryBox->preProcess ('Function' =>
     sub{prebook(@_,$env,$dbh,$funcmenu,$entryBox,$loanlength,
     $scroll1,$scroll2,$borrower,$amountowing,$odues);});
   $barcode = $entryBox->activate();
@@ -347,9 +347,9 @@ sub issuewindow {
   undef $funcmenu;
   undef $loanlength;
   Cdk::refreshCdkScreen();
-  #debug_msg($env,"exiting");    
+  #debug_msg($env,"exiting");
   return $barcode,$reason;
-}  
+}
 sub actfmenu {
   my ($env,$dbh,$funcmenu,$entryBox,$loanlength,$scroll1,
     $scroll2,$borrower,$amountowing,$odues) = @_;
@@ -357,7 +357,7 @@ sub actfmenu {
   if (!defined $funct) {
   } elsif ($funct == 0 ) {
     actloanlength ($env,$entryBox,$loanlength,$scroll1,$scroll2);
-  } elsif ($funct == 1 ) { 
+  } elsif ($funct == 1 ) {
     $entryBox->erase();
     $scroll1->erase();
     $scroll2->erase();
@@ -385,7 +385,7 @@ sub actfmenu {
   $entryBox->unregister();
   $entryBox->register();
   return
-}  
+}
 sub actscroll1 {
   my ($env,$entryBox,$loanlength,$scroll1,$scroll2) = @_;
   $scroll1->activate();
@@ -407,18 +407,18 @@ sub actloanlength {
     } elsif ($loanlength eq "") {
       $env->{'loanlength'} = "";
       $validdate = "Y";
-    } else {    
+    } else {
       my $date = ParseDate($loanlength);
       if ( $date > ParseDate('today')){
         $validdate="Y";
 	my $fdate = substr($date,0,4).'-'.substr($date,4,2).'-'.substr($date,6,2);
 	#debug_msg($env,"$date $fdate");
         $env->{'loanlength'} = $fdate;
-      } else { 
-        error_msg($env,"Invalid date"); 
+      } else {
+        error_msg($env,"Invalid date");
       }
     }
-  }  
+  }
   return;
 }
 
@@ -426,14 +426,14 @@ sub prebook {
   my ($input,$env,$dbh,$funcmenu,$entryBox,$loanlength,
     $scroll1,$scroll2,$borrower,$amountowing,$odues)= @_;
   # FIXME - $key_tab is undefined
-  if ($input eq $key_tab) {    
+  if ($input eq $key_tab) {
     actfmenu ($env,$dbh,$funcmenu,$entryBox,$loanlength,$scroll1,
        $scroll2,$borrower,$amountowing,$odues);
     return 0;
   }
   return 1;
 }
-	  						  
+
 sub borrowerbox {
   my ($env,$borrower,$amountowing,$odues) = @_;
   my @borrinfo;
@@ -453,7 +453,7 @@ sub borrowerbox {
   }
   if ($odues > 0) {
     $line = $line." </R>ODUE<!R>";
-  }	
+  }
   if ($borrower->{'borrowernotes'} ne "" ) {
     $line = $line." </R>NOTES<!R>";
   }
@@ -462,7 +462,7 @@ sub borrowerbox {
   }
   $borrinfo[2]=$line;
   if ($borrower->{'borrowernotes'} ne "" ) {
-    $borrinfo[3]=substr($borrower->{'borrowernotes'},0,40);     
+    $borrinfo[3]=substr($borrower->{'borrowernotes'},0,40);
   }
   my $borrbox = new Cdk::Label ('Message' =>\@borrinfo,
     'Ypos'=>3, 'Xpos'=>"RIGHT");
@@ -481,8 +481,8 @@ sub returnwindow {
   $returnlist->draw();
   $funcmenu->draw();
   my $borrbox;
-  if ($borrower->{'cardnumber'} ne "") {    
-    $borrbox = borrowerbox($env,$borrower,$amountowing);  
+  if ($borrower->{'cardnumber'} ne "") {
+    $borrbox = borrowerbox($env,$borrower,$amountowing);
     $borrbox->draw();
   } else {
     if ($resp ne "") {
@@ -491,7 +491,7 @@ sub returnwindow {
       $borrbox = new Cdk::Label ('Message' =>\@text, 'Ypos'=>3, 'Xpos'=>"RIGHT");
       $borrbox->draw();
     }
-  }  
+  }
   my $bookentry  =  new Cdk::Entry('Label'=>" ",
      'Max'=>"11",'Width'=>"11",
      'Xpos'=>"2",'Ypos'=>"3",'Title'=>"Item Barcode",
@@ -568,9 +568,9 @@ sub actrfmenu {
        $returnlist->draw();
        #Cdk::refreshCdkScreen();
     }
-  } 
+  }
 }
-  
+
 sub act {
   my ($obj) = @_;
   my $ans = $obj->activate();
@@ -578,7 +578,7 @@ sub act {
   }
 
 sub borrbind {
-  my ($env,$entry) = @_; 
+  my ($env,$entry) = @_;
   my $lastborr = $env->{"bcard"};
   $entry->preProcess ('Function' => sub {preborr (@_, $env,$entry);});
 }
@@ -586,18 +586,18 @@ sub borrbind {
 sub preborr {
   my ($input,$env, $entry) = @_;
   if ($env->{"bcard"} ne "") {
-#     error_msg($env,"hi there");  
+#     error_msg($env,"hi there");
     # FIXME - $lastval is undefined
     if ($input eq $lastval) {
-#        error_msg($env,"its a ctrl-r");  
+#        error_msg($env,"its a ctrl-r");
       borfill($env,$entry);
       return 0;
     }
-  } 
+  }
   return 1;
-}  
-  
-  
+}
+
+
 sub borfill {
   my ($env,$entry) = @_;
   error_msg($env,"in borfill: $env->{'bcard'}");
@@ -609,9 +609,9 @@ sub borfill {
 #    $entry->inject('Input'=>$temp);
     $i++;
   }
-   
+
 }
-			       
+
 END { }       # module clean-up code here (global destructor)
 
 
