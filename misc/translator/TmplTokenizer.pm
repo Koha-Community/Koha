@@ -539,7 +539,7 @@ sub quote_po ($) {
     return "\"$s\"";
 }
 
-# Complication function that shouldn't be here
+# Some functions that shouldn't be here... should be moved out some time
 sub parametrize ($@) {
     my($fmt, @params) = @_;
     my $it = '';
@@ -570,6 +570,14 @@ sub parametrize ($@) {
 	}
     }
     return $it;
+}
+
+sub charset_canon ($) {
+    my($charset) = @_;
+    $charset = uc($charset);
+    $charset = "$1-$2" if $charset =~ /^(ISO|UTF)(\d.*)/i;
+    $charset = 'Big5' if $charset eq 'BIG5'; # "Big5" must be in mixed case
+    return $charset;
 }
 
 ###############################################################################

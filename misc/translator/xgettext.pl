@@ -12,9 +12,50 @@ use Locale::PO;
 use TmplTokenizer;
 use VerboseWarnings;
 
+use vars qw( $convert_from );
 use vars qw( $files_from $directory $output $sort );
 use vars qw( $pedantic_p );
-use vars qw( %text );
+use vars qw( %text %translation );
+use vars qw( $charset_in $charset_out );
+
+###############################################################################
+
+use vars qw( @latin1_utf8 );
+@latin1_utf8 = (
+    "\302\200", "\302\201", "\302\202", "\302\203", "\302\204", "\302\205",
+    "\302\206", "\302\207", "\302\210", "\302\211", "\302\212", "\302\213",
+    "\302\214", "\302\215",   undef,      undef,    "\302\220", "\302\221",
+    "\302\222", "\302\223", "\302\224", "\302\225", "\302\226", "\302\227",
+    "\302\230", "\302\231", "\302\232", "\302\233", "\302\234", "\302\235",
+    "\302\236", "\302\237", "\302\240", "\302\241", "\302\242", "\302\243",
+    "\302\244", "\302\245", "\302\246", "\302\247", "\302\250", "\302\251",
+    "\302\252", "\302\253", "\302\254", "\302\255", "\302\256", "\302\257",
+    "\302\260", "\302\261", "\302\262", "\302\263", "\302\264", "\302\265",
+    "\302\266", "\302\267", "\302\270", "\302\271", "\302\272", "\302\273",
+    "\302\274", "\302\275", "\302\276", "\302\277", "\303\200", "\303\201",
+    "\303\202", "\303\203", "\303\204", "\303\205", "\303\206", "\303\207",
+    "\303\210", "\303\211", "\303\212", "\303\213", "\303\214", "\303\215",
+    "\303\216", "\303\217", "\303\220", "\303\221", "\303\222", "\303\223",
+    "\303\224", "\303\225", "\303\226", "\303\227", "\303\230", "\303\231",
+    "\303\232", "\303\233", "\303\234", "\303\235", "\303\236", "\303\237",
+    "\303\240", "\303\241", "\303\242", "\303\243", "\303\244", "\303\245",
+    "\303\246", "\303\247", "\303\250", "\303\251", "\303\252", "\303\253",
+    "\303\254", "\303\255", "\303\256", "\303\257", "\303\260", "\303\261",
+    "\303\262", "\303\263", "\303\264", "\303\265", "\303\266", "\303\267",
+    "\303\270", "\303\271", "\303\272", "\303\273", "\303\274", "\303\275",
+    "\303\276", "\303\277" );
+
+sub charset_convert ($) {
+    my($s) = @_;
+    if ($s !~ /[\200-\377]/s) { # FIXME: don't worry about iso2022 for now
+	;
+    } elsif ($charset_in eq 'ISO-8859-1' && $charset_out eq 'UTF-8') {
+	$s =~ s/[\200-\377]/ $latin1_utf8[ord($&) - 128] /egs;
+    } elsif ($charset_in ne $charset_out) {
+	VerboseWarnings::warn_normal "conversion from $charset_in to $charset_out is not supported\n", undef;
+    }
+    return $s;
+}
 
 ###############################################################################
 
@@ -87,6 +128,8 @@ sub generate_strings_list () {
 
 sub generate_po_file () {
     # We don't emit the Plural-Forms header; it's meaningless for us
+    my $pot_charset = (defined $charset_out? $charset_out: 'CHARSET');
+    $pot_charset = TmplTokenizer::charset_canon $pot_charset;
     print OUTPUT <<EOF;
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -102,7 +145,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n"
 "Language-Team: LANGUAGE <LL\@li.org>\\n"
 "MIME-Version: 1.0\\n"
-"Content-Type: text/plain; charset=CHARSET\\n"
+"Content-Type: text/plain; charset=$pot_charset\\n"
 "Content-Transfer-Encoding: 8bit\\n"
 
 EOF
@@ -113,12 +156,53 @@ EOF
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
 	    $pathname =~ s/^$directory_re//os;
-	    printf OUTPUT "#: %s:%d\n", $pathname, $token->line_number;
+	    printf OUTPUT "#: %s:%d\n", $pathname, $token->line_number
+		    if defined $pathname && defined $token->line_number;
 	    $cformat_p = 1 if $token->type == TmplTokenType::TEXT_PARAMETRIZED;
 	}
 	printf OUTPUT "#, c-format\n" if $cformat_p;
-	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po( $t );
-	printf OUTPUT "msgstr \"\"\n\n";
+	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po( charset_convert $t );
+	printf OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
+		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
+    }
+}
+
+###############################################################################
+
+sub convert_translation_file () {
+    open(INPUT, "<$convert_from") || die "$convert_from: $!\n";
+    VerboseWarnings::set_input_file_name $convert_from;
+    while (<INPUT>) {
+	chomp;
+	my($msgid, $msgstr) = split(/\t/);
+	die "$convert_from: $.: Malformed tmpl_process input (no tab)\n"
+		unless defined $msgstr;
+
+	# Fixup some of the bad strings
+	$msgid =~ s/^SELECTED>//;
+
+	# Create dummy token
+	my $token = TmplToken->new( $msgid, TmplTokenType::UNKNOWN, undef, undef );
+	remember( $token, $msgid );
+	$msgstr =~ s/^(?:LIMIT;|LIMITED;)//g; # unneeded for tmpl_process3
+	$translation{$msgid} = $msgstr unless $msgstr eq '*****';
+
+	if ($msgid  =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
+	    my $candidate = TmplTokenizer::charset_canon $2;
+	    die "Conflicting charsets in msgid: $candidate vs $charset_in\n"
+		    if defined $charset_in && $charset_in ne $candidate;
+	    $charset_in = $candidate;
+	}
+	if ($msgstr =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
+	    my $candidate = TmplTokenizer::charset_canon $2;
+	    die "Conflicting charsets in msgid: $candidate vs $charset_out\n"
+		    if defined $charset_out && $charset_out ne $candidate;
+	    $charset_out = $candidate;
+	}
+    }
+    if (!defined $charset_in) {
+	$charset_in = $charset_out = TmplTokenizer::charset_canon 'iso8859-1';
+	warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
     }
 }
 
@@ -164,9 +248,13 @@ sub usage_error (;$) {
 
 Getopt::Long::config qw( bundling no_auto_abbrev );
 GetOptions(
+    'charset=s'	=> sub { $charset_in = $charset_out = $_[1] },	# INTERNAL
+    'convert-from=s'			=> \$convert_from,
     'D|directory=s'			=> \$directory,
     'f|files-from=s'			=> \$files_from,
+    'I|input-charset=s'			=> \$charset_in,	# INTERNAL
     'pedantic-warnings|pedantic'	=> sub { $pedantic_p = 1 },
+    'O|output-charset=s'		=> \$charset_out,	# INTERNAL
     'output|o=s'			=> \$output,
     's|sort-output'			=> sub { $sort = 's' },
     'F|sort-by-file'			=> sub { $sort = 'F' },
@@ -176,8 +264,12 @@ GetOptions(
 VerboseWarnings::set_application_name $0;
 VerboseWarnings::set_pedantic_mode $pedantic_p;
 
-usage_error('Missing mandatory option -f') unless defined $files_from;
+usage_error('Missing mandatory option -f')
+	unless defined $files_from || defined $convert_from;
 $directory = '.' unless defined $directory;
+
+usage_error('You cannot specify both --convert-from and --files-from')
+	if defined $convert_from && defined $files_from;
 
 if (defined $output && $output ne '-') {
     open(OUTPUT, ">$output") || die "$output: $!\n";
@@ -185,15 +277,19 @@ if (defined $output && $output ne '-') {
     open(OUTPUT, ">&STDOUT");
 }
 
-open(INPUT, "<$files_from") || die "$files_from: $!\n";
-while (<INPUT>) {
-    chomp;
-    my $h = TmplTokenizer->new( "$directory/$_" );
-    $h->set_allow_cformat( 1 );
-    VerboseWarnings::set_input_file_name "$directory/$_";
-    text_extract( $h );
+if (defined $files_from) {
+    open(INPUT, "<$files_from") || die "$files_from: $!\n";
+    while (<INPUT>) {
+	chomp;
+	my $h = TmplTokenizer->new( "$directory/$_" );
+	$h->set_allow_cformat( 1 );
+	VerboseWarnings::set_input_file_name "$directory/$_";
+	text_extract( $h );
+    }
+    close INPUT;
+} else {
+    convert_translation_file;
 }
-close INPUT;
 generate_po_file;
 
 warn "This input will not work with Mozilla standards-compliant mode\n", undef

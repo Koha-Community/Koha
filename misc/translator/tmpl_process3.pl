@@ -26,6 +26,7 @@ use vars qw( $recursive_p );
 use vars qw( $pedantic_p );
 use vars qw( $href );
 use vars qw( $type );	# file extension (DOS form without the dot) to match
+use vars qw( $charset_in $charset_out );
 
 ###############################################################################
 
@@ -98,7 +99,6 @@ sub text_replace (**) {
     }
 }
 
-# FIXME: Should we use the GNOME convention of using POTFILES.in instead?
 sub listfiles ($$) {
     my($dir, $type) = @_;
     my @it = ();
@@ -146,6 +146,12 @@ GetOptions(
 VerboseWarnings::set_application_name $0;
 VerboseWarnings::set_pedantic_mode $pedantic_p;
 
+# keep the buggy Locale::PO quiet if it says stupid things
+$SIG{__WARN__} = sub {
+	my($s) = @_;
+	print STDERR $s unless $s =~ /^Strange line in [^:]+: #~/s
+    };
+
 my $action = shift or usage_error('You must specify an ACTION.');
 usage_error('You must at least specify input and string list filenames.')
     if !@in_files || !defined $str_file;
@@ -179,26 +185,56 @@ if (-d $in_files[0]) {
     }
 }
 
+# restores the string list from file
+$href = Locale::PO->load_file_ashash($str_file);
+
+# guess the charsets. HTML::Templates defaults to iso-8859-1
+if (defined $href) {
+    $charset_out = TmplTokenizer::charset_canon $2
+	    if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
+    for my $msgid (keys %$href) {
+	if ($msgid =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/) {
+	    my $candidate = TmplTokenizer::charset_canon $2;
+	    die "Conflicting charsets in msgid: $charset_in vs $candidate\n"
+		    if defined $charset_in && $charset_in ne $candidate;
+	    $charset_in = $2;
+	}
+    }
+}
+if (!defined $charset_in) {
+    $charset_in = TmplTokenizer::charset_canon 'iso8859-1';
+    warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
+}
+
 if ($action eq 'create')  {
     # updates the list. As the list is empty, every entry will be added
     die "$str_file: Output file already exists" if -f $str_file;
     my($tmph, $tmpfile) = tmpnam();
+    # Generate the temporary file that acts as <MODULE>/POTFILES.in
     for my $input (@in_files) {
 	print $tmph "$input\n";
     }
     close $tmph;
-    system {'./xgettext.pl'} ('xgettext.pl', '-s', '-f', $tmpfile, '-o', $str_file);
+    # Generate the specified po file ($str_file)
+    system ('xgettext.pl', '-s', '-f', $tmpfile, '-o', $str_file);
     unlink $tmpfile || warn_normal "$tmpfile: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'update') {
     my($tmph1, $tmpfile1) = tmpnam();
     my($tmph2, $tmpfile2) = tmpnam();
     close $tmph2; # We just want a name
+    # Generate the temporary file that acts as <MODULE>/POTFILES.in
     for my $input (@in_files) {
 	print $tmph1 "$input\n";
     }
     close $tmph1;
-    system('./xgettext.pl', '-s', '-f', $tmpfile1, '-o', $tmpfile2);
+    # Generate the temporary file that acts as <MODULE>/<LANG>.pot
+    system('./xgettext.pl', '-s', '-f', $tmpfile1, '-o', $tmpfile2,
+	    (defined $charset_in? ('-I', $charset_in): ()),
+	    (defined $charset_out? ('-O', $charset_out): ()));
+    # Merge the temporary "pot file" with the specified po file ($str_file)
+    # FIXME: msgmerge(1) is a Unix dependency
+    # FIXME: need to check the return value
     system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
     unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
     unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
@@ -220,9 +256,6 @@ if ($action eq 'create')  {
     # Try to open the file, because Locale::PO doesn't check :-/
     open(INPUT, "<$str_file") || die "$str_file: $!\n";
     close INPUT;
-
-    # restores the string list from file
-    $href = Locale::PO->load_file_ashash($str_file);
 
     # creates the new tmpl file using the new translation
     for my $input (@in_files) {
