@@ -173,16 +173,6 @@ if ($do_it) {
 	my $hglghtLOC =$count % 2;
 #	warn "highlightLOC ".$hglghtLOC;
 	
-# 	undef @select;
-# 	push @select,"";
-# 	for (my $i=1950;$i<=2050;$i++) {
-# 		push @select, $i;
-# 	}
-# 	my $CGIpublicationyear=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
 	
 	$req = $dbh->prepare("select distinctrow itemtype from biblioitems order by itemtype");
 	$req->execute;
@@ -197,7 +187,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow publishercode from biblioitems order by publishercode");
+	$req = $dbh->prepare("select distinctrow left(publishercode,75) from biblioitems order by publishercode");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -531,10 +521,11 @@ sub calculate {
 	
 	if (@$filters[7]){
 		@$filters[7]=~ s/\*/%/g;
+		@$filters[7].="%" unless @$filters[7]=~/%/;
 		if ($cond){
-			$strcalc .= " AND biblioitems.publishercode like '" . @$filters[7] ."'";
+			$strcalc .= " AND biblioitems.publishercode like \"" . @$filters[7] ."\"";
 		} else {
-			$strcalc .= " WHERE biblioitems.publishercode like '" . @$filters[7] ."'";
+			$strcalc .= " WHERE biblioitems.publishercode like \"" . @$filters[7] ."\"";
 			$cond=1;
 		}
 	}
