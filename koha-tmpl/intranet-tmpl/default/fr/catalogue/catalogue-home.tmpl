@@ -14,10 +14,6 @@
 
 <FONT SIZE=6><em>Recherche Catalogue</em></FONT>
 
-<div align=right>
-	<input type="hidden" name="type" value="intra">
-	<INPUT TYPE="image"  alt="Start Search" src="/images/ok-start-search.gif"  WIDTH=187  HEIGHT=42 BORDER=0 >
-</div>
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
@@ -92,8 +88,13 @@
 		<TD>Sujet</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
 	</TR>
 	<tr>
-		<TD></TD>
-		<TD><INPUT TYPE="reset"  VALUE= "Clear Fields"></TD>
+		<TD>
+			<input type="hidden" name="type" value="intra">
+			<input type="submit" class="button" value="Chercher">
+		</TD>
+		<TD>
+			<div align="right"><INPUT TYPE="reset"  VALUE= "effacer" class="button"></div>
+		</TD>
 	</TR>
 </TABLE>
 </FORM>
