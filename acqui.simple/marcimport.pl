@@ -181,6 +181,8 @@ sub ProcessFile {
 	$input,
     )=@_;
 
+    my $debug=1;
+
     my $sth;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
@@ -310,7 +312,6 @@ RECORD:
 		$additionalauthors	=$bib->{additionalauthors};
 		$illustrator		=$bib->{illustrator};
 		$notes			=$bib->{notes};
-		$subject		=$bib->{subject};
 
 	    $titleinput=$input->textfield(-name=>'title', -default=>$title, -size=>40);
 	    $marcinput=$input->hidden(-name=>'marc', -default=>$marc);
@@ -318,12 +319,17 @@ RECORD:
 	    $authorinput=$input->textfield(-name=>'author', -default=>$author);
 	    $illustratorinput=$input->textfield(-name=>'illustrator', -default=>$illustrator);
 	    $additionalauthorsinput=$input->textarea(-name=>'additionalauthors', -default=>$additionalauthors, -rows=>4, -cols=>20);
+
 	    my $subject='';
-	    foreach (@subjects) {
+	    foreach ( @{$bib->{subject} } ) {
 		$subject.="$_\n";
+	    	print "<PRE>form subject=$subject</PRE>\n" if $debug;
 	    }
-	    $subjectinput=$input->textarea(-name=>'subject', -default=>$subject, -rows=>4, -cols=>40);
-	    $noteinput=$input->textarea(-name=>'notes', -default=>$notes, -rows=>4, -cols=>40, -wrap=>'physical');
+	    $subjectinput=$input->textarea(-name=>'subject', 
+			-default=>$subject, -rows=>4, -cols=>40);
+
+	    $noteinput=$input->textarea(-name=>'notes', 
+			-default=>$notes, -rows=>4, -cols=>40, -wrap=>'physical');
 	    $copyrightinput=$input->textfield(-name=>'copyrightdate', -default=>$copyrightdate);
 	    $seriestitleinput=$input->textfield(-name=>'seriestitle', -default=>$seriestitle);
 	    $volumeinput=$input->textfield(-name=>'volume', -default=>$volume);
@@ -615,6 +621,7 @@ sub extractmarcfields {
     # return 
     my $bib;		# hash of named fields
 
+    my $debug=0;
 
     my (
 	$field, $value,
@@ -625,6 +632,9 @@ sub extractmarcfields {
 	$notes, $additionalauthors, $illustrator, $copyrightdate, 
 	$s, $subdivision, $subjectsubfield,
 	$seriestitle);
+
+    print "<PRE>\n" if $debug;
+
     foreach $field (@$record) {
 	    if ($field->{'tag'} eq '001') {
 		$bib->{controlnumber}=$field->{'indicator'};
@@ -723,6 +733,7 @@ sub extractmarcfields {
 		    my $sub;
 		    my $subject=$field->{'subfields'}->{'a'};
 		    $subject=~s/\.$//;
+		    print "Subject=$subject\n" if $debug;
 		    foreach $subjectsubfield ( 'x','y','z' ) {
 		      if ($subdivision=$field->{'subfields'}->{$subjectsubfield}) {
 			if ( ref($subdivision) eq 'ARRAY' ) {
@@ -736,6 +747,7 @@ sub extractmarcfields {
 			} # if array
 		      } # if subfield exists
 		    } # foreach subfield
+		    print "Subject=$subject\n" if $debug;
 		    push @subjects, $subject;
 		}
 
@@ -752,10 +764,11 @@ sub extractmarcfields {
 		($additionalauthors	) && ($bib->{additionalauthors}=$additionalauthors  );
 		($illustrator		) && ($bib->{illustrator}=$illustrator  );
 		($notes			) && ($bib->{notes}=$notes  );
-		($subject		) && ($bib->{subject}=$subject  );
+		($#subjects		) && ($bib->{subject}=\@subjects  );
 
 
     } # foreach field
+    print "</PRE>\n" if $debug;
 
     return $bib;
 
