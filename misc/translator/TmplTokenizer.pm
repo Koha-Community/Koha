@@ -341,14 +341,15 @@ sub identify_js_translatables (@) {
 	} elsif ($state == STATE_UNDERSCORE) {
 	    $state = $input[$i] eq parenleft ? STATE_PARENLEFT : 0;
 	} elsif ($state == STATE_PARENLEFT) {
-	    if ($input[$i] =~ /^(['"])(.*)\1$/s) {
+	    if ($input[$i] =~ /^(['"])\s*(.*)\1$/s) {
 		($state, $j, $q, $s) = (STATE_STRING_LITERAL, $#output, $1, $2);
 	    } else {
 		$state = 0;
 	    }
 	} elsif ($state == STATE_STRING_LITERAL) {
 	    if ($input[$i] eq parenright) {
-		$output[$j] = [1, $output[$j]->[1], $q, $s];
+		my $candidate = $output[$j]->[1];
+		$output[$j] = [1, $candidate, $q, $s];
 	    }
 	    $state = 0;
 	} else {
