@@ -1,21 +1,19 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <div id="mainbloc">
 
-<h1>Acquisitions</h1>
+<h1 class="acquisition">Acquisitions</h1>
 <div id="bloc25">
-	<div id="bloctitle">Start, receive, modify order</div>
-	Supplier name :
+	<h2 class="acquisition">Start, receive, modify order</h2>
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
-			<input type="text"  size="25"   name="supplier">
-			<input type="submit" class="button" value="OK">
+			Supplier name : <input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button acquisition" value="OK">
 		</form>
 </div>
 <div id="bloc25">
-	<div id="bloctitle">Receive or modify periodical order</div>
-	Title Search
+	<h2 class="acquisition">Receive or modify periodical order</h2>
 	<form action="/cgi-bin/koha/acqui/acquire.pl" method=post>
-		<input type="text"  size="25"   name="recieve">
-		<input type="submit" class="button" value="OK">
+		Title Search : <input type="text"  size="25"   name="recieve">
+		<input type="submit" class="button acquisition" value="OK">
 	</form>
 </div>
 
@@ -23,7 +21,7 @@
 <div id="bloc25">
 	<form action="/cgi-bin/koha/currency.pl">
 	<input type=hidden name=type value=change>
-	<div id="bloctitle">exchange rates</div>
+	<h2 class="acquisition">exchange rates</h2>
 	<table>
 	<!-- TMPL_LOOP name="loop_currency" -->
 		<tr>
@@ -36,36 +34,36 @@
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
-	<input type=submit value="Save" class="button">
+	<input type=submit value="Save" class="button acquisition">
 </div>
 
 <!-- showbudget-->
 <div id="bloc25">
 	<form action="/cgi-bin/koha/search.pl">
-		<div id="bloctitle">budgets and bookfunds</div>
+		<h2 class="acquisition">budgets and bookfunds</h2>
 		<table>
 			<tr>
-				<td><b>Budgets</B></td>
-				<td><b> Total</B></td>
-				<td><b>Spent</B></td>
-				<td><b>Comtd</B></td>
-				<td><b>Avail</B></td>
+				<th class="acquisition">Budgets</th>
+				<th class="acquisition">Total</th>
+				<th class="acquisition">Spent</th>
+				<th class="acquisition">Comtd</th>
+				<th class="acquisition">Avail</th>
 			</tr>
 			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
 					<td><!-- TMPL_VAR name="bookfundname" --></td>
-					<td align=right><!-- TMPL_VAR name="budgetamount" --></td>
-					<td align=right><!-- TMPL_VAR name="spent" --></td>
-					<td align=right><!-- TMPL_VAR name="comtd" --></td>
-					<td align=right><!-- TMPL_VAR name="avail" --></td>
+					<td align="right"><!-- TMPL_VAR name="budgetamount" --></td>
+					<td align="right"><!-- TMPL_VAR name="spent" --></td>
+					<td align="right"><!-- TMPL_VAR name="comtd" --></td>
+					<td align="right"><!-- TMPL_VAR name="avail" --></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b> Total</b></td>
-				<td align=right><b><!-- TMPL_VAR name="total" --></b></td>
-				<td align=right><b><!-- TMPL_VAR name="totspent" --></b></td>
-				<td align=right><b><!-- TMPL_VAR name="totcomtd" --></b></td>
-				<td align=right><b><!-- TMPL_VAR name="totavail" --></b></td>
+				<th class="acquisition" align="right">Total</th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR name="total" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR name="totspent" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR name="totcomtd" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR name="totavail" --></th>
 			</tr>
 		</table>
 		<p>
@@ -74,11 +72,15 @@
 	</form>
 </div>
 
-<div id="bloc100">
-	<div id="bloctitle">HELP Ordering:</div>
-	<ul>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</ul>
-	<ul>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </ul>
-	<ul>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </ul>
-	<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
-</DIV>
+<div id="bloc25">
+	<h2 class="acquisition">HELP Ordering</h2>
+	<ul>
+		<p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</p>
+		<p>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </p>
+		<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.</p>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+	</ul>
+</div>
+
+</div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -26,34 +26,16 @@ div.tabs a {
 	color: #FFFFFF;
 	border: thin solid black;
 	margin-right: 2px;
-	padding: 20px 10px;
+	padding: 10px 10px;
 	-moz-border-radius: 5px 0px 0px 5px;
 }
 
 div.tab {
-	display: none;
-	width:95%;
-	text-align: center;
-	background-color:white;
-}
-
-div.tab:target {
 	width:90%;
 	text-align: center;
 	display: block;
+	visibility:hidden;
 	position:absolute;
 	margin-left:70px;
 	margin-top:100px;
-}
-
-:target div.tab {
-	width:100%;
-	text-align: center;
-	display: block;
-	position:absolute;
-	margin-left:10%;
-}
-
-:target div.tab{
-	display: none;
 }
