@@ -133,20 +133,22 @@
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 	</table>
-	<table width=40%>
+	<br/>
+	<table width=40% height="80">
 		<tr>
-			<td width=50%><!-- TMPL_VAR name="previous" --></td>
-			<td width=50%><!-- TMPL_VAR name="next" --></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Previous</a></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Next</a></td>
 		</tr>
 	</table>
-
+	<br/>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type="hidden" name="op" value="add_form">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="father" value="<!-- TMPL_VAR name="father" -->">
-	<br><input type=submit class="button"  value="Add Thesaurus entry" title="Add Thesaurus entry" ALT="Add Thesaurus entry"><br>
+	<br><input type=submit class="button"  value="Add" title="Add Thesaurus entry" ALT="Add Thesaurus entry"><br>
 	</form>
+
 
 <!-- /TMPL_IF -->
 

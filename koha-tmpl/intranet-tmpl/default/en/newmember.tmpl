@@ -95,7 +95,11 @@
 				<B>Sex</B>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="sex" -->
+				<!-- TMPL_IF Name="sex" -->
+					Male
+				<!-- TMPL_ELSE -->
+					Female
+				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
@@ -126,7 +130,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Home)</B>
+				<B>Phone home</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="phone" -->
@@ -134,7 +138,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Daytime)</B>
+				<B>Phone daytime</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="phoneday" -->
@@ -223,7 +227,7 @@
 		</form>
 <!-- TMPL_ELSE -->
 	<h1>ERROR</H1>
-	<p>The following  fields have a forbidden value. Please push the back button and try again : </p>
+	<p>The following fields have a forbidden value. Please push the back button and try again : </p>
 	<!-- TMPL_IF name="cardnumber" -->
 		Cardnumber<br/>
 	<!-- /TMPL_IF -->

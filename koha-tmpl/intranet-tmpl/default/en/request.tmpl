@@ -1,7 +1,6 @@
 <!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
 <form action="placerequest.pl" method=post>
-<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=187 BORDER=0 src="<!-- TMPL_VAR name="themelang" -->/images/place-request.gif" align=right >
 <input type=hidden name=biblio value="<!-- TMPL_VAR Name="bib" -->">
 <input type=hidden name=type value=str8>
 <input type=hidden name=title value="<!-- TMPL_VAR Name="title" -->">
@@ -36,11 +35,11 @@
 		<td><!-- TMPL_VAR Name=date --></td>
 		<td><!-- TMPL_VAR name="CGIbranch" --></td>
 		<td>
-			<input type=checkbox name=request value=any>Next Available,<br>(or choose from list below)
+			<input type=checkbox name=request value=any>Next Available, or choose from list below
 		</td>
 	</tr>
 </table>
-
+<INPUT type="submit" value="request" class="button">
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>

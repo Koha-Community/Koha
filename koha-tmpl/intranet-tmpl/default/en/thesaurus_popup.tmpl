@@ -9,6 +9,7 @@
 		<p>
 			<input type="text" name="search_string" value="<!-- TMPL_VAR name="search_string" -->">
 			<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+			<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
 			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 			<input type="hidden" name="op" value="search">
 			<input type="submit" value="Search">
@@ -18,6 +19,7 @@
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
 	<!-- TMPL_VAR name="select_list" -->
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="select">
 	<input type="hidden" name="result" value="<!-- TMPL_VAR name="result" -->">
@@ -27,6 +29,7 @@
 <form name="f3_pop"  action="thesaurus_popup.pl" method="post">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
 	<input type="hidden" name="op" value="add">
 	insert a new authority : <input type="text" name="insert">
 	<input type="submit" name="NEW" value="NEW">
