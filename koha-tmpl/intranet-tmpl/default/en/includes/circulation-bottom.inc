@@ -14,9 +14,8 @@
 <A HREF="/cgi-bin/koha/members-home.pl">Members</a> ||
 <A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> ||
 <A HREF="/cgi-bin/koha/reports-home.pl">Reports</a> ||
-<A HREF="/help/">Help</a> ||
-<A HREF="http://opac.library.org.nz">OPAC</a> ||
-<A HREF="http://www.library.org.nz">Library Website</a>
+<A HREF="/cgi-bin/koha/admin-home.pl">System Parameters</a> ||
+<A HREF="/help/">Help</a>
 </FONT>
 </CENTER>
 </BODY>
