@@ -6,6 +6,7 @@
 	<th>Paramètres </th>
 </tr>
 </table>
+
 <table cellspacing=5 cellpadding=1 width=90%>
 <th colspan=2>En rapport avec les bibliographies</th>
 <tr>
@@ -67,12 +68,22 @@
 	<th>Utilitaires</th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=1 width=80%>
+
+<table cellspacing=0 cellpadding=1 width=90%>
 <th colspan=2>Export</th>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>Export de notices</a></td>
 	<td>Export au format MARC</td>
 </tr>
+<th colspan=2>Import</th>
+	<tr valign="top">
+		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Décharger des notices MARC</a> <br/>dans le réservoir</td>
+		<td>Le réservoir est une table ou sont stockées des notices inactives.<br/>
+			Une notice MARC est stockée dans le réservoir tant qu'il n'y pas d'exemplaire correspondant. Si vous entrez l'ISBN ou le titre d'un ouvrage, il est recherché dans le réservoir.
+			S'il est trouvé, une notice active sera créée.
+		</td>
+	</tr>
+
 </table>
 </center>
 <TMPL_INCLUDE NAME="parameters-bottom.inc">
