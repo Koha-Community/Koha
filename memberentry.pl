@@ -66,7 +66,6 @@ if ($delete){
 	}
 
 	my $data=borrdata('',$member);
-	warn "data: ".$data->{'surname'};
 	if ($type eq 'Add'){
 		$template->param( updtype => 'I');
 	} else {
