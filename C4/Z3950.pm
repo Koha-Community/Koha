@@ -150,12 +150,20 @@ sub addz3950queue {
 	    $sth->execute($query, $type, $serverlist, $requestid);
 	    my $pid=`cat /var/log/koha/processz3950queue.pid`;
 	    chomp $pid;
-	    kill 1, $pid;
+	    my $processcount=kill 1, $pid;
+	    if ($processcount==0) {
+		return 1;
+	    }
 	}
 } # sub addz3950queue
 
 #--------------------------------------
 # $Log$
+# Revision 1.1.2.4  2002/06/28 18:07:27  tonnesen
+# marcimport.pl will print an error message if it can not signal the
+# processz3950queue program.  The message contains instructions for starting the
+# daemon.
+#
 # Revision 1.1.2.3  2002/06/28 17:45:39  tonnesen
 # z3950queue now listens for a -HUP signal before processing the queue.  Z3950.pm
 # sends the -HUP signal when queries are added to the queue.

@@ -756,8 +756,26 @@ sub AcceptZ3950Queue {
           }
         }
 
-	addz3950queue($dbh,$input->param('query'), $input->param('type'), 
-		$input->param('rand'), @serverlist);
+	if (addz3950queue($dbh,$input->param('query'), $input->param('type'), 
+		$input->param('rand'), @serverlist)) {
+	    print qq|
+<table border=1 cellpadding=5 cellspacing=0 align=center>
+<tr><td bgcolor=#99cc33 background=/images/background-acq.gif colspan=2><font color=red><b>Error</b></font></td></tr>
+<tr><td colspan=2>
+<b>No Z39.50 client daemon running on the server.</b><p>
+There is a launcher for the Z39.50 client daemon in your intranet installation<br>
+directory under <b>./scripts/z3950daemon/z3950-daemon-launch.sh</b>.  This<br>
+script should be run as root, and it will start up the program running with the<br>
+privileges of your apache user.  Ideally, this script should be started from a<br>
+system init directory so that is running after the machine starts up.
+	
+</td></tr>
+</table>
+
+<table border
+
+|;
+	}
     } else {
 	print "<font color=red size=+1>$query is not a valid ISBN
 	Number</font><p>\n";
@@ -1118,6 +1136,11 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.30  2002/06/28 18:07:27  tonnesen
+# marcimport.pl will print an error message if it can not signal the
+# processz3950queue program.  The message contains instructions for starting the
+# daemon.
+#
 # Revision 1.6.2.29  2002/06/27 18:35:01  tonnesen
 # $deweyinput was always defined (it's an HTML input field).  Check against
 # $bib->{dewey} instead.
