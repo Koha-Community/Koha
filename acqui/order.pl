@@ -63,6 +63,7 @@ for (my $i=0; $i<$count; $i++) {
 	}
 	$line{id} =$suppliers[$i]->{'id'};
 	$line{name} = $suppliers[$i]->{'name'};
+	$line{active} = $suppliers[$i]->{'active'};
 	$line{total} = $orders->[0]->{'count(*)'};
 	$line{authorisedby} = $orders->[0]->{'authorisedby'};
 	$line{entrydate} = $orders->[0]->{'entrydate'};
