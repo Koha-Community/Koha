@@ -400,7 +400,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
-						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
+						$sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
@@ -414,7 +414,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
+						 $sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				}
@@ -424,7 +424,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
-					 	$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
+					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
@@ -451,7 +451,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] ".$dbh->quote(@$value[$i]);
 					if (@$tags[$i]) {
-					 	$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
+					 	$sql_where1 .="  and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					$sql_where1.=")";
