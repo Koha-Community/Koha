@@ -232,7 +232,9 @@ my %requirefields = (
         'userid'        => 'char(30)',
         'password'      => 'char(30)',
         'flags'         => 'int(11)',
-        'textmessaging' => 'varchar(30)'
+        'textmessaging' => 'varchar(30)',
+	   'zipcode' => 'varchar(25)',
+			'homezipcode' => 'varchar(25)',
     },
     aqorders => { 'budgetdate' => 'date' },
 
@@ -240,8 +242,6 @@ my %requirefields = (
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
     systempreferences => { 'explanation' => 'char(80)' },
     z3950servers      => { 'syntax'      => 'char(80)' },
-    borrowers => {'zipcode' => 'varchar(25)',
-    						'homezipcode' => 'varchar(25)'}
 );
 
 my %dropable_table = (
@@ -777,6 +777,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.49  2003/05/26 10:41:53  tipaul
+# bugfix : borrowers modifs overwritten by stupid hash entry existing twice.
+#
 # Revision 1.48  2003/05/20 19:50:45  slef
 # Initial fix to bug 456: hardwired paths
 #
