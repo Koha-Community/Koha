@@ -162,7 +162,7 @@ sub mktablerow {
   return($string);
 }
 
-sub mktableft {
+sub mktableft() {
   return("</table>\n");
 }
 
@@ -349,11 +349,11 @@ sub mkform2{
 }
 
 
-sub endpage{
+sub endpage() {
   return("</body></html>\n");
 }
 
-sub mklink {
+sub mklink($$)  {
   my ($url,$text)=@_;
   my $string="<a href=\"$url\">$text</a>";
   return ($string);
@@ -374,15 +374,15 @@ sub mkheadr {
   return ($string);
 }
 
-sub center {
+sub center() {
   return ("<CENTER>\n");
 }  
 
-sub endcenter {
+sub endcenter() {
   return ("</CENTER>\n");
 }  
 
-sub bold {
+sub bold($) {
   my ($text)=@_;
   my $string="<b>$text</b>";
   return($string);
