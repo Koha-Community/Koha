@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+    <p align=left>您現在登入了的身份為 <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>讀者專區主頁</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>登出</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> <span lang=mi>Koha</span></p>
 </TMPL_IF>
@@ -29,11 +29,11 @@
 <tr valign="top">
 <td>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Subtitle:</b> <TMPL_VAR NAME="subtitle"><br>
+<b>副題：</b> <TMPL_VAR NAME="subtitle"><br>
 <b>作者：</b> <TMPL_VAR NAME="author"><br>
 <b>主題：</b> <TMPL_VAR NAME="subject"><br>
 <b>著作年份：</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
+<b>館內存量：</b> <TMPL_VAR NAME="count">
 <p>
 </font></td>
 </tr>
@@ -47,7 +47,7 @@
 <td>存放於</td>
 <td>還書日期</td>
 <td>Last Seen</td>
-<td>Barcode</td>
+<td>條碼</td>
 </tr>
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <tr>
