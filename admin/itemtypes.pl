@@ -104,7 +104,7 @@ if ($op eq 'add_form') {
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
 							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => $data->{'rentalcharge'},
+							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
 							notforloan => $data->{'notforloan'}
 							);
 ;
@@ -145,7 +145,7 @@ if ($op eq 'add_form') {
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
 							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => $data->{'rentalcharge'},
+							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
 							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -166,19 +166,20 @@ if ($op eq 'add_form') {
 } else { # DEFAULT
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle="white";
+	my $toggle=0;
 	my @loop_data;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		my %row_data;
-		if ($toggle eq 'white'){
-			$row_data{toggle}="#ffffcc";
+		if ($toggle eq 0){
+			$toggle=1;
 		} else {
-			$row_data{toggle}="white";
+			$toggle=0;
 		}
+		$row_data{toggle} = $toggle;
 		$row_data{itemtype} = $results->[$i]{'itemtype'};
 		$row_data{description} = $results->[$i]{'description'};
 		$row_data{renewalsallowed} = $results->[$i]{'renewalsallowed'};
-		$row_data{rentalcharge} = $results->[$i]{'rentalcharge'};
+		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{'rentalcharge'});
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
