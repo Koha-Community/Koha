@@ -90,10 +90,11 @@ sub text_replace (**) {
 	    print $output find_translation($t);
 	} elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
 	    my $fmt = find_translation($s->form);
-	    print $output TmplTokenizer::parametrize($fmt, [ map {
+	    print $output TmplTokenizer::parametrize($fmt, 1, $s, sub {
+		$_ = $_[0];
 		my($kind, $t, $attr) = ($_->type, $_->string, $_->attributes);
 		$kind == TmplTokenType::TAG && %$attr?
-		    text_replace_tag($t, $attr): $t } $s->parameters ], [ $s->anchors ]);
+		    text_replace_tag($t, $attr): $t });
 	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    print $output text_replace_tag($t, $attr);
 	} elsif (defined $t) {

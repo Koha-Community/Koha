@@ -19,6 +19,7 @@ use vars qw( $extract_all_p );
 use vars qw( $pedantic_p );
 use vars qw( %text %translation );
 use vars qw( $charset_in $charset_out );
+use vars qw( $disable_fuzzy_p );
 use vars qw( $verbose_p );
 use vars qw( $po_mode_p );
 
@@ -115,7 +116,7 @@ sub text_extract (*) {
 sub generate_strings_list () {
     # Emit all extracted strings.
     for my $t (string_list) {
-	printf OUTPUT "%s\n", $t # unless negligible_p($t);
+	printf OUTPUT "%s\n", $t;
     }
 }
 
@@ -135,7 +136,11 @@ sub generate_po_file () {
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL\@ADDRESS>, YEAR.
 #
+EOF
+    print OUTPUT <<EOF unless $disable_fuzzy_p;
 #, fuzzy
+EOF
+    print OUTPUT <<EOF;
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\\n"
@@ -150,7 +155,50 @@ msgstr ""
 EOF
     my $directory_re = quotemeta("$directory/");
     for my $t (string_list) {
-	#next if negligible_p($t);
+	if ($text{$t}->[0]->type == TmplTokenType::TEXT_PARAMETRIZED) {
+	    my($token, $n) = ($text{$t}->[0], 0);
+	    printf OUTPUT "#. For the first occurrence,\n"
+		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
+	    for my $param ($token->parameters_and_fields) {
+		$n += 1;
+		my $type = $param->type;
+		my $subtype = ($type == TmplTokenType::TAG
+			&& $param->string =~ /^<input\b/is?
+				$param->attributes->{'type'}->[1]: undef);
+		my $fmt = TmplTokenizer::_formalize( $param );
+		$fmt =~ s/^%/%$n\$/;
+		if ($type == TmplTokenType::DIRECTIVE) {
+		    $type = $param->string =~ /(TMPL_[A-Z]+)+/is? $1: 'ERROR';
+		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
+			    $2: undef;
+		    printf OUTPUT "#. %s: %s\n", $fmt,
+			"$type" . (defined $name? " name=$name": '');
+		} else {
+		    my $name = $param->attributes->{'name'};
+		    my $value = $param->attributes->{'value'}
+			    unless $subtype =~ /^(?:text)$/;
+		    printf OUTPUT "#. %s: %s\n", $fmt, "type=$subtype"
+			    . (defined $name?  " name=$name->[1]": '')
+			    . (defined $value? " value=$value->[1]": '');
+		}
+	    }
+	} elsif ($text{$t}->[0]->type == TmplTokenType::TAG) {
+	    my($token) = ($text{$t}->[0]);
+	    printf OUTPUT "#. For the first occurrence,\n"
+		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
+	    if ($token->string =~ /^<meta\b/is) {
+		my $type = $token->attributes->{'http-equiv'}->[1];
+		print OUTPUT "#. META http-equiv=$type\n" if defined $type;
+	    } elsif ($token->string =~ /^<([a-z0-9]+)/is) {
+		my $tag = uc($1);
+		my $type = (lc($tag) eq 'input'?
+			$token->attributes->{'type'}: undef);
+		my $name = $token->attributes->{'name'};
+		printf OUTPUT "#. %s\n", $tag
+		    . (defined $type? " type=$type->[1]": '')
+		    . (defined $name? " name=$name->[1]": '');
+	    }
+	}
 	my $cformat_p;
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
@@ -258,6 +306,7 @@ GetOptions(
     'charset=s'	=> sub { $charset_in = $charset_out = $_[1] },	# INTERNAL
     'convert-from=s'			=> \$convert_from,
     'D|directory=s'			=> \$directory,
+    'disable-fuzzy'			=> \$disable_fuzzy_p,	# INTERNAL
     'f|files-from=s'			=> \$files_from,
     'I|input-charset=s'			=> \$charset_in,	# INTERNAL
     'pedantic-warnings|pedantic'	=> sub { $pedantic_p = 1 },
@@ -360,9 +409,9 @@ details.
 If you want to generate GNOME-style POTFILES.in files, such
 files (passed to -f) can be generated thus:
 
-	(cd ../.. && find koha-tmpl/opac-tmpl/default/en
+	(cd ../.. && find koha-tmpl/opac-tmpl/default/en \
 		-name \*.inc -o -name \*.tmpl) > opac/POTFILES.in
-	(cd ../.. && find koha-tmpl/intranet-tmpl/default/en
+	(cd ../.. && find koha-tmpl/intranet-tmpl/default/en \
 		-name \*.inc -o -name \*.tmpl) > intranet/POTFILES.in
 
 This is, however, quite pointless, because the "create" and

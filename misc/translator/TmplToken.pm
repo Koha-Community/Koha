@@ -82,9 +82,12 @@ sub set_children {
 
 # only meaningful for TEXT_PARAMETRIZED tokens
 # FIXME: DIRECTIVE is not necessarily TMPL_VAR !!
-sub parameters {
+sub parameters_and_fields {
     my $this = shift;
-    return map { $_->type == TmplTokenType::DIRECTIVE? $_: ()} @{$this->{'_kids'}};
+    return map { $_->type == TmplTokenType::DIRECTIVE? $_:
+		($_->type == TmplTokenType::TAG
+			&& $_->string =~ /^<input\b/is)? $_: ()}
+	    @{$this->{'_kids'}};
 }
 
 # only meaningful for TEXT_PARAMETRIZED tokens

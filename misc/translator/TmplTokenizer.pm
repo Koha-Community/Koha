@@ -484,9 +484,9 @@ sub _token_groupable1_p ($) { # as first token, groupable into TEXT_PARAMETRIZED
 	|| ($t->type == TmplTokenType::DIRECTIVE
 		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
 	|| ($t->type == TmplTokenType::TAG
-		&& ($t->string =~ /^<(?:b|em|h[123456]|i|u)\b/is
-#		|| ($t->string =~ /^<input\b/is
-#		    && $t->attributes->{'type'}->[1] =~ /^(?:radio|text)$/is)
+		&& ($t->string =~ /^<(?:a|b|em|h[123456]|i|u)\b/is
+		|| ($t->string =~ /^<input\b/is
+		    && $t->attributes->{'type'}->[1] =~ /^(?:radio|text)$/is)
 		    ))
 }
 
@@ -498,7 +498,7 @@ sub _token_groupable2_p ($) { # as other token, groupable into TEXT_PARAMETRIZED
 	|| ($t->type == TmplTokenType::TAG
 		&& ($t->string =~ /^<\/?(?:a|b|em|h[123456]|i|u)\b/is
 		|| ($t->string =~ /^<input\b/is
-		    && $t->attributes->{'type'} =~ /^(?:radio|text)$/is)))
+		    && $t->attributes->{'type'}->[1] =~ /^(?:radio|text)$/is)))
 }
 
 sub _quote_cformat ($) {
@@ -528,7 +528,9 @@ sub _formalize ($) {
 		   _formalize_string_cformat($t->string):
 	   $t->type == TmplTokenType::TAG?
 		   ($t->string =~ /^<a\b/is? '<a>':
-		    $t->string =~ /^<input\b/is? '<input>':
+		    $t->string =~ /^<input\b/is? (
+			    lc $t->attributes->{'type'}->[1] eq 'text' ? '%S':
+			    '%p'):
 		    _quote_cformat($t->string)):
 	       _quote_cformat($t->string);
 }
@@ -540,30 +542,63 @@ sub _optimize {
 		for (my $i = $#structure; $i >= 0; $i -= 1) {
 		last if $structure[$i]->type != TmplTokenType::TEXT;
 		last if !blank_p($structure[$i]->string);
-		    push @{$this->{_queue}}, pop @structure;
+		    # Queue element structure: [reanalysis-p, token]
+		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 	    };
     &$undo_trailing_blanks;
-    # FIXME: If the last token is a close tag but there are no tags
-    # FIXME: before it, drop the close tag back into the queue. This
-    # FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
-    if (@structure >= 2
-	    && $structure[$#structure]->type == TmplTokenType::TAG
-	    && $structure[$#structure]->string =~ /^<\//s) {
-	my $has_other_tags_p = 0;
-	for (my $i = 0; $i < $#structure; $i += 1) {
-	    $has_other_tags_p = 1 if $structure[$i]->type == TmplTokenType::TAG;
-	last if $has_other_tags_p;
+    while (@structure >= 2) {
+	my $something_done_p = 0;
+	# FIXME: If the last token is a close tag but there are no tags
+	# FIXME: before it, drop the close tag back into the queue. This
+	# FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
+	if (@structure >= 2
+		&& $structure[$#structure]->type == TmplTokenType::TAG
+		&& $structure[$#structure]->string =~ /^<\//s) {
+	    my $has_other_tags_p = 0;
+	    for (my $i = 0; $i < $#structure; $i += 1) {
+		$has_other_tags_p = 1
+			if $structure[$i]->type == TmplTokenType::TAG;
+	    last if $has_other_tags_p;
+	    }
+	    if (!$has_other_tags_p) {
+		push @{$this->{_queue}}, [0, pop @structure]
+		&$undo_trailing_blanks;
+		$something_done_p = 1;
+	    }
 	}
-	push @{$this->{_queue}}, pop @structure unless $has_other_tags_p;
-	&$undo_trailing_blanks;
-    }
-    # FIXME: Do the same ugly hack for the last token being a ( or [
-    if (@structure >= 2
-	    && $structure[$#structure]->type == TmplTokenType::TEXT
-	    && $structure[$#structure]->string =~ /^[\(\[]$/) { # not )]
-	push @{$this->{_queue}}, pop @structure;
-	&$undo_trailing_blanks;
+	# FIXME: Do the same ugly hack for the last token being a ( or [
+	if (@structure >= 2
+		&& $structure[$#structure]->type == TmplTokenType::TEXT
+		&& $structure[$#structure]->string =~ /^[\(\[]$/) { # not )]
+	    push @{$this->{_queue}}, [1, pop @structure];
+	    &$undo_trailing_blanks;
+	    $something_done_p = 1;
+	}
+	# FIXME: If the first token is an open tag, the last token is the
+	# FIXME: corresponding close tag, and there are no other close tags 
+	# FIXME: inbetween, requeue the tokens from the second token on,
+	# FIXME: flagged as ok for re-analysis
+	if (@structure >= 3
+		&& $structure[0]->type == TmplTokenType::TAG
+		&& $structure[0]->string =~ /^<([a-z0-9])/is && (my $tag = $1)
+		&& $structure[$#structure]->type == TmplTokenType::TAG
+		&& $structure[$#structure]->string =~ /^<\/$1\s*>$/is) {
+	    my $has_other_open_or_close_tags_p = 0;
+	    for (my $i = 1; $i < $#structure; $i += 1) {
+		$has_other_open_or_close_tags_p = 1
+			if $structure[$i]->type == TmplTokenType::TAG
+			&& $structure[$i]->string =~ /^<\/?$tag\b/is;
+	    last if $has_other_open_or_close_tags_p;
+	    }
+	    if (!$has_other_open_or_close_tags_p) {
+		for (my $i = $#structure; $i; $i -= 1) {
+		    push @{$this->{_queue}}, [1, pop @structure];
+		}
+		$something_done_p = 1;
+	    }
+	}
+    last if !$something_done_p;
     }
     return @structure;
 }
@@ -600,12 +635,16 @@ sub next_token {
     my $it;
     $this->{_queue} = [] unless defined $this->{_queue};
 
-    # Don't reparse anything in the queue. We can put a parametrized token
-    # there if we need to, however.
-    if (@{$this->{_queue}}) {
-	$it = pop @{$this->{_queue}};
+    # Elements in the queue are ordered pairs. The first in the ordered pair
+    # specifies whether we are allowed to reanalysis; the second is the token.
+    if (@{$this->{_queue}} && !$this->{_queue}->[$#{$this->{_queue}}]->[0]) {
+	$it = (pop @{$this->{_queue}})->[1];
     } else {
-	$it = $this->_next_token_intermediate($h);
+	if (@{$this->{_queue}}) {
+	    $it = (pop @{$this->{_queue}})->[1];
+	} else {
+	    $it = $this->_next_token_intermediate($h);
+	}
 	if (!$this->cdata_mode_p && $this->allow_cformat_p && defined $it
 	    && ($it->type == TmplTokenType::TEXT?
 		!blank_p( $it->string ): _token_groupable1_p( $it ))) {
@@ -624,7 +663,11 @@ sub next_token {
 	    }
 	    # We hate | and || in msgid strings, so we try to avoid them
 	    for (my $i = 1, my $quit_p = 0, my $quit_next_p = ($it->type == TmplTokenType::TEXT && $it->string =~ /^\|+$/s);; $i += 1) {
-		$next = $this->_next_token_intermediate($h);
+		if (@{$this->{_queue}}) {
+		    $next = (pop @{$this->{_queue}})->[1];
+		} else {
+		    $next = $this->_next_token_intermediate($h);
+		}
 		push @structure, $next; # for consistency (with initialization)
 	    last unless defined $next && _token_groupable2_p( $next );
 	    last if $quit_next_p;
@@ -635,7 +678,9 @@ sub next_token {
 		    $parametrized_p = 1;
 		} elsif ($next->type == TmplTokenType::TAG) {
 		    if ($next->string =~ /^<([A-Z0-9]+)/is) {
-			push @tags, lc($1);
+			my $candidate = lc($1);
+			push @tags, $candidate
+				unless $candidate =~ /^(?:input)$/is;
 			$with_anchor_p = 1 if lc($1) eq 'a';
 			$with_input_p = 1 if lc($1) eq 'input';
 		    } elsif ($next->string =~ /^<\/([A-Z0-9]+)/is) {
@@ -647,8 +692,8 @@ sub next_token {
 		}
 	    last if $quit_p;
 	    }
-	    # Undo the last token
-	    push @{$this->{_queue}}, pop @structure;
+	    # Undo the last token, allowing reanalysis
+	    push @{$this->{_queue}}, [1, pop @structure];
 	    # Simply it a bit more
 	    @structure = $this->_optimize( @structure );
 	    if (@structure < 2) {
@@ -673,12 +718,12 @@ sub next_token {
 		$it = TmplToken->new($string, TmplTokenType::TEXT,
 			$it->line_number, $it->pathname);;
 	    } else {
-		# Requeue the tokens thus seen for re-emitting
+		# Requeue the tokens thus seen for re-emitting, allow reanalysis
 		for (;;) {
-		    push @{$this->{_queue}}, pop @structure;
+		    push @{$this->{_queue}}, [1, pop @structure];
 		last if !@structure;
 		}
-		$it = pop @{$this->{_queue}};
+		$it = (pop @{$this->{_queue}})->[1];
 	    }
 	}
     }
@@ -717,39 +762,77 @@ sub quote_po ($) {
 }
 
 # Some functions that shouldn't be here... should be moved out some time
-sub parametrize ($$$) {
-    my($fmt_0, $params, $anchors) = @_;
+sub parametrize ($$$$) {
+    my($fmt_0, $cformat_p, $t, $f) = @_;
     my $it = '';
-    for (my $n = 0, my $fmt = $fmt_0; length $fmt;) {
-	if ($fmt =~ /^[^%]+/) {
-	    $fmt = $';
-	    $it .= $&;
-	} elsif ($fmt =~ /^%%/) {
-	    $fmt = $';
-	    $it .= '%';
-	} elsif ($fmt =~ /^%(?:(\d+)\$)?(?:(\d+)(?:\.(\d+))?)?s/) {
-	    $n += 1;
-	    my($i, $width, $prec) = ((defined $1? $1: $n), $2, $3);
-	    $fmt = $';
-	    if (!defined $width && !defined $prec) {
-		my $param = $params->[$i - 1];
-		$it .= $param;
-		warn_normal "$&: Undefined parameter $i for msgid \"$fmt_0\"",
-			    undef
-			unless defined $param;
-	    } elsif (defined $width && defined $prec && !$width && !$prec) {
-		;
+    if ($cformat_p) {
+	my @params = $t->parameters_and_fields;
+	for (my $n = 0, my $fmt = $fmt_0; length $fmt;) {
+	    if ($fmt =~ /^[^%]+/) {
+		$fmt = $';
+		$it .= $&;
+	    } elsif ($fmt =~ /^%%/) {
+		$fmt = $';
+		$it .= '%';
+	    } elsif ($fmt =~ /^%(?:(\d+)\$)?(?:(\d+)(?:\.(\d+))?)?s/s) {
+		$n += 1;
+		my($i, $width, $prec) = ((defined $1? $1: $n), $2, $3);
+		$fmt = $';
+		if (defined $width && defined $prec && !$width && !$prec) {
+		    ;
+		} elsif (defined $params[$i - 1]) {
+		    my $param = $params[$i - 1];
+		    warn_normal "$fmt_0: $&: Expected a TMPL_VAR, but found a "
+			    . $param->type->to_string . "\n", undef
+			    if $param->type != TmplTokenType::DIRECTIVE;
+		    warn_normal "$fmt_0: $&: Unsupported "
+				. "field width or precision\n", undef
+			    if defined $width || defined $prec;
+		    warn_normal "$fmt_0: $&: Parameter $i not known", undef
+			    unless defined $param;
+		    $it .= defined $f? &$f( $param ): $param->string;
+		}
+	    } elsif ($fmt =~ /^%(?:(\d+)\$)?(?:(\d+)(?:\.(\d+))?)?([pS])/s) {
+		$n += 1;
+		my($i, $width, $prec, $conv) = ((defined $1? $1: $n), $2, $3, $4);
+		$fmt = $';
+
+		my $param = $params[$i - 1];
+		if (!defined $param) {
+		    warn_normal "$fmt_0: $&: Parameter $i not known", undef;
+		} else {
+		    if ($param->type == TmplTokenType::TAG
+			    && $param->string =~ /^<input\b/is) {
+			my $type = defined $param->attributes?
+				lc($param->attributes->{'type'}->[1]): undef;
+			if ($conv eq 'S') {
+			    warn_normal "$fmt_0: $&: Expected type=text, "
+					. "but found type=$type", undef
+				    unless $type eq 'text';
+			} elsif ($conv eq 'p') {
+			    warn_normal "$fmt_0: $&: Expected type=radio, "
+					. "but found type=$type", undef
+				    unless $type eq 'radio';
+			}
+		    } else {
+			warn_normal "$&: Expected an INPUT, but found a "
+				. $param->type->to_string . "\n", undef
+		    }
+		    warn_normal "$fmt_0: $&: Unsupported "
+				. "field width or precision\n", undef
+			    if defined $width || defined $prec;
+		    $it .= defined $f? &$f( $param ): $param->string;
+		}
+	    } elsif ($fmt =~ /^%[^%a-zA-Z]*[a-zA-Z]/) {
+		$fmt = $';
+		$it .= $&;
+		die "$&: Unknown or unsupported format specification\n"; #XXX
 	    } else {
-		die "Unsupported precision specification in format: $&\n"; #XXX
+		die "$&: Completely confused parametrizing\n";#XXX
 	    }
-	} elsif ($fmt =~ /^%[^%a-zA-Z]*[a-zA-Z]/) {
-	    $fmt = $';
-	    $it .= $&;
-	    die "Unknown or unsupported format specification: $&\n"; #XXX
-	} else {
-	    die "Completely confused parametrizing: $fmt\n";#XXX
 	}
     }
+    my @anchors = $t->anchors;
     for (my $n = 0, my $fmt = $it, $it = ''; length $fmt;) {
 	if ($fmt =~ /^(?:(?!<a\d+>).)+/is) {
 	    $fmt = $';
@@ -758,7 +841,7 @@ sub parametrize ($$$) {
 	    $n += 1;
 	    my $i  = $1;
 	    $fmt = $';
-	    my $anchor = $anchors->[$i - 1];
+	    my $anchor = $anchors[$i - 1];
 	    warn_normal "$&: Anchor $1 not found for msgid \"$fmt_0\"", undef #FIXME
 		    unless defined $anchor;
 	    $it .= $anchor->string;
@@ -860,9 +943,59 @@ words will require certain inflectional suffixes in sentences.
 Because this is an incompatible change, this mode must be explicitly
 turned on using the set_cformat(1) method call.
 
+=head2 The flag characters
+
+The character % is followed by zero or more of the following flags:
+
+=over
+
+=item #
+
+The value comes from HTML <INPUT> elements.
+This abuse of the flag character is somewhat reasonable,
+since TMPL_VAR and INPUT are both variables, but of different kinds.
+
+=back
+
+=head2 The field width and precision
+
+An optional 0.0 can be specified for %s to specify
+that the <TMPL_VAR> should be suppressed.
+
+=head2 The conversion specifier
+
+=over
+
+=item p
+
+Specifies any input field that is neither text nor hidden
+(which currently mean radio buttons).
+The p conversion specifier is chosen because this does not
+evoke any certain sensible data type.
+
+=item S
+
+Specifies a text input field (<INPUT TYPE=TEXT>).
+This use of the o conversion specifier is somewhat reasonable,
+since text input fields contain values of undeterminable type,
+which can be treated as strings.
+
+=item s
+
+Specifies a <TMPL_VAR>.
+This use of the o conversion specifier is somewhat reasonable,
+since <TMPL_VAR> denotes values of undeterminable type, which
+can be treated as strings.
+
+=back
+
 =head1 BUGS
 
 There is no code to save the tag name anywhere in the scanned token.
+
+The use of <AI<i>> to stand for the I<i>th anchor
+is not very well thought out.
+Some abuse of c-format specifies might have been more appropriate.
 
 =head1 HISTORY
 
