@@ -54,120 +54,118 @@ else {
     );
 
     # fill with books in ACTIVE DB (biblio)
-    if ( !$offset ) {
-        $offset     = 0;
-        $showoffset = 1;
-    }
-    if ( !$num ) { $num = 10 }
-    ( $count, @results ) = isbnsearch( $isbn, $title );
+	if ( !$offset ) {
+		$offset     = 0;
+		$showoffset = 1;
+	}
+	if ( !$num ) { $num = 10 }
+	( $count, @results ) = isbnsearch( $isbn, $title );
 
-    if ( $count < ( $offset + $num ) ) {
-        $total = $count;
-    }
-    else {
-        $total = $offset + $num;
-    }    # else
+	if ( $count < ( $offset + $num ) ) {
+		$total = $count;
+	}
+	else {
+		$total = $offset + $num;
+	}    # else
 
-    my @loop_data = ();
-    my $toggle;
-    for ( my $i = $offset ; $i < $total ; $i++ ) {
-        if ( $i % 2 ) {
-            $toggle = "#ffffcc";
-        }
-        else {
-            $toggle = "white";
-        }
-        my %row_data;    # get a fresh hash for the row data
-        $row_data{toggle}        = $toggle;
-        $row_data{biblionumber}  = $results[$i]->{'biblionumber'};
-        $row_data{title}         = $results[$i]->{'title'};
-        $row_data{author}        = $results[$i]->{'author'};
-        $row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
-        $row_data{NOTMARC}       = !$marc_p;	
-        push ( @loop_data, \%row_data );
-    }
-    $template->param( startfrom => $offset + 1 );
-    ( $offset + $num <= $count )
-      ? ( $template->param( endat => $offset + $num ) )
-      : ( $template->param( endat => $count ) );
-    $template->param( numrecords => $count );
-    my $nextstartfrom = ( $offset + $num < $count ) ? ( $offset + $num ) : (-1);
-    my $prevstartfrom = ( $offset - $num >= 0 ) ? ( $offset - $num ) : (-1);
-    $template->param( nextstartfrom => $nextstartfrom );
-    my $displaynext = 1;
-    my $displayprev = 0;
-    ( $nextstartfrom == -1 ) ? ( $displaynext = 0 ) : ( $displaynext = 1 );
-    ( $prevstartfrom == -1 ) ? ( $displayprev = 0 ) : ( $displayprev = 1 );
-    $template->param( displaynext => $displaynext );
-    $template->param( displayprev => $displayprev );
-    my @numbers = ();
-    my $term;
-    my $value;
+	my @loop_data = ();
+	my $toggle;
+	for ( my $i = $offset ; $i < $total ; $i++ ) {
+		if ( $i % 2 ) {
+			$toggle = "#ffffcc";
+		} else {
+			$toggle = "white";
+		}
+		my %row_data;    # get a fresh hash for the row data
+		$row_data{toggle}        = $toggle;
+		$row_data{biblionumber}  = $results[$i]->{'biblionumber'};
+		$row_data{title}         = $results[$i]->{'title'};
+		$row_data{author}        = $results[$i]->{'author'};
+		$row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
+		$row_data{NOTMARC}       = !$marc_p;
+		push ( @loop_data, \%row_data );
+	}
+	$template->param( startfrom => $offset + 1 );
+	( $offset + $num <= $count )
+	? ( $template->param( endat => $offset + $num ) )
+	: ( $template->param( endat => $count ) );
+	$template->param( numrecords => $count );
+	my $nextstartfrom = ( $offset + $num < $count ) ? ( $offset + $num ) : (-1);
+	my $prevstartfrom = ( $offset - $num >= 0 ) ? ( $offset - $num ) : (-1);
+	$template->param( nextstartfrom => $nextstartfrom );
+	my $displaynext = 1;
+	my $displayprev = 0;
+	( $nextstartfrom == -1 ) ? ( $displaynext = 0 ) : ( $displaynext = 1 );
+	( $prevstartfrom == -1 ) ? ( $displayprev = 0 ) : ( $displayprev = 1 );
+	$template->param( displaynext => $displaynext );
+	$template->param( displayprev => $displayprev );
+	my @numbers = ();
+	my $term;
+	my $value;
 
-    if ($isbn) {
-        $term  = "isbn";
-        $value = $isbn;
-    }
-    else {
-        $term  = "title";
-        $value = $title;
-    }
-    if ( $count > 10 ) {
-        for ( my $i = 1 ; $i < $count / 10 + 1 ; $i++ ) {
-            if ( $i < 16 ) {
-                my $highlight = 0;
-                ( $offset == ( $i - 1 ) * 10 ) && ( $highlight = 1 );
-                push @numbers,
-                  {
-                    number    => $i,
-                    highlight => $highlight,
-                    term      => $term,
-                    value     => $value,
-                    startfrom => ( $i - 1 ) * 10
-                };
-            }
-        }
-    }
+	if ($isbn) {
+		$term  = "isbn";
+		$value = $isbn;
+	} else {
+		$term  = "title";
+		$value = $title;
+	}
+	if ( $count > 10 ) {
+		for ( my $i = 1 ; $i < $count / 10 + 1 ; $i++ ) {
+			if ( $i < 16 ) {
+				my $highlight = 0;
+				( $offset == ( $i - 1 ) * 10 ) && ( $highlight = 1 );
+				push @numbers,
+				{
+					number    => $i,
+					highlight => $highlight,
+					term      => $term,
+					value     => $value,
+					startfrom => ( $i - 1 ) * 10
+				};
+			}
+		}
+	}
 
-    # fill with books in breeding farm
-    ( $count, @results ) = breedingsearch( $title, $isbn );
-    my @breeding_loop = ();
-    for ( my $i = 0 ; $i <= $#results ; $i++ ) {
-        my %row_data;
-        if ( $i % 2 ) {
-            $toggle = "#ffffcc";
-        }
-        else {
-            $toggle = "white";
-        }
-        $row_data{toggle} = $toggle;
-        $row_data{id}     = $results[$i]->{'id'};
-        $row_data{isbn}   = $results[$i]->{'isbn'};
-        $row_data{file}   = $results[$i]->{'file'};
-        $row_data{title}  = $results[$i]->{'title'};
-        $row_data{author} = $results[$i]->{'author'};
-        $row_data{NOTMARC}= !$marc_p;	
-        push ( @breeding_loop, \%row_data );
-    }
+# fill with books in breeding farm
+	my $count2;
+	( $count2, @results ) = breedingsearch( $title, $isbn );
+	my @breeding_loop = ();
+	for ( my $i = 0 ; $i <= $#results ; $i++ ) {
+		my %row_data;
+		if ( $i % 2 ) {
+			$toggle = "#ffffcc";
+		} else {
+			$toggle = "white";
+		}
+		$row_data{toggle} = $toggle;
+		$row_data{id}     = $results[$i]->{'id'};
+		$row_data{isbn}   = $results[$i]->{'isbn'};
+		$row_data{file}   = $results[$i]->{'file'};
+		$row_data{title}  = $results[$i]->{'title'};
+		$row_data{author} = $results[$i]->{'author'};
+		$row_data{NOTMARC}= !$marc_p;
+		push ( @breeding_loop, \%row_data );
+	}
 
+	$template->param(
+		isbn          => $isbn,
+		title         => $title,
+		showoffset    => $showoffset,
+		total         => $total,
+		count	=> $count,
+		offset        => $offset,
+		loop          => \@loop_data,
+		breeding_loop => \@breeding_loop,
+		numbers       => \@numbers,
+		term          => $term,
+		value         => $value,
+		NOTMARC       => !$marc_p
+	);
 
-    $template->param(
-        isbn          => $isbn,
-        title         => $title,
-        showoffset    => $showoffset,
-        total         => $total,
-        offset        => $offset,
-        loop          => \@loop_data,
-        breeding_loop => \@breeding_loop,
-        numbers       => \@numbers,
-        term          => $term,
-        value         => $value,
-        NOTMARC       => !$marc_p
-    );
-
-    print $input->header(
-        -type   => guesstype( $template->output ),
-        -cookie => $cookie
-      ),
-      $template->output;
+	print $input->header(
+		-type   => guesstype( $template->output ),
+		-cookie => $cookie
+	),
+	$template->output;
 }    # else
