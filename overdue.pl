@@ -31,11 +31,11 @@ print "<FONT SIZE=6><em>Items Overdue as of $todaysdate</em></FONT><br><P>";
 print << "EOF";
 <TABLE  cellspacing=0 cellpadding=5 border=0 align=center>
 <TR VALIGN=TOP>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif" colspan ><b>Due Date</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif" colspan ><b>Patron</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Phone</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Title</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Author</b></td>
+<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan ><b>Due Date</b></td>
+<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan ><b>Patron</b></td>
+<TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Phone</b></td>
+<TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Title</b></td>
+<TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Author</b></td>
 </tr>
 EOF
 

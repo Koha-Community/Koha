@@ -66,7 +66,7 @@ if ($input->param('newflags')) {
     <input type=hidden name=member value=$member>
     <input type=hidden name=newflags value=1>
     <table border=1>
-    <tr><th background=/koha/images/background-mem.gif colspan=3>FLAGS</th></tr>
+    <tr><th background=/images/background-mem.gif colspan=3>FLAGS</th></tr>
     $flagtext
     </table>
 
