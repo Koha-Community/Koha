@@ -58,6 +58,7 @@ if ($dewey <= 0){
 }
 $dewey=~ s/\.$//;
 $data->{'dewey'}=$dewey;
+$data->{'rentalcharge'}=sprintf "%.02f", $data->{'rentalcharge'};
 
 my @results;
 
@@ -77,6 +78,7 @@ foreach my $item (@items){
     $item->{'withdrawn'}=~ s/0/No/;
     $item->{'withdrawn'}=~ s/1/Yes/;
     $item->{'replacementprice'}+=0.00;
+    $item->{'replacementprice'}=sprintf "%.02f", $item->{'replacementprice'};
     my $year=substr($item->{'timestamp0'},0,4);
     my $mon=substr($item->{'timestamp0'},4,2);
     my $day=substr($item->{'timestamp0'},6,2);
