@@ -1,19 +1,31 @@
 #!/usr/bin/perl
 
+# Script for handling import of MARC data into Koha db
+#   and Z39.50 lookups
 
+# Koha library project  www.koha.org
+
+# Licensed under the GPL
+
+#use strict;
+
+# standard or CPAN modules used
+use CGI;
+use DBI;
+
+# Koha modules used
+use C4::Database;
+use C4::Acquisitions;
+use C4::Output;
+
+#------------------
+# Constants
+
+# HTML colors for alternating lines
 my $lc1='#dddddd';
 my $lc2='#ddaaaa';
 
-
-use C4::Database;
-use CGI;
-use DBI;
-#use strict;
-use C4::Acquisitions;
-use C4::Output;
-my $dbh=C4Connect;
-my $userid=$ENV{'REMOTE_USER'};
-%tagtext = (
+my %tagtext = (
     '001' => 'Control number',
     '003' => 'Control number identifier',
     '005' => 'Date and time of latest transaction',
@@ -71,35 +83,109 @@ my $userid=$ENV{'REMOTE_USER'};
     '856' => 'Electronic location and access',
 );
 
+#-------------
+# Initialize
+
+my $userid=$ENV{'REMOTE_USER'};
 
 my $input = new CGI;
 my $dbh=C4Connect;
 
+#-------------
+# Display output
 print $input->header;
 print startpage();
 print startmenu('acquisitions');
+
+#-------------
+# Process input parameters
 my $file=$input->param('file');
 
 if ($input->param('z3950queue')) {
     my $query=$input->param('query');
-    my $type=$input->param('type');
+ 
     my @serverlist;
-    foreach ($input->param) {
-	if (/S-(.*)/) {
-	    my $server=$1;
-	    if ($server eq 'MAN') {
-		push @serverlist, "MAN/".$input->param('manualz3950server')."//";
+
+    my $isbngood=1;
+    if ($input->param('type') eq 'isbn') {
+	$isbngood=CheckIsbn($query);
+    }
+    if ($isbngood) {
+ 	foreach ($input->param) {
+          if (/S-(.*)/) {
+            my $server=$1;
+            if ($server eq 'MAN') {
+                push @serverlist, "MAN/".$input->param('manualz3950server')."//"
+;
+            } else {
+                push @serverlist, $server;
+            }
+          }
+        }
+
+	Addz3950queue($input->param('query'), $input->param('type'), 
+		$input->param('rand'), @serverlist);
+    } else {
+	print "<font color=red size=+1>$query is not a valid ISBN
+	Number</font><p>\n";
+    }
+}
+
+sub Addz3950queue {
+    use strict;
+    my (
+	$query,		# value to look up
+	$type,		# type of value ("isbn", "lccn", etc).
+	$requestid,
+	@z3950list,	# list of z3950 servers to query
+    )=@_;
+
+    my (
+	@serverlist,
+	$server,
+	$failed,
+    );
+
+	# list of servers: entry can be a fully qualified URL-type entry
+        #   or simply just a server ID number.
+
+        my $sth=$dbh->prepare("select host,port,db,userid,password 
+	  from z3950servers 
+	  where id=? ");
+        foreach $server (@z3950list) {
+	    if ($server =~ /:/ ) {
+		push @serverlist, $server;
 	    } else {
-		my $sth=$dbh->prepare("select host,port,db,userid,password from z3950servers where id=$server");
-		$sth->execute;
+		$sth->execute($server);
 		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
 		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
 	    }
+        }
+
+	my $serverlist='';
+	foreach (@serverlist) {
+	    $serverlist.="$_ ";
 	}
-    }
-    my $isbnfailed=0;
-    if ($type eq 'isbn') {
-	my $q=$query;
+	chop $serverlist;
+
+	# Don't allow reinsertion of the same request number.
+	my $sth=$dbh->prepare("select identifier from z3950queue 
+		where identifier=?");
+	$sth->execute($requestid);
+	unless ($sth->rows) {
+	    $sth=$dbh->prepare("insert into z3950queue 
+		(term,type,servers, identifier) 
+		values (?, ?, ?, ?)");
+	    $sth->execute($query, $type, $serverlist, $requestid);
+	}
+} # sub
+
+#--------------------------------------
+sub CheckIsbn {
+	my ($q)=@_ ;
+
+	my $isbngood = 0;
+
 	$q=~s/[^X\d]//g;
 	$q=~s/X.//g;
 	if (length($q)==10) {
@@ -114,35 +200,19 @@ if ($input->param('z3950queue')) {
 	    $c=int(11-($c/11-int($c/11))*11+.1);
 	    ($c==10) && ($c='X');
 	    if ($c eq $checksum) {
+		$isbngood=1;
 	    } else {
-		print "<font color=red size=+1>$query is not a valid ISBN
-		Number</font><p>\n";
-		$isbnfailed=1;
+		$isbngood=0;
 	    }
 	} else {
-	    print "<font color=red size=+1>$query is not a valid ISBN
-	    Number</font><p>\n";
-	    $isbnfailed=1;
+	    $isbngood=0;
 	}
-    }
-    unless ($isbnfailed) {
-	my $q_term=$dbh->quote($query);
-	my $serverlist='';
-	foreach (@serverlist) {
-	    $serverlist.="$_ ";
-	}
-	chop $serverlist;
-	my $q_serverlist=$dbh->quote($serverlist);
-	my $rand=$input->param('rand');
-	my $sth=$dbh->prepare("select identifier from z3950queue where
-	identifier=$rand");
-	$sth->execute;
-	unless ($sth->rows) {
-	    $sth=$dbh->prepare("insert into z3950queue (term,type,servers, identifier) values ($q_term, '$type', $q_serverlist, '$rand')");
-	    $sth->execute;
-	}
-    }
-}
+
+	return $isbngood;
+
+} # sub CheckIsbn
+
+
 
 if (my $data=$input->param('uploadmarc')) {
     my $name=$input->param('name');
@@ -171,7 +241,7 @@ if ($input->param('insertnewrecord')) {
     my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
     my $q_issn=$dbh->quote((($issn) || ('NIL')));
     my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-    $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
+    my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
     $sth->execute;
     my $sth=$dbh->prepare("select biblionumber,biblioitemnumber from biblioitems where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
     $sth->execute;
@@ -278,6 +348,8 @@ EOF
 EOF
     }
     my $title=$input->param('title');
+
+    # Get next barcode, or pick random one if none exist yet
     $sth=$dbh->prepare("select max(barcode) from items");
     $sth->execute;
     my ($barcode) = $sth->fetchrow;
@@ -285,6 +357,10 @@ EOF
     if ($barcode==1) {
 	$barcode=int(rand()*1000000);
     }
+
+    my $branchselect=GetKeyTableSelectOptions(
+		$dbh, 'branches', 'branchcode', 'branchname', 0);
+
     print << "EOF";
     <table border=0 cellpadding=10 cellspacing=0>
     <tr><th bgcolor=black><font color=white>
@@ -298,7 +374,10 @@ Add a New Item for $title
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <input type=hidden name=file value=$file>
 <table border=0>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode> Home Branch: <select name=homebranch><option value='STWE'>Stewart Elementary<option value='MEZ'>Meziadin Elementary</select></td></tr>
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode>
+
+Home Branch: <select name=homebranch> $branchselect </select></td></tr>
+
 </tr><td>Replacement Price:</td><td><input name=replacementprice size=10></td></tr>
 <tr><td>Notes</td><td><textarea name=notes rows=4 cols=40
 wrap=physical></textarea></td></tr>
@@ -622,18 +701,19 @@ RECORD:
 	    $origlccn=$input->hidden(-name=>'origlccn', -default=>$lccn);
 	    $origcontrolnumber=$input->hidden(-name=>'origcontrolnumber', -default=>$controlnumber);
 
-	    my $itemtypeselect='';
-	    $sth=$dbh->prepare("select itemtype,description from itemtypes");
-	    $sth->execute;
-	    while (my ($itemtype, $description) = $sth->fetchrow) {
-		$itemtypeselect.="<option value=$itemtype>$itemtype - $description\n";
-	    }
+	    #print "<PRE>getting itemtypeselect</PRE>\n";
+	    $itemtypeselect=&GetKeyTableSelectOptions(
+		$dbh, 'itemtypes', 'itemtype', 'description', 1);
+	    #print "<PRE>it=$itemtypeselect</PRE>\n";
+
 	    ($qissn) || ($qissn='NIL');
 	    ($qlccn) || ($qlccn='NIL');
 	    ($qisbn) || ($qisbn='NIL');
 	    ($qcontrolnumber) || ($qcontrolnumber='NIL');
 	    $controlnumber=~s/\s+//g;
+
 	    unless (($isbn eq $qisbn) || ($issn eq $qissn) || ($lccn eq $qlccn) || ($controlnumber eq $qcontrolnumber)) {
+	        #print "<PRE>Skip record $isbn $issn $lccn </PRE>\n";
 		next RECORD;
 	    }
 
@@ -944,7 +1024,7 @@ SWITCH:
 
 
 sub z3950 {
-    $sth=$dbh->prepare("select id,term,type,done,numrecords,length(results),startdate,enddate,servers from z3950queue order by id desc limit 20");
+    my $sth=$dbh->prepare("select id,term,type,done,numrecords,length(results),startdate,enddate,servers from z3950queue order by id desc limit 20");
     $sth->execute;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     print "<table border=0><tr><td valign=top>\n";
@@ -1174,3 +1254,42 @@ sub parsemarcdata {
     }
     return @records;
 }
+
+#---------------
+# Create an HTML option list for a <SELECT> form tag by using
+#    values from a DB file
+sub GetKeyTableSelectOptions {
+	# inputs
+	my (
+		$dbh,		# DBI handle
+		$tablename,	# name of table containing list of choices
+		$keyfieldname,	# column name of code to use in option list
+		$descfieldname,	# column name of descriptive field
+		$showkey,	# flag to show key in description
+	)=@_;
+	my $selectclause;	# return value
+
+	my (
+		$sth, $query, 
+		$key, $desc, $orderfieldname,
+	);
+	my $debug=0;
+
+	if ( $showkey ) {
+		$orderfieldname=$keyfieldname;
+	} else {
+		$orderfieldname=$descfieldname;
+	}
+	$query= "select $keyfieldname,$descfieldname
+		from $tablename
+		order by $orderfieldname ";
+	print "<PRE>Query=$query </PRE>\n" if $debug; 
+	$sth=$dbh->prepare($query);
+	$sth->execute;
+	while ( ($key, $desc) = $sth->fetchrow) {
+	    if ($showkey) { $desc="$key - $desc"; }
+	    $selectclause.="<option value='$key'>$desc\n";
+	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
+	}
+	return $selectclause;
+} # sub GetKeyTableSelectOptions
