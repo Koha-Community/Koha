@@ -19,10 +19,10 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 
 <TMPL_LOOP name="loop">
 	<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
-	<td><a href="additem.pl?biblionumber=<TMPL_VAR name="biblionumber">"><TMPL_VAR name="title"></a></td>
+	<td><TMPL_VAR name="title"></a>
 	<td><TMPL_VAR name="author"></td>
 	<td><TMPL_VAR name="copyrightdate"></td>
-	<td><a href="additem.pl?biblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
+	<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
 	</tr>
 </TMPL_LOOP>
 </table>

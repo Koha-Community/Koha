@@ -1,5 +1,5 @@
 <TMPL_INCLUDE NAME="acquisitions-top.inc">
-<form method="post">
+<form method="post" action="additem.pl">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="/images/background-mem.gif">
 	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
@@ -19,7 +19,7 @@
 		<td width=9% align="center">&nbsp;</td>
 		<td width=9% align="center">&nbsp;</td>
 		<td width=10% align="center">
-			<input type="hidden" name="op" value="additem">
+			<input type="hidden" name="op" value="<TMPL_VAR name="op">">
 			<input type="hidden" name="bibid" value="<TMPL_VAR name="bibid">">
 			</td>
 	</tr>
@@ -37,19 +37,20 @@
 </table>
 <table border=1 cellspacing=0 cellpadding=0 width=100%>
 	<tr  background="/images/background-mem.gif">
-		<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP>
+		<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP><th colspan=2>&nbsp;</th>
 	</tr>
 		<TMPL_LOOP name="item_loop">
 		<tr>
-				<TMPL_VAR name="item_value">
+			<TMPL_VAR name="item_value">
+			<td><a href="additem.pl?op=edititem&bibid=<TMPL_VAR name="bibid">&itemnum=<TMPL_VAR name="itemnum">">Edit</a></td>
 		</tr>
-	</TMPL_LOOP>
+		</TMPL_LOOP>
 </table>
 </DIV>
 <br /><br />
 <table border=1 cellspacing=0 cellpadding=5 width=100%>
 	<tr  background="/images/background-mem.gif">
-		<th>New items</th>
+		<th>New Item</th>
 	</tr>
 </table><table width=100%  cellspacing=0 cellpadding=5 border=0>
 	<TMPL_LOOP name="item">
@@ -65,6 +66,7 @@
 	</tr>
 	</tmpl_loop>
 </table>
+<input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
 <input type="submit" value=">>> Enter item">
 </center>
 </form>

@@ -30,9 +30,9 @@
     </TMPL_IF>
     <TMPL_LOOP NAME=numbers>
 	<TMPL_IF NAME=highlight>
-	    <img src=/images/numbers/<TMPL_VAR NAME=number>-highlight.gif> 
+	    <img src=/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
 	<TMPL_ELSE>
-	    <a href=search.pl?startfrom=<TMPL_VAR NAME=startfrom>&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>type=<TMPL_IF NAME=opac>opac<TMPL_ELSE>intra</TMPL_IF>><img src=/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
+	    <a href=search.pl?startfrom=<TMPL_VAR NAME=startfrom>&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>type=<TMPL_IF NAME=opac>opac<TMPL_ELSE>intra</TMPL_IF>><img src=/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a>
 	</TMPL_IF>
     </TMPL_LOOP>
     <TMPL_IF NAME=displaynext>
@@ -64,7 +64,7 @@
 
     <TMPL_LOOP NAME=SEARCH_RESULTS>
       <tr>
-      <td><a href=/cgi-bin/koha/detail.pl?type=<TMPL_IF NAME="opac">opac<TMPL_ELSE>intra</TMPL_IF>&bib=<TMPL_VAR NAME=biblionumber ESCAPE=HTML>><TMPL_VAR NAME=title></a></td>
+      <td><a href=/cgi-bin/koha/<TMPL_VAR name="script">?type=<TMPL_IF NAME="opac">opac<TMPL_ELSE>intra</TMPL_IF>&bib=<TMPL_VAR NAME=biblionumber ESCAPE=HTML>><TMPL_VAR NAME=title></a></td>
       <td><a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME=authorhtmlescaped>&type=<TMPL_IF NAME=opac>opac<TMPL_ELSE>intra</TMPL_IF>><TMPL_VAR NAME=author></a></td>
       <td align=center> <TMPL_VAR NAME=copyrightdate> </td>
       <td align=center> <TMPL_VAR NAME=itemcount> </td>

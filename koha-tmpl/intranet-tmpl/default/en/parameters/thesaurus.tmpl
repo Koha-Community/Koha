@@ -44,15 +44,21 @@
 	</tr>
 	<tr>
 		<td>Authority lib</td>
-		<td><input type=text name="stdlib" value='<TMPL_VAR name="stdlib">' maxlength="80" size="80"></td>
+		<td><TMPL_VAR name="father"><input type=text name="stdlib" value='<TMPL_VAR name="stdlib">' maxlength="80" size="80"></td>
 	</tr>
 	<tr>
 		<td>Other lib</td>
-		<td><input type=text name="freelib" value='<TMPL_VAR name="freelib">' maxlength="80" size="80"></td>
+		<td><TMPL_VAR name="father"><input type=text name="freelib" value='<TMPL_VAR name="freelib">' maxlength="80" size="80"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
+			<input type="hidden" name="father" value="<TMPL_VAR name="father">">
+			<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
+			<input type="hidden" name="toponly" value="<TMPL_VAR name="toponly">">
+			<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
+			<input type="hidden" name="searchstring" value="<TMPL_VAR name="searchstring">">
+			<input type="hidden" name="offset" value="<TMPL_VAR name="offset">">
 			<INPUT type="submit" value='OK'></td>
 	</tr>
 	</table>
@@ -85,7 +91,7 @@
 	<b>Dig</b> : see datas depending from this one<br />
 	<b>Related</b> : see other forms of this authority entry</p>
 </ul>
-<form action=/cgi-bin/koha/admin/thesaurus.pl method=post>
+<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 	<TMPL_VAR name="tab_list">
 	<input type="checkbox" name="toponly" value="1" <TMPL_IF name="toponly">checked</TMPL_IF>>Top hierarchy only
 	<input type="text" name="searchstring" value="<TMPL_VAR name="searchstring">">
@@ -126,6 +132,8 @@
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type="hidden" name="op" value="add_form">
 <input type="hidden" name="category" value="<TMPL_VAR name="category">">
+<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
+<input type="hidden" name="father" value="<TMPL_VAR name="father">">
 <br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
 </form>
 </TMPL_IF>
