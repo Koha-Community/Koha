@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<h2>Reserve page for <u><!-- TMPL_VAR NAME="title" --></u> (<!-- TMPL_VAR NAME="author" -->, N°<!-- TMPL_VAR name="biblionumber" -->)</h2>
+<!-- TMPL_IF NAME="message" -->
+	<h2>Impossible to set reserve because </h2>
+	<ul>
+		<!-- TMPL_IF NAME="too_much_oweing" --><li>you owe <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_many_reserves" --><li>you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already_reserved" --><li>you already have a reserve placed on this item.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_items_selected" --><li>you must select at least on item type!</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_branch_selected" --><li>you must select a branch for pickup!</li><!-- /TMPL_IF -->
+	</ul>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p> There are <b><!-- TMPL_VAR NAME="reservecount" --></b> reserves already on this item. </p>
+	<p>Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.</p>
+
+	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+		<input type="hidden" name="item_types_selected" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
+		<TABLE cellspacing=0>
+			<tr>
+				<th>Request</th>
+				<th>Item Type</th>
+				<th>Copies</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->" checked></td>
+					<!-- TMPL_ELSE -->
+						<td>Cannot be Reserved</td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>Please select the branch from which you want to collect the item: <!-- TMPL_VAR NAME="CGIbranch" --></p>
+		<p>Reserve on this date:
+			<select name=required-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+			<select name=required-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+			<select name=required-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+		</p>
+		<p>End reserve on this date:
+			<select name=expires-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+			<select name=expires-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+			<select name=expires-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+		</p>
+		<INPUT class="button" type="submit" value="Submit">
+	</FORM>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+	<p>Please confirm that you wish to request an item of these types:<p>
+
+	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+		<input type="hidden" name="place_reserve" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME='required_date' -->">
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME='expires_date' -->">
+		<ul>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+					<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
+					<li><!-- TMPL_VAR NAME="description" --></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+		Which is to be picked up from
+		<ul>
+			<li>
+				<!-- TMPL_VAR NAME="branchname" -->
+			</li>
+		</ul>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<p>Note there will be a reserve charge of <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<INPUT class="button" type="submit" value="Place Reserve">
+	</FORM>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
