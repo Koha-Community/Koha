@@ -398,7 +398,8 @@ sub CatSearch  {
 	 }   
 	 $query=$query.")";
          if ($search->{'title'} ne ''){ 
-	   $query=$query. " and title like '%$search->{'title'}%'";
+	   $query=$query. " and (title like '%$search->{'title'}%' 
+	   or seriestitle like '%$search->{'title'}%')";
 	 }
 	 if ($search->{'class'} ne ''){
       	   my @temp=split(/\|/,$search->{'class'});
