@@ -32,7 +32,6 @@ use MARC::File::USMARC;
 
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
-#	warn "$tagfield / $insubfield // ";
 	my $result;
 	my $indicator;
 	foreach my $field ($record->field($tagfield)) {
@@ -121,6 +120,7 @@ my @big_array;
 my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
 my @itemnums; # array to store itemnums
 foreach my $field (@fields) {
+	next if ($field->tag()<10);
 	my @subf=$field->subfields;
 	my %this_row;
 # loop through each subfield

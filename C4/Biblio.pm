@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.44  2003/04/28 13:07:14  tipaul
+# Those fixes solves the "internal server error" with MARC::Record 1.12.
+# It was due to an illegal contruction in Koha : we tried to retrive subfields from <10 tags.
+# That's not possible. MARC::Record accepted this in 0.93 version, but it was fixed after.
+# Now, the construct/retrieving is OK !
+#
 # Revision 1.43  2003/04/10 13:56:02  tipaul
 # Fix some bugs :
 # * worked in 1.9.0, but not in 1.9.1 :
@@ -631,9 +637,9 @@ sub MARCgetbiblio {
 		if ($row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag) {
 			$previndicator.="  ";
 			if ($prevtag <10) {
-   				$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+ 			$record->add_fields((sprintf "%03s",$prevtag),$prevvalue) unless $prevtag eq "XXX"; # ignore the 1st loop
 			} else {
-				$record->add_fields($field);
+				$record->add_fields($field) unless $prevtag eq "XXX";
 			}
 			undef $field;
 			$prevtagorder=$row->{tagorder};
@@ -749,8 +755,6 @@ sub MARCmoditem {
 	if ($oldrecord eq $record) {
 		return;
 	}
-#	warn "MARCmoditem : ".$record->as_formatted;
-#	warn "OLD : ".$oldrecord->as_formatted;
 
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();

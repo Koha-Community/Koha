@@ -88,23 +88,27 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 	my @fields = $record->fields();
 	my @loop_data =();
 	foreach my $field (@fields) {
-		my @subf=$field->subfields;
-#		my $previous_tag = '';
-		my @subfields_data;
-# loop through each subfield
-		for my $i (0..$#subf) {
-#			$previous_tag = $field->tag();
-			$subf[$i][0] = "@" unless $subf[$i][0];
-			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
+			my @subfields_data;
+		# if tag <10, there's no subfield, use the "@" trick
+		if ($field->tag()<10) {
+  			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
 			my %subfield_data;
-			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-			if ($field->tag()<10) {
-				$subfield_data{marc_value}=$field->data();
-			} else {
-				$subfield_data{marc_value}=$subf[$i][1];
-			}
-			$subfield_data{marc_tag}=$subf[$i][0];
+			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
+			$subfield_data{marc_value}=$field->data();
+			$subfield_data{marc_tag}='@';
 			push(@subfields_data, \%subfield_data);
+		} else {
+			my @subf=$field->subfields;
+	# loop through each subfield
+			for my $i (0..$#subf) {
+				$subf[$i][0] = "@" unless $subf[$i][0];
+				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
+				my %subfield_data;
+				$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
+					$subfield_data{marc_value}=$subf[$i][1];
+				$subfield_data{marc_tag}=$subf[$i][0];
+				push(@subfields_data, \%subfield_data);
+			}
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
@@ -124,6 +128,7 @@ my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 foreach my $field (@fields) {
+	next if ($field->tag()<10);
 	my @subf=$field->subfields;
 	my %this_row;
 # loop through each subfield
@@ -140,7 +145,6 @@ foreach my $field (@fields) {
 foreach my $subfield_code  (keys(%witness)) {
 	for (my $i=0;$i<=$#big_array;$i++) {
 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
-#		warn "filled : ".$big_array[$i]{$subfield_code};
 	}
 }
 # now, construct template !
@@ -151,7 +155,6 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	foreach my $subfield_code (keys(%witness)) {
 		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
 	}
-#	warn $items_data;
 	my %row_data;
 	$row_data{item_value} = $items_data;
 	push(@item_value_loop,\%row_data);
