@@ -5,7 +5,7 @@
 
 <div id="main">
 <!-- TMPL_IF Name="found" -->
-		<h3 class="alert">Reserve Found<!-- TMPL_IF Name="waiting" --> (item is already marked <em>waiting</em>) <!-- /TMPL_IF --></h3>
+		<h3 class="alert">Reserve Found<!-- TMPL_IF Name="waiting" --> (item is already <em>consigned</em>) <!-- /TMPL_IF --></h3>
 		<!-- TMPL_IF Name="waiting" -->
 		<div class="items">
 		<table>
@@ -17,6 +17,7 @@
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
 			<li><!-- TMPL_VAR Name="borphone" --></li>
+			<!-- Display for NPL // <!-- TMPL_IF NAME="boremail" --><li><a href="/intranet-intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->" onclick="window.open('/intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->','notify','width=650,height=450,location=no,menubar=no,toolbar=no,scrollbars=yes'); return false;"><!-- TMPL_VAR Name="boremail" --></a></li><!-- /TMPL_IF --> // Display for NPL -->
 			</ul></td></tr>
 	<tr><th>Transfer to:</th><td><!-- TMPL_VAR Name="branchname" --></td></tr>
 		</table></div><form method="post" action="returns.pl" name="mainform" id="mainform">
@@ -31,7 +32,7 @@
 			
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="diffbranch" -->
-			<h3>Item marked Waiting:</h3><br>
+			<h3>Item Consigned:</h3><br>
     	<div class="item">
 		<table>
 		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
@@ -61,6 +62,7 @@
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
 			<li><!-- TMPL_VAR Name="borphone" --></li>
+			<!-- Display for NPL // <!-- TMPL_IF NAME="boremail" --><li><a href="/intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->" onclick="window.open('/intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->','notify','width=650,height=450,location=no,menubar=no,toolbar=no,scrollbars=yes'); return false;"><!-- TMPL_VAR Name="boremail" --></a></li><!-- /TMPL_IF --> // Display for NPL -->
 			</ul></td></tr>
 			<tr><th>Transfer to: </th><td><!-- TMPL_VAR Name="branchname" --></td></tr></table>
 			</div> <form method="post" action="returns.pl" name="mainform" id="mainform">
