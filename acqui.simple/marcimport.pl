@@ -252,7 +252,7 @@ RECORD:
 
 	    my $defaultitemtype;
 
-	    if (defined $deweyinput) {
+	    if ($bib->{dewey}) {
 		$defaultitemtype = 'NF';
 	    } else {
 		$defaultitemtype = 'F';
@@ -1118,6 +1118,10 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.29  2002/06/27 18:35:01  tonnesen
+# $deweyinput was always defined (it's an HTML input field).  Check against
+# $bib->{dewey} instead.
+#
 # Revision 1.6.2.28  2002/06/27 17:41:26  tonnesen
 # Applying patch from Matt Kraai to pick F or NF based on presense of a dewey
 # number when adding a book via marcimport.pl
