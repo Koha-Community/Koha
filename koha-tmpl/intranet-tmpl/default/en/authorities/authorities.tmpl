@@ -1,0 +1,171 @@
+<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+
+<div class="tabbed">
+	<form method="post" name="f">
+	<h1 class="authority">Authority number <!-- TMPL_VAR name="authid" --></h1>
+	<p>
+		<input type="hidden" name="op" value="add">
+		<input type="hidden" name="addfield_field">
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+		<!-- TMPL_IF name="authid" -->
+			<input type="button" value="Save" onClick='Check(this.form)' accesskey="w" class="button authority">
+		<!-- TMPL_ELSE -->
+			<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w" class="button authority">
+		<!-- /TMPL_IF -->
+<!--		<a href="javascript:PopupZ3950()" class="button authority">z3950 search</a> -->
+	</p>
+</div>
+
+<!-- TMPL_LOOP name="0XX" -->
+	<!-- TMPL_IF name="tag" -->
+		<p class="MARCtag">
+		<!-- TMPL_VAR name="tag" -->
+		<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR name="tag" -->">
+		<input type="text" name="indicator" size=3 maxlength=2 value="<!-- TMPL_VAR name="indicator" -->"> - <tmpl_var name="tag_lib">
+		<!-- TMPL_IF name="repeatable" -->
+			<a href="javascript:AddField(<!-- TMPL_VAR name="tag" -->)">+</a>
+		<!-- /TMPL_IF -->
+		</p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP name="subfield_loop" -->
+		<p>
+			<label class="labelsubfield">
+				<b><!-- TMPL_VAR name="subfield" --></b>
+				<!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
+				<!-- TMPL_VAR name="marc_lib" -->
+				<!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
+			</label>
+			<!-- TMPL_VAR name="marc_value" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
+			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+		</p>
+	<!-- /tmpl_loop -->
+<!-- /tmpl_loop -->
+		
+		<div name="hidden" id="hidden" class="tab">
+		<!-- TMPL_LOOP name="hidden_loop" -->
+				<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
+				<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
+				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
+				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
+				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+		<!-- /TMPL_LOOP -->
+		</div>
+		<!-- TMPL_IF name="oldbiblionumtagfield" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblionumtagfield" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblionumtagsubfield" -->">
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblionumber" -->">
+			<input type="hidden" name="mandatory" value="0">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="oldbiblioitemnumtagfield" -->">
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="oldbiblioitemnumtagsubfield" -->">
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="oldbiblioitemnumber" -->">
+			<input type="hidden" name="mandatory" value="0">
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR name="tag_mandatory" -->">
+		<!-- /TMPL_IF -->
+	</form>
+<script LANGUAGE="JavaScript">
+function _(s) { return s } // dummy function for gettext
+function active(numlayer)
+{
+	for (i=0; i < 10 ; i++ ) {
+		ong = i+"XX";
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+function Check(f) {
+	// Scan for nonempty fields
+	var field_is_nonempty_p = new Array();
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    field_is_nonempty_p[f.tag[i].value] = 0;
+	}
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    if (f.field_value[i].value.length != 0) {
+		field_is_nonempty_p[f.tag[i].value] += 1;
+	    }
+	}
+
+	// Scan for missing mandatory subfields
+	var total_missing_mandatory_subfields = 0;
+	for (i=0 ; i<f.field_value.length-2 ; i++) {
+		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+		    // We should not flag an error unless the tag is also
+		    // mandatory, or if something else in the tag is entered
+
+		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
+			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+			total_missing_mandatory_subfields++;
+		    }
+		} else {
+			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+		}
+	}
+
+	// Scan for missing mandatory tags
+	var total_missing_mandatory_tags = 0;
+	var seen_mandatory_tag_p = new Array();
+	for (i=0 ; i<f.field_value.length ; i++) {
+	    var j = f.tag[i].value;
+	    if (!field_is_nonempty_p[j] && f.tag_mandatory[i].value == 1) {
+		if (seen_mandatory_tag_p[j] != 1) {
+		    seen_mandatory_tag_p[j] = 1;
+		    total_missing_mandatory_tags++;
+		}
+		document.getElementById("error"+i).style.backgroundColor="#ffff00";
+	    }
+	}
+
+	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
+	var alertString2;
+	if (total_errors!=0) {
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
+		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+		alert(alertString2);
+	} else {
+		document.forms[0].submit();
+	}
+}
+function Dopop(link,i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
+}
+
+function PopupZ3950() {
+    var strQuery="";
+	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
+		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&isbn="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.title" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&title="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.author" &&document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&author="+document.forms[0].field_value[i].value;
+		}
+		if (document.forms[0].kohafield[i].value == "biblioitems.issn" && document.forms[0].field_value[i].value.length>0) {
+		    strQuery += "&issn="+document.forms[0].field_value[i].value;
+		}
+	}
+	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR name="bibid" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function AddField(field) {
+	document.forms[0].op.value = "addfield";
+	document.forms[0].addfield_field.value=field;
+	document.f.submit();
+}
+</script>
+</body>
+</html>
