@@ -36,7 +36,7 @@ if ($op eq "export") {
 					query => $query,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {parameters => 1},
+					flagsrequired => {parameters => 1, management => 1, tools => 1},
 					debug => 1,
 					});
 	output_html_with_http_headers $query, $cookie, $template->output;

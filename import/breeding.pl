@@ -73,7 +73,7 @@ my ($template, $loggedinuser, $cookie)
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {parameters => 1},
+					flagsrequired => {parameters => 1, management => 1, tools => 1},
 					debug => 1,
 					});
 
@@ -103,6 +103,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.3  2005/03/23 09:57:47  doxulting
+# Adding a parameter to allow acces to people with management/tools flags
+#
 # Revision 1.2  2003/10/06 09:10:38  slef
 # Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
 #
