@@ -3,8 +3,11 @@
 #simple script to provide basic redirection
 #used by members section
 
+# Allows a single script to handle the addition of either an adult
+# or a corporate member
 
-# Copyright 2000-2002 Katipo Communications
+
+# Copyright 2000-2003 Katipo Communications
 #
 # This file is part of Koha.
 #
@@ -35,3 +38,9 @@ if ($choice eq 'adult'){
 if ($choice eq 'organisation'){
   print $input->redirect("/cgi-bin/koha/imemberentry.pl?type=Add");
 }
+
+print <<EOF;
+Content-Type: text/plain
+
+Internal error: Invalid chooseform parameter "$choice"
+EOF
