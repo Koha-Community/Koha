@@ -42,12 +42,12 @@
 			<tr>
 			<tr>
 				<td><label for="renewalsallowed">Renewals</label></td>
-				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /></td>
+				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /><!-- Display for NPL <input type="hidden" name="rentalcharge" value="0" /> /Display for NPL --></td>
 			</tr>
-<!-- Hide from NPL 			<tr>
+<!-- Hide from NPL--> 			<tr>
 				<td><label for="rentalcharge">Rental charge</label></td>
 				<td><input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" /></td>
-			</tr> /Hide from NPL -->
+			</tr><!--  /Hide from NPL -->
 		</table><input type="button" value="OK" onclick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="history.back();" />
 	</form>
 <!-- /TMPL_IF -->
@@ -64,7 +64,7 @@
 	<tr><th>Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
 	<tr><th>Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
 	<tr><th>Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
-<!-- Hide from NPL <tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr> /Hide from NPL --></table></div>
+<!-- Hide from NPL --><tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr><!-- /Hide from NPL --></table></div>
 		<div class="tabitem"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_IF name="total" -->
 		</form><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="OK" class="submit" /></form>
@@ -112,4 +112,61 @@
 <!-- /TMPL_IF -->
 
 </div>
+<script language="javascript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
+
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+
+function isNum(v,maybenull) {
+var n = new Number(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+
+function isDate(f) {
+	var t = Date.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "\n- " + _("Itemtype missing");
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "\n- " + _("Description missing");
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "\n- " + _("Rental charge is not a number");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
