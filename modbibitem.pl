@@ -33,7 +33,7 @@ use C4::Output;
 use C4::Koha;
 use CGI;
 use HTML::Template;
-
+use C4::Date;
 use C4::Biblio;
 use C4::Catalogue;
 use C4::Auth;
@@ -141,7 +141,7 @@ my @itemloop;
 my $count=@items;
 for (my $i=0;$i<$count;$i++){
 	my %line;
-  	$items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
+  	$items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'});
 	$line{barcode}=$items[$i]->{'barcode'};
 	$line{itemnumber}=$items[$i]->{'itemnumber'};
 	$line{biblionumber}=$data->{'biblionumber'};

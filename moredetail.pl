@@ -30,6 +30,7 @@ use C4::Catalogue;
 use C4::Output; # contains gettemplate
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::Date;
 
 my $query=new CGI;
 
@@ -87,8 +88,8 @@ foreach my $item (@items){
     my $mon=substr($item->{'timestamp0'},4,2);
     my $day=substr($item->{'timestamp0'},6,2);
     $item->{'timestamp0'}="$day/$mon/$year";
-    $item->{'dateaccessioned'} = slashifyDate($item->{'dateaccessioned'});
-    $item->{'datelastseen'} = slashifyDate($item->{'datelastseen'});
+    $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
+    $item->{'datelastseen'} = format_date($item->{'datelastseen'});
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
