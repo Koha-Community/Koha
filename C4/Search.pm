@@ -992,6 +992,12 @@ sub CatSearch  {
       }
   }
   if ($type eq 'subject'){
+    # FIXME - Subject search is badly broken. The query defined by
+    # $query returns a single item (the subject), but later code
+    # expects a ref-to-hash with all sorts of stuff in it.
+    # Also, the count of items (biblios?) with the given subject is
+    # wrong.
+
     my @key=split(' ',$search->{'subject'});
     my $count=@key;
     my $i=1;
@@ -1114,7 +1120,8 @@ while (my $data=$sth->fetchrow_hashref){
     $subclass=$bibitemdata->{'subclass'};
     $publishercode=$bibitemdata->{'publishercode'};
   }
-  print STDERR "$dewey $subclass $publishercode\n";
+#  print STDERR "$dewey $subclass $publishercode\n";
+  # FIXME - The Dewey code is a string, not a number.
   $dewey=~s/\.*0*$//;
   ($dewey == 0) && ($dewey='');
   ($dewey) && ($dewey.=" $subclass");
