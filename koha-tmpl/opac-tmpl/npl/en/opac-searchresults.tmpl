@@ -49,8 +49,8 @@
 			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
 			<td><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->"></td>
 			 <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
-				<td>
-<a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a> <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+				<td><!-- TMPL_IF name="BiblioDefaultViewmarc" --><a href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --><!-- /TMPL_IF -->				
+			 <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
@@ -59,16 +59,8 @@
 						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF --></td>
 					<td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
-				<td>
-					<!-- TMPL_VAR name="totitem" -->
-				</td>
-				<td><!-- TMPL_VAR name="locationstring" -->
-				<!-- 	<!-- TMPL_LOOP name="CN" -->
-						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
-					<!-- /TMPL_LOOP --> -->
-				</td>
-			</tr>
-		<!-- /TMPL_LOOP -->
+				<td><!-- TMPL_VAR name="totitem" -->
+				</td><td><!-- TMPL_LOOP name="CN" --><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" -->	<!-- TMPL_IF name="date_due" -->	<i>(On Loan until <!-- TMPL_VAR name="date_due" -->)</i><!-- TMPL_ELSE --><!-- TMPL_IF name="itemcallnumber" --> (<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td></tr><!-- /TMPL_LOOP -->
 	</table>
 </form>
 
@@ -85,22 +77,22 @@
 				<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;</a>
 				<!-- /TMPL_IF --></div>
 
-<!-- Display for NPL -->
+<!-- Display for NPL 
 	<div class="note">
 Not finding what you're looking for?<br />  Make a <a href="http://www.athenscounty.lib.oh.us/ipage.html">
 purchase suggestion</a>
 </div>
-<!-- /Display for NPL -->
+ /Display for NPL -->
 </div> 
 
 
 
 <!-- TMPL_ELSE -->
 Sorry, there were no results.
-<!-- Display for NPL -->	<div class="note">
+<!-- Display for NPL 	<div class="note">
 Not finding what you're looking for?<br />  Make a <a href="http://www.athenscounty.lib.oh.us/ipage.html">
 purchase suggestion</a>
-</div><!-- /Display for NPL -->
+</div> /Display for NPL -->
 <!-- /TMPL_IF -->
 </div>
 </body>
