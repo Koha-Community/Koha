@@ -61,7 +61,24 @@ sub authoritysearch {
 	#		where m1.authid=m2.authid and
 	#		(m1.subfieldvalue like "Des%" and m2.subfieldvalue like "27%")
 
+	# the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
+	# the authtypecode. Then, search on $a of this tag_to_report
+	for (my $i=0;$i<$#{$tags};$i++) {
+		if (@$tags[$i] eq "mainentry") {
+			my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
+			$sth->execute($authtypecode);
+			my ($tag_to_report) = $sth->fetchrow;
+			@$tags[$i] = $tag_to_report."a";
+		}
+	}
+
 	# "Normal" statements
+	# quote marc fields/subfields
+	for (my $i=0;$i<$#{$tags};$i++) {
+		if (@$tags[$i]) {
+			@$tags[$i] = $dbh->quote(@$tags[$i]);
+		}
+	}
 	my @normal_tags = ();
 	my @normal_and_or = ();
 	my @normal_operator = ();
@@ -841,6 +858,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.2  2005/02/28 14:03:13  tipaul
+# * adding search on "main entry" (ie $a subfield) on a given authority (the "search everywhere" field is still here).
+# * adding a select box to requet "contain" or "begin with" search.
+# * fixing some bug in authority search (related to "main entry" search)
+#
 # Revision 1.9.2.1  2005/02/24 13:12:13  tipaul
 # saving authority modif in a text file. This will be used soon with another script (in crontab). The script in crontab will retrieve every authorityid in the directory localfile/authorities and modify every biblio using this authority. Those modifs may be long. So they can't be done through http, because we may encounter a webserver timeout, and kill the process before end of the job.
 # So, it will be done through a cron job.
