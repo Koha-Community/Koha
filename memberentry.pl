@@ -8,6 +8,7 @@ use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Database;
+use C4::Koha;
 
 my $input = new CGI;
 my $member=$input->param('bornum');
@@ -171,96 +172,49 @@ print <<printend
 
 <tr><td>&nbsp; </TD></TR>
 <tr valign=top bgcolor=white>
-<td colspan=2><SELECT NAME="ethnicity" SIZE="1">
+<td colspan=2>
 printend
 ;
-print "<OPTION value=\" \">
-<OPTION value=european";
-if ($data->{'ethnicity'} eq 'european'){
-  print " selected";
-}
-print "
->European/Pakeha
-<OPTION value=maori";
-if ($data->{'ethnicity'} eq 'maori'){
-  print " selected";
-}
-print ">Maori
-<OPTION value=asian";
-if ($data->{'ethnicity'} eq 'asian'){
-  print " selected";
-}
-print ">Asian
-<OPTION value=pi";
-if ($data->{'ethnicity'} eq 'pi'){
-  print " selected";
-}
-print ">Pacific Island
-<OPTION value=other";
-if ($data->{'ethnicity'} eq 'other'){
-  print " selected";
-}
 
+my ($categories,$labels)=ethnicitycategories();
+my $ethnicitycategoriescount=$#{$categories};
+if ($ethnicitycategoriescount>=0) {
+	print $input->popup_menu(-name=>'ethnicity',
+			        -values=>$categories,
+			        -default=>$data->{'ethnicity'},
+			        -labels=>$labels);
 print <<printend
->Other - please specify-->
-</SELECT>
 </td>
 <td colspan=2><input type=text name=ethnicnotes size=40 ></td>
-<td> <select name=categorycode>
-<option value="A"
+<td> 
 printend
 ;
-if ($data->{'categorycode'} eq 'A'){
-  print " Selected";
+} else {
+	print "</td><td colspan=2>&nbsp;</td><td>\n";
 }
-print ">Adult
-<option value=B";
-if ($data->{'categorycode'} eq 'B'){
-  print " Selected";
+($categories,$labels)=borrowercategories();
+print $input->popup_menu(-name=>'categorycode',
+			        -values=>$categories,
+			        -default=>$data->{'categorycode'},
+			        -labels=>$labels);
+
+
+
+my $ethnicitylabels='';
+if ($ethnicitycategoriescount>=0) {
+	$ethnicitylabels=qq|
+<td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
+<td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+|;
+} else {
+	$ethnicitylabels="<td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>";
 }
-print ">Homebound
-<option value=P";
-if ($data->{'categorycode'} eq 'P'){
-  print " Selected";
-}
-print ">Privileged
-<option value=E";
-if ($data->{'categorycode'} eq 'E'){
-  print " Selected";
-}
-print ">Senior Citizen
-<option value=W";
-if ($data->{'categorycode'} eq 'W'){
-  print " Selected";
-}
-print ">Staff
-<option value=I";
-if ($data->{'categorycode'} eq 'I'){
-  print " Selected";
-}
-print ">Institution
-<option value=C";
-if ($data->{'categorycode'} eq 'C'){
-  print " Selected";
-}
-print ">Child
-<option value=L";
-if ($data->{'categorycode'} eq 'L'){
-  print " Selected";
-}
-print ">Library
-<option value=F";
-if ($data->{'categorycode'} eq 'F'){
-  print " Selected";
-}
-print ">Family";
 print <<printend
-</select>
+
 </td>
 </tr>																																													
 <tr valign=top bgcolor=white>
-<td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
-<td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+$ethnicitylabels
 <td><FONT SIZE=2>Membership Category*</FONT></td>
 </tr>
 <tr><td>&nbsp; </TD></TR>
