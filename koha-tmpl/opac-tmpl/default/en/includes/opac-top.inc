@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<title>KOHA: Przeszukiwanie katalogu OPAC</title>
+<title>KOHA: OPAC Catalogue Search</title>
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
@@ -28,7 +28,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 <tr BGCOLOR="#339999" >
 
         <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-search.gif" 
-	width=349 height=50 alt="KOHA: Przeszukiwanie Katalogu" hspace=0 vspace=0 border=0></td>
+	width=349 height=50 alt="KOHA: Catalogue Search" hspace=0 vspace=0 border=0></td>
 
 
       
@@ -38,15 +38,15 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	
 <!--	<a href="/members/"
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-login.gif" 
-	width=111 height=30 alt="Logowanie" hspace=0 vspace=0 border=0 name="menu-login"></a>
+	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
 -->
 	<a href="/join.html"
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-join.gif" 
-	width=54 height=30 alt="Zapisy" hspace=0 vspace=0 border=0 name="menu-join"></a>
+	width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
 
 	<a href="/cgi-bin/koha/opac-main.pl" 
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-home.gif" 
-	width=60 height=30 alt="Pocz±tek" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
+	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
         
         </TR>
 
@@ -69,4 +69,3 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 <!-------------------------MAIN BODY OF PAGE-------------------------->
 <BLOCKQUOTE>
-</html>

@@ -1,4 +1,3 @@
-<html>
 </BLOCKQUOTE>
 
 <p> &nbsp; </p>
@@ -6,11 +5,11 @@
 <center>
 
 
-<A HREF="/cgi-bin/koha/opac-search.pl">Przeszukiwanie Katalogu</a> ||
-<!--<A HREF="/members/">Logowanie</a> ||
+<A HREF="/cgi-bin/koha/opac-search.pl">Catalogue Search</a> || 
+<!--<A HREF="/members/">Member Login</a> || 
 -->
-<A HREF="/join.html">Zostañ cz³onkiem</a> ||
-<A HREF="/cgi-bin/koha/opac-main.pl">Pocz±tek</a> 
+<A HREF="/join.html">Become a Member</a> || 
+<A HREF="/cgi-bin/koha/opac-main.pl">Home</a> 
 
 </font>
 </center>

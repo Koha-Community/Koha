@@ -1,9 +1,9 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
 
 
@@ -16,28 +16,28 @@
 </td></tr>
 
 <TR VALIGN=TOP>
-<TD>S³owo kluczowe</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+<TD>Keywords</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
 </TD></TR>
 
 <TR VALIGN=TOP>
-<TD>Tytu³</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-<td><input type=radio name=ttype value=normal checked>Zwyk³e<input
-type=radio name=ttype value=exact>Dok³adne</td>
+<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+<td><input type=radio name=ttype value=normal checked>Normal<input
+type=radio name=ttype value=exact>Exact</td>
 </TR>
 
 <TR VALIGN=TOP> 
-<TD>Autor</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+<TD>Author</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Ilustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+<TD>Illustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
 
 <TR VALIGN=TOP>
-<TD>Przedmiot</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
+<TD>Subject</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
 
-<td>Klasa</td>
+<td>Class</td>
   <td>
     <select size="1"  name="class">
-    <option value="">Ka¿da
+    <option value="">Any
     <!-- fetch class list -->
     <TMPL_VAR name="classlist">
     <!--#include virtual="/includes/cat-class-list.inc" -->
@@ -58,7 +58,7 @@ type=radio name=ttype value=exact>Dok³adne</td>
 <TR VALIGN=TOP>
 <td></td>
 <TD><font size=4 face="arial,helvetica">
-<INPUT TYPE="reset"  value="Wyczy¶æ wszystkie pola"></font></td></tr>
+<INPUT TYPE="reset"  value="Clear All Fields"></font></td></tr>
 
 </TABLE>
 </FORM>
@@ -66,4 +66,3 @@ type=radio name=ttype value=exact>Dok³adne</td>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
-

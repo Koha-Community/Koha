@@ -1,13 +1,13 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony Cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
 
 <TMPL_UNLESS NAME="norequests">
-<p align=right><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Zamów</a></p>
+<p align=right><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Request</a></p>
 </TMPL_UNLESS>
 
 
@@ -21,7 +21,7 @@
 <tr valign="top">
 
 <td bgcolor="#99cccc">
-<b>OPIS BIBLIO</b>
+<b>BIBLIO RECORD</b>
 
 <TMPL_VAR NAME="biblionumber">
 </td>
@@ -29,11 +29,11 @@
 <tr valign="top">
 <td>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Podtytu³:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Autor:</b> <TMPL_VAR NAME="author"><br>
-<b>Przedmiot:</b> <TMPL_VAR NAME="subject"><br>
+<b>Subtitle:</b> <TMPL_VAR NAME="subtitle"><br>
+<b>Author:</b> <TMPL_VAR NAME="author"><br>
+<b>Subject:</b> <TMPL_VAR NAME="subject"><br>
 <b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Ca³kowita liczba pozycji:</b> <TMPL_VAR NAME="count">
+<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
 <p>
 </font></td>
 </tr>
@@ -42,12 +42,12 @@
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#99cccc">
-<td>Typ Pozycji</td>
-<td>Klasa</td>
-<td>Lokalizacja</td>
-<td>Data zwrotu</td>
-<td>Ostatnio Zdano</td>
-<td>Pasek Kreskowy</td>
+<td>Item Type</td>
+<td>Class</td>
+<td>Location</td>
+<td>Date Due</td>
+<td>Last Seen</td>
+<td>Barcode</td>
 </tr>
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <tr>
@@ -62,9 +62,9 @@
 <TMPL_LOOP NAME="WEB_RESULTS">
 <tr>
 <td><TMPL_VAR NAME="itemtype"></td>
-<td>Witryna</td>
+<td>Website</td>
 <td>Online</td>
-<td>Dostêpn</td>
+<td>Available</td>
 <td></td>
 <td><TMPL_VAR NAME="url"></td>
 </tr>
@@ -75,4 +75,3 @@
 <br clear=all>
 <p />
 <TMPL_INCLUDE NAME="opac-bottom.inc">
-

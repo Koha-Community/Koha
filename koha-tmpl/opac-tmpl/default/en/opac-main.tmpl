@@ -1,5 +1,5 @@
 <HTML>
-<TITLE>Katalog Publiczny systemu KOHA </TITLE>
+<TITLE>WELCOME TO THE  KOHA OPAC </TITLE>
 
 
 <style type="text/css">
@@ -52,7 +52,7 @@ cellspacing=0 cellpadding=0 border=0 >
 	alt="Koha: Horowhenua Library Trust Catalogue and Member Services" hspace=0 vspace=0></td>
 
 	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/opac-search.pl"><img src="<TMPL_VAR NAME='themelang'>/images/heading-search.gif" width=272 	height=38
-	alt="Szukaj w Katalogu" hspace=0 vspace=0 border=0></a></font></td>
+	alt="Search the Catalogue" hspace=0 vspace=0 border=0></a></font></td>
 
   </tr>
 
@@ -65,19 +65,19 @@ cellspacing=0 cellpadding=0 border=0 >
 
 	<input type=text size="27" name="keyword"><br>
 	</font>
-	<b>Wype³nij pole i naci¶nij klawisz ENTER.</b><br>
+	<b>Type in the box and press the enter 			key.</b><br>
 	<a href="/cgi-bin/koha/opac-search.pl">
       
 	<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >Wyszukiwanie zaawansowane (wiêcej opcji).</a><br>
+	alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search (More Options)</a><br>
 
 	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0>
 	<p>
 	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Wyloguj</a>]</p>
+	    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
 	<TMPL_ELSE>
-	    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Zaloguj siê</a> do Koha</p>
+	    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 	</TMPL_IF>
 	</td>
 	</form>
@@ -96,7 +96,7 @@ cellspacing=0 cellpadding=0 border=0 >
         <td></td>
 	<form action="/cgi-bin/koha/member.pl" method=get >
 	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">NumerKarty &nbsp;</font></td>
+	<font size=3 face="arial narrow,arial,helvetica">Card Number &nbsp;</font></td>
 	<td background=" " ><input type=text size="12" name="card"></td>
 
   </tr>
@@ -105,7 +105,7 @@ cellspacing=0 cellpadding=0 border=0 >
 	<td></td>
 	<td></td>
 	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Has³o</font></td>
+	<font size=3 face="arial narrow,arial,helvetica">Password</font></td>
 	<td background=" " ><input type=password size="12" name="password"><br>
 	<input type=submit value="OK"><br>
 
