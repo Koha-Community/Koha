@@ -18,6 +18,10 @@ package C4::Security; #assumes C4/Security
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - As far as I can tell, this module is only used by the CDK
+# stuff, which appears to be stillborn. In other words, this module
+# isn't used.
+
 use strict;
 require Exporter;
 use DBI;

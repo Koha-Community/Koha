@@ -54,6 +54,9 @@ use C4::Biblio;
 use C4::Output;
 my $dbh = C4::Context->dbh;
 my $userid=$ENV{'REMOTE_USER'};
+
+# FIXME - Wouldn't it be better to use &C4::SimpleMarc::taglabel
+# instead of duplicating this information?
 %tagtext = (
     '001' => 'Control number',
     '003' => 'Control number identifier',
