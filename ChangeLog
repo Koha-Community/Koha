@@ -1,5 +1,17 @@
 2002-10-10  Andrew Arensburger  <arensb@baa.ooblick.com>
 
+	* C4/Search.pm: Removed &systemprefs. It is no longer used.
+
+	* C4/Output.pm: Use C4::Context->preference instead of
+	&systemprefs or explicit SQL calls to get an entry from the
+	systempreferences table.
+
+	* moremember.pl (bug fix): Titles and due dates weren't being
+	retrieved properly due to missing braces. Added bug report: the
+	item type still isn't being displayed.
+
+	* C4/Search.pm: Made code a bit more Perl-ish.
+
 	* member.pl: Use the default theme if it wasn't given as a CGI
 	parameter.
 
