@@ -41,14 +41,17 @@ if ($sth->rows) {
 $sth=$dbh->prepare("delete from sessions where sessionID=?");
 $sth->execute($sessionID);
 open L, ">>/tmp/sessionlog";
-print L "$userid from $ip logged out at ".localtime(time())." (manual log out).\n";
+my $time=localtime(time());
+printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, $time;
 close L;
 
 my $cookie=$query->cookie(-name => 'sessionID',
 			  -value => '',
 			  -expires => '+1y');
 
-print $query->redirect("shelves.pl");
+# Should redirect to intranet home page after logging out
+
+print $query->redirect("mainpage.pl");
 
 exit;
 if ($sessionID) {
