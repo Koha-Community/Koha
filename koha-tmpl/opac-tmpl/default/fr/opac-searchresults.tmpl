@@ -19,7 +19,7 @@
     </TMPL_IF>
     <TMPL_LOOP NAME="numbers">
 	<TMPL_IF NAME="highlight">
-	    <img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif> 
+	    <img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
 	<TMPL_ELSE>
 	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
 	</TMPL_IF>
@@ -60,7 +60,7 @@
 	    <th align=left>Titre</th>
 	    <th align=left>Auteur</th>
 	    <th>Ann&eacute;e</th>
-	    <th>Nbre d'exemplaires</th>
+	    <th>Nbre</th>
 	    <th>Localisation</th>
 	    <th>Cote</th>
 	    <th>&nbsp</th>
@@ -72,13 +72,13 @@
 
     <TMPL_LOOP NAME="SEARCH_RESULTS">
       <tr>
-      <td><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>><TMPL_VAR NAME="title"></a></td>
-      <td><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td>
-      <td align=center> <TMPL_VAR NAME="copyrightdate"> </td>
-      <td align=center> <TMPL_VAR NAME="itemcount"> </td>
-      <td> <TMPL_VAR NAME="location"> </td>
-      <td><TMPL_VAR name="classification"> <TMPL_VAR name="dewey"></td>
-      <td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>><TMPL_VAR NAME="title"></a></td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF> align=center> <TMPL_VAR NAME="copyrightdate"> </td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF> align=center> <TMPL_VAR NAME="itemcount"> </td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><TMPL_VAR NAME="location"></td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><TMPL_VAR name="classification"><TMPL_VAR name="dewey"></td>
+      <td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>>
 <TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>R&eacute;servation</a>
 <TMPL_ELSE>
 Non r&eacute;servable
