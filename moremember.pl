@@ -59,12 +59,25 @@ print <<printend
 <FONT SIZE=2  face="arial, helvetica">$data->{'title'} $data->{'othernames'}  $data->{'surname'} ($data->{'firstname'}, $data->{'initials'})<p>
 
 Card Number: $data->{'cardnumber'}<BR>
+printend
+;
+if ($data->{'categorycode'} eq 'C'){
+    my $data2=borrdata('',$data->{'guarantor'});
+    $data->{'streetaddress'}=$data2->{'streetaddress'};
+    $data->{'city'}=$data2->{'city'};
+    $data->{'physstreet'}=$data2->{'phystreet'};
+    $data->{'streetcity'}=$data2->{'streetcity'};
+    $data->{'phone'}=$data2->{'phone'};
+    $data->{'phoneday'}=$data2->{'phoneday'};
+}
+print <<printend
 Postal Address: $data->{'streetaddress'}, $data->{'city'}<BR>
 Home Address: $data->{'physstreet'}, $data->{'streetcity'}<BR>
 Phone (Home): $data->{'phone'}<BR>
 Phone (Daytime): $data->{'phoneday'}<BR>
 Fax: $data->{'faxnumber'}<BR>
-E-mail: <a href="mailto:$data->{'emailaddress'}">$data->{'emailaddress'}</a><P>
+E-mail: <a href="mailto:$data->{'emailaddress'}">$data->{'emailaddress'}</a><br>
+Textmessaging:$data->{'textmessaging'}<p>
 Membership Number: $data->{'borrowernumber'}<BR>
 Membership: $data->{'categorycode'}<BR>
 Area: $data->{'area'}<BR>
@@ -79,12 +92,23 @@ Alternative Contact:$data->{'contactname'}<BR>
 Phone: $data->{'altphone'}<BR>
 Relationship: $data->{'altrelationship'}<BR>
 Notes: $data->{'altnotes'}<P>
-Guarantees:
 printend
 ;
-my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
-for (my $i=0;$i<$count;$i++){
-  print "<A HREF=\"/cgi-bin/koha/moremember.pl?bornum=$guarantees->[$i]->{'borrowernumber'}\">$guarantees->[$i]->{'cardnumber'}</a><br>";
+
+if ($data->{'categorycode'} ne 'C'){
+  print " Guarantees:";
+  my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
+  for (my $i=0;$i<$count;$i++){
+    print "<A HREF=\"/cgi-bin/koha/moremember.pl?bornum=$guarantees->[$i]->{'borrowernumber'}\">$guarantees->[$i]->{'cardnumber'}</a><br>";
+  }
+} else {
+  print "Guarantor:";
+  my ($guarantor)=findguarantor($data->{'borrowernumber'});
+  if ($guarantor->{'borrowernumber'} == 0){
+      print "no guarantor<br>";
+  } else {
+    print "<A HREF=\"/cgi-bin/koha/moremember.pl?bornum=$guarantor->{'borrowernumber'}\">$guarantor->{'cardnumber'}</a><br>";
+  }
 }
 print <<printend
 
@@ -202,7 +226,7 @@ for (my $i=0;$i<$count;$i++){
 #    print "<td> &nbsp; </td>";
 #  }
   #check item is not reserved
-  my ($rescount,$reserves)=FindReserves($issue->[$i]{'biblionumber'},'');
+  my ($rescount,$reserves)=Findgroupreserve($issue->[$i]{'biblionumber'},'');
   if ($rescount >0){
     print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
 #  } elsif ($issue->[$i]->{'renewals'} > 0) {
@@ -257,7 +281,7 @@ for (my $i=0;$i<$rescount;$i++){
   @temp=split('-',$reserves->[$i]{'reservedate'});
   $reserves->[$i]{'reservedate'}="$temp[2]/$temp[1]/$temp[0]";
   print "<tr VALIGN=TOP  >
-  <TD><a href=\"/cgi-bin/koha/request.pl?bib=$reserves->[$i]{'biblionumber'}\">$reserves->[$i]{'title'}</a></td>
+  <TD><a href=\"/cgi-bin/koha/request.pl?bib=$reserves->[$i]{'biblionumber'}\">$reserves->[$i]{'btitle'}</a></td>
   <TD>$reserves->[$i]{'reservedate'}</td>
   <input type=hidden name=biblio value=$reserves->[$i]{'biblionumber'}>
   <input type=hidden name=borrower value=$bornum>
