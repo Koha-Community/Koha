@@ -122,6 +122,8 @@ sub catalogsearch {
 	{
 		# replace * by %
 		@$value[$i] =~ s/\*/%/g;
+		# remove % at the beginning
+		@$value[$i] =~ s/^%//g;
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
