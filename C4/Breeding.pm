@@ -71,6 +71,7 @@ sub  ImportBreeding {
 	my $notmarcrecord = 0;
 	for (my $i=0;$i<=$#marcarray;$i++) {
 		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
+		my @warnings = $marcrecord->warnings();
 		if (ref($marcrecord) eq undef) {
 			$notmarcrecord++;
 		} else {

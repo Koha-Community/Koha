@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.67  2003/10/25 08:46:27  tipaul
+# minor fixes for bilbio deletion (still buggy)
+#
 # Revision 1.66  2003/10/17 10:02:56  tipaul
 # Indexing only words longer than 2 letters. Was >=2 before, & 2 letters words usually means nothing.
 #
@@ -1826,7 +1829,6 @@ where biblioitemnumber = $biblioitemnumber";
 
 sub OLDdelbiblio{
   my ($dbh,$biblio)=@_;
-#  my $dbh=C4Connect;
   my $query="select * from biblio where biblionumber=$biblio";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -1838,7 +1840,6 @@ sub OLDdelbiblio{
       $query .= "'$temp',";
     }
     $query=~ s/\,$/\)/;
-#   print $query;
     $sth=$dbh->prepare($query);
     $sth->execute;
     $sth->finish;
@@ -1848,7 +1849,6 @@ sub OLDdelbiblio{
     $sth->finish;
   }
   $sth->finish;
-#  $dbh->disconnect;
 }
 
 #
@@ -2125,6 +2125,8 @@ sub delbiblio {
   my ($biblio)=@_;
   my $dbh = C4::Context->dbh;
   &OLDdelbiblio($dbh,$biblio);
+ my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblio);
+ &MARCdelbiblio($dbh,$bibid,0);
 }
 
 sub getitemtypes {
