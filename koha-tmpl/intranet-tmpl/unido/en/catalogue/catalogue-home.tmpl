@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+
+
+	<TMPL_INCLUDE NAME="general-top.inc">
+
+	<TMPL_INCLUDE NAME="cat-top.inc">
+
+	<TMPL_INCLUDE NAME="general-first-column-divider.inc">
+
+	
+<div class="chumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > Catalogue Search</div>
+
+<H1>Catalogue Search</H1>
+<FORM ACTION="/cgi-bin/koha/search.pl" METHOD="POST">
+
+<!--Search Form Starts-->
+
+	<TABLE class="content">
+		<TR>
+			<TD class="heading" colspan="2">
+			
+			<h2>General Search</h2></td></tr>
+			
+			<TR><td></td>
+			
+				<TD class="label">
+					<INPUT TYPE=RADIO NAME="ttype" VALUE="normal" CHECKED>Normal &nbsp;
+					<INPUT TYPE=RADIO NAME="ttype" VALUE="exact">Exact 
+				</TD>
+			</tr>
+			<tr>
+			
+				<TD class="label">Keywords</TD>
+				<TD class="field">
+					<INPUT TYPE=TEXT NAME="keyword">
+				</TD>
+				</TR>
+				
+			<TR>
+				<TD class="label">Title</TD>
+			<TD class="field">
+				<INPUT TYPE=TEXT NAME="title">			
+				</TD>
+			</TR>
+			
+			<TR>
+				<TD class="label">Author</TD>
+			<TD class="field">
+			<INPUT TYPE=TEXT NAME="author" >
+				</TD>
+			</TR>
+			
+			<TR >
+				<TD class="label">
+					Type of Item
+				</TD>
+					<TD class="field">
+					<SELECT NAME="class">
+						<OPTION VALUE="" SELECTED>Any</OPTION>
+					</SELECT></td>
+					</tr>
+					
+						<TR >
+				<TD class="label">
+					Langage
+				</TD>
+					<TD class="field">
+					<SELECT NAME="language">
+						<OPTION VALUE="" SELECTED>Any</OPTION>
+					</SELECT></td>
+					</tr>
+					
+					
+					<tr>
+	<TD  class="label">Published After (Year)</TD> <TD><INPUT TYPE="text"   NAME="date-after"> </TD></TR>
+	
+				<tr>
+	<TD  class="label">Published Before (Year)</TD> 
+	<TD class="field"><INPUT TYPE="text"  NAME="date-before"></TD></TR>
+
+	
+			<TR>
+				 <TD class="label">
+					Dewey/UDC number
+				
+				</TD>
+				<TD class="field">
+					<INPUT TYPE=TEXT NAME="dewey">
+				</TD>
+				
+			</TR>
+			
+			<tr>
+			
+	<td class="label">Branch</td>
+	
+	
+		<TD class="field">
+		<select name=branch>
+	<option value="M">Main
+	</select>
+	</td></tr>
+	
+	
+
+	
+	<tr><td></trd><td class="field"><input type="submit" class="go" value="GO"></td></tr>
+	
+<TR>
+			<TD class="heading" colspan="2">
+			
+			<h2>Subject Search</h2></td></tr>
+									
+			
+			<TR>
+				<TD  class="label">
+					Subject
+				</TD>
+				<TD class="field-medium">
+			    <INPUT TYPE=TEXT NAME="subject"> <input type="submit" class="go" value="GO">
+			    <INPUT TYPE=HIDDEN NAME="type" VALUE="intra"> 
+				</TD>
+			
+			</TR>
+			
+			<TR>
+			<TD class="heading" colspan="2">
+			
+			<h2>Barcode Search</h2></td></tr>
+									
+			
+			<TR>
+				<TD  class="label">
+			Barcode
+			</TD>
+			
+			<TD class="field-medium">
+				<INPUT TYPE=TEXT NAME="itemnumber"> <input type="submit" class="go" value="GO">
+			</TD>
+			</tr>
+			
+				
+			<TR>
+			<TD class="heading" colspan="2">
+			
+			<h2>ISBN or ISSN Search</h2></td></tr>
+			
+		<TR>
+	<TD class="label">ISBN or ISSN</TD> 
+		<TD class="field-medium"><INPUT TYPE="text"   NAME="isbn"> <input type="submit" class="go" value="GO"></TD></TR>
+	
+	
+
+		</TABLE>
+
+</FORM>
+
+			
+
+	
+	
+	<TMPL_INCLUDE NAME="3-column-seperator.inc">
+	
+	<div class="tip">
+	<Spam class="tip-big">tip</span>
+	<span class="tip-text"> you can use more than one field four your search, eg Keyword + Author, but this may slow
+	it down.  There is an implicit "and" between search terms.</span></div>
+		
+		
+		
+		<!--I'VE DIABLED VIRTUAL BOOKSHELVES UNTIL THEY WORK A BIT BETTER 
+		 anyway I think that this should be in a side menu-->			
+			
+		<!--A HREF="/cgi-bin/koha/shelves.pl" Virtual Bookshelves</A-->
+		
+		<!--other diabled fields-->
+		
+		<!--			Illustrator: INPUT TYPE=TEXT NAME="illustrator"  -->
+			
+		
+	<TMPL_INCLUDE NAME="3-column-end.inc">
+
+	<TMPL_INCLUDE NAME="cat-bottom.inc">
+
+</BODY>
+</HTML>
