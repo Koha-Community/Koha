@@ -25,6 +25,14 @@ $borr->{'expiry'}       = slashifyDate($borr->{'expiry'});
 $borr->{'dateofbirth'}  = slashifyDate($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
+if ($borr->{'amountoutstanding'} > 5) {
+    $borr->{'amountoverfive'} = 1;
+} else {
+    $borr->{'amountoverfive'} = 0;
+}
+
+$borr->{'amountoutstanding'} = sprintf "\$%.02f", $borr->{'amountoutstanding'};
+
 my @bordat;
 $bordat[0] = $borr;
 
@@ -57,6 +65,24 @@ foreach my $key (keys %$issues) {
 $template->param(ISSUES => \@issuedat); 
 $template->param(issues_count => $count); 
 
+# now the reserved items....
+my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
 
+$template->param(RESERVES => $reserves);
+$template->param(reserves_count => $rcount);
+
+my $branches = getbranches();
+my @waiting;
+my $wcount = 0;
+foreach my $res (@$reserves) {
+    if ($res->{'itemnumber'}) {
+	$res->{'branch'} = $branches->{$res->{'branchcode'}}->{'branchname'};
+	push @waiting, $res;
+	$wcount++;
+    }
+}
+
+$template->param(WAITING => \@waiting);
+$template->param(waiting_count => $wcount);
 
 print "Content-Type: text/html\n\n", $template->output; 
