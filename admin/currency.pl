@@ -113,12 +113,23 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $query = "replace currency (currency,rate) values (";
-	$query.= $dbh->quote($input->param('currency')).",";
-	$query.= $dbh->quote($input->param('rate')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	$sth->finish;
+
+	my $check = $dbh->prepare("select * from currency where currency = ?");
+	$check->execute($input->param('currency'));
+	if ( $check->fetchrow )
+	{
+		my $sth = $dbh->prepare("UPDATE currency SET rate = ? WHERE currency = ?");
+		$sth->execute($input->param('rate'),$input->param('currency'));
+		$sth->finish;
+	}
+	else
+	{
+		my $sth = $dbh->prepare("INSERT INTO currency (currency, rate) VALUES (?,?)");
+		$sth->execute($input->param('currency'),$input->param('rate'));
+		$sth->finish;
+	}	 
+
+	$check->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
