@@ -635,11 +635,13 @@ sub extractmarcfields {
 		# see if it is defined in our Marc to koha mapping table
 	    	if ( $fieldname=$tagmap{ $field->{'tag'} }->{$subfield}->{name} ) {
 		    # Yes, so keep the value
-		    $bib->{$fieldname}=$field->{'subfields'}->{$subfield};
+		    if ( ref($field->{'subfields'}->{$subfield} ) eq 'ARRAY' ) {
 		    # if it was an array, just keep first element.
-		    if (ref($bib->{$fieldname}) eq 'ARRAY') {
-			$bib->{$fieldname}=$$bib->{fieldname}[0]
+		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield}[0];
+		    } else {
+		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield};
 		    } # if array
+		    print "$field->{'tag'} $subfield $fieldname=$bib->{$fieldname}\n" if $debug;
 		    # see if this field should have trailing chars dropped
 	    	    if ($strip=$tagmap{ $field->{'tag'} }->{$subfield}->{striptrail} ) {
 			$strip=~s//\\/; # backquote each char
