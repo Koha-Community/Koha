@@ -9,10 +9,12 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&slashifyDate
-	     &fixEthnicity); 
+	     &fixEthnicity
+	     $DEBUG); 
 
 use vars qw();
 	
+my $DEBUG = 0;
 
 sub slashifyDate {
     # accepts a date of the form xx-xx-xx[xx] and returns it in the 
