@@ -83,15 +83,13 @@ for (my $i=0; $i<$count2; $i++) {
 
     $data[$i]->{'dewey'}="" if ($data[$i]->{'dewey'} == 0);
 
-    warn "Itemlost: $data[$i]->{itemlost} \n";
     $data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
     $data[$i]->{'dewey'}=~ s/\.0000$//;
     $data[$i]->{'dewey'}=~ s/00$//;
     my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
     my $select;
     if (($data[$i]->{'notforloan'}) 
-	|| ($data[$i]->{'itemlost'} == 1)
-	|| ($data[$i]->{'itemlost'} == 2))  {
+	|| ($data[$i]->{'itemlost'} == 1))  {
 	$select = "Cannot be reserved.";
     } else {
 	$select = " <input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}><input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>";
