@@ -7,8 +7,6 @@
 
 # This script is meant to be a drop-in replacement of text-extract.pl
 
-# FIXME: Trailing spaces are not yet handled correctly
-
 use Getopt::Long;
 use strict;
 
@@ -201,6 +199,7 @@ sub text_extract (*) {
     last unless defined $s;
 	my($kind, $t, $attr) = @$s; # FIXME
 	if ($kind eq KIND_TEXT) {
+	    $t =~ s/\s+$//s;
 	    $text{$t} = 1 if $t =~ /\S/s; # FIXME... trailing whitespace
 	} elsif ($kind eq KIND_TAG && %$attr) {
 	    # value [tag=input], meta
@@ -210,13 +209,14 @@ sub text_extract (*) {
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && $tag ne 'input';
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}};
+		    $val =~ s/\s+$//s;
 		    $text{$val} = 1 if $val =~ /\S/s;
 		}
 	    }
 	}
     }
     for my $t (keys %text) {
-	printf "%s\n", $t unless $t =~ /^(?:\s|\&nbsp;)*$/;
+	printf "%s\n", $t unless $t =~ /^(?:\s|\&nbsp;)*$/s;
     }
 }
 
