@@ -1145,7 +1145,7 @@ sub CatSearch  {
 		}
 	} else {
 		if ($type eq 'subject'){
-			$query .= "group by subject order by subject ";
+			$query .= "order by subject group by subject ";
 		}
 	}
 	my $sth=$dbh->prepare($query);
