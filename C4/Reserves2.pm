@@ -15,8 +15,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&FindReserves &CreateReserve &updatereserves &getreservetitle
-Findgroupreserve);
+@EXPORT = qw(&FindReserves &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
