@@ -2,14 +2,13 @@
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
 
 use C4::Auth;       # get_template_and_user
 
 my $query = new CGI;
 
 my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name => "opac-main.tmpl",
+    = get_template_and_user({template_name => "opac-membership.tmpl",
 			     query => $query,
 			     type => "opac",
 			     authnotrequired => 1,

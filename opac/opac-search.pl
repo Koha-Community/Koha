@@ -2,19 +2,31 @@
 use strict;
 require Exporter;
 
-use C4::Output;
-use CGI;
 use C4::Auth;
+use CGI;
+use C4::Database;
+
+my $classlist='';
+
+my $dbh=C4Connect;
+my $sth=$dbh->prepare("select groupname,itemtypes from itemtypesearchgroups order by groupname");
+$sth->execute;
+while (my ($groupname,$itemtypes) = $sth->fetchrow) {
+    $classlist.="<option value=\"$itemtypes\">$groupname\n";
+}
+
 
 my $query = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-search.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			 });
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query ,1, $flagsrequired);
 
-my $template = gettemplate("opac-search.tmpl", "opac");
+$template->param(classlist => $classlist);
 
-$template->param(loggedinuser => $loggedinuser);
-
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;

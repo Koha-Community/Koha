@@ -1,23 +1,18 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use C4::Auth;
 
 my $query=new CGI;
-
-
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
-
-
-my $template = gettemplate ("opac-detail.tmpl", "opac");
-
-$template->param(loggedinuser => $loggedinuser);
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-detail.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			     });
 
 my $biblionumber=$query->param('bib');
 $template->param(biblionumber => $biblionumber);
@@ -40,40 +35,22 @@ for (my $i = 1; $i < $authorcount; $i++) {
 my $norequests = 1;
 foreach my $itm (@items) {
     $norequests = 0 unless $itm->{'notforloan'};
+    $itm->{$itm->{'publictype'}} = 1;
 }
 
 $template->param(norequests => $norequests);
 
-
-
-my @results;
-
-$results[0]=$dat;
+my @results = ($dat,);
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 
-
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
-
-my $count=1;
-
-# now to get the items into a hash we can use and whack that thru
-$template->param(startfrom => $startfrom+1);
-$template->param(endat => $startfrom+20);
-$template->param(numrecords => $count);
-my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
-my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
-$template->param(nextstartfrom => $nextstartfrom);
-$template->param(prevstartfrom => $prevstartfrom);
-
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray);
 
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;
 

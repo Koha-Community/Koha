@@ -4,21 +4,22 @@ require Exporter;
 use CGI;
 
 use C4::Search;
-use C4::Output;       # gettemplate
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Reserves2;
 
 my $query = new CGI;
-
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
-
-my $template = gettemplate("opac-reserve.tmpl", "opac");
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-reserve.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 0,
+			     flagsrequired => {borrow => 1},
+			     debug => 1,
+			     });
 
 # get borrower information ....
-my $borrowernumber = getborrowernumber($loggedinuser);
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 my @bordat;
 $bordat[0] = $borr;
@@ -33,6 +34,8 @@ $template->param($bibdata);
 
 # get the rank number....
 my ($rank,$reserves) = FindReserves($biblionumber);
+$template->param(reservecount => $rank);
+
 foreach my $res (@$reserves) {
     if ($res->{'found'} eq 'W') {
 	$rank--;
@@ -53,6 +56,7 @@ $template->param(branchname => $branches->{$branch}->{'branchname'});
 
 # make branch selection options...
 my $branchoptions = '';
+my @branches;
 foreach my $br (keys %$branches) {
     (next) unless $branches->{$br}->{'IS'};
     my $selected = "";
@@ -60,45 +64,154 @@ foreach my $br (keys %$branches) {
 	$selected = "selected";
     }
     $branchoptions .= "<option value=$br $selected>$branches->{$br}->{'branchname'}</option>\n";
+    push @branches, {branchcode => $br, branchname => $branches->{$br}->{'branchname'}, selected => $selected};
 }
 $template->param( branchoptions => $branchoptions);
+$template->param(BRANCHES => \@branches);
 
+#### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
+# get the itemtype data....
+my @items = ItemInfo(undef, $biblionumber, 'opac');
+my @temp;
+foreach my $itm (@items) {
+    push @temp, $itm if $itm->{'itemtype'};
+}
+@items = @temp;
+my $itemcount = @items;
+$template->param(itemcount => $itemcount);
 
-#get the bibitem data....
-my ($count,@data) = bibitems($biblionumber);
-
-foreach my $bibitem (@data) {
-    my @barcodes = barcodes($bibitem->{'biblioitemnumber'});
-    my $barcodestext = "";
-    foreach my $num (@barcodes) {
-	my $message = $num->{'itemlost'} == 1 ? "(lost)" :
-	    $num->{'itemlost'} == 2 ? "(long overdue)" : "($branches->{$num->{'holdingbranch'}}->{'branchname'})";
-	$barcodestext .= "$num->{'barcode'} $message <br>";
+my %types;
+my %itemtypes;
+my @duedates;
+foreach my $itm (@items) {
+    push @duedates, {date_due => slashifyDate($itm->{'date_due'})} if defined $itm->{'date_due'};
+    $itm->{$itm->{'publictype'}} = 1;
+    my $fee  = CalcReserveFee(undef, $borrowernumber, $itm->{'biblionumber'},'a',($itm->{'biblioitemnumber'}));
+    $fee = sprintf "%.02f", $fee;
+    $itm->{'reservefee'} = $fee;
+    my $pty = $itm->{'publictype'};
+    $itemtypes{$itm->{'itemtype'}} = $itm;
+    unless ($types {$pty}) {
+	$types{$pty}->{'count'} = 1;
+	$types{$pty}->{$itm->{'itemtype'}} = 1;
+	push @{$types{$pty}->{'items'}}, $itm;
+    } else {
+	unless ($types{$pty}->{$itm->{'itemtype'}}) {
+	    $types{$pty}->{'count'}++;
+	    $types{$pty}->{$itm->{'itemtype'}} = 1;
+	    push @{$types{$pty}->{'items'}}, $itm;
+	}
     }
-    $barcodestext = substr($barcodestext, 0, -4);
-    $bibitem->{'copies'} = $barcodestext;
 }
 
 
+$template->param(ITEMS => \@duedates);
 
-my @reqbibs = $query->param('reqbib');
-if ($query->param('bibitemsselected')) {
-    $template->param(bibitemsselected => 1);
-    my @tempdata;
-    foreach my $bibitem (@data) {
-	foreach my $reqbib (@reqbibs){
-	    push @tempdata, $bibitem if ($bibitem->{'biblioitemnumber'} == $reqbib) ;
-	}
+my $width = keys %types;
+my @publictypes = sort {$b->{'count'} <=> $a->{'count'}} values %types;
+my $typecount;
+foreach my $pt (@publictypes) {
+    $typecount += $pt->{'count'};
+}
+$template->param(onlyone => 1) if $typecount == 1;
+
+my @typerows;
+for (my $rownum=0;$rownum<$publictypes[0]->{'count'} ;$rownum++) {
+    my @row;
+    foreach my $pty (@publictypes) {
+	my @items = @{$pty->{'items'}};
+	push @row, $items[$rownum] if defined $items[$rownum];
     }
-    @data = @tempdata;
-} elsif ($query->param('placereserve')) {
-# here we actually do the reserveration....
+    my $last = @row; 
+    $row[$last-1]->{'last'} =1 if $last == $width; 
+    my $fill = ($width - $last)*2;
+    $fill-- if $fill;
+    push @typerows, {ROW => \@row, fill => $fill};
+}
+$template->param(TYPE_ROWS => \@typerows);
+$width = 2*$width -1;
+$template->param(totalwidth => 2*$width-1);
+
+if ($query->param('item_types_selected')) {
+# this is what happens after the itemtypes have been selected. Stage 2
+    my @itemtypes = $query->param('itemtype');
+    my $fee = 0;
+    my $proceed = 0;
+    if (@itemtypes) {
+	my %newtypes;
+	foreach my $itmtype (@itemtypes) {
+	    $newtypes{$itmtype} = $itemtypes{$itmtype};
+	}
+	my @types = values %newtypes;
+	$template->param(TYPES => \@types);
+	foreach my $type (@itemtypes) {
+	    my @reqbibs;
+	    foreach my $item (@items) {
+		if ($item->{'itemtype'} eq $type) {
+		    push @reqbibs, $item->{'biblioitemnumber'};
+		}
+	    }
+	    $fee += CalcReserveFee(undef,$borrowernumber,$biblionumber,'o',\@reqbibs);
+	}
+	$proceed = 1;
+    } elsif ($query->param('all')) {
+	$template->param(all => 1);
+	$fee = 1;
+	$proceed = 1;
+    }
+    if ($proceed) {
+	$fee = sprintf "%.02f", $fee;
+	$template->param(fee => $fee);
+	$template->param(item_types_selected => 1);
+    } else {
+	$template->param(message => 1);
+	$template->param(no_items_selected => 1);
+    }
+
+
+} elsif ($query->param('place_reserve')) {
+# here we actually do the reserveration. Stage 3.
     my $title = $bibdata->{'title'};
-    CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
-    warn "reserve created\n";
+    my @itemtypes = $query->param('itemtype');
+    foreach my $type (@itemtypes) {
+	my @reqbibs;
+	foreach my $item (@items) {
+	    if ($item->{'itemtype'} eq $type) {
+		push @reqbibs, $item->{'biblioitemnumber'};
+	    }
+	}
+	CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
+    }
+    if ($query->param('all')) {
+	CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'a', undef, $rank,'',$title);
+    }
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
 } else {
-    $template->param(selectbibitems => 1);
+# Here we check that the borrower can actually make reserves Stage 1.
+    my $noreserves = 0;
+    if ($borr->{'amountoutstanding'} > 5) {
+  	my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
+	$template->param(message => 1);
+	$noreserves = 1;
+	$template->param(too_much_oweing => $amount);
+    }
+    my ($resnum, $reserves) = FindReserves(undef, $borrowernumber); 
+    $template->param(RESERVES => $reserves);
+    if ($resnum >= $MAXIMUM_NUMBER_OF_RESERVES) {
+	$template->param(message => 1);
+	$noreserves = 1;
+	$template->param(too_many_reserves => $resnum);
+    }
+    foreach my $res (@$reserves) {
+	if ($res->{'biblionumber'} == $biblionumber) {
+	    $template->param(message => 1);
+	    $noreserves = 1;
+	    $template->param(already_reserved => 1);
+	}
+    }
+    unless ($noreserves) {
+	$template->param(select_item_types => 1);
+    }
 }
 # check that you can actually make the reserve.
 
@@ -106,5 +219,5 @@ if ($query->param('bibitemsselected')) {
 
 $template->param(BIBLIOITEMS => \@data);
 
-$template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output;
+
+print $query->header(-cookie => $cookie), $template->output;

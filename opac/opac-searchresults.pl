@@ -4,21 +4,20 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
-use C4::Output; # now contains gettemplate
 
 my $query=new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
-
-
-my $template = gettemplate ("opac-searchresults.tmpl", "opac");
-
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-searchresults.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			 });
 
 
 my $subject=$query->param('subject');
+
 
 
 if ($subject) {
@@ -33,15 +32,20 @@ my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn
 
 # collect all the fields ...
 my %search;
+
 my $forminputs;
 my $searchdesc = '';
 foreach my $field (@fields) {
     $search{$field} = $query->param($field);
+    if ($field eq 'keyword'){
+	$search{$field} = $query->param('words') unless $search{$field};
+    }
     if ($search{$field}) {
 	push @$forminputs, {field => $field, value => $search{$field}};
 	$searchdesc .= "$field = $search{$field}, ";
     }
 }
+
 $search{'ttype'} = $query->param('ttype');
 push @$forminputs, {field => 'ttype', value => $search{'ttype'}};
 
@@ -56,18 +60,19 @@ $template->param(FORMINPUTS => $forminputs);
 # do the searchs ....
 my $env;
 $env->{itemcount}=1;
-my $num=10;
+my $number_of_results = 20;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    @results = subsearch($env,$subjectitems, $num, $startfrom);
+    @results = subsearch($env,$subjectitems, $number_of_results, $startfrom);
     $count = $#results+1;
 } else {
-    ($count, @results) = catalogsearch($env,'',\%search,$num,$startfrom);
+    ($count, @results) = catalogsearch($env,'',\%search,$number_of_results,$startfrom);
 }
 
+my $num = 1;
 foreach my $res (@results) {
     my @items = ItemInfo(undef, $res->{'biblionumber'}, "intra");
     my $norequests = 1;
@@ -75,6 +80,10 @@ foreach my $res (@results) {
 	$norequests = 0 unless $itm->{'notforloan'};
     }
     $res->{'norequests'} = $norequests;
+    # set up the even odd elements....
+    $res->{'even'} = 1 if $num % 2 == 0;
+    $res->{'odd'} = 1 if $num % 2 == 1;
+    $num++;
 }
 
 
@@ -102,7 +111,6 @@ $template->param(prevstartfrom => $prevstartfrom);
 
 $template->param(searchdesc => $searchdesc);
 $template->param(SEARCH_RESULTS => $resultsarray);
-$template->param(loggedinuser => $loggedinuser);
 
 my $numbers;
 @$numbers = ();
@@ -116,8 +124,6 @@ if ($count>10) {
 }
 
 $template->param(numbers => $numbers);
-
-$template->param(loggedinuser => $loggedinuser);
 
 print $query->header(-cookie => $cookie), $template->output;
 
