@@ -130,7 +130,7 @@ foreach my $res (@$reserves) {
     }
 }
 
-# $template->param(WAITING => \@waiting);
+$template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount);
 
 output_html_with_http_headers $query, $cookie, $template->output;
