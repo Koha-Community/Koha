@@ -93,9 +93,9 @@ sub checkdigit {
 	unless ( $nounique )
 	{
 		my $dbh=C4::Context->dbh;
-		my $query=qq{SELECT * FROM borrowers WHERE cardnumber="$infl"};
+		my $query=qq{SELECT * FROM borrowers WHERE cardnumber=?};
 		my $sth=$dbh->prepare($query);
-		$sth->execute;
+		$sth->execute($infl);
 		my %results = $sth->fetchrow_hashref();
 		if ( $sth->rows != 0 )
 		{
