@@ -48,9 +48,9 @@ foreach my $key (@names){
   my $data=$input->param($key);
   my @dat=split(',',$data);
 #  print "$bor $cat $dat[0] $dat[1] $dat[2] <br> ";
-  my $sth=$dbh->prepare("Update categoryitem set fine=$dat[0],startcharge=$dat[1],chargeperiod=$dat[2] where
-  categorycode='$bor' and itemtype='$cat'");
-  $sth->execute;
+  my $sth=$dbh->prepare("Update categoryitem set fine=?,firstremind=?,chargeperiod=? where
+  categorycode=? and itemtype=?");
+  $sth->execute($dat[0],$dat[1],$dat[2],$bor,$cat);
   $sth->finish;
 }
 print $input->redirect("/cgi-bin/koha/charges.pl");

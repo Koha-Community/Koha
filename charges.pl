@@ -66,13 +66,13 @@ $i=0;
 while (my $data=$sth->fetchrow_hashref){
   my @trow2;
   for ($i=0;$i<9;$i++){
-    $query="select * from categoryitem where categorycode='$trow3[$i]' and itemtype='$data->{'itemtype'}'";
+    $query="select * from categoryitem where categorycode=? and itemtype=?";
     my $sth2=$dbh->prepare($query);
-    $sth2->execute;
+    $sth2->execute($trow3[$i],$data->{'itemtype'});
     my $dat=$sth2->fetchrow_hashref;
     $sth2->finish;
     my $fine=$dat->{'fine'}+0;
-    $trow2[$i]="<input type=text name=\"$trow3[$i]$data->{'itemtype'}\" value=\"$fine,$dat->{'startcharge'},$dat->{'chargeperiod'}\" size=6>";
+    $trow2[$i]="<input type=text name=\"$trow3[$i]$data->{'itemtype'}\" value=\"$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}\" size=6>";
   }
   print mktablerow(11,'white',$data->{'description'},@trow2);
 }
