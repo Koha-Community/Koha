@@ -132,9 +132,9 @@ if ($type ne 'opac'){
   if ($subject ne ''){
    print mktablerow(6,$main,'<b>SUBJECT</b>',' &nbsp; ',' &nbsp; ');
   } elsif ($illustrator ne '') {
-   print mktablerow(7,$main,'<b>TITLE</b>','<b>AUTHOR</b>','<b>ILLUSTRATOR</b>', bold('&copy;'),'<b>COUNT</b>',bold('BRANCH'),'');
+   print mktablerow(7,$main,'<b>TITLE</b>','<b>AUTHOR</b>','<b>ILLUSTRATOR</b>', bold('&copy;'),'<b>COUNT</b>',bold('LOCATION'),'');
   } else {
-   print mktablerow(6,$main,'<b>TITLE</b>','<b>AUTHOR</b>',bold('&copy;'),'<b>COUNT</b>',bold('BRANCH'),'');
+   print mktablerow(6,$main,'<b>TITLE</b>','<b>AUTHOR</b>',bold('&copy;'),'<b>COUNT</b>',bold('LOCATION'),'');
   }
 }
 my $count2=@results;
