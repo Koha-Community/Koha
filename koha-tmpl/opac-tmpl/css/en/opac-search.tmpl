@@ -113,14 +113,16 @@
 			<input type="hidden" name="operator" value="<=" />
 			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
 		</p>
-		<p>Results per page :
+		<p>
+			<label class="label20">Results per page</label>
 			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
 			</select>
 		</p>
-		<p>Ordered by
+		<p>
+			<label class="label20">Ordered by</label>
 			<select name="orderby" size="1">
 				<option value="biblio.title">Title</option>
 				<option value="biblio.author">Author</option>
@@ -129,7 +131,12 @@
 				<option value="biblioitems.publishercode">Publisher</option>
 				<option value="biblio.timestamp desc">Acquisition date</option>
 			</select>
-		</p>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Ascending</option>
+				<option value="DESC">Descending</option>
+			</select>
+		</p>		
+
 	</div>
 	<p>
 		<input type="submit" value="Start search" class="button catalogue" />
