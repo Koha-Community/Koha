@@ -60,13 +60,13 @@ closedir DIR;
 for my $PACKAGE (sort {
 	    my($theme1, $module1) = ($1, $2) if $a =~ /^(.*)_([^_]+)$/;
 	    my($theme2, $module2) = ($1, $2) if $b =~ /^(.*)_([^_]+)$/;
-	    $module1 cmp $module2 && $theme1 cmp $theme2
+	    return $module1 cmp $module2 || $theme1 cmp $theme2
 	} @templates) {
     my @pos_orig = @pos;
     my @pos = grep { /^${PACKAGE}_/ } @pos_orig;
     my($theme, $module) = ($1, $2) if $PACKAGE =~ /^(.*)_([^_]+)$/;
 
-$_ = `msgfmt --statistics $PACKAGE.pot -o /dev/null 2>&1 |tee zz`;
+$_ = `msgfmt --statistics $PACKAGE.pot -o /dev/null 2>&1`;
 
 die "unable to get total: $!" unless (/(\d+) untranslated messages/);
 
