@@ -14,7 +14,11 @@ my ($template, $loggedinuser, $cookie)
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {catalogue => 1, circulate => 1,
+			     				parameters => 1, borrowers => 1,
+							permissions =>1, reserveforothers=>1,
+							borrow => 1, reserveforself => 1,
+							editcatalogue => 1, updatecharges => 1, },
 			     debug => 1,
 			     });
 
