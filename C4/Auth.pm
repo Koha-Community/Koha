@@ -1,6 +1,9 @@
 package C4::Auth;
 
 use strict;
+use Digest::MD5 qw(md5_base64);
+
+
 require Exporter;
 use C4::Database;
 
@@ -36,12 +39,16 @@ sub checkauth {
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	if ($lasttime<time()-40 && $userid ne 'tonnesen') {
+	if ($lasttime<time()-15 && $userid ne 'tonnesen') {
 	    # timed logout
 	    warn "$sessionID logged out due to inactivity.";
 	    $message="You have been logged out due to inactivity.";
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
 	    $sti->execute($sessionID);
+	    my $scriptname=$ENV{'SCRIPT_NAME'};
+	    my $selfurl=$query->self_url();
+	    $sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, value) values (?, ?, ?)");
+	    $sti->execute($sessionID, $userid, $selfurl);
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
 	    printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
@@ -78,6 +85,15 @@ sub checkauth {
 	if (checkpw($dbh, $userid, $password)) {
 	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+	    $sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
+	    $sti->execute($sessionID, $userid);
+	    if ($sti->rows) {
+		my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
+		$stj->execute($sessionID);
+		my ($selfurl) = $sti->fetchrow;
+		print $query->redirect($selfurl);
+		exit;
+	    }
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
 	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
@@ -153,16 +169,16 @@ sub checkpw {
     my $sth=$dbh->prepare("select password from borrowers where userid=?");
     $sth->execute($userid);
     if ($sth->rows) {
-	my ($cryptpassword) = $sth->fetchrow;
-	if (crypt($password, $cryptpassword) eq $cryptpassword) {
+	my ($md5password) = $sth->fetchrow;
+	if (md5_base64($password) eq $md5password) {
 	    return 1;
 	}
     }
     my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
     $sth->execute($userid);
     if ($sth->rows) {
-	my ($cryptpassword) = $sth->fetchrow;
-	if (crypt($password, $cryptpassword) eq $cryptpassword) {
+	my ($md5password) = $sth->fetchrow;
+	if (md5_base64($password) eq $md5password) {
 	    return 1;
 	}
     }
