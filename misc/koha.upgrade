@@ -14,6 +14,7 @@ Install::setetcdir($ENV{etcdir}||'/etc');
 my $input;
 loadconfigfile();
 
+my $curr_ver = Install::getkohaversion();
 $::newversion=`cat koha.version`;
 chomp $::newversion;
 Install::setkohaversion $::newversion;
@@ -23,7 +24,7 @@ if ($::newversion =~ /RC/) {
     releasecandidatewarning();
 }
 
-my $answer = showmessage(getmessage('WelcomeToUpgrader',[$::newversion]),'yn','n');
+my $answer = showmessage(getmessage('WelcomeToUpgrader',[$curr_ver,$::newversion]),'yn','n');
 if ($answer eq "Y" || $answer eq "y") {
 	print "Great! continuing upgrade... \n";
 } else {
