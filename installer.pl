@@ -614,16 +614,17 @@ if ($result) {
 
     print qq|
 
+=============================================================================
 If you are installing Koha for evaluation purposes,  I have a batch of sample
 data that you can install now.
 
 If you are installing Koha with the intention of populating it with your own
 data, you probably don't want this sample data installed.
-
+=============================================================================
 |;
-    print "\n\nWould you like to install the sample data? Y/[N]: ";
+    print "\nWould you like to install the sample data? Y/[N]: ";
     chomp($input = <STDIN>);
-    unless ($input =~/^y/i) {
+    if ($input =~/^y/i) {
 	system("gunzip sampledata-1.2.gz");
 	system("cat sampledata-1.2 | mysql -u$mysqluser -p$mysqlpass $dbname");
 	system("gzip -9 sampledata-1.2");
