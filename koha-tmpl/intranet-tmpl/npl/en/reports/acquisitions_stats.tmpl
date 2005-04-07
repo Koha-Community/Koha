@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close-calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -60,7 +60,7 @@
 			</tr>
 			<tr>
 			<th>Limit by Date: </th>
-			<td>From: <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+			<td><label for="from1">From: </label><input type="text"  size="10" id="from1" name="Filter" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -89,8 +89,8 @@
 										}
 									);
 								</script>
-					To: <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+					<label for="to1">To:</label> <input  size="10" id="to1" name="Filter" value="" type="text" />
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" >
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -139,7 +139,7 @@
 			</tr>
 			<tr>
 			<th>Limit by Date: </th>
-				<td><label for="fromRO">From:</label> <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
+				<td><label for="fromRO">From:</label> <input type="text"  size="10" id="fromRO" name="Filter" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -168,7 +168,7 @@
 										}
 									);
 								</script>
-					<label for="toRO">To: </label><input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
+					<label for="toRO">To: </label><input type="text"  size="10" id="toRO" name="Filter" value="" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" border="0" />
 							<script language="JavaScript" type="text/javascript">
 								function validate2(date) {
