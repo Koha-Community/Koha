@@ -11,8 +11,8 @@
 
 <!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form><!-- /TMPL_IF --><!-- /Hide from NPL -->
 
-<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Edit" /></form>
-<!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form>
+<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Edit" /></form>
+<!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form>
 <!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Change Password" /></form>
@@ -20,7 +20,7 @@
  <form action="/cgi-bin/koha/members/member-flags.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Modify Privileges" /></form>
 
 
-<form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->" onclick="confirm_deletion(); return false;"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="submit" class="cancel" value="Delete"></form>
+<form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->" onclick="confirm_deletion(); return false;"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="submit" class="cancel" value="Delete"></form>
 
 </div>
 <!-- TMPL_IF NAME="flagged" -->	<div class="details">
@@ -34,9 +34,10 @@
 
 <div class="compact">
 <table>
-<tr><th>Name:</th><td><!-- TMPL_IF name="IS_ADULT" --><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" -->. <!-- /TMPL_IF --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_IF NAME="othernames" -->"<!-- TMPL_VAR NAME="othernames" -->" <!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="initials" -->(<!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --></td></tr>
-		<tr><th>Address:</th><td><!-- TMPL_IF NAME="streetaddress" --><!-- TMPL_VAR NAME="streetaddress" --><br /><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="physstreet" --><!-- TMPL_VAR NAME="physstreet" --><br /><!-- /TMPL_IF --><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></td></tr>
+<tr><th>Name:</th><td><!-- TMPL_IF name="IS_ADULT" --><!-- TMPL_IF NAME="title" -->[<!-- TMPL_VAR NAME="title" -->]. <!-- /TMPL_IF --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_IF NAME="othernames" -->"<!-- TMPL_VAR NAME="othernames" -->" <!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="initials" -->(<!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --></td></tr>
+		<tr><th>Mailing Address:</th><td><!-- TMPL_IF NAME="streetaddress" --><!-- TMPL_VAR NAME="streetaddress" --><br /><!-- /TMPL_IF -->
+<!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></td></tr>
+		<!-- TMPL_IF NAME="physstreet" --><tr><th>Street Address:</th><td><!-- TMPL_VAR NAME="physstreet" --><br /><!-- TMPL_VAR NAME="streetcity" -->, <!-- TMPL_VAR NAME="homezipcode" --></td></tr><!-- /TMPL_IF -->
 		<!-- TMPL_UNLESS name="I" -->
 		<tr><th>Home Phone: </th><td><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr><!-- /TMPL_UNLESS -->
 		<!-- TMPL_IF NAME="phoneday" --><tr><th>Work Phone: </th><td><!-- TMPL_VAR NAME="phoneday" --></td></tr><!-- /TMPL_IF -->
