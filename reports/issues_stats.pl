@@ -274,7 +274,7 @@ sub calculate {
 	push @loopfilter,{crit=>"Issue|Return ",filter=>$type};
 	push @loopfilter,{crit=>"Display by ",filter=>$dsp} if ($dsp);
 	push @loopfilter,{crit=>"Select Day ",filter=>$daysel} if ($daysel);
-	push @loopfilter,{crit=>"Select Month ",filter=>$daysel} if ($monthsel);
+	push @loopfilter,{crit=>"Select Month ",filter=>$monthsel} if ($monthsel);
 	
 	
 	my @linefilter;
