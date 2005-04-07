@@ -216,7 +216,7 @@ sub catalogsearch {
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g if @$operator[$i] eq "contains";
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if @$operator[$i] eq "contains";
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
