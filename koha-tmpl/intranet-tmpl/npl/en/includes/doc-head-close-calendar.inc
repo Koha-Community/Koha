@@ -1,0 +1,49 @@
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
+<style type="text/css"> 
+	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
+</style>
+<script language="JavaScript" type="text/javascript">
+<!-- Hide from old browsers
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+
+function openWindow(targeturl, windowname) {
+	newwin =
+	window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
+}
+ 
+ 	var newwin;
+	
+	// Open the popup window if it doesn't already exist and give it focus.
+	function PopWin(targeturl, windowname) {
+	
+		if (!newwin || newwin.closed) newwin = window.open(targeturl,windowname, "height=300,width=400,scrollbars=yes,resizable=yes");
+	  newwin.focus();
+	}
+	
+  // Set the value of the form field to the passed value and optionally shift
+	// focus and close the popup.
+	function FillForm(val,formname,formfield) {
+	
+		document.forms[formname].elements[formfield].value = val;
+
+		// Uncomment below to shift focus after clicking link in popup.
+		document.forms[formname].elements[formfield].focus();
+		
+		// Uncomment below to close popup after clicking link.
+		newwin.close();
+	}
+ 
+// end hiding -->
+</script>
+<!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+</head>
+
+<body>
