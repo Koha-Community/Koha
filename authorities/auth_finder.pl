@@ -150,7 +150,7 @@ if ($op eq "do_search") {
 				debug => 1,
 				});
 
-	$template->param(index => $index,
+	$template->param(index=>$query->param('index')."",
 					resultstring => $resultstring,
 					);
 }
