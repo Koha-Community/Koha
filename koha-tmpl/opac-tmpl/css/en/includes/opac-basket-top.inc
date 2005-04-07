@@ -5,7 +5,11 @@
 <head>
 	<title>OPAC Basket</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang">/includes/opac.css">
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext
