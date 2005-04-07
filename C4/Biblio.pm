@@ -1146,7 +1146,7 @@ sub MARCaddword {
         $subfieldid, $subfieldorder, $sentence
       )
       = @_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
+    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
     my @words = split / /, $sentence;
     my $stopwords = C4::Context->stopwords;
     my $sth       =
@@ -2623,6 +2623,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
+# adding / to the list of symbols that are replace by spaces for searches
+#
 # Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
 # some improvements :
 # * return immediatly when a subfield is empty
