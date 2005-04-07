@@ -46,7 +46,23 @@
 						<!-- TMPL_IF name="classification" --><tr><th>Call Number:</th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="lccn" --><tr><th>LCCN:</th><td> <!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="url" --><tr><th>URL:</th><td> <!-- TMPL_VAR NAME="url" --></td></tr><!-- /TMPL_IF -->
-			</table></div><br>
+			</table></div>
+							<table><tr>
+					<th>Location: </th>
+					<th>Barcode: </th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+					<tr>
+						<td>
+							<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+					</tr>
+				<!-- /TMPL_LOOP --></table>
+			<br>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 <div class="table">	
