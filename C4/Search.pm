@@ -1305,11 +1305,12 @@ sub ItemInfo {
 					WHERE items.biblionumber = ?
 					AND biblioitems.biblioitemnumber = items.biblioitemnumber
 					AND biblio.biblionumber = items.biblionumber";
-	if ($type ne 'intra'){
-		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-		or items.itemlost is NULL)
-		and (wthdrawn <> 1 or wthdrawn is NULL)";
-	}
+# buggy : opac & librarian interface can show the same info level & itemstatus should not be hardcoded
+# 	if ($type ne 'intra'){
+# 		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
+# 		or items.itemlost is NULL)
+# 		and (wthdrawn <> 1 or wthdrawn is NULL)";
+# 	}
 	$query .= " order by items.dateaccessioned desc";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($biblionumber);
@@ -1324,15 +1325,17 @@ sub ItemInfo {
 		$data->{cardnumber} = $idata->{cardnumber};
 		$datedue = format_date($idata->{'date_due'});
 		}
-		if ($data->{'itemlost'} eq '2'){
-			$datedue='Very Overdue';
-		}
-		if ($data->{'itemlost'} eq '1'){
-			$datedue='Lost';
-		}
-		if ($data->{'wthdrawn'} eq '1'){
-			$datedue="Cancelled";
-		}
+# buggy : hardcoded & non-translatable
+# more : why don't you want to show the datedue if it's very very overdue ?
+# 		if ($data->{'itemlost'} eq '2'){
+# 			$datedue='Very Overdue';
+# 		}
+# 		if ($data->{'itemlost'} eq '1'){
+# 			$datedue='Lost';
+# 		}
+# 		if ($data->{'wthdrawn'} eq '1'){
+# 			$datedue="Cancelled";
+# 		}
 		if ($datedue eq ''){
 	#	$datedue="Available";
 			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
@@ -1365,20 +1368,22 @@ sub ItemInfo {
 	}
 	$sth->finish;
 	#FIXME: ordering/indentation here looks wrong
-	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-	$sth2->execute($biblionumber);
-	my $data;
-	my $ocount;
-	if ($data=$sth2->fetchrow_hashref){
-		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-		if ($ocount > 0){
-		$data->{'ocount'}=$ocount;
-		$data->{'order'}="One Order";
-		$results[$i]=$data;
-		}
-	}
-	$sth2->finish;
-	
+# buggy : count in $i+1 the info on qty ordered for $i : total shown is real total +1
+# useless : Koha 2.2.2 now automatically show the existing number of items
+# and if there is no items, and at least one is on order, show "on order".
+# 	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
+# 	$sth2->execute($biblionumber);
+# 	my $data;
+# 	my $ocount;
+# 	if ($data=$sth2->fetchrow_hashref){
+# 		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
+# 		if ($ocount > 0){
+# 		$data->{'ocount'}=$ocount;
+# 		$data->{'order'}="One Order";
+# 		$results[$i]=$data;
+# 		}
+# 	}
+# 	$sth2->finish;
 	return(@results);
 }
 
