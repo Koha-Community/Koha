@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports: Patron Statistics<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -6,61 +6,66 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Koha : Borrowers statistics </h1>
+		<h1>Patron Statistics Report</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
-			<p>Filtered on</p>
+			<p>Showing patron counts by category where 
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><label> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--></p>
-			<!-- /TMPL_LOOP -->
+					<strong><!-- TMPL_VAR NAME="crit"--></strong> is <span class="ex"><!-- TMPL_VAR NAME="filter"--></span>,
+			<!-- /TMPL_LOOP --></p>
 		<!-- /TMPL_IF NAME="loopfilter"-->
-		<table>
+		<div class="table"><table>
 			<tr >
-				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<th scope="col"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
-					<th><!-- TMPL_VAR NAME="coltitle" --></th>
+					<th scope="col"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
-				<th>TOTAL</th>
+				<th scope="col">Total</th>
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
-					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="hilighted" --><tr class="highlight"><!-- TMPL_ELSE --><!-- /TMPL_IF -->
+						<td>
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+							<td class="sum">
 								<!--TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" -->
 								<!--TMPL_ELSE-->
 									&nbsp;
 								<!--/TMPL_IF-->
 								</td>
 						<!-- /TMPL_LOOP -->
-						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<td class="sum">
 							<!-- TMPL_VAR NAME="totalrow" -->
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tfoot>
 				<tr >
-					<th>TOTAL</th>
+					<td>TOTAL</td>
 					<!-- TMPL_LOOP NAME="loopfooter" -->
-						<th>
+						<td class="sum">
 							<!-- TMPL_VAR NAME="totalcol" -->
-						</th>
+						</td>
 					<!-- /TMPL_LOOP -->
-					<th><!-- TMPL_VAR NAME="total" --></th>
+					<td class="sum"><!-- TMPL_VAR NAME="total" --></td>
 				</tr>
-		</table>
+				</tfoot>
+		</table></div>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1 class = "reports">Borrowers statistics</h1>
+<h1>Build Patron Statistics Report</h1>
+<div class="help">Choose at least one piece of information to display as a row in the report, and one to display as a column.</div>
 	<form method="post">
 <div class="data">
 	<table>
+	<caption>Patron Category</caption>
+	<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col">Limit by Category</th><th scope="col">Limit by Status</th></tr></thead>
 		<tbody>
-			<tr>
-			<th>Display Patron Category As: </th><td><label for="">Line</label><input type="radio" name="Line" value="categorycode" />  <label for="">Column</label><input type="radio" name="Column" value="categorycode" /></td></tr>
-			<tr><th><label for="Filter">Limit by Patron Category: </label></th><td><!-- TMPL_VAR NAME="CGICatCode" --></td></tr>
-			<tr><th><label for="">Limit by Patron Status: </label></th><td><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td></tr>
-			<tr><th>Display Zip Code As: </th><td><label for="">Row</label><input type="radio" name="Line" value="zipcode" />  <label for="">Column</label><input type="radio" name="Column" value="zipcode" /></td></tr>
-			<tr><th><label for="zipcode">Limit by Zip Code: </label></th><td><input type="text" size="10" id="zipcode" name="Filter" /> Limit to <select name="digits">
+			<tr><td><input type="radio" name="Line" value="categorycode" /></td><td><input type="radio" name="Column" value="categorycode" /></td><td><!-- TMPL_VAR NAME="CGICatCode" --></td><td><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td></tr>
+</table>
+<table>
+	<caption>Patron Zip Code</caption>
+		<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col">Limit by Zip Code</th><th scope="col">Limit Filter</th></tr></thead>
+			<tr><td><input type="radio" name="Line" value="zipcode" /></td><td><input type="radio" name="Column" value="zipcode" /></td><td><input type="text" size="10" id="zipcode" name="Filter" /></td><td><select name="digits">
 			<option value=""> </option>
 			<option value ="1">1</option>
 			<option value ="2">2</option>
@@ -73,21 +78,17 @@
 			<option value ="9">9</option>
 			<option value ="10">10</option>
 			</select> digits</td></tr>
-			
+	</table>
 			<!-- TMPL_IF name="hassort1" -->
-				<tr>
-				<th>Display Sorting Field 1 As: </th><td><label for="">Row</label> <input type="radio" name="Line" value="sort1" /> <label for="">Column</label><input type="radio" name="Column" value="sort1" /></td></tr>
-				<tr>
-				<th>Limit by Sorting Field 1: </th><td><!-- TMPL_VAR NAME="CGISort1" --></td></tr>
+				<table><caption>Sorting Field 1</caption>
+						<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col" colspan="2">Limit by Sorting Field 1</th></tr></thead>
+				<tr><td><input type="radio" name="Line" value="sort1" /></td><td><input type="radio" name="Column" value="sort1" /></td><td colspan="2"><!-- TMPL_VAR NAME="CGISort1" --></td></tr></table>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="hassort2" -->
-				<tr>
-				<th>Display Sorting Field 2 As: </th><td><label for="">Row</label> <input type="radio" name="Line" value="sort2" /> <label for="">Column</label><input type="radio" name="Column" value="sort2" /></td></tr>
-				<tr>
-				<th>Limit by Sorting Field 1: </th><td><!-- TMPL_VAR NAME="CGISort1" --></td></tr>
+							<table><caption>Sorting Field 2</caption>
+						<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col" colspan="2">Limit by Sorting Field 2</th></tr></thead>
+				<tr><td><input type="radio" name="Line" value="sort2" /></td><td><input type="radio" name="Column" value="sort2" /></td><td colspan="2"><!-- TMPL_VAR NAME="CGISort1" --></td></tr></table>
 			<!-- /TMPL_IF -->
-		</tbody>
-	</table>
 <table>
 	<caption>Output Options</caption>
 	<tr><td colspan="2"><label for="screen">To the Screen</label> <input type="radio" checked name="output" value="screen" id="screen" /></td></tr>
