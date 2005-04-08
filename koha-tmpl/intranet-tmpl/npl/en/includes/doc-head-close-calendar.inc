@@ -4,6 +4,9 @@
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
 </style>
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME='themelang' -->/includes/calendar/calendar-system.css">
+<!-- End of additions -->
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
 function Help() {
