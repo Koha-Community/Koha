@@ -27,20 +27,21 @@ Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMP
 					<th>Call Number</th>
 					<th>&nbsp;</th>
 				<!-- TMPL_UNLESS NAME="NOTMARC" -->
-					<th>&nbsp;</th>
+					<th colspan="2">&nbsp;</th>
 				<!-- /TMPL_UNLESS -->
 				</tr>
 				<!-- TMPL_IF name="loop" -->
 				<!-- TMPL_LOOP NAME="loop" -->
 				<tr>
-						<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 						<td><!-- TMPL_VAR NAME="author" --></td>
 						<td><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 <td><!-- TMPL_IF NAME="classification" --><!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --></td>
 						<!-- TMPL_IF NAME="NOTMARC" -->
 						<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add items</a></td>
 						<!-- TMPL_ELSE -->
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Record</a></td>
+						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Biblio</a></td>
+						<td><a href="additem.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->">Edit Items</a></td>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_UNLESS NAME="NOTMARC" -->
 						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;op=duplicate">Duplicate</a></td><!-- /TMPL_UNLESS --></tr>
