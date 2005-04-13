@@ -133,7 +133,7 @@
 			<p>Title: <!-- TMPL_VAR NAME="itemtitle" --></p>
 			<h2 class="circulation">Borrower Information</h2>
 			<p>
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;">
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;">
 				<!-- TMPL_VAR NAME="riborcnum" -->
 			</a>
 			<!-- TMPL_VAR NAME="riborsurname" -->, <!-- TMPL_VAR NAME="ribortitle" --> <!-- TMPL_VAR NAME="riborfirstname" --></p>
@@ -212,7 +212,7 @@
 					<td><!-- TMPL_VAR NAME="itemtype" --></td>
 					<td>
 					<!-- TMPL_IF Name="duedate" -->
-						<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->','Member'); return false;">
+						<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->','Member'); return false;">
 							<!-- TMPL_VAR NAME="borcnum" -->
 						</a> <!-- TMPL_VAR NAME="borfirstname" --> <!-- TMPL_VAR NAME="borsurname" -->
 					<!-- TMPL_ELSE -->
