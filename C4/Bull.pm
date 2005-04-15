@@ -228,8 +228,25 @@ sub getsubscriptions {
 		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=?");
 		$sth->execute($biblionumber);
 	} else {
-		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
-		$sth->execute("%$title%",$ISSN);
+		if ($ISSN and $title)
+		{
+			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
+			$sth->execute("%$title%",$ISSN);
+		}
+		else
+		{
+			if ($ISSN)
+			{
+				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ?");
+				$sth->execute($ISSN);
+			}
+			else
+			{
+				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
+ biblio.biblionumber=subscription.biblionumber and biblio.title like ? ");
+				$sth->execute("%$title%");
+			}
+		}
 	}
 		my @results;
 	while (my $line = $sth->fetchrow_hashref) {
