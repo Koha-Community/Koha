@@ -40,6 +40,35 @@
 	display: block;
 }
 
+.panelholder table {
+	font-family : Verdana, Geneva, Arial, sans-serif;
+}
+
+.panelholder table th {
+	background-color : #EFF1D8;
+	border-bottom : 1px solid #CCCC99;
+	border-right : 1px solid #CCCC99;
+	font-size : 80%;
+	font-weight : bold;
+	text-align : right;
+	width : 30%;
+}
+
+.panelholder table tr.mandatory td, .panelholder table tr.mandatory th {
+	background-color : #FFFFE1;
+	border-bottom : 1px dashed #990000;
+	border-left : 1px dashed #990000;
+	border-top : 1px dashed #990000;
+}
+
+.panelholder table tr.mandatory td:first-child {
+	border-left : 3px dotted #990000;
+}
+
+.panelholder table tr.mandatory td {
+	background-color : #EEF0DB;
+}
+
 .panel {
 	position: relative;
 	color: #000000;
@@ -48,6 +77,6 @@
 	border-color: #999999;
 	top: 0;
 	left: 0;
-	padding: 10px;
+	padding: 0 0 0 10px;
 	display: none;
 }
