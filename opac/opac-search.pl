@@ -11,6 +11,9 @@ use HTML::Template;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
+my @spsuggest; # the array for holding suggestions
+my $suggest;   # a flag to be set (if there are suggestions it's 1)
+my $firstbiblionumber; # needed for directly sending user to first item
 # use C4::Search;
 
 my $classlist='';
@@ -89,6 +92,123 @@ if ($op eq "do_search") {
 
 	my @field_data = ();
 
+### Added by JF
+## This next does a number of things:
+# 1. It allows you to track all the searches made for stats, etc.
+# 2. It fixes the 'searchdesc' variable problem by introducing
+#         a. 'searchterms' which comes out as 'Keyword: neal stephenson'
+#         b. 'phraseorterm' which comes out as 'neal stephenson'
+#      both of these are useful for differen purposes ... I use searchterms
+#      for display purposes and phraseorterm for passing the search terms
+#      to an external source through a url (like a database search)
+# 3. It provides the variables necessary for the spellchecking (look below for
+#      how this is done
+# 4.
+# 
+$totalresults = $total;
+## This formats the 'search results' string and populates
+## the 'OPLIN' variable as well as the 'spellcheck' variable
+## with appropriate values based on the user's search input
+
+my $searchterms; #returned in place of searchdesc for 'results for search'
+                 # as a string (can format if need be)
+
+my @spphrases;
+my $phraseorterm;
+my %searchtypehash = ( # used only for the searchterms string formation
+                        # and for spellcheck string
+        '0' => 'keyword',
+        '1' => 'title',
+        '2' => 'author',
+        '3' => 'subject',
+        '4' => 'series',
+        '5' => 'format',
+        );
+
+my @searchterm = $query->param('value');
+
+for (my $i=0; $i <= $#searchterm; $i++) {
+        my $searchtype = $searchtypehash{$i};
+        push @spphrases, $searchterm[$i];
+        if ($searchterms) { #don't put and in again
+                if ($searchterm[$i]) {
+                $phraseorterm.=$searchterm[$i];
+                $searchterms.=" AND ".$searchtype." : \'".$searchterm[$i]."\'";
+                }
+        } else {
+                if ($searchterm[$i]) {
+                $phraseorterm.=$searchterm[$i];
+                $searchterms.=$searchtype.": \'".$searchterm[$i]."\'";
+                }
+        }
+}
+
+# Spellchecck stuff ... needs to use above scheme but must change
+# cgi script first
+my $phrases = $query->param('value');
+#my $searchterms = $query->param('value');
+# warn "here is searchterms:".$searchterms;
+
+# FIXME: should be obvious ;-)
+#foreach my $phrases (@spphrases) {
+$phrases =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
+$phrases =~ s/(\Athe |\Aa |\Aan |)//g;
+my $spchkphraseorterm = $phraseorterm;
+        $spchkphraseorterm =~ tr/A-Z/a-z/;
+        $spchkphraseorterm =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
+        $spchkphraseorterm =~s/(\Aand-or |\Aand\/or |\Aanon |\Aan |\Aa |\Abut |\Aby |\Ade |\Ader |\Adr |\Adu|et |\Afor |\Afrom |\Ain |\Ainto |\Ait |\Amy |\Anot |\Aon |\Aor |\Aper |\Apt |\Aspp |\Ato |\Avs |\Awith |\Athe )/ /g;
+        $spchkphraseorterm =~s/( and-or | and\/or | anon | an | a | but | by | de | der | dr | du|et | for | from | in | into | it | my | not | on | or | per | pt | spp | to | vs | with | the )/ /g;
+ 
+        $spchkphraseorterm =~s/  / /g;
+my $resultcount = $total;
+my $ipaddress = $query->remote_host();
+#
+
+if (
+#need to create a table to record the search info
+#...FIXME: add the script name that creates the table
+# 
+my $dbhpop=DBI->connect("DBI:mysql:demosuggest:localhost","auth","YourPass")) {
+
+# insert the search info query
+my $insertpop = "INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip) VALUES(?,?,?)";
+
+# grab spelling suggestions query
+my $getsugg = "SELECT display FROM spellcheck WHERE strcmp(soundex(suggestion), soundex(?)) = 0 order by soundex(suggestion) limit 0,5";
+
+#get spelling suggestions when there are no results
+if ($resultcount eq 0) {
+        my $sthgetsugg=$dbhpop->prepare($getsugg);
+        $sthgetsugg->execute($spchkphraseorterm);
+        while (my ($spsuggestion)=$sthgetsugg->fetchrow_array) {
+#               warn "==>$spsuggestion";
+                #push @spsuggest, +{ spsuggestion => $spsuggestion };
+                my %line;
+                $line{spsuggestion} = $spsuggestion;
+                push @spsuggest,\%line;
+                $suggest = 1;
+        }
+#       warn "==>".$#spsuggest;
+        $sthgetsugg->finish;
+}
+# end of spelling suggestions
+
+my $sthpop=$dbhpop->prepare($insertpop);
+
+#$sthpop->execute($phrases,$resultcount,$ipaddress);
+$sthpop->finish;
+}
+#
+### end of tracking stuff  --  jmf at kados dot org
+#
+$template->param(suggest => $suggest );
+$template->param( SPELL_SUGGEST => \@spsuggest );
+$template->param( searchterms => $searchterms );
+$template->param( phraseorterm => $phraseorterm );
+#warn "here's the search terms: ".$searchterms;
+#
+### end of spelling suggestions
+### /Added by JF
 
 	for(my $i = 0 ; $i <= $#marclist ; $i++)
 	{
@@ -193,5 +313,12 @@ if ($op eq "do_search") {
 					CGIbranch => $CGIbranch,
 	);
 }
-
+# ADDED BY JF
+if ($totalresults == 1){
+    # if its a barcode search by definition we will only have one result.
+    # And if we have a result
+    # lets jump straight to the detail.pl page
+    print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=$firstbiblionumber");
+}
+else {
 output_html_with_http_headers $query, $cookie, $template->output;
