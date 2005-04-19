@@ -45,6 +45,13 @@
 			<input type="hidden" name="operator" value="contains" />  
 			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" /></td>
 		</tr>
+<tr><th><label for="seriestitle">Series title</label></th><td>			
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="seriestitle" name="value" size="35"/></td></tr>
+	</table><input type="submit" value="Start search" class="submit" /><table>
 		<tr>
 			<th><label for="itemtype">Item Type</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.itemtype" />
@@ -55,7 +62,7 @@
 		</tr>
 		<tr>
 				<th><label for="branch">Branch</label></th>
-				<td><input type="hidden" name="marclist" value="items.holdingbranch" />
+				<td><input type="hidden" name="marclist" value="items.homebranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
@@ -94,6 +101,7 @@
 			<input type="text" id="publisher" name="value" onchange="sql_update()" size="35"  accesskey="p" /></td>
 		</tr>
 		</table>
+		<input type="submit" value="Start search" class="submit" />
 </div>
 
 <div class="table">
@@ -144,11 +152,16 @@
 				<option value="biblioitems.dewey">Dewey</option>
 				<option value="biblioitems.publicationyear">Publication Year</option>
 				<option value="biblioitems.publishercode">Publisher</option>
-			</select></td>
+			</select>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Ascending</option>
+				<option value="DESC">Descending</option>
+			</select>
+			</td>
 		</tr></table>
 		<p>
-			<input type="submit" value="Start search" class="submit">
-			<input type="button" value="Suggest Search Term" class="submit" onclick="PopupSuggestion(); return false;">
+			<input type="submit" value="Start search" class="submit" />
+			<input type="button" value="Suggest Search Term" class="submit" onclick="PopupSuggestion(); return false;" />
 		</p>
 		</div>
 	</form>
