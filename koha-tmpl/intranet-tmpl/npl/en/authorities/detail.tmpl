@@ -1,7 +1,13 @@
-<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="authorities-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
 <div class="tabbed">
-	<h1 class="authority">Authority number : <!-- TMPL_VAR NAME="authid" --></h1>
+	<h1>Authority number : <!-- TMPL_VAR NAME="authid" --></h1>
 	<a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">
 		<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
 	</a>
@@ -44,5 +50,4 @@ function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
