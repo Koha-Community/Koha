@@ -152,8 +152,8 @@
 	</form>	
         <div class="data"><table>
 		<tr>
-			<th scope="col">Category</th>
-			<th scope="col">Description</th>
+			<th scope="col">Category Name</th>
+			<th scope="col">Code</th>
 			<th scope="col">Enrollment Period</th>
 			<th scope="col">Upper Age Limit</th>
 			<th scope="col">Age Required</th>
@@ -163,17 +163,17 @@
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPl_IF -->>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="categorycode" --></a></td>
-                        <td><!-- TMPL_VAR NAME="description" --></td>
+		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPl_IF -->
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="description" --></a></td><td><!-- TMPL_VAR NAME="categorycode" --></td>
+                        
                         <td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td>
                         <td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
-                        <td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
-                        <td><a class="delete" href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME=script_name -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table></div><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">

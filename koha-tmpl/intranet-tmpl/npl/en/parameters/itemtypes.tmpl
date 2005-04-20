@@ -94,8 +94,8 @@
 					<!-- /TMPL_IF -->
 			</td>
 		<td><!-- TMPL_UNLESS name="notforloan" --><!-- TMPL_VAR NAME="rentalcharge" --><!-- /TMPL_UNLESS --></td>
-			<td><a class="edit" href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Edit</a></td>
-			<td><a class="delete" href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Delete</a></td>
+			<td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" escape="HTML" -->" /><input type="submit" value="Edit" class="submit" /></form></td>
+			<td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" escape="HTML" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>

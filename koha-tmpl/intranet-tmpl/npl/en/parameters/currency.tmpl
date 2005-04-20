@@ -68,7 +68,7 @@
         <form action="<!-- TMPL_VAR NAME=script_name -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
 
-	<table>
+<div class="data">	<table>
 	<caption><!-- TMPL_IF NAME=searchfield -->
 		Modify currency
 	<!-- TMPL_ELSE -->
@@ -76,14 +76,14 @@
 	<!-- /TMPL_IF --></caption>
 	<!-- TMPL_IF NAME="searchfield" -->
 		<tr>
-			<td>Currency</td>
+			<th>Currency</th>
 			<td>
 				<input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Currency</td>
+			<th>Currency</th>
 			<td>
 				<input type="text" name="currency" size="50" maxlength="50" onblur="toUC(this);" />
 			</td>
@@ -91,12 +91,14 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>Rate</td>
+			<th>Rate</th	>
 			<td>
 				<input type="text" name="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
 			</td>
 		</tr>
-        </table><input type="button" value="Update" onClick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
+        </table></div>
+		
+		<input type="button" value="Update" onClick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
         </form>
 
 <!-- /TMPL_IF -->
@@ -149,7 +151,7 @@
 
 <!-- TMPL_IF NAME="else" -->
 
-<h2>Currencies admin</h2>
+<h2>Currencies Management</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <span class="ex"><!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->	
@@ -167,8 +169,8 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
-			<td><a class="edit"  href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
-                        <td><a class="delete" href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
+			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Delete" class="delete" /></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table></div>
