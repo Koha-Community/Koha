@@ -91,21 +91,22 @@
 <input type="hidden" name="op" value="add_validate" />
 <input type="hidden" name="checked" value="0" />
 <h1><!-- TMPL_VAR NAME="header" --></h1>
+<div class="data">
 <table>
 <!-- TMPL_IF name="modify" -->
-<tr><td>Book fund</td><td><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
-<tr><td>Book fund name</td><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
+<tr><th>Book fund</th><td><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
+<tr><th>Book fund name</th><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="adding" -->
-<tr><td><label for="bookfundid">Bookfund</label></td><td><input type="hidden" name="bookfundid" id="bookfundid" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
+<tr><th><label for="bookfundid">Bookfund</label></th><td><input type="hidden" name="bookfundid" id="bookfundid" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
 <!-- /TMPL_IF -->
 
-<tr><td><label for="startdate">Start date (<!-- TMPL_VAR NAME="dateformat" -->)</label></td><td><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR NAME="startdate" -->" />&nbsp;</td></tr>
-<tr><td><label for="enddate">End date (<!-- TMPL_VAR NAME="dateformat" -->)</label></td><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR NAME="enddate" -->" /></td></tr>
-<tr><td><label for="budgetamount">Budget amount</label></td><td><input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" /></td></tr>
-</table>
-<input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="button" value="Add" class="submit" onclick="Check(this.form)" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" /></form>
+<tr><th><label for="startdate">Start date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR NAME="startdate" -->" />&nbsp;</td></tr>
+<tr><th><label for="enddate">End date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR NAME="enddate" -->" /></td></tr>
+<tr><th><label for="budgetamount">Budget amount</label></th><td><input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" /></td></tr>
+</table></div>
+<input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="button" value="<!-- TMPL_VAR NAME="header" -->" class="submit" onclick="Check(this.form)" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" /></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
@@ -116,16 +117,18 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<h3>Delete Book Fund '<!-- TMPL_VAR NAME="bookfundid" -->'?</h3>
-<table>
-<tr><td>Start date</td><td><!-- TMPL_VAR NAME="startdate" --></td></tr>
-<tr><td>End date</td><td><!-- TMPL_VAR NAME="enddate" --></td></tr>
-<tr><td>Budget Amount</td><td><!-- TMPL_VAR NAME="budgetamount" --></td></tr>
-<tr><td></td></tr></table><div class="tabitem"><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="submit" value="Delete this Book Fund" class="cancel" /></form> <form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="Do Not Delete" class="submit" /></form></div>
+<h3>Delete Book Budget?</h3>
+<div class="data"><table>
+<tr><th>Start date</th><td><!-- TMPL_VAR NAME="startdate" --></td></tr>
+<tr><th>End date</th><td><!-- TMPL_VAR NAME="enddate" --></td></tr>
+<tr><th>Budget Amount</th><td><!-- TMPL_VAR NAME="budgetamount" --></td></tr>
+</table></div>
+
+<div class="tabitem"><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="submit" value="Delete this Book Fund" class="cancel" /></form> <form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="Do Not Delete" class="submit" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<h3>Book fund deleted</h3>
+<h3>Budget deleted</h3>
 <div class="form"><form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 <input type="submit" value="Continue" class="submit" />
 </form></div>
