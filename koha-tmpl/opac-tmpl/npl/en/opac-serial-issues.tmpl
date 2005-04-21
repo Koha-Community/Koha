@@ -1,12 +1,15 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-<!--------------------------MAIN BODY OF PAGE-------------------------->
-<div id="mainbloc">
-<h1 class="catalogue">Issues for a subscription</h1>
-<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Serials
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<h1>Issues for a subscription</h1>
+<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Back to biblio</a>
 <form method="post" name="f">
 <!-- TMPL_LOOP name="subscription_LOOP" -->
 <div id="bloc60">
-	<h2 class="catalogue">Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
+	<h2>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
 		<p>It began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every
 		<b>
 		<!--TMPL_IF name="periodicity1" -->
@@ -75,8 +78,8 @@
 		since <b><!-- TMPl_VAR name="startdate" --></b>
 		</p>
 		<p><!-- TMPL_VAR name="notes" --></p>
-	<!-- TMPL_IF name="opacnotes" -->
-		<h2 class="catalogue">Issues summary</h2>
+	<!-- TMPL_IF name="opacnote" -->
+		<h2>Issues summary</h2>
 		<p>
 			<!-- TMPL_VAR name="opacnote" -->
 		</p>
@@ -84,5 +87,5 @@
 </div>
 <!-- /TMPL_LOOP -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+</body>
+</html>
