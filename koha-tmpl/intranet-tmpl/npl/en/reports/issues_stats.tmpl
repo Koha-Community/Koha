@@ -10,7 +10,7 @@
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Showing Issues where 
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --> <strong><!-- TMPL_VAR NAME="crit"--></strong> = <span class="ex"><!-- TMPL_VAR NAME="filter"--></span>, <!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF -->
+					<!-- TMPL_IF NAME="err" --> <span class="error"> <b><!--/TMPL_IF --> <strong><!-- TMPL_VAR NAME="crit"--></strong> = <span class="ex"><!-- TMPL_VAR NAME="filter"--></span>, <!-- TMPL_IF NAME="err" --> </span> </b><!--/TMPL_IF -->
 			<!-- /TMPL_LOOP --></p>
 		<!-- /TMPL_IF NAME="loopfilter"-->
 	
@@ -248,6 +248,7 @@
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 	<input type="hidden" name="do_it" value="1" />
 	</form></p>
+	</div>
 <!-- /TMPL_IF -->
 </div>
 

@@ -10,11 +10,11 @@
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+					<p><!-- TMPL_IF NAME="err" --> <span class="error"> <b><!--/TMPL_IF --><strong><!-- TMPL_VAR NAME="crit"--> =</strong><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </span> </b><!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
 		<br>
-		<table border="1">
+		<table>
 			<tr >
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
