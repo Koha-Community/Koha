@@ -50,7 +50,7 @@
 					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 					<!-- TMPL_UNLESS name="closedate" -->
 					<td>
-							<a class="delete" href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;quantity=0&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">Delete</a>
+							<form action="addorder.pl" method="get"><input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" /><input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="quantity" value="0" /><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="delete" value="Delete" /></form>
 						</td>
 					<!-- /TMPL_UNLESS -->
 				</tr>

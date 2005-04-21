@@ -35,17 +35,17 @@
 	<caption>Catalogue Details</caption>
 		<tr>
 			<td><b>Title *</b></td>
-			<td><input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" >
+			<td><input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
 			</td>
 		</tr>
 		<tr>
 			<td>Author</td>
-			<td><input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" >
+			<td><input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
 			</td>
 		</tr>
 		<tr>
 			<td>Copyright Date</td>
-			<td><input type="text" size="20" name="copyright" value="<!-- TMPL_VAR NAME="copyrightdate" -->" >
+			<td><input type="text" size="20" name="copyright" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
 			</td>
 		</tr>
 		<tr>
@@ -54,11 +54,11 @@
 		</tr>
 		<tr>
 			<td>ISBN</td>
-			<td><input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->"></td>
+			<td><input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /></td>
 		</tr>
 		<tr>
 			<td>Series</td>
-			<td><input type="text" size="20" name="Series" value="<!-- TMPL_VAR NAME="seriestitle" -->"></td>
+			<td><input type="text" size="20" name="Series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /></td>
 		</tr>
 		<tr>
 			<td>Branch</td>
@@ -66,22 +66,22 @@
 		</tr>
 		<tr>
 			<td><b>Item Barcode *</b></td>
-			<td><input type="text" size="20" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->"></td>
+			<td><input type="text" size="20" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></td>
 		</tr>
 		<tr>
 			<td><b>Volume Info (for serials) *</b></td>
-			<td><input type="text" size="20" name="volinf"></td>
+			<td><input type="text" size="20" name="volinf" /></td>
 		</tr>
 		<tr>
 			<td colspan=2 align="center">
-				<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-				<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->">
-				<input type="hidden" name="biblioitemnum" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
-				<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="booksellerid" -->">
-				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
-				<input type="hidden" name="gst" "value"="<!-- TMPL_VAR NAME="gst" -->">
+				<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+				<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
+				<input type="hidden" name="biblioitemnum" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+				<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
+				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
+				<input type="hidden" name="gst" "value"="<!-- TMPL_VAR NAME="gst" -->" />
 				<!-- TMPL_IF name="catview" -->
-					<input type="submit" class="submit"  name="submit" value="Save">
+					<input type="submit" class="submit"  name="submit" value="Save" />
 				<!-- TMPL_ELSE -->
 					<a href="/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;id=<!-- TMPL_VAR NAME="booksellerid" -->">Edit</a>
 				<!-- /TMPL_IF -->
@@ -96,36 +96,36 @@
 		</tr>
 		<tr>
 			<td>Quantity Ordered</td>
-			<td><input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->">
+			<td><input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
 			</td>
 		</tr>
 		<tr>
 			<td><b>Quantity Received *</b></td>
-			<td><input type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->">
+			<td><input type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
 			</td>
 		</tr>
 		<tr>
 			<td>Replacement Cost</td>
-			<td><input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->">
+			<td><input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
 		</tr>
 		<tr>
 			<td>Budgeted Cost </td>
-			<td><input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"></td>
+			<td><input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" /></td>
 		</tr>
 		<tr>
 			<td><b>Actual Cost *</b></td>
-			<td><input type="text" size="20" name="cost" value="<!-- TMPL_VAR NAME="unitprice" -->"></td>
+			<td><input type="text" size="20" name="cost" value="<!-- TMPL_IF name="unitprice"--><!-- TMPL_VAR NAME="unitprice" --><!-- TMPL_ELSE --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF -->" /></td>
 		</tr>
 		<tr>
 			<td>Invoice Number</td>
 			<td>
 				<!-- TMPL_VAR NAME="invoice" -->
-				<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+				<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
 			</td>
 		</tr>
 		<tr>
 			<td>Notes</td>
-			<td><input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->"></td>
+			<td><input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" /></td>
 		</tr>
 	</table>
 	</form>
