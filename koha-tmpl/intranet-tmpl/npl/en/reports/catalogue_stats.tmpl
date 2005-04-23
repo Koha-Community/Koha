@@ -13,9 +13,9 @@
 					<p><!-- TMPL_IF NAME="err" --> <span class="error"> <b><!--/TMPL_IF --><strong><!-- TMPL_VAR NAME="crit"--> =</strong><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </span> </b><!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
-		<br>
+		
 		<table>
-			<tr >
+			<tr>
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -38,7 +38,7 @@
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP NAME="looprow" -->
-				<tr >
+				<tr>
 					<th>TOTAL</th>
 					<!-- TMPL_LOOP NAME="loopfooter" -->
 						<th>
@@ -50,13 +50,12 @@
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<form method="post">
+	<form method="post" action="catalogue_stats.pl">
 	<div class="data">
 	<table>
 	<caption>Catalogue statistics</caption>
-		<tbody>
-			<!-- TMPL_IF Name="hasdewey" -->
-				<tr>
+			<!-- TMPL_IF Name="hasdewey" --><tr>
+				
 					<th>Display Dewey Number As:</th><td><label for="Line">Row</label> <input type="radio" name="Line" id="Line" value="dewey" /> <label for="Column">Column</label> <input type="radio" name="Column" id="Column" value="dewey" /></td></tr>
 				<tr><th>Limit by Dewey Number: </th><td><label for="Filter">From</label> <!-- TMPL_VAR NAME="CGIFromDeweyClass" --> <label for="Filter">To</label> <!-- TMPL_VAR NAME="CGIToDeweyClass" -->, Limit to: <select name="deweydigits">
 						<option value=""> </option>
@@ -65,16 +64,14 @@
 						<option value ="3">3</option>
 						<option value ="4">4</option>
 						<option value ="5">5</option>
-						</select> digits</td></tr>
-				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></tr>
-			<!-- /TMPL_IF -->
+						</select> digits</td>
+			</tr><!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF Name="haslccn" -->
 				<tr>
 					<th>Display LoC Number As:</th>
 					<td><label for="Line2">Row</label> <input type="radio" name="Line" id="Line2" value="lccn" /> <label for="Column2">Column</label> <input type="radio" id="Column2" name="Column" value="lccn" /></td></tr>
-					<tr><th>Limit by LoC Number: </th><td><label for="lccn">From</label> <!-- TMPL_VAR NAME="CGIFromLoCClass" --> To <!-- TMPL_VAR NAME="CGIToLoCClass" -->, <label for="lccndigits">Limit to</label> <select name="lccndigits" id="lccndigits">
+					<tr><th>Limit by LoC Number: </th><td><label for="locfrom">From</label> <input type="text" id="locfrom" size="6" name="Filter" /> <label for="locto">To</label> <input id="locto" type="text" size="6" name="Filter" />, <label for="lccndigits">Limit to</label> <select name="lccndigits" id="lccndigits">
 						<option value=""> </option>
 						<option value ="1">1</option>
 						<option value ="2">2</option>
@@ -82,13 +79,11 @@
 						<option value ="4">4</option>
 						<option value ="5">5</option>
 						</select> characters</td></tr>
-				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" /></tr>
 			<!-- /TMPL_IF  -->
 			<!-- TMPL_IF Name="hascote" -->
 <tr>
 					<th>Display Call Number As:</th>
-					<td><label for="Line3">Row</label> <input type="radio" name="Line" id="Line3" value="items.itemcallnumber"> <label for="Column3">Column</label> <input type="radio" name="Column" id="Column3" value="items.itemcallnumber"></td></tr>
+					<td><label for="Line3">Row</label> <input type="radio" name="Line" id="Line3" value="items.itemcallnumber"> <label for="Column3">Column</label> <input type="radio" name="Column" id="Column3" value="items.itemcallnumber" /></td></tr>
 					<th>Limit by Call Number</th><label for="cote">From</label> <!-- TMPL_VAR NAME="CGIFromCoteClass" --> To <!-- TMPL_VAR NAME="CGIToCoteClass" -->, <label for="cotedigits">Limit to</label> <select id="cotedigits" name="cotedigits">
 						<option value=""> </option>
 						<option value ="1">1</option>
@@ -96,27 +91,27 @@
 						<option value ="3">3</option>
 						<option value ="4">4</option>
 						<option value ="5">5</option>
-						</select> characters</td>
-				</tr>
-				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" /></tr>
+						</select> characters</td></tr>
 			<!-- /TMPL_IF -->
 			</table>
+			<!-- TMPL_UNLESS NAME="hasdewey --><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /><!-- /TMPL_UNLESS -->
+			<!-- TMPL_UNLESS NAME="haslccn --><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /><!-- /TMPL_UNLESS -->
+			<!-- TMPL_UNLESS NAME="hascote --><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /><!-- /TMPL_UNLESS -->
 			<table>
 			<tr>
 				<th>Display Item Type As:</th>
 				<td><label for="Line4">Row</label> <input type="radio" name="Line" id="Line4" value="itemtype" /> <label for="Column4">Column</label> <input type="radio" id="Column4" name="Column" value="itemtype" /></td></tr>
-				<th><label for="itemtype">Limit by Item Type: </label></th><td><!-- TMPL_VAR NAME="CGIItemType" --></td></tr></table>
+				<tr><th><label for="itemtype">Limit by Item Type: </label></th><td><!-- TMPL_VAR NAME="CGIItemType" --></td></tr></table>
 <table>
 				<tr>
 				<th>Display Publisher As: </th>
 				<td><label for="Line5">Row</label> <input type="radio" name="Line" id="Line5" value="publishercode" /> <label for="Column5">Column</label> <input type="radio" name="Column" id="Column5" value="publishercode" /></td></tr>
-				<tr><th><label for="publisher">Limit by Publisher:</label> </th><td><!-- TMPL_VAR NAME="CGIPublisher" --></td>
+				<tr><th><label for="publisher">Limit by Publisher:</label> </th><td><input type="text" id="publisher" name="Filter" /></td>
 			</tr>
 </table>
 <table><tr>
-				<th>Display Publication Year As: </th><td><label for="Line6">Row</label> <input type="radio" name="Line" id="Line6" value="publicationyear"> <label for="Column6">Column</label> <input type="radio" name="Column" id="Column6" value="publicationyear"></td></tr>
-				<th>Limit by Publication Year: </th><td><label for="fromyear">From</label> <input type="text" id="fromyear" name="Filter" size="4" maxlength="4" /> <label for="toyear">To</label> <input type="text" size="4" maxlength="4" id="toyear" name="Filter" /></td></tr>
+				<th>Display Publication Year As: </th><td><label for="Line6">Row</label> <input type="radio" name="Line" id="Line6" value="publicationyear" /> <label for="Column6">Column</label> <input type="radio" name="Column" id="Column6" value="publicationyear" /></td></tr>
+				<tr><th>Limit by Publication Year: </th><td><label for="fromyear">From</label> <input type="text" id="fromyear" name="Filter" size="4" maxlength="4" /> <label for="toyear">To</label> <input type="text" size="4" maxlength="4" id="toyear" name="Filter" /></td></tr>
 </table>
 <table>
 	<tr><th>Display Home Branch As: </th>
@@ -130,22 +125,23 @@
 				<td><label for="Line8">Row</label> <input type="radio" name="Line" id="Line8" value="items.location" /> <label for="Column8">Column</label> <input type="radio" name="Column" id="Column8" value="items.location" /></td></tr>
 			<tr><th><label for="location">Limit By Location: </label></th><td><!-- TMPL_VAR NAME="CGILocation" --> </td>
 			</tr>
-		</tbody>
 	</table>
 	
-		<h3> Output </h3>
-		<input type="radio" checked name="output" value="screen"  /> To screen into the browser
-		<br>
-		<input type="radio" name="output" value="file" /> To file <input type="text" name="basename" value="Export" /> into an application  
-		<!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	</p>
-
+<table>
+	<caption>Output Options</caption>
+	<tr><td colspan="2"><label for="screen">To the Screen</label> <input type="radio" checked="checked" name="output" value="screen" id="screen" /></td></tr>
+	<tr><td colspan="2"><label for="file">To file a file</label><input type="radio" name="output" value="file" id="file" /></td></tr>
+<tr><td>&nbsp;</td><td><label for="basename">...named:</label>   <input type="text" id="basename" name="basename" value="Export" /></td></tr>
+<tr><td>&nbsp;</td><td><label for="MIME">File Format:</label> <!-- TMPL_VAR NAME="CGIextChoice" --></td></tr>
+<tr><td>&nbsp;</td><td><label for="sep">Delimiter:</label> <!-- TMPL_VAR NAME="CGIsepChoice" --></td></tr>
+</table>
+		
 	<p>
-	<input TYPE="submit" value="OK" class="submit" />
+	<input type="submit" value="Generate Report" class="submit" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
-	</form>
+	<input type="hidden" name="do_it" value="1" /></p>
+	</div></form>
+	
 <!-- /TMPL_IF -->
 </div>
 
