@@ -13,9 +13,8 @@
 
 	<div class="tabitem"><form action="MARCdetail.pl" method="get">
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
-<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form> 	<form action="bookshelves/addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Add to Shelf" onclick="openWindow('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->', 'popped'); return false;" /></form> <form action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Reserves" class="submit" /></form> <!-- Hide from NPL //<form action="acqui.simple/addbiblio.pl"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Edit this Record" class="submit" /></form> //Hide from NPL -->
-</div>
-	<!-- /TMPL_IF -->
+<input type="submit" class="submit" value="View MARC" /></form> <form action="ISBDdetail.pl" method="get" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="View ISBD" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="View Item Details" /></form> 	<form action="bookshelves/addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Add to Shelf" onclick="openWindow('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->', 'popped'); return false;" /></form> <form action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Print" onclick="openWindow('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->','printview'); return false;" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Reserves" class="submit" /></form>
+	<!-- /TMPL_IF --></div>
 <ul>
 			<!-- TMPL_IF NAME="subtitle" --><li><b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="author" --><li><b>Author:</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR
@@ -29,10 +28,16 @@
 			<!-- TMPL_IF NAME="unititle" --><li><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
 			<!-- Hide from NPL --><!-- TMPL_IF NAME="serial" --><li><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --></li><!-- /TMPL_IF --> <!-- /Hide from NPL -->
 			<li><b>Biblio Record</b> <!-- TMPL_VAR NAME="biblionumber" --></li>
-			<!-- TMPL_IF NAME="count" --><li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li><!-- /TMPL_IF -->
+			<li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li>
 			</ul>
 <br clear="both" />
-			</div>
+
+			</div><!-- TMPL_IF NAME="CAN_user_editcatalogue" --><div class="tabitem">
+		<form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Edit Record" /></form>
+		<form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate Record" /></form>
+		<form action="acqui.simple/additem.pl" method="get" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR name="biblionumber"-->" /><input type="submit" class="submit" value="Edit Items" />
+		<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->" /><input type="submit" class="cancel" value="Delete Record" onclick="confirm_deletion(); return false;" /></form>
+		</div><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 
 <div class="table"><table>
@@ -45,7 +50,7 @@
 		<th>Barcode</th>
 		<!-- <th>Volume</th> -->
 	</tr>
-	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<!-- TMPL_IF NAME="ITEM_RESULTS" -->	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td><!-- TMPL_IF NAME="classification" --><!-- <a href="/cgi-bin/koha/search.pl?class=<!-- TMPL_VAR NAME="class" ESCAPE=URL -->"> --><!-- TMPL_VAR NAME="classification" --><!-- </a> --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
@@ -60,7 +65,7 @@
 				</td>
 			<!-- /TMPL_IF -->
 		</tr>
-	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="6">This record has no items.</td></tr><!-- /TMPL_IF -->
 	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
