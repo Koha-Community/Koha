@@ -1,20 +1,26 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: <!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
-<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<script language="JavaScript" type="text/javascript">
+	document.write("<div id=\"loading\">");
+	document.write("Please wait while the page loads...");
+	document.write("<\/div>");
+</script><!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
 
 <div id="main">
 
-	<form method="post" name="f" action="addbiblio.pl">
+	<form method="post" name="f" id="f" action="addbiblio.pl">
 <h1><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
+
+
 
 <div class="tabitem">		<input type="hidden" name="op" value="addbiblio" />
 		<input type="hidden" name="addfield_field" />
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->" />
 		<!-- TMPL_IF name="bibid" -->
-			<input type="button" value="Save" onclick="Check(this.form)" accesskey="w" class="submit" />
+			<input type="button" value="Save Bibliographic Record and go to Items" onclick="Check(this.form)" accesskey="w" class="submit" />
 		<!-- TMPL_ELSE -->
 			<input type="button" value="Add Bibliographic Record and go to Items" onclick="Check(this.form)" accesskey="w" class="submit" />
 		<!-- /TMPL_IF -->
@@ -56,12 +62,12 @@
 	
 	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
 		<!-- TMPL_IF name="duplicatebiblionumber" -->
-			<div class="problem">
-				<p>Duplicate suspected with <a href='javascript:openWindow("../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1", "Duplicate biblio")' class="submit"><!-- TMPL_VAR name="duplicatetitle" --></a></p>
+			<div class="error">
+				<p>Is this a duplicate of <a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
 				<p>You must either :</p>
 				<ul>
-					<p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on Add biblio again)</p>
-					<p>Go to <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->" class="submit">edit items</a> from this duplicate biblio</p>
+					<li>If it <em>is</em> a duplicate, <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->">Edit Items</a> of the existing record.</li>
+					<li>If not, click to <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Confirm it's not a duplicate</a></li>
 				</ul>
 			</div>
 		<!-- /TMPL_IF -->
@@ -400,7 +406,15 @@
 
 	</div>
 <script language="JavaScript" type="text/javascript">
+function loading(){
+	document.getElementById("loading").style.display = "none";
+}
 function _(s) { return s } // dummy function for gettext
+function confirmnotdup(){
+	document.getElementById("confirm_not_duplicate").value = 1;
+	var checkform =	document.getElementById("f");
+	Check(checkform);
+}
 function active(numlayer)
 {
 	for (i=0; i <= 9 ; i++ ) {
@@ -457,7 +471,7 @@ function Check(f) {
 			}
 		} else {
 // 			alert("I = "+i);
-			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+			document.getElementById("error"+i).style.backgroundColor="#FFFFCC";
 		}
 	}
 
@@ -511,21 +525,42 @@ function Dopop(link,i) {
 
 function PopupZ3950() {
     var strQuery="";
+	var error = 0;
 	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
-		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
+		if (document.forms[0].kohafield[i].value == "biblioitems.isbn"){
+			if(document.forms[0].field_value[i].value.length>0) {
 		    strQuery += "&isbn="+document.forms[0].field_value[i].value;
+		} else {
+			error++;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.title" && document.forms[0].field_value[i].value.length>0) {
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.title"){
+			if(document.forms[0].field_value[i].value.length>0) {
 		    strQuery += "&title="+document.forms[0].field_value[i].value;
+		} else {
+			error++;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.author" &&document.forms[0].field_value[i].value.length>0) {
+		}
+		if (document.forms[0].kohafield[i].value == "biblio.author"){
+			if(document.forms[0].field_value[i].value.length>0) {
 		    strQuery += "&author="+document.forms[0].field_value[i].value;
+		} else { 
+			error++;
 		}
-		if (document.forms[0].kohafield[i].value == "biblioitems.issn" && document.forms[0].field_value[i].value.length>0) {
+		}
+		if (document.forms[0].kohafield[i].value == "biblioitems.issn"){
+			if(document.forms[0].field_value[i].value.length>0) {
 		    strQuery += "&issn="+document.forms[0].field_value[i].value;
+		} else {
+			error++;
+		}
 		}
 	}
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
+	if(error < 4){
+	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+	} else {
+		alert("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");
+	}
 }
 
 function AddField(field) {
