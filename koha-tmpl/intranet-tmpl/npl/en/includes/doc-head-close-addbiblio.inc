@@ -41,4 +41,4 @@ function openWindow(targeturl, windowname) {
 </script>
 </head>
 
-<body>
+<body onload="loading();">
