@@ -3,13 +3,14 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
 <div id="main">
+
+<h1>Edit Items for Bibliographic Record <!-- TMPL_VAR NAME="biblionumber" --></h1>
+
+		<div class="tabitem"><form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate this Record" /></form></div> <div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form> <form action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View MARC in Catalog"></form>  <form action="/cgi-bin/koha/ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View ISBD in Catalog"></form></div>
+
 	<form method="post" action="additem.pl" name="f">
 	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
 	<input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->">
-	
-		<h1>Edit Items for Bibliographic Record <!-- TMPL_VAR NAME="biblionumber" --></h1>
-		<div class="tabitem"><form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate this Record" /></form></div> <div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form> <form action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View MARC in Catalog"></form>  <form action="/cgi-bin/koha/ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View ISBD in Catalog"></form></div>
-
 	<!-- TMPL_IF name="item_loop" -->
 			<div name="10XX" id="10XX">
 			<table class="editing">
@@ -55,12 +56,12 @@
 		<div class="error"><b>ERROR : Barcode already exists !<b></div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opisadd" -->
-	<input type="button" value="Add item" onClick="Check(this.form)" accesskey="w">
+	<input type="button" value="Add item" class="submit"  onClick="Check(this.form)" accesskey="w">
 	<!-- TMPL_ELSE -->
 	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
 	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
 	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnum" -->">
-	<input type="button" value="Modify item" onClick="Check(this.form)" accesskey="w">
+	<input type="button" value="Save Changes" class="submit" onClick="Check(this.form)" accesskey="w">
 	<!-- /TMPL_IF -->
 	</form>
 </div>
