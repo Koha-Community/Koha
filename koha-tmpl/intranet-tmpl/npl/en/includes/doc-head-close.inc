@@ -36,6 +36,17 @@ function openWindow(targeturl, windowname) {
 		// Uncomment below to close popup after clicking link.
 		newwin.close();
 	}
+	
+	function CheckAll() {
+		count = document.mainform.elements.length;
+	    for (i=0; i < count; i++) {
+		    if(document.mainform.elements[i].checked == 1){
+				document.mainform.elements[i].checked = 0;
+			} else {
+				document.mainform.elements[i].checked = 1;
+			}
+		}
+	}
  
 // end hiding -->
 </script>
