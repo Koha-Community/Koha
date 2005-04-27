@@ -15,11 +15,11 @@
 					<th class="catalogue">Author</th>
 				</tr>
 				<!-- TMPL_LOOP Name="itemsloop" -->
-					<tr>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
+					<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+						<td><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -114,13 +114,13 @@
 					<th class="catalogue">Modify</th>
 				</tr>
 				<!-- TMPL_LOOP Name="shelvesloop" -->
-				<tr>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+					<td>
 						<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
 							<!-- TMPL_VAR NAME="shelfname" -->
 						</a>
 					</td>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<td>
 						<!-- TMPL_IF NAME="category1" -->
 							Private
 						<!-- /TMPL_IF -->
@@ -131,14 +131,16 @@
 							Free
 						<!-- /TMPL_IF -->
 					</td>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<td>
 						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
 					</td>
 					<!-- TMPL_IF name="mine" -->
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<td>
 							<a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a>
 							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
 						</td>
+						<!-- TMPL_ELSE -->
+						<td>&nbsp;</td>
 					<!-- /TMPL_IF -->
 				</tr>
 				<!-- /TMPL_LOOP -->
