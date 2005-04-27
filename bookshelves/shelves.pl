@@ -107,7 +107,7 @@ foreach my $element (sort keys %$shelflist) {
 		$line{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
 ;
 		push (@shelvesloop, \%line);
-}
+		}
 $template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
@@ -169,12 +169,14 @@ sub viewshelf {
 	my @itemsloop;
 	foreach $item (sort {$a->{'barcode'} cmp $b->{'barcode'}} @$itemlist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-		$line{'color'}=$color;
+		($color eq 1) ? ($color=0) : ($color=1);
+		$line{'toggle'}=$color;
 		$line{'itemnumber'}=$item->{'itemnumber'};
 		$line{'barcode'}=$item->{'barcode'};
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
+		$line{'publicationyear'}=$item->{'publicationyear'};
+		$line{'itemtype'}=$item->{'itemtype'};
 		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
@@ -188,6 +190,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.5.2.1  2005/04/27 16:55:38  oleonard
+# Moving alternating row colors to the template, adding publicationyear and itemtype variables
+#
 # Revision 1.5  2004/12/16 11:30:57  tipaul
 # adding bookshelf features :
 # * create bookshelf on the fly
