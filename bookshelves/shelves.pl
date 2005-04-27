@@ -95,8 +95,8 @@ my $color='';
 my @shelvesloop;
 foreach my $element (sort keys %$shelflist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-		$line{'color'}= $color;
+		($color eq 1) ? ($color=0) : ($color=1);
+		$line{'toggle'}=$color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
 		$line{"category".$shelflist->{$element}->{'category'}} = 1;
@@ -147,8 +147,8 @@ sub shelves {
 	my @shelvesloop;
 	foreach my $element (sort keys %$shelflist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-		$line{'color'}=$color;
+		($color eq 1) ? ($color=0) : ($color=1);
+		$line{'toggle'}=$color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'} ;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'} ;
@@ -190,6 +190,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.7  2005/04/27 18:16:19  oleonard
+# Left out some instances in the previous update
+#
 # Revision 1.6  2005/04/27 17:17:41  oleonard
 # Moving alternating row colors to the template, adding publicationyear and itemtype variables
 #
