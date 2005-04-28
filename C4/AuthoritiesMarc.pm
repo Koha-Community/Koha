@@ -51,6 +51,7 @@ $VERSION = 0.01;
 	&AUTHaddword
 	&MARCaddword &MARCdelword
 	&char_decode
+	&FindDuplicate
  );
 
 sub authoritysearch {
@@ -74,7 +75,7 @@ sub authoritysearch {
 
 	# "Normal" statements
 	# quote marc fields/subfields
-	for (my $i=0;$i<$#{$tags};$i++) {
+	for (my $i=0;$i<=$#{$tags};$i++) {
 		if (@$tags[$i]) {
 			@$tags[$i] = $dbh->quote(@$tags[$i]);
 		}
@@ -844,6 +845,57 @@ sub nsb_clean {
 	return($string) ;
 }
 
+sub FindDuplicate {
+	my ($record,$authtypecode)=@_;
+	warn "IN for ".$record->as_formatted;
+	my $dbh = C4::Context->dbh;
+
+#	warn "".$record->as_formatted;
+	my $sth = $dbh->prepare("select auth_tag_to_report,summary from auth_types where authtypecode=?");
+	$sth->execute($authtypecode);
+	my ($auth_tag_to_report,$taglist) = $sth->fetchrow;
+	$sth->finish;
+	# build a request for authoritysearch
+	my (@tags, @and_or, @excluding, @operator, @value, $offset, $length);
+	# search on biblio.title
+#	warn " tag a reporter : $auth_tag_to_report";
+# 	warn "taglist ".$taglist;
+	my @subfield = split /\[/,  $taglist;
+	my $max = @subfield;
+	for (my $i=1; $i<$max;$i++){
+		warn " ".$subfield[$i];
+		$subfield[$i]=substr($subfield[$i],3,1);
+# 		warn " ".$subfield[$i];
+	}
+	
+	if ($record->fields($auth_tag_to_report)) {
+		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? ");
+		$sth->execute($auth_tag_to_report,$authtypecode);
+#		warn " field $auth_tag_to_report exists";
+		while (my ($tag,$subfield) = $sth->fetchrow){
+			if ($record->field($tag)->subfield($subfield)) {
+				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
+				push @tags, $tag.$subfield;
+#				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
+				push @and_or, "and";
+				push @excluding, "";
+				push @operator, "=";
+				push @value, $record->field($tag)->subfield($subfield);
+			}
+		}
+ 	}
+ 
+	my ($finalresult,$nbresult) = authoritysearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10,$authtypecode);
+	# there is at least 1 result => return the 1st one
+	if ($nbresult) {
+		warn "XXXXX $nbresult => ".@$finalresult[0]->{authid},@$finalresult[0]->{summary};
+		return @$finalresult[0]->{authid},@$finalresult[0]->{summary};
+	}
+	# no result, returns nothing
+	return;
+}
+
+
 END { }       # module clean-up code here (global destructor)
 
 =back
@@ -858,6 +910,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.3  2005/04/28 08:45:33  tipaul
+# porting FindDuplicate feature for authorities from HEAD to rel_2_2, works correctly now.
+#
 # Revision 1.9.2.2  2005/02/28 14:03:13  tipaul
 # * adding search on "main entry" (ie $a subfield) on a given authority (the "search everywhere" field is still here).
 # * adding a select box to requet "contain" or "begin with" search.

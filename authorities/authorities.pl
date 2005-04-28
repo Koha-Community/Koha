@@ -160,7 +160,6 @@ sub create_input () {
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-# "=>".$record->as_formatted;
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -334,12 +333,28 @@ if ($op eq "add") {
 	}
 	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record built => now, record in DB
-	if ($is_a_modif) {
-		 AUTHmodauthority($dbh,$authid,$record,$authtypecode);
+	# check for a duplicate
+	my ($duplicateauthid,$duplicateauthvalue) = FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
+	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
+	if (!$duplicateauthid or $confirm_not_duplicate) {
+		if ($is_a_modif) {
+			AUTHmodauthority($dbh,$authid,$record,$authtypecode);
+		} else {
+			($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
+		}
+	# now, redirect to detail page
+		print $input->redirect("detail.pl?authid=$authid");
+		exit;
 	} else {
-		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
+	# it may be a duplicate, warn the user and do nothing
+		build_tabs ($template, $record, $dbh,$encoding);
+		build_hidden_data;
+		$template->param(
+			duplicateauthid				=> $duplicateauthid,
+			duplicateauthvalue				=> $duplicateauthvalue,
+			 );
 	}
-	print $input->redirect("detail.pl?authid=$authid");
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -399,8 +414,10 @@ if ($op eq "add") {
 	&AUTHdelauthority($dbh,$authid);
 }
 
-build_tabs ($template, $record, $dbh,$encoding);
-build_hidden_data;
+if ($authid) {
+	build_tabs ($template, $record, $dbh,$encoding);
+	build_hidden_data;
+}
 $template->param(
 	authid                       => $authid,
 # 	oldbiblionumtagfield        => $oldbiblionumtagfield,
