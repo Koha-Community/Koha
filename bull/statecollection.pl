@@ -38,8 +38,10 @@ if ($op eq 'serialchangestatus') {
 		if ($serialids[$i]) {
 			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
 		} else {
-			my $subscription=getsubscription($subscriptionid);
-			newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+			if ($serialseqs[$i]) {
+				my $subscription=getsubscription($subscriptionid);
+				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+			}
 		}
 	}
 }
