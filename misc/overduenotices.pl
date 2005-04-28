@@ -38,20 +38,37 @@ use strict;
 use C4::Context;
 use C4::Date;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
+use Getopt::Long;
 
-print "This script will send overdue notices by e-mail and prepare a file of\nnotices for printing if the borrower does not have e-mail.\nYou MUST edit this script for your library BEFORE you run it for the first time!\nSee the comments in the script for directions on changing the script.\n\nDo you wish to continue? (y/n) ";
-chomp($_ = <STDIN>);
-die unless (/^y/i);  # comment these lines out once you've made the changes
+my ($confirm, $nomail);
+GetOptions(
+    'c'    => \$confirm,
+	'n'	=> \$nomail,
+);
+unless ($confirm) {
+	print qq|
+This script will send overdue notices by e-mail and prepare a file of\nnotices for printing if the borrower does not have e-mail.
+You MUST edit this script for your library BEFORE you run it for the first time!
+See the comments in the script for directions on changing the script.
+This script has 2 parameters :
+	-c to confirm and remove this help & warning
+	-n to avoid sending any mail. Instead, all mail messages are printed on screen. Usefull for testing purposes.
 
+Do you wish to continue? (y/n)
+|;
+	chomp($_ = <STDIN>);
+	exit unless (/^y/i);  # comment these lines out once you've made the changes
+	
+}
 #
 # BEGINNING OF PARAMETERS
 #
-my $mindays = 7 # the notice will be sent after mindays days (grace period)
-my $maxdays = 30 # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
-my $smtpserver = 'smtp.yourserver.com'; # your smtp server (the server who sent mails)
-my $from = 'library@yourname.org';
-my $mailtitle = 'Overdue library items';
-my $librarymail = 'library@yourname.org'; # all notices without mail are sent (in 1 mail) to this mail address. They must then be managed manually.
+my $mindays = 7; # the notice will be sent after mindays days (grace period)
+my $maxdays = 30; # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
+my $smtpserver = 'smtp.server.com'; # your smtp server (the server who sent mails)
+my $from = 'librarianname@library.com'; # all the mails sent to the borrowers will appear coming from here.
+my $mailtitle = 'Overdues'; # the title of the mails
+my $librarymail = 'librarystaff@library.com'; # all notices without mail are sent (in 1 mail) to this mail address. They must then be managed manually.
 # this parameter (the last) is the text of the mail that is sent.
 # this text contains fields that are replaced by their value. Those fields must be written between brackets
 # The following fields are available :
@@ -67,97 +84,46 @@ unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
 #                                         set your own mail server name here
 
 my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare ("SELECT issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categorie WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN $mindays and $maxdays AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 ORDER BY issues.borrowernumber");
-my $first_borrno = $dbh->prepare ("SELECT borrowernumber FROM issues WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN $mindays and $maxdays ORDER BY borrowernumber");
-my $get_date = $dbh->prepare ("SELECT CURDATE()");
-
-$get_date->execute;
-my $daydate = $get_date->fetchrow_arrayref;
-my $rawdate = $daydate->[0];
-my $date = format_date($rawdate);
-$first_borrno->execute;               # get first borrowernumber
-my $firstborr = $first_borrno->fetchrow_arrayref;
-my $borrowernumber = $firstborr->[0];
-$first_borrno->finish;  
-
+my $sth = $dbh->prepare ("SELECT count(*), issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categories WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 group by issues.borrowernumber");
 $sth->execute;
-
-my $itemcount = 0;
-my $row;
+# 
+# my $itemcount = 0;
+# my $row;
 my $count = 0;   # to keep track of how many notices are printed
 my $e_count = 0;   # and e-mailed
-my ($firstname,$lastname,$address1,$address2,$city,$postcode,$email);
+my ($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
 
-while ($row = $sth->fetchrow_arrayref) {
-    my $borrno = $row->[0];
-    if ($itemcount==0) {    # store values for first borrower
-		$firstname = $row->[1];
-		$lastname = $row->[2];
-		$address1 = $row->[3];
-		$address2 = $row->[4];
-		unless ($address2) {
-			$address2 = '';
-		}
-		$city = $row->[5];
-		unless ($city) {
-			$city = '';
-		}
-		$postcode = $row->[6];
-		unless ($postcode) {
-			$postcode = '';
-		}
-		$email = $row->[7];
-    }
-    if ($borrno == $borrowernumber) {     # next borrower yet?
-		$itemcount++;
-		next;
-    } else {
-		$borrowernumber = $borrno;
+while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
 		my $notice = $mailtext;
-		$notice =~ s/\<date\>/$date/g;
 		$notice =~ s/\<itemcount\>/$itemcount/g;
 		$notice =~ s/\<firstname\>/$firstname/g;
 		$notice =~ s/\<lastname\>/$lastname/g;
 		$notice =~ s/\<address1\>/$address1/g;
 		$notice =~ s/\<address2\>/$address2/g;
-		$notice =~ s/\<address3\>/$address3/g;
 		$notice =~ s/\<city\>/$city/g;
 		$notice =~ s/\<postcode\>/$postcode/g;
 	
 	# if not using e-mail notices, comment out the following lines
 		if ($email) {   # or you might check for borrowers.preferredcont 
-			my %mail = ( To      => $email,
-							From    => $from,
-							Subject => $mailtitle,
-							Message => $notice,
-				);
-			sendmail(%mail);
+			if ($nomail) {
+				print "TO => $email\n";
+				print "FROM => $from\n";
+				print "SUBJECT => $mailtitle\n";
+				print "MESSAGE => $notice\n";
+			} else {
+				my %mail = ( To      => $email,
+								From    => $from,
+								Subject => $mailtitle,
+								Message => $notice,
+					);
+				sendmail(%mail);
+			}
 			$e_count++
 		} else {
-		# if not using e-mail notices, comment out the above lines
-			print $notice;
 			print OUTFILE $notice;
 			$count++;
 		}    # and comment this one out, too, if not using e-mail
 
-		$itemcount = 1;   #start the count for next notice
-		$firstname = $row->[1]; # and store the new values
-		$lastname = $row->[2];
-		$address1 = $row->[3];
-		$address2 = $row->[4];
-		unless ($address2) {
-			$address2 = '';
-		}
-		$city = $row->[5];
-		unless ($city) {
-			$city = '';
-		}
-		$postcode = $row->[6];
-		unless ($postcode) {
-			$postcode = '';
-		}
-		$email = $row->[7];
-	}
 }
 $sth->finish;
 close OUTFILE;
@@ -165,13 +131,20 @@ close OUTFILE;
 if ($count) {
 		open ODUES, "overdues" or die "Cannot open file overdues: $!";
 		my $notice = "$e_count overdue notices e-mailed\n";
-		my $notice .= "$count overdue notices in file for printing\n\n";
+		$notice .= "$count overdue notices in file for printing\n\n";
 
-		my $notice .= <ODUES>;
-	    my %mail = ( To      => $email,
-                         From    => $from,
-                         Subject => 'Koha overdues',
-                         Message => $notice,
-			 );
-	    sendmail(%mail);
-
+		$notice .= <ODUES>;
+		if ($nomail) {
+			print "TO => $email\n";
+			print "FROM => $from\n";
+			print "SUBJECT => Koha overdue\n";
+			print "MESSAGE => $notice\n";
+		} else {
+			my %mail = ( To      => $email,
+							From    => $from,
+							Subject => 'Koha overdues',
+							Message => $notice,
+				);
+			sendmail(%mail);
+		}
+}
