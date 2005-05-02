@@ -97,7 +97,7 @@
 	<div class="details">
 	<!-- TMPL_IF NAME="message" -->
 	<div class="details">
-	No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span> <a href="/cgi-bin/koha/members/memberentry.pl?type=Add">Add a new patron</a>
+	No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span> <a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add">Add a new patron</a>
 	</div>
 	<!-- /TMPL_IF -->
 	
@@ -114,7 +114,7 @@
 	</style>
 	<p><!-- TMPL_VAR name="CGIselectborrower" --></p>
 	<p><input type="submit" class="submit" value="Select" /></p>
-	<p>Patron not found? <a href="/cgi-bin/koha/memberentry.pl?type=Add">Add a new patron</a></p>
+	<p>Patron not found? <a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add">Add a new patron</a></p>
 	</form>
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
@@ -128,11 +128,12 @@
 	</ul>
 	</div>
 	<h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
-<h4> &nbsp; &nbsp; <!-- TMPL_VAR NAME="issuecount" --> out<!-- TMPL_IF NAME="overduecount" -->, <span class="error"><!-- TMPL_VAR name="overduecount" --> overdue</span><!-- /TMPL_IF --></h4><br clear="right" />
+<h4> &nbsp; &nbsp; <!-- TMPL_VAR NAME="issuecount" --> out<!-- TMPL_IF NAME="overduecount" -->, <span class="error"><!-- TMPL_VAR name="overduecount" --> overdue</span><!-- /TMPL_IF --></h4> <!-- Display for NPL // <h4> &nbsp; &nbsp; <!-- TMPL_IF NAME="avcount" --><!-- TMPL_VAR NAME="avcount" --> AV Issues, <!-- TMPL_IF NAME="avflag" --><span class="error">AV Limit Reached!</span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> More Allowed<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> AV Issues Allowed<!-- /TMPL_IF --> //Display for NPL --></h4><br clear="right" />
 
 <!-- TMPL_IF NAME="flagged" -->
 </div><div class="details">
 <ul>
+<!-- Display for NPL // <!-- TMPL_IF NAME="avflag" --><li>Patron has reached the <span class="error">AV issue limit</span></li><!-- /TMPL_IF --> //Display for NPL -->
 <!-- TMPL_IF NAME="gna" -->
 <li><span class="error">Address:</span> Patron's address in doubt</li>
 <!-- /TMPL_IF -->
@@ -304,7 +305,7 @@
 	<p><input type="submit" class="submit" value="Renew Checked Items" /></p>
 </form>
 
-<!-- TMPL_IF name="previssues" --><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><!-- TMPL_LOOP NAME="previssues" --><input type="hidden" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y" /><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form><!-- /TMPL_IF -->
+<!-- TMPL_IF name="previssues" --><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" value="circ" name="destination" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><!-- TMPL_LOOP NAME="previssues" --><input type="hidden" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y" /><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form><!-- /TMPL_IF -->
 	
 </div>
 <!-- /TMPL_IF -->
