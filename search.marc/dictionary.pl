@@ -103,7 +103,7 @@ if ($op eq "do_search") {
 	    $seen{$item->{$display}}++;
 	}
 	my @catresults;
-	foreach my $name (keys %seen){
+	foreach my $name (sort keys %seen){
 		push @catresults, { value => $name , count => $seen{$name}}
 	}
 
