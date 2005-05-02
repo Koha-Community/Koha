@@ -30,6 +30,9 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet','biblio.title')">
+				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			</a>
 		</p>
 		<p>
 			<label class="label100" for="author">Author</label> <input type="hidden" name="marclist" value="biblio.author">
@@ -37,6 +40,9 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet','biblio.author')">
+				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			</a>
 		</p>
 		<p>
 			<label class="label100" for="subject">Subject</label>
@@ -45,6 +51,9 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">  
 			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
+			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet','bibliosubject.subject')">
+				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			</a>
 		</p>
 		<p>
 			<label class="label100" for="itemtype">Item Type</label>
@@ -171,6 +180,11 @@ function AddStatement() {
 	document.forms[0].op.value="AddStatement";
 	document.f.submit();
 }
+
+function Dopop(link,i) {
+	newin=window.open(link,'width=550,height=550,toolbar=false,scrollbars=yes');
+}
+
 
 function PopupSuggestion() {
     var strQuery="";
