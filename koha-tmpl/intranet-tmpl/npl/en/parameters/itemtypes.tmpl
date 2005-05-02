@@ -37,7 +37,7 @@
 			<tr>
 			<tr>
 				<th><label for="renewalsallowed">Renewals</label></th>
-				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /><!-- Display for NPL <input type="hidden" name="rentalcharge" value="0" /> /Display for NPL --></td>
+				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /><!-- Display for NPL //<input type="hidden" name="rentalcharge" value="0" /> //Display for NPL --></td>
 			</tr>
 <!-- Hide from NPL--> 			<tr>
 				<th><label for="rentalcharge">Rental charge</label></th>
@@ -59,7 +59,7 @@
 	<tr><th>Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
 	<tr><th>Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
 	<tr><th>Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
-<!-- Hide from NPL --><tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr><!-- /Hide from NPL --></table></div>
+<!-- Hide from NPL  --><tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr><!-- Hide from NPL --></table></div>
 		<div class="tabitem"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_IF name="total" -->
 		</form><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="OK" class="submit" /></form>
@@ -87,17 +87,15 @@
 			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><!-- TMPL_VAR name="itemtype" --></a></td>
 			<td><!-- TMPL_VAR name="description" --></td>
 			<td><!-- TMPL_IF NAME="notforloan" -->Yes<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-			<td><!-- TMPL_UNLESS name="notforloan" -->
-					<!-- TMPL_IF NAME="renewalsallowed" -->
+			<td><!-- TMPL_IF NAME="renewalsallowed" -->
 						<!-- TMPL_VAR name="renewalsallowed" --> time(s)
 					<!-- TMPL_ELSE -->
 						No
 					<!-- /TMPL_IF -->
-				<!-- /TMPL_UNLESS -->
 			</td>
 		<td><!-- TMPL_UNLESS name="notforloan" --><!-- TMPL_VAR NAME="rentalcharge" --><!-- /TMPL_UNLESS --></td>
-			<td><a class="edit" href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Edit</a></td>
-			<td><a class="delete" href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Delete</a></td>
+			<td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" escape="HTML" -->" /><input type="submit" value="Edit" class="submit" /></form></td>
+			<td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" escape="HTML" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>

@@ -54,34 +54,19 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
-<table border="0" cellspacing="0" cellpadding="2">
-	<tr valign="top" bgcolor="#99cc33">
-		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Subfield</b></td>
-		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="tagsubfield" --></b></td>
-	</tr>
-	<tr><td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td></tr>
-	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
+<div class="data"><table>
+<caption>Confirm Deletion of Subfield <span class="ex"><!-- TMPL_VAR NAME="tagsubfield" -->?</span></caption>
 	<tr>
-		<td>
-			<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post">
-				<input type="hidden" name="op" value="delete_confirmed" />
-				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
-				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
-				<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-				<input type="submit" class="cancel" value="YES" />
-			</form>
-		</td>
-		<td>
-			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
-				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
-				<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-				<input type="submit" class="submit" value="NO" />
-			</form>
-		</td>
+		<th>Subfield</th>
+		<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
 	</tr>
+	<tr><th>Description</th><td><!-- TMPL_VAR NAME="liblibrarian" --></td></tr>
+</table></div>
+			<form class="inline" action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" /><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" class="cancel" value="Yes, Delete this Subfield" />
+			</form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />	<input type="submit" class="submit" value="No, Do Not Delete" />
+			</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
@@ -105,7 +90,7 @@
 	<th>Constraints</th>
 	<th>Delete</th>
 <!-- TMPL_LOOP NAME="loop" -->
-<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 	<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
 	<td>
 		<!-- TMPL_IF NAME="subfield_ignored" -->

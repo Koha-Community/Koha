@@ -85,17 +85,17 @@
         <!-- TMPL_ELSE -->
                 <h1>Add Z39.50 Server</h1>
         <!-- /TMPL_IF -->                
-        <table>
+        <div class="data"><table>
         <!-- TMPL_IF NAME=searchfield -->
                 <tr>
-                        <td>Z39.50 Server</td>
+                        <th>Z39.50 Server</th>
                         <td>
                                 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
                         </td>
                 </tr>
         <!-- TMPL_ELSE -->
                 <tr>
-                        <td>Z39.50 Server</td>
+                        <th>Z39.50 Server</th>
                         <td>
                                 <input type="text" name="searchfield" size="65" maxlength="100" onblur="toUC(this)" />
                         </td>
@@ -103,48 +103,48 @@
         <!-- /TMPL_IF -->
 
 		<tr>
-			<td>Hostname</td>
+			<th>Hostname</th>
 			<td>
 				<input type="text" name="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
 			</td>
 		</tr>
 		<tr>
-			<td>Port</td>
+			<th>Port</th>
 			<td>
 				<input type="text" name="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
 			</td>
 		</tr>
 		<tr>
-			<td>Database</td>
+			<th>Database</th>
 			<td>
 				<input type="text" name="db" value="<!-- TMPL_VAR NAME="db" -->" />
 			</td>
 		</tr>
 		<tr>
-			<td>Userid</td>
+			<th>Userid</th>
 			<td>
 				<input type="text" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
 			</td>
 		</tr>
 		<tr>
-			<td>Password</td>
+			<th>Password</th>
 			<td>
 				<input type="text" name="password" value="<!-- TMPL_VAR NAME="password" -->" />
 			</td>
 		</tr>
 		<tr>
-			<td>Checked (searched by default)</td>
+			<th>Checked (searched by default)</th>
 			<td>
 				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  
 		<tr>
-			<td>Rank (display order)</td>
+			<th>Rank (display order)</th>
 			<td>
 				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
 			</td>
 		</tr>
 				<tr>
-			<td>Syntax (z3950 can send<br>
-			 records in various format. Choose one)</td>
+			<th>Syntax (z3950 can send<br>
+			 records in various format. Choose one)</th>
 			<td>
 				<select name="syntax">
 					<option value="USMARC">USMARC</option>
@@ -152,7 +152,7 @@
 				</select>
 			</td>
 		</tr>
-        </table><input type="button" value="<!-- TMPL_IF NAME=searchfield -->Update Z39.50 Server<!-- TMPL_ELSE -->Add Z39.50 Server<!-- /TMPL_IF -->" onclick="Check(this.form)" class="submit" />  <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';" />
+        </table></div><input type="button" value="<!-- TMPL_IF NAME=searchfield -->Update Z39.50 Server<!-- TMPL_ELSE -->Add Z39.50 Server<!-- /TMPL_IF -->" onclick="Check(this.form)" class="submit" />  <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';" />
         </form>
 <!-- /TMPL_IF -->
 
@@ -229,8 +229,7 @@
 <table>
                 <tr>
                         <th>Site</th>
-                        <th>Hostname</th>
-                        <th>Port</th>
+                        <th>Hostname/Port</th>
                         <th>Database</th>
                         <th>Userid</th>
                         <th>Password</th>
@@ -240,18 +239,17 @@
                         <th colspan="2">&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME=loop -->
-                <tr>
+               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="name" --></td>
-                        <td><!-- TMPL_VAR NAME="host" --></td>
-                        <td><!-- TMPL_VAR NAME="port" --></td>
+                        <td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td>
                         <td><!-- TMPL_VAR NAME="db" --></td>
                         <td><!-- TMPL_VAR NAME="userid" --></td>
                         <td><!-- TMPL_VAR NAME="password" --></td>
                         <td><!-- TMPL_VAR NAME="checked" --></td>
                         <td><!-- TMPL_VAR NAME="rank" --></td>
 						<td><!-- TMPL_VAR NAME="syntax" --></td>
-                        <td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td>
-                        <td><a class="delete" href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                
+                        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="name" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
+                        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="name" -->" /><input type="submit" class="delete" value="Delete" /></form></td>                
 			</tr>
                 <!-- /TMPL_LOOP -->
 	</table>

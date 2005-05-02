@@ -171,7 +171,8 @@
 			<td><!-- TMPL_VAR NAME="printername" --></td>
 			<td><!-- TMPL_VAR NAME="printqueue" --></td>
 			<td><!-- TMPL_VAR NAME="printtype" --></td>
-			<td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->">Edit</a> <a class="delete" href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->">Delete</a></td>
+			<td><form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="printername" -->" /><input type="submit" value="Edit" class="submit" /></form> <form class="inline" action="" method="get"><input type="hidden" name=
+"op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="printername" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

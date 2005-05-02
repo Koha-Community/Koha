@@ -78,20 +78,23 @@
 	<!-- TMPL_ELSE -->
 		<h1>Add category</h1>
 	<!-- /TMPL_IF -->
-	<div class="form"><table>
+	<div class="data"><table>
 	<!-- TMPL_IF NAME="categorycode" -->
 	<tr><th>Category code</th><td><!-- TMPL_VAR NAME="categorycode" -->
 				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /></td></tr>
 	<!-- TMPL_ELSE -->
 	<tr><th>Category code</th><td><input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)" /></td></tr>
 	<!-- /TMPL_IF -->
-	<tr><th>Description</th><td><input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME=description -->" /></td></tr>
-	<tr><th>Enrolment period</th><td><input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> years</td></tr>
-	<tr><th>Upperage limit</th><td><input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /> years</td></tr>
-	<tr><th>Age Required</th><td><input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /> years</td></tr>
-	<tr><th>Enrollment fee</th><td>$<input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
-	<tr><th>Overdue notice required</th><td><input type="text" name="overduenoticerequired" value="<!-- TMPL_VAR NAME="overduenoticerequired" -->" /></td></tr>
-	<tr><th>Reserve fee</th><td>$<input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
+	<tr><th>Description</th><td>&nbsp; <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME=description -->" /></td></tr>
+	<tr><th>Enrolment period</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> years</td></tr>
+	<tr><th>Upperage limit</th><td>&nbsp; <input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /> years</td></tr>
+	<tr><th>Age Required</th><td>&nbsp; <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /> years</td></tr>
+	<tr><th>Enrollment fee</th><td>$ <input type="text" name="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
+	<tr><th>Overdue notice required</th><td>&nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
+						<option<!-- TMPL_UNLESS name="overduenoticerequired" --> selected="selected"<!-- /TMPL_UNLESS --> value="0">No</option>
+						<option<!-- TMPL_IF NAME="overduenoticerequired" --> selected="selected"<!-- /TMPL_IF --> value="1">Yes</option>
+					</select></td></tr>
+	<tr><th>Reserve fee</th><td>$ <input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
 </table></div>
 	<p>				<input type="button" class="submit" value="<!-- TMPL_IF NAME="categorycode" -->Update Category<!-- TMPL_ELSE -->Add Category<!-- /TMPL_IF -->" onclick="Check(this.form);" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" /></p>
 	</form>
@@ -149,32 +152,28 @@
 	</form>	
         <div class="data"><table>
 		<tr>
-			<th scope="col">Category</th>
-			<th scope="col">Description</th>
+			<th scope="col">Category Name</th>
+			<th scope="col">Code</th>
 			<th scope="col">Enrollment Period</th>
 			<th scope="col">Upper Age Limit</th>
 			<th scope="col">Age Required</th>
- 			<th scope="col">Fine</th>
  			<th scope="col">Enrollment Fee</th>
 			<th scope="col">Overdue</th>
-			<th scope="col">Issue Limit</th>
  			<th scope="col">Reservation Fee</th>
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPl_IF -->>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="categorycode" --></a></td>
-                        <td><!-- TMPL_VAR NAME="description" --></td>
+		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPl_IF -->
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="description" --></a></td><td><!-- TMPL_VAR NAME="categorycode" --></td>
+                        
                         <td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td>
                         <td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>
-                        <td><!-- TMPL_VAR NAME="finetype" --></td>
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
-                        <td><!-- TMPL_VAR NAME="overduenoticerequired" --></td>
-                        <td><!-- TMPL_VAR NAME="issuelimit" --></td>
+                        <td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
-                        <td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
-                        <td><a class="delete" href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME=script_name -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table></div><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
