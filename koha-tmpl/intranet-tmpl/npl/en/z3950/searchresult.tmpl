@@ -1,17 +1,22 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Z39.50 Search Results</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<!-- TMPL_IF name="refresh" -->
-	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->">
-<!-- /TMPL_IF -->
-</title>
+<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="shortcut icon" href="/intranet-tmpl/npl/en/includes/favicon.ico" type="image/x-icon" />
+<style type="text/css"> 
+	@import url(/intranet-tmpl/npl/en/includes/intranet.css);
+</style>
 </head>
 <body>
-<h3>Z3950 Search Results</h3>
+
+<div id="main-compact">
+	<h2>Z3950 Search Results</h2>
+	
+	<!-- TMPL_IF NAME="breeding_loop" -->
 <table>
-<caption>Bibliographic Records Found</caption>
 	<tr>
 		<th>Title</th>
 		<th>Author</th>
@@ -20,28 +25,27 @@
 		<th>&nbsp;</th>
 		<th>&nbsp;</th>
 	</tr>
-	<!-- TMPL_IF name="breeding_loop" -->
-	<!-- TMPL_LOOP name="breeding_loop" -->
+				<!-- TMPL_LOOP NAME="breeding_loop" -->
 		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
-			<td><!-- TMPL_VAR NAME="title" --></a>
+						<td><!-- TMPL_VAR NAME="title" --></td>
 			<td><!-- TMPL_VAR NAME="author" --></td>
 			<td><!-- TMPL_VAR NAME="isbn" --></td>
 			<td><!-- TMPL_VAR NAME="file" --></td>
 			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="id" -->)">Import this biblio</a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
+		</table>
 	<!-- TMPL_ELSE -->
-		<tr><td colspan="6">Nothing found</td></tr>
+				<p>Nothing found</p>
 	<!-- /TMPL_IF -->
-</table>
-<!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h3><!-- /TMPL_IF -->
-<script language="JavaScript" type="text/javascript">
+	<!-- TMPL_IF NAME="numberpending" --><h1>Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h1><!-- /TMPL_IF -->
+	<script language="javascript" type="text/javascript">
 	function Import(GetThisOne) {
 		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
 		self.close();
 		return false;
 	}
 </script>
-<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
+</div>
 </body>
 </html>

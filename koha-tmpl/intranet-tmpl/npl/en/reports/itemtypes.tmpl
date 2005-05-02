@@ -4,22 +4,23 @@
 <div id="main">
 <!-- TMPL_IF name="do_it" -->
 <!-- TMPL_LOOP name="mainloop" -->
-	<div class="table"><table>
-	<caption>Item counts <!--TMPL_IF name="branch" --> for <!-- TMPL_VAR name="branch" --><!-- /TMPL_IF --></caption>
+	<table>
+	<caption>Item Counts <!--TMPL_IF name="branch" --> for <!-- TMPL_VAR name="branch" --><!-- /TMPL_IF --></caption>
 		<tr>
 			<th>Item Type</th>
-			<th>Item Count</th>
+			<th>Count</th>
 		</tr>
 			<!-- TMPL_LOOP name="loopitemtype" -->
-				<tr>
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR name="itemtype" --></td>
-					<td><!-- TMPL_VAR name="count" --></td>
+					<td class="credit"><!-- TMPL_VAR name="count" --></td>
 				</tr>
 			<!-- /TMPL_LOOP name="loopitemtype" -->
-			<tr>
-				<th>TOTAL</th>
-				<th><!-- TMPL_VAR name="total" --></th>
-	</table></div>
+			<tfoot><tr>
+				<td>TOTAL</td>
+				<td class="credit"><!-- TMPL_VAR name="total" --></td>
+				</tr></tfoot>
+	</table>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Item Type Report</h1>
