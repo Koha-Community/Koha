@@ -6,36 +6,34 @@
 <table>
 <caption>Supplier Search Results</caption>
 <tr>
-	<th colspan="2">Action</th>
+	<th>Order</th>
+	<th>Receive</th>
 	<th>Company</th>
-	<th>
-		<table>
-					<tr>
-						<th>Basket</th>
-						<th>Items</th>
-						<th>Created by</th>
-						<th>Date</th>
-						<th>&nbsp;</th>
-					</tr>
-		</table>
-	</th>
+	<th>Exisiting Baskets</th>
 </tr>
 
 <!-- TMPL_LOOP name="loop_suppliers" -->
 	<tr>
-		<td>
-			<a href="basket.pl?id=<!-- TMPL_VAR name=supplierid -->">Add</a>
+		<td><!-- TMPL_IF name="active" -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->">Add Order</a><!-- TMPL_ELSE -->	Inactive<!-- /TMPL_IF -->
 		</td>
 		<td>
 			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=supplierid -->">Receive</a>
 		</td>
 		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
-<table>
+<div class="data"><table>
+					<tr>
+						<th scope="col">Basket</th>
+						<th scope="col">Items</th>
+						<th scope="col">Created by</th>
+						<th scope="col">Date</th>
+						<th scope="col">&nbsp;</th>
+					</tr>
 					<!-- TMPL_LOOP NAME="loop_basket" -->
 						<tr>
 							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
-							<td><TMPL_VAR NAME="total"></td>
+							<td><!-- TMPL_VAR NAME="total" --></td>
 							<td>
 								<!-- TMPL_VAR name="firstname" -->
 									<!-- TMPL_VAR name="surname" -->
@@ -43,15 +41,15 @@
 							<td><!-- TMPL_VAR NAME="creationdate" --></td>
 							<td>
 								<!-- TMPL_IF name="closedate" -->
-									closed on <!-- TMPL_VAR NAME="closedate" -->
-									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">View</a>
+									Closed on <!-- TMPL_VAR NAME="closedate" -->
+									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">(View)</a>
 								<!-- TMPL_ELSE -->
 									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">Modify</a>
 								<!-- /TMPL_IF -->
 							</td>
 						</tr>
 					<!-- /TMPL_LOOP -->
-				</table>
+				</table></div>
 	</tr>
 <!-- /TMPL_LOOP -->
 </table>

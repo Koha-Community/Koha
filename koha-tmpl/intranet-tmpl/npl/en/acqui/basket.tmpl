@@ -5,7 +5,7 @@
 <div id="main">
 	<h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <b><!-- TMPL_VAR NAME="basketno" --> </b>for <a href="supplier.pl?id=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
 	<!-- TMPL_UNLESS name="closedate" -->
-		<div class="details">
+		<div class="data">
 			<table>
 			<caption>Basket Details</caption>
 			<tr><th>Basket Number:</th><td><!-- TMPL_VAR NAME="basketno" --></td></tr>
@@ -13,30 +13,32 @@
 			<tr><th>Open On:</th><td><!-- TMPL_VAR NAME="creationdate" --></td></tr>
 			<tr><th>For:</th><td>Supplier Id <!-- TMPL_VAR NAME="booksellerid" --></td></tr>
 			<tr><th>Invoice Number:</th><td><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></td></tr>
-			<!-- TMPL_IF name="closedate" --><tr><th>Closed On:</th><td> <!-- TMPL_VAR name="closedate" --></td></tr><!-- TMPL_ELSE -->
-			<tr><tfoot><td colspan="2"><form action="/cgi-bin/koha/acqui/order.pl" method="get"><input type="hidden" name="op" value="close" /><input type="hidden" name="basket" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="supplier" value="<!-- TMPL_VAR name="booksellerid" -->" /><input type="submit" class="submit" value="Close this Basket" /></form></td></tfoot></tr><!-- /TMPL_IF -->
-			</table>
+			<!-- TMPL_IF name="closedate" --><tr><th>Closed On:</th><td> <!-- TMPL_VAR name="closedate" --></td></tr><!-- /TMPL_IF -->
+			</table><!-- TMPL_UNLESS name="closedate" --><form action="/cgi-bin/koha/acqui/order.pl" method="get"><input type="hidden" name="op" value="close" /><input type="hidden" name="basket" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="supplier" value="<!-- TMPL_VAR name="booksellerid" -->" /><input type="submit" class="submit" value="Close this Basket" /></form><!-- /TMPL_UNLESS -->
 		</div>
 	<!-- /TMPL_UNLESS -->
-	<div class="details">
+	<div class="data">
 	<!-- TMPL_IF name="books_loop" -->
 		<table>
 			<caption>Order Details</caption>
 			<tr>
-				<th>Order</th>
-				<th>Publisher <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">[order]</a></th>
-				<th>ISBN</th>
-				<th>Title</th>
-				<th>Author</th>
-				<th>rrp</th>
-				<th>est</th>
-				<th>Qty</th>
-				<th>Total</th>
-				<th>Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
+				<th scope="col">Order</th>
+				<th scope="col"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">Publisher</a></th>
+				<th scope="col">ISBN</th>
+				<th scope="col">Title</th>
+				<th scope="col">Author</th>
+				<th scope="col">rrp</th>
+				<th scope="col">est</th>
+				<th scope="col">Qty</th>
+				<th scope="col">Total</th>
+				<th scope="col"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">Fund</a></th>
+<!-- TMPL_UNLESS name="closedate" -->
+					<th scope="col">Remove</th>
+				<!-- /TMPL_UNLESS -->
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
-				<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
-					<td><!-- TMPL_VAR NAME="ordernumber" --></td>
+				<!-- TMPL_IF NAME="highlight" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+							<td><!-- TMPL_VAR NAME="ordernumber" --></td>
 					<td><!-- TMPL_VAR NAME="publishercode" --></td>
 					<td><!-- TMPL_VAR NAME="isbn" --></td>
 					<td><a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
@@ -46,23 +48,28 @@
 					<td><!-- TMPL_VAR NAME="quantity" --></td>
 					<td><!-- TMPL_VAR NAME="line_total" --></td>
 					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
+					<!-- TMPL_UNLESS name="closedate" -->
+					<td>
+							<form action="addorder.pl" method="get"><input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" /><input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="quantity" value="0" /><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="delete" value="Delete" /></form>
+						</td>
+					<!-- /TMPL_UNLESS -->
 				</tr>
 			<!-- /TMPL_LOOP -->
-			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
-			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+			
 			<tr>
-				<td colspan="7" rowspan=3>
-					&nbsp;
+				<td colspan="4" rowspan="3">
+					&nbsp;<input type="hidden" name="number" value="<!-- TMPL_VAR NAME="count" -->" />
+			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
 				</td>
-				<th>SubTotal</th>
-				<th><!-- TMPL_VAR NAME="currency" --> <!-- TMPL_VAR NAME="sub_total" --></th>
+				<th colspan="2">SubTotal</th>
+				<th><!-- TMPL_VAR NAME="currency" --> <!-- TMPL_VAR NAME="sub_total" --></th><td rowspan="3" colspan="4">&nbsp;</td>
 			</tr>
 			<tr>
-				<th>GST</th>
+				<th colspan="2">GST</th>
 				<th><!-- TMPL_VAR NAME="currency" --> <!-- TMPL_VAR NAME="gist" --></th>
 			</tr>
 			<tr>
-				<th>TOTAL</th>
+				<th colspan="2">TOTAL</th>
 				<th><!-- TMPL_VAR NAME="currency" --> <!-- TMPL_VAR NAME="grand_total" --></th>
 			</tr>
 		</table>

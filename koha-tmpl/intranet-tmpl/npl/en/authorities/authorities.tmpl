@@ -1,9 +1,15 @@
-<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="authorities-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
 
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="authority">Authority number <!-- TMPL_VAR NAME="authid" --></h1>
+	<h1>Authority number <!-- TMPL_VAR NAME="authid" --></h1>
 	<p>
 		<input type="hidden" name="op" value="add">
 		<input type="hidden" name="addfield_field">
@@ -170,5 +176,4 @@ function AddField(field) {
 	document.f.submit();
 }
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

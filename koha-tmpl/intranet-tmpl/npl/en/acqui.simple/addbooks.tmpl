@@ -4,25 +4,35 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h1>Catalog Maintenance</h1>
-<!-- TMPL_IF name="noitemsfound" -->
-	<p>&nbsp;</p>
-	<font color="red" size="4">No items found</font>
-<!-- /TMPL_IF -->
-
-<form class="inline" action="isbnsearch.pl">
-	<ul class="notes"><li>If the ISBN is found into the biblio table, it will be retrieved and can be modified.</li>
-	<li>If the ISBN is found into the reservoir, it will be retrieved, and a biblio added.</li>
-	<li>Otherwise, a biblio can be added from scratch.</li></ul>
-	<div class="data"><table><caption>Search Existing Records</caption>
-<tr><th><label for="isbn">ISBN:</label></th><td><input type="text" id="isbn" name="isbn" /></td></tr>
-<tr><th><label for="title">Title</label></th><td><input type="text" id="title" name="title" /></td></tr>
-</table></div>
-<p><input type="submit" class="submit" value="Search" /> </p></form>
+	<h1>Catalog Maintenance</h1>
+	<!-- TMPL_IF name="noitemsfound" -->
+		<font color="red" size="4">No items found</font>
+	<!-- /TMPL_IF -->
+	
+	<div class="data">
+		<form action="isbnsearch.pl">
+		<table>
+		<caption>Search Existing Records</caption>
+		<tr><th><label for="title">Title</label></th>
+		<td><input type="hidden" name="marclist" value="biblio.title"><input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				<input type="text" name="value" id="title"size="35" /></td></tr>
+		<tr><th><label for="isbn">ISBN</label></th>
+		<td><input type="hidden" name="marclist" value="biblioitems.isbn" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="start" />
+				<input type="text" name="value" id="isbn"size="35" /></td></tr>		
+		</table></div>
+				<p><input type="submit" value="Search" class="submit" /></p>
+				<div class="help"><ul class="notes"><li>If the ISBN is found into the database, that record will be retrieved and can be modified.</li>
+	<li>If the ISBN is found in the reservoir, it will be retrieved and a full record added.</li>
+	<li>Otherwise, a record can be added from scratch.</li></ul></div>
+		</form>
 
 		<!-- TMPL_IF NAME="NOTMARC" -->
-		
-<form action="addbiblio.pl"><p> <input type="submit" value="Add Record Without Search" class="submit" /></p></form>
+		<form action="addbiblio.pl"><p> <input type="submit" value="Add Record Without Search" class="submit" /></p></form>
 		<!-- TMPL_ELSE -->
 				<form action="addbiblio.pl" method="post">
 		<div class="data"><table>
@@ -32,22 +42,16 @@
 						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
 							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 						<!-- /TMPL_LOOP -->
-					</select></td></tr>
-		</table></div>				
-<p> <input type="submit" value="Add Record Without Search" class="submit" /></p></form>
+					</select> <input type="submit" value="Add Record Without Search" class="submit" /></td></tr>
+		</table></div></form>
 			
 		<!-- /TMPL_IF -->
 
-<!-- Display for NPL <div class="form">
-<h3>Cataloging Item Search by Barcode</h3>
-<form action="/bcd.php" method="post">
-	<table><tr><th><label for="barcode">Barcode: </label></th><td><input type="text" size="14" maxlength="14" name="barcode" id="barcode" /></td></tr></table>
-	
-	<input type="submit" class="submit" value="Submit" />
+<!-- Display for NPL //
+<form action="/intranet-bcd.php" method="post">
+	<div class="data"><table><caption>Cataloging Item Search by Barcode</caption><tr><th><label for="barcode">Barcode: </label></th><td><input type="text" size="14" maxlength="14" name="barcode" id="barcode" /> <input type="submit" class="submit" value="Submit" /></td></tr></table></div>
 </form>
-</div>< /Display for NPL -->
-
-
+//Display for NPL -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

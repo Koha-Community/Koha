@@ -7,6 +7,9 @@
 function update(f){
   //collect values
   quantity=f.quantity.value
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+  }
   discount=f.discount.value
   listinc=parseInt(f.listinc.value)
   currency=f.currency.value
@@ -34,19 +37,31 @@ function update(f){
   f.ecost.value=ecost;
   f.GST.value=GST;
   f.total.value=total;
-
+  return true;
 }
 
-
-
 function messenger(X,Y,etc){
-win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
-win.focus();
-win.document.close();
-win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
-win.document.write(etc);
-win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
-win.document.write("</font></body></html>");
+	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+	win.focus();
+	win.document.close();
+	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
+	win.document.write(etc);
+	win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
+	win.document.write("</font></body></html>");
+}
+
+function check(f) {
+  quantity=f.quantity.value
+  title=f.title.value
+  if (title == "") {
+  	alert("Title can't be empty");
+	return false;
+  }
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+	return false;
+  }
+	document.frusin.submit();
 }
 //-->
 
@@ -79,21 +94,43 @@ win.document.write("</font></body></html>");
 		 <!-- TMPL_IF name="suggestionid" -->(created from suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
 	</h1>
 	<h2>Shopping Basket For <span class="ex"><!-- TMPL_VAR NAME="name" --></span></h2>
-	<div class="details">
+	<div class="data">
 		<table>
 			<caption>Catalog Details</caption>
-			<tr><th><label for="title">Title *</label></th><td><input type="text" size="20" id="title" name="title" value="<!-- TMPL_VAR NAME="title" -->" /></td></tr>
-			<tr><th><label for="author">Author</label></th><td><input type="text" size="20" id="author" name="author" value="<!-- TMPL_VAR NAME="author" -->" /></td></tr>
-			<tr><th><label for="publishercode"> Publisher</label></th><td><input type="text" size="30" id="publishercode" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /></td></tr>
-			<tr><th><label for="copyrightdate">Copyright Date</label></th><td><input type="text" size="20" id="copyrightdate" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /></td></tr>
+			<tr><th><label for="title">Title *</label></th><td><!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
+			<!-- TMPL_ELSE --><input type="text" size="20" id="title" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- /TMPL_IF --></td></tr>
+			<tr><th><label for="author">Author</label></th><td><!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
+			<!-- /TMPL_IF --></td></tr>
+			<tr><th><label for="publishercode"> Publisher</label></th><td>			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
+			<!-- /TMPL_IF --></td></tr>
+			<tr><th><label for="copyrightdate">Copyright Date</label></th><td><!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /><!-- TMPL_VAR NAME="copyrightdate" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
+			<!-- /TMPL_IF --></td></tr>
 			<tr><th><label for="itemtype">Format</label></th><td><!-- TMPL_VAR NAME="CGIitemtype" --></td></tr>
-			<tr><th><label for="ISBN">ISBN</label></th><td><input type="text" size="20" id="ISBN" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->"></td></tr>
-		<tr><th><label for="Series">Series</label></th><td><input type="text" size="20" id="Series" name="Series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /></td></tr>
+			<tr><th><label for="ISBN">ISBN</label></th><td><!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
+			<!-- /TMPL_IF --></td></tr>
+		<tr><th><label for="Series">Series</label></th><td><!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
+			<!-- /TMPL_IF --></td></tr>
 		<tr><th><label for="branch">Branch</label></th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>
 		</table>
 	</div>
 	
-	<div class="details">
+	<div class="data">
 		<table>
 		<caption>Accounting details</caption>
 		<tr><th><label for="quantity">Quantity</label></th><td><input type="text" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" /></td></tr>
@@ -105,12 +142,13 @@ win.document.write("</font></body></html>");
 		<tr><th><label for="total"><strong>BUDGETED TOTAL</strong></label></th><td><input type="text" size="20" id="total" name="total" value="" onchange="update(this.form)" /></td></tr>
 		<tr><th><label for="cost">Actual Cost</label></th><td><input type="text" size="20" id="cost" name="cost" value="<!-- TMPL_VAR name="ecost"-->" /></td></tr>
 		<tr><th><label for="invoice">Invoice Number *</label></th><td><input type="text" size="20" id="invoice" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /></td></tr>
-		<tr><th><label for="notes">Notes</label></th><td><input type="text" size="20" id="notes" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" /></td></tr>
+		<tr><th><label for="notes-details">Notes</label></th><td><input type="text" size="20" id="notes-details" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" /></td></tr>
 		<tr><th><label for="sort1">Sort field 1</label></th><td><input type="text" size="20" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" /></td></tr>
 		<tr><th><label for="sort2">Sort field 2</label></th><td><input type="text" size="20" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" /></td></tr>
-		</table></div>	<p>The 'Sort' fields are available for your own usage. They can be useful for stat purposes</p>	
+		</table></div>
+		<p>The 'Sort' fields are available for your own usage. They can be useful for stat purposes</p>	
 		<p>
-			<input type="submit" value="Submit" class="submit" />
+			<input type="submit" value="Submit" class="submit"  onClick="check(this.form); return false;" />
 		</p>
 		
 	</form>
