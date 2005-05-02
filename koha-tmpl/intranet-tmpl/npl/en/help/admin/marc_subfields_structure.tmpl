@@ -21,6 +21,12 @@
 <li>Auth value : means the value is not free, but in the authorised value list of the selected type</li>
 <li>thesaurus : means that the value is not free, but can be searched in authority/thesaurus of the selected category</li>
 <li>plugin : means the value is calculated or managed by a plugin. Plugins can do almost anything. For example, in UNIMARC there are plugins for every 1xx fields that are coded fields. The plugin is a huge help for cataloger ! There are also two plugins (unimarc_plugin_210c and unimarc_plugin_225a that can "magically" find the editor from an ISBN, and the collection list for the editor)</li>
-<li>link : useless for instance</li>
+<li>link : If you enter a field/subfield here (200b), a little glass appears after the subfield. If the user clic on the glass, a search is done on the DB for the field/subfield with the same value. Can be used for 2 main topic : 
+	<ul>
+		<li>on a field like author (200f in UNIMARC), put 200f here, you will be able to see all biblios with the same author</li>
+		<li>on a field that is a link (4xx) to reach another biblio. For example, put 011a in 464$x, will find the serial that was previously with this issn. With the 4xx pligin, you get a powerful tool to manage biblios connected to biblios</li>
 </ul>
+</li>
+</ul>
+
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

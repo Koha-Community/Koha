@@ -3,13 +3,16 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
-        @import url(<!-- TMPL_VAR NAME='themelang' -->/includes/marc-editor.css);
 </style>
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME='themelang' -->/includes/calendar/calendar-system.css">
+<!-- End of additions -->
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
+
 function openWindow(targeturl, windowname) {
 	newwin =
 	window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
@@ -39,6 +42,11 @@ function openWindow(targeturl, windowname) {
  
 // end hiding -->
 </script>
+<!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
 </head>
 
-<body onload="loading();">
+<body>

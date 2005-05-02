@@ -3,8 +3,6 @@
 <!-- main site -->
 <div id="main">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-
-	<div class="table">
 	<table class="list">
 	<caption><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></caption>
 	<tr><th>Biblio Record Number: </th><td> <!-- TMPL_VAR NAME="biblionumber" -->	</td></tr>
@@ -19,12 +17,12 @@
 			<!-- TMPL_IF name="copyrightdate" --><tr><th>Copyright Date: </th><td> <!-- TMPL_VAR NAME="copyrightdate" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" --><tr><th>Notes: </th><td><!-- TMPL_VAR NAME="notes" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="unititle" --><tr><th>Unititle: </th><td><!-- TMPL_VAR NAME="unititle" --></td></tr><!-- /TMPL_IF --> 
-			<!-- TMPL_IF name="dewey" --><tr><th>Dewey: </th><td><a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a></td></tr><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="dewey" --><tr><th>Dewey: </th><td><!-- TMPL_VAR name="dewey" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="classification" --><tr><th>Classification: </th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="lccn" --><tr><th>LCCN: </th><td><!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="url" --><tr><th>URL: </th><td><a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="ISBN" --><tr><th>ISBN: </th><td><!-- TMPL_VAR NAME="ISBN" --></td></tr><!-- /TMPL_IF -->
-	</table></div>
+	</table>
 <!-- /TMPL_LOOP -->
 
 <table>

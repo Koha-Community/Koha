@@ -48,7 +48,7 @@
 		<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->">
 		<input type="hidden" name="type" value="borrowers">
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
 	<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
 		<!-- TMPL_IF NAME="addAction" -->
@@ -83,12 +83,12 @@
 					
 	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="othernames">Prefered Name:</label></th><td colspan="4"><input type="text" id="othernames" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->"></td></tr><!-- /TMPL_UNLESS -->
 
-	<tr><th>Addresses:</th><td colspan="4"><fieldset><legend>Mailing Address</legend><label for="address"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->><a name="address" id="address">Address:</a> </label><input type="text" id="address" name="address" size="25" value="<!-- TMPL_VAR NAME="address" -->"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->>
+	<tr><th>Addresses:</th><td colspan="4"><fieldset><legend>Mailing Address</legend><label for="streetaddress"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->><a name="address" id="address">Address:</a> </label><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->>
 <br><label for="city"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF -->><a name="#city" id="#city">City, State:</a></label> <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF -->>
 <br><label for="zipcode">Zip Code:</label> <input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->"></fieldset>
 
 <fieldset><legend>Street Address (if different)</legend>
-<label for="streetaddress">Address:</label><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="streetaddress" -->">
+<label for="physstreet">Address:</label><input type="text" id="physstreet" name="physstreet" size="25" value="<!-- TMPL_VAR NAME="physstreet" -->">
 <br><label for="streetcity">City, State: </label><input type="text" id="streetcity" name="streetcity" size="20" value="<!-- TMPL_VAR NAME="streetcity" -->">
 <br><label for="homezipcode">Zip Code:</label><input type="text" id="homezipcode" name="homezipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->">
 </fieldset>
@@ -117,15 +117,12 @@
 		<tr><th><label for="altnotes">Notes: </label></th><td><textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR NAME="altnotes" --></textarea></td></tr>
 		</table></div><!-- /TMPL_UNLESS -->
 
-
-<!-- TMPL_IF NAME="modify" -->
 <div class="table members"><table>
 	<caption>Flags</caption>
 	<!-- TMPL_LOOP NAME="flagloop" -->
 	<tr><th><label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" --></label></th><td><input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Yes <input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>No</td></tr>
 				<!-- /TMPL_LOOP -->
 </table></div>
-			<!-- /TMPL_IF -->
 
 <div class="table members"><table>
 <caption>Patron Details</caption>
