@@ -66,23 +66,7 @@ a.catalogue:hover {
 <!-- TMPL_IF Name=result -->	
 	<div class="bloc100">
 		<h2 class="catalogue">Dictionary Search results</h2>
-		<div id="resultlist">
-			<table>
-				<tr>
-					<th colspan="2">Authorities</th>
-				</tr>
-				<tr>
-					<th class="authority">Summary</th>
-					<th class="authority">Used</th>
-				</tr>
-				<!-- TMPL_LOOP NAME="authresult" -->
-					<tr>
-						<td><!-- TMPL_VAR NAME="summary" --></td>
-						<td><!-- TMPL_VAR NAME="used" --> times</td>
-					</tr>
-				<!-- /TMPL_LOOP -->
-			</table>
-		</div>
+		<!-- TMPL_IF NAME="authresult" -->
 		<div id="resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> 
 					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
@@ -98,6 +82,35 @@ a.catalogue:hover {
 					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 			</p>
+			<p class="resultcount">
+			<!-- TMPL_IF NAME="nbresults" -->
+					Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="nbresults" --><!-- TMPL_ELSE -->No results found.
+			<!-- /TMPL_IF -->
+			</p>
+		</div>
+		<div id="resultlist">
+			<table>
+				<tr>
+					<th colspan="2" class="authority">Authorities</th>
+				</tr>
+				<tr>
+					<th class="authority">Summary</th>
+					<th class="authority">Used</th>
+				</tr>
+				<!-- TMPL_LOOP NAME="authresult" -->
+					<tr>
+						<td><!-- TMPL_VAR NAME="summary" --></td>
+						<td>
+							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+		<!-- TMPL_ELSE -->
+			<h3 class="authority">No results in Authorities</h3>
+		<!-- /TMPL_IF -->
+		<div id="resultnumber">
 			<p class="resultcount">
 			<!-- TMPL_IF NAME="total" -->
 					Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --><!-- TMPL_ELSE -->No results found.
@@ -157,6 +170,25 @@ a.catalogue:hover {
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
+				<!-- TMPL_LOOP NAME="catresult" -->
+				<tr>
+					<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+								<!-- TMPL_IF name="MARC_ON" -->
+									<a class="transparent resultlist" href="search.pl?type=<!-- TMPL_VAR NAME="type" ESCAPE="URL" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL" -->&amp;operator=contains&amp;op=do_search&amp;and_or=and&amp;value='<!-- TMPL_VAR Name=value ESCAPE="URL" -->'&amp;excluding="><!-- TMPL_VAR NAME="value" --></a>
+								<!-- TMPL_ELSE -->
+									<a class="transparent resultlist" href="search.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="value" --></a>				<!-- /TMPL_IF -->
+					</td>
+					<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+						<!-- TMPL_VAR NAME="count" -->
+					</td>
+					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+						&nbsp;
+					</td>
+					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+						&nbsp;
+					</td>
+				</tr>
+				<!-- /TMPL_LOOP -->
 			</table>
 		</div>
 		<div id="resultnumber">
@@ -182,7 +214,7 @@ a.catalogue:hover {
 		</div>
 		
 	</div>
-<!-- /TMPL_IF -->	
+<!-- /TMPL_IF -->
 
 </div>
 </body>

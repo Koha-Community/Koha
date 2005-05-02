@@ -92,7 +92,21 @@ if ($op eq "do_search") {
 	my ($results,$total) = catalogsearch($dbh,\@tags ,\@and_or,
 										\@excluding, \@operator,  \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$orderby);
-	
+	my %seen = ();
+
+	foreach my $item (@$results) {
+		my $display;
+		$display="author" if ($field=~/author/);
+		$display="title" if ($field=~/title/);
+		$display="subject" if ($field=~/subject/);
+		$display="publishercode" if ($field=~/publisher/);
+	    $seen{$item->{$display}}++;
+	}
+	my @catresults;
+	foreach my $name (keys %seen){
+		push @catresults, { value => $name , count => $seen{$name}}
+	}
+
 	my $strsth="Select distinct authtypecode from marc_subfield_structure where ";
 	my $strtagfields="tagfield in (";
 	my $strtagsubfields=" and tagsubfield in (";
@@ -172,6 +186,7 @@ if ($op eq "do_search") {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
 	$template->param(result => $results,
+					 catresult=> \@catresults,
 						search => $search[0],
 						marclist =>$field,
 						authresult => \@authresults,
