@@ -743,7 +743,7 @@ sub canbookbeissued {
 	if ($currentborrower eq $borrower->{'borrowernumber'}) {
 # Already issued to current borrower. Ask whether the loan should
 # be renewed.
-		my ($renewstatus) = renewstatus($env,$dbh,$borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+		my ($renewstatus) = renewstatus($env, $borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 		if ($renewstatus == 0) { # no more renewals allowed
 			$issuingimpossible{NO_MORE_RENEWALS} = 1;
 		} else {
@@ -816,7 +816,7 @@ sub issuebook {
 			$iteminformation->{'charge'} = $charge;
 		}
 		&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
-		renewbook($env,$dbh, $borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+		renewbook($env, $borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 	} else {
 #
 # NOT a renewal
