@@ -18,19 +18,6 @@ function Help() {
 
 <link rel="stylesheet" type="text/css" href="/intranet-tmpl/default/en/includes/common-style.css">
 <style type="text/css">
-.authority {
-	background-color: #6b7cbe;
-	color:#FFFFFF;
-	text-decoration: normal;
-	font-weight: bold;
-	background-image:none;
-	}
-a.authority:hover {
-	background-color: #6b7cbe;
-	color: #FFFFFF;
-	text-decoration: normal;
-	font-weight: bold;
-	}
 .catalogue {
 	background-color:#ad11ad;
 	color:#FFFFFF;
@@ -63,7 +50,6 @@ a.catalogue:hover {
 		</div>
 	</form>
 
-<!-- TMPL_IF Name=result -->	
 	<div class="bloc100">
 		<h2 class="catalogue">Dictionary Search results</h2>
 		<!-- TMPL_IF NAME="authresult" -->
@@ -91,25 +77,26 @@ a.catalogue:hover {
 		<div id="resultlist">
 			<table>
 				<tr>
-					<th colspan="2" class="authority">Authorities</th>
+					<th colspan="2" class="catalogue">Authorities</th>
 				</tr>
 				<tr>
-					<th class="authority">Summary</th>
-					<th class="authority">Used</th>
+					<th class="catalogue">Summary</th>
+					<th class="catalogue">Used</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="authresult" -->
 					<tr>
 						<td><!-- TMPL_VAR NAME="summary" --></td>
 						<td>
-							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)
+							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button catalogue"><!-- TMPL_VAR NAME="used" --> biblio(s)
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
 		</div>
 		<!-- TMPL_ELSE -->
-			<h3 class="authority">No results in Authorities</h3>
+			<h3 class="catalogue">No results in Authorities</h3>
 		<!-- /TMPL_IF -->
+<!-- TMPL_IF Name=catresult -->	
 		<div id="resultnumber">
 			<p class="resultcount">
 			<!-- TMPL_IF NAME="total" -->
@@ -125,23 +112,16 @@ a.catalogue:hover {
 					<th class="catalogue">Location</th>
 					<th class="catalogue">&nbsp;</th>
 				</tr>
-				<!-- TMPL_LOOP NAME="result" -->
+				<!-- TMPL_LOOP NAME="catresult" -->
 				<tr>
 					<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 								<!-- TMPL_IF name="MARC_ON" -->
-									<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+									<a class="transparent resultlist" href="search.pl?type=<!-- TMPL_VAR NAME="type" ESCAPE="URL" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL" -->&amp;operator=contains&amp;op=do_search&amp;and_or=and&amp;value='<!-- TMPL_VAR Name=value ESCAPE="URL" -->'&amp;excluding="><!-- TMPL_VAR NAME="value" --></a>
 								<!-- TMPL_ELSE -->
-									<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
-							<p><!-- TMPL_VAR NAME="author" -->
-							<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
-						</p>
+									<a class="transparent resultlist" href="search.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="value" --></a>				<!-- /TMPL_IF -->
 					</td>
 					<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
-						<!-- TMPL_VAR NAME="totitem" -->
+						<!-- TMPL_VAR NAME="count" -->
 					</td>
 					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 						<!-- TMPL_LOOP NAME="CN" -->
@@ -167,25 +147,6 @@ a.catalogue:hover {
 						<!-- TMPL_ELSE -->
 							<p>Not Reservable</p>
 						<!-- /TMPL_UNLESS -->
-					</td>
-				</tr>
-				<!-- /TMPL_LOOP -->
-				<!-- TMPL_LOOP NAME="catresult" -->
-				<tr>
-					<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
-								<!-- TMPL_IF name="MARC_ON" -->
-									<a class="transparent resultlist" href="search.pl?type=<!-- TMPL_VAR NAME="type" ESCAPE="URL" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL" -->&amp;operator=contains&amp;op=do_search&amp;and_or=and&amp;value='<!-- TMPL_VAR Name=value ESCAPE="URL" -->'&amp;excluding="><!-- TMPL_VAR NAME="value" --></a>
-								<!-- TMPL_ELSE -->
-									<a class="transparent resultlist" href="search.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="value" --></a>				<!-- /TMPL_IF -->
-					</td>
-					<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
-						<!-- TMPL_VAR NAME="count" -->
-					</td>
-					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-						&nbsp;
-					</td>
-					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-						&nbsp;
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->

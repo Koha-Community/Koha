@@ -75,10 +75,6 @@ if ($op eq "do_search") {
 	
  	while ((my $tagfield,my $tagsubfield,my $liblibrarian) = $sth->fetchrow) {
  		push @tags, $dbh->quote("$tagfield$tagsubfield");
- 		push @and_or, "";
- 		push @operator, "contains";
- 		push @excluding, "";
- 		push @value, @search ;
  	}
 
 	$resultsperpage= $input->param('resultsperpage');
@@ -89,37 +85,47 @@ if ($op eq "do_search") {
 #	select distinct m1.bibid from biblio,biblioitems,marc_biblio,marc_word as m1 where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and (m1.word  like 'Paul' and m1.tagsubfield in ('200f','710a','711a','712a','701a','702a','700a')) order by biblio.title
 
 
-	my ($results,$total) = catalogsearch($dbh,\@tags ,\@and_or,
-										\@excluding, \@operator,  \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby);
-	my %seen = ();
-
-	foreach my $item (@$results) {
-		my $display;
-		$display="author" if ($field=~/author/);
-		$display="title" if ($field=~/title/);
-		$display="subject" if ($field=~/subject/);
-		$display="publishercode" if ($field=~/publisher/);
-	    $seen{$item->{$display}}++;
+	my @results, my $total;
+# 	my ($results,$total) = catalogsearch($dbh,\@tags ,\@and_or,
+# 										\@excluding, \@operator,  \@value,
+# 										$startfrom*$resultsperpage, $resultsperpage,$orderby);
+	my $strsth="select distinct subfieldvalue, count(marc_subfield_table.bibid) from marc_subfield_table,marc_word where marc_word.word like ? and marc_subfield_table.bibid=marc_word.bibid and marc_word.tagsubfield in ";
+	my $listtags="(";
+	foreach my $tag (@tags){
+		$listtags .= $tag .",";
 	}
+	$listtags =~s/,$/)/;
+	$strsth .= $listtags." and marc_word.tagsubfield=marc_subfield_table.tag+marc_subfield_table.subfieldcode group by subfieldvalue ";
+	warn "".$strsth;
+	my $value = uc($search[0]);
+	$value=~s/\*/%/g;
+	$value.= "%" if not($value=~m/%/);
+	warn " texte : ".$value;
+
+	$sth=$dbh->prepare($strsth);
+	$sth->execute($value);
+	my $total;
 	my @catresults;
-	foreach my $name (sort keys %seen){
-		push @catresults, { value => $name , count => $seen{$name}}
+	while (my ($value,$ctresults)=$sth->fetchrow) {
+		warn "countresults : ".$ctresults;
+		push @catresults,{value=> $value, 
+						  even=>($total-$startfrom*$resultsperpage)%2,
+						  count=>$ctresults
+						  } if (($total>=$startfrom*$resultsperpage) and ($total<($startfrom+1)*$resultsperpage));
+		$total++;
 	}
+	
 
-	my $strsth="Select distinct authtypecode from marc_subfield_structure where ";
-	my $strtagfields="tagfield in (";
-	my $strtagsubfields=" and tagsubfield in (";
+	my $strsth="Select distinct authtypecode from marc_subfield_structure where (";
 	foreach my $listtags (@tags){
 		my @taglist=split /,/,$listtags;
 		foreach my $curtag (@taglist){
-			$strtagfields=$strtagfields."'".substr($curtag,1,3)."',";
-			$strtagsubfields=$strtagsubfields."'".substr($curtag,4,1)."',";
+			$strsth.="(tagfield='".substr($curtag,1,3)."' AND tagsubfield='".substr($curtag,4,1)."') OR";
 		}
 	}
-	$strtagfields=~s/,$/)/;
-	$strtagsubfields=~s/,$/)/;
-	my $strsth = $strsth.$strtagfields.$strtagsubfields." and authtypecode is not NULL";
+	
+	$strsth=~s/ OR$/)/;
+	my $strsth = $strsth." and authtypecode is not NULL";
 	warn $strsth;
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute;
@@ -185,7 +191,7 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
-	$template->param(result => $results,
+	$template->param(result => \@results,
 					 catresult=> \@catresults,
 						search => $search[0],
 						marclist =>$field,
