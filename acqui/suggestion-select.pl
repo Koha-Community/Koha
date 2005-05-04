@@ -23,7 +23,7 @@ my $publicationyear = $input->param('publicationyear');
 my $place = $input->param('place');
 my $isbn = $input->param('isbn');
 my $status = 'ACCEPTED';
-my $suggestedbyme = 1;
+my $suggestedbyme = -1; # search ALL suggestors
 my $op = $input->param('op');
 $op = 'else' unless $op;
 
@@ -33,7 +33,7 @@ my ($template, $borrowernumber, $cookie)
 			     type => "intranet",
 			     query => $input,
 			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+			     flagsrequired => {acquisition => 1},
 			 });
 
 my $suggestions_loop= &searchsuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);

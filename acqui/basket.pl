@@ -64,7 +64,6 @@ my $line_total; # total of each line
 my $sub_total; # total of line totals
 my $gist;      # GST
 my $grand_total; # $subttotal + $gist
-my $toggle=0;
 
 my @books_loop;
 for (my $i=0;$i<$count;$i++){
@@ -74,12 +73,10 @@ for (my $i=0;$i<$count;$i++){
 	$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
 	$sub_total+=$line_total;
 	my %line;
-	if ($toggle==0){
-		$line{color}='#EEEEEE';
-		$toggle=1;
+	if ($i % 2){
+		$line{highlight}=1;
 	} else {
-		$line{color}='white';
-		$toggle=0;
+		$line{highlight}=0;
 	}
 	$line{ordernumber} = $results[$i]->{'ordernumber'};
 	$line{publishercode} = $results[$i]->{'publishercode'};
@@ -106,6 +103,7 @@ $template->param(basketno => $basketno,
 				authorisedby => $basket->{authorisedby},
 				authorisedbyname => $basket->{authorisedbyname},
 				closedate => format_date($basket->{closedate}),
+				active => $booksellers[0]->{'active'},
 				booksellerid=> $booksellers[0]->{'id'},
 				name => $booksellers[0]->{'name'},
 				entrydate => format_date($results[0]->{'entrydate'}),

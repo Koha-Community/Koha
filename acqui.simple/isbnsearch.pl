@@ -21,34 +21,30 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
-use C4::Search;
+# use C4::Search;
+use C4::Breeding;
+use C4::SearchMarc;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Koha;
 
 my $input      = new CGI;
-my $isbn       = $input->param('isbn');
-my $title      = $input->param('title');
 my $offset     = $input->param('offset');
 my $num        = $input->param('num');
-my $showoffset = $offset + 1;
-my $total;
-my $count;
-my @results;
+# my $total;
+# my $count;
+# my @results;
 my $marc_p = C4::Context->boolean_preference("marc");
+my $dbh = C4::Context->dbh;
 
-if ( !$isbn && !$title ) {
-    print $input->redirect('addbooks.pl');
-}
-else {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "acqui.simple/isbnsearch.tmpl",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
+            flagsrequired   => { editcatalogue => 1 },
             debug           => 1,
         }
     );
@@ -56,10 +52,77 @@ else {
     # fill with books in ACTIVE DB (biblio)
     if ( !$offset ) {
         $offset     = 0;
-        $showoffset = 1;
     }
     if ( !$num ) { $num = 10 }
-    ( $count, @results ) = isbnsearch( $isbn, $title );
+	my @marclist = $input->param('marclist');
+	my @and_or = $input->param('and_or');
+	my @excluding = $input->param('excluding');
+	my @operator = $input->param('operator');
+	my @value = $input->param('value');
+	my $title= @value[0];
+	my $isbn = @value[1];
+	my $resultsperpage= $input->param('resultsperpage');
+	$resultsperpage = 5 if(!defined $resultsperpage);
+	my $startfrom=$input->param('startfrom');
+	$startfrom=0 if(!defined $startfrom);
+	my $orderby = $input->param('orderby');
+	my $desc_or_asc = $input->param('desc_or_asc');
+
+	# builds tag and subfield arrays
+	my @tags;
+
+	foreach my $marc (@marclist) {
+		if ($marc) {
+			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
+			if ($tag) {
+				push @tags,$dbh->quote("$tag$subfield");
+			} else {
+				push @tags, $dbh->quote(substr($marc,0,4));
+			}
+		} else {
+			push @tags, "";
+		}
+	}
+	findseealso($dbh,\@tags);
+	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
+										\@excluding, \@operator, \@value,
+										$startfrom, $resultsperpage,'biblio.title','ASC');
+# 	@results = @$resultsref;
+
+#     my @loop_data = ();
+#     my $toggle;
+#     for ( my $i = $offset ; $i < $total ; $i++ ) {
+#         if ( $i % 2 ) {
+#             $toggle = 0;
+#         } else {
+#             $toggle = 1;
+#         }
+#         my %row_data;    # get a fresh hash for the row data
+#         $row_data{toggle}        = $toggle;
+#         $row_data{biblionumber}  = $results[$i]->{'biblionumber'};
+#         $row_data{title}         = $results[$i]->{'title'};
+#         $row_data{author}        = $results[$i]->{'author'};
+#         $row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
+# 		$row_data{classification} = $results[$i]->{'classification'};
+#         $row_data{NOTMARC}       = !$marc_p;	
+#         push ( @loop_data, \%row_data );
+#     }
+	# multi page display gestion
+	my $displaynext=0;
+	my $displayprev=$startfrom;
+	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
+		$displaynext = 1;
+	}
+
+	my @field_data = ();
+
+	for(my $i = 0 ; $i <= $#marclist ; $i++) {
+		push @field_data, { term => "marclist", val=>$marclist[$i] };
+		push @field_data, { term => "and_or", val=>$and_or[$i] };
+		push @field_data, { term => "excluding", val=>$excluding[$i] };
+		push @field_data, { term => "operator", val=>$operator[$i] };
+		push @field_data, { term => "value", val=>$value[$i] };
+	}
 
     if ( $count < ( $offset + $num ) ) {
         $total = $count;
@@ -130,9 +193,10 @@ else {
     }
 
     # fill with books in breeding farm
-    ( $count, @results ) = breedingsearch( $title, $isbn );
+	my $toggle=0;
+    my ( $countbr, @resultsbr ) = BreedingSearch( @value[0], @value[1] );
     my @breeding_loop = ();
-    for ( my $i = 0 ; $i <= $#results ; $i++ ) {
+    for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
         my %row_data;
         if ( $i % 2 ) {
             $toggle = 0;
@@ -141,15 +205,14 @@ else {
             $toggle = 1;
         }
         $row_data{toggle} = $toggle;
-        $row_data{id}     = $results[$i]->{'id'};
-        $row_data{isbn}   = $results[$i]->{'isbn'};
-        $row_data{file}   = $results[$i]->{'file'};
-        $row_data{title}  = $results[$i]->{'title'};
-        $row_data{author} = $results[$i]->{'author'};
+        $row_data{id}     = $resultsbr[$i]->{'id'};
+        $row_data{isbn}   = $resultsbr[$i]->{'isbn'};
+        $row_data{file}   = $resultsbr[$i]->{'file'};
+        $row_data{title}  = $resultsbr[$i]->{'title'};
+        $row_data{author} = $resultsbr[$i]->{'author'};
         $row_data{NOTMARC}= !$marc_p;	
         push ( @breeding_loop, \%row_data );
     }
-
 
 	# get framework list
 	my $frameworks = getframeworks;
@@ -162,16 +225,22 @@ else {
 	}
 
     $template->param(
-        isbn          => $isbn,
-        title         => $title,
-        showoffset    => $showoffset,
+		title		  => $title,
+		isbn		  => $isbn,
+							startfrom=> $startfrom,
+							displaynext=> $displaynext,
+							displayprev=> $displayprev,
+							resultsperpage => $resultsperpage,
+							startfromnext => $startfrom+1,
+							startfromprev => $startfrom-1,
+							searchdata=>\@field_data,
+							numbers=>\@numbers,
+							from => $from,
+							to => $to,
         total         => $total,
-        offset        => $offset,
-        loop          => \@loop_data,
+#         offset        => $offset,
+        loop          => $results,
         breeding_loop => \@breeding_loop,
-        numbers       => \@numbers,
-        term          => $term,
-        value         => $value,
         NOTMARC       => !$marc_p,
 		frameworkcodeloop => \@frameworkcodeloop,
     );
@@ -181,4 +250,3 @@ else {
         -cookie => $cookie
       ),
       $template->output;
-}    # else

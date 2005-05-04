@@ -120,6 +120,7 @@ if ($op eq "additem") {
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
+# warn "R: ".$record->as_formatted;
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
 	$itemnum="";
 	$nextop="additem";
@@ -269,7 +270,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 

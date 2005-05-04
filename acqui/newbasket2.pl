@@ -71,7 +71,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {superlibrarian => 1},
+			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
 
