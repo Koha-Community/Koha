@@ -17,7 +17,7 @@
 ## CONFIGURABLE VARIABLES ####################
 ##
  # Change this to where your Koha modules are (C4 directory)
-use lib '/var/www/labs.liblime.com/cvsroots/koha/';
+use lib '/usr/local/koha/intranet/modules/';
  # These are the tags that have meaningful data
  # for the databases I've worked with (MARC21 only)
  # you may need to change them depending on your data
@@ -79,10 +79,9 @@ use C4::Context;
  # and uncomment the one after it, adding your site info (check out GRANT
  # syntax in the mysql manual if you're unsure how enable authentication)
 #
-#my dbh2 = C4::Context->dbh;
+my dbh2 = C4::Context->dbh;
 #
 #my $dbh2=DBI->connect("DBI:mysql:<add your database name here>:localhost","<add your mysql user here>","<add your password here>");
-my $dbh2=DBI->connect("DBI:mysql:demosuggest:localhost","sugg","Free2cirC");
 ########################################################################
 ## End of most common configurable variables: in most cases you won't need
 ## edit any further ... of course feel free to indulge yourself ;-)
