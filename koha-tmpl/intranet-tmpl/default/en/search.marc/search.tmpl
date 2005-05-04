@@ -30,7 +30,7 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet','biblio.title')">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)">
 				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
 			</a>
 		</p>
@@ -40,7 +40,7 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet','biblio.author')">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)">
 				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
 			</a>
 		</p>
@@ -51,7 +51,7 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">  
 			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet','bibliosubject.subject')">
+			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)">
 				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
 			</a>
 		</p>
@@ -186,7 +186,8 @@ function AddStatement() {
 }
 
 function Dopop(link,i) {
-	newin=window.open(link,'width=550,height=550,toolbar=false,scrollbars=yes');
+	var searchstring=document.forms[0].value[i].value;
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
 
 
