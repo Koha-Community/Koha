@@ -176,6 +176,7 @@ sub authoritysearch {
 		$newline{authid} = $result[$counter];
 		$newline{used} = &AUTHcount_usage($result[$counter]);
 		$newline{biblio_fields} = $tags_using_authtype;
+		$newline{marcrecord} = $record;
 		$counter++;
 		push @finalresult, \%newline;
 	}
@@ -924,6 +925,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.15  2005/05/04 14:18:39  hdl
+# adding Marc Record to authoritysearch report
+#
 # Revision 1.14  2005/04/05 17:07:46  hdl
 # Scanning every the Subfields of auth_tag_to_report for FindDuplicate
 #
