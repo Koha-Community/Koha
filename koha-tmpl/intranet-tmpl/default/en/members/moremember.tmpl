@@ -15,7 +15,8 @@
 		<label class="label100">Text messaging: </label><!-- TMPL_VAR NAME="textmessaging" --><br>
 		<label class="label100">Membership Number: </label><!-- TMPL_VAR NAME="borrowernumber" --><br>
 		<label class="label100">Membership Category: </label><!-- TMPL_VAR NAME="categorycode" --><br>
-		<label class="label100">Joined: </label><!-- TMPL_VAR NAME="dateenrolled" -->,  Expires: <!-- TMPL_VAR NAME="expiry" --><br>
+		<label class="label100">Joined: </label><!-- TMPL_VAR NAME="dateenrolled" -->,<br>
+		<label class="label100"> Expires:</label><!-- TMPL_VAR NAME="expiry" --><br>
 		<label class="label100">Joining branch: </label><!-- TMPL_VAR NAME="branchcode" -->
 		</p>
 		<p>
@@ -25,7 +26,6 @@
 		<!-- TMPL_UNLESS name="I" -->
 			<label class="label100">DoB: </label><!-- TMPL_VAR NAME="dateofbirth" --><br>
 			<label class="label100">Sex: </label><!-- TMPL_VAR NAME="sex" --><br>
-			Alternative
 		<!-- /TMPL_UNLESS -->
 		<label class="label100">Contact: </label><!-- TMPL_VAR NAME="contactname" --><br>
 		<label class="label100">Phone: </label><!-- TMPL_VAR NAME="altphone" --><br>
@@ -66,7 +66,7 @@
 		<!-- TMPL_IF NAME="I" -->
 			<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
 		<!-- TMPL_ELSE -->
-			<a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+			<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
 		<!-- /TMPL_IF -->
 		<a href="javascript:confirm_deletion()" class="button">Delete</a>
 		<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Issue books</a>
@@ -172,13 +172,13 @@
 
 			<!-- TMPL_LOOP NAME="issueloop" -->
 			<tr>
-				<td><!-- TMPL_IF NAME="red" --><font color="red"><!-- /TMPL_IF -->
-				<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="red" --></font><!-- /TMPL_IF -->
+				<td><!-- TMPL_IF NAME="red" --><p class="problem"><!-- TMPL_ELSE --> <p><!-- /TMPL_IF -->
+				<!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="itemcallnumber" --> <i>(<!-- TMPL_VAR name="itemcallnumber" -->)</i> <!-- /TMPL_IF -->
 				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 					<!-- TMPL_VAR NAME="barcode" -->
-				</a>
+				</a></p>
 				</td>
-				<td><!-- TMPL_VAR NAME="date_due" --></td>
+				<td><!-- TMPL_IF NAME="red" --><p class="problem"><!-- TMPL_ELSE --> <p><!-- /TMPL_IF --><!-- TMPL_VAR NAME="date_due" --></p></td>
 				<td><!-- TMPL_VAR NAME="itemtype" --></td>
 				<td><!-- TMPL_VAR NAME="charge" --></td>
 				<td>

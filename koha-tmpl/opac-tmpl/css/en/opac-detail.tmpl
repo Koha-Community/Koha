@@ -34,7 +34,6 @@
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="class" --></h1>
 
-	<p>
 	<div id="bibliobloc">
 	<table cellspacing="0">
 		<!-- BIBLIO RECORD TABLE -->
@@ -46,37 +45,40 @@
 		<tr>
 			<td>
 				<!-- TMPL_IF name="subtitles" -->
-					<label><b>Subtitle(s):</b> </label>
+					<p><label><b>Subtitle(s):</b> </label>
 					<!-- TMPL_LOOP name="subtitles" -->
 						<!-- TMPL_VAR NAME="subtitle" --> ; 
 					<!-- /TMPL_LOOP -->
-					<br />
+					</p>
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="author" --><label><b>Author:</b> </label><!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="additional" --><label><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="publishercode" --><label><b>Published by :</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" --><br />
-				<!-- TMPL_IF name="publicationyear" --><label><b>in </b></label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
-				<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-				<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br />
-				<!-- TMPL_IF name="isbn" --><label><b>ISBN:</b> </label><!-- TMPL_VAR NAME="isbn" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="seriestitle" --><label><b>Collection:</b> </label><!-- TMPL_VAR NAME="seriestitle" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="subjects" --><label><b>Subject(s):</b> </label>
+				<!-- TMPL_IF name="author" --><p><label><b>Author:</b> </label><!-- TMPL_VAR NAME="author" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="additional" --><p><label><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --></p><!-- /TMPL_IF -->
+				<p><!-- TMPL_IF name="publishercode" --><label><b>Published by :</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" --></p>
+				<p>
+					<!-- TMPL_IF name="publicationyear" --><label><b>in </b></label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
+					<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+					<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
+				</p>
+				<!-- TMPL_IF name="isbn" --><p><label><b>ISBN:</b> </label><!-- TMPL_VAR NAME="isbn" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="issn" --><p><label><b>ISSN:</b> </label><!-- TMPL_VAR NAME="issn" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="seriestitle" --><p><label><b>Collection:</b> </label><!-- TMPL_VAR NAME="seriestitle" --> <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="subjects" --><p><label><b>Subject(s):</b> </label></p>
 					<!-- TMPL_LOOP name="subjects" -->
-						<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP -->
-					<br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="copyrightdate" --><label><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="notes" --><label><b>Notes:</b> </label><!-- TMPL_VAR NAME="notes" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="unititle" --><label><b>Unititle:</b> </label><!-- TMPL_VAR NAME="unititle" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="dewey" --><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="url" --><label><b>URL:</b> </label><a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><br /><!-- /TMPL_IF -->
-				<label><b>Item type : </b></label>
+						<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="copyrightdate" --><p><label><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="notes" --><p><label><b>Notes:</b> </label><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="unititle" --><p><label><b>Unititle:</b> </label><!-- TMPL_VAR NAME="unititle" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dewey" --><p><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="url" --><p><label><b>URL:</b> </label><a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a></p><!-- /TMPL_IF -->
+				<p><label><b>Item type : </b></label>
 					<!-- TMPL_IF name="description" -->
 						<!-- TMPL_VAR name="description" -->
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_VAR NAME="itemtype" -->
 					<!-- /TMPL_IF -->
-					<br/>
-				<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
+				</p>
+				<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
 			</td>
 		</tr>
 	</table>

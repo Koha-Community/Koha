@@ -41,12 +41,13 @@ if ($email_add) {
 
 	my @bibs = split(/\//, $bib_list);
 	my @results;
-
+	my $iso2709;
 	foreach my $biblionumber (@bibs) {
 		$template2->param(biblionumber => $biblionumber);
 
 		my $dat = &bibdata($biblionumber);
 		my ($authorcount, $addauthor) = &addauthor($biblionumber);
+		my @items                     = &ItemInfo(undef, $biblionumber, 'opac');
 
 		$dat->{'additional'}=$addauthor->[0]->{'author'};
 		for (my $i = 1; $i < $authorcount; $i++) {
@@ -54,7 +55,10 @@ if ($email_add) {
 		}
 
 		$dat->{'biblionumber'} = $biblionumber;
-		
+		$dat->{ITEM_RESULTS} = \@items;
+		my $record = MARCgetbiblio($dbh,$bibid);
+		$iso2709 .= $record->as_usmarc();
+
 		push (@results, $dat);
 	}
 
@@ -97,6 +101,7 @@ $mail{'body'}
 $boundary--
 END_OF_BODY
 
+$mail{PJ} = $iso2709;
 #	$mail{body} = <<END_OF_BODY;
 #$boundary
 #Content-Type: text/plain; charset="iso-8859-1"
@@ -129,6 +134,9 @@ END_OF_BODY
 }
 else {
 	$template->param(bib_list => $bib_list);
-	$template->param(url => "/cgi-bin/koha/opac-sendbasket.pl");
+	$template->param(url => "/cgi-bin/koha/opac-sendbasket.pl",
+	suggestion => C4::Context->preference("suggestion"),
+	virtualshelves => C4::Context->preference("virtualshelves"),
+	);
 	output_html_with_http_headers $query, $cookie, $template->output;
 }

@@ -78,6 +78,10 @@ my ($template, $loggedinuser, $cookie)
 			     authnotrequired => 1,
 			     debug => 1,
 			     });
+$template->param(LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+);
 
 my $ISBD = C4::Context->preference('ISBD');
 # my @blocs = split /\@/,$ISBD;
@@ -88,7 +92,6 @@ my $res;
 	my $bloc = $ISBD;
 	my $blocres;
 	foreach my $isbdfield (split /#/,$bloc) {
-	warn "ISBDFIELD : $isbdfield";
 # 		$isbdfield= /(.?.?.?)/;
 		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
 		my $fieldvalue=$1;

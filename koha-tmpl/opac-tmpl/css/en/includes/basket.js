@@ -295,14 +295,6 @@ function delBasket() {
 
 
 function quit() {
-	if (document.myform.records.value) {
-		var rep = false;
-		rep = confirm(MSG_CONFIRM_DEL_RECORDS);
-		if (rep) {
-			delSelRecords();
-		}
-	}
-	updateBasket(arrayRecords.length-1,top.opener.document);
 	window.close();
 }
 
@@ -313,7 +305,7 @@ function sendBasket() {
 
 	var loc = CGIBIN + "opac-sendbasket.pl?" + strCookie;
 
-	var optWin="dependant=yes,scrollbars=no,resizable=no,height=300,width=400,top=50,left=100";
+	var optWin="dependant=yes,scrollbars=no,resizable=no,height=300,width=600,top=50,left=100";
 	var win_form = open(loc,"win_form",optWin);
 }
 

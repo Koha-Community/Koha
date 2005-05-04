@@ -34,6 +34,7 @@ foreach my $biblionumber (@bibs) {
 
 	my $dat                                   = &bibdata($biblionumber);
 	my ($authorcount, $addauthor)             = &addauthor($biblionumber);
+	my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 
 	$dat->{'additional'}=$addauthor->[0]->{'author'};
 	for (my $i = 1; $i < $authorcount; $i++) {
@@ -44,12 +45,17 @@ foreach my $biblionumber (@bibs) {
 	}
 	$num++;
 	$dat->{'biblionumber'} = $biblionumber;
-	
+	$dat->{ITEM_RESULTS} = \@items;
 	push (@results, $dat);
 }
 
 my $resultsarray=\@results;
+# my $itemsarray=\@items;
 
-$template->param(BIBLIO_RESULTS => $resultsarray);
+$template->param(BIBLIO_RESULTS => $resultsarray,
+			     LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

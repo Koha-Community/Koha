@@ -33,6 +33,7 @@ use HTML::Template;
 
 my $env;
 my $query = new CGI;
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
@@ -57,6 +58,8 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
+					suggestion => C4::Context->preference("suggestion"),
+					virtualshelves => C4::Context->preference("virtualshelves"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -169,7 +172,7 @@ sub viewshelf {
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
 		$line{'classification'}=$item->{'classification'};		
-		$line{'itemtype'}=$item->{'itemtype'};				
+		$line{'itemtype'}=$item->{'itemtype'};		
 		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
@@ -183,14 +186,23 @@ sub viewshelf {
 
 #
 # $Log$
-# Revision 1.6  2005/03/01 13:41:32  tipaul
-# merging 2.2 branch with head. Sorry for not making it before, many many commits done here
+# Revision 1.7  2005/05/04 09:02:38  tipaul
+# synch'ing 2.2 and head
 #
-# Revision 1.5  2005/01/27 17:27:11  oleonard
+# Revision 1.3.2.4  2005/03/25 17:04:28  tipaul
+# adding virtual shelves & suggestions button to the top
+#
+# Revision 1.3.2.3  2005/01/27 17:18:28  oleonard
 # Taking table cell background color information out of the script and moving it into the template (requires update to opac-shelves.tmpl)
 #
-# Revision 1.4  2005/01/13 20:41:07  oleonard
+# Revision 1.3.2.2  2005/01/11 20:18:29  oleonard
 # Adding call number and item type to list of returned variables
+#
+# Revision 1.3.2.1  2005/01/11 16:33:57  tipaul
+# fix for http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=811 :
+# The OPAC requires uses to log in to view virtual shelves, and it requires a user
+# with librarian privileges.  Virtual shelves should be viewable by all users,
+# logged in or not, and editable by all logged-in users in good standing.
 #
 # Revision 1.3  2005/01/03 11:09:34  tipaul
 # synch'ing virtual shelves management in opac with the librarian one, that has more features

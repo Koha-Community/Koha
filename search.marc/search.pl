@@ -119,6 +119,7 @@ if ($op eq "do_search") {
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	my $orderby = $query->param('orderby');
+	my $desc_or_asc = $query->param('desc_or_asc');
 
 	# builds tag and subfield arrays
 	my @tags;
@@ -138,8 +139,12 @@ if ($op eq "do_search") {
 	findseealso($dbh,\@tags);
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby);
-
+										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
+	if ($total == 1) {
+	 # if only 1 answer, jump directly to the biblio
+	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+		 exit
+	}
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
 				query => $query,

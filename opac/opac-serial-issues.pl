@@ -34,24 +34,8 @@ my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
 $template->param(
 	biblionumber => $query->param('biblionumber'),
 	subscription_LOOP => $subscriptions
-# 	startdate => format_date($subscription->{startdate}),
-# 	periodicity => $subscription->{periodicity},
-# 	dow => $subscription->{dow},
-# 	numberlength => $subscription->{numberlength},
-# 	weeklength => $subscription->{weeklength},
-# 	monthlength => $subscription->{monthlength},
-# 	opacnote => $subscription->{opacnote},
-# 	numberingmethod => $subscription->{numberingmethod},
-# 	arrivalplanified => $subscription->{arrivalplanified},
-# 	status => $subscription->{status},
-# 	biblionumber => $subscription->{biblionumber},
-# 	bibliotitle => $subscription->{bibliotitle},
-# 	notes => $subscription->{notes},
-# 	subscriptionid => $subscription->{subscriptionid}
+	suggestion => C4::Context->preference("suggestion"),
+	virtualshelves => C4::Context->preference("virtualshelves"),
 	);
-# $template->param(
-# 			"periodicity$subscription->{periodicity}" => 1,
-# 			"arrival$subscription->{dow}" => 1,
-# 			);
 
 output_html_with_http_headers $query, $cookie, $template->output;

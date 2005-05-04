@@ -73,12 +73,19 @@ sub calculate {
 	}
 	my ($description,$biblioitems,$total);
 	my $grantotal = 0;
+	my $count = 0;
 	while (($description,$biblioitems,$total) = $sth->fetchrow) {
 		my %line;
+		if($count % 2){
+			$line{toggle} = 1;
+			} else {
+				$line{toggle} = 0;
+			}
 		$line{itemtype} = $description;
 		$line{count} = $total;
 		$grantotal += $total;
 		push @results,\%line;
+		$count ++;
 	}
 	my @mainloop;
 	my %globalline;

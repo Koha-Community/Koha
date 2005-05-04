@@ -809,25 +809,43 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
+            variable            => 'opacstylesheet',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'delimiter',
+            value               => ';',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'separator for reports exported to spreadsheet',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
             variable            => 'MIME',
             value               => 'OPENOFFICE.ORG',
-	    forceupdate		=> { 'explanation' => 1,
+            forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1,
 				     'options' => 1},
             explanation         => 'Define the default application for report exportations into files',
-	    type		=> 'Choice',
-	    options		=> 'EXCEL|OPENOFFICE.ORG'
+	        type		=> 'Choice',
+	        options		=> 'EXCEL|OPENOFFICE.ORG'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'Delimiter',
             value               => ';',
-	    forceupdate		=> { 'explanation' => 1,
+	        forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1,
 				     'options' => 1},
             explanation         => 'Define the default separator character for report exportations into files',
-	    type		=> 'Choice',
-	    options		=> ';|tabulation|,|/|\|#'
+	        type		=> 'Choice',
+	        options		=> ';|tabulation|,|/|\|#'
         },
     ],
 
@@ -1414,11 +1432,19 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.102  2005/03/23 09:23:04  doxulting
-# Adding 2 flags to separate the rights in the parameter section
+# Revision 1.103  2005/05/04 09:04:52  tipaul
+# synch'ing 2.2 and head
 #
-# Revision 1.101  2005/02/24 11:28:35  hdl
-# Adding MIME and delimiter support to system preferences
+# Revision 1.100.2.2  2005/03/29 15:41:43  tipaul
+# * new permissions : management & tools. You now have 2 new permissions :
+# 	- management : means the user can manage library parameters, but NOT system parameters.
+# 	- parameters : means the user can manage all parameters (including system parameters : marc structure, authorised values, system preferences. Was the only flag previously existing)
+# 	- tools : means the user can import/export datas & edit barcodes.
+# note that for compatibility reasons, a user having "parameters" can access everything.
+# * new permission scheme. In every template new variables are available. They are written CAN_user_permission, with permission being one of the permission flag. templates can now show or hidde menu entries depending on user permissions. For example, a user with just circ permissions should have only the "circulation" button on home page. Templates are NOT updated in this version (except for system parameters, as proof of concept), they will be in the next ones. But the scheme is ready.
+#
+# Revision 1.100.2.1  2005/03/17 17:15:18  tipaul
+# defaulting opacstylesheet to '' instead of 'normal' (that is stupid)
 #
 # Revision 1.100  2004/12/10 16:11:32  tipaul
 # Improvement : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd

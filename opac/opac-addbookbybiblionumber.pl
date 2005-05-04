@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "opac-addbookbybiblionumber.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 0,
+							authnotrequired => 1,
 						});
 
 my $x; # for trash
@@ -75,11 +75,25 @@ if ($shelfnumber) {
 						title => $biblios[0]->{'title'},
 						author => $biblios[0]->{'author'},
 						CGIbookshelves => $CGIbookshelves,
+						LibraryName => C4::Context->preference("LibraryName"),
+						suggestion => C4::Context->preference("suggestion"),
+						virtualshelves => C4::Context->preference("virtualshelves"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.2  2005/05/04 09:02:38  tipaul
+# synch'ing 2.2 and head
+#
+# Revision 1.1.2.2  2005/03/25 17:04:27  tipaul
+# adding virtual shelves & suggestions button to the top
+#
+# Revision 1.1.2.1  2005/03/10 08:44:43  tipaul
+# bugfix in baskets :
+# * The user does not need to have to have librarian rights to use virtual shelves
+# * error when adding a biblio to an existing basket
+#
 # Revision 1.1  2005/01/03 11:09:59  tipaul
 # *** empty log message ***
 #

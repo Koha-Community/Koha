@@ -20,7 +20,7 @@ use VerboseWarnings qw( :warn :die );
 
 ###############################################################################
 
-use vars qw( @in_files $in_dir $str_file $out_dir );
+use vars qw( @in_files $in_dir $str_file $out_dir $quiet );
 use vars qw( @excludes $exclude_regex );
 use vars qw( $recursive_p );
 use vars qw( $pedantic_p );
@@ -113,8 +113,8 @@ sub text_replace (**) {
     }
 }
 
-sub listfiles ($$) {
-    my($dir, $type) = @_;
+sub listfiles ($$$) {
+    my($dir, $type, $action) = @_;
     my @it = ();
     if (opendir(DIR, $dir)) {
 	my @dirent = readdir DIR;	# because DIR is shared when recursing
@@ -125,9 +125,9 @@ sub listfiles ($$) {
 	    || (defined $exclude_regex && $dirent =~ /^(?:$exclude_regex)$/)) {
 		;
 	    } elsif (-f $path) {
-		push @it, $path if !defined $type || $dirent =~ /\.(?:$type)$/;
+		push @it, $path if (!defined $type || $dirent =~ /\.(?:$type)$/) || $action eq 'install';
 	    } elsif (-d $path && $recursive_p) {
-		push @it, listfiles($path, $type);
+		push @it, listfiles($path, $type, $action);
 	    }
 	}
     } else {
@@ -145,7 +145,7 @@ sub mkdir_recursive ($) {
     my ($prefix, $basename) = ($dir =~ /\/([^\/]+)$/s)? ($`, $1): ('.', $dir);
     mkdir_recursive($prefix) if $prefix ne '.' && !-d $prefix;
     if (!-d $dir) {
-	print STDERR "Making directory $dir...";
+	print STDERR "Making directory $dir..." unless $quiet;
 	# creates with rwxrwxr-x permissions
 	mkdir($dir, 0775) || warn_normal "$dir: $!", undef;
     }
@@ -173,12 +173,13 @@ Create or update PO files from templates, or install translated templates.
                               for input (install) or output (create, update)
   -x, --exclude=REGEXP        Exclude files matching the given REGEXP
       --help                  Display this help and exit
+  -q, --quiet                 no output to screen (except for errors)
 
 The -o option is ignored for the "create" and "update" actions.
-Try `perldoc $0' for perhaps more information.
+Try `perldoc $0 for perhaps more information.
 EOF
     exit($exitcode);
-}
+}#`
 
 ###############################################################################
 
@@ -186,7 +187,7 @@ sub usage_error (;$) {
     for my $msg (split(/\n/, $_[0])) {
 	print STDERR "$msg\n";
     }
-    print STDERR "Try `$0 --help' for more information.\n";
+    print STDERR "Try `$0 --help for more information.\n";
     exit(-1);
 }
 
@@ -198,6 +199,7 @@ GetOptions(
     'recursive|r'			=> \$recursive_p,
     'str-file|s=s'			=> \$str_file,
     'exclude|x=s'			=> \@excludes,
+	'quiet|q'				=> \$quiet,
     'pedantic-warnings|pedantic'	=> sub { $pedantic_p = 1 },
     'help'				=> \&usage,
 ) || usage_error;
@@ -236,7 +238,7 @@ if (-d $in_files[0]) {
     # input is a directory, generates list of files to process
     $in_dir = $in_files[0];
     $in_dir =~ s/\/$//; # strips the trailing / if any
-    @in_files = listfiles($in_dir, $type);
+    @in_files = listfiles($in_dir, $type, $action);
 } else {
     for my $input (@in_files) {
 	die "You cannot specify input files and directories at the same time.\n"
@@ -359,30 +361,39 @@ if ($action eq 'create')  {
 
     # creates the new tmpl file using the new translation
     for my $input (@in_files) {
-	die "Assertion failed"
-		unless substr($input, 0, length($in_dir) + 1) eq "$in_dir/";
-
-	my $h = TmplTokenizer->new( $input );
-	$h->set_allow_cformat( 1 );
-	VerboseWarnings::set_input_file_name $input;
-
-	my $target = $out_dir . substr($input, length($in_dir));
-	my $targetdir = $` if $target =~ /[^\/]+$/s;
-	mkdir_recursive($targetdir) unless -d $targetdir;
-	print STDERR "Creating $target...\n";
-	open( OUTPUT, ">$target" ) || die "$target: $!\n";
-	text_replace( $h, *OUTPUT );
-	close OUTPUT;
-    }
+		die "Assertion failed"
+			unless substr($input, 0, length($in_dir) + 1) eq "$in_dir/";
+# 		print "$input / $type\n";
+		if (!defined $type || $input =~ /\.(?:$type)$/) {
+			my $h = TmplTokenizer->new( $input );
+			$h->set_allow_cformat( 1 );
+			VerboseWarnings::set_input_file_name $input;
+		
+			my $target = $out_dir . substr($input, length($in_dir));
+			my $targetdir = $` if $target =~ /[^\/]+$/s;
+			mkdir_recursive($targetdir) unless -d $targetdir;
+			print STDERR "Creating $target...\n" unless $quiet;
+			open( OUTPUT, ">$target" ) || die "$target: $!\n";
+			text_replace( $h, *OUTPUT );
+			close OUTPUT;
+		} else {
+		# just copying the file
+			my $target = $out_dir . substr($input, length($in_dir));
+			my $targetdir = $` if $target =~ /[^\/]+$/s;
+			mkdir_recursive($targetdir) unless -d $targetdir;
+			system("cp -f $input $target");
+			print STDERR "Copying $input...\n" unless $quiet;
+		}
+	}
 
 } else {
     usage_error('Unknown action specified.');
 }
 
 if ($st == 0) {
-    printf "The %s seems to be successful.\n", $action;
+    printf "The %s seems to be successful.\n", $action unless $quiet;
 } else {
-    printf "%s FAILED.\n", "\u$action";
+    printf "%s FAILED.\n", "\u$action" unless $quiet;
 }
 exit 0;
 

@@ -45,7 +45,8 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="hidden" name="orderby" value="biblio.timestamp" />
+			<input type="hidden" name="desc_or_asc" value="desc" />
 			<input type="submit" value="OK" class="button" />
 		</p>
 	</form>
@@ -72,12 +73,14 @@
 		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
-		<select name="language">
-			<TMPL_LOOP NAME="languages">
-				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
-			</TMPL_LOOP>
-		</select>
-		<input type="submit" value="Change Language" class="button">
+		<p>
+			<select name="language">
+				<TMPL_LOOP NAME="languages">
+					<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+				</TMPL_LOOP>
+			</select>
+			<input type="submit" value="Change Language" class="button" />
+		</p>
 	</form>
 	<p class="copyright">
 		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards

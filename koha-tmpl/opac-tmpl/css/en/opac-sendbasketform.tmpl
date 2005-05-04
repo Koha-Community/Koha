@@ -10,14 +10,14 @@
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
-	<p><label>mail sent by</label><input name="email_sender" size="25" /></p>
-	<p><label>E-mail address</label><input name="email_add" size="25" /></p>
+	<p><label class="label100">mail sent by</label><input name="email_sender" size="25" /></p>
+	<p><label class="label100">E-mail address</label><input name="email_add" size="25" /></p>
 	<p><label>&nbsp;</label><input type="submit" value="Send" class="button" /></p>
 	<input type='hidden' name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
 </form>
 <!-- /TMPL_IF -->
 </div>
 <div id="bottombloc">
-	<p><a href="javascript:this.close()">Close</a></p>
+	<p><a href="javascript:this.close()" class="button">Close</a></p>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->

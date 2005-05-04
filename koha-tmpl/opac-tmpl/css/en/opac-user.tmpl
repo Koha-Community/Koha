@@ -4,10 +4,11 @@
 	<div class="bloc20">
 		<h2>Are our records correct?</h2>
 		<p>Library Card: <!-- TMPL_VAR NAME="cardnumber" --> </p>
-		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) </p>
-		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
-		<p><!-- TMPL_VAR NAME="phone" --> (hm)</p>
-		<p><!-- TMPL_VAR NAME="faxnumber" --> (wk)</p>
+		<p><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></p>
+		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --></p>
+		<p><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --></p>
+		<p><!-- TMPL_VAR NAME="phone" --> <!-- TMPL_IF name="phone" -->(hm)<!-- /TMPL_IF --></p>
+		<p><!-- TMPL_VAR NAME="faxnumber" --> <!-- TMPL_IF name="fawnumber" -->(wk)<!-- /TMPL_IF --></p>
 		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
 		<p><a href="/cgi-bin/koha/opac-userupdate.pl" class="button">Update Record</a></p>
 	</div>
@@ -59,15 +60,27 @@
 				<th>Renewable</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="ISSUES" -->
-				<tr>
-					<td><!-- TMPL_VAR NAME="title" --></td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="date_due" --></td>
-					<td><!-- TMPL_VAR NAME="itemtype" --></td>
-					<td><!-- TMPL_VAR NAME="barcode" --></td>
-					<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-					<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-				</tr>
+				<!-- TMPL_IF name="overdue"-->
+					<tr>
+						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+						<td><b>OVERDUE <!-- TMPL_VAR NAME="date_due" --></b></td>
+						<td><!-- TMPL_VAR NAME="itemtype" --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+					</tr>
+				<!-- TMPL_ELSE -->
+					<tr>
+						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+						<td><!-- TMPL_VAR NAME="date_due" --></td>
+						<td><!-- TMPL_VAR NAME="itemtype" --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+					</tr>
+				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 		</table>
 	<!-- TMPL_ELSE -->

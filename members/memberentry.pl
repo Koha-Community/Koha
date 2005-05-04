@@ -52,7 +52,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $member=$input->param('bornum');
+my $borrowernumber=$input->param('borrowernumber');
 my $actionType=$input->param('actionType') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
@@ -100,7 +100,7 @@ if ($op eq 'add' or $op eq 'modify') {
 		push @errors,"ERROR_surname";
 		$nok=1;
 	}
-	if ($data{'address'} eq ''){
+	if ($data{'streetaddress'} eq ''){
 		push @errors, "ERROR_address";
 		$nok=1;
 	}
@@ -120,7 +120,13 @@ if ($op eq 'add' or $op eq 'modify') {
 		if (my $data2=$sth->fetchrow_hashref){
 			&modmember(%data);
 		}else{
-			$data{borrowernumber} = &newmember(%data);
+			$borrowernumber = &newmember(%data);
+		}
+		
+	if($destination eq "circ"){
+		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
+	} else {
+		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
 		}
 		
 	if($destination eq "circ"){
@@ -131,7 +137,7 @@ if ($op eq 'add' or $op eq 'modify') {
 	}
 }
 if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 } else {  # this else goes down the whole script
 	if ($actionType eq 'Add'){
 		$template->param( addAction => 1);
@@ -146,7 +152,7 @@ if ($delete){
 			$data->{$key}=$input->param($key);
 		}
 	} else {
-		$data=borrdata('',$member);
+		$data=borrdata('',$borrowernumber);
 	}
 	if ($actionType eq 'Add'){
 		$template->param( updtype => 'I');
@@ -243,7 +249,8 @@ if ($delete){
 				initials	=> $data->{'initials'},
 				ethcatpopup	=> $ethcatpopup,
 				catcodepopup	=> $catcodepopup,
-				streetaddress   => $data->{'physstreet'},
+				streetaddress   => $data->{'streetaddress'},
+				physstreet   => $data->{'physstreet'},
 				zipcode => $data->{'zipcode'},
 				streetcity      => $data->{'streetcity'},
 				homezipcode => $data->{'homezipcode'},
