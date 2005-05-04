@@ -30,10 +30,11 @@
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
 			<h2 class="circulation">Borrower information</h2>
-			<p>
-				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " onclick="openWindow(this,'Member', 480, 640)">
-					<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
+			<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
+				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " class="button circulation">
+					detail
 				</a>
+				<a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">edit</a>
 			</p>
 			<p>
 				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->
@@ -286,7 +287,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 					</td>
 					<td class="problem"><!-- TMPL_VAR NAME="title" --></td>
 					<td class="problem"><!-- TMPL_VAR NAME="author" --></td>
-					<td class="problem"><!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" --></td>
+					<td class="problem"><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 				<!-- TMPL_ELSE -->
 					<td>
 						<!-- TMPL_VAR NAME="dd" -->

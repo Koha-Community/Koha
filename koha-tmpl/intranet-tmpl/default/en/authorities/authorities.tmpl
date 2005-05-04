@@ -18,6 +18,16 @@
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br>
+<!-- TMPL_IF name="duplicateauthid" -->
+	<div class="problem">
+		<p>Duplicate suspected with <a href='javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthnumber" -->&popup=1", "Duplicate Authority")' class="button authority"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
+		<p>You must either :</p>
+		<ul>
+			<p><input type="checkbox" value=1 name="confirm_not_duplicate">confirm it's not a duplicate (and click on Add Auth again)</p>
+			<p>Go to <a href="authorities.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->" >original authority</a></p>
+		</ul>
+	</div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="duplicateauthnumber" -->
 	<div class="problem">

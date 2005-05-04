@@ -11,8 +11,24 @@
 	<div id="bloc25">
 		<form action="isbnsearch.pl">
 			<h2 class="catalogue">To add a new biblio/item, scan or type the ISBN/ISSN number</h2>
-			<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
-			<p><label class="label20">Title</label> <input type="text" name="title" /></p>
+			<p>
+				<label class="label100" for="title">Title</label>
+				<input type="hidden" name="marclist" value="biblio.title">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="title"size="35">
+			</p>
+			<p>
+				<label class="label100" for="title">ISBN</label>
+				<input type="hidden" name="marclist" value="biblioitems.isbn">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="start">
+				<input type="text" name="value" id="title"size="35">
+			</p>
 			<p><input type="submit" value="Go" class="button catalogue" /></p>
 		</form>
 		<!-- TMPL_IF NAME="NOTMARC" -->

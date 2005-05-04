@@ -1,8 +1,7 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
-
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="oldbiblionumber" --></h1>
+	<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="oldbiblionumber" --></h1>
 	<p>
 		<input type="hidden" name="op" value="addbiblio">
 		<input type="hidden" name="addfield_field">
@@ -19,34 +18,34 @@
 
 	<div class="tabs">
 		<!-- TMPL_IF name="0XX" -->
-		<a href="javascript:active(0)">0</a>
+		<a href="javascript:active(0)" id="link0">0</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="1XX" -->
-		<a href="javascript:active(1)">1</a>
+		<a href="javascript:active(1)" id="link1">1</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="2XX" -->
-		<a href="javascript:active(2)">2</a>
+		<a href="javascript:active(2)" id="link2">2</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="3XX" -->
-		<a href="javascript:active(3)">3</a>
+		<a href="javascript:active(3)" id="link3">3</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="4XX" -->
-		<a href="javascript:active(4)">4</a>
+		<a href="javascript:active(4)" id="link4">4</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="5XX" -->
-		<a href="javascript:active(5)">5</a>
+		<a href="javascript:active(5)" id="link5">5</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="6XX" -->
-		<a href="javascript:active(6)">6</a>
+		<a href="javascript:active(6)" id="link6">6</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="7XX" -->
-		<a href="javascript:active(7)">7</a>
+		<a href="javascript:active(7)" id="link7">7</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="8XX" -->
-		<a href="javascript:active(8)">8</a>
+		<a href="javascript:active(8)" id="link8">8</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="9XX" -->
-			<a href="javascript:active(9)">9</a>
+			<a href="javascript:active(9)" id="link9">9</a>
 		<!-- /TMPL_IF -->
 	</div>
 	
@@ -402,11 +401,14 @@ function active(numlayer)
 		link = "link"+i;
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
+			document.getElementById(link).style.color="#FFFFFF";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
+			document.getElementById(link).style.color="#000000";
 		}
 	}
 }
+active(0);
 function Check(f) {
 	// Scan for nonempty fields
 	var field_is_nonempty_p = new Array();
@@ -422,7 +424,6 @@ function Check(f) {
 	// Scan for missing mandatory subfields
 	var total_missing_mandatory_subfields = 0;
 	var missing_mandatory_subfields = new Array();
-
 	for (i=0 ; i<f.field_value.length-2 ; i++) {
 		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
 		    // We should not flag an error unless the tag is also
@@ -439,8 +440,10 @@ function Check(f) {
 			{
 				missing_mandatory_subfields.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.id.substr(0,1) + ")");
 			}
-		    }
+
+			}
 		} else {
+// 			alert("I = "+i);
 			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
 		}
 	}
@@ -449,14 +452,13 @@ function Check(f) {
 	var total_missing_mandatory_tags = 0;
 	var seen_mandatory_tag_p = new Array();
 	var missing_mandatory_tags = new Array();
-	
 	for (i=0 ; i<f.field_value.length ; i++) {
 	    var j = f.tag[i].value;
 	    if (!field_is_nonempty_p[j] && f.tag_mandatory[i].value == 1) {
 		if (seen_mandatory_tag_p[j] != 1) {
 		    seen_mandatory_tag_p[j] = 1;
 		    total_missing_mandatory_tags++;
-		    if (document.getElementById("error"+i).parentNode.tagName == "B")
+ 		    if (document.getElementById("error"+i).parentNode.tagName == "B")
 		    {
 				missing_mandatory_tags.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.parentNode.id.substr(0,1) + ")");
 		    }
@@ -479,7 +481,7 @@ function Check(f) {
 		{
 			alertString2 += "\n--->"+ missing_mandatory_tags[i];
 		}
-		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+  		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
 		for (i=0; i<missing_mandatory_subfields.length; i++)
 		{
 			alertString2 += "\n--->"+ missing_mandatory_subfields[i];
@@ -510,7 +512,7 @@ function PopupZ3950() {
 		    strQuery += "&issn="+document.forms[0].field_value[i].value;
 		}
 	}
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
 }
 
 function AddField(field) {

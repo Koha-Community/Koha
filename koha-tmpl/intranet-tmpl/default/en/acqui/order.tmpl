@@ -46,7 +46,11 @@
 									closed on <!-- TMPL_VAR NAME="closedate" -->
 									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">View</a>
 								<!-- TMPL_ELSE -->
-									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">modify</a>
+									<!-- TMPL_IF name="active" -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">modify</a>
+									<!-- TMPL_ELSE -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">View</a>
+									<!-- /TMPL_IF -->
 								<!-- /TMPL_IF -->
 							</td>
 						</tr>

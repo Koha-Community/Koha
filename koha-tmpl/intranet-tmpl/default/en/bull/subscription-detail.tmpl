@@ -6,7 +6,9 @@
 <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Issues</a>
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Biblio</a>
 <!-- TMPL_UNLESS name="totalissues" -->
-	<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del" class="button bull">Delete subscription</a>
+		<a href="javascript:confirm_deletion()" class="button bull">
+			delete
+		</a>
 <!-- /TMPL_UNLESS -->
 <form method="post" name="f">
 <div id="bloc25">
@@ -15,8 +17,8 @@
 		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
 		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
 		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
-		<p><label class="label100">Biblio</label><!-- TMPL_VAR name="bibliotitle" --></p>
-		<p><label class="label100">Notes:</label><!-- TMPL_VAR name="notes" --></p>
+		<p><label>Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>
@@ -38,16 +40,16 @@
 				1/Month
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity6" -->
-				1/2 Monthes
+				1/2 Months (6/year)
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity7" -->
-				1/3 Monthes
+				1/quarter
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity8" -->
 				1/quarter
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity9" -->
-				1/2 quarters
+				2/year
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity10" -->
 				1/year
@@ -176,5 +178,13 @@
 	</table>
 </div>
 </div>
-
+<script>
+function _(s) { return s } // dummy function for gettext
+function confirm_deletion() {
+	var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	if (is_confirmed) {
+		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
+	}
+}
+</script>
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

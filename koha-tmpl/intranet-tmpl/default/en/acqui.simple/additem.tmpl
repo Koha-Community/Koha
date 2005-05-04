@@ -3,32 +3,49 @@
 	<form method="post" action="additem.pl" name="f">
 	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
 	<input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->">
-		<h2 class="catalogue">
-			MARC biblionumber : <!-- TMPL_VAR NAME="biblionumber" -->
-		</h2>
-	<div id="bloc25">
-		<div name="10XX" id="10XX">
-		<h2 class="catalogue">Existing items</h2>
-		<table>
-			<tr>
-				<!-- TMPL_LOOP NAME="item_header_loop" -->
-					<th class="catalogue">
-						<TMPL_VAR NAME="header_value">
-					</th>
-				<!-- /TMPL_LOOP -->
-				<th colspan="2" class="catalogue">&nbsp;</th>
-			</tr>
-				<!-- TMPL_LOOP NAME="item_loop" -->
-				<tr>
-					<!-- TMPL_VAR NAME="item_value" -->
-					<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
-					<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
-				</tr>
-				<!-- /TMPL_LOOP -->
-		</table>
-		</div>
+	<div class="tabbed">
+		<h1 class="catalogue">biblionumber : <!-- TMPL_VAR NAME="biblionumber" --></h1>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Edit biblio
+		</a>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+			Duplicate
+		</a>	
+		<a href="../MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			MARC
+		</a>
+		<a href="../detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Normal
+		</a>
+		<a href="../ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			ISBD
+		</a>
 	</div>
-	<div id="bloc100">
+	<!-- TMPL_IF name="item_loop" -->
+		<div id="bloc25">
+			<div name="10XX" id="10XX">
+			<h2 class="catalogue">Existing items</h2>
+			<table>
+				<tr>
+					<!-- TMPL_LOOP NAME="item_header_loop" -->
+						<th class="catalogue">
+							<TMPL_VAR NAME="header_value">
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th colspan="2" class="catalogue">&nbsp;</th>
+				</tr>
+					<!-- TMPL_LOOP NAME="item_loop" -->
+					<tr>
+						<!-- TMPL_VAR NAME="item_value" -->
+						<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
+						<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+					</tr>
+					<!-- /TMPL_LOOP -->
+			</table>
+			</div>
+		</div>
+	<!-- /TMPL_IF -->
+	<div id="bloc25">
 	<!-- TMPL_IF name="opisadd" -->
 		<h2 class="catalogue">New Item</h2>
 	<!-- TMPL_ELSE -->

@@ -3,14 +3,45 @@
 <div id="mainbloc">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
-	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a>
-	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">ISBD</a>
-	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">Add to shelf</a>
-	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">Print</a>
-	<!-- TMPL_IF NAME="norequests" -->
-	<!-- TMPL_ELSE -->
-		<a class="button catalogue" href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Requests</a>
-	<!-- /TMPL_IF -->
+	<div class="bibliomenu">
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Edit biblio
+		</a>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+			Duplicate
+		</a>
+		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
+			Edit item
+		</a>
+	
+		<a href="javascript:confirm_deletion()" class="button catalogue">
+			delete
+		</a>
+		<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Complete
+		</a>
+		<a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Normal
+		</a>
+		<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			ISBD
+		</a>
+		<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+			Add to shelf
+		</a>
+		<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+			Print
+		</a>
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Subscription(s)
+		</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="norequests" -->
+		<!-- TMPL_ELSE -->
+			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
+		<!-- /TMPL_IF -->
+	</div>
 	<div id="bloc25">
 	<table class="small">
 		<!-- BIBLIO RECORD TABLE -->

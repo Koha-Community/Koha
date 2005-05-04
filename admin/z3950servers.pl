@@ -163,7 +163,7 @@ if ($op eq 'add_form') {
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my @loop;
-	my $toggle = 'white';
+	my $toggle = 0;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 			
 		my $urlsearchfield=$results->[$i]{name};
@@ -180,13 +180,13 @@ if ($op eq 'add_form') {
 			toggle => $toggle);
 		push @loop, \%row;
 
-                if ( $toggle eq 'white' )
+                if ( $toggle eq 0 )
                 {
-                        $toggle = '#ffffcc';
+                        $toggle = 1;
                 }
                 else
                 {
-                        $toggle = 'white';
+                        $toggle = 0;
                 }
 
 	}

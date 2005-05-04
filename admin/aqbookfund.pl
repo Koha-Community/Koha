@@ -44,6 +44,7 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
+use C4::Date;
 use HTML::Template;
 
 sub StringSearch  {
@@ -182,8 +183,8 @@ if ($op eq 'add_form') {
 		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
 			my %budgetrow_data;
 			$budgetrow_data{aqbudgetid} = $aqbudgetid;
-			$budgetrow_data{startdate} = $startdate;
-			$budgetrow_data{enddate} = $enddate;
+			$budgetrow_data{startdate} = format_date($startdate);
+			$budgetrow_data{enddate} = format_date($enddate);
 			$budgetrow_data{budgetamount} = $budgetamount;
 			push @budget_loop,\%budgetrow_data;
 		}

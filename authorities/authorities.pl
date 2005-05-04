@@ -160,7 +160,6 @@ sub create_input () {
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-#	warn "=>".$record->as_formatted if $record;
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -335,31 +334,26 @@ if ($op eq "add") {
 	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record built => now, record in DB
 	# check for a duplicate
-	my ($duplicateauthnumber,$duplicateauthid,$duplicateauthvalue) = FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+	my ($duplicateauthid,$duplicateauthvalue) = FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
-	if (!$duplicateauthnumber or $confirm_not_duplicate) {
-		# MARC::Record built => now, record in DB
+	if (!$duplicateauthid or $confirm_not_duplicate) {
 		if ($is_a_modif) {
 			AUTHmodauthority($dbh,$authid,$record,$authtypecode);
 		} else {
 			($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 		}
-	# now, redirect to additem page
+	# now, redirect to detail page
 		print $input->redirect("detail.pl?authid=$authid");
- 		build_tabs ($template, $record, $dbh,$encoding);
- 		build_hidden_data;
 		exit;
 	} else {
 	# it may be a duplicate, warn the user and do nothing
+		build_tabs ($template, $record, $dbh,$encoding);
+		build_hidden_data;
 		$template->param(
- 			duplicateauthnumber		=> $duplicateauthnumber,
- 			duplicateauthid				=> $duplicateauthid,
- 			duplicateauthvalue			=> $duplicateauthvalue,
-			);
-		warn " AUTH : ".$record->as_formatted,
- 		build_tabs ($template, $record, $dbh,$encoding);
- 		build_hidden_data;
+			duplicateauthid				=> $duplicateauthid,
+			duplicateauthvalue				=> $duplicateauthvalue,
+			 );
 	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
@@ -423,8 +417,10 @@ if ($op eq "add") {
 	build_hidden_data;
 }
 
-# build_tabs ($template, $record, $dbh,$encoding);
-# build_hidden_data;
+if ($authid) {
+	build_tabs ($template, $record, $dbh,$encoding);
+	build_hidden_data;
+}
 $template->param(
 	authid                       => $authid,
 # 	oldbiblionumtagfield        => $oldbiblionumtagfield,

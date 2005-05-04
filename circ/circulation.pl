@@ -86,7 +86,6 @@ my @datearr = localtime(time());
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 
-# my $message;
 
 # check and see if we should print
  if ($barcode eq ''  && $print eq 'maybe'){
@@ -103,11 +102,13 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 # if there is a list of find borrowers....
 #
 my $borrowerslist;
+my $message;
 if ($findborrower) {
 	my ($count,$borrowers)=BornameSearch(\%env,$findborrower,'cardnumber','web');
 	my @borrowers=@$borrowers;
 	if ($#borrowers == -1) {
 		$query->param('findborrower', '');
+		$message =  "'$findborrower'";
 	} elsif ($#borrowers == 0) {
 		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
 		$query->param('barcode','');
@@ -219,7 +220,7 @@ if ($borrower) {
 		}    
 		push @realtodayissues,$book;
 	}
-    
+
 	# parses previous & build Template array
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 		my $dd = $book->{'date_due'};
@@ -256,7 +257,7 @@ my $CGIselectborrower;
 if ($borrowerslist) {
 	foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowerslist){
 		push @values,$_->{'borrowernumber'};
-		$labels{$_->{'borrowernumber'}} ="$_->{'surname'}, $_->{'firstname'} ($_->{'cardnumber'})";
+		$labels{$_->{'borrowernumber'}} ="$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'}) ...  $_->{'streetaddress'} ";
 	}
 	$CGIselectborrower=CGI::scrolling_list( -name     => 'borrnumber',
 				-values   => \@values,
@@ -290,6 +291,7 @@ $template->param(
 		amountold => $amountold,
 		barcode => $barcode,
 		stickyduedate => $stickyduedate,
+		message => $message,
 		CGIselectborrower => $CGIselectborrower,
 		todayissues => \@realtodayissues,
 		previssues => \@realprevissues,
