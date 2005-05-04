@@ -103,13 +103,13 @@ sub modmember {
 	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 	my $query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
 	cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
-	streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
+	streetaddress='$data{'streetaddress'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
 	altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
 	emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
 	altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
 	categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
 	borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-	initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
+	initials='$data{'initials'}',physstreet='$data{'physstreet'}',ethnicity='$data{'ethnicity'}',
 	gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
 	textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
 	zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}', sort1='$data{'sort1'}', sort2='$data{'sort2'}'
@@ -137,12 +137,12 @@ sub newmember {
 	firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
 	altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
 	initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,sort1,sort2) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
-	'$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
+	'$data{'sex'}','$data{'ethnotes'}','$data{'streetaddress'}','$data{'faxnumber'}',
 	'$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
 	'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 	'$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
 	'$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-	'$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'sort1'}','$data{'sort2'}')";
+	'$data{'ethnicity'}','$data{'physstreet'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'sort1'}','$data{'sort2'}')";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;

@@ -46,7 +46,7 @@ Give all XYZ functions
 @ISA = qw(Exporter);
 @EXPORT = qw(&newsubscription &modsubscription &delsubscription &getsubscriptions &getsubscription 
 			&getsubscriptionfrombiblionumber &get_subscription_list_from_biblionumber
-			&modsubscriptionhistory
+			&modsubscriptionhistory &newissue
 			&getserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
 			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
@@ -176,7 +176,10 @@ sub get_subscription_list_from_biblionumber {
 	$sth->execute($biblionumber);
 	my @res;
 	while (my $subs = $sth->fetchrow_hashref) {
-		$subs->{'startdate'} = format_date($subs->{'startdate'});
+		$subs->{startdate} = format_date($subs->{startdate});
+		$subs->{opacnote} =~ s/\n/\<br\/\>/g;
+		$subs->{missinglist} =~ s/\n/\<br\/\>/g;
+		$subs->{recievedlist} =~ s/\n/\<br\/\>/g;
 		push @res,$subs;
 	}
 	return \@res;
@@ -259,6 +262,9 @@ sub modsubscriptionhistory {
 	my ($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote)=@_;
 	my $dbh=C4::Context->dbh;
 	my $sth = $dbh->prepare("update subscriptionhistory set histstartdate=?,enddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=? where subscriptionid=?");
+	$recievedlist =~ s/^,//g;
+	$missinglist =~ s/^,//g;
+	$opacnote =~ s/^,//g;
 	$sth->execute($histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote,$subscriptionid);
 }
 # get every serial not arrived for a given subscription
@@ -313,13 +319,19 @@ sub serialchangestatus {
 		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
 		# next date (calculated from actual date & frequency parameters)
 		my $nextplanneddate = Get_Next_Date($planneddate,$val);
-		$sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
-		$sth->execute($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
+		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
 		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
 														innerloop1=?,innerloop2=?,innerloop3=?
 														where subscriptionid = ?");
 		$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
 	}
+}
+
+sub newissue {
+	my ($serialseq,$subscriptionid,$biblionumber,$status, $planneddate) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
+	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status, $planneddate);
 }
 
 sub Get_Next_Date(@) {
@@ -350,7 +362,7 @@ sub Get_Next_Date(@) {
 		$resultdate=DateCalc($planneddate,"3 months");
 	}
 	if ($subscription->{periodicity} == 9) {
-		$resultdate=DateCalc($planneddate,"2 weeks");
+		$resultdate=DateCalc($planneddate,"6 months");
 	}
 	if ($subscription->{periodicity} == 10) {
 		$resultdate=DateCalc($planneddate,"1 year");

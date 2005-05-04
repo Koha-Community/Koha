@@ -241,13 +241,13 @@ sub MARCgettagslib {
     $frameworkcode = "" unless ( $total > 0 );
     $sth =
       $dbh->prepare(
-"select tagfield,$libfield as lib,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield"
+"select tagfield,liblibrarian,libopac,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield"
     );
     $sth->execute($frameworkcode);
-    my ( $lib, $tag, $res, $tab, $mandatory, $repeatable );
+    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
 
-    while ( ( $tag, $lib, $mandatory, $repeatable ) = $sth->fetchrow ) {
-        $res->{$tag}->{lib}        = $lib;
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
+        $res->{$tag}->{lib}        = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
         $res->{$tab}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
@@ -255,7 +255,7 @@ sub MARCgettagslib {
 
     $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
+"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
     );
     $sth->execute($frameworkcode);
 
@@ -270,14 +270,14 @@ sub MARCgettagslib {
 	my $link;
 
     while (
-        ( $tag,         $subfield,   $lib,              $tab,
+        ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
         $value_builder, $kohafield,  $seealso,          $hidden,
         $isurl,			$link )
         = $sth->fetchrow
       )
     {
-        $res->{$tag}->{$subfield}->{lib}              = $lib;
+        $res->{$tag}->{$subfield}->{lib}              = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
         $res->{$tag}->{$subfield}->{tab}              = $tab;
         $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
         $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
@@ -298,13 +298,6 @@ sub MARCfind_marc_from_kohafield {
     return 0, 0 unless $kohafield;
 	my $relations = C4::Context->marcfromkohafield;
 	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
-#     my $sth =
-#       $dbh->prepare(
-# "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-#     );
-#     $sth->execute($frameworkcode,$kohafield);
-#     my ( $tagfield, $tagsubfield ) = $sth->fetchrow;
-#     return ( $tagfield, $tagsubfield );
 }
 
 sub MARCfind_oldbiblionumber_from_MARCbibid {
@@ -418,6 +411,7 @@ sub MARCaddsubfield {
         $tagorder, $subfieldcode, $subfieldorder, $subfieldvalues
       )
       = @_;
+	  return unless $subfieldvalues;
 # warn "$tagid / $subfieldcode / $subfieldvalues";
     # if not value, end of job, we do nothing
 #     if ( length($subfieldvalues) == 0 ) {
@@ -710,37 +704,9 @@ sub MARCdelitem {
 
 sub MARCmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-
-	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
-	# if nothing to change, don't waste time...
-	if ($oldrecord eq $record) {
-		return;
-	}
-	# otherwise, skip through each subfield...
-	my @fields = $record->fields();
-	# search old MARC item
-	my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
-	$sth2->execute($bibid,$itemnumber);
-	my ($tagorder) = $sth2->fetchrow_array();
-	foreach my $field (@fields) {
-		my $oldfield = $oldrecord->field($field->tag());
-		my @subfields=$field->subfields();
-		my $subfieldorder=0;
-		foreach my $subfield (@subfields) {
-			$subfieldorder++;
-			if ($oldfield eq 0 or (length($oldfield->subfield(@$subfield[0])) ==0) ) {
-		# just adding datas...
-				&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
-						$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
-			} else {
-		# modify he subfield if it's a different string
-				if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
-					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
-				}
-			}
-		}
-	}
+	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&MARCdelitem($dbh,$bibid,$itemnumber);
+	&MARCadditem($dbh,$record,$biblionumber);
 }
 
 sub MARCmodsubfield {
@@ -1180,7 +1146,7 @@ sub MARCaddword {
         $subfieldid, $subfieldorder, $sentence
       )
       = @_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
+    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
     my @words = split / /, $sentence;
     my $stopwords = C4::Context->stopwords;
     my $sth       =
@@ -2549,11 +2515,15 @@ sub FindDuplicate {
 	my ($record)=@_;
 	my $dbh = C4::Context->dbh;
 	my $result = MARCmarc2koha($dbh,$record,'');
+	my $sth;
+	my ($biblionumber,$bibid,$title);
 	# search duplicate on ISBN, easy and fast...
-	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
-	$sth->execute($result->{'isbn'});
-	my ($biblionumber,$bibid,$title) = $sth->fetchrow;
-	return $biblionumber,$bibid,$title if ($biblionumber);
+	if ($result->{isbn}) {
+		$sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
+		$sth->execute($result->{'isbn'});
+		($biblionumber,$bibid,$title) = $sth->fetchrow;
+		return $biblionumber,$bibid,$title if ($biblionumber);
+	}
 	# a more complex search : build a request for SearchMarc::catalogsearch()
 	my (@tags, @and_or, @excluding, @operator, @value, $offset,$length);
 	# search on biblio.title
@@ -2653,8 +2623,27 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.117  2005/03/07 08:55:29  tipaul
-# synch'ing with 2.2
+# Revision 1.118  2005/05/04 15:40:01  tipaul
+# synch'ing 2.2 and head
+#
+# Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
+# adding / to the list of symbols that are replace by spaces for searches
+#
+# Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
+# some improvements :
+# * return immediatly when a subfield is empty
+# * search duplicate on isbn must be done only when there is an isbn ;-)
+#
+# Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
+# * adding glass to opac marc detail.
+# * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
+# * fixing bug with libopac
+#
+# Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
+# Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
+# Longer, but solves problems with repeated subfields.
+#
+# The previous version was not buggy except under certain circumstances (a repeated subfield, that does not exist usually in items)
 #
 # Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
 # exporting MARCdelsubfield sub. It's used in authority merging.

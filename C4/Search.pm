@@ -64,7 +64,7 @@ on what is passed to it, it calls the appropriate search function.
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
-&isbnsearch &breedingsearch &getbranchname &getborrowercategory);
+&isbnsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
 
@@ -1305,11 +1305,12 @@ sub ItemInfo {
 					WHERE items.biblionumber = ?
 					AND biblioitems.biblioitemnumber = items.biblioitemnumber
 					AND biblio.biblionumber = items.biblionumber";
-	if ($type ne 'intra'){
-		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-		or items.itemlost is NULL)
-		and (wthdrawn <> 1 or wthdrawn is NULL)";
-	}
+# buggy : opac & librarian interface can show the same info level & itemstatus should not be hardcoded
+# 	if ($type ne 'intra'){
+# 		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
+# 		or items.itemlost is NULL)
+# 		and (wthdrawn <> 1 or wthdrawn is NULL)";
+# 	}
 	$query .= " order by items.dateaccessioned desc";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($biblionumber);
@@ -1324,15 +1325,17 @@ sub ItemInfo {
 		$data->{cardnumber} = $idata->{cardnumber};
 		$datedue = format_date($idata->{'date_due'});
 		}
-		if ($data->{'itemlost'} eq '2'){
-			$datedue='Very Overdue';
-		}
-		if ($data->{'itemlost'} eq '1'){
-			$datedue='Lost';
-		}
-		if ($data->{'wthdrawn'} eq '1'){
-			$datedue="Cancelled";
-		}
+# buggy : hardcoded & non-translatable
+# more : why don't you want to show the datedue if it's very very overdue ?
+# 		if ($data->{'itemlost'} eq '2'){
+# 			$datedue='Very Overdue';
+# 		}
+# 		if ($data->{'itemlost'} eq '1'){
+# 			$datedue='Lost';
+# 		}
+# 		if ($data->{'wthdrawn'} eq '1'){
+# 			$datedue="Cancelled";
+# 		}
 		if ($datedue eq ''){
 	#	$datedue="Available";
 			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
@@ -1365,20 +1368,22 @@ sub ItemInfo {
 	}
 	$sth->finish;
 	#FIXME: ordering/indentation here looks wrong
-	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-	$sth2->execute($biblionumber);
-	my $data;
-	my $ocount;
-	if ($data=$sth2->fetchrow_hashref){
-		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-		if ($ocount > 0){
-		$data->{'ocount'}=$ocount;
-		$data->{'order'}="One Order";
-		$results[$i]=$data;
-		}
-	}
-	$sth2->finish;
-	
+# buggy : count in $i+1 the info on qty ordered for $i : total shown is real total +1
+# useless : Koha 2.2.2 now automatically show the existing number of items
+# and if there is no items, and at least one is on order, show "on order".
+# 	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
+# 	$sth2->execute($biblionumber);
+# 	my $data;
+# 	my $ocount;
+# 	if ($data=$sth2->fetchrow_hashref){
+# 		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
+# 		if ($ocount > 0){
+# 		$data->{'ocount'}=$ocount;
+# 		$data->{'order'}="One Order";
+# 		$results[$i]=$data;
+# 		}
+# 	}
+# 	$sth2->finish;
 	return(@results);
 }
 
@@ -2441,58 +2446,6 @@ and itemtype = 'WEB'");
     $sth->finish;
     return($count, @results);
 } # sub getwebbiblioitems
-
-
-=item breedingsearch
-
-  ($count, @results) = &breedingsearch($title,$isbn,$random);
-C<$title> contains the title,
-C<$isbn> contains isbn or issn,
-C<$random> contains the random seed from a z3950 search.
-
-C<$count> is the number of items in C<@results>. C<@results> is an
-array of references-to-hash; the keys are the items from the C<marc_breeding> table of the Koha database.
-
-=cut
-
-sub breedingsearch {
-	my ($title,$isbn,$z3950random) = @_;
-	my $dbh   = C4::Context->dbh;
-	my $count = 0;
-	my ($query,@bind);
-	my $sth;
-	my @results;
-
-	$query = "Select id,file,isbn,title,author from marc_breeding where ";
-	if ($z3950random) {
-		$query .= "z3950random = ?";
-		@bind=($z3950random);
-	} else {
-	    @bind=();
-		if ($title) {
-			$query .= "title like ?";
-			push(@bind,"$title%");
-		}
-		if ($title && $isbn) {
-			$query .= " and ";
-		}
-		if ($isbn) {
-			$query .= "isbn like ?";
-			push(@bind,"$isbn%");
-		}
-	}
-	$sth   = $dbh->prepare($query);
-	$sth->execute(@bind);
-	while (my $data = $sth->fetchrow_hashref) {
-			$results[$count] = $data;
-			$count++;
-	} # while
-
-	$sth->finish;
-	return($count, @results);
-} # sub breedingsearch
-
-
 
 
 

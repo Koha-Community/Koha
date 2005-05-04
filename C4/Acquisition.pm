@@ -397,7 +397,7 @@ sub getorders {
 		left join aqbasket on aqbasket.basketno=aqorders.basketno 
 		left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
 		where booksellerid=? and (quantity > quantityreceived or
-		quantityreceived is NULL)
+		quantityreceived is NULL) and datecancellationprinted is NULL
 		group by basketno order by aqbasket.basketno");
 	$sth->execute($supplierid);
 	my @results = ();

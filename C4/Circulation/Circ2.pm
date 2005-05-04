@@ -858,8 +858,8 @@ sub issuebook {
 					CancelReserve($biblionumber,0,$res->{'borrowernumber'});
 					warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
 				} else {
-					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
-					transferbook($tobrcd,$barcode, 1);
+# 					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+# 					transferbook($tobrcd,$barcode, 1);
 					warn "transferbook";
 				}
 			}

@@ -216,7 +216,7 @@ sub catalogsearch {
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g if @$operator[$i] eq "contains";
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if @$operator[$i] eq "contains";
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
@@ -335,7 +335,7 @@ sub catalogsearch {
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice empty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
 							FROM biblio, marc_biblio 
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
@@ -388,7 +388,8 @@ sub catalogsearch {
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
 			$lineCN{date_due} = format_date($date_due);
-			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan});
+			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan}); # setting not forloan if itemtype is not for loan
+			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
 			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			push @CNresults,\%lineCN;
 			$totalitems++;
@@ -399,7 +400,7 @@ sub catalogsearch {
 		$newline{totitem} = $totalitems;
 		# if $totalitems == 0, check if it's being ordered.
 		if ($totalitems == 0) {
-			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=?");
+			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=? and datecancellationprinted is NULL");
 			$sth->execute($biblionumber);
 			my ($ordered) = $sth->fetchrow;
 			$newline{onorder} = 1 if $ordered;
