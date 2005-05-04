@@ -38,7 +38,9 @@ my ($tablename, $kohafield)=split /./,$field;
 $tablename="biblio" unless ($tablename);
 #my $kohafield = $input->param('kohafield');
 my @search = $input->param('search');
-#warn " ".$search[0];
+warn " ".$search[0];
+my $index = $input->param('index');
+warn " index: ".$index;
 my $op=$input->param('op');
 if (($search[0]) and not ($op eq 'do_search')){
 	$op='do_search';
@@ -191,6 +193,7 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
+	$template->param(anindex => $input->param('index'));
 	$template->param(result => \@results,
 					 catresult=> \@catresults,
 						search => $search[0],
@@ -219,15 +222,14 @@ if ($op eq "do_search") {
 				authnotrequired => 0,
  				flagsrequired => {catalogue => 1},
  				debug => 1,
- 				search => $search[0],
- 				marclist =>$field,
  				});
 #warn "type : $type";
  
  }
 $template->param(search => $search[0],
 					marclist =>$field,
-					type=>$type);
+					type=>$type,
+					anindex => $input->param('index'));
 
 # Print the page
 output_html_with_http_headers $input, $cookie, $template->output;

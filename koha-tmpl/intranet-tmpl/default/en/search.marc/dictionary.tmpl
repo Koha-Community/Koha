@@ -46,26 +46,28 @@ a.catalogue:hover {
 				<input type="text" name="search" value="<!-- TMPL_VAR Name="search" -->" size="35">
 				<input type="submit" value="Start search" class="button catalogue">
 				<input type="hidden" name="type" value="<!-- TMPL_VAR Name="type" -->">
+				<input type="hidden" name="index" value="<!-- TMPL_VAR Name="anindex" ESCAPE="URL" -->">
 			</p>
 		</div>
 	</form>
 
+<!-- TMPL_IF Name=search -->
 	<div class="bloc100">
 		<h2 class="catalogue">Dictionary Search results</h2>
 		<!-- TMPL_IF NAME="authresult" -->
 		<div id="resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> 
-					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
+					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Previous</a>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP NAME="numbers" -->
 					<!-- TMPL_IF NAME="highlight" -->
 						<span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
 					<!-- TMPL_ELSE --> 
-						<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+						<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP --> 
 				<!-- TMPL_IF NAME="displaynext" -->
-					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">Next&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 			</p>
 			<p class="resultcount">
@@ -77,17 +79,20 @@ a.catalogue:hover {
 		<div id="resultlist">
 			<table>
 				<tr>
-					<th colspan="2" class="catalogue">Authorities</th>
+					<th colspan="3" class="catalogue">Authorities</th>
 				</tr>
 				<tr>
 					<th class="catalogue">Summary</th>
 					<th class="catalogue">Used</th>
+					<th class="catalogue">Select</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="authresult" -->
 					<tr>
 						<td><!-- TMPL_VAR NAME="summary" --></td>
 						<td>
 							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button catalogue"><!-- TMPL_VAR NAME="used" --> biblio(s)
+						<td><img src="/images/arrow.gif" width="32" hspace="0" vspace="0" border="0">
+						</td>
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
@@ -96,7 +101,7 @@ a.catalogue:hover {
 		<!-- TMPL_ELSE -->
 			<h3 class="catalogue">No results in Authorities</h3>
 		<!-- /TMPL_IF -->
-<!-- TMPL_IF Name=catresult -->	
+		<!-- TMPL_IF Name=catresult -->	
 		<div id="resultnumber">
 			<p class="resultcount">
 			<!-- TMPL_IF NAME="total" -->
@@ -108,9 +113,8 @@ a.catalogue:hover {
 			<table>
 				<tr>
 					<th class="catalogue">Summary</th>
-					<th class="catalogue">Item Count</th>
-					<th class="catalogue">Location</th>
-					<th class="catalogue">&nbsp;</th>
+					<th class="catalogue">Biblio Count</th>
+					<th class="catalogue">Select</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="catresult" -->
 				<tr>
@@ -124,29 +128,7 @@ a.catalogue:hover {
 						<!-- TMPL_VAR NAME="count" -->
 					</td>
 					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-						<!-- TMPL_LOOP NAME="CN" -->
-							<p>
-								<!-- TMPL_VAR NAME="holdingbranch" -->
-								<!-- TMPL_IF name="date_due" -->
-									On Loan until <!-- TMPL_VAR NAME="date_due" -->
-								<!-- TMPL_ELSE -->
-									<!-- TMPL_IF NAME="itemcallnumber" -->
-										(<!-- TMPL_VAR NAME="itemcallnumber" -->)
-									<!-- /TMPL_IF -->
-								<!-- /TMPL_IF -->
-								<!-- TMPL_IF name="notforloan" -->
-									<i>(<!-- TMPL_VAR name="notforloan" -->)</i>
-								<!-- /TMPL_IF -->
-							</p>
-						<!-- /TMPL_LOOP -->
-						<!-- TMPL_IF name="onorder" --><p>On order</p><!-- /TMPL_IF -->
-					</td>
-					<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-						<!-- TMPL_UNLESS name="norequests" -->
-							<a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a>
-						<!-- TMPL_ELSE -->
-							<p>Not Reservable</p>
-						<!-- /TMPL_UNLESS -->
+							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="value" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="anindex" ESCAPE="URL"  -->)" class="button catalogue">Select</a>
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
@@ -154,17 +136,17 @@ a.catalogue:hover {
 		</div>
 		<div id="resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> 
-					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
+					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Previous</a>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP NAME="numbers" -->
 					<!-- TMPL_IF NAME="highlight" -->
 						<span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
 					<!-- TMPL_ELSE --> 
-						<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+						<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP --> 
 				<!-- TMPL_IF NAME="displaynext" -->
-					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+					<a class="resultnumber" href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">Next&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 			</p>
 			<p class="resultcount">
@@ -173,10 +155,18 @@ a.catalogue:hover {
 			<!-- /TMPL_IF -->
 			</p>
 		</div>
-		
+<script language="JavaScript" type="text/javascript">
+function SelectEntry(myentry, myindex){
+	if (opener.document.f.value[myindex].value!=""){ 
+		opener.document.f.value[myindex].value=opener.document.f.value[myindex].value+" "+myentry
+	} else {
+		opener.document.f.value[myindex].value=myentry
+	}
+}
+</script>
 	</div>
 <!-- /TMPL_IF -->
-
+<!-- /TMPL_IF -->
 </div>
 </body>
 </html>
