@@ -60,6 +60,7 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record = MARCgetbiblio($dbh,$bibid);
+my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -279,6 +280,8 @@ $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						bibid => $bibid,
 						biblionumber =>$oldbiblionumber,
+						title => $oldrecord->{title},
+						author => $oldrecord->{author},
 						item => \@loop_data,
 						itemnum => $itemnum,
 						itemtagfield => $itemtagfield,
