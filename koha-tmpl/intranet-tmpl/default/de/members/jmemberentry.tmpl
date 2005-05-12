@@ -1,0 +1,107 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+	<h1>Jugendlichen hinzuf&uuml;gen </h1><br>
+	<form action="/cgi-bin/koha/members/newjmember.pl" method="post">
+		<!--<input type="hidden" name="joining" value="">
+		<input type="hidden" name="expiry" value="">
+		<input type="hidden" name="type" value="borrowers">-->
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="hidden" name="updtype" value="I">
+		<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+		<input type="hidden" name="city" value="<!-- TMPL_VAR NAME="city" -->">
+		<input type="hidden" name="physstreet" value="<!-- TMPL_VAR NAME="physstreet" -->">
+		<input type="hidden" name="streetaddress" value="<!-- TMPL_VAR NAME="streetaddress" -->">
+		<input type="hidden" name="streetcity" value="<!-- TMPL_VAR NAME="streetcity" -->">
+		<input type="hidden" name="phone" value="<!-- TMPL_VAR NAME="phone" -->">
+		<input type="hidden" name="phoneday" value="<!-- TMPL_VAR NAME="phoneday" -->">
+		<input type="hidden" name="faxnumber" value="<!-- TMPL_VAR NAME="faxnumber" -->">
+		<input type="hidden" name="emailaddress" value="<!-- TMPL_VAR NAME="emailaddress" -->">
+		<input type="hidden" name="contactname" value="<!-- TMPL_VAR NAME="contactname" -->">
+		<input type="hidden" name="altphone" value"<!-- TMPL_VAR NAME="altphone" -->">
+	
+		<table border="0" cellspacing="0" cellpadding="5" >
+		<tr>
+			<th  colspan="5">
+				ELTERN ODER VORMUND 
+			</th>
+		</tr>
+		<tr valign="top" bgcolor="white">
+			<td>Anrede</td>
+			<td>Vornamen*</td>
+			<td colspan="2">Nachname*</td>
+			<td>Benutzer Nr.</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="title" size="1">
+					<option value=" ">Kein Titel
+					<!-- TMPL_LOOP NAME="titleloop" -->
+					<option value="<!-- TMPL_VAR NAME="title" -->" <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="title" -->
+					<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td><input type="text" name="firstname_guardian" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"></td>
+			<td colspan="2"><input type="text" name="surname_guardian" size="20" value="<!-- TMPL_VAR NAME="surname" -->"></td>
+			<td><input type="text" name="guardian_number" size="20" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
+		</tr>
+		<!-- TMPL_LOOP NAME="cmemloop" -->
+		<tr>
+			<tH colspan="5">
+				KIND <!-- TMPL_VAR NAME="count" -->
+			</tH>
+		</tr>
+		<tr>
+			<td colspan="5">
+				Benutzer-Nr <!-- TMPL_VAR NAME="cmember" --> , Ausweisnummer* <input type="text" name="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" size="20" value="<!-- TMPL_VAR NAME="jcardnumber" -->"><br>
+				<input type="hidden" name="bornumber_child_<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="cmember" -->">
+			</td>
+		</tr>
+		<tr>
+			<td>Vorname</td>
+			<td>Nachname*</td>
+			<td>Geburtsdatum (<!-- TMPL_VAR NAME="dateformat" -->)*</td>
+			<td>&nbsp;</td>
+			<td>Schule</td>
+		</tr>
+		<tr>
+			<td><input type="text" name="firstname_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
+			<td><input type="text" name="surname_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
+			<td><input type="text" name="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" size="10" value=""></td>
+			<td>
+				<input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="F"><b>F</b>  <input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="M"><b>M*</b>
+			</td>
+			<td><input type="text" name="school_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
+		</tr>
+		<tr>
+			<td colspan="5">Die folgenden zwei Felder sind zur freien Verf&uuml;gung. Sie k&ouml;nnen f&uuml;r Statistikzwecke hilfreich sein.</td>
+		<tr>
+			<td>Sortierfeld 1</td>
+			<td colspan="4">
+				<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+			</td>
+		</tr>
+		<tr>
+			<td>Sortierfeld 2</td>
+			<td colspan="4">
+				<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+			</td>
+		</tr>
+		<tr>
+			<td>Bemerkung</td>
+		</tr>
+		<tr>
+			<td colspan="5"><textarea name="altnotes_child_<!-- TMPL_VAR NAME="i" -->" wrap="physical" cols="70" rows="3"></textarea></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td>
+				<input type="submit" class="button members" value="OK">
+			</td>
+			<td><input type="reset" class="button members" value="Alle Felder l&ouml;schen"></td>
+		</tr>
+	
+		</table>
+	</form>
+</div>
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

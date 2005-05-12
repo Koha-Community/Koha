@@ -1,0 +1,181 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+		<h1>Druckeradministration</h1>
+	<!-- TMPL_IF NAME="add_form" -->
+			<script language="javascript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNotNull(f,noalert) {
+					if (f.value.length ==0) {
+	return false;
+					}
+					return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function toUC(f) {
+					var x=f.value.toUpperCase();
+					f.value=x;
+					return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNum(v,maybenull) {
+			var n = new Number(v.value);
+			if (isNaN(n)) {
+					return false;
+					}
+			if (maybenull==0 && v.value=='') {
+					return false;
+			}
+			return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isDate(f) {
+					var t = Date.parse(f.value);
+					if (isNaN(t)) {
+							return false;
+					}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function Check(f) {
+					var ok=1;
+					var _alertString="";
+					var alertString2;
+					if (f.printername.value.length==0) {
+							_alertString += "\n- " + _("Druckername fehlt ");
+					}
+					if (f.printqueue.value.length==0) {
+							_alertString += "\n- " + _("Queue fehlt");
+					}
+					if (_alertString.length==0) {
+							document.Aform.submit();
+					} else {
+							alertString2  = _("Form not submitted because of the following problem(s)");
+							alertString2 += "\n------------------------------------------------------------------------------------\n";
+							alertString2 += _alertString;
+							alert(alertString2);
+					}
+			}
+			</script>
+	<div id="bloc25">
+		<!-- TMPL_IF NAME="searchfield" -->
+			<h2 class="parameters">Drucker bearbeiten</h2>
+		<!-- TMPL_ELSE -->
+			<h2 class="parameters">Drucker hinzuf&uuml;gen</h2>
+		<!-- /TMPL_IF -->
+	
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+				<input type="hidden" name="op" value="add_validate">
+				<!-- TMPL_IF NAME="searchfield" -->
+						<p><label>Druckername</label><input type="hidden" name="printername" value="<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" --></p>
+				<!-- TMPL_ELSE -->
+						<p><label>Druckername</label><input type="text" name="printername" size="50" maxlength="50"></p>
+				<!-- /TMPL_IF -->
+				<p><label>Queue</label><input type="text" name="printqueue" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printqueue" -->"> </p>
+				<p><label>Typ</label><input type="text" name="printtype" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printtype" -->"> </p>
+				<p><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
+			</form>
+	</div>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+		Daten gespeichert
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="OK" class="button">
+			</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+		<table border="0" cellspacing="0" cellpadding="5">
+			<tr bgcolor="#99cc33">
+				<td background="/images/background-mem.gif"><b>Drucker</b></td>
+				<td background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
+			</tr>
+	
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="hidden" name="op" value="delete_confirmed">
+				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			
+			<tr>
+				<td>Queue</td>
+				<td><!-- TMPL_VAR NAME="printqueue" --></td>
+			</tr>
+				<tr>
+				<td>Typ</td>
+				<td><!-- TMPL_VAR NAME="printtype" --></td>
+			</tr>
+				<tr>
+				<td colspan="2" align="center">L&ouml;schen best&auml;tigen</td>
+			</tr>
+				<tr>
+				<td>
+					<input type="submit" value="JA">
+					</form>
+				</td>
+				<td>
+					<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="NEIN">
+					</form>
+				</td>
+			</tr>
+		</table>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+		Daten gel&ouml;scht
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="OK">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+			<form action="<!-- TMPL_VAR NAME="script_name">" method="post">
+					<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
+					<input type="reset" name="reset" value="l&ouml;schen">
+			</form>
+	
+		<!-- TMPL_IF NAME="searchfield" -->
+			You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+		<!-- /TMPL_IF -->
+	
+		<table border="0" cellspacing="0" cellpadding="5">
+			<tr bgcolor="#99cc33">
+				<td background="/images/background-mem.gif"><b>Name</b></td>
+				<td background="/images/background-mem.gif"><b>Queue</b></td>
+				<td background="/images/background-mem.gif"><b>Typ</b></td>
+				<td background="/images/background-mem.gif"> </td>
+				<td background="/images/background-mem.gif"> </td>
+			</tr>
+			<!-- TMPL_LOOP NAME="loop" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<td><!-- TMPL_VAR NAME="printername" --></td>
+				<td><!-- TMPL_VAR NAME="printqueue" --></td>
+				<td><!-- TMPL_VAR NAME="printtype" --></td>
+				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->" class="button">Bearbeiten</a></td>
+							<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->" class="button">L&ouml;schen</a></td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="add_form">
+		
+		<!-- TMPL_IF NAME="offsetgtzero" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Prev</a>
+		<!-- /TMPL_IF -->
+	
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+		<!-- TMPL_IF NAME="ltcount" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">N&auml;chster &gt;&gt;</a>	
+		<!-- /TMPL_iF -->
+	
+			<br>
+		<input type="submit" class="button" value="Drucker hinzuf&uuml;gen" alt="Drucker hinzuf&uuml;gen">
+		<br>
+			</form>
+	
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

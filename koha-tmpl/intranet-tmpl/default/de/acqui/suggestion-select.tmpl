@@ -1,0 +1,58 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">Vorschl&auml;ge</h1>
+	<table>
+		<tr>
+			<th class="acquisition">Vorschlag</th>
+			<th class="acquisition">Vorgeschlagen von</th>
+			<th class="acquisition">Genehmigt von</th>
+			<th class="acquisition">&nbsp;</th>
+		</tr>
+		<tr>
+			<form>
+				<th class="acquisition">
+					<p>Filter auf: Titel: <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->"> Verfasser: <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->"> Verlag: <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					<input type="submit" class="button acquisition" value="Filter setzen">
+				</th>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
+					<p>
+						<!-- TMPL_IF name="copyrightdate" -->Exemplar. Jahr:<!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR NAME="isbn" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" --><br/>verlegt von <!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR NAME="publicationyear" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR NAME="place" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR NAME="note" -->)</i></p> <!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamesuggestedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF name="biblionumber" -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Bestellung</a>
+					<!-- TMPL_ELSE -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Bestellung</a>
+					<!-- /TMPL_IF -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<form>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

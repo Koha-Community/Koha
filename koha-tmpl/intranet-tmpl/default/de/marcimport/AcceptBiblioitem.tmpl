@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<center>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<a href="$ENV{'SCRIPT_NAME'}?file=$file">Neuer Satz</a> | <a href="marcimport.pl">Neue Datei</a><br>
+<!-- TMPL_IF NAME="BIBLIO_EXISTS" -->
+	<table border="0" width="50%" cellpadding="10" cellspacing="0">
+		<tr>
+			<th background="/images/background-acq.gif">Satz bereits in der Datenbank
+			</th>
+		</tr>
+		<tr>
+			<td bgcolor="#dddddd">
+				<!-- TMPL_VAR NAME="title" --> ist bereits in der Datenbank mit biblionumber <!-- TMPL_VAR NAME="biblionumber" --> und biblioitemnumber <!-- TMPL_VAR NAME="biblioitemnumber" -->
+			  </td>
+		</tr>
+	</table>
+	<p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="BIBLIO_CREATE" -->
+    <table cellpadding="10" cellspacing="0" border="0" width="50%">
+		<tr>
+			<th background="/images/background-acq.gif">Satz in Datenbank aufgenommen</th>
+		</tr>
+		<tr>
+			<td bgcolor="#dddddd">
+				<!-- TMPL_VAR NAME="title" --> wurde in die Datenbank aufgenommen mit biblionumber <!-- TMPL_VAR NAME="biblionumber" --> und biblioitemnumber <!-- TMPL_VAR NAME="biblioitemnumber" --></td>
+		</tr>
+	  </table>
+<!-- /TMPL_IF -->
+    <table border="0" cellpadding="10" cellspacing="0">
+      <tr><th background="/images/background-acq.gif">
+	Exemplar hinzuf&uuml;gen f&uuml;r <!-- TMPL_VAR NAME="title" -->
+      </th></tr>
+      <tr><td bgcolor="#dddddd">
+      <form>
+        <input type="hidden" name="newitem" value="1">
+        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+        <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+        <input type="hidden" name="file" value="<!-- TMPL_VAR NAME="file" -->">
+        <table border="0">
+          <tr><td>BARCODE</td><td><input name="barcode" size="10" value="<!-- TMPL_VAR NAME="barcode" -->">
+          Heimatzweigstelle: <select name="homebranch"><!-- TMPL_VAR NAME="branchselect" --></select>
+	  </td></tr>
+          <tr><td>Wiederbeschaffungspreis:</td>
+	  <td><input name="replacementprice" size="10"></td></tr>
+          <tr><td>Bemerkung</td>
+	  <td><textarea name="notes" rows="4" cols="40" wrap="physical"></textarea>
+	  </td></tr>
+        </table>
+        <p>
+        <input type="submit" value="Medium hinzuf&uuml;gen">
+      </form>
+      </td></tr>
+    </table>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+<div id="mainbloc">
+	<h1 class="catalogue">F&uuml;ge neuen Biblio hinzu</h1>
+	
+	<div id="bloc60">
+		<h2 class="catalogue">Sektion 1: Copyright Informationen </h2>
+	
+		<!-- TMPL_IF NAME="ERROR" -->
+			<p class="problem">Please Specify a Title</p>
+		<!-- /TMPL_IF -->
+		
+		<form action="savebiblio.pl" method="post">
+		<p><label class="label100">Titel: *</label><input name="title" size="40" /></p>
+		<p><label class="label100">Untertitel:</label><input name="subtitle" size="40" /></p>
+		<p><label class="label100">Verfasser</label><input name="author" size="40" /></p>
+		<p>weitere Verfasser <i>Ein Verfasser pro Zeile</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="additionalauthors" cols="30" rows="6"></textarea>
+		</p>
+		</p>
+		<p>Serientitel: <i>(wenn zutreffend)</i></p>
+		<p><label class="label100">&nbsp;</label><input name="seriestitle" size="40" /></p>
+		<p>Subject Headings: <i>One Subject per line</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="subjectheadings" cols="30" rows="6"></textarea>
+		</p>
+		<label class="label100">Copyright Datum:</label><input name="copyrightdate" size="40" /></p>
+		<label class="label100">Abstract:</label><textarea cols="30" rows="6" name="abstract"></textarea></p>
+		<label class="label100">Bemerkung:</label><textarea cols="30" rows="6" name="notes"></textarea></p>
+		<p><input type="submit" value="Abschicken" class="button catalogue"></p>
+		</form>
+		* notwendig
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

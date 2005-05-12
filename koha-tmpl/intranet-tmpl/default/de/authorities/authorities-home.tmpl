@@ -1,0 +1,49 @@
+    <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="authority">Authority search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div id="bloc25">
+		<h2 class="authority">Suche nach
+			<select name="authtypecode">
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="authtypetext" -->
+				</option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</h2>
+		<p>
+			<label class="label100">Main entry</label>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="mainentry">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+		</p>
+		<p>
+			<label class="label100">Anywhere</label>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+		</p>
+		<p>
+			<input type="submit" value="Suche starten" class="button authority">
+		</p>
+	</div>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
+

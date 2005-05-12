@@ -1,0 +1,180 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- TMPL_IF NAME="missingloop" -->
+	<!-- TMPL_VAR NAME="string" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME="invalid" -->
+		Ung&uuml;ltige Kartennummer<p>
+	<!-- TMPL_ELSE -->
+	<h1> Satz best&auml;tigen </h1>
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> NEUER BENUTZER </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Name</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="institution_name" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> EINZELHEITEN DER BEBNUTZUNG </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Membership Number</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornum" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Ausweisnummer</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="cardnumber_institution" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Anmeldezweigstelle</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="branchcode" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>BENUTZERANSCHRIFT</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Postal Address</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="postal" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Home Address</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="home" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>BENUTZERDETAILS</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Tel.</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Tel. (tags&uuml;ber)</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phoneday" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Fax</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>E-Mail</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign="top" bgcolor="white" >
+                        <td>
+                                <b>Text messaging</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="textmessaging" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ZUS&Auml;TZLICHE KONTAKTANGABEN</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Name</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="contactname" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Tel.:</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altphone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Bezug:</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Bemerkung</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altnotes" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>Bemerkung</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Allgemeine Bemerkung</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornotes" -->
+			</td>
+		</tr>
+		</table><p>
+		Valid values. click OK to confirm this new borrower
+		<form action="/cgi-bin/koha/members/insertidata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" name="submit" value="OK">
+		</form>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

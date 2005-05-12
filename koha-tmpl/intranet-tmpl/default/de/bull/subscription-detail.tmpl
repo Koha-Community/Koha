@@ -1,0 +1,188 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="bull">Abonnement</h1>
+<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Edit</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Issues</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Biblio</a>
+<!-- TMPL_UNLESS name="totalissues" -->
+		<a href="javascript:confirm_deletion()" class="button bull">
+			l&ouml;schen
+		</a>
+<!-- /TMPL_UNLESS -->
+<form method="post" name="f">
+<div id="bloc25">
+	<h2 class="bull">Abo-Informationen</h2>
+		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
+		<p><label>Lieferant </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
+		<p><label>Etat </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label>Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label>Bemerkung:</label><!-- TMPL_VAR name="notes" --></p>
+</div>
+<div id="bloc25">
+	<h2 class="bull">Planung</h2>
+	<p><label class="label100">Anfangsdatum</label> <!-- TMPL_VAR name="startdate" --></p>
+	<p><label class="label100">Frequenz (*):</label>
+		<!--TMPL_IF name="periodicity1" -->
+				1/Tag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				1/Woche
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				1/2 Wochen
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				1/3 Wochen
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				1/Monat
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				1/2 Months (6/year)
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				1/Quartal
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				1/Quartal
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2/year
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				1/Jahr
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				1/2 Jahre
+		<!-- /TMPL_IF -->
+	</p>
+	<p><label class="label100">Lieferung am:</label>
+		<!--TMPL_IF name="arrival1" -->
+			Montag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Dienstag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Mittwoch
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Donnerstag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				Freitag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Samstag
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Sonntag
+		<!-- /TMPL_IF -->
+</div>
+<div id="bloc25">
+	<h2 class="bull">Abo-Dauer</h2>
+	<p><label class="label100">Anzahl der Hefte</label><!-- TMPL_VAR name="numberlength" --></p>
+	<p><label class="label100">Anzahl der Wochen</label><!-- TMPL_VAR name="weeklength" --></p>
+	<p><label class="label100">Anzahl der Monate</label><!-- TMPL_VAR name="monthlength" --></p>
+
+</div>
+<div id="bloc25">
+	<h2 class="bull">Numbering calculation</h2>
+	<p>
+		<p>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></p>
+		<table class="small" width="20%">
+			<tr>
+				<th class="bull">&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			</tr>
+			<tr>
+				<td class="bull">Hinzuf&uuml;gen</td>
+				<td>
+					<!-- TMPL_VAR name="add1" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add2" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add3" -->
+				</td>
+			</tr>
+			<tr>
+				<td class="bull">Einmal alle</td>
+				<td><!-- TMPL_VAR name="every1" --></td>
+				<td><!-- TMPL_VAR name="every2" --></td>
+				<td><!-- TMPL_VAR name="every3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">Wenn mehr als</td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+					<i>(ist <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+					<i>(ist <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+					<i>(ist <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
+				<td class="bull">Zur&uuml;cksetzen auf</td>
+				<td><!-- TMPL_VAR name="setto1" --></td>
+				<td><!-- TMPL_VAR name="setto2" --></td>
+				<td><!-- TMPL_VAR name="setto3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">
+						Last value
+				</td>
+				<td><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+			</tr>
+		</table>
+</div>
+<div id="bloc25">
+	<h2 class="bull">Ausleihen</h2>
+	<table class="small">
+	<tr>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Heftnummer&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR name="serialseq" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR name="planneddate" -->
+			</td>
+			<td>
+					<!--TMPL_IF name="status1" -->
+						Waited
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						Eingegangen
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						Late
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						&Uuml;berf&auml;llig
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+<script>
+function _(s) { return s } // dummy function for gettext
+function confirm_deletion() {
+	var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	if (is_confirmed) {
+		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
+	}
+}
+</script>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

@@ -1,0 +1,123 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+
+<div id="mainbloc">
+	<form action=updatesupplier.pl method="post">
+	
+	<input type="hidden" name="id" value=<!-- TMPL_VAR NAME="id" -->>
+	
+	<!-- TMPL_IF name="id" -->
+		<h1 class="acquisition">&Auml;ndern: <!-- TMPL_VAR NAME="name" --></h1>
+	<!-- TMPL_ELSE -->
+		<h1 class="acquisition">Lieferant hinzuf&uuml;gen</h1>
+	<!-- /TMPL_IF -->
+	<div id="bloc25">
+		<h2 class="acquisition">FIRMENDETAILS</h2>
+		<p>
+			<label>Firmenname</label>
+			<input type="text" size="40" name="company" value="<!-- TMPL_VAR NAME="name" -->">
+		</p>
+		<p>
+			<label>Postal Address</label>
+				<textarea name="company_postal" cols="40" rows="3"><!-- TMPL_VAR NAME="postal" --></textarea>
+		</p>
+		<p>
+			<label>Physical Address</label>
+			<textarea name="physical" cols="40" rows="4"><!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" --></textarea>
+		</p>
+		<p>
+			<label>Tel.:</label>
+			<input type="text" size="20" name="company_phone" value="<!-- TMPL_VAR NAME="phone" -->">
+		</p>
+		<p>
+			<label>Fax</label>
+			<input type="text" size="20" name="company_fax" value="<!-- TMPL_VAR NAME="fax" -->">
+		</p>
+		<p>
+			<label>Website</label>
+			<input type="text" size="40" name="website" value="<!-- TMPL_VAR NAME="url" -->">
+		</p>
+		<h2 class="acquisition">KONTAKT-DETAILS</h2>
+		<p>
+			<label>Kontaktname</label>
+			<input type="text" size="40" name="company_contact_name" value="<!-- TMPL_VAR NAME="contact" -->">
+		</p>
+		<p>
+			<label>Position</label>
+			<input type="text" size="40" name="company_contact_position" value="<!-- TMPL_VAR NAME="contpos" -->">
+		</p>
+		<p>
+			<label>Tel.:</label>
+			<input type="text" size="20" name="contact_phone" value="<!-- TMPL_VAR NAME="contphone" -->">
+		</p>
+		<p>
+			<label>Weiter Rufnummer</label>
+			<input type="text" size="20" name="contact_phone_2" value="<!-- TMPL_VAR NAME="contaltphone" -->">
+		</p>
+		<p>
+			<label>Fax</label>
+			<input type="text" size="20" name="contact_fax" value="<!-- TMPL_VAR NAME="contfax" -->">
+		</p>
+		<p>
+			<label>E-Mail</label>
+			<input type="text" size="40" name="company_email" value="<!-- TMPL_VAR NAME="contemail" -->">
+		</p>
+		<p>
+			<label>Bemerkung</label>
+			<textarea name="notes" cols="40" rows="4"><!-- TMPL_VAR NAME="contnotes" --></textarea>
+		</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="acquisition">DERZEITIGER STATUS</h2>
+		<p>
+			<label>Lieferant ist</label>
+				<!-- TMPL_IF name="active" -->
+					<input type="radio" name="status" value="1" checked>Aktiv <input type="radio" name="status" value="0">Inaktiv</td>
+				<!-- TMPL_ELSE -->
+					<input type="radio" name="status" value="1">Aktiv <input type="radio" name="status" value="0" checked>Inaktiv</td>
+				<!-- /TMPL_IF -->
+		</p>
+		<h2 class="acquisition">BESTELLINFORMATIONEN</h2>
+		</p>
+		<p>
+			<label>Verlage und Impressum</label>
+			<textarea name="publishers_imprints" cols="20" rows="4"><!-- TMPL_VAR NAME="specialty" --></textarea>
+		</p>
+		<p>
+			<label class="label100">List Prices are</label>
+				<select name="list_currency" size="1">
+				<!-- TMPL_LOOP NAME="loop_pricescurrency" -->
+					<!-- TMPL_VAR NAME="currency" -->
+				<!-- /TMPL_LOOP -->
+				</select>
+		</p>
+		<p>
+			<label class="label100">Rechnungspreise sind</label>
+				<select name="invoice_currency" size="1">
+				<!-- TMPL_LOOP NAME="loop_invoicecurrency" -->
+					<!-- TMPL_VAR NAME="currency" -->
+				<!-- /TMPL_LOOP -->
+				</select>
+		</p>
+		<p>
+			<label class="label100">GST Registered</label>
+				<input type="radio" name="gst" value="1" <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Ja <input type="radio" name="gst" value="0" <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>Nein
+		</p>
+		<p>
+			<label class="label100">List Item Price Includes GST</label>
+				<input type="radio" name="list_gst" value="1" <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>Ja <input type="radio" name="list_gst" value="0" <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>Nein
+		</p>
+		<p>
+			<label class="label100">Exemplarpreis auf der Rechnung einschl. MWST</label>
+				<input type="radio" name="invoice_gst" value="1" <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>Ja <input type="radio" name="invoice_gst" value="0" <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>Nein
+		</p>
+		<p>
+			<label class="label100">Rabatt</label>
+			<input type="text" size="3" name="discount" value="<!-- TMPL_VAR NAME="discount" -->"> %
+		</p>
+	<br/>
+	<br/><input type="image" name="submit" src="/<!-- TMPL_VAR NAME="theme" -->/images/filesave.png" border="0" title="Speichern" alt="Speichern" class="button acquisition">
+	</form>
+	</div>
+</div>
+
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

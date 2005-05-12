@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">Bestelleingang von Lieferant <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+	<div id="bloc25">
+		<form method="get" action="receive.pl">
+		<p>
+			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
+			<h2 class="acquisition">Rechnungsinfo Lieferanten</h2>
+		<p>
+			<label>RechnungsNr. Lieferant</label>
+			<input type="text" size="20" name="invoice">
+		</p>
+		<p>
+			<label>MWST</label>
+			<input type="text" size="20" name="gst">
+		</p>
+		<p>
+			<label>Fracht</label>
+			<input type="text" size="20" name="freight">
+		</p>
+		<p>
+			<input type="submit" class="button acquisition" value="Speichern">
+		</p>
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

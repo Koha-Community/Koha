@@ -1,0 +1,42 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- main site -->
+<div id="mainbloc">
+<h2><!-- TMPL_VAR name="LibraryName" --></h2>
+<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br><!-- /TMPL_IF -->
+Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br>
+<!-- TMPL_VAR NAME="todaysdate" --><br>
+<table>
+	<caption>Ausleihen</caption>
+	<tr>
+		<th>R&uuml;ckgabedatum</th>
+		<th>Titel</th>
+	</tr>
+	<!-- TMPL_loop name="issueloop" -->
+	<!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
+		<tr>
+		<td><!-- TMPL_VAR NAME="date_due" --></td>
+		<td><a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</table>
+	
+	<table>
+	<caption>Overdues</caption>
+	<tr>
+	<th>R&uuml;ckgabedatum</th>
+	<th>Titel</th>
+	</tr>
+	<!-- TMPL_LOOP NAME="issueloop" -->
+	<!-- TMPL_IF NAME="red" --><tr>
+	<td><!-- TMPL_VAR NAME="date_due" --></td>
+	<td><a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+	</tr>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</table>
+
+</div>
+<!-- endmenu -->
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

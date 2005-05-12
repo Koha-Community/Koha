@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1 class="parameters">Definition der Ausleihkonditionen f&uuml;r <!-- TMPL_VAR NAME="branch" --></h1>
+	<div id="bloc25">
+		<h2 class="parameters">TIPP f&uuml;r Ausleihen</h2>
+		<p>Each box needs to be filled with issuelength, maxissues</p>
+		<p> - z.B.: 21,5 = 21 Tage Leihfrist und max. 5 Ausleihen</p>
+		<h2 class="parameters">TIPP f&uuml;r Mahngeb&uuml;hren</h2>
+		<p>Bei jedem Feld m&uuml;ssen Geb&uuml;hr, Beginn der Geb&uuml;hrenerhebung und Erhebungsturnus eingetragen werden.</p>
+		<p>z.B 1,7,7 = 1 USD, EUR &Uuml;berziehungsgeb&uuml;hr, nach 7 Tagen, alle 7 Tage</p>
+		<p>Achtung: Geb&uuml;hren werden mit dem Skript fines.pl berechnet, das im "misc"-Verzeichnis liegt </p>
+		<p>Um jede Nacht die Geb&uuml;hren zu berechnen, mu&szlig; ihr Administrator dieses Skript in die crontab eintragen</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="parameters">Defaultwerte</h2>
+		<p> Ist eine Zelle nicht ausgef&uuml;llt, wird nach dem ersten der folgenden Werte gesucht :</p>
+		<ul>
+			<li>selbe Zweigstelle und selbe Benutzerkategorie, Medientyp *</li>
+			<li> selbe Zweigstelle und selber Medientyp, Benutzerkategorie *</li>
+			<li>selber Medientyp und Benutzerkategorie, Zweigstelle *</li>
+			<li>&uuml;berall</li>
+			<li>Wird nichts gefunden, wird der Defaultwert 21,5 (fest programmiert) genommen</li>
+		</li>
+	</div>
+	<div id="bloc100">
+		<form method="post">
+		Zweigstelle ausw&auml;hlen
+			<select name="branch">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP NAME="branchloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+			<input type="submit" value="Auswahl" class="button parameters">
+		</form>
+		<form method="post">
+			<input type="hidden" name="op" value="save">
+			<table>
+			<tr>
+				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th><!-- TMPL_VAR NAME="in_title" --><br/>Ausleihe / Mahngeb&uuml;hr</th><!-- /TMPL_LOOP -->
+			</tr>
+			<!-- TMPL_LOOP NAME="row" -->
+				<tr align="center">
+					<th>
+						<!-- TMPL_VAR NAME="categorycode" -->
+					</th>
+					<!-- TMPL_LOOP NAME="cell" -->
+						<td<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
+							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
+							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
+						</td>
+					<!-- /TMPL_LOOP -->
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+			<input type="submit" value="Speichern" class="button parameters">
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

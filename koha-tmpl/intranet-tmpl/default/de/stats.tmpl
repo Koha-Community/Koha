@@ -1,0 +1,31 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+
+	<table border="0" cellspacing="0" cellpadding="5" align="center">
+		<tr bgcolor="#99cc33">
+			<td background="/images/background-mem.gif"><b>Name</b></td>
+			<td background="/images/background-mem.gif"><b>Typ</b></td>
+			<td background="/images/background-mem.gif"><b>Datum/Uhrzeit</b></td>
+			<td background="/images/background-mem.gif"><b>Betrag</b></td>
+			<td background="/images/background-mem.gif"><b>Zweigstelle</b></td>
+		<tr>
+		<!-- TMPL_LOOP NAME=loop1 -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<td><!-- TMPL_VAR NAME="type" --></td>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><!-- TMPL_VAR NAME="amount" --></td>
+			<td><!-- TMPL_VAR NAME="branch" --></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+
+
+<p>
+	<b>Insgesamt bezahlt: <!-- TMPL_VAR NAME="total" --></b>
+	<br>
+	<b>Insgesamt ausgebucht: <!-- TMPL_VAR NAME="totalw" --></b>
+</p>
+
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</body>
+</html>

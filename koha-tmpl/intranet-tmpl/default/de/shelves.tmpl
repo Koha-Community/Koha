@@ -1,0 +1,137 @@
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+
+<!-- TMPL_IF Name="viewshelf" -->
+<form>
+    <table border="0" cellpadding="2" cellspacing="0" align="center">
+    		<tr>
+			<th colspan="4" bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+				<font color="white">Inhalt von <!-- TMPL_VAR NAME="shelfname" --></font>
+			</th>
+		</tr>
+		<!-- TMPL_LOOP Name="itemsloop" -->
+			<tr>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="title" --></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<br>
+	<a href="shelves.pl" class="button">Shelf-Liste</a>
+	<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="hidden" name="modifyshelfcontents" value="1">
+	<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="submit" value="Ausgew&auml;hlte exemplare l&ouml;schen" class="button">
+</form>
+<form>
+	<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="hidden" name="modifyshelfcontents" value="1">
+	<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<table>
+		<tr>
+			<td>
+				Buch &uuml;ber Barcode hinzuf&uuml;gen in <!-- TMPL_VAR NAME="shelfname" -->
+			</td>
+			<td>
+				<input name="addbarcode">
+				<input type="hidden" name="modifyshelfcontents" value="1">
+				<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+				<input type="submit" value="Speichern" class="button">
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<!-- TMPL_IF Name="status1" -->
+			<font color="red"><!-- TMPL_VAR NAME="string1" --></font><p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<font color="red"><!-- TMPL_VAR NAME="string" --></font><p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<h1>Buchregale</h1>
+		<table border="0" cellpadding="7" align="center">
+			<tr>
+				<td align="center" valign="bottom">
+					<form>
+						<p>
+							<a href="shelves.pl" class="button">Shelf-Liste</a>
+						</p>
+					</form>
+				</td>
+				<td align="center" valign="bottom">
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Zu l&ouml;schende Regale ausw&auml;hlen</font>
+							</th>
+						</tr>
+						<!-- TMPL_LOOP Name="shelvesloop" -->
+						<tr>
+							<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
+								<!-- TMPL_VAR NAME="shelfname" --> (<!-- TMPL_VAR NAME="shelfbookcount" --> B&uuml;cher)
+							</td>
+						</tr>
+						<!-- /TMPL_LOOP -->
+					</table>
+					<p>
+						<input type="submit" value="Regale l&ouml;schen" class="button"></form>
+					</p>
+				</td>
+				<td align="center" valign="bottom">
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Regal hinzuf&uuml;gen</font>
+							</th>
+						</tr>
+						<tr>
+							<td>
+								<p><input name="addshelf" size="25"></p>
+							</td>
+						</tr>
+					</table>
+								<p><input type="submit" value="Neues Regal hinzuf&uuml;gen" class="button"></p>
+					</form>
+				</td>
+			</tr>
+		</table>
+
+	<!-- TMPL_ELSE -->
+		<center>
+		<table border="0" cellpadding="4" cellspacing="0">
+			<tr>
+				<td bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+					<table border="0" cellpadding="5" cellspacing="0" width="100%">
+						<tr>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Shelf List</font>
+							</th>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!-- TMPL_LOOP Name="shelvesloop" -->
+			<tr>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+						<!-- TMPL_VAR NAME="shelfname" --> (<!-- TMPL_VAR NAME="shelfbookcount" --> B&uuml;cher)
+					</a>
+				</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<P>
+			<a href="shelves.pl?shelves=1" class="button">Buchregal hinzuf&uuml;gen oder l&ouml;schen</a>
+		</p>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

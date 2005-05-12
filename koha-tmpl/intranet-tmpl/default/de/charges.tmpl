@@ -1,0 +1,32 @@
+<html>
+
+<!-- TMPL_VAR NAME="startmenuissue" -->
+
+<p>
+Bei jedem Feld m&uuml;ssen Geb&uuml;hr, Beginn der Geb&uuml;hrenerhebung und Erhebungsturnus eingetragen werden.<br>
+z.B 1,7,7 = 1 EUR &Uuml;berziehungsgeb&uuml;hr, nach 7 Tagen, alle 7 Tage<p>
+
+<table>
+  <tr bgcolor="white">
+    <!-- TMPL_LOOP NAME="firstrowloop" -->
+      <td><!-- TMPL_VAR NAME="description" --></td>
+    <!-- /TMPL_LOOP -->
+  </tr>
+  <form action="/cgi-bin/koha/updatecharges.pl" method="post">
+  <!-- TMPL_LOOP NAME="tablebodyloop" -->
+    <tr bgcolor="whitw">
+      <td><!-- TMPL_VAR NAME="description" --></td>
+      <!-- TMPL_LOOP NAME="rowloop" -->
+        <td><input type="text" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" size="6"></td>
+      <!-- /TMPL_LOOP -->
+    </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+
+<input type="submit">
+</form>
+
+<!-- TMPL_VAR NAME="endmenuissue" -->
+
+</body>
+</html>

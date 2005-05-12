@@ -1,0 +1,264 @@
+<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Koha : Erwerbungsstatistiken </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>gefiltert auf</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<br>
+		<table border="1">
+			<tr >
+				<th class="reports"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+				<th class="reports">SUMME</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+								<!-- TMPL_IF Name="value" --><!-- TMPL_VAR NAME="value" -->
+								<!-- TMPL_ELSE--> &nbsp;
+								<!-- /TMPL_IF -->
+							</td>
+						<!-- /TMPL_LOOP -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="totalrow" -->
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tr >
+					<th class="reports">SUMME</th>
+					<!-- TMPL_LOOP NAME="loopfooter" -->
+						<th class="reports">
+							<!-- TMPL_VAR NAME="totalcol" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th class="reports"><!-- TMPL_VAR NAME="total" --></th>
+				</tr>
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Koha : Erwerbungsstatistiken </h1>
+	<form method="post">
+	<table>
+		<thead>
+			<tr>
+			<th class="reports"><div class="label100">Titel</div></th>
+			<th class="reports">Zeile</th>
+			<th class="reports">Spalte</th>
+			<th class="reports">Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="hilighted">
+				<td>Eingestellt in</td>
+				<td align="center"><input type="radio" name="Line" value="aqbasket.closedate"></td>
+				<td align="center"><input type="radio" name="Column" value="aqbasket.closedate"></td>
+				<td > Von <input type="text" readonly="readonly" size="10" id="from" name="Filter" >
+							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+								<script language="JavaScript" type="text/javascript">
+									function validate1(date) {
+										var day = date.getDate();
+										var month = date.getMonth() + 1;
+										var year = date.getFullYear();
+										var weekDay = date.getDay();
+										var dayMonth = month + '-' + day;
+										var dateString = year + '-' + month + '-' + day;
+										var dateTo = document.getElementById('to').value.split("-");
+										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+										if (date > limitDate) {
+											return true;
+										} else {
+											return false;
+										}
+									}
+					
+									Calendar.setup(
+										{
+											inputField : "from",
+											ifFormat : "%Y-%m-%d",
+											button : "openCalendarFrom",
+											disableFunc : validate1,
+											dateStatusFunc : validate1
+										}
+									);
+								</script>
+					To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								function validate2(date) {
+									var day = date.getDate();
+									var month = date.getMonth() + 1;
+									var year = date.getFullYear();
+									var weekDay = date.getDay();
+									var dayMonth = month + '-' + day;
+									var dateString = year + '-' + month + '-' + day;
+									var dateFrom = document.getElementById('from').value.split("-");
+									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+									if (limitDate > date) {
+										return true;
+									} else {
+										return false;
+									}
+								}
+		
+								Calendar.setup(
+									{
+										inputField : "to",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarTo",
+										disableFunc : validate2,
+										dateStatusFunc : validate2
+									}
+								);
+							</script>
+				</td>
+			</tr>
+			<tr class="hilighted"> 
+				<td>&nbsp;</td>
+				<td align="center" colspan="2">gruppiert nach <select name="PlacedOnDisplay">
+					<option value="">Keine</option>
+					<option value ="1">Day of week</option>
+					<option value ="2">Monat</option>
+					<option value ="3">Jahr</option>
+					</select>
+					
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>Eingegangen am</td>
+				<td align="center"><input type="radio" name="Line" value="aqorderdelivery.deliverydate"></td>
+				<td align="center"><input type="radio" name="Column" value="aqorderdelivery.deliverydate"></td>
+				<td > Von <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" >
+							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
+								<script language="JavaScript" type="text/javascript">
+									function validate1(date) {
+										var day = date.getDate();
+										var month = date.getMonth() + 1;
+										var year = date.getFullYear();
+										var weekDay = date.getDay();
+										var dayMonth = month + '-' + day;
+										var dateString = year + '-' + month + '-' + day;
+										var dateTo = document.getElementById('toRO').value.split("-");
+										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+										if (date > limitDate) {
+											return true;
+										} else {
+											return false;
+										}
+									}
+					
+									Calendar.setup(
+										{
+											inputField : "fromRO",
+											ifFormat : "%Y-%m-%d",
+											button : "openCalendarFromRO",
+											disableFunc : validate1,
+											dateStatusFunc : validate1
+										}
+									);
+								</script>
+					To <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" >
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								function validate2(date) {
+									var day = date.getDate();
+									var month = date.getMonth() + 1;
+									var year = date.getFullYear();
+									var weekDay = date.getDay();
+									var dayMonth = month + '-' + day;
+									var dateString = year + '-' + month + '-' + day;
+									var dateFrom = document.getElementById('fromRO').value.split("-");
+									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+									if (limitDate > date) {
+										return true;
+									} else {
+										return false;
+									}
+								}
+		
+								Calendar.setup(
+									{
+										inputField : "toRO",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarToRO",
+										disableFunc : validate2,
+										dateStatusFunc : validate2
+									}
+								);
+							</script>
+				</td>
+			</tr>
+			<tr> 
+				<td>&nbsp;</td>
+				<td align="center" colspan="2">gruppiert nach <select name="ReceivedOnDisplay">
+					<option value="">Keine</option>
+					<option value ="1">Day of week</option>
+					<option value ="2">Monat</option>
+					<option value ="3">Jahr</option>
+					</select>
+					
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr class="hilighted">
+				<td>Buchh&auml;ndler</td>
+				<td align="center"><input type="radio" name="Line" value="aqbooksellers.name"></td>
+				<td align="center"><input type="radio" name="Column" value="aqbooksellers.name"></td>
+				<td ><!-- TMPL_VAR NAME="CGIBookSeller" --></td>
+			</tr>
+			<tr>
+				<td>Etat</td>
+				<td align="center"><input type="radio" name="Line" value="aqorderbreakdown.bookfundid"></td>
+				<td align="center"><input type="radio" name="Column" value="aqorderbreakdown.bookfundid"></td>
+				<td ><!-- TMPL_VAR NAME="CGIBudget" --></td>
+			</tr>
+			<!-- TMPL_IF Name="hassort1" -->
+				<tr class="hilighted"> 
+					<td>Sortierung 1</td>
+					<td align="center"><input type="radio" name="Line" value="aqorders.sort1"></td>
+					<td align="center"><input type="radio" name="Column" value="aqorders.sort1"></td>
+					<td><!-- TMPL_VAR NAME="CGISort1" --> </td>
+				</tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="hassort2" -->
+				<!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
+					<td>Sortierung 2</td>
+					<td align="center"><input type="radio" name="Line" value="aqorders.sort2"></td>
+					<td align="center"><input type="radio" name="Column" value="aqorders.sort2"></td>
+					<td><!-- TMPL_VAR NAME="CGISort2" --> </td>
+				</tr>
+			<!-- /TMPL_IF -->
+			<tr></tr>
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Zellwert </h3>
+			<input type="radio" name="Cellvalue" value="1" checked> Z&auml;hle Medien <input type="radio" name="Cellvalue" value="2"> Betrag
+	</div>
+	<div id="bloc25">
+		<h3 class="reports"> Ausgabe </h3>
+		<input type="radio" checked name="output" value="screen" > In ein Browserfenster
+		<br>
+		<input type="radio" name="output" value="file"> In eine Datei <input type="text" name="basename" value="Export"> In eine Anwendung <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input TYPE="submit" value="OK" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

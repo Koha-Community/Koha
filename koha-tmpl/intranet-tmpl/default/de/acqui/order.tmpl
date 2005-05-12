@@ -1,0 +1,64 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+<h1 class="acquisition">Sie suchten nach dem <b>Lieferanten <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> Treffer gefunden</h1>
+<div id="bloc100">
+<table>
+<tr>
+	<th class="acquisition">Bestellung</th>
+	<th class="acquisition">Eingang</th>
+	<th class="acquisition">Firma</th>
+	<th class="acquisition">&nbsp;</th>
+</tr>
+
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr valign="top">
+		<td>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Bestellung hinzuf&uuml;gen" alt="Hinzuf&uuml;gen" border=0></a>
+			<!-- TMPL_ELSE -->
+				Inaktiv
+			<!-- /TMPL_IF -->
+		</td>
+		<td>
+			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="Eingang" alt="Hinzuf&uuml;gen" border=0></a>
+		</td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td>
+			<table>
+					<tr>
+						<th class="acquisition">Korb</th>
+						<th class="acquisition">Exemplare</th>
+						<th class="acquisition">Angelegt von </th>
+						<th class="acquisition">Datum</th>
+						<th class="acquisition">&nbsp;</th>
+					</tr>
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td>
+								<!-- TMPL_VAR name="firstname" -->
+									<!-- TMPL_VAR name="surname" -->
+							</td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									geschlossen am <!-- TMPL_VAR NAME="closedate" --> <a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Zeigen</a>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_IF name="active" -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">&auml;ndern</a>
+									<!-- TMPL_ELSE -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Zeige</a>
+									<!-- /TMPL_IF -->
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+	<a class="button acquisition" href="supplier.pl?supplierid=0">Lieferant hinzuf&uuml;gen</a>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -1,0 +1,29 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+	<h1 class="reports">&Uuml;berf&auml;llige Exemplare seit <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	
+	<table>
+	<tr>
+		<th class="reports">F&auml;lligkeitsdatum</th>
+		<th class="reports">Benutzer</th>
+		<th class="reports">Tel.:</th>
+		<th class="reports">Titel</th>
+		<th class="reports">Verfasser</th>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="overdueloop" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="duedate" --></td>
+			<!-- TMPL_IF NAME="email" -->
+			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+			<!-- TMPL_ELSE -->
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="phone" --></td>
+			<td><!-- TMPL_VAR NAME="title" --></td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

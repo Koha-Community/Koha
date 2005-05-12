@@ -1,0 +1,106 @@
+<!-- TMPL_IF NAME="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+<div id="mainbloc">
+
+<h1 class="catalogue">Suchergebnisse</h1>
+<p><!-- TMPL_IF NAME="searchdesc" -->
+	Sie suchten nach <b><!-- TMPL_VAR NAME="searchdesc" --></b>
+<!-- TMPL_ELSE -->
+	Sie haben kein Suchkriterium festgelegt<br>
+<!-- /TMPL_IF --></p>
+
+<p><!-- TMPL_VAR NAME="numrecords" --> Ergebnisse gefunden</p>
+<div id="resultnumber">
+<!-- Row of numbers corresponding to search result pages -->
+<!-- TMPL_IF NAME="displayprev" -->
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0"></a>
+<!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
+	<!-- TMPL_ELSE -->
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0"></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="displaynext" -->
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0"></a>
+<!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+<!-- /TMPL_IF -->
+</div>
+
+<div id="resultlist">
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="numrecords" -->
+<table>
+		<tr>
+	<th class="catalogue">Titel</th><th class="catalogue">Verfasser</th><th class="catalogue">&copy;</th><th class="catalogue">Exemplarzahl</th><th class="catalogue">Standort</th><th class="catalogue">&nbsp;</th>
+	<!-- /TMPL_IF -->
+</tr>
+<!-- Actual Search Results -->
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+	<tr>
+			<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<a href="/cgi-bin/koha/<!-- TMPL_VAR NAME="script" -->?type=intra&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+					<!-- TMPL_VAR NAME="title" -->
+				</a>
+			</td>
+			<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=intra">
+					<!-- TMPL_VAR NAME="author" -->
+				</a>
+			</td>
+		<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->> <!-- TMPL_VAR NAME="copyrightdate" --> </td>
+		<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->> <!-- TMPL_VAR NAME="itemcount" --> </td>
+		<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+		<!-- TMPL_IF NAME=use-location-flags-p -->
+		<!-- TMPL_IF NAME=location-only --><!-- TMPL_VAR NAME=location-only --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=not-available-p -->Not Available<!-- TMPL_IF NAME=not-available-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=lost-p -->Exemplar vermi&szligt<!-- TMPL_IF NAME=lost-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=withdrawn-p -->Zur&uuml;ckgezogen<!-- TMPL_IF NAME=withdrawn-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=on-loan-p -->Ausgeliehen<!-- TMPL_IF NAME=on-loan-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+		<!-- TMPL_VAR NAME="location" -->
+		<!-- /TMPL_IF -->
+		</td>
+		<!-- TMPL_IF NAME="opac" -->
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_UNLESS name="norequests" -->
+				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->> <a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Bestellung</a></td>
+			<!-- TMPL_ELSE -->
+				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>Nicht vorbestellbar</td>
+			<!-- /TMPL_UNLESS -->
+		<!-- /TMPL_IF -->
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+
+<p>				<!-- TMPL_IF NAME="displayprev" -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Vorherige S&auml;tze</a>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!-- /TMPL_IF -->
+
+				<!-- TMPL_IF NAME="displaynext" -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">N&auml;chster Satz</a>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!-- /TMPL_IF --></p>
+
+
+
+<p>Results <b><!-- TMPL_VAR NAME="startfrom" --></b> through <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.</p>
+
+
+<p>Probieren Sie eine andere <a href="/cgi-bin/koha/catalogue-home.pl">Suche</a></p>
+
+
+</div>
+
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

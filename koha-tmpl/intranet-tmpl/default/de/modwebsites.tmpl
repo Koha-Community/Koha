@@ -1,0 +1,51 @@
+<!-- TMPL_INCLUDE Name="acquisitions-top.inc" -->
+<p>
+<a href="detail.pl?type=intra&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->">Return to Details Page</a>
+
+
+<!-- TMPL_LOOP Name="websitesloop" -->
+<p>
+<form action="updatewebsite.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<input type="hidden" name="websitenumber" value="<!-- TMPL_VAR NAME="websitenumber" -->">
+<table>
+<tr valign="top">
+<td>Titel</td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->"></td>
+</tr>
+<tr valign="top">
+<td>Beschreibung</td>
+<td><textarea name="description" cols="40" rows="4"><!-- TMPL_VAR NAME="description" --></textarea></td>
+</tr>
+<tr valign="top">
+<td>URL</td>
+<td><input type="text" name="url" value="<!-- TMPL_VAR NAME="url" -->"></td>
+</tr>
+</table>
+<input type="submit" value="Update this Website Link">   <input type="submit" name="delete" value="Diesen Wen-Link l&ouml;schen">
+</form>
+<!-- /TMPL_LOOP -->
+
+<p>
+<h2><b>Weitern Link hinzuf&uuml;gen</b></h2>
+<form action="addwebsite.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<table>
+<tr valign="top">
+<td>Titel</td>
+<td><input type="text" name="title"></td>
+</tr>
+<tr valign="top">
+<td>Beschreibung</td>
+<td><textarea name="description" cols="40" rows="4"></textarea></td>
+</tr>
+<tr valign="top">
+<td>URL</td>
+<td><input type="text" name="url"></td>
+</tr>
+</table>
+<input type="submit" value="Diesen Website-Link hinzuf&uuml;gen">
+</form>
+
+
+<!-- TMPL_INCLUDE Name="acquisitions-bottom.inc" -->

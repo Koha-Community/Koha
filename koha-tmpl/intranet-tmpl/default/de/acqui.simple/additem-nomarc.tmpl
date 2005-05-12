@@ -1,0 +1,102 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<div id="mainbloc">
+		<h1 class="catalogue"><!-- TMPL_VAR NAME="TITLE" --></h1>
+	<div id="bloc25">
+		<p>
+		<!-- TMPL_IF NAME="NOBARCODE" -->
+			<p class="problem">Sie m&uuml;ssen dem Exemplar einen Barcode zuordnen</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="NOBIBLIOITEM" -->
+			<p class="problem">You must create a new group for your item to be added to</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="BARCODEINUSE" -->
+			<p class="problem">Sorry, Barcode bereits vorhanden</p>
+		<!-- /TMPL_IF -->
+		<h2 class="catalogue">BIBLIO SATZ <!-- TMPL_VAR NAME="BIBNUM" --></h2>
+		<p><label class="label100">Verfasser</label> <!-- TMPL_VAR NAME="AUTHOR" --></p>
+		<p><label class="label100">Copyright:</label> <!-- TMPL_VAR NAME="COPYRIGHT" --></p>
+		<p><label class="label100">Serientitel:</label> <!-- TMPL_VAR NAME="SERIES" --></p>
+		<p><label class="label100">Bemerkung:</label> <!-- TMPL_VAR NAME="NOTES" --></p>
+		<!-- TMPL_LOOP NAME="BIBITEMS" -->
+			<!-- TMPL_IF NAME="WEB" -->
+				<h2 class="catalogue"><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPPE = <!-- TMPL_VAR NAME="itemtype" --></h2>
+				<p><label>URL:</label><!-- TMPL_VAR NAME="url" --></p>
+				<p><label>Datum</label> <!-- TMPL_VAR NAME="publicationyear" --></p>
+				<p><label>Bemerkung:</label> <!-- TMPL_VAR NAME="notes" --></p>
+			<!-- TMPL_ELSE -->
+				<h2 class="catalogue"><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPPE = <!-- TMPL_VAR NAME="itemtype" --></h2>
+				<p><label>ISBN:</label> <!-- TMPL_VAR NAME="isbn" --></p>
+				<p><label>Dewey:</label> <!-- TMPL_VAR NAME="dewey" --></p>
+				<p><label>Verlag:</label> <!-- TMPL_VAR NAME="publishercode" --></p>
+				<p><label>Ort:</label> <!-- TMPL_VAR NAME="place" --></p>
+				<p><label>Datum</label> <!-- TMPL_VAR NAME="publicationyear" --></p>
+				<!-- TMPL_LOOP NAME="ITEMS -->
+					<p><label class="label100">Exemplar: </label> <!-- TMPL_VAR NAME="barcode" --></p>
+					<p><label class="label100">Heimatzweigstelle:</label> <!-- TMPL_VAR NAME="homebranch" --></p>
+					<p><label class="label100">Bemerkung:</label> <!-- TMPL_VAR NAME="itemnotes" --></p>
+				<!-- /TMPL_LOOP -->
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+	</div>
+	<div id="bloc25">
+		<form action="saveitem.pl" method="post">
+		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
+		<h2 class="catalogue">NEUES MEDIUM HINZ&Uuml;GEN:</h2>
+		<p><i>For a website add the group only</i></p>
+		<p><label>Exemplar-Barcode:</label><input type="text" name="barcode" size="40"></p>
+		<p>
+			<label>Zweigstelle:</label>
+			<select name="homebranch">
+			<!-- TMPL_LOOP NAME="BRANCHES" -->
+				<option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</p>
+		<p><label>Wiederbeschaffungspreis:</label><input type="text" name="replacementprice" size="40"></p>
+		<p><label>Bemerkung:</label><textarea name="itemnotes" cols="30" rows="6"></textarea></p>
+	</div>
+	<div id="bloc25">
+		<h2 class="catalogue">Zu vorhandener Gruppe hinzuf&uuml;gen:</h2>
+		<p>
+			<label>Gruppe:</label><select name="biblioitemnumber">
+			<!-- TMPL_LOOP NAME="BIBITEMS" -->
+				<!-- TMPL_IF NAME="WEB" -->
+				<!-- TMPL_ELSE -->
+					<option value="<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="itemtype" --></option>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</p>
+		<p><input type="submit" name="existinggroup" value="Eintrag zu einer existierenden Gruppe hinzuf&uuml;gen"></p>
+	</div>
+	<div id="bloc25">
+		<h2 class="catalogue">ODER zu einer neuen Gruppe hinzuf&uuml;gen</h2>
+		<p>
+			<label>Format:</label>
+			<select name="itemtype">
+				<!-- TMPL_LOOP NAME="ITEMTYPES" -->
+					<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- /TMPL_LOOP -->
+			</select>
+		</p>
+		<p><label>ISBN:</label><input name="isbn" size="40"></p>
+		<p><label>Verlag:</label><input name="publishercode" size="40"></p>
+		<p><label>Erscheinungsjahr:</label><input name="publicationyear" size="40"></p>
+		<p><label>Erscheinungsort:</label><input name="place" size="40"></p>
+		<p><label>Illustrator:</label><input name="illus" size="40"></p>
+		<p><label>Website URL:</label><input name="url" size="40"></p>
+		<p><label>Dewey:</label><input name="dewey" size="40"></p>
+		<p><label>Dewey Subclass:</label><input name="subclass" size="40"></p>
+		<p><label>ISSN:</label><input name="issn" size="40"></p>
+		<p><label>LCCN:</label><input name="lccn" size="40"></p>
+		<p><label>Band:</label><input name="volume" size="40"></p>
+		<p><label>Anzahl</label><input name="number" size="40"></p>
+		<p><label>Bandbeschreibung:</label><input name="volumeddesc" size="40"></p>
+		<p><label>Pages:</label><input name="pages" size="40"></p>
+		<p><label>Gr&ouml;&szlig;e"</label><input name="size" size="40"></p>
+		<p><label>Bemerkung:</label><textarea name="notes" cols="30" rows="6"></textarea></p>
+		<p><input type="submit" name="newgroup" value="Eintrag zu einer neuen Gruppe hinzuf&uuml;gen" class="button catalogue"></p>
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

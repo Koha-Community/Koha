@@ -1,0 +1,18 @@
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+
+
+<!-- TMPL_VAR NAME="error" -->
+<p> Click submit to force the subject
+<br>
+<form action="/cgi-bin/koha/updatebiblio.pl" method="post">
+<table border="0" cellspacing="0" cellpadding="5">
+<!-- TMPL_LOOP Name="dataloop" -->
+	<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+<!-- /TMPL_LOOP -->
+	<input type="hidden" name="Force" value="<!-- TMPL_VAR NAME="substring" -->">
+<tr><td><input type="submit"></td></tr>
+</table>
+</form>
+
+
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

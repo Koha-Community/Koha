@@ -1,0 +1,58 @@
+<HTML>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<!-- TMPL_IF NAME="refresh" -->
+		<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->">
+	<!-- /TMPL_IF -->
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+	<style type="text/css">
+	.catalogue {
+		background-color:#ad11ad;
+		color:#FFFFFF;
+		background-image:none;
+		text-decoration: normal;
+		}
+	a.catalogue:hover {
+		background-color: #ad11ad;
+		color: #FFFFFF;
+		text-decoration: none;
+		}
+	</style>
+</head>
+<body>
+<div id="mainbloc">
+	<h2 class="catalogue">Z3950 Suchergebnisse</h2>
+	
+	<!-- TMPL_IF NAME="breeding_loop" -->
+		<table>
+			<tr>
+				<th class="catalogue">Titel</th>
+				<th class="catalogue">Verfasser</th>
+				<th class="catalogue">ISBN</th>
+				<th class="catalogue">kommt von</th>
+				<th class="catalogue">&nbsp;</th>
+				<th class="catalogue">&nbsp;</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="breeding_loop" -->
+					<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+						<td><!-- TMPL_VAR NAME="isbn" --></td>
+						<td><!-- TMPL_VAR NAME="file" --></td>
+						<td><a href="javascript:Import(<!-- TMPL_VAR NAME="id" -->)">Diesen Biblio importieren</a></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+		</table>
+	<!-- TMPL_ELSE -->
+				<p>Nichts gefunden</p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="numberpending" --><h1 class="catalogue">Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h1><!-- /TMPL_IF -->
+	<script language="javascript" type="text/javascript">
+		function Import(GetThisOne) {
+			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
+			self.close();
+			return false;
+		}
+	</script>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

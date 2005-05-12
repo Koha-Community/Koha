@@ -1,0 +1,170 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<!-- TMPL_IF NAME="else" -->
+	<h1>Administration Erwerbungsetats</h1>
+	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
+	<input type="text" name="searchfield" value=""><input type="reset" name="reset" value="l&ouml;schen"></form>
+	<!-- TMPL_IF NAME="search" -->
+		<br>Sie suchten nach <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
+	<!-- /TMPL_IF -->
+	<table border="0" cellspacing="0" cellpadding="2" width="80%">
+	<tr>
+		<th>Erwerbungsetat</th>
+		<th>Name</th>
+		<th>Bearbeiten</th>
+		<th>L&ouml;schen</th>
+		</tr>
+	<!-- TMPL_LOOP NAME="bookfund" -->
+		<tr valign="top" bgcolor="ffffcc">
+			<td><!-- TMPL_VAR NAME="bookfundid" --></td>
+			<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" --> ">
+				<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Bearbeiten" title="Bearbeiten" width="32" hspace="0" vspace="0" border="0"></a>
+			</td>
+			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" alt="L&ouml;schen" title="L&ouml;schen" width="32" hspace="0" vspace="0" border="0"></a></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<th>Etat</th>
+			<td>
+				<a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->" class="button">
+				Etat hinzuf&uuml;gen</a>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+		<!-- TMPL_LOOP NAME="budget" -->
+			<tr valign="top">
+				<td>&nbsp;</td>
+				<td>
+					<!-- TMPL_VAR NAME="startdate" --> - <!-- TMPL_VAR NAME="enddate" --> : <b><!-- TMPL_VAR NAME="budgetamount" --></b>
+				</td>
+				<td>
+					<a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">
+						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Bearbeiten" title="Bearbeiten" width="32" hspace="0" vspace="0" border="0">
+					</a>
+				</td>
+				<td>
+					<a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">
+						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" alt="L&ouml;schen" title="L&ouml;schen" width="32" hspace="0" vspace="0" border="0">
+					</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+	</table>
+	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
+		<input type="hidden" name="op" value="add_form">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<br><input type="submit" class="button" value="Erwerbungsetat hinzuf&uuml;gen" title="Erwerbungsetat hinzuf&uuml;gen" alt="Erwerbungsetat hinzuf&uuml;gen"><br>
+		<br></form><br clear="all">
+	<p> &nbsp; </p>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_form" -->
+	<script language="javascript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
+			return false;
+		}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.bookfundid.value.length==0) {
+				_alertString += "\n- " + _("Etat-ID fehlt");
+			}
+			if (f.bookfundname.value.length==0) {
+				_alertString += "\n- " + _("Etatname fehlt");
+			}
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Form not submitted because of the following problem(s)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
+		}
+		</script>
+	<h1>
+		<!-- TMPL_IF NAME="use-header-flags-p" -->
+		<!-- TMPL_IF NAME="header-is-add-p" -->Erwerbungsetat hinzuf&uuml;gen<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="header-is-modify-p" -->Medienetat bearbeiten<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+		<!-- TMPL_VAR NAME="header" -->
+		<!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="checked" value="0">
+	<!-- TMPL_IF NAME="add_or_modify" -->
+	<p>
+		<label>Erwerbungsetat</label><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->"><!-- TMPL_VAR NAME="bookfundid" -->
+	</p>
+	<!-- TMPL_ELSE -->
+	<p>
+		<label>Erwerbungsetat</label><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)">
+	</p>
+	<!-- /TMPL_IF -->
+	<p>
+		<label>Name</label><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="bookfundname" escape=HTML -->">&nbsp;
+	</p>
+	<p>
+		<label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" class="button">
+	</p>
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	Daten gespeichert
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	<table border="0" cellspacing="0" cellpadding="5">
+	<tr valign="top" bgcolor="#99cc33"><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Erwerbungsetat</b></td><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="bookfundid" --></b></td></tr>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->">
+	<tr><td>Name</td><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
+	<tr><td colspan="2" align="center">L&ouml;schen best&auml;tigen</td></tr>
+	<tr><td><input type="submit" value="JA"></form></td><td><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="NEIN"></form></td></tr><br clear="all">
+	<p> &nbsp; </p>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	Daten gel&ouml;scht
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

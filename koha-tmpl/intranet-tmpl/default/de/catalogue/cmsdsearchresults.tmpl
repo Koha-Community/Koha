@@ -1,0 +1,29 @@
+<html>
+<head><title>Suchergebnis</title>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="searchheader.tmpl" -->
+<table border="0" cellspacing="0" cellpadding="0">
+<tr bgcolor="#ccccff"><th>Titel</th><th>Verfasser</th><th>Dewey</th></tr>
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+  <tr>
+  <td><!-- TMPL_VAR NAME="title" --></td>
+  <td><!-- TMPL_VAR NAME="author" --></td>
+  <td align="right"><!-- TMPL_VAR NAME="dewey" --></td>
+  </tr>
+<!-- /TMPL_LOOP -->
+<tr><td colspan="3" bgcolor="#ccccff">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr><td align="left">
+    <a href="search.pl?template=<!-- TMPL_VAR NAME="template" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Vorherige S&auml;tze</a>
+    </td><td align="right">
+    <a href="search.pl?template=<!-- TMPL_VAR NAME="template" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">N&auml;chster Satz</a>
+    </td></tr>
+    </table>
+</td></tr>
+</table>
+<br>
+Results <i><!-- TMPL_VAR NAME="startfrom" --></i> through <i><!-- TMPL_VAR NAME="endat" --></i> of <i><!-- TMPL_VAR NAME="numrecords" --></i> records.
+<hr>
+</body>
+</html>

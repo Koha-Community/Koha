@@ -1,0 +1,132 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+	<h1>&uuml;berpr&uuml;fe MARC Setup</h1>
+	<table>
+		<tr>
+			<th>Test</th>
+			<th>Treffer</th>
+		</tr>
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemnum" -->
+		<tr>
+			<td><b>itemnum</b></td>
+			<td><li>The field itemnum MUST be mapped </li>
+				<li>The correspounding subfield MUST be in with -1 (ignore) tab</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>itemnum : Das Feld itemnumber ist einem Feld mit tab -1 zugewiesen</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemfields" -->
+		<tr>
+			<td><b>item fields</b></td>
+			<td>ALL items fields MUST :<br/>
+				<li>be mapped to the same tag,</li>
+				<li>and they must all be in the 10 (items) tab</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Alle Eintragsfelder befinden sich im selben Tag und im "item tab"</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtypes_empty" -->
+		<tr>
+			<td><b>Medientyp-Tabelle leer</b></td>
+			<td>the itemtypes table is empty. It must contain at least 1 value</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Medientyp-Tabelle mit mindestens 1 Wert gef&uuml;llt</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtype" -->
+		<tr>
+			<td><b>Medientyp NICHT zugeordnet</b></td>
+			<td>the biblioitems.itemtype field MUST :<br/>
+				<li>be mapped to a MARC subfield, </li>
+				<li>the correspounding subfield MUST have authorised_value="itemtype"</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>biblioitems.itemtype definiert</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branches_empty" -->
+		<tr>
+			<td><b>Zweigstellentabelle leer</b></td>
+			<td>Die Zweigstellentabelle ist leer. Es mu&szlig: mindestens 1 Wert eingetragen sein!</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Zweigstellentabelle gef&uuml;llt mit mindestens 1 Wert</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branch" -->
+		<tr>
+			<td><b>Heimatzweigstelle NICHT zugeordnet</b></td>
+			<td>the items.homebranch field MUST :<br/>
+				<li>be mapped to a MARC subfield,</li>
+				<li>the correspounding subfield MUST have authorised value="branches"</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Heimatzweigstelle definiert</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="holdingbranch" -->
+		<tr>
+			<td><b>aktuelle Zweigstelle NICHT zugeordnet</b></td>
+			<td>the items.holdingbranch field MUST :<br/>
+				<li>be mapped to a MARC subfield, </li>
+				<li>the correspounding subfield MUST have authorised value="branches"</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>aktuelle Zweigstelle definiert</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="biblionumber" -->
+		<tr>
+			<td><b>Biblio und Biblio-Nr.</b></td>
+			<td>The biblio.biblionumber and biblioitems.biblioitemnumber fields MUST :<br/>
+				<li>be mapped to a MARC subfield,</li>
+				<li>be in the SAME tag (for example : 090$a and 090$b)</li>
+				<li>be in tab -1</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Biblio-Nr. und Exemplar korrekt zugeordnet</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="total" -->
+		<tr>
+			<td><b>SUMME</b></td>
+			<td>You have <b><!-- TMPL_VAR NAME="total" --></b> error(s) in your MARC configuration. Please fix them before using koha</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>&nbsp;</td>
+			<td><b>Konfiguration ok. Sie haben keine Fehler in der MARC Parameter-Tabelle</b></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

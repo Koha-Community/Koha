@@ -1,0 +1,42 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->">Hauptmen&uuml;</a></h1>
+<ul>
+	<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=z3950">Z39.50-Suche</a>
+	<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=uploadmarc">MARC-S&auml;tze hochladen</a>
+</ul>
+<h2>W&auml;hlen Sie einen Set von MARC-S&auml;tzen</h2><ul>
+<!-- TMPL_LOOP NAME="marc" -->
+	<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?file=<!-- TMPL_VAR NAME="id" -->&amp;menu=<!-- TMPL_VAR NAME="menu" -->"><!-- TMPL_VAR NAME="name" --></a></li>
+<!-- /TMPL_LOOP -->
+</ul>
+<p>
+<table border="1" bgcolor="#dddddd">
+	<tr><th bgcolor="#bbbbbb" colspan="2">
+		Upload a set of MARC records</th>
+	</tr>
+	<tr>
+		<td>Upload a set of MARC records:</td>
+		<td>
+			<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=<!-- TMPL_VAR NAME="menu" -->" enctype="multipart/form-data">
+			<input type="file" name="uploadmarc" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="menu" value=<!-- TMPL_VAR NAME="menu" -->>
+			Name this set of MARC records:
+		</td>
+		<td>
+			<input type="text" name="name">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center">
+			<input type="submit">
+		</td>
+	</tr>
+</table>
+</form>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+

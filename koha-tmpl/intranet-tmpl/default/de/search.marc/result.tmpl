@@ -1,0 +1,80 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+<div id="mainbloc">
+	<h1 class="catalogue">Suchergebnisse</h1>
+	<div id="resultnumber">
+		<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">N&auml;chster &gt;&gt;</a><!-- /TMPL_IF --></p>
+		<p class="resultcount"><!-- TMPL_IF NAME="total" -->Treffer <i><!-- TMPL_VAR NAME="from" --></i> von <i><!-- TMPL_VAR NAME="to" --></i><!-- TMPL_ELSE -->Keine Treffer<!-- /TMPL_IF --></p></div>
+	<div id="resultlist">
+		<table>
+			<tr>
+				<th class="catalogue">Zusammenfassung</th>
+				<th class="catalogue">Medientyp</th>
+				<th class="catalogue">Exemplarzahl</th>
+				<th class="catalogue">Standort</th>
+				<th class="catalogue">&nbsp;</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="result" -->
+			<tr>
+				<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+							<!-- TMPL_IF name="MARC_ON" -->
+								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+							<!-- TMPL_ELSE -->
+								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
+						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
+					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<p><!-- TMPL_VAR NAME="description" --></p>
+				</td>
+				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="totitem" -->
+				</td>
+				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_LOOP NAME="CN" -->
+						<p>
+							<!-- TMPL_VAR NAME="holdingbranch" -->
+							<!-- TMPL_IF name="date_due" -->
+								Ausgeliehen seit <!-- TMPL_VAR NAME="date_due" -->
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="itemcallnumber" -->
+									(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+							<!-- TMPL_IF name="notforloan" -->
+								<i>(<!-- TMPL_VAR name="notforloan" -->)</i>
+							<!-- /TMPL_IF -->
+						</p>
+					<!-- /TMPL_LOOP -->
+					<!-- TMPL_IF name="onorder" --><p>On order</p><!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_UNLESS name="norequests" -->
+						<p><a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Bestellung</a></p>
+					<!-- TMPL_ELSE -->
+						<p>Nicht vorbestellbar</p>
+					<!-- /TMPL_UNLESS -->
+				</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+	<div id="resultnumber">
+		<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">N&auml;chster &gt;&gt;</a><!-- /TMPL_IF --></p>
+	</div>	
+</div>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->

@@ -1,0 +1,37 @@
+<!-- TMPL_INCLUDE Name="circulation-top.inc" -->
+
+<div id="mainbloc">
+<h1>Ausleihe: Drucker- und Zweigstelleneinstellungen w&auml;hlen</h1>
+
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+<p>
+<!--branchselection-->
+<!-- TMPL_IF Name="onebranch" -->
+<b>Zweigstelle:</b> <!-- TMPL_VAR NAME="branchname" -->
+<!-- TMPL_ELSE -->
+<b>Bitte zweigstelle eingeben:</b>
+	<select name="branch">
+	<!-- TMPL_LOOP Name="branchloop" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
+	<!-- /TMPL_LOOP -->
+	</select>
+<!-- /TMPL_IF --></p>
+
+<p><!-- printerselection -->
+<!-- TMPL_IF Name="oneprinter" -->
+<b>Drucker:</b> <!-- TMPL_VAR NAME="printername" -->
+<!-- TMPL_ELSE -->
+<b>Bitte Drucker eingeben:</b>
+	<select name="printer">
+	<!-- TMPL_LOOP Name="printerloop" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
+	<!-- /TMPL_LOOP -->
+	</select>
+<!-- /TMPL_IF --></p>
+<p><input type="hidden" name="setcookies" value="1">
+<input value="Abschicken" type="changesettings" class="button"></p>
+</form>
+
+</div>
+<!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
+

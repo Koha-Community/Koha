@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<center>
+<!-- TMPL_IF NAME="BARCODE_EXISTS" -->
+	<font color="red">Der Barcode <b><!-- TMPL_VAR NAME="barcode" --></b> ist bereits vergeben.</font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="ITEM_ERROR" -->
+	<font color="red">Fehler : <!-- TMPL_VAR NAME="error" --></font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="ITEM_CREATED" -->
+	<table border="1" align="center" cellpadding="10">
+		<tr><td bgcolor="yellow">
+			Exemplar mit dem Barcode <!-- TMPL_VAR NAME="barcode" --> hinzugef&uuml;gt
+		</td></tr>
+	</table>
+<!-- /TMPL_IF -->
+<h1>Hauptmen&uuml;</h1>
+<ul>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=z3950">Z39.50-Suche</a>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=uploadmarc">MARC-S&auml;tze hochladen</a>
+</ul>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

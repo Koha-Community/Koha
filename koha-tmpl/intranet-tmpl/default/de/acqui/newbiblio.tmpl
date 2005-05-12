@@ -1,0 +1,212 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<script language="javascript" type="text/javascript">
+
+<!--
+function update(f){
+  //collect values
+  quantity=f.quantity.value
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+  }
+  discount=f.discount.value
+  listinc=parseInt(f.listinc.value)
+  currency=f.currency.value
+  applygst=parseInt(f.applygst.value)
+  listprice=f.list_price.value
+  //  rrp=f.rrp.value
+  //  ecost=f.ecost.value  //budgetted cost
+  //  GST=f.GST.value
+  //  total=f.total.value
+  //make useful constants out of the above
+  exchangerate=f.elements[currency].value      //get exchange rate
+  gst_on=(!listinc && applygst);
+  //do real stuff
+  rrp=listprice*exchangerate;
+  ecost=rrp*(100-discount)/100
+  GST=0;
+  if (gst_on){
+    rrp=rrp*(1+<!-- TMPL_VAR NAME="gstrate" -->);
+    GST=ecost*(<!-- TMPL_VAR NAME="gstrate" -->);
+  }
+
+  total=(ecost+GST)*quantity
+
+  f.rrp.value=rrp;
+  f.ecost.value=ecost;
+  f.GST.value=GST;
+  f.total.value=total;
+  return true;
+}
+
+
+
+function messenger(X,Y,etc){
+	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+	win.focus();
+	win.document.close();
+	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
+	win.document.write(etc);
+	win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
+	win.document.write("</font></body></html>");
+}
+
+function check(f) {
+  quantity=f.quantity.value
+  title=f.title.value
+  if (title == "") {
+  	alert("Title can't be empty");
+	return false;
+  }
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+	return false;
+  }
+	document.frusin.submit();
+}
+
+//-->
+
+</script>
+<div id="mainbloc">
+	<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin">
+	<!-- TMPL_UNLESS name="existing" --><input type="hidden" name="existing" value="no"><!-- /TMPL_UNLESS -->
+	<!-- <!-- TMPL_VAR NAME="title" --> -->
+	<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordnum" -->">
+	<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+	<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
+	<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblio" -->">
+	<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+	<input type="hidden" name="oldtype" value="<!-- TMPL_VAR NAME="itemtype" -->">
+	<input type="hidden" name="discount" value="<!-- TMPL_VAR NAME="discount" -->">
+	<input type="hidden" name="listinc" value="<!-- TMPL_VAR NAME="listincgst" -->">
+	<input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="currency" -->">
+	<input type="hidden" name="applygst" value="<!-- TMPL_VAR NAME="gstreg" -->">
+	<input type="hidden" name="suggestionid" value="<!-- TMPL_VAR NAME="suggestionid" -->">
+	<!-- TMPL_LOOP NAME="loop_currencies" -->
+		<input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->">
+	<!-- /TMPL_LOOP -->
+	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->" class="button acquisition">Korb ansehen</a> <h1 class="acquisition">
+		<!-- TMPL_IF name="ordnum" -->
+			Bestellung bearbeiten (Zeile #<!-- TMPL_VAR NAME="ordnum" -->)
+		<!-- TMPL_ELSE -->
+			Neue Bestellung
+		<!-- /TMPL_IF -->
+		 <!-- TMPL_IF name="suggestionid" -->(bestimmt durch Vorschlag)<!-- /TMPL_IF -->
+	</h1>
+	Shopping Basket For <!-- TMPL_VAR NAME="name" -->
+	<div id="bloc25">
+		<h2 class="acquisition">Katalog-Details</h2>
+		<p>
+			<label class="label100"><b>Titel *</b></label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="title" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Verfasser</label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100"> Verlag</label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->"><!-- TMPL_VAR NAME="publishercode" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Copyright Datum</label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->"><!-- TMPL_VAR NAME="copyrightdate" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Format</label>
+			<!-- TMPL_VAR NAME="CGIitemtype" -->
+		</p>
+		<p>
+			<label class="label100">ISBN</label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Serien</label>
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->"><!-- TMPL_VAR NAME="seriestitle" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->">
+			<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Zweigstelle</label>
+			<!-- TMPL_VAR NAME="CGIbranch" -->
+		</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="acquisition">Bestelldetails</h2>
+		<p>
+			<label class="label100">Menge</label>
+			<input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);">
+		</p>
+		<p>
+			<label class="label100">Erwerbungsetat</label>
+			<!-- TMPL_VAR NAME="CGIbookfund" -->
+		</p>
+		<p>
+			<label class="label100">EK-Preis Lieferant</label>
+			<input type="text" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)">
+		</p>
+		<p>
+			<label class="label100">Wiederbeschaffungskosten </label>
+			<input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" onchange="update(this.form)">
+		</p>
+		<p>
+			<label class="label100">Buchungsbetrag</label>
+			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" onchange="update(this.form)">
+		</p>
+		<p>
+			<label class="label100">MWST</label>
+			<input type="text" size="20" name="GST" value="" onchange="update(this.form)">
+		</p>
+		<p>
+			<label class="label100"><b>BUDGETED TOTAL</b></label>
+			<input type="text" size="20" name="total" value="" onchange="update(this.form)">
+		</p>
+		<p>
+			<label class="label100">Effektive Kosten</label>
+			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->">
+		</p>
+		<p>
+			<label class="label100">Rechnungsnummer *</label>
+			<input type="text" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->">
+		<p>
+			<label class="label100">Bemerkung</label>
+			<input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->">
+		</p>
+		<p>Die folgenden zwei Felder sind zur freien Verf&uuml;gung. Sie k&ouml;nnen f&uuml;r Statistikzwecke hilfreich sein.</p>
+		<p>
+			<label class="label100">Sortierfeld 1</label>
+			<input type="text" size="20" name=sort1 value="<!-- TMPL_VAR NAME="sort1" -->">
+		</p>
+		<p>
+			<label class="label100">Sortierfeld 2</label>
+			<input type="text" size="20" name=sort2 value="<!-- TMPL_VAR NAME="sort2" -->">
+		</p>
+		<p>
+			<input type="button" value="OK" class="button acquisition" onClick="check(this.form)">
+		</p>
+	</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

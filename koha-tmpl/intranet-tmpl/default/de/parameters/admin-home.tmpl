@@ -1,0 +1,138 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+<TMPL_IF name="CAN_user_management">
+<h1>Parameter</h1><br>
+</TMPL_IF>
+
+<div id="bloc100">
+<TMPL_IF name="CAN_user_management">
+	<div id="bloctitle">Systemparameter </div>
+
+	<table>
+	<tr>
+	<td colspan="2"><b>F&uuml;llen Sie die einzelnen Punkte der Reihe nach aus, um ein funktionsf&auml;higes Koha zu erhalten</b></td>
+	</tr>
+	<TMPL_IF name="CAN_user_parameters">	
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Zweigstellen der Bibliothek</a></td>
+			<td>Die verschiedenen Zweigstellen, die mit diesem Koha-Server verwaltet werden</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_management">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Erwerbungsetats</a></td>
+			<td>Administration Erwerbungsetats. Denken Sie daran, da&szlig; Sie vor der Einrichtung der Einzeletats den Erwerbungsetat festlegen.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl">W&auml;hrungen</a></td>
+			<td>Wechselkurs definieren</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/itemtypes.pl">Medientypen</a></td>
+			<td>Medientypen definieren</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">Benutzerkategorien</a></td>
+			<td>Definition der Benutzerkategorien</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Ausleihbedingungen</a></td>
+			<td>Definition der Ausleihkonditionen f&uuml;r Zweigstellen / Entleiher / Medientypen (Anzahl Ausleihen, Leihfrist, Geb&uuml;hren...)</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Vorgabewerte</a></td>
+			<td>Definition von Kategorien und deren Vorgabewerte. Vorgabewerte werden in MARC-Formularen zur Begrenzung und als Eingabehilfe benutzt</td>
+		</tr>
+	</TMPL_IF>
+		
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus-Struktur</a></td>
+			<td>Definition von Kategorien und Thesaurus/Authority MARC-Struktur</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio Framework (MARC-Struktur)</a></td>
+			<td>Die definierten Frameworks f&uuml;r den MARC-Editor. Framework anlegen, dann Definition der MARC-Struktur (Felder &amp; Unterfelder</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></td>
+			<td>Verweise zwischen der Koha-Standarddatenbank der MARC-Datenbank definieren. Beachten Sie, dass Verweise &uuml;ber die MARC-Struktur definiert werden k&ouml;nnen. Dieses Dienstprogramm stellt nur einen schnelleren Weg dar, die Erstellung der Verweise durchzuf&uuml;hren.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></td>
+			<td>&Uuml;berpr&uuml;ft die MARC-Struktur. Vor Aufnahme des Echtbetriebs bitte ausf&uuml;hren. Das Ergebnis zeigt Fehler an, die die Koha Datenbank zerst&ouml;ren k&ouml;nnen!</td>
+		</tr>
+	</TMPL_IF>
+	
+	<tr>
+	<th colspan="2">Verschiedene Parameter</th>
+	</tr>
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Drucker</a></td>
+			<td>Drucker (UNIX-Pfade).</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_management">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Stopworte</a></td>
+			<td>W&ouml;rter, die bei der Suche nicht ber&uuml;cksichtigt werden</td>
+		</tr>
+	</TMPL_IF>
+	
+	<TMPL_IF name="CAN_user_parameters">
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Server</a></td>
+			<td>Server f&uuml;r die Suche nach MARC-Daten</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/systempreferences.pl">Systemvorgaben</a></td>
+			<td>Systemvorgaben</td>
+		</tr>
+	</TMPL_IF>
+	</table>
+</TMPL_IF>
+
+
+<TMPL_IF name="CAN_user_tools">
+	<h1>Tools</h1>
+	<table>
+		<tr>
+		<th colspan="2"> Export</th>
+		</tr>
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">MARC BIBLIO-Export</a></td>
+			<td> Exportiere ins MARC-Format</td>
+		</tr>
+		<tr>
+		<th colspan="2">Import</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">MARC-S&auml;tze in den Framddatenpool hochladen</a></td>
+			<td>Die Breeding-Farm ist eine Tabelle, in der die importierten MARC-Daten gespeichert werden. So lange Sie keine Exemplare zu diesem Satz haben, bleibt er in der Breeding-Farm. Geben Sie die ISBN oder den Titel eines Biblio ein, wird danach in der Breeding-Farm gesucht. Wird der Satz gefunden, dann wird er in die aktive Koha-Tabelle &uuml;bernommen.
+			</td>
+		</tr>
+		<tr>
+		<th colspan="2">Barcode-Generator</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/barcodes/barcodes.pl">Generiere Barcodes</a></td>
+			<td>Der Barcodegenerator generiert Barcodes f&uuml;r Exemplare die Sie erwerben
+			</td>
+		</tr>
+	</table>
+</TMPL_IF>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

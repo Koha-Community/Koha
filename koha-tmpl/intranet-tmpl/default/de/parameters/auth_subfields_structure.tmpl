@@ -1,0 +1,137 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+<!-- TMPL_IF NAME="add_form" -->
+<!-- ------------------------------------------------------------------------ -->
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-edit-subfields-p" -->Subfields bearbeiten<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+	<table>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td>
+			<h2 class="parameters">Tag <!-- TMPL_VAR NAME="tagfield" -->, Subfield <!-- TMPL_VAR NAME="tagsubfield" --></h2>
+			<h3>MARC constraints</h3>
+			<p>
+				<label>&nbsp;</label><!-- TMPL_VAR NAME="repeatable" --> repeatable  <!-- TMPL_VAR NAME="mandatory" --> mandatory
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<label>Search also</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (example for 200a : '200c','200d','200e')
+			</p>
+			<h3>Editor constaints</h3>
+			<p> <label>&nbsp;</label>
+				<label>Text f&uuml; Bibliothekar</label>
+				<input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80">
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<label>Text f&uuml;r OPAC</label> <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
+			</p>
+			<p><label>&nbsp;</label><label>Managed</label> <!-- TMPL_VAR NAME="tab" --></p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="hidden" --> hidden (subfield is managed, but hidden. -should be filled by a plugin or thesaurus-)</p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="isurl" --> URL (if checked, it means that the subfield is an URL and can be clicked</p>
+			<p>
+				<label>&nbsp;</label><label>Auth value:</label> <!-- TMPL_VAR NAME="authorised_value" --> oder Thesaurus: <!-- TMPL_VAR NAME="thesaurus_category" --> oder Plugin: <!-- TMPL_VAR NAME="value_builder" -->
+			</p>
+		</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="OK" class="button parameters">
+	<p>Note: in the last column, you can choose:
+	<ul><li>An "authorised value": it refers to a list of authorised values for this subfield. See the corresponding admin table.</li>
+	<li>A "value builder": values builders are perl programs that help you select the value of the field. They are MARC-flavor dependant and sometimes fill another subfield automatically.</li>
+	</ul>
+	</p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<!-- ------------------------------------------------------------------------ -->
+<div id="bloc25">
+	<h2 class="parameters">
+		Subfield <!-- TMPL_VAR NAME="tagsubfield" -->  <!-- TMPL_VAR NAME="liblibrarian" -->
+	</h2>
+	<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+		<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->">
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+		<p>L&ouml;schen best&auml;tigen</p>
+		<input type="submit" value="JA" class="button parameters">
+	</form>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+		<input type="submit" value="NEIN" class="button parameters">
+	</form>
+</div>
+<!-- /TMPL_IF -->
+
+<!-- ------------------------------------------------------------------------ -->
+<!-- TMPL_IF NAME="else" -->
+<h1>Authority MARC subfield structure admin for tag <!-- TMPL_VAR NAME="tagfield" --> <!-- TMPL_IF NAME="authtypecode" -->(Framework <!--TMPL_VAR NAME="authtypecode" -->)<!-- TMPL_ELSE -->(Default Framework)<!-- /TMPL_IF --></h1>
+<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
+
+<table>
+<tr>
+	<th>Subfield</th>
+	<th>Texte</th>
+	<th>Constraints</th>
+	<th>L&ouml;schen</th>
+<!-- TMPL_LOOP NAME="loop" -->
+<tr bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+	<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
+	<td>
+		<!-- TMPL_IF NAME="subfield_ignored" -->
+			<i><!-- TMPL_VAR NAME="liblibrarian" --></i>
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_VAR NAME="liblibrarian" -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<!-- TMPL_IF NAME="subfield_ignored" -->
+			<i>subfield ignored</i>
+		<!-- TMPL_ELSE -->
+			Managed, <!-- TMPL_IF NAME="repeatable" -->Wiederholbar, <!-- TMPL_ELSE -->Nicht wiederholbar<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="mandatory" -->Obligatorisch, <!-- TMPL_ELSE -->Nicht obligatorisch,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seealso" -->siehe auch: <!-- TMPL_VAR NAME="seealso" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="hidden" -->versteckt<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="isurl" -->ist ein URL<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="authorised_value" --> Auth value :<!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="value_builder" -->Plugin :<!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<a href="<!-- TMPL_VAR NAME="delete" -->">
+			<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+		</a>
+	</td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_VAR NAME="edit" -->
+	<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0">
+</a>
+<a href="auth_tag_structure.pl?searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">
+	<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2uparrow.png" width="32" hspace="0" vspace="0" border="0">
+</a>
+<!-- TMPL_IF NAME="previous" -->
+	<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="vorheriges" alt="vorheriges" border="0">
+	</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="next" -->
+	<!-- TMPL_VAR NAME="next" -->
+		<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

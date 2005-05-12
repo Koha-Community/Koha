@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<div id="mainbloc">
+	<h1 class="catalogue">MARC Biblio-Management</h1>
+	<!-- TMPL_IF name="noitemsfound" -->
+		<font color="red" size="4">Keine Medien gefunden</font>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="websiteadded" -->
+		<font color="red" size="4">Website Biblioitem Added</font>
+	<!-- /TMPL_IF -->
+	
+	<div id="bloc25">
+		<form action="isbnsearch.pl">
+			<h2 class="catalogue">Zum Hinzuf&uuml;gen eines neuen Biblio/Exemplars, ISBN/ISSN einscannen oder eingeben</h2>
+			<p>
+				<label class="label100" for="title">Titel</label>
+				<input type="hidden" name="marclist" value="biblio.title">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="title"size="35">
+			</p>
+			<p>
+				<label class="label100" for="title">ISBN</label>
+				<input type="hidden" name="marclist" value="biblioitems.isbn">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="start">
+				<input type="text" name="value" id="title"size="35">
+			</p>
+			<p><input type="submit" value="Los" class="button catalogue"></p>
+		</form>
+		<!-- TMPL_IF NAME="NOTMARC" -->
+			<p><a href="addbiblio-nomarc.pl" class="button catalogue">Leeren Biblio anlegen</a></p>
+		<!-- TMPL_ELSE -->
+			<p>
+				<form action="addbiblio.pl" method="post">
+					<select name="frameworkcode">
+						<option value="">Default</option>
+						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+					<input type="submit" value="Leeren Biblio anlegen" class="button catalogue">
+				</form>
+			</p>
+		<!-- /TMPL_IF -->
+	</div>
+	<div id="bloc25">
+		<h2 class="catalogue">Tipp</h2>
+		<p>Wird die ISBN oder der Titel in der Datenbank gefunden, wird er angezeigt und kann bearbeitet werden<br/>
+				If the ISBN or title is found in the reservoir, it will be retrieved and a biblio will be added.<br/>
+				Anderenfalls kann ein Biblio direkt eingegeben werden</p>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

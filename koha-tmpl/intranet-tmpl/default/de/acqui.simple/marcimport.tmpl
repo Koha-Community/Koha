@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<h1>MARC acquisition system</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Import in die Breeding-Farm</font></td>
+	</tr>
+</table>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Importergebnisse</p>
+<ul>
+	<p><!-- TMPL_VAR NAME="imported" --> importierte S&auml;tze</p>
+	<p><!-- TMPL_VAR NAME="alreadyindb" --> wurde nicht importiert, da bereits in der Datenbank</p>
+	<p><!-- TMPL_VAR NAME="alreadyinfarm" --> nicht importiert, da bereits im Fremddatenpool</p>
+	<p><!-- TMPL_VAR NAME="notmarcrecord" --> nicht importiert, da es nicht nach einem MARC-Satz aussieht (oder ISBN/ISSN fehlt) !</p>
+	<p><!-- TMPL_VAR NAME="total" --> records parsed</p>
+	<p><a href="addbooks.pl">Zur&uuml;ck zur Erwerbung</a>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>W&auml;hlen Sie eine Datei zum Import in die Breeding-Farm. Sie wird analysiert, und f&uuml;r jede gefundene ISBN wird ein neuer Satz in der Breeding-Farm angelegt.</li>
+	<li>Ist die ISBN bereits in der Breeding-Farm, k&ouml;nnen Sie w&auml;hlen, ob der neue Satz ignoriert oder der vorhandene Satz &uuml;berschrieben werden soll.</li>
+	<li>Sie k&ouml;nnen f&uuml;r diesen Import einen Namen vergeben. Beim Anlegen eines Biblio kann es sinnvoll sein, sich die Herkunftsquelle zu merken.</li>
+	<li>Nat&uuml;rlich wird der Satz ignoriert, wenn in der aktiven Datenbank die ISBN bereits existiert. </li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table cellpadding="3" border="0">
+	<tr valign="top">
+		<td>Datei f&uuml;r den Import ausw&auml;hlen</td>
+		<td>
+			<input type="file" name="uploadmarc" /><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Name f&uuml;r diesen Import:</td>
+		<td>
+			<input type="text" name="filename" /><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Format (MARC21 oder UNIMARC)</td>
+		<td>
+			<select name="syntax" /><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>If ISBN is already in the reservoir: </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked> Ignorieren, den vorhandenen Satz behalten<br/>
+			<input type="radio" name="overwrite_biblio" value="1">den vorhandenen Satz &uuml;berschreiben</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="Import"></td>
+	</tr>
+
+</table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,0 +1,94 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+
+<!-- TMPL_IF NAME=allsub-p -->
+<!-- TMPL_LOOP NAME="loop" -->
+"<a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html -->"</a><br>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=modsub-p -->
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+Schlagwort:<input type="text" value="<!-- TMPL_VAR NAME="sub" escape=html -->" name="sub" size="40"><br>
+<input type="hidden" name="type" value="upsub">
+<input type="hidden" name="oldsub" value="<!-- TMPL_VAR NAME="sub" escape=html -->">
+<input type="submit" value="&auml;ndern">
+</form>
+<p>This will change the subject headings on all the biblios this subject is applied to.
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=upsub-p -->
+<!-- TMPL_VAR NAME="oldsub" escape=html --> erfolgreich ge&auml;ndert, ist jetzt <!-- TMPL_VAR NAME="sub" escape=html -->
+<!-- <![ IGNORE [
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl" onclick="window0.focus()">Back to catalogue maintenance</a><br>
+<a href=nowhere onclick="self.close()">Close this window</a>
+]]> -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=undel-p -->
+<table border="0">
+<thead>
+<tr><th>Titel</th><th>Verfasser</th><th>Wiederherstellen</th></tr>
+<tbody>
+<!-- TMPL_LOOP NAME="loop" -->
+<tr>
+<td><!-- TMPL_VAR NAME="title" escape=html --></td>
+<td><!-- TMPL_VAR NAME="author" escape=html --></td>
+<td><a href="/cgi-bin/koha/maint/catmaintain.pl?<!-- TMPL_VAR NAME="undelete" escape=url -->">Wiederherstellen</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=finun-p -->
+Erfolgreich wiederhergestellt
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Zur&uuml;ck zur Katalogpflege</a>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=fixitemtype-p -->
+<form method="post" action="/cgi-bin/koha/maint/catmaintain.pl">
+<input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="bi" escape=html>">
+<input type="hidden" name="type" value="updatetype">
+Medientyp: <input type="text" name="itemtype" value="<!-- TMPL_VAR NAME="item" escape=html>"><br>
+<input type="submit" value="&Auml;ndern">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=updatetype-p -->
+Erfolgreich ge&auml;ndert
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Zur&uuml;ck zur Katalogpflege</a>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME=mainmenu-p -->
+<b>Schlagwortpflege</b><br>
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+<input type="hidden" name="type" value="allsub">
+Alle Schlagworte anzeigen, die mit <input type="text" name="sub"> beginnen<br>
+<input type="submit" value="Zeige">
+</form>
+<p>
+<b>Gruppenpflege</b></br>
+<form action="/cgi-bin/koha/search.pl" method="post">
+<input type="hidden" name="type" value="catmain">
+Alle Titel anzeigen, die mit <input type="text" name="title"> beginnen<br>
+Mediennummer <input type="text" size="25" name="item"><br>
+<input type="submit" value="Zeige">
+</form>
+<p>
+<b>Biblio wiederherstellen</b></br>
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+<input type="hidden" name="type" value="undel">
+Alle Titel anzeigen, die mit <input type="text" name="title"> beginnen<br>
+<input type="submit" value="Zeige">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="do_it" -->
+<!-- TMPL_LOOP NAME="mainloop" -->
+	<h1> Koha : Statistik nach Medientypen <!--TMPL_IF NAME="branch" --> f&uuml;r Zweigstelle = <!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></h1>
+	<table>
+		<tr>
+			<th>Medientyp</th>
+			<th>Anzahl</th>
+		</tr>
+			<!-- TMPL_LOOP NAME="loopitemtype" -->
+				<tr>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
+					<td><!-- TMPL_VAR NAME="count" --></td>
+				</tr>
+			<!-- /TMPL_LOOP NAME="loopitemtype" -->
+			<tr>
+				<th>SUMME</th>
+				<th><!-- TMPL_VAR NAME="total" --></th>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>Zeige Katalogisate sortiert nach Medientypen</h1>
+	<form method="post">
+		Zweigstelle ausw&auml;hlen (keine Auswahl - Report f&uuml;r alle Zweigstellen) <!-- TMPL_VAR NAME="CGIbranch" -->
+		<input type="submit" value="OK" class="button">
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+		<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

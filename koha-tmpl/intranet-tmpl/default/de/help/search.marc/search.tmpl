@@ -1,0 +1,28 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Suche</h1>
+	<p>The search id divided in 2 differents parts :</p>
+	<h2>Usual fields</h2>
+	<p>The usual fields are in the top part of the screen. They contains :</p>
+		<ul>
+			<li>Stichwort: Suche nach allem</li>
+			<li>Titel</li>
+			<li>Verfasser</li>
+			<li>Barcode: Der Bibliotheks-Barcode des Mediums</li>
+			<li>Dewey</li>
+			<li>Call number</li>
+			<li>ISBN</li>
+			<li>Medientyp: Medientyp hier ausw&auml;hlen. Erfolgt keine Auswahl, wird die Suche &uuml;ber alle Medientypen durchgef&uuml;hrt!</li>
+			<li>Zweigstelle: W&auml;hlen Sie eine bestimmte ZWB. Erfolgt keine Auswahl, dann wird in allen gesucht</li>
+		</ul>
+	<p>Suchmethode</p>
+		<ul>
+			<li>If you enter values in more than 1 field, the search is "and-ed" (biblios that contains <b>title</b> AND <b>author</b>)</li>
+			<li>A biblio is selected if it's field <b>contains</b> the term you entered</li>
+			<li>If you enter a * (or a %) at the end of a term, Koha search for words starting with your term (entering <b>kleiner*</b> means : find biblio that have a <b>title containing a word starting by lower</b></li>
+		</ul>
+	<h2 class="catalogue">MARC-Suche abgeschlossen</h2>
+	<p>In the lower part of the search screen, the <b>More fields</b> box let you enter whatever you want : and, or, exclusions (not), search on any MARC field/subfield</p>
+	
+	<p><b>WICHTIGER HINWEIS: </b>for performance reasons, the * is valid only if you enter a word more than 3 letters long. for words of 3 letters or less, the * is <b>ignoriert</b></p>
+	<br/>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

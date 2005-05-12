@@ -1,0 +1,34 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1 class="parameters">Import in die Breeding-Farm</h2>
+	<!-- TMPL_IF NAME="uploadmarc" -->
+	<p>Importergebnisse</p>
+	<ul>
+		<p><!-- TMPL_VAR NAME="imported" --> importierte S&auml;tze</p>
+		<p><!-- TMPL_VAR NAME="alreadyindb" --> wurde nicht importiert, da bereits in der Datenbank</p>
+		<p><!-- TMPL_VAR NAME="alreadyinfarm" --> nicht importiert, da bereits im Fremddatenpool</p>
+		<p><!-- TMPL_VAR NAME="notmarcrecord" --> nicht importiert, da es nicht nach einem MARC-Satz aussieht (oder ISBN/ISSN fehlt) !</p>
+		<p><!-- TMPL_VAR NAME="total" --> records parsed</p>
+		<p><a href="/cgi-bin/koha/admin-home.pl">Zur&uuml;ck</a>
+	</ul>
+	<!-- TMPL_ELSE -->
+	<ul>
+		<li>W&auml;hlen Sie eine Datei zum Import in die Breeding-Farm. Sie wird analysiert, und f&uuml;r jede gefundene ISBN wird ein neuer Satz in der Breeding-Farm angelegt.</li>
+		<li>Ist die ISBN bereits in der Breeding-Farm, k&ouml;nnen Sie w&auml;hlen, ob der neue Satz ignoriert oder der vorhandene Satz &uuml;berschrieben werden soll.</li>
+		<li>Sie k&ouml;nnen f&uuml;r diesen Import einen Namen vergeben. Beim Anlegen eines Biblio kann es sinnvoll sein, sich die Herkunftsquelle zu merken.</li>
+		<li>Nat&uuml;rlich wird der Satz ignoriert, wenn in der aktiven Datenbank die ISBN bereits existiert. </li>
+	</ul>
+	<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" enctype="multipart/form-data">
+		<p><label class="label100">Datei f&uuml;r den Import ausw&auml;hlen</label><input type="file" name="uploadmarc" /></p>
+		<p><label class="label100">Name f&uuml;r diesen Import:</label><input type="text" name="filename" /></p>
+		<p><label class="label100">Format</label>
+			<select name="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		</p>
+		<p>Wenn die ISBN bereits in der Breeding-Farm ist</p>
+				<p><label class="label100">&nbsp; </label><input type="radio" name="overwrite_biblio" value="0" checked> Ignorieren, den vorhandenen Satz behalten</p>
+				<p><label class="label100">&nbsp; </label><input type="radio" name="overwrite_biblio" value="1">den vorhandenen Satz &uuml;berschreiben</p>
+		<p><label class="label100">&nbsp; </label><input type="submit" value="Import" class="button parameters"></p>
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

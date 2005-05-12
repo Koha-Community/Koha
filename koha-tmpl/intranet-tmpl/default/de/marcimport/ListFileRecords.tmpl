@@ -1,0 +1,53 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1>Hauptmen&uuml;</h1>
+<ul>
+<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=z3950">Z39.50-Suche</a>
+<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=uploadmarc">MARC-S&auml;tze hochladen</a>
+</ul>
+<center>
+<p>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<a href="$ENV{'SCRIPT_NAME'}?menu=$menu">Neue Datei ausw&auml;hlen</a>
+<p>
+<!-- TMPL_IF NAME="IS_MARC" -->
+	<table border="0" cellpadding="10" cellspacing="0">
+	<tr>
+		<th background="/images/background-acq.gif">
+		 	Select a Record to Import from <!-- TMPL_VAR NAME="recordsource" -->
+		</th>
+	</tr>
+	<tr>
+		<td bgcolor="#dddddd">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="IS_Z3950" -->
+<table border="0" cellpadding="10" cellspacing="0">
+<tr>
+		<td bgcolor="#dddddd">
+		<!-- TMPL_IF NAME="HAS_NUMRECORDS" -->
+	            <a name="SERVER-<!-- TMPL_VAR NAME="srvid" -->"></a> " <!-- TMPL_VAR NAME="srvname" -->
+		<font size="-1">[Zeige <!-- TMPL_VAR NAME="startrecord" --> bis <!-- TMPL_VAR NAME="highest" --> von <!-- TMPL_VAR NAME="numrecords" --> S&auml;tzen] <!-- TMPL_VAR NAME="previous" --> | <!-- TMPL_VAR NAME="next" --> </font><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="PENDING" -->
+			<font color="red">Suche h&auml;ngt</font>
+		<!-- TMPL_ELSE -->
+			<font color="red">verarbeite... <!-- TMPL_VAR NAME="elapsedtime" --></font>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="NO_RECORDS" -->
+			<b>Keine Treffer gefunden f&uuml;r Recherche <!-- TMPL_VAR NAME="id" --></b>
+		<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP NAME="LINES" -->
+<!--		<a href=<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?file=<!-- TMPL_VAR NAME="file" -->&amp;resultsid=<!-- TMPL_VAR NAME="resultsid" -->&amp;<!-- TMPL_VAR NAME="searchfield" -->=<!-- TMPL_VAR NAME="searchvalue" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;searchvalue=<!-- TMPL_VAR NAME="searchvalue" -->> -->
+		<a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?file=<!-- TMPL_VAR NAME="file" -->&amp;numrecord=<!-- TMPL_VAR NAME="numrecord" -->">
+				<!-- TMPL_VAR NAME="title" -->
+				<!-- TMPL_VAR NAME="author" -->
+		</a>
+		<!-- TMPL_VAR NAME="donetext" --><br>
+	<!-- /TMPL_LOOP -->
+</td>
+</tr>
+</table>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

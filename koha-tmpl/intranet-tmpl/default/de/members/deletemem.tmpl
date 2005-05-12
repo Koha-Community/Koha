@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<div id="mainbloc">
+	<div id="bloc25">
+	<h2 class="members">L&ouml;schen nicht m&ouml;glich</h2>
+		<!-- TMPL_IF name="ItemsOnIssues" -->
+			<p>Benutzer hat <!-- TMPL_VAR name="ItemsOnIssues" --> Medien ausgeliehen</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="charges -->
+			<p>Benutzer hat <!-- TMPL_VAR name="charges" --> Schulden</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="guarantees" -->
+			<p>Benutzer hat einen Vormund</p>
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

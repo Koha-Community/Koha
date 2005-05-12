@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+
+<Center><h3>Rechnung per Hand erstellen</h3></center>
+<form action="/cgi-bin/koha/maninvoice.pl" method="post">
+<table cellpadding="2" cellspacing="0" border="0">
+<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+<tr><td><b>Benutzernummer<b></td><td><!-- TMPL_VAR NAME="bornum" --></td></tr>
+<tr><td><b>Typ</b></td><Td>
+<select name="type">
+<option value="L">Verlorenes Exemplar</option>
+<option value="F">Mahngeb&uuml;hr</option>
+<option value="A">Account Management Fee</option>
+<option value="N">Neuer Ausweis</option>
+<option value="M">Sundry</option>
+<option value="REF">Cash Refund</option>
+</select>
+</td></tr>
+<tr><td><b>Mediennummer</b></td><td><input type="text" name="itemnum"></td></tr>
+<tr><td><b>Beschreibung</b></td><td><input type="text" name="desc" size="50"></td></tr>
+<tr><td><b>Betrag</b></td><td><input type="text" name="amount"></td></tr>
+<tr><td><input type="submit" name="add" value="Hinzuf&uuml;gen"></td></tr>
+</table>
+</form>
+
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

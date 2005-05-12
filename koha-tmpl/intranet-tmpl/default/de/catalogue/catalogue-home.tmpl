@@ -1,0 +1,50 @@
+<!-- TMPL_IF NAME="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+
+<div id="mainbloc">
+<form action="/cgi-bin/koha/search.pl" method="post">
+
+<h1 class="catalogue">Suche im Katalog</h1>
+
+
+<div id="bloc25">
+<h2 class="catalogue">Suche nach</h2>
+		<p><label class="label100" for="keyword">Stichworte:</label><input type="text"  size="25" id="keyword"  name="keyword"></p>
+
+		<p><label class="label100" for="title">Titel:</label><input type="text" id="title"  size="25" name="title"></p>
+
+		<p><label class="label100" for="author">Verfasser</label><input type="text"  size="25" id="author"  name="author"></p>
+
+		<p><label class="label100" for="illustrator">Illustrator:</label><input type="text"  size="25" id="illustrator"  name="illustrator"></p>
+		
+		<p><label class="label100" for="dewey">Dewey:</label></td><td><input type="text"  size="25" id="dewey"  name="dewey"></p>
+
+<p>		<label class="label100" for="class">Class:</label><select name="class" id="class" size="1">
+			<option value=""> Any  <!-- TMPL_VAR NAME="classlist" -->
+			</select></p>
+			
+					<p><label class="label100">Search Style:</label><input type="radio" name="ttype" id=" ttype" value="normal" checked>Normal <input type="radio" name="ttype" value="exact">Exakt</p>
+			</div>
+			
+	<div id="bloc25">
+		<h2 class="catalogue">Barcode-Suche</h2>
+		<p>
+		<label class="label100" for="itemnumber">Barcode:</label><input type="text"  size="25" id="itemnumber" name="itemnumber"></p>
+</div>
+
+<div id="bloc25">
+<h2 class="catalogue">Schlagwortsuche</h2>
+<p><label class="label100" for="subject">Schlagwort:</label><input type="text"  size="25"  id="subject" name="subject"><input type="hidden" name="type" value="intra"></p></div>
+
+<div id="block25"><p><input type="submit" class="button catalogue" value="Suche starten">
+						<input type="reset" value="L&ouml;schen" class="button catalogue">
+						<a href="/cgi-bin/koha/shelves.pl" class="button catalogue">Virtuelle B&uuml;cherregale</a></p></div>
+
+	</form>
+
+	</div>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+

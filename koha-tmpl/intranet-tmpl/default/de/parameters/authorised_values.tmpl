@@ -1,0 +1,91 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="add_form" -->
+<!-- ------------------------------------------------------------------------ -->
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-authorized-value-p" -->Authorized Value bearbeiten<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-new-category-p" -->Neue Kategorie hinzuf&uuml;gen<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->Add authorised value<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+		<p><label>Kategorie</label><!-- TMPL_VAR NAME="category" --></p>
+		<p><label>Vorgabewert</label><input type="text" name="authorised_value" value="<!-- TMPL_VAR NAME="authorised_value" escape=HTML -->"></p>
+		<p><label>Texte</label><input type="text" name="lib" value="<!-- TMPL_VAR NAME="lib" -->"></p>
+		<p>
+			<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+			<input type="submit" value="OK" class="button parameters">
+		</p>
+	</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<!-- ------------------------------------------------------------------------ -->
+<table border="0" cellspacing="0" cellpadding="2">
+	<tr valign="top" bgcolor="#99cc33">
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Variable</b></td>
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Texte</b></td>
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
+	</tr>
+	<tr><td>Wert</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+	<tr><td colspan="2" align="center">L&ouml;schen best&auml;tigen</td></tr>
+	<tr><td><input type="submit" value="JA"></form></td>
+		<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NEIN"></form></td></tr>
+<!-- /TMPL_IF -->
+
+<!-- ------------------------------------------------------------------------ -->
+<!-- TMPL_IF NAME="else" -->
+<h1>Administration Vorgabewerte</h1>
+<p>Diese Tabelle wird bei der MARC-Definition verwendet. Es k&ouml;nnen beliebig viele Kategorien und beliebig viele Vorgabewerte pro Kategorie definiert werden.</p>
+<p>Bei der Definition der MARC-Unterfeldstruktur kann ein Unterfeld mit einer Kategorie von Vorgabewerten verbunden werden. Wenn ein Anwender ein Biblio hinzuf&uuml;gt oder modifiziert, wird das Unterfeld durch eine Auswahlliste mit Vorgabewerten gef&uuml;llt.</p>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+	<!-- TMPL_VAR NAME="tab_list" --><input type="submit" value="OK" class="button parameters">
+		<a href="authorised_values.pl?op=add_form" class="button parameters">Neue Kategorie...</a>
+</form>
+<!-- TMPL_VAR NAME="searchfield" -->
+<table>
+<tr>
+	<th class="parameters">Kategorie</h>
+	<th class="parameters">Vorgabewert</th>
+	<th class="parameters">Texte</th>
+	<th class="parameters">Bearbeiten</th>
+	<th class="parameters">L&ouml;schen</th>
+</tr>
+<!-- TMPL_LOOP NAME="loop" -->
+<tr>
+	<td><!-- TMPL_VAR NAME="category" --></td>
+	<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+	<td><!-- TMPL_VAR NAME="lib" --></td>
+	<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+	<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<input type="hidden" name="op" value="add_form">
+<!-- TMPL_IF NAME="isprevpage" -->
+	<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+	<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="vorheriges" alt="vorheriges" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="nextpage" -->
+	<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<input type="hidden" name="op" value="add_form">
+<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
+<br><input type="submit" class="button" value="Vorgabewert hinzuf&uuml;gen" title="Add authorised Value" alt="Vorgabewert hinzuf&uuml;gen"><br>
+</form>
+<!-- /TMPL_IF -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

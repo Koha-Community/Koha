@@ -1,0 +1,31 @@
+<!-- TMPL_INCLUDE NAME="quicksearch-top.inc" -->
+
+<div id="mainbloc">
+<h1>Benutzersuche</h1>
+
+<div class="bloc100">
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Ausweis</th>
+			<th>Nachname</th>
+			<th>Vorname</th>
+			<th>Anschrift:</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="resultsloop" -->
+			<!-- TMPL_IF NAME="background" -->
+				<tr bgcolor="#ffffcc">
+			<!-- TMPL_ELSE -->
+				<tr bgcolor="white">
+			<!-- /TMPL_IF -->
+				<td><form action="member-search-results.pl" method="get"><input type="button" class="button" value="Choose" title="Choose this Patron" onclick="window.opener.FillForm('<!-- TMPL_VAR NAME="cardnumber" -->','request','member'); return false;" /></form></td>
+				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
+				<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" --></a></td>
+				<td><!-- TMPL_VAR NAME="firstname" --></a></td>
+				<td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

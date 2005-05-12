@@ -1,0 +1,191 @@
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+
+<div id="mainbloc">
+<!-- TMPL_IF Name="viewshelf" -->
+	<form>
+		<h1 class="catalogue"><!-- TMPL_VAR NAME="shelfname" --></h1>
+
+		<div id="bloc25">
+		<h2 class="catalogue">Shelf-Inhalt</h2>
+			<table class="small">
+				<tr colspan="4">
+					<th class="catalogue">l&ouml;schen</th>
+					<th class="catalogue">Barcode</th>
+					<th class="catalogue">Titel</th>
+					<th class="catalogue">Verfasser</th>
+				</tr>
+				<!-- TMPL_LOOP Name="itemsloop" -->
+					<tr>
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<!-- TMPL_IF name="manageshelf" -->
+				<input type="submit" value="Ausgew&auml;hlte exemplare l&ouml;schen" class="button catalogue">
+			<!-- /TMPL_IF -->
+		</div>
+	</form>
+
+	<!-- TMPL_IF name="manageshelf" -->
+	<div id="bloc25">
+		<form>
+		<h2 class="catalogue">Buch &uuml;ber Barcode hinzuf&uuml;gen</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input name="addbarcode">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="submit" value="Speichern" class="button catalogue">
+		</form>
+	</div>
+	<!-- /TMPL_IF -->
+	<div id="bloc25">
+		<a href="shelves.pl" class="button catalogue">Shelf-Liste</a>
+	</div>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<h1 class="catalogue">Buchregale</h1>
+		<!-- TMPL_IF Name="status1" -->
+			<p class="problem"><!-- TMPL_VAR NAME="string1" --><p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<p class="problem"><!-- TMPL_VAR NAME="string" --><p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<div id="bloc25">
+					<h2 class="catalogue">Zu l&ouml;schende Regale ausw&auml;hlen</h2>
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+						<!-- TMPL_LOOP Name="shelvesloop" -->
+						<!-- TMPL_IF name="canmanage" -->
+						<p>
+							<label>
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
+							</label>
+								<a href="shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a> (<!-- TMPL_VAR NAME="shelfbookcount" --> item(s))
+						</p>
+						<!-- /TMPL_IF -->
+						<!-- /TMPL_LOOP -->
+					<p>
+						<input type="submit" value="Regale l&ouml;schen" class="button catalogue">
+					</p>
+					</form>
+		</div>
+		<div id="bloc25">
+			<form method="post">
+				<input type="hidden" name="shelves" value="1">
+				<h2 class="catalogue">Regal hinzuf&uuml;gen</h2>
+				<p><label>Name</label><input type="text" name="addshelf" size="25"></p>
+				<p><label>Eigent&uuml;mer</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+				<p><label>Kategorie</label>
+					<select name="category">
+						<option value="1">Privat</option>
+						<option value="2">&Ouml;ffentlich</option>
+						<option value="3">Free</option>
+					</select>
+				</p>
+				<p> <li>ein privates Regal wird durch Sie gemanagt &amp; kann nur von Ihnen eingesehen werden</li>
+					<li> Ein &Ouml;ffentliches kann jedermann sehen, aber wird nur von Ihnen gemanagt.</li>
+					<li> Ein Freies kann von jedem Benutzer gemanagt werden.</li>
+				</p>
+				<p>
+					<input type="submit" value="Neues Regal hinzuf&uuml;gen" class="button catalogue">
+					<a href="shelves.pl" class="button catalogue">zur&uuml;ck zur Regallliste</a>
+				</p>
+
+			</form>
+		</div>
+	<!-- TMPL_ELSE -->
+		<div id="bloc25">
+			<h2 class="catalogue">Shelf-Liste</h2>
+			<table class="small">
+				<tr>
+					<th class="catalogue">Shelf-Name</th>
+					<th class="catalogue">Kategorie</th>
+					<th class="catalogue">Content size</th>
+					<th class="catalogue">&Auml;ndern</th>
+				</tr>
+				<!-- TMPL_LOOP Name="shelvesloop" -->
+				<tr>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+							<!-- TMPL_VAR NAME="shelfname" -->
+						</a>
+					</td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<!-- TMPL_IF NAME="category1" -->
+							Privat
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category2" -->
+							&Ouml;ffentlich
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category3" -->
+							Free
+						<!-- /TMPL_IF -->
+					</td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<!-- TMPL_VAR NAME="shelfbookcount" --> Exemplar(e)
+					</td>
+					<!-- TMPL_IF name="mine" -->
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+							<a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">&Auml;ndern</a> <!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
+						</td>
+					<!-- /TMPL_IF -->
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+		<div id="bloc25">
+			<a href="shelves.pl?shelves=1" class="button catalogue">Buchregal hinzuf&uuml;gen oder l&ouml;schen</a>
+		</div>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="edit" -->
+	<div id="bloc25">
+		<form method="post">
+			<input type="hidden" name="op" value="modifsave">
+			<h2 class="catalogue">Regal bearbeiten</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+			<p><label>Name</label><input type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
+			<p><label>Eigent&uuml;mer</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+			<p><label>Kategorie</label>
+				<select name="category">
+					<!-- TMPL_IF name="category1" -->
+						<option value="1" selected>Privat</option>
+					<!-- TMPL_ELSE -->
+						<option value="1">Privat</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category2" -->
+						<option value="2" selected>&Ouml;ffentlich</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">&Ouml;ffentlich</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category3" -->
+						<option value="3" selected>Free</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Free</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</p>
+			<p> <li>ein privates Regal wird durch Sie gemanagt &amp; kann nur von Ihnen eingesehen werden</li>
+				<li> Ein &Ouml;ffentliches kann jedermann sehen, aber wird nur von Ihnen gemanagt.</li>
+				<li> Ein Freies kann von jedem Benutzer gemanagt werden.</li>
+			</p>
+			<p>
+				<input type="submit" value="Speichern" class="button catalogue">
+			</p>
+
+		</form>
+	</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

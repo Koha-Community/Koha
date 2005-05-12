@@ -1,0 +1,92 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">Shopping basket <!-- TMPL_VAR name="basketno" --> for: <!-- TMPL_VAR NAME="bookselname" --></h1>
+		<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;sub=<!-- TMPL_VAR NAME="parsub" -->">
+		<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filenew.png" border="0" alt="Neuen Biblio hinzuf&uuml;gen"></a>
+	<a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
+		<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1uparrow.png" border="0" alt="Einkaufskorb anzeigen">
+	</a>
+	<form action="/cgi-bin/koha/acqui/newbasket2.pl">
+	<input type="hidden" name="booksellerid" value=<!-- TMPL_VAR NAME="booksellerid" -->>
+	<input type="hidden" name="basketno" value=<!-- TMPL_VAR NAME="basketno" -->>
+	<b>Neue Suche </b><input="text"  size="25"   name="search">
+	<input type="submit" value="Suche" class="button acquisition">
+	</form>
+
+	Sie suchten nach
+	<b>
+	<!-- TMPL_LOOP NAME="loopsearch" -->
+		<!-- TMPL_VAR NAME="key" --> <!-- TMPL_VAR NAME="value" -->
+	<!-- /TMPL_LOOP -->
+	</b>
+	<br>
+	<!-- TMPL_VAR NAME="count" --> Ergebnisse gefunden
+	
+	<br> Treffer <i><!-- TMPL_VAR NAME="dispnum" --></i> von <i><!-- TMPL_VAR NAME="offset2" --></i> angezeigt
+	
+	<table>
+		<tr>
+			<th class="acquisition">TITEL</th>
+			<th class="acquisition">VERFASSER</th>
+			<th class="acquisition">&copy;</th>
+			<th class="acquisition">COUNT</th>
+			<th class="acquisition">STANDORT</th>
+		</tr>
+	
+	<!-- TMPL_LOOP NAME="loopresult" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+			<td>
+					<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR NAME="sub" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+					<!-- TMPL_VAR NAME="title" -->
+					</a>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="author" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="copyright" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="itemcount" -->
+			</td>
+			<td>
+				<!-- TMPL_IF name="use-location-flags-p" -->
+				<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR NAME="location-only" --><br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="on-loan-p" -->Ausgeliehen<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="lost-p" -->Verloren<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="mending-p" -->Mending<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="in-transit-p" -->Auf dem Transport<br><!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_VAR NAME="location" -->
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+	
+	<!-- /TMPL_LOOP -->
+	
+		<tr bgcolor="#ffdf61">
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+	</table>
+	
+	<!-- TMPL_IF name="offsetover" -->
+	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="offset" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
+	N&auml;chster
+	</a>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
