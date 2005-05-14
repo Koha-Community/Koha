@@ -1841,7 +1841,7 @@ sub BornameSearch  {
 	}
 
 	my $sth=$dbh->prepare($query);
-	warn "Q $orderby : $query";
+#	warn "Q $orderby : $query";
 	$sth->execute(@bind);
 	my @results;
 	my $cnt=$sth->rows;
