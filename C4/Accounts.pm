@@ -85,7 +85,7 @@ sub checkaccount  {
 		WHERE borrowernumber = ?
 			AND amountoutstanding<>0";
 	my @bind = ($bornumber);
-	if ($date ne ''){
+	if ($date && $date ne ''){
 	$select.=" AND date < ?";
 	push(@bind,$date);
 	}
