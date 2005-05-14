@@ -228,7 +228,7 @@ sub getpatroninformation {
 	$sth=$dbh->prepare("select bit,flag from userflags");
 	$sth->execute;
 	while (my ($bit, $flag) = $sth->fetchrow) {
-		if ($borrower->{'flags'} & 2**$bit) {
+		if ($borrower->{'flags'} && $borrower->{'flags'} & 2**$bit) {
 		$accessflagshash->{$flag}=1;
 		}
 	}
