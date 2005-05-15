@@ -70,10 +70,11 @@ my $win3 = $cui->add(
     -bfg    => 'red',
 );
 
-my $texteditor =
-  $win1->add( "text", "TextEditor",
-    -text => "This is the first cut of a \ncirculations system using Curses::UI\n".
-  "Use the menus (or the keyboard\nshortcuts) to choose issues or \nreturns");
+my $texteditor = $win1->add( "text", "TextEditor",
+    -text =>
+      "This is the first cut of a \ncirculations system using Curses::UI\n"
+      . "Use the menus (or the keyboard\nshortcuts) to choose issues or \nreturns"
+);
 
 $cui->set_binding( sub { $menu->focus() }, "\cX" );
 $cui->set_binding( \&exit_dialog, "\cQ" );
@@ -108,9 +109,11 @@ sub returns {
             $borrower =
               getpatroninformation( \%env, $borrower->{'borrowernumber'}, 0 );
             $win1->delete('borrowerdata');
-            my $borrowerdata = $win1->add( 'borrowerdata', 'TextViewer',
+            my $borrowerdata = $win1->add(
+                'borrowerdata', 'TextViewer',
                 -text => "Cardnumber: $borrower->{'cardnumber'}\n"
-                  . "Name: $borrower->{'title'} $borrower->{'firstname'} $borrower->{'surname'}"
+                  . "Name: $borrower->{'title'} $borrower->{'firstname'} $borrower->{'surname'}\n"
+
             );
 
             $borrowerdata->focus();
@@ -192,6 +195,7 @@ sub issues {
 
         # go into a loop issuing until a blank barcode is given
         while ( my $barcode = $cui->question( -question => 'Barcode' ) ) {
+            my $issues;
             my $issueconfirmed;
             my ( $error, $question ) =
               canbookbeissued( \%env, $borrower, $barcode, $year, $month,
@@ -202,19 +206,29 @@ sub issues {
                 $cui->error( -message => $impossible );
                 $noerror = 0;
             }
+            if ($noerror) {
 
-            foreach my $needsconfirmation ( keys %$question ) {
-                $noquestion     = 0;
-                $issueconfirmed = $cui->dialog(
-                    -message => $needsconfirmation,
-                    -title   => "Confirmation",
-                    -buttons => [ 'yes', 'no' ],
+                # no point asking confirmation questions if we cant issue
+                foreach my $needsconfirmation ( keys %$question ) {
+                    $noquestion     = 0;
+                    $issueconfirmed = $cui->dialog(
+                        -message =>
+"$needsconfirmation $question->{$needsconfirmation} Issue anyway?",
+                        -title   => "Confirmation",
+                        -buttons => [ 'yes', 'no' ],
 
-                );
+                    );
 
+                }
             }
             if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
                 issuebook( \%env, $borrower, $barcode, $datedue );
+                $issues .= "$barcode $datedue";
+                $win2->delete('currentissues');
+                $currentissues =
+                  $win2->add( 'currentissues', 'TextViewer', -text => $issues,
+                  );
+
             }
 
         }
