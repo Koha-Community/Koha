@@ -78,7 +78,6 @@ sub UpdateStats {
 		$branch=$env->{'branchcode'};
 	}
 	my $user = $env->{'usercode'};
-	print $borrowernumber;
 	# FIXME - Use $dbh->do() instead
 	my $sth=$dbh->prepare("Insert into statistics (datetime,branch,type,usercode,value,
 					other,itemnumber,itemtype,borrowernumber) values (now(),?,?,?,?,?,?,?,?)");
