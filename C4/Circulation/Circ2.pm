@@ -449,7 +449,7 @@ sub transferbook {
 	my $hbr = $iteminformation->{'homebranch'};
 	my $fbr = $iteminformation->{'holdingbranch'};
 	# if is permanent...
-	if ($branches->{$hbr}->{'PE'}) {
+	if ($hbr && $branches->{$hbr}->{'PE'}) {
 		$messages->{'IsPermanent'} = $hbr;
 	}
 	# can't transfer book if is already there....
@@ -721,16 +721,16 @@ sub canbookbeissued {
 	unless ($iteminformation->{barcode}) {
 		$issuingimpossible{UNKNOWN_BARCODE} = 1;
 	}
-	if ($iteminformation->{'notforloan'} > 0) {
+	if ($iteminformation->{'notforloan'} && $iteminformation->{'notforloan'} > 0) {
 		$issuingimpossible{NOT_FOR_LOAN} = 1;
 	}
-	if ($iteminformation->{'itemtype'} eq 'REF') {
+	if ($iteminformation->{'itemtype'} &&$iteminformation->{'itemtype'} eq 'REF') {
 		$issuingimpossible{NOT_FOR_LOAN} = 1;
 	}
-	if ($iteminformation->{'wthdrawn'} == 1) {
+	if ($iteminformation->{'wthdrawn'} && $iteminformation->{'wthdrawn'} == 1) {
 		$issuingimpossible{WTHDRAWN} = 1;
 	}
-	if ($iteminformation->{'restricted'} == 1) {
+	if ($iteminformation->{'restricted'} && $iteminformation->{'restricted'} == 1) {
 		$issuingimpossible{RESTRICTED} = 1;
 	}
 
@@ -740,7 +740,7 @@ sub canbookbeissued {
 # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
 #
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-	if ($currentborrower eq $borrower->{'borrowernumber'}) {
+	if ($currentborrower && $currentborrower eq $borrower->{'borrowernumber'}) {
 # Already issued to current borrower. Ask whether the loan should
 # be renewed.
 		my ($renewstatus) = renewstatus($env, $borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
@@ -1025,7 +1025,7 @@ sub returnbook {
 	# check if the book is in a permanent collection....
 	my $hbr = $iteminformation->{'homebranch'};
 	my $branches = getbranches();
-	if ($branches->{$hbr}->{'PE'}) {
+	if ($hbr && $branches->{$hbr}->{'PE'}) {
 		$messages->{'IsPermanent'} = $hbr;
 	}
 	# check that the book has been cancelled
@@ -1614,7 +1614,7 @@ sub renewstatus {
 		if (my $data2=$sth2->fetchrow_hashref) {
 			$renews = $data2->{'renewalsallowed'};
 		}
-		if ($renews > $data1->{'renewals'}) {
+		if ($renews && $renews > $data1->{'renewals'}) {
 			$renewokay = 1;
 		}
 		$sth2->finish;
@@ -1851,24 +1851,30 @@ sub fixdate {
     my ($year, $month, $day) = @_;
     my $invalidduedate;
     my $date;
-    if (($year eq 0) && ($month eq 0) && ($year eq 0)) {
+    if ($year && $month && $day){
+	if (($year eq 0 ) && ($month eq 0) && ($year eq 0)) {
 #	$env{'datedue'}='';
-    } else {
-	if (($year eq 0) || ($month eq 0) || ($year eq 0)) {
-	    $invalidduedate=1;
 	} else {
-	    if (($day>30) && (($month==4) || ($month==6) || ($month==9) || ($month==11))) {
-		$invalidduedate = 1;
-	    } elsif (($day > 29) && ($month == 2)) {
-		$invalidduedate=1;
-	    } elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
+	    if (($year eq 0) || ($month eq 0) || ($year eq 0)) {
 		$invalidduedate=1;
 	    } else {
+		if (($day>30) && (($month==4) || ($month==6) || ($month==9) || ($month==11))) {
+		    $invalidduedate = 1;
+		} 
+		elsif (($day > 29) && ($month == 2)) {
+		    $invalidduedate=1;
+		} 
+		elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
+		    $invalidduedate=1;
+		} 
+		else {
 		$date="$year-$month-$day";
+		}
 	    }
 	}
     }
     return ($date, $invalidduedate);
+	
 }
 
 1;
