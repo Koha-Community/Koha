@@ -25,6 +25,7 @@ use Curses::UI;
 use C4::Circulation::Circ2;
 use C4::Search;
 use C4::Print;
+use C4::Context;
 
 my $cui = new Curses::UI( -color_support => 1 );
 
@@ -35,6 +36,13 @@ my @menu = (
             { -label => 'Issues   ^I', -value => \&issues },
             { -label => 'Returns  ^R', -value => \&returns },
             { -label => 'Exit     ^Q', -value => \&exit_dialog }
+        ]
+    },
+    {
+        -label   => 'Parameters',
+        -submenu => [
+            { -label => 'Branch',  -value => \&changebranch },
+            { -label => 'Printer', -value => \&changeprinter }
         ]
     },
 );
@@ -85,6 +93,8 @@ $cui->set_binding( \&returns,     "\cR" );
 $texteditor->focus();
 $cui->mainloop();
 
+my %env;
+
 sub exit_dialog() {
     my $return = $cui->dialog(
         -message => "Do you really want to quit?",
@@ -102,7 +112,7 @@ sub returns {
         -question => 'Barcode'
     );
     my $branch = 'MAIN';
-    my %env;
+
     if ($barcode) {
         my ( $returned, $messages, $iteminformation, $borrower ) =
           returnbook( $barcode, $branch );
@@ -129,7 +139,6 @@ sub issues {
 
     # this routine does the actual issuing
 
-    my %env;
     my $borrowernumber;
     my $borrowerlist;
 
@@ -185,10 +194,6 @@ sub issues {
         );
 
         $popupbox->focus();
-        $borrowernumber = $popupbox->get();
-        if ($borrowernumber) {
-            doissues( $borrowernumber, \%env, $year, $month, $day );
-        }
     }
     else {
     }
@@ -281,4 +286,55 @@ sub doissues {
     if ($printconfirm) {
         printslip( $env, $borrowernumber );
     }
+}
+
+sub changebranch {
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare('SELECT * FROM branches');
+    $sth->execute();
+    my @branches;
+    while ( my $data = $sth->fetchrow_hashref() ) {
+        push @branches, $data->{'branchcode'};
+    }
+    $sth->finish;
+    $win1->delete('text');
+    $win1->delete('mypopupbox');
+    my $popupbox = $win1->add(
+        'mypopupbox', 'Popupmenu',
+        -values   => [@branches],
+        -onchange => \&setbranch,
+    );
+    $popupbox->focus();
+}
+
+sub changeprinter {
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare('SELECT * FROM printers');
+    $sth->execute();
+    my @printers;
+    while ( my $data = $sth->fetchrow_hashref() ) {
+        push @printers, $data->{'printqueue'};
+    }
+    $sth->finish;
+    $win1->delete('text');
+    $win1->delete('mypopupbox');
+    my $popupbox = $win1->add(
+        'mypopupbox', 'Popupmenu',
+        -values   => [@printers],
+        -onchange => \&setprinter,
+    );
+    $popupbox->focus();
+
+}
+
+sub setbranch {
+    my $list   = shift;
+    my $branch = $list->get();
+    $env{'branch'} = $branch;
+}
+
+sub setprinter {
+    my $list    = shift;
+    my $printer = $list->get();
+    $env{'printer'} = $printer;
 }
