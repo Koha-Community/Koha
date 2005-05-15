@@ -72,7 +72,8 @@ my $win3 = $cui->add(
 
 my $texteditor =
   $win1->add( "text", "TextEditor",
-    -text => "Here is some text\n" . "And some more" );
+    -text => "This is the first cut of a \ncirculations system using Curses::UI\n".
+  "Use the menus (or the keyboard\nshortcuts) to choose issues or \nreturns");
 
 $cui->set_binding( sub { $menu->focus() }, "\cX" );
 $cui->set_binding( \&exit_dialog, "\cQ" );
