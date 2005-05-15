@@ -24,6 +24,7 @@ use lib '/usr/local/koha/intranet/modules';
 use Curses::UI;
 use C4::Circulation::Circ2;
 use C4::Search;
+use C4::Print;
 
 my $cui = new Curses::UI( -color_support => 1 );
 
@@ -136,7 +137,6 @@ sub issues {
     my $year;
     my $month;
     my $day;
-    my $datedue;
 
     $win1->delete('text');
 
@@ -164,92 +164,121 @@ sub issues {
     if ($borrowernumber) {
 
         # if we have one single borrower, we can start issuing
-        my $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
-        $win1->delete('borrowerdata');
-        my $borrowerdata = $win1->add( 'borrowerdata', 'TextViewer',
-            -text => "Cardnumber: $borrower->{'cardnumber'}\n"
-              . "Name: $borrower->{'title'} $borrower->{'firstname'} $borrower->{'surname'}"
-        );
-
-        $borrowerdata->focus();
-
-        $win3->delete('pastissues');
-        my $issueslist = getissues($borrower);
-        my $oldissues;
-        foreach my $it ( keys %$issueslist ) {
-            $oldissues .=
-              $issueslist->{$it}->{'barcode'}
-              . " $issueslist->{$it}->{'title'} $issueslist->{$it}->{'date_due'}\n";
-
-        }
-
-        my $pastissues =
-          $win3->add( 'pastissues', 'TextViewer', -text => $oldissues, );
-        $pastissues->focus();
-
-        $win2->delete('currentissues');
-        my $currentissues =
-          $win2->add( 'currentissues', 'TextViewer',
-            -text => "Todays issues go here", );
-        $currentissues->focus();
-
-        # go into a loop issuing until a blank barcode is given
-        while ( my $barcode = $cui->question( -question => 'Barcode' ) ) {
-            my $issues;
-            my $issueconfirmed;
-            my ( $error, $question ) =
-              canbookbeissued( \%env, $borrower, $barcode, $year, $month,
-                $day );
-            my $noerror    = 1;
-            my $noquestion = 1;
-            foreach my $impossible ( keys %$error ) {
-                $cui->error( -message => $impossible );
-                $noerror = 0;
-            }
-            if ($noerror) {
-
-                # no point asking confirmation questions if we cant issue
-                foreach my $needsconfirmation ( keys %$question ) {
-                    $noquestion     = 0;
-                    $issueconfirmed = $cui->dialog(
-                        -message =>
-"$needsconfirmation $question->{$needsconfirmation} Issue anyway?",
-                        -title   => "Confirmation",
-                        -buttons => [ 'yes', 'no' ],
-
-                    );
-
-                }
-            }
-            if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
-                issuebook( \%env, $borrower, $barcode, $datedue );
-                $issues .= "$barcode $datedue";
-                $win2->delete('currentissues');
-                $currentissues =
-                  $win2->add( 'currentissues', 'TextViewer', -text => $issues,
-                  );
-
-            }
-
-        }
-
+        doissues( $borrowernumber, \%env, $year, $month, $day );
     }
     elsif ($borrowerlist) {
-        my $listbox = $win1->add(
-            'mylistbox',
-            'Listbox',
-            -values => [ 1, 2, 3 ],
-            -labels => {
-                1 => 'One',
-                2 => 'Two',
-                3 => 'Three'
-            },
-            -radio => 1,
+
+        # choose from a list then start issuing
+        my @borrowernumbers;
+        my %borrowernames;
+        foreach my $bor (@$borrowerlist) {
+            push @borrowernumbers, $bor->{'borrowernumber'};
+            $borrowernames{ $bor->{'borrowernumber'} } =
+              "$bor->{'cardnumber'} $bor->{'firstname'} $bor->{surname}";
+        }
+        $win1->delete('mypopupbox');
+        my $popupbox = $win1->add(
+            'mypopupbox', 'Popupmenu',
+            -values   => [@borrowernumbers],
+            -labels   => \%borrowernames,
+            -onchange => \&dolistissues,
         );
 
-        $listbox->focus();
-        my $selected = $listbox->get();
+        $popupbox->focus();
+        $borrowernumber = $popupbox->get();
+        if ($borrowernumber) {
+            doissues( $borrowernumber, \%env, $year, $month, $day );
+        }
     }
     else {
+    }
+}
+
+sub dolistissues {
+    my $list           = shift;
+    my $borrowernumber = $list->get();
+    doissues($borrowernumber);
+}
+
+sub doissues {
+    my ( $borrowernumber, $env, $year, $month, $day ) = @_;
+    my $datedue;
+
+    my $borrower = getpatroninformation( $env, $borrowernumber, 0 );
+    $win1->delete('borrowerdata');
+    my $borrowerdata = $win1->add( 'borrowerdata', 'TextViewer',
+        -text => "Cardnumber: $borrower->{'cardnumber'}\n"
+          . "Name: $borrower->{'title'} $borrower->{'firstname'} $borrower->{'surname'}"
+    );
+
+    $borrowerdata->focus();
+
+    $win3->delete('pastissues');
+    my $issueslist = getissues($borrower);
+    my $oldissues;
+    foreach my $it ( keys %$issueslist ) {
+        $oldissues .=
+          $issueslist->{$it}->{'barcode'}
+          . " $issueslist->{$it}->{'title'} $issueslist->{$it}->{'date_due'}\n";
+
+    }
+
+    my $pastissues =
+      $win3->add( 'pastissues', 'TextViewer', -text => $oldissues, );
+    $pastissues->focus();
+
+    $win2->delete('currentissues');
+    my $currentissues =
+      $win2->add( 'currentissues', 'TextViewer',
+        -text => "Todays issues go here", );
+    $currentissues->focus();
+
+    # go into a loop issuing until a blank barcode is given
+    while ( my $barcode = $cui->question( -question => 'Barcode' ) ) {
+        my $issues;
+        my $issueconfirmed;
+        my ( $error, $question ) =
+          canbookbeissued( $env, $borrower, $barcode, $year, $month, $day );
+        my $noerror    = 1;
+        my $noquestion = 1;
+        foreach my $impossible ( keys %$error ) {
+            $cui->error( -message => $impossible );
+            $noerror = 0;
+        }
+        if ($noerror) {
+
+            # no point asking confirmation questions if we cant issue
+            foreach my $needsconfirmation ( keys %$question ) {
+                $noquestion     = 0;
+                $issueconfirmed = $cui->dialog(
+                    -message =>
+"$needsconfirmation $question->{$needsconfirmation} Issue anyway?",
+                    -title   => "Confirmation",
+                    -buttons => [ 'yes', 'no' ],
+
+                );
+
+            }
+        }
+        if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
+            issuebook( $env, $borrower, $barcode, $datedue );
+            $issues .= "$barcode";
+            $win2->delete('currentissues');
+            $currentissues =
+              $win2->add( 'currentissues', 'TextViewer', -text => $issues, );
+
+        }
+
+    }
+
+    # finished issuing
+    my $printconfirm = $cui->dialog(
+        -message => "Print a slip for this borrower?",
+        -title   => "Print Slip",
+        -buttons => [ 'yes', 'no' ],
+
+    );
+    if ($printconfirm) {
+        printslip( $env, $borrowernumber );
     }
 }
