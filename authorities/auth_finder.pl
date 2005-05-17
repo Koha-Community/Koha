@@ -157,7 +157,7 @@ if ($op eq "do_search") {
 
 $template->param(authtypesloop => \@authtypesloop,
 				authtypecode => $authtypecode);
-warn "CAT : $authtypecode";
+#warn "CAT : $authtypecode";
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
