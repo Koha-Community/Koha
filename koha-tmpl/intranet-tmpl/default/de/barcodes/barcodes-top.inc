@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//DE">
 
 <html>
 <head>
@@ -212,5 +212,5 @@ function removeItem() {
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Angemeldet als: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Abmelden</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
+    <p align="left">Bei Koha <a href="/cgi-bin/koha/opac-user.pl">Anmelden</a></p>
 <!-- /TMPL_IF -->

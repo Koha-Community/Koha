@@ -23,9 +23,9 @@
 <b>Schlagwort:</b> <!-- TMPL_VAR NAME="subject" --><br>
 <b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
 <b>Bemerkungen:</b> <!-- TMPL_VAR NAME="notes" --><br>
-<b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><br>
+<b>Einheitstitel:</b> <!-- TMPL_VAR NAME="unititle" --><br>
 <b>Serie:</b> <!-- TMPL_VAR NAME="serial" --><br>
-<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
+<b>Verf&uuml;gbare Exemplare:</b> <!-- TMPL_VAR NAME="count" -->
 <p>
 </font></td>
 </tr>
@@ -35,9 +35,9 @@
 <table border="0" cellspacing="0" cellpadding="2">
 <tr bgcolor="#99cccc">
 <td>Medientyp</td>
-<td>Class</td>
+<td>Klasse</td>
 <td>Standort</td>
-<td>R&uuml;ckgabedatum</td>
+<td>Entliehen bis</td>
 <td>Zuletzt gesehen</td>
 </tr>
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -54,7 +54,7 @@
 <td><!-- TMPL_VAR NAME="itemtype" --></td>
 <td>Website</td>
 <td>Online</td>
-<td>Available</td>
+<td>Verf&uuml;gbar</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
 name="itemnumber">&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<TMPL_VAR

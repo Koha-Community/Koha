@@ -23,13 +23,13 @@
 		<!-- TMPL_LOOP name="subscriptions" -->
 			<tr>
 				<td>
-					<!-- TMPL_VAR name="title" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+					<!-- TMPL_VAR name="title" --><!-- TMPL_IF name="notes" --> (<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="ISSN" -->
 				</td>
 				<td>
-					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>  <a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>  <a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Anzeigen</a>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->

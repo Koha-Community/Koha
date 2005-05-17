@@ -60,10 +60,10 @@
 		<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 		<!-- TMPL_IF NAME=use-location-flags-p -->
 		<!-- TMPL_IF NAME=location-only --><!-- TMPL_VAR NAME=location-only --><br><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME=not-available-p -->Not Available<!-- TMPL_IF NAME=not-available-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME=lost-p -->Exemplar vermi&szligt<!-- TMPL_IF NAME=lost-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME=withdrawn-p -->Zur&uuml;ckgezogen<!-- TMPL_IF NAME=withdrawn-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME=on-loan-p -->Ausgeliehen<!-- TMPL_IF NAME=on-loan-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=not-available-p -->Nicht verf&uuml;gbar<!-- TMPL_IF NAME=not-available-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=lost-p -->Exemplar vermi&szlig;t<!-- TMPL_IF NAME=lost-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=withdrawn-p -->Ausgemustert<!-- TMPL_IF NAME=withdrawn-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=on-loan-p -->Entliehen<!-- TMPL_IF NAME=on-loan-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_VAR NAME="location" -->
 		<!-- /TMPL_IF -->
@@ -88,17 +88,17 @@
 				<!-- /TMPL_IF -->
 
 				<!-- TMPL_IF NAME="displaynext" -->
-				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">N&auml;chster Satz</a>
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Weitere S&auml;tze</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF --></p>
 
 
 
-<p>Results <b><!-- TMPL_VAR NAME="startfrom" --></b> through <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.</p>
+<p>Treffer <b><!-- TMPL_VAR NAME="startfrom" --></b> bis <b><!-- TMPL_VAR NAME="endat" --></b> von <b><!-- TMPL_VAR NAME="numrecords" --></b> Treffern.</p>
 
 
-<p>Probieren Sie eine andere <a href="/cgi-bin/koha/catalogue-home.pl">Suche</a></p>
+<p>Neue <a href="/cgi-bin/koha/catalogue-home.pl">Suche</a></p>
 
 
 </div>

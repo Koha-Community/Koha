@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
 <div id="mainbloc">
-	<h1 class="authority">Authority search results</h1>
+	<h1 class="authority">Authority Suchergebnisse</h1>
 	<div id="resultnumber">
 		<p>
 			<!-- TMPL_IF NAME=displayprev -->
@@ -21,9 +21,9 @@
 		</p>
 		<p>
 			<!-- TMPL_IF name=total -->
-			&nbsp<b>Treffer <i><!-- TMPL_VAR name="from" --></i> von <i><!-- TMPL_VAR name="to" --></i></b><br><br>
+			&nbsp<b>Treffer <i><!-- TMPL_VAR name="from" --></i> bis <i><!-- TMPL_VAR name="to" --></i></b><br><br>
 			<!-- TMPL_ELSE -->
-			&nbsp; Kein Ergebnis gefunden.<br>
+			&nbsp;Kein Ergebnis gefunden.<br>
 			<!-- /TMPL_IF -->
 		</p>
 	</div>
@@ -31,8 +31,8 @@
 		<table>
 			<tr>
 				<th class="authority">Zusammenfassung</th>
-				<th class="authority">Used</th>
-				<th class="authority">Zeige</th>
+				<th class="authority">Nutzung</th>
+				<th class="authority">Zeigen</th>
 				<th class="authority">L&ouml;schen</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
@@ -41,7 +41,7 @@
 					<td><!-- TMPL_VAR name="used" --> <a href="../search.marc/search.pl?type=intranet&op=do_search&marclist=<!-- TMPL_VAR name="biblio_fields" -->&operator==&value=<!-- TMPL_VAR name="authid" -->&and_or=&excluding=">...</a></td>
 					<td>
 						<a href="detail.pl?authid=<!-- TMPL_VAR name="authid" -->">
-							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR name="authid" -->" title="Authority number<!-- TMPL_VAR name="authid" -->">
+							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority Nummer <!-- TMPL_VAR name="authid" -->" title="Authority Nummer <!-- TMPL_VAR name="authid" -->">
 						</a>
 					</td>
 					<td>

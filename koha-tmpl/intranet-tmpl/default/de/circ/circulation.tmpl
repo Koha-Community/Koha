@@ -70,8 +70,8 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 	<div id="bloc25">
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-		<h2 class="circulation">Medien-Barcode eingeben</h2>
-		<p>Exemplar-Barcode:<input name="barcode" size="10"> <input type="submit" value="Ausleihe" class="button circulation"></p>
+		<h2 class="circulation">Medien-Strichcode eingeben</h2>
+		<p>Exemplar-Strichcode:<input name="barcode" size="10"> <input type="submit" value="Ausleihe" class="button circulation"></p>
 		<p>
 			<select name="day">
 				<option value="0">Tag</option>
@@ -111,7 +111,7 @@
 				<option value="0">Monat</option>
 				<option value="1"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
 				<option value="2"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
-				<option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
+				<option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>M&auml;r</option>
 				<option value="4"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
 				<option value="5"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>Mai</option>
 				<option value="6"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
@@ -132,7 +132,7 @@
 			</select>
 		</p>
 		<p>
-		<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR NAME="selected" -->> R&uuml;ckgabedatum beibehalten
+		<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR NAME="selected" -->> R&uuml;ckgabedatum manuell festlegen
 		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
 		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
@@ -152,18 +152,18 @@
 -->
 	<div id="bloc25">
 		<!-- TMPL_IF NAME="IMPOSSIBLE" -->
-		<h2 class="problem">Ausleihe nicht möglich</h2>
+		<h2 class="problem">Ausleihe nicht m&ouml;glich</h2>
 			<!-- TMPL_IF NAME="INVALID_DATE" -->
 				<p class="problem">Das &Uuml;berzeihungsdatum ist ung&uuml;ltig</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-				<p class="problem">Barcode unbekannt</p>
+				<p class="problem">Strichcode unbekannt</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
 				<p class="problem">Exemplar nicht ausleihbar</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="WTHDRAWN" -->
-				<p class="problem">Exemplar zur&uuml;ckgenommen</p>
+				<p class="problem">Exemplar ausgemustert</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="GNA" -->
 				<p class="problem">Benutzer ist unbekannt verzogen</p>
@@ -175,17 +175,17 @@
 				<p class="problem">Benutzer ist ausgeschlossen</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
-				<p class="problem">Weitzer Verl&auml;ngerung nicht m&ouml;glich</p>
+				<p class="problem">Weitere Verl&auml;ngerung nicht m&ouml;glich</p>
 			<!-- /TMPL_IF -->
 			<br/>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
-		<h2 class="problem">I need confirmation before issuing</h2>
+		<h2 class="problem">Genehmigung vor Ausgabe einholen</h2>
 			<!-- TMPL_IF NAME="DEBT" -->
-				<p>Der Entleihet hat Verbindlichkeiten in H&ouml;he von <!-- TMPL_VAR name="DEBT" --></p>
+				<p>Benutzer hat Verbindlichkeiten in H&ouml;he von <!-- TMPL_VAR name="DEBT" --></p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="RENEW_ISSUE" -->
-				<p>Keine Ausleihe, aber eine Verl&auml;ngerung</p>
+				<p>Keine Ausleihe, aber Verl&auml;ngerung</p>
 			<!-- /TMPL_IF -->	
 			<!-- TMPL_IF NAME="RESERVE_WAITING" -->
 				<p>Vormerkung bereitgestellt f&uuml;r <!-- TMPL_VAR NAME="RESERVE_WAITING" --></p>
@@ -194,18 +194,18 @@
 				<p>Vorgemerkt von <!-- TMPL_VAR NAME="RESERVED" --></p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-				<p>Exemplar ausgeliehen an <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Zur&uuml;ck &amp; buchen?</p>
+				<p>Exemplar momentan ausgeliehen an <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Zur&uuml;ck &amp; buchen?</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="TOO_MANY" -->
-				<p class="problem">Zu viele Medien (bereits ausgeliehen / max. : <!-- TMPL_VAR name="TOO_MANY" -->)</p>
+				<p class="problem">Zu viele Medien bereits ausgeliehen (max.: <!-- TMPL_VAR name="TOO_MANY" -->)</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">
 				<!-- TMPL_IF NAME="RESERVED" -->
-					<p><input type="checkbox" checked name="cancelreserve" value="1">Cancel Reserve</p>
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Vorbestellung l&ouml;schen</p>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="RESERVE_WAITING" -->
-					<p><input type="checkbox" checked name="cancelreserve" value="1">Cancel Reserve</p>
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Vorbestellung l&ouml;schen</p>
 				<!-- /TMPL_IF -->
 				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">">
@@ -214,7 +214,7 @@
 				<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
 				<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
 				<input type="submit" value="Ausleihe best&auml;tigen" class="button circulation">
-				<a href="circulation.pl?borrnumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button circulation">Don't issue</a>
+				<a href="circulation.pl?borrnumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button circulation">Nicht ausgeben</a>
 			</form>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
@@ -236,7 +236,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 	<table>
 		<tr>
 			<th class="circulation">F&auml;lligkeitsdatum</th>
-			<th class="circulation">Barcode</th>
+			<th class="circulation">Strichcode</th>
 			<th class="circulation">Titel</th>
 			<th class="circulation">Verfasser</th>
 			<th class="circulation">Call number</th>
@@ -261,11 +261,11 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 
 <!-- TMPL_IF NAME="previssues" -->
 <div id="bloc25">
-	<h2 class="circulation">Vorherige Exemplare</h2>
+	<h2 class="circulation">Sonstige ausleihen</h2>
 	<table>
 		<tr>
 			<th class="circulation">F&auml;lligkeitsdatum</th>
-			<th class="circulation">Barcode</th>
+			<th class="circulation">Strichcode</th>
 			<th class="circulation">Titel</th>
 			<th class="circulation">Verfasser</th>
 			<th class="circulation">Call number</th>

@@ -25,7 +25,7 @@
 		<p><label class="label100">Datum</label><!-- TMPL_VAR NAME="date" --></p>
 		<p><label class="label100">Abholung</label><!-- TMPL_VAR NAME="CGIbranch" --></p>
 		<p>
-			<label class="label100">Bestellung</label><input type="checkbox" name="request" value="alle">N&auml;chstes Verf&uuml;gbares, oder w&auml;hlen Sie aus der Liste aus
+			<label class="label100">Bestellung</label><input type="checkbox" name="request" value="any">N&auml;chstes Verf&uuml;gbares, oder w&auml;hlen Sie aus der Liste aus
 		</p>
 		<table class="small">
 			<tr>
@@ -41,7 +41,7 @@
 				<tr>
 					<td>
 						<!-- TMPL_IF Name="itemlost" -->
-							Cannot be selected
+							Nicht verf&uuml;gbar
 						<!-- TMPL_ELSE -->
 							<input type="checkbox" name="reqbib" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 							<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
@@ -98,7 +98,7 @@
 										<!-- TMPL_VAR NAME="num" -->
 									</option>
 								<!-- /TMPL_LOOP -->
-								<option value="del">Del</option>
+								<option value="del">L&ouml;schen</option>
 							</select>
 						</td>
 						<td>
@@ -125,10 +125,10 @@
 								</a>
 							<!-- TMPL_ELSE -->
 								<!-- TMPL_IF Name="constrainttypea" -->
-									<i>N&auml;chstes Verf&uuml;gbares</i>
+									<i>N&auml;chstes verf&uuml;gbares</i>
 								<!-- TMPL_ELSE -->
 									<!-- TMPL_IF Name="constrainttypeo" -->
-										This type only : <b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>
+										Ausschlie&szlig;lich <b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>
 									<!-- /TMPL_IF -->
 								<!-- /TMPL_IF -->
 							<!-- /TMPL_IF -->
@@ -138,7 +138,7 @@
 				<!-- /TMPL_LOOP -->
 				<tr>
 					<td colspan="6" align="right">
-						Bestellung aus der Rangliste l&ouml;schen durch "del"
+						Bestellung aus der Rangliste l&ouml;schen durch "L&ouml;schen"
 						<input type="image" name="submit" value="Bestellen" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2rightarrow.png">
 					</td>
 				</tr>

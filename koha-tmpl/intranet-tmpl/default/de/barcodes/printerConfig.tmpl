@@ -1,18 +1,17 @@
 <!-- TMPL_INCLUDE NAME="barcodes-top.inc" -->
 <div id="mainbloc">
-	<h1>Konfiguration Drucker</h1>
+	<h1>Druckerkonfiguration</h1>
 	<table bgcolor="#ffcc00" width="80%" cellpadding="3">
 		<tr valign="center">
-			<td><font size="4">Set de printer configuration corresponding to your environment</font></td>
+			<td><font size="4">Bitte stellen Sie die Konfiguration entsprechend Ihres Druckers ein.</font></td>
 		</tr>
 	</table>
 	<ul>
-		<li>Set width and heigth of the label that you are going to work with.</li>
-		<li>Set your system dpi by default.</li>
-		<li>Setentyp setzen</li>
-		<li>Select how many columns and rows are in your page type.</li>
-		<li>Set margin left and margin bottom of the page that you are going to use. This parameters will
-		    help to center the barcodes into the labels.</li>
+		<li>Geben Sie die Breite und Höher der von Ihnen verwendeten Etiketten an.</li>
+		<li>Stellen Sie die Druckaufl&ouml;sung in DPI ein.</li>
+		<li>W&auml;hlen Sie das Seitenformat</li>
+		<li>Stellen sie ein, wieviele Etiketten sich in einer Spalte und Zeile befinden.</li>
+		<li>Wählen Sie den linken und unteren Randabstand ihrer Etiketten. Dadurch k&ouml;nnen Sie den Druck besser auf den Etiketten zentrieren.</li>
 	</ul>
 	<br>
 	<form id="formulario" method="POST" action='<!-- TMPL_VAR NAME="SCRIPT_NAME" -->' name="form1">
@@ -26,22 +25,22 @@
 					Labelh&ouml;he (in mm)
 				</td>
 				<td>
-					System dpi
+					Druckaufl&ouml;sung (in dpi)
 				</td>
 				<td>
 					Seitentyp
 				</td>
 				<td>
-					Columns
+					Anzahl Spalten pro Zeile
 				</td>
 				<td>
-					Zeilen
+					Anzahl Zeilen pro Seite
 				</td>
 				<td>
-					Margin Bottom (Expressed in mm)
+					Abstand der Etiketten vom unteren Seitenrand (in&nbsp;mm)
 				</td>
 				<td>
-					Margin Left (Expressed in mm)
+					Abstand der Etiketten vom linken Seitenrand (in&nbsp;mm)
 				</td>
 			<tr>
   			<tr valign="top">

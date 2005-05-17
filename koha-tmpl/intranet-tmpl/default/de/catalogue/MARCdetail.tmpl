@@ -2,11 +2,11 @@
 
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
-		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --></h1>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Edit biblio  </a>  <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">  Duplicate  </a>  <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">  Edit item  </a>   <a href="javascript:confirm_deletion()" class="button catalogue">  delete  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Complete  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Normal  </a>  <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  ISBD  </a>  <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Add to shelf  </a>  <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Print  </a>
+		<h1 class="catalogue">Biblionummer : <!-- TMPL_VAR NAME="biblionumber" --></h1>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Biblio bearbeiten  </a>  <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">  Duplizieren  </a>  <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">  Exemplar bearbeiten  </a>   <a href="javascript:confirm_deletion()" class="button catalogue">  L&ouml;schen  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Vollanzeige  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Normalanzeige  </a>  <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  ISBD  </a>  <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  zu vituellem Regal hinzuf&uuml;gen  </a>  <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Drucken  </a>
 		<!-- TMPL_IF name="subscriptionsnumber" -->
 		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
-			Subscription(s)
+			Bestellungen
 		</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="norequests" -->
@@ -94,7 +94,7 @@
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Search on <!-- TMPL_VAR name="marc_value" -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Suche nach <!-- TMPL_VAR name="marc_value" -->">
 						</a>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
@@ -150,7 +150,7 @@
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Search on <!-- TMPL_VAR name="marc_value" -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Suche nach <!-- TMPL_VAR name="marc_value" -->">
 						</a>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
@@ -206,7 +206,7 @@
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Search on <!-- TMPL_VAR name="marc_value" -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Suche nach <!-- TMPL_VAR name="marc_value" -->">
 						</a>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
@@ -234,7 +234,7 @@
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Search on <!-- TMPL_VAR name="marc_value" -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Suche nach <!-- TMPL_VAR name="marc_value" -->">
 						</a>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
@@ -262,7 +262,7 @@
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Search on <!-- TMPL_VAR name="marc_value" -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title="Suche nach <!-- TMPL_VAR name="marc_value" -->">
 						</a>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->

@@ -14,15 +14,15 @@
 	<tr><th>Vorgemerkt</th></tr>
 	<tr><td>
 	<!-- TMPL_IF Name="reserved" -->
-			Vorgemerkt: vorgemerkt f&uuml;r <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>.
+			Vorgemerkt f&uuml;r <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>.
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="waiting" --> Exemplar bereitgestellt<br>
     Exemplar steht bereit in <!-- TMPL_VAR NAME="branchname" --> f&uuml;r <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>.<br><!-- /TMPL_IF -->
 
 <p>			
 
-			<form method="post" action="branchtransfers.pl"><!-- TMPL_IF Name="reserved" -->Vorbestellung auf "Warten" setzen und Medium nach <b><!-- TMPL_VAR NAME="branchname" --> </b> schicken <!-- /TMPL_IF -->
-			<!-- TMPL_IF Name="waiting" --><strong>Cancel reservation and then attempt transfer:</strong> <!-- /TMPL_IF -->
+			<form method="post" action="branchtransfers.pl"><!-- TMPL_IF Name="reserved" -->Vorbestellung auf "Warten" setzen und Medium nach <b><!-- TMPL_VAR NAME="branchname" --></b> schicken <!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="waiting" --><strong>Vorbestellung l&ouml;schen und danach Transfer:</strong> <!-- /TMPL_IF -->
 				<!-- TMPL_LOOP Name="trsfitemloop" -->
 					<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
 					<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
@@ -40,7 +40,7 @@
 
 		<!-- TMPL_IF Name="reserved" --><p>
 			<form method="post" action="branchtransfers.pl">
-<strong>Cancel reservation and then attempt transfer:</strong>
+<strong>Vorbestellung l&ouml;schen und danach Transfer:</strong>
 			<!-- TMPL_LOOP Name="trsfitemloop" -->
 				<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
 				<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
@@ -75,25 +75,24 @@
 	<tr><td>
 	<!-- TMPL_IF Name="reqmessage" -->
 		<!-- TMPL_IF Name="cancelled" -->
-			Vormerkung storniert<br>
+			Vorbestellung storniert<br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="setwaiting" -->
-			Exemplar ist bereitgestellt in der Zweigstelle: <!-- TMPL_VAR NAME="reqbrchname" --><br>
+			Exemplar ist bereitgestellt in der Zweigstelle <!-- TMPL_VAR NAME="reqbrchname" --><br>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	<!-- TMPL_LOOP Name="errmsgloop" -->
 				<!-- TMPL_IF Name="errbadcode" -->
-			Kein Exemplar mit dem Barcode: <!-- TMPL_VAR NAME="msg" -->
+			Kein Exemplar mit dem Barcode <!-- TMPL_VAR NAME="msg" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errispermanent" -->
-			Biite Exemplar zur&uuml;ck an Heimatzweigstelle: <!-- TMPL_VAR NAME="msg" -->
+			Bitte Exemplar zur&uuml;ck an Heimatzweigstelle <!-- TMPL_VAR NAME="msg" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errdesteqholding" -->
 			Exemplar ist bereits in der Ausleihzweigstelle
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errwasreturned" -->
-			Exemplar war ausgeliehen an<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"
-onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a> <!-- TMPL_VAR NAME="name" --> und wurde zur&uuml;ck gegeben.
+			Exemplar war ausgeliehen an <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="bornum" --></a> und wurde zur&uuml;ck gegeben.
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->&nbsp;
 	</td></tr></table>
@@ -105,7 +104,7 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 			<!-- /TMPL_LOOP -->
 		</select></p>
 
-	<p><b> Exemplarbarcode eingeben:</b> <input name="barcode" size="10">
+	<p><b> Exemplarstrichcode eingeben:</b> <input name="barcode" size="10">
 	<input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR NAME="tobrancd" -->>
 
 	<!-- TMPL_LOOP Name="trsfitemloop" -->
@@ -119,7 +118,7 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 		<p>
 		<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th colspan="6">Verschickte Medien</th></tr>
-		<tr><th>Barcode</th><th>Titel</th><th>Verfasser</th><th>Typ</th><th>von</th><th>An</th></tr>
+		<tr><th>Strichcode</th><th>Titel</th><th>Verfasser</th><th>Typ</th><th>von</th><th>nach</th></tr>
 		<!-- TMPL_LOOP Name="trsfitemloop" -->
 			<tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->">
 			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>

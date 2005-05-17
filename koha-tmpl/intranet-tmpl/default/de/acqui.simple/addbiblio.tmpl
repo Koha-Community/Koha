@@ -8,41 +8,41 @@
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
 		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->">
 		<!-- TMPL_IF name="bibid" -->
-			<input type="button" value="Speichern" onclick="Check(this.form)" accesskey="w" class="button catalogue">
+			<BUTTON value="Save" onclick="Check(this.form)" accesskey="s" class="button catalogue">&Auml;nderungen <u>s</u>ichern</BUTTON>
 		<!-- TMPL_ELSE -->
-			<input type="button" value="Biblio hinzuf&uuml;gen" onclick="Check(this.form)" accesskey="w" class="button catalogue">
+			<BUTTON value="Add biblio" onclick="Check(this.form)" accesskey="n" class="button catalogue"><u>N</u>euer Eintrag</BUTTON>
 		<!-- /TMPL_IF -->
-		<a href="javascript:PopupZ3950()" class="button catalogue">z3950 search</a>
+		<a href="javascript:PopupZ3950()" class="button catalogue">z3950 Suche</a>
 	</p>
 </div>
 
 	<div class="tabs">
 		<!-- TMPL_IF name="0XX" -->
-		<a href="javascript:active(0)" id="link0">0</a>
+			<a href="javascript:active(0)" id="link0">0</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="1XX" -->
-		<a href="javascript:active(1)" id="link1">1</a>
+			<a href="javascript:active(1)" id="link1">1</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="2XX" -->
-		<a href="javascript:active(2)" id="link2">2</a>
+			<a href="javascript:active(2)" id="link2">2</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="3XX" -->
-		<a href="javascript:active(3)" id="link3">3</a>
+			<a href="javascript:active(3)" id="link3">3</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="4XX" -->
-		<a href="javascript:active(4)" id="link4">4</a>
+			<a href="javascript:active(4)" id="link4">4</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="5XX" -->
-		<a href="javascript:active(5)" id="link5">5</a>
+			<a href="javascript:active(5)" id="link5">5</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="6XX" -->
-		<a href="javascript:active(6)" id="link6">6</a>
+			<a href="javascript:active(6)" id="link6">6</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="7XX" -->
-		<a href="javascript:active(7)" id="link7">7</a>
+			<a href="javascript:active(7)" id="link7">7</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="8XX" -->
-		<a href="javascript:active(8)" id="link8">8</a>
+			<a href="javascript:active(8)" id="link8">8</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="9XX" -->
 			<a href="javascript:active(9)" id="link9">9</a>
@@ -52,11 +52,11 @@
 	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
 		<!-- TMPL_IF name="duplicatebiblionumber" -->
 			<div class="problem">
-				<p>Duplicate suspected with <a href='javascript:openWindow("../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1", "Duplicate biblio")' class="button catalogue"><!-- TMPL_VAR name="duplicatetitle" --></a></p>
-				<p>Sie m&uuml;ssen :</p>
+				<p>Ein &auml;hnlicher Eintrag existiert bereits: <a href='javascript:openWindow("../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1", "Duplicate biblio")' class="button catalogue"><!-- TMPL_VAR name="duplicatetitle" --></a></p>
+				<p>Bitte w&auml;hlen Sie:</p>
 				<ul>
-					<p><input type="checkbox" value=1 name="confirm_not_duplicate">best&auml;tigen, da&szlig; es kein Duplikat ist (und Biblio hinzuf&uuml;gen erneut anklicken)</p>
-					<p>Go to <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->" class="button catalogue">edit items</a> from this duplicate biblio</p>
+					<p><input type="checkbox" value=1 name="confirm_not_duplicate"> Es handelt sich hierbei um zwei verschiedene Einträge (anw&auml;hlen und dann nochmal auf "Neuer Eintrag" klicken)</p>
+					<p>Den bestehenden Eintrag von <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->" class="button catalogue"> bearbeiten</a> um weitere Exemplare hinzuzuf&uuml;gen</p>
 				</ul>
 			</div>
 		<!-- /TMPL_IF -->
@@ -474,14 +474,14 @@ function Check(f) {
 	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
 	var alertString2;
 	if (total_errors!=0) {
-		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2  = _("Die Anfrage konnte aufgrund folgender Probleme nicht bearbeitet werden");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_missing_mandatory_tags +_("Pflichttags leer");
+		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" auszuf&uuml;llende Tags sind leer");
 		for (i=0; i<missing_mandatory_tags.length; i++)
 		{
 			alertString2 += "\n--->"+ missing_mandatory_tags[i];
 		}
-  		alertString2 += "\n- "+ total_missing_mandatory_subfields +_("Pflichtfeld leer (sieh fett dargestellte Unterfelder)");
+  		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" auszuf&uuml;llende Fields sind leer (fettgedruckt)");
 		for (i=0; i<missing_mandatory_subfields.length; i++)
 		{
 			alertString2 += "\n--->"+ missing_mandatory_subfields[i];

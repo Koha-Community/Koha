@@ -2,7 +2,7 @@
 <div id="mainbloc">
 	<h1>Suchergebnis Lieferanten</h1>
 	<div id="bloc100">
-		<h2>Sie suchten nach dem <b>Lieferanten <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> Treffer gefunden</h2>
+		<h2>Sie suchten nach dem <b>Lieferanten <!-- TMPL_VAR name="supplier" --></b>, <!-- TMPL_VAR name="count" --> Treffer gefunden</h2>
 		<table>
 			<tr>
 				<th>Buchh&auml;ndler</th>
@@ -11,7 +11,7 @@
 			<!-- TMPL_LOOP name="loop_suppliers" -->
 				<tr>
 					<td><!-- TMPL_VAR name="name" --></td>
-					<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">Get It !</td>
+					<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">W&auml;hlen</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>

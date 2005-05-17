@@ -10,7 +10,7 @@
 		<div id="bloc25">
 			<!-- TMPL_IF Name="waiting" -->
 				<h2 class="circulation">Exemplar bereitgestellt</h2>
-			<p>Exemplar <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) ist bereitgestellt in <b><!-- TMPL_VAR NAME="branchname" --></b> f&uuml;r (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="name" --></a>).
+			<p>Exemplar <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) ist bereitgestellt in <b><!-- TMPL_VAR NAME="branchname" --></b> f&uuml;r (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"> <!-- TMPL_VAR NAME="name" --></a>).
 					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
 						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
@@ -24,7 +24,7 @@
 			<!-- TMPL_IF Name="diffbranch" -->
 				<h2 class="circulation">Exemplar bereitgestellt</h2>
 				<p>
-					Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)  needs to be transfered to <b><!-- TMPL_VAR NAME="branchname" --></b>  to be picked up by  <!-- TMPL_VAR NAME="name" -->  (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+					Exemplar <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) muss nach <b><!-- TMPL_VAR NAME="branchname" --></b> verschickt und dort f&uuml;r <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>) bereitgestellt werden.
 				</p>
 				<center>
 				<form method="post" action="returns.pl">
@@ -57,17 +57,17 @@
 				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
 				<input type="hidden" name="resbarcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 				<input type="hidden" name="resslip" value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Date: <!-- TMPL_VAR NAME="today" -->
+	Datum: <!-- TMPL_VAR NAME="today" -->
 	
-	ITEM RESERVED:<!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
-	barcode: <!-- TMPL_VAR NAME="itembarcode" -->
-	itemtype: <!-- TMPL_VAR NAME="itemtype" -->
-	COLLECT AT: <!-- TMPL_VAR NAME="branchname" -->
+	Vorbestellter Titel:<!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
+	Strichcode: <!-- TMPL_VAR NAME="itembarcode" -->
+	Medientyp: <!-- TMPL_VAR NAME="itemtype" -->
+	Abholort: <!-- TMPL_VAR NAME="branchname" -->
 	
-	BORROWER:
+	Benutzer:
 	<!-- TMPL_VAR NAME="bortitle" --> <!-- TMPL_VAR NAME="borfirstname" --> <!-- TMPL_VAR NAME="borsurname" -->
-	card number: <!-- TMPL_VAR NAME="borcnum" -->
-	Phone: <!-- TMPL_VAR NAME="borphone" -->
+	Kartennummer: <!-- TMPL_VAR NAME="borcnum" -->
+	Telefon: <!-- TMPL_VAR NAME="borphone" -->
 	<!-- TMPL_VAR NAME="borstraddress" -->
 	<!-- TMPL_VAR NAME="borsub" -->
 	<!-- TMPL_VAR NAME="bortown" -->
@@ -83,8 +83,8 @@
 	<!-- TMPL_ELSE -->
 		<div id="bloc25">
 			<form method="post" action="/cgi-bin/koha/circ/returns.pl">
-				<h2 class="circulation">Medien-Barcode eingeben</h2>
-				<label class="label20">Exemplar-Barcode:</label><input name="barcode" size="10">
+				<h2 class="circulation">Medien-Strichcode eingeben</h2>
+				<label class="label20">Exemplar-Strichcode:</label><input name="barcode" size="10">
 				</table>
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
@@ -99,7 +99,7 @@
 				<!-- TMPL_LOOP Name="errmsgloop" -->
 					<span id="problem">
 					<!-- TMPL_IF Name="badbarcode" -->
-						Kein Exemplar mit dem Barcode: <!-- TMPL_VAR NAME="msg" -->
+						Kein Exemplar mit dem Strichcode: <!-- TMPL_VAR NAME="msg" -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="ispermanent" -->
 						Bitte zur&uuml;ck an <!-- TMPL_VAR NAME="msg" -->
@@ -111,7 +111,7 @@
 						Exemplar war vermi&szlig;t. Jetzt wieder da.
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="withdrawn" -->
-						Exemplar gel&ouml;scht
+						Exemplar ausgemustert
 					<!-- /TMPL_IF -->
 					</span>
 				<!-- /TMPL_LOOP -->
@@ -165,7 +165,7 @@
 			<table>
 			<tr>
 				<th class="circulation">F&auml;lligkeitsdatum</th>
-				<th class="circulation">Barcode</th>
+				<th class="circulation">Strichcode</th>
 				<th class="circulation">Titel</th>
 				<th class="circulation">Verfasser</th>
 				<th class="circulation">Typ</th>

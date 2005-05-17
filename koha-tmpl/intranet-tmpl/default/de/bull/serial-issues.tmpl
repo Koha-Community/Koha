@@ -1,73 +1,73 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
-<h1 class="catalogue">Ausleihen f&uuml;r eine Abo</h1>
+<h1 class="catalogue">Informationen zum Abo</h1>
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Biblio</a>
 <form method="post" name="f">
 <div id="bloc25">
 	<h2 class="catalogue">Abo-Informationen</h2>
-		<p>For <b><!-- TMPL_VAR name="bibliotitle" --></b> that began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every  <b>
+		<p>f&uuml;r <b><!-- TMPL_VAR name="bibliotitle" --></b>, abboniert seit <b><!-- TMPL_VAR name="startdate" --></b>, erscheint <b>
 		<!--TMPL_IF name="periodicity1" -->
-				Tag
+				t&auml;glich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity2" -->
-				Woche
+				w&ouml;chentlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity3" -->
-				2 Wochen
+				2 w&ouml;chentlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity4" -->
-				3 Wochen
+				3 w&ouml;chentlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity5" -->
-				Monat
+				monatlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity6" -->
-				2 Monate
+				2 monatlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity7" -->
-				3 Monate
+				3 monatlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity8" -->
-				quarter
+				quartalsweise
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity9" -->
-				2 Quartale
+				halbj&auml;hrlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity10" -->
-				Jahr
+				j&auml;hrlich
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity11" -->
-				2 Jahre
+				2 j&auml;hrlich
 		<!-- /TMPL_IF -->
 		</b>
-		on
+		jeweils
 		<b>
 		<!--TMPL_IF name="arrival1" -->
-			Montag
+			Montags
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival2" -->
-				Dienstag
+				Dienstags
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival3" -->
-				Mittwoch
+				Mittwochs
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival4" -->
-				Donnerstag
+				Donnerstags
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival5" -->
-				Freitag
+				Freitags
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival6" -->
-				Samstag
+				Samstags
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival7" -->
-				Sonntag
+				Sonntags
 		<!-- /TMPL_IF -->
 		</b>
 		</p>
-		<p>(Abonnement f&uuml;r 
-			<!-- TMPL_IF name="numberlength" -->Ausleihen<!-- /TMPL_IF -->
+		<p>(Abonniert f&uuml;r 
+			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> Ausgaben<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> Wochen<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> Monate<!-- /TMPL_IF -->
 			)
@@ -75,7 +75,7 @@
 		<p><!-- TMPL_VAR name="notes" --></p>
 </div>
 <div id="bloc25">
-	<h2 class="catalogue">Gesamtausleihe</h2>
+	<h2 class="catalogue">Bemerkungen</h2>
 	<p>
 		<!-- TMPL_VAR name="librariannote" -->
 	</p>

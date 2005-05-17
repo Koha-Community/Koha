@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <div id="mainbloc">
-	<h1 class="catalogue">MARC Biblio-Management</h1>
+	<h1 class="catalogue">MARC Bestands-Management</h1>
 	<!-- TMPL_IF name="noitemsfound" -->
 		<font color="red" size="4">Keine Medien gefunden</font>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="websiteadded" -->
-		<font color="red" size="4">Website Biblioitem Added</font>
+		<font color="red" size="4">Webseiten-Referenz hinzugef&uuml;gt</font>
 	<!-- /TMPL_IF -->
 	
 	<div id="bloc25">
 		<form action="isbnsearch.pl">
-			<h2 class="catalogue">Zum Hinzuf&uuml;gen eines neuen Biblio/Exemplars, ISBN/ISSN einscannen oder eingeben</h2>
+			<h2 class="catalogue">Um neue bibliografische Daten (und evtl. entsprechende Medien) aufzunehmen, scannen Sie die ISBN/ISSN oder geben Sie sie hier ein.</h2>
 			<p>
-				<label class="label100" for="title">Titel</label>
+				<label class="label100" for="title">Title</label>
 				<input type="hidden" name="marclist" value="biblio.title">
 	
 				<input type="hidden" name="and_or" value="and">
@@ -29,29 +29,29 @@
 				<input type="hidden" name="operator" value="start">
 				<input type="text" name="value" id="title"size="35">
 			</p>
-			<p><input type="submit" value="Los" class="button catalogue"></p>
+			<p><button type="submit" value="Go" class="button catalogue">Start</button></p>
 		</form>
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<p><a href="addbiblio-nomarc.pl" class="button catalogue">Leeren Biblio anlegen</a></p>
+			<p><a href="addbiblio-nomarc.pl" class="button catalogue">Nur bibliografische Daten einpflegen</a></p>
 		<!-- TMPL_ELSE -->
 			<p>
 				<form action="addbiblio.pl" method="post">
 					<select name="frameworkcode">
-						<option value="">Default</option>
+						<option value="">Standard</option>
 						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
 							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 						<!-- /TMPL_LOOP -->
 					</select>
-					<input type="submit" value="Leeren Biblio anlegen" class="button catalogue">
+					<button type="submit" value="Create Empty biblio" class="button catalogue">Nur bibliografische Daten einpflegen</button>
 				</form>
 			</p>
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="catalogue">Tipp</h2>
-		<p>Wird die ISBN oder der Titel in der Datenbank gefunden, wird er angezeigt und kann bearbeitet werden<br/>
-				If the ISBN or title is found in the reservoir, it will be retrieved and a biblio will be added.<br/>
-				Anderenfalls kann ein Biblio direkt eingegeben werden</p>
+		<h2 class="catalogue">Hinweis</h2>
+		<p>Wenn bereits Daten für die ISBN in der Datenbank hinterlegt sind, werden diese angezeigt und k&ouml;nnen bearbeitet werden.<br/>
+			 Wenn Fremddaten für die ISBN abgerufen wurden sich im Zwischenspeicher befinden, werden diese ebenfalls angezeigt und dienen als Grundlage f&uuml;r einen neuen Datensatz.<br/>
+			 Anderenfalls wird eine leerer Datensatz angelegt und Sie m&uuml;ssen alle Daten selbst eintragen.</p>
 	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

@@ -15,11 +15,11 @@
 			</tr>
 			<tr>
 				<td>
-					L&auml;ndername &nbsp;<input type="text" size="10" id="countryName" name="countryName"  
+					L&auml;ndername&nbsp;<input type="text" size="10" id="countryName" name="countryName"  
 					                        style="background-color:#FFFFFF;color:Black"/>
 				</td>
 				<td>
-					L&auml;ndercode &nbsp;<input type="text" size="3" id="countryCode" name="countryCode"  
+					L&auml;ndercode&nbsp;<input type="text" size="3" id="countryCode" name="countryCode"  
 					                        style="background-color:#FFFFFF;color:Black"/>
 				</td>
 			</tr>
@@ -43,14 +43,14 @@
 	<h1>Barcode-Generator</h1>
 	<table bgcolor="#ffcc00" width="80%" cellpadding="3">
 		<tr valign="center">
-			<td><font size="4">Generiere Barcodes aus den Inventarisierungscodes</font></td>
+			<td><font size="4">Generiere Strichcodes aus den Inventarnummern</font></td>
 		</tr>
 	</table>
 	<ul>
 		<li>W&auml;hlen Sie einen Bereich von Inventarisierungsnummern. Sie K&ouml;nnen einen Bereich oder einzelne Nummern ausw&auml;hlen</li>
-		<li>W&auml;hlen Sie ein Standardformat aus, um mit diesem die Barcodes zu generieren.</li>
-		<li>Definition der Seitenformate f&uuml;r die PDF-Ausgabe</li>
-		<li>Abh&auml;ngig vom Seitenformat zeigt Koha wie die Barcodes auf einer Seite angeordnet sind. Sie k&ouml;nnen festlegen, wo auf der Seite mit dem Druck begonnen wird.
+		<li>W&auml;hlen Sie ein Standardformat aus, um mit diesem die Strichcodes zu generieren.</li>
+		<li>Definition des Seitenformats f&uuml;r die PDF-Ausgabe</li>
+		<li>Abh&auml;ngig vom Seitenformat zeigt Koha wie die Strichcodes auf einer Seite angeordnet sind. Sie k&ouml;nnen festlegen, wo auf der Seite mit dem Druck begonnen wird.
 		</li>
 	</ul>
 	<br>
@@ -60,7 +60,7 @@
 			<!-- TMPL_IF NAME="ERROR" -->
 			<tr align="center">
 				<td colspan="2" >
-					<p style="font-size:13pt;color:red">Can't find inventory codes in that range. Please try again.</p>
+					<p style="font-size:13pt;color:red">Im angegeben Bereich sind keine Inventarnummrn vorhanden.</p>
 				</td>
 			</tr>
 			<!-- /TMPL_IF -->
@@ -92,7 +92,7 @@
 						<table class="ranges">
 							<tr valign="top">
 								<td width="5%">
-									Inventarisierungscode <BR>
+									Inventarnummer<BR>
 									<input id="inventaryCode" type="text" name="inventaryCode" size="20">
 								<td>
 								<td align="center">	
@@ -165,7 +165,7 @@
   			</tr>
   			<tr valign="top">
   			    <td align="right">
-					<input type="submit" value="Barcodes generieren" name="B1" class="button">
+					<input type="submit" value="Strichcodes generieren" name="B1" class="button">
 				</td>
   			    <td align="left">
   			    	<input type="reset" value="Felder l&ouml;schen" name="B2" class="button">

@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
-	<h1 class="reports">&Uuml;berf&auml;llige Exemplare seit <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<h1 class="reports">&Uuml;berf&auml;llige Exemplare am <!-- TMPL_VAR NAME="todaysdate" --></h1>
 	
 	<table>
 	<tr>
@@ -15,7 +15,7 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="duedate" --></td>
 			<!-- TMPL_IF NAME="email" -->
-			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Überziehung: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
 			<!-- TMPL_ELSE -->
 			<td><!-- TMPL_VAR NAME="name" --></td>
 			<!-- /TMPL_IF -->

@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
-<h1>MARC acquisition system</h1>
+<h1>MARC Fremddaten&uuml;bernahme</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Import in die Breeding-Farm</font></td>
+	<td><font size="4">Importieren Sie MARC-Daten in den Fremddatenpool</font></td>
 	</tr>
 </table>
 
@@ -11,16 +11,16 @@
 <p>Importergebnisse</p>
 <ul>
 	<p><!-- TMPL_VAR NAME="imported" --> importierte S&auml;tze</p>
-	<p><!-- TMPL_VAR NAME="alreadyindb" --> wurde nicht importiert, da bereits in der Datenbank</p>
-	<p><!-- TMPL_VAR NAME="alreadyinfarm" --> nicht importiert, da bereits im Fremddatenpool</p>
-	<p><!-- TMPL_VAR NAME="notmarcrecord" --> nicht importiert, da es nicht nach einem MARC-Satz aussieht (oder ISBN/ISSN fehlt) !</p>
-	<p><!-- TMPL_VAR NAME="total" --> records parsed</p>
+	<p><!-- TMPL_VAR NAME="alreadyindb" --> S&auml;tze wurden nicht importiert, da bereits in der Datenbank</p>
+	<p><!-- TMPL_VAR NAME="alreadyinfarm" --> S&auml;tze nicht importiert, da bereits im Fremddatenpool</p>
+	<p><!-- TMPL_VAR NAME="notmarcrecord" --> S&auml;tze nicht importiert, da es nicht nach einem MARC-Satz aussieht (oder ISBN/ISSN fehlt) !</p>
+	<p><!-- TMPL_VAR NAME="total" --> S&auml;tze bearbeitet</p>
 	<p><a href="addbooks.pl">Zur&uuml;ck zur Erwerbung</a>
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
-	<li>W&auml;hlen Sie eine Datei zum Import in die Breeding-Farm. Sie wird analysiert, und f&uuml;r jede gefundene ISBN wird ein neuer Satz in der Breeding-Farm angelegt.</li>
-	<li>Ist die ISBN bereits in der Breeding-Farm, k&ouml;nnen Sie w&auml;hlen, ob der neue Satz ignoriert oder der vorhandene Satz &uuml;berschrieben werden soll.</li>
+	<li>W&auml;hlen Sie eine Datei zum Import in den Fremddatenpool. Sie wird analysiert, und f&uuml;r jede gefundene ISBN wird ein neuer Satz im Fremddatenpool angelegt.</li>
+	<li>Ist die ISBN bereits im Fremddatenpool, k&ouml;nnen Sie w&auml;hlen, ob der neue Satz ignoriert oder der vorhandene Satz &uuml;berschrieben werden soll.</li>
 	<li>Sie k&ouml;nnen f&uuml;r diesen Import einen Namen vergeben. Beim Anlegen eines Biblio kann es sinnvoll sein, sich die Herkunftsquelle zu merken.</li>
 	<li>Nat&uuml;rlich wird der Satz ignoriert, wenn in der aktiven Datenbank die ISBN bereits existiert. </li>
 </ul>

@@ -4,13 +4,13 @@
 	<div id="bloc25">
 		<p>
 		<!-- TMPL_IF NAME="NOBARCODE" -->
-			<p class="problem">Sie m&uuml;ssen dem Exemplar einen Barcode zuordnen</p>
+			<p class="problem">Sie m&uuml;ssen dem Exemplar einen Strichcode zuordnen</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="NOBIBLIOITEM" -->
-			<p class="problem">You must create a new group for your item to be added to</p>
+			<p class="problem">Sie m&uuml;ssen zuerst einen bibliografischen Datensatz anlegen, dem sie das Exemplar zuordnen k&ouml;nnen</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="BARCODEINUSE" -->
-			<p class="problem">Sorry, Barcode bereits vorhanden</p>
+			<p class="problem">Der Strichcode wird bereits verwendet</p>
 		<!-- /TMPL_IF -->
 		<h2 class="catalogue">BIBLIO SATZ <!-- TMPL_VAR NAME="BIBNUM" --></h2>
 		<p><label class="label100">Verfasser</label> <!-- TMPL_VAR NAME="AUTHOR" --></p>
@@ -18,13 +18,12 @@
 		<p><label class="label100">Serientitel:</label> <!-- TMPL_VAR NAME="SERIES" --></p>
 		<p><label class="label100">Bemerkung:</label> <!-- TMPL_VAR NAME="NOTES" --></p>
 		<!-- TMPL_LOOP NAME="BIBITEMS" -->
-			<!-- TMPL_IF NAME="WEB" -->
 				<h2 class="catalogue"><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPPE = <!-- TMPL_VAR NAME="itemtype" --></h2>
+			<!-- TMPL_IF NAME="WEB" -->
 				<p><label>URL:</label><!-- TMPL_VAR NAME="url" --></p>
 				<p><label>Datum</label> <!-- TMPL_VAR NAME="publicationyear" --></p>
 				<p><label>Bemerkung:</label> <!-- TMPL_VAR NAME="notes" --></p>
 			<!-- TMPL_ELSE -->
-				<h2 class="catalogue"><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPPE = <!-- TMPL_VAR NAME="itemtype" --></h2>
 				<p><label>ISBN:</label> <!-- TMPL_VAR NAME="isbn" --></p>
 				<p><label>Dewey:</label> <!-- TMPL_VAR NAME="dewey" --></p>
 				<p><label>Verlag:</label> <!-- TMPL_VAR NAME="publishercode" --></p>
@@ -42,7 +41,7 @@
 		<form action="saveitem.pl" method="post">
 		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 		<h2 class="catalogue">NEUES MEDIUM HINZ&Uuml;GEN:</h2>
-		<p><i>For a website add the group only</i></p>
+		<p><i>F&uuml;gen Sie für eine Website nur biblografische Daten und keine Exemplare ein.</i></p>
 		<p><label>Exemplar-Barcode:</label><input type="text" name="barcode" size="40"></p>
 		<p>
 			<label>Zweigstelle:</label>
@@ -92,7 +91,7 @@
 		<p><label>Band:</label><input name="volume" size="40"></p>
 		<p><label>Anzahl</label><input name="number" size="40"></p>
 		<p><label>Bandbeschreibung:</label><input name="volumeddesc" size="40"></p>
-		<p><label>Pages:</label><input name="pages" size="40"></p>
+		<p><label>Seiten:</label><input name="pages" size="40"></p>
 		<p><label>Gr&ouml;&szlig;e"</label><input name="size" size="40"></p>
 		<p><label>Bemerkung:</label><textarea name="notes" cols="30" rows="6"></textarea></p>
 		<p><input type="submit" name="newgroup" value="Eintrag zu einer neuen Gruppe hinzuf&uuml;gen" class="button catalogue"></p>

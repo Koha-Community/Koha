@@ -6,7 +6,7 @@
 <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Abonnement</a>
 
 <div id="bloc25">
-<h2 class="bull">waited or late numbers</h2>
+<h2 class="bull">versp&auml;tete Ausgaben</h2>
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus">
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
@@ -15,7 +15,7 @@
 	<table class="small">
 	<tr>
 		<th class="bull">
-			Numbered
+			Ausgabe
 		</th>
 		<th class="bull">
 			geplant f&uuml;r
@@ -34,25 +34,11 @@
 			</td>
 			<td>
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
-				<select name="status" size="1">
-					<!--TMPL_IF name="status1" -->
-						<option value="1" selected>Waited</option>
-					<!-- /TMPL_IF -->
-					<!--TMPL_IF name="status2" -->
-						<option value="2" selected>Eingegangen</option>
-					<!-- TMPL_ELSE -->
-						<option value="2">Eingegangen</option>
-					<!-- /TMPL_IF -->
-					<!--TMPL_IF name="status3" -->
-						<option value="3" selected>Late</option>
-					<!-- TMPL_ELSE -->
-						<option value="3">Late</option>
-					<!-- /TMPL_IF -->
-					<!--TMPL_IF name="status4" -->
-						<option value="4" selected>&Uuml;berf&auml;llig</option>
-					<!-- TMPL_ELSE -->
-						<option value="4">&Uuml;berf&auml;llig</option>
-					<!-- /TMPL_IF -->
+				<select name="status" size="1">					
+						<option value="1" <!--TMPL_IF name="status1" -->selected<!-- /TMPL_IF -->>erwartet</option>		
+						<option value="2" <!--TMPL_IF name="status2" -->selected<!-- /TMPL_IF -->>eingegangen</option>
+						<option value="3" <!--TMPL_IF name="status3" -->selected<!-- /TMPL_IF -->>versp&auml;tet</option>					
+						<option value="4" <!--TMPL_IF name="status4" -->selected<!-- /TMPL_IF -->>&uuml;berf&auml;llig</option>					
 				</select>
 			</td>
 		</tr>
@@ -60,7 +46,7 @@
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
 		<tr>
 			<td>
-				Manual issue <input type="text" name="serialseq" size=30 maxlength=100>
+				Manuelle Ausgabe <input type="text" name="serialseq" size=30 maxlength=100>
 			</td>
 			<td>
 				<input type="text" name="planneddate" size=10 maxlength=15>
@@ -68,9 +54,10 @@
 			<td>
 				<input type="hidden" name="serialid" value="0">
 				<select name="status" size="1">
-						<option value="2">Eingegangen</option>
-						<option value="3" selected>Late</option>
-						<option value="4">&Uuml;berf&auml;llig</option>
+						<option value="1">erwartet</option>				
+						<option value="2">eingegangen</option>
+						<option value="3" selected>versp&auml;tet</option>
+						<option value="4">&uuml;berf&auml;llig</option>
 				</select>
 			</td>
 		</tr>
@@ -93,11 +80,11 @@
 		<p><label>Bibliothekar</label><!-- TMPL_VAR name="user" --></p>
 		<p><label class="label100">Anfangsdatum (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
 		<p><label class="label100">Enddatum</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
-		<p>Recieved issues</p>
+		<p>erhaltene Ausgaben</p>
 		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
-		<p>&uuml;berf&auml;llige Medien</p>
+		<p>&uuml;berf&auml;llige Ausgaben</p>
 		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
-		<p>Opac's note</p>
+		<p>Benemrkung im OPAC</p>
 		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
 		<input type="submit" value="&Auml;nderungen speichern" class="button bull">
 	</form>

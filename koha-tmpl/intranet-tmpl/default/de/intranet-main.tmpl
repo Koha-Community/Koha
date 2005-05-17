@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<title>WILLKOMMEMN ZUM KOHA INTRANET </title>
+	<title>WILLKOMMEN ZUM KOHA INTRANET</title>
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/intranet-main.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <!-- JAVASCRIPT SCRIPTS -->
@@ -63,10 +63,10 @@
 <div id="mainbloc">
 	<div class="image">
 		<p class="kohalogo">Koha</p>
-		<p class="kohalogo2">Open Source  Library System</p>
-		<p class="kohalogo2">Librarian interface</p>
+		<p class="kohalogo2">Open Source Bibliotheksverwaltung</p>
+		<p class="kohalogo2">Bibliothekarsbereich</p>
 		<hr width="50%" />
-		<p class="kohalogo2">Koha : gift, donation or contribution</p>
+		<p class="kohalogo2">Koha : ein Geschenk, eine Spende oder ein Beitrag</p>
 	</div>
 	<div id="menus">
 <!-- RIGHT (disappearing) BLOC -->
@@ -79,15 +79,15 @@
 			<a class="catalogue" href="/cgi-bin/koha/bull-home.pl">Serien</a>
 				<p>Management von Serien-Abos und Ausgaben</p>
 			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Virtuelle Regale</a>
-				<p>Virtuelle Regale k&ouml;nnen von Bibliothekaren und Benutzern zur Bildung von virtuellen Bibliotheken innerhalb der "Realen"benutzt werden. Ein virtuelles Regal kann von Lehrern zur Unterst&uuml;tzung bei der Suche nach speziellen Information eingesetzt werden. </p>
+				<p>Virtuelle Regale k&ouml;nnen von Bibliothekaren und Benutzern zur Bildung von virtuellen Bibliotheken innerhalb der "realen" benutzt werden. Ein virtuelles Regal kann z.B. von Lehrern zur Unterst&uuml;tzung bei der Suche nach speziellen Information eingesetzt werden. </p>
 			<!-- TMPL_IF NAME="NOTMARC" -->
 				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
 					<input type="hidden" name="module" value="search">
 					<input type="hidden" name="type" value="intranet">
 					<input type="text" name="keyword" size="27">
 					<input type="reset" value="l&ouml;schen"><br>
-					<p>Ins Feld eingeben und dann die Eingabetaste dr&uuml;cken</p>
-					<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue">Erweiterte Suche (Weitere Optionen)</a><br>
+					<p>Suchbegriffe in das Feld eingeben und dann die Eingabetaste dr&uuml;cken</p>
+					<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue">Erweiterte Suche (weitere Optionen)</a><br>
 				</form>
 			<!-- /TMPL_IF -->
 		</div>
@@ -97,16 +97,16 @@
 			<form action="/cgi-bin/koha/members/member.pl" method="post">
 				<input type="text" size="27" name="member">
 				<input type="submit" value="OK"><br>
-				<p>Ins Feld eingeben und dann die Eingabetaste dr&uuml;cken</p>
+				<p>Suchbegriffe in das Feld eingeben und dann die Eingabetaste dr&uuml;cken</p>
 				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
 			</form>
 
 			<a href="/cgi-bin/koha/members/members-home.pl" class="members">Startseite Benutzer</a>
 			<p>Zur Hauptseite Benutzer</p>
 			<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add" class="members">Benutzer hinzuf&uuml;gen</a>
-			<p>Benutzer hinzuf&uuml;gen. Er/Sie kann einer beliebigen Zweigstelle zugeordnet werden.</p>
+			<p>Benutzer hinzuf&uuml;gen. Zuordnung auch f&uuml;r andere Zweigstellen m&ouml;glich.</p>
 			<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add" class="members">Organisation hinzuf&uuml;gen</a>
-			<p>Organisation hinzuf&uuml;gen. Sie hat weniger Informationen als ein "physischer" Benutzer.</p>
+			<p>Organisation hinzuf&uuml;gen. Es werden weniger Informationen gespeichert als f&uuml;r einen "physischen" Benutzer.</p>
 		</div>
 		
 		<div id="Hint3" class="hint">
@@ -123,13 +123,13 @@
 		</div>
 		<div id="Hint6" class="hint">
 			<h1 class="parameters">Parameter</h1>
-			<h2 class="parameters"><a href="barcodes/barcodes.pl">Barcode-Generator</a></h2>
+			<h2 class="parameters"><a href="barcodes/barcodes.pl">Strichcode-Generator</a></h2>
 			<h2 class="parameters"><a href="admin/aqbookfund.pl">Erwerbungsetats</a></h2>
 			<h2 class="parameters"><a href="import/breeding.pl">Import in den Fremddatenpool</a></h2>
 		</div>
 		<div id="Hint7" class="hint">
 			<h1 class="circulation">Ausleihe</h1>
-			T&auml;tigen von Ausleihen und R&uuml;ckgaben nur mit Barcodeleser und Maus
+			T&auml;tigen von Ausleihen und R&uuml;ckgaben nur mit Strichcodeleser und Maus
 		</div>
 <!-- MAIN MENU -->
 		<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" class="acquisition" onMouseOver="SetOn(3);">Erwerbung</a><br/>
