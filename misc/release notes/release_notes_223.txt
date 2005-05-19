@@ -1,0 +1,479 @@
+RELEASE NOTES
+=============
+
+Koha is the 1st Open-Source Integrated Library System.
+Released at first in New zealand, in 2000 januaray, it is maintained by a team of volunteers from around the globe, the Koha system is a full catalogue, opac, circulation and acquisitions system.
+
+Koha 2.2 is more than 247 000 lines of code, developped by more than 30 differents developpers (excluding translators).
+
+With the 2.2 version, Koha is now a mature product, with a lot of nice features. It's used in more than 50 libraries, from all kinds (public, schools, search, religious...), of all size (from 1 to 8 branches, from 1000 to 300 000 items).
+
+========
+WARNINGS
+========
+* The librarian interface is tested only with mozilla/firefox. Should work (partially) with IE. OPAC should work fine with any navigator.
+
+=======
+DIFFS
+=======
+Diff 2.2.2 => 2.2.3
+*******************
+
+DB MODIFS :
+***********
+(This new chapter in release notes will be in all new releases. It point any change in the DB. All changes are supposed to be handled by the DB updater, but here for your information)
+
+DB structure : none
+DB content : none
+
+BUGFIXES
+***** Critical & Minor mixed
+	=== ACQUISITION ===
+	* adding supplier info to basket.pl (for order printing)
+	
+	=== OPAC ===
+	* minor fix in subject link (normal view)
+	
+	=== CATALOGUE ===
+	
+	=== CIRCULATION ===
+	
+	=== BORROWERS ===
+	* better management of joining & expiry dates :
+		- dates can be manually typed when adding a borrower.
+		- Empty fields are automatically calculated (joining = today & expiry date calculated from borrower category)
+		- Expiry date can be modified
+	* checking expiry date when trying to issue a book & forbidding issuing when expiry date reached. ** IMPORTANT ** This check was not done before. Thus, you may be unable to issue books where you could before. You can update your database borrower by borrower or with the following SQL command on the server : "update borrowers set expiry='2005-31-12'". You can limit the update to a borrower category with "update borrowers set expiry='2005-31-12' where categorycode='A'" (all SQL commands must be typed without any ")
+	* template improvements & some bugfixes in fines management.
+
+	=== PARAMETERS ===
+	* in marctagstructure, next & previous button no more loose frameworkcode & link to default framework
+	
+	=== REPORTS ===
+	* in "borrowers with no issues" wizard, adding "without issues since" (DOES NOT WORK)
+	
+	=== ALL ===
+	
+IMPROVEMENTS
+***** Major
+	=== CATALOGUE ===
+	* There is also a FindDuplicate feature for MARC Authorities
+	
+
+**** Minor
+
+
+Diff 2.2.1 => 2.2.2
+*******************
+
+DB MODIFS :
+***********
+(This new chapter in release notes will be in all new releases. It point any change in the DB. All changes are supposed to be handled by the DB updater, but here for your information)
+
+DB structure : none
+DB content :
+* new systempref MIME (OPENOFFICE.ORG or EXCEL) and delimiter (;). They are used by the Reports module, when exporting a report to a spreadsheet
+* new userflags *management* and *tools* to separate systempreferences in 3 differents permissions (see below)
+
+BUGFIXES
+***** Critical & Minor mixed
+	=== ACQUISITION ===
+		* 3 bugfixes in suggestions :
+		- major : a suggestion was not shown in acquisition except when ordered by the suggestor itself.
+		- major : the mail to the suggestor was not sent.
+		- minor : the name was not shown in accepted by column, in acquisition
+		* virtual sheves in OPAC :
+		- The user needed to have librarian rights to be able to go to the virtual shelf page.
+		- Adding a book to an existing virtual shelf did not work
+		* when a line was deleted, it was still counted in bookseller number of pending line order (in order.pl).
+		* a non closed basket could be modified even if the supplier was set "inactive"
+
+	=== OPAC ===
+		* showing marcnotes in opac-detail (bug #920)
+
+	=== CATALOGUE ===
+		* some fixes in authority search (worked, but could fail to return results under certain circumstances)
+		* libopac now works : in Koha >> parameters >> biblioframework >> modify field or subfield. If you set "opac text" to a different value than librarian text, you'll have different headers/text for MARC fields (for example : "1st responsability" for librarians, "author" for end users)
+		* removed a limit to 255 char in field length in MARC editor (the DB can handle much more)
+		* tabs in MARC editor : the active tab is now hilighted & in biblio modif, empty tabs are not shown (as in biblio add)
+		* bugfixes in permissions (some pages required parameters where they should require editcatalogue)
+		* the z3950daemon was buggy (forgotten to port a bugfix in 2.0 branch. It works again)
+
+	=== CIRCULATION ===
+		* renewal date was improperly calculated. Now, returndate is calculated from today, not from previous returndate
+		* display waiting status only if item has arrived at pickup branch.  Setting 'atdestination' variable if so.  Changes are required in the template to take advantage of this.
+		* in circulation, when clicking on member, the member page is opened twice (in main window & in a popup). The popup has been removed.
+
+	=== BORROWERS ===
+		* bugfixes in parameters (when modifying a borrower, with alternate address)
+		* members flags (card lost, debarred, gone no address) are back in default template.
+
+	=== ALL ===
+		* some fixes for date & currency format
+
+IMPROVEMENTS
+***** Major
+
+	=== STATS ===
+		* The stat module is here !!! In Reports menu, you now have 4 powerful "wizards" (for catalogue, borrowers, issues and acquisitions). You can define 3 things in a report : what you want in columns, what you want in lines, and filters you want on datas. For issues & acquisitions, you also can choose what you want in each cell (count or amount, or loan length). You can get those results in your borwser, or in your spreadsheet (MS-Excel & OpenOffice.org work fine). This module will continue to be improved to get the possibility to retrieve bulk datas in your spreadsheat. It works quite well, but has still some bugs and weaknesses. You also get some nice "top XXX" stats.
+	
+	=== CATALOGUE ===
+		* catalogue, changed the small "search glass" behaviour. It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
+		* showing item status in result list. The book status is in items.notforloan (every non 0 value meaning "book not for loan). The item status should be mapped to an item MARC subfield & this subfield should usually be connected to an authorised_value list.
+		* in authorities search forms, adding a "main entry" field ($a), to limit the search. The "anywhere" field is still here. An option has been added to search "contains" or "start by".
+		* item status (opac & librarian interfaces) The item status has been improved : It now can be :
+			- on order (= item has been ordered, but not yet arrived at the library)
+			- not for loan : if the "notforloan" field is mapped to an authorised value list, the right value is shown. Thus, an item can be "lost" or "being repaired", or whatever you put in the authorised values list. (reminder : the "notforloan" field, when 0 means 'ok, book can be issued', and all other values means 'nok, book can't be issued' (whatever the reason, that can be in the authorised value table)
+		* in catalogue search, the user can now order asc or desc.
+		* in catalogue search, the result list now show the itemtype in a column
+		* in catalogue search, if there is only 1 answer, open it directly, don't show a list of results with just 1 line.
+		* added an option to duplicate a biblio
+		* in search before adding a biblio, the search uses the standard Koha API. It means the user don't have to write the title exactly as in biblio.title (empty words are now excluded)
+		* changed behaviour for long fields : if a field contains more than 200 chars, the field will be edited as a textarea, not as a standard input. More conveinent.
+		* in item MARC editor, the item list is hidden if empty.
+		* in item MARC editor, the user can switch easily to the biblio again
+		* UNIMARC plugin for 4xx fields. In UNIMARC, 4xx are related to links. This plugin works like the authority popup, but search in biblio instead of authorities. To set it up, you must :
+			- define a 4xx$9 that will contain the biblio number of the linked biblio. In this 4xx$9 subfield, you must fill the "link to" with the field/subfield that is connected to biblio.biblionumber (090a by default).
+			- define the subfield you want in the 4xx field. This plugins deals "classic link" method (one of the 2 UNIMARC possibilities for links)
+			- choose one subfield and set unimarc_field_4xx.pl as plugin.
+
+	=== TOOLS ===
+		* added a tool in misc/merge_authority.pl to merge 2 authorities (and modify biblios using them) This script can also be used to update biblios that use an authority that has been modified.
+		* added a tool in misc/migration_tools/check_marc_definition.pl that can be helpful when you migrate your datas. It compare the datas in the DB and the setting of MARC structure 
+		It show all fields/subfields that are in the MARC DB but NOT in any tab (= fields used but not visible) Usually, this means you made an error in your MARC editor. Sometimes, this is something normal.
+		* Useful for translators only : modified tmpl_process to copy files that are not translated (like images, css... previously, they were not copied, it had to be done manually. Errors occurs because changes in english css or images were not reported to the translation directory giving a buggy translation)
+
+	=== ALL ===
+		* added a stylesheet for the printer (useful in acquisition basket printing. The doNotPrint style can be used anywhere to remove a part of the screen during printing)
+		* new permissions : management & tools. You now have 2 new permissions :
+			- management : means the user can manage library parameters, but NOT system parameters.
+			- parameters : means the user can manage all parameters (including system parameters : marc structure, authorised values, system preferences. Was the only flag previously existing)
+			- tools : means the user can import/export datas & edit barcodes.
+		note that for compatibility reasons, a user having "parameters" can access everything.
+		* new permission scheme. In every template new variables are available. They are written CAN_user_permission, with permission being one of the permission flag. templates can now show or hidde menu entries depending on user permissions. For example, a user with just circ permissions should have only the "circulation" button on home page. Templates are NOT updated in this version (except for system parameters, as proof of concept), they will be in the next ones. But the scheme is ready.
+
+**** Minor
+	=== OPAC ===
+		* added ISSN to simple biblio detail
+		* added glasses to OPAC marc view, with same behaviour as in librarian interface.
+		* overdues items are more visible on opac-user page
+		* removed menu at bottom of basket page. They are badly shown in some browsers
+		* in biblio basket, showing item info (location, callnumber and barcode)
+		* if a search give only 1 result, the user reach it directly (without a 1 line list)
+
+	=== ACQUISITION ===
+		* acquisition, module, adding a button to delete a line in order (was possible by setting qty to 0, but it's more user-friendly)
+
+	=== CATALOGUE ===
+		* in authorities, added a "main entry" search field. Will limit the search to the main entry of the main field of the authority (the $a of the tag_to_report field)
+
+	=== BORROWERS ===
+		* Show the current borrower in librarian interface, normal view of a biblio (with a link to jump to borrower page)
+	
+	=== CIRCULATION ===
+		* in circulation, adding a button to edit the borrower & go back to the circ screen directly.
+
+	=== TOOLS ===
+		* changes in overdue_notice.pl script :
+			- moving all parameters at start of script => easier to maintain
+			- sending overdues for borrowers without mail to a "koha admin mail".
+			- ignoring borrowers with "overduenoticerequired" set to 0 (= don't send overduenotice)
+			- removing "print" to have a silent script (ie can be put in crontab)
+
+Diff 2.2.0 => 2.2.1
+*******************
+BUGFIXES
+
+***** Critical
+* fix for http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=811 : The OPAC requires uses to log in to view virtual shelves, but it does not require a user with librarian privileges
+* multiple biblio subtitles are correctly stored & shown in simple (non-MARC) view, even after a biblio modif.
+* multiple main authors are now correctly handled in simple (non-MARC) view
+* it was possible to create a cardnumber that was already defined
+
+***** Minor
+* in serials module >> add subscription >> select biblio : The next / previous page were invalid.
+* in serials module >> add subscription >> select biblio : impossible to report the biblio when there is a quote in it (' was not escaped)
+* "waiting" status was often inaccurate for a reserved material (should show "in transit" while not in destination branch)
+* issn were not stored correctly in non-MARC DB on biblio modification
+* in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
+* in thesaurus structure, deleting a tag delete the tag in each authtype, not only in the selected authtype.
+* plugin unimarc_225a (seriestitle) did not show the seriestitle list, when there was no ISBN
+* in authority structure, trying to delete a tag in an authority type, deleted the tag in the default authority type.
+* in authority structure, trying to define the 400$0 created a "400$@" ("subfield" for fields <100)
+* many bugfixes for a better mod_perl support
+* bug in acquisition : the title was also stored as subtitle.
+
+IMPROVEMENTS
+***** Major
+* serial subscriptions : modifs to handdle correctly more than 1 subscription of the same biblio. Enter subscription detail in subscription notes (like "for branch XX" or "for 2nd floor"). The subscription details are all shown in OPAC.
+* serial subscriptions : you can now delete a subscription that is not yet active (= has only 1 issue in "waiting" state)
+* adding series title and publication year limits in opac-search form.
+* improvements and fixes in Nelsonville templates
+* adding a brief/detailled display in biblio basket view.
+
+**** Minor
+* in biblio basket, adding the possibility to open a biblio (in the main window) by clicking on the title
+* circulation >> issue : showing borrowernumber code just after the borrower name.
+* the search on barcodes has been changed to "start" instead of "contains". It's more logic
+* in ISBD & MARC view, codes like itemtypes, authorized values... are shown in complete form, not as code.
+* do not show reserve fees if they are not applicable (0)
+* show a message for libraries with no reserve possible, when the user clic on "request" button.
+* adding a "un-debar" button in circulation screen, to unset "debarred" flag for a borrower (ported from nelsonville templates)
+* adding a link to member page to jump to issues page directly (ported from nelsonville templates)
+* Adding two print versions of the member details screen (ported from nelsonville templates)
+- moremember-print.tmpl is a full-page view with information about the patron, issues, and reserves
+- moremember-receipt.tmpl is a brief view with information about issues, designed to be appropriate for a slip printer.
+* member detail : adding opac login in main page
+* adding notforloan column in admin/itemtypes list
+* in unimarc_field_225a plugin (collection chooser), ordering the list alphabetically
+* in member search, adding an option to order result by name or cardnumber
+* added the price in order history
+
+
+Diff 2.2RC5 => 2.2.0
+********************
+BUGFIXES
+
+***** Critical
+* rolling back lock_tables_privs = 'Y' during install stage (too many problems) The option is shown in bulkmacimport instead.
+* bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
+
+***** Minor
+* error in authority => biblio 'jumper' that make the jump fail (was a remaining ')
+* when modifying a biblio, on a repeated field with many subfields, the test to show empty subfields in X>1 was wrong : the missing subfields of the 1st field were repeated.
+Example :
+606 has $a$x$z
+1st is 606$a (so $x$z empty)
+2nd is 606$a$x
+The marc editor in the 2nd field showed before this fix :
+606 $a a_value
+   $x another_value
+   $x
+   $z
+(the 2nd $x being useless)
+* Authorities : Minor changes in summary "exploding" (the 3 digits AFTER the subfield were not on the right place).
+* partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
+IMPROVEMENTS
+
+***** Major
+* New systempref parameter : opacstylesheet If this parameter is set to a stylesheet URL, this stylesheet will be used instead of the opactheme one. With this parameter, you can have your own stylesheet for OPAC, that will be used and kept when you update your version of Koha. The systempref must be a complete URL (http://www.koha.org/stylesheet/somestylesheet.css for example)
+* improvements in shelves management in OPAC (synch'ing with librarian interface) : the user can modify a bookshelf, add a book into a bookshelf from the biblio, create a bookshelf "on the fly", from the bookshelf popup.
+* new directory migration_tools in $KOHA/misc Will store various migration tools. bulkmarcimport has been moved here.
+
+**** Minor
+* minor change in MARCdetail : when a field is repeated, the field header is not repeated but replaced by a nice little empty space.
+
+Diff 2.2RC4 => 2.2RC5
+*********************
+
+BUGFIXES
+
+***** Critical
+* limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items) In 2.4, a new DB structure will highly speed things and this limit will be removed. FindDuplicate is activated again.
+* bugfixes in french translation (that made cataloguing in french impossible)
+* set lock_tables_privs = 'Y' during install stage. Note this requires a mysql version not too old.
+
+***** Minor
+* during update, if the user enter a different directory for backup than the default one, the updater does not obey and stores in default directory anyway !
+* minor (spelling) fix for adding an organization
+* member search (bug 851) : stripping out comma and apostrophe from search terms
+* various methods to split subjects (depending on OS, a <CR> / <CR><LF> problem)
+
+IMPROVEMENTS
+
+***** Major
+* circulation / issue : adding a button to cancel an issue when a confirmation is required (bug #858)
+* circulation / issue : adding a checkbox to confirm reserve cancel when a reserved book is issued by someone else (bug #858)
+* virtual shelves : adding feature to create a virtual shelf on the fly, when adding a biblio, and feature to modify a virtual shelf name/status
+* catalogue : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
+
+**** Minor
+* an improvement has been done in DB calls that needs a new index. It's automatically added in fresh installs, but for updates, run the following SQL command :
+ALTER TABLE `marc_subfield_structure` ADD INDEX ( `kohafield` ) 
+* adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
+* the list of authorities types is now ordered by authtypetext. Thus you can use the "space trick" : if you add a space before an authtype text, it's shown first. Useful when you have an authority type that you use more often than others.
+* authoritiy list shown in authtypetext order (so authtypetext with a space appear first, hint used everywhere else for lists)
+* some minor html changes (like changing "images" numbers in "text" numbers for result list page numbers.
+
+Diff 2.2RC3 => 2.2RC4
+*********************
+BUGFIXES
+
+***** Critical
+1 CRITICAL bug in acquisition (another one...) : when MARC=ON, and an order line is created from an existing biblio (to buy another item), the MARC biblio is lost and replaced by the non marc one (that has a lot less informations...). To solve the problem, the biblio can no more be modified after the order has been placed. Less feature, but more reliable ! (not simple solution to solve this problem. Would imply to rewrite the MARC biblio from the non marc datas, and no API is provided for this yet)
+2 CRITICAL bugfix in Biblio.pm, removing &branches declaration (was due to an untested cvs rollback, opac-search.pl was crashing)
+3 CRITICAL bugfix in Biblio.pm when MARC=OFF. subjects were stored and immediatly deleted. And not stored correctly in MARC part of the biblio. (thanks to Waylon Robertson)
+
+***** Minor
+1 bugfix in updatedatabase (auth_header creation table). Don't affect previous install of 2.2, only upgrades 2.0 => 2.2
+2 reading rec : Fixing link to toggle between full and limited display
+3 bugfix for moremember.pl that no longer outputed item type for issues
+4 defaulting actual cost to estimated cost (was 0 by default)
+5 bugfix : in biblio search, - and other signs where not properly managed. Leroy-Beaulieu could not be found
+6 the popup of the 210c plugin closes when a collection is choosed
+7 bugfix : could not select a biblio in subscription creation if the book was not for loan
+8 minor fixes in spelling in subscription
+9 adding acquisition in default userflags. This flag can be set for librarians that have access to acquisition
+10 in subscription enddate calculation, bugfix when subscription based on number of issues (worked when based on subscription length)
+11 in subscription next issue date calculation, bugfix when subscription frequency is 1/quarter.
+12 datelastseen is updated when the book is returned
+13 moredetail.pl shows incorrect date, incorrectly formatted (bug #689)
+14 DuplicateFinder has been disabled : sometimes goes into a looonnnggg lasting loop.
+15 when a query returns only one result, adding it to basket did not work.
+16 deletion of a suggestion was buggy. Now fixed
+17 for installation of Koha under Windows there is a bug with subject splitting. Now fixed. (thanks to Waylon Robertson)
+
+IMPROVEMENTS
+***** Major
+1 a lot in book shelves
+2 Submitting with no barcode in issues should clear for next patron (bug #865)
+3 screen added to see late issues from a given bookseller
+4 Koha should now work under mod_perl (Release Manager don't use mod_perl. fixes comes from A. Tarallo, Argentina, that ensure Koha works fine with mod_perl with the patches applied)
+
+**** Minor
+1 show also item tags into marc list of fields (in librarian search interface)
+2 email sent basket : the sender can give it's name, in case the basket is sent to a friend, not to itself
+3 removing useless string in isbd view
+4 cataloguing, in isbnsearch, after searching a title/ISBN, the librarian can choose the framework (+ it's a cataloguing screen, not an acquisition one)
+5 serials : in issues management, the waited/late issues bloc is before the collection state bloc.
+6 serials : the intranet note has been removed, it's useless
+7 after an authority is added/modified, go to this fresh authority (instead of authority-home)
+8 search option in auth-top
+9 in OPAC, the itemcallnumber search is a "start by" search (was a contains)
+10 opac note is defaulted to '' (was 0, that means nothing)
+11 adding blank to relshiploop (altrelationship) loop (Bug ???)
+12 when deleting an itemtype, don't check issuingrules, but delete them too
+13 For MARC=OFF installation, Waylon submitted a script to rebuild MARC part of the catalogue. It's in misc/updatemarc_subjects.pl (thanks to Waylon Robertson)
+
+Diff 2.2RC2 => 2.2RC3
+*********************
+* CRITICAL bug in acquisition : biblio badly stored in MARC part of Koha, deleting another biblio...
+* CRITICAL problem : the duplicate finder (when adding a biblio) has performances problems under certains circumstances.
+* bug #862 fixed : Upgrade does not work (from 2.2RC1 to 2.2RC2)
+* bugfix in acquisition, when a line is modified, aqorderbreakdown was duplicated. (Seems it was a mysql return value depending on mysql version)
+* bugfix in setting user permissions (they were stored, but not shown correctly after)
+* bugfix in translation error for basket sent in OPAC
+* bugfix in 225a plugin (editor chooser)
+* adding itemcallnumber entry in systempreferences during install
+* error in biblio detail showing when MARC=ON (bug from RC2, did not exist before)
+* bug in acceptorreject OPAC suggestion (bug from RC2, did not exist before)
+* Not really a bug but : stopword must not be empty. If it's empty, the search fail.
+* During install, the user can load french and english stopwords if he want.
+* French librarian interface seems OK
+* addbook (1st page when MARC=ON) is a catalogue screen, not an acquisition one
+* The barcode is shown in the list of books issued by a borrower in opac-user page.
+
+Diff 2.2RC1 => 2.2RC2
+*********************
+* bugfix for import in reservoir : title and isbn where not extracted.
+* bugfix in OPAC : it was possible to reserve books that where "notforloan"
+* bugfix in circulation : no warning when a reserve was made on a book that you try to issue to someone else. 
+* bugfix & improvement for catalogue management behaviour when MARC=OFF
+* bugfix in bookshelves (in CVS, probably not in official tar.gz)
+* bugfix in online help (in CVS, probably not in official tar.gz)
+
+=============
+INSTALLATION
+=============
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* READ and FOLLOW the instructions
+
+READING what is on screen during installation is VERY important. Some decisions you make during install stage are very hard to reproduce after.
+
+
+UPGRADE from previous 2.0.0preX or RCx version
+*******
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+UPGRADE from previous 1.2.x version :
+********
+UPGRADE TO A 2.0.0 version before upgrading
+
+UPGRADE from a 2.1.x version is NOT AVAILABLE. Don't install 2.2 on a 2.1.x test database. A lot of DB changes have been done since 2.1.x & cannot be handled by the DB updater.
+
+=============
+NEW FEATURES
+=============
+Koha 2.2 has, of course, all the previous features from Koha (acquisition, cataloguing, circulation, members modules, OPAC, complete MARC support...) plus the following new ones :
+
+General :
+*********
+* (almost) complete rewrite of librarian GUI : now Koha uses CSS, and is easier to use. However, users of Koha 2.0.0 won't be lost, as the general organisation of the product has not changed.
+* Online Help : an online help is available everywhere in the librarian interface. It's complete in the parameters section of Koha and for new features. It will be completed for the rest of the product.
+* Better LDAP suport : Koha 2.2 can be "connected" to a LDAP server and get all borrower informations from there (including borrower category where applicable). However, to avoid problems for libraries without LDAP server, the LDAP features have been stored in modules/C4/Auth_with_ldap.pm file. The standard Auth.pm don't use it. If you want LDAP, just perldoc Auth_with_ldap.pm and manually tune your Auth package !
+* Auto installer : if you install koha with ./install -i /path/to/auto_install_file, then Koha will be installed almost without question. A very usefull feature for developpers that want to install/uninstall Koha quite often. A sample of auto_install_file is provided in misc/auto_install_file.
+* Uninstaller : run misc/uninstall.pl, provide the mysql root password. that's all. Koha is completely deleted and can be reinstalled. With the previous feature, it's a very nice solution for test platform.
+* mod_perl : Koha should now work under mod_perl, that gives a big performance boost (Release Manager don't use mod_perl. fixes comes from A. Tarallo, Argentina, that ensure Koha works fine with mod_perl with the patches applied)
+* Nelsonville have shared their templates. They are available as NPL theme.
+* Language : in this version, only english and french versions are fully functionnal. Spanish and chinese are provided, but not fully functionnal. Polish, German, Arabic, Hebrew, and many other languages have volunteers and should be here in a future 2.2.x
+
+
+BE CAREFUL with uninstaller : 
+1- This script does not ask for confirmation after mysql root password.
+2- This script uses /etc/koha.conf. If you have more than 1 koha on your server, use /etc/koha.conf for a "deletable-test" one.
+
+Acquisition :
+*************
+* suggestion : borrowers can suggest items to buy in OPAC. Then, the librarian can manage (accept or refuse) and order them.
+* possibility to close a basket, he can't be modified then
+* order a basket by publisher or by bookfund/publisher
+* search order history
+
+Cataloguing :
+*************
+* Cataloguing frameworks : you can define as many frameworks as you want. A framework describes how a material is catalogued (which fields, subfields, which constraints on them...)
+* MARC authorities : Koha now supports authorities in MARC. You can define the MARC structure for authorities like for biblios.
+* New contraints can be set for subfields :
+  - subfield is hidden : appears in MARC editor, but not in OPAC.
+  - subfield is an URL : the field can be cliqued
+  - related fields : a search made on a subfield also uses other subfields automatically. Using this feature, a search on "title" can search title, but also subtitle, uniform title,...
+* Item location can now be done on 3 levels : the branch, the location (room), the callnumber.
+* The callnumber can now be calculated from the LC, the dewey, or be freely (and manually) entered.
+* Duplicate finder : this powerful feature help your cataloguers avoiding duplicate biblios.
+* ISBD view : in librarian interface as well as in OPAC biblios can be shown in standard (default) presentation, in MARC (human readable) or ISBD. The ISBD view can be tuned by the librarian team. There is also a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
+* UNIMARC plugin for every 1xx fields : ESNMP have developped all the plugins for UNIMARC fields 1xx. Those fields are coded fields.
+
+Serial cataloguing :
+********************
+Koha 2.2 manage serial subscriptions and issuing of those subscriptions. (Only a few words to describe a very important & complete module !)
+
+Catalogue search :
+******************
+* Search in OPAC and librarian interface has been improved. They now are exactly the same.
+* Spelling suggestion : before sending a request, the user can ask for spelling suggestion. This shows other forms of words entered that would give results. Give poor results for instance, the Koha team is thinking to a true spellchecking.
+* The user can select the order of the results and the number of results shown.
+
+Members :
+*********
+* The borrowernote field is shown on issue and transfer.
+* The textmessaging field appears in OPAC when the user logs in.
+
+Circulation :
+*************
+* New issuing rules : Issuing can be set for branch / borrower type / item category, by number of days and number of items available.
+* "joker" issuing rules : the library can set issuing rules for "any branch" or "any borrower type", or "any item category".
+Both issuing rules are cumulative : a library can set issuing rules to 10 books, 5 CD, but 12 total (books or CD).
+
+OPAC :
+******
+In Koha 2.2, koha has :
+* baskets. A basket can be printed or sent by mail to the borrower
+* virtual shelves : a virtual shelf can be created and filled by any logged borrower. A given virtual shelf can be private or public. Or even free-for-all.
+* language chooser : the borrower can change the language on the fly. The default language being still choosen by the library
+* complete CSS definition. With a new systempref parameter : opacstylesheet. If this parameter is set to a stylesheet URL, this stylesheet will be used instead of the opactheme one. With this parameter, you can have your own stylesheet for OPAC, that will be used and kept when you update your version of Koha. The systempref must be a complete URL (http://www.koha.org/stylesheet/somestylesheet.css for example)
+
+Barcode printing :
+******************
+A new module has been added to the parameters section : barcode printing. It requires the PDF::Api2 Perl package and can print barcode on 
+
+============
+Koha Future
+============
+The future of Koha is being discussed on mailing lists and on koha wiki : http://www.saas.nsw.edu.au/koha_wiki/index.php?page=KohaRoadmap2.2.x
