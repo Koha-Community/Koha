@@ -103,7 +103,7 @@ sub plugin {
 		
 		my $subfield_value_9=$bibid;
 		my $subfield_value_0;
-		$subfield_value_0=$marcrecord->field('001')->data if $marcrecord->field;
+		$subfield_value_0=$marcrecord->field('001')->data if $marcrecord->field('001');
 		my $subfield_value_a;
 		if ($marcrecord->field('200')){
 			$subfield_value_a=$marcrecord->field('200')->subfield("f");
@@ -112,17 +112,9 @@ sub plugin {
 		} elsif ($marcrecord->field('701')){
 			$subfield_value_a=$marcrecord->field('701')->subfield("a");
 		}
-		my $subfield_value_c = $marcrecord->field('210')->subfield("d") if ($marcrecord->field('210'));
-		my $subfield_value_d;
-		if ($marcrecord->field('100')){
-			my $publicationdate;
-			#warn "date de publication 1".substr($marcrecord->field('100')->subfield("a"),9,4)."   date de publication 2 ".substr($marcrecord->field('100')->subfield("a"),12,4);
-			$publicationdate = substr($marcrecord->field('100')->subfield("a"),9,4);
-			if (substr($marcrecord->field('100')->subfield("a"),12,4)>$publicationdate){
-			$publicationdate=substr($marcrecord->field('100')->subfield("a"),12,4);
-			}
-			$subfield_value_d=$publicationdate;
-		}
+		my $subfield_value_c = $marcrecord->field('210')->subfield("a") if ($marcrecord->field('210'));
+		my $subfield_value_d = $marcrecord->field('210')->subfield("d") if ($marcrecord->field('210'));
+		
 		my $subfield_value_e= $marcrecord->field('205')->subfield("a") if ($marcrecord->field('205'));
 		
 		my $subfield_value_h; 
@@ -154,7 +146,7 @@ sub plugin {
 			$subfield_value_t = $marcrecord->field('500')->subfield("a") ;
 		}
 		
-		my $subfield_value_u = $marcrecord->field('856')->subfield("p") if ($marcrecord->field('856'));
+		my $subfield_value_u = $marcrecord->field('856')->subfield("u") if ($marcrecord->field('856'));
 		
 		my $subfield_value_v;
 		if (($marcrecord->field('225')) && ($marcrecord->field('225')->subfield("v"))){
