@@ -1,47 +1,39 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
-
-<!-- The manual invoice and credit buttons -->
-
-<h1>Account for <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></h1><P>
-<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Create Manual Invoice</a>
-&nbsp;
-<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Create Manual Credit</a>
-<center>
-<p>
-
-<!-- The table with the account items -->
-
-<table  cellspacing="0"  cellpadding="5" border="1" >
-
-  <tr valign="top">
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="2"><b>FINES &amp; CHARGES</td>
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="1"><b>AMOUNT</td>
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="1"><b>STILL OWING</td>
-  </tr>
-
-  <!-- TMPL_LOOP NAME="accounts" -->
-
-    <tr valign="top">
-      <td><!-- TMPL_VAR NAME="date" --></td>
-      <td><!-- TMPL_VAR NAME="description" --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
-      <td><!-- TMPL_VAR NAME="amount" --></td>
-      <td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
-    </tr>
-
-  <!-- /TMPL_LOOP -->
-
-  <tr valign="top">
-    <td></td>
-    <td colspan="2"><b>Total Due</b></td>
-    <td><b><!-- TMPL_VAR NAME="total" --></b></td>
-  </tr>
-
-</table>
-
-<br clear="all">
-<p> &nbsp; </p>
-
-<!-- endmenu (member) -->
-
+<div id="mainbloc">
+	<!-- The manual invoice and credit buttons -->
+	
+	<h1>Account for <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></h1><P>
+	<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Create Manual Invoice</a>
+	&nbsp;
+	<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Create Manual Credit</a>
+	<!-- The table with the account items -->
+	
+	<table>
+	
+	<tr>
+		<th>FINES &amp; CHARGES</th>
+		<th>AMOUNT</th>
+		<th>STILL OWING</th>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="accounts" -->
+	
+		<tr>
+		<td><!-- TMPL_VAR NAME="date" --> <!-- TMPL_VAR NAME="description" --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+		<td><!-- TMPL_VAR NAME="amount" --></td>
+		<td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
+		</tr>
+	
+	<!-- /TMPL_LOOP -->
+	
+	<tr>
+		<th>Total Due</th>
+		<th colspan="2"><!-- TMPL_VAR NAME="total" --></th>
+	</tr>
+	
+	</table>
+	
+	<!-- endmenu (member) -->
+</div>
 <!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
