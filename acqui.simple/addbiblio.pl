@@ -263,7 +263,7 @@ sub build_tabs ($$$$) {
 						push (@loop_data, \%tag_data);
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
-					if ($#fields >1) {
+					if ($#fields >=1) {
 						my @subfields_data;
 						my %tag_data;
 						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
@@ -434,41 +434,14 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	splice(@tags,$addedfield,0,$tags[$addedfield]);
-	splice(@subfields,$addedfield,0,$subfields[$addedfield]);
-	splice(@values,$addedfield,0,$values[$addedfield]);
-	splice(@ind_tag,$addedfield,0,$ind_tag[$addedfield]);
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-# search the part of the array to duplicate.
-	my $start=0;
-	my $end=0;
-	my $started;
-	for (my $i=$#tags;$i>0;$i--) {
-		$end=$i if ($end eq 0 && $tags[$i] == $addedfield);
-		$start=$i if ($end>0 && $tags[$i] eq $addedfield);
-		last if ($end>0 && $tags[$i] ne $addedfield);
-	}
-	# add an empty line in all arrays. This forces a new field in MARC::Record.
-	splice(@tags,$end+1,0,'');
-	splice(@subfields,$end+1,0,'');
-	splice(@values,$end+1,0,'');
-	splice(@ind_tag,$end+1,0,'');
-	splice(@indicator,$end+1,0,'');
-# then duplicate the field.
-	splice(@tags,$end+2,0,@tags[$start..$end]);
-	splice(@subfields,$end+2,0,@subfields[$start..$end]);
-	splice(@values,$end+2,0,@values[$start..$end]);
-	splice(@ind_tag,$end+2,0,@ind_tag[$start..$end]);
-	splice(@indicator,$end+2,0,@indicator[$start..$end]);
-
 	my %indicators;
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	# adding an empty field
+	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
+	$record->append_fields($field);
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
