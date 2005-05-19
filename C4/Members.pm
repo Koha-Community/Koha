@@ -99,13 +99,12 @@ sub modmember {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-	$data{'joining'}=format_date_in_iso($data{'joining'});
 	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 	my $query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
 	cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
 	streetaddress='$data{'streetaddress'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
 	altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
-	emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
+	emailaddress='$data{'emailaddress'}',streetcity='$data{'streetcity'}',
 	altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
 	categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
 	borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
@@ -130,7 +129,16 @@ sub newmember {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+	$data{'joining'} = &ParseDate("today") unless $data{'joining'};
 	$data{'joining'}=format_date_in_iso($data{'joining'});
+	# if expirydate is not set, calculate it from borrower category subscription duration
+	unless ($data{'expiry'}) {
+		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+		$sth->execute($data{'categorycode'});
+		my ($enrolmentperiod) = $sth->fetchrow;
+		$enrolmentperiod = 12 unless ($enrolmentperiod);
+		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
+	}
 	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 # 	$data{'borrowernumber'}=NewBorrowerNumber();
 	my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,

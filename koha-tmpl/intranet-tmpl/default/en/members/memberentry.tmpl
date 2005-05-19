@@ -39,8 +39,6 @@
 		</div>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
-		<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
-		<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
@@ -236,6 +234,17 @@
 
 			<tr>
 				<th colspan="5" >LIBRARY USE</th>
+			</tr>
+			<tr>
+				<!-- TMPL_IF NAME="addAction" -->
+					<td>Joining date (leave blank for today)</td>
+					<td><input type="text" name="joining" size="12" maxlength="10" value="<!-- TMPL_VAR name="joining" -->"></td>
+				<!-- TMPL_ELSE -->
+					<td>Joining date</td>
+					<td><!-- TMPL_VAR name="joining" --></td>
+				<!-- /TMPL_IF -->
+				<td>Expiry date (leave blank for auto calc)</td>
+				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->"></td>
 			</tr>
 			<tr>
 				<td>Borrower message (appears in OPAC)</td>
