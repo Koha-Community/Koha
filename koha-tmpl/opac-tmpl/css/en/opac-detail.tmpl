@@ -64,7 +64,7 @@
 				<!-- TMPL_IF name="seriestitle" --><p><label><b>Collection:</b> </label><!-- TMPL_VAR NAME="seriestitle" --> <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --></p><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="subjects" --><p><label><b>Subject(s):</b> </label></p>
 					<!-- TMPL_LOOP name="subjects" -->
-						<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
+						<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator==&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="copyrightdate" --><p><label><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="notes" --><p><label><b>Notes:</b> </label><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
