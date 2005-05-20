@@ -1626,6 +1626,11 @@ sub renewstatus {
 		if ($resfound) {
 			$renewokay = 0;
 		}
+		my ($resfound, $resrec) = CheckReserves($itemno);
+                if ($resfound) {
+                        $renewokay = 0;
+                }
+
 	}
 	$sth1->finish;
 	return($renewokay);
