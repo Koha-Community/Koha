@@ -608,7 +608,7 @@ sub TooMany ($$){
 	# check the 3 parameters
 	$sth->execute($cat_borrower, $type, $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
-# 	warn "==>".$result->{maxissueqty};
+#	warn "==>".$result->{maxissueqty};
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -627,7 +627,8 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my ($alreadyissued) = $sth3->fetchrow;
+		warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
 		return ("c $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	#check for borrowertype=*
@@ -643,7 +644,7 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my $alreadyissued = $sth3->fetchrow;
 		return ("e $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
@@ -667,7 +668,7 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my $alreadyissued = $sth3->fetchrow;
 		return ("h $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	return;
