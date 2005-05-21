@@ -346,7 +346,7 @@ sub catalogsearch {
 	my $totalitems=0;
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
-	my $sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
+	my $sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL)");
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
