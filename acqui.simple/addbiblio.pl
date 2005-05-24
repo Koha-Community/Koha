@@ -340,13 +340,15 @@ my $op = $input->param('op');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 my $bibid;
+
+
 if ($oldbiblionumber) {
 	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
 	# find framework type
-	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if ($bibid and not ($frameworkcode));
 }else {
 	$bibid = $input->param('bibid');
-	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if ($bibid and not ($frameworkcode));
 }
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
@@ -356,6 +358,29 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
+
+#Getting the list of all frameworks
+my $queryfwk =$dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
+$queryfwk->execute;
+my %select_fwk;
+my @select_fwk;
+my $curfwk;
+push @select_fwk,"";
+$select_fwk{""} = "Default";
+while (my ($description, $fwk) =$queryfwk->fetchrow) {
+	push @select_fwk, $fwk;
+	$select_fwk{$fwk} = $description;
+}
+$curfwk=$frameworkcode;
+my $framework=CGI::scrolling_list( -name     => 'Frameworks',
+			-id => 'Frameworks',
+			-default => $curfwk,
+			-OnChange => 'Changefwk(this);',
+			-values   => \@select_fwk,
+			-labels   => \%select_fwk,
+			-size     => 1,
+			-multiple => 0 );
+$template->param( framework => $framework);
 
 $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;

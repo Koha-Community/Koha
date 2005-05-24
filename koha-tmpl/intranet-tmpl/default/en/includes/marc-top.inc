@@ -69,7 +69,7 @@ a.catalogue:hover {
 <!-- /TMPL_IF -->
 		</td>
 		<td align="right">
-		<b>Framework :<!--TMPL_VAR Name="framework" --></b>
+		<b><Form Name="fwks">Framework :<!--TMPL_VAR Name="framework" --></Form></b>
 		</td>
 		</tr>
 	</table>

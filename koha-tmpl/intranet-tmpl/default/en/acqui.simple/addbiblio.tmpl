@@ -514,6 +514,10 @@ function PopupZ3950() {
 	}
 	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
 }
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
+}
 
 function AddField(field) {
 	document.forms[0].op.value = "addfield";

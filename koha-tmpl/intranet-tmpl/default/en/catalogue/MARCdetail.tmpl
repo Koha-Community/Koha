@@ -4,10 +4,10 @@
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
 		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --> </h1>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+		<a href="javascript:Addbiblio('')" class="button catalogue">
 			Edit biblio
 		</a>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+		<a href="javascript:Addbiblio('duplicate')" class="button catalogue">
 			Duplicate
 		</a>
 		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
@@ -402,7 +402,11 @@ function Dopop(link) {
 }
 function Changefwk(FwkList) {
   var fwk = FwkList.options[FwkList.selectedIndex].value;
-  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&amp;fwk="+fwk;
+  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+}
+function Addbiblio(op) {
+  var fwk = window.document.fwks.Frameworks.options[window.document.fwks.Frameworks.selectedIndex].value;
+  window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>
 </body>

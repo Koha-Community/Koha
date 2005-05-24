@@ -65,7 +65,7 @@ my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
 my $bibid = $query->param('bibid');
-my $itemtype = $query->param('fwk');
+my $itemtype = $query->param('frameworkcode');
 my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
 
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
