@@ -65,11 +65,12 @@ my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
 my $bibid = $query->param('bibid');
+my $itemtype = $query->param('fwk');
 my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
 
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+$itemtype = &MARCfind_frameworkcode($dbh,$bibid) if not ($itemtype);
 warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
@@ -102,6 +103,7 @@ warn "current fwk :".$curfwk ;
 my $framework=CGI::scrolling_list( -name     => 'Frameworks',
 			-id => 'Frameworks',
 			-default => $curfwk,
+			-OnChange => 'Changefwk(this);',
 			-values   => \@select_fwk,
 			-labels   => \%select_fwk,
 			-size     => 1,

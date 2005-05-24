@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 
+
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
-		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --></h1>
+		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --> </h1>
 		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Edit biblio
 		</a>
@@ -40,6 +41,8 @@
 		<!-- TMPL_ELSE -->
 			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
 		<!-- /TMPL_IF -->
+		
+
 	</div>
 <!-- /TMPL_UNLESS -->
 	<div class="tabs">
@@ -396,6 +399,10 @@ function confirm_deletion() {
 }
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&amp;fwk="+fwk;
 }
 </script>
 </body>
