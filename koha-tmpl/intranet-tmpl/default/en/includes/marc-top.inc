@@ -60,8 +60,16 @@ a.catalogue:hover {
 		<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
 	</div>
 <!-- /TMPL_UNLESS -->
+<table border=0><tr >
+<td align="left">
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
+    Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]
 <!-- TMPL_ELSE -->
-    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
+    <a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha
 <!-- /TMPL_IF -->
+		</td>
+		<td align="right">
+		<b>Framework :<!--TMPL_VAR Name="framework" --></b>
+		</td>
+		</tr>
+	</table>

@@ -70,6 +70,8 @@ my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+warn "itemtype :".$itemtype;
+
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
@@ -83,6 +85,29 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+#Getting the list of all frameworks
+my $queryfwk =$dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
+$queryfwk->execute;
+my %select_fwk;
+my @select_fwk;
+my $curfwk;
+push @select_fwk,"";
+$select_fwk{""} = "Default";
+while (my ($description, $fwk) =$queryfwk->fetchrow) {
+	push @select_fwk, $fwk;
+	$select_fwk{$fwk} = $description;
+}
+$curfwk=$itemtype;
+warn "current fwk :".$curfwk ;
+my $framework=CGI::scrolling_list( -name     => 'Frameworks',
+			-id => 'Frameworks',
+			-default => $curfwk,
+			-values   => \@select_fwk,
+			-labels   => \%select_fwk,
+			-size     => 1,
+			-multiple => 0 );
+
+$template->param( framework => $framework);
 # fill arrays
 my @loop_data =();
 my $tag;
