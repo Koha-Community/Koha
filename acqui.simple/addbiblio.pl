@@ -350,6 +350,7 @@ if ($oldbiblionumber) {
 	$bibid = $input->param('bibid');
 	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if ($bibid and not ($frameworkcode));
 }
+$frameworkcode='' if ($frameworkcode eq 'Default');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
 			     query => $input,
@@ -365,8 +366,8 @@ $queryfwk->execute;
 my %select_fwk;
 my @select_fwk;
 my $curfwk;
-push @select_fwk,"";
-$select_fwk{""} = "Default";
+push @select_fwk,"Default";
+$select_fwk{"Default"} = "Default";
 while (my ($description, $fwk) =$queryfwk->fetchrow) {
 	push @select_fwk, $fwk;
 	$select_fwk{$fwk} = $description;
@@ -425,6 +426,7 @@ if ($op eq "addbiblio") {
 		my $oldbibnum;
 		my $oldbibitemnum;
 		if ($is_a_modif) {
+			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
 		} else {
 			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);

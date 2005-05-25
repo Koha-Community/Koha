@@ -3,7 +3,10 @@
 
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
-		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --> </h1>
+	<form Name="f">
+		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --> 	<b>With Framework :<!--TMPL_VAR Name="framework" --></b>
+</h1>
+	</form>
 		<a href="javascript:Addbiblio('')" class="button catalogue">
 			Edit biblio
 		</a>
@@ -405,7 +408,7 @@ function Changefwk(FwkList) {
   window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
 }
 function Addbiblio(op) {
-  var fwk = window.document.fwks.Frameworks.options[window.document.fwks.Frameworks.selectedIndex].value;
+  var fwk = document.forms[0].Frameworks.options[document.forms[0].Frameworks.selectedIndex].value;
   window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>

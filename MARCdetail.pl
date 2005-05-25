@@ -71,6 +71,7 @@ my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 $itemtype = &MARCfind_frameworkcode($dbh,$bibid) if not ($itemtype);
+$itemtype = '' if ($itemtype eq 'Default');
 warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
@@ -92,8 +93,8 @@ $queryfwk->execute;
 my %select_fwk;
 my @select_fwk;
 my $curfwk;
-push @select_fwk,"";
-$select_fwk{""} = "Default";
+push @select_fwk,"Default";
+$select_fwk{"Default"} = "Default";
 while (my ($description, $fwk) =$queryfwk->fetchrow) {
 	push @select_fwk, $fwk;
 	$select_fwk{$fwk} = $description;
