@@ -58,6 +58,7 @@ $VERSION = 0.01;
   &NEWnewbiblio &NEWnewitem
   &NEWmodbiblio &NEWmoditem
   &NEWdelbiblio &NEWdelitem
+  &NEWmodbiblioframework
 
   &MARCaddbiblio &MARCadditem
   &MARCmodsubfield &MARCaddsubfield
@@ -1272,6 +1273,12 @@ sub NEWnewbiblio {
     return ( $bibid, $oldbibnum, $oldbibitemnum );
 }
 
+sub NEWmodbiblioframework {
+	my ($dbh,$bibid,$frameworkcode) =@_;
+	my $sth = $dbh->prepare("Update marc_biblio SET frameworkcode=? WHERE bibid=$bibid");
+	$sth->execute($frameworkcode);
+	return 1;
+}
 sub NEWmodbiblio {
 	my ($dbh,$record,$bibid,$frameworkcode) =@_;
 	$frameworkcode="" unless $frameworkcode;
@@ -2623,6 +2630,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.10  2005/05/25 09:30:50  hdl
+# Adding NEWmodbiblioframework feature
+# Used by addbiblio.pl when modifying a framework selection.
+#
 # Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
 # adding / to the list of symbols that are replace by spaces for searches
 #
