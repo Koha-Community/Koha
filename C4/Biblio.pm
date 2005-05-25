@@ -928,14 +928,14 @@ sub MARCkoha2marcBiblio {
         &MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author",
             $row->{'author'},'' );
     }
-    my $sth2 =
+    $sth2 =
       $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
         &MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject",
             $row->{'subject'},'' );
     }
-    my $sth2 =
+    $sth2 =
       $dbh->prepare(
         " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
     $sth2->execute($biblionumber);
@@ -1099,7 +1099,7 @@ sub MARCmarc2koha {
 		$result->{'copyrightdate'} = $1;
 	}
 # modify publicationyear to keep only the 1st year found
-	my $temp = $result->{'publicationyear'};
+	$temp = $result->{'publicationyear'};
 	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
 	if ($1>0) {
 		$result->{'publicationyear'} = $1;
@@ -1352,7 +1352,7 @@ sub NEWnewitem {
     my ( $itemnumber, $error ) = &OLDnewitems( $dbh, $item, $item->{barcode} );
 
     # add itemnumber to MARC::Record before adding the item.
-    my $sth =
+    $sth =
       $dbh->prepare(
 "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
@@ -1462,13 +1462,14 @@ sub OLDnewbiblio {
     $sth->finish;
     $sth =
       $dbh->prepare(
-"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?"
+"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?"
     );
     $sth->execute(
         $bibnum,             $biblio->{'title'},
         $biblio->{'author'}, $biblio->{'copyrightdate'},
         $biblio->{'serial'},             $biblio->{'seriestitle'},
-        $biblio->{'notes'},  $biblio->{'abstract'}
+        $biblio->{'notes'},  $biblio->{'abstract'},
+		$biblio->{'unititle'},
     );
 
     $sth->finish;
@@ -2630,6 +2631,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
+# * removing my for variables already declared
+# * updating biblio.unititle  field as well as other fields in biblio table
+#
 # Revision 1.115.2.10  2005/05/25 09:30:50  hdl
 # Adding NEWmodbiblioframework feature
 # Used by addbiblio.pl when modifying a framework selection.
