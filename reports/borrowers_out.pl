@@ -159,7 +159,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=6;$i++) {
+	for (my $i=0;$i<=2;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			if (($i==1) and (@$filters[$i-1])) {
@@ -167,6 +167,7 @@ sub calculate {
 			}
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Bor Cat" if ($i==0);
+			$cell{crit} .="Without issues since" if ($i==1);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -231,10 +232,15 @@ sub calculate {
 # Processing average loanperiods
 	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM borrowers LEFT JOIN issues ON  issues.borrowernumber=borrowers.borrowernumber WHERE issues.borrowernumber is null";
+	$strcalc .= " FROM borrowers LEFT JOIN ";
+	if (@$filters[1]){
+		$strcalc .= " (SELECT * FROM issues where issues.timestamp>" . $dbh->quote(@$filters[1]).")" ;
+	} else {
+		$strcalc .= "issues";
+	} 
+	$strcalc .= " AS filtered_issues ON  filtered_issues.borrowernumber=borrowers.borrowernumber WHERE filtered_issues.borrowernumber is null";
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-	
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
 	$strcalc .= " order by $colfield " if ($colfield);
