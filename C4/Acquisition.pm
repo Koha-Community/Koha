@@ -597,15 +597,17 @@ sub ordersearch {
 
 
 sub histsearch {
-	my ($title,$author,$name)=@_;
+	my ($title,$author,$name,$from_placed_on,$to_placed_on)=@_;
 	my $dbh= C4::Context->dbh;
-	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost
-							from aqorders,aqbasket,aqbooksellers,biblio 
-							where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and
-							biblio.biblionumber=aqorders.biblionumber";
+	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio 
+where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and
+biblio.biblionumber=aqorders.biblionumber";
 	$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
 	$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
 	$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
+	$query .= " and creationdate >" .$dbh->quote($from_placed_on) if $from_placed_on;
+	$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
+	warn "C4:Acquisition : ".$query;
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
 	my @order_loop;

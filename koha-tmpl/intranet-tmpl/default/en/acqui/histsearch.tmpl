@@ -28,7 +28,63 @@
 					<input type="text" name="name" value="<!-- TMPL_VAR name="name" -->">
 				</th>
 				<th class="acquisition">
-					&nbsp;
+					From <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+					<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->">
+					<script language="JavaScript" type="text/javascript">
+						function validate1(date) {
+							var day = date.getDate();
+							var month = date.getMonth() + 1;
+							var year = date.getFullYear();
+							var weekDay = date.getDay();
+							var dayMonth = month + '-' + day;
+							var dateString = year + '-' + month + '-' + day;
+							var dateTo = document.getElementById('to').value.split("-");
+							var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+							if (date > limitDate) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+						Calendar.setup(
+							{
+								inputField : "from",
+								ifFormat : "%Y-%m-%d",
+								button : "openCalendarFrom",
+								disableFunc : validate1,
+								dateStatusFunc : validate1
+							}
+						);
+					</script>
+					To <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+					<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text">
+					<script type="text/javascript">
+						function validate2(date) {
+							var day = date.getDate();
+							var month = date.getMonth() + 1;
+							var year = date.getFullYear();
+							var weekDay = date.getDay();
+							var dayMonth = month + '-' + day;
+							var dateString = year + '-' + month + '-' + day;
+							var dateFrom = document.getElementById('from').value.split("-");
+							var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+							if (limitDate > date) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+
+						Calendar.setup(
+							{
+								inputField : "to",
+								ifFormat : "%Y-%m-%d",
+								button : "openCalendarTo",
+								disableFunc : validate2,
+								dateStatusFunc : validate2
+							}
+						);
+					</script>
 				</th>
 				<th class="acquisition">
 					&nbsp;
@@ -74,4 +130,5 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 </div>
+
 <!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
