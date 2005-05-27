@@ -2,7 +2,7 @@ package Install; #assumes Install.pm
 
 
 # Copyright 2000-2002 Katipo Communications
-# Contains parts Copyright 2003-4 MJ Ray
+# Contains parts Copyright 2003-5 MJ Ray
 #
 # This file is part of Koha.
 #
@@ -1816,7 +1816,7 @@ sub databasesetup {
 	} else {
 		# Create the database structure
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user $database < koha.mysql");
+		system("$mysqldir/bin/mysql '-u$user' '$database' < koha.mysql");
 	}
 
 }
@@ -1895,10 +1895,10 @@ sub updatedatabase {
 	}
 	startsysout();
 	if ($response eq '1') {
-		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql '-u$user' '$database'");
 	}
 	if ($response eq '2') {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql '-u$user' '$database'");
 	}
 	delete($ENV{"KOHA_CONF"});
 
@@ -1951,9 +1951,9 @@ sub populatedatabase {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" '$database'");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" '$database'");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" '$database'");
 
 		my $printername='lp';
 		my $printerqueue='/dev/lp0';
@@ -1972,7 +1972,7 @@ sub populatedatabase {
 			$printerqueue=~s/[^A-Za-z0-9]//g;
 		}
 		startsysout();	
-		system("$mysqldir/bin/mysql -u$user -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" '$database'");
 	}
 	my $language;
 	if ($auto_install->{Language}) {
@@ -1982,7 +1982,7 @@ sub populatedatabase {
 		$language=showmessage(getmessage('Language'), 'free', 'en');
 	}
 	startsysout();	
-	system("$mysqldir/bin/mysql -u$user -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
+	system("$mysqldir/bin/mysql '-u$user' -e \"update systempreferences set value='$language' where variable='opaclanguages'\" '$database'");
 	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
 		# ask for directory to look for files to append
@@ -2046,7 +2046,7 @@ if you confirm, the file will be added to the DB
 						# if confirmed, upload the file in the DB
 						unless ($response =~/^n/i) {
 							$FileToUpload =~ s/\.txt/\.sql/;
-							system("$mysqldir/bin/mysql -u$user $database <scripts/misc/sql-datas/$sqluploaddir/$FileToUpload");
+							system("$mysqldir/bin/mysql '-u$user' '$database' <scripts/misc/sql-datas/$sqluploaddir/$FileToUpload");
 						}
 					}
 				}
@@ -2153,7 +2153,7 @@ $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
 setmysqlclipass($pass); 
-open (MD, "$mysqldir/bin/mysqldump --user=$user --host=$hostname $database|");
+open (MD, "$mysqldir/bin/mysqldump '--user=$user' --host=$hostname '$database'|");
 
 (open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
 
