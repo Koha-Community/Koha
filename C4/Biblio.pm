@@ -1042,7 +1042,9 @@ sub MARChtml2marc {
 			$indicators{@$rtags[$i]}.='  ';
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
+				undef $field;
 			} else {
+				undef $prevvalue;
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 # 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
@@ -1060,7 +1062,7 @@ sub MARChtml2marc {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field);
+	$record->add_fields($field) if $field;
 # 	warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
@@ -2631,6 +2633,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
+# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
+#
 # Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
 # * removing my for variables already declared
 # * updating biblio.unititle  field as well as other fields in biblio table
