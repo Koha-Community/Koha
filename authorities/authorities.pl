@@ -239,6 +239,7 @@ sub build_tabs ($$$$) {
 				my %tag_data;
 				$tag_data{tag} = $tag;
 				$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+				$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
 				$tag_data{indicator} = $indicator;
 				$tag_data{subfield_loop} = \@subfields_data;
 				push (@loop_data, \%tag_data);
@@ -365,41 +366,14 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	splice(@tags,$addedfield,0,$tags[$addedfield]);
-	splice(@subfields,$addedfield,0,$subfields[$addedfield]);
-	splice(@values,$addedfield,0,$values[$addedfield]);
-	splice(@ind_tag,$addedfield,0,$ind_tag[$addedfield]);
 	my %indicators;
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-# search the part of the array to duplicate.
-	my $start=0;
-	my $end=0;
-	my $started;
-	for (my $i=0;$i<=$#tags;$i++) {
-		$start=$i if ($start eq 0 && $tags[$i] == $addedfield);
-		$end=$i if ($start>0 && $tags[$i] eq $addedfield);
-		last if ($start>0 && $tags[$i] ne $addedfield);
-	}
-# add an empty line in all arrays. This forces a new field in MARC::Record.
-	splice(@tags,$end+1,0,'');
-	splice(@subfields,$end+1,0,'');
-	splice(@values,$end+1,0,'');
-	splice(@ind_tag,$end+1,0,'');
-	splice(@indicator,$end+1,0,'');
-# then duplicate the field.
-	splice(@tags,$end+2,0,@tags[$start..$end]);
-	splice(@subfields,$end+2,0,@subfields[$start..$end]);
-	splice(@values,$end+2,0,@values[$start..$end]);
-	splice(@ind_tag,$end+2,0,@ind_tag[$start..$end]);
-	splice(@indicator,$end+2,0,@indicator[$start..$end]);
+	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
+	$record->append_fields($field);
 
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
@@ -414,7 +388,8 @@ if ($op eq "add") {
 	&AUTHdelauthority($dbh,$authid);
 }
 
-if ($authid) {
+unless ($op) {
+# 	warn "BUILDING";
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 }
