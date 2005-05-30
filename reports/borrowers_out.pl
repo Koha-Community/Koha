@@ -229,18 +229,26 @@ sub calculate {
 # preparing calculation
 	my $strcalc ;
 	
-# Processing average loanperiods
+# Processing calculation
 	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM borrowers LEFT JOIN ";
-	if (@$filters[1]){
-		$strcalc .= " (SELECT * FROM issues where issues.timestamp>" . $dbh->quote(@$filters[1]).")" ;
-	} else {
-		$strcalc .= "issues";
-	} 
-	$strcalc .= " AS filtered_issues ON  filtered_issues.borrowernumber=borrowers.borrowernumber WHERE filtered_issues.borrowernumber is null";
+	$strcalc .= " FROM borrowers ";
+	$strcalc .= "WHERE 1 ";
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
+	if (@$filters[1]){
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp>?");
+		$queryfilter->execute(@$filters[1]);
+		while (my ($bornum)=$queryfilter->fetchrow){
+			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+		}
+	} else {
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
+		$queryfilter->execute;
+		while (my ($bornum)=$queryfilter->fetchrow){
+			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+		}
+	}
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
 	$strcalc .= " order by $colfield " if ($colfield);
