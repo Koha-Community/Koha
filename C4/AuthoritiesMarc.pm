@@ -655,7 +655,9 @@ sub AUTHhtml2marc {
 			$indicators{@$rtags[$i]}.='  ';
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
+				undef $field;
 			} else {
+				undef $prevvalue;
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 			}
 			$prevtag = @$rtags[$i];
@@ -663,7 +665,7 @@ sub AUTHhtml2marc {
 			if (@$rtags[$i] <10) {
 				$prevvalue=@$rvalues[$i];
 			} else {
-				if (@$rvalues[$i]) {
+				if (length(@$rvalues[$i])>0) {
 					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
 				}
 			}
@@ -671,8 +673,7 @@ sub AUTHhtml2marc {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field);
-# 	warn $record->as_formatted;
+	$record->add_fields($field) if $field;
 	return $record;
 }
 
@@ -910,6 +911,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.4  2005/05/30 11:24:15  tipaul
+# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in AUTHhtml2marc, this empty field was not discarded correctly)
+#
 # Revision 1.9.2.3  2005/04/28 08:45:33  tipaul
 # porting FindDuplicate feature for authorities from HEAD to rel_2_2, works correctly now.
 #
