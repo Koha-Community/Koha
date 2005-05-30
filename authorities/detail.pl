@@ -143,6 +143,7 @@ foreach my $thisauthtype (keys %$authtypes) {
 $template->param(authid => $authid,
 				count => $count,
 				biblio_fields => $biblio_fields,
+				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
 				authtypesloop => \@authtypesloop);
 output_html_with_http_headers $query, $cookie, $template->output;
 

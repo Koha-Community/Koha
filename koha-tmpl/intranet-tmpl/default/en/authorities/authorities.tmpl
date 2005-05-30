@@ -3,7 +3,11 @@
 
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="authority">Authority number <!-- TMPL_VAR NAME="authid" --></h1>
+	<!-- TMPL_IF name="authid" -->
+		<h1 class="authority">Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+	<!-- TMPL_ELSE -->
+		<h1 class="authority">Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+	<!-- /TMPL_IF -->
 	<p>
 		<input type="hidden" name="op" value="add">
 		<input type="hidden" name="addfield_field">
@@ -174,8 +178,8 @@ function PopupZ3950() {
 }
 
 function AddField(field) {
-	document.forms[0].op.value = "addfield";
-	document.forms[0].addfield_field.value=field;
+	document.forms[1].op.value = "addfield";
+	document.forms[1].addfield_field.value=field;
 	document.f.submit();
 }
 </script>

@@ -403,7 +403,7 @@ $template->param(
 	authtypecode => $authtypecode,
 	);
 
-	my $authtypes = getauthtypes;
+my $authtypes = getauthtypes;
 my @authtypesloop;
 foreach my $thisauthtype (keys %$authtypes) {
 	my $selected = 1 if $thisauthtype eq $authtypecode;
@@ -414,5 +414,7 @@ foreach my $thisauthtype (keys %$authtypes) {
 	push @authtypesloop, \%row;
 }
 
-$template->param(authtypesloop => \@authtypesloop);
+$template->param(authtypesloop => \@authtypesloop,
+				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
+				);
 output_html_with_http_headers $input, $cookie, $template->output;
