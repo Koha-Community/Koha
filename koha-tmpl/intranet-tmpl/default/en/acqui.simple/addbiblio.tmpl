@@ -404,7 +404,10 @@ function active(numlayer)
 			document.getElementById(link).style.color="#FFFFFF";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
-			document.getElementById(link).style.color="#000000";
+			if (document.getElementById(link))
+				{
+					document.getElementById(link).style.color="#000000";
+				}
 		}
 	}
 }
