@@ -530,7 +530,12 @@ sub AUTHmodauthority {
 	&AUTHdelauthority($dbh,$authid,1);
 	&AUTHaddauthority($dbh,$record,$authid,AUTHfind_authtypecode($dbh,$authid));
 	# save the file in localfile/modified_authorities
-	my $filename = C4::Context->config("intranetdir")."/localfile/modified_authorities/$authid.authid";
+	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+	unless (opendir(DIR, "$cgidir")) {
+			$cgidir = C4::Context->intranetdir."/";
+	} 
+
+	my $filename = $cgidir."/localfile/modified_authorities/$authid.authid";
 	open AUTH, "> $filename";
 	print AUTH $authid;
 	close AUTH;
@@ -911,6 +916,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.5  2005/05/31 14:50:46  tipaul
+# fix for authority merging. There was a bug on official installs
+#
 # Revision 1.9.2.4  2005/05/30 11:24:15  tipaul
 # fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in AUTHhtml2marc, this empty field was not discarded correctly)
 #
