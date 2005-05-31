@@ -15,7 +15,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Title</label>
@@ -23,14 +23,14 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Author</label> <input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Subject</label>
@@ -38,7 +38,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Series title</label>
@@ -46,7 +46,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35"/>
+			<input type="text" name="value" size="35"/>
 		</p>
 		<p>
 			<label class="label20">Item Type</label>
@@ -73,7 +73,7 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="start" />
-				<input type="text" name="value" onchange="sql_update()" /> 
+				<input type="text" name="value" /> 
 		</p>
 		<p>
 			<label class="label20">Call Number</label>
@@ -81,7 +81,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="start" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">ISBN</label>
@@ -89,7 +89,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Publisher</label>
@@ -97,7 +97,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Published between</label>
@@ -105,13 +105,13 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value=">=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			<input type="text" name="value" size="6" maxlength="4" />
 			and
 			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="<=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			<input type="text" name="value" size="6" maxlength="4" />
 		</p>
 		<p>
 			<label class="label20">Results per page</label>
@@ -156,38 +156,5 @@
 		<p>If you want to enter a partial word, add a * or a % at the end of the word. For example "two tower*" will retrieve "the two towers", "two white towers", "a tower and two cities"</p>
 	</div>
 </form>
-
-<script type="text/javascript">
-function sql_update() {
-document.f.sql.value="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-			document.f.sql.value = document.f.sql.value+
-										document.f.and_or[i].value + ' (' +
-										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + ' ' +
-										document.f.operator[i].value + ' ' +
-										'\''+document.f.value[i].value + '\') ';
-		}
-	}
-}
-
-function AddStatement() {
-
-	document.forms[0].op.value="AddStatement";
-	document.f.submit();
-}
-
-function PopupSuggestion() {
-    var strQuery="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-		    strQuery += " "+document.f.value[i].value;
-		}
-	}
-	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-</script>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
