@@ -770,7 +770,7 @@ sub canbookbeissued {
 			my $branches = getbranches();
 			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 			$needsconfirmation{RESERVE_WAITING} = "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
-			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+			# CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'}); Doesn't belong in a checking subroutine.
 		} elsif ($restype eq "Reserved") {
 			# The item is on reserve for someone else.
 			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
@@ -845,7 +845,9 @@ sub issuebook {
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+                if ($cancelreserve){
+    				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+                }
 			} elsif ($restype eq "Reserved") {
 				warn "Reserved";
 				# The item is on reserve for someone else.
@@ -856,11 +858,11 @@ sub issuebook {
 					# cancel reserves on this item
 					CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 					# also cancel reserve on biblio related to this item
-					my $st_Fbiblio = $dbh->prepare("select biblionumber from items where itemnumber=?");
-					$st_Fbiblio->execute($res->{'itemnumber'});
-					my $biblionumber = $st_Fbiblio->fetchrow;
-					CancelReserve($biblionumber,0,$res->{'borrowernumber'});
-					warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
+					#my $st_Fbiblio = $dbh->prepare("select biblionumber from items where itemnumber=?");
+					#$st_Fbiblio->execute($res->{'itemnumber'});
+					#my $biblionumber = $st_Fbiblio->fetchrow;
+					#CancelReserve($biblionumber,0,$res->{'borrowernumber'});
+					#warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
 				} else {
 # 					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
 # 					transferbook($tobrcd,$barcode, 1);
