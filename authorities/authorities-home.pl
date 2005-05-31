@@ -87,10 +87,11 @@ if ($op eq "do_search") {
 
 	my @field_data = ();
 
-
+	# we must get parameters once again. Because if there is a mainentry, it has been replaced by something else during the search, thus the links next/previous would not work anymore 
+	my @marclist_ini = $query->param('marclist');
 	for(my $i = 0 ; $i <= $#marclist ; $i++)
 	{
-		push @field_data, { term => "marclist", val=>$marclist[$i] };
+		push @field_data, { term => "marclist", val=>$marclist_ini[$i] };
 		push @field_data, { term => "and_or", val=>$and_or[$i] };
 		push @field_data, { term => "excluding", val=>$excluding[$i] };
 		push @field_data, { term => "operator", val=>$operator[$i] };
