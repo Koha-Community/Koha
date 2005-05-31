@@ -111,7 +111,6 @@
 		<input type="submit" value="OK" class="button">
 	</form>
 <!-- /TMPL_IF -->
-
 <!-- ------------------------------------------------------------------------ -->
 <!-- TMPL_IF NAME="else" -->
 <div id="bloc25">
@@ -125,9 +124,62 @@
 	</select>
 	<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 	<input type="submit" value="OK" class="button">
+	<p>
+	<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True" checked>
+	</p>
 </form>
 <b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
 </div>
+<!-- TMPL_IF NAME="select_display" -->
+<div id="bloc100">
+	<table>
+	<tr>
+		<th>Tag</th>
+		<th>Lib</th>
+		<th>Repeatable</th>
+		<th>Mandatory</th>
+		<th>Authorised<br />value</th>
+		<th>Subfields</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	<!-- TMPL_LOOP NAME="loop" -->
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
+		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
+		<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_IF NAME="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">subfields</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
+	</tr>
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td colspan=8>
+			<table colspan=8>
+			<!-- TMPL_LOOP NAME="subfields" -->
+				<tr<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
+					<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
+					<td>
+						<!-- TMPL_VAR NAME="liblibrarian" -->
+					</td>
+					<td>
+						Tab :<!-- TMPL_VAR NAME="tab" -->,
+						<!-- TMPL_IF NAME="kohafield" -->Koha field : <!-- TMPL_VAR NAME="kohafield" -->, <!--/TMPL_IF -->
+						<!-- TMPL_IF NAME="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="mandatory" -->Mandatory, <!-- TMPL_ELSE -->Not mandatory,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="seealso" -->see also : <!-- TMPL_VAR NAME="seealso" -->,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="authorised_value" --> Auth value :<!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="authtypecode" --> Authority :<!-- TMPL_VAR NAME="authtypecode" -->,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="value_builder" -->Plugin :<!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+					</td>
+					<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
 <div id="bloc100">
 	<table>
 	<tr>
@@ -168,8 +220,10 @@
 				<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0">
 			</a>
 		<!-- /TMPL_IF -->
+<!--/TMPL_IF -->
 	</form>
 </div>
 <!-- /TMPL_IF -->
+
 </div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

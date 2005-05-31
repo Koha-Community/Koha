@@ -42,6 +42,7 @@ $searchfield=~ s/\,//g;
 
 my $offset=$input->param('offset');
 my $op = $input->param('op');
+my $dspchoice = $input->param('select_display');
 my $pagesize=20;
 
 my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
@@ -217,45 +218,134 @@ if ($op eq 'add_form') {
 	if  ($searchfield ne '') {
 		 $template->param(searchfield => $searchfield);
 	}
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,$frameworkcode);
-	my $toggle=0;
-	my @loop_data = ();
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 0){
-			$toggle=1;
-	  	} else {
-			$toggle=0;
-	  	}
-		my %row_data;  # get a fresh hash for the row data
-		$row_data{tagfield} = $results->[$i]{'tagfield'};
-		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
-		$row_data{repeatable} = $results->[$i]{'repeatable'};
-		$row_data{mandatory} = $results->[$i]{'mandatory'};
-		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{toggle} = $toggle;
-		push(@loop_data, \%row_data);
-	}
-	$template->param(loop => \@loop_data);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(isprevpage => $offset,
-						prevpage=> $prevpage,
-						searchfield => $searchfield,
-						script_name => $script_name,
-						frameworkcode => $frameworkcode,
-		 );
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(nextpage =>$nextpage,
-						searchfield => $searchfield,
-						script_name => $script_name,
-						frameworkcode => $frameworkcode,
-		);
+	if ($dspchoice) {
+		#here, user only wants used tags/subfields displayed
+		my $env;
+		$searchfield=~ s/\'/\\\'/g;
+		my @data=split(' ',$searchfield);
+		my $count=@data;
+		my $sth=$dbh->prepare("Select marc_tag_structure.tagfield as mts_tagfield,marc_tag_structure.liblibrarian as mts_liblibrarian,marc_tag_structure.libopac as mts_libopac,marc_tag_structure.repeatable as mts_repeatable,marc_tag_structure.mandatory as mts_mandatory,marc_tag_structure.authorised_value as mts_authorized_value,marc_subfield_structure.* from marc_tag_structure LEFT JOIN marc_subfield_structure ON (marc_tag_structure.tagfield=marc_subfield_structure.tagfield AND marc_tag_structure.frameworkcode=marc_subfield_structure.frameworkcode) where (marc_tag_structure.tagfield >= ? and marc_tag_structure.frameworkcode=?) AND marc_subfield_structure.tab>=0 order by marc_tag_structure.tagfield,marc_subfield_structure.tagsubfield");
+		#could be ordoned by tab
+		$sth->execute($data[0], $frameworkcode);
+		my @results = ();
+		while (my $data=$sth->fetchrow_hashref){
+			push(@results,$data);
+		}
+		$sth->finish;
+		
+		my $toggle=0;
+		my @loop_data = ();
+		my $j=1;
+		my $i=$offset;
+		while ($i < ($offset+$pagesize<scalar(@results)?$offset+$pagesize:scalar(@results))) {
+			if ($toggle eq 0){
+				$toggle=1;
+			} else {
+				$toggle=0;
+			}
+			my %row_data;  # get a fresh hash for the row data
+			$row_data{tagfield} = $results[$i]->{'mts_tagfield'};
+			$row_data{liblibrarian} = $results[$i]->{'mts_liblibrarian'};
+			$row_data{repeatable} = $results[$i]->{'mts_repeatable'};
+			$row_data{mandatory} = $results[$i]->{'mts_mandatory'};
+			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
+			$row_data{subfield_link} ="marc_subfields_structure.pl?op=add_form&tagfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{toggle} = $toggle;
+			$j=$i;
+			my @internal_loop = ();
+			while (($results[$i]->{'tagfield'}==$results[$j]->{'tagfield'}) and ($j< ($offset+$pagesize<scalar(@results)?$offset+$pagesize:scalar(@results)))) {
+				if ($toggle eq 0) {
+					$toggle=1;
+				} else {
+					$toggle=0;
+				}
+				my %subfield_data;
+				$subfield_data{tagsubfield} = $results[$j]->{'tagsubfield'};
+				$subfield_data{liblibrarian} = $results[$j]->{'liblibrarian'};
+				$subfield_data{kohafield} = $results[$j]->{'kohafield'};
+				$subfield_data{repeatable} = $results[$j]->{'repeatable'};
+				$subfield_data{mandatory} = $results[$j]->{'mandatory'};
+				$subfield_data{tab} = $results[$j]->{'tab'};
+				$subfield_data{seealso} = $results[$j]->{'seealso'};
+				$subfield_data{authorised_value} = $results[$j]->{'authorised_value'};
+				$subfield_data{authtypecode}= $results[$j]->{'authtypecode'};
+				$subfield_data{value_builder}= $results[$j]->{'value_builder'};
+				$subfield_data{toggle}	= $toggle;
+				warn "tagfield :  ".$results[$j]->{'tagfield'}." tagsubfield :".$results[$j]->{'tagsubfield'};
+				push @internal_loop,\%subfield_data;
+				$j++;
+			}
+			$row_data{'subfields'}=\@internal_loop;
+			push(@loop_data, \%row_data);
+#			undef @internal_loop;
+			$i=$j;
+		}
+		$template->param(select_display => "True",
+						loop => \@loop_data);
+		if ($offset>0) {
+			my $prevpage = $offset-$pagesize;
+			$template->param(isprevpage => $offset,
+							prevpage=> $prevpage,
+							searchfield => $searchfield,
+							script_name => $script_name,
+							frameworkcode => $frameworkcode,
+			);
+		}
+		if ($offset+$pagesize<$count) {
+			my $nextpage =$offset+$pagesize;
+			$template->param(nextpage =>$nextpage,
+							searchfield => $searchfield,
+							script_name => $script_name,
+							frameworkcode => $frameworkcode,
+			);
+		}
+		
+		#  $sth->execute;
+		$sth->finish;
+	} else {
+		#here, normal old style : display every tags
+		my $env;
+		my ($count,$results)=StringSearch($env,$searchfield,$frameworkcode);
+		my $toggle=0;
+		my @loop_data = ();
+		for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+			if ($toggle eq 0){
+				$toggle=1;
+			} else {
+				$toggle=0;
+			}
+			my %row_data;  # get a fresh hash for the row data
+			$row_data{tagfield} = $results->[$i]{'tagfield'};
+			$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
+			$row_data{repeatable} = $results->[$i]{'repeatable'};
+			$row_data{mandatory} = $results->[$i]{'mandatory'};
+			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
+			$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{toggle} = $toggle;
+			push(@loop_data, \%row_data);
+		}
+		$template->param(loop => \@loop_data);
+		if ($offset>0) {
+			my $prevpage = $offset-$pagesize;
+			$template->param(isprevpage => $offset,
+							prevpage=> $prevpage,
+							searchfield => $searchfield,
+							script_name => $script_name,
+							frameworkcode => $frameworkcode,
+			);
+		}
+		if ($offset+$pagesize<$count) {
+			my $nextpage =$offset+$pagesize;
+			$template->param(nextpage =>$nextpage,
+							searchfield => $searchfield,
+							script_name => $script_name,
+							frameworkcode => $frameworkcode,
+			);
+		}
 	}
 } #---- END $OP eq DEFAULT
 
