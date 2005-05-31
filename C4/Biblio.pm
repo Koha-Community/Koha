@@ -2066,7 +2066,17 @@ sub modsubject {
     my ( $bibnum, $force, @subject ) = @_;
     my $dbh = C4::Context->dbh;
     my $error = &OLDmodsubject( $dbh, $bibnum, $force, @subject );
-    return ($error);
+    if ($error eq ''){
+		# When MARC is off, ensures that the MARC biblio table gets updated with new
+		# subjects, of course, it deletes the biblio in marc, and then recreates.
+		# This check is to ensure that no MARC data exists to lose.
+		if (C4::Context->preference("MARC") eq '0'){
+			my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
+			my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+			&MARCmodbiblio($dbh,$bibid, $MARCRecord);
+		}
+	}
+	return ($error);
 }    # sub modsubject
 
 sub modbibitem {
@@ -2633,6 +2643,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
+# patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
+#
 # Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
 # fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
 #
