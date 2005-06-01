@@ -99,7 +99,7 @@ sub findseealso {
 	}
 }
 
-=head1  my ($count, @results) = catalogsearch($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby);
+=head1  my ($count, @results) = catalogsearch($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$sqlstring);
 
 =head2 $dbh is a link to the DB handler.
 
@@ -146,6 +146,10 @@ define the field used to order the request. Any field in the biblio/biblioitem t
 
 (for example title, title DESC,...)
 
+=head2 $sqlstring
+
+optional argument containing an sql string to be used in the 'where' statement. see usage in opac-search.pl.
+
 =head2 RETURNS
 
 returns an array containing hashes. The hash contains all biblio & biblioitems fields and a reference to an item hash. The "item hash contains one line for each callnumber & the number of items related to the callnumber.
@@ -165,7 +169,7 @@ $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrievi
 =cut
 
 sub catalogsearch {
-	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc) = @_;
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring) = @_;
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -272,15 +276,15 @@ sub catalogsearch {
 
 	# Finds the basic results without the NOT requests
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
-
+  $sql_where1 .=" ". $sqlstring;
 	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( biblio.timestamp ) <30" if $orderby =~ "biblio.timestamp";
 	my $sth;
 	if ($sql_where2) {
-		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc");
-		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc term is  @$value";
+		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,items,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc");
+		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,items,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc term is  @$value";
 	} else {
-		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc");
-		warn "Q : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc";
+		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,items,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc");
+		warn "Q : select distinct m1.bibid from biblio,biblioitems,items,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc";
 	}
 	$sth->execute();
 	my @result = ();
