@@ -54,72 +54,74 @@ my $starttime = gettimeofday;
 $dbh->do("delete from marc_Tword");
 
 # parse every line
-my $query="SELECT biblio.biblionumber,tag,subfieldcode,subfieldvalue,biblio.title FROM marc_subfield_table left join marc_biblio on marc_biblio.bibid=marc_subfield_table.bibid left join biblio on marc_biblio.biblionumber=biblio.biblionumber";
+my $query="SELECT biblio.biblionumber,tag,subfieldcode,subfieldvalue,biblio.title FROM marc_subfield_table left join marc_biblio on marc_biblio.bibid=marc_subfield_table.bibid left join biblio on marc_biblio.biblionumber=biblio.biblionumber and tag=?";
 my $sth=$dbh->prepare($query);
 
-print "******** SELECTING \n";
-$sth->execute;
-print "******** DONE \n";
-$|=1; # flushes output
-
-my $sthT=$dbh->prepare("select usedin from marc_Tword where tagsubfield=? and word=?");
-my $updateT=$dbh->prepare("update marc_Tword set usedin=? where tagsubfield=? and word=?");
-my $insertT=$dbh->prepare("insert into marc_Tword (tagsubfield,word,usedin) values (?,?,?)");
-my $i=0;
-my $timeneeded;
-# 1st version, slower, but less RAM consumming
-# while (my ($biblionumber, $tag, $subfieldcode, $subfieldvalue, $title) = $sth->fetchrow) {
-# 	next if $ignore_list{"$tag.$subfieldcode"};
-#     $subfieldvalue =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-# 	# remove useless chars in the title.
-#     $title =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-#     my @words = split / /, $subfieldvalue;
-# 	# and retrieve the reversed entry
-# 	foreach my $word (@words) {
-# 		$sthT->execute($tag.$subfieldcode,$word);
-# 		if (my ($usedin) = $sthT->fetchrow) {
-# 			# add the field & save it once again.
-# 			$usedin.=",$biblionumber-$title";
-# 			$updateT->execute($usedin,$tag.$subfieldcode,$word);
-# 		} else {
-# 			$insertT->execute($tag.$subfieldcode,$word,",$title-$biblionumber");
-# 		}
-# 	}
-# 	$timeneeded = gettimeofday - $starttime unless ($i % 100);
-# 	print "$i in $timeneeded s\n" unless ($i % 100);
-# 	print ".";
-# 	$i++;
-# }
-
-# 2nd version : faster (about 100 times !), bug maybe too much RAM consumming...
-my %largehash;
-print "READING\n";
-while (my ($biblionumber, $tag, $subfieldcode, $subfieldvalue, $title) = $sth->fetchrow) {
-	next unless $subfieldvalue;
-	next if $ignore_list{$tag.$subfieldcode};
-    $subfieldvalue =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-	# remove useless chars in the title.
-    $title =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-    my @words = split / /, $subfieldvalue;
-	# and retrieve the reversed entry
-	foreach my $word (@words) {
-		my $localkey = $tag.$subfieldcode.'|'.uc($word);
-		$largehash{$localkey}.=",$title-$biblionumber";
+for (my $looptag=0;$looptag<=999;$looptag++) {
+	print "******** SELECTING ".(sprintf "%03s",$looptag)."\n";
+	$sth->execute(sprintf "%03s",$looptag);
+	print "******** DONE \n";
+	$|=1; # flushes output
+	
+	my $sthT=$dbh->prepare("select usedin from marc_Tword where tagsubfield=? and word=?");
+	my $updateT=$dbh->prepare("update marc_Tword set usedin=? where tagsubfield=? and word=?");
+	my $insertT=$dbh->prepare("insert into marc_Tword (tagsubfield,word,usedin) values (?,?,?)");
+	my $i=0;
+	my $timeneeded;
+	# 1st version, slower, but less RAM consumming
+	# while (my ($biblionumber, $tag, $subfieldcode, $subfieldvalue, $title) = $sth->fetchrow) {
+	# 	next if $ignore_list{"$tag.$subfieldcode"};
+	#     $subfieldvalue =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
+	# 	# remove useless chars in the title.
+	#     $title =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
+	#     my @words = split / /, $subfieldvalue;
+	# 	# and retrieve the reversed entry
+	# 	foreach my $word (@words) {
+	# 		$sthT->execute($tag.$subfieldcode,$word);
+	# 		if (my ($usedin) = $sthT->fetchrow) {
+	# 			# add the field & save it once again.
+	# 			$usedin.=",$biblionumber-$title";
+	# 			$updateT->execute($usedin,$tag.$subfieldcode,$word);
+	# 		} else {
+	# 			$insertT->execute($tag.$subfieldcode,$word,",$title-$biblionumber");
+	# 		}
+	# 	}
+	# 	$timeneeded = gettimeofday - $starttime unless ($i % 100);
+	# 	print "$i in $timeneeded s\n" unless ($i % 100);
+	# 	print ".";
+	# 	$i++;
+	# }
+	
+	# 2nd version : faster (about 100 times !), bug maybe too much RAM consumming...
+	my %largehash;
+	print "READING\n";
+	while (my ($biblionumber, $tag, $subfieldcode, $subfieldvalue, $title) = $sth->fetchrow) {
+		next unless $subfieldvalue;
+		next if $ignore_list{$tag.$subfieldcode};
+		$subfieldvalue =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if $subfieldvalue;
+		# remove useless chars in the title.
+		$title =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if $title;
+		my @words = split / /, $subfieldvalue;
+		# and retrieve the reversed entry
+		foreach my $word (@words) {
+			my $localkey = $tag.$subfieldcode.'|'.uc($word);
+			$largehash{$localkey}.=",".substr($title,0,15)."-$biblionumber";
+		}
+		$timeneeded = gettimeofday - $starttime unless ($i % 30000);
+		print "$i in $timeneeded s\n" unless ($i % 30000);
+		print "." unless ($i % 500);
+		$i++;
 	}
-	$timeneeded = gettimeofday - $starttime unless ($i % 30000);
-	print "$i in $timeneeded s\n" unless ($i % 30000);
-	print "." unless ($i % 500);
-	$i++;
-}
-$i=0;
-print "WRITING\n";
-foreach my $k (keys %largehash) {
-	$k =~ /(.*)\|(.*)/;
-	$insertT->execute($1,$2,$largehash{$k});
-	$timeneeded = gettimeofday - $starttime unless ($i % 30000);
-	print "$i in $timeneeded s\n" unless ($i % 30000);
-	print "." unless ($i % 500);
-	$i++;
+	$i=0;
+	print "WRITING\n";
+	foreach my $k (keys %largehash) {
+		$k =~ /(.*)\|(.*)/;
+		$insertT->execute($1,$2,$largehash{$k});
+		$timeneeded = gettimeofday - $starttime unless ($i % 30000);
+		print "$i in $timeneeded s\n" unless ($i % 30000);
+		print "." unless ($i % 500);
+		$i++;
+	}
 }
 
 $dbh->disconnect();
