@@ -144,7 +144,7 @@
 		<tr>
 	<!-- TMPL_IF NAME="select_display" -->
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<tr class="hilighted">
 			<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
 			<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
 			<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
@@ -159,41 +159,19 @@
 				&nbsp;
 			</td>
 			<td colspan=7 border=0>
-				<table colspan=8 border=0>
 				<!-- TMPL_LOOP NAME="subfields" -->
-					<tr<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
-						<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
-						<td>
+					<p><label>&nbsp;</label>
+							Tab:<!-- TMPL_VAR NAME="tab" --> | $<!-- TMPL_VAR NAME="tagsubfield" -->
 							<!-- TMPL_VAR NAME="liblibrarian" -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="kohafield" --><!-- TMPL_VAR NAME="kohafield" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="repeatable" -->repeatable<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="mandatory" -->Mandatory<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="seealso" -->See<!-- TMPL_ELSE -->&nbsp;<!--/TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="authorised_value" --><!-- TMPL_VAR NAME="authorised_value" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
-						</td>
-						<td>
-							<!-- TMPL_IF NAME="value_builder" --><!-- TMPL_VAR NAME="value_builder" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
-						</td>
-						<td>
-							Tab:<!-- TMPL_VAR NAME="tab" -->
-						</td>
-						<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
-					</tr>
+							<!-- TMPL_IF NAME="kohafield" -->,<!-- TMPL_VAR NAME="kohafield" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
+							<!-- TMPL_IF NAME="repeatable" -->, repeatable<!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="mandatory" -->, Mandatory<!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="seealso" -->, See <!-- TMPL_VAR name="seealso" --><!--/TMPL_IF -->
+							<!-- TMPL_IF NAME="authorised_value" -->, <!-- TMPL_VAR NAME="authorised_value" --><!--/TMPL_IF -->
+							<!-- TMPL_IF NAME="authtypecode" -->, <!-- TMPL_VAR NAME="authtypecode" --><!--/TMPL_IF -->
+							<!-- TMPL_IF NAME="value_builder" -->, <!-- TMPL_VAR NAME="value_builder" --><!--/TMPL_IF -->
+					</p>
 				<!-- /TMPL_LOOP -->
-				</table>
 			</td>
 		</tr>
 		<!-- /TMPL_LOOP -->
