@@ -2056,6 +2056,18 @@ sub modsubject {
     my ( $bibnum, $force, @subject ) = @_;
     my $dbh = C4::Context->dbh;
     my $error = &OLDmodsubject( $dbh, $bibnum, $force, @subject );
+        if ($error eq ''){
+    # When MARC is off, ensures that the MARC biblio table gets updated with new
+    # subjects, of course, it deletes the biblio in marc, and then recreates.
+    # This check is to ensure that no MARC data exists to lose.
+
+        if (C4::Context->preference("MARC") eq '0'){
+            my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
+            my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+            &MARCmodbiblio($dbh,$bibid, $MARCRecord);
+        }
+
+    }
     return ($error);
 }    # sub modsubject
 
@@ -2623,6 +2635,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.119  2005/06/01 20:43:58  genjimoto
+# patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
+#
 # Revision 1.118  2005/05/04 15:40:01  tipaul
 # synch'ing 2.2 and head
 #
