@@ -73,7 +73,8 @@ my $librarymail = 'librarystaff@library.com'; # all notices without mail are sen
 # this text contains fields that are replaced by their value. Those fields must be written between brackets
 # The following fields are available :
 # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
-my $mailtext = "\n\n\nDear library borrower\n\n\n       <date>\n\n       According to our records, you have <itemcount> items that are at\n       least a week overdue for return to the library or renewal.\n       If you have registered a password with the library, you may use it\n       and your library card to login at http://XXX.org\n       to check the status of your account, or you may call any of our branch\n       Please be advised that all library services will be blocked\n       if items are allowed to go more than 30 days overdue.\n\n       Thank you for using your public libraries.\n\n\n                                             <firstname> <lastname>\n                                             <address1>\n                                             <address2>\n                                             <city>  <postcode>\n\n\n\n\n\n";
+my $mailtext = "\n\n\nDear library borrower\n\n\n       <date>\n\n       According to our records, you have <itemcount> items, the description of which follows, that are at\n       least a week overdue for return to the library or renewal:\n		title		author		barcode\n<titles>\n
+       If you have registered a password with the library, you may use it\n       and your library card to login at http://XXX.org\n       to check the status of your account, or you may call any of our branch\n       Please be advised that all library services will be blocked\n       if items are allowed to go more than 30 days overdue.\n\n       Thank you for using your public libraries.\n\n\n                                             <firstname> <lastname>\n                                             <address1>\n                                             <address2>\n                                             <city>  <postcode>\n\n\n\n\n\n";
 #
 # END OF PARAMETERS
 #
@@ -84,13 +85,16 @@ unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
 #                                         set your own mail server name here
 
 my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare ("SELECT count(*), issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categories WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 group by issues.borrowernumber");
+my $sth = $dbh->prepare ("SELECT COUNT(*), issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categories WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 group by issues.borrowernumber");
+my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
+
 $sth->execute;
 # 
 # my $itemcount = 0;
 # my $row;
 my $count = 0;   # to keep track of how many notices are printed
 my $e_count = 0;   # and e-mailed
+my $date=localtime;
 my ($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
 
 while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
@@ -102,7 +106,16 @@ while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$post
 		$notice =~ s/\<address2\>/$address2/g;
 		$notice =~ s/\<city\>/$city/g;
 		$notice =~ s/\<postcode\>/$postcode/g;
-	
+		$notice =~ s/\<date\>/$date/g;
+
+		$sth2->execute($borrnum);
+		my $titles;
+		my ($title, $author, $barcode);
+		while (($title, $author, $barcode) = $sth2->fetchrow){
+			$titles .= "		$title	$author	$barcode\n";
+		}
+		$notice =~ s/\<titles\>/$titles/g;
+		$sth2->finish;
 	# if not using e-mail notices, comment out the following lines
 		if ($email) {   # or you might check for borrowers.preferredcont 
 			if ($nomail) {
