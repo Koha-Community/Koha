@@ -7,6 +7,7 @@ use MIME::QuotedPrint;
 use MIME::Base64;
 
 use C4::Search;
+use C4::Biblio;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
@@ -24,6 +25,10 @@ my ($template, $borrowernumber, $cookie)
 my $bib_list=$query->param('bib_list');
 my $email_add=$query->param('email_add');
 my $email_sender=$query->param('email_sender');
+my $dbh=C4::Context->dbh;
+my $sth;
+$sth=$dbh->prepare("select bibid from marc_biblio where biblionumber=? order by bibid");
+
 
 if ($email_add) {
 	my $email_from = C4::Context->preference('KohaAdminEmailAddress');
@@ -56,6 +61,8 @@ if ($email_add) {
 
 		$dat->{'biblionumber'} = $biblionumber;
 		$dat->{ITEM_RESULTS} = \@items;
+		$sth->execute($biblionumber);
+		my ($bibid) = $sth->fetchrow;
 		my $record = MARCgetbiblio($dbh,$bibid);
 		$iso2709 .= $record->as_usmarc();
 
