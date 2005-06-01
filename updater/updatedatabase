@@ -12,7 +12,7 @@
 # - Would also be a good idea to offer to do a backup at this time...
 
 # NOTE:  If you do something more than once in here, make it table driven.
-
+use lib "/usr/koha200pre2/modules";
 use strict;
 
 # CPAN modules
@@ -368,6 +368,21 @@ my %requiretables = (
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
 						)",
+    categorytable       => "(categorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (categorycode)
+                            )",
+    subcategorytable       => "(subcategorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (subcategorycode)
+                            )",
+    mediatypetable       => "(mediatypecode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (mediatypecode)
+                            )",
 );
 
 my %requirefields = (
@@ -1432,6 +1447,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.104  2005/06/01 21:35:05  genjimoto
+# New Feature: catalogsearch() has a new parameter, $sqlstring. A developer puts into it whatever they want to tack onto the end of the where statement. See usage in opac-search.pl
+#
 # Revision 1.103  2005/05/04 09:04:52  tipaul
 # synch'ing 2.2 and head
 #
