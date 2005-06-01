@@ -115,7 +115,7 @@
 <!-- TMPL_IF NAME="else" -->
 <div id="bloc25">
 <h2 class="parameters">Select a framework</h2>
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<form name="f" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<select name="frameworkcode">
 		<option value="">Default</option>
 	<!-- TMPL_LOOP NAME="frameworkloop" -->
@@ -125,7 +125,7 @@
 	<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 	<input type="submit" value="OK" class="button">
 	<p>
-	<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True" checked>
+	<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True"  OnChange="javascript:document.f.submit()">
 	</p>
 </form>
 <b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
@@ -142,6 +142,7 @@
 		<th>Subfields</th>
 		<th>Edit</th>
 		<th>Delete</th>
+	<tr>
 	<!-- TMPL_LOOP NAME="loop" -->
 	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
 		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
@@ -154,8 +155,11 @@
 		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 	</tr>
 	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
-		<td colspan=8>
-			<table colspan=8>
+		<td>
+			&nbsp;
+		</td>
+		<td colspan=7 border=0>
+			<table colspan=8 border=0>
 			<!-- TMPL_LOOP NAME="subfields" -->
 				<tr<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
 					<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
@@ -163,14 +167,28 @@
 						<!-- TMPL_VAR NAME="liblibrarian" -->
 					</td>
 					<td>
-						Tab :<!-- TMPL_VAR NAME="tab" -->,
-						<!-- TMPL_IF NAME="kohafield" -->Koha field : <!-- TMPL_VAR NAME="kohafield" -->, <!--/TMPL_IF -->
-						<!-- TMPL_IF NAME="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="mandatory" -->Mandatory, <!-- TMPL_ELSE -->Not mandatory,<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="seealso" -->see also : <!-- TMPL_VAR NAME="seealso" -->,<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="authorised_value" --> Auth value :<!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="authtypecode" --> Authority :<!-- TMPL_VAR NAME="authtypecode" -->,<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="value_builder" -->Plugin :<!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="kohafield" --><!-- TMPL_VAR NAME="kohafield" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="repeatable" -->repeatable<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="mandatory" -->Mandatory<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="seealso" -->See<!-- TMPL_ELSE -->&nbsp;<!--/TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="authorised_value" --><!-- TMPL_VAR NAME="authorised_value" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="value_builder" --><!-- TMPL_VAR NAME="value_builder" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
+					</td>
+					<td>
+						Tab:<!-- TMPL_VAR NAME="tab" -->
 					</td>
 					<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 				</tr>
@@ -191,6 +209,7 @@
 		<th>Subfields</th>
 		<th>Edit</th>
 		<th>Delete</th>
+	</tr>
 	<!-- TMPL_LOOP NAME="loop" -->
 	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
 		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
@@ -222,6 +241,11 @@
 		<!-- /TMPL_IF -->
 <!--/TMPL_IF -->
 	</form>
+<script language="javascript" type="text/javascript">
+	function ChangeDisplay(checkbox) {
+		window.
+	}
+</script>
 </div>
 <!-- /TMPL_IF -->
 
