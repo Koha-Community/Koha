@@ -54,7 +54,7 @@ my $starttime = gettimeofday;
 $dbh->do("delete from marc_Tword");
 
 # parse every line
-my $query="SELECT biblio.biblionumber,tag,subfieldcode,subfieldvalue,biblio.title FROM marc_subfield_table left join marc_biblio on marc_biblio.bibid=marc_subfield_table.bibid left join biblio on marc_biblio.biblionumber=biblio.biblionumber and tag=?";
+my $query="SELECT biblio.biblionumber,tag,subfieldcode,subfieldvalue,biblio.title FROM marc_subfield_table left join marc_biblio on marc_biblio.bibid=marc_subfield_table.bibid left join biblio on marc_biblio.biblionumber=biblio.biblionumber where tag=?";
 my $sth=$dbh->prepare($query);
 
 for (my $looptag=0;$looptag<=999;$looptag++) {
@@ -94,7 +94,9 @@ for (my $looptag=0;$looptag<=999;$looptag++) {
 	
 	# 2nd version : faster (about 100 times !), bug maybe too much RAM consumming...
 	my %largehash;
-	print "READING\n";
+# 	print "READING\n";
+	$timeneeded = gettimeofday - $starttime unless ($i % 30000);
+	print "READING $timeneeded s\n";
 	while (my ($biblionumber, $tag, $subfieldcode, $subfieldvalue, $title) = $sth->fetchrow) {
 		next unless $subfieldvalue;
 		next if $ignore_list{$tag.$subfieldcode};
