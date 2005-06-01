@@ -33,7 +33,7 @@ my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
 
 $template->param(
 	biblionumber => $query->param('biblionumber'),
-	subscription_LOOP => $subscriptions
+	subscription_LOOP => $subscriptions,
 	suggestion => C4::Context->preference("suggestion"),
 	virtualshelves => C4::Context->preference("virtualshelves"),
 	);
