@@ -162,14 +162,7 @@
 				<!-- TMPL_LOOP NAME="subfields" -->
 					<p><label>&nbsp;</label>
 							Tab:<!-- TMPL_VAR NAME="tab" --> | $<!-- TMPL_VAR NAME="tagsubfield" -->
-							<!-- TMPL_VAR NAME="liblibrarian" -->
-							<!-- TMPL_IF NAME="kohafield" -->,<!-- TMPL_VAR NAME="kohafield" --><!-- TMPL_ELSE --> &nbsp;<!--/TMPL_IF -->
-							<!-- TMPL_IF NAME="repeatable" -->, repeatable<!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="mandatory" -->, Mandatory<!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="seealso" -->, See <!-- TMPL_VAR name="seealso" --><!--/TMPL_IF -->
-							<!-- TMPL_IF NAME="authorised_value" -->, <!-- TMPL_VAR NAME="authorised_value" --><!--/TMPL_IF -->
-							<!-- TMPL_IF NAME="authtypecode" -->, <!-- TMPL_VAR NAME="authtypecode" --><!--/TMPL_IF -->
-							<!-- TMPL_IF NAME="value_builder" -->, <!-- TMPL_VAR NAME="value_builder" --><!--/TMPL_IF -->
+							<!-- TMPL_VAR NAME="liblibrarian" --> <!-- TMPL_IF NAME="kohafield" --><!-- TMPL_VAR NAME="kohafield" --><!--/TMPL_IF --><!-- TMPL_IF NAME="repeatable" -->, repeatable<!-- /TMPL_IF --><!-- TMPL_IF NAME="mandatory" -->, Mandatory<!-- /TMPL_IF --><!-- TMPL_IF NAME="seealso" -->, See <!-- TMPL_VAR name="seealso" --><!--/TMPL_IF --><!-- TMPL_IF NAME="authorised_value" -->, <!-- TMPL_VAR NAME="authorised_value" --><!--/TMPL_IF --><!-- TMPL_IF NAME="authtypecode" -->, <!-- TMPL_VAR NAME="authtypecode" --><!--/TMPL_IF --><!-- TMPL_IF NAME="value_builder" -->, <!-- TMPL_VAR NAME="value_builder" --><!--/TMPL_IF -->
 					</p>
 				<!-- /TMPL_LOOP -->
 			</td>
