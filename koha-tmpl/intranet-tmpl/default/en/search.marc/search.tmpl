@@ -16,7 +16,7 @@
 		<p>
 			<input type="hidden" name="op" value="do_search">
 			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-			<label class="label100" for="keyword">Any word</label>
+			<label for="keyword">Any word</label>
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
@@ -24,39 +24,39 @@
 			<input type="text" name="value" id="keyword" onchange="sql_update()" size="35">
 		</p>
 		<p>
-			<label class="label100" for="title">Title</label>
+			<label for="title">Title</label>
 			<input type="hidden" name="marclist" value="biblio.title">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)">
-				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+				...
 			</a>
 		</p>
 		<p>
-			<label class="label100" for="author">Author</label> <input type="hidden" name="marclist" value="biblio.author">
+			<label for="author">Author</label> <input type="hidden" name="marclist" value="biblio.author">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)">
-				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+				...
 			</a>
 		</p>
 		<p>
-			<label class="label100" for="subject">Subject</label>
+			<label for="subject">Subject</label>
 			<input type="hidden" name="marclist" value="bibliosubject.subject">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">  
 			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
-			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)">
-				<img src="/intranet-tmpl/default/en/includes/addressbook_section.png" width=12 height=12 alt="dict">
+			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+				...
 			</a>
 		</p>
 		<p>
-			<label class="label100" for="itemtype">Item Type</label>
+			<label for="itemtype">Item Type</label>
 			<input type="hidden" name="marclist" value="biblioitems.itemtype">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
@@ -64,7 +64,7 @@
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
 		<p>
-				<label class="label100" for="branch">Branch</label>
+				<label for="branch">Branch</label>
 				<input type="hidden" name="marclist" value="items.holdingbranch">
 				<input type="hidden" name="and_or" value="and">
 				<input type="hidden" name="excluding" value="">
@@ -75,7 +75,7 @@
 	<div class="bloc25">
 		<h2 class="catalogue">Other options</h2>
 		<p>
-				<label class="label100" for="barcode">Item barcode</label>
+				<label for="barcode">Item barcode</label>
 				<input type="hidden" name="marclist" value="items.barcode">
 				<input type="hidden" name="and_or" value="and">
 				<input type="hidden" name="excluding" value="">
@@ -83,7 +83,7 @@
 				<input type="text" name="value" id="barcode" onchange="sql_update()"> 
 		</p>
 		<p>
-			<label class="label100" for="callno">Call Number</label>
+			<label for="callno">Call Number</label>
 			<input type="hidden" name="marclist" value="items.itemcallnumber">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
@@ -91,7 +91,7 @@
 			<input type="text" name="value" id="callno" onchange="sql_update()">
 		</p>
 		<p>
-			<label class="label100" for="isbn">ISBN</label>
+			<label for="isbn">ISBN</label>
 			<input type="hidden" name="marclist" value="biblioitems.isbn">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
@@ -99,7 +99,7 @@
 			<input type="text" name="value" id="isbn" onchange="sql_update()">
 		</p>
 		<p>
-			<label class="label100" for="publisher">Publisher</label>
+			<label for="publisher">Publisher</label>
 			<input type="hidden" name="marclist" value="biblioitems.publishercode">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
@@ -159,7 +159,7 @@
 		</p>
 		<p>
 			<input type="submit" value="Start search" class="button catalogue">
-			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Suggestions</a>
+			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Spelling suggestion</a>
 		</p>
 	</div>
 </form>
@@ -187,7 +187,7 @@ function AddStatement() {
 
 function Dopop(link,i) {
 	var searchstring=document.forms[0].value[i].value;
-	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=550,height=550,toolbar=false,scrollbars=yes');
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 

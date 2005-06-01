@@ -30,6 +30,24 @@ use C4::Context;
 use C4::Biblio;
 use HTML::Template;
 
+=head1 NAME
+
+dictionnary.pl : script to search in biblio & authority an existing value
+
+=head1 SYNOPSIS
+
+useful when the user want to search a term before running a query. For example, to see if "computer" is used in the database
+
+The parameter "marclist" tells which field is searched (title, author, subject, but could be anything else)
+
+This script searches in both biblios & authority
+* in biblio, the script search in all marc fields related to what the user is looking for (for example, if the dictionnary is used on "author", the script searches in biblio.author, but also in additional authors & any MARC field related to author (through the "seealso" MARC constraint)
+* in authority, the script search everywhere. Thus, the accepted & rejected forms are found.
+
+The script shows all results & the user can choose what he want, that is copied into search form.
+
+=cut
+
 my $input = new CGI;
 my $field =$input->param('marclist');
 #warn "field :$field";
@@ -38,9 +56,9 @@ my ($tablename, $kohafield)=split /./,$field;
 $tablename="biblio" unless ($tablename);
 #my $kohafield = $input->param('kohafield');
 my @search = $input->param('search');
-warn " ".$search[0];
+# warn " ".$search[0];
 my $index = $input->param('index');
-warn " index: ".$index;
+# warn " index: ".$index;
 my $op=$input->param('op');
 if (($search[0]) and not ($op eq 'do_search')){
 	$op='do_search';
@@ -63,14 +81,9 @@ my $resultsperpage;
 #warn "Starting process";
 
 if ($op eq "do_search") {
-	($template, $loggedinuser, $cookie)
-			= get_template_and_user({template_name => "search.marc/dictionary.tmpl",
-					query => $input,
-					type => $type,
-					authnotrequired => 0,
-					flagsrequired => {catalogue => 1},
-					debug => 1,
-					});
+	#
+	# searching in biblio
+	#
 	my $sth=$dbh->prepare("Select distinct tagfield,tagsubfield from marc_subfield_structure where kohafield = ?");
 	$sth->execute("$field");
 	my (@tags, @and_or, @operator, @excluding,@value);
@@ -84,32 +97,27 @@ if ($op eq "do_search") {
 	my $orderby = $input->param('orderby');
 
 	findseealso($dbh,\@tags);
-#	select distinct m1.bibid from biblio,biblioitems,marc_biblio,marc_word as m1 where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and (m1.word  like 'Paul' and m1.tagsubfield in ('200f','710a','711a','712a','701a','702a','700a')) order by biblio.title
-
 
 	my @results, my $total;
-# 	my ($results,$total) = catalogsearch($dbh,\@tags ,\@and_or,
-# 										\@excluding, \@operator,  \@value,
-# 										$startfrom*$resultsperpage, $resultsperpage,$orderby);
-	my $strsth="select distinct subfieldvalue, count(marc_subfield_table.bibid) from marc_subfield_table,marc_word where marc_word.word like ? and marc_subfield_table.bibid=marc_word.bibid and marc_word.tagsubfield in ";
+	my $strsth="select distinct subfieldvalue, count(marc_subfield_table.bibid) from marc_subfield_table,marc_word where marc_word.word like ? and marc_subfield_table.bibid=marc_word.bibid and marc_subfield_table.tagorder=marc_word.tagorder and marc_word.tagsubfield in ";
 	my $listtags="(";
 	foreach my $tag (@tags){
 		$listtags .= $tag .",";
 	}
 	$listtags =~s/,$/)/;
 	$strsth .= $listtags." and marc_word.tagsubfield=marc_subfield_table.tag+marc_subfield_table.subfieldcode group by subfieldvalue ";
-	warn "".$strsth;
+# 	warn "search in biblio : ".$strsth;
 	my $value = uc($search[0]);
 	$value=~s/\*/%/g;
 	$value.= "%" if not($value=~m/%/);
-	warn " texte : ".$value;
+# 	warn " texte : ".$value;
 
 	$sth=$dbh->prepare($strsth);
 	$sth->execute($value);
 	my $total;
 	my @catresults;
 	while (my ($value,$ctresults)=$sth->fetchrow) {
-		warn "countresults : ".$ctresults;
+# 		warn "countresults : ".$ctresults;
 		push @catresults,{value=> $value, 
 						  even=>($total-$startfrom*$resultsperpage)%2,
 						  count=>$ctresults
@@ -128,10 +136,13 @@ if ($op eq "do_search") {
 	
 	$strsth=~s/ OR$/)/;
 	my $strsth = $strsth." and authtypecode is not NULL";
-	warn $strsth;
+# 	warn $strsth;
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute;
 	
+	#
+	# searching in authorities
+	#
 	my @authresults;
 	my $authnbresults;
 	while ((my $authtypecode) = $sth->fetchrow) {
@@ -141,13 +152,15 @@ if ($op eq "do_search") {
 		$authnbresults+=$nbresults;
 #		warn "auth : $authtypecode nbauthresults : $nbresults";
 	}
- 	
+	
+	# 
+	# OK, filling the template with authorities & biblio entries found.
+	#
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/dictionary.tmpl",
 				query => $input,
 				type => $type,
 				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
