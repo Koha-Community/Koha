@@ -218,18 +218,19 @@ if ($op eq 'add_form') {
 	if  ($searchfield ne '') {
 		 $template->param(searchfield => $searchfield);
 	}
+	my $cnt=0;
 	if ($dspchoice) {
 		#here, user only wants used tags/subfields displayed
 		my $env;
 		$searchfield=~ s/\'/\\\'/g;
 		my @data=split(' ',$searchfield);
-		my $count=@data;
 		my $sth=$dbh->prepare("Select marc_tag_structure.tagfield as mts_tagfield,marc_tag_structure.liblibrarian as mts_liblibrarian,marc_tag_structure.libopac as mts_libopac,marc_tag_structure.repeatable as mts_repeatable,marc_tag_structure.mandatory as mts_mandatory,marc_tag_structure.authorised_value as mts_authorized_value,marc_subfield_structure.* from marc_tag_structure LEFT JOIN marc_subfield_structure ON (marc_tag_structure.tagfield=marc_subfield_structure.tagfield AND marc_tag_structure.frameworkcode=marc_subfield_structure.frameworkcode) where (marc_tag_structure.tagfield >= ? and marc_tag_structure.frameworkcode=?) AND marc_subfield_structure.tab>=0 order by marc_tag_structure.tagfield,marc_subfield_structure.tagsubfield");
 		#could be ordoned by tab
 		$sth->execute($data[0], $frameworkcode);
 		my @results = ();
 		while (my $data=$sth->fetchrow_hashref){
 			push(@results,$data);
+			$cnt++;
 		}
 		$sth->finish;
 		
@@ -237,7 +238,7 @@ if ($op eq 'add_form') {
 		my @loop_data = ();
 		my $j=1;
 		my $i=$offset;
-		while ($i < ($offset+$pagesize<scalar(@results)?$offset+$pagesize:scalar(@results))) {
+		while ($i < ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt)) {
 			if ($toggle eq 0){
 				$toggle=1;
 			} else {
@@ -255,7 +256,7 @@ if ($op eq 'add_form') {
 			$row_data{toggle} = $toggle;
 			$j=$i;
 			my @internal_loop = ();
-			while (($results[$i]->{'tagfield'}==$results[$j]->{'tagfield'}) and ($j< ($offset+$pagesize<scalar(@results)?$offset+$pagesize:scalar(@results)))) {
+			while (($results[$i]->{'tagfield'}==$results[$j]->{'tagfield'}) and ($j< ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt))) {
 				if ($toggle eq 0) {
 					$toggle=1;
 				} else {
@@ -273,7 +274,7 @@ if ($op eq 'add_form') {
 				$subfield_data{authtypecode}= $results[$j]->{'authtypecode'};
 				$subfield_data{value_builder}= $results[$j]->{'value_builder'};
 				$subfield_data{toggle}	= $toggle;
-				warn "tagfield :  ".$results[$j]->{'tagfield'}." tagsubfield :".$results[$j]->{'tagsubfield'};
+# 				warn "tagfield :  ".$results[$j]->{'tagfield'}." tagsubfield :".$results[$j]->{'tagsubfield'};
 				push @internal_loop,\%subfield_data;
 				$j++;
 			}
@@ -284,30 +285,13 @@ if ($op eq 'add_form') {
 		}
 		$template->param(select_display => "True",
 						loop => \@loop_data);
-		if ($offset>0) {
-			my $prevpage = $offset-$pagesize;
-			$template->param(isprevpage => $offset,
-							prevpage=> $prevpage,
-							searchfield => $searchfield,
-							script_name => $script_name,
-							frameworkcode => $frameworkcode,
-			);
-		}
-		if ($offset+$pagesize<$count) {
-			my $nextpage =$offset+$pagesize;
-			$template->param(nextpage =>$nextpage,
-							searchfield => $searchfield,
-							script_name => $script_name,
-							frameworkcode => $frameworkcode,
-			);
-		}
-		
 		#  $sth->execute;
 		$sth->finish;
 	} else {
 		#here, normal old style : display every tags
 		my $env;
 		my ($count,$results)=StringSearch($env,$searchfield,$frameworkcode);
+		$cnt = $count;
 		my $toggle=0;
 		my @loop_data = ();
 		for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -329,23 +313,23 @@ if ($op eq 'add_form') {
 			push(@loop_data, \%row_data);
 		}
 		$template->param(loop => \@loop_data);
-		if ($offset>0) {
-			my $prevpage = $offset-$pagesize;
-			$template->param(isprevpage => $offset,
-							prevpage=> $prevpage,
-							searchfield => $searchfield,
-							script_name => $script_name,
-							frameworkcode => $frameworkcode,
-			);
-		}
-		if ($offset+$pagesize<$count) {
-			my $nextpage =$offset+$pagesize;
-			$template->param(nextpage =>$nextpage,
-							searchfield => $searchfield,
-							script_name => $script_name,
-							frameworkcode => $frameworkcode,
-			);
-		}
+	}
+	if ($offset>0) {
+		my $prevpage = $offset-$pagesize;
+		$template->param(isprevpage => $offset,
+						prevpage=> $prevpage,
+						searchfield => $searchfield,
+						script_name => $script_name,
+						frameworkcode => $frameworkcode,
+		);
+	}
+	if ($offset+$pagesize<$cnt) {
+		my $nextpage =$offset+$pagesize;
+		$template->param(nextpage =>$nextpage,
+						searchfield => $searchfield,
+						script_name => $script_name,
+						frameworkcode => $frameworkcode,
+		);
 	}
 } #---- END $OP eq DEFAULT
 
