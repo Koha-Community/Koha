@@ -109,10 +109,10 @@ while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$post
 		$notice =~ s/\<date\>/$date/g;
 
 		$sth2->execute($borrnum);
-		my $titles;
+		my $titles="";
 		my ($title, $author, $barcode);
 		while (($title, $author, $barcode) = $sth2->fetchrow){
-			$titles .= "		$title	$author	$barcode\n";
+			$titles .= "		".($title?$title:"")."	".($author?$author:"")."	".($barcode?$barcode:"")."\n";
 		}
 		$notice =~ s/\<titles\>/$titles/g;
 		$sth2->finish;
@@ -148,7 +148,7 @@ if ($count) {
 
 		$notice .= <ODUES>;
 		if ($nomail) {
-			print "TO => $email\n";
+			print "TO => $email\n" if $email;
 			print "FROM => $from\n";
 			print "SUBJECT => Koha overdue\n";
 			print "MESSAGE => $notice\n";
