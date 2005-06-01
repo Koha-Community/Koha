@@ -16,19 +16,49 @@ my $suggest;   # a flag to be set (if there are suggestions it's 1)
 my $firstbiblionumber; # needed for directly sending user to first item
 # use C4::Search;
 
-my $classlist='';
 
+my $itemtypelist;
+my $brancheslist;
+my $categorylist;
+my $subcategorylist;
+my $mediatypelist;
 my $dbh=C4::Context->dbh;
 my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
 $sth->execute;
 while (my ($description,$itemtype) = $sth->fetchrow) {
-    $classlist.="<option value=\"$itemtype\">$description</option>\n";
+    $itemtypelist.="<option value=\"$itemtype\">$description</option>\n";
 }
+my $sth=$dbh->prepare("select description,subcategorycode from subcategorytable order by description");
+$sth->execute;
+while (my ($description,$subcategorycode) = $sth->fetchrow) {
+    $subcategorylist.="<option value=\"$subcategorycode\">$description</option>\n";
+}
+my $sth=$dbh->prepare("select description,mediatypecode from mediatypetable order by description");
+$sth->execute;
+while (my ($description,$mediatypecode) = $sth->fetchrow) {
+    $mediatypelist.="<option value=\"$mediatypecode\">$description</option>\n";
+}
+my $sth=$dbh->prepare("select description,categorycode from categorytable order by description");
+$sth->execute;
+while (my ($description,$categorycode) = $sth->fetchrow) {
+    $categorylist .= '<input type="radio" name="categorylist" value="'.$categorycode.'">'.$description.'<br>';
+}
+my $sth=$dbh->prepare("select branchname,branchcode from branches order by branchname");
+$sth->execute;
 
-
+while (my ($branchname,$branchcode) = $sth->fetchrow) {
+    $brancheslist.="<option value=\"$branchcode\">$branchname</option>\n";
+}
 my $query = new CGI;
 my $op = $query->param("op");
 my $type=$query->param('type');
+
+my $itemtypesstring=$query->param("itemtypesstring");
+$itemtypesstring =~s/"//g;
+my @itemtypes = split ( /\|/, $itemtypesstring);
+my $branchesstring=$query->param("branchesstring");
+$branchesstring =~s/"//g;
+my @branches = split (/\|/, $branchesstring);
 
 my $startfrom=$query->param('startfrom');
 $startfrom=0 if(!defined $startfrom);
@@ -50,6 +80,14 @@ if ($op eq "do_search") {
 			$searchdesc = $excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
 		}
 	}
+  if ($itemtypesstring ne ''){
+    $searchdesc .= 'filtered by itemtypes ';
+    $searchdesc .= join(" ",@itemtypes)
+  }
+  if ($branchesstring ne ''){
+    $searchdesc .= ' in branches ';
+    $searchdesc .= join(" ",@branches)
+  }
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	my $orderby = $query->param('orderby');
@@ -70,9 +108,39 @@ if ($op eq "do_search") {
 		}
 	}
 	findseealso($dbh,\@tags);
+    my $sqlstring;
+    if ($itemtypesstring ne ''){
+        $sqlstring = 'and (biblioitems.itemtype IN (';
+        my $itemtypeloop=0;
+        foreach my $itemtype (@itemtypes){
+            if ($itemtype ne ''){
+                if ($itemtypeloop != 0){
+                    $sqlstring .=','
+                }
+                $sqlstring .= '"'.$itemtype.'"';
+                $itemtypeloop++;
+            }
+        }
+        $sqlstring .= '))'
+    }
+    if ($branchesstring ne ''){
+        $sqlstring .= 'and biblio.biblionumber=items.biblionumber and (items.holdingbranch IN (';
+        my $branchesloop=0;
+        foreach my $branch (@branches){
+            if ($branch ne ''){
+                if ($branchesloop != 0){
+                    $sqlstring .=','
+                }
+                $sqlstring .= '"'.$branch.'"';
+                $branchesloop++;
+            }
+        }
+        $sqlstring .= '))'
+    }
+
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
+										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc,$sqlstring);
 	if ($total ==1) {
 	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
 	     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=".@$results[0]->{biblionumber});
@@ -272,6 +340,12 @@ $template->param( phraseorterm => $phraseorterm );
 							$defaultview => 1,
 							suggestion => C4::Context->preference("suggestion"),
 							virtualshelves => C4::Context->preference("virtualshelves"),
+                itemtypelist => $itemtypelist,
+              subcategorylist => $subcategorylist,
+              brancheslist => $brancheslist,
+              categorylist => $categorylist,
+              mediatypelist => $mediatypelist,
+              itemtypesstring => $itemtypesstring,
 							);
 
 } else {
@@ -318,7 +392,7 @@ $template->param( phraseorterm => $phraseorterm );
 				-multiple => 0 );
 	$sth->finish;
     
-	$template->param(classlist => $classlist,
+	$template->param(itemtypelist => $itemtypelist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
