@@ -9,7 +9,9 @@
 		<p class="center">You did not specify any search criteria</p>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-
+<table width="100%">
+<tr>
+<td width="70%">
 <!-- <p class="center"><!-- TMPL_VAR NAME="total" --> results found</p> -->
 	<div id="resultnumber">
 		<p class="center">
@@ -124,6 +126,65 @@
 		</tr>
 	</table>
 </form>
+</td>
+<td width="30%">
+<!-- fancy writing --> Search options<br>
+
+<!-- TMPL_VAR NAME="searchdesc" -->
+<br>
+<!-- TMPL_VAR NAME="total" --> results found.
+<br>
+<form name="searchoptions" action="searchoptions.pl" method="get">
+<input type="hidden" name="nbstatementsori" value="<!-- TMPL_VAR NAME="nbstatements" ESCAPE=HTML-->">
+<input type="hidden" name="itemtypessearched" value="<!-- TMPL_VAR NAME="itemtypesstring" -->">
+<input type="hidden" name="orderbyori" value="<!-- TMPL_VAR NAME="orderby" -->">
+<!-- TMPL_LOOP NAME="searchdata" -->
+<input type="hidden" name="<!-- TMPL_VAR NAME="term" -->" value="<!-- TMPL_VAR NAME="val" ESCAPE=HTML -->">
+<!-- /TMPL_LOOP -->
+<input type="radio" name="searchtype" value="NewSearch"> New Search<br>
+<input type="radio" name="searchtype" value="SearchWithin" checked> Search Within Results<br>
+<br>
+Select a category<br>
+<input type="checkbox" name="allcategories"> All Categories <br>
+<!-- TMPL_VAR NAME="categorylist" -->
+<input type="text" name="keyword"><br>
+Search using keywords or subject.
+<input type="submit" value="Quick Search">
+<br>
+
+Filter by Subcategory<br>
+<input type="checkbox" name="allsubcategories"> All Subcategories <br>
+
+<select name="subcategorieswanted" size="4" multiple>
+
+<!-- TMPL_VAR NAME="subcategorylist" -->
+</select><br>
+
+Filter by Media type<br>
+<input type="checkbox" name="allmediatypes">All Media types<br>
+<select name="mediatypeswanted" size="4" multiple>
+<!-- TMPL_VAR NAME="mediatypelist" -->
+</select><br>
+
+Filter by Item type<br>
+<input type="checkbox" name="allitemtypes"> All Itemtypes <br>
+
+<select name="itemtypeswanted" size="6" multiple>
+
+<!-- TMPL_VAR NAME="itemtypelist" -->
+</select><br>
+
+Filter by Branch<br>
+<input type="checkbox" name="allbranches"> All Branches<br>
+<select name="brancheswanted" size="6" multiple>
+<!-- TMPL_VAR NAME="brancheslist" -->
+</select><br>
+<input type="checkbox" name="avail"> Only show titles available (Not on loan)<br>
+<input type="submit" value="Search">
+</form>
+</td>
+</table>
+
 	<p class="center">
 		Results <b><i><!-- TMPL_VAR NAME="from" --></i> through <i><!-- TMPL_VAR NAME="to" --></i> of <i><!-- TMPL_VAR NAME="total" --></i></b>
 	</p>
