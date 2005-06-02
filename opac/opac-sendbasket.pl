@@ -129,6 +129,8 @@ $mail{PJ} = $iso2709;
 	# Sending mail
 	if (sendmail %mail) {
 	# do something if it works....
+#		warn " ".$mail{body};
+#		warn " ".$mail{PJ};
 		warn "Mail sent ok\n";
 		$template->param(SENT => "1");
 		$template->param(email_add => $email_add);
