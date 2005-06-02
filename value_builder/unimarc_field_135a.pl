@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_135a.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 135a\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_135a.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 135a\",'width=800,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -83,23 +83,26 @@ my ($template, $loggedinuser, $cookie)
 	my $f2 = substr($result,1,1);
 	my $f3 = substr($result,2,1);
 	my $f4 = substr($result,3,1);
-	my $f5 = substr($result,4,3);
-	my $f6 = substr($result,7,1);
+	my $f5 = substr($result,4,1);
+	my $f6 = substr($result,5,3);
 	my $f7 = substr($result,8,1);
 	my $f8 = substr($result,9,1);
 	my $f9 = substr($result,10,1);
+	my $f10 = substr($result,11,1);
+	my $f11 = substr($result,12,1);
 
-	$template->param(index => $index,
+	$template->param("index" => $index,
 			 "f1$f1" => $f1,
 			 "f2$f2" => $f2,
 			 "f3$f3" => $f3,
 			 "f4$f4" => $f4,
-			 "f5" => $f5,
-			 "f6$f6" => $f6,
+			 "f5$f5" => $f5,
+			 "f6" => $f6,
 			 "f7$f7" => $f7,
 			 "f8$f8" => $f8,
-			 "f9$f9" => $f9
-
+			 "f9$f9" => $f9,
+			 "f10$f10" => $f10,
+			 "f11$f11" => $f11
 );
 	print $input->header(-cookie => $cookie),$template->output;
 }
