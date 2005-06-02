@@ -847,6 +847,17 @@ my %tabledata = (
 	        type		=> 'Choice',
 	        options		=> ';|tabulation|,|/|\|#'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'SubscriptionHistory',
+            value               => ';',
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the information level for serials history in OPAC',
+	        type		=> 'Choice',
+	        options		=> 'simplified|full'
+        },
     ],
 
 );
@@ -1432,6 +1443,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.3  2005/06/02 21:05:34  hdl
+# adding variable SubscriptionHistory
+#
 # Revision 1.100.2.2  2005/03/29 15:41:43  tipaul
 # * new permissions : management & tools. You now have 2 new permissions :
 # 	- management : means the user can manage library parameters, but NOT system parameters.
