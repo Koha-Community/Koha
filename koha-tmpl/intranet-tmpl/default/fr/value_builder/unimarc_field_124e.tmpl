@@ -1,39 +1,42 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 124e</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 124e</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Categorie du satellite pour la teledetection:</td>
-		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Meteorologique</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Meteorologique</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Exploration terrestre</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">Exploration terrestre</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Observation spatiale</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Observation spatiale</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+
+<p>
+	<label style="width:20em;">Catégorie du satellite pour la télédétection</label>
+		<select name="f1" size="1">
+		<!-- TMPL_IF name="f1 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1a" -->
+		<option value="a" SELECTED>Météorologique</option>
+		<!-- TMPL_ELSE -->
+		<option value="a">Météorologique</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1b" -->
+		<option value="b" SELECTED>Exploration terrestre</option>
+		<!-- TMPL_ELSE -->
+		<option value="b">Exploration terrestre</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1c" -->
+		<option value="c" SELECTED>Observation spatiale</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Observation spatiale</option>
+		<!-- /TMPL_IF -->
+		</select>
+</p>
+
+<br>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 
@@ -43,5 +46,4 @@
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
