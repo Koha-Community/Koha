@@ -1,39 +1,42 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 124d</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 124d</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Position de la base pour les images photographiques ou de teledetection:</td>
-		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Terrestre</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Terrestre</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Aerienne</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">Aerienne</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Spatiale</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Spatiale</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+
+<p>
+	<label style="width:25em;">Position de la base pour les images photographiques ou de télédétection</label>
+	<select name="f1" size="1">
+		<!-- TMPL_IF name="f1 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1a" -->
+		<option value="a" SELECTED>Terrestre</option>
+		<!-- TMPL_ELSE -->
+		<option value="a">Terrestre</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1b" -->
+		<option value="b" SELECTED>Aérienne</option>
+		<!-- TMPL_ELSE -->
+		<option value="b">Aérienne</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1c" -->
+		<option value="c" SELECTED>Spatiale</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Spatiale</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
+
+<br>
+<p>
+	<label style="width:25em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 
@@ -43,5 +46,4 @@
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
