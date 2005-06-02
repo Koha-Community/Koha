@@ -1,62 +1,63 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 123f</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 123f</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Hemisphere:</td>
-		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1w" -->
-				<option value="w" SELECTED>Ouest</option>
-			<!-- TMPL_ELSE -->
-				<option value="w">Ouest</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>Est</option>
-			<!-- TMPL_ELSE -->
-				<option value="e">Est</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1n" -->
-				<option value="n" SELECTED>Nord</option>
-			<!-- TMPL_ELSE -->
-				<option value="n">Nord</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1s" -->
-				<option value="s" SELECTED>Sud</option>
-			<!-- TMPL_ELSE -->
-				<option value="s">Sud</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr>
 
-<tr>          <td>Degres (completer avec des 0):</td>
-                         <td><input type="text" name="f2" maxlength=3
-                         size=4
-                   value="<!-- TMPL_VAR name="f2" -->"></td>
-</tr>
-<tr>          <td>Minutes (completer avec des 0):</td>
-                         <td><input type="text" name="f3" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f3" -->"></td>
-</tr>
-<tr>          <td>Secondes (completer avec des 0):</td>
-                         <td><input type="text" name="f4" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f4" -->"></td>
-</tr>
+<p>
+	<label style="width:20em;">Hémisphère</label>
+	<select name="f1" size="1">
+		<!-- TMPL_IF name="f1 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1w" -->
+		<option value="w" SELECTED>Ouest</option>
+		<!-- TMPL_ELSE -->
+		<option value="w">Ouest</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1e" -->
+		<option value="e" SELECTED>Est</option>
+		<!-- TMPL_ELSE -->
+		<option value="e">Est</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1n" -->
+		<option value="n" SELECTED>Nord</option>
+		<!-- TMPL_ELSE -->
+		<option value="n">Nord</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1s" -->
+		<option value="s" SELECTED>Sud</option>
+		<!-- TMPL_ELSE -->
+		<option value="s">Sud</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>	
+
+<p>
+	<label style="width:20em;">Degrés (compléter avec des 0)</label>
+	<input type="text" name="f2" maxlength=3 size=4 value="<!-- TMPL_VAR name="f2" -->">
+</p>
+
+<p>
+	<label style="width:20em;">Minutes (compléter avec des 0)</label>
+	<input type="text" name="f3" maxlength=2 size=3 value="<!-- TMPL_VAR name="f3" -->">
+</p>
+
+<p>
+	<label style="width:20em;">Secondes (compléter avec des 0)</label>
+	<input type="text" name="f4" maxlength=2 size=3 value="<!-- TMPL_VAR name="f4" -->">
+</p>
 
 
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+<br>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 document.f_pop.f2.value=document.f_pop.f2.value+'   ';
@@ -75,5 +76,4 @@ document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
