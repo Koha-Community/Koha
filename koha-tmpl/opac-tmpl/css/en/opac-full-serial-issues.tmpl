@@ -1,0 +1,63 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+
+<!-- TMPL_UNLESS name="popup" -->
+<div class="tabbed">
+<h1 class="catalogue">Issues for a subscription</h1>
+<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
+		<h2 class="catalogue">Subscription information for biblio number : <!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h2>
+
+</div>
+<!-- /TMPL_UNLESS -->
+	<div class="tabs">
+	<!-- TMPL_LOOP NAME="years" -->
+		<!-- TMPL_IF NAME="year" -->
+			<div id="link<!--TMPL_VAR Name="year" -->"><a href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a></div>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</div>
+
+	<!-- TMPL_LOOP NAME="years" -->
+	<div name="<!-- TMPL_VAR NAME="year" -->XX" id="<!-- TMPL_VAR NAME="year" -->XX" class="tab" style="visibility:visible">
+		<table>
+			<tr>
+				<th> Date
+				</th>
+				<th> Number
+				</th>
+				<th> Status
+				</th>
+			</tr>
+			<!-- TMPL_LOOP Name="serials" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR Name="planneddate" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR Name="serialseq" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR Name="status" -->
+				</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+	</div>
+	<!--/TMPL_LOOP -->
+
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+	for (i=<!--TMPL_VAR Name="yearmin"-->; i <= <!--TMPL_VAR Name="yearmax"--> ; i++ ) {
+		ong = i+"XX";
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+
+</script>
+</body>
+</html>

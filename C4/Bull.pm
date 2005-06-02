@@ -46,6 +46,7 @@ Give all XYZ functions
 @ISA = qw(Exporter);
 @EXPORT = qw(&newsubscription &modsubscription &delsubscription &getsubscriptions &getsubscription 
 			&getsubscriptionfrombiblionumber &get_subscription_list_from_biblionumber
+			&get_full_subscription_list_from_biblionumber 
 			&modsubscriptionhistory &newissue
 			&getserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
@@ -166,7 +167,7 @@ sub getsubscriptionfrombiblionumber {
 sub get_subscription_list_from_biblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select subscription.*,subscriptionhistory.*,aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('select subscription.*,subscriptionhistory.*,  aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
 							from subscription 
 							left join subscriptionhistory on subscription.subscriptionid=subscriptionhistory.subscriptionid
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
@@ -185,6 +186,39 @@ sub get_subscription_list_from_biblionumber {
 	return \@res;
 }
 
+sub get_full_subscription_list_from_biblionumber {
+	my ($biblionumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare('select year(subscription.startdate) as year,subscription.*, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+							from subscription 
+							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
+							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
+							left join biblio on biblio.biblionumber=subscription.biblionumber 
+							where subscription.biblionumber = ? order by subscription.startdate');
+	$sth->execute($biblionumber);
+	my @res;
+	my $year;
+	my @loopissues;
+	while (my $subs = $sth->fetchrow_hashref) {
+		my $sth2 = $dbh->prepare('select serial.serialseq, serial.planneddate, year(serial.planneddate) as year, serial.status from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
+		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
+		while (my $issues = $sth2->fetchrow_hashref){
+				push @loopissues,
+					{'planneddate' => $issues->{'planneddate'}, 
+					'serialseq' => $issues->{'serialseq'},
+					'status' => $issues->{'status'}};
+# 				warn "planneddate ".$issues->{'planneddate'};
+# 				warn "serialseq".$issues->{'serialseq'};
+		}
+		my %cell;
+		$cell{'year'}=$subs->{year};
+		$cell{'title'}=$subs->{title};
+		$cell{'booksellername'}=$subs->{booksellername};
+		$cell{'serials'}=\@loopissues;
+		push @res,\%cell;
+	}
+	return \@res;
+}
 
 sub modsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
