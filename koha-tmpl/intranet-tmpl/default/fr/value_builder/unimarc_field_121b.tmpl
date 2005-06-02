@@ -1,277 +1,271 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 121b</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 121b</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Altitude du capteur:</td>
-		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Terrestre</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Terrestre</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Aerienne</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">Aerienne</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Spatiale</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Spatiale</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr><tr>
-		<td>Orientation du capteur :</td>
-		<td>
-			<select name="f2" size="1">
-			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>Oblique faible</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Oblique faible</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>Oblique forte</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">Oblique forte</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>Verticale</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Verticale</option>
-			<!-- /TMPL_IF -->
-		</td></tr><tr>		<td>Bandes spectrales (nombre
-		a deux chiffres 01->99 ou xx (ecrire 01 pour 1):</td>
-		   <td><input type="text" name="f3" maxlength=2 size=3
-		   value="<!-- TMPL_VAR name="f3" -->">
-		</td></tr>
-<tr>
-		<td>Qualite de l'image:</td>
-		<td>
-			<select name="f4" size="1">
-			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f4a" -->
-				<option value="a" SELECTED>Faible</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Faible</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f4b" -->
-				<option value="b" SELECTED>Acceptable</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">Acceptable</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f4c" -->
-				<option value="c" SELECTED>Bonne</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Bonne</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f4d" -->
-				<option value="d" SELECTED>Tres bonne</option>
-			<!-- TMPL_ELSE -->
-				<option value="d">Tres bonne</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr><tr>
-		<td>Couverture nuageuse exprimee en huitieme:</td>
-		<td>
-			<select name="f5" size="1">
-			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f51" -->
-				<option value="1" SELECTED>1/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="1">1/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f52" -->
-				<option value="2" SELECTED>2/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="2">2/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f53" -->
-				<option value="3" SELECTED>3/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="3">3/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f54" -->
-				<option value="4" SELECTED>4/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="4">4/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f55" -->
-				<option value="5" SELECTED>5/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="5">5/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f56" -->
-				<option value="6" SELECTED>6/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="6">6/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f57" -->
-				<option value="7" SELECTED>7/8</option>
-			<!-- TMPL_ELSE -->
-				<option value="7">7/8</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f58" -->
-				<option value="8" SELECTED>Couverture totale</option>
-			<!-- TMPL_ELSE -->
-				<option value="8">Couverture totale</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr><tr>
 
-		       <td>Qualite de l'image:</td>
-                <td>
-                        <select name="f6" size="1">
-                        <!-- TMPL_IF name="f6 " -->
-                                <option value=" "
-                SELECTED>Aucun</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">Aucun</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f6-" -->
-                                <option value="-"
-                SELECTED>Inferieure au cm</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="-">Inferieure au cm</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f61" -->
-                                <option value="1"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="1">1</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f62" -->
-                                <option value="2"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="2">2</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f63" -->
-                                <option value="3"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="3">3</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f64" -->
-                                <option value="4"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="4">4</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f51" -->
-                                <option value="5"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="5">5</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f66" -->
-                                <option value="6"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="6">6</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f71" -->
-                                <option value="7"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="7">7</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f68" -->
-                                <option value="8"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="8">8</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f69" -->
-                                <option value="9"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="9">9</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f6+" -->
-                                <option value="+"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="+">+</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f6x" -->
-                                <option value="x"
-                SELECTED>1</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="x">x</option>
-                        <!-- /TMPL_IF -->
-                        </select>
-                
-			<select name="f7" size="1">
-			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7c" -->
-				<option value="c" SELECTED>Centimetres</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">Centimetres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7i" -->
-				<option value="i" SELECTED>Decimetres</option>
-			<!-- TMPL_ELSE -->
-				<option value="i">Decimetres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7m" -->
-				<option value="m" SELECTED>Metres</option>
-			<!-- TMPL_ELSE -->
-				<option value="m">Metres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7d" -->
-				<option value="d" SELECTED>Decametres</option>
-			<!-- TMPL_ELSE -->
-				<option value="d">Decametres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7h" -->
-				<option value="h" SELECTED>Hectometres</option>
-			<!-- TMPL_ELSE -->
-				<option value="h">Hectometres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7k" -->
-				<option value="k" SELECTED>Kilometres</option>
-			<!-- TMPL_ELSE -->
-				<option value="k">Kilometres</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>Non applicable</option>
-			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td>
-	</tr>
+<p>
+	<label style="width:20em;">Altitude du capteur</label>
+	<select name="f1" size="1">
+		<!-- TMPL_IF name="f1 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1a" -->
+		<option value="a" SELECTED>Terrestre</option>
+		<!-- TMPL_ELSE -->
+		<option value="a">Terrestre</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1b" -->
+		<option value="b" SELECTED>Aérienne</option>
+		<!-- TMPL_ELSE -->
+		<option value="b">Aérienne</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1c" -->
+		<option value="c" SELECTED>Spatiale</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Spatiale</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
 
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+<p>
+	<label style="width:20em;">Orientation du capteur</label>
+	<select name="f2" size="1">
+		<!-- TMPL_IF name="f2 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f2a" -->
+		<option value="a" SELECTED>Oblique faible</option>
+		<!-- TMPL_ELSE -->
+		<option value="a">Oblique faible</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f2b" -->
+		<option value="b" SELECTED>Oblique forte</option>
+		<!-- TMPL_ELSE -->
+		<option value="b">Oblique forte</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f2c" -->
+		<option value="c" SELECTED>Verticale</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Verticale</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
+
+<p>
+	<label style="width:20em;">Bandes spectrales</label>
+	<input type="text" name="f3" maxlength=2 size=3 value="<!-- TMPL_VAR name="f3" -->"> <i>nombre à deux chiffres 01->99 ou xx (ecrire 01 pour 1)</i>
+</p>
+
+<p>
+	<label style="width:20em;">Qualité de l'image</label>
+		<select name="f4" size="1">
+		<!-- TMPL_IF name="f4 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f4a" -->
+		<option value="a" SELECTED>Faible</option>
+		<!-- TMPL_ELSE -->
+		<option value="a">Faible</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f4b" -->
+		<option value="b" SELECTED>Acceptable</option>
+		<!-- TMPL_ELSE -->
+		<option value="b">Acceptable</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f4c" -->
+		<option value="c" SELECTED>Bonne</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Bonne</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f4d" -->
+		<option value="d" SELECTED>Très bonne</option>
+		<!-- TMPL_ELSE -->
+		<option value="d">Très bonne</option>
+		<!-- /TMPL_IF -->
+		</select>
+</p>
+
+<p>
+	<label style="width:20em;">Couverture nuageuse exprimée en huitièmes</label>
+		<select name="f5" size="1">
+		<!-- TMPL_IF name="f5 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f51" -->
+		<option value="1" SELECTED>1/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="1">1/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f52" -->
+		<option value="2" SELECTED>2/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="2">2/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f53" -->
+		<option value="3" SELECTED>3/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="3">3/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f54" -->
+		<option value="4" SELECTED>4/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="4">4/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f55" -->
+		<option value="5" SELECTED>5/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="5">5/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f56" -->
+		<option value="6" SELECTED>6/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="6">6/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f57" -->
+		<option value="7" SELECTED>7/8</option>
+		<!-- TMPL_ELSE -->
+		<option value="7">7/8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f58" -->
+		<option value="8" SELECTED>Couverture totale</option>
+		<!-- TMPL_ELSE -->
+		<option value="8">Couverture totale</option>
+		<!-- /TMPL_IF -->
+		</select>
+</p>
+
+<p>
+	<label style="width:20em;">Valeur moyenne de la résolution au sol</label>
+		<select name="f6" size="1">
+		<!-- TMPL_IF name="f6 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f6-" -->
+		<option value="-" SELECTED>Inferieure au cm</option>
+		<!-- TMPL_ELSE -->
+		<option value="-">Inferieure au cm</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f61" -->
+		<option value="1" SELECTED>1</option>
+		<!-- TMPL_ELSE -->
+		<option value="1">1</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f62" -->
+		<option value="2" SELECTED>2</option>
+		<!-- TMPL_ELSE -->
+		<option value="2">2</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f63" -->
+		<option value="3" SELECTED>3</option>
+		<!-- TMPL_ELSE -->
+		<option value="3">3</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f64" -->
+		<option value="4" SELECTED>4</option>
+		<!-- TMPL_ELSE -->
+		<option value="4">4</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f65" -->
+		<option value="5" SELECTED>5</option>
+		<!-- TMPL_ELSE -->
+		<option value="5">5</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f66" -->
+		<option value="6" SELECTED>6</option>
+		<!-- TMPL_ELSE -->
+		<option value="6">6</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f67" -->
+		<option value="7" SELECTED>7</option>
+		<!-- TMPL_ELSE -->
+		<option value="7">7</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f68" -->
+		<option value="8" SELECTED>8</option>
+		<!-- TMPL_ELSE -->
+		<option value="8">8</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f69" -->
+		<option value="9" SELECTED>9</option>
+		<!-- TMPL_ELSE -->
+		<option value="9">9</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f6+" -->
+		<option value="+" SELECTED>Supérieure à 9 kilomètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="+">Supérieure à 9 kilomètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f6x" -->
+		<option value="x" SELECTED>Non applicable</option>
+		<!-- TMPL_ELSE -->
+		<option value="x">Non applicable</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
+<p>
+	<label style="width:20em;">Unité métrique</label>
+	<select name="f7" size="1">
+		<!-- TMPL_IF name="f7 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7c" -->
+		<option value="c" SELECTED>Centimètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="c">Centimètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7i" -->
+		<option value="i" SELECTED>Décimètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="i">Décimètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7m" -->
+		<option value="m" SELECTED>Mètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="m">Mètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7d" -->
+		<option value="d" SELECTED>Décamètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="d">Décamètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7h" -->
+		<option value="h" SELECTED>Hectomètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="h">Hectomètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7k" -->
+		<option value="k" SELECTED>Kilomètres</option>
+		<!-- TMPL_ELSE -->
+		<option value="k">Kilomètres</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f7x" -->
+		<option value="x" SELECTED>Non applicable</option>
+		<!-- TMPL_ELSE -->
+		<option value="x">Non applicable</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
+
+<br>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 
@@ -287,5 +281,4 @@ document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
