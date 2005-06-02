@@ -33,24 +33,23 @@ my $avail = $query->param("avail");
 my $brancheslist;
 my $count=0;
 my $newquery='';
-my $subfoundbool=0;
-my $itemtypefoundbool=0;
-my $branchfoundbool=0;
+my $keywordfoundbool=0;
 my $itemtypeslist;
 my $itemtypescatlist;
 my $itemtypessubcatlist;
 my $mediatypeslist;
+
 $count=0;
 my $dbh=C4::Context->dbh;
 $newquery='op=do_search&nbstatements='.$nbstatements;
-if ($allcategoriesbool eq '' && $category ne ''){
+if ($allcategoriesbool == 0 && $category ne ''){
 
     my $sth=$dbh->prepare("select itemtypecodes from categorytable where categorycode=?");
     $sth->execute($category);
     $itemtypescatlist = $sth->fetchrow .'|';
     $sth->finish;
 }
-if ($allmediatypesbool eq '' && @mediatypeswanted ne ''){
+if ($allmediatypesbool == 0 && @mediatypeswanted ne ''){
     foreach my $mediatype (@mediatypeswanted){
         my $sth=$dbh->prepare("select itemtypecodes from mediatypetable where mediatypecode=?");
         $sth->execute($mediatype);
@@ -59,7 +58,7 @@ if ($allmediatypesbool eq '' && @mediatypeswanted ne ''){
 
     }
 }
-if ($allsubcategoriesbool eq '' && @subcategorieswanted ne ''){
+if ($allsubcategoriesbool == 0 && @subcategorieswanted ne ''){
     foreach my $subcategory (@subcategorieswanted){
         my $sth=$dbh->prepare("select itemtypecodes from subcategorytable where subcategorycode=?");
         $sth->execute($subcategory);
@@ -68,13 +67,13 @@ if ($allsubcategoriesbool eq '' && @subcategorieswanted ne ''){
 
     }
 }
-if ($allitemtypesbool ne ''){
-#warn @itemtypeswanted;
+if ($allitemtypesbool == 0){
+
 $itemtypeslist .=$itemtypescatlist.$itemtypessubcatlist.$mediatypeslist.$itemtypessearched.join ("|", @itemtypeswanted)
 } else {
 $itemtypeslist .=$itemtypescatlist.$itemtypessubcatlist.$mediatypeslist.$itemtypessearched
 }
-#warn $itemtypeslist;
+
 if ($allbranchesbool == 0){
    $brancheslist = join("|",@brancheswanted)
 }
@@ -96,15 +95,15 @@ if ($searchtype eq 'NewSearch'){
          $newquery .= $operator[$count];
          $newquery .= '&value='.$value[$count];
          if ($marclist[$count] eq ''){
-             if ($subfoundbool=0){
-                $subfoundbool=1;
+             if ($keywordfoundbool=0){
+                $keywordfoundbool=1;
                 $newquery .=" ".join(" ",@keywords)
              }
          }
         $count++;
 
     }
-    if ($subfoundbool == 0 && $query->param('keysub') ne ''){
+    if ($keywordfoundbool == 0 && $query->param('keysub') ne ''){
         $newquery .= '&marclist=&and_or=and&excluding=&operator=contains&value=';
         $newquery .=join(" ",@keywords)
     }
