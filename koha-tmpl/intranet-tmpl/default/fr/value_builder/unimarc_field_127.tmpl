@@ -1,29 +1,29 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 127</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 127a</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-<tr>(Completer avec des 0 a gauche)</tr>
-<tr>          <td>Heure:</td>
-                         <td><input type="text" name="f1" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f1" -->"></td>
-          <td>Minutes:</td>
-                         <td><input type="text" name="f2" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f2" -->"></td>
-          <td>Secondes:</td>
-                         <td><input type="text" name="f3" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f3" -->"></td>
-</tr>
 
+<p>
+	<label style="width:20em;">Durée (compléter avec des 0 à gauche)</label>
+	<label style="width:6em;">Heures</label><input type="text" name="f1" maxlength=2 size=3 value="<!-- TMPL_VAR name="f1" -->">
+</p>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<label style="width:6em;">Minutes</label><input type="text" name="f2" maxlength=2 size=3 value="<!-- TMPL_VAR name="f2" -->">
+</p>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<label style="width:6em;">Secondes</label><input type="text" name="f3" maxlength=2 size=3 value="<!-- TMPL_VAR name="f3" -->">
+</p>
 
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+<br>
+<p>
+	<label style="width:20em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 document.f_pop.f1.value=document.f_pop.f1.value+'   ';
@@ -42,5 +42,4 @@ document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
