@@ -408,3 +408,4 @@ if ($totalresults == 1){
 }
 else {
 output_html_with_http_headers $query, $cookie, $template->output;
+}
