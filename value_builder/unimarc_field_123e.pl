@@ -39,7 +39,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "123g".(int(rand(100000))+1);
+my $function_name= "123e".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_123g.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 123g\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_123e.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 123e\",'width=800,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -72,7 +72,7 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/unimarc_field_123g.tmpl",
+    = get_template_and_user({template_name => "value_builder/unimarc_field_123e.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
