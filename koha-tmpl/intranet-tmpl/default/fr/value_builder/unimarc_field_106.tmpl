@@ -1,82 +1,72 @@
-<html>
-<head>
-<title>UNIMARC Field 106 builder</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 106a</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Texte presentation physique</td>
-		<td>
-			<select name="f1" size="1">
-	                        <!-- TMPL_IF name="f1 " -->
-                                <option value=" " SELECTED>Aucun</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">Aucun</option>
-                        <!-- /TMPL_IF -->
 
-			<!-- TMPL_IF name="f1r" -->
-				<option value="r" SELECTED>Impression normale</option>
-			<!-- TMPL_ELSE -->
-				<option value="r">Impression normale</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1b" -->
-				<option value="d" SELECTED>Impression
-				en gros caractere</option>
-			<!-- TMPL_ELSE -->
-				<option value="d">Impression en gros caractere</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>Journal</option>
-			<!-- TMPL_ELSE -->
-				<option value="e">Journal</option>
-	
-			<!-- /TMPL_IF -->
+<p>
+	<label style="width:15em;">Texte présentation physique</label>
+	<select name="f1" size="1">
+		<!-- TMPL_IF name="f1 " -->
+		<option value=" " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1r" -->
+		<option value="r" SELECTED>Impression normale</option>
+		<!-- TMPL_ELSE -->
+		<option value="r">Impression normale</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1b" -->
+		<option value="d" SELECTED>Impression en gros caractères</option>
+		<!-- TMPL_ELSE -->
+		<option value="d">Impression en gros caractères</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1e" -->
+		<option value="e" SELECTED>Journal</option>
+		<!-- TMPL_ELSE -->
+		<option value="e">Journal</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1f" -->
+		<option value="f" SELECTED>Caractères braille et moon</option>
+		<!-- TMPL_ELSE -->
+		<option value="f">Caractères braille et moon</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1g" -->
+		<option value="g" SELECTED>Micro-impression</option>
+		<!-- TMPL_ELSE -->
+		<option value="g">Micro-impression</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1h" -->
+		<option value="h" SELECTED>Manuscrit</option>
+		<!-- TMPL_ELSE -->
+		<option value="h">Manuscrit</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1i" -->
+		<option value="i" SELECTED>Multimédia</option>
+		<!-- TMPL_ELSE -->
+		<option value="i">Multimédia</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1j" -->
+		<option value="j" SELECTED>Impression en réduction</option>
+		<!-- TMPL_ELSE -->
+		<option value="j">Impression en réduction</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1z" -->
+		<option value="z" SELECTED>Autres formes de présentation</option>
+		<!-- TMPL_ELSE -->
+		<option value="z">Autres formes de présentation</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
 
+<br>
+<p>
+	<label style="width:15em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
 
-			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>Caractere braille et moon</option>
-			<!-- TMPL_ELSE -->
-				<option value="f">Caractere braille et moon</option>
-	
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>Micro-impression</option>
-			<!-- TMPL_ELSE -->
-				<option value="g">Micro-impression</option>
-	
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>Manuscrit</option>
-			<!-- TMPL_ELSE -->
-				<option value="h">Manuscrit</option>
-	
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1i" -->
-				<option value="i" SELECTED>Multimedia</option>
-			<!-- TMPL_ELSE -->
-				<option value="i">Multimedia</option>
-	
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1j" -->
-				<option value="j" SELECTED>Impression en reduction</option>
-			<!-- TMPL_ELSE -->
-				<option value="j">Impression en reduction</option>
-	
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>Autres formes de presentation</option>
-			<!-- TMPL_ELSE -->
-				<option value="z">Autres formes de presentation</option>
-	
-			<!-- /TMPL_IF -->
-			</select>
-		</td>
-	</tr>
-	
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
 </form>
+</div>
 <script>
 	function report() {
 
@@ -86,5 +76,4 @@
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
