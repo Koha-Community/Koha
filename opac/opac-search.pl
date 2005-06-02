@@ -22,6 +22,9 @@ my $brancheslist;
 my $categorylist;
 my $subcategorylist;
 my $mediatypelist;
+# added by Gavin 
+my $totalresults;
+
 my $dbh=C4::Context->dbh;
 my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
 $sth->execute;
@@ -180,8 +183,9 @@ if ($op eq "do_search") {
 # 3. It provides the variables necessary for the spellchecking (look below for
 #      how this is done
 # 4.
-# 
+ 
 $totalresults = $total;
+
 ## This formats the 'search results' string and populates
 ## the 'OPLIN' variable as well as the 'spellcheck' variable
 ## with appropriate values based on the user's search input
@@ -407,5 +411,5 @@ if ($totalresults == 1){
     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=$firstbiblionumber");
 }
 else {
-output_html_with_http_headers $query, $cookie, $template->output;
+  output_html_with_http_headers $query, $cookie, $template->output;
 }
