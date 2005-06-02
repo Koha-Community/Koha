@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_124f.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 124f\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_124f.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 124f\",'width=800,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
