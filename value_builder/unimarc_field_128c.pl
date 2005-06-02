@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_128c.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 128c\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_128c.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 128c\",'width=800,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -80,8 +80,10 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 	my $f1 = substr($result,0,2);
+	my $f2 = substr($result,2,2);
 	$template->param(index => $index,
-			 "f1$f1" => $f1);
+			 "f1$f1" => $f1,
+			f2 => $f2);
 	print $input->header(-cookie => $cookie),$template->output;
 }
 
