@@ -1,74 +1,80 @@
-<html>
-<head>
-<title>UNIMARC constructeur champ 124g</title>
-</head>
-<body>
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc" style="padding-bottom:10px;margin:10px;width:95%;">
+<h1 class="authority">Assistant champ codé 124g</h1>
 <form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Technique d'enregistrement pour les images de teledetection:</td>
-		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1  " -->
-				<option value="  " SELECTED>Aucun</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">Aucun</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1aa" -->
-				<option value="aa" SELECTED>Enregistrement video</option>
-			<!-- TMPL_ELSE -->
-				<option value="aa">Enregistrement video</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1ab" -->
-				<option value="ab" SELECTED>Photographie en fausse couleur</option>
-			<!-- TMPL_ELSE -->
-				<option value="ab">Photographie en fausse couleur</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1ac" -->
-				<option value="ac" SELECTED>Photographie multispectrale</option>
-			<!-- TMPL_ELSE -->
-				<option value="ac">Photographie multispectrale</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1ad" -->
-				<option value="ad" SELECTED>Balayage multispectrale</option>
-			<!-- TMPL_ELSE -->
-				<option value="ad">Balayage multispectrale</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1av" -->
-				<option value="av" SELECTED>Combinaisons de techniques en faible emission</option>
-			<!-- TMPL_ELSE -->
-				<option value="av">Combinaisons de techiques en faible emission</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1da" -->
-				<option value="da" SELECTED>Balayage par ligne infrarouge</option>
-			<!-- TMPL_ELSE -->
-				<option value="da">Balayage par ligne infrarouge</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1dv" -->
-				<option value="dv" SELECTED>Combinaisons de techniques diverses de detection thermique par infrarouge</option>
-			<!-- TMPL_ELSE -->
-				<option value="dv">Combinaisons de techiques diverses de detection thermique par infrarouge</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1ga" -->
-				<option value="ga" SELECTED>Sidelooking Airbone Radar</option>
-			<!-- TMPL_ELSE -->
-				<option value="ga">Sidelooking Airbone Radar</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1gb" -->
-				<option value="gb" SELECTED>Synthetic Aperture Radar</option>
-			<!-- TMPL_ELSE -->
-				<option value="gb">Synthetic Aperture Radar</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1gc" -->
-				<option value="gc" SELECTED>Couverture passive par ondes micrometriques</option>
-			<!-- TMPL_ELSE -->
-				<option value="gc">Couverture passive par onde micrometrique</option>
-			<!-- /TMPL_IF -->
-			</select>
-		</td></tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
+
+<p>
+	<label style="width:18em;">Technique d'enregistrement pour les images de télédétection</label>
+	<select name="f1" size="1">
+		<!-- TMPL_IF name="f1  " -->
+		<option value="  " SELECTED>Aucun</option>
+		<!-- TMPL_ELSE -->
+		<option value="  ">Aucun</option>
+		<!-- /TMPL_IF -->
+		<option value="" style="font-style:italic"> ---------- Emission faible :</option>
+		<!-- TMPL_IF name="f1aa" -->
+		<option value="aa" SELECTED>Enregistrement vidéo</option>
+		<!-- TMPL_ELSE -->
+		<option value="aa">Enregistrement vidéo</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1ab" -->
+		<option value="ab" SELECTED>Photographie en fausse couleur</option>
+		<!-- TMPL_ELSE -->
+		<option value="ab">Photographie en fausse couleur</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1ac" -->
+		<option value="ac" SELECTED>Photographie multispectrale</option>
+		<!-- TMPL_ELSE -->
+		<option value="ac">Photographie multispectrale</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1ad" -->
+		<option value="ad" SELECTED>Balayage multispectral</option>
+		<!-- TMPL_ELSE -->
+		<option value="ad">Balayage multispectral</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1av" -->
+		<option value="av" SELECTED>Combinaisons de techniques en faible émission</option>
+		<!-- TMPL_ELSE -->
+		<option value="av">Combinaisons de techiques en faible émission</option>
+		<!-- /TMPL_IF -->
+		<option value="" style="font-style:italic"> ---------- Détection thermique par infrarouge :</option>
+		<!-- TMPL_IF name="f1da" -->
+		<option value="da" SELECTED>Balayage par ligne infrarouge</option>
+		<!-- TMPL_ELSE -->
+		<option value="da">Balayage par ligne infrarouge</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1dv" -->
+		<option value="dv" SELECTED>Combinaisons de techniques diverses de détection thermique par infrarouge</option>
+		<!-- TMPL_ELSE -->
+		<option value="dv">Combinaisons de techiques diverses de détection thermique par infrarouge</option>
+		<!-- /TMPL_IF -->
+		<option value="" style="font-style:italic"> ---------- Emission d'ondes micrométriques :</option>
+		<!-- TMPL_IF name="f1ga" -->
+		<option value="ga" SELECTED>Sidelooking Airbone Radar (SLAR)</option>
+		<!-- TMPL_ELSE -->
+		<option value="ga">Sidelooking Airbone Radar (SLAR)</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1gb" -->
+		<option value="gb" SELECTED>Synthetic Aperture Radar (SAR)</option>
+		<!-- TMPL_ELSE -->
+		<option value="gb">Synthetic Aperture Radar (SAR)</option>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f1gc" -->
+		<option value="gc" SELECTED>Couverture passive par ondes micrométriques</option>
+		<!-- TMPL_ELSE -->
+		<option value="gc">Couverture passive par ondes micrométriques</option>
+		<!-- /TMPL_IF -->
+	</select>
+</p>
+
+<br>
+<p>
+	<label style="width:18em;">&nbsp;</label>
+	<input type="submit" value="OK" class="button authority">
+</p>
+
 </form>
+</div>
 <script>
 	function report() {
 
@@ -78,5 +84,4 @@
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
