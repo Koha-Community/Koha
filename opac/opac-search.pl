@@ -15,7 +15,7 @@ my @spsuggest; # the array for holding suggestions
 my $suggest;   # a flag to be set (if there are suggestions it's 1)
 my $firstbiblionumber; # needed for directly sending user to first item
 # use C4::Search;
-
+my $totalresults;
 
 my $itemtypelist;
 my $brancheslist;
@@ -55,7 +55,7 @@ while (my ($branchname,$branchcode) = $sth->fetchrow) {
 my $query = new CGI;
 my $op = $query->param("op");
 my $type=$query->param('type');
-
+my $avail=$query->param('avail');
 my $itemtypesstring=$query->param("itemtypesstring");
 $itemtypesstring =~s/"//g;
 my @itemtypes = split ( /\|/, $itemtypesstring);
@@ -140,7 +140,9 @@ if ($op eq "do_search") {
         }
         $sqlstring .= '))'
     }
-
+  if ($avail){
+    $sqlstring .= "and biblioitems.biblioitemnumber=items.biblioitemnumber and items.itemnumber !=issues.itemnumber and biblio.biblionumber !=reserves.biblionumber and (items.itemlost IS NULL or items.itemlost = 0) and (items.notforloan IS NULL or items.notforloan =0) and (items.wthdrawn IS NULL or items.wthdrawn =0) ";
+  }
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc,$sqlstring);
