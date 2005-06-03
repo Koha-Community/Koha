@@ -859,8 +859,12 @@ sub checkperlmodules {
 	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
 	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
-	unless (eval {require PDF::API2})   { push @missing,"PDF::API2" };
 # The following modules are not mandatory, depends on how the library want to use Koha
+	unless (eval {require PDF::API2})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need PDF::API2 for barcode generator" 
+			}
+	}
 	unless (eval {require Net::LDAP})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Net::LDAP";
