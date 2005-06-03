@@ -179,7 +179,11 @@ Filter by Branch<br>
 <select name="brancheswanted" size="6" multiple>
 <!-- TMPL_VAR NAME="brancheslist" -->
 </select><br>
-<input type="checkbox" name="avail"> Only show titles available (Not on loan)<br>
+
+<input type="checkbox" name="avail"
+<!-- TMPL_IF NAME="avail" --> checked
+<!-- /TMPL_IF -->
+> Only show titles available (Not on loan)<br>
 <input type="submit" value="Search">
 </form>
 </td>
