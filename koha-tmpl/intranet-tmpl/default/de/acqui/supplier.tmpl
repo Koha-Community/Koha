@@ -17,11 +17,11 @@
 			<input type="text" size="40" name="company" value="<!-- TMPL_VAR NAME="name" -->">
 		</p>
 		<p>
-			<label>Postal Address</label>
+			<label>Anschrift</label>
 				<textarea name="company_postal" cols="40" rows="3"><!-- TMPL_VAR NAME="postal" --></textarea>
 		</p>
 		<p>
-			<label>Physical Address</label>
+			<label>Anschrift 2</label>
 			<textarea name="physical" cols="40" rows="4"><!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" --></textarea>
 		</p>
 		<p>
@@ -50,7 +50,7 @@
 			<input type="text" size="20" name="contact_phone" value="<!-- TMPL_VAR NAME="contphone" -->">
 		</p>
 		<p>
-			<label>Weiter Rufnummer</label>
+			<label>Weitere Rufnummer</label>
 			<input type="text" size="20" name="contact_phone_2" value="<!-- TMPL_VAR NAME="contaltphone" -->">
 		</p>
 		<p>
@@ -83,7 +83,7 @@
 			<textarea name="publishers_imprints" cols="20" rows="4"><!-- TMPL_VAR NAME="specialty" --></textarea>
 		</p>
 		<p>
-			<label class="label100">List Prices are</label>
+			<label class="label100">Listenpreise/label>
 				<select name="list_currency" size="1">
 				<!-- TMPL_LOOP NAME="loop_pricescurrency" -->
 					<!-- TMPL_VAR NAME="currency" -->
@@ -99,11 +99,11 @@
 				</select>
 		</p>
 		<p>
-			<label class="label100">GST Registered</label>
+			<label class="label100">MWST</label>
 				<input type="radio" name="gst" value="1" <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Ja <input type="radio" name="gst" value="0" <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>Nein
 		</p>
 		<p>
-			<label class="label100">List Item Price Includes GST</label>
+			<label class="label100">Listenpreis einschl. MWST</label>
 				<input type="radio" name="list_gst" value="1" <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>Ja <input type="radio" name="list_gst" value="0" <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>Nein
 		</p>
 		<p>
