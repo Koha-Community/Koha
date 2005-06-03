@@ -87,9 +87,13 @@ if ($op eq "do_search") {
     $searchdesc .= 'filtered by itemtypes ';
     $searchdesc .= join(" ",@itemtypes)
   }
+
   if ($branchesstring ne ''){
     $searchdesc .= ' in branches ';
     $searchdesc .= join(" ",@branches)
+  }
+  if ($avail ne ''){
+    $searchdesc .= '. Only available items shown.'
   }
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
@@ -352,6 +356,7 @@ $template->param( phraseorterm => $phraseorterm );
               categorylist => $categorylist,
               mediatypelist => $mediatypelist,
               itemtypesstring => $itemtypesstring,
+              avail => $avail,
 							);
 
 } else {
