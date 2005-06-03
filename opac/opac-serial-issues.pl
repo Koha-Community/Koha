@@ -24,13 +24,12 @@ my $biblionumber = $query->param('biblionumber');
 if ($selectview eq "full"){
 my $subscriptions = get_full_subscription_list_from_biblionumber($biblionumber);
 
-my $year;
-my $yearmin=$subscriptions->[1]{year};
-warn "yearmin".$yearmin;
-my $yearmax;
-my @loopissues;
-my $yearmax=$subscriptions->[scalar(@$subscriptions)]{year};
-warn "yearmax".$yearmax;
+my $title = $subscriptions->[0]{bibliotitle};
+warn "title ".$title;
+my $yearmin=$subscriptions->[0]{year};
+warn "yearmin ".$yearmin;
+my $yearmax=$subscriptions->[scalar(@$subscriptions)-1]{year};
+warn "yearmax ".$yearmax;
 
 
 ($template, $loggedinuser, $cookie)
@@ -49,6 +48,7 @@ $template->param(
 	years => $subscriptions,
 	yearmin => $yearmin,
 	yearmax =>$yearmax,
+	bibliotitle => $title,
 	suggestion => C4::Context->preference("suggestion"),
 	virtualshelves => C4::Context->preference("virtualshelves"),
 	);

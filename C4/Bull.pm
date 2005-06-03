@@ -189,33 +189,63 @@ sub get_subscription_list_from_biblionumber {
 sub get_full_subscription_list_from_biblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select year(subscription.startdate) as year,subscription.*, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
-							from subscription 
+	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, year(serial.planneddate) as year,subscription.*, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+							from serial left join subscription on (serial.subscriptionid=subscription.subscriptionid and subscription.biblionumber=serial.biblionumber)
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
 							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
 							left join biblio on biblio.biblionumber=subscription.biblionumber 
-							where subscription.biblionumber = ? order by subscription.startdate');
+							where subscription.biblionumber = ? order by year,serial.planneddate');
 	$sth->execute($biblionumber);
 	my @res;
 	my $year;
+	my $startdate;
+	my $aqbooksellername;
+	my $bibliotitle;
 	my @loopissues;
+	my $first;
 	while (my $subs = $sth->fetchrow_hashref) {
-		my $sth2 = $dbh->prepare('select serial.serialseq, serial.planneddate, year(serial.planneddate) as year, serial.status from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
-		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
-		while (my $issues = $sth2->fetchrow_hashref){
-				push @loopissues,
-					{'planneddate' => $issues->{'planneddate'}, 
-					'serialseq' => $issues->{'serialseq'},
-					'status' => $issues->{'status'}};
+# 		my $sth2 = $dbh->prepare('select * from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
+# 		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
+# 		while (my $issues = $sth2->fetchrow_hashref){
 # 				warn "planneddate ".$issues->{'planneddate'};
 # 				warn "serialseq".$issues->{'serialseq'};
+# 		}
+		if ($year and ($year==$subs->{year})){
+			if ($first eq 1){$first=0;}
+			my $temp=$res[scalar(@res)-1]->{'serials'};
+			push @$temp,
+				{'planneddate' => $subs->{'planneddate'}, 
+				'serialseq' => $subs->{'serialseq'},
+				'status1' => $subs->{'status'}==1,
+				'status2' => $subs->{'status'}==2,
+				'status3' => $subs->{'status'}==3,
+				'status4' => $subs->{'status'}==4,
+				};
+		}else {
+			$year= $subs->{'year'};
+			$startdate= $subs->{'startdate'};
+			$aqbooksellername= $subs->{'aqbooksellername'};
+			$bibliotitle= $subs->{'bibliotitle'};
+			$first=1 if (not $year);
+			my @temp;
+			push @temp,
+				{'planneddate' => $subs->{'planneddate'}, 
+				'serialseq' => $subs->{'serialseq'},
+				'status1' => $subs->{'status'}==1,
+				'status2' => $subs->{'status'}==2,
+				'status3' => $subs->{'status'}==3,
+				'status4' => $subs->{'status'}==4,
+				};
+			
+			push @res,{
+				'year'=>$year,
+				'startdate'=>$startdate,
+				'aqbooksellername'=>$aqbooksellername,
+				'bibliotitle'=>$bibliotitle,
+				'serials'=>\@temp,
+				'first'=>$first 
+			};
 		}
-		my %cell;
-		$cell{'year'}=$subs->{year};
-		$cell{'title'}=$subs->{title};
-		$cell{'booksellername'}=$subs->{booksellername};
-		$cell{'serials'}=\@loopissues;
-		push @res,\%cell;
 	}
 	return \@res;
 }

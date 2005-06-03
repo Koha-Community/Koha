@@ -2,23 +2,22 @@
 
 
 <!-- TMPL_UNLESS name="popup" -->
-<div class="tabbed">
-<h1 class="catalogue">Issues for a subscription</h1>
+<div class="mainbloc">
+		<h1 class="catalogue">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
 <a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
-		<h2 class="catalogue">Subscription information for biblio number : <!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h2>
 
 </div>
 <!-- /TMPL_UNLESS -->
-	<div class="tabs">
+	<div class="tabsubs">
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
-			<div id="link<!--TMPL_VAR Name="year" -->"><a href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a></div>
+			<div id="link<!--TMPL_VAR Name="year" -->" ><a href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a></div>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	</div>
 
 	<!-- TMPL_LOOP NAME="years" -->
-	<div name="<!-- TMPL_VAR NAME="year" -->XX" id="<!-- TMPL_VAR NAME="year" -->XX" class="tab" style="visibility:visible">
+	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
 				<th> Date
@@ -37,18 +36,22 @@
 					<!-- TMPL_VAR Name="serialseq" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR Name="status" -->
+					<!-- TMPL_IF Name="status1" -->Arrived<!-- /TMPL_IF -->
+					<!-- TMPL_IF Name="status2" -->Waited<!-- /TMPL_IF -->
+					<!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
+					<!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->
 				</td>
 			</tr>
 			<!-- /TMPL_LOOP -->
+		</table>
 	</div>
 	<!--/TMPL_LOOP -->
 
 <script language="JavaScript" type="text/javascript">
 function active(numlayer)
 {
-	for (i=<!--TMPL_VAR Name="yearmin"-->; i <= <!--TMPL_VAR Name="yearmax"--> ; i++ ) {
-		ong = i+"XX";
+	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
+		ong = i;
 		link = "link"+i;
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
