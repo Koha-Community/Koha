@@ -29,7 +29,7 @@
 <div id="bloc25">
 	<h2 class="acquisition">zu pr&uuml;fende Vorschl&auml;ge</h2>
 		<!-- TMPL_IF name="suggestion" -->
-			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Manage</a>
+			<!--TMPL_VAR NAME="suggestion" --> offene Anschaffungsvorschl%auml;ge <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Manage</a>
 		<!-- TMPL_ELSE -->
 			Keine Anschaffungsvorschl&auml;ge offen
 		<!-- /TMPL_IF -->
@@ -44,8 +44,8 @@
 				<th class="acquisition">Etats</th>
 				<th class="acquisition">Total</th>
 				<th class="acquisition">geschenkt</th>
-				<th class="acquisition">Comtd</th>
-				<th class="acquisition">Avail</th>
+				<th class="acquisition">Verausgabt</th>
+				<th class="acquisition">Verf&uuml;gbar </th>
 			</tr>
 			<!-- TMPL_LOOP NAME="loop_budget" -->
 				<tr>
@@ -57,7 +57,7 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<th class="acquisition" align="right">Total</th>
+				<th class="acquisition" align="right">Gesamt</th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="total" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totspent" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totcomtd" --></th>
@@ -65,7 +65,7 @@
 			</tr>
 		</table>
 		<p>
-		Use your reload button to get the most recent figures. Committed figures are approximate only, as exchange rates will affect the amount actually paid.
+Benutzen Sie den "neu laden"-Button des Browsers zur Anzeige der aktuellen Werte. Die angezeigten Werte sind nur ungef&auml;hre Werte, da bei Zahlung eines Betrags der dann aktuelle Wechselkurs berechnet wird.
 		</p>
 	</form>
 </div>
@@ -73,10 +73,10 @@
 <div id="bloc25">
 	<h2 class="acquisition">HILFE Bestellungen</h2>
 	<ul>
-		<p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</p>
-		<p>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </p>
-		<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.</p>
-		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+		<p>Zu Beginn einer Bestellung, eines direkten Kaufs oder Eingabe eines Geschenks, suchen Sie zuerst nach einem Lieferanten. Falls n&ouml;tig, f&uuml;gen Sie einen neuen hinzu.</p>
+		<p>W&auml;hlen Sie dann einen Einkausfkorb aus bzw. legen Sie einen neuen Korb an. Beachten Sie bitte, dass der neue Korb dem angemeldeten Benutzer zugeordnet wird.</p>
+		<p>Sie m&uuml;ssen das zu bestellende Exemplar einem bestehenden Biblio zuordnen, oder erst einen neuen Biblio anlegen.</p>
+		<p>Um einen Einkaufskorb zu schlie&szlig;en, klicken Sie auf "Einkaufkorb anzeiegn", dann auf "Einkaufskorb best&auml;tigen".</p>
 	</ul>
 </div>
 

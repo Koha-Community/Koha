@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div id="mainbloc">
-	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->Neu <!-- /TMPL_UNLESS -->Einkauskorb <b><!-- TMPL_VAR NAME="basketno" --> </b>f&uuml;r <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
+	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->Neu <!-- /TMPL_UNLESS -->Einkaufskorb <b><!-- TMPL_VAR NAME="basketno" --> </b>f&uuml;r <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
 	<!-- TMPL_UNLESS name="closedate" -->
 		<div id="bloc25">
 			<h2 class="acquisition">Korb-Info</h2>
 			<p><label class="label100">Korb-Nummer<label> <!-- TMPL_VAR NAME="basketno" --></p>
-			<p><label class="label100">Managed by<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
-			<p><label class="label100">open on<label> <!-- TMPL_VAR NAME="creationdate" --></p>
+			<p><label class="label100">Bearbeitet von<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
+			<p><label class="label100">Begonnen am<label> <!-- TMPL_VAR NAME="creationdate" --></p>
 			<p><label class="label100">f&uuml;r<label> <!-- TMPL_VAR NAME="booksellerid" --></p>
 			<p><label class="label100">Rechnungsnummer </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
 			<!-- TMPL_IF name="closedate" -->
@@ -29,8 +29,8 @@
 				<th class="acquisition">Verfasser</th>
 				<th class="acquisition">rrp</th>
 				<th class="acquisition doNotPrint">est</th>
-				<th class="acquisition">Qty</th>
-				<th class="acquisition">Total</th>
+				<th class="acquisition">Menge</th>
+				<th class="acquisition">Gesamt</th>
 				<th class="acquisition doNotPrint">Etat <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[Bestellung]</a></th>
 				<!-- TMPL_IF name="active" -->
 					<!-- TMPL_UNLESS name="closedate" -->
@@ -90,7 +90,7 @@
 	<!-- TMPL_IF name="active" -->
 		<!-- TMPL_UNLESS name="closedate" -->
 		<div id="bloc25">
-			<h2 class="acquisition">Add order line</h2>
+			<h2 class="acquisition">Weitere Bestellung</h2>
 			<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
 				<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
 				<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
