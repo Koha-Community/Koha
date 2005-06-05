@@ -4,13 +4,13 @@
 	<div id="bloc25">
 		<p>
 		<!-- TMPL_IF NAME="NOBARCODE" -->
-			<p class="problem">Sie m&uuml;ssen dem Exemplar einen Strichcode zuordnen</p>
+			<p class="problem">Sie m&uuml;ssen dem Exemplar einen Barcode zuordnen</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="NOBIBLIOITEM" -->
 			<p class="problem">Sie m&uuml;ssen zuerst einen bibliografischen Datensatz anlegen, dem sie das Exemplar zuordnen k&ouml;nnen</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="BARCODEINUSE" -->
-			<p class="problem">Der Strichcode wird bereits verwendet</p>
+			<p class="problem">Der Barcode wird bereits verwendet</p>
 		<!-- /TMPL_IF -->
 		<h2 class="catalogue">BIBLIO SATZ <!-- TMPL_VAR NAME="BIBNUM" --></h2>
 		<p><label class="label100">Verfasser</label> <!-- TMPL_VAR NAME="AUTHOR" --></p>

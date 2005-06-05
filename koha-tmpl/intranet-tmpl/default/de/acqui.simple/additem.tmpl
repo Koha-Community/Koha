@@ -52,7 +52,7 @@
 		<!-- /tmpl_loop -->
 	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	<!-- TMPL_IF name="barcode_not_unique" -->
-		<div id="problem"><b>FEHLER: Strichcode ist bereits vorhanden<b></div>
+		<div id="problem"><b>FEHLER: Barcode ist bereits vorhanden<b></div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opisadd" -->
 	<input type="button" value="Exemplar hinzuf&uuml;gen" onclick="Check(this.form)" accesskey="w" class="button catalogue">
@@ -99,9 +99,9 @@ function Check(f) {
 	if (total_errors==0) {
 		document.f.submit();
 	} else {
-		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2  = _("Formular nicht bearbeitet wegen der folgenden Probleme");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_errors+_("Pflichtfelder leer (sieh fett dargestellte Unterfelder)");
+		alertString2 += "\n- "+ total_errors+_("Pflichtfelder leer (siehe fett dargestellte Unterfelder)");
 		alert(alertString2);
 	}
 }
