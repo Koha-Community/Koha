@@ -14,7 +14,11 @@
 
 <body>
 <div id="leftbloc">
-	<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+	<!-- TMPL_IF name="opaclargeimage" -->
+		<img class="relative" src="<!-- TMPL_VAR name="opaclargeimage"-->" title="koha" alt="koha" />
+	<!-- TMPL_ELSE -->
+		<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+	<!-- /TMPL_IF -->
 </div>
 
 <div id="homebloc">
