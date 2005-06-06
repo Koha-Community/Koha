@@ -30,9 +30,15 @@
 </head>
 <body>
 	<!-- MENUS -->
-	<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
-	<div id="menuline">
+	<div id="title">
+		<!-- TMPL_IF name="opacsmallimage" -->
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="50" alt="koha logo"/>
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
+		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
+	</div>
+	<div id="menuline">
 		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Home</a>
 		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Advanced search</a>
 		<!-- TMPL_IF NAME="loggedinusername" -->
