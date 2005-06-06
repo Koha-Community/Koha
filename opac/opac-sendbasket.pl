@@ -89,14 +89,44 @@ if ($email_add) {
 	if ($template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s) { $mail{'body'} = $1; }
 
 	my $boundary = "====" . time() . "====";
+# 	$mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
+# 
+# 	$email_header = encode_qp($email_header);
+# 
+# 	$boundary = "--".$boundary;
+# 
+# 	# Writing mail
+# 	$mail{body} =
 	$mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
 
-	$email_header = encode_qp($email_header);
+	my $message = encode_qp( "" );
 
-	$boundary = "--".$boundary;
+# $file = $^X; # This is the perl executable
+# 
+# open (F, $file) or die "Cannot read $file: $!";
+# binmode F; undef $/;
+$mail{body} = encode_base64($iso2709);
+# close F;
 
-	# Writing mail
-	$mail{body} = <<END_OF_BODY;
+$boundary = '--'.$boundary;
+$mail{body} = <<END_OF_BODY;
+$boundary
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+$message
+$boundary
+Content-Type: application/octet-stream; name="basket"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="basket"
+
+$mail{body}
+$boundary--
+END_OF_BODY
+
+
+
+	 <<END_OF_BODY;
 $boundary
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -108,7 +138,7 @@ $mail{'body'}
 $boundary--
 END_OF_BODY
 
-$mail{PJ} = $iso2709;
+$mail{attachment} = $iso2709;
 #	$mail{body} = <<END_OF_BODY;
 #$boundary
 #Content-Type: text/plain; charset="iso-8859-1"
@@ -131,7 +161,6 @@ $mail{PJ} = $iso2709;
 	# do something if it works....
 #		warn " ".$mail{body};
 #		warn " ".$mail{PJ};
-		warn "Mail sent ok\n";
 		$template->param(SENT => "1");
 		$template->param(email_add => $email_add);
 	} else {
