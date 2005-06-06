@@ -876,6 +876,15 @@ my %tabledata = (
 	        type		=> 'Choice',
 	        options		=> 'simplified|full'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'hidelostitems',
+            value               => 'No',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'show or hide "lost" items in OPAC.',
+	    type		=> 'YesNo',
+        },
     ],
 
 );
@@ -1461,6 +1470,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.5  2005/06/06 15:23:36  tipaul
+# adding a systempref to choose either to show or hide "lost" items. Note that "lost items" can be related to an authorised value list, so does not necessary mean "item definetly lost". Even here, some libraries want to see lost items, and some don't want. This parameter will make everybody happy !
+#
 # Revision 1.100.2.4  2005/06/06 14:15:55  tipaul
 # adding 2 systemparameters to define an alternate image as logo in opac (the image on main page & on each top-left page)
 #
