@@ -818,6 +818,24 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
+            variable            => 'opacsmallimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclargeimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
             variable            => 'delimiter',
             value               => ';',
 	    forceupdate		=> { 'explanation' => 1,
@@ -1443,6 +1461,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.4  2005/06/06 14:15:55  tipaul
+# adding 2 systemparameters to define an alternate image as logo in opac (the image on main page & on each top-left page)
+#
 # Revision 1.100.2.3  2005/06/02 21:05:34  hdl
 # adding variable SubscriptionHistory
 #
