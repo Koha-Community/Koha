@@ -90,11 +90,9 @@ h1 {
 	background-color:transparent;
 	font-weight:bold;
 	font-size: 115%;
-	text-align : center;
 	vertical-align:top;
 	padding: 2px;
 	width:100%;
-	margin-left:70px;
 }
 
 /* subtitles. headers of blocks */
@@ -142,7 +140,7 @@ p.copyright {
 table {
 	border:1px solid #000000;
 	border-collapse:collapse;
-	width:90%;
+	position:static;
 }
 /* header */
 th {
@@ -154,13 +152,21 @@ th {
 	border-left:1px solid #000000;
 	border-bottom:1px solid #000000;
 	border-top:1px solid #000000;
-	padding:5px;
 }
 /* standard cell */
+
+tr {
+	display:table-row;
+	position:static;
+}
+
 td {
 	font-size:10pt;
 	border-left:1px solid #000000;
 	vertical-align:top;
+	position:static;
+/*	position:relative;*/
+	display:table-cell;
 }
 
 /* hilighted cell */
@@ -344,8 +350,8 @@ select:hover {
 }
 
 #menuline {
-	float:left;
 	display:block;
+	margin-left:100px;
 }
 
 #bibliomenu {
@@ -357,10 +363,6 @@ select:hover {
 }
 
 /* a little spacer. should not be used */
-.spacer {
-	padding-left:20pt;
-	float:left;
-}
 .basketspacer {
 	padding-left:8pt;
 	float:left;
@@ -369,8 +371,6 @@ select:hover {
 /* for SubscritptionHistory view  */
 div.tabsubs {
 	width:25px;
-	position:absolute;
-	display:block;
 	margin-left:10px;
 	margin-top:100px;
 }
@@ -386,9 +386,7 @@ div.tabsubs a {
 
 div.tabsub {
 	background-color: #ACE6E6;
-	display: block;
 	visibility:hidden;
-	position:absolute;
 	margin-left:72px;
 	margin-top:100px;
 	margin-right:10%;
@@ -398,10 +396,7 @@ div.tabsub {
 /* for MARC view  */
 div.tabs {
 	width:10px;
-	position:absolute;
 	display:block;
-	margin-left:50px;
-	margin-top:150px;
 }
 
 div.tabs a {
@@ -413,14 +408,20 @@ div.tabs a {
 	-moz-border-radius: 5px 0px 0px 5px;
 }
 
+div.tabbloc {
+	position:absolute;
+	display:block;
+	top:123px;
+	left:42px;
+	border: 1px solid black;
+}
+
 div.tab {
 	background-color: #ACE6E6;
 	display: block;
 	visibility:hidden;
 	position:absolute;
-	margin-left:72px;
-	margin-top:150px;
-	margin-right:10%;
+	float:left;
 }
 
 .MARCtag { /* style for tag definition (700 - Statement of responsability) */

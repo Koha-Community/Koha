@@ -30,13 +30,10 @@
 </head>
 <body>
 	<!-- MENUS -->
+	<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
 	<div id="menuline">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo" style="float: left" />
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
-		<span class="spacer">&nbsp;</span>
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Home</a>
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Advanced search</a>
 		<!-- TMPL_IF NAME="loggedinusername" -->
 			<!-- TMPL_IF name="virtualshelves" -->
@@ -46,9 +43,7 @@
 				<a href="opac-suggestions.pl" class="menu">View & manage suggestions</a>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Personal page</a>
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="javascript:openBasket()" title="Biblio basket">Biblio basket <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
 	</div>
 	<!-- MAIN BODY OF PAGE -->
