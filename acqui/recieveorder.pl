@@ -32,7 +32,7 @@ use HTML::Template;
 use C4::Acquisition;
 
 my $input=new CGI;
-my $supplierid=$input->param('id');
+my $supplierid=$input->param('supplierid');
 my ($count,@booksellers)=bookseller($supplierid);
 
 my ($template, $loggedinuser, $cookie)
