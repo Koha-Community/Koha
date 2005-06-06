@@ -55,7 +55,7 @@ my @names=$input->param;
 my %inp;
 my $check=0;
 for (my $i=0;$i<@names;$i++){
-	my$temp=$input->param($names[$i]);
+	my $temp=$input->param($names[$i]);
 	if ($temp eq 'wo'){
 		$inp{$names[$i]}=$temp;
 		$check=1;
@@ -64,6 +64,7 @@ for (my $i=0;$i<@names;$i++){
 		$user=~ s/Levin/C/i;
 		$user=~ s/Foxton/F/i;
 		$user=~ s/Shannon/S/i;
+		# FIXME : using array +4, +5, +6 is dirty. Should use arrays for each accountline
 		my $amount=$input->param($names[$i+4]);
 		my $bornum=$input->param($names[$i+5]);
 		my $accountno=$input->param($names[$i+6]);
@@ -145,7 +146,7 @@ if ($check ==0){
 		}
 	}
 	$bornum=$input->param('bornum');
-	print $input->redirect("/cgi-bin/koha/pay.pl?bornum=$bornum");
+	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
 }
 
 
