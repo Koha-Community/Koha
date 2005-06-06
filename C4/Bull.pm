@@ -222,11 +222,11 @@ sub get_full_subscription_list_from_biblionumber {
 				'status4' => $subs->{'status'}==4,
 				};
 		}else {
+			$first=1 if (not $year);
 			$year= $subs->{'year'};
 			$startdate= $subs->{'startdate'};
 			$aqbooksellername= $subs->{'aqbooksellername'};
 			$bibliotitle= $subs->{'bibliotitle'};
-			$first=1 if (not $year);
 			my @temp;
 			push @temp,
 				{'planneddate' => $subs->{'planneddate'}, 
