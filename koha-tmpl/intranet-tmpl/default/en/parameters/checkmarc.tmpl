@@ -35,6 +35,18 @@
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtags" -->
+		<tr>
+			<td><b>Item tag</b></td>
+			<td>There is more than 1 MARC tag related to items tab (10) : <!-- TMPL_VAR name="itemtags" --></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Only 1 marc tag mapped to items</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="itemtypes_empty" -->
 		<tr>
 			<td><b>itemtypes table empty</b></td>
@@ -113,6 +125,21 @@
 		<tr>
 			<td>OK</td>
 			<td><i>biblionumber and biblioitemnumber mapped correctly</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="frameworknull" -->
+		<tr>
+			<td><b>framework values</b></td>
+			<td>there is a null value in a frameworkcode. Check the following tables<br/>
+				<li>select * from marc_subfield_structure where frameworkcode is NULL</li>
+				<li>select * from marc_tag_structure where frameworkcode is NULL</li>
+				<li>select * from marc_biblio where frameworkcode is NULL</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>no NULL value in frameworkcode</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->

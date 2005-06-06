@@ -76,6 +76,7 @@ my $field;
 my $tagfield = $res;
 my $tab = $res2;
 my $subtotal=0;
+warn "TAGF : $tagfield";
 while (($res,$res2,$field) = $sth->fetchrow) {
 	# (ignore itemnumber, that must be in -1 tab)
 	if (($res ne $tagfield or $res2 ne $tab ) && $res2 ne -1) {
@@ -96,6 +97,23 @@ if ($subtotal eq 0) {
 	$template->param(itemfields => 1);
 	$total++;
 }
+
+$sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where tab = 10");
+$sth->execute;
+my $totaltags = 0;
+my $list = "";
+while (($res2) = $sth->fetchrow) {
+	$totaltags++;
+	$list.=$res2.",";
+}
+if ($totaltags > 1) {
+	$template->param(itemtags => $list);
+	$total++;
+} else {
+	$template->param(itemtags => 0);
+}
+
+
 # checks biblioitems.itemtype must be mapped and use authorised_value=itemtype
 $sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"biblioitems.itemtype\"");
 $sth->execute;
@@ -142,6 +160,28 @@ $sth->execute;
 ($res) = $sth->fetchrow;
 unless ($res) {
 	$template->param(branches_empty =>1);
+	$total++;
+}
+
+$sth = $dbh->prepare("select count(*) from marc_biblio where frameworkcode is NULL");
+$sth->execute;
+($res) = $sth->fetchrow;
+if ($res) {
+	$template->param(frameworknull =>1);
+	$total++;
+}
+$sth = $dbh->prepare("select count(*) from marc_subfield_structure where frameworkcode is NULL");
+$sth->execute;
+($res) = $sth->fetchrow;
+if ($res) {
+	$template->param(frameworknull =>1);
+	$total++;
+}
+$sth = $dbh->prepare("select count(*) from marc_tag_structure where frameworkcode is NULL");
+$sth->execute;
+($res) = $sth->fetchrow;
+if ($res) {
+	$template->param(frameworknull =>1);
 	$total++;
 }
 
