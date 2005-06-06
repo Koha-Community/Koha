@@ -562,7 +562,7 @@ sub ordersearch {
 	my @searchterms = ($id);
 	map { push(@searchterms,"$_%","% $_%") } @data;
 	push(@searchterms,$search,$search,$biblio);
-	my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblioitems,biblio,aqbasket
+	my $sth=$dbh->prepare("Select biblio.*,biblioitems.*,aqorders.*,aqbasket.*,biblio.title from aqorders,biblioitems,biblio,aqbasket
 		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber and
 		aqorders.basketno = aqbasket.basketno
 		and aqbasket.booksellerid = ?
