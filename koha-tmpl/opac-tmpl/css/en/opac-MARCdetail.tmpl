@@ -27,7 +27,7 @@
 	<!-- /TMPL_IF -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Add to basket</a>
 </div>
-
+<div id="mainbloc">
 	<div class="tabs">
 		<!-- TMPL_IF name="0XX" -->
 			<a href="javascript:active(0)"><div id="link0">0</div></a>
@@ -61,7 +61,7 @@
 		<!-- /TMPL_IF -->
 		<a href="javascript:active(10)">I<br/>t<br/>e<br/>m<br/>s</a>
 	</div>
-
+<div class="tabbloc">
 	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
 		<!-- TMPL_LOOP name="0XX" -->
 			<!-- TMPL_IF name="tag" -->
@@ -319,6 +319,8 @@
 				<!-- /TMPL_LOOP -->
 		</table>
 	</div>
+</div>
+</div>
 <script language="JavaScript" type="text/javascript">
 function active(numlayer)
 {
