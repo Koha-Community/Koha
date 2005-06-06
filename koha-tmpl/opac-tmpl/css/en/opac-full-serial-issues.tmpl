@@ -2,11 +2,9 @@
 
 
 <!-- TMPL_UNLESS name="popup" -->
-<div class="mainbloc">
-		<h1 class="catalogue">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
-<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
-
-</div>
+<div id="mainbloc">
+	<h1 class="catalogue">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<div class="tabsubs">
 	<!-- TMPL_LOOP NAME="years" -->
@@ -46,7 +44,7 @@
 		</table>
 	</div>
 	<!--/TMPL_LOOP -->
-
+</div>
 <script language="JavaScript" type="text/javascript">
 function active(numlayer)
 {
