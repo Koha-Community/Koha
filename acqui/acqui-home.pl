@@ -63,6 +63,7 @@ $template->param(classlist => $classlist,
 						suggestion => $suggestion,
 						totspent => sprintf("%.2f",$totspent),
 						totcomtd => sprintf("%.2f",$totcomtd),
-						totavail => sprintf("%.2f",$totavail));
+						totavail => sprintf("%.2f",$totavail),
+						nobudget => $#results==-1?1:0);
 
 output_html_with_http_headers $query, $cookie, $template->output;
