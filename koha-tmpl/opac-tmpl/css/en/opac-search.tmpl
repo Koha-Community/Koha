@@ -24,6 +24,9 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+				...
+			</a>
 		</p>
 		<p>
 			<label class="label20">Author</label> <input type="hidden" name="marclist" value="biblio.author" />
@@ -31,6 +34,9 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+				...
+			</a>
 		</p>
 		<p>
 			<label class="label20">Subject</label>
@@ -39,6 +45,9 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
 			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+				...
+			</a>
 		</p>
 		<p>
 			<label class="label20">Series title</label>
@@ -154,6 +163,8 @@
 		<h3>Partial search</h3>
 		<p>A search is done on every words you enter. Empty words are ignored. If you enter, for example "the two towers" in the title, the result list will contain all the books containing two AND tower in the title. The "the" will be discarded.</p>
 		<p>If you want to enter a partial word, add a * or a % at the end of the word. For example "two tower*" will retrieve "the two towers", "two white towers", "a tower and two cities"</p>
+		<h3>Dictionnary search</h3>
+		<p>if you clic on ... on the right of title/author/subject, you can search existing values in the library.</p>
 	</div>
 </form>
 </div>
