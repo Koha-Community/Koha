@@ -31,9 +31,7 @@
 			<tr valign="top" bgcolor="#ffdf61">
 				<th class="acquisition doNotPrint">Order</th>
 				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition doNotPrint">[order]</a></th>
-				<th class="acquisition">Isbn</th>
 				<th class="acquisition">Title</th>
-				<th class="acquisition">Author</th>
 				<th class="acquisition">rrp</th>
 				<th class="acquisition doNotPrint">est</th>
 				<th class="acquisition">Qty</th>
@@ -49,13 +47,24 @@
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
 					<td class="doNotPrint"><!-- TMPL_VAR NAME="ordernumber" --></td>
 					<td><!-- TMPL_VAR NAME="publishercode" --></td>
-					<td><!-- TMPL_VAR NAME="isbn" --></td>
 					<!-- TMPL_IF name="closedate" -->
-						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><p>
+							<b><!-- TMPL_VAR NAME="title" --></b><br/>
+								<!-- TMPL_VAR NAME="author" -->
+								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF name="notes" --><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
+							</p>
+						</td>
 					<!-- TMPL_ELSE -->
-						<td><a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td>
+							<p>
+							<a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><br/>
+								<!-- TMPL_VAR NAME="author" -->
+								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF name="notes" --><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
+							</p>
+						</td>
 					<!-- /TMPL_IF -->
-					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="rrp" --></td>
 					<td class="doNotPrint"><!-- TMPL_VAR NAME="ecost" --></td>
 					<td><!-- TMPL_VAR NAME="quantity" --></td>
@@ -75,19 +84,39 @@
 			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
 			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
 			<tr>
-				<td colspan="4" rowspan=3>
+				<td colspan="2" class="acquisition">
 					&nbsp;
 				</td>
-				<th colspan="2" class="acquisition">SubTotal</th>
-				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="sub_total" --></th>
-			</tr>
-			<tr>
-				<th colspan="2" class="acquisition">GST</th>
-				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="gist" --></th>
-			</tr>
-			<tr>
-				<th colspan="2" class="acquisition">TOTAL</th>
-				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="grand_total" --></th>
+				<td class="acquisition number">
+					<p>Sub total</p>
+					<p>GST</p>
+					<p>TOTAL (<!-- TMPL_VAR NAME="currency" -->)</p>
+				</td>
+				<td class="acquisition number">
+					<p><!-- TMPL_VAR NAME="sub_total_est" --></p>
+					<p><!-- TMPL_VAR NAME="gist_est" --></p>
+					<p><!-- TMPL_VAR NAME="grand_total_est" --></p>
+				</td>
+				<td class="acquisition number">
+					<p><!-- TMPL_VAR NAME="sub_total" --></p>
+					<p><!-- TMPL_VAR NAME="gist" --></p>
+					<p><!-- TMPL_VAR NAME="grand_total" --></p>
+				</td>
+				<td class="acquisition">
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition">
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition">
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+				</td>
 			</tr>
 		</table>
 	<!-- TMPL_ELSE -->

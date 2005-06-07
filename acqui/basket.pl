@@ -55,6 +55,8 @@ my $basket = getbasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
 
+# get librarian branch...
+
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});
 $basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});
@@ -65,11 +67,17 @@ my $sub_total; # total of line totals
 my $gist;      # GST
 my $grand_total; # $subttotal + $gist
 
+# my $line_total_est; # total of each line
+my $sub_total_est; # total of line totals
+my $gist_est;      # GST
+my $grand_total_est; # $subttotal + $gist
+
 my @books_loop;
 for (my $i=0;$i<$count;$i++){
 	my $rrp=$results[$i]->{'listprice'};
 	$rrp=curconvert($results[$i]->{'currency'},$rrp);
 
+	$sub_total_est+=$results[$i]->{'quantity'}*$results[$i]->{'rrp'};
 	$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
 	$sub_total+=$line_total;
 	my %line;
@@ -98,6 +106,8 @@ for (my $i=0;$i<$count;$i++){
 my $prefgist =C4::Context->preference("gist");
 $gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
+$grand_total_est = $sub_total_est+sprintf("%.2f",$sub_total_est*$prefgist);
+$gist_est = sprintf("%.2f",$sub_total_est*$prefgist);
 $template->param(basketno => $basketno,
 				creationdate => $basket->{creationdate},
 				authorisedby => $basket->{authorisedby},
@@ -106,12 +116,19 @@ $template->param(basketno => $basketno,
 				active => $booksellers[0]->{'active'},
 				booksellerid=> $booksellers[0]->{'id'},
 				name => $booksellers[0]->{'name'},
+				address1 => $booksellers[0]->{'address1'},
+				address2 => $booksellers[0]->{'address2'},
+				address3 => $booksellers[0]->{'address3'},
+				address4 => $booksellers[0]->{'address4'},
 				entrydate => format_date($results[0]->{'entrydate'}),
 				books_loop => \@books_loop,
 				count =>$count,
 				sub_total => $sub_total,
 				gist => $gist,
 				grand_total =>$grand_total,
+				sub_total_est => $sub_total_est,
+				gist_est => $gist_est,
+				grand_total_est =>$grand_total_est,
 				currency => $booksellers[0]->{'listprice'},
 				);
 output_html_with_http_headers $query, $cookie, $template->output;
