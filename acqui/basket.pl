@@ -72,6 +72,8 @@ my $sub_total_est; # total of line totals
 my $gist_est;      # GST
 my $grand_total_est; # $subttotal + $gist
 
+my $qty_total;
+
 my @books_loop;
 for (my $i=0;$i<$count;$i++){
 	my $rrp=$results[$i]->{'listprice'};
@@ -80,18 +82,15 @@ for (my $i=0;$i<$count;$i++){
 	$sub_total_est+=$results[$i]->{'quantity'}*$results[$i]->{'rrp'};
 	$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
 	$sub_total+=$line_total;
+	$qty_total += $results[$i]->{'quantity'};
 	my %line;
-	if ($i % 2){
-		$line{highlight}=1;
-	} else {
-		$line{highlight}=0;
-	}
 	$line{ordernumber} = $results[$i]->{'ordernumber'};
 	$line{publishercode} = $results[$i]->{'publishercode'};
 	$line{isbn} = $results[$i]->{'isbn'};
 	$line{booksellerid} = $results[$i]->{'booksellerid'};
 	$line{basketno}=$basketno;
 	$line{title} = $results[$i]->{'title'};
+	$line{notes} = $results[$i]->{'notes'};
 	$line{author} = $results[$i]->{'author'};
 	$line{i} = $i;
 	$line{rrp} = $results[$i]->{'rrp'};
@@ -101,6 +100,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{line_total} = $line_total;
 	$line{biblionumber} = $results[$i]->{'biblionumber'};
 	$line{bookfundid} = $results[$i]->{'bookfundid'};
+	$line{odd} = $i %2;
 	push @books_loop, \%line;
 }
 my $prefgist =C4::Context->preference("gist");
@@ -130,5 +130,6 @@ $template->param(basketno => $basketno,
 				gist_est => $gist_est,
 				grand_total_est =>$grand_total_est,
 				currency => $booksellers[0]->{'listprice'},
+				qty_total => $qty_total,
 				);
 output_html_with_http_headers $query, $cookie, $template->output;
