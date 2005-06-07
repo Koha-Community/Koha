@@ -5,8 +5,11 @@
 <div id="main">
 
 <h1>Acquisitions</h1>
-
-<div class="details"><form action="/cgi-bin/koha/acqui/order.pl" method="post"><table>
+	<!-- TMPL_IF name="nobudget" -->
+		<div class="error">You must define a budget in parameters</div>
+	<!-- TMPL_ELSE -->
+<div class="details">
+<form action="/cgi-bin/koha/acqui/order.pl" method="post"><table>
 <caption>Start, Recieve, or Modify Any Order</caption>
 <tr>
 	<th><label for="supplier">Supplier ID or Name</label></th>
@@ -14,7 +17,10 @@
 </tr>
 </table>
 <input type="submit" class="submit" value="Search" /></form>
+<p>	<form action="histsearch.pl" method="get"><input type="submit" class="submit" value="Search Order History" /></form></p>
 </div>
+<!-- /TMPL_IF -->
+
 <div class="details">
 <form action="/cgi-bin/koha/acqui/acquire.pl" method="post"><table>
 <caption>Receive or Modify a Periodical Order</caption>
@@ -65,7 +71,11 @@
 </div>
 
 <!-- showbudget-->
-	<div class="table"><table>
+	<div class="table">
+		<!-- TMPL_IF name="nobudget" -->
+		<div class="error">You must define a budget in parameters</div>
+	<!-- TMPL_ELSE -->
+	<table>
 		<caption>Budgets and Bookfunds</caption>
 			<tr>
 				<th>Budgets</th>
@@ -92,7 +102,7 @@
 				<td><!-- TMPL_VAR name="totavail" --></td>
 				</tfoot>
 			</tr>
-		</table></div>
+		</table><!-- /TMPL_IF --></div>
 <p>		Use your reload button [ctrl + r] to get the most recent figures.
 		Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
 
