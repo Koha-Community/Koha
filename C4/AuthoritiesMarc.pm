@@ -64,11 +64,14 @@ sub authoritysearch {
 
 	# the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
 	# the authtypecode. Then, search on $a of this tag_to_report
+	# also store main entry MARC tag, to extract it at end of search
+	my $mainentrytag;
+	my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
+	$sth->execute($authtypecode);
+	my ($tag_to_report) = $sth->fetchrow;
+	$mainentrytag = $tag_to_report;
 	for (my $i=0;$i<$#{$tags};$i++) {
 		if (@$tags[$i] eq "mainentry") {
-			my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
-			$sth->execute($authtypecode);
-			my ($tag_to_report) = $sth->fetchrow;
 			@$tags[$i] = $tag_to_report."a";
 		}
 	}
@@ -87,6 +90,11 @@ sub authoritysearch {
 	# Extracts the NOT statements from the list of statements
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
+		# replace * by %
+		@$value[$i] =~ s/\*/%/g;
+		# remove % at the beginning
+		@$value[$i] =~ s/^%//g;
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if @$operator[$i] eq "contains";
 		if(@$operator[$i] eq "contains") # if operator is contains, splits the words in separate requests
 		{
 			foreach my $word (split(/ /, @$value[$i]))
@@ -174,6 +182,8 @@ sub authoritysearch {
 		$newline{authid} = $result[$counter];
 		$newline{used} = &AUTHcount_usage($result[$counter]);
 		$newline{biblio_fields} = $tags_using_authtype;
+		$newline{even} = $counter % 2;
+		$newline{mainentry} = $record->field($mainentrytag)->subfield('a')." ".$record->field($mainentrytag)->subfield('b') if $record->field($mainentrytag);
 		$counter++;
 		push @finalresult, \%newline;
 	}
@@ -916,6 +926,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.6  2005/06/07 10:02:00  tipaul
+# porting dictionnary search from head to 2.2. there is now a ... facing titles, author & subject, to search in biblio & authorities existing values.
+#
 # Revision 1.9.2.5  2005/05/31 14:50:46  tipaul
 # fix for authority merging. There was a bug on official installs
 #
