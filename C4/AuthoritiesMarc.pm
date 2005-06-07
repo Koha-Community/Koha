@@ -183,7 +183,7 @@ sub authoritysearch {
 		$newline{used} = &AUTHcount_usage($result[$counter]);
 		$newline{biblio_fields} = $tags_using_authtype;
 		$newline{even} = $counter % 2;
-		$newline{mainentry} = $record->field($mainentrytag)->subfield('a') if $record->field($mainentrytag);
+		$newline{mainentry} = $record->field($mainentrytag)->subfield('a')." ".$record->field($mainentrytag)->subfield('b') if $record->field($mainentrytag);
 		$counter++;
 		push @finalresult, \%newline;
 	}
@@ -921,6 +921,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.18  2005/06/07 10:00:47  tipaul
+# adding $b to mainentry (in UNIMARC, for personal names, $a is the surname, $b is the firstname)
+#
 # Revision 1.17  2005/06/01 12:51:02  tipaul
 # some fixes & improvements for dictionnary search in librarian interface
 #
