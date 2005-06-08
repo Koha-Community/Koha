@@ -11,7 +11,7 @@
 <div id="main">
 
 	<form method="post" name="f" id="f" action="addbiblio.pl">
-<h1><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
+<h1><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="oldbiblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --> With Framework : <!--TMPL_VAR Name="framework" --></h1>
 
 
 
@@ -429,8 +429,10 @@ function active(numlayer)
 		} else {
 			with(document){
 			document.getElementById(ong).style.visibility="hidden";
+			if (document.getElementById(link)) {
 			document.getElementById(link).style.color="#669999";
 			document.getElementById(link).style.backgroundColor="#D8DEB8";
+			}
 			}
 		}
 	}
@@ -561,6 +563,11 @@ function PopupZ3950() {
 	} else {
 		alert("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");
 	}
+}
+
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
 }
 
 function AddField(field) {
