@@ -33,7 +33,7 @@
 					<br />
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="author" --><label class="label100"><b>Verfasser</b> </label><!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="additional" --><label class="label100"><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="additional" --><label class="label100"><b>Weitere Verfasser:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="publishercode" --><label class="label100"><b>Verlag:</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" --><br />
 				<!-- TMPL_IF name="publicationyear" --><label class="label100"><b>Ort:</b></label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
 				<!-- TMPL_IF name="pages" -->, <!-- TMPL_VAR name="pages" -->s<!-- /TMPL_IF -->
@@ -71,7 +71,7 @@
 			<th class="catalogue">Status</th>
 			<th class="catalogue">Entliehen bis</th>
 			<th class="catalogue">Zuletzt gesehen</th>
-			<th class="catalogue">Strichcode</th>
+			<th class="catalogue">Barcode</th>
 			<th class="catalogue">Band</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -91,7 +91,7 @@
 				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 				<!-- TMPL_IF NAME="type" -->
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Medientyp &auml;ndern</a>
 					</td>
 				<!-- /TMPL_IF -->
 			</tr>

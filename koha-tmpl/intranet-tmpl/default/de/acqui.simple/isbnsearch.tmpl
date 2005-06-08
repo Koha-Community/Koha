@@ -61,12 +61,12 @@
 						<!-- TMPL_IF NAME="NOTMARC" -->
 						<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Exemplare hinzuf&uuml;gen</a></td>
 						<!-- TMPL_ELSE -->
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Bearbeite...</a></td>
+						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Bearbeiten</a></td>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_UNLESS NAME="NOTMARC" -->
 						<td>
 							<a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
-								Duplicate
+								Duplizieren
 							</a>
 						</td>
 						<!-- /TMPL_UNLESS -->
@@ -108,7 +108,7 @@
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="catalogue">Bibliografische Daten im Zwischenspeicher</h2>
+		<h2 class="catalogue">Bibliografische Daten im Fremddatenpool</h2>
 		<!-- TMPL_IF name="breeding_loop" -->
 			<table>
 				<tr>
