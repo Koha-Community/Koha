@@ -21,11 +21,14 @@
 			NAME="author" ESCAPE=URL>"><!-- TMPL_VAR NAME="author" --></a></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="additional" --><li><b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="isbn" --><li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="seriestitle" --><li><b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="subject" --><li><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="issn" --><li><strong>ISSN:</strong> <!-- TMPL_VAR NAME="issn" --></li><!-- /TMPL_IF --><!-- TMPL_IF NAME="seriestitle" --><li><b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></li><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="subjects" --><li><strong>Subject(s):</strong>
+					<!-- TMPL_LOOP name="subjects" -->
+						<a href="/cgi-bin/koha/search.pl?type=intra&amp;subjectitems=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></li>
+					<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="copyrightdate" --><li><b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="notes" --><li><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="unititle" --><li><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="unititle" --><li><b>Alternate Title:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
 			<!-- Hide from NPL --><!-- TMPL_IF NAME="serial" --><li><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --></li><!-- /TMPL_IF --> <!-- /Hide from NPL -->
 			<li><b>Biblio Record</b> <!-- TMPL_VAR NAME="biblionumber" --></li>
 			<li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li>
