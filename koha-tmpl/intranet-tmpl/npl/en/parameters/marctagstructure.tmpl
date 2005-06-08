@@ -118,7 +118,7 @@
 <!-- ------------------------------------------------------------------------ -->
 <!-- TMPL_IF NAME="else" -->
 
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<form name="f" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 <label for="frameworkcode">Select a framework: </label>
 	<select id="frameworkcode" name="frameworkcode">
 		<option value="">Default</option>
@@ -129,6 +129,9 @@
 	<label for="searchfield">Search for Tag: </label>
 	<input type="text" name="searchfield" id="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 	<input type="submit" value="Search" class="submit">
+			<p>
+		<label for="select_display">Display only used Tags/Subfields</label> <input type="checkbox" name="select_display" id="select_display" value="True"<!-- TMPL_IF Name="select_display"--> checked="checked"<!--/TMPL_IF -->  onchange="this.form.submit();" />
+		</p>
 </form>
 <p class="note">NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</p>
 
@@ -142,6 +145,33 @@
 		<th>Subfields</th>
 		<th>Edit</th>
 		<th>Delete</th>
+				<tr>
+	<!-- TMPL_IF NAME="select_display" -->
+		<!-- TMPL_LOOP NAME="loop" -->
+			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+			<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
+			<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
+			<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_IF NAME="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+			<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">subfields</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
+		</tr>
+			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+			<td>
+				&nbsp;
+			</td>
+			<td colspan="7">
+				<!-- TMPL_LOOP NAME="subfields" -->
+					<p>	Tab:<!-- TMPL_VAR NAME="tab" --> | $<!-- TMPL_VAR NAME="tagsubfield" -->
+							<!-- TMPL_VAR NAME="liblibrarian" --> <!-- TMPL_IF NAME="kohafield" --><!-- TMPL_VAR NAME="kohafield" --><!--/TMPL_IF --><!-- TMPL_IF NAME="repeatable" -->, repeatable<!-- /TMPL_IF --><!-- TMPL_IF NAME="mandatory" -->, Mandatory<!-- /TMPL_IF --><!-- TMPL_IF NAME="seealso" -->, See <!-- TMPL_VAR name="seealso" --><!--/TMPL_IF --><!-- TMPL_IF NAME="authorised_value" -->, <!-- TMPL_VAR NAME="authorised_value" --><!--/TMPL_IF --><!-- TMPL_IF NAME="authtypecode" -->, <!-- TMPL_VAR NAME="authtypecode" --><!--/TMPL_IF --><!-- TMPL_IF NAME="value_builder" -->, <!-- TMPL_VAR NAME="value_builder" --><!--/TMPL_IF -->
+					</p>
+				<!-- /TMPL_LOOP -->
+			</td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
 	<!-- TMPL_LOOP NAME="loop" -->
 	<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
@@ -154,9 +184,10 @@
 		<td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
+	<!--/TMPL_IF -->
 	</table>
 <div id="pages">	<!-- TMPL_IF NAME="isprevpage" -->
-			<a class="pages" href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">&lt;&lt; Previous</a>
+			<a class="pages" href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Previous</a>
 		<!-- /TMPL_IF --><form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form">
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -165,8 +196,13 @@
 		<input type="submit" class="submit" value="Add Tag" />
 	</form>
 		<!-- TMPL_IF NAME="nextpage" -->
-			<a class="pages" href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">Next &gt;&gt;</a>
+			<a class="pages" href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">Next &gt;&gt;</a>
 		<!-- /TMPL_IF --></div>
+		<script language="javascript" type="text/javascript">
+	function ChangeDisplay(checkbox) {
+		window.
+	}
+</script>
 </div>
 <!-- /TMPL_IF -->
 
