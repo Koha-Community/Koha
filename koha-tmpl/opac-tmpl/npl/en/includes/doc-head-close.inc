@@ -4,6 +4,7 @@
 <link rel="shortcut icon" href="<TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
 	@import url(<TMPL_VAR NAME="themelang">/includes/opac.css);
+	@import url(<TMPL_VAR NAME="themelang">/includes/marc-editor.css);	
 </style>
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/script.js"></script>
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/basket.js"></script>
