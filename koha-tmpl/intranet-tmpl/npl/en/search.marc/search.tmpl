@@ -27,7 +27,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="title" name="value" onchange="sql_update()" size="35" accesskey="t" /></td>
+			<input type="text" id="title" name="value" onchange="sql_update()" size="35" accesskey="t" />			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+				<strong>...</strong>
+			</a></td>
 		</tr>
 		<tr>
 			<th><label for="author"><span class="accesskey" title="Access Key a">A</span>uthor</label></th>
@@ -35,7 +37,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="author" name="value" onchange="sql_update()" size="35" accesskey="a" /></td>
+			<input type="text" id="author" name="value" onchange="sql_update()" size="35" accesskey="a" />			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+				<strong>...</strong>
+			</a></td>
 		</tr>
 		<tr>
 			<th><label for="subject"><span class="accesskey" title="Access Key s">S</span>ubject</label></th>
@@ -43,7 +47,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" /></td>
+			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" />			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+				<strong>...</strong>
+			</a></td>
 		</tr>
 <tr><th><label for="seriestitle">Series title</label></th><td>			
 			<input type="hidden" name="marclist" value="biblio.seriestitle" />
@@ -186,6 +192,11 @@ function AddStatement() {
 
 	document.forms[0].op.value="AddStatement";
 	document.f.submit();
+}
+
+function Dopop(link,i) {
+	var searchstring=document.forms[4].value[i].value;
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 function PopupSuggestion() {
