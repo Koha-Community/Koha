@@ -1,21 +1,20 @@
-<!-- TMPL_INCLUDE NAME="main-top-blank.inc" -->
-<div>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="main-compact">
 
-<h1>subscription renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
+<h1>Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
 
-<form name="f" method="post">
-	<div>
-		<input type="hidden" name="op" value="renew">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
-		<p><label>start date</label><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->"></p>
-		<p>Subscription length :</p>
-		<p><label>Number of num</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
-		<p><label>Number of weeks</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
-		<p><label>Number of months</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
-		<p>Note for the librarian that will manage your renewal request</p>
-		<ul><textarea name="note" rows="10" cols="60"></textarea></ul>
-		<input type="submit" value="Request a renewal" class="submit">
-	</div>
+<form name="f" method="post" action="subscription-renew.pl">
+	<div class="data">
+		<table><tr><th><label>Start Date: </label></th><td><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" /><input type="hidden" name="op" value="renew" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /></td></tr></table>	
+		
+	<table><caption>Subscription Length:</caption>
+	<tr><th><label for="numberlength">Number of Issues: </label></th><td><input type="text" name="numberlength" id="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></td></tr>
+	<tr><th><label for="weeklength">Number of Weeks: </label></th><td><input type="text" name="weeklength" id="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></td></tr>
+	<tr><th><label for="monthlength">Number of Months: </label></th><td><input type="text" name="monthlength" id="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></td></tr>
+	<tr><th><label for="note">Comments for the librarian that will manage your renewal request:</label></th><td><textarea name="note" id="note" rows="3" cols="30"></textarea></td></tr>
+	</table>
+	<p><input type="submit" value="Request a renewal" class="submit" /></p>
+</div>
 </form>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
