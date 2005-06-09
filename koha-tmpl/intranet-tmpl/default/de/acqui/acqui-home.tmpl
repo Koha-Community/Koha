@@ -1,14 +1,19 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<!-- version 1.14.2.1, Tue Jun 7 13:17:38 200, geaendert 080605 by hellen -->
 <div id="mainbloc">
 
 <h1 class="acquisition">Erwerbung</h1>
 <div id="bloc25">
 	<h2 class="acquisition">Beginnen, Eingangsbearbeitung, &auml;ndern von Bestellungen</h2>
+	<!-- TMPL_IF name="nobudget" -->
+  	                 <p class="problem">Sie m&uuml;ssen unter Parameter ein Budget definieren</p>
+  	         <!-- TMPL_ELSE -->
 		<form action="/cgi-bin/koha/acqui/order.pl" method="post">
 			Lieferantenname: <input type="text"  size="25"   name="supplier">
 			<input type="submit" class="button acquisition" value="OK">
 		</form>
 	<p>oder <a href="histsearch.pl" class="button acquisition"> Suche Bestellhistorie</a></p>
+	<!-- /TMPL_IF -->
 </div>
 
 <!-- currencies-->
@@ -39,11 +44,14 @@
 <div id="bloc25">
 	<form action="/cgi-bin/koha/search.pl">
 		<h2 class="acquisition">Etats und Budgets</h2>
+		<!-- TMPL_IF name="nobudget" -->
+  	                 <p class="problem">Sie m&uuml;sen unter Parameter ein Budget definieren</p>
+  	         <!-- TMPL_ELSE -->
 		<table class="noborder">
 			<tr>
 				<th class="acquisition">Etats</th>
-				<th class="acquisition">Total</th>
-				<th class="acquisition">geschenkt</th>
+				<th class="acquisition">Gesamt</th>
+				<th class="acquisition">Geschenkt</th>
 				<th class="acquisition">Verausgabt</th>
 				<th class="acquisition">Verf&uuml;gbar </th>
 			</tr>
@@ -65,18 +73,18 @@
 			</tr>
 		</table>
 		<p>
-Benutzen Sie den "neu laden"-Button des Browsers zur Anzeige der aktuellen Werte. Die angezeigten Werte sind nur ungef&auml;hre Werte, da bei Zahlung eines Betrags der dann aktuelle Wechselkurs berechnet wird.
+Benutzen Sie den "neu laden"-Button des Browsers zur Anzeige der aktuellen Betr&auml;ge. Die angezeigten Werte sind nur ungef&auml;hre Werte, da bei Zahlung eines Betrags der dann aktuelle Wechselkurs berechnet wird.
 		</p>
-	</form>
+	<!-- /TMPL_IF -->
 </div>
 
 <div id="bloc25">
 	<h2 class="acquisition">HILFE Bestellungen</h2>
 	<ul>
-		<p>Zu Beginn einer Bestellung, eines direkten Kaufs oder Eingabe eines Geschenks, suchen Sie zuerst nach einem Lieferanten. Falls n&ouml;tig, f&uuml;gen Sie einen neuen hinzu.</p>
+		<p>Zu Beginn eines Erwerbungsvorgangs, gleichg&uuml;ltig, ob es eine Bestellung, ein direkter Kauf oder ein Geschenk ist, mu&szlig; zuerst ein Lieferant aufgerufen werden. Falls n&ouml;tig, f&uuml;gen Sie einen neuen hinzu.</p>
 		<p>W&auml;hlen Sie dann einen Einkausfkorb aus bzw. legen Sie einen neuen Korb an. Beachten Sie bitte, dass der neue Korb dem angemeldeten Benutzer zugeordnet wird.</p>
 		<p>Sie m&uuml;ssen das zu bestellende Exemplar einem bestehenden Biblio zuordnen, oder erst einen neuen Biblio anlegen.</p>
-		<p>Um einen Einkaufskorb zu schlie&szlig;en, klicken Sie auf "Einkaufkorb anzeigen", dann auf "Einkaufskorb best&auml;tigen".</p>
+		<p>Um einen Einkaufskorb zu schlie&szlig;en, klicken Sie auf "Einkaufskorb anzeigen", dann auf "Einkaufskorb best&auml;tigen".</p>
 	</ul>
 </div>
 
