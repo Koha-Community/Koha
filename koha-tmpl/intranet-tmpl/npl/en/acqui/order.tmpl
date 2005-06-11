@@ -15,12 +15,12 @@
 <!-- TMPL_LOOP name="loop_suppliers" -->
 	<tr>
 		<td><!-- TMPL_IF name="active" -->
-				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->">Add Order</a><!-- TMPL_ELSE -->	Inactive<!-- /TMPL_IF -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Add Order</a><!-- TMPL_ELSE -->	Inactive<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=supplierid -->">Receive</a>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name="supplierid" -->">Receive</a>
 		</td>
-		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 <div class="data"><table>
 					<tr>
