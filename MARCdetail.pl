@@ -115,8 +115,12 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
 				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
+# 				warn "tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}."lien koha? : "$subfield_data{link};
 				if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+				} elsif ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{kohafield} eq "biblioitems.isbn") {
+#					warn " tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}. "ISBN : ".$subf[$i][1]."PosttraitementISBN :".DisplayISBN($subf[$i][1]);
+					$subfield_data{marc_value}=DisplayISBN($subf[$i][1]);
 				} else {
 					if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{authtypecode}) {
 						$subfield_data{authority}=$fields[$x_i]->subfield(9);
