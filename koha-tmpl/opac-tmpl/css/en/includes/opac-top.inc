@@ -24,7 +24,7 @@
 	var MSG_NO_RECORD_SELECTED = _("No biblio selected");
 	var MSG_NO_RECORD_ADDED = _("No biblio added");
 	function Dopop(link) {
-		newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+		newin=window.open(link,'popup','width=700,height=500,toolbar=false,scrollbars=yes');
 	}
 	</script>
 </head>
