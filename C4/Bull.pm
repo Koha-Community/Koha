@@ -101,6 +101,7 @@ sub GetLateIssues {
 	}
 	return @issuelist;
 }
+
 sub newsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 		$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
@@ -140,6 +141,7 @@ sub newsubscription {
 	$sth->execute($serialseq, $subscriptionid, $val->{'biblionumber'}, 1, format_date_in_iso($startdate));
 	return $subscriptionid;
 }
+
 sub getsubscription {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
@@ -178,9 +180,16 @@ sub get_subscription_list_from_biblionumber {
 	my @res;
 	while (my $subs = $sth->fetchrow_hashref) {
 		$subs->{startdate} = format_date($subs->{startdate});
+		$subs->{histstartdate} = format_date($subs->{histstartdate});
 		$subs->{opacnote} =~ s/\n/\<br\/\>/g;
 		$subs->{missinglist} =~ s/\n/\<br\/\>/g;
 		$subs->{recievedlist} =~ s/\n/\<br\/\>/g;
+		$subs->{"periodicity".$subs->{periodicity}} = 1;
+		if ($subs->{enddate} eq '0000-00-00') {
+			$subs->{enddate}='';
+		} else {
+			$subs->{enddate} = format_date($subs->{enddate});
+		}
 		push @res,$subs;
 	}
 	return \@res;
@@ -214,7 +223,7 @@ sub get_full_subscription_list_from_biblionumber {
 			if ($first eq 1){$first=0;}
 			my $temp=$res[scalar(@res)-1]->{'serials'};
 			push @$temp,
-				{'planneddate' => $subs->{'planneddate'}, 
+				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
 				'status1' => $subs->{'status'}==1,
 				'status2' => $subs->{'status'}==2,
@@ -224,12 +233,12 @@ sub get_full_subscription_list_from_biblionumber {
 		}else {
 			$first=1 if (not $year);
 			$year= $subs->{'year'};
-			$startdate= $subs->{'startdate'};
+			$startdate= format_date($subs->{'startdate'});
 			$aqbooksellername= $subs->{'aqbooksellername'};
 			$bibliotitle= $subs->{'bibliotitle'};
 			my @temp;
 			push @temp,
-				{'planneddate' => $subs->{'planneddate'}, 
+				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
 				'status1' => $subs->{'status'}==1,
 				'status2' => $subs->{'status'}==2,
