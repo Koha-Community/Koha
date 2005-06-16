@@ -54,7 +54,7 @@ a {
 h1.catalogue{
 	text-align:center;
 	background-color:#ad11ad;
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: normal;
 	font-weight: bold;
 }
@@ -83,6 +83,25 @@ h1.reports{
 	font-weight: bold;
 }
 
+h2 {
+	margin-top:0px;
+	margin-bottom:4px;
+	text-align:center;
+	padding:0px;
+	font-size:125%;
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:3px;
+	padding-top:3px;
+}
+h2.reports{
+	text-align:center;
+	background-color: #6b7cbe;
+	color: #FFFFFF;
+	text-decoration: normal;
+	font-weight: bold;
+}
+
 h1.circulation{
 	text-align:center;
 	background-color: #be6170;
@@ -90,6 +109,15 @@ h1.circulation{
 	text-decoration: normal;
 	font-weight: bold;
 }
+
+h1.authority {
+	text-align:center;
+	background-color: #6b7cbe;
+	color:#000000;
+	text-decoration: normal;
+	font-weight: bold;
+	background-image:none;
+	}
 
 h1.parameters{
 	text-align:center;
@@ -120,13 +148,21 @@ a.catalogue:hover {
 	text-decoration: none;
 	cursor: hand;
 	background-color:#ad11ad;
-	color:#FFFFFF;
+	color:#000000;
 	font-weight: bold;
 	border:1px solid #000000;
 	line-height:200%;
 	}
 
-a.members {
+.little {
+	font-weight: normal;
+	font-size:10pt;
+	padding:0px 0px 0px 0px;
+	text-decoration: none;
+	line-height:100%;
+	}
+
+.members {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
@@ -134,7 +170,7 @@ a.members {
 	font-weight: bold;
 	line-height:200%;
 	}
-a.members:hover {
+.members:hover {
 	background-color: #86c268;
 	border:1px solid #000000;
 	color: #000000;
@@ -143,7 +179,7 @@ a.members:hover {
 	line-height:200%;
 	}
 
-a.acquisition {
+a.authority {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
@@ -151,7 +187,23 @@ a.acquisition {
 	font-weight: bold;
 	line-height:200%;
 	}
-a.acquisition:hover {
+a.authority:hover {
+	background-color: #6b7cbe;
+	border:1px solid #000000;
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+	}
+
+.acquisition {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#777777;
+	font-weight: bold;
+	line-height:200%;
+	}
+.acquisition:hover {
 	background-color: #ffdf61;
 	border:1px solid #000000;
 	color: #000000;
@@ -168,6 +220,7 @@ a.reports {
 	font-weight: bold;
 	line-height:200%;
 	}
+
 a.reports:hover {
 	background-color: #6b7cbe;
 	border:1px solid #000000;
@@ -177,7 +230,7 @@ a.reports:hover {
 	line-height:200%;
 	}
 
-a.circulation {
+.circulation {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
@@ -185,7 +238,7 @@ a.circulation {
 	font-weight: bold;
 	line-height:200%;
 	}
-a.circulation:hover {
+.circulation:hover {
 	background-color: #be6170;
 	border:1px solid #000000;
 	color: #000000;
@@ -258,6 +311,13 @@ a.bull:hover {
 	font-style:italic;
 	font-family:Times;
 	color:#000000;
+	margin:0px;
+	padding:0px;
+}
+
+#bloc25, .bloc25 {
+	float:left;
+	border:1px solid #000000;
 	margin:0px;
 	padding:0px;
 }

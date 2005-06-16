@@ -7,8 +7,19 @@ use C4::Output;  # contains gettemplate
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Auth;
+use C4::AuthoritiesMarc;
+use C4::Koha;
 
 my $query = new CGI;
+my $authtypes = getauthtypes;
+my @authtypesloop;
+foreach my $thisauthtype (sort { $authtypes->{$a} <=> $authtypes->{$b} } keys %$authtypes) {
+	my %row =(value => $thisauthtype,
+				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+			);
+	push @authtypesloop, \%row;
+}
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "intranet-main.tmpl",
 			     query => $query,
@@ -24,5 +35,6 @@ my ($template, $loggedinuser, $cookie)
 
 my $marc_p = C4::Context->boolean_preference("marc");
 $template->param(NOTMARC => !$marc_p);
+$template->param(authtypesloop => \@authtypesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
