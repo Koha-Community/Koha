@@ -53,6 +53,16 @@
 					<!-- TMPL_ELSE -->
 						<option value="4">Missing</option>
 					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status5" -->
+						<option value="5" selected>Not issued</option>
+					<!-- TMPL_ELSE -->
+						<option value="5">Not issued</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status6" -->
+						<option value="6" selected>Delete</option>
+					<!-- TMPL_ELSE -->
+						<option value="6">Delete</option>
+					<!-- /TMPL_IF -->
 				</select>
 			</td>
 		</tr>
@@ -97,6 +107,10 @@
 		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
 		<p>Missing issues</p>
 		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<!--TMPL_IF Name="notissuedlist"-->
+		<p>Not issued</p>
+		<p>&nbsp;<textarea name="notissuedlist" COLS=60 ROWS=2><!-- TMPL_VAR name="notissuedlist" --></textarea></p>
+		<!--/TMPL_IF-->
 		<p>Opac's note</p>
 		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
 		<input type="submit" value="Save changes" class="button bull">

@@ -50,7 +50,7 @@ Give all XYZ functions
 			&getserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
 			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
-			&getSupplierListWithLateIssues &GetLateIssues);
+			&getSupplierListWithLateIssues &GetLateIssues &serialdelete);
 
 sub getSupplierListWithLateIssues {
 	my $dbh = C4::Context->dbh;
@@ -274,7 +274,7 @@ sub getserials {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
 	# status = 2 is "arrived"
-	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate from serial where subscriptionid = ? and status <>2 and status <>4");
+	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
 	$sth->execute($subscriptionid);
 	my @serials;
 	while(my $line = $sth->fetchrow_hashref) {
@@ -288,6 +288,24 @@ sub getserials {
 	return ($totalissues,@serials);
 }
 
+sub serialdelete {
+	my ($serialid,$serialseq)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
+	$sth->execute($serialid);
+	my ($subscriptionid,$oldstatus) = $sth->fetchrow;
+	# change status & update subscriptionhistory
+	my $sth = $dbh->prepare("delete * from serial  where serialid = ?");
+	$sth->execute($serialid);
+	$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+	$sth->execute($subscriptionid);
+	my ($missinglist,$recievedlist) = $sth->fetchrow;
+	$recievedlist =~ s/",$serialseq"//;
+	$missinglist =~ s/",$serialseq"//;
+	$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
+	$sth->execute($recievedlist,$missinglist,$subscriptionid);
+}
+
 sub serialchangestatus {
 	my ($serialid,$serialseq,$planneddate,$status)=@_;
 # 	warn "($serialid,$serialseq,$planneddate,$status)";
@@ -297,19 +315,23 @@ sub serialchangestatus {
 	$sth->execute($serialid);
 	my ($subscriptionid,$oldstatus) = $sth->fetchrow;
 	# change status & update subscriptionhistory
-	$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=? where serialid = ?");
-	$sth->execute($serialseq,$planneddate,$status,$serialid);
-	$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
-	$sth->execute($subscriptionid);
-	my ($missinglist,$recievedlist) = $sth->fetchrow;
-	if ($status eq 2) {
-		$recievedlist .= ",$serialseq";
+	if ($status eq 6){
+		delissue($serialseq, $subscriptionid) 
+	}else{
+		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=? where serialid = ?");
+		$sth->execute($serialseq,$planneddate,$status,$serialid);
+		$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+		$sth->execute($subscriptionid);
+		my ($missinglist,$recievedlist) = $sth->fetchrow;
+		if ($status eq 2) {
+			$recievedlist .= ",$serialseq";
+		}
+		$missinglist .= ",$serialseq" if ($status eq 4) ;
+		$missinglist .= ",not issued $serialseq" if ($status eq 5);
+		$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
+		$sth->execute($recievedlist,$missinglist,$subscriptionid);
 	}
-	if ($status eq 4) {
-		$missinglist .= ",$serialseq";
-	}
-	$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
-	$sth->execute($recievedlist,$missinglist,$subscriptionid);
+
 	# create new waited entry if needed (ie : was a "waited" and has changed)
 	if ($oldstatus eq 1 && $status ne 1) {
 		$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
@@ -332,6 +354,13 @@ sub newissue {
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
 	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status, $planneddate);
+}
+
+sub delissue {
+	my ($serialseq,$subscriptionid) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("delete from serial where serialseq= ? and subscriptionid= ? ");
+	$sth->execute($serialseq,$subscriptionid);
 }
 
 sub Get_Next_Date(@) {
