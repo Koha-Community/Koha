@@ -14,10 +14,11 @@ use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 my ( $input_marc_file, $number) = ('',0);
-my ($version,$confirm);
+my ($version,$confirm,$all);
 GetOptions(
     'h' => \$version,
     'c' => \$confirm,
+	'a' => \$all,
 );
 
 if ($version || ($confirm eq '')) {
@@ -25,6 +26,8 @@ if ($version || ($confirm eq '')) {
 Script that compare the datas in the DB and the setting of MARC structure 
 It show all fields/subfields that are in the MARC DB but NOT in any tab (= fields used but not visible) Usually, this means you made an error in your MARC editor. Sometimes, this is something normal.
 
+options
+\t-a : will show all subfields usages, not only subfields in tab ignore that are used.
 Enter $0 -c to run this script (the -c being here only to "confirm"
 EOF
 ;#
@@ -37,12 +40,19 @@ my $sth = $dbh->prepare("SELECT count(*), tag, subfieldcode, frameworkcode FROM 
 $sth->execute;
 my %tags;
 my $sth2 = $dbh->prepare("select tab,liblibrarian,kohafield from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+if ($all) {
+	print "framework|tag|subfield|value|used|tab\n";
+}
 while (my ($total,$tag,$subfield,$frameworkcode) = $sth->fetchrow) {
 	$sth2->execute($tag,$subfield,$frameworkcode);
 	$tags{$frameworkcode." / ".$tag." / ".$subfield} ++;
 	my ($tab,$liblibrarian,$kohafield) = $sth2->fetchrow;
-	if ($tab eq -1 && $kohafield ne "biblio.biblionumber" && $kohafield ne "biblioitems.biblioitemnumber" && $kohafield ne "items.itemnumber") {
-		print "Tab ignore for framework $frameworkcode, $tag\$$subfield - $liblibrarian (used $total times)\n";
+	if ($all) {
+		print $frameworkcode."|".$tag.'|$'.$subfield."|".$liblibrarian."|".$total."|".$tab."\n";
+	} else {
+		if ($tab eq -1 && $kohafield ne "biblio.biblionumber" && $kohafield ne "biblioitems.biblioitemnumber" && $kohafield ne "items.itemnumber") {
+			print "Tab ignore for framework $frameworkcode, $tag\$$subfield - $liblibrarian (used $total times)\n";
+		}
 	}
 }
 
