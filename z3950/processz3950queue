@@ -280,14 +280,7 @@ while (1) {
 									my $scantimerstart=time();
 									for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
 										my $rec=$rs->record($i);
- 										my $marcdata;
-										# use render() or rawdata() depending on the type of the returned record
-										if (ref($rec) eq "Net::Z3950::Record::USMARC") {
-											$marcdata = $rec->rawdata();
-										}
-										if (ref($rec) eq "Net::Z3950::Record::UNIMARC") {
-											$marcdata = $rec->rawdata();
-										}
+ 										my $marcdata = $rec->rawdata();
 										$globalencoding = ref($rec);
  										$result.=$marcdata;
 									}
