@@ -30,7 +30,7 @@
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
 				<th class="acquisition doNotPrint">Order</th>
-				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition doNotPrint">[order]</a></th>
+				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[order]</a></th>
 				<th class="acquisition">Title</th>
 				<th class="acquisition">rrp</th>
 				<th class="acquisition doNotPrint">est</th>
@@ -52,12 +52,11 @@
 					<td class="doNotPrint"><!-- TMPL_VAR NAME="ordernumber" --></td>
 					<td><!-- TMPL_VAR NAME="publishercode" --></td>
 					<!-- TMPL_IF name="closedate" -->
-						<td><p>
+						<td>
 							<b><!-- TMPL_VAR NAME="title" --></b><br/>
 								<!-- TMPL_VAR NAME="author" -->
 								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
-								<!-- TMPL_IF name="notes" --></p><p><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
-							</p>
+								<!-- TMPL_IF name="notes" --><p class="doNotPrint"><i><!--TMPL_VAR name="notes" --></i></p><!-- /TMPL_IF -->
 						</td>
 					<!-- TMPL_ELSE -->
 						<td>
