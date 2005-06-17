@@ -49,23 +49,71 @@ use HTML::Template;
 use C4::Context;
 
 
+my %tabsysprefs;
+$tabsysprefs{acquisitions}="Acquisitions";
+$tabsysprefs{gist}="Acquisitions";
+$tabsysprefs{authoritysep}="Authorities";
+$tabsysprefs{ISBD}="Catalogue";
+$tabsysprefs{marc}="Catalogue";
+$tabsysprefs{marcflavour}="Catalogue";
+$tabsysprefs{SubscriptionHistory}="Catalogue";
+$tabsysprefs{maxoutstanding}="Circulation";
+$tabsysprefs{printcirculationslips}="Circulation";
+$tabsysprefs{suggestion}="Circulation";
+$tabsysprefs{automembernum}="Members";
+$tabsysprefs{noissuescharge}="Circulation";
+$tabsysprefs{opacthemes}="OPAC";
+$tabsysprefs{opaclanguages}="OPAC";
+$tabsysprefs{LibraryName}="OPAC";
+$tabsysprefs{opacstylesheet}="OPAC";
+$tabsysprefs{BiblioDefaultView}="OPAC";
+$tabsysprefs{hidelostitem}="OPAC";
+$tabsysprefs{KohaAdmin}="Admin";
+$tabsysprefs{checkdigit}="Admin";
+$tabsysprefs{dateformat}="Admin";
+$tabsysprefs{insecure}="Admin";
+$tabsysprefs{ldapinfos}="Admin";
+$tabsysprefs{ldapserver}="Admin";
+
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
-	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
-		push(@results,$data);
-		$cnt ++;
+	if ($type){
+		foreach my $syspref (sort keys %tabsysprefs){
+			if ($tabsysprefs{$syspref} eq $type){
+				my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
+				$sth->execute($syspref);
+				while (my $data=$sth->fetchrow_hashref){
+					push(@results,$data);
+					$cnt ++;
+				}
+				$sth->finish;
+			}
+		}
+	}else {
+		my $strsth ="Select variable,value,explanation,type,options from systempreferences where variable not in (";  
+		foreach my $syspref (keys %tabsysprefs){
+			$strsth .= $dbh->quote($syspref).",";
+		}
+		$strsth =~ s/,$/) /;
+		$strsth .= " order by variable";
+		warn $strsth;
+		my $sth=$dbh->prepare($strsth);
+		$sth->execute();
+		while (my $data=$sth->fetchrow_hashref){
+			push(@results,$data);
+			$cnt ++;
+		}
+		$sth->finish;
 	}
-	$sth->finish;
 	return ($cnt,\@results);
 }
+
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
@@ -278,19 +326,22 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
+	#Adding tab management for system preferences
+	my $tab=$input->param('tab');
+	
 	if  ($searchfield ne '') {
 		 $template->param(searchfield => "<p>You Searched for <strong>$searchfield</strong></p>");
 	}
 	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($env,$searchfield,$tab);
 	my $toggle=0;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 0){
+		if ($toggle eq 0){
 			$toggle=1;
-	  	} else {
+		} else {
 			$toggle=0;
-	  	}
+		}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{variable} = $results->[$i]{'variable'};
 		$row_data{value} = $results->[$i]{'value'};
