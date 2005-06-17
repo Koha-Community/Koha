@@ -105,7 +105,7 @@ if ($op eq "do_search") {
 		$listtags .= $tag .",";
 	}
 	$listtags =~s/,$/)/;
-	$strsth .= $listtags." and marc_word.tagsubfield=marc_subfield_table.tag+marc_subfield_table.subfieldcode group by subfieldvalue ";
+	$strsth .= $listtags." and marc_word.tagsubfield=concat(marc_subfield_table.tag,marc_subfield_table.subfieldcode) group by subfieldvalue ";
 # 	warn "search in biblio : ".$strsth;
 	my $value = uc($search[0]);
 	$value=~s/\*/%/g;
