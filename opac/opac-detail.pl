@@ -29,7 +29,6 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
@@ -66,11 +65,26 @@ my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 
+#coping with subscriptions
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
+my @subs;
+foreach my $subscription (@subscriptions){
+	warn "subsid :".$subscription->{subscriptionid};
+	my %cell;
+	$cell{subscriptionid}= $subscription->{subscriptionid};
+	$cell{subscriptionnotes}= $subscription->{notes};
+	#get the three latest serials.
+	$cell{latestserials}=getlatestserials($subscription->{subscriptionid},3);
+	push @subs, \%cell;
+}
+
 $template->param(BIBLIO_RESULTS => $resultsarray,
 				ITEM_RESULTS => $itemsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
 				subscriptionsnumber => $subscriptionsnumber,
+				subscriptions => \@subs,
 			     LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
@@ -107,5 +121,5 @@ $template->param( REVIEWS => \@reviews );
 =cut
 output_html_with_http_headers $query, $cookie, $template->output;
 
-output_html_with_http_headers $query, $cookie, $template->output;
+#output_html_with_http_headers $query, $cookie, $template->output;
 

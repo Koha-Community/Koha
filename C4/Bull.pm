@@ -50,7 +50,7 @@ Give all XYZ functions
 			&getserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
 			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
-			&getSupplierListWithLateIssues &GetLateIssues &serialdelete);
+			&getSupplierListWithLateIssues &GetLateIssues &serialdelete &getlatestserials);
 
 sub getSupplierListWithLateIssues {
 	my $dbh = C4::Context->dbh;
@@ -287,6 +287,21 @@ sub getserials {
 	my ($totalissues) = $sth->fetchrow;
 	return ($totalissues,@serials);
 }
+sub getlatestserials{
+	my ($subscriptionid,$limit) =@_;
+	my $dbh = C4::Context->dbh;
+	# status = 2 is "arrived"
+	my $strsth="select serialid,serialseq, status, planneddate from serial where subscriptionid = ? and (status =2 or status=4) order by planneddate DESC LIMIT 0,$limit";
+	my $sth=$dbh->prepare($strsth);
+	$sth->execute($subscriptionid);
+	my @serials;
+	while(my $line = $sth->fetchrow_hashref) {
+		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
+		$line->{"planneddate"} = format_date($line->{"planneddate"});
+		push @serials,$line;
+	}
+	return \@serials;
+}
 
 sub serialdelete {
 	my ($serialid,$serialseq)=@_;
@@ -316,7 +331,7 @@ sub serialchangestatus {
 	my ($subscriptionid,$oldstatus) = $sth->fetchrow;
 	# change status & update subscriptionhistory
 	if ($status eq 6){
-		delissue($serialseq, $subscriptionid) 
+		delissue($serialseq, $subscriptionid); 
 	}else{
 		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=? where serialid = ?");
 		$sth->execute($serialseq,$planneddate,$status,$serialid);

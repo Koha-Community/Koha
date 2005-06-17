@@ -157,12 +157,45 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 	<!-- TMPL_IF name="subscriptionsnumber" -->
-		<p>
-			This is a serial subscription (we have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions). You can see which 
-				<a href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue" title="Serial issues">
-					Issues
-				</a> we have and don't have
-		</p>
+		<div id="bloc25">
+		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<b class="catalogue"> Subscription #<!--TMPL_VAR Name="subscriptionid"--> </b>
+				<p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+				<!--TMPL_IF Name="latestserials"-->
+				<p> Here comes a list of the three latest issues related to this subscription :</p>
+				<table>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Waited
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Arrived
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Late
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Missing
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Not Issued
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p> For more information : You can see <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues"> for Issues</a> we have and don't have</p>
+		</div>
 	<!-- /TMPL_IF -->
 	</div>
 </div>
