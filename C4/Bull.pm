@@ -405,6 +405,17 @@ sub newissue {
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
 	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status, $planneddate);
+	$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+	$sth->execute($subscriptionid);
+	my ($missinglist,$recievedlist) = $sth->fetchrow;
+	if ($status eq 2) {
+		$recievedlist .= ",$serialseq";
+	}
+	if ($status eq 4) {
+		$missinglist .= ",$serialseq";
+	}
+	$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
+	$sth->execute($recievedlist,$missinglist,$subscriptionid);
 }
 
 sub Get_Next_Date(@) {
