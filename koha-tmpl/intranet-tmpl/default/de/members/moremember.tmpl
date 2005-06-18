@@ -9,7 +9,7 @@
 		<label class="label100">Anschrift </label><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
 		<!-- TMPL_UNLESS name="I" --><label class="label100">Zweitanschrift: </label><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
 		<label class="label100">Tel.: </label><!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
-		<label class="label100">Phone daytime: </label><!-- TMPL_VAR NAME="phoneday" --><br>
+		<label class="label100">Tel. tags&uuml;ber: </label><!-- TMPL_VAR NAME="phoneday" --><br>
 		<label class="label100">Fax: </label><!-- TMPL_VAR NAME="faxnumber" --><br>
 		<label class="label100">E-mail: </label><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
 		<label class="label100">Mitteilungstext: </label><!-- TMPL_VAR NAME="textmessaging" --><br>
@@ -28,16 +28,16 @@
 			<label class="label100">Geschlecht: </label><!-- TMPL_VAR NAME="sex" --><br>
 		<!-- /TMPL_UNLESS -->
 		<label class="label100">Kontakt: </label><!-- TMPL_VAR NAME="contactname" --><br>
-		<label class="label100">Phone: </label><!-- TMPL_VAR NAME="altphone" --><br>
+		<label class="label100">Tel: </label><!-- TMPL_VAR NAME="altphone" --><br>
 		<!-- TMPL_UNLESS name="I" -->
-			<label class="label100">Relationship: </label><!-- TMPL_VAR NAME="altrelationship" --><br>
+			<label class="label100">Bezug: </label><!-- TMPL_VAR NAME="altrelationship" --><br>
 		<!-- /TMPL_UNLESS -->
 		<label class="label100">Bemerkung: </label><!-- TMPL_VAR NAME="altnotes" -->
 		<!-- TMPL_IF NAME="sort1" -->
-			<p><label class="label100">Sort field 1 : </label><!-- TMPL_VAR NAME="sort1" --></p>
+			<p><label class="label100">Sortierung 1 : </label><!-- TMPL_VAR NAME="sort1" --></p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="sort2" -->
-			<p><label class="label100">Sort field 2 : </label><!-- TMPL_VAR NAME="sort2" --></p>
+			<p><label class="label100">Sortierung 2 : </label><!-- TMPL_VAR NAME="sort2" --></p>
 		<!-- /TMPL_IF -->
 		</p>
 		<p>
@@ -80,11 +80,11 @@
 	</div>
 	
 <!-- TMPL_IF NAME="flagged" -->	<div class="bloc25">
-		<h2 class="members">Member Flags</h2>
+		<h2 class="members">Benutzer-Flags</h2>
 		<ul>
-		<!-- TMPL_IF NAME="debarred" --><li>Member is debarred.</li><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="gonenoaddress" --><li>Member's address is in doubt.</li><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="lost" --><li>Member's card has been reported lost.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="debarred" --><li>Benutzer ist gesperrt.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gonenoaddress" --><li>Benutzeradresse zweifelhaft.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="lost" --><li>Benutzerausweis als verloren gemeldet.</li><!-- /TMPL_IF -->
 		</ul>
 	</div><!-- /TMPL_IF -->
 
