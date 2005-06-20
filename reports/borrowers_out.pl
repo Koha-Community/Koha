@@ -159,7 +159,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=6;$i++) {
+	for (my $i=0;$i<=2;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			if (($i==1) and (@$filters[$i-1])) {
@@ -167,6 +167,7 @@ sub calculate {
 			}
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Bor Cat" if ($i==0);
+			$cell{crit} .="Without issues since" if ($i==1);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -228,13 +229,26 @@ sub calculate {
 # preparing calculation
 	my $strcalc ;
 	
-# Processing average loanperiods
+# Processing calculation
 	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM borrowers LEFT JOIN issues ON  issues.borrowernumber=borrowers.borrowernumber WHERE issues.borrowernumber is null";
+	$strcalc .= " FROM borrowers ";
+	$strcalc .= "WHERE 1 ";
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-	
+	if (@$filters[1]){
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp>?");
+		$queryfilter->execute(@$filters[1]);
+		while (my ($bornum)=$queryfilter->fetchrow){
+			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+		}
+	} else {
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
+		$queryfilter->execute;
+		while (my ($bornum)=$queryfilter->fetchrow){
+			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+		}
+	}
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
 	$strcalc .= " order by $colfield " if ($colfield);

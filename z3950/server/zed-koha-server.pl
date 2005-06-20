@@ -57,7 +57,7 @@ use MARC::Record;
 use C4::Context;
 use C4::Biblio;
 use strict;
-my $dbh = C4::Context->dbh;
+# my $dbh = C4::Context->dbh;
 my @bib_list;		## Stores the list of biblionumbers in a query 
 			## I should eventually move this to different scope
 
@@ -85,6 +85,7 @@ sub init_handler {
 
 sub run_query {		## Run the query and store the biblionumbers: 
 	my ($sql_query, $query, $args) = @_;
+		my $dbh = C4::Context->dbh;
        	my $sth_get = $dbh->prepare("$sql_query");
 
        	## Send the query to the database:
@@ -144,7 +145,7 @@ sub search_handler {
 		print "$term\n";        
 		print "The query was:\n";        
 		print "$query\n";
-		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.isbn LIKE ?";
+		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblioitems ON marc_biblio.biblionumber = biblioitems.biblionumber WHERE biblioitems.isbn LIKE ?";
 		&run_query($sql_query, $query, $args);
 
 	} 
@@ -268,126 +269,20 @@ sub fetch_handler {
         my $offset = $args->{OFFSET};
         $offset -= 1;                   ## because $args->{OFFSET} 1 = record #1
         chomp (my $bibid = $bib_list[$offset]); ## Not sure about this
-                ## print "the bibid is:$bibid\n";
-                my $MARCRecord = &MARCgetbiblio($dbh,$bibid);
-                my $recordstring=$MARCRecord->as_usmarc();
-                ## print "here is my record: $recordstring\n";
-
-		## Troubleshooting:
-		## use Data::Dumper;
-		## Dumper $recordstring;
-		## open (MARC, ">/root/marc.dump");
-                ## print MARC "$recordstring";
-		## close MARC;
-		
-		## Convert from 852/4 to 952:
-		## 942a --> 852a  Organization code
-		## 952b --> 852b  Home branch
-		## 942k --> 852h  Classification
-		## 952p --> 852p  Barcode
-
-my $record = MARC::Record->new_from_usmarc($recordstring);
-    my @fields942 = $record->field('942');
-    my $field842 = $fields942[0];
-	my ($field952, $sub852a, $sub852k, $sub852b, $sub852p, $sub852h);
-       
-
-## while ( my $record = $batch->next() ) {
-  ##  my @fields942 = $record->field('942');
-  ##  my $field842 = $fields942[0];
-  ##     #grab first 942 (only need one, they are same for all items)
-  ##  my $sub852a = ($field842->subfield('a') || '');
-  ##  my $sub852h = ($field842->subfield('k') || '');
-
-  ##  my @fields952 = $record->field('952');
-  ##  foreach my $field952 (@fields952) {   #get all 952s
-  ##      my $sub852b = ($field952->subfield('b') || '');
-  ##      my $sub852p = ($field952->subfield('p') || '');
-
-
-#grab first 942 (only need one, they are same for all items)
-	unless (! $field952){
-		$sub852a = ($field952->subfield('a') || '') ;
-}
-	unless (! $field952){ #->subfield('k')) { 
-		$sub852k = ($field952->subfield('k') || '') ;
-
-}
-
-    my @fields952 = $record->field('952');
-    foreach my $field952 (@fields952) {   #get all 952s
-        
-        unless (! $field952) { #->subfield('b')) { 
-		$sub852b = ($field952->subfield('b') || '') ;
-} 
- unless (! $field952) { #->subfield('p')) { 
-		$sub852p = ($field952->subfield('p') || '') ;
-}
-     #make it one big happy family
-        my $new852 = MARC::Field->new(
-                                      852,'','',
-                                      'a' => $sub852a,
-				      'b' => $sub852b,
-                                      'h' => $sub852h,
-                                      'p' => $sub852p,
-                                      );
-        $record->append_fields($new852);
-
-}
-
-my $recordstringdone = $record->as_usmarc();
-
+				## print "the bibid is:$bibid\n";
+				my $dbh = C4::Context->dbh;
+				my $MARCRecord = &MARCgetbiblio($dbh,$bibid);
+				$MARCRecord->leader('     nac  22     1u 4500');
 		## Set the REP_FORM
-		$args->{REP_FORM} = &Net::Z3950::OID::usmarc;
+		$args->{REP_FORM} = &Net::Z3950::OID::unimarc;
 		
 		## Return the record string to the client 
-	        $args->{RECORD} = $recordstringdone;
+			$args->{RECORD} = $MARCRecord->as_usmarc();
+# 	        $args->{RECORD} = $recordstringdone;
 
 }
 
-# That's all folks!
-# 
-# OLD OLD OLD OLD
 
-sub fetch_handler_old {
-	my ($args) = @_;	
-	# warn "in fetch_handler";	## troubleshooting
-	my $offset = $args->{OFFSET};
-	$offset -= 1;			## because $args->{OFFSET} 1 = record #1
-	chomp (my $bibid = $bib_list[$offset]);	## Not sure about this
-        my $sql_query = "SELECT tag, subfieldcode, subfieldvalue FROM marc_subfield_table where bibid=?";
-	my $sth_get = $dbh->prepare("$sql_query");
-        $sth_get->execute($bibid);
-	
-	## create a MARC::Record object 
-        my $rec = MARC::Record->new();
-
-	## create the fields
-        while (my @data=$sth_get->fetchrow_array) {
-
-        	my $tag = $data[0];
-       		my $subfieldcode = $data[1];
-        	my $subfieldvalue = $data[2];
-
-        	my $field = MARC::Field->new(
-                	                          $tag,'','',
-                        	                  $subfieldcode => $subfieldvalue,
-                                	    );
-
- 	       	$rec->append_fields($field);
-		
-		## build the marc string and put into $record         
-        	my $tmp_record = $rec->as_usmarc();
-		my $reclen = length $tmp_record;
-		my $baseaddr = "$reclen + dirlen";
-#		set_leader_lengths($reclen,$baseaddr);
-		my $record = $rec->as_usmarc(); 	
-		$args->{RECORD} = $record;
-	}
-
-}
-
-	
 ## This stuff doesn't work yet...I should include boolean searching someday
 ## though
 package Net::Z3950::RPN::Term;

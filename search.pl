@@ -19,6 +19,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.36  2005/06/20 14:39:11  tipaul
+# synch'ing 2.2 and head
+#
+# Revision 1.35.2.1  2005/05/27 10:02:50  hdl
+# Bug Fixing : Using old search.pl with subjectitems In normal mode display.
+# Problem : Changing Page doesn't work.
+#
 # Revision 1.35  2004/04/07 22:43:04  rangi
 # Fix for bug 217
 #
@@ -99,7 +106,7 @@ my @forminputs;			# This is used in the form template.
 
 foreach my $term (qw(keyword subject author illustrator itemnumber
 		     isbn date-before class dewey branch title abstract
-		     publisher ttype))
+		     publisher ttype subjectitems))
 {
 	my $value = $query->param($term);
 	next unless defined $value && $value ne "";

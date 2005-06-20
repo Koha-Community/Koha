@@ -29,6 +29,7 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
@@ -84,7 +85,6 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
 				subscriptionsnumber => $subscriptionsnumber,
-				subscriptions => \@subs,
 			     LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
@@ -122,4 +122,6 @@ $template->param( REVIEWS => \@reviews );
 output_html_with_http_headers $query, $cookie, $template->output;
 
 #output_html_with_http_headers $query, $cookie, $template->output;
+
+output_html_with_http_headers $query, $cookie, $template->output;
 

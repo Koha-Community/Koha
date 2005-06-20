@@ -8,7 +8,7 @@ use C4::Context;
 use CGI;
 use C4::Database;
 use HTML::Template;
-use C4::SearchMarc;
+use C4::SearchMarcTest;
 use C4::Acquisition;
 use C4::Biblio;
 my @spsuggest; # the array for holding suggestions
@@ -411,7 +411,7 @@ $template->param( phraseorterm => $phraseorterm );
 	);
 }
 # ADDED BY JF
-if ($totalresults == 1){
+#if ($totalresults == 1){
     # if its a barcode search by definition we will only have one result.
     # And if we have a result
     # lets jump straight to the detail.pl page

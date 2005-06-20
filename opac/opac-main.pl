@@ -52,5 +52,6 @@ $template->param(CGIitemtype => $CGIitemtype,
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				languages => \@options,
 				textmessaging => $borrower->{textmessaging},
+				opaclargeimage => C4::Context->preference("opaclargeimage"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

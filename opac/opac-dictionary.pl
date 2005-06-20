@@ -63,7 +63,7 @@ my $op=$input->param('op');
 if (($search[0]) and not ($op eq 'do_search')){
 	$op='do_search';
 }
-my $script_name = 'search.marc/dictionary.pl';
+my $script_name = 'opac-dictionary.pl';
 my $query;
 my $type=$input->param('type');
 #warn " ".$type;
@@ -157,11 +157,10 @@ if ($op eq "do_search") {
 	# OK, filling the template with authorities & biblio entries found.
 	#
 	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "search.marc/dictionary.tmpl",
+		= get_template_and_user({template_name => "opac-dictionary.tmpl",
 				query => $input,
-				type => $type,
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				type => 'opac',
+				authnotrequired => 1,
 				debug => 1,
 				});
 
@@ -229,11 +228,10 @@ if ($op eq "do_search") {
 
  } else {
  	($template, $loggedinuser, $cookie)
- 		= get_template_and_user({template_name => "search.marc/dictionary.tmpl",
+ 		= get_template_and_user({template_name => "opac-dictionary.tmpl",
  				query => $input,
- 				type => $type,
-				authnotrequired => 0,
- 				flagsrequired => {catalogue => 1},
+ 				type => 'opac',
+				authnotrequired => 1,
  				debug => 1,
  				});
 #warn "type : $type";

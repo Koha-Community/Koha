@@ -29,7 +29,7 @@ sub gethelptemplate {
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, "intranet");
 	unless (-e "$htdocs/$theme/$lang/$tmplbase") {
 		$tmplbase="help/nohelp.tmpl";
-		my ($theme, $lang) = themelanguage($htdocs, $tmplbase, "intranet");
+		($theme, $lang) = themelanguage($htdocs, $tmplbase, "intranet");
 	}
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
