@@ -124,73 +124,29 @@ my $dbh = C4::Context->dbh;
 		push @field_data, { term => "value", val=>$value[$i] };
 	}
 
-    if ( $count < ( $offset + $num ) ) {
-        $total = $count;
-    }
-    else {
-        $total = $offset + $num;
-    }    # else
+	my @numbers = ();
 
-    my @loop_data = ();
-    my $toggle;
-    for ( my $i = $offset ; $i < $total ; $i++ ) {
-        if ( $i % 2 ) {
-            $toggle = 0;
-        } else {
-            $toggle = 1;
-        }
-        my %row_data;    # get a fresh hash for the row data
-        $row_data{toggle}        = $toggle;
-        $row_data{biblionumber}  = $results[$i]->{'biblionumber'};
-        $row_data{title}         = $results[$i]->{'title'};
-        $row_data{author}        = $results[$i]->{'author'};
-        $row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
-		$row_data{classification} = $results[$i]->{'classification'};
-        $row_data{NOTMARC}       = !$marc_p;	
-        push ( @loop_data, \%row_data );
-    }
-    $template->param( startfrom => $offset + 1 );
-    ( $offset + $num <= $count )
-      ? ( $template->param( endat => $offset + $num ) )
-      : ( $template->param( endat => $count ) );
-    $template->param( numrecords => $count );
-    my $nextstartfrom = ( $offset + $num < $count ) ? ( $offset + $num ) : (-1);
-    my $prevstartfrom = ( $offset - $num >= 0 ) ? ( $offset - $num ) : (-1);
-    $template->param( nextstartfrom => $nextstartfrom );
-    my $displaynext = 1;
-    my $displayprev = 0;
-    ( $nextstartfrom == -1 ) ? ( $displaynext = 0 ) : ( $displaynext = 1 );
-    ( $prevstartfrom == -1 ) ? ( $displayprev = 0 ) : ( $displayprev = 1 );
-    $template->param( displaynext => $displaynext );
-    $template->param( displayprev => $displayprev );
-    my @numbers = ();
-    my $term;
-    my $value;
+	if ($total>$resultsperpage) {
+		for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
+			if ($i<16) {
+	    		my $highlight=0;
+	    		($startfrom==($i-1)) && ($highlight=1);
+	    		push @numbers, { number => $i,
+					highlight => $highlight ,
+					searchdata=> \@field_data,
+					startfrom => ($i-1)};
+			}
+    	}
+	}
+	my $from = $startfrom*$resultsperpage+1;
+	my $to;
 
-    if ($isbn) {
-        $term  = "isbn";
-        $value = $isbn;
-    }
-    else {
-        $term  = "title";
-        $value = $title;
-    }
-    if ( $count > 10 ) {
-        for ( my $i = 1 ; $i < $count / 10 + 1 ; $i++ ) {
-            if ( $i < 16 ) {
-                my $highlight = 0;
-                ( $offset == ( $i - 1 ) * 10 ) && ( $highlight = 1 );
-                push @numbers,
-                  {
-                    number    => $i,
-                    highlight => $highlight,
-                    term      => $term,
-                    value     => $value,
-                    startfrom => ( $i - 1 ) * 10
-                };
-            }
-        }
-    }
+	if($total < (($startfrom+1)*$resultsperpage))
+	{
+		$to = $total;
+	} else {
+		$to = (($startfrom+1)*$resultsperpage);
+	}
 
     # fill with books in breeding farm
 	my $toggle=0;

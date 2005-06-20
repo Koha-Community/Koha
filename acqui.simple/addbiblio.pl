@@ -185,7 +185,7 @@ sub create_input () {
 		unless (opendir(DIR, "$cgidir")) {
 			$cgidir = C4::Context->intranetdir."/value_builder";
 		} 
-		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'}; 
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
@@ -340,14 +340,17 @@ my $op = $input->param('op');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 my $bibid;
+
+
 if ($oldbiblionumber) {
 	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
 	# find framework type
-	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if ($bibid and not ($frameworkcode));
 }else {
 	$bibid = $input->param('bibid');
-	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if ($bibid and not ($frameworkcode));
 }
+$frameworkcode='' if ($frameworkcode eq 'Default');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
 			     query => $input,
@@ -356,6 +359,29 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
+
+#Getting the list of all frameworks
+my $queryfwk =$dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
+$queryfwk->execute;
+my %select_fwk;
+my @select_fwk;
+my $curfwk;
+push @select_fwk,"Default";
+$select_fwk{"Default"} = "Default";
+while (my ($description, $fwk) =$queryfwk->fetchrow) {
+	push @select_fwk, $fwk;
+	$select_fwk{$fwk} = $description;
+}
+$curfwk=$frameworkcode;
+my $framework=CGI::scrolling_list( -name     => 'Frameworks',
+			-id => 'Frameworks',
+			-default => $curfwk,
+			-OnChange => 'Changefwk(this);',
+			-values   => \@select_fwk,
+			-labels   => \%select_fwk,
+			-size     => 1,
+			-multiple => 0 );
+$template->param( framework => $framework);
 
 $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;
@@ -400,6 +426,7 @@ if ($op eq "addbiblio") {
 		my $oldbibnum;
 		my $oldbibitemnum;
 		if ($is_a_modif) {
+			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
 		} else {
 			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
@@ -434,41 +461,14 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	splice(@tags,$addedfield,0,$tags[$addedfield]);
-	splice(@subfields,$addedfield,0,$subfields[$addedfield]);
-	splice(@values,$addedfield,0,$values[$addedfield]);
-	splice(@ind_tag,$addedfield,0,$ind_tag[$addedfield]);
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-# search the part of the array to duplicate.
-	my $start=0;
-	my $end=0;
-	my $started;
-	for (my $i=$#tags;$i>0;$i--) {
-		$end=$i if ($end eq 0 && $tags[$i] == $addedfield);
-		$start=$i if ($end>0 && $tags[$i] eq $addedfield);
-		last if ($end>0 && $tags[$i] ne $addedfield);
-	}
-	# add an empty line in all arrays. This forces a new field in MARC::Record.
-	splice(@tags,$end+1,0,'');
-	splice(@subfields,$end+1,0,'');
-	splice(@values,$end+1,0,'');
-	splice(@ind_tag,$end+1,0,'');
-	splice(@indicator,$end+1,0,'');
-# then duplicate the field.
-	splice(@tags,$end+2,0,@tags[$start..$end]);
-	splice(@subfields,$end+2,0,@subfields[$start..$end]);
-	splice(@values,$end+2,0,@values[$start..$end]);
-	splice(@ind_tag,$end+2,0,@ind_tag[$start..$end]);
-	splice(@indicator,$end+2,0,@indicator[$start..$end]);
-
 	my %indicators;
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	# adding an empty field
+	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
+	$record->append_fields($field);
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
@@ -495,7 +495,7 @@ if ($op eq "addbiblio") {
 		$bibid = "";
 		$oldbiblionumber= "";
 	}
-
+ 
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
