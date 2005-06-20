@@ -23,7 +23,9 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 my $order_loop= &histsearch($title,$author,$name);
-$template->param(suggestions_loop => $order_loop,
+
+$template->param(numresults => scalar(@$order_loop),
+				suggestions_loop => $order_loop,
 				title => $title,
 				author => $author,
 				name => $name,
