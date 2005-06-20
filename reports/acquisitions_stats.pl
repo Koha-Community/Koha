@@ -271,27 +271,35 @@ sub calculate {
 #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
                                               
 # 1st, loop rows.                             
-	my $linefield;                               
+	my $linefield;
+	my $lineorder;                               
 	if (($line =~/closedate/) and ($podsp == 1)) {
 		#Display by day
-		$linefield .="dayname($line)";  
+		$linefield .="dayname($line)";
+		$lineorder .="weekday($line)";  
 	} elsif (($line=~/closedate/) and ($podsp == 2)) {
 		#Display by Month
 		$linefield .="monthname($line)";  
+		$lineorder .="month($line)";  
 	} elsif (($line=~/closedate/) and ($podsp == 3)) {
 		#Display by Year
 		$linefield .="Year($line)";
+		$lineorder .="Year($line)";
 	} elsif (($line =~/received/) and ($rodsp == 1)) {
 		#Display by day
 		$linefield .="dayname($line)";  
+		$lineorder .="weekday($line)";  
 	} elsif (($line=~/received/) and ($rodsp == 2)) {
 		#Display by Month
 		$linefield .="monthname($line)";  
+		$lineorder .="month($line)";  
 	} elsif (($line=~/received/) and ($rodsp == 3)) {
 		#Display by Year
 		$linefield .="Year($line)";
+		$lineorder .="Year($line)";
 	} else {
 		$linefield .= $line;
+		$lineorder .= $line;
 	}  
 	
  	my $strsth;
@@ -312,7 +320,7 @@ sub calculate {
  		}
  	}
 	$strsth .=" group by $linefield";
-	$strsth .=" order by $linefield";
+	$strsth .=" order by $lineorder";
 	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
@@ -337,26 +345,34 @@ sub calculate {
 
 # 2nd, loop cols.
 	my $colfield;
+	my $colorder;
 	if (($column =~/closedate/) and ($podsp == 1)) {
 		#Display by day
 		$colfield .="dayname($column)";  
+		$colorder .="weekday($column)";  
 	} elsif (($column=~/closedate/) and ($podsp == 2)) {
 		#Display by Month
 		$colfield .="monthname($column)";  
+		$colorder .="month($column)";  
 	} elsif (($column=~/closedate/) and ($podsp == 3)) {
 		#Display by Year
 		$colfield .="Year($column)";
+		$colorder .="Year($column)";
 	} elsif (($column =~/received/) and ($rodsp == 1)) {
 		#Display by day
 		$colfield .="dayname($column)";  
+		$colorder .="weekday($column)";  
 	} elsif (($column=~/received/) and ($rodsp == 2)) {
 		#Display by Month
 		$colfield .="monthname($column)";  
+		$colorder .="month($column)";  
 	} elsif (($column=~/received/) and ($rodsp == 3)) {
 		#Display by Year
 		$colfield .="Year($column)";
+		$colorder .="Year($column)";
 	} else {
 		$colfield .= $column;
+		$colorder .= $column;
 	}  
 	
  	my $strsth2;
@@ -377,12 +393,12 @@ sub calculate {
  		}
  	}
 	$strsth2 .=" group by $colfield";
-	$strsth2 .=" order by $colfield";
+	$strsth2 .=" order by $colorder";
  	warn "". $strsth2;
 	
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if (( @colfilter ) and ($colfilter[1])){
-		warn "from : ".$colfilter[0]." To  :".$colfilter[1];
+#		warn "from : ".$colfilter[0]." To  :".$colfilter[1];
 		$sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
 	} elsif ($colfilter[0]) {
 		$sth2->execute($colfilter[0]);
@@ -438,7 +454,7 @@ sub calculate {
 	$strcalc .= " AND aqorders.sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
 	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
 	$strcalc .= " AND aqorders.sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
-	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
+	$strcalc .= " group by $linefield, $colfield order by $lineorder,$colorder";
 	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
