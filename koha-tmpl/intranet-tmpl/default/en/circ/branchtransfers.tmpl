@@ -1,22 +1,16 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 <div id="mainbloc">
-<div class="bloc25">
-<a class="button" href="circulation.pl">
-Next Borrower</a>
-<a class="button" href="returns.pl">
-Returns</a>
-</div>
 
-<h1>Circulation: Transfers</h1>
+<h1 class="circulation">Circulation: Transfers</h1>
 <b>Branch:</b> <!-- TMPL_VAR NAME="genbrname" --> &nbsp;
 <b>Printer:</b> <!-- TMPL_VAR NAME="genprname" -->
-<a href="selectbranchprinter.pl" class="button">Change Settings</a>
+<a href="selectbranchprinter.pl" class="button circulation">Change Settings</a>
 <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
 <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
 
 <!-- TMPL_IF Name="found" -->
 	<table>
-	<tr><th>Reserve Found</th></tr>
+	<tr><th class="circulation">Reserve Found</th></tr>
 	<tr><td>
 	<!-- TMPL_IF Name="reserved" -->
 			Reserved: reserve found for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
@@ -37,10 +31,10 @@ Returns</a>
 				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
 				<!-- TMPL_IF Name="waiting" --><input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 					<input type="hidden" name="request" value="KillWaiting">
-					<input type="submit" value="Cancel" class="button">
+					<input type="submit" value="Cancel" class="button circulation">
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="reserved" --><input type="hidden" name="request" value="SetWaiting">
-					<input type="submit" value="Waiting" class="button"><!-- /TMPL_IF -->
+					<input type="submit" value="Waiting" class="button circulation"><!-- /TMPL_IF -->
 			</form></p>
 
 		<!-- TMPL_IF Name="reserved" --><p>
@@ -57,7 +51,7 @@ Returns</a>
 			<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR NAME="tobranchcd" -->">
 			<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 			<input type="hidden" name="request" value="KillReserved">
-			<input type="submit" value="Cancel" class="button">
+			<input type="submit" value="Cancel" class="button circulation">
 			</form></p>
 		<!-- /TMPL_IF -->
 <p>
@@ -69,14 +63,14 @@ Returns</a>
 				<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
 				<input type="hidden" name="tb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="tobrcd" -->">
 			<!-- /TMPL_LOOP -->
-			<input type="submit" value="Ignore" class="button">
+			<input type="submit" value="Ignore" class="button circulation">
 			</form></p>
 
 	</td></tr></table>
 
 <!-- TMPL_ELSE -->
 	<table>
-	<tr><th>Messages</th></tr>
+	<tr><th class="circulation">Messages</th></tr>
 	<tr><td>
 	<!-- TMPL_IF Name="reqmessage" -->
 		<!-- TMPL_IF Name="cancelled" -->
@@ -124,8 +118,8 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 	<!-- TMPL_IF Name="transferred" -->
 		<p>
 		<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
-		<tr><th colspan="6">Transfered Items</th></tr>
-		<tr><th>Barcode</th><th>Title</th><th>Author</th><th>Type</th><th>From</th><th>To</th></tr>
+		<tr><th colspan="6" class="circulation">Transfered Items</th></tr>
+		<tr><th class="circulation">Barcode</th><th class="circulation">Title</th><th class="circulation">Author</th><th class="circulation">Type</th><th class="circulation">From</th><th class="circulation">To</th></tr>
 		<!-- TMPL_LOOP Name="trsfitemloop" -->
 			<tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->">
 			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
@@ -139,6 +133,12 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 		</table>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+<div class="bloc25">
+<a class="button circulation" href="circulation.pl">
+Next Borrower</a>
+<a class="button circulation" href="returns.pl">
+Returns</a>
+</div>
 
 </div>
 <!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->

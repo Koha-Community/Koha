@@ -128,12 +128,6 @@ if ($op eq 'add' or $op eq 'modify') {
 	} else {
 		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
 		}
-		
-	if($destination eq "circ"){
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
-	} else {
-		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");
-		}
 	}
 }
 if ($delete){
@@ -241,7 +235,7 @@ if ($delete){
 
 	$template->param(	actionType 		=> $actionType,
 				destination => $destination,
-				member          => $member,
+				borrowernumber          => $borrowernumber,
 				address         => $data->{'streetaddress'},
 				firstname       => $data->{'firstname'},
 				surname         => $data->{'surname'},
@@ -267,8 +261,8 @@ if ($delete){
 				flagloop	=> \@flagdata,
 				relshiploop	=> \@relshipdata,
 				"title_".$data->{'title'} => " SELECTED ",
-				dateenrolled	=> $data->{'dateenrolled'},
-				expiry		=> $data->{'expiry'},
+				joining	=> format_date($data->{'dateenrolled'}),
+				expiry		=> format_date($data->{'expiry'}),
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $data->{'dateofbirth'},
 				sort1 => $data->{'sort1'},

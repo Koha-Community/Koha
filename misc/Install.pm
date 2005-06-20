@@ -2,7 +2,7 @@ package Install; #assumes Install.pm
 
 
 # Copyright 2000-2002 Katipo Communications
-# Contains parts Copyright 2003-5 MJ Ray
+# Contains parts Copyright 2003-4 MJ Ray
 #
 # This file is part of Koha.
 #
@@ -859,8 +859,12 @@ sub checkperlmodules {
 	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
 	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
-	unless (eval {require PDF::API2})   { push @missing,"PDF::API2" };
 # The following modules are not mandatory, depends on how the library want to use Koha
+	unless (eval {require PDF::API2})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need PDF::API2 for barcode generator" 
+			}
+	}
 	unless (eval {require Net::LDAP})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Net::LDAP";
@@ -1951,9 +1955,9 @@ sub populatedatabase {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" '$database'");
-		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" '$database'");
-		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" '$database'");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
 
 		my $printername='lp';
 		my $printerqueue='/dev/lp0';
@@ -1972,7 +1976,7 @@ sub populatedatabase {
 			$printerqueue=~s/[^A-Za-z0-9]//g;
 		}
 		startsysout();	
-		system("$mysqldir/bin/mysql '-u$user' -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" '$database'");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
 	}
 	my $language;
 	if ($auto_install->{Language}) {
@@ -1982,7 +1986,7 @@ sub populatedatabase {
 		$language=showmessage(getmessage('Language'), 'free', 'en');
 	}
 	startsysout();	
-	system("$mysqldir/bin/mysql '-u$user' -e \"update systempreferences set value='$language' where variable='opaclanguages'\" '$database'");
+	system("$mysqldir/bin/mysql -u$user -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
 	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
 		# ask for directory to look for files to append
@@ -2153,7 +2157,7 @@ $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
 setmysqlclipass($pass); 
-open (MD, "$mysqldir/bin/mysqldump '--user=$user' --host=$hostname '$database'|");
+open (MD, "$mysqldir/bin/mysqldump --user=$user --host=$hostname $database|");
 
 (open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
 

@@ -1,12 +1,16 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 
+
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
-		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --></h1>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+	<form Name="f">
+		<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" --> 	<b>With Framework :<!--TMPL_VAR Name="framework" --></b>
+</h1>
+	</form>
+		<a href="javascript:Addbiblio('')" class="button catalogue">
 			Edit biblio
 		</a>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+		<a href="javascript:Addbiblio('duplicate')" class="button catalogue">
 			Duplicate
 		</a>
 		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
@@ -40,6 +44,8 @@
 		<!-- TMPL_ELSE -->
 			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
 		<!-- /TMPL_IF -->
+		
+
 	</div>
 <!-- /TMPL_UNLESS -->
 	<div class="tabs">
@@ -396,6 +402,14 @@ function confirm_deletion() {
 }
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+}
+function Addbiblio(op) {
+  var fwk = document.forms[0].Frameworks.options[document.forms[0].Frameworks.selectedIndex].value;
+  window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>
 </body>

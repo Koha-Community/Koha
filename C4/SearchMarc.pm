@@ -339,7 +339,7 @@ sub catalogsearch {
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice empty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblioitems.*,biblio.*, marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
 							FROM biblio, marc_biblio 
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
@@ -350,7 +350,12 @@ sub catalogsearch {
 	my $totalitems=0;
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
-	my $sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
+	my $sth_itemCN;
+	if (C4::Context->preference('hidelostitem')) {
+		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL)");
+	} else {
+		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
+	}
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {

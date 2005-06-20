@@ -24,19 +24,22 @@
 	var MSG_NO_RECORD_SELECTED = _("No biblio selected");
 	var MSG_NO_RECORD_ADDED = _("No biblio added");
 	function Dopop(link) {
-		newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+		newin=window.open(link,'popup','width=700,height=500,toolbar=false,scrollbars=yes');
 	}
 	</script>
 </head>
 <body>
 	<!-- MENUS -->
-	<div id="menuline">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo" style="float: left" />
+	<div id="title">
+		<!-- TMPL_IF name="opacsmallimage" -->
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="50" alt="koha logo"/>
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
+		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
-		<span class="spacer">&nbsp;</span>
-		<span class="spacer">&nbsp;</span>
+	</div>
+	<div id="menuline">
 		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Home</a>
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Advanced search</a>
 		<!-- TMPL_IF NAME="loggedinusername" -->
 			<!-- TMPL_IF name="virtualshelves" -->
@@ -46,9 +49,7 @@
 				<a href="opac-suggestions.pl" class="menu">View & manage suggestions</a>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Personal page</a>
-		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="javascript:openBasket()" title="Biblio basket">Biblio basket <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
 	</div>
 	<!-- MAIN BODY OF PAGE -->

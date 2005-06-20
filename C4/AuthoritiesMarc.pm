@@ -666,7 +666,9 @@ sub AUTHhtml2marc {
 			$indicators{@$rtags[$i]}.='  ';
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
+				undef $field;
 			} else {
+				undef $prevvalue;
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 			}
 			$prevtag = @$rtags[$i];
@@ -674,7 +676,7 @@ sub AUTHhtml2marc {
 			if (@$rtags[$i] <10) {
 				$prevvalue=@$rvalues[$i];
 			} else {
-				if (@$rvalues[$i]) {
+				if (length(@$rvalues[$i])>0) {
 					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
 				}
 			}
@@ -682,8 +684,7 @@ sub AUTHhtml2marc {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field);
-# 	warn $record->as_formatted;
+	$record->add_fields($field) if $field;
 	return $record;
 }
 
@@ -921,6 +922,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.19  2005/06/20 14:10:00  tipaul
+# synch'ing 2.2 and head
+#
 # Revision 1.18  2005/06/07 10:00:47  tipaul
 # adding $b to mainentry (in UNIMARC, for personal names, $a is the surname, $b is the firstname)
 #

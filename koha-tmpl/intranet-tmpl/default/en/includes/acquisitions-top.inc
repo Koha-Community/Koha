@@ -5,6 +5,16 @@
 <title>KOHA: INTRANET: Acquisitions</title>
 <link rel="stylesheet" type="text/css" media="print" href="<!-- TMPL_VAR name="themelang" -->/includes/common-print.css">
 <link rel="stylesheet" type="text/css" media="screen" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<!-- Additions for Calendar-system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js">
+</script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js">
+</script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js">
+</script>
+<!-- /Additions for Calendar-system -->
+
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script language="JavaScript" type="text/javascript">
 function Help() {

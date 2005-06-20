@@ -608,7 +608,7 @@ sub TooMany ($$){
 	# check the 3 parameters
 	$sth->execute($cat_borrower, $type, $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
-# 	warn "==>".$result->{maxissueqty};
+#	warn "==>".$result->{maxissueqty};
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -627,7 +627,8 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my ($alreadyissued) = $sth3->fetchrow;
+		warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
 		return ("c $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	#check for borrowertype=*
@@ -643,7 +644,7 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my $alreadyissued = $sth3->fetchrow;
 		return ("e $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
@@ -667,7 +668,7 @@ sub TooMany ($$){
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
-		my $alreadyissued = $sth2->fetchrow;
+		my $alreadyissued = $sth3->fetchrow;
 		return ("h $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	return;
@@ -697,6 +698,9 @@ sub canbookbeissued {
 	}
 	if ($borrower->{flags}->{'DBARRED'}) {
 		$issuingimpossible{DEBARRED} = 1;
+	}
+	if (&Date_Cmp(&ParseDate($borrower->{expiry}),&ParseDate("today"))<0) {
+		$issuingimpossible{EXPIRED} = 1;
 	}
 #
 # BORROWER STATUS
@@ -766,7 +770,7 @@ sub canbookbeissued {
 			my $branches = getbranches();
 			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 			$needsconfirmation{RESERVE_WAITING} = "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
-			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+			# CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'}); Doesn't belong in a checking subroutine.
 		} elsif ($restype eq "Reserved") {
 			# The item is on reserve for someone else.
 			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
@@ -841,7 +845,9 @@ sub issuebook {
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+                if ($cancelreserve){
+    				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+                }
 			} elsif ($restype eq "Reserved") {
 				warn "Reserved";
 				# The item is on reserve for someone else.
@@ -852,11 +858,11 @@ sub issuebook {
 					# cancel reserves on this item
 					CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 					# also cancel reserve on biblio related to this item
-					my $st_Fbiblio = $dbh->prepare("select biblionumber from items where itemnumber=?");
-					$st_Fbiblio->execute($res->{'itemnumber'});
-					my $biblionumber = $st_Fbiblio->fetchrow;
-					CancelReserve($biblionumber,0,$res->{'borrowernumber'});
-					warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
+					#my $st_Fbiblio = $dbh->prepare("select biblionumber from items where itemnumber=?");
+					#$st_Fbiblio->execute($res->{'itemnumber'});
+					#my $biblionumber = $st_Fbiblio->fetchrow;
+					#CancelReserve($biblionumber,0,$res->{'borrowernumber'});
+					#warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
 				} else {
 # 					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
 # 					transferbook($tobrcd,$barcode, 1);
@@ -1618,6 +1624,15 @@ sub renewstatus {
 			$renewokay = 1;
 		}
 		$sth2->finish;
+		my ($resfound, $resrec) = CheckReserves($itemno);
+		if ($resfound) {
+			$renewokay = 0;
+		}
+		my ($resfound, $resrec) = CheckReserves($itemno);
+                if ($resfound) {
+                        $renewokay = 0;
+                }
+
 	}
 	$sth1->finish;
 	return($renewokay);

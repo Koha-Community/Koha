@@ -137,7 +137,6 @@ sub get_template_and_user {
 		$bordat[0] = $borr;
 		$template->param(USER_INFO => \@bordat,
 		);
-		
 		# We are going to use the $flags returned by checkauth
 		# to create the template's parameters that will indicate
 		# which menus the user can access.
@@ -163,29 +162,36 @@ sub get_template_and_user {
 		if ($flags->{catalogue} == 1) {
 			$template->param(CAN_user_catalogue => 1); }
 		
+
 		if ($flags->{parameters} == 1) {
 			$template->param(CAN_user_parameters => 1);	
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
+
 		if ($flags->{borrowers} == 1) {
 			$template->param(CAN_user_borrowers => 1); }
 		
+
 		if ($flags->{permissions} == 1) {
 			$template->param(CAN_user_permission => 1); }
 		
 		if ($flags->{reserveforothers} == 1) {
 			$template->param(CAN_user_reserveforothers => 1); }
 		
+
 		if ($flags->{borrow} == 1) {
 			$template->param(CAN_user_borrow => 1); }
 		
+
 		if ($flags->{reserveforself} == 1) {
 			$template->param(CAN_user_reserveforself => 1); }
 		
+
 		if ($flags->{editcatalogue} == 1) {
 			$template->param(CAN_user_editcatalogue => 1); }
 		
+
 		if ($flags->{updatecharges} == 1) {
 			$template->param(CAN_user_updatecharge => 1); }
 		

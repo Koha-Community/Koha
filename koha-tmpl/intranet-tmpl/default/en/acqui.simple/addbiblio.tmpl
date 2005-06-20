@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="oldbiblionumber" --></h1>
+	<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="oldbiblionumber" -->     With Framework :<!--TMPL_VAR Name="framework" --></b></h1>
 	<p>
 		<input type="hidden" name="op" value="addbiblio">
 		<input type="hidden" name="addfield_field">
@@ -404,7 +404,10 @@ function active(numlayer)
 			document.getElementById(link).style.color="#FFFFFF";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
-			document.getElementById(link).style.color="#000000";
+			if (document.getElementById(link))
+				{
+					document.getElementById(link).style.color="#000000";
+				}
 		}
 	}
 }
@@ -513,6 +516,10 @@ function PopupZ3950() {
 		}
 	}
 	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
+}
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
 }
 
 function AddField(field) {

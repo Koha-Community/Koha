@@ -15,7 +15,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Title</label>
@@ -23,14 +23,20 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+				...
+			</a>
 		</p>
 		<p>
 			<label class="label20">Author</label> <input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+				...
+			</a>
 		</p>
 		<p>
 			<label class="label20">Subject</label>
@@ -38,7 +44,18 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+				...
+			</a>
+		</p>
+		<p>
+			<label class="label20">Series title</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" size="35"/>
 		</p>
 		<p>
 			<label class="label20">Series title</label>
@@ -73,7 +90,7 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="start" />
-				<input type="text" name="value" onchange="sql_update()" /> 
+				<input type="text" name="value" /> 
 		</p>
 		<p>
 			<label class="label20">Call Number</label>
@@ -81,7 +98,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="start" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">ISBN</label>
@@ -89,7 +106,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Publisher</label>
@@ -97,7 +114,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Published between</label>
@@ -105,13 +122,13 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value=">=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			<input type="text" name="value" size="6" maxlength="4" />
 			and
 			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="<=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			<input type="text" name="value" size="6" maxlength="4" />
 		</p>
 		<p>
 			<label class="label20">Results per page</label>
@@ -129,7 +146,7 @@
 				<option value="biblioitems.dewey">Dewey</option>
 				<option value="biblioitems.publicationyear">Publication Year</option>
 				<option value="biblioitems.publishercode">Publisher</option>
-				<option value="biblio.timestamp desc">Acquisition date</option>
+				<option value="biblio.timestamp">Acquisition date</option>
 			</select>
 			<select name="desc_or_asc" size="1">
 				<option value="ASC">Ascending</option>
@@ -154,40 +171,9 @@
 		<h3>Partial search</h3>
 		<p>A search is done on every words you enter. Empty words are ignored. If you enter, for example "the two towers" in the title, the result list will contain all the books containing two AND tower in the title. The "the" will be discarded.</p>
 		<p>If you want to enter a partial word, add a * or a % at the end of the word. For example "two tower*" will retrieve "the two towers", "two white towers", "a tower and two cities"</p>
+		<h3>Dictionnary search</h3>
+		<p>if you clic on ... on the right of title/author/subject, you can search existing values in the library.</p>
 	</div>
 </form>
-
-<script type="text/javascript">
-function sql_update() {
-document.f.sql.value="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-			document.f.sql.value = document.f.sql.value+
-										document.f.and_or[i].value + ' (' +
-										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + ' ' +
-										document.f.operator[i].value + ' ' +
-										'\''+document.f.value[i].value + '\') ';
-		}
-	}
-}
-
-function AddStatement() {
-
-	document.forms[0].op.value="AddStatement";
-	document.f.submit();
-}
-
-function PopupSuggestion() {
-    var strQuery="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-		    strQuery += " "+document.f.value[i].value;
-		}
-	}
-	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-</script>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

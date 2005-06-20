@@ -58,6 +58,7 @@ $VERSION = 0.01;
   &NEWnewbiblio &NEWnewitem
   &NEWmodbiblio &NEWmoditem
   &NEWdelbiblio &NEWdelitem
+  &NEWmodbiblioframework
 
   &MARCaddbiblio &MARCadditem
   &MARCmodsubfield &MARCaddsubfield
@@ -929,14 +930,14 @@ sub MARCkoha2marcBiblio {
         &MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author",
             $row->{'author'},'' );
     }
-    my $sth2 =
+    $sth2 =
       $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
         &MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject",
             $row->{'subject'},'' );
     }
-    my $sth2 =
+    $sth2 =
       $dbh->prepare(
         " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
     $sth2->execute($biblionumber);
@@ -1043,7 +1044,9 @@ sub MARChtml2marc {
 			$indicators{@$rtags[$i]}.='  ';
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
+				undef $field;
 			} else {
+				undef $prevvalue;
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 # 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
@@ -1061,7 +1064,7 @@ sub MARChtml2marc {
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field);
+	$record->add_fields($field) if $field;
 # 	warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
@@ -1100,7 +1103,7 @@ sub MARCmarc2koha {
 		$result->{'copyrightdate'} = $1;
 	}
 # modify publicationyear to keep only the 1st year found
-	my $temp = $result->{'publicationyear'};
+	$temp = $result->{'publicationyear'};
 	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
 	if ($1>0) {
 		$result->{'publicationyear'} = $1;
@@ -1274,6 +1277,12 @@ sub NEWnewbiblio {
     return ( $bibid, $oldbibnum, $oldbibitemnum );
 }
 
+sub NEWmodbiblioframework {
+	my ($dbh,$bibid,$frameworkcode) =@_;
+	my $sth = $dbh->prepare("Update marc_biblio SET frameworkcode=? WHERE bibid=$bibid");
+	$sth->execute($frameworkcode);
+	return 1;
+}
 sub NEWmodbiblio {
 	my ($dbh,$record,$bibid,$frameworkcode) =@_;
 	$frameworkcode="" unless $frameworkcode;
@@ -1347,7 +1356,7 @@ sub NEWnewitem {
     my ( $itemnumber, $error ) = &OLDnewitems( $dbh, $item, $item->{barcode} );
 
     # add itemnumber to MARC::Record before adding the item.
-    my $sth =
+    $sth =
       $dbh->prepare(
 "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
@@ -1457,13 +1466,14 @@ sub OLDnewbiblio {
     $sth->finish;
     $sth =
       $dbh->prepare(
-"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?"
+"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?"
     );
     $sth->execute(
         $bibnum,             $biblio->{'title'},
         $biblio->{'author'}, $biblio->{'copyrightdate'},
         $biblio->{'serial'},             $biblio->{'seriestitle'},
-        $biblio->{'notes'},  $biblio->{'abstract'}
+        $biblio->{'notes'},  $biblio->{'abstract'},
+		$biblio->{'unititle'},
     );
 
     $sth->finish;
@@ -2671,6 +2681,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.121  2005/06/20 14:10:00  tipaul
+# synch'ing 2.2 and head
+#
 # Revision 1.120  2005/06/15 16:09:43  hdl
 # Displaying dashed isbn.
 #

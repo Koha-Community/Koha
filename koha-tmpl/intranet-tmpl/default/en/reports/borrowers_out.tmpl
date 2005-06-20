@@ -72,6 +72,22 @@
 				<td>Borrower Category</td>
 				<td><input type="text" name="Filter" value=""></td>
 			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Without issues since</td>
+				<td><input size="10" id="to" name="Filter" value="" type="text">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								Calendar.setup(
+									{
+										inputField : "to",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarTo",
+									}
+								);
+							</script></td>
+			</tr>
 		</tbody>
 	</table>
 	

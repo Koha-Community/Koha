@@ -213,7 +213,7 @@
 					<th> </td>
 				</tr>
 				<!-- TMPL_LOOP NAME="loop" -->
-				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR NAME="name" --></td>
 					<td><!-- TMPL_VAR NAME="host" --></td>
 					<td><!-- TMPL_VAR NAME="port" --></td>

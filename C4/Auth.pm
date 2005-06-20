@@ -399,7 +399,7 @@ sub checkauth {
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
 	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url);
+	$template->param(url => $self_url, LibraryName=> => C4::Context->preference("LibraryName"),);
 	$template->param(\%info);
 	$cookie=$query->cookie(-name => 'sessionID',
 					-value => $sessionID,
