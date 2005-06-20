@@ -139,43 +139,63 @@
 	<table>
 		<tr>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin
-				</a>
+				<!-- TMPL_IF name="Admin" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="button">Admin</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions
-				</a>
+				<!-- TMPL_IF name="Acquisitions" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="button">Acquisitions</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities
-				</a>
+				<!-- TMPL_IF name="Authorities" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="button">Authorities</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue
-				</a>
+				<!-- TMPL_IF name="Catalogue" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="button">Catalogue</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation
-				</a>
+				<!-- TMPL_IF name="Circulation" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="button">Circulation</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Members
-				</a>
+				<!-- TMPL_IF name="Members" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="button">Members</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Members</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC
-				</a>
+				<!-- TMPL_IF name="OPAC" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="button">OPAC</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC</a>
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Others
-				</a>
+				<!-- TMPL_IF name="Others" -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="button">Others</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Others</a>
+				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 	</table>
-	<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
-		<input type="text" name="searchfield" value="">
-		<input type="reset" name="reset" value="clr">
-	</form>
 	<!-- TMPL_VAR NAME="searchfield" -->
 	<table border="0" cellspacing="0" cellpadding="2">
 	<tr valign="top" bgcolor="#99cc33">

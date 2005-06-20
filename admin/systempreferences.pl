@@ -59,7 +59,7 @@ $tabsysprefs{marcflavour}="Catalogue";
 $tabsysprefs{SubscriptionHistory}="Catalogue";
 $tabsysprefs{maxoutstanding}="Circulation";
 $tabsysprefs{printcirculationslips}="Circulation";
-$tabsysprefs{suggestion}="Circulation";
+$tabsysprefs{suggestion}="Acquisitions";
 $tabsysprefs{automembernum}="Members";
 $tabsysprefs{noissuescharge}="Circulation";
 $tabsysprefs{opacthemes}="OPAC";
@@ -74,6 +74,9 @@ $tabsysprefs{dateformat}="Admin";
 $tabsysprefs{insecure}="Admin";
 $tabsysprefs{ldapinfos}="Admin";
 $tabsysprefs{ldapserver}="Admin";
+$tabsysprefs{itemcallnumber}="Catalogue";
+$tabsysprefs{maxreserves}="Circulation";
+$tabsysprefs{virtualshelves}="OPAC";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -134,10 +137,10 @@ $searchfield=~ s/\,//g;
 
 if ($op) {
 $template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+						$op              => 1,); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+						else              => 1,); # we show only the TMPL_VAR names $op
 }
 
 if ($op eq 'update_and_reedit') {
@@ -351,7 +354,7 @@ if ($op eq 'add_form') {
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
 		push(@loop_data, \%row_data);
 	}
-	$template->param(loop => \@loop_data);
+	$template->param(loop => \@loop_data, $tab => 1);
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param("<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
