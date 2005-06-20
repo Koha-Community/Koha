@@ -32,12 +32,16 @@ then
 	exit 1
 fi
 
-su -s /bin/sh -c $KohaZ3950Shell - $RunAsUser &
+#MJR: removed -s option, as we have a #! at the start of z3950-daemon-shell.sh
+su -c $KohaZ3950Shell - $RunAsUser &
 
 exit
 
 #--------------
 # $Log$
+# Revision 1.5  2005/06/20 17:05:17  slef
+# Removed -s from su call after Thomas D reports it breaks FreeBSD
+#
 # Revision 1.4  2003/11/05 23:33:45  slef
 # Now figures out what directory the scripts are in
 #
