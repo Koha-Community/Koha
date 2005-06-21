@@ -124,8 +124,11 @@
 		</select>
 		<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 		<input type="submit" value="OK" class="button">
-		<p>
-		<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True" <!-- TMPL_IF Name="select_display"-->checked<!--/TMPL_IF -->  OnChange="javascript:document.f.submit()">
+		<p><!-- TMPL_IF Name="select_display"-->
+				<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True" checked OnChange="javascript:document.f.submit()">
+			<!-- TMPL_ELSE -->
+				<i>Display only used Tags/Subfields</i> <input type="checkbox" name="select_display" value="True" OnChange="javascript:document.f.submit()">
+			<!--/TMPL_IF --> 
 		</p>
 	</form>
 	<b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
