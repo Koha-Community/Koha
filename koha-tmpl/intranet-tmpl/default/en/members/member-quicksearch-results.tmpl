@@ -20,7 +20,7 @@
 			<!-- TMPL_ELSE -->
 				<tr bgcolor="white">
 			<!-- /TMPL_IF -->
-				<td><form action="member-search-results.pl" method="get"><input type="button" class="button" value="Choose" title="Choose this Patron" onclick="window.opener.FillForm('<!-- TMPL_VAR NAME="cardnumber" -->','request','member'); return false;" /></form></td>
+				<td><!-- TMPL_VAR NAME="count" --><form action="member-search-results.pl" method="get"><input type="button" class="button" value="Choose" title="Choose this Patron" onclick="window.opener.FillForm('<!-- TMPL_VAR NAME="cardnumber" -->','request','member'); return false;" /></form></td>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
 				<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" --></a></td>
 				<td><!-- TMPL_VAR NAME="firstname" --></a></td>

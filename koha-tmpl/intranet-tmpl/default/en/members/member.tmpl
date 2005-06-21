@@ -21,6 +21,7 @@
 	 </p>
 	<table>
 		<tr>
+			<th>&nbsp;</th>
 			<th>Card</th>
 			<th>Surname</th>
 			<th>Firstname</th>
@@ -36,6 +37,7 @@
 			<!-- TMPL_ELSE -->
 				<tr bgcolor="white">
 			<!-- /TMPL_IF -->
+				<td><!-- TMPL_VAR NAME="count" --></td>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
 				<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" --></a></td>
 				<td><!-- TMPL_VAR NAME="firstname" --></a></td>
