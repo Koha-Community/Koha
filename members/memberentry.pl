@@ -60,6 +60,8 @@ my $op=$input->param('op');
 my $categorycode=$input->param('categorycode');
 my $destination=$input->param('destination');
 
+
+
 my $nok;
 # if a add or modify is requested => check validity of data.
 if ($op eq 'add' or $op eq 'modify') {
@@ -232,7 +234,22 @@ if ($delete){
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
+				
 
+	my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});
+	if ($CGIsort1) {
+		$template->param(CGIsort1 => $CGIsort1);
+	} else {
+		$template->param( sort1 => $data->{'sort1'});
+	}
+
+	my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data->{'sort2'});
+	if ($CGIsort2) {
+		$template->param(CGIsort2 =>$CGIsort2);
+	} else {
+		$template->param( sort2 => $data->{'sort2'});
+	}
+	
 	$template->param(	actionType 		=> $actionType,
 				destination => $destination,
 				borrowernumber          => $borrowernumber,
@@ -265,8 +282,6 @@ if ($delete){
 				expiry		=> format_date($data->{'expiry'}),
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $data->{'dateofbirth'},
-				sort1 => $data->{'sort1'},
-				sort2 => $data->{'sort2'},
 				dateformat      => display_date_format(),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);

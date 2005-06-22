@@ -21,6 +21,7 @@ package C4::Input; #assumes C4/Input
 use strict;
 require Exporter;
 use C4::Context;
+use CGI;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -49,6 +50,7 @@ number or ISBN is valid.
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	&checkdigit &checkvalidisbn
+	&buildCGIsort
 );
 
 # FIXME - This is never used.
@@ -140,37 +142,74 @@ digit at the end.
 # Determine if a number is a valid ISBN number, according to length
 #   of 10 digits and valid checksum
 sub checkvalidisbn {
-        use strict;
-        my ($q)=@_ ;	# Input: ISBN number
-
-        my $isbngood = 0; # Return: true or false
-
-        $q=~s/x$/X/g;           # upshift lower case X
-        $q=~s/[^X\d]//g;
-        $q=~s/X.//g;
-        
-	#return 0 if $q is not ten digits long
-	if (length($q)!=10) {
-		return 0;
-	}
+	use strict;
+	my ($q)=@_ ;	# Input: ISBN number
 	
-	#If we get to here, length($q) must be 10
-        my $checksum=substr($q,9,1);
-        my $isbn=substr($q,0,9);
-        my $i;
-        my $c=0;
-        for ($i=0; $i<9; $i++) {
-            my $digit=substr($q,$i,1);
-            $c+=$digit*(10-$i);
-        }
+	my $isbngood = 0; # Return: true or false
+	
+	$q=~s/x$/X/g;   # upshift lower case X
+	$q=~s/[^X\d]//g;
+	$q=~s/X.//g;
+	
+		#return 0 if $q is not ten digits long
+		if (length($q)!=10) {
+			return 0;
+		}
+		
+		#If we get to here, length($q) must be 10
+	my $checksum=substr($q,9,1);
+	my $isbn=substr($q,0,9);
+	my $i;
+	my $c=0;
+	for ($i=0; $i<9; $i++) {
+		my $digit=substr($q,$i,1);
+		$c+=$digit*(10-$i);
+	}
 	$c %= 11;
-        ($c==10) && ($c='X');
-        $isbngood = $c eq $checksum;
-
-        return $isbngood;
+	($c==10) && ($c='X');
+	$isbngood = $c eq $checksum;
+	return $isbngood;
 
 } # sub checkvalidisbn
 
+=item buildCGISort
+
+  $CGIScrollingList = &BuildCGISort($name string, $input_name string);
+
+Returns the scrolling list with name $input_name, built on authorised Values named $name.
+Returns NULL if no authorised values found
+
+=cut
+#'
+#--------------------------------------
+# Determine if a number is a valid ISBN number, according to length
+#   of 10 digits and valid checksum
+sub buildCGIsort {
+    use strict;
+	my ($name,$input_name,$data) = @_;
+	my $dbh=C4::Context->dbh;
+	my $query=qq{SELECT * FROM authorised_values WHERE category=?};
+	my $sth=$dbh->prepare($query);
+	$sth->execute($name);
+	my $CGISort;
+	if ($sth->rows>0){
+		my @values;
+		my %labels;
+		for (my $i =0;$i<=$sth->rows;$i++){
+			my $results = $sth->fetchrow_hashref;
+ 			push @values, $results->{authorised_value};
+ 			$labels{$results->{authorised_value}}=$results->{lib};
+		}
+ 		$CGISort= CGI::scrolling_list(
+ 					-name => $input_name,
+ 					-values => \@values,
+ 					-labels => \%labels,
+					-default=> $data,
+ 					-size => 1,
+ 					-multiple => 0);
+	} 
+	return $CGISort;
+}
 END { }       # module clean-up code here (global destructor)
 
 1;

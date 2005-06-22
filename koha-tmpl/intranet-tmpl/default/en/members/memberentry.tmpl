@@ -269,13 +269,21 @@
 			<tr>
 				<td>Sorting field 1</td>
 				<td colspan="4">
-					<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+					<!-- TMPL_IF Name="CGIsort1" -->
+						<!-- TMPL_VAR Name="CGIsort1" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+					<!--/TMPL_IF -->
 				</td>
 			</tr>
 			<tr>
 				<td>Sorting field 2</td>
 				<td colspan="4">
-					<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+					<!-- TMPL_IF Name="CGIsort2" -->
+						<!-- TMPL_VAR Name="CGIsort2" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+					<!--/TMPL_IF -->
 				</td>
 			</tr>
 

@@ -24,6 +24,7 @@
 use strict;
 use CGI;
 use C4::Context;
+use C4::Input;
 use C4::Database;
 use C4::Auth;
 use C4::Acquisition;
@@ -139,6 +140,21 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-size     => 1,
 			-multiple => 0 );
 
+my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});
+if ($CGIsort1) {
+	$template->param(CGIsort1 => $CGIsort1);
+} else {
+	$template->param( sort1 => $data->{'sort1'});
+}
+
+my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data->{'sort2'});
+if ($CGIsort2) {
+	$template->param(CGIsort2 =>$CGIsort2);
+} else {
+	$template->param( sort2 => $data->{'sort2'});
+}
+			
+			
 # fill template
 $template->param( existing => $biblio,
 						title => $title,
@@ -172,8 +188,6 @@ $template->param( existing => $biblio,
 						invoice => $data->{'booksellerinvoicenumber'},
 						ecost => $data->{'ecost'},
 						notes => $data->{'notes'},
-						sort1 => $data->{'sort1'},
-						sort2 => $data->{'sort2'},
 						publishercode => $data->{'publishercode'});
 
 output_html_with_http_headers $input, $cookie, $template->output;
