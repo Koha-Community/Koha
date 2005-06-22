@@ -140,14 +140,14 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-size     => 1,
 			-multiple => 0 );
 
-my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});
+my $CGIsort1 = buildCGIsort("Asort1","sort1",$data->{'sort1'});
 if ($CGIsort1) {
 	$template->param(CGIsort1 => $CGIsort1);
 } else {
 	$template->param( sort1 => $data->{'sort1'});
 }
 
-my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data->{'sort2'});
+my $CGIsort2 = buildCGIsort("Asort2","sort2",$data->{'sort2'});
 if ($CGIsort2) {
 	$template->param(CGIsort2 =>$CGIsort2);
 } else {
