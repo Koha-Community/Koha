@@ -19,10 +19,11 @@
 	</form>
 
 <!-- TMPL_IF Name=search -->
-	<div class="bloc25">
-	<h2 class="catalogue">Dictionary Search results</h2>
+	<h1>Dictionary Search results</h1>
 	<!-- TMPL_IF NAME="authresult" -->
+	<div class="bloc20">
 		<div id="resultnumber">
+			<h2>Values in authorities</h2>
 			<p><!-- TMPL_IF NAME="displayprev" --> 
 					<a class="resultnumber" href="opac-dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Previous</a>
 				<!-- /TMPL_IF -->
@@ -81,12 +82,13 @@
 				<!-- /TMPL_LOOP -->
 			</table>
 		</div>
-		<!-- TMPL_ELSE -->
-			<h3 class="catalogue">No results in Authorities</h3>
+	</div>
 	<!-- /TMPL_IF -->
 		
 		
 	<!-- TMPL_IF Name=catresult -->	
+	<div class="bloc20">
+		<h2>Values in biblios</h2>
 		<div id="resultnumber">
 			<p class="resultcount">
 			<!-- TMPL_IF NAME="total" -->
