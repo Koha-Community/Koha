@@ -32,7 +32,7 @@
 	<!-- MENUS -->
 	<div id="title">
 		<!-- TMPL_IF name="opacsmallimage" -->
-			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="50" alt="koha logo"/>
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="65" alt="koha logo"/>
 		<!-- TMPL_ELSE -->
 			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
 		<!-- /TMPL_IF -->
