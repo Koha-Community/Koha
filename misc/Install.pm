@@ -19,14 +19,12 @@ package Install; #assumes Install.pm
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 #
-# Recent Authors
-# MJR: my.cnf, etcdir, prefix, new display, apache conf, copying fixups
+# Current maintainer MJR slef at users.sourceforge.net
 
 use strict;
 use POSIX;
 #MJR: everyone will have these modules, right?
 # They look like part of perl core to me
-#use Term::Cap;
 use Term::ANSIColor qw(:constants);
 use Text::Wrap;
 use File::Temp qw/ :mktemp /;
@@ -45,14 +43,18 @@ of the code to do installation;
 this code is used by installer.pl
 to perform an actual installation.
 
-=head2 Internal functions (not meant to be used outside of Install.pm)
+=head2 Internal variables
 
 =over 4
+
+=item $VERSION, @ISA, @EXPORT
+
+Defines the version and structure of the module interface
 
 =cut
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 2.2.3;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -81,47 +83,59 @@ $VERSION = 0.01;
 		&restoremycnf
 		);
 
-use vars qw( $kohaversion $newversion );			# set in loadconfigfile and installer.pl
-use vars qw( $language );			# set in installer.pl
-use vars qw( $domainname );			# set in installer.pl
+=item $kohaversion, $newversion, $language, $clear_string
 
-use vars qw( $etcdir );				# set in installer.pl, usu. /etc
-use vars qw( $intranetdir $opacdir $kohalogdir );
-use vars qw( $realhttpdconf $httpduser $httpdgroup );
-use vars qw( $servername $svr_admin $opacport $intranetport );
-use vars qw( $mysqldir );
-use vars qw( $database $mysqluser );
-use vars qw( $mysqlpass );			# normally should not be used
-use vars qw( $hostname $user $pass );	# virtual hosting
+Installer setting details
 
-=item heading
+=item $etcdir, $intranetdir, $opacdir, $kohalogdir
 
-    $messages->{'WelcomeToKohaInstaller'
-	= heading('Welcome to the Koha Installer') . qq|...|;
+Directories to use for installation (configuration, intranet, opac, logs)
 
-The heading function takes one string, the text to be displayed as
-the heading, and returns a formatted heading (currently formatted
-with ANSI colours).
+=item $domainname, $realhttpdconf, $httpduser, $httpdgroup, $servername, $svr_admin, $opacport, $intranetport, $hostname, $user, $pass
+
+Apache configuration settings
+
+=item $mysqldir, $database, $mysqluser, $mysqlpass, $mycnf, $mytmpcnf
+
+MySQL configuration settings
+
+=cut
+
+use vars qw( $kohaversion $newversion $language
+  $etcdir $intranetdir $opacdir $kohalogdir
+  $domainname $realhttpdconf $httpduser $httpdgroup
+  $servername $svr_admin $opacport $intranetport
+  $hostname $user $pass
+  $mysqldir $database $mysqluser $mysqlpass );
+
+my $clear_string = "\n\n"; #MJR: was $terminal->Tputs('cl');
+
+my $mycnf = $ENV{HOME}."/.my.cnf";
+my $mytmpcnf = mktemp("my.cnf.koha.XXXXXX");
+chomp($mytmpcnf);
+
+=back
+
+=head2 Internal functions (not meant to be used outside of Install.pm)
+
+=over 4
+
+=item C<heading($)>
+
+Takes: a string to be displayed as the heading
+
+Returns: a formatted heading (currently with ANSI colours).
 
 This reduces the likelihood of pod2man(1) etc. misinterpreting
 a line of equal signs as illegal POD directives.
 
 =cut
 
-#my $termios = POSIX::Termios->new();
-#$termios->getattr();
-#my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
-my $clear_string = "\n\n"; #MJR: was $terminal->Tputs('cl');
-
 sub heading ($) {
   my $title = shift;
   my $bal = 5;
   return($clear_string.ON_BLUE.WHITE.BOLD." "x$bal.uc($title)." "x$bal.RESET."\n\n");
 }
-
-my $mycnf = $ENV{HOME}."/.my.cnf";
-my $mytmpcnf = mktemp("my.cnf.koha.XXXXXX");
-chomp($mytmpcnf);
 
 my $messages;
 $messages->{'continuing'}->{en}="Great!  Continuing...\n\n";
@@ -288,18 +302,22 @@ Press <ENTER> to exit the installer: |;
 
 #'
 
-=item completeupgrade
-
-   completeupgrade
+=item C<completeupgrade()>
 
 Display a message describing what may need changing in httpd.conf
-and any other instructions
+and any other instructions for just before exit.
 
 =cut
 
 sub completeupgrade {
 	showmessage(getmessage('UpgradeCompleted',[$intranetdir,$intranetdir,$intranetdir,$opacdir,$opacdir,$intranetdir]),'PressEnter');
 }
+
+=item C<releasecandidatewarning()>
+
+Display a warning about upgrading to a public test release.
+
+=cut
 
 sub releasecandidatewarning {
     my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
@@ -313,6 +331,14 @@ sub releasecandidatewarning {
 	exit;
     };
 }
+
+=item C<read_autoinstall_file($)>
+
+Takes: a configuration file describing the installation
+
+Returns: a hashref of the configuration
+
+=cut
 
 sub read_autoinstall_file
 {
@@ -357,14 +383,10 @@ sub read_autoinstall_file
 
 =over 4
 
-=cut
+=item C<setlanguage($)>
 
-=item setlanguage
-
-    setlanguage('en');
-
-Sets the installation language, normally "en" (English).
-In fact, only "en" is supported.
+Sets the installation language code, normally "en" (English).
+Only "en" is supported so far.
 
 =cut
 
@@ -372,9 +394,7 @@ sub setlanguage ($) {
     ($language) = @_;
 }
 
-=item setdomainname
-
-    setdomainname('example.org');
+=item C<setdomainname($)>
 
 Sets the domain name of the host.
 
@@ -387,9 +407,7 @@ sub setdomainname ($) {
     ($domainname) = @_;
 }
 
-=item setetcdir
-
-    setetcdir('/etc');
+=item C<setetcdir($)>
 
 Sets the sysconfdir, normally /etc.
 This should be an absolute path; a trailing / is not required.
@@ -402,11 +420,9 @@ sub setetcdir ($) {
     if (! ((-d $etcdir) && (-w $etcdir))) { die("Cannot write to $etcdir! Please set the etcdir environment variable to a writeable directory.\nFailed"); }
 }
 
-=item getkohaversion
+=item C<getkohaversion()>
 
-    getkohaversion();
-
-Gets the Koha version as known by the previous config file.
+Returns: the Koha version as known by the previous config file..
 
 =cut
 
@@ -414,11 +430,11 @@ sub getkohaversion () {
     return($kohaversion);
 }
 
-=item setkohaversion
-
-    setkohaversion('1.3.3RC26');
+=item C<setkohaversion($)>
 
 Sets the Koha version as known by the installer.
+
+Note: function is now misnamed, setting $newversion not $kohaversion
 
 =cut
 
@@ -426,11 +442,9 @@ sub setkohaversion ($) {
     ($newversion) = @_;
 }
 
-=item getservername
+=item C<getservername()>
 
-    my $servername = getservername;
-
-Gets the name of the Koha virtual server as specified by the user.
+Returns: the name of the Koha virtual server as specified by the user.
 
 =cut
 
@@ -438,12 +452,10 @@ sub getservername () {
     $servername;
 }
 
-=item getopacport
+=item C<getopacport()>
 
-    $port = getopacport;
-
-Gets the port that will run the Koha OPAC virtual server,
-as specified by the user.
+Returns the port that will run the Koha OPAC virtual server, as
+specified by the user.
 
 =cut
 
@@ -451,12 +463,10 @@ sub getopacport () {
     $opacport;
 }
 
-=item getintranetport
+=item C<getintranetport()>
 
-    $port = getintranetport;
-
-Gets the port that will run the Koha INTRANET virtual server,
-as specified by the user.
+Returns the port that will run the Koha INTRANET virtual server, as
+specified by the user.
 
 =cut
 
@@ -470,15 +480,14 @@ sub getintranetport () {
 
 =over 4
 
-=cut
+=item C<dirname($)>
 
-=item dirname
+Does the equivalent of dirname(1).
 
-    dirname $path;
+Takes: a path
 
-Does the equivalent of dirname(1). Given a path $path, return the
-parent directory of $path (best guess), except when $path seems to
-be the same as /, in which case $path itself is returned unchanged.
+Returns: parent directory of path (best guess), except when the path
+seems to be the same as /, in which case it is returned unchanged.
 
 =cut
 
@@ -494,29 +503,28 @@ sub dirname ($;$) {
     return $path;
 }
 
-=item mkdir_parents
+=item C<mkdir_parents($;$)>
 
-    mkdir_parents $path;
-    mkdir_parents $path, $mode;
+Does the equivalent of mkdir -p, or mkdir --parents.
 
-Does the equivalent of mkdir -p, or mkdir --parents. Given a path $path,
-create the directory $path, recursively creating any intermediate
-directories. If $mode is given, the directory will be created with
-mode $mode.
+Takes: a path and an optional mode.
 
-WARNING: If $path already exists, mkdir_parents will just return
-successfully (just like mkdir -p), whether the mode of $path conforms
-to $mode or not. (This is the behaviour of the mkdir -p command.)
+Create the directory path, recursively creating any intermediate
+directories, with the access mode if given.
+
+WARNING: If the path already exists, mkdir_parents will just return
+successfully (just like mkdir -p), whether the mode of path conforms
+to the mode or not. (This is the behaviour of the mkdir -p command.)
 
 =cut
 
-sub mkdir_parents {
+sub mkdir_parents ($;$) {
     my($path, $mode) = @_;
     my $ok = -d($path)? 1: defined $mode? mkdir($path, $mode): mkdir($path);
 
     if (!$ok && $! == ENOENT) {
 	my $parent = dirname($path);
-	$ok = mkdir_parents($parent, $mode);
+	$ok = &mkdir_parents($parent, $mode);
 
 	# retry and at the same time make sure that $! is set correctly
 	$ok = defined $mode? mkdir($path, $mode): mkdir($path);
@@ -524,22 +532,18 @@ sub mkdir_parents {
     return $ok;
 }
 
+=item C<getmessage($;$)>
 
-=item getmessage
+Takes: a message identifier, an array reference
 
-    getmessage($msgid);
-    getmessage($msgid, $variables);
+Returns: a localized message (format string)
 
-Gets a localized message (format string) with message id $msgid,
-and, if an array reference of variables $variables is given,
-substitutes variables in the format string with @$variables.
-Returns the found message string, with variable substitutions
-if specified.
+The first message must be the message identifier corresponding to a
+defined message string (a valid key to the $Installer::messages hash).
+The second parameter may be an array reference of variables,
+to be substituted into the format string.
 
-$msgid must be the message identifier corresponding to a defined
-message string (a valid key to the $messages hash in the Installer
-package). getmessage throws an exception if the message cannot be
-found.
+getmessage throws an exception if the message cannot be found.
 
 =cut
 
@@ -554,40 +558,25 @@ sub getmessage {
 }
 
 
-=item showmessage
-
-    showmessage($message, 'none');
-    showmessage($message, 'none', undef, $noclear);
-
-    $result = showmessage($message, 'yn');
-    $result = showmessage($message, 'yn', $defaultresponse);
-    $result = showmessage($message, 'yn', $defaultresponse, $noclear);
-
-    $result = showmessage($message, 'restrictchar CHARS');
-    $result = showmessage($message, 'free');
-    $result = showmessage($message, 'silentfree');
-    $result = showmessage($message, 'numerical');
-    $result = showmessage($message, 'email');
-    $result = showmessage($message, 'PressEnter');
+=item C<showmessage($$;$$)>
 
 Shows a message and optionally gets a response from the user.
 
-The first two arguments, the message and the response type,
-are mandatory.  The message must be the actual string to
-display; the caller is responsible for calling getmessage if
-required.
+Takes:
+message string, question type, default response, noclear
 
-The response type must be one of "none", "yn", "free", "silentfree"
-"numerical", "email", "PressEnter", or a string consisting
-of "restrictchar " followed by a list of allowed characters
-(space can be specified). (Case is not significant, but case is
-significant in the list of allowed characters.) If a response
-type other than the above-listed is specified, the result is
-undefined.
+Returns: response string
 
-Note that the response type "yn" is equivalent to "restrictchar yn".
-Because "restrictchar" is case-sensitive, the user is expected
-to enter "y" or "n" in lowercase only.
+The message must be the actual string to display; the caller is
+responsible for calling getmessage if required.
+
+Question type must be 'none' for no response, 'yn' for a yes/no
+question, 'restrictchar CHARS' for one letter from CHARS (Case is not
+significant, but case is significant in the list of allowed
+characters), 'free' for any string, 'silentfree' for any string
+entered without on-screen display, 'numerical', 'email' or
+'PressEnter'.  If a response type other than the above-listed is
+specified, the result is undefined.
 
 Note that the response type of "email" does not actually
 guarantee that the returned value is a well-formed RFC-822
@@ -597,28 +586,27 @@ string that is looks reasonably likely to be an email address
 in the "real world", given the premise that the user is trying
 to enter a real email address.
 
-If a response type other than "none" or "PressEnter" is
-specified, a third argument, specifying the default value, can
-be specified:  If this default response is not specified, the
-default response is the first allowed character if the response
-type is "restrictchar", otherwise the default response is the
-empty string. This default response is used when the user does
-not specify a value (i.e., presses Enter without typing in
-anything), showmessage will assume that the default response is
-the user's response.
+If a response type other than "none" or "PressEnter" is specified, a
+third argument, specifying the default value, can be specified: If
+this default response is not specified, the default response is the
+first allowed character if the response type is "restrictchar",
+otherwise the default response is the empty string. This default
+response is used when the user does not specify a value (i.e., presses
+Enter without typing in anything), showmessage will assume that the
+default response is the user's response.
 
 Note that because the response type "yn" is equivalent to
-"restrictchar yn", the default value for response type "yn",
-if unspecified, is "y".
+"restrictchar yn", the default value for response type "yn", if
+unspecified, is "y".
 
-The screen is normally cleared before the message is displayed;
-if a fourth argument is specified and is nonzero, this
-screen-clearing is not done.
+The screen is normally cleared before the message is displayed; if a
+fourth argument is specified and is nonzero, this screen-clearing is
+not done.
 
 =cut
 #'
 
-sub showmessage {
+sub showmessage ($$;$$) {
     #MJR: Maybe refactor to use anonymous functions that
     # check the responses instead of RnP branching.
     my $message=join('',fill('','',(shift)));
@@ -703,11 +691,7 @@ sub showmessage {
 }
 
 
-=back
-
-=item startsysout
-
-	startsysout;
+=item C<startsysout()>
 
 Changes the display to show system output until the next showmessage call.
 At the time of writing, this means using red text.
@@ -718,18 +702,13 @@ sub startsysout {
 	print RED."\n";
 }
 
-
 =back
 
 =head2 Subtasks of doing an installation
 
 =over 4
 
-=cut
-
-=item checkabortedinstall
-
-    checkabortedinstall;
+=item C<checkabortedinstall()>
 
 Checks whether a previous installation process has been abnormally
 aborted, by checking whether $etcidr/koha.conf is a symlink matching
@@ -761,15 +740,14 @@ database is already created.
     }
 }
 
-=item checkpaths
-
-	checkpaths;
+=item C<checkpaths()>
 
 Make sure that we loaded the right dirs from an old koha.conf
 
+FIXME: needs update to use Install.pm
+
 =cut
 
-#FIXME: update to use Install.pm
 sub checkpaths {
 if ($opacdir && $intranetdir) {
     print qq|
@@ -828,17 +806,15 @@ if (!$opacdir || !$intranetdir) {
 
 }
 
-=item checkperlmodules
+=item C<checkperlmodules(;$)>
 
-    checkperlmodules;
-
-Test whether the version of Perl is new enough, whether Perl is
-found at the expected location, and whether all required modules
-have been installed.
+Test whether the version of Perl is new enough, whether Perl is found
+at the expected location, and whether all required modules have been
+installed.
 
 =cut
 
-sub checkperlmodules {
+sub checkperlmodules(;$) {
 #
 # Test for Perl and Modules
 #
@@ -943,19 +919,17 @@ We could not create %s, but continuing anyway...
 
 
 
-=item getinstallationdirectories
+=item C<getinstallationdirectories(;$)>
 
-    getinstallationdirectories;
+Asks the user for the various installation directories, and then
+creates those directories (if they do not already exist).
 
-Get the various installation directories from the user, and then
-create those directories (if they do not already exist).
-
-These pieces of information are saved to global variables; the
-function does not return any values.
+These pieces of information are saved to variables; the function does
+not return any values.
 
 =cut
 
-sub getinstallationdirectories {
+sub getinstallationdirectories(;$) {
 	my ($auto_install) = @_;
 	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
     $opacdir = $ENV{prefix}.'/koha/opac';
@@ -1028,11 +1002,10 @@ You must specify different directories for the OPAC and INTRANET files!
     }
 }
 
-=item getmysqldir
+=item C<getmysqldir()>
 
-	getmysqldir;
-
-Get the MySQL database server installation directory, automatically if possible.
+Returns: the MySQL database server installation directory,
+automatically if possible and from the user otherwise.
 
 =cut
 
@@ -1044,7 +1017,7 @@ The file mysqladmin should be in bin/mysqladmin under the directory that you giv
 
 MySQL installation directory: |;
 #'
-sub getmysqldir {
+sub getmysqldir () {
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
 			  /usr/local
@@ -1063,13 +1036,11 @@ sub getmysqldir {
     return($mysqldir);
 }
 
-=item getdatabaseinfo
+=item C<getdatabaseinfo(;$)>
 
-    getdatabaseinfo;
-
-Get various pieces of information related to the Koha database:
-the name of the database, the host on which the SQL server is
-running, and the database user name.
+Asks for various pieces of information related to the Koha database:
+the name of the database, the host on which the SQL server is running,
+and the database user name.
 
 These pieces of information are saved to global variables; the
 function does not return any values.
@@ -1112,7 +1083,7 @@ You must not use a blank password for your MySQL user.
 Press <ENTER> to try again: 
 |;
 
-sub getdatabaseinfo {
+sub getdatabaseinfo(;$) {
 	my ($auto_install) = @_;
     $database = 'Koha';
     $hostname = 'localhost';
@@ -1166,13 +1137,11 @@ sub getdatabaseinfo {
 
 
 
-=item getapacheinfo
+=item C<getapacheinfo(;$)>
 
-    getapacheinfo;
-
-Get various pieces of information related to the Apache server:
-the location of the configuration file and, if needed, the Unix
-user that the Koha CGI will be run under.
+Detects or asks for various pieces of information related to the
+Apache server: the location of the configuration file and, if needed,
+the Unix user that the Koha CGI will be run under.
 
 These pieces of information are saved to global variables; the
 function does not return any values.
@@ -1214,7 +1183,7 @@ The userid %s is not a valid userid on this system.
 
 Press <ENTER> to continue: |;
 
-sub getapacheinfo {
+sub getapacheinfo (;$) {
 	my ($auto_install) = @_;
     my @confpossibilities;
 
@@ -1303,13 +1272,11 @@ sub getapacheinfo {
 }
 
 
-=item getapachevhostinfo
+=item C<getapachevhostinfo(;$)>
 
-    getapachevhostinfo;
-
-Gets various pieces of information related to virtual hosting:
-the webmaster email address, virtual hostname, and the ports
-that the OPAC and INTRANET modules run on.
+Asks for various pieces of information related to virtual hosting: the
+webmaster email address, virtual hostname, and the ports that the OPAC
+and INTRANET modules run on.
 
 These pieces of information are saved to global variables; the
 function does not return any values.
@@ -1363,7 +1330,7 @@ the OPAC port (%s).
 Enter the Intranet Port [%s]: |;
 
 
-sub getapachevhostinfo {
+sub getapachevhostinfo (;$) {
 	my ($auto_install) = @_;
     $svr_admin = "webmaster\@$domainname";
     $servername=`hostname`;
@@ -1400,16 +1367,10 @@ sub getapachevhostinfo {
 }
 
 
-=item updateapacheconf
+=item C<updateapacheconf(;$)>
 
-    updateapacheconf;
-
-Updates the Apache config file according to parameters previously
-specified by the user.
-
-It will append fully-commented directives at the end of the original
-Apache config file.  The old config file is renamed with an extension
-of .prekoha.
+Creates the Apache config file according to parameters previously
+specified by the user as F<$etcdir/koha-httpd.conf>.
 
 If you need to uninstall Koha for any reason, the lines between
 
@@ -1446,7 +1407,7 @@ configuration.
 
 Press <ENTER> to continue: |;
 
-sub updateapacheconf {
+sub updateapacheconf (;$) {
 	my ($auto_install)=@_;
     my $logfiledir=$kohalogdir;
     my $httpdconf = $etcdir."/koha-httpd.conf";
@@ -1460,7 +1421,7 @@ sub updateapacheconf {
     open HC, "<$realhttpdconf";
     while (<HC>) {
 	if (/^\s*#\s*LoadModule env_module /) {
-	    showmessage(getmessage('ApacheConfigMissingModules'));
+	    showmessage(getmessage('ApacheConfigMissingModules'),'none');
 	    $envmodule=1;
 	}
 	if (/\s*LoadModule includes_module / ) {
@@ -1554,18 +1515,16 @@ EOP
 }
 
 
-=item basicauthentication
-
-    basicauthentication;
-
-Asks the user whether HTTP basic authentication is wanted, and,
-if so, the user name and password for the basic authentication.
-
-These pieces of information are saved to global variables; the
-function does not return any values.
-
-=cut
-
+# =item C<basicauthentication(;$)>
+# 
+# Asks the user whether HTTP basic authentication is wanted, and,
+# if so, the user name and password for the basic authentication.
+# 
+# These pieces of information are saved to global variables; the
+# function does not return any values.
+# 
+# =cut
+# 
 # $messages->{'IntranetAuthenticationQuestion'}->{en} =
 #    heading('LIBRARIAN AUTHENTICATION') . qq|
 # The Librarian site can be password protected using
@@ -1616,16 +1575,17 @@ function does not return any values.
 # }
 
 
-=item installfiles
+=item C<installfiles(;$$)>
 
-    installfiles
-
-Install the Koha files to the specified OPAC and INTRANET
+Copy the Koha files to the specified OPAC and INTRANET
 directories (usually in /usr/local/koha).
 
-The koha.conf file is created, but as koha.conf.tmp. The
-caller is responsible for calling finalizeconfigfile when
-installation is completed, to rename it back to koha.conf.
+Creates the koha.conf file, but as koha.conf.tmp. The caller is
+responsible for calling C<finalizeconfigfile(;$)> when installation is
+completed, to rename it back to koha.conf.
+
+The first parameter may be a marker to say this is a new installation,
+rather than an upgrade.
 
 =cut
 
@@ -1649,7 +1609,7 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 
 
 
-sub installfiles {
+sub installfiles (;$$) {
 
 	my ($is_first_install,$auto_install) = @_;
 	# $is_install is set if it's a fresh install and not an upgrade. If it's an upgrade, copy old files.
@@ -1731,9 +1691,7 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 }
 
 
-=item databasesetup
-
-    databasesetup;
+=item C<databasesetup(;$)>
 
 Finds out where the MySQL utitlities are located in the system,
 then create the Koha database structure and MySQL permissions.
@@ -1791,7 +1749,7 @@ $messages->{'BranchCode'}->{en}="Branch Code (4 letters or numbers) [%s]: ";
 $messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
 $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
 
-sub databasesetup {
+sub databasesetup (;$) {
 	my ($auto_install) = @_;
     $mysqluser = 'root';
     $mysqlpass = '';
@@ -1826,9 +1784,7 @@ sub databasesetup {
 }
 
 
-=item updatedatabase
-
-    updatedatabase;
+=item C<updatedatabase(;$)>
 
 Updates the Koha database structure, including the addition of
 MARC tables.
@@ -1877,7 +1833,7 @@ change it from the system preferences screen in the librarian sit.
 
 Which language do you choose? |;
 
-sub updatedatabase {
+sub updatedatabase (;$) {
 	my ($auto_install) = @_;
     # At this point, $etcdir/koha.conf must exist, for C4::Context
     $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf';
@@ -1911,19 +1867,17 @@ sub updatedatabase {
 }
 
 
-=item populatedatabase
+=item C<populatedatabase(;$)>
 
-    populatedatabase;
-
-Populate the non-MARC tables. If the user wants to install the
-sample data, install them.
+Populates the non-MARC tables and installs sample data,
+if wanted.
 
 =cut
 
 $messages->{'ConfirmFileUpload'}->{en} = qq|
 Confirm loading of this file into Koha  [Y]/N: |;
 
-sub populatedatabase {
+sub populatedatabase (;$) {
 	my ($auto_install) = @_;
 	my $input;
 	my $response;
@@ -2060,11 +2014,9 @@ if you confirm, the file will be added to the DB
 	}
 }
 
-=item restartapache
+=item C<restartapache(;$)>
 
-    restartapache;
-
-Asks the user whether to restart Apache, and restart it if the user
+Asks the user whether to restart Apache, and restarts it if the user
 wants so.
 
 =cut
@@ -2075,7 +2027,7 @@ The installer can do this if you are using Apache and give the root password.
 
 Would you like to try to restart Apache now?  [Y]/N: |;
 
-sub restartapache {
+sub restartapache (;$) {
 	my ($auto_install)=@_;
 	my $response;
     $response=showmessage(getmessage('RestartApache'), 'yn', 'y') unless ($auto_install->{NoPressEnter});
@@ -2094,11 +2046,9 @@ sub restartapache {
 	}
 }
 
-=item backupkoha
+=item C<backupkoha(;$)>
 
-   backupkoha;
-
-This function attempts to back up all koha's details.
+Attempts to make backup copies of all koha's details.
 
 =cut
 
@@ -2123,7 +2073,7 @@ File Listing
 Does this look right? ([Y]/N): |;
 
 #FIXME: rewrite to use Install.pm
-sub backupkoha {
+sub backupkoha () {
 if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
 my $backupdir=$ENV{prefix}.'/backups';
 
@@ -2198,13 +2148,11 @@ Aborting.  The database dump is located in:
 
 }
 
-=item finalizeconfigfile
+=item C<finalizeconfigfile()>
 
-   finalizeconfigfile;
+Renames F<koha.conf.tmp> file to F<koha.conf>.
 
-This function must be called when the installation is complete,
-to rename the koha.conf.tmp file to koha.conf.
-
+This file must be renamed when the installation is complete,
 Currently, failure to rename the file results only in a warning.
 
 =cut
@@ -2225,19 +2173,15 @@ EOF
 }
 
 
-=item loadconfigfile
+=item C<loadconfigfile()>
 
-   loadconfigfile
-
-Open the existing koha.conf file and get its values,
-saving the values to some global variables.
-
-If the existing koha.conf file cannot be opened for any reason,
-the file is silently ignored.
+Opens the existing koha.conf file and gets its values, saving the
+values to some global variables.  If the existing koha.conf file
+cannot be opened for any reason, the file is silently ignored.
 
 =cut
 
-sub loadconfigfile {
+sub loadconfigfile () {
     my %configfile;
 
 	#MJR: reverted to r1.53.  Please call setetcdir().  Do NOT hardcode this.
