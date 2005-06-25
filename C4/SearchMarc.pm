@@ -150,6 +150,11 @@ define the field used to order the request. Any field in the biblio/biblioitem t
 
 optional argument containing an sql string to be used in the 'where' statement. see usage in opac-search.pl.
 
+=head2 $extratables
+
+optional argument containing extra tables to search. Used in conjunction with $sqlstring. See usage in opac-search.pl.
+String... so ',items,issues,reserves' allows the items, issues and reserves tables to be used.in a where.
+
 =head2 RETURNS
 
 returns an array containing hashes. The hash contains all biblio & biblioitems fields and a reference to an item hash. The "item hash contains one line for each callnumber & the number of items related to the callnumber.
@@ -169,7 +174,7 @@ $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrievi
 =cut
 
 sub catalogsearch {
-	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring) = @_;
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring, $extratables) = @_;
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -277,6 +282,7 @@ sub catalogsearch {
 	# Finds the basic results without the NOT requests
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
   $sql_where1 .= $sqlstring;
+  $sql_tables .= $extratables;
 	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( biblio.timestamp ) <30" if $orderby =~ "biblio.timestamp";
 	my $sth;
 	if ($sql_where2) {
