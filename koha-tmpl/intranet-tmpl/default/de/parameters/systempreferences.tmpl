@@ -39,15 +39,15 @@
 			var _alertString="";
 			var alertString2;
 			if (f.variable.value.length==0) {
-				_alertString += "\n- " + _("variable missing");
+				_alertString += "\n- " + _("Variable fehlt");
 			}
 			if (f.value.value.length==0) {
-				_alertString += "\n- " + _("value missing");
+				_alertString += "\n- " + _("Wert fehlt");
 			}
 			if (_alertString.length==0) {
 				document.Aform.submit();
 			} else {
-				alertString2  = _("Form not submitted because of the following problem(s)");
+				alertString2  = _("Daten wegen der folgenden Probleme nicht gespeichert");
 				alertString2 += "\n------------------------------------------------------------------------------------\n";
 				alertString2 += _alertString;
 				alert(alertString2);
@@ -88,7 +88,8 @@
 					</select>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="type-yesno" -->
-					<input type="radio" name="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked<!-- /TMPL_IF -->>Ja <input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked<!-- /TMPL_IF -->>Nein
+					<input type="radio" name="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked<!-- /TMPL_IF -->>Ja 
+					<input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked<!-- /TMPL_IF -->>Nein
 				<!-- /TMPL_IF -->
 	
 			</p>

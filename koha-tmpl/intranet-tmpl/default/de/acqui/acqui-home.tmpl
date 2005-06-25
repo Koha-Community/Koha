@@ -5,15 +5,11 @@
 <h1 class="acquisition">Erwerbung</h1>
 <div id="bloc25">
 	<h2 class="acquisition">Beginnen, Eingangsbearbeitung, &auml;ndern von Bestellungen</h2>
-	<!-- TMPL_IF name="nobudget" -->
-  	                 <p class="problem">Sie m&uuml;ssen unter Parameter ein Budget definieren</p>
-  	         <!-- TMPL_ELSE -->
-		<form action="/cgi-bin/koha/acqui/order.pl" method="post">
+  	        <form action="/cgi-bin/koha/acqui/order.pl" method="post">
 			Lieferantenname: <input type="text"  size="25"   name="supplier">
 			<input type="submit" class="button acquisition" value="OK">
 		</form>
 	<p>oder <a href="histsearch.pl" class="button acquisition"> Suche Bestellhistorie</a></p>
-	<!-- /TMPL_IF -->
 </div>
 
 <!-- currencies-->
@@ -34,7 +30,7 @@
 <div id="bloc25">
 	<h2 class="acquisition">zu pr&uuml;fende Vorschl&auml;ge</h2>
 		<!-- TMPL_IF name="suggestion" -->
-			<!--TMPL_VAR NAME="suggestion" --> offene Anschaffungsvorschl%auml;ge <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Manage</a>
+			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Manage</a>
 		<!-- TMPL_ELSE -->
 			Keine Anschaffungsvorschl&auml;ge offen
 		<!-- /TMPL_IF -->
@@ -42,18 +38,15 @@
 
 <!-- showbudget-->
 <div id="bloc25">
-	<form action="/cgi-bin/koha/search.pl">
+		<form action="/cgi-bin/koha/search.pl">	
 		<h2 class="acquisition">Etats und Budgets</h2>
-		<!-- TMPL_IF name="nobudget" -->
-  	                 <p class="problem">Sie m&uuml;sen unter Parameter ein Budget definieren</p>
-  	         <!-- TMPL_ELSE -->
 		<table class="noborder">
 			<tr>
 				<th class="acquisition">Etats</th>
-				<th class="acquisition">Gesamt</th>
+				<th class="acquisition">Total</th>
 				<th class="acquisition">Geschenkt</th>
 				<th class="acquisition">Verausgabt</th>
-				<th class="acquisition">Verf&uuml;gbar </th>
+				<th class="acquisition">Verf&uuml;gbar</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="loop_budget" -->
 				<tr>
@@ -65,7 +58,7 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<th class="acquisition" align="right">Gesamt</th>
+				<th class="acquisition" align="right">Total</th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="total" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totspent" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totcomtd" --></th>
@@ -73,9 +66,9 @@
 			</tr>
 		</table>
 		<p>
-Benutzen Sie den "neu laden"-Button des Browsers zur Anzeige der aktuellen Betr&auml;ge. Die angezeigten Werte sind nur ungef&auml;hre Werte, da bei Zahlung eines Betrags der dann aktuelle Wechselkurs berechnet wird.
+		Benutzen Sie den "neu laden"-Button des Browsers zur Anzeige der aktuellen Betr&auml;ge. Die angezeigten Werte sind nur ungef&auml;hre Werte, da bei Zahlung eines Betrags der dann aktuelle Wechselkurs berechnet wird.
 		</p>
-	<!-- /TMPL_IF -->
+	 </form>
 </div>
 
 <div id="bloc25">

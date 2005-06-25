@@ -1,4 +1,5 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<!-- angepasst fuer 2.2.3, hellen 24/06/05 -->
 <div id="mainbloc">
 <h1>Zahlung Mahngeb&uuml;hren f&uuml;r <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
 
@@ -11,7 +12,9 @@
 	
 <!-- TMPL_LOOP NAME="loop_pay" -->
 <tr valign="top">
-	<td><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="no" checked="checked">Unpaid  <input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="yes">Pay  <input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="wo">Writeoff
+	<td><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="no" checked="checked">Unbezahlt
+	<input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="yes">Zahlen 
+	<input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="wo">Abschreiben
 	<input type="hidden" name="itemnumber<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="itemnumber" -->">
 	<input type="hidden" name="accounttype<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="accounttype" -->">
 	<input type="hidden" name="amount<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="amount'}" -->">

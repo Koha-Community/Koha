@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
-
+<!-- angepasst fuer 2.2.3, hellen, 24/06/05 -->
 <div id="mainbloc">
 	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->Neu <!-- /TMPL_UNLESS -->Einkaufskorb <b><!-- TMPL_VAR NAME="basketno" --> </b>f&uuml;r <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
 	<!-- TMPL_UNLESS name="closedate" -->
 		<div id="bloc25">
 			<h2 class="acquisition">Korb-Info</h2>
 			<p><label class="label100">Korb-Nummer<label> <!-- TMPL_VAR NAME="basketno" --></p>
-			<p><label class="label100">Bearbeitet von<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
-			<p><label class="label100">Begonnen am<label> <!-- TMPL_VAR NAME="creationdate" --></p>
+			<p><label class="label100">Managed by<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
+			<p><label class="label100">open on<label> <!-- TMPL_VAR NAME="creationdate" --></p>
 			<p><label class="label100">f&uuml;r<label> <!-- TMPL_VAR NAME="booksellerid" --></p>
 			<p><label class="label100">Rechnungsnummer </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
 			<!-- TMPL_IF name="closedate" -->
@@ -27,10 +27,10 @@
 				<th class="acquisition">ISBN</th>
 				<th class="acquisition">Titel</th>
 				<th class="acquisition">Verfasser</th>
-				<th class="acquisition">EK-Preis</th>
-				<th class="acquisition doNotPrint">Nettopreis</th>
-				<th class="acquisition">Menge</th>
-				<th class="acquisition">Gesamt</th>
+				<th class="acquisition">rrp</th>
+				<th class="acquisition doNotPrint">est</th>
+				<th class="acquisition">Qty</th>
+				<th class="acquisition">Total</th>
 				<th class="acquisition doNotPrint">Etat <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[Bestellung]</a></th>
 				<!-- TMPL_IF name="active" -->
 					<!-- TMPL_UNLESS name="closedate" -->
@@ -90,12 +90,17 @@
 	<!-- TMPL_IF name="active" -->
 		<!-- TMPL_UNLESS name="closedate" -->
 		<div id="bloc25">
-			<h2 class="acquisition">Weitere Bestellung</h2>
+			<h2 class="acquisition">Add order line</h2>
 			<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
 				<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
 				<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
 				<p>von einem vorhandenen Biblio </b><input type="text"  size="25"   name="search"><input type="submit" class="button acquisition" value="Suche"></p>
-				<p>oder <a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition"> f&uuml;r einen Anschaffungsvorschlag </a> <a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition"> Neuer Biblio </a>
+				<p>oder
+				 <a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
+				  f&uuml;r einen Anschaffungsvorschlag
+				   </a> <a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
+				    Neuer Biblio
+				     </a>
 				</p>
 			</form>
 		</div>

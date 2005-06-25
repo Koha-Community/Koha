@@ -4,7 +4,29 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
 	<div class="bibliomenu">
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Biblio bearbeiten  </a>  <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">  Duplizieren  </a>  <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">  Exemplar bearbeiten  </a>   <a href="javascript:confirm_deletion()" class="button catalogue">  L&ouml;schen  </a>  <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  MARC-Vollanzeige  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Normalanzeige  </a>  <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  ISBD  </a>  <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  zu virtuellem Regal hinzuf&uuml;gen  </a>  <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Drucken  </a>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Biblio bearbeiten
+		  </a>
+		    <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+		     Duplizieren 
+		      </a>
+		        <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
+			  Exemplar bearbeiten
+			    </a>
+			       <a href="javascript:confirm_deletion()" class="button catalogue">
+			         L&ouml;schen 
+				  </a>
+				    <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  MARC-Vollanzeige
+				      </a>
+				        <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Normalanzeige
+					  </a>
+					    <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  ISBD
+					      </a>
+					        <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+						  zu virtuellem Regal hinzuf&uuml;gen
+						    </a>
+						      <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+						        Drucken
+							  </a>
 		<!-- TMPL_IF name="subscriptionsnumber" -->
 		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Bestellungen
@@ -33,7 +55,7 @@
 					<br />
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="author" --><label class="label100"><b>Verfasser</b> </label><!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="additional" --><label class="label100"><b>Weitere Verfasser:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="additional" --><label class="label100"><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="publishercode" --><label class="label100"><b>Verlag:</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" --><br />
 				<!-- TMPL_IF name="publicationyear" --><label class="label100"><b>Ort:</b></label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
 				<!-- TMPL_IF name="pages" -->, <!-- TMPL_VAR name="pages" -->s<!-- /TMPL_IF -->
@@ -71,7 +93,7 @@
 			<th class="catalogue">Status</th>
 			<th class="catalogue">Entliehen bis</th>
 			<th class="catalogue">Zuletzt gesehen</th>
-			<th class="catalogue">Barcode</th>
+			<th class="catalogue">Strichcode</th>
 			<th class="catalogue">Band</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -91,7 +113,7 @@
 				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 				<!-- TMPL_IF NAME="type" -->
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Medientyp &auml;ndern</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
 					</td>
 				<!-- /TMPL_IF -->
 			</tr>

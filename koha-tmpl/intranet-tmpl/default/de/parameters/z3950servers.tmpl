@@ -63,7 +63,7 @@
 					if (_alertString.length==0) {
 							document.Aform.submit();
 					} else {
-							alertString2  = _("Form not submitted because of the following problem(s)");
+							alertString2  = _("Daten wegen der folgenden Probleme nicht gespeichert");
 							alertString2 += "\n------------------------------------------------------------------------------------\n";
 							alertString2 += _alertString;
 							alert(alertString2);
@@ -190,13 +190,13 @@
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="else" -->
-			<h1 class="parameters">Admin Z39.50 Server</h1>
+			<h1 class="parameters">Administration Z39.50 Server</h1>
 			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 				<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
 				<input type="submit" name="ok" value="OK" class="button">
 			</form>
 			<!-- TMPL_IF NAME="searchfield" -->
-				You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+				Sie suchten nach <b><!-- TMPL_VAR NAME="searchfield" --></b>
 			<!-- /TMPL_IF -->
 			<table>
 				<tr>

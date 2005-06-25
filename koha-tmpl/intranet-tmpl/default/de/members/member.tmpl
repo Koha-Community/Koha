@@ -1,11 +1,12 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 <div id="mainbloc">
 <h1>Benutzersuche</h1>
-
+<!-- angepasst fuer 2.2.3, hellen 24/06/05 -->
 <div class="bloc100">
 	<div class="bloctitle">Suche nach</div>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->">  order by 
+		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->">
+		  order by 
 		<select name="orderby">
 			<option value="surname,firstname">Nachname</option>
 			<option value="cardnumber">Cardnumber</option>
@@ -46,7 +47,8 @@
 	</table>
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
 	<input type="submit" class="button" value="Benutzer hinzuf&uuml;gen" title="Benutzer hinzuf&uuml;gen" alt="Benutzer hinzuf&uuml;gen">
-	<input type="radio" name="categorycode" value="" checked>Erwachsener <input type="radio" name="categorycode" value="I" >Organisation
+	<input type="radio" name="categorycode" value="" checked>Erwachsener
+	<input type="radio" name="categorycode" value="I" >Organisation
 	<input type="hidden" name="actionType" value="Add">
 	</form>
 </div>

@@ -11,7 +11,7 @@
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="catalogue">Ergebnisse in der Datenbank</h2>
+		<h2 class="catalogue">Biblios in der Datenbank</h2>
 		<!-- TMPL_IF name="loop" -->
 			<div id="resultnumber">
 				<p>
@@ -31,15 +31,15 @@
 					<!-- /TMPL_LOOP -->
 					<!-- TMPL_IF NAME="displaynext" -->
 						<a class="resultnumber" href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
-							Weitere &gt;&gt;
+							Weitere&gt;&gt;
 						</a>
 					<!-- /TMPL_IF -->
 			</p>
 			<p class="resultcount">
 				<!-- TMPL_IF NAME="total" -->
-					Treffer <i><!-- TMPL_VAR NAME="from" --></i> bis <i><!-- TMPL_VAR NAME="to" --></i>
+					Ergebnisse <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" -->
 				<!-- TMPL_ELSE -->
-					Keine Treffer
+					Nichts gefunden.
 				<!-- /TMPL_IF -->
 			</p>
 		</div>
@@ -61,12 +61,12 @@
 						<!-- TMPL_IF NAME="NOTMARC" -->
 						<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Exemplare hinzuf&uuml;gen</a></td>
 						<!-- TMPL_ELSE -->
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Bearbeiten</a></td>
+						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Bearbeiten...</a></td>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_UNLESS NAME="NOTMARC" -->
 						<td>
 							<a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
-								Duplizieren
+								Duplikate
 							</a>
 						</td>
 						<!-- /TMPL_UNLESS -->
@@ -91,24 +91,24 @@
 					<!-- /TMPL_LOOP -->
 					<!-- TMPL_IF NAME="displaynext" -->
 						<a class="resultnumber" href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
-							Weitere &gt;&gt;
+							Weitere&gt;&gt;
 						</a>
 					<!-- /TMPL_IF -->
 			</p>
 			<p class="resultcount">
 				<!-- TMPL_IF NAME="total" -->
-					Treffer <i><!-- TMPL_VAR NAME="from" --></i> bis <i><!-- TMPL_VAR NAME="to" --></i>
+					Ergebnisse <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" -->
 				<!-- TMPL_ELSE -->
-					Keine Treffer
+					Nichts gefunden.
 				<!-- /TMPL_IF -->
 			</p>
 		</div>
 		<!-- TMPL_ELSE -->
-			<p>Keine</p>
+			<p>None</p>
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="catalogue">Bibliografische Daten im Fremddatenpool</h2>
+		<h2 class="catalogue">Biblios im fremddatenpool</h2>
 		<!-- TMPL_IF name="breeding_loop" -->
 			<table>
 				<tr>
@@ -128,7 +128,7 @@
 							<!-- TMPL_IF NAME="NOTMARC" -->
 							
 							<!-- TMPL_ELSE -->
-							<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->" class="button catalogue">Biblio zur Datenbank hinzuf&uuml;gen</a></td>
+							<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->" class="button catalogue">Biblio hinzuf&uuml;gen</a></td>
 							<!-- /TMPL_IF -->
 						</tr>
 					<!-- /TMPL_LOOP -->
@@ -138,7 +138,7 @@
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="catalogue">Biblio zur Datenbank hinzuf&uuml;gen</h2>
+		<h2 class="catalogue">Biblio hinzuf&uuml;gen</h2>
 		<p class="center">
 		<!-- TMPL_IF NAME="NOTMARC" -->
 			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button catalogue">Neuen Biblio hinzuf&uuml;gen</a>

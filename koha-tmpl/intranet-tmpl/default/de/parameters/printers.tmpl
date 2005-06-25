@@ -42,7 +42,7 @@
 					var _alertString="";
 					var alertString2;
 					if (f.printername.value.length==0) {
-							_alertString += "\n- " + _("Druckername fehlt ");
+							_alertString += "\n- " + _("Druckername fehlt");
 					}
 					if (f.printqueue.value.length==0) {
 							_alertString += "\n- " + _("Queue fehlt");
@@ -50,7 +50,7 @@
 					if (_alertString.length==0) {
 							document.Aform.submit();
 					} else {
-							alertString2  = _("Form not submitted because of the following problem(s)");
+							alertString2  = _("Form wird nicht unterstuetzt wegen der folgenden Probleme");
 							alertString2 += "\n------------------------------------------------------------------------------------\n";
 							alertString2 += _alertString;
 							alert(alertString2);
@@ -59,7 +59,7 @@
 			</script>
 	<div id="bloc25">
 		<!-- TMPL_IF NAME="searchfield" -->
-			<h2 class="parameters">Drucker bearbeiten</h2>
+			<h2 class="parameters">Drucker &auml;ndern</h2>
 		<!-- TMPL_ELSE -->
 			<h2 class="parameters">Drucker hinzuf&uuml;gen</h2>
 		<!-- /TMPL_IF -->
@@ -79,7 +79,7 @@
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="add_validate" -->
-		Daten gespeichert
+		Daten hinzugef&uuml;gt
 			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="submit" value="OK" class="button">
 			</form>
@@ -105,7 +105,7 @@
 				<td><!-- TMPL_VAR NAME="printtype" --></td>
 			</tr>
 				<tr>
-				<td colspan="2" align="center">L&ouml;schen best&auml;tigen</td>
+				<td colspan="2" align="center">L&Ouml;SCHUNG BEST&Auml;TIGEN</td>
 			</tr>
 				<tr>
 				<td>
@@ -131,11 +131,11 @@
 	<!-- TMPL_IF NAME="else" -->
 			<form action="<!-- TMPL_VAR NAME="script_name">" method="post">
 					<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
-					<input type="reset" name="reset" value="l&ouml;schen">
+					<input type="reset" name="reset" value="clr">
 			</form>
 	
 		<!-- TMPL_IF NAME="searchfield" -->
-			You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+			Sie suchten nach <b><!-- TMPL_VAR NAME="searchfield" --></b>
 		<!-- /TMPL_IF -->
 	
 		<table border="0" cellspacing="0" cellpadding="5">
@@ -152,7 +152,7 @@
 				<td><!-- TMPL_VAR NAME="printqueue" --></td>
 				<td><!-- TMPL_VAR NAME="printtype" --></td>
 				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->" class="button">Bearbeiten</a></td>
-							<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->" class="button">L&ouml;schen</a></td>
+				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->" class="button">L&ouml;schen</a></td>
 			</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
@@ -161,17 +161,17 @@
 			<input type="hidden" name="op" value="add_form">
 		
 		<!-- TMPL_IF NAME="offsetgtzero" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Prev</a>
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Vorherige</a>
 		<!-- /TMPL_IF -->
 	
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
 		<!-- TMPL_IF NAME="ltcount" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">N&auml;chster &gt;&gt;</a>	
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">N&auml;chste &gt;&gt;</a>	
 		<!-- /TMPL_iF -->
 	
 			<br>
-		<input type="submit" class="button" value="Drucker hinzuf&uuml;gen" alt="Drucker hinzuf&uuml;gen">
+		<input type="submit" class="button" value="Drucker hinzuf&uuml;gen" alt="Add printer">
 		<br>
 			</form>
 	

@@ -34,11 +34,25 @@
 			</td>
 			<td>
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
-				<select name="status" size="1">					
-						<option value="1" <!--TMPL_IF name="status1" -->selected<!-- /TMPL_IF -->>erwartet</option>		
-						<option value="2" <!--TMPL_IF name="status2" -->selected<!-- /TMPL_IF -->>eingegangen</option>
-						<option value="3" <!--TMPL_IF name="status3" -->selected<!-- /TMPL_IF -->>versp&auml;tet</option>					
-						<option value="4" <!--TMPL_IF name="status4" -->selected<!-- /TMPL_IF -->>&uuml;berf&auml;llig</option>					
+				<select name="status" size="1">	
+					<!--TMPL_IF name="status1" -->				
+						<option value="1" selected>erwartet</option>
+						<!-- /TMPL_IF -->
+						<!--TMPL_IF name="status2" -->		
+						<option value="2" selected>eingegangen</option>
+						<!-- /TMPL_ELSE -->
+						<option value="2" selected>eingegangen</option>
+						<!-- /TMPL_IF -->
+						<!--TMPL_IF name="status3" -->
+						<option value="3"selected>versp&auml;tet</option>
+						<!-- /TMPL_ELSE -->
+						<option value="3"selected>versp&auml;tet</option>
+						<!-- /TMPL_IF -->
+						 <!--TMPL_IF name="status4" -->					
+						<option value="4"selected>&uuml;berf&auml;llig</option>
+						<!-- /TMPL_ELSE -->
+						<option value="4"selected>&uuml;berf&auml;llig</option>
+						<!-- /TMPL_IF -->					
 				</select>
 			</td>
 		</tr>
@@ -54,7 +68,6 @@
 			<td>
 				<input type="hidden" name="serialid" value="0">
 				<select name="status" size="1">
-						<option value="1">erwartet</option>				
 						<option value="2">eingegangen</option>
 						<option value="3" selected>versp&auml;tet</option>
 						<option value="4">&uuml;berf&auml;llig</option>

@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <script language="javascript" type="text/javascript">
-
+<!-- aktualisiert fuer 2.2.3, hellen 24/06/05 -->
 <!--
 function update(f){
   //collect values
@@ -86,6 +86,7 @@ function check(f) {
 		<input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->">
 	<!-- /TMPL_LOOP -->
 	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->" class="button acquisition">Korb ansehen</a> <h1 class="acquisition">
+	<h1 class="acquisition">
 		<!-- TMPL_IF name="ordnum" -->
 			Bestellung bearbeiten (Zeile #<!-- TMPL_VAR NAME="ordnum" -->)
 		<!-- TMPL_ELSE -->
@@ -93,7 +94,7 @@ function check(f) {
 		<!-- /TMPL_IF -->
 		 <!-- TMPL_IF name="suggestionid" -->(bestimmt durch Vorschlag)<!-- /TMPL_IF -->
 	</h1>
-	Einkaufkorb f&uuml;r <!-- TMPL_VAR NAME="name" -->
+	Shopping Basket For <!-- TMPL_VAR NAME="name" -->
 	<div id="bloc25">
 		<h2 class="acquisition">Katalog-Details</h2>
 		<p>
@@ -141,7 +142,7 @@ function check(f) {
 			<!-- /TMPL_IF -->
 		</p>
 		<p>
-			<label class="label100">Serie</label>
+			<label class="label100">Serien</label>
 			<!-- TMPL_IF name="biblio" -->
 				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->"><!-- TMPL_VAR NAME="seriestitle" -->
 			<!-- TMPL_ELSE -->
@@ -180,7 +181,7 @@ function check(f) {
 			<input type="text" size="20" name="GST" value="" onchange="update(this.form)">
 		</p>
 		<p>
-			<label class="label100"><b>GESAMTSUMME</b></label>
+			<label class="label100"><b>BUDGETED TOTAL</b></label>
 			<input type="text" size="20" name="total" value="" onchange="update(this.form)">
 		</p>
 		<p>

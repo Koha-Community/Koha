@@ -33,7 +33,15 @@ a.acquisition:hover {
 <!-- MENUS -->
 <div id="menubar">
 	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
-	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Erwerbung</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Katalog</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Ausleihe</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Benutzer</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameter</a> <a class="about" href="/cgi-bin/koha/about.pl">&Uuml;ber</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Hilfe</a>
+	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Erwerbung</a> 
+	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Katalog</a>
+	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Ausleihe</a> 
+	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Benutzer</a> 
+	<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> 
+	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a> 
+	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameter</a> 
+	<a class="about" href="/cgi-bin/koha/about.pl">&Uuml;ber</a> 
+	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Hilfe</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Angemeldet als: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Abmelden</a>]</p>

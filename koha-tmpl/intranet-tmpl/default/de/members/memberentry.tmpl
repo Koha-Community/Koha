@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
-
+<!-- angepasst fuer 2.2.3, hellen 24/06/05 -->
 <div id="mainbloc">
 	<!-- TMPL_IF NAME="addAction" -->
 	<h1>
@@ -101,7 +101,10 @@
 			<tr>
 				<td colspan="2">
 				<!-- TMPL_UNLESS name="institution" -->
-					<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked<!-- /TMPL_IF -->>F  <input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked<!-- /TMPL_UNLESS -->> M
+					<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked<!-- /TMPL_IF -->>F  
+					<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME="female" --> checked<!-- /TMPL_UNLESS -->>M  
+					
+
 				<!-- /TMPL_UNLESS -->
 
 				</td>
@@ -247,7 +250,8 @@
 				<!-- TMPL_LOOP NAME="flagloop" -->
 				<tr>
 					<td colspan="2"><!-- TMPL_VAR NAME="html" --></td>
-					<td colspan="3"><input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Ja <input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>Nein
+					<td colspan="3"><input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Ja 
+					<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>Nein
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
