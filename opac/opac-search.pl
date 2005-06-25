@@ -8,7 +8,7 @@ use C4::Context;
 use CGI;
 use C4::Database;
 use HTML::Template;
-use C4::SearchMarcTest;
+use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
 my @spsuggest; # the array for holding suggestions
@@ -116,6 +116,7 @@ if ($op eq "do_search") {
 	}
 	findseealso($dbh,\@tags);
     my $sqlstring;
+    my $extratables;
     if ($itemtypesstring ne ''){
         $sqlstring = 'and (biblioitems.itemtype IN (';
         my $itemtypeloop=0;
@@ -133,6 +134,7 @@ if ($op eq "do_search") {
     if ($branchesstring ne ''){
         $sqlstring .= 'and biblio.biblionumber=items.biblionumber and (items.holdingbranch IN (';
         my $branchesloop=0;
+        $extratables = ',items';
         foreach my $branch (@branches){
             if ($branch ne ''){
                 if ($branchesloop != 0){
@@ -145,11 +147,12 @@ if ($op eq "do_search") {
         $sqlstring .= '))'
     }
   if ($avail){
+  	$extratables .= ',items,issues,reserves';
     $sqlstring .= "and biblioitems.biblioitemnumber=items.biblioitemnumber and items.itemnumber !=issues.itemnumber and biblio.biblionumber !=reserves.biblionumber and (items.itemlost IS NULL or items.itemlost = 0) and (items.notforloan IS NULL or items.notforloan =0) and (items.wthdrawn IS NULL or items.wthdrawn =0) ";
   }
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc,$sqlstring);
+										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc,$sqlstring, $extratables);
 	if ($total ==1) {
 	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
 	     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=".@$results[0]->{biblionumber});
@@ -411,7 +414,7 @@ $template->param( phraseorterm => $phraseorterm );
 	);
 }
 # ADDED BY JF
-#if ($totalresults == 1){
+if ($totalresults == 1){
     # if its a barcode search by definition we will only have one result.
     # And if we have a result
     # lets jump straight to the detail.pl page
