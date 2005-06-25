@@ -32,10 +32,13 @@ my ($websitecount, @websites)             = &getwebsites($biblionumber);
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
-
+my @author;
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
         $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
+        my %authorpush;
+        $authorpush{author} =$addauthor->[$i]->{'author'};
+        push @author, \%authorpush
 } # for
 
 my $norequests = 1;
@@ -60,11 +63,37 @@ if ($marc eq "yes") {
 }
 
 my @results = ($dat,);
+my @title;
+
+
+foreach my $word (split(" ", $dat->{'title'})){
+        unless (length($word) == 4){
+                $word =~s/\%//g
+        }
+        unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {
+        my %titlepush;
+        $titlepush{title} =$word;
+                push @title, \%titlepush;
+        }#it's NOT a stopword => use it. Otherwise, ignore
+}
+foreach my $word (split(" ", $dat->{'author'})){
+        unless (length($word) == 4){
+                $word =~s/\%//g
+        }
+        unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {
+        my %authorpush;
+        $authorpush{author}=$word;
+                push @author, \%authorpush;
+        }#it's NOT a stopword => use it. Otherwise, ignore
+}
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
+my $titlewords=\@title;
+my $authorwords=\@author;
+
 
 #coping with subscriptions
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
@@ -88,6 +117,8 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 			     LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
+        titlewords => $titlewords,
+        authorwords => $authorwords,
 );
   ## Amazon.com stuff
 =head
@@ -120,8 +151,3 @@ $template->param( REVIEWS => \@reviews );
   ## End of Amazon Stuff
 =cut
 output_html_with_http_headers $query, $cookie, $template->output;
-
-#output_html_with_http_headers $query, $cookie, $template->output;
-
-output_html_with_http_headers $query, $cookie, $template->output;
-
