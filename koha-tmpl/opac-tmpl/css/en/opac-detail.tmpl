@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
-
+<table width="100%">
+<tr>
+<td width="70%">
 <div id="bibliomenu">
 	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		Simple
@@ -79,7 +81,7 @@
 					<!-- /TMPL_IF -->
 				</p>
 				<!-- TMPL_IF name="count" -->
-					<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
+				<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
 				<!-- /TMPL_IF -->
 			</td>
 		</tr>
@@ -168,4 +170,37 @@
 	<!-- /TMPL_IF -->
 	</div>
 </div>
+</td>
+<td width="30%">
+Search Options:<br>
+Select keywords from list<br>
+<br>
+<form name="searchoptions" action="searchoptions.pl" method="get">
+<input type="hidden" name="searchtype" value="NewSearch">
+Titles:<br>
+<!-- TMPL_LOOP NAME="titlewords" -->
+<input type="checkbox" name="keyword" value="<!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="title" --><br>
+<!-- /TMPL_LOOP --><br>
+Authors:<br>
+<!-- TMPL_LOOP NAME="authorwords" -->
+<input type="checkbox" name="keyword" value="<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --><br>
+<!-- /TMPL_LOOP --><br>
+Subjects:<br>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<!-- TMPL_LOOP NAME="subjects" -->
+<input type="checkbox" name="keyword" value="<!-- TMPL_VAR NAME="subject" -->"><!-- TMPL_VAR NAME="subject" --><br>
+<!-- /TMPL_LOOP --><br>
+Itemtype:<br>
+<input type="checkbox" name="itemtypeswanted" value="<!-- TMPL_VAR NAME="itemtype" -->">
+!-- TMPL_IF name="description" -->
+<!-- TMPL_VAR name="description" -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_VAR NAME="itemtype" -->
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP --><br>
+<input type="submit" value="Search">
+</form>
+</td>
+</tr>
+</table>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
