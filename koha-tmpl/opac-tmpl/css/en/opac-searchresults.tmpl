@@ -16,15 +16,18 @@
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME=displayprev -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+				<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->">&lt;&lt;Previous</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
-					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+					<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME=displaynext -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+				<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->">Next &gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p>
 		<p class="center">
@@ -195,15 +198,18 @@ Filter by Branch<br>
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME="displayprev" -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+				<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->">&lt;&lt;Previous</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
-					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+					<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search
+				<!-- TMPL_IF NAME="itemtypesstring">&itemtypesstring=<!-- TMPL_VAR NAME="itemtypesstring"><!-- /TMPL_IF --><!-- TMPL_IF NAME="avail" -->&avail=1<!-- /TMPL_IF -->">Next &gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p>
 	</div>
