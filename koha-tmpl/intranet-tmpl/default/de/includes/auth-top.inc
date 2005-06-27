@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA INTRANET: Authorities</title>
+<title>KOHA INTRANET: Authorit&auml;ten</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <script language="JavaScript">
@@ -16,7 +16,7 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 
 <script language="JavaScript" type="text/javascript">
 function Help() {
-	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Hilfe",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
 
 function addauthority() {
@@ -73,12 +73,12 @@ a.authority:hover {
 		<!-- /TMPL_LOOP -->
 	</select>
 	<a href="javascript:addauthority()" class="submenu2">
-		Authority hinzuf&uuml;gen
+		Autorit&auml;t hinzuf&uuml;gen
 	</a>
 </div>
 </form>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Angemeldet als: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Abmelden</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Anmelden</a> bei Koha</p>
 <!-- /TMPL_IF -->

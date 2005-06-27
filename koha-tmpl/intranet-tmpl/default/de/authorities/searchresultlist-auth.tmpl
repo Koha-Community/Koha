@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="auth-search-top.inc" -->
 <div id="mainbloc">
-	<h1 class="authority">Authority search results</h1>
+	<h1 class="authority">Autorit&auml;ten: Suchergebnisse</h1>
 	<div id="bloc25">
 		<form name="f" method="post" action="auth_finder.pl">
 			<input type="hidden" name="op" value="do_search">
@@ -9,29 +9,29 @@
 			<div id="bloc25">
 				<h2 class="authority">Suche nach</h2>
 				<p>
-					<label class="label100">Authority type</label>
+					<label class="label100">Autorit&auml;tstyp</label>
 					<!-- TMPL_VAR NAME="authtypecode" -->
 					<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
 				</p>
 				<p>
-					<label class="label100">Main entry</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
+					<label class="label100">Haupteintrag</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
 					<input type="hidden" name="marclist" value="mainentry">
 					<input type="hidden" name="and_or" value="and">
 					<input type="hidden" name="excluding" value="">
 					<select name="operator">
-						<option value="start">start by</option>
-						<option value="contains">contains</option>
+						<option value="start">Start mit</option>
+						<option value="contains">enth&auml;lt</option>
 					</select>
 					<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 				</p>
 				<p>
-					<label class="label100">Anywhere</label><input type="text" name="value">
+					<label class="label100">Irgendwo</label><input type="text" name="value">
 					<input type="hidden" name="marclist" value="">
 					<input type="hidden" name="and_or" value="and">
 					<input type="hidden" name="excluding" value="">
 					<select name="operator">
-						<option value="contains">contains</option>
-						<option value="start">start by</option>
+						<option value="contains">enth&auml;lt</option>
+						<option value="start">Start mit</option>
 					</select>
 					<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 				</p>
@@ -74,8 +74,8 @@
 			<table>
 				<tr>
 					<th class="authority">Zusammenfassung</th>
-					<th class="authority">Used</th>
-					<th class="authority">Get It!</th>
+					<th class="authority">Verwendet</th>
+					<th class="authority">Nehmen!</th>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
