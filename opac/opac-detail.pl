@@ -31,13 +31,37 @@ my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
+my @title;
 $dat->{'count'}=@items;
 my @author;
+if ($dat->{'author'}){
+	my %authorpush; 
+	$authorpush{author}=$dat->{'author'};
+	push @author, \%authorpush
+}
 $dat->{'additional'}=$addauthor->[0]->{'author'};
+if ($dat->{'additional'}){
+	my %authorpush;
+	$authorpush{author} =$addauthor->[0]->{'author'};
+	push @author, \%authorpush
+}
+
+foreach my $word (split(" ", $dat->{'title'})){
+        unless (length($word) == 4){
+                $word =~s/\%//g
+        }
+        unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {
+        my %titlepush;
+        $titlepush{title} =$word;
+                push @title, \%titlepush;
+        }#it's NOT a stopword => use it. Otherwise, ignore
+}
+
 for (my $i = 1; $i < $authorcount; $i++) {
         $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
+    
         my %authorpush;
-        $authorpush{author} =$addauthor->[$i]->{'author'};
+        $authorpush{author}=$addauthor->[$i]->{'author'};
         push @author, \%authorpush
 } # for
 
@@ -63,29 +87,11 @@ if ($marc eq "yes") {
 }
 
 my @results = ($dat,);
-my @title;
 
 
-foreach my $word (split(" ", $dat->{'title'})){
-        unless (length($word) == 4){
-                $word =~s/\%//g
-        }
-        unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {
-        my %titlepush;
-        $titlepush{title} =$word;
-                push @title, \%titlepush;
-        }#it's NOT a stopword => use it. Otherwise, ignore
-}
-foreach my $word (split(" ", $dat->{'author'})){
-        unless (length($word) == 4){
-                $word =~s/\%//g
-        }
-        unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {
-        my %authorpush;
-        $authorpush{author}=$word;
-                push @author, \%authorpush;
-        }#it's NOT a stopword => use it. Otherwise, ignore
-}
+
+
+
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
