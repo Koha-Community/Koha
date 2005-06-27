@@ -71,6 +71,7 @@ $VERSION = 0.01;
   &char_decode
   
   &FindDuplicate
+  &DisplayISBN
 );
 
 #
@@ -2629,6 +2630,43 @@ sub FindDuplicate {
 	return;
 }
 
+sub DisplayISBN {
+	my ($isbn)=@_;
+	my $seg1;
+	if(substr($isbn, 0, 1) <=7) {
+		$seg1 = substr($isbn, 0, 1);
+	} elsif(substr($isbn, 0, 2) <= 94) {
+		$seg1 = substr($isbn, 0, 2);
+	} elsif(substr($isbn, 0, 3) <= 995) {
+		$seg1 = substr($isbn, 0, 3);
+	} elsif(substr($isbn, 0, 4) <= 9989) {
+		$seg1 = substr($isbn, 0, 4);
+	} else {
+		$seg1 = substr($isbn, 0, 5);
+	}
+	my $x = substr($isbn, length($seg1));
+	my $seg2;
+	if(substr($x, 0, 2) <= 19) {
+# 		if(sTmp2 < 10) sTmp2 = "0" sTmp2;
+		$seg2 = substr($x, 0, 2);
+	} elsif(substr($x, 0, 3) <= 699) {
+		$seg2 = substr($x, 0, 3);
+	} elsif(substr($x, 0, 4) <= 8399) {
+		$seg2 = substr($x, 0, 4);
+	} elsif(substr($x, 0, 5) <= 89999) {
+		$seg2 = substr($x, 0, 5);
+	} elsif(substr($x, 0, 6) <= 9499999) {
+		$seg2 = substr($x, 0, 6);
+	} else {
+		$seg2 = substr($x, 0, 7);
+	}
+	my $seg3=substr($x,length($seg2));
+	$seg3=substr($seg3,0,length($seg3)-1) ;
+	my $seg4 = substr($x, -1, 1);
+	return "$seg1-$seg2-$seg3-$seg4";
+}
+
+
 END { }    # module clean-up code here (global destructor)
 
 =back
@@ -2643,6 +2681,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.14  2005/06/27 23:24:06  hdl
+# Display dashed ISBN
+#
 # Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
 # patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
 #
