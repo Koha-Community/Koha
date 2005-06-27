@@ -32,12 +32,15 @@ then
 	exit 1
 fi
 
-su -s /bin/sh -c $KohaZ3950Shell - $RunAsUser &
+su -c $KohaZ3950Shell - $RunAsUser &
 
 exit
 
 #--------------
 # $Log$
+# Revision 1.4.4.1  2005/06/27 23:10:55  hdl
+# Removing -s from su call after Thomas D reports it breaks FreeBSD
+#
 # Revision 1.4  2003/11/05 23:33:45  slef
 # Now figures out what directory the scripts are in
 #
