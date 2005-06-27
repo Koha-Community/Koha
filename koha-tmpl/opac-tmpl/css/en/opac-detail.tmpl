@@ -1,8 +1,6 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
-<table width="100%">
-<tr>
-<td width="70%">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css"/>
+
 <div id="bibliomenu">
 	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		Simple
@@ -31,7 +29,7 @@
 	<!-- /TMPL_IF -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Add to basket</a>
 </div>
-
+<div id="homebloc">
 <div id="mainbloc">
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="class" --></h1>
@@ -170,8 +168,8 @@
 	<!-- /TMPL_IF -->
 	</div>
 </div>
-</td>
-<td width="30%">
+</div>
+<div id="rightbloc">
 Search Options:<br>
 Select keywords from list<br>
 <br>
@@ -200,7 +198,5 @@ Itemtype:<br>
 <!-- /TMPL_LOOP --><br>
 <input type="submit" value="Search">
 </form>
-</td>
-</tr>
-</table>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
