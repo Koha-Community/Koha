@@ -198,11 +198,19 @@ function check(f) {
 		<p>The 2 following fields are available for your own usage. They can be useful for stat purposes</p>
 		<p>
 			<label class="label100">Sort field 1</label>
-			<input type="text" size="20" name=sort1 value="<!-- TMPL_VAR NAME="sort1" -->">
+			<!-- TMPL_IF Name="CGIsort1" -->
+				<!-- TMPL_VAR Name="CGIsort1" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+			<!--/TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Sort field 2</label>
-			<input type="text" size="20" name=sort2 value="<!-- TMPL_VAR NAME="sort2" -->">
+			<!-- TMPL_IF Name="CGIsort2" -->
+				<!-- TMPL_VAR Name="CGIsort2" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+			<!--/TMPL_IF -->
 		</p>
 		<p>
 			<input type="button" value="OK" class="button acquisition" onClick="check(this.form)">
