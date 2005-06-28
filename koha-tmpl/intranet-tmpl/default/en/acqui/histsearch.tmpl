@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 <div id="mainbloc">
 	<h1 class="acquisition">Order search</h1>
+	<p class="resultcount"><!-- TMPL_VAR Name ="numresults" --> orders were found.
+	 </p>
 	<table>
 		<tr>
 			<th class="acquisition">&nbsp;</th>
@@ -103,7 +105,7 @@
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<tr>
 				<td>
-					&nbsp;
+					<!-- TMPL_VAR NAME="count" -->
 				</td>
 				<td>
 					<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a>

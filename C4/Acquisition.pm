@@ -611,7 +611,9 @@ biblio.biblionumber=aqorders.biblionumber";
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
 	my @order_loop;
+	my $cnt=1;
 	while (my $line = $sth->fetchrow_hashref) {
+		$line->{count}=$cnt++;
 		push @order_loop, $line;
 	}
 	return \@order_loop;
