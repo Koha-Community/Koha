@@ -48,6 +48,34 @@ use C4::Search;
 use HTML::Template;
 use C4::Context;
 
+my %tabsysprefs;
+$tabsysprefs{acquisitions}="Acquisitions";
+$tabsysprefs{gist}="Acquisitions";
+$tabsysprefs{authoritysep}="Authorities";
+$tabsysprefs{ISBD}="Catalogue";
+$tabsysprefs{marc}="Catalogue";
+$tabsysprefs{marcflavour}="Catalogue";
+$tabsysprefs{SubscriptionHistory}="Catalogue";
+$tabsysprefs{maxoutstanding}="Circulation";
+$tabsysprefs{printcirculationslips}="Circulation";
+$tabsysprefs{suggestion}="Acquisitions";
+$tabsysprefs{automembernum}="Members";
+$tabsysprefs{noissuescharge}="Circulation";
+$tabsysprefs{opacthemes}="OPAC";
+$tabsysprefs{opaclanguages}="OPAC";
+$tabsysprefs{LibraryName}="OPAC";
+$tabsysprefs{opacstylesheet}="OPAC";
+$tabsysprefs{BiblioDefaultView}="OPAC";
+$tabsysprefs{hidelostitem}="OPAC";
+$tabsysprefs{KohaAdmin}="Admin";
+$tabsysprefs{checkdigit}="Admin";
+$tabsysprefs{dateformat}="Admin";
+$tabsysprefs{insecure}="Admin";
+$tabsysprefs{ldapinfos}="Admin";
+$tabsysprefs{ldapserver}="Admin";
+$tabsysprefs{itemcallnumber}="Catalogue";
+$tabsysprefs{maxreserves}="Circulation";
+$tabsysprefs{virtualshelves}="OPAC";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -55,15 +83,36 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
-	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
-		push(@results,$data);
-		$cnt ++;
+	if ($type){
+		foreach my $syspref (sort keys %tabsysprefs){
+			if ($tabsysprefs{$syspref} eq $type){
+				my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
+				$sth->execute($syspref);
+				while (my $data=$sth->fetchrow_hashref){
+					push(@results,$data);
+					$cnt++;
+				}
+				$sth->finish;
+			}
+		}
+	} else {
+		my $strsth ="Select variable,value,explanation,type,options from systempreferences where variable not in (";  
+		foreach my $syspref (keys %tabsysprefs){
+			$strsth .= $dbh->quote($syspref).",";
+		}
+		$strsth =~ s/,$/) /;
+		$strsth .= " order by variable";
+		warn $strsth;
+		my $sth=$dbh->prepare($strsth);
+		$sth->execute();
+		while (my $data=$sth->fetchrow_hashref){
+			push(@results,$data);
+			$cnt++;
+		}
+		$sth->finish;
 	}
-	$sth->finish;
 	return ($cnt,\@results);
 }
 
@@ -278,11 +327,11 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	if  ($searchfield ne '') {
-		 $template->param(searchfield => "<p>You Searched for <strong>$searchfield</strong></p>");
-	}
+	#Adding tab management for system preferences
+	my $tab=$input->param('tab');
+	
 	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($env,$searchfield,$tab);
 	my $toggle=0;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -300,7 +349,8 @@ if ($op eq 'add_form') {
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
 		push(@loop_data, \%row_data);
 	}
-	$template->param(loop => \@loop_data);
+	$tab=($tab?$tab:"Others");
+	$template->param(loop => \@loop_data, $tab => 1);
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param("<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
