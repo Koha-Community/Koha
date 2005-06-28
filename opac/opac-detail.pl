@@ -29,8 +29,21 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
+ #coping with subscriptions
+ my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+ my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
+ my @subs;
+ foreach my $subscription (@subscriptions){
+ 	warn "subsid :".$subscription->{subscriptionid};
+ 	my %cell;
+ 	$cell{subscriptionid}= $subscription->{subscriptionid};
+ 	$cell{subscriptionnotes}= $subscription->{notes};
+ 	#get the three latest serials.
+ 	$cell{latestserials}=getlatestserials($subscription->{subscriptionid},3);
+ 	push @subs, \%cell;
+ }
+ 
 $dat->{'count'}=@items;
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
@@ -70,6 +83,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				ITEM_RESULTS => $itemsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
+				subscriptions => \@subs,
 				subscriptionsnumber => $subscriptionsnumber,
 			     LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
