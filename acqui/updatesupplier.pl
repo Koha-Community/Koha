@@ -35,7 +35,6 @@ my %data;
 $data{'id'}=$input->param('id');
 
 $data{'name'}=$input->param('company');
-$data{'name'}=~ s/\'/\\\'/g;
 $data{'postal'}=$input->param('company_postal');
 my $address=$input->param('physical');
 my @addresses=split('\n',$address);
