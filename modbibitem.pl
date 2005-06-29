@@ -43,7 +43,7 @@ my $input = new CGI;
 my $bibitemnum=$input->param('bibitem');
 my $data=bibitemdata($bibitemnum);
 my $biblio=$input->param('biblio');
-my $submit=$input->param('submit.x');
+my $submit=$input->param('submit');
 if ($submit eq ''){
   print $input->redirect("deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio");
 }
