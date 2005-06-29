@@ -70,10 +70,8 @@ if ($email_add) {
 		push (@results, $dat);
 	}
 
-    $email_header = encode_qp($email_header);
-
-    $boundary = "--" . $boundary;
-
+    # Getting template result                                                                                             
+    my $template_res = $template2->output();
 	# Analysing information and getting mail properties
 	if ($template_res =~ /<SUBJECT>\n(.*)\n<END_SUBJECT>/s) { $mail{'subject'} = $1; }
 	else { $mail{'subject'} = "no subject"; }
