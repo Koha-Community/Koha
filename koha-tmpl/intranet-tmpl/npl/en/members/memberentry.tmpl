@@ -145,8 +145,16 @@
 	<tr><th><label for="cardnumber"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->><a name="cardnumber" id="cardnumber">Card Number</a></label></th><td><input id="cardnumber" type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->></td></tr>
 </table>
 <table><caption>Additional Fields</caption>
-	<tr><th><label for="sort1">Sorting field 1</label></th><td><input type="text" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->"></td><td rowspan="2"><p>These fields are available for your own usage. They can be useful for statistical purposes</p></td></tr>
-	<tr><th><label for="sort2">Sorting field 2</label></th><td><input type="text" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->"></td></tr>
+	<tr><th><label for="sort1">Sorting field 1</label></th><td><!-- TMPL_IF Name="CGIsort1" -->
+						<!-- TMPL_VAR Name="CGIsort1" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort1" id="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+					<!--/TMPL_IF --></td><td rowspan="2"><p>These fields are available for your own usage. They can be useful for statistical purposes</p></td></tr>
+	<tr><th><label for="sort2">Sorting field 2</label></th><td><!-- TMPL_IF Name="CGIsort2" -->
+						<!-- TMPL_VAR Name="CGIsort2" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort2" id="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+					<!--/TMPL_IF --></td></tr>
 </table>
 </div>
 
