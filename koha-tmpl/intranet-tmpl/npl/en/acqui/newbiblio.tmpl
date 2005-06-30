@@ -143,8 +143,18 @@ function check(f) {
 		<tr><th><label for="cost">Actual Cost</label></th><td><input type="text" size="20" id="cost" name="cost" value="<!-- TMPL_VAR name="ecost"-->" /></td></tr>
 		<tr><th><label for="invoice">Invoice Number *</label></th><td><input type="text" size="20" id="invoice" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /></td></tr>
 		<tr><th><label for="notes-details">Notes</label></th><td><input type="text" size="20" id="notes-details" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" /></td></tr>
-		<tr><th><label for="sort1">Sort field 1</label></th><td><input type="text" size="20" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" /></td></tr>
-		<tr><th><label for="sort2">Sort field 2</label></th><td><input type="text" size="20" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" /></td></tr>
+		<tr><th><label for="sort1">Sort field 1</label></th><td>
+		<!-- TMPL_IF Name="CGIsort1" -->
+				<!-- TMPL_VAR Name="CGIsort1" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+			<!--/TMPL_IF -->
+	</td></tr>
+		<tr><th><label for="sort2">Sort field 2</label></th><td><!-- TMPL_IF Name="CGIsort2" -->
+				<!-- TMPL_VAR Name="CGIsort2" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+			<!--/TMPL_IF --></td></tr>
 		</table></div>
 		<p>The 'Sort' fields are available for your own usage. They can be useful for stat purposes</p>	
 		<p>
