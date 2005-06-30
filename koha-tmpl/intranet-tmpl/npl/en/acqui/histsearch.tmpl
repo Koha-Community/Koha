@@ -4,6 +4,7 @@
 
 <div id="main">
 	<h1>Order search</h3>
+	<div class="results"><!-- TMPL_VAR Name ="numresults" --> orders were found.</div>
 	<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post"><table>
 		<tr>
 			<th>&nbsp;</th>
@@ -86,7 +87,7 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<tr>
-				<td>&nbsp;</td>
+				<td><!-- TMPL_VAR NAME="count" --></td>
 				<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
