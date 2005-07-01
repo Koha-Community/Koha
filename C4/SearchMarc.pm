@@ -41,7 +41,7 @@ This module provides the searching facilities for the Koha MARC catalog
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCnotes &getMARCsubjects);
+@EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCurls &getMARCnotes &getMARCsubjects);
 
 =head1 findsuggestion($dbh,$values);
 
@@ -163,7 +163,12 @@ Returns a reference to an array containing all the subjects stored in the MARC d
 $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
 
 =cut
+=head2 my $marcurlsarray = &getMARCurls($dbh,$bibid,$marcflavour);
 
+Returns a reference to an array containing all the URLS stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") isn't used in this version because both flavours of MARC use the same subfield for URLS (but eventually when we get the lables working we'll need to change this.
+
+=cut
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc) = @_;
 	# build the sql request. She will look like :
@@ -611,6 +616,24 @@ sub getMARCsubjects {
         return $marcsubjctsarray;
 }  #end getMARCsubjects
 
+sub getMARCurls {
+# same for MARC21 and UNIMARC with current functionality
+# FIXME: really, this is a temporary hack
+   my ($dbh, $bibid, $marcflavour) = @_;
+my $sth=$dbh->prepare("SELECT subfieldvalue FROM marc_subfield_table WHERE bibid=? AND tag = '856' and subfieldcode = 'u'");
+$sth->execute($bibid);
+my @marcurls;
+        while (my $data=$sth->fetchrow_array) {
+		my %line;
+		$line{MARCURL} = $data;
+                push @marcurls, \%line;
+	}
+	$sth->finish;
+	$dbh->disconnect;
+my $marcurlsarray=\@marcurls;
+return $marcurlsarray;
+}  #end getMARCurls
+				
 END { }       # module clean-up code here (global destructor)
 
 1;
