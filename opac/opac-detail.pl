@@ -67,11 +67,12 @@ if ($marc eq "yes") {
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
 	my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
+	my $marcurlsarray = &getMARCurls($dbh,$bibid,$marcflavour);
 
 	$template->param(MARCNOTES => $marcnotesarray);
 	$template->param(MARCSUBJCTS => $marcsubjctsarray);
+        $template->param(MARCURLS => $marcurlsarray);
 }
-
 my @results = ($dat,);
 
 my $resultsarray=\@results;
