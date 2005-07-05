@@ -70,6 +70,7 @@
 		<!-- /TMPL_IF -->
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<div class="details">
+		
 		<table>
 			<tr><td><label for="explanation">Explanation: </label></td><td><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></td></tr>
 			<tr><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label></td><td><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td>
@@ -140,10 +141,82 @@
 	
 	<!-- TMPL_IF NAME="else" -->
 	<h1>System preferences admin</h1>
-	<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
-		<input type="text" name="searchfield" value="" />
-		<input type="submit" value="Search" class="submit" />
-	</form>
+<div class="tabitem">
+		<ul>
+			<li>
+				<!--TMPL_IF Name="Admin"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="here">Admin
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Acquisitions"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="here">Acquisitions
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Authorities"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="here">Authorities
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Catalogue"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="here">Catalogue
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Circulation"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="here">Circulation
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Members"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="here">Members
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Members
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="OPAC"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="here">OPAC
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Others"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="here">Others
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Others
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+		</ul>
+</div>
 	<!-- TMPL_VAR NAME="searchfield" -->
 	<table>
 	<tr>
