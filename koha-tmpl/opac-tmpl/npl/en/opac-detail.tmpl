@@ -7,7 +7,7 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <div class="details">
 <div class="detail-sidebar">
-<!-- Display for NPL // <!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" /><!-- /TMPL_IF -->  //Display for NPL -->
+<!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" /><!-- /TMPL_IF -->
 <div class="operations">
 <ul>
 <!-- TMPL_UNLESS NAME="norequests" --><li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Place Reserve</a></li><!-- /TMPL_UNLESS -->
@@ -21,8 +21,8 @@
 <div class="further">
 <h4>Search for this title in:</h4>
 <ul><!-- Display for NPL // <li><a href="http://search3.webfeat.org/cgi-bin/webfeat.dll?Command=Search&BypassSessData=yes&noserial=1&Databases=wf_sirsdiscover,wf_elibrary2_e,wf_ebonline,wf_healthsourceconsumer,wf_masterfileprem,wf_newspapersource&wf_cat=0&Client_ID=oplin&wf_all_years=yes&wf_field1=wf_keyword&wf_term1=<!-- TMPL_VAR NAME="title" -->&rurl=http%3A//www.oplin.org/&wut_code=OH0156">Local Databases (OPLIN)</a></li> //Display for NPL -->
-<li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" -->%20england+site:worldcatlibraries.org">Other Libraries(WorldCat)</a></li>
-<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" -->">Other Databases (Google Scholar)</a></li></ul></div>
+<li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->+site:worldcatlibraries.org">Other Libraries(WorldCat)</a></li>
+<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li></ul></div>
 </div>
 <h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
 <!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&and_or=and&excluding=&operator=contains&value=<!-- TMPL_VAR NAME="author" -->.&resultsperpage=20&orderby=biblio.title&op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
@@ -104,8 +104,44 @@
 <table><tr><td>No copies available.</td></tr></table>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="subscriptionsnumber" -->
-		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title). You can see which <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Issues</a> we have and don't have</p>
-	<!-- /TMPL_IF -->
+		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<b> Subscription #<!--TMPL_VAR Name="subscriptionid"--> </b>
+				<p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+				<!--TMPL_IF Name="latestserials"-->
+				<p> The three latest issues related to this subscription:</p>
+				<table>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Waited
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Arrived
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Late
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Missing
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Not Issued
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p> For more information: View a record of <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">this subscription's issues</a></p>
+ 	<!-- /TMPL_IF -->
 </div>
 </div>
 </body>
