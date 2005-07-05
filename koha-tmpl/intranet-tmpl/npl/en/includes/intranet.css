@@ -413,21 +413,34 @@ div.tabitem form {
 	white-space : nowrap;
 }
 
+div.tabitem ul {
+	margin : 0;
+	padding : 0;
+}
+
 div.tabitem ul li {
-	margin-left: 0;
-	margin-bottom: 0;
-	padding: 2px 15px 5px;
-	border: 1px solid #000;
+	font-size : 80%;
+	margin : 0 2px 0 0;
+	border-right: 1px solid #999900;
+	padding : 3px 0;
 	list-style: none;
 	display: inline;
 	}
-	
-		
-div.tabitem ul li.here {
-	border-bottom: 1px solid #ffc;
-	list-style: none;
-	display: inline;
-	}
+
+div.tabitem li a {
+	background-color : #E7E7CA;
+	font-weight : bold;
+	padding : 3px 3px;
+	text-decoration : none;
+}
+
+div.tabitem li a.here {
+	background-color : #D8DEB8;
+}
+
+div.tabitem li a:hover {
+	background-color : #FFFFCC;
+}
 
 fieldset {
 	border : 0;
@@ -562,6 +575,13 @@ th {
 	font-size : 14px;
 	font-weight : bold;
 	padding : 5px 5px 5px 5px;
+}
+
+tr th[scope=row], tr.highlight th[scope=row]{
+	font-family : Arial, Geneva, Helvetica, sans-serif;
+	font-size : 70%;
+	font-weight : normal;
+	padding : 0;
 }
 
 th:last-child {
