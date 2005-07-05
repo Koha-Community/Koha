@@ -5,10 +5,11 @@
 
 <div id="main">
 <h1>Issues for a subscription</h1>
-<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Back to biblio</a>
+	<form action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Normal View" /></form>
+
 <form method="post" name="f">
 <!-- TMPL_LOOP name="subscription_LOOP" -->
-<div id="bloc60">
+<div class="content-block">
 	<h2>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
 		<p>It began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every
 		<b>
