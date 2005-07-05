@@ -317,9 +317,16 @@ div.error {
 }
 
 div.error .submit {
+	background-color : #669999;
+	font-size: 14px;
+	margin-left : 5%;
+	padding : 2px 15px 2px 15px;
+}
+
+div.error .cancel {
 	background-color : #993300;
 	font-size: 14px;
-	color: #E7E7CA;
+	margin-left : 5%;
 	padding : 2px 15px 2px 15px;
 }
 
@@ -350,13 +357,7 @@ div.flags ul {
 	padding : 0px;
 }
 
-div.form {
-	background-color : #FFFFCC;
-	border : 0px dotted #333333;
-	margin : 0px auto;
-	padding : 5px;
-	position : relative;
-}
+
 
 	div.help {
 		border : 0;
@@ -366,7 +367,6 @@ div.form {
 	}
 	
 	div.help h3 {
-		cursor : pointer;
 		font-size : 100%;
 		background-color : #FFFFCC;
 		border-bottom : #CCCC99;
@@ -413,21 +413,34 @@ div.tabitem form {
 	white-space : nowrap;
 }
 
+div.tabitem ul {
+	margin : 0;
+	padding : 0;
+}
+
 div.tabitem ul li {
-	margin-left: 0;
-	margin-bottom: 0;
-	padding: 2px 15px 5px;
-	border: 1px solid #000;
+	font-size : 80%;
+	margin : 0 2px 0 0;
+	border-right: 1px solid #999900;
+	padding : 3px 0;
 	list-style: none;
 	display: inline;
 	}
-	
-		
-div.tabitem ul li.here {
-	border-bottom: 1px solid #ffc;
-	list-style: none;
-	display: inline;
-	}
+
+div.tabitem li a {
+	background-color : #E7E7CA;
+	font-weight : bold;
+	padding : 3px 3px;
+	text-decoration : none;
+}
+
+div.tabitem li a.here {
+	background-color : #D8DEB8;
+}
+
+div.tabitem li a:hover {
+	background-color : #FFFFCC;
+}
 
 fieldset {
 	border : 0;
@@ -564,6 +577,13 @@ th {
 	padding : 5px 5px 5px 5px;
 }
 
+tr th[scope=row], tr.highlight th[scope=row]{
+	font-family : Arial, Geneva, Helvetica, sans-serif;
+	font-size : 70%;
+	font-weight : normal;
+	padding : 0;
+}
+
 th:last-child {
 	background-color : #D8DEB8;
 	border-bottom : 1px solid #000000;
@@ -623,7 +643,7 @@ table.marc {
 	border-collapse : collapse;
 	margin : 3px 0px 5px 0px;
 	padding : 0px;
-	width : 95%;
+	width : auto;
 }
 
 table.marc th {
@@ -657,6 +677,15 @@ table.marc td.data {
 	font-size : 12px;
 	font-weight : bold;
 	padding : 2px;
+}
+
+td.credit, td.debit, td.sum {
+	font-family : "Courier New", Courier, monospace;
+	text-align : right;
+}
+
+td.debit {
+	color : #990000;
 }
 
 .current {
@@ -702,8 +731,9 @@ table.marc td.data {
 	padding : 4px;
 }
 
-.help {
-		cursor: help;
+.form-help {
+	font-size : 95%;
+	padding-left : 15px;
 }
 
 .inline {
@@ -740,6 +770,41 @@ input.unfocus {
 	font-size : 12px;
 	font-weight : bold;
 	padding : 2px;
+}
+
+td form {
+	margin : 0;
+}
+
+td input.submit {
+	border : 1px outset #CCCC99;
+	color : #FFFFCC;
+	margin : 0 5px 0 0;
+	padding : 0 5px 0 5px;
+}
+
+td input.submit:active {
+	border : 1px inset #cccc99;
+}
+
+td input.delete {
+	border : 1px outset #CCCC99;
+	color : #FFFFCC;
+	background-color : #993300;
+	font-size : 12px;
+	font-weight : bold;
+	padding : 0 5px 0 5px;
+	margin : 0 5px 0 0;
+}
+
+td input.delete:active {
+	border : 1px inset #cccc99;
+}
+
+.thumbnail {
+	float : left;
+	margin : 0 5px 10px 0;
+	border : 0px solid #E7E7CA;
 }
 
 .yes {
@@ -1041,11 +1106,19 @@ input.unfocus {
 	font-weight : bold;
 }
 
+.searchresults td {
+	padding : 2px 2px 2px 5px;
+}
+
 .searchresults p {
+	font-size : 1.2em;
+	font-weight : bold;
 	margin : .2em;
 }
 
 .searchresults p+p {
+	font-size : 1em;
+	font-weight : normal;
 	text-indent : 1em;
 }
 
@@ -1160,6 +1233,10 @@ div.data-main table th {
 	background-color : #EFF1D8;
 }
 
+div.data table tr.highlight td {
+	background-color: #FFFFE1;
+}
+
 div.data table th[scope=col], div.data-main table th[scope=col] {
 	text-align: center;
 	border-left : 0;
@@ -1171,4 +1248,17 @@ div.data table col, div.data-main table col {
 
 .accesskey {
 	text-decoration : underline;
+}
+
+div#controls {
+	float: right;
+	margin-left : .7em;
+	width : 15%;
+}
+
+div#controls form {
+	background-color : #FFFFCC;
+	font-size : 80%;
+	margin : .3em 0;
+	padding : .3em;
 }
