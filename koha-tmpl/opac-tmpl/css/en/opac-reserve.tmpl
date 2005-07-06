@@ -42,7 +42,10 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		<p>Please select the branch from which you want to collect the item: <!-- TMPL_VAR NAME="CGIbranch" --></p>
+		<p>Please select the branch from which you want to collect the item: <select name="branch" id="branch">
+		<option>-- Please choose your branch --</option>
+		<!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
+</select></p>
 				
 		<input class="button" type="submit" value="Submit" />
 	</form>
