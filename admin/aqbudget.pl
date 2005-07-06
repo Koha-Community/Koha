@@ -41,6 +41,7 @@ use strict;
 use CGI;
 use C4::Date;
 use C4::Auth;
+use C4::Acquisition;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
@@ -53,7 +54,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where (bookfundid like ?) order by bookfundid,aqbudgetid");
+	my $sth=$dbh->prepare("Select aqbudgetid,bookfundid,startdate,enddate,budgetamount,branchcode from aqbudget where (bookfundid like ?) order by bookfundid,aqbudgetid");
 	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
@@ -94,6 +95,12 @@ $template->param(script_name => $script_name,
 }
 
 $template->param(action => $script_name);
+
+my $dbh = C4::Context->dbh;
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($borrowernumber);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
@@ -102,7 +109,7 @@ if ($op eq 'add_form') {
 	my $dataaqbookfund;
 	if ($aqbudgetid) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,startdate,enddate,budgetamount from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
+		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
 		$sth->execute($aqbudgetid);
 		$dataaqbudget=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -122,6 +129,32 @@ if ($op eq 'add_form') {
 	    $template->param(bookfundid => $bookfundid,
 	    							adding => 1);
 	}
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my ($count2,@branches)=branches();
+	push @select_branch,"";
+	$select_branches{""}="";
+	if ($flags>1){
+		if ($homebranch){
+			push @select_branch, $homebranch;#
+			for (my $i=0;$i<$count2;$i++){
+				$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'} if ($branches[$i]->{'branchcode'} eq $homebranch);
+			}
+		}
+	} else {
+		for (my $i=0;$i<$count2;$i++){
+			push @select_branch, $branches[$i]->{'branchcode'};#
+			$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+		}
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+				-values   => \@select_branch,
+				-labels   => \%select_branches,
+				-default  => $dataaqbudget->{branchcode},
+				-size     => 1,
+				-multiple => 0 );
+	$template->param(CGIbranch => $CGIbranch);
 	$template->param(dateformat => display_date_format(),
 							aqbudgetid => $dataaqbudget->{'aqbudgetid'},
 							startdate => format_date($dataaqbudget->{'startdate'}),
@@ -133,11 +166,12 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount) values (?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount,branchcode) values (?,?,?,?,?,?)");
 	$sth->execute($input->param('aqbudgetid'),$input->param('bookfundid'),
 						format_date_in_iso($input->param('startdate')),
 						format_date_in_iso($input->param('enddate')),
-						$input->param('budgetamount')
+						$input->param('budgetamount'),
+						$input->param('branchcode')
 						);
 	$sth->finish;
 	 print $input->redirect("aqbookfund.pl");
@@ -147,7 +181,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where aqbudgetid=?");
+	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount,branchcode from aqbudget where aqbudgetid=?");
 	$sth->execute($aqbudgetid);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;

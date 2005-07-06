@@ -418,7 +418,8 @@ my %requirefields = (
     aqorders => { 'budgetdate' => 'date',
 				'sort1' => 'char(80)',
 				'sort2' => 'char(80)', },
-    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
+    aqbookfund =>{'branchcode'=> 'varchar(4) NULL'},
+    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key', 'branchcode'=> 'varchar(4) NULL'},
     items => {'paidfor' => 'text', 'location' => 'char(80)'},
 
     #added so that reference items are not available for reserves...
@@ -922,6 +923,14 @@ my %fielddefinitions = (
             key     => 'PRI',
             default => ''
         },
+        {
+            field   => 'branchcode',
+            type    => 'varchar(4)',
+            null    => 'NULL',
+            key     => '',
+	    default =>'',
+            extra => ''
+        },
     ],
     aqbudget => [
         {
@@ -931,6 +940,14 @@ my %fielddefinitions = (
             key     => 'PRI',
 		  default =>'',
             extra => 'auto_increment'
+        },
+        {
+            field   => 'branchcode',
+            type    => 'varchar(4)',
+            null    => 'NULL',
+            key     => '',
+	    default =>'',
+            extra => ''
         },
     ],
     z3950servers => [
@@ -1485,6 +1502,13 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.106  2005/07/06 17:47:22  hdl
+# Add branch selection and filter for budgets and funds.
+# May be too much... Funds could be enough....
+#
+# It works provided you update your base adding branchcode both in aqbookfund AND aqbudget.
+# If selection in budget is not needed, I shall remove.
+#
 # Revision 1.105  2005/06/20 14:36:44  tipaul
 # synch'ing 2.2 and head
 #

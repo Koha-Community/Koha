@@ -41,6 +41,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
+use C4::Acquisition;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
@@ -64,6 +65,7 @@ sub StringSearch  {
 	return (scalar(@results),\@results);
 }
 
+my $dbh = C4::Context->dbh;
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
@@ -91,6 +93,39 @@ $template->param(script_name => $script_name,
 }
 $template->param(action => $script_name);
 
+my @branches;
+my @select_branch;
+my %select_branches;
+my ($count2,@branches)=branches();
+
+push @select_branch,"";
+$select_branches{""}="";
+
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($borrowernumber);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+if ($flags>1){
+	if ($homebranch){
+		push @select_branch, $homebranch;#
+		for (my $i=0;$i<$count2;$i++){
+			$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'} if ($branches[$i]->{'branchcode'} eq $homebranch);
+		}
+	}
+} else {
+	for (my $i=0;$i<$count2;$i++){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	}
+}
+my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+			-values   => \@select_branch,
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+$template->param(CGIbranch => $CGIbranch);
+
+warn "bornum=".$borrowernumber . "flags = ".$flags. " homebranch= ".$homebranch;
+$sthtemp->finish;
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -99,7 +134,6 @@ if ($op eq 'add_form') {
 	my $data;
 	my $header;
 	if ($bookfundid) {
-		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
 		$sth->execute($bookfundid);
 		$data=$sth->fetchrow_hashref;
@@ -126,7 +160,6 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-        my $dbh = C4::Context->dbh;
 	my $bookfundid=uc($input->param('bookfundid'));
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
 	$sth->execute($bookfundid);
@@ -141,7 +174,6 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
 	$sth->execute($bookfundid);
 	my $data=$sth->fetchrow_hashref;
@@ -152,7 +184,6 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
 	my $bookfundid=uc($input->param('bookfundid'));
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid=?");
 	$sth->execute($bookfundid);
@@ -172,24 +203,35 @@ if ($op eq 'add_form') {
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
 	my @loop_data =();
-	my $dbh = C4::Context->dbh;
-	my $sth2 = $dbh->prepare("Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where bookfundid = ? order by bookfundid");
+	my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget where bookfundid = ? ";
+	if ($homebranch){
+		$strsth2 .= "AND ((aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch)."))" ;
+	} else {
+		$strsth2 .= "AND (aqbudget.branchcode='') " if ($flags>1);
+	}
+	$strsth2 .= "order by bookfundid";
+	warn "".$strsth2;
+	my $sth2 = $dbh->prepare($strsth2);
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+		$row_data{branchname} = $select_branches{$results->[$i]{'branchcode'}};
 		$sth2->execute($row_data{bookfundid});
 		my @budget_loop;
-		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
+		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {
 			my %budgetrow_data;
 			$budgetrow_data{aqbudgetid} = $aqbudgetid;
 			$budgetrow_data{startdate} = format_date($startdate);
 			$budgetrow_data{enddate} = format_date($enddate);
 			$budgetrow_data{budgetamount} = $budgetamount;
+			$budgetrow_data{branchcode} = $branchcode;
 			push @budget_loop,\%budgetrow_data;
 		}
-		$row_data{budget} = \@budget_loop;
-		push @loop_data,\%row_data;
+		if ($sth2->rows){
+			$row_data{budget} = \@budget_loop;
+			push @loop_data,\%row_data;
+		}
 	}
 	$template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT

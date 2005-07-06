@@ -11,6 +11,7 @@
 	<tr>
 		<th>Book fund</th>
 		<th>Name</th>
+		<th>Branch</th>
 		<th>Edit</th>
 		<th>Delete</th>
 		</tr>
@@ -18,6 +19,13 @@
 		<tr valign="top" bgcolor="ffffcc">
 			<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 			<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+			<td align="center">
+			<!--TMPL_IF Name="branchname"-->
+				<!--TMPL_VAR Name="branchname"-->
+			<!--TMPL_ELSE -->
+				&nbsp;
+			<!--/TMPL_IF-->
+			</td>
 			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" --> ">
 				<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Edit" title="Edit" width="32" hspace="0" vspace="0" border="0"></a>
 			</td>
@@ -26,6 +34,7 @@
 		<tr>
 			<td>&nbsp;</td>
 			<th>Budget</th>
+			<th>Branch</th>
 			<td>
 				<a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->" class="button">
 				Add budget</a>
@@ -36,7 +45,13 @@
 			<tr valign="top">
 				<td>&nbsp;</td>
 				<td>
-					<!-- TMPL_VAR NAME="startdate" --> - <!-- TMPL_VAR NAME="enddate" --> : <b><!-- TMPL_VAR NAME="budgetamount" --></b>
+					<!-- TMPL_VAR NAME="startdate" --> - <!-- TMPL_VAR NAME="enddate" --> : <b><!-- TMPL_VAR NAME="budgetamount" --></b> 
+				<td align="center">
+				<!--TMPL_IF Name="branchcode"-->
+				 	<!--TMPL_VAR Name="branchcode"-->
+				<!--TMPL_ELSE -->
+					&nbsp;
+				<!--/TMPL_IF-->
 				</td>
 				<td>
 					<a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">
@@ -136,6 +151,10 @@
 	<!-- /TMPL_IF -->
 	<p>
 		<label>Name</label><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="bookfundname" escape=HTML -->">&nbsp;
+	</p>
+	<p>
+		<label>Branch</label><!-- TMPL_VAR NAME="CGIbranch"-->&nbsp;
+		<br/> Select one if budget is branch specific, otherwise, leave it blank.
 	</p>
 	<p>
 		<label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" class="button">
