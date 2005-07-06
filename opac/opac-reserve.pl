@@ -65,18 +65,20 @@ my @branches;
 my @select_branch;
 my %select_branches;
 
+my @CGIbranchlooparray;
+
 foreach my $branch (keys %$branches) {
 	if ($branch) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+
+		my %line;
+		$line{branch} = $branches->{$branch}->{'branchname'};
+		warn "here's  a branch:".$line{branch};
+		$line{value} = $branch;
+		push @CGIbranchlooparray, \%line;
 	}
 }
-my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
-			-values   => \@select_branch,
-			-labels   => \%select_branches,
-			-size     => 1,
-			-multiple => 0 );
-$template->param( CGIbranch => $CGIbranch);
+my $CGIbranchloop = \@CGIbranchlooparray;
+$template->param( CGIbranch => $CGIbranchloop);
 
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
