@@ -18,6 +18,13 @@
 		<tr valign="top" bgcolor="ffffcc">
 			<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 			<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+			<td align="center">
+			<!--TMPL_IF Name="branchname"-->
+				<!--TMPL_VAR Name="branchname"-->
+			<!--TMPL_ELSE -->
+				&nbsp;
+			<!--/TMPL_IF-->
+			</td>
 			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" --> ">
 				<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Bearbeiten" title="Bearbeiten" width="32" hspace="0" vspace="0" border="0"></a>
 			</td>
@@ -136,6 +143,10 @@
 	<!-- /TMPL_IF -->
 	<p>
 		<label>Name</label><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="bookfundname" escape=HTML -->">&nbsp;
+	</p>
+	<p>
+		<label>Zweigstelle</label><!-- TMPL_VAR NAME="CGIbranch"-->&nbsp;
+		<br/> Bitte eine ausw&auml;hlen wenn das Budget zweigstellenspezifisch ist, sonst leer lassen.
 	</p>
 	<p>
 		<label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" class="button">

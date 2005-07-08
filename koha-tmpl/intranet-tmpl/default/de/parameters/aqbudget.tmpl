@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
 	<!-- TMPL_IF NAME="else" -->
-		<h1>Etatadministration</h1><form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
+		<h1>Budget admin</h1><form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
 		<input type="text" name="searchfield" value="">
 		<input type="submit" class="button" value="OK"></form>
 		<!-- TMPL_IF NAME="search" -->
@@ -38,7 +38,7 @@
 		<form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
 			<input type="hidden" name="op" value="add_form">
 			<br>
-			<input type="submit" class="button" value="Budget hinzuf&uuml;gen" title="Budget hinzuf&uuml;gen" alt="Budget hinzuf&uuml;gen">
+			<input type="submit" class="button" value="Add Budget" title="Budget hinzuf&uuml;gen" alt="Add Budget">
 			<br>
 		</form>
 		<br clear="all">
@@ -89,7 +89,7 @@
 			if (_alertString.length==0) {
 				document.Aform.submit();
 			} else {
-				alertString2  = _("Form not submitted because of the following problem(s)");
+				alertString2  = _("Daten wegen der folgenden Probleme nicht gespeichert)");
 				alertString2 += "\n------------------------------------------------------------------------------------\n";
 				alertString2 += _alertString;
 				alert(alertString2);
@@ -117,7 +117,7 @@
 		<!-- /TMPL_IF -->
 		
 		<p>
-			<label class="label100">Anfangsdatum</label><input type="text" name="startdate" size="11" value="<!-- TMPL_VAR NAME="startdate" -->">
+			<label class="label100">Anfangsdatum <i>(<!-- TMPL_VAR NAME="dateformat" -->)</i></label><input type="text" name="startdate" size="11" value="<!-- TMPL_VAR NAME="startdate" -->">
 		</p>
 		<p>
 			<label class="label100">Enddatum <i>(<!-- TMPL_VAR NAME="dateformat" -->)</i></label><input type="text" name="enddate" size="11" value="<!-- TMPL_VAR NAME="enddate" -->">
@@ -125,13 +125,18 @@
 		<p>
 			<label class="label100">Etatsumme</label><input type="text" name="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->">
 		</p>
+		<p>
+			<label class="label100">Zweigstelle</label><!--TMPL_VAR Name="CGIbranch" -->
+			<br/> Ist der Etat f&uuml;r eine bestimmte Zweigstelle, dann w&auml;hlen Sie sie hier aus. Wenn nicht, dann lassen Sie das Feld leer.
+		</p>
+		
 		<p><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->"><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
 		</form>
 	</div>
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="add_validate" -->
-	Daten gespeichert
+	Data recorded
 	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 	<input type="submit" value="OK">
 	</form>
@@ -160,7 +165,7 @@
 			<td>Etath&ouml;he</td><td><!-- TMPL_VAR NAME="budgetamount" --></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center">L&ouml;schen best&auml;tigen</td>
+			<td colspan="2" align="center">L&Ouml;SCHEN BEST&Auml;TIGEN</td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="JA"></form></td><td><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="NEIN"></form></td>
