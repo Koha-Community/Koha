@@ -6,15 +6,18 @@
     <li><a href="http://www.athenscounty.lib.oh.us/teens/index.asp">teens</a></li> //Display for NPL -->
   <li><a href="/cgi-bin/koha/opac-main.pl">library catalog</a>
   	<ul>
+		<li><a href="/cgi-bin/koha/opac-main.pl">Catalog Home</a></li>
 		<li><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a></li>
 		<!-- Display for NPL //
 		<li><a href="/opac-format-search.php">Search by Format and Date</a></li>
 		<li><a href="http://66.213.78.70/upcoming.cfm">Upcoming Releases Waiting List</a></li> //Display for NPL -->
 </ul>
 	<!-- TMPL_IF NAME="loggedinusername" -->
-	<ul>
-		<li><a href="/cgi-bin/koha/opac-suggestions.pl">Suggestions</a></li>
-	</ul>
+	</li><li><a href="/cgi-bin/koha/opac-user.pl">my account</a><ul>
+		<li><a href="/cgi-bin/koha/opac-shelves.pl">My Book Lists</a></li>
+		<li><a href="/cgi-bin/koha/opac-user.pl">My Account</a></li>
+		<!-- TMPL_IF name="suggestion" --><li><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a></li><!-- /TMPL_IF -->
+	</ul></li>
 	<!-- /TMPL_IF -->
   </li>
  <!-- Display for NPL // <li><a href="http://www.athenscounty.lib.oh.us/programs.asp">programs</a></li>
