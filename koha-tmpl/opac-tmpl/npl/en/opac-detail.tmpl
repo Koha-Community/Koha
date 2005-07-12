@@ -25,28 +25,9 @@
 <li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li></ul></div>
 </div>
 <h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
-<!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&and_or=and&excluding=&operator=contains&value=<!-- TMPL_VAR NAME="author" -->.&resultsperpage=20&orderby=biblio.title&op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
-
-<table>
-
-<!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="copyrightdate" -->
-    <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
-<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&and_or=and&excluding=&operator=contains&value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->.&resultsperpage=20&orderby=biblio.title&op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="isbn" -->
-	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="lccn" -->
-	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="publishercode" -->
-	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="pages" -->
-	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
-<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
 <!-- /TMPL_LOOP -->
+<table>
 
 <!-- TMPL_UNLESS NAME="MARCNOTES" -->
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -61,9 +42,6 @@
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_UNLESS -->
 
-<!-- Hide from NPL --> <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
- <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP --> <!-- Hide from NPL -->
-
 <!-- TMPL_IF NAME="MARCNOTES" -->
 		<tr>
 			<th>Detailed notes:</th>
@@ -72,7 +50,35 @@
 		<!-- TMPL_IF NAME="MARCSUBJCTS" -->
 		<tr>
 			<th>Related links:</th>
-			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
+			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="copyrightdate" -->
+    <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
+<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="isbn" -->
+	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lccn" -->
+	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- Hide from NPL --> <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+ <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP --> <!-- Hide from NPL -->
+</table>
+<table>
+<!-- TMPL_IF NAME="MARCURLS" -->
+		<tr><th>Related URLs: </th><td><ul><!-- TMPL_LOOP NAME="MARCURLS" --><li><a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="MARCURL" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
 </table>
 <br clear="right" />
