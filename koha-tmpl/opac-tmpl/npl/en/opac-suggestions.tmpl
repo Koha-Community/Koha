@@ -42,21 +42,21 @@
 		<tr>
 			<form>
 				<th>
-					Filter on
+					Filter by:
 				</th>
-				<th>
+				<td>
 					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
-				</th>
-				<th>
+				</td>
+				<td>
 					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" />
-				</th>
-				<th>
+				</td>
+				<td>
 					&nbsp;
-				</th>
-				<th>
+				</td>
+				<td>
 					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
-				</th>
-				<th>
+				</td>
+				<td>
 					<select name="status">
 						<option value="">Any</option>
 						<option value="ASKED" <!-- TMPL_IF name="ASKED" -->selected<!-- /TMPL_IF -->>Requested</option>
@@ -64,19 +64,19 @@
 						<option value="REJECTED"<!-- TMPL_IF name="REJECTED" -->selected<!-- /TMPL_IF -->>Declined</option>
 						<option value="AVAILABLE"<!-- TMPL_IF name="AVAILABLE" -->selected<!-- /TMPL_IF -->>Available</option>
 					</select>
-				</th>
-				<th>
+				</td>
+				<td>
 					<select name="suggestedbyme">
 						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>Me</option>
 						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>Anybody</option>
 					</select>
-				</th>
-				<th>
+				</td>
+				<td>
 					&nbsp;
-				</th>
-				<th>
+				</td>
+				<td>
 					<input type="submit" class="submit" value="Set Filter" />
-				</th>
+				</td>
 			</form>
 		</tr>
 		<form>
@@ -116,16 +116,9 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 		<tr>
-			<td colspan="2">
+			<td colspan="9">
 				<input type="submit" class="icon delete" value="Delete Checked Items" />
 			</td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
 		</tr>
 		</form>
 	</table>
