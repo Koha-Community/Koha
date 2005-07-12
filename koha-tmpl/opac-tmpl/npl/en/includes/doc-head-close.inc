@@ -2,10 +2,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <meta http-equiv="Content-Language" content="en-us" />
 <link rel="shortcut icon" href="<TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
+	<!-- TMPL_IF name="opacstylesheet" -->
 <style type="text/css"> 
-	@import url(<TMPL_VAR NAME="themelang">/includes/opac.css);
+	@import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);
+</style>
+	<!-- TMPL_ELSE -->
+<style type="text/css"> 
+	@import url(<!-- TMPL_VAR NAME="themelang" -->/includes/opac.css);
 	@import url(<TMPL_VAR NAME="themelang">/includes/marc-editor.css);	
 </style>
+	<!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/script.js"></script>
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/basket.js"></script>
 <script type="text/javascript" language="javascript">
