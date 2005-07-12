@@ -49,12 +49,23 @@ use C4::Date;
 use HTML::Template;
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,%branches)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like ?) order by bookfundid");
+	my $strsth= "select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where bookfundname like ? ";
+	if (%branches){
+		$strsth.= "AND (aqbookfund.branchcode is null " ;
+		foreach my $branchcode (keys %branches){
+			$strsth .= "or aqbookfund.branchcode = '".$branchcode."' "; 
+		}
+		$strsth .= ") ";
+	}
+	$strsth.= "order by aqbookfund.bookfundid";
+	warn "chaine de recherche : ".$strsth;
+	
+	my $sth=$dbh->prepare($strsth);
 	$sth->execute("%$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -164,8 +175,8 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
 	$sth->execute($bookfundid);
 	$sth->finish;
-	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
-	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
+	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname, branchcode) values (?,?,?)");
+	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'),$input->param('branchcode'));
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
 	exit;
@@ -200,23 +211,24 @@ if ($op eq 'add_form') {
 		$template->param(searchfield => $searchfield);
 	}
 	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($env,$searchfield,%select_branches);
 	my $toggle="white";
 	my @loop_data =();
-	my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget where bookfundid = ? ";
-	if ($homebranch){
-		$strsth2 .= "AND ((aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch)."))" ;
-	} else {
-		$strsth2 .= "AND (aqbudget.branchcode='') " if ($flags>1);
-	}
-	$strsth2 .= "order by bookfundid";
-	warn "".$strsth2;
-	my $sth2 = $dbh->prepare($strsth2);
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+		warn "".$results->[$i]{'bookfundid'}." ".$results->[$i]{'bookfundname'}." ".$results->[$i]{'branchcode'};
 		$row_data{branchname} = $select_branches{$results->[$i]{'branchcode'}};
+		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget where aqbudget.bookfundid = ?";
+		if ($homebranch){
+			$strsth2 .= " AND ((aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch).")) " ;
+		} else {
+			$strsth2 .= " AND (aqbudget.branchcode='') " if ($flags>1);
+		}
+		$strsth2 .= " order by aqbudgetid";
+		warn "".$strsth2;
+		my $sth2 = $dbh->prepare($strsth2);
 		$sth2->execute($row_data{bookfundid});
 		my @budget_loop;
 		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {

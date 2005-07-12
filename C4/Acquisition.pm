@@ -665,11 +665,25 @@ alphabetically by book fund name.
 =cut
 #'
 sub bookfunds {
+  my ($branch)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-  =aqbudget.bookfundid
-  group by aqbookfund.bookfundid order by bookfundname");
-  $sth->execute;
+  my $strsth;
+  
+  if ($branch eq '') {
+      $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
+      =aqbudget.bookfundid
+      group by aqbookfund.bookfundid order by bookfundname";
+  } else {
+      $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
+      =aqbudget.bookfundid and (aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
+      group by aqbookfund.bookfundid order by bookfundname";
+  }
+  my $sth=$dbh->prepare($strsth);
+  if ($branch){
+      $sth->execute($branch);
+  } else {
+      $sth->execute;
+  }
   my @results = ();
   while (my $data=$sth->fetchrow_hashref){
     push(@results,$data);
