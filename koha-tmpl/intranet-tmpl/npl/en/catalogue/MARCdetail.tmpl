@@ -182,8 +182,8 @@
      </table>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="item_header_loop -->
-    <table>
+
+<!-- TMPL_IF NAME="item_loop" -->    <table>
 		<tr>
 			<!-- TMPL_LOOP NAME="item_header_loop" --><th><!-- TMPL_VAR NAME="header_value" --></th><!-- /TMPL_LOOP -->
 		</tr>
@@ -192,8 +192,8 @@
 					<!-- TMPL_VAR NAME="item_value" -->
 			</tr>
 		<!-- /TMPL_LOOP -->
-     </table>
-<!-- /TMPL_IF -->
+     </table><!-- /TMPL_IF -->
+
 	 </div>
 	<script language="JavaScript" type="text/javascript">
 function confirm_deletion() {
