@@ -52,7 +52,7 @@ miscategorized items, etc.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&listsubjects &updatesub &shiftgroup &deletedbib &undeletebib
-&updatetype);
+&updatetype &logaction);
 
 =item listsubjects
 
@@ -213,6 +213,22 @@ sub updatetype{
   my $sth=$dbh->prepare("Update biblioitems set itemtype=? where biblioitemnumber=?");
   $sth->execute($type,$bi);
   $sth->finish;
+}
+
+=item logaction
+
+  &logaction($usernumber, $modulename, $actionname, $infos);
+
+Adds a record into action_logs table to report the different changes upon the database
+
+=cut
+#'
+sub logaction{
+  my ($usernumber,$modulename, $actionname, $infos)=@_;
+  my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,info) values (now(),?,?,?,?)");
+	$sth->execute($usernumber,$modulename,$actionname,$infos);
+	$sth->finish;
 }
 
 END { }       # module clean-up code here (global destructor)

@@ -383,6 +383,14 @@ my %requiretables = (
                              itemtypecodes text default '',
                              PRIMARY KEY (mediatypecode)
                             )",
+    `action_logs` 	=> "(
+				    `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+				    `user` INT( 11 ) NOT NULL ,
+				    `module` TEXT default '',
+				    `action` TEXT default '' ,
+				    `info` TEXT default '' ,
+				    PRIMARY KEY ( `timestamp` , `user` )
+			    )",
 );
 
 my %requirefields = (
@@ -1502,6 +1510,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.107  2005/07/14 09:53:10  hdl
+# Adding a log facility for actions watching.
+# Code to be widely used in order to report data modifications.
+#
 # Revision 1.106  2005/07/06 17:47:22  hdl
 # Add branch selection and filter for budgets and funds.
 # May be too much... Funds could be enough....
