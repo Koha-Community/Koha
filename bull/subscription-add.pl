@@ -36,6 +36,13 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 
+#FIXME : If Budgets are never used, then these lines are useless.
+my $dbh = C4::Context->dbh;
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($loggedinuser);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+#FIXME : END added by hdl on July,14 2005
+
 if ($op eq 'mod') {
 	my $subscriptionid = $query->param('subscriptionid');
 	my $subs = &getsubscription($subscriptionid);
@@ -120,7 +127,8 @@ if ($op eq 'mod') {
 				"dow$dow" => 1,
 				);
 }
-(my $temp,@budgets) = bookfunds();
+##FIXME : Looks like never used.
+(my $temp,@budgets) = bookfunds($homebranch);
 # find default value & set it for the template
 for (my $i=0;$i<=$#budgets;$i++) {
 	if ($budgets[$i]->{'aqbudgetid'} eq $aqbudgetid) {
@@ -128,6 +136,7 @@ for (my $i=0;$i<=$#budgets;$i++) {
 	}
 }
 $template->param(budgets => \@budgets);
+#FIXME : END Added by hdl on July, 14 2005
 
 if ($op eq 'addsubscription') {
 	my $auser = $query->param('user');

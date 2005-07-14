@@ -18,8 +18,15 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+#FIXME : Is this page still used ????
+# looks like no.
+
 # budget
-my ($count,@results)=&bookfunds;
+my $dbh = C4::Context->dbh;
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($loggedinuser);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+my ($count,@results)=bookfunds($homebranch);
 my $classlist='';
 my $total=0;
 my $totspent=0;

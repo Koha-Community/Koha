@@ -675,7 +675,7 @@ sub bookfunds {
       group by aqbookfund.bookfundid order by bookfundname";
   } else {
       $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid and (aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
+      =aqbudget.bookfundid and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
       group by aqbookfund.bookfundid order by bookfundname";
   }
   my $sth=$dbh->prepare($strsth);

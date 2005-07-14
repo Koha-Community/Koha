@@ -125,10 +125,14 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-multiple => 0 );
 
 # build bookfund list
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($loggedinuser);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+
 my @bookfund;
 my @select_bookfund;
 my %select_bookfunds;
-($count2,@bookfund)=bookfunds();
+($count2,@bookfund)=bookfunds($homebranch);
 for (my $i=0;$i<$count2;$i++){
 	push @select_bookfund, $bookfund[$i]->{'bookfundid'};
 	$select_bookfunds{$bookfund[$i]->{'bookfundid'}} = $bookfund[$i]->{'bookfundname'}

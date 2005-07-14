@@ -58,8 +58,11 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
-
 $template->param($count);
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($borrowernumber);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+
 if ($count == 1){
 	my $sth;
 # 	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");

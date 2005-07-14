@@ -21,7 +21,12 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 # budget
-my ($count,@results)=bookfunds;
+my $dbh = C4::Context->dbh;
+my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
+$sthtemp->execute($loggedinuser);
+my ($flags, $homebranch)=$sthtemp->fetchrow;
+
+my ($count,@results)=bookfunds($homebranch);
 my $classlist='';
 my $total=0;
 my $totspent=0;
