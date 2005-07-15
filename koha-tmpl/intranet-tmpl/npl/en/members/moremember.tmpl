@@ -131,16 +131,19 @@
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
 <div class="table"><table>
 	<caption>Items On Loan</caption>
+	<thead>
 	<tr>
 		<th>Title</th>
 		<th>Due</th>
 		<th>Itemtype</th>
-<!-- 		<th>Charge</th> -->
+		<!-- Hide from NPL --><th>Charge</th><!-- /Hide from NPL -->
 		<th>Price</th>
 		<th>Renew</th>
 		<th>Return</th>
 	</tr>
-
+	</thead>
+	<tfoot><tr><td colspan="4">Total Replacement Cost:</td><td class="sum"><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="3">&nbsp;</td></tr></tfoot>
+<tbody>
 	<!-- tmpl_loop name="issueloop" -->
 	<tr>
 		<td><!-- TMPL_IF name="red" --><font color="red"><!-- /TMPL_IF -->
@@ -151,8 +154,8 @@
 		</td>
 		<td><!-- TMPL_VAR NAME="date_due" --></td>
 		<td><!-- TMPL_VAR NAME="itemtype" --></td>
-		<!-- <td><!-- TMPL_VAR NAME="charge" --></td> -->
-		<td><!-- TMPL_VAR NAME="replacementprice" --></td>
+		<!-- Hide from NPL --><td class="credit"><!-- TMPL_VAR NAME="charge" --></td><!-- /Hide from NPL -->
+		<td class="credit"><!-- TMPL_VAR NAME="replacementprice" --></td>
 		<td>
 		<!-- TMPL_IF name="norenew" -->
 			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
@@ -163,7 +166,7 @@
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
 	</tr>
 	<!-- /tmpl_loop -->
-	<tfoot><tr><td colspan="3">Total Replacement Cost:</td><td><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="2">&nbsp;</td></tr></tfoot>
+	</tbody>
 	</table></div><p><input type="submit" class="submit" value="Renew Checked Items" /></p>
 </form>
 
