@@ -909,6 +909,16 @@ my %tabledata = (
             explanation         => 'show or hide "lost" items in OPAC.',
 	    type		=> 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Acitvate_Log',
+            value               => 'On',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Turn Log Actions on DB On an Off',
+	    type		=> 'Choice',
+	    options		=> 'On|Off'
+        },
     ],
 
 );
@@ -1510,6 +1520,15 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.108  2005/07/15 16:10:35  hdl
+# Adding Log Facility.
+# Needs Two Update in database...
+# On more table (action_logs)
+# And One more syspref Activate_Log, with On|Off values.
+# Maintainance has been sweeped of previous Log functions
+# addbiblio.pl contains a sample of code using Log.pm
+# To be generalized to Authorities, acquisitions, members soon.
+#
 # Revision 1.107  2005/07/14 09:53:10  hdl
 # Adding a log facility for actions watching.
 # Code to be widely used in order to report data modifications.

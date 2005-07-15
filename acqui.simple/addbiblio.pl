@@ -27,6 +27,7 @@ use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
 use C4::Context;
+use C4::Log;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use HTML::Template;
 use MARC::File::USMARC;
@@ -428,8 +429,10 @@ if ($op eq "addbiblio") {
 		if ($is_a_modif) {
 			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
+			logaction($loggedinuser,"acqui.simple","modify","biblionumber :$oldbiblionumber\nrecord : ".$record->as_formatted) if (logstatus);
 		} else {
 			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
+			logaction($loggedinuser,"acqui.simple","add","biblionumber :$oldbibnum\nrecord : ".$record->as_formatted) if (logstatus);
 		}
 	# now, redirect to additem page
 		print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");
@@ -482,9 +485,11 @@ if ($op eq "addbiblio") {
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
 	&NEWdelbiblio($dbh,$bibid);
+	logaction($loggedinuser,"acqui.simple","del","biblionumber :$bibid") if (logstatus);
+	
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=/cgi-bin/koha/search.marc/search.pl?type=intranet\"></html>";
 	exit;
-#------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------logaction($loggedinuser,"acqui.simple","add","biblionumber :$oldbibnum");
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
