@@ -36,8 +36,15 @@ $template->param( BORROWER_INFO => \@bordat );
 my ($numaccts,$accts,$total) = getboracctrecord(undef,$borr);
 
 for (my $i=0;$i<$numaccts;$i++){
-    $accts->[$i]{'amount'}+=0.00;
-    $accts->[$i]{'amountoutstanding'}+=0.00;
+	$accts->[$i]{'date'} = format_date($accts->[$i]{'date'});
+    $accts->[$i]{'amount'} = sprintf("%.2f", $accts->[$i]{'amount'});
+	if($accts->[$i]{'amount'} >= 0){
+		$accts->[$i]{'amountcredit'} = 1;
+	}
+    $accts->[$i]{'amountoutstanding'} =sprintf("%.2f", $accts->[$i]{'amountoutstanding'});
+	if($accts->[$i]{'amountoutstanding'} >= 0){
+		$accts->[$i]{'amountoutstandingcredit'} = 1;
+	}
     if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
 	$accts->[$i]{'print_title'};
     }
@@ -56,7 +63,7 @@ $template->param( ACCOUNT_LINES => $accts,
 			     LibraryName => C4::Context->preference("LibraryName"),
  );
 
-$template->param( total => $total );
+$template->param( total => sprintf("%.2f",$total) );
 
 #$template->param(loggeninuser => $loggedinuser);
 output_html_with_http_headers $query, $cookie, $template->output;
