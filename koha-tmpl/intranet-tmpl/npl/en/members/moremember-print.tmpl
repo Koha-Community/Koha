@@ -11,14 +11,19 @@
 
 <table>
 	<caption>Items Checked Out</caption>
+	<thead>
 	<tr>
 		<th>Title</th>
 		<th>Author</th>
 		<th>Format</th>
+		<!-- Hide from NPL --><th>Charge</th><!-- /Hide from NPL -->
+		<th>Replacement Cost</th>
 		<th>Date Due</th>
 		<th>Status</th>
 	</tr>
-
+	</thead>
+	<tfoot><tr><td colspan="4">Total Replacement Cost:</td><td class="sum"><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="3">&nbsp;</td></tr></tfoot>
+<tbody>
 	<!-- TMPL_loop name="issueloop" -->
 	<tr<!-- TMPL_IF name="red" --> class="overdue"</TMPL_IF>>
 		<td>
@@ -28,10 +33,13 @@
 		</td>
 		<td><!-- TMPL_VAR NAME="author" --></td>
 		<td><!-- TMPL_VAR NAME="itemtype" --></td>
+		<!-- Hide from NPL --><td class="credit"><!-- TMPL_VAR NAME="charge" --></td><!-- /Hide from NPL -->
+		<td class="credit"><!-- TMPL_VAR NAME="replacementprice" --></td>
 		<td><!-- TMPL_VAR NAME="date_due" --></td>
 		<td><!-- TMPL_IF NAME="red" -->Overdue!<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
+	</tbody>
 	</table>
 	
 <table>
