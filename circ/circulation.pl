@@ -195,6 +195,7 @@ if ($borrower) {
 		}
     }
 	my $od; # overdues
+	my $i = 0;
 	my $togglecolor;
 	# parses today & build Template array
 	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
@@ -207,21 +208,23 @@ if ($borrower) {
 		} else {
 			$od=0;
 		}
-		$book->{'od'}=$od;
-		$book->{'dd'}=$dd;
-		$book->{'tcolor'}=$togglecolor;
-		if ($togglecolor) {
+		if ($i%2) {
 			$togglecolor=0;
 		} else {
 			$togglecolor=1;
 		}
+		$book->{'togglecolor'} = $togglecolor;
+		$book->{'od'}=$od;
+		$book->{'dd'}=$dd;
 		if ($book->{'author'} eq ''){
 			$book->{'author'}=' ';
 		}    
 		push @realtodayissues,$book;
+		$i++;
 	}
 
 	# parses previous & build Template array
+	$i = 0;
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 		my $dd = $book->{'date_due'};
 		my $datedue = $book->{'date_due'};
@@ -234,19 +237,19 @@ if ($borrower) {
 		} else {
 			$od = 0;
 		}
-		$book->{'tcolor'}=$togglecolor;
-		if ($togglecolor) {
+		if ($i%2) {
 			$togglecolor=0;
 		} else {
 			$togglecolor=1;
 		}
+		$book->{'togglecolor'} = $togglecolor;
 		$book->{'dd'}=$dd; 
 		$book->{'od'}=$od;
-		$book->{'tcolor'}=$pcolor;
 		if ($book->{'author'} eq ''){
 			$book->{'author'}=' ';
 		}    
-		push @realprevissues,$book
+		push @realprevissues,$book;
+		$i++;
 	}
 }
 
