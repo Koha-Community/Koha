@@ -251,7 +251,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Call number</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="todayissues" -->
-		<tr>
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="dd" --></td>
 			<td>
 				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
@@ -280,7 +280,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Call number</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="previssues" -->
-			<tr>
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="od" -->
 					<td class="problem">
 						<!-- TMPL_VAR NAME="dd" -->
