@@ -20,7 +20,7 @@
 
 use ExtUtils::MakeMaker;
 
-die "perl >= 5.6.1 required" unless ($] >= 5.006001);
+die "perl 5.6.1 or later required" unless ($] >= 5.006001);
 
 WriteMakefile(
     NAME => 'Koha',
@@ -42,16 +42,22 @@ WriteMakefile(
         },
    CONFIGURE => sub {
      # Figure out options here?
-     return {}
+     return { macro => { 'export TEST' => '755' } }
      },
    PMLIBDIRS => [ '.' ],
    PL_FILES => { # generator => target
-     # need to copy detail, moredetail, search, subjectsearch and logout from intranet to opac
-     # need to write koha.conf
-     # need to write koha-httpd.conf
-     # need to write koha.sql
+     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
+     'misc/koha.conf.PL' => '$(INST_LIBDIR)/../etc/koha.conf',
+     'misc/apache-koha.conf.PL' => '$(INST_LIBDIR)/../etc/apache-koha.conf',
+     'misc/koha.sql.PL' => '$(INST_LIBDIR)/intranet/scripts/koha.sql',
+     'z3950/z3950-daemon-options.PL' => '$(INST_LIBDIR)/intranet/scripts/z3950daemon/z3950-daemon-options',
+     # fake target to check permissions
+     'misc/chmod.PL' => '$(INST_LIBDIR)/fake-target'
      }
-   # need to check permissions somehow
+   # need to set ownerships
+   # need to load koha.sql
+   # need to link koha-httpd.conf
+   # need to start z3950-daemon
 );
 
 sub MY::libscan {
@@ -63,7 +69,7 @@ sub MY::libscan {
   # from here
   # reimplementation of buildrelease and Install::installfiles
   # ban some shell specials too
-  elsif ($path =~ /(\/CVS\/|\.bak$|\.orig$|\/,|\/t\/|[^\$]\(| )/) { $path = ''; }
+  elsif ($path =~ /(\/CVS\/|\.(bak|orig|PL)$|\/,|\/t\/|[^\$]\(| )/) { $path = ''; }
   elsif (
     $path =~ s:\)/misc:\)/intranet/scripts: ||
     $path =~ s:\)/updater:\)/intranet/scripts/updater: ||
