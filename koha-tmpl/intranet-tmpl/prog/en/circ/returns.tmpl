@@ -1,0 +1,154 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+
+
+<!-- TMPL_IF Name="found" -->
+		<h3>Reserve Found<!-- TMPL_IF Name="waiting" --> (item is already consigned) <!-- /TMPL_IF --></h3>
+		<!-- TMPL_IF Name="waiting" -->
+		
+		<table>
+		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+		<tr><th>Patron: </th><td>
+			<ul>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+			<li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
+			<li><!-- TMPL_VAR Name="borstraddress" --><br />
+			<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
+			<li><!-- TMPL_VAR Name="borphone" --></li>
+			</ul></td></tr>
+	<tr><th>Transfer to:</th><td><!-- TMPL_VAR Name="branchname" --></td></tr>
+		</table><form method="post" action="returns.pl" name="mainform" id="mainform">
+			<input type="submit" value="Confirm" /><!-- TMPL_LOOP Name="inputloop" -->
+				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
+				<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<!-- /TMPL_LOOP -->
+			<input type="hidden" name="barcode" value="0" />
+			</form>
+		
+			
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="diffbranch" -->
+			<h3>Item Consigned:</h3>
+    	
+		<table>
+		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+		<tr><th>Patron:</th><td><!-- TMPL_VAR Name="name" --></td></tr>
+		</table><form method="post" action="returns.pl" name="mainform" id="mainform"><input type="submit" value="OK" />
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<!-- TMPL_UNLESS Name="first" -->
+					<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+					<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
+					<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
+				<!-- /TMPL_UNLESS -->
+			<!-- /TMPL_LOOP -->
+			<input type="hidden" name="barcode" value="0" />
+			
+			</form>
+		
+
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="reserved" -->
+			
+			<table>
+			<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+			<tr><th>Patron: </th><td>
+			<ul>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+			<li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
+			<li><!-- TMPL_VAR Name="borstraddress" --><br />
+			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
+			<li><!-- TMPL_VAR Name="borphone" --></li>
+			</ul></td></tr>
+			<tr><th>Transfer to: </th><td><!-- TMPL_VAR Name="branchname" --></td></tr></table>
+			 <form method="post" action="returns.pl" name="mainform" id="mainform">
+			<input type="submit" value="Confirm" />
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
+				<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<!-- /TMPL_LOOP -->
+			<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" /></form>
+		<!-- /TMPL_IF -->
+	
+<!-- TMPL_ELSE -->
+<h1>Circulation: Returns</h1>
+	
+	<form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
+			<label for="barcode">Enter Item Barcode</label>
+			<input name="barcode" id="barcode" size="14" maxlength="14" />
+			<input type="submit" value="Submit" />
+			<!-- TMPL_LOOP Name="inputloop" -->
+				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
+				<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<!-- /TMPL_LOOP -->
+		</form><!-- TMPL_IF NAME="errmsgloop" --><!-- TMPL_LOOP Name="errmsgloop" -->
+				
+				<!-- TMPL_IF Name="badbarcode" -->
+					No Item with barcode: <!-- TMPL_VAR Name="msg" -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="ispermanent" -->
+					Please return to  <!-- TMPL_VAR Name="msg" -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="notissued" -->
+					Not On Issue.
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="waslost" -->
+					Item was lost, now found.
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="withdrawn" -->
+					Item Cancelled
+				<!-- /TMPL_IF -->
+				
+			<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF Name="returned" -->
+<table>
+		<tr><th>Item Information</th><th>Patron Information</th></tr>
+		<tr><td><!-- TMPL_VAR Name="itemtitle" -->
+		</td><td>
+<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->"><!-- TMPL_VAR Name="riborcnum" --></a>
+		<!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" -->
+
+<!-- TMPL_IF Name="flagset" -->
+ (<!-- TMPL_LOOP Name="flagloop" -->
+<!-- TMPL_VAR Name="flag" -->, 
+<!-- /TMPL_LOOP -->)<!-- /TMPL_IF -->
+</td></tr></table>
+
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_IF Name="riloop" -->
+
+		<table>
+		<caption>Returned Items</caption>
+		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Patron</th></tr>
+		<!-- TMPL_LOOP Name="riloop" -->
+			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><!-- /TMPL_IF --><!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->/<!-- TMPL_VAR Name="year" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
+			<td>
+			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
+			<td><!-- TMPL_VAR Name="itemtitle" --></td>
+			<td><!-- TMPL_VAR Name="itemauthor" --></td>
+			<td><!-- TMPL_VAR Name="itemtype" --></td>
+			<td>
+			<!-- TMPL_IF Name="duedate" -->Yes, duedate
+				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->">
+					<!-- TMPL_VAR Name="borcnum" -->
+				</a><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> 
+			<!-- TMPL_ELSE -->
+								Not on issue.
+			<!-- /TMPL_IF -->
+			</td></tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
