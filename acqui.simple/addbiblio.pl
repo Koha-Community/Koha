@@ -429,10 +429,10 @@ if ($op eq "addbiblio") {
 		if ($is_a_modif) {
 			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","modify","biblionumber :$oldbiblionumber\nrecord : ".$record->as_formatted) if (logstatus);
+			logaction($loggedinuser,"acqui.simple","modify",$oldbiblionumber,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
 		} else {
 			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","add","biblionumber :$oldbibnum\nrecord : ".$record->as_formatted) if (logstatus);
+			logaction($loggedinuser,"acqui.simple","add",$oldbibnum,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
 		}
 	# now, redirect to additem page
 		print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");
@@ -485,7 +485,7 @@ if ($op eq "addbiblio") {
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
 	&NEWdelbiblio($dbh,$bibid);
-	logaction($loggedinuser,"acqui.simple","del","biblionumber :$bibid") if (logstatus);
+	logaction($loggedinuser,"acqui.simple","del",$bibid,"") if (logstatus);
 	
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=/cgi-bin/koha/search.marc/search.pl?type=intranet\"></html>";
 	exit;

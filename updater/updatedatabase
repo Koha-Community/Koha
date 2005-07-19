@@ -388,6 +388,7 @@ my %requiretables = (
 				    `user` INT( 11 ) NOT NULL ,
 				    `module` TEXT default '',
 				    `action` TEXT default '' ,
+				    `object` INT(11) default '' ,
 				    `info` TEXT default '' ,
 				    PRIMARY KEY ( `timestamp` , `user` )
 			    )",
@@ -911,13 +912,12 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'Acitvate_Log',
+            variable            => 'Activate_Log',
             value               => 'On',
 	    forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1},
             explanation         => 'Turn Log Actions on DB On an Off',
-	    type		=> 'Choice',
-	    options		=> 'On|Off'
+	    type		=> 'YesNo',
         },
     ],
 
@@ -1520,6 +1520,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.109  2005/07/19 16:48:16  hdl
+# Adding an object field to action_logs.
+# + Minor Correction to updatedatabase
+# Changing Activate_Log from choice to YesNo Variable.
+#
 # Revision 1.108  2005/07/15 16:10:35  hdl
 # Adding Log Facility.
 # Needs Two Update in database...

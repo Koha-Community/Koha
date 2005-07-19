@@ -60,10 +60,10 @@ Adds a record into action_logs table to report the different changes upon the da
 =cut
 #'
 sub logaction{
-  my ($usernumber,$modulename, $actionname, $infos)=@_;
+  my ($usernumber,$modulename, $actionname, $objectnumber, $infos)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,info) values (now(),?,?,?,?)");
-	$sth->execute($usernumber,$modulename,$actionname,$infos);
+	my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
+	$sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
 	$sth->finish;
 }
 
@@ -76,15 +76,62 @@ Activate_Log is a system preference Variable
 =cut
 #'
 sub logstatus{
-  my ($usernumber,$modulename, $actionname, $infos)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select value from systempreferences where variable='Activate_Log'");
-	$sth->execute;
-	my ($var)=$sth->fetchrow;
-	$sth->finish;
-	return ($var eq "On"?"True":"")
+	return C4::Context->preference("Activate_Log");
 }
 
+=item displaylog
+
+  &displaylog($modulename, @filters);
+  $modulename is the name of the module on which the user wants to display logs
+  @filters is an optional table of hash containing :
+  	- name : the name of the variable to filter
+	- value : the value of the filter.... May be with * joker
+
+returns a table of hash containing who did what on which object at what time
+
+=cut
+#'
+sub displaylog{
+  my ($modulename, @filters)=@_;
+	my $dbh = C4::Context->dbh;
+	my $strsth;
+	if ($modulename eq "acqui.simple"){
+		$strsth="select action_logs.timestamp, action_logs.action, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+		$strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
+		$strsth .= "FROM borrowers,action_logs ";
+		$strsth .= ",biblio" ;#if ($modulename eq "acqui.simple");
+	
+		$strsth .="WHERE borrowers.borrowernumber=action_logs.user";
+		$strsth .= "AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+		if (@filters){
+			foreach my $filter (@filters){
+				if ($filter->{name} =~ /user/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND borrowers.surname like ".$filter->{value};
+				}elsif ($filter->{name} =~ /title/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND biblio.title like ".$filter->{value};
+				}elsif ($filter->{name} =~ /author/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND biblio.author like ".$filter->{value};
+				}
+			}
+		}
+	} elsif ($modulename eq "acqui")  {
+	} elsif ($modulename eq "circ")   {
+	} elsif ($modulename eq "members"){
+	}
+	warn "displaylog :".$strsth;
+	my $sth=$dbh->prepare($strsth);
+	$sth->execute;
+	my @results;
+	my $count;
+	while (my $data = $sth->fetchrow_hashref){
+		push @results, $data;
+		$count++;
+	}
+	return ($count, \@results);
+}
 END { }       # module clean-up code here (global destructor)
 
 1;
