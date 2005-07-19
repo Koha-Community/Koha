@@ -1,0 +1,45 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reading Record for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_IF NAME="showfulllink" -->
+<ul>
+	<li>Showing All Items</li>
+	<li><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show Last 50 Items Only</a></li>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Showing Last 50 Items</li>
+	<li><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show All Items</a></li>
+</ul>
+<!-- /TMPL_IF -->
+<table>
+<caption>Reading Record for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></caption>
+<tr>
+	<th scope="col">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
+	</th>
+	<th scope="col">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
+	</th>
+	<th scope="col">Call No.</th>
+	<th scope="col">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
+	</th>
+</tr>
+<!-- TMPL_LOOP name="loop_reading" -->
+<tr<!-- TMPL_IF NAME="toggle" --><!-- TMPL_ELSE --> class="highlight"<!-- /TMPL_IF -->>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
+ 		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
+	</td>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
+ 		<!-- TMPL_VAR name="author" -->
+	</td>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="classification" --></td>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
+	</td>
+<!-- /TMPL_LOOP -->
+</table>
+
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+

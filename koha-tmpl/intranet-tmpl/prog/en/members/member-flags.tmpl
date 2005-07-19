@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Set Privileges for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+	<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="member" -->" />
+	<input type="hidden" name="newflags" value="1" />
+<table>
+	<caption>Set Privileges for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></caption>
+	<tr><th scope="col">Flag</th><th scope="col">Name</th><th scope="col">Description</th></tr>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td>
+				<input type="checkbox" id="flag-<!-- TMPL_VAR NAME="bit" -->" name="flag-<!-- TMPL_VAR NAME="bit" -->" <!-- TMPL_VAR NAME="checked" --> />
+			</td>
+			<td>
+				<label for="flag-<!-- TMPL_VAR NAME="bit" -->"><!-- TMPL_VAR NAME="flag" --></label>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="flagdesc" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+
+<input type="submit" value="Set Flags" />
+
+</form>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
