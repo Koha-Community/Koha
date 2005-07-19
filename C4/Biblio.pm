@@ -484,7 +484,7 @@ sub MARCgetbiblio {
       $dbh->prepare(
 "select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
 		 		 from marc_subfield_table
-		 		 where bibid=? order by tag,tagorder,subfieldcode
+		 		 where bibid=? order by tag,tagorder,subfieldorder
 		 	 "
     );
     my $sth2 =
@@ -1123,19 +1123,27 @@ sub MARCmarc2kohaOneField {
     my $subfield;
     ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
     foreach my $field ( $record->field($tagfield) ) {
-        if ( $field->subfields ) {
-            my @subfields = $field->subfields();
-            foreach my $subfieldcount ( 0 .. $#subfields ) {
-				if ($subfields[$subfieldcount][0] eq $subfield) {
-					if ( $result->{$kohafield} ) {
-						$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
-					}
-					else {
-						$result->{$kohafield} = $subfields[$subfieldcount][1];
+		if ($field->tag()<10) {
+			if ($result->{$kohafield}) {
+				$result->{$kohafield} .= " | ".$field->data();
+			} else {
+				$result->{$kohafield} = $field->data();
+			}
+		} else {
+			if ( $field->subfields ) {
+				my @subfields = $field->subfields();
+				foreach my $subfieldcount ( 0 .. $#subfields ) {
+					if ($subfields[$subfieldcount][0] eq $subfield) {
+						if ( $result->{$kohafield} ) {
+							$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+						}
+						else {
+							$result->{$kohafield} = $subfields[$subfieldcount][1];
+						}
 					}
 				}
 			}
-        }
+		}
     }
 # 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
     return $result;
@@ -1206,7 +1214,7 @@ sub NEWnewbiblio {
     my $oldbibitemnum;
     my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
     $oldbibnum = OLDnewbiblio( $dbh, $olddata );
-    $olddata->{'biblionumber'} = $oldbibnum;
+	$olddata->{'biblionumber'} = $oldbibnum;
     $oldbibitemnum = OLDnewbiblioitem( $dbh, $olddata );
 
     # search subtiles, addiauthors and subjects
@@ -1256,22 +1264,49 @@ sub NEWnewbiblio {
     ( my $tagfield1, my $tagsubfield1 ) = $sth->fetchrow;
     $sth->execute("biblioitems.biblioitemnumber");
     ( my $tagfield2, my $tagsubfield2 ) = $sth->fetchrow;
+	my $newfield;
+	# biblionumber & biblioitemnumber are in different fields
     if ( $tagfield1 != $tagfield2 ) {
-        warn
-"Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-        print
-"Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-        die;
-    }
-    my $newfield = MARC::Field->new(
-        $tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-        "$tagsubfield2" => $oldbibitemnum
-    );
-
-    # drop old field and create new one...
-    my $old_field = $record->field($tagfield1);
-    $record->delete_field($old_field);
-    $record->add_fields($newfield);
+		# deal with biblionumber
+		if ($tagfield1<10) {
+			$newfield = MARC::Field->new(
+				$tagfield1, $oldbibnum,
+			);
+		} else {
+			$newfield = MARC::Field->new(
+				$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
+			);
+		}
+		# drop old field and create new one...
+		my $old_field = $record->field($tagfield1);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+		# deal with biblioitemnumber
+		if ($tagfield2<10) {
+			$newfield = MARC::Field->new(
+				$tagfield2, $oldbibitemnum,
+			);
+		} else {
+			$newfield = MARC::Field->new(
+				$tagfield2, '', '', "$tagsubfield2" => $oldbibitemnum,
+			);
+		}
+		# drop old field and create new one...
+		$old_field = $record->field($tagfield2);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+	# biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
+	} else {
+		my $newfield = MARC::Field->new(
+			$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
+			"$tagsubfield2" => $oldbibitemnum
+		);
+		# drop old field and create new one...
+		my $old_field = $record->field($tagfield1);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+	}
+# 	warn "REC : ".$record->as_formatted;
     my $bibid = MARCaddbiblio( $dbh, $record, $oldbibnum, $frameworkcode );
     return ( $bibid, $oldbibnum, $oldbibitemnum );
 }
@@ -2442,10 +2477,15 @@ sub char_decode {
         s/\xc4\x6f/õ/gm;
         s/\xc8\x45/Ë/gm;
         s/\xc8\x49/Ï/gm;
+        s/\xc8\x61/ä/gm;
         s/\xc8\x65/ë/gm;
         s/\xc8\x69/ï/gm;
+        s/\xc8\x6F/ö/gm;
+        s/\xc8\x75/ü/gm;
         s/\xc8\x76/ÿ/gm;
         s/\xc9\x41/Ä/gm;
+        s/\xc9\x45/Ë/gm;
+        s/\xc9\x49/Ï/gm;
         s/\xc9\x4f/Ö/gm;
         s/\xc9\x55/Ü/gm;
         s/\xc9\x61/ä/gm;
@@ -2681,6 +2721,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
+# * fixing a bug in subfield order when MARCgetbiblio
+# * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
+# * adding some diacritic decoding (Ä, Ü...)
+#
 # Revision 1.115.2.14  2005/06/27 23:24:06  hdl
 # Display dashed ISBN
 #
