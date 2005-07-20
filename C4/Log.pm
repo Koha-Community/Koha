@@ -49,7 +49,7 @@ The functions in this module perform various functions in order to log all the o
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&logaction &logstatus);
+@EXPORT = qw(&logaction &logstatus &displaylog);
 
 =item logaction
 
@@ -95,14 +95,14 @@ sub displaylog{
   my ($modulename, @filters)=@_;
 	my $dbh = C4::Context->dbh;
 	my $strsth;
-	if ($modulename eq "acqui.simple"){
-		$strsth="select action_logs.timestamp, action_logs.action, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+	if ($modulename eq "catalogue"){
+		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
 		$strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
-		$strsth .= "FROM borrowers,action_logs ";
-		$strsth .= ",biblio" ;#if ($modulename eq "acqui.simple");
+		$strsth .= " FROM borrowers,action_logs ";
+		$strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
 	
-		$strsth .="WHERE borrowers.borrowernumber=action_logs.user";
-		$strsth .= "AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+		$strsth .=" AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
 		if (@filters){
 			foreach my $filter (@filters){
 				if ($filter->{name} =~ /user/){
@@ -118,19 +118,67 @@ sub displaylog{
 			}
 		}
 	} elsif ($modulename eq "acqui")  {
-	} elsif ($modulename eq "circ")   {
+		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+		$strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
+		$strsth .= "FROM borrowers,action_logs ";
+		$strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
+	
+		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+		$strsth .= "AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+		if (@filters){
+			foreach my $filter (@filters){
+				if ($filter->{name} =~ /user/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND borrowers.surname like ".$filter->{value};
+				}elsif ($filter->{name} =~ /title/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND biblio.title like ".$filter->{value};
+				}elsif ($filter->{name} =~ /author/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND biblio.author like ".$filter->{value};
+				}
+			}
+		}
 	} elsif ($modulename eq "members"){
+		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+		$strsth .= "bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid,";
+		$strsth .= "FROM borrowers,action_logs,borrowers as bor2 ";
+	
+		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+		$strsth .= "AND action_logs.module = 'members' AND action_logs.object=bor2.borrowernumber ";# if ($modulename eq "acqui.simple");
+		if (@filters){
+			foreach my $filter (@filters){
+				if ($filter->{name} =~ /user/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND borrowers.surname like ".$filter->{value};
+				}elsif ($filter->{name} =~ /surname/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND bor2.surname like ".$filter->{value};
+				}elsif ($filter->{name} =~ /firstname/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND bor2.firsntame like ".$filter->{value};
+				}elsif ($filter->{name} =~ /cardnumber/){
+					$filter->{value}=~s/\*/%/g;
+					$strsth .= " AND bor2.cardnumber like ".$filter->{value};
+				}
+			}
+		}
 	}
 	warn "displaylog :".$strsth;
-	my $sth=$dbh->prepare($strsth);
-	$sth->execute;
-	my @results;
-	my $count;
-	while (my $data = $sth->fetchrow_hashref){
-		push @results, $data;
-		$count++;
-	}
-	return ($count, \@results);
+	if ($strsth){
+		my $sth=$dbh->prepare($strsth);
+		$sth->execute;
+		my @results;
+		my $count;
+		my $hilighted=1;
+		while (my $data = $sth->fetchrow_hashref){
+			$data->{hilighted} = ($hilighted>0);
+			push @results, $data;
+			$count++;
+			$hilighted = -$hilighted;
+		}
+		return ($count, \@results);
+	} else {return 0;}
 }
 END { }       # module clean-up code here (global destructor)
 
