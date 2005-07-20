@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging Home<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+	<h1>Catalog Maintenance</h1>
+	<!-- TMPL_IF name="noitemsfound" -->
+		No items found
+	<!-- /TMPL_IF -->
+	
+		<form action="isbnsearch.pl">
+		<table>
+		<caption>Search Existing Records</caption>
+		<tr><th scope="row"><label for="title">Title</label></th>
+		<td><input type="hidden" name="marclist" value="biblio.title"><input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				<input type="text" name="value" id="title"size="35" /></td></tr>
+		<tr><th scope="row"><label for="isbn">ISBN</label></th>
+		<td><input type="hidden" name="marclist" value="biblioitems.isbn" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="start" />
+				<input type="text" name="value" id="isbn"size="35" /></td></tr>		
+		</table>
+				<input type="submit" value="Search" />
+				<ul><li>If the ISBN is found into the database, that record will be retrieved and can be modified.</li>
+	<li>If the ISBN is found in the reservoir, it will be retrieved and a full record added.</li>
+	<li>Otherwise, a record can be added from scratch.</li></ul>
+		</form>
+
+		<!-- TMPL_IF NAME="NOTMARC" -->
+		<form action="addbiblio.pl"><input type="submit" value="Add Record Without Search" /></form>
+		<!-- TMPL_ELSE -->
+				<form action="addbiblio.pl" method="post">
+		<h3>Create a Blank Bibliographic Record</h3>
+		<label for="frameworkcode">Choose a Framework:</label>
+		<select name="frameworkcode" id="frameworkcode">
+						<option value="">Default</option>
+						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
+						<!-- /TMPL_LOOP -->
+					</select> <input type="submit" value="Add Record Without Search" /></form>
+			
+		<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
