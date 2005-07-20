@@ -1,0 +1,169 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Virtual Shelves<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+	function CheckAll() { 
+	count = document.mainform.elements.length;
+    for (i=0; i < count; i++){
+	    if(document.mainform.elements[i].checked == 1){
+			document.mainform.elements[i].checked = 0;
+		} else {
+			document.mainform.elements[i].checked = 1;
+		}
+	}
+}
+</script>
+
+<!-- TMPL_IF name="edit" -->
+		<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">
+			<input type="hidden" name="op" value="modifsave" />
+			<table>
+			<caption>Editing Shelf <!-- TMPL_VAR name="shelfname"--></caption>
+			<tr><td><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" /><label for="shelfname">Name:</label></td><td><input id="shelfname" type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></td></tr>
+			<tr><td><label for="owner">Owner:</label></td><td><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></td></tr>
+			<tr><td><label for="category">Category:</label></td><td><select id="category" name="category">
+					<!-- TMPL_IF name="category1" -->
+						<option value="1" selected>Private</option>
+					<!-- TMPL_ELSE -->
+						<option value="1">Private</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category2" -->
+						<option value="2" selected>Public</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Public</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category3" -->
+						<option value="3" selected>Free</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Free</option>
+					<!-- /TMPL_IF -->
+				</select></td></tr>
+			</table>
+			<ul><li>a private bookshelf is managed by you and can be seen only by you.</li>
+				<li> A public can be seen by everybody, but managed only by you.</li>
+				<li> A free can be managed by any user.</li></ul>
+			<input type="submit" value="Save Changes" /></p>
+		</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF Name="viewshelf" -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post" name="mainform">
+			<table>
+			<caption>Contents of <!-- TMPL_VAR NAME="shelfname" --></caption>
+			<tr>
+					<!-- TMPL_IF name="manageshelf" --><th><a href="/cgi-bin/koha/shelves.pl" onclick="CheckAll(); return false;">Check All</a></th><!-- /TMPL_IF -->
+					<th>Title</th>
+					<th>Author</th>
+					<th>Item Type</th>
+					<th>&copy;</th>
+					<th>&nbsp;</th>
+				</tr><!-- TMPL_LOOP Name="itemsloop" --><!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- TMPL_IF name="manageshelf" --><td><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->" /></td><!-- /TMPL_IF -->
+						<td><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><!-- TMPL_VAR NAME="author" --></td> 
+						<td><!-- TMPL_VAR NAME="itemtype" --></td>
+						<td><!-- TMPL_VAR NAME="publicationyear" --></td>
+						<td><a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserves</a></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+			<input type="hidden" name="modifyshelfcontents" value="1" />
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+			<!-- TMPL_IF name="manageshelf" -->
+				<input type="submit" value="Remove Selected Items" />
+			<!-- /TMPL_IF --></form><br>
+
+	<!-- TMPL_IF name="manageshelf" -->
+		<form>
+<table>
+		<caption>Add an item by barcode</caption>
+		<tr><th><label for="barcode">Barcode:</label></th><td><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+			<input type="hidden" name="modifyshelfcontents" value="1" />
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+			<input type="text" size="14" maxlength="14" id="barcode" name="addbarcode" />
+			<input type="hidden" name="modifyshelfcontents" value="1" />
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Save" /></td></tr></table>
+		</form>
+	<!-- /TMPL_IF -->
+		<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="get"><input type="submit" value="Return to Virtual Shelves" /></form>
+				
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<!-- TMPL_IF Name="status1" -->
+			<!-- TMPL_VAR NAME="string1" -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<!-- TMPL_VAR NAME="string" -->
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+					<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">								
+					<input type="hidden" name="shelves" value="1" /><table>
+						<caption>Bookshelves</caption>
+						<th>&nbsp;</th><th>Title</th><th>Item Count</th>
+					<!-- TMPL_LOOP Name="shelvesloop" -->
+						<!-- TMPL_IF name="canmanage" -->
+
+						<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF --><td><!-- TMPL_IF NAME="shelfbookcount" --><input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" disabled="disabled" readonly="readonly" /><!-- TMPL_ELSE --><input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" /><!-- /TMPL_IF --></td><td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td><td><!-- TMPL_IF NAME="shelfbookcount" --><!-- TMPL_VAR NAME="shelfbookcount" --> item(s)*<!-- TMPL_ELSE -->Empty<!-- /TMPL_IF --></td></tr>
+						<!-- /TMPL_IF -->
+						<!-- /TMPL_LOOP --></table>
+					
+						<input type="submit" value="Delete Selected Shelves" /> <sup>*</sup>Shelves must be empty before they can be deleted.
+					</p>
+					</form>
+
+			<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">
+				<input type="hidden" name="shelves" value="1" />
+				<table>
+				<caption>Add Shelf</caption>
+				<tr><th><label>Name</label></th><td><input type="text" name="addshelf" size="25" /></td></tr>
+				<tr><th><label>Owner</label></th><td><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></td></tr>
+				<tr><th><label>Category</label></th>
+					<td><select name="category">
+						<option value="1">Private</option>
+						<option value="2">Public</option>
+					</select></td></tr>
+</table>
+<ul><li>A private bookshelf is managed by you and can be seen only by you.</li>
+					<li> A public shelf can be seen by everybody, but managed only by you.</li></ul>
+					<input type="submit" value="Add New Shelf" /></form>
+					<form action="shelves.pl" method="get"><input type="submit" value="Back to Shelf List" /></form>
+	<!-- TMPL_ELSE -->
+			<table>
+			<caption>Virtual Shelves</caption>
+				<tr>
+					<th>Shelf Name</th>
+					<th>Category</th>
+					<th>Content size</th>
+					<th>&nbsp;</th>
+				</tr>
+				<!-- TMPL_LOOP Name="shelvesloop" -->
+				<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+					<td>
+						<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+							<!-- TMPL_VAR NAME="shelfname" -->
+						</a>
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="category1" -->
+							Private
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category2" -->
+							Public
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category3" -->
+							Free
+						<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
+					</td>
+					<td><!-- TMPL_IF name="mine" --><a href="shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a><!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		<form action="shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Add or Remove Book Shelves" />				
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
