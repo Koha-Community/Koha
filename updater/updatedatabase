@@ -113,6 +113,16 @@ my %tabledata = (
             explanation         => 'Turn Log Actions on DB On an Off',
 	    type		=> 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'IndependantBranches',
+            value               => 0,
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Turn Branch independancy management On an Off',
+	    type		=> 'YesNo',
+        },
+
     ],
 
 );
@@ -341,6 +351,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.112  2005/07/26 08:19:47  hdl
+# Adding IndependantBranches System preference variable in order to manage Branch independancy.
+#
 # Revision 1.111  2005/07/25 15:35:38  tipaul
 # we have decided that moving to Koha 3.0 requires being already in Koha 2.2.x
 # So, the updatedatabase script can highly be cleaned (90% removed).
