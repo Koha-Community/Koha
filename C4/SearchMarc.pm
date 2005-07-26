@@ -41,7 +41,7 @@ This module provides the searching facilities for the Koha MARC catalog
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCurls &getMARCnotes &getMARCsubjects);
+@EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCnotes &getMARCsubjects);
 
 =head1 findsuggestion($dbh,$values);
 
@@ -573,7 +573,6 @@ sub getMARCnotes {
 	}
 
 	$sth->finish;
-	$dbh->disconnect;
 
 	my $marcnotesarray=\@marcnotes;
 	return $marcnotesarray;
@@ -610,30 +609,11 @@ sub getMARCsubjects {
 	}
 
 	$sth->finish;
-	$dbh->disconnect;
 
 	my $marcsubjctsarray=\@marcsubjcts;
         return $marcsubjctsarray;
 }  #end getMARCsubjects
 
-sub getMARCurls {
-# same for MARC21 and UNIMARC with current functionality
-# FIXME: really, this is a temporary hack
-   my ($dbh, $bibid, $marcflavour) = @_;
-my $sth=$dbh->prepare("SELECT subfieldvalue FROM marc_subfield_table WHERE bibid=? AND tag = '856' and subfieldcode = 'u'");
-$sth->execute($bibid);
-my @marcurls;
-        while (my $data=$sth->fetchrow_array) {
-		my %line;
-		$line{MARCURL} = $data;
-                push @marcurls, \%line;
-	}
-	$sth->finish;
-	$dbh->disconnect;
-my $marcurlsarray=\@marcurls;
-return $marcurlsarray;
-}  #end getMARCurls
-				
 END { }       # module clean-up code here (global destructor)
 
 1;

@@ -1500,6 +1500,14 @@ sub bibdata {
 	my $data;
 	$data  = $sth->fetchrow_hashref;
 	$sth->finish;
+	# move url to an array, splitting it on every |
+	my @URLS;
+	foreach (split /\|/,$data->{url}) {
+		my %url;
+		$url{url} = $_;
+		push @URLS,\%url;
+	}
+	$data->{URLS} = \@URLS;
 	# handle management of repeated subtitle
 	$sth   = $dbh->prepare("Select * from bibliosubtitle where biblionumber = ?");
 	$sth->execute($bibnum);
