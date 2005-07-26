@@ -233,7 +233,7 @@ sub new
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
 	$self->{"userenv"} = undef;		# User env
-	$self->{"context"} = undef;		# current active user
+	$self->{"activeuser"} = undef;		# current active user
 
 	bless $self, $class;
 	return $self;
@@ -613,17 +613,27 @@ userenv is set in _new_userenv, called in Auth.pm
 
 =cut
 #'
+
+=item userenv
+
+  C4::Context->userenv;
+
+Builds a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+set_userenv is called in Auth.pm
+
+=cut
+#'
 sub userenv
 {
-	warn "activeuser : ".$context->{"activeuser"}."hash :".$context->{$context->{"activeuser"}};
-	my $var = $context->{$context->{"activeuser"}};
-	foreach my $key (sort keys %$context){
-		warn "key : ".$key;
-	}
-	return $context->{$context->{"activeuser"}};
+	my $var = $context->{"activeuser"};
+	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
 }
 
-=item set_userenv
+=item userenv
 
   C4::Context->set_userenv;
 
@@ -636,11 +646,10 @@ set_userenv is called in Auth.pm
 
 =cut
 #'
-sub set_userenv
-{
+sub set_userenv{
 	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags)= @_;
-	warn "SETTING :  $usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags";
-	$context->{$context->{"activeuser"}}=\{
+	my $var=$context->{"activeuser"};
+	my $cell = {
 		"number"     => $usernum,
 		"id"         => $userid,
 		"cardnumber" => $usercnum,
@@ -649,6 +658,8 @@ sub set_userenv
 		"branch"     => $userbranch,
 		"flags"      => $userflags
 	};
+	$context->{userenv}->{$var} = $cell;
+	return $cell;
 }
 
 =item _new_userenv
@@ -666,9 +677,9 @@ _new_userenv is called in Auth.pm
 #'
 sub _new_userenv
 {
+	shift;
 	my ($sessionID)= @_;
-	$context->{"activeuser"} = \$sessionID;
-	$context->{$sessionID}=\();
+ 	$context->{"activeuser"}=$sessionID;
 }
 
 =item _unset_userenv
@@ -683,8 +694,9 @@ Destroys the hash for activeuser user environment variables.
 sub _unset_userenv
 {
 	my ($sessionID)= @_;
-	undef $context->{$sessionID};
+#	undef $context->{$sessionID};
 	undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
+# 	$context->{"activeuser"}--;
 }
 
 

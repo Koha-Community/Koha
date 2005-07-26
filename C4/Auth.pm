@@ -285,7 +285,7 @@ sub checkauth {
 	# state variables
 	my $loggedin = 0;
 	my %info;
-	my ($userid, $cookie, $sessionID, $flags);
+	my ($userid, $cookie, $sessionID, $flags, $envcookie);
 	my $logout = $query->param('logout.x');
 	if ($userid = $ENV{'REMOTE_USER'}) {
 		# Using Basic Authentication, no cookies required
@@ -294,8 +294,18 @@ sub checkauth {
 				-expires => '');
 		$loggedin = 1;
 	} elsif ($sessionID=$query->cookie('sessionID')) {
-		warn "NEWUSERENV : ".$sessionID;
 		C4::Context->_new_userenv($sessionID);
+		if (my %hash=$query->cookie('userenv')){
+				C4::Context::set_userenv(
+					$hash{number},
+					$hash{id},
+					$hash{cardnumber},
+					$hash{firstname},
+					$hash{surname},
+					$hash{branch},
+					$hash{flags}
+				);
+		}
 		my ($ip , $lasttime);
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
@@ -357,34 +367,65 @@ sub checkauth {
 	unless ($userid) {
 		$sessionID=int(rand()*100000).'-'.time();
 		$userid=$query->param('userid');
-		warn "NEWUSERENV : ".$sessionID;
 		C4::Context->_new_userenv($sessionID);
 		my $password=$query->param('password');
 		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 		if ($return) {
-		$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-			undef, ($sessionID, $userid));
-		$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-			undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-		close L;
-		$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-		
-		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-			$loggedin = 1;
+			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+				undef, ($sessionID, $userid));
+			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+			close L;
+			$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
+			
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$loggedin = 1;
+			} else {
+				$info{'nopermission'} = 1;
+				C4::Context->_unset_userenv($sessionID);
+			}
+			if ($return == 1){
+				my $sth=$dbh->prepare(
+					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode
+					from borrowers where userid=?"
+				);
+				$sth->execute($userid);
+				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
+				my $hash = C4::Context::set_userenv(
+					$bornum,
+					$userid,
+					$cardnumber,
+					$firstname,
+					$surname,
+					$branchcode,
+					$userflags
+				);
+				$envcookie=$query->cookie(-name => 'userenv',
+						-value => $hash,
+						-expires => '');
+			} elsif ($return == 2) {
+			#We suppose the user is the superlibrarian
+				my $hash = C4::Context::set_userenv(
+					0,0,
+					C4::Context->config('user'),
+					C4::Context->config('user'),
+					C4::Context->config('user'),
+					"",1
+				);
+				$envcookie=$query->cookie(-name => 'userenv',
+						-value => $hash,
+						-expires => '');
+			}
 		} else {
-			$info{'nopermission'} = 1;
-			C4::Context->_unset_userenv($sessionID);
-		}
-		} else {
-		if ($userid) {
-			$info{'invalid_username_or_password'} = 1;
-			C4::Context->_unset_userenv($sessionID);
-		}
+			if ($userid) {
+				$info{'invalid_username_or_password'} = 1;
+				C4::Context->_unset_userenv($sessionID);
+			}
 		}
 	}
 	my $insecure = C4::Context->boolean_preference('insecure');
@@ -396,7 +437,12 @@ sub checkauth {
 					-value => '',
 					-expires => '');
 		}
-		return ($userid, $cookie, $sessionID, $flags);
+		if ($envcookie){
+			warn "envcookie set";
+			return ($userid, [$cookie,$envcookie], $sessionID, $flags)
+		} else {
+			return ($userid, $cookie, $sessionID, $flags);
+		}
 	}
 	# else we have a problem...
 	# get the inputs from the incoming query
@@ -412,7 +458,7 @@ sub checkauth {
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
 	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url, LibraryName=> => C4::Context->preference("LibraryName"),);
+	$template->param(url => $self_url, LibraryName=> C4::Context->preference("LibraryName"),);
 	$template->param(\%info);
 	$cookie=$query->cookie(-name => 'sessionID',
 					-value => $sessionID,
@@ -431,30 +477,25 @@ sub checkpw {
 
 	my ($dbh, $userid, $password) = @_;
 # INTERNAL AUTH
-	my $sth=$dbh->prepare("select password,cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode  from borrowers where userid=?");
+	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
-		my ($md5password,$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
+		my ($md5password,$cardnumber) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
-			warn "setuserenv1 $bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags";
-			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$cardnumber;
 		}
 	}
-	my $sth=$dbh->prepare("select password,cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode from borrowers where cardnumber=?");
+	my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
-		my ($md5password,$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
+		my ($md5password) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
-			warn "setuserenv2 $bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags";
-			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$userid;
 		}
 	}
 	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
 		# Koha superuser account
 			warn "setuserenv3";
-		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
 		return 2;
 	}
 	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
