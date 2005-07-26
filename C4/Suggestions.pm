@@ -165,8 +165,16 @@ sub delsuggestion {
 sub countsuggestion {
 	my ($status) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select count(*) from suggestions where status=?");
-	$sth->execute($status);
+	my $sth;
+	if (C4::Context->preference("IndependantBranches")){
+		my $userenv = C4::Context->userenv;
+		warn "IndependantBranches : Count Suggestions : ".$userenv->{branch};
+		$sth = $dbh->prepare("select count(*) from suggestions,borrowers where status=? and borrowers.borrowernumber=suggestions.suggestedby and (borrowers.branchcode='' or borrowers.branchcode =?)");
+		$sth->execute($status,$userenv->{branch});
+	} else {
+		$sth = $dbh->prepare("select count(*) from suggestions where status=?");
+		$sth->execute($status);
+	}
 	my ($result) = $sth->fetchrow;
 	return $result;
 }

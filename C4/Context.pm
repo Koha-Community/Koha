@@ -597,6 +597,92 @@ sub _new_stopwords
 	return $stopwordlist;
 }
 
+=item userenv
+
+  %userenv = C4::Context->userenv;
+
+Returns a hash with userenvironment variables.
+
+This hash is cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+Returns Null if userenv is not set.
+userenv is set in _new_userenv, called in Auth.pm
+
+=cut
+#'
+sub userenv
+{
+	warn "activeuser : ".$context->{"activeuser"}."hash :".$context->{$context->{"activeuser"}};
+	my $var = $context->{$context->{"activeuser"}};
+	foreach my $key (sort keys %$context){
+		warn "key : ".$key;
+	}
+	return $context->{$context->{"activeuser"}};
+}
+
+=item set_userenv
+
+  C4::Context->set_userenv;
+
+Builds a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+set_userenv is called in Auth.pm
+
+=cut
+#'
+sub set_userenv
+{
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags)= @_;
+	$context->{$context->{"activeuser"}}=\{
+		"number"     => $usernum,
+		"id"         => $userid,
+		"cardnumber" => $usercnum,
+		"firstname"  => $userfirstname,
+		"surname"    => $usersurname,
+		"branch"     => $userbranch,
+		"flags"      => $userflags
+	}
+}
+
+=item _new_userenv
+
+  C4::Context->_new_userenv($session);
+
+Builds a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+_new_userenv is called in Auth.pm
+
+=cut
+#'
+sub _new_userenv
+{
+	my ($sessionID)= @_;
+	$context->{"activeuser"} = \$sessionID;
+	$context->{$sessionID}=\();
+}
+
+=item _unset_userenv
+
+  C4::Context->_unset_userenv;
+
+Destroys the hash for activeuser user environment variables.
+
+=cut
+#'
+
+sub _unset_userenv
+{
+	my ($sessionID)= @_;
+	undef $context->{$sessionID};
+	undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
+}
 
 
 1;

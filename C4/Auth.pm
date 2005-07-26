@@ -299,56 +299,64 @@ sub checkauth {
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
 								undef, $sessionID);
 		if ($logout) {
-		# voluntary logout the user
-		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-		$sessionID = undef;
-		$userid = undef;
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
-		close L;
+			# voluntary logout the user
+			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+			C4::Context->_unset_userenv($sessionID);
+			warn "DEL USERENV0";
+			$sessionID = undef;
+			$userid = undef;
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
+			close L;
 		}
 		if ($userid) {
-		if ($lasttime<time()-$timeout) {
-			# timed logout
-			$info{'timed_out'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$userid = undef;
-			$sessionID = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-			close L;
-		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-			# Different ip than originally logged in from
-			$info{'oldip'} = $ip;
-			$info{'newip'} = $ENV{'REMOTE_ADDR'};
-			$info{'different_ip'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$sessionID = undef;
-			$userid = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
-			close L;
-		} else {
-			$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-			$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
-				undef, (time(), $sessionID));
-			$flags = haspermission($dbh, $userid, $flagsrequired);
-			if ($flags) {
-			$loggedin = 1;
+			if ($lasttime<time()-$timeout) {
+				# timed logout
+				$info{'timed_out'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				warn "DEL USERENV1";
+				$userid = undef;
+				$sessionID = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+				close L;
+			} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+				# Different ip than originally logged in from
+				$info{'oldip'} = $ip;
+				$info{'newip'} = $ENV{'REMOTE_ADDR'};
+				$info{'different_ip'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				warn "DEL USERENV2";
+				$sessionID = undef;
+				$userid = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+				close L;
 			} else {
-			$info{'nopermission'} = 1;
+				$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
+				$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+					undef, (time(), $sessionID));
+				$flags = haspermission($dbh, $userid, $flagsrequired);
+				if ($flags) {
+				$loggedin = 1;
+				} else {
+				$info{'nopermission'} = 1;
+				}
 			}
-		}
 		}
 	}
 	unless ($userid) {
 		$sessionID=int(rand()*100000).'-'.time();
 		$userid=$query->param('userid');
+		warn "NEWUSERENV : ".$sessionID;
+		C4::Context->_new_userenv($sessionID);
 		my $password=$query->param('password');
 		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 		if ($return) {
@@ -363,14 +371,17 @@ sub checkauth {
 		$cookie=$query->cookie(-name => 'sessionID',
 					-value => $sessionID,
 					-expires => '');
+		
 		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
 			$loggedin = 1;
 		} else {
 			$info{'nopermission'} = 1;
+			C4::Context->_unset_userenv($sessionID);
 		}
 		} else {
 		if ($userid) {
 			$info{'invalid_username_or_password'} = 1;
+			C4::Context->_unset_userenv($sessionID);
 		}
 		}
 	}
@@ -418,24 +429,30 @@ sub checkpw {
 
 	my ($dbh, $userid, $password) = @_;
 # INTERNAL AUTH
-	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
+	my $sth=$dbh->prepare("select password,cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode  from borrowers where userid=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
-		my ($md5password,$cardnumber) = $sth->fetchrow;
+		my ($md5password,$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
+			warn "setuserenv1 $bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags";
+			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$cardnumber;
 		}
 	}
-	my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+	my $sth=$dbh->prepare("select password,cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode from borrowers where cardnumber=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
-		my ($md5password) = $sth->fetchrow;
+		my ($md5password,$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
+			warn "setuserenv2 $bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags";
+			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$userid;
 		}
 	}
 	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
 		# Koha superuser account
+			warn "setuserenv3";
+		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
 		return 2;
 	}
 	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
