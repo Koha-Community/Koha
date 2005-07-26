@@ -294,6 +294,8 @@ sub checkauth {
 				-expires => '');
 		$loggedin = 1;
 	} elsif ($sessionID=$query->cookie('sessionID')) {
+		warn "NEWUSERENV : ".$sessionID;
+		C4::Context->_new_userenv($sessionID);
 		my ($ip , $lasttime);
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",

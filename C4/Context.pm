@@ -232,6 +232,8 @@ sub new
 	$self->{"dbh"} = undef;		# Database handle
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
+	$self->{"userenv"} = undef;		# User env
+	$self->{"context"} = undef;		# current active user
 
 	bless $self, $class;
 	return $self;
@@ -637,6 +639,7 @@ set_userenv is called in Auth.pm
 sub set_userenv
 {
 	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags)= @_;
+	warn "SETTING :  $usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags";
 	$context->{$context->{"activeuser"}}=\{
 		"number"     => $usernum,
 		"id"         => $userid,
@@ -645,7 +648,7 @@ sub set_userenv
 		"surname"    => $usersurname,
 		"branch"     => $userbranch,
 		"flags"      => $userflags
-	}
+	};
 }
 
 =item _new_userenv
