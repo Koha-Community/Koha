@@ -108,6 +108,14 @@ sub searchsuggestion  {
 		push @sql_params,$status;
 		$query .= " and status=?";
 	}
+	
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		unless ($userenv->{flags} == 1){
+			push @sql_params,$userenv->{branch};
+			$query .= " and (U1.branchcode = ? or U1.branchcode ='')";
+		}
+	}
 	if ($suggestedbyme) {
 		if ($suggestedbyme eq -1) {
 		} else {
@@ -168,9 +176,13 @@ sub countsuggestion {
 	my $sth;
 	if (C4::Context->preference("IndependantBranches")){
 		my $userenv = C4::Context->userenv;
-		warn "IndependantBranches : Count Suggestions : ".$userenv->{branch};
-		$sth = $dbh->prepare("select count(*) from suggestions,borrowers where status=? and borrowers.borrowernumber=suggestions.suggestedby and (borrowers.branchcode='' or borrowers.branchcode =?)");
-		$sth->execute($status,$userenv->{branch});
+		if ($userenv->{flags} == 1){
+			$sth = $dbh->prepare("select count(*) from suggestions where status=?");
+			$sth->execute($status);
+		} else {
+			$sth = $dbh->prepare("select count(*) from suggestions,borrowers where status=? and borrowers.borrowernumber=suggestions.suggestedby and (borrowers.branchcode='' or borrowers.branchcode =?)");
+			$sth->execute($status,$userenv->{branch});
+		}
 	} else {
 		$sth = $dbh->prepare("select count(*) from suggestions where status=?");
 		$sth->execute($status);
