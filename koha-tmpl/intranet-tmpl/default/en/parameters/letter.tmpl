@@ -1,0 +1,218 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1>Letters admin</h1>
+	<!-- TMPL_IF NAME="else" -->
+		<form action="/cgi-bin/koha/admin/letter.pl" method="post">
+		<input type="text" name="searchfield" value="">
+		<input type="submit" class="button" value="OK"></form>
+		<!-- TMPL_IF NAME="search" -->
+		<br>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
+		<!-- /TMPL_IF -->
+		<table>
+		<tr>
+			<th>Code</th>
+			<th>Name</th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="letter" -->
+			<tr bgcolor=<!-- TMPL_VAR NAME="toggle" --> >
+				<td><!-- TMPL_VAR NAME="code" --></td>
+				<td><!-- TMPL_VAR NAME="name" --></td>
+				<td>
+					<a href="/cgi-bin/koha/admin/letter.pl?op=add_form&amp;code=<!-- TMPL_VAR NAME="code" -->">
+						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0">
+					</a>
+				</td>
+				<td>
+					<a href="/cgi-bin/koha/admin/letter.pl?op=delete_confirm&amp;code=<!-- TMPL_VAR NAME="code" -->">
+						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+					</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		<form action="/cgi-bin/koha/admin/letter.pl" method="post">
+			<input type="hidden" name="op" value="add_form">
+			<br>
+			<input type="submit" class="button" value="Add Letter" title="Add Letter" alt="Add Letter">
+			<br>
+		</form>
+		<br clear="all">
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_form" -->
+	<script language="javascript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
+			return false;
+		}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+/*			if (!(isNotNull(window.document.Aform.code))) {
+				_alertString += "\n- " + _("Code missing");
+			}*/
+/*			if (!(isNotNull(window.document.Aform.name))) {
+				_alertString += "\n- " + _("Name missing");
+			}*/
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Form not submitted because of the following problem(s)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
+		}
+		// GPL code coming from PhpMyAdmin
+		function insertValueQuery() {
+			var myQuery = document.Aform.content;
+			var myListBox = document.Aform.SQLfieldname;
+		
+			if(myListBox.options.length > 0) {
+				var chaineAj = "";
+				var NbSelect = 0;
+				for(var i=0; i<myListBox.options.length; i++) {
+					if (myListBox.options[i].selected){
+						NbSelect++;
+						if (NbSelect > 1)
+							chaineAj += ", ";
+						chaineAj += myListBox.options[i].value;
+					}
+				}
+		
+				//IE support
+				if (document.selection) {
+					myQuery.focus();
+					sel = document.selection.createRange();
+					sel.text = chaineAj;
+					document.Aform.insert.focus();
+				}
+				//MOZILLA/NETSCAPE support
+				else if (document.Aform.content.selectionStart || document.Aform.content.selectionStart == "0") {
+					var startPos = document.Aform.content.selectionStart;
+					var endPos = document.Aform.content.selectionEnd;
+					var chaineSql = document.Aform.content.value;
+					myQuery.value = chaineSql.substring(0, startPos) +'<<'+ chaineAj+'>>' + chaineSql.substring(endPos, chaineSql.length);
+				} else {
+					myQuery.value += chaineAj;
+				}
+			}
+		}
+		
+		</script>
+	<div id="bloc25">
+		<!-- TMPL_IF name="modify" -->
+			<h2 class="parameters">Modify letter</h2>
+		<!-- TMPL_ELSE -->
+			<h2 class="parameters">Add letter</h2>
+		<!-- /TMPL_IF -->
+		<form action="/cgi-bin/koha/admin/letter.pl" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate">
+		<input type="hidden" name="checked" value="0">
+		<!-- TMPL_IF NAME="modify" -->
+			<p>
+				<label class="label100">Code:</label><input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="code" -->
+			</p>
+			<p>
+				<label class="label100">Name:</label><!-- TMPL_VAR NAME="name" -->
+			</p>
+		<!-- /TMPL_IF -->
+		
+		<!-- TMPL_IF NAME="adding" -->
+			<p>
+				<label class="label100">Code:</label><input type="text" name="code" size="20" maxlength="20">
+			</p>
+		<!-- /TMPL_IF -->
+		
+		<p>
+			<label class="label100">Name:</label><input type="text" name="name" size="100" value="<!-- TMPL_VAR NAME="name" -->">
+		</p>
+		<p>
+			<label class="label100">Content:</label>
+		</p>
+		<p><textarea name="content" cols="80" rows="10"><!-- TMPL_VAR NAME="content" --></textarea>
+		<input type="button" name="insert" value="&lt;&lt;" onclick="insertValueQuery()" title="Insert" />
+		<select name="SQLfieldname" size=10>
+			<!-- TMPL_LOOP name="SQLfieldname" -->
+				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
+			<!-- /TMPL_LOOP -->
+		</select>
+		</p>
+		<p><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
+		</form>
+	</div>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	Data recorded
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="#99cc33">
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>Code</b>
+			</td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b><!-- TMPL_VAR NAME="code" --></b>
+			</td>
+		</tr>
+	
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->">
+		<tr>
+			<td>Name</td>
+			<td><!-- TMPL_VAR NAME="Name" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">CONFIRM DELETION</td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="NO"></form></td>
+		</tr>
+	</table>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	Data deleted
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

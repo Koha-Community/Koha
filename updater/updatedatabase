@@ -72,6 +72,12 @@ my %requiretables = (
 				    `info` TEXT default '' ,
 				    PRIMARY KEY ( `timestamp` , `user` )
 			    )",
+	letter		=> "(
+					code varchar(20) NOT NULL,
+					name varchar(100) NOT NULL,
+					content TEXT,
+					PRIMARY KEY (code)
+				)",
 );
 
 my %requirefields = (
@@ -350,6 +356,21 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.114  2005/07/28 15:10:13  tipaul
+# Introducing new "Letters" system : Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.
+# the letter table contains 3 fields :
+# * code => the code of the letter
+# * name => the complete name of the letter
+# * content => the complete text. It's a TEXT field type, so has no limits.
+#
+# My next goal now is to work on point 2-I "serial issue alert"
+# With this feature, in serials, a user can subscribe the "issue alert". For every issue arrived/missing, a mail is sent to all subscribers of this list. The mail warns the user that the issue is arrive or missing. Will be in head.
+# (see mail on koha-devel, 2005/04/07)
+#
+# The "serial issue alert" will be the 1st to use this letter system that probably needs some tweaking ;-)
+#
+# Once it will be stabilised default letters (in any languages) could be added during installer to help the library begin with this new feature.
+#
 # Revision 1.113  2005/07/28 08:38:41  tipaul
 # For instance, the return date does not rely on the borrower expiration date. A systempref will be added in Koha, to modify return date calculation schema :
 # * ReturnBeforeExpiry = yes => return date can't be after expiry date
@@ -716,6 +737,21 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.114  2005/07/28 15:10:13  tipaul
+# Introducing new "Letters" system : Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.
+# the letter table contains 3 fields :
+# * code => the code of the letter
+# * name => the complete name of the letter
+# * content => the complete text. It's a TEXT field type, so has no limits.
+#
+# My next goal now is to work on point 2-I "serial issue alert"
+# With this feature, in serials, a user can subscribe the "issue alert". For every issue arrived/missing, a mail is sent to all subscribers of this list. The mail warns the user that the issue is arrive or missing. Will be in head.
+# (see mail on koha-devel, 2005/04/07)
+#
+# The "serial issue alert" will be the 1st to use this letter system that probably needs some tweaking ;-)
+#
+# Once it will be stabilised default letters (in any languages) could be added during installer to help the library begin with this new feature.
+#
 # Revision 1.113  2005/07/28 08:38:41  tipaul
 # For instance, the return date does not rely on the borrower expiration date. A systempref will be added in Koha, to modify return date calculation schema :
 # * ReturnBeforeExpiry = yes => return date can't be after expiry date

@@ -1,0 +1,49 @@
+<!-- TMPL_INCLUDE name="help-top.inc" -->
+
+<h1>Letter administration</h1>
+
+<p>In this part of Koha, you can define "letters".</p>
+<p>Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.</p>
+<p>Letter contains specific "meta-tags" that are related to fields that will be replaced by a value at runtime. Here is a list of fields that can be used :</p>
+<p>General</p>
+<ul>
+	<li>date</li>
+	<li>LibraryName</li>
+</ul>
+<p>catalogue information</p>
+<ul>
+	<li>biblio.biblionumber</li>
+	<li>biblio.title</li>
+	<li>biblio.unititle</li>
+	<li>biblio.notes</li>
+	<li>biblio.serial</li>
+	<li>biblio.seriestitle</li>
+	<li>biblio.copyrightdate</li>
+	<li>biblio.abstract</li>
+	<li>biblioitems.volume</li>
+	<li>biblioitems.number</li>
+	<li>biblioitems.classification</li>
+	<li>biblioitems.itemtype</li>
+	<li>biblioitems.isbn</li>
+	<li>biblioitems.issn</li>
+	<li>biblioitems.dewey</li>
+	<li>biblioitems.subclass</li>
+	<li>biblioitems.publicationyear</li>
+	<li>biblioitems.publishercode</li>
+	<li>biblioitems.volumedate</li>
+	<li>biblioitems.volumedesc</li>
+	<li>biblioitems.illus</li>
+	<li>biblioitems.pages</li>
+	<li>biblioitems.notes</li>
+	<li>biblioitems.size</li>
+	<li>biblioitems.place</li>
+	<li>biblioitems.lccn</li>
+	<li>biblioitems.url</li>
+	<li>items.content</li>
+</ul>
+<p>(items.content will contain one or more item informations, coming from items table)</p>
+<p>borrower information</p>
+<p>put borrower fields here</p>
+
+All fields must be included in &lt;&lt; and &gt;&gt;, like : &lt;&lt;biblio.title&gt;&gt;
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
