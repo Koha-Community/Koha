@@ -63,21 +63,41 @@
 			 <!-- TMPL_IF name="password" -->(password defined)<!-- TMPL_ELSE -->(no password)<!-- /TMPL_IF -->
 		</p>
 		<p>
-		<!-- TMPL_IF NAME="I" -->
-			<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
-		<!-- TMPL_ELSE -->
-			<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+		<!-- TMPL_IF NAME="independantbranches"--> 
+			<!-- TMPL_IF NAME="samebranch"--> 
+				<!-- TMPL_IF NAME="I" -->
+					<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+				<!-- TMPL_ELSE -->
+					<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+				<!-- /TMPL_IF -->
+				<a href="javascript:confirm_deletion()" class="button">Delete</a>
+				<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Issue books</a>
+				<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Change Password</a>
+				</p>
+				<br/>
+				<p>
+				<!-- TMPL_IF NAME="IS_ADULT" -->
+					<a href="/cgi-bin/koha/members/jmemberentry.pl?type=Add&bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button">Add Child</a>
+				<!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify User Flags</a>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --> 
+			<!-- TMPL_IF NAME="I" -->
+				<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+			<!-- TMPL_ELSE -->
+				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
+			<!-- /TMPL_IF -->
+			<a href="javascript:confirm_deletion()" class="button">Delete</a>
+			<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Issue books</a>
+			<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Change Password</a>
+			</p>
+			<br/>
+			<p>
+			<!-- TMPL_IF NAME="IS_ADULT" -->
+				<a href="/cgi-bin/koha/members/jmemberentry.pl?type=Add&bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button">Add Child</a>
+			<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify User Flags</a>
 		<!-- /TMPL_IF -->
-		<a href="javascript:confirm_deletion()" class="button">Delete</a>
-		<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Issue books</a>
-		<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Change Password</a>
-		</p>
-		<br/>
-		<p>
-		<!-- TMPL_IF NAME="IS_ADULT" -->
-			<a href="/cgi-bin/koha/members/jmemberentry.pl?type=Add&bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button">Add Child</a>
-		<!-- /TMPL_IF -->
-		<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify User Flags</a>
 		<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" class="button">Print Page</a> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" class="button">Print Slip</a>
 		</p>
 	</div>
@@ -99,12 +119,23 @@
 			No debts
 		</TMPL_IF>
 		<p>
+		<!-- TMPL_IF NAME="independantbranches"--> 
+			<!-- TMPL_IF NAME="samebranch"--> 
+				<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+					View Account
+				</a>
+				<a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+					Pay Fines
+				</a>
+			<!-- /TMPL_IF --> 
+		<!-- TMPL_ELSE --> 
 			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
 				View Account
 			</a>
 			<a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
 				Pay Fines
 			</a>
+		<!-- /TMPL_IF --> 
 		</p>
 	</div>
 	<div class="bloc25">
@@ -139,9 +170,18 @@
 					<!-- /TMPL_LOOP -->
 					<tr>
 						<td colspan="5" align="right">
-						<!-- TMPL_IF NAME="reserveloop" -->
-							<input type="submit" name="submit" value="Update" class="button">
-						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="independantbranches"--> 
+							<!-- TMPL_IF NAME="samebranch"--> 
+								<!-- TMPL_IF NAME="reserveloop" -->
+									<input type="submit" name="submit" value="Update" class="button">
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF --> 
+						<!-- TMPL_ELSE --> 
+							<!-- TMPL_IF NAME="reserveloop" -->
+								<input type="submit" name="submit" value="Update" class="button">
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF --> 
+
 						</td>
 					</tr>
 				</table>
@@ -167,7 +207,13 @@
 				<th>Due</th>
 				<th>Itemtype</th>
 				<th>Charge</th>
-				<th>Renew</th>
+				<!-- TMPL_IF NAME="independantbranches"--> 
+					<!-- TMPL_IF NAME="samebranch"--> 
+						<th>Renew</th>
+					<!-- /TMPL_IF--> 
+				<!-- TMPL_ELSE --> 
+					<th>Renew</th>
+				<!-- /TMPL_IF--> 
 			</tr>
 
 			<!-- TMPL_LOOP NAME="issueloop" -->
@@ -181,19 +227,37 @@
 				<td><!-- TMPL_IF NAME="red" --><p class="problem"><!-- TMPL_ELSE --> <p><!-- /TMPL_IF --><!-- TMPL_VAR NAME="date_due" --></p></td>
 				<td><!-- TMPL_VAR NAME="itemtype" --></td>
 				<td><!-- TMPL_VAR NAME="charge" --></td>
-				<td>
-				<!-- TMPL_IF NAME="norenew" -->
-					<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">On Request - no renewals</a>
-				<!-- TMPL_ELSE -->
-					<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y">Y
-					<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="n">N
+				<!-- TMPL_IF NAME="independantbranches"--> 
+					<!-- TMPL_IF NAME="samebranch"--> 
+						<td>
+						<!-- TMPL_IF NAME="norenew" -->
+							<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">On Request - no renewals</a>
+						<!-- TMPL_ELSE -->
+							<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y">Y
+							<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="n">N
+						<!-- /TMPL_IF -->
+						</td>
+					<!-- /TMPL_IF--> 
+				<!-- TMPL_ELSE --> 
+					<td>
+					<!-- TMPL_IF NAME="norenew" -->
+						<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">On Request - no renewals</a>
+					<!-- TMPL_ELSE -->
+						<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y">Y
+						<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="n">N
+					<!-- /TMPL_IF -->
+					</td>
 				<!-- /TMPL_IF -->
-				
-				</td>
 			</tr>
 			<!-- /TMPL_LOOP -->
 			</table>
-			<input type="submit" class="button" value="Renew Items">
+			<!-- TMPL_IF NAME="independantbranches"--> 
+				<!-- TMPL_IF NAME="samebranch"--> 
+					<input type="submit" class="button" value="Renew Items">
+				<!-- /TMPL_IF--> 
+			<!-- TMPL_ELSE --> 
+				<input type="submit" class="button" value="Renew Items">
+			<!-- /TMPL_IF -->
 		</form>
 		<!-- TMPL_ELSE -->
 			None

@@ -131,6 +131,14 @@ my %bor;
 $bor{'borrowernumber'}=$bornum;
 
 # Converts the branchcode to the branch name
+my $samebranch;
+if (C4::Context->preference("IndependantBranches")) {
+	my $userenv = C4::Context->userenv;
+	unless ($userenv->{flags} == 1){
+		$samebranch = ($data->{'branchcode'} eq $userenv->{branch});
+	}
+}
+
 $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 
 # Converts the categorycode to the description
@@ -196,6 +204,10 @@ $template->param(
 		 totalprice =>$totalprice,
 		 totaldue =>$total,
 		 issueloop       => \@issuedata,
-		 reserveloop     => \@reservedata);
+		 reserveloop     => \@reservedata
+		 );
+$template->param(
+		 independantbranches => C4::Context->preference("IndependantBranches"),
+		 samebranch		 => $samebranch) if (C4::Context->preference("IndependantBranches"));
 
 output_html_with_http_headers $input, $cookie, $template->output;
