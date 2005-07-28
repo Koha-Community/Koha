@@ -60,7 +60,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 $template->param($count);
 my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
-$sthtemp->execute($borrowernumber);
+$sthtemp->execute($loggedinuser);
 my ($flags, $homebranch)=$sthtemp->fetchrow;
 
 if ($count == 1){

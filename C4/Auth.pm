@@ -494,8 +494,6 @@ sub checkpw {
 		}
 	}
 	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-		# Koha superuser account
-			warn "setuserenv3";
 		return 2;
 	}
 	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {

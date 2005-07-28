@@ -35,7 +35,7 @@ use C4::Acquisition;
 use C4::Date;
 
 my $query =new CGI;
-my $basketno = $query ->param('basket');
+my $basketno = $query->param('basket');
 my $booksellerid = $query->param('supplierid');
 my $order = $query->param('order');
 my ($template, $loggedinuser, $cookie)
@@ -48,6 +48,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 my ($count,@results);
 
+
 my $basket = getbasket($basketno);
 # FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
@@ -56,6 +57,19 @@ $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
 
 # get librarian branch...
+if (C4::Context->preference("IndependantBranches")) {
+	my $userenv = C4::Context->userenv;
+	unless ($userenv->{flags} == 1){
+		my $validtest = ($basket->{creationdate} = "") 
+					|| ($userenv->{branch} eq $basket->{branch})
+					|| ($userenv->{branch} = '')
+					|| ($basket->{branch} = '');
+		unless ($validtest) {
+			print $query->redirect("../mainpage.pl");
+			exit 1;
+		}
+	}
+}
 
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});
