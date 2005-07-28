@@ -393,7 +393,7 @@ sub getorders {
 	my $dbh = C4::Context->dbh;
 	
 	my $strsth ="Select count(*),authorisedby,creationdate,aqbasket.basketno,
-closedate,surname,firstname 
+closedate,surname,firstname,aqorders.title 
 from aqorders 
 left join aqbasket on aqbasket.basketno=aqorders.basketno 
 left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
@@ -407,7 +407,6 @@ quantityreceived is NULL) and datecancellationprinted is NULL ";
 		}
 	}
 	$strsth.=" group by basketno order by aqbasket.basketno";
-	warn "getorders :".$strsth;
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute($supplierid);
 	my @results = ();
@@ -490,23 +489,21 @@ sub getallorders {
   my ($supid)=@_;
   my $dbh = C4::Context->dbh;
   my @results = ();
-  my $strsth="Select * from aqorders,biblio,biblioitems,aqbasket "; 
+  my $strsth="Select *,aqorders.title as suggestedtitle,biblio.title as truetitle from aqorders,biblio,biblioitems,aqbasket,aqbooksellers "; 
 	$strsth .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
 	$strsth .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
 	$strsth .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
 	$strsth.=" and booksellerid=? and (cancelledby is NULL or cancelledby = '')
   and (quantityreceived < quantity or quantityreceived is NULL)
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber";
+  aqorders.biblioitemnumber ";
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
 		unless ($userenv->{flags} == 1){
 			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
 		}
 	}
-	$strsth .= "group by aqorders.biblioitemnumber
-  order by
-  biblio.title";
+	$strsth .= " group by aqorders.biblioitemnumber order by biblio.title";
   my $sth=$dbh->prepare($strsth);
   $sth->execute($supid);
   while (my $data=$sth->fetchrow_hashref){
@@ -581,7 +578,7 @@ sub ordersearch {
 	my @searchterms = ($id);
 	map { push(@searchterms,"$_%","% $_%") } @data;
 	push(@searchterms,$search,$search,$biblio);
-	my $sth=$dbh->prepare("Select biblio.*,biblioitems.*,aqorders.*,aqbasket.*,biblio.title from aqorders,biblioitems,biblio,aqbasket
+	my $sth=$dbh->prepare("Select biblio.*,biblioitems.*,aqorders.*,aqbasket.* from aqorders,biblioitems,biblio,aqbasket
 		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber and
 		aqorders.basketno = aqbasket.basketno
 		and aqbasket.booksellerid = ?
