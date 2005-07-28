@@ -368,6 +368,8 @@ sub MARCaddbiblio {
             }
         }
     }
+	# save leader
+	&MARCaddsubfield($dbh,$bibid,'000','',$fieldcount+1,'',1,$record->leader);
     $dbh->do("unlock tables");
     return $bibid;
 }
@@ -478,8 +480,6 @@ sub MARCgetbiblio {
     my ( $dbh, $bibid ) = @_;
     my $record = MARC::Record->new();
 
-    #---- TODO : the leader is missing
-    $record->leader('                        ');
     my $sth =
       $dbh->prepare(
 "select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
@@ -507,8 +507,11 @@ sub MARCgetbiblio {
         if ( $row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag ) {
             $previndicator .= "  ";
             if ( $prevtag < 10 ) {
-                $record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue )
-                  unless $prevtag eq "XXX";    # ignore the 1st loop
+				if ($prevtag ne '000') {
+                	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
+				} else {
+					$record->leader(sprintf("%24s",$prevvalue));
+				}
             }
             else {
                 $record->add_fields($field) unless $prevtag eq "XXX";
@@ -627,10 +630,6 @@ sub MARCgetitem {
 
 sub MARCmodbiblio {
 	my ($dbh,$bibid,$record,$frameworkcode,$delete)=@_;
-	my $oldrecord=&MARCgetbiblio($dbh,$bibid);
-	if ($oldrecord eq $record) {
-		return;
-	}
 # 1st delete the biblio,
 # 2nd recreate it
 	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
@@ -1033,7 +1032,11 @@ sub MARChtml2marc {
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
-					$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					if ($prevtag ne '000') {
+						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					} else {
+						$record->leader($prevvalue);
+					}
 				}
 			} else {
 				if ($field) {
@@ -2429,7 +2432,7 @@ sub char_decode {
 
     # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
     if ( $encoding eq "UNIMARC" ) {
-        s/\xe1/Æ/gm;
+#         s/\xe1/Æ/gm;
         s/\xe2/Ð/gm;
         s/\xe9/Ø/gm;
         s/\xec/þ/gm;
@@ -2721,6 +2724,14 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
+# * removing a useless & CPU consuming call to MARCgetbiblio
+# * Leader management.
+# If you create a MARC tag "000", with a subfield '@', it will be managed as the leader.
+# Seems to work correctly.
+#
+# Now going to create a plugin for leader()
+#
 # Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
 # * fixing a bug in subfield order when MARCgetbiblio
 # * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.

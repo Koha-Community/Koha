@@ -198,7 +198,7 @@ sub create_input () {
 	# it's a standard field
 	} else {
 		if (length($value) >200) {
-			$subfield_data{marc_value}="<textarea name=\"fieldvalue\" cols=\"50\" rows=\"5\" >$value</textarea>";
+			$subfield_data{marc_value}="<textarea name=\"field_value\" cols=\"50\" rows=\"5\" >$value</textarea>";
 		} else {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\">"; #"
 		}
@@ -223,14 +223,26 @@ sub build_tabs ($$$$) {
 			my $indicator;
 	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
 	# if MARC::Record is empty => use tab as master loop.
-			if ($record ne -1 && $record->field($tag)) {
-				my @fields = $record->field($tag);
+			if ($record ne -1 && ($record->field($tag) || $tag eq '000')) {
+				my @fields;
+				if ($tag ne '000') {
+					@fields = $record->field($tag);
+				} else {
+					push @fields,$record->leader();
+				}
 				foreach my $field (@fields)  {
 					my @subfields_data;
 					if ($tag<10) {
-						my $value=$field->data();
-						my $subfield="@";
+						my ($value,$subfield);
+						if ($tag ne '000') {
+							$value=$field->data();
+							$subfield="@";
+						} else {
+							$value = $field;
+							$subfield='@';
+						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
 						push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {

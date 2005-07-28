@@ -135,8 +135,9 @@ if ($op eq "additem") {
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-my $temp = MARCgetbiblio($dbh,$bibid);
-my @fields = $temp->fields();
+# my $temp = MARCgetbiblio($dbh,$bibid);
+# my @fields = $temp->fields();
+my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
