@@ -113,6 +113,371 @@ my %tabledata = (
             explanation         => 'Turn Log Actions on DB On an Off',
 	    type		=> 'YesNo',
         },
+		{
+            uniquefieldrequired => 'variable',
+            variable            => 'ReturnBeforeExpiry',
+            value               => 'Off',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+	    type		=> 'YesNo',
+        },
+    ],
+
+);
+
+my %fielddefinitions = (
+# fieldname => [
+#	{		  field => 'fieldname',
+#             type    => 'fieldtype',
+#             null    => '',
+#             key     => '',
+#             default => ''
+#         },
+#     ],
+);
+
+#-------------------
+# Initialize
+
+# Start checking
+
+# Get version of MySQL database engine.
+my $mysqlversion = `mysqld --version`;
+$mysqlversion =~ /Ver (\S*) /;
+$mysqlversion = $1;
+if ( $mysqlversion ge '3.23' ) {
+    print "Could convert to MyISAM database tables...\n" unless $silent;
+}
+
+#---------------------------------
+# Tables
+
+# Collect all tables into a list
+$sth = $dbh->prepare("show tables");
+$sth->execute;
+while ( my ($table) = $sth->fetchrow ) {
+    $existingtables{$table} = 1;
+}
+
+
+# Now add any missing tables
+foreach $table ( keys %requiretables ) {
+    unless ( $existingtables{$table} ) {
+	print "Adding $table table...\n" unless $silent;
+        my $sth = $dbh->prepare("create table $table $requiretables{$table}");
+        $sth->execute;
+        if ( $sth->err ) {
+            print "Error : $sth->errstr \n";
+            $sth->finish;
+        }    # if error
+    }    # unless exists
+}    # foreach
+
+# now drop useless tables
+foreach $table ( keys %dropable_table ) {
+	if ( $existingtables{$table} ) {
+		print "Dropping unused table $table\n" if $debug and not $silent;
+		$dbh->do("drop table $table");
+		if ( $dbh->err ) {
+			print "Error : $dbh->errstr \n";
+		}
+	}
+}
+
+#---------------------------------
+# Columns
+
+foreach $table ( keys %requirefields ) {
+    print "Check table $table\n" if $debug and not $silent;
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute();
+    undef %types;
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $types{$column} = $type;
+    }    # while
+    foreach $column ( keys %{ $requirefields{$table} } ) {
+        print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
+        if ( !$types{$column} ) {
+
+            # column doesn't exist
+            print "Adding $column field to $table table...\n" unless $silent;
+            $query = "alter table $table
+			add column $column " . $requirefields{$table}->{$column};
+            print "Execute: $query\n" if $debug;
+            my $sti = $dbh->prepare($query);
+            $sti->execute;
+            if ( $sti->err ) {
+                print "**Error : $sti->errstr \n";
+                $sti->finish;
+            }    # if error
+        }    # if column
+    }    # foreach column
+}    # foreach table
+
+foreach $table ( keys %fielddefinitions ) {
+	print "Check table $table\n" if $debug;
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute();
+	my $definitions;
+	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+	{
+		$definitions->{$column}->{type}    = $type;
+		$definitions->{$column}->{null}    = $null;
+		$definitions->{$column}->{key}     = $key;
+		$definitions->{$column}->{default} = $default;
+		$definitions->{$column}->{extra}   = $extra;
+	}    # while
+	my $fieldrow = $fielddefinitions{$table};
+	foreach my $row (@$fieldrow) {
+		my $field   = $row->{field};
+		my $type    = $row->{type};
+		my $null    = $row->{null};
+		my $key     = $row->{key};
+		my $default = $row->{default};
+		$default="''" unless $default;
+		my $extra   = $row->{extra};
+		my $def     = $definitions->{$field};
+		unless ( $type eq $def->{type}
+			&& $null eq $def->{null}
+			&& $key eq $def->{key}
+			&& $default eq $def->{default}
+			&& $extra eq $def->{extra} )
+		{
+
+			if ( $null eq '' ) {
+				$null = 'NOT NULL';
+			}
+			if ( $key eq 'PRI' ) {
+				$key = 'PRIMARY KEY';
+			}
+			unless ( $extra eq 'auto_increment' ) {
+				$extra = '';
+			}
+			# if it's a new column use "add", if it's an old one, use "change".
+			my $action;
+			if ($definitions->{$field}->{type}) {
+				$action="change $field"
+			} else {
+				$action="add";
+			}
+# if it's a primary key, drop the previous pk, before altering the table
+			my $sth;
+			if ($key ne 'PRIMARY KEY') {
+				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ?");
+			} else {
+				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ?");
+			}
+			$sth->execute($default);
+			print "  Alter $field in $table\n" unless $silent;
+		}
+	}
+}
+
+
+# Populate tables with required data
+foreach my $table ( keys %tabledata ) {
+    print "Checking for data required in table $table...\n" unless $silent;
+    my $tablerows = $tabledata{$table};
+    foreach my $row (@$tablerows) {
+        my $uniquefieldrequired = $row->{uniquefieldrequired};
+        my $uniquevalue         = $row->{$uniquefieldrequired};
+        my $forceupdate         = $row->{forceupdate};
+        my $sth                 =
+          $dbh->prepare(
+"select $uniquefieldrequired from $table where $uniquefieldrequired=?"
+        );
+        $sth->execute($uniquevalue);
+	if ($sth->rows) {
+	    foreach my $field (keys %$forceupdate) {
+		if ($forceupdate->{$field}) {
+		    my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
+		    $sth->execute($row->{$field}, $uniquevalue);
+		}
+	    }
+	} else {
+            print "Adding row to $table: " unless $silent;
+            my @values;
+            my $fieldlist;
+            my $placeholders;
+            foreach my $field ( keys %$row ) {
+                next if $field eq 'uniquefieldrequired';
+		next if $field eq 'forceupdate';
+                my $value = $row->{$field};
+                push @values, $value;
+                print "  $field => $value" unless $silent;
+                $fieldlist .= "$field,";
+                $placeholders .= "?,";
+            }
+            print "\n" unless $silent;
+            $fieldlist    =~ s/,$//;
+            $placeholders =~ s/,$//;
+            my $sth =
+              $dbh->prepare(
+                "insert into $table ($fieldlist) values ($placeholders)");
+            $sth->execute(@values);
+        }
+    }
+}
+
+# at last, remove useless fields
+foreach $table ( keys %uselessfields ) {
+	my @fields = split /,/,$uselessfields{$table};
+	my $fields;
+	my $exists;
+	foreach my $fieldtodrop (@fields) {
+		$fieldtodrop =~ s/\t//g;
+		$fieldtodrop =~ s/\n//g;
+		$exists =0;
+		$sth = $dbh->prepare("show columns from $table");
+		$sth->execute;
+		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+		{
+			$exists =1 if ($column eq $fieldtodrop);
+		}
+		if ($exists) {
+			print "deleting $fieldtodrop field in $table...\n" unless $silent;
+			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+			$sth->execute;
+		}
+	}
+}    # foreach
+
+
+$sth->finish;
+
+exit;
+
+# $Log$
+# Revision 1.113  2005/07/28 08:38:41  tipaul
+# For instance, the return date does not rely on the borrower expiration date. A systempref will be added in Koha, to modify return date calculation schema :
+# * ReturnBeforeExpiry = yes => return date can't be after expiry date
+# * ReturnBeforeExpiry = no  => return date can be after expiry date
+#
+# Revision 1.112  2005/07/26 08:19:47  hdl
+# Adding IndependantBranches System preference variable in order to manage Branch independancy.
+#
+# Revision 1.111  2005/07/25 15:35:38  tipaul
+# we have decided that moving to Koha 3.0 requires being already in Koha 2.2.x
+# So, the updatedatabase script can highly be cleaned (90% removed).
+# Let's play with the new Koha DB structure now ;-)
+#
+#!/usr/bin/perl
+
+# $Id$
+
+# Database Updater
+# This script checks for required updates to the database.
+
+# Part of the Koha Library Software www.koha.org
+# Licensed under the GPL.
+
+# Bugs/ToDo:
+# - Would also be a good idea to offer to do a backup at this time...
+
+# NOTE:  If you do something more than once in here, make it table driven.
+use strict;
+
+# CPAN modules
+use DBI;
+use Getopt::Long;
+# Koha modules
+use C4::Context;
+
+# FIXME - The user might be installing a new database, so can't rely
+# on /etc/koha.conf anyway.
+
+my $debug = 0;
+
+my (
+    $sth, $sti,
+    $query,
+    %existingtables,    # tables already in database
+    %types,
+    $table,
+    $column,
+    $type, $null, $key, $default, $extra,
+    $prefitem,          # preference item in systempreferences table
+);
+
+my $silent;
+GetOptions(
+	's' =>\$silent
+	);
+my $dbh = C4::Context->dbh;
+print "connected to your DB. Checking & modifying it\n" unless $silent;
+
+#-------------------
+# Defines
+
+# Tables to add if they don't exist
+my %requiretables = (
+    categorytable       => "(categorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (categorycode)
+                            )",
+    subcategorytable       => "(subcategorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (subcategorycode)
+                            )",
+    mediatypetable       => "(mediatypecode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (mediatypecode)
+                            )",
+    action_logs 	=> "(
+				    `timestamp` TIMESTAMP NOT NULL ,
+				    `user` INT( 11 ) NOT NULL ,
+				    `module` TEXT default '',
+				    `action` TEXT default '' ,
+				    `object` INT(11) default '' ,
+				    `info` TEXT default '' ,
+				    PRIMARY KEY ( `timestamp` , `user` )
+			    )",
+);
+
+my %requirefields = (
+#    tablename        => { 'field' => 'fieldtype' },
+);
+
+my %dropable_table = (
+# tablename => 'tablename',
+);
+
+my %uselessfields = (
+# tablename => "field1,field2",
+	);
+# the other hash contains other actions that can't be done elsewhere. they are done
+# either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
+
+# The tabledata hash contains data that should be in the tables.
+# The uniquefieldrequired hash entry is used to determine which (if any) fields
+# must not exist in the table for this row to be inserted.  If the
+# uniquefieldrequired entry is already in the table, the existing data is not
+# modified, unless the forceupdate hash entry is also set.  Fields in the
+# anonymous "forceupdate" hash will be forced to be updated to the default
+# values given in the %tabledata hash.
+
+my %tabledata = (
+# tablename => [
+#	{	uniquefielrequired => 'fieldname', # the primary key in the table
+#		fieldname => fieldvalue,
+#		fieldname2 => fieldvalue2,
+#	},
+# ],
+    systempreferences => [
+		{
+            uniquefieldrequired => 'variable',
+            variable            => 'Activate_Log',
+            value               => 'On',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Turn Log Actions on DB On an Off',
+	    type		=> 'YesNo',
+        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'IndependantBranches',
@@ -351,6 +716,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.113  2005/07/28 08:38:41  tipaul
+# For instance, the return date does not rely on the borrower expiration date. A systempref will be added in Koha, to modify return date calculation schema :
+# * ReturnBeforeExpiry = yes => return date can't be after expiry date
+# * ReturnBeforeExpiry = no  => return date can be after expiry date
+#
 # Revision 1.112  2005/07/26 08:19:47  hdl
 # Adding IndependantBranches System preference variable in order to manage Branch independancy.
 #

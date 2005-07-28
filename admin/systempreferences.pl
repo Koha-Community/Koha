@@ -59,6 +59,7 @@ $tabsysprefs{marcflavour}="Catalogue";
 $tabsysprefs{SubscriptionHistory}="Catalogue";
 $tabsysprefs{maxoutstanding}="Circulation";
 $tabsysprefs{printcirculationslips}="Circulation";
+$tabsysprefs{ReturnBeforeExpiry}="Circulation";
 $tabsysprefs{suggestion}="Acquisitions";
 $tabsysprefs{automembernum}="Members";
 $tabsysprefs{noissuescharge}="Circulation";

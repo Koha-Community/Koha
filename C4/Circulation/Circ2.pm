@@ -879,6 +879,10 @@ sub issuebook {
 		if ($date) {
 			$dateduef=$date;
 		}
+		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
+		if (C4::Context->preference('ReturnBeforeExpiry') && $dateduef gt $borrower->{expiry}) {
+			$dateduef=$borrower->{expiry};
+		}
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;
 		$iteminformation->{'issues'}++;
