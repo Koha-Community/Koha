@@ -223,10 +223,22 @@ if ($delete){
 	my @select_branch;
 	my %select_branches;
 	my $branches=getbranches();
+	my $default;
 	foreach my $branch (keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+		if (C4::Context->preference("IndependantBranches")) {
+			my $userenv = C4::Context->userenv;
+			unless ($userenv->{flags} == 1){
+				push @select_branch, $branch if ($branch eq $userenv->{branch});
+				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq $userenv->{branch});
+				$default = $userenv->{branch};
+			}
+		} else {
+			push @select_branch, $branch;
+			$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+			$default = $data->{'branchcode'};
+		}
 	}
+	
 	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
 				-id => 'branchcode',
 				-values   => \@select_branch,
