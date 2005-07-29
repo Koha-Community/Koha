@@ -227,7 +227,11 @@ if ($delete){
 	foreach my $branch (keys %$branches) {
 		if (C4::Context->preference("IndependantBranches")) {
 			my $userenv = C4::Context->userenv;
-			unless ($userenv->{flags} == 1){
+			if ($userenv->{flags} == 1){
+				push @select_branch, $branch;
+				$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+				$default = $data->{'branchcode'};
+			} else {
 				push @select_branch, $branch if ($branch eq $userenv->{branch});
 				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq $userenv->{branch});
 				$default = $userenv->{branch};

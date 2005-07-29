@@ -137,6 +137,7 @@ if (C4::Context->preference("IndependantBranches")) {
 	unless ($userenv->{flags} == 1){
 		$samebranch = ($data->{'branchcode'} eq $userenv->{branch});
 	}
+	$samebranch =1 if ($userenv->{flags} == 1);
 }
 
 $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
