@@ -36,6 +36,9 @@
 			<!-- TMPL_IF NAME="ERROR_city" -->
 				Postal city<br>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_branch" -->
+				Branch : member should be of the same branch as you<br>
+			<!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">

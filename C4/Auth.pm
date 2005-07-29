@@ -314,7 +314,6 @@ sub checkauth {
 			# voluntary logout the user
 			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
 			C4::Context->_unset_userenv($sessionID);
-			warn "DEL USERENV0";
 			$sessionID = undef;
 			$userid = undef;
 			open L, ">>/tmp/sessionlog";
@@ -328,7 +327,6 @@ sub checkauth {
 				$info{'timed_out'} = 1;
 				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
 				C4::Context->_unset_userenv($sessionID);
-				warn "DEL USERENV1";
 				$userid = undef;
 				$sessionID = undef;
 				open L, ">>/tmp/sessionlog";
@@ -342,7 +340,6 @@ sub checkauth {
 				$info{'different_ip'} = 1;
 				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
 				C4::Context->_unset_userenv($sessionID);
-				warn "DEL USERENV2";
 				$sessionID = undef;
 				$userid = undef;
 				open L, ">>/tmp/sessionlog";
@@ -438,7 +435,6 @@ sub checkauth {
 					-expires => '');
 		}
 		if ($envcookie){
-			warn "envcookie set";
 			return ($userid, [$cookie,$envcookie], $sessionID, $flags)
 		} else {
 			return ($userid, $cookie, $sessionID, $flags);
