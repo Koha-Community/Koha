@@ -142,7 +142,16 @@ if ($op eq "do_search") {
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
 	if ($total == 1) {
 	 # if only 1 answer, jump directly to the biblio
-	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	    # here we need to check if MARC searching is turned on or off.
+	    # if on, go to MARCdetail.pl else go to
+	    # detail.pl
+	    my $marc_bool = C4::Context->boolean_preference("MARC") || 0;
+	    if ($marc_bool eq "1") {                              
+		print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	    }
+	    else {
+		print $query->redirect("/cgi-bin/koha/detail.pl?bib=".@$results[0]->{biblionumber});
+	    }
 		 exit
 	}
 	($template, $loggedinuser, $cookie)
