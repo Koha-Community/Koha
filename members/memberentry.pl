@@ -90,6 +90,7 @@ if ($op eq 'add' or $op eq 'modify') {
 			push @errors, "ERROR_invalid_cardnumber";
 		}
 	}
+
 	if ($data{'sex'} eq '' && $categorycode ne "I"){
 		push @errors, "ERROR_gender";
 		$nok=1;
@@ -109,6 +110,15 @@ if ($op eq 'add' or $op eq 'modify') {
 	if ($data{'city'} eq ''){
 		push @errors, "ERROR_city";
 		$nok=1;
+	}
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		if ($userenv->{flags} == 1){
+			unless ($userenv->{branch} eq $data{'branchcode'}){
+				push @errors, "ERROR_branch";
+				$nok=1;
+			}
+		}
 	}
 	if ($nok) {
 		foreach my $error (@errors) {
@@ -133,7 +143,25 @@ if ($op eq 'add' or $op eq 'modify') {
 	}
 }
 if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+	my @errors;
+	my $nok;
+	my $branch =$input->param('branchcode');
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		if ($userenv->{flags} == 1){
+			if ($userenv->{branch} eq $branch){
+				print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+			} else {
+				push @errors, "ERROR_branch";
+				$nok=1;
+				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
+			}
+		} else {
+			print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+		}
+	} else {
+		print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+	}
 } else {  # this else goes down the whole script
 	if ($actionType eq 'Add'){
 		$template->param( addAction => 1);
@@ -149,6 +177,16 @@ if ($delete){
 		}
 	} else {
 		$data=borrdata('',$borrowernumber);
+	}
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		unless ($userenv->{flags} == 1){
+			warn "userenv=".$userenv->{'branch'}."  member branch :".$data->{'branchcode'};
+			unless ($userenv->{'branch'} eq $data->{'branchcode'}){
+				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
+				exit 1;
+			}
+		}
 	}
 	if ($actionType eq 'Add'){
 		$template->param( updtype => 'I');
