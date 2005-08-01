@@ -26,7 +26,7 @@
 				<tr>
 					<!-- TMPL_LOOP NAME="item_header_loop" -->
 						<th class="catalogue">
-							<TMPL_VAR NAME="header_value">
+							<!-- TMPL_VAR NAME="header_value" -->
 						</th>
 					<!-- /TMPL_LOOP -->
 					<th colspan="2" class="catalogue">&nbsp;</th>
@@ -34,8 +34,13 @@
 					<!-- TMPL_LOOP NAME="item_loop" -->
 					<tr>
 						<!-- TMPL_VAR NAME="item_value" -->
-						<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
-						<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+						<!-- TMPL_IF Name="nomod" -->
+							<td></td>
+							<td></td>
+						<!-- TMPL_ELSE -->
+							<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
+							<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+						<!-- /TMPL_IF -->
 					</tr>
 					<!-- /TMPL_LOOP -->
 			</table>
@@ -56,7 +61,7 @@
 					<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
 					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
 			</p>
-		<!-- /tmpl_loop -->
+		<!-- /TMPL_LOOP -->
 	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	<!-- TMPL_IF name="barcode_not_unique" -->
 		<div id="problem"><b>ERROR : Barcode already exists !<b></div>

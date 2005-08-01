@@ -52,6 +52,7 @@ my $error = $input->param('error');
 my $bibid = $input->param('bibid');
 my $oldbiblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
 
+
 my $op = $input->param('op');
 my $itemnum = $input->param('itemnum');
 
@@ -131,6 +132,14 @@ if ($op eq "additem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # build screen with existing items. and "new" one
 #------------------------------------------------------------------------------------------------------------------------------
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {editcatalogue => 1},
+			     debug => 1,
+			     });
 
 my %indicators;
 $indicators{995}='  ';
@@ -141,6 +150,7 @@ my %witness; #---- stores the list of subfields used at least once, with the "me
 my @big_array;
 #---- finds where items.itemnumber is stored
 my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
+my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$itemtype);
 my @itemnums; # array to store itemnums
 foreach my $field (@fields) {
 	next if ($field->tag()<10);
@@ -151,6 +161,16 @@ foreach my $field (@fields) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10 && ($field->tag() ne $itemtagfield && $subf[$i][0] ne $itemtagsubfield));
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
 		$this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+			#verifying rights
+			my $userenv = C4::Context->userenv;
+			unless ($userenv->{'flags'} == 1){
+				if (not ($userenv->{'branch'} eq $subf[$i][1])) {
+					$this_row{'nomod'}=1;
+					warn "nomod"
+				}
+			}
+		}
 		push @itemnums,$this_row{$subf[$i][0]} =$subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
 	}
 	if (%this_row) {
@@ -174,6 +194,8 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	my %row_data;
 	$row_data{item_value} = $items_data;
 	$row_data{itemnum} = $itemnums[$i];
+	#reporting this_row values
+	$row_data{'nomod'} = $big_array[$i]{'nomod'};
 	push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {
@@ -202,6 +224,13 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 		my ($x,$value);
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
+		
+		#testing branch value if IndependantBranches.
+		my $test = (C4::Context->preference("IndependantBranches")) && 
+					($tag==$branchtagfield) && ($subfield==$branchtagsubfield) &&
+					(C4::Context->userenv->{flags} != 1) && ($value != C4::Context->userenv->{branch}) ;
+		print $input->redirect("additem.pl?bibid=$bibid") if ($test);
+		
 		# search for itemcallnumber if applicable
 		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
 			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
@@ -217,12 +246,22 @@ foreach my $tag (sort keys %{$tagslib}) {
 			# builds list, depending on authorised value...
 			#---- branch
 			if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-				my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
-				$sth->execute;
-				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-				while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-					push @authorised_values, $branchcode;
-					$authorised_lib{$branchcode}=$branchname;
+				if ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags} != 1)){
+						my $sth=$dbh->prepare("select branchcode,branchname from branches where branchcode = ? order by branchname");
+						$sth->execute(C4::Context->userenv->{branch});
+						push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+						while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+							push @authorised_values, $branchcode;
+							$authorised_lib{$branchcode}=$branchname;
+						}
+				} else {
+					my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
+					$sth->execute;
+					push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+					while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+						push @authorised_values, $branchcode;
+						$authorised_lib{$branchcode}=$branchname;
+					}
 				}
 			#----- itemtypes
 			} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
@@ -266,14 +305,6 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$i++
 	}
 }
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
