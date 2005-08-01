@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -72,21 +72,22 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/leader.tmpl",
+    = get_template_and_user({template_name => "value_builder/marc21_leader.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-	my $f5 = substr($result,4,1);
-	my $f6 = substr($result,5,1);
-	my $f7 = substr($result,6,1);
-	my $f8 = substr($result,7,1);
-	my $f9 = substr($result,8,1);
-	my $f17 = substr($result,16,1);
-	my $f18 = substr($result,17,1);
-	my $f19 = substr($result,18,1);
+	$result = "     nam                 " unless $result;
+	my $f5 = substr($result,5,1);
+	my $f6 = substr($result,6,1);
+	my $f7 = substr($result,7,1);
+	my $f8 = substr($result,8,1);
+	my $f9 = substr($result,9,1);
+	my $f17 = substr($result,17,1);
+	my $f18 = substr($result,18,1);
+	my $f19 = substr($result,19,1);
 
 	$template->param(index => $index,
 							"f5$f5" => 1,

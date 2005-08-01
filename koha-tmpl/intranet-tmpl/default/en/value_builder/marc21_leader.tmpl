@@ -14,9 +14,9 @@
 		<td>
 			<select name="f5" size="1">
 			<!-- TMPL_IF name="f5a" -->
-				<option value=" " SELECTED>a- Increase in encoding level (MARC21 specific)</option>
+				<option value=" " SELECTED>a- Increase in encoding level</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">a- Increase in encoding level (MARC21 specific)</option>
+				<option value=" ">a- Increase in encoding level</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5c" -->
@@ -34,11 +34,6 @@
 			<!-- TMPL_ELSE -->
 				<option value="n">n- New</option>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f5o" -->
-				<option value="o" SELECTED>o- "daughter" biblio (UNIMARC specific)</option>
-			<!-- TMPL_ELSE -->
-				<option value="o">o- daughter biblio (UNIMARC specific)</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5p" -->
 				<option value="p" SELECTED>p- Increase in encoding level from prepublication</option>
 			<!-- TMPL_ELSE -->
@@ -55,11 +50,6 @@
 				<option value="a" SELECTED>a- Language material (monography)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">a- Language material (monography)</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>b- Manuscript Language material(UNIMARC)</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">b- Manuscript Language material (UNIMARC)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6c" -->
 				<option value="c" SELECTED>c- Notated music</option>
@@ -107,14 +97,9 @@
 				<option value="m">m - Computer file</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6o" -->
-				<option value="o" SELECTED>o - Kit (MARC21)</option>
+				<option value="o" SELECTED>o - Kit</option>
 			<!-- TMPL_ELSE -->
-				<option value="o">o - Kit (MARC21)</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6p" -->
-				<option value="p" SELECTED>p - Mixed material (UNIMARC)</option>
-			<!-- TMPL_ELSE -->
-				<option value="p">p - Mixed material (UNIMARC)</option>
+				<option value="o">o - Kit</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6r" -->
 				<option value="r" SELECTED>r - Three-dimensional artifact or naturally occurring object</option>
@@ -122,9 +107,9 @@
 				<option value="r">r - Three-dimensional artifact or naturally occurring object</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6t" -->
-				<option value="t" SELECTED>t - Manuscript language material (MARC21)</option>
+				<option value="t" SELECTED>t - Manuscript language material</option>
 			<!-- TMPL_ELSE -->
-				<option value="t">t - Manuscript language material (MARC21)</option>
+				<option value="t">t - Manuscript language material</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -139,24 +124,24 @@
 					<option value="a">a- Monographic component part</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7b" -->
-					<option value="b" SELECTED>b- Serial component part (MARC21)</option>
+					<option value="b" SELECTED>b- Serial component part</option>
 				<!-- TMPL_ELSE -->
-					<option value="b">a- Serial component part (MARC21)</option>
+					<option value="b">a- Serial component part</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7c" -->
-					<option value="c" SELECTED>c- Collection (MARC21) / Factice (UNIMARC)</option>
+					<option value="c" SELECTED>c- Collection</option>
 				<!-- TMPL_ELSE -->
-					<option value="c">c- Collection (MARC21) / Factice (UNIMARC)</option>
+					<option value="c">c- Collection</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7d" -->
-					<option value="d" SELECTED>d- Subunit (MARC21)</option>
+					<option value="d" SELECTED>d- Subunit</option>
 				<!-- TMPL_ELSE -->
-					<option value="d">d- Subunit (MARC21)</option>
+					<option value="d">d- Subunit</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7i" -->
-					<option value="i" SELECTED>i- Integrating resource (MARC21)</option>
+					<option value="i" SELECTED>i- Integrating resource</option>
 				<!-- TMPL_ELSE -->
-					<option value="i">i- Integrating resource (MARC21)</option>
+					<option value="i">i- Integrating resource</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7m" -->
 					<option value="m" SELECTED>m- Monograph/item</option>
@@ -182,24 +167,9 @@
 					<option value=" ">No specific type</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f8a" -->
-					<option value="a" SELECTED>a- Archival (MARC21)</option>
+					<option value="a" SELECTED>a- Archival</option>
 				<!-- TMPL_ELSE -->
-					<option value="a">a- Archival (MARC21)</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f81" -->
-					<option value="1" SELECTED>1- None (UNIMARC)</option>
-				<!-- TMPL_ELSE -->
-					<option value="1">1- None (UNIMARC)</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f82" -->
-					<option value="2" SELECTED>2- Upper level (UNIMARC)</option>
-				<!-- TMPL_ELSE -->
-					<option value="2">a- Upper level (UNIMARC)</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f83" -->
-					<option value="3" SELECTED>3- Daughter level (UNIMARC)</option>
-				<!-- TMPL_ELSE -->
-					<option value="3">3- Daughter level (UNIMARC)</option>
+					<option value="a">a- Archival</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -210,14 +180,14 @@
 		<td>
 			<select name="f9" size="1">
 				<!-- TMPL_IF name="f9 " -->
-					<option value=" " SELECTED>MARC-8 (MARC21)</option>
+					<option value=" " SELECTED>MARC-8</option>
 				<!-- TMPL_ELSE -->
 					<option value=" ">MARC-8</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f9a" -->
-					<option value="a" SELECTED>a- UCS/Unicode (MARC21)</option>
+					<option value="a" SELECTED>a- UCS/Unicode</option>
 				<!-- TMPL_ELSE -->
-					<option value="a">a- UCS/Unicode (MARC21)</option>
+					<option value="a">a- UCS/Unicode</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
