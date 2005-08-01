@@ -2478,6 +2478,7 @@ sub char_decode {
         s/\xc4\x61/ã/gm;
         s/\xc4\x6e/ñ/gm;
         s/\xc4\x6f/õ/gm;
+        s/\xc8\x41/Ä/gm;
         s/\xc8\x45/Ë/gm;
         s/\xc8\x49/Ï/gm;
         s/\xc8\x61/ä/gm;
@@ -2724,6 +2725,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
+# adding decoder for Ä string
+#
 # Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
 # * removing a useless & CPU consuming call to MARCgetbiblio
 # * Leader management.
