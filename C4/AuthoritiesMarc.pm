@@ -158,7 +158,7 @@ sub authoritysearch {
 					my $subfieldcode = $subf[$i][0];
 					my $subfieldvalue = $subf[$i][1];
 					my $tagsubf = $tag.$subfieldcode;
-					$summary =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2/g;
 				}
 			}
 		}
@@ -926,6 +926,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.7  2005/08/01 15:14:50  tipaul
+# minor change in summary handling (accepting 4 digits before the field)
+#
 # Revision 1.9.2.6  2005/06/07 10:02:00  tipaul
 # porting dictionnary search from head to 2.2. there is now a ... facing titles, author & subject, to search in biblio & authorities existing values.
 #
