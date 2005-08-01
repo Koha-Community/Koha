@@ -3,12 +3,10 @@
 	<!-- TMPL_IF NAME="add" -->
 	
 	<h1>
-	<!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-branches-p" -->Branches<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Branches: Add Branch<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Branches: Edit Branch<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Branches: Edit Category<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
 	</h1>
 	
 	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
@@ -86,15 +84,35 @@
 	
 	<!-- TMPL_IF NAME="else" -->
 		<h1>
-		<!-- TMPL_IF NAME="use-heading-flags-p" -->
 		<!-- TMPL_IF NAME="heading-branches-p" -->Branches<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Branches: Add Branch<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Branches: Edit Branch<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Branches: Edit Category<!-- /TMPL_IF -->
-		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
 		</h1>
 	
-		<font color="red"><!-- TMPL_VAR NAME="message" --></font>
+		<font color="red">
+		<!-- TMPL_IF name="MESSAGE1" -->
+			NEW Cannot change branch record: You must specify a Branchname and a Branchcode
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE2" -->
+			NEW Branch record changed
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE3" -->
+			NEW Branch record deleted
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE4" -->
+			NEW Cannot change branch record: You must specify a Branchname and a Branchcode
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE5" -->
+			NEW Category record changed
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE6" -->
+			NEW The category has been deleted
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE7" -->
+			Branch cannot be deleted because there are items using that branch
+		<!-- /TMPL_IF -->
+		</font>
 		<table border="1" cellpadding="5" cellspacing="0">
 			<tr>
 				<th colspan="6" align="left" bgcolor="#99cc33">

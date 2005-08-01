@@ -88,25 +88,23 @@ if ($op eq 'add') {
 	# If the user has pressed the "add new branch" button.
 	heading("Branches: Add Branch");
 	$template->param('heading-branches-add-branch-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
 	editbranchform();
 
 } elsif ($op eq 'edit') {
 	# if the user has pressed the "edit branch settings" button.
 	heading("Branches: Edit Branch");
 	$template->param('heading-branches-edit-branch-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
 	$template->param(add => 1);
 	editbranchform($branchcode);
 } elsif ($op eq 'add_validate') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'branchcode'} && $params->{'branchname'}) {
-		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
+		default ("MESSAGE1");
 	} else {
 		setbranchinfo($params);
 		$template->param(else => 1);
-		default ("Branch record changed for branch: $params->{'branchname'}");
+		default ("MESSAGE2");
 	}
 } elsif ($op eq 'delete') {
 	# if the user has pressed the "delete branch" button.
@@ -123,22 +121,21 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletebranch($branchcode);
 	$template->param(else => 1);
-	default("The branch \"$branchname\" ($branchcode) has been deleted.");
+	default("MESSAGE3");
 } elsif ($op eq 'editcategory') {
 	# If the user has pressed the "add new category" or "modify" buttons.
 	heading("Branches: Edit Category");
 	$template->param('heading-branches-edit-category-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
 	editcatform($categorycode);
 } elsif ($op eq 'addcategory_validate') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'categorycode'} && $params->{'categoryname'}) {
-		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
+		default ("MESSAGE4");
 	} else {
 		setcategoryinfo($params);
 		$template->param(else => 1);
-		default ("Category record changed for category $params->{'categoryname'}");
+		default ("MESSAGE5");
 	}
 } elsif ($op eq 'delete_category') {
 	# if the user has pressed the "delete branch" button.
@@ -154,7 +151,7 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletecategory($categorycode);
 	$template->param(else => 1);
-	default("The category with code $categorycode has been deleted.");
+	default("MESSAGE6");
 
 } else {
 	# if no operation has been set...
@@ -171,8 +168,7 @@ sub default {
 	my ($message) = @_;
 	heading("Branches");
 	$template->param('heading-branches-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
-	$template->param(message => $message);
+	$template->param("$message" => 1);
 	$template->param(action => $script_name);
 	branchinfotable();
 }
@@ -501,7 +497,7 @@ sub checkdatabasefor {
     my $message;
     if ($total) {
 	# FIXME: need to be replaced by an exported boolean parameter
-	$message = "Branch cannot be deleted because there are $total items using that branch.";
+	$message = "MESSAGE7";
     }
     return $message;
 }
