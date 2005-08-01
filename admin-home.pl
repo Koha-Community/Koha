@@ -17,5 +17,10 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {parameters => 1, management => 1, tools => 1},
 			     debug => 1,
 			     });
+my $dbh = C4::Context->dbh;
+my $sth = $dbh->prepare("select count(*) from stopwords");
+$sth->execute;
+my ($total) = $sth->fetchrow;
+$template->param(stopwords => $total);
 
 output_html_with_http_headers $query, $cookie, $template->output;

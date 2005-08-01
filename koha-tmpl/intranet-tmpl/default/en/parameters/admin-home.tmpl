@@ -86,7 +86,8 @@
 	<TMPL_IF name="CAN_user_management">
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></td>
-			<td>Words deleted during searches.</td>
+			<td>Words deleted during searches.
+				<!-- TMPL_UNLESS name="stopwords" --><p class="problem">WARNING : you should define stop words</p><!-- /TMPL_UNLESS --></td>
 		</tr>
 	</TMPL_IF>
 	
