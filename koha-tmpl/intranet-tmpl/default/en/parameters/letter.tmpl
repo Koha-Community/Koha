@@ -4,12 +4,13 @@
 	<!-- TMPL_IF NAME="else" -->
 		<form action="/cgi-bin/koha/admin/letter.pl" method="post">
 		<input type="text" name="searchfield" value="">
-		<input type="submit" class="button" value="OK"></form>
+		<input type="submit" class="button" value="Filter"></form>
 		<!-- TMPL_IF NAME="search" -->
 		<br>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
 		<!-- /TMPL_IF -->
 		<table>
 		<tr>
+			<th>Module</th>
 			<th>Code</th>
 			<th>Name</th>
 			<th>&nbsp;</th>
@@ -17,6 +18,7 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="letter" -->
 			<tr bgcolor=<!-- TMPL_VAR NAME="toggle" --> >
+				<td><!-- TMPL_VAR NAME="module" --></td>
 				<td><!-- TMPL_VAR NAME="code" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
 				<td>
@@ -25,7 +27,7 @@
 					</a>
 				</td>
 				<td>
-					<a href="/cgi-bin/koha/admin/letter.pl?op=delete_confirm&amp;code=<!-- TMPL_VAR NAME="code" -->">
+					<a href="/cgi-bin/koha/admin/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">
 						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
 					</a>
 				</td>
@@ -143,14 +145,63 @@
 		<input type="hidden" name="checked" value="0">
 		<!-- TMPL_IF NAME="modify" -->
 			<p>
-				<label class="label100">Code:</label><input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="code" -->
+				<label class="label100">Koha module:</label>
+				<select name="module">
+					<!-- TMPL_IF name="acquisition" -->
+						<option value="acquisition" selected>Acquisition</option>
+					<!-- TMPL_ELSE -->
+						<option value="acquisition">Acquisition</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="catalogue" -->
+						<option value="catalogue" selected>Catalogue</option>
+					<!-- TMPL_ELSE -->
+						<option value="catalogue">Catalogue</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="circulation" -->
+						<option value="circulation" selected>Circulation</option>
+					<!-- TMPL_ELSE -->
+						<option value="circulation">Circulation</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="members" -->
+						<option value="members" selected>Members</option>
+					<!-- TMPL_ELSE -->
+						<option value="members">Members</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="authorities" -->
+						<option value="authorities" selected>Authorities</option>
+					<!-- TMPL_ELSE -->
+						<option value="authorities">Authorities</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="reports" -->
+						<option value="reports" selected>Reports</option>
+					<!-- TMPL_ELSE -->
+						<option value="reports">Reports</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="parameters" -->
+						<option value="parameters" selected>Parameters</option>
+					<!-- TMPL_ELSE -->
+						<option value="parameters">Parameters</option>
+					<!-- /TMPL_IF -->
+				</select>
 			</p>
 			<p>
-				<label class="label100">Name:</label><!-- TMPL_VAR NAME="name" -->
+				<label class="label100">Code:</label><input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="code" -->
 			</p>
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_IF NAME="adding" -->
+			<p>
+				<label class="label100">Koha module:</label>
+				<select name="module">
+						<option value="acquisition">Acquisition</option>
+						<option value="catalogue">Catalogue</option>
+						<option value="circulation">Circulation</option>
+						<option value="members">Members</option>
+						<option value="authorities">Authorities</option>
+						<option value="reports">Reports</option>
+						<option value="parameters">Parameters</option>
+				</select>
+			</p>
 			<p>
 				<label class="label100">Code:</label><input type="text" name="code" size="20" maxlength="20">
 			</p>
@@ -160,7 +211,10 @@
 			<label class="label100">Name:</label><input type="text" name="name" size="100" value="<!-- TMPL_VAR NAME="name" -->">
 		</p>
 		<p>
-			<label class="label100">Content:</label>
+			<label class="label100">Title (mail subject):</label><input type="text" name="title" size="100" value="<!-- TMPL_VAR NAME="title" -->">
+		</p>
+		<p>
+			<label class="label100">Content (mail content):</label>
 		</p>
 		<p><textarea name="content" cols="80" rows="10"><!-- TMPL_VAR NAME="content" --></textarea>
 		<input type="button" name="insert" value="&lt;&lt;" onclick="insertValueQuery()" title="Insert" />
@@ -186,15 +240,16 @@
 	<table border="0" cellspacing="0" cellpadding="5">
 		<tr valign="top" bgcolor="#99cc33">
 			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-				<b>Code</b>
+				<b>module / Code</b>
 			</td>
 			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-				<b><!-- TMPL_VAR NAME="code" --></b>
+				<b><!-- TMPL_VAR name="module"--> / <!-- TMPL_VAR NAME="code" --></b>
 			</td>
 		</tr>
 	
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed">
 		<input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->">
+		<input type="hidden" name="module" value="<!-- TMPL_VAR NAME="module" -->">
 		<tr>
 			<td>Name</td>
 			<td><!-- TMPL_VAR NAME="Name" --></td>
@@ -203,7 +258,15 @@
 			<td colspan="2" align="center">CONFIRM DELETION</td>
 		</tr>
 		<tr>
-			<td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="NO"></form></td>
+			<td>
+				<input type="submit" value="YES">
+				</form>
+			</td>
+			<td>
+				<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+					<input type="submit" value="NO">
+				</form>
+			</td>
 		</tr>
 	</table>
 	<!-- /TMPL_IF -->

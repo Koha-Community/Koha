@@ -53,7 +53,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from letter where (code like ?) order by code");
+	my $sth=$dbh->prepare("Select * from letter where (code like ?) order by module,code");
 	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
@@ -113,7 +113,6 @@ if ($op eq 'add_form') {
 	push @SQLfieldname, \%line;
 	while ((my $field) = $sth2->fetchrow_array) {
 		my %line = ('value' => "biblio.".$field, 'text' => "biblio.".$field);
-		warn "$line{value}";
 		push @SQLfieldname, \%line;
 	}
 	my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
@@ -122,7 +121,6 @@ if ($op eq 'add_form') {
 	push @SQLfieldname, \%line;
 	while ((my $field) = $sth2->fetchrow_array) {
 		my %line = ('value' => "biblioitems.".$field, 'text' => "biblioitems.".$field);
-		warn "$line{value}";
 		push @SQLfieldname, \%line;
 	}
 	my %line = ('value' => "", 'text' => '---ITEMS---');
@@ -136,7 +134,6 @@ if ($op eq 'add_form') {
 	push @SQLfieldname, \%line;
 	while ((my $field) = $sth2->fetchrow_array) {
 		my %line = ('value' => "borrowers.".$field, 'text' => "borrowers.".$field);
-		warn "$line{value}";
 		push @SQLfieldname, \%line;
 	}
 	if ($code) {
@@ -145,7 +142,7 @@ if ($op eq 'add_form') {
 	} else {
 	    $template->param(adding => 1);
 	}
-	$template->param(name => $letter->{name},
+	$template->param(name => $letter->{name},title => $letter->{title},
 					content => $letter->{content},
 					SQLfieldname => \@SQLfieldname,);
 													# END $OP eq ADD_FORM
@@ -153,8 +150,8 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace letter (code,name,content) values (?,?,?)");
-	$sth->execute($input->param('code'),$input->param('name'),$input->param('content'));
+	my $sth=$dbh->prepare("replace letter (module,code,name,title,content) values (?,?,?,?,?)");
+	$sth->execute($input->param('module'),$input->param('code'),$input->param('name'),$input->param('title'),$input->param('content'));
 	$sth->finish;
 	 print $input->redirect("letter.pl");
 	 exit;
@@ -167,6 +164,7 @@ if ($op eq 'add_form') {
 	$sth->execute($code);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
+	$template->param(module => $data->{module});
 	$template->param(code => $code);
 	$template->param(name => $data->{'name'});
 	$template->param(content => $data->{'content'});
@@ -176,8 +174,9 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	my $code=uc($input->param('code'));
-	my $sth=$dbh->prepare("delete from letter where code=?");
-	$sth->execute($code);
+	my $module=$input->param('module');
+	my $sth=$dbh->prepare("delete from letter where module=? and code=?");
+	$sth->execute($module,$code);
 	$sth->finish;
 	 print $input->redirect("letter.pl");
 	 return;
@@ -200,6 +199,7 @@ if ($op eq 'add_form') {
 	  	}
 	   my %row_data;
 	   $row_data{toggle} = $toggle;
+	   $row_data{module} = $results->[$i]{'module'};
 	   $row_data{code} = $results->[$i]{'code'};
 	   $row_data{name} = $results->[$i]{'name'};
 	   push(@loop_data, \%row_data);

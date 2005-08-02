@@ -73,10 +73,12 @@ my %requiretables = (
 				    PRIMARY KEY ( `timestamp` , `user` )
 			    )",
 	letter		=> "(
-					code varchar(20) NOT NULL,
-					name varchar(100) NOT NULL,
-					content TEXT,
-					PRIMARY KEY (code)
+					module varchar(20) NOT NULL default '',
+					code varchar(20) NOT NULL default '',
+					name varchar(100) NOT NULL default '',
+					title varchar(200) NOT NULL default '',
+					content text,
+					PRIMARY KEY  (module,code)
 				)",
 );
 
@@ -356,6 +358,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.115  2005/08/02 16:15:34  tipaul
+# adding 2 fields to letter system :
+# * module (acquisition, catalogue...) : it will be usefull to show the librarian only letters he may be interested by.
+# * title, that will be used as mail subject.
+#
 # Revision 1.114  2005/07/28 15:10:13  tipaul
 # Introducing new "Letters" system : Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.
 # the letter table contains 3 fields :
@@ -737,6 +744,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.115  2005/08/02 16:15:34  tipaul
+# adding 2 fields to letter system :
+# * module (acquisition, catalogue...) : it will be usefull to show the librarian only letters he may be interested by.
+# * title, that will be used as mail subject.
+#
 # Revision 1.114  2005/07/28 15:10:13  tipaul
 # Introducing new "Letters" system : Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.
 # the letter table contains 3 fields :
