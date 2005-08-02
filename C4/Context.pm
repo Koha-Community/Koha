@@ -594,6 +594,7 @@ sub _new_stopwords
 		my $retval = {};
 		$stopwordlist->{$stopword} = uc($stopword);
 	}
+	$stopwordlist->{A} = "A" unless $stopwordlist;
 	return $stopwordlist;
 }
 
