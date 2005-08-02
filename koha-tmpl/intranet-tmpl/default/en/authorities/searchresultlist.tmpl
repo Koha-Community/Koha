@@ -50,7 +50,7 @@
 					</td>
 					<td>
 						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:do_delete('authorities-home.pl?op=delete&authid=<!-- TMPL_VAR NAME="authid" -->')">
+						<a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
 						</a>
 						<!-- /TMPL_UNLESS -->
@@ -87,8 +87,12 @@
 
 
 <script language="JavaScript" type="text/javascript" >
-function do_delete(page)
-{
-window.location = page;
+
+function confirm_deletion(id) {
+	
+	var is_confirmed = confirm('Are you sure you want to delete this authority?');
+	if (is_confirmed) {
+		window.location="authorities-home.pl?op=delete&amp;authid="+id;
+	}
 }
 </script>
