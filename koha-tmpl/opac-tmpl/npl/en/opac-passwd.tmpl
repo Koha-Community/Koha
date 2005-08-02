@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
+<div id="mainbloc">
+<h1>Cambio de clave de usuarios</h1>
+
+<!-- TMPL_IF NAME= "Error_messages" -->
+	<p>Error</p>
+	<!-- TMPL_IF NAME= "PassMismatch" -->
+	<p>No coinciden las claves</p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME= "ShortPass" -->
+	<p>La clave debe tener mas de 5 caracteres</p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME= "WrongPass" -->
+	<p> Ingrese correctamente su clave de usuario</p>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME= "Ask_data" -->
+<form action="/cgi-bin/koha/opac-passwd.pl" method="get">
+	<p><label>Clave Vieja</label><input type="password"  size="25"  name="Oldkey" /></p>
+	<p><label>Clave Nueva</label><input type="password"  size="25"  name="Newkey" /></p>
+	<p><label>Repita la Clave</label><input type="password"  size="25" name="Confirm" /></p>
+	<p><input type="image" src="/opac-tmpl/css/es/images/boton_enviar.gif" width="70" height="30" value="submit"  align="bottom"/></p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME= "Cambio_clave" -->
+	<p>Ha cambiado la clave con exito</p>
+<!-- /TMPL_IF -->
+</form>
+</div>
+</div>
+</body>
+</html>
