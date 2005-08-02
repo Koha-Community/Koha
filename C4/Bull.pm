@@ -203,7 +203,7 @@ sub get_full_subscription_list_from_biblionumber {
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
 							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
 							left join biblio on biblio.biblionumber=subscription.biblionumber 
-							where subscription.biblionumber = ? order by year,serial.planneddate');
+							where subscription.biblionumber = ? order by year,serial.subscriptionid,serial.planneddate');
 	$sth->execute($biblionumber);
 	my @res;
 	my $year;
@@ -212,6 +212,7 @@ sub get_full_subscription_list_from_biblionumber {
 	my $bibliotitle;
 	my @loopissues;
 	my $first;
+	my $previousnote="";
 	while (my $subs = $sth->fetchrow_hashref) {
 # 		my $sth2 = $dbh->prepare('select * from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
 # 		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
@@ -229,6 +230,7 @@ sub get_full_subscription_list_from_biblionumber {
 				'status2' => $subs->{'status'}==2,
 				'status3' => $subs->{'status'}==3,
 				'status4' => $subs->{'status'}==4,
+				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 		}else {
 			$first=1 if (not $year);
@@ -244,6 +246,7 @@ sub get_full_subscription_list_from_biblionumber {
 				'status2' => $subs->{'status'}==2,
 				'status3' => $subs->{'status'}==3,
 				'status4' => $subs->{'status'}==4,
+				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 			
 			push @res,{
@@ -255,6 +258,7 @@ sub get_full_subscription_list_from_biblionumber {
 				'first'=>$first 
 			};
 		}
+		$previousnote=$subs->{notes};
 	}
 	return \@res;
 }
@@ -301,31 +305,38 @@ sub getsubscriptions {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($biblionumber) {
-		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=?");
+		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=?");
 		$sth->execute($biblionumber);
 	} else {
 		if ($ISSN and $title)
 		{
-			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
+			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
 			$sth->execute("%$title%",$ISSN);
 		}
 		else
 		{
 			if ($ISSN)
 			{
-				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ?");
+				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ?");
 				$sth->execute($ISSN);
 			}
 			else
 			{
-				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
+				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
  biblio.biblionumber=subscription.biblionumber and biblio.title like ? ");
 				$sth->execute("%$title%");
 			}
 		}
 	}
-		my @results;
+	my @results;
+	my $previoustitle="";
 	while (my $line = $sth->fetchrow_hashref) {
+		if ($previoustitle eq $line->{title}) {
+			$line->{title}="";
+			$line->{issn}="";
+		} else {
+			$previoustitle=$line->{title};
+		}
 		push @results, $line;
 	}
 	return @results;
