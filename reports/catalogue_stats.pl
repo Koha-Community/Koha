@@ -216,12 +216,12 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow location from items order by location");
+	$req = $dbh->prepare("select distinctrow holdingbranch from items order by holdingbranch");
 	$req->execute;
 	undef @select;
 	push @select,"";
-	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'location',
+	my $CGIholdingbranch=CGI::scrolling_list( -name     => 'Filter',
+				-id => 'holdingbranch',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -267,7 +267,7 @@ if ($do_it) {
 # 					CGIToPublicationYear => $CGIpublicationyear,
 #					CGIPublisher => $CGIpublisher,
 					CGIBranch => $CGIbranch,
-					CGILocation => $CGIlocation,
+					CGILocation => $CGIholdingbranch,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice
 					);
@@ -333,7 +333,7 @@ sub calculate {
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
  	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	@linefilter[0] = @$filters[11] if ($line =~ /items.location/ ) ;
+ 	@linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
@@ -347,7 +347,7 @@ sub calculate {
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
  	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	@colfilter[0] = @$filters[11] if ($column =~ /items.location/ ) ;
+ 	@colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
 
 # 1st, loop rows.
 	my $linefield;
@@ -559,9 +559,9 @@ sub calculate {
 	if (@$filters[11]){
 		@$filters[11]=~ s/\*/%/g;
 		if ($cond){
-			$strcalc .= " AND items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
+			$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
 		} else {
-			$strcalc .= " WHERE items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
+			$strcalc .= " WHERE items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
 		}
 	}
 	
