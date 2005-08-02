@@ -51,13 +51,13 @@ if ( $query->param('Oldkey') && $query->param('Newkey') && $query->param('Confir
 			length($query->param('Confirm')) > 5 ){ # Record password
 			my $clave = md5_base64($query->param('Newkey'));
 			$sth->execute($clave,$borrowernumber);
-			$template->param('Cambio_clave' => '1');
+			$template->param('password_updated' => '1');
+			$template->param('borrowernumber' => $borrowernumber);
 		}elsif ( $query->param('Newkey') ne $query->param('Confirm') ){
 			$template->param('Ask_data' => '1');
 			$template->param('Error_messages' => '1');
 			$template->param('PassMismatch' => '1');
 		}elsif (length($query->param('Confirm')) <= 5 ){
-			warn "La password es chica\n";
 			$template->param('Ask_data' => '1');
 			$template->param('Error_messages' => '1');
 			$template->param('ShortPass' => '1');
