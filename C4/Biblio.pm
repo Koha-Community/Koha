@@ -1786,45 +1786,61 @@ sub OLDnewitems {
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
     if ( $item->{'dateaccessioned'} ) {
         $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,				biblionumber         = ?,
-							biblioitemnumber     = ?,				barcode              = ?,
-							booksellerid         = ?,					dateaccessioned      = ?,
-							homebranch           = ?,				holdingbranch        = ?,
-							price                = ?,						replacementprice     = ?,
-							replacementpricedate = NOW(),	itemnotes            = ?,
+							itemnumber           = ?,			biblionumber         = ?,
+							multivolumepart      = ?,
+							biblioitemnumber     = ?,			barcode              = ?,
+							booksellerid         = ?,			dateaccessioned      = ?,
+							homebranch           = ?,			holdingbranch        = ?,
+							price                = ?,			replacementprice     = ?,
+							replacementpricedate = NOW(),		datelastseen		= NOW(),
+							multivolume			= ?,			stack				= ?,
+							itemlost			= ?,			wthdrawn			= ?,
+							paidfor				= ?,			itemnotes            = ?,
 							itemcallnumber	=?, 							notforloan = ?,
 							location = ?
 							"
         );
         $sth->execute(
-            $itemnumber,                 $item->{'biblionumber'},
-            $item->{'biblioitemnumber'}, $barcode,
-            $item->{'booksellerid'},     $item->{'dateaccessioned'},
-            $item->{'homebranch'},       $item->{'holdingbranch'},
-            $item->{'price'},            $item->{'replacementprice'},
-            $item->{'itemnotes'},        $item->{'itemcallnumber'},
-            $item->{'notforloan'},		$item->{'location'}
+			$itemnumber,				$item->{'biblionumber'},
+			$item->{'multivolumepart'},
+			$item->{'biblioitemnumber'},$barcode,
+			$item->{'booksellerid'},	$item->{'dateaccessioned'},
+			$item->{'homebranch'},		$item->{'holdingbranch'},
+			$item->{'price'},			$item->{'replacementprice'},
+			$item->{multivolume},		$item->{stack},
+			$item->{itemlost},			$item->{wthdrawn},
+			$item->{paidfor},			$item->{'itemnotes'},
+			$item->{'itemcallnumber'},	$item->{'notforloan'},
+			$item->{'location'}
         );
     }
     else {
         $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,				biblionumber         = ?,
-							biblioitemnumber     = ?,				barcode              = ?,
-							booksellerid         = ?,					dateaccessioned      = NOW(),
-							homebranch           = ?,				holdingbranch        = ?,
-							price                = ?,						replacementprice     = ?,
-							replacementpricedate = NOW(),	itemnotes            = ?,
-							itemcallnumber = ? , notforloan = ?,
+							itemnumber           = ?,			biblionumber         = ?,
+							multivolumepart      = ?,
+							biblioitemnumber     = ?,			barcode              = ?,
+							booksellerid         = ?,			dateaccessioned      = NOW(),
+							homebranch           = ?,			holdingbranch        = ?,
+							price                = ?,			replacementprice     = ?,
+							replacementpricedate = NOW(),		datelastseen		= NOW(),
+							multivolume			= ?,			stack				= ?,
+							itemlost			= ?,			wthdrawn			= ?,
+							paidfor				= ?,			itemnotes            = ?,
+							itemcallnumber	=?, 							notforloan = ?,
 							location = ?
 							"
         );
         $sth->execute(
-            $itemnumber,                 $item->{'biblionumber'},
-            $item->{'biblioitemnumber'}, $barcode,
-            $item->{'booksellerid'},     $item->{'homebranch'},
-            $item->{'holdingbranch'},    $item->{'price'},
-            $item->{'replacementprice'}, $item->{'itemnotes'},
-            $item->{'itemcallnumber'},   $item->{'notforloan'},
+			$itemnumber,				$item->{'biblionumber'},
+			$item->{'multivolumepart'},
+			$item->{'biblioitemnumber'},$barcode,
+			$item->{'booksellerid'},
+			$item->{'homebranch'},		$item->{'holdingbranch'},
+			$item->{'price'},			$item->{'replacementprice'},
+			$item->{multivolume},		$item->{stack},
+			$item->{itemlost},			$item->{wthdrawn},
+			$item->{paidfor},			$item->{'itemnotes'},
+			$item->{'itemcallnumber'},	$item->{'notforloan'},
 			$item->{'location'}
         );
     }
@@ -1837,32 +1853,27 @@ sub OLDnewitems {
 
 sub OLDmoditem {
     my ( $dbh, $item ) = @_;
-
-#  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
-    #  my $dbh=C4Connect;
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=? where itemnumber=?";
+    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
     my @bind = (
-        $item->{'barcode'},        $item->{'notes'},
-        $item->{'itemcallnumber'}, $item->{'notforloan'},
-        $item->{'location'},	   $item->{'itemnum'}
+        $item->{'barcode'},			$item->{'notes'},
+        $item->{'itemcallnumber'},	$item->{'notforloan'},
+        $item->{'location'},		$item->{multivolumepart},
+		$item->{multivolume},		$item->{stack},
+		$item->{wthdrawn},
     );
     if ( $item->{'lost'} ne '' ) {
-        $query = "update items set biblioitemnumber=?,
-                             barcode=?,
-                             itemnotes=?,
-                             homebranch=?,
-                             itemlost=?,
-                             wthdrawn=?,
-			     itemcallnumber=?,
-			     notforloan=?,
-				 location=?";
+        $query = "update items set biblioitemnumber=?,barcode=?,itemnotes=?,homebranch=?,
+							itemlost=?,wthdrawn=?,itemcallnumber=?,notforloan=?,
+				 			location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
             $item->{'notes'},          $item->{'homebranch'},
             $item->{'lost'},           $item->{'wthdrawn'},
             $item->{'itemcallnumber'}, $item->{'notforloan'},
-            $item->{'location'},		$item->{'itemnum'}
+            $item->{'location'},		$item->{multivolumepart},
+			$item->{multivolume},		$item->{stack},
+			$item->{wthdrawn},
         );
 		if ($item->{homebranch}) {
 			$query.=",homebranch=?";
@@ -1872,9 +1883,10 @@ sub OLDmoditem {
 			$query.=",holdingbranch=?";
 			push @bind, $item->{holdingbranch};
 		}
-		$query.=" where itemnumber=?";
     }
-    if ( $item->{'replacement'} ne '' ) {
+	$query.=" where itemnumber=?";
+	push @bind,$item->{'itemnum'};
+   if ( $item->{'replacement'} ne '' ) {
         $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
     }
     my $sth = $dbh->prepare($query);
@@ -2725,6 +2737,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
+# fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
+# (Not all items fields mapped to MARC)
+#
 # Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
 # adding decoder for Ä string
 #
