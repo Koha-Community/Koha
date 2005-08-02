@@ -157,6 +157,11 @@
 					<!-- TMPL_ELSE -->
 						<option value="catalogue">Catalogue</option>
 					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="serial" -->
+						<option value="serial" selected>Serial</option>
+					<!-- TMPL_ELSE -->
+						<option value="serial">Serial</option>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="circulation" -->
 						<option value="circulation" selected>Circulation</option>
 					<!-- TMPL_ELSE -->
@@ -195,6 +200,7 @@
 				<select name="module">
 						<option value="acquisition">Acquisition</option>
 						<option value="catalogue">Catalogue</option>
+						<option value="serial">Serial</option>
 						<option value="circulation">Circulation</option>
 						<option value="members">Members</option>
 						<option value="authorities">Authorities</option>
