@@ -77,6 +77,7 @@ if ($op eq 'del') {
 }
 my $subs = &getsubscription($subscriptionid);
 my ($totalissues,@serialslist) = getserials($subscriptionid);
+warn " => $totalissues";
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 # the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
