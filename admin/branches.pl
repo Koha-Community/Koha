@@ -100,6 +100,7 @@ if ($op eq 'add') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'branchcode'} && $params->{'branchname'}) {
+		$template->param(else => 1);
 		default ("MESSAGE1");
 	} else {
 		setbranchinfo($params);
@@ -124,13 +125,13 @@ if ($op eq 'add') {
 	default("MESSAGE3");
 } elsif ($op eq 'editcategory') {
 	# If the user has pressed the "add new category" or "modify" buttons.
-	heading("Branches: Edit Category");
 	$template->param('heading-branches-edit-category-p' => 1);
 	editcatform($categorycode);
 } elsif ($op eq 'addcategory_validate') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'categorycode'} && $params->{'categoryname'}) {
+		$template->param(else => 1);
 		default ("MESSAGE4");
 	} else {
 		setcategoryinfo($params);
@@ -259,10 +260,11 @@ sub branchinfotable {
 	} else {
 		$branchinfo = getbranchinfo();
 	}
-	my $color;
+	my $toggle;
+	my $i;
 	my @loop_data =();
 	foreach my $branch (@$branchinfo) {
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		($i % 2) ? ($toggle = 1) : ($toggle = 0);
 		#
 		# We export the following fields to the template. These are not
 		# pre-composed as a single "address" field because the template
@@ -318,21 +320,27 @@ sub branchinfotable {
 		# Handle all other fields
 		$row{'branch_name'} = $branch->{'branchname'};
 		$row{'branch_code'} = $branch->{'branchcode'};
-		$row{'color'} = $color;
+		$row{'toggle'} = $toggle;
 		$row{'value'} = $branch->{'branchcode'};
 		$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
 
 		push @loop_data, { %row };
+		$i++;
 	}
 	my @branchcategories =();
 	my $catinfo = getcategoryinfo();
+	my $toggle;
+	my $i = 0;
 	foreach my $cat (@$catinfo) {
+		($i % 2) ? ($toggle = 1) : ($toggle = 0);
 		push @branchcategories, {
+			toggle => $toggle,
 			categoryname    => $cat->{'categoryname'},
 			categorycode    => $cat->{'categorycode'},
 			codedescription => $cat->{'codedescription'},
 		};
-	}
+		$i++;
+	} 
 
 	$template->param(branches => \@loop_data,
 							branchcategories => \@branchcategories);
