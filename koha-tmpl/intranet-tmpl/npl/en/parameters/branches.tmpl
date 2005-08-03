@@ -8,56 +8,62 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main"><!-- TMPL_IF name="add" -->
-<h1><!-- TMPL_VAR name="head" --></h1>
+	<h1>
+	<!-- TMPL_IF NAME="heading-branches-p" -->Branches<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Add Branch<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Edit Branch<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Edit Branch Category<!-- /TMPL_IF -->
+	</h1>
+	
 <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
 <input type="hidden" name="op" value="add_validate" />
-<table>
+<div class="data"><table>
 	<tr>
-		<td>Branch code</td>
+	<th><label for="branchcode" class="required">Branch code</label></th>
 		<td>
 			<!-- TMPL_IF name="branchcode" -->
-				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+				<input type="hidden" id="branchcode" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
 				<!-- TMPL_VAR name="branchcode" -->
 			<!-- TMPL_ELSE -->
-				<input type="text" name="branchcode" size="5" maxlength="5" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+				<input type="text" id="branchcode" name="branchcode" size="5" maxlength="5" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
 			<!-- /TMPL_IF -->
 		</td>
 	</tr>
 	<tr>
-		<td>Name</td>
-		<td><input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branchname" escape="HTML" -->" />&nbsp;</td>
+	<th><label for="branchname" class="required">Name</label></th>
+		<td><input type="text" id="branchname" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branchname" escape="HTML" -->" />&nbsp;</td>
 	</tr>
 <!-- TMPL_LOOP name="categoryloop" -->
 					<tr>
-						<td><!-- TMPL_VAR name="categoryname" --></td>
-						<td><input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /><!-- TMPL_VAR name="codedescription" --></td>
+						<th><label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label></th>
+						<td><input type="checkbox" id="<!-- TMPL_VAR name="categorycode" -->" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /><!-- TMPL_VAR name="codedescription" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 <tr>
-		<td>Address</td>
-		<td><input type="text" name="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></td>
+	<th><label for="branchaddress1">Address Line 1</label></th>
+		<td><input type="text" id="branchaddress1" name="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td>
-		<td><input type="text" name="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></td>
+	<th><label for="branchaddress2">Address Line 2</label></th>
+		<td><input type="text" id="branchaddress2" name="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td>
-		<td><input type="text" name="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></td>
+	<th><label for="branchaddress3">Address Line 3</label></th>
+		<td><input type="text" id="branchaddress3" name="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></td>
 	</tr>
 	<tr>
-		<td>Phone</td>
-		<td><input type="text" name="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></td>
+	<th><label for="branchphone">Phone</label></th>
+		<td><input type="text" id="branchphone" name="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></td>
 	</tr>
 	<tr>
-		<td>Fax</td>
-		<td><input type="text" name="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></td>
+	<th><label for="branchfax">Fax</label></th>
+		<td><input type="text" id="branchfax" name="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></td>
 	</tr>
 	<tr>
-		<td>E-mail</td>
-		<td><input type="text" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></td>
+	<th><label for="branchemail">E-mail</label></th>
+		<td><input type="text" id="branchemail" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></td>
 	</tr>
-</table><p><input type="submit" class="submit" value="Submit" /></p>
+</table></div><p><input type="submit" class="submit" value="Submit" /></p>
 </form>
 <!-- /TMPL_IF -->
 
@@ -75,10 +81,37 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-	
-	<!-- TMPL_IF NAME="message" --><div class="error"><!-- TMPL_VAR name="message" --></div><!-- /TMPL_IF -->
+
+<h1>
+<!-- TMPL_IF NAME="heading-branches-p" -->Branches<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Add Branch<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="heading-branches-edit-branch-p" --> Edit Branch<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Edit Branch Category<!-- /TMPL_IF -->
+</h1>
+
+	<!-- TMPL_IF name="MESSAGE1" -->
+			<div class="error">Cannot change branch record: You must specify a branch name and a branch code</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE2" -->
+			<div class="error">Branch record updated</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE3" -->
+			<div class="error">Branch record deleted</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE4" -->
+			<div class="error">Cannot change branch category: You must specify a category name and category code</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE5" -->
+			<div class="error">Branch category record udpated</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE6" -->
+			<div class="error">The branch category has been deleted</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE7" -->
+			<div class="error">Branch cannot be deleted because there are items using that branch</div>
+		<!-- /TMPL_IF -->
+
 	<table>
-	<caption><!-- TMPL_VAR name="head" --></caption>
 		<tr>
 			<th>Name</th>
 			<th>Code</th>
@@ -88,8 +121,8 @@
 			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP name="branches" -->
-			<tr>
-				<td><!-- TMPL_VAR name="branch_name" escape="HTML" --></td>
+			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+				<td><!-- TMPL_VAR NAME="i" --><!-- TMPL_VAR name="branch_name" escape="HTML" --></td>
 				<td><!-- TMPL_VAR name="branch_code" escape="HTML" --></td>
 				<td>
 					<!-- TMPL_IF name="address-empty-p" -->
@@ -137,7 +170,7 @@
 	</table>
 <form action="<!-- TMPL_VAR name=action -->" method="post">
 		<p><input type="hidden" name="op" value="add" />
-		<input type="submit" class="submit" value="Add New Branch" /></p>
+		<input type="submit" class="submit" value="Add Branch" /></p>
 	</form>
 	
 	<table>
@@ -150,8 +183,8 @@
 		<th>&nbsp;</th>
 	</tr>
 	<!-- TMPL_LOOP name="branchcategories" -->
-		<tr>
-		<td><!-- TMPL_VAR name="categoryname" --></td>
+			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+	<td><!-- TMPL_VAR name="categoryname" --></td>
 		<td><!-- TMPL_VAR name="categorycode" --></td>
 		<td><!-- TMPL_VAR name="codedescription" --></td>
 		<td>
@@ -171,48 +204,59 @@
 	<!-- /TMPL_LOOP -->
 	</table><form action="<!-- TMPL_VAR name="action" -->" method="post"><p>
 		<input type="hidden" name="op" value="editcategory" />
-		<input type="submit" class="submit" value="Add New Category" /></p>
+		<input type="submit" class="submit" value="Add Category" /></p>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="editcategory" -->
 	
 	<form action="<!-- TMPL_VAR name=action -->" name="Aform" method="post">
-	<input type="hidden" name=op value="addcategory_validate" />
-	<table>
-		<caption><!-- TMPL_VAR name="head" --></caption>
+	<input type="hidden" name="op" value="addcategory_validate" />
+	<div class="data"><table>
+	<caption>
+		<!-- TMPL_IF NAME="categorycode" -->Update Branch Category<!-- TMPL_ELSE -->Add Branch Category<!-- /TMPL_IF -->
+	</caption>
 		<tr>
-			<td>Category code</td>
+			<th><label for="categorycode" class="required">Category code</label></th>
 			<td>
 				<!-- TMPL_IF name="categorycode" -->
-					<input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+					<input type="hidden" id="categorycode" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
 					<!-- TMPL_VAR name="categorycode" -->
 				<!-- TMPL_ELSE -->
-					<input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
+					<input type="text" id="categorycode" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
 				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 		<tr>
-			<td>Name</td>
-			<td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name=categoryname escape="HTML" -->" />&nbsp;</td>
+			<th><label for="categoryname" class="required">Name</label></th>
+			<td><input type="text" id="categoryname" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" />&nbsp;</td>
 		</tr>
 		<tr>
-			<td>Description</td>
-			<td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />&nbsp;</td>
+			<th><label for="codedescription">Description</label></th>
+			<td><input type="text" id="codedescription" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />&nbsp;</td>
 		</tr>
-	</table><input type="submit" value="Update" class="submit" />
+	</table></div>
+	<!-- TMPL_IF name="categorycode" -->
+	<input type="submit" value="Update Branch Category" class="submit" />
+	<!-- TMPL_ELSE -->
+	<input type="submit" value="Add Branch Category" class="submit" />
+	<!-- /TMPL_IF -->
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_category" -->
-	Confirm delete:
+	<div class="data">
+	<table>
+	<caption>Confirm Deletion of Category?</caption>
+	<tr><th>Category Code: </th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
+	</table>
 <div class="tabitem">	<form action="<!-- TMPL_VAR name=action -->" method="post">
 		<input type="hidden" name="op" value="categorydelete_confirmed" />
-		<input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
-		<input type="submit" value="YES" class="submit" />
+		<input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
+		<input type="submit" value="Yes, Delete" class="submit" />
 	</form>
 	<form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
-		<input type="submit" value="NO" class="cancel" />
+		<input type="submit" value="No, Do Not Delete" class="cancel" />
 	</form></div>
 <!-- /TMPL_IF --></div>
 
