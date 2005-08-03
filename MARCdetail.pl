@@ -100,7 +100,6 @@ while (my ($description, $fwk) =$queryfwk->fetchrow) {
 	$select_fwk{$fwk} = $description;
 }
 $curfwk=$itemtype;
-warn "current fwk :".$curfwk ;
 my $framework=CGI::scrolling_list( -name     => 'Frameworks',
 			-id => 'Frameworks',
 			-default => $curfwk,
