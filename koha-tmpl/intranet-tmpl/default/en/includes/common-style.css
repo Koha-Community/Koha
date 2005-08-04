@@ -24,6 +24,10 @@ p {
 	clear:left;
 }
 
+textarea {
+	font-size:10pt;
+	font-family:arial,sans-serif;
+}
 .center {
 	text-align:center;
 }
@@ -47,20 +51,23 @@ label {
 
 .button {
 	text-align: center;
-	font: 1.2em sans-serif;
+	font-family: Arial;
+	font-size:12px;
 	padding: 0px 5px 0px 5px;
 	margin:2px;
 	display:inline;
 	position:static;
-	border-style: solid;
-	border-width: 1px;
-	border-color: black;
+	border : 1px solid black;
+/*	border-width: 1px;
+	border-color: black;*/
 	text-decoration: none;
-	color: black;
 	cursor:pointer;
 	vertical-align:middle;
-	-moz-border-radius: 6px;
 	background-color:#FFFFFF;
+	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
+}
+
+.button:hover {
 	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
 }
 
@@ -140,7 +147,7 @@ h1 {
 	font-size: 150%;
 	text-align:center;
 	padding: 4px;
-	border: 4px inset #666666;
+/* 	border: 1px solid #666666; */
 }
 
 h2 {
@@ -188,6 +195,10 @@ h3 {
 	background-color:red;
 }
 
+tr.hilighted td.problem {
+	background-color : #ff9999;
+}
+
 #mainbloc {
 	float:left;
 	width:90%;
@@ -196,6 +207,7 @@ h3 {
 	border-right:3px solid #000000;
 	border-bottom:3px solid #000000;
 	background-color:#FFFFFF;
+	margin-top:10px;
 	margin-left:10px;
 	margin-right:10px;
 	padding-bottom:100px;
@@ -277,62 +289,91 @@ a:hover {
 	text-decoration: none;
 }
 
-a.submenu {
-	text-decoration: none;
-	cursor : pointer;
-	color:#777777;
-	background-color:#EEEEEE;
-	font-weight: bold;
-	margin:0;
-}
-a.submenu:hover {
-	text-decoration: none;
-	cursor:pointer;
-	color:#777777;
-	background-color:#EEEEEE;
-	font-weight: bold;
-	margin:0;
-	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
-}
-
-a.submenu2 {
-	text-decoration: none;
-	cursor:pointer;
-	color:#777777;
-	background-color:#CCCCCC;
-	font-weight: bold;
-	margin:0;
-}
-a.submenu2:hover {
-	text-decoration: none;
-	cursor:pointer;
-	color:#777777;
-	background-color:#CCCCCC;
-	font-weight: bold;
-	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
-	margin:0;
-}
-
 #menubar {
+	z-index:2;
+	position:absolute;
+	top:0px;
+	left:0px;
 	border-top:1px solid #666666;
-	font: 125% bold sans-serif;
+	font-size: 14px;
 	background-color:#DDDDDD;
 	padding-bottom:5px;
 }
-#submenu {
-	background-color:#EEEEEE;
-	border-left:1px solid #000000;
-	padding-bottom:5px;
-	font-size:110%;
+html>body #menubar {
+position: fixed;
 }
 
 #menubar a {
 	padding:5px;
 }
-#submenu a {
-	padding:5px;
+
+a.submenu {
+	padding:0px 10px 0px 10px;
+	display:block;
+	background-color:#FFFFFF;
+	color:#000000;
+}
+a.submenu:hover {
+	padding:0px 10px 0px 10px;
+	display:block;
+	background-color:#DDDDDD;
+	color:#000000;
+}
+#Subm1 {
+	z-index: 11; left: 75px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm1 {
+position: fixed;
+}
+#Subm2 {
+	z-index: 12; left: 150px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm2 {
+position: fixed;
+}
+#Subm3 {
+	z-index: 12; left: 250px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm3 {
+position: fixed;
+}
+#Subm4 {
+	z-index: 12; left: 320px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm4 {
+position: fixed;
+}
+#Subm5 {
+	z-index: 12; left: 400px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm5 {
+position: fixed;
+}
+#Subm6 {
+	z-index: 12; left: 480px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm6 {
+position: fixed;
 }
 
+#Subm7 {
+	z-index: 12; left: 550px; visibility: hidden; position: absolute; top: 24px; background-color:white; border:1px solid black;
+}
+html>body #Subm7 {
+position: fixed;
+}
+
+.user {
+	padding-top: 30px;
+	padding-bottom:0px;
+	text-align:right;
+}
+
+.user {
+	padding-top: 30px;
+	padding-bottom:0px;
+	text-align:right;
+}
 .koha {
 	text-align:center;
 	background-image:url("/intranet-tmpl/default/images/background-mem.gif");

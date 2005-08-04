@@ -2,9 +2,11 @@
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
 <h1 class="bull">Subscription</h1>
-<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Edit</a>
-<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Issues</a>
-<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Biblio</a>
+<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Modify subscription">Edit</a>
+<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Recieve issues">Receive</a>
+<a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="All issues on this title">Issue history</a>
+<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Subscriptions</a>
+<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Back to biblio</a>
 <!-- TMPL_UNLESS name="totalissues" -->
 		<a href="javascript:confirm_deletion()" class="button bull">
 			delete
@@ -14,18 +16,11 @@
 <div id="bloc25">
 	<h2 class="bull">Subscription information</h2>
 		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
-		<p><label class="label100">Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
-		<p><label class="label100">Cost</label><!-- TMPL_VAR name="cost" --></p>
-		<p><label class="label100">Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
-		<p><label class="label100">Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
-		<p><label class="label100">Notes:</label><!-- TMPL_VAR name="notes" --></p>
-		<p>
-			<!-- TMPL_IF name="letter" -->
-				<label class="label100">Issue alert with letter:</label><!-- TMPL_VAR name="letter" -->
-			<!-- TMPL_ELSE -->
-				<label class="label100">Borrowers can't subscribe to issue alerts</label>
-			<!-- /TMPL_IF -->
-		</p>
+		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
+		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label>Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>

@@ -3,7 +3,9 @@
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
 <h1 class="bull">Subscription for <!-- TMPL_VAR name="bibliotitle" --></h1>
-<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Subscription</a>
+<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="detail of the subscription">Subscription</a>
+<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Subscriptions</a>
+<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Back to biblio</a>
 
 <div id="bloc25">
 <h2 class="bull">waited or late numbers</h2>
