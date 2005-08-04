@@ -14,45 +14,60 @@ use HTML::Template;
 my $query = new CGI;
 my $op = $query->param('op');
 my $dbh = C4::Context->dbh;
+my $selectview = $query->param('selectview');
+$selectview = C4::Context->preference("SubscriptionHistory") unless $selectview;
+
 my $sth;
 # my $id;
 my ($template, $loggedinuser, $cookie);
-my ($subscriptionid);
+my $biblionumber = $query->param('biblionumber');
+if ($selectview eq "full"){
+	my $subscriptions = get_full_subscription_list_from_biblionumber($biblionumber);
+	
+	my $title = $subscriptions->[0]{bibliotitle};
+	my $yearmin=$subscriptions->[0]{year};
+	my $yearmax=$subscriptions->[scalar(@$subscriptions)-1]{year};
 
-$subscriptionid = $query->param('subscriptionid');
-my $subscription = &getsubscription($subscriptionid);
+	($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "bull/full-serial-issues.tmpl",
+					query => $query,
+					type => "intranet",
+					authnotrequired => 1,
+					debug => 1,
+					});
+	
+	# replace CR by <br> in librarian note
+	# $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
+	
+	$template->param(
+		biblionumber => $query->param('biblionumber'),
+		years => $subscriptions,
+		yearmin => $yearmin,
+		yearmax =>$yearmax,
+		bibliotitle => $title,
+		suggestion => C4::Context->preference("suggestion"),
+		virtualshelves => C4::Context->preference("virtualshelves"),
+		);
 
-($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "bull/serial-issues.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
-
-# replace CR by <br> in librarian note
-$subscription->{librariannote} =~ s/\n/\<br\/\>/g;
-
-$template->param(
-	startdate => format_date($subscription->{startdate}),
-	periodicity => $subscription->{periodicity},
-	dow => $subscription->{dow},
-	numberlength => $subscription->{numberlength},
-	weeklength => $subscription->{weeklength},
-	monthlength => $subscription->{monthlength},
-	librariannote => $subscription->{librariannote},
-	numberingmethod => $subscription->{numberingmethod},
-	arrivalplanified => $subscription->{arrivalplanified},
-	status => $subscription->{status},
-	biblionumber => $subscription->{biblionumber},
-	bibliotitle => $subscription->{bibliotitle},
-	notes => $subscription->{notes},
-	subscriptionid => $subscription->{subscriptionid}
-	);
-$template->param(
-			"periodicity$subscription->{periodicity}" => 1,
-			"arrival$subscription->{dow}" => 1,
-			);
-
+} else {
+	my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
+	
+	($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "bull/serial-issues.tmpl",
+					query => $query,
+					type => "intranet",
+					authnotrequired => 1,
+					debug => 1,
+					});
+	
+	# replace CR by <br> in librarian note
+	# $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
+	
+	$template->param(
+		biblionumber => $query->param('biblionumber'),
+		subscription_LOOP => $subscriptions,
+		suggestion => C4::Context->preference("suggestion"),
+		virtualshelves => C4::Context->preference("virtualshelves"),
+		);
+}
 output_html_with_http_headers $query, $cookie, $template->output;

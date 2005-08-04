@@ -190,10 +190,13 @@ sub viewshelf {
 
 #
 # $Log$
-# Revision 1.7  2005/04/27 18:16:19  oleonard
+# Revision 1.8  2005/08/04 13:19:54  tipaul
+# synch'ing 2.2 and head
+#
+# Revision 1.5.2.2  2005/04/27 18:15:27  oleonard
 # Left out some instances in the previous update
 #
-# Revision 1.6  2005/04/27 17:17:41  oleonard
+# Revision 1.5.2.1  2005/04/27 16:55:38  oleonard
 # Moving alternating row colors to the template, adding publicationyear and itemtype variables
 #
 # Revision 1.5  2004/12/16 11:30:57  tipaul
