@@ -2,19 +2,18 @@
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
-
  <div id="main">
 	<h1>Circulation: Issues</h1>
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
-<!-- Hide from NPL 	<div class="details">
+<!-- see selectbranchprinter.pl  	<div class="details">
 		<h2>Parameters</h2>
 		<p>
 			<b>Branch:</b> <!-- TMPL_VAR NAME="branchname" -->, 
 			<b>Printer:</b> <!-- TMPL_VAR NAME="printername" --> 
 			<a href="selectbranchprinter.pl">Change Settings</a>
 		</p>
-	</div> /Hide from NPL -->
+	</div> -->
 	
 	<!-- RESULT OF ISSUING REQUEST -->
 	
@@ -189,9 +188,25 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 	<div class="details">
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
-<label for="barcode">Enter Item Barcode: </label><input name="barcode" size="14" maxlength="14"class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" /> <input type="submit" value="Issue" class="submit" /><!-- Display for NPL --><input type="hidden" name="day" value="0" /><input type="hidden" name="month" value="0" /><input type="hidden" name="year" value="0" /> <!-- /Display for NPL -->
-	<!-- Hide from NPL	--><p>
-			<label for="day">Specify Due Date: </label><select name="day" id="day">
+<label for="barcode">Enter Item Barcode: </label><input name="barcode" size="14" maxlength="14"class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" /> <input type="submit" value="Issue" class="submit" /><!-- Display for NPL <input type="hidden" name="day" value="0" /><input type="hidden" name="month" value="0" /><input type="hidden" name="year" value="0" />  /Display for NPL -->
+	<!-- Hide from NPL	--><p class="date-select">
+			<label for="month">Specify Due Date: </label>
+			<select name="month" id="month">
+				<option value="0">Month</option>
+				<option value="1"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
+				<option value="2"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
+				<option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
+				<option value="4"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
+				<option value="5"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>May</option>
+				<option value="6"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
+				<option value="7"<!-- TMPL_IF NAME="month7" --> selected="selected"<!-- /TMPL_IF -->>Jul</option>
+				<option value="8"<!-- TMPL_IF NAME="month8" --> selected="selected"<!-- /TMPL_IF -->>Aug</option>
+				<option value="9"<!-- TMPL_IF NAME="month9" --> selected="selected"<!-- /TMPL_IF -->>Sep</option>
+				<option value="10"<!-- TMPL_IF NAME="month10" --> selected="selected"<!-- /TMPL_IF -->>Oct</option>
+				<option value="11"<!-- TMPL_IF NAME="month11" --> selected="selected"<!-- /TMPL_IF -->>Nov</option>
+				<option value="12"<!-- TMPL_IF NAME="month12" --> selected="selected"<!-- /TMPL_IF -->>Dec</option>
+			</select>
+			<select name="day" id="day">
 				<option value="0">Day</option>
 				<option value="1"<!-- TMPL_IF NAME="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
 				<option value="2"<!-- TMPL_IF NAME="day2" --> selected="selected"<!-- /TMPL_IF -->>2</option>
@@ -224,21 +239,6 @@
 				<option value="29"<!-- TMPL_IF NAME="day29" --> selected="selected"<!-- /TMPL_IF -->>29</option>
 				<option value="30"<!-- TMPL_IF NAME="day30" --> selected="selected"<!-- /TMPL_IF -->>30</option>
 				<option value="31"<!-- TMPL_IF NAME="day31" --> selected="selected"<!-- /TMPL_IF -->>31</option>
-			</select>
-			<select name="month">
-				<option value="0">Month</option>
-				<option value="1"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
-				<option value="2"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
-				<option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
-				<option value="4"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
-				<option value="5"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>May</option>
-				<option value="6"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
-				<option value="7"<!-- TMPL_IF NAME="month7" --> selected="selected"<!-- /TMPL_IF -->>Jul</option>
-				<option value="8"<!-- TMPL_IF NAME="month8" --> selected="selected"<!-- /TMPL_IF -->>Aug</option>
-				<option value="9"<!-- TMPL_IF NAME="month9" --> selected="selected"<!-- /TMPL_IF -->>Sep</option>
-				<option value="10"<!-- TMPL_IF NAME="month10" --> selected="selected"<!-- /TMPL_IF -->>Oct</option>
-				<option value="11"<!-- TMPL_IF NAME="month11" --> selected="selected"<!-- /TMPL_IF -->>Nov</option>
-				<option value="12"<!-- TMPL_IF NAME="month12" --> selected="selected"<!-- /TMPL_IF -->>Dec</option>
 			</select>
 			<select name="year">
 				<option value="0">Year</option>
