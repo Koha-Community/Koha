@@ -222,7 +222,7 @@ $template->param(
 		 reserveloop     => \@reservedata,
 		 alertloop => $alerts);
 		 independantbranches => C4::Context->preference("IndependantBranches"),
-		 samebranch		 => $samebranch) if (C4::Context->preference("IndependantBranches")
+		 samebranch		 => C4::Context->preference("IndependantBranches"?"":$samebranch,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
