@@ -478,7 +478,7 @@ sub checkpw {
 	if ($sth->rows) {
 		my ($md5password,$cardnumber) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
-			C4::Context->set_userenv("$bornum",$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
+# 			C4::Context->set_userenv("$bornum",$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$cardnumber;
 		}
 	}
@@ -487,13 +487,13 @@ sub checkpw {
 	if ($sth->rows) {
 		my ($md5password) = $sth->fetchrow;
 		if (md5_base64($password) eq $md5password) {
-			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
+# 			C4::Context->set_userenv($bornum,$userid,$cardnumber,$firstname,$surname,$branchcode,$userflags);
 			return 1,$userid;
 		}
 	}
 	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
 		# Koha superuser account
-		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
+# 		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
 		return 2;
 	}
 	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
