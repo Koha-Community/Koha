@@ -26,6 +26,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 my $order_loop= &histsearch($title,$author,$name,$from_placed_on,$to_placed_on);
 $template->param(suggestions_loop => $order_loop,
+				numresults => scalar(@$order_loop),
 				title => $title,
 				author => $author,
 				name => $name,

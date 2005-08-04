@@ -31,6 +31,7 @@ use C4::Acquisition;
 use C4::Suggestions;
 use C4::Search;
 use C4::Output;
+use C4::Input;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 
@@ -144,6 +145,7 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-size     => 1,
 			-multiple => 0 );
 
+#Build sort lists
 my $CGIsort1 = buildCGIsort("Asort1","sort1",$data->{'sort1'});
 if ($CGIsort1) {
 	$template->param(CGIsort1 => $CGIsort1);
@@ -157,8 +159,7 @@ if ($CGIsort2) {
 } else {
 	$template->param( sort2 => $data->{'sort2'});
 }
-			
-			
+
 # fill template
 $template->param( existing => $biblio,
 						title => $title,
