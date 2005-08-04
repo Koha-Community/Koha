@@ -92,8 +92,9 @@ if ($op eq "do_search") {
 	my @field_data = ();
 
 
+	my @marclist_ini = $query->param('marclist'); # get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name
 	for(my $i = 0 ; $i <= $#marclist ; $i++) {
-		push @field_data, { term => "marclist", val=>$marclist[$i] };
+		push @field_data, { term => "marclist", val=>$marclist_ini[$i] };
 		push @field_data, { term => "and_or", val=>$and_or[$i] };
 		push @field_data, { term => "excluding", val=>$excluding[$i] };
 		push @field_data, { term => "operator", val=>$operator[$i] };
@@ -157,7 +158,6 @@ if ($op eq "do_search") {
 
 $template->param(authtypesloop => \@authtypesloop,
 				authtypecode => $authtypecode);
-#warn "CAT : $authtypecode";
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

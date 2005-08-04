@@ -144,8 +144,9 @@ my ($template, $loggedinuser, $cookie)
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-my $temp = MARCgetbiblio($dbh,$bibid);
-my @fields = $temp->fields();
+# my $temp = MARCgetbiblio($dbh,$bibid);
+# my @fields = $temp->fields();
+my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
@@ -305,6 +306,14 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$i++
 	}
 }
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {editcatalogue => 1},
+			     debug => 1,
+			     });
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,

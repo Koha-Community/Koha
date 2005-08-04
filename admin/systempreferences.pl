@@ -48,6 +48,35 @@ use C4::Search;
 use HTML::Template;
 use C4::Context;
 
+my %tabsysprefs;
+$tabsysprefs{acquisitions}="Acquisitions";
+$tabsysprefs{gist}="Acquisitions";
+$tabsysprefs{authoritysep}="Authorities";
+$tabsysprefs{ISBD}="Catalogue";
+$tabsysprefs{marc}="Catalogue";
+$tabsysprefs{marcflavour}="Catalogue";
+$tabsysprefs{SubscriptionHistory}="Catalogue";
+$tabsysprefs{maxoutstanding}="Circulation";
+$tabsysprefs{printcirculationslips}="Circulation";
+$tabsysprefs{ReturnBeforeExpiry}="Circulation";
+$tabsysprefs{suggestion}="Acquisitions";
+$tabsysprefs{automembernum}="Members";
+$tabsysprefs{noissuescharge}="Circulation";
+$tabsysprefs{opacthemes}="OPAC";
+$tabsysprefs{opaclanguages}="OPAC";
+$tabsysprefs{LibraryName}="OPAC";
+$tabsysprefs{opacstylesheet}="OPAC";
+$tabsysprefs{BiblioDefaultView}="OPAC";
+$tabsysprefs{hidelostitem}="OPAC";
+$tabsysprefs{KohaAdmin}="Admin";
+$tabsysprefs{checkdigit}="Admin";
+$tabsysprefs{dateformat}="Admin";
+$tabsysprefs{insecure}="Admin";
+$tabsysprefs{ldapinfos}="Admin";
+$tabsysprefs{ldapserver}="Admin";
+$tabsysprefs{itemcallnumber}="Catalogue";
+$tabsysprefs{maxreserves}="Circulation";
+$tabsysprefs{virtualshelves}="OPAC";
 
 my %tabsysprefs;
 $tabsysprefs{acquisitions}="Acquisitions";
@@ -94,12 +123,12 @@ sub StringSearch  {
 				$sth->execute($syspref);
 				while (my $data=$sth->fetchrow_hashref){
 					push(@results,$data);
-					$cnt ++;
+					$cnt++;
 				}
 				$sth->finish;
 			}
 		}
-	}else {
+	} else {
 		my $strsth ="Select variable,value,explanation,type,options from systempreferences where variable not in (";  
 		foreach my $syspref (keys %tabsysprefs){
 			$strsth .= $dbh->quote($syspref).",";
@@ -111,7 +140,7 @@ sub StringSearch  {
 		$sth->execute();
 		while (my $data=$sth->fetchrow_hashref){
 			push(@results,$data);
-			$cnt ++;
+			$cnt++;
 		}
 		$sth->finish;
 	}
@@ -333,19 +362,16 @@ if ($op eq 'add_form') {
 	#Adding tab management for system preferences
 	my $tab=$input->param('tab');
 	
-	if  ($searchfield ne '') {
-		 $template->param(searchfield => "<p>You Searched for <strong>$searchfield</strong></p>");
-	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,$tab);
 	my $toggle=0;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		if ($toggle eq 0){
+	  	if ($toggle eq 0){
 			$toggle=1;
-		} else {
+	  	} else {
 			$toggle=0;
-		}
+	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{variable} = $results->[$i]{'variable'};
 		$row_data{value} = $results->[$i]{'value'};
@@ -355,6 +381,7 @@ if ($op eq 'add_form') {
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
 		push(@loop_data, \%row_data);
 	}
+	$tab=($tab?$tab:"Others");
 	$template->param(loop => \@loop_data, $tab => 1);
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
