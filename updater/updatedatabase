@@ -80,9 +80,19 @@ my %requiretables = (
 					content text,
 					PRIMARY KEY  (module,code)
 				)",
+	alert		=>"(
+					alertid int(11) NOT NULL auto_increment,
+					borrowernumber int(11) NOT NULL default '0',
+					type varchar(10) NOT NULL default '',
+					externalid varchar(20) NOT NULL default '',
+					PRIMARY KEY  (alertid),
+					KEY borrowernumber (borrowernumber),
+					KEY type (type,externalid)
+				)"
 );
 
 my %requirefields = (
+	subscription => { 'letter' => 'char(20) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -358,6 +368,17 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.116  2005/08/04 08:55:54  tipaul
+# Letters / alert system, continuing...
+#
+# * adding a package Letters.pm, that manages Letters & alerts.
+# * adding feature : it's now possible to define a "letter" for any subscription created. If a letter is defined, users in OPAC can put an alert on the subscription. When an issue is marked "arrived", all users in the alert will recieve a mail (as defined in the "letter"). This last part (= send the mail) is not yet developped. (Should be done this week)
+# * adding feature : it's now possible to "put to an alert" in OPAC, for any serial subscription. The alert is stored in a new table, called alert. An alert can be put only if the librarian has activated them in subscription (and they activate it just by choosing a "letter" to sent to borrowers on new issues)
+# * adding feature : librarian can see in borrower detail which alerts they have put, and a user can see in opac-detail which alert they have put too.
+#
+# Note that the system should be generic enough to manage any type of alert.
+# I plan to extend it soon to virtual shelves : a borrower will be able to put an alert on a virtual shelf, to be warned when something is changed in the virtual shelf (mail being sent once a day by cron, or manually by the shelf owner. Anyway, a mail won't be sent on every change, users would be spammed by Koha ;-) )
+#
 # Revision 1.115  2005/08/02 16:15:34  tipaul
 # adding 2 fields to letter system :
 # * module (acquisition, catalogue...) : it will be usefull to show the librarian only letters he may be interested by.
@@ -744,6 +765,17 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.116  2005/08/04 08:55:54  tipaul
+# Letters / alert system, continuing...
+#
+# * adding a package Letters.pm, that manages Letters & alerts.
+# * adding feature : it's now possible to define a "letter" for any subscription created. If a letter is defined, users in OPAC can put an alert on the subscription. When an issue is marked "arrived", all users in the alert will recieve a mail (as defined in the "letter"). This last part (= send the mail) is not yet developped. (Should be done this week)
+# * adding feature : it's now possible to "put to an alert" in OPAC, for any serial subscription. The alert is stored in a new table, called alert. An alert can be put only if the librarian has activated them in subscription (and they activate it just by choosing a "letter" to sent to borrowers on new issues)
+# * adding feature : librarian can see in borrower detail which alerts they have put, and a user can see in opac-detail which alert they have put too.
+#
+# Note that the system should be generic enough to manage any type of alert.
+# I plan to extend it soon to virtual shelves : a borrower will be able to put an alert on a virtual shelf, to be warned when something is changed in the virtual shelf (mail being sent once a day by cron, or manually by the shelf owner. Anyway, a mail won't be sent on every change, users would be spammed by Koha ;-) )
+#
 # Revision 1.115  2005/08/02 16:15:34  tipaul
 # adding 2 fields to letter system :
 # * module (acquisition, catalogue...) : it will be usefull to show the librarian only letters he may be interested by.
