@@ -6,6 +6,7 @@ use C4::Auth;
 use C4::Koha;
 use C4::Date;
 use C4::Bull;
+use C4::Letters;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -24,12 +25,15 @@ my $biblionumber = $query->param('biblionumber');
 if ($selectview eq "full"){
 	my $subscriptions = get_full_subscription_list_from_biblionumber($biblionumber);
 	
+	# now, check is there is an alert subscription for one of the subscriptions
+	foreach (@$subscriptions) {
+		if (getalert($loggedinuser,'issue',$_->{subscriptionid})) {
+			warn "SUBSCRIPTION FOR : $loggedinuser,'issue',$_->{subscriptionid}";
+		}
+	}
 	my $title = $subscriptions->[0]{bibliotitle};
-# 	warn "title ".$title;
 	my $yearmin=$subscriptions->[0]{year};
-# 	warn "yearmin ".$yearmin;
 	my $yearmax=$subscriptions->[scalar(@$subscriptions)-1]{year};
-# 	warn "yearmax ".$yearmax;
 	
 	
 	($template, $loggedinuser, $cookie)
@@ -55,6 +59,13 @@ if ($selectview eq "full"){
 
 } else {
 	my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
+	
+	# now, check is there is an alert subscription for one of the subscriptions
+	foreach (@$subscriptions) {
+		if (getalert($loggedinuser,'issue',$_->{subscriptionid})) {
+			$_->{hasalert} = 1;
+		}
+	}
 	
 	($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "opac-serial-issues.tmpl",

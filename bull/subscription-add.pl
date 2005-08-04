@@ -13,6 +13,7 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
 use C4::Bull;
+use C4::Letters;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -23,7 +24,7 @@ my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	$numberingmethod, $status, $biblionumber, 
-	$bibliotitle, $notes);
+	$bibliotitle, $notes, $letter);
 
 	my @budgets;
 my ($template, $loggedinuser, $cookie)
@@ -82,6 +83,7 @@ if ($op eq 'mod') {
 	$biblionumber = $subs->{'biblionumber'};
 	$bibliotitle = $subs->{'bibliotitle'},
 	$notes = $subs->{'notes'};
+	$letter = $subs->{'letter'};
 	$template->param(
 		$op => 1,
 		user => $auser,
@@ -120,6 +122,7 @@ if ($op eq 'mod') {
 		biblionumber => $biblionumber,
 		bibliotitle => $bibliotitle,
 		notes => $notes,
+		letter => $letter,
 		subscriptionid => $subscriptionid,
 		);
 	$template->param(
@@ -137,6 +140,13 @@ for (my $i=0;$i<=$#budgets;$i++) {
 }
 $template->param(budgets => \@budgets);
 #FIXME : END Added by hdl on July, 14 2005
+
+my @letterlist = GetLetterList('serial');
+for (my $i=0;$i<=$#letterlist;$i++) {
+	warn "$letterlist[$i]->{'code'} eq ".$letter;
+	$letterlist[$i]->{'selected'} =1 if $letterlist[$i]->{'code'} eq $letter;
+}
+$template->param(letters => \@letterlist);
 
 if ($op eq 'addsubscription') {
 	my $auser = $query->param('user');
@@ -168,12 +178,13 @@ if ($op eq 'addsubscription') {
 	my $status = 1;
 	my $biblionumber = $query->param('biblionumber');
 	my $notes = $query->param('notes');
+	my $letter = $query->param('letter');
 	my $subscriptionid = newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-					$numberingmethod, $status, $notes
+					$numberingmethod, $status, $notes, $letter
 				);
 	print $query->redirect("/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {

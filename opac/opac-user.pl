@@ -11,6 +11,7 @@ use C4::Search;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Date;
+use C4::Letters;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -133,13 +134,22 @@ foreach my $res (@$reserves) {
 	$wcount++;
     }
 }
-
 $template->param(WAITING => \@waiting);
+
+# current alert subscriptions
+warn " B : $borrowernumber";
+my $alerts = getalert($borrowernumber);
+foreach (@$alerts) {
+	$_->{$_->{type}}=1;
+	$_->{relatedto} = findrelatedto($_->{type},$_->{externalid});
+}
+
 $template->param(waiting_count => $wcount,
 				LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				textmessaging => $borr->{textmessaging},
+				alertloop => $alerts,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -14,11 +14,18 @@
 <div id="bloc25">
 	<h2 class="bull">Subscription information</h2>
 		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
-		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
-		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
-		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
-		<p><label>Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
-		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
+		<p><label class="label100">Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label class="label100">Cost</label><!-- TMPL_VAR name="cost" --></p>
+		<p><label class="label100">Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label class="label100">Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label class="label100">Notes:</label><!-- TMPL_VAR name="notes" --></p>
+		<p>
+			<!-- TMPL_IF name="letter" -->
+				<label class="label100">Issue alert with letter:</label><!-- TMPL_VAR name="letter" -->
+			<!-- TMPL_ELSE -->
+				<label class="label100">Borrowers can't subscribe to issue alerts</label>
+			<!-- /TMPL_IF -->
+		</p>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>

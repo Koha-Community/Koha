@@ -113,6 +113,25 @@
 		<br />
 	</div>
 	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="alertloop" -->
+		<div class="bloc60">
+		<h2 class="members">Alert subscriptions</h2>
+			<table>
+			<tr>
+				<th>Type</th>
+				<th>on</th>
+			</tr>
+
+			<!-- TMPL_LOOP NAME="alertloop" -->
+				<tr>
+					<td><!-- TMPL_IF name="issue" -->Serial issue<!-- /TMPL_IF --></td>
+					<td><!-- TMPL_VAR name="relatedto" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+	<!-- /TMPL_IF -->
+
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
 

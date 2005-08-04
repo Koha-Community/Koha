@@ -22,7 +22,7 @@ my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$
 	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-	$numberingmethod, $status, $biblionumber, $bibliotitle, $notes);
+	$numberingmethod, $status, $biblionumber, $bibliotitle, $notes,$letter);
 
 $subscriptionid = $query->param('subscriptionid');
 
@@ -60,13 +60,14 @@ if ($op eq 'modsubscription') {
 	$numberingmethod = $query->param('numberingmethod');
 	$status = 1;
 	$notes = $query->param('notes');
+	$letter = $query->param('letter');
     
 	&modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid);
+					$numberingmethod, $status, $biblionumber, $notes, $letter, $subscriptionid);
 }
 
 if ($op eq 'del') {
@@ -78,7 +79,6 @@ if ($op eq 'del') {
 my $subs = &getsubscription($subscriptionid);
 my ($totalissues,@serialslist) = getserials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
-# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/subscription-detail.tmpl",
@@ -89,8 +89,7 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
 				debug => 1,
 				});
 
-my ($user, $cookie, $sessionID, $flags)
-	= checkauth($query, 0, {catalogue => 1}, "intranet");
+my ($user, $cookie, $sessionID, $flags) = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 $template->param(
 	user => $subs->{auser},
@@ -129,6 +128,7 @@ $template->param(
 	biblionumber => $subs->{biblionumber},
 	bibliotitle => $subs->{bibliotitle},
 	notes => $subs->{notes},
+	letter => $subs->{letter},
 	subscriptionid => $subs->{subscriptionid},
 	serialslist => \@serialslist,
 	totalissues => $totalissues,

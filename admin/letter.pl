@@ -71,6 +71,7 @@ my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/letter.pl";
 my $code=$input->param('code');
+my $module = $input->param('module');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
@@ -100,8 +101,8 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $letter;
 	if ($code) {
-		my $sth=$dbh->prepare("select * from letter where code=?");
-		$sth->execute($code);
+		my $sth=$dbh->prepare("select * from letter where module=? and code=?");
+		$sth->execute($module,$code);
 		$letter=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -144,6 +145,7 @@ if ($op eq 'add_form') {
 	}
 	$template->param(name => $letter->{name},title => $letter->{title},
 					content => $letter->{content},
+					$letter->{module} => 1,
 					SQLfieldname => \@SQLfieldname,);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################

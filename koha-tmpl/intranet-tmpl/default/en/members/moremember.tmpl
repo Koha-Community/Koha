@@ -263,6 +263,25 @@
 			None
 		<!-- /TMPL_IF -->
 	</div>
+
+		<div class="bloc25">
+		<h2 class="members">Alert subscriptions</h2>
+			<table>
+			<tr>
+				<th>Type</th>
+				<th>on</th>
+			</tr>
+
+			<!-- TMPL_LOOP NAME="alertloop" -->
+				<tr>
+					<td><!-- TMPL_IF name="issue" -->Serial issue<!-- /TMPL_IF --></td>
+					<td><!-- TMPL_VAR name="relatedto" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+
+	
 </div>
 <script language="JavaScript" type="text/javascript">
 function confirm_deletion() {

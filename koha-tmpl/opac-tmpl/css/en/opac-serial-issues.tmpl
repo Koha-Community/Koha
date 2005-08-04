@@ -75,6 +75,19 @@
 		<!-- TMPL_IF name="enddate" --><p><b>This subscription is now ended. The last issue was recieved on <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF name="enddate" -->
 	<!--TMPL_UNLESS Name=fullinfo -->
 		<p><!-- TMPL_VAR name="notes" --></p>
+		<p>
+			<!-- TMPL_IF name="letter" -->
+				<!-- TMPL_IF name="hasalert" -->
+					<a href="opac-alert-subscribe.pl?op=cancel&amp;externalid=<!-- TMPL_VAR name="subscriptionid" -->&amp;alerttype=issue&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="Cancel mail alert when a new issue arrives for this subscription">
+						Cancel alert
+					</a>
+				<!-- TMPL_ELSE -->
+					<a href="opac-alert-subscribe.pl?externalid=<!-- TMPL_VAR name="subscriptionid" -->&amp;alerttype=issue&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="be warned by mail when a new issue arrives for this subscription">
+						Stay in touch
+					</a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+		</p>
 		<!-- TMPL_IF name="opacnote" -->
 			<h2 class="catalogue">Issues summary</h2>
 			<p>

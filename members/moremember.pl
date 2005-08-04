@@ -43,6 +43,7 @@ use C4::Date;
 use C4::Reserves2;
 use C4::Circulation::Circ2;
 use C4::Koha;
+use C4::Letters;
 use HTML::Template;
 
 my $dbh = C4::Context->dbh;
@@ -147,7 +148,11 @@ $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
 
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 
+#
+# current issues
+#
 my ($count,$issue)=borrissues($bornum);
+
 my $today=ParseDate('today');
 my @issuedata;
 my $totalprice = 0;
@@ -185,8 +190,10 @@ for (my $i=0;$i<$count;$i++){
 	push (@issuedata, \%row);
 }
 
+#
+# find reserves
+#
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
-
 my @reservedata;
 foreach my $reserveline (@$reserves) {
 	$reserveline->{'reservedate2'} = format_date($reserveline->{'reservedate'});
@@ -199,16 +206,23 @@ foreach my $reserveline (@$reserves) {
 	push (@reservedata, \%row);
 }
 
+# current alert subscriptions
+my $alerts = getalert($bornum);
+foreach (@$alerts) {
+	$_->{$_->{type}}=1;
+	$_->{relatedto} = findrelatedto($_->{type},$_->{externalid});
+}
+
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
 		 totalprice =>$totalprice,
 		 totaldue =>$total,
 		 issueloop       => \@issuedata,
-		 reserveloop     => \@reservedata
-		 );
-$template->param(
+		 reserveloop     => \@reservedata,
+		 alertloop => $alerts);
 		 independantbranches => C4::Context->preference("IndependantBranches"),
-		 samebranch		 => $samebranch) if (C4::Context->preference("IndependantBranches"));
+		 samebranch		 => $samebranch) if (C4::Context->preference("IndependantBranches")
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

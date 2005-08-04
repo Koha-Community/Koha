@@ -15,9 +15,21 @@
 		<input type="hidden" name="op" value="addsubscription">
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
 		<p>Librarian</td><td> <!-- TMPL_VAR name="user" --></p>
-		<p><label>Supplier</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>)<a href="#" onClick="FindAcqui(f)">...</a></p>
-		<p><label>Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
-		<p><label>Notes</label><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></p>
+		<p><label class="label100">Supplier</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>)<a href="#" onClick="FindAcqui(f)">...</a></p>
+		<p><label class="label100">Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
+		<p><label class="label100">Notes</label><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></p>
+		<p><label class="label100">Enable issue alert</label>
+			<select name="letter">
+				<option value=""></option>
+				<!-- TMPL_LOOP name="letters" -->
+					<!-- TMPL_IF name="selected" -->
+						<option value="<!-- TMPL_VAR name="code" -->" selected><!-- TMPL_VAR name="name" --></option>
+					<!-- TMPL_ELSE -->
+						<option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="name" --></option>
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+			</select>
+		</p>
 		<p class="problem">warning</p>
 		<ul>
 			<li>remember you <b>must</b> have created a biblio <b>before</b> creating a subscription</li>
