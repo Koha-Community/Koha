@@ -172,7 +172,12 @@ Returns a reference to an array containing all the subjects stored in the MARC d
 $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
 
 =cut
+=head2 my $marcurlsarray = &getMARCurls($dbh,$bibid,$marcflavour);
 
+Returns a reference to an array containing all the URLS stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") isn't used in this version because both flavours of MARC use the same subfield for URLS (but eventually when we get the lables working we'll need to change this.
+
+=cut
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring, $extratables) = @_;
 	# build the sql request. She will look like :
@@ -578,7 +583,6 @@ sub getMARCnotes {
 	}
 
 	$sth->finish;
-	$dbh->disconnect;
 
 	my $marcnotesarray=\@marcnotes;
 	return $marcnotesarray;
@@ -615,7 +619,6 @@ sub getMARCsubjects {
 	}
 
 	$sth->finish;
-	$dbh->disconnect;
 
 	my $marcsubjctsarray=\@marcsubjcts;
         return $marcsubjctsarray;

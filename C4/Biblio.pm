@@ -368,6 +368,8 @@ sub MARCaddbiblio {
             }
         }
     }
+	# save leader
+	&MARCaddsubfield($dbh,$bibid,'000','',$fieldcount+1,'',1,$record->leader);
     $dbh->do("unlock tables");
     return $bibid;
 }
@@ -479,13 +481,11 @@ sub MARCgetbiblio {
     my $record = MARC::Record->new();
 #	warn "". $bidid;
 
-    #---- TODO : the leader is missing
-    $record->leader('                        ');
     my $sth =
       $dbh->prepare(
 "select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
 		 		 from marc_subfield_table
-		 		 where bibid=? order by tag,tagorder,subfieldcode
+		 		 where bibid=? order by tag,tagorder,subfieldorder
 		 	 "
     );
     my $sth2 =
@@ -508,8 +508,11 @@ sub MARCgetbiblio {
         if ( $row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag ) {
             $previndicator .= "  ";
             if ( $prevtag < 10 ) {
-                $record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue )
-                  unless $prevtag eq "XXX";    # ignore the 1st loop
+				if ($prevtag ne '000') {
+                	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
+				} else {
+					$record->leader(sprintf("%24s",$prevvalue));
+				}
             }
             else {
                 $record->add_fields($field) unless $prevtag eq "XXX";
@@ -628,10 +631,6 @@ sub MARCgetitem {
 
 sub MARCmodbiblio {
 	my ($dbh,$bibid,$record,$frameworkcode,$delete)=@_;
-	my $oldrecord=&MARCgetbiblio($dbh,$bibid);
-	if ($oldrecord eq $record) {
-		return;
-	}
 # 1st delete the biblio,
 # 2nd recreate it
 	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
@@ -1034,7 +1033,11 @@ sub MARChtml2marc {
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
-					$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					if ($prevtag ne '000') {
+						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					} else {
+						$record->leader($prevvalue);
+					}
 				}
 			} else {
 				if ($field) {
@@ -1124,19 +1127,27 @@ sub MARCmarc2kohaOneField {
     my $subfield;
     ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
     foreach my $field ( $record->field($tagfield) ) {
-        if ( $field->subfields ) {
-            my @subfields = $field->subfields();
-            foreach my $subfieldcount ( 0 .. $#subfields ) {
-				if ($subfields[$subfieldcount][0] eq $subfield) {
-					if ( $result->{$kohafield} ) {
-						$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
-					}
-					else {
-						$result->{$kohafield} = $subfields[$subfieldcount][1];
+		if ($field->tag()<10) {
+			if ($result->{$kohafield}) {
+				$result->{$kohafield} .= " | ".$field->data();
+			} else {
+				$result->{$kohafield} = $field->data();
+			}
+		} else {
+			if ( $field->subfields ) {
+				my @subfields = $field->subfields();
+				foreach my $subfieldcount ( 0 .. $#subfields ) {
+					if ($subfields[$subfieldcount][0] eq $subfield) {
+						if ( $result->{$kohafield} ) {
+							$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+						}
+						else {
+							$result->{$kohafield} = $subfields[$subfieldcount][1];
+						}
 					}
 				}
 			}
-        }
+		}
     }
 # 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
     return $result;
@@ -1207,7 +1218,7 @@ sub NEWnewbiblio {
     my $oldbibitemnum;
     my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
     $oldbibnum = OLDnewbiblio( $dbh, $olddata );
-    $olddata->{'biblionumber'} = $oldbibnum;
+	$olddata->{'biblionumber'} = $oldbibnum;
     $oldbibitemnum = OLDnewbiblioitem( $dbh, $olddata );
 
     # search subtiles, addiauthors and subjects
@@ -1257,22 +1268,49 @@ sub NEWnewbiblio {
     ( my $tagfield1, my $tagsubfield1 ) = $sth->fetchrow;
     $sth->execute("biblioitems.biblioitemnumber");
     ( my $tagfield2, my $tagsubfield2 ) = $sth->fetchrow;
+	my $newfield;
+	# biblionumber & biblioitemnumber are in different fields
     if ( $tagfield1 != $tagfield2 ) {
-        warn
-"Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-        print
-"Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-        die;
-    }
-    my $newfield = MARC::Field->new(
-        $tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-        "$tagsubfield2" => $oldbibitemnum
-    );
-
-    # drop old field and create new one...
-    my $old_field = $record->field($tagfield1);
-    $record->delete_field($old_field);
-    $record->add_fields($newfield);
+		# deal with biblionumber
+		if ($tagfield1<10) {
+			$newfield = MARC::Field->new(
+				$tagfield1, $oldbibnum,
+			);
+		} else {
+			$newfield = MARC::Field->new(
+				$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
+			);
+		}
+		# drop old field and create new one...
+		my $old_field = $record->field($tagfield1);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+		# deal with biblioitemnumber
+		if ($tagfield2<10) {
+			$newfield = MARC::Field->new(
+				$tagfield2, $oldbibitemnum,
+			);
+		} else {
+			$newfield = MARC::Field->new(
+				$tagfield2, '', '', "$tagsubfield2" => $oldbibitemnum,
+			);
+		}
+		# drop old field and create new one...
+		$old_field = $record->field($tagfield2);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+	# biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
+	} else {
+		my $newfield = MARC::Field->new(
+			$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
+			"$tagsubfield2" => $oldbibitemnum
+		);
+		# drop old field and create new one...
+		my $old_field = $record->field($tagfield1);
+		$record->delete_field($old_field);
+		$record->add_fields($newfield);
+	}
+# 	warn "REC : ".$record->as_formatted;
     my $bibid = MARCaddbiblio( $dbh, $record, $oldbibnum, $frameworkcode );
     return ( $bibid, $oldbibnum, $oldbibitemnum );
 }
@@ -1749,45 +1787,61 @@ sub OLDnewitems {
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
     if ( $item->{'dateaccessioned'} ) {
         $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,				biblionumber         = ?,
-							biblioitemnumber     = ?,				barcode              = ?,
-							booksellerid         = ?,					dateaccessioned      = ?,
-							homebranch           = ?,				holdingbranch        = ?,
-							price                = ?,						replacementprice     = ?,
-							replacementpricedate = NOW(),	itemnotes            = ?,
+							itemnumber           = ?,			biblionumber         = ?,
+							multivolumepart      = ?,
+							biblioitemnumber     = ?,			barcode              = ?,
+							booksellerid         = ?,			dateaccessioned      = ?,
+							homebranch           = ?,			holdingbranch        = ?,
+							price                = ?,			replacementprice     = ?,
+							replacementpricedate = NOW(),		datelastseen		= NOW(),
+							multivolume			= ?,			stack				= ?,
+							itemlost			= ?,			wthdrawn			= ?,
+							paidfor				= ?,			itemnotes            = ?,
 							itemcallnumber	=?, 							notforloan = ?,
 							location = ?
 							"
         );
         $sth->execute(
-            $itemnumber,                 $item->{'biblionumber'},
-            $item->{'biblioitemnumber'}, $barcode,
-            $item->{'booksellerid'},     $item->{'dateaccessioned'},
-            $item->{'homebranch'},       $item->{'holdingbranch'},
-            $item->{'price'},            $item->{'replacementprice'},
-            $item->{'itemnotes'},        $item->{'itemcallnumber'},
-            $item->{'notforloan'},		$item->{'location'}
+			$itemnumber,				$item->{'biblionumber'},
+			$item->{'multivolumepart'},
+			$item->{'biblioitemnumber'},$barcode,
+			$item->{'booksellerid'},	$item->{'dateaccessioned'},
+			$item->{'homebranch'},		$item->{'holdingbranch'},
+			$item->{'price'},			$item->{'replacementprice'},
+			$item->{multivolume},		$item->{stack},
+			$item->{itemlost},			$item->{wthdrawn},
+			$item->{paidfor},			$item->{'itemnotes'},
+			$item->{'itemcallnumber'},	$item->{'notforloan'},
+			$item->{'location'}
         );
     }
     else {
         $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,				biblionumber         = ?,
-							biblioitemnumber     = ?,				barcode              = ?,
-							booksellerid         = ?,					dateaccessioned      = NOW(),
-							homebranch           = ?,				holdingbranch        = ?,
-							price                = ?,						replacementprice     = ?,
-							replacementpricedate = NOW(),	itemnotes            = ?,
-							itemcallnumber = ? , notforloan = ?,
+							itemnumber           = ?,			biblionumber         = ?,
+							multivolumepart      = ?,
+							biblioitemnumber     = ?,			barcode              = ?,
+							booksellerid         = ?,			dateaccessioned      = NOW(),
+							homebranch           = ?,			holdingbranch        = ?,
+							price                = ?,			replacementprice     = ?,
+							replacementpricedate = NOW(),		datelastseen		= NOW(),
+							multivolume			= ?,			stack				= ?,
+							itemlost			= ?,			wthdrawn			= ?,
+							paidfor				= ?,			itemnotes            = ?,
+							itemcallnumber	=?, 							notforloan = ?,
 							location = ?
 							"
         );
         $sth->execute(
-            $itemnumber,                 $item->{'biblionumber'},
-            $item->{'biblioitemnumber'}, $barcode,
-            $item->{'booksellerid'},     $item->{'homebranch'},
-            $item->{'holdingbranch'},    $item->{'price'},
-            $item->{'replacementprice'}, $item->{'itemnotes'},
-            $item->{'itemcallnumber'},   $item->{'notforloan'},
+			$itemnumber,				$item->{'biblionumber'},
+			$item->{'multivolumepart'},
+			$item->{'biblioitemnumber'},$barcode,
+			$item->{'booksellerid'},
+			$item->{'homebranch'},		$item->{'holdingbranch'},
+			$item->{'price'},			$item->{'replacementprice'},
+			$item->{multivolume},		$item->{stack},
+			$item->{itemlost},			$item->{wthdrawn},
+			$item->{paidfor},			$item->{'itemnotes'},
+			$item->{'itemcallnumber'},	$item->{'notforloan'},
 			$item->{'location'}
         );
     }
@@ -1800,32 +1854,27 @@ sub OLDnewitems {
 
 sub OLDmoditem {
     my ( $dbh, $item ) = @_;
-
-#  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
-    #  my $dbh=C4Connect;
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=? where itemnumber=?";
+    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
     my @bind = (
-        $item->{'barcode'},        $item->{'notes'},
-        $item->{'itemcallnumber'}, $item->{'notforloan'},
-        $item->{'location'},	   $item->{'itemnum'}
+        $item->{'barcode'},			$item->{'notes'},
+        $item->{'itemcallnumber'},	$item->{'notforloan'},
+        $item->{'location'},		$item->{multivolumepart},
+		$item->{multivolume},		$item->{stack},
+		$item->{wthdrawn},
     );
     if ( $item->{'lost'} ne '' ) {
-        $query = "update items set biblioitemnumber=?,
-                             barcode=?,
-                             itemnotes=?,
-                             homebranch=?,
-                             itemlost=?,
-                             wthdrawn=?,
-			     itemcallnumber=?,
-			     notforloan=?,
-				 location=?";
+        $query = "update items set biblioitemnumber=?,barcode=?,itemnotes=?,homebranch=?,
+							itemlost=?,wthdrawn=?,itemcallnumber=?,notforloan=?,
+				 			location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
             $item->{'notes'},          $item->{'homebranch'},
             $item->{'lost'},           $item->{'wthdrawn'},
             $item->{'itemcallnumber'}, $item->{'notforloan'},
-            $item->{'location'},		$item->{'itemnum'}
+            $item->{'location'},		$item->{multivolumepart},
+			$item->{multivolume},		$item->{stack},
+			$item->{wthdrawn},
         );
 		if ($item->{homebranch}) {
 			$query.=",homebranch=?";
@@ -1835,9 +1884,10 @@ sub OLDmoditem {
 			$query.=",holdingbranch=?";
 			push @bind, $item->{holdingbranch};
 		}
-		$query.=" where itemnumber=?";
     }
-    if ( $item->{'replacement'} ne '' ) {
+	$query.=" where itemnumber=?";
+	push @bind,$item->{'itemnum'};
+   if ( $item->{'replacement'} ne '' ) {
         $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
     }
     my $sth = $dbh->prepare($query);
@@ -2068,19 +2118,17 @@ sub modsubject {
     my ( $bibnum, $force, @subject ) = @_;
     my $dbh = C4::Context->dbh;
     my $error = &OLDmodsubject( $dbh, $bibnum, $force, @subject );
-        if ($error eq ''){
-    # When MARC is off, ensures that the MARC biblio table gets updated with new
-    # subjects, of course, it deletes the biblio in marc, and then recreates.
-    # This check is to ensure that no MARC data exists to lose.
-
-        if (C4::Context->preference("MARC") eq '0'){
-            my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
-            my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
-            &MARCmodbiblio($dbh,$bibid, $MARCRecord);
-        }
-
-    }
-    return ($error);
+    if ($error eq ''){
+		# When MARC is off, ensures that the MARC biblio table gets updated with new
+		# subjects, of course, it deletes the biblio in marc, and then recreates.
+		# This check is to ensure that no MARC data exists to lose.
+		if (C4::Context->preference("MARC") eq '0'){
+			my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
+			my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+			&MARCmodbiblio($dbh,$bibid, $MARCRecord);
+		}
+	}
+	return ($error);
 }    # sub modsubject
 
 sub modbibitem {
@@ -2397,7 +2445,7 @@ sub char_decode {
 
     # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
     if ( $encoding eq "UNIMARC" ) {
-        s/\xe1/Æ/gm;
+#         s/\xe1/Æ/gm;
         s/\xe2/Ð/gm;
         s/\xe9/Ø/gm;
         s/\xec/þ/gm;
@@ -2443,12 +2491,18 @@ sub char_decode {
         s/\xc4\x61/ã/gm;
         s/\xc4\x6e/ñ/gm;
         s/\xc4\x6f/õ/gm;
+        s/\xc8\x41/Ä/gm;
         s/\xc8\x45/Ë/gm;
         s/\xc8\x49/Ï/gm;
+        s/\xc8\x61/ä/gm;
         s/\xc8\x65/ë/gm;
         s/\xc8\x69/ï/gm;
+        s/\xc8\x6F/ö/gm;
+        s/\xc8\x75/ü/gm;
         s/\xc8\x76/ÿ/gm;
         s/\xc9\x41/Ä/gm;
+        s/\xc9\x45/Ë/gm;
+        s/\xc9\x49/Ï/gm;
         s/\xc9\x4f/Ö/gm;
         s/\xc9\x55/Ü/gm;
         s/\xc9\x61/ä/gm;
@@ -2632,6 +2686,7 @@ sub FindDuplicate {
 	# no result, returns nothing
 	return;
 }
+
 sub DisplayISBN {
 	my ($isbn)=@_;
 	my $seg1;
@@ -2667,6 +2722,8 @@ sub DisplayISBN {
 	my $seg4 = substr($x, -1, 1);
 	return "$seg1-$seg2-$seg3-$seg4";
 }
+
+
 END { }    # module clean-up code here (global destructor)
 
 =back
@@ -2681,17 +2738,45 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.121  2005/06/20 14:10:00  tipaul
+# Revision 1.122  2005/08/04 13:27:48  tipaul
 # synch'ing 2.2 and head
 #
-# Revision 1.120  2005/06/15 16:09:43  hdl
-# Displaying dashed isbn.
+# Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
+# fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
+# (Not all items fields mapped to MARC)
 #
-# Revision 1.119  2005/06/01 20:43:58  genjimoto
+# Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
+# adding decoder for Ä string
+#
+# Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
+# * removing a useless & CPU consuming call to MARCgetbiblio
+# * Leader management.
+# If you create a MARC tag "000", with a subfield '@', it will be managed as the leader.
+# Seems to work correctly.
+#
+# Now going to create a plugin for leader()
+#
+# Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
+# * fixing a bug in subfield order when MARCgetbiblio
+# * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
+# * adding some diacritic decoding (Ä, Ü...)
+#
+# Revision 1.115.2.14  2005/06/27 23:24:06  hdl
+# Display dashed ISBN
+#
+# Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
 # patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
 #
-# Revision 1.118  2005/05/04 15:40:01  tipaul
-# synch'ing 2.2 and head
+# Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
+# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
+#
+# Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
+# * removing my for variables already declared
+# * updating biblio.unititle  field as well as other fields in biblio table
+#
+# Revision 1.115.2.10  2005/05/25 09:30:50  hdl
+# Adding NEWmodbiblioframework feature
+# Used by addbiblio.pl when modifying a framework selection.
 #
 # Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
 # adding / to the list of symbols that are replace by spaces for searches

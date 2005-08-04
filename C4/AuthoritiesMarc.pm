@@ -158,7 +158,7 @@ sub authoritysearch {
 					my $subfieldcode = $subf[$i][0];
 					my $subfieldvalue = $subf[$i][1];
 					my $tagsubf = $tag.$subfieldcode;
-					$summary =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2/g;
 				}
 			}
 		}
@@ -541,7 +541,12 @@ sub AUTHmodauthority {
 	&AUTHdelauthority($dbh,$authid,1);
 	&AUTHaddauthority($dbh,$record,$authid,AUTHfind_authtypecode($dbh,$authid));
 	# save the file in localfile/modified_authorities
-	my $filename = C4::Context->config("intranetdir")."/localfile/modified_authorities/$authid.authid";
+	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+	unless (opendir(DIR, "$cgidir")) {
+			$cgidir = C4::Context->intranetdir."/";
+	} 
+
+	my $filename = $cgidir."/localfile/modified_authorities/$authid.authid";
 	open AUTH, "> $filename";
 	print AUTH $authid;
 	close AUTH;
@@ -922,17 +927,20 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.19  2005/06/20 14:10:00  tipaul
+# Revision 1.20  2005/08/04 13:27:47  tipaul
 # synch'ing 2.2 and head
 #
-# Revision 1.18  2005/06/07 10:00:47  tipaul
-# adding $b to mainentry (in UNIMARC, for personal names, $a is the surname, $b is the firstname)
+# Revision 1.9.2.7  2005/08/01 15:14:50  tipaul
+# minor change in summary handling (accepting 4 digits before the field)
 #
-# Revision 1.17  2005/06/01 12:51:02  tipaul
-# some fixes & improvements for dictionnary search in librarian interface
+# Revision 1.9.2.6  2005/06/07 10:02:00  tipaul
+# porting dictionnary search from head to 2.2. there is now a ... facing titles, author & subject, to search in biblio & authorities existing values.
 #
-# Revision 1.16  2005/05/04 15:43:43  tipaul
-# synch'ing 2.2 and head
+# Revision 1.9.2.5  2005/05/31 14:50:46  tipaul
+# fix for authority merging. There was a bug on official installs
+#
+# Revision 1.9.2.4  2005/05/30 11:24:15  tipaul
+# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in AUTHhtml2marc, this empty field was not discarded correctly)
 #
 # Revision 1.9.2.3  2005/04/28 08:45:33  tipaul
 # porting FindDuplicate feature for authorities from HEAD to rel_2_2, works correctly now.

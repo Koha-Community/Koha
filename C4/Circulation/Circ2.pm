@@ -725,7 +725,7 @@ sub canbookbeissued {
 	unless ($iteminformation->{barcode}) {
 		$issuingimpossible{UNKNOWN_BARCODE} = 1;
 	}
-	if ($iteminformation->{'notforloan'} && $iteminformation->{'notforloan'} > 0) {
+	if ($iteminformation->{'notforloan'} > 0) {
 		$issuingimpossible{NOT_FOR_LOAN} = 1;
 	}
 	if ($iteminformation->{'itemtype'} &&$iteminformation->{'itemtype'} eq 'REF') {
