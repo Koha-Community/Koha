@@ -72,9 +72,28 @@ my %requiretables = (
 				    `info` TEXT default '' ,
 				    PRIMARY KEY ( `timestamp` , `user` )
 			    )",
+	letter		=> "(
+					module varchar(20) NOT NULL default '',
+					code varchar(20) NOT NULL default '',
+					name varchar(100) NOT NULL default '',
+					title varchar(200) NOT NULL default '',
+					content text,
+					PRIMARY KEY  (module,code)
+				)",
+	alert		=>"(
+					alertid int(11) NOT NULL auto_increment,
+					borrowernumber int(11) NOT NULL default '0',
+					type varchar(10) NOT NULL default '',
+					externalid varchar(20) NOT NULL default '',
+					PRIMARY KEY  (alertid),
+					KEY borrowernumber (borrowernumber),
+					KEY type (type,externalid)
+				)",
+
 );
 
 my %requirefields = (
+	subscription => { 'letter' => 'char(20) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -122,7 +141,15 @@ my %tabledata = (
             explanation         => 'Turn Branch independancy management On an Off',
 	    type		=> 'YesNo',
         },
-
+		{
+            uniquefieldrequired => 'variable',
+            variable            => 'ReturnBeforeExpiry',
+            value               => 'Off',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+	    type		=> 'YesNo',
+        },
     ],
 
 );
@@ -351,6 +378,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.119  2005/08/04 16:07:58  tipaul
+# Synch really broke this script...
+#
 # Revision 1.118  2005/08/04 16:02:55  tipaul
 # oops... error in synch between 2.2 and head
 #
