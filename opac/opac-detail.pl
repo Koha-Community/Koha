@@ -75,15 +75,17 @@ $template->param(norequests => $norequests);
 
   ## get notes and subjects from MARC record
 my $marc = C4::Context->preference("marc");
-if ($marc eq "yes") {
+my @results = ($dat,);
+if (C4::Boolean::true_p($marc)) {
 	my $dbh = C4::Context->dbh;
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
+	$results[0]->{MARCNOTES} = $marcnotesarray;
 	my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
-
-	$template->param(MARCNOTES => $marcnotesarray);
-	$template->param(MARCSUBJCTS => $marcsubjctsarray);
+	$results[0]->{MARCSUBJCTS} = $marcsubjctsarray;
+# 	$template->param(MARCNOTES => $marcnotesarray);
+# 	$template->param(MARCSUBJCTS => $marcsubjctsarray);
 }
 
 my @results = ($dat,);
@@ -157,3 +159,4 @@ $template->param( REVIEWS => \@reviews );
   ## End of Amazon Stuff
 =cut
 output_html_with_http_headers $query, $cookie, $template->output;
+

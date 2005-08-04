@@ -211,10 +211,13 @@ if ($query->param('item_types_selected')) {
 		$fee = sprintf "%.02f", $fee;
 		$template->param(fee => $fee,istherefee => $fee>0?1:0);
 		$template->param(item_types_selected => 1);
+		warn "Branch is ==$branch==";
+		$template->param(no_branch_selected => 1) unless ($branch!='');
 	} else {
 		$template->param(message => 1);
 		$template->param(no_items_selected => 1) unless ($proceed);
-		$template->param(no_branch_selected =>1) unless ($branch);
+		$template->param(no_branch_selected => 1) unless ($branch);
+		warn "Branch is ==$branch==";
 	}
 } elsif ($query->param('place_reserve')) {
 	# here we actually do the reserveration. Stage 3.

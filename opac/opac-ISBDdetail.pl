@@ -114,7 +114,7 @@ my $res;
 						my $subfieldcode = $subf[$i][0];
 						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);
 						my $tagsubf = $tag.$subfieldcode;
-						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
+						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
 					}
 					# field builded, store the result
 					if ($calculated && !$hasputtextbefore) { # put textbefore if not done

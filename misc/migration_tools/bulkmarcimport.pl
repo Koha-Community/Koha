@@ -82,6 +82,7 @@ while ( my $record = $batch->next() ) {
 
     ## create an empty record object to populate
     my $newRecord = MARC::Record->new();
+	$newRecord->leader($record->leader());
 
     # go through each field in the existing record
     foreach my $oldField ( $record->fields() ) {

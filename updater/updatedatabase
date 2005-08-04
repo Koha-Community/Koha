@@ -140,6 +140,84 @@ my %tabledata = (
             explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
 	    type		=> 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacstylesheet',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacsmallimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclargeimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'delimiter',
+            value               => ';',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'separator for reports exported to spreadsheet',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'MIME',
+            value               => 'OPENOFFICE.ORG',
+            forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default application for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> 'EXCEL|OPENOFFICE.ORG'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Delimiter',
+            value               => ';',
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default separator character for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> ';|tabulation|,|/|\|#'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'SubscriptionHistory',
+            value               => ';',
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the information level for serials history in OPAC',
+	        type		=> 'Choice',
+	        options		=> 'simplified|full'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'hidelostitems',
+            value               => 'No',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'show or hide "lost" items in OPAC.',
+	    type		=> 'YesNo',
+        },
     ],
 
 );
@@ -368,6 +446,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.117  2005/08/04 14:24:39  tipaul
+# synch'ing 2.2 and head
+#
 # Revision 1.116  2005/08/04 08:55:54  tipaul
 # Letters / alert system, continuing...
 #
@@ -765,6 +846,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.117  2005/08/04 14:24:39  tipaul
+# synch'ing 2.2 and head
+#
 # Revision 1.116  2005/08/04 08:55:54  tipaul
 # Letters / alert system, continuing...
 #

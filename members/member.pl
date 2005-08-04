@@ -89,7 +89,7 @@ for (my $i=0; $i < $count; $i++){
 
   my %row = (
   	background => $background,
-		count => $i + 1,
+	count => $i+1,
         borrowernumber => $results->[$i]{'borrowernumber'},
         cardnumber => $results->[$i]{'cardnumber'},
         surname => $results->[$i]{'surname'},
@@ -106,7 +106,7 @@ for (my $i=0; $i < $count; $i++){
 
 $template->param( 
 			member          => $member,
-			numresults      => $count,
+			numresults		=> $count,
 			resultsloop     => \@resultsdata );
 
 output_html_with_http_headers $input, $cookie, $template->output;

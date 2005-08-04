@@ -175,7 +175,7 @@ for (my $i=0;$i<$count;$i++){
 	# charge, for that matter).
 	my ($charge,$itemtype)=calc_charges($dbh,$issue->[$i]{'itemnumber'},$bornum);
 	$row{'itemtype'}=&ItemType($itemtype);
-	$row{'charge'}=$charge;
+	$row{'charge'}= sprintf("%.2f",$charge);
 
 	#check item is not reserved
 	my ($restype,$reserves)=CheckReserves($issue->[$i]{'itemnumber'});

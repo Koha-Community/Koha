@@ -83,7 +83,7 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
-# Revision 1.2  2005/05/04 09:02:38  tipaul
+# Revision 1.3  2005/08/04 14:19:50  tipaul
 # synch'ing 2.2 and head
 #
 # Revision 1.1.2.2  2005/03/25 17:04:27  tipaul

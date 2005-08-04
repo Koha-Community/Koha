@@ -60,8 +60,6 @@ my $op=$input->param('op');
 my $categorycode=$input->param('categorycode');
 my $destination=$input->param('destination');
 
-
-
 my $nok;
 # if a add or modify is requested => check validity of data.
 if ($op eq 'add' or $op eq 'modify') {
@@ -143,25 +141,7 @@ if ($op eq 'add' or $op eq 'modify') {
 	}
 }
 if ($delete){
-	my @errors;
-	my $nok;
-	my $branch =$input->param('branchcode');
-	if (C4::Context->preference("IndependantBranches")) {
-		my $userenv = C4::Context->userenv;
-		if ($userenv->{flags} == 1){
-			if ($userenv->{branch} eq $branch){
-				print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
-			} else {
-				push @errors, "ERROR_branch";
-				$nok=1;
-				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
-			}
-		} else {
-			print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
-		}
-	} else {
-		print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
-	}
+	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 } else {  # this else goes down the whole script
 	if ($actionType eq 'Add'){
 		$template->param( addAction => 1);
@@ -177,16 +157,6 @@ if ($delete){
 		}
 	} else {
 		$data=borrdata('',$borrowernumber);
-	}
-	if (C4::Context->preference("IndependantBranches")) {
-		my $userenv = C4::Context->userenv;
-		unless ($userenv->{flags} == 1){
-			warn "userenv=".$userenv->{'branch'}."  member branch :".$data->{'branchcode'};
-			unless ($userenv->{'branch'} eq $data->{'branchcode'}){
-				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
-				exit 1;
-			}
-		}
 	}
 	if ($actionType eq 'Add'){
 		$template->param( updtype => 'I');
@@ -288,7 +258,20 @@ if ($delete){
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
-				
+	
+	my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});
+	if ($CGIsort1) {
+		$template->param(CGIsort1 => $CGIsort1);
+	} else {
+		$template->param( sort1 => $data->{'sort1'});
+	}
+	
+	my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data->{'sort2'});
+	if ($CGIsort2) {
+		$template->param(CGIsort2 =>$CGIsort2);
+	} else {
+		$template->param( sort2 => $data->{'sort2'});
+	}
 
 	my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});
 	if ($CGIsort1) {
