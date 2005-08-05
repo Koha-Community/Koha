@@ -216,7 +216,7 @@ sub sendalerts {
 			my $userenv = C4::Context->userenv;
 			if ($borinfo->{emailaddress}) {
 				my %mail = ( To => $borinfo->{emailaddress},
-							From => 'paul.poulain@free.fr',#.$userenv->{emailaddress},
+							From => $userenv->{emailaddress},
 							Subject => "".$innerletter->{title},
 							Message => "".$innerletter->{content},
 							);
