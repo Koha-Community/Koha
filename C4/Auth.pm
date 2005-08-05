@@ -303,7 +303,8 @@ sub checkauth {
 					$hash{firstname},
 					$hash{surname},
 					$hash{branch},
-					$hash{flags}
+					$hash{flags},
+					$hash{emailaddress},
 				);
 		}
 		my ($ip , $lasttime);
@@ -388,11 +389,11 @@ sub checkauth {
 			}
 			if ($return == 1){
 				my $sth=$dbh->prepare(
-					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode
+					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress
 					from borrowers where userid=?"
 				);
 				$sth->execute($userid);
-				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode) = $sth->fetchrow;
+				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
 				my $hash = C4::Context::set_userenv(
 					$bornum,
 					$userid,
@@ -400,7 +401,8 @@ sub checkauth {
 					$firstname,
 					$surname,
 					$branchcode,
-					$userflags
+					$userflags,
+					$emailaddress,
 				);
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
@@ -412,7 +414,7 @@ sub checkauth {
 					C4::Context->config('user'),
 					C4::Context->config('user'),
 					C4::Context->config('user'),
-					"",1
+					"",1,'nobody@nowhere_koha.com'
 				);
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,

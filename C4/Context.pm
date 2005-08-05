@@ -632,6 +632,7 @@ sub userenv
 {
 	my $var = $context->{"activeuser"};
 	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+	warn "NO CONTEXT for $var";
 }
 
 =item userenv
@@ -648,7 +649,7 @@ set_userenv is called in Auth.pm
 =cut
 #'
 sub set_userenv{
-	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags)= @_;
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress)= @_;
 	my $var=$context->{"activeuser"};
 	my $cell = {
 		"number"     => $usernum,
@@ -657,7 +658,8 @@ sub set_userenv{
 		"firstname"  => $userfirstname,
 		"surname"    => $usersurname,
 		"branch"     => $userbranch,
-		"flags"      => $userflags
+		"flags"      => $userflags,
+		"emailaddress"	=> $emailaddress,
 	};
 	$context->{userenv}->{$var} = $cell;
 	return $cell;
