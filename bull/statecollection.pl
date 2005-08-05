@@ -25,6 +25,16 @@ my @serialids = $query->param('serialid');
 my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
 my @status = $query->param('status');
+
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "bull/statecollection.tmpl",
+				query => $query,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});
+
 my $hassubscriptionexpired = hassubscriptionexpired($subscriptionid);
 if ($op eq 'modsubscriptionhistory') {
 	modsubscriptionhistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
@@ -52,14 +62,6 @@ my ($totalissues,@serialslist) = getserials($subscriptionid);
 my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
 $sth->execute($subscriptionid);
 my $solhistory = $sth->fetchrow_hashref;
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "bull/statecollection.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
 
 	$template->param(
 			serialslist => \@serialslist,

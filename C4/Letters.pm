@@ -19,9 +19,11 @@ package C4::Letters;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use Mail::Sendmail;
 use C4::Date;
 use Date::Manip;
 use C4::Suggestions;
+use C4::Members;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -47,7 +49,7 @@ C4::Letters - Give functions for Letters management
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetLetterList &addalert &getalert &delalert &findrelatedto);
+@EXPORT = qw(&GetLetterList &getletter &addalert &getalert &delalert &findrelatedto &sendalerts);
 
 =head2 GetLetterList
 
@@ -72,6 +74,15 @@ sub GetLetterList {
 		push @result,$line;
 	}
 	return @result;
+}
+
+sub getletter {
+	my ($module,$code) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select * from letter where module=? and code=?");
+	$sth->execute($module,$code);
+	my $line = $sth->fetchrow_hashref;
+	return $line;
 }
 
 =head2 addalert
@@ -137,7 +148,6 @@ sub getalert {
 		push @bind,$externalid;
 	}
 	$query =~ s/ and$//;
-# 	warn "Q : $query";
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@bind);
 	my @result;
@@ -147,6 +157,7 @@ sub getalert {
 	return \@result if $#result >=0; # return only if there is one result.
 	return;
 }
+
 =head2 findrelatedto
 	parameters :
 	- $type : the type of alert
@@ -156,16 +167,98 @@ sub getalert {
 	When type=issue, the id is related to a subscriptionid and this sub returns the name of the biblio.
 	When type=virtual, the id is related to a virtual shelf and this sub returns the name of the sub
 =cut
+
 sub findrelatedto {
 	my ($type,$externalid) = @_;
 	my $dbh=C4::Context->dbh;
 	my $sth;
-	if ($type eq "issue") {
+	if ($type eq 'issue') {
 		$sth=$dbh->prepare("select title as result from subscription left join biblio on subscription.biblionumber=biblio.biblionumber where subscriptionid=?");
+	}
+	if ($type eq 'borrower') {
+		$sth=$dbh->prepare("select concat(firstname,' ',surname) from borrowers where borrowernumber=?");
 	}
 	$sth->execute($externalid);
 	my ($result) = $sth->fetchrow;
 	return $result;
+}
+
+=head2 sendalert
+	parameters :
+	- $type : the type of alert
+	- $externalid : the id of the "object" to query
+	- $letter : the letter to send.
+
+	send an alert to all borrowers having put an alert on a given subject.
+
+=cut
+
+sub sendalerts {
+	my ($type,$externalid,$letter)=@_;
+	warn "sendalerts : ($type,$externalid,$letter)";
+	my $dbh=C4::Context->dbh;
+	if ($type eq 'issue') {
+# 		warn "sending issues...";
+		my $letter = getletter('serial',$letter);
+		# prepare the letter...
+		# search the biblionumber
+		my $sth=$dbh->prepare("select biblionumber from subscription where subscriptionid=?");
+		$sth->execute($externalid);
+		my ($biblionumber)=$sth->fetchrow;
+		parseletter($letter,'biblio',$biblionumber);
+		parseletter($letter,'biblioitems',$biblionumber);
+		# find the list of borrowers to alert
+		my $alerts = getalert('','issue',$externalid);
+		foreach (@$alerts) {
+			my $innerletter = $letter;
+			my $borinfo = getmember('',$_->{'borrowernumber'});
+			parseletter($innerletter,'borrowers',$_->{'borrowernumber'});
+			my $userenv = C4::Context->userenv;
+			if ($borinfo->{emailaddress}) {
+				my %mail = ( To => $borinfo->{emailaddress},
+							From => 'paul.poulain@free.fr',#.$userenv->{emailaddress},
+							Subject => "".$innerletter->{title},
+							Message => "".$innerletter->{content},
+							);
+				sendmail(%mail);
+# 				warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
+			}
+		}
+	}
+}
+
+=head2
+	parameters :
+	- $letter : a hash to letter fields (title & content useful)
+	- $table : the Koha table to parse.
+	- $pk : the primary key to query on the $table table
+	parse all fields from a table, and replace values in title & content with the appropriate value
+=cut
+sub parseletter {
+	my ($letter,$table,$pk) = @_;
+# 	warn "Parseletter : ($letter,$table,$pk)";
+	my $dbh=C4::Context->dbh;
+	my $sth;
+	if ($table eq 'biblio') {
+		$sth = $dbh->prepare("select * from biblio where biblionumber=?");
+	} elsif ($table eq 'biblioitems') {
+		$sth = $dbh->prepare("select * from biblioitems where biblionumber=?");
+	} elsif ($table eq 'borrowers') {
+		$sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
+	}
+	$sth->execute($pk);
+	# store the result in an hash
+	my $values = $sth->fetchrow_hashref;
+	# and get all fields from the table
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute;
+	while ((my $field) = $sth->fetchrow_array) {
+		my $replacefield="<<$table.$field>>";
+		my $replacedby = $values->{$field};
+# 		warn "REPLACE $replacefield by $replacedby";
+		$letter->{title} =~ s/$replacefield/$replacedby/g;
+		$letter->{content} =~ s/$replacefield/$replacedby/g;
+	}
 }
 
 END { }       # module clean-up code here (global destructor)

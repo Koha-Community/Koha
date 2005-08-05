@@ -22,6 +22,7 @@ use strict;
 use C4::Date;
 use Date::Manip;
 use C4::Suggestions;
+use C4::Letters;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -395,7 +396,6 @@ sub getlatestserials{
 
 sub serialchangestatus {
 	my ($serialid,$serialseq,$planneddate,$status)=@_;
-# 	warn "($serialid,$serialseq,$planneddate,$status)";
 	# 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
@@ -419,19 +419,23 @@ sub serialchangestatus {
 		$sth->execute($recievedlist,$missinglist,$subscriptionid);
 	}
 	# create new waited entry if needed (ie : was a "waited" and has changed)
+	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+	$sth->execute($subscriptionid);
+	my $subscription = $sth->fetchrow_hashref;
 	if ($oldstatus eq 1 && $status ne 1) {
-		$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
-		$sth->execute($subscriptionid);
-		my $val = $sth->fetchrow_hashref;
 		# next issue number
-		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
+		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($subscription);
 		# next date (calculated from actual date & frequency parameters)
-		my $nextplanneddate = Get_Next_Date($planneddate,$val);
-		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
+		my $nextplanneddate = Get_Next_Date($planneddate,$subscription);
+		newissue($newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextplanneddate);
 		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
 														innerloop1=?,innerloop2=?,innerloop3=?
 														where subscriptionid = ?");
 		$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
+	}
+	# check if an alert must be sent... (= a letter is defined & status became "arrived"
+	if ($subscription->{letter} && $status eq 2) {
+		sendalerts('issue',$subscription->{subscriptionid},$subscription->{letter});
 	}
 }
 
