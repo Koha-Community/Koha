@@ -108,11 +108,27 @@ if ($op eq 'add_form') {
 	}
 	# build field list
 	my @SQLfieldname;
+	my %line = ('value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname');
+	push @SQLfieldname, \%line;
+	my %line = ('value' => "LibrarianSurname", 'text' => 'LibrarianSurname');
+	push @SQLfieldname, \%line;
+	my %line = ('value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress');
+	push @SQLfieldname, \%line;
+	my $sth2=$dbh->prepare("SHOW COLUMNS from branches");
+	$sth2->execute;
+	my %line = ('value' => "", 'text' => '---BRANCHES---');
+	push @SQLfieldname, \%line;
+	while ((my $field) = $sth2->fetchrow_array) {
+		my %line = ('value' => "branches.".$field, 'text' => "branches.".$field);
+		push @SQLfieldname, \%line;
+	}
 	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
 	$sth2->execute;
 	my %line = ('value' => "", 'text' => '---BIBLIO---');
+
 	push @SQLfieldname, \%line;
 	while ((my $field) = $sth2->fetchrow_array) {
+		# note : %line is redefined, otherwise \%line contains the same value for every entry of the list
 		my %line = ('value' => "biblio.".$field, 'text' => "biblio.".$field);
 		push @SQLfieldname, \%line;
 	}

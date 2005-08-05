@@ -195,7 +195,6 @@ sub findrelatedto {
 
 sub sendalerts {
 	my ($type,$externalid,$letter)=@_;
-	warn "sendalerts : ($type,$externalid,$letter)";
 	my $dbh=C4::Context->dbh;
 	if ($type eq 'issue') {
 # 		warn "sending issues...";
@@ -205,15 +204,24 @@ sub sendalerts {
 		my $sth=$dbh->prepare("select biblionumber from subscription where subscriptionid=?");
 		$sth->execute($externalid);
 		my ($biblionumber)=$sth->fetchrow;
+		# parsing branch info
+		my $userenv = C4::Context->userenv;
+		parseletter($letter,'branches',$userenv->{branch});
+		# parsing librarian name
+		$letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/g;
+		$letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
+		$letter->{content} =~ s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
+		# parsing biblio information
 		parseletter($letter,'biblio',$biblionumber);
 		parseletter($letter,'biblioitems',$biblionumber);
 		# find the list of borrowers to alert
 		my $alerts = getalert('','issue',$externalid);
 		foreach (@$alerts) {
+			# and parse borrower ...
 			my $innerletter = $letter;
 			my $borinfo = getmember('',$_->{'borrowernumber'});
 			parseletter($innerletter,'borrowers',$_->{'borrowernumber'});
-			my $userenv = C4::Context->userenv;
+			# ... then send mail
 			if ($borinfo->{emailaddress}) {
 				my %mail = ( To => $borinfo->{emailaddress},
 							From => $userenv->{emailaddress},
@@ -233,6 +241,7 @@ sub sendalerts {
 	- $table : the Koha table to parse.
 	- $pk : the primary key to query on the $table table
 	parse all fields from a table, and replace values in title & content with the appropriate value
+	(not exported sub, used only internally)
 =cut
 sub parseletter {
 	my ($letter,$table,$pk) = @_;
@@ -245,6 +254,8 @@ sub parseletter {
 		$sth = $dbh->prepare("select * from biblioitems where biblionumber=?");
 	} elsif ($table eq 'borrowers') {
 		$sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
+	} elsif ($table eq 'branches') {
+		$sth = $dbh->prepare("select * from branches where branchcode=?");
 	}
 	$sth->execute($pk);
 	# store the result in an hash
