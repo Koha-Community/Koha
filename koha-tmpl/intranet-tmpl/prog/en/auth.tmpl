@@ -1,0 +1,43 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF --><!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF --><!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesn"t have permission --><h3>Login Error</h3>
+<p>Sorry, Koha doesn"t think you have permission for this page.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if login has timed out -->
+<h3>Login Error</h3><p>Sorry, your session has timed out.  Please login again.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user"s IP has changed -->
+<h3>Login Error</h3><p>You are accessing Koha from a different ip address! Please login again.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if the username or password doesn"t work -->
+<h3>Login Error</h3><p>You entered an incorrect username or password.  Please try again.</p>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- login prompt time-->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="mainform" id="mainform">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+<!-- /TMPL_LOOP -->
+
+<table>
+	<caption>Log In to Koha</caption>
+    <tr><th scope="row"><label for="userid">Cardnumber:</label></th><td><input name="userid" id="userid" /></td></tr>
+    <tr><th scope="row"><label for="password">Password:</label></th><td><input type="password" name="password" id="password" /></td></tr>
+    </table>
+<p><input type="submit" value="Submit" /></p>
+</form>
+
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

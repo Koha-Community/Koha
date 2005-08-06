@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Edit Item Details<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<h1><!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR Name="author" -->)<!-- /TMPL_IF --></h1>
+<form action="updateitem.pl" method="post">
+<input type="hidden" name="Barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
+<input type="hidden" name="Class" value="<!-- TMPL_VAR Name="classification" -->" />
+<input type="hidden" name="Publisher" value="<!-- TMPL_VAR Name="publisher" -->" />
+<input type="hidden" name="ISBN" value="<!-- TMPL_VAR Name="isbn" -->" />
+<input type="hidden" name="Publication Year" value="<!-- TMPL_VAR Name="publicationyear" -->" />
+<input type="hidden" name="Pages" value="<!-- TMPL_VAR Name="pages" -->" />
+<input type="hidden" name="Illustrations" value="<!-- TMPL_VAR Name="illustration" -->" />
+<input type="hidden" name="ItemNotes" value="<!-- TMPL_VAR Name="itemnotes" -->" />
+<input type="hidden" name="Volume" value="<!-- TMPL_VAR Name="volumeddesc" -->" />
+<input type="hidden" name="Home Branch" value="<!-- TMPL_VAR Name="homebranch" -->" />
+<input type="hidden" name="bibnum" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+
+<div class="form">
+<table>
+<caption>Set Item Status:</caption>
+<tr>
+<th><label for="Lost">Lost:</label></th>
+<td><input type="radio" id="Lost" name="Lost" value="1"<!-- TMPL_IF Name="itemlost" --> checked="checked"<!-- /TMPL_IF -->>
+Yes
+<input type="radio" name="Lost" value="0"<!-- TMPL_UNLESS Name="itemlost" --> checked="checked"<!-- /TMPL_UNLESS --> />
+No
+</td>
+</tr>
+<tr>
+<th><label for="withdrawn">Damaged</label></th>
+<td><input type="radio" id="withdrawn" name="withdrawn" value="1"<!-- TMPL_IF Name="itemwithdrawn" --> checked="checked"<!-- /TMPL_IF -->>
+Yes
+<input type="radio" name="withdrawn" value="0"<!-- TMPL_UNLESS Name="itemwithdrawn" --> checked="checked"<!-- /TMPL_UNLESS -->>
+No
+</td>
+</tr>
+</table>
+
+
+<p><input type="submit" name="submit" value="Save Changes" /></p>
+</form>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

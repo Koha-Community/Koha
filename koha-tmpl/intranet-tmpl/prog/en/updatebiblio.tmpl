@@ -1,0 +1,16 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Update Biblio<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_VAR Name="error" -->
+<h3>Click submit to force the subject</h3>
+
+<form action="/cgi-bin/koha/updatebiblio.pl" method="post">
+<table>
+<!-- TMPL_LOOP Name="dataloop" -->
+	<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+<!-- /TMPL_LOOP -->
+	<input type="hidden" name="Force" value="<!-- TMPL_VAR NAME="substring" -->" />
+<tr><td><input type="submit" value="Submit" /></td></tr>
+</table>
+</form>
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

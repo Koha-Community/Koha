@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Patrons: Create Manual Credit<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<h2>Manual Credit</h2>
+<form action="/cgi-bin/koha/mancredit.pl" method="post">
+<input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+
+<table>
+	<tr><th scope="row">Patron Number</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+	<tr><th scope="row">Credit Type</th><td><select name="type">
+<option value="C">Credit</option>
+<option value="F">Forgiven</option>
+</select></td></tr>
+	<tr><th scope="row">Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th scope="row">Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th scope="row">Amount</th><td>$<input type="text" name="amount" /></td></tr>
+</table>
+
+<input type="submit" name="add" value="Add Credit" />
+</form>
+
+<form action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR Name="bornum" -->" name="bornum" /><input type="submit" value="Cancel" /></form>
+
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
