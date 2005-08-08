@@ -115,8 +115,11 @@ my @select_branch;
 my %select_branches;
 my ($count2,@branches)=branches();
 for (my $i=0;$i<$count2;$i++){
-	push @select_branch, $branches[$i]->{'branchcode'};#
-  	$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	if ((!C4::Context->preference('IndependantBranches'))||(C4::Context->preference('IndependantBranches') && (C4::Context->userenv->{flags} ==1))
+	||((C4::Context->preference('IndependantBranches') && (C4::Context->userenv->{flags} !=1) && (C4::Context->userenv->{branch} eq $branches[$i]->{'branchcode'})))){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	}
 }
 my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-values   => \@select_branch,
