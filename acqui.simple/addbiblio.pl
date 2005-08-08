@@ -152,6 +152,7 @@ sub build_authorized_values_list ($$$$$) {
 				-values   => \@authorised_values,
 				-default  => $value,
 				-labels   => \%authorised_lib,
+				-override => 1,
 				-size     => 1,
 				-multiple => 0 );
 }
