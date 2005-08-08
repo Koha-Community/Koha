@@ -4,6 +4,7 @@ require Exporter;
 use CGI;
 use HTML::Template;
 
+use C4::Context;
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::BookShelves;
@@ -11,6 +12,7 @@ use C4::Koha;
 use C4::Members;
 
 my $input = new CGI;
+my $kohaVersion = C4::Context->config("kohaversion");
 my $dbh = C4::Context->dbh;
 my $query="Select itemtype,description from itemtypes order by description";
 my $sth=$dbh->prepare($query);
@@ -53,5 +55,6 @@ $template->param(CGIitemtype => $CGIitemtype,
 				languages => \@options,
 				textmessaging => $borrower->{textmessaging},
 				opaclargeimage => C4::Context->preference("opaclargeimage"),
+                                kohaversion => $kohaVersion
 );
 output_html_with_http_headers $input, $cookie, $template->output;
