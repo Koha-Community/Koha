@@ -1,0 +1,46 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Z39.50 Search Results</title>
+<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
+<style type="text/css"> 
+	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
+</style>
+</head>
+<body>
+
+	<h2>Z3950 Search Results</h2>
+	
+	<!-- TMPL_IF NAME="breeding_loop" -->
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>ISBN</th>
+		<th>coming from</th>
+		<th>&nbsp;</th>
+		<th>&nbsp;</th>
+	</tr>
+				<!-- TMPL_LOOP NAME="breeding_loop" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+						<td><!-- TMPL_VAR NAME="title" --></td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="isbn" --></td>
+			<td><!-- TMPL_VAR NAME="file" --></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="id" -->)">Import this biblio</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+		</table>
+	<!-- TMPL_ELSE -->
+				<p>Nothing found</p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="numberpending" --><h1>Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h1><!-- /TMPL_IF -->
+	<script language="javascript" type="text/javascript">
+	function Import(GetThisOne) {
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
+		self.close();
+		return false;
+	}
+</script>
+
+</body>
+</html>
