@@ -60,10 +60,11 @@ my ($count2,@booksellers)=bookseller($booksellerid);
 if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
 	unless ($userenv->{flags} == 1){
-		my $validtest = ($basket->{creationdate} = "") 
+		my $validtest = ($basket->{creationdate} eq '') 
+					|| ($basket->{branch} eq '')
 					|| ($userenv->{branch} eq $basket->{branch})
-					|| ($userenv->{branch} = '')
-					|| ($basket->{branch} = '');
+					|| ($userenv->{branch} eq '')
+					|| ($basket->{branch} eq '');
 		unless ($validtest) {
 			print $query->redirect("../mainpage.pl");
 			exit 1;
