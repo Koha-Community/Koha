@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc" >
 
 <!-- TMPL_IF NAME="do_it" -->
@@ -7,7 +7,7 @@ function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
-		<h1 class="parameters">Koha : LogView for <!-- TMPL_VAR NAME="modulename"--> </h1>
+		<h1 class="parameters">Koha : Hisory view for <!-- TMPL_VAR NAME="modulename"--> </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -18,36 +18,28 @@ function Dopop(link) {
 		<table border="1">
 			<!-- TMPL_IF NAME="catalogue" -->
 				<tr >
-							<th class="parameters">Timestamp
+							<th class="parameters">Modified on
 							</th>
-							<th class="parameters">Firstname
+							<th class="parameters">Title
 							</th>
-							<th class="parameters">Surname
+							<th class="parameters">Librarian
 							</th>
 							<th class="parameters">Action
 							</th>
 							<th class="parameters">Info
 							</th>
-							<th class="parameters">Title
-							</th>
-							<th class="parameters">Author
-							</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<!-- TMPL_IF NAME="hilighted" --><tr class="higlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-						<td><!-- TMPL_IF NAME="timestamp" --><!-- TMPL_VAR NAME="timestamp" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="day" --><br/>(<!-- TMPL_VAR NAME="timestamp" -->)
 						</td>
-						<td><!-- TMPL_IF NAME="firstname" --><!-- TMPL_VAR NAME="firstname" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="title" -->, <!-- TMPL_VAR NAME="author" -->
 						</td>
-						<td><!-- TMPL_IF NAME="surname" --><!-- TMPL_VAR NAME="surname" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 						</td>
 						<td><!-- TMPL_IF NAME="action" --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
 						</td>
 						<td><!-- TMPL_IF NAME="info" --><!-- TMPL_VAR NAME="info" --><!-- /TMPL_IF -->
-						</td>
-						<td><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF -->
-						</td>
-						<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->

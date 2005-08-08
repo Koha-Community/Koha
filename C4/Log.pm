@@ -22,6 +22,7 @@ package C4::Log; #assumes C4/Log
 
 use strict;
 use C4::Context;
+use C4::Date;
 
 require Exporter;
 
@@ -164,7 +165,7 @@ sub displaylog{
 			}
 		}
 	}
-	warn "displaylog :".$strsth;
+# 	warn "displaylog :".$strsth;
 	if ($strsth){
 		my $sth=$dbh->prepare($strsth);
 		$sth->execute;
@@ -173,6 +174,8 @@ sub displaylog{
 		my $hilighted=1;
 		while (my $data = $sth->fetchrow_hashref){
 			$data->{hilighted} = ($hilighted>0);
+			$data->{info} =~ s/\n/<br\/>/g;
+			$data->{day} = format_date($data->{timestamp});
 			push @results, $data;
 			$count++;
 			$hilighted = -$hilighted;
