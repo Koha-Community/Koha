@@ -391,14 +391,22 @@ Results are ordered from most to least recent.
 sub getorders {
 	my ($supplierid)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select count(*),authorisedby,creationdate,aqbasket.basketno,
-		closedate,surname,firstname 
-		from aqorders 
-		left join aqbasket on aqbasket.basketno=aqorders.basketno 
-		left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
-		where booksellerid=? and (quantity > quantityreceived or
-		quantityreceived is NULL) and datecancellationprinted is NULL
-		group by basketno order by aqbasket.basketno");
+	my $strsth ="Select count(*),authorisedby,creationdate,aqbasket.basketno,
+closedate,surname,firstname,aqorders.title 
+from aqorders 
+left join aqbasket on aqbasket.basketno=aqorders.basketno 
+left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
+where booksellerid=? and (quantity > quantityreceived or
+quantityreceived is NULL) and datecancellationprinted is NULL ";
+		
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		unless ($userenv->{flags} == 1){
+			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
+		}
+	}
+	$strsth.=" group by basketno order by aqbasket.basketno";
+	my $sth=$dbh->prepare($strsth);
 	$sth->execute($supplierid);
 	my @results = ();
 	while (my $data=$sth->fetchrow_hashref){
@@ -606,14 +614,22 @@ sub ordersearch {
 sub histsearch {
 	my ($title,$author,$name,$from_placed_on,$to_placed_on)=@_;
 	my $dbh= C4::Context->dbh;
-	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio 
-where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and
-biblio.biblionumber=aqorders.biblionumber";
+	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
+	
+	$query .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
+	$query .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
+	$query .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
 	$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
 	$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
 	$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
 	$query .= " and creationdate >" .$dbh->quote($from_placed_on) if $from_placed_on;
 	$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		unless ($userenv->{flags} == 1){
+			$query .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
+		}
+	}
 	warn "C4:Acquisition : ".$query;
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
