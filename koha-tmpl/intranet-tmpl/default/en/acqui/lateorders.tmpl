@@ -1,0 +1,86 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="acquisition">Late issues</h1>
+	<table>
+		<tr>
+			<th class="acquisition">Supplier</th>
+			<th class="acquisition">Budget</th>
+			<th class="acquisition">Title</th>
+			<th class="acquisition">Author</th>
+			<th class="acquisition">Publisher</th>
+			<th class="acquisition">Branch</th>
+			<th class="acquisition">Order Date</th>
+			<th class="acquisition">Including Basket</th>
+			<th class="acquisition">Quantity</th>
+			<th class="acquisition">Unit Price</th>
+			<th class="acquisition">Late since</th>
+			<th class="acquisition">&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="lateorders.pl" method="post">
+				<td>
+					<!-- TMPL_VAR name="CGIsupplier" -->
+				</td>
+				<td colspan="4">
+					&nbsp;
+				</td>
+				<td>
+					<!-- TMPL_VAR name="CGIbranch" -->
+				</td>
+				<td colspan="4">
+					&nbsp;
+				</td>
+				<td>
+					<input type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->"> days
+				</td>
+				
+				<td>
+					<input type="submit" value="filter" class="button acquisition">
+				</td>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP name="lateorders" -->
+			<!--TMPL_IF Name="hilighted" --> <tr class="hilighted"> <!--TMPL_ELSE--> <tr> <!-- /TMPL_IF -->
+				<td>
+					<!-- TMPL_VAR name="supplier" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="budget" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="author" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="publisher" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="branch" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="orderdate" -->
+				</td>
+				<td align="center">
+					<!-- TMPL_VAR name="basketno" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="quantity" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="unitprice" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="latesince" -->
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+

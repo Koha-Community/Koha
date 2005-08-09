@@ -56,6 +56,8 @@ orders, converting money to different currencies, and so forth.
 		&ordersearch &histsearch
 		&modorder &getsingleorder &invoice &receiveorder
 		&updaterecorder &newordernum
+		&getsupplierlistwithlateorders
+		&getlateorders
 
 		&bookfunds &curconvert &getcurrencies &bookfundbreakdown
 		&updatecurrencies &getcurrency
@@ -512,6 +514,95 @@ sub getallorders {
   return(scalar(@results),@results);
 }
 
+=item getsupplierlistwithlateorders
+
+  %results = &getsupplierlistwithlateorders;
+
+Searches for suppliers with late orders.
+
+=cut
+#'
+sub getsupplierlistwithlateorders {
+	my $delay=shift;
+	my $dbh = C4::Context->dbh;
+#FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
+#should be tested with other DBMs
+	
+	my $strsth;
+	my$dbdriver = C4::Context->config("db_scheme")||"mysql";
+	if ($dbdriver eq "mysql"){
+		$strsth="SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
+					FROM aqorders, aqbasket
+					LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+					WHERE aqorders.basketno = aqbasket.basketno AND
+					(closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY) AND (datereceived = '' or datereceived is null))
+					";
+	}else {
+		$strsth="SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
+			FROM aqorders, aqbasket
+			LEFT JOIN aqbooksellers ON aqbasket.aqbooksellerid = aqbooksellers.id
+			WHERE aqorders.basketno = aqbasket.basketno AND
+			(closedate < (CURDATE( )-(INTERVAL $delay DAY))) AND (datereceived = '' or datereceived is null))
+			";
+	}
+	warn "C4::Acquisition getsupplierlistwithlateorders : ".$strsth;
+	my $sth = $dbh->prepare($strsth);
+	$sth->execute;
+	my %supplierlist;
+	while (my ($id,$name) = $sth->fetchrow) {
+		$supplierlist{$id} = $name;
+	}
+	return %supplierlist;
+}
+
+=item getlateorders
+
+  %results = &getlateorders;
+
+Searches for suppliers with late orders.
+
+=cut
+#'
+sub getlateorders {
+	my $delay=shift;
+	my $supplierid = shift;
+	my $branch = shift;
+	
+	my $dbh = C4::Context->dbh;
+#BEWARE, order of parenthesis and LEFT JOIN is important for speed 
+	my $strsth ="SELECT DISTINCT aqbasket.basketno,
+					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.unitprice,
+					aqbookfund.bookfundname as budget, aqorderbreakdown.branchcode as branch,
+					aqbooksellers.name as supplier,
+					biblio.title, biblio.author, biblioitems.publishercode as publisher,
+					DATEDIFF(DATE_SUB(CURDATE( ),INTERVAL $delay DAY),closedate) AS latesince
+					FROM 
+						(
+							(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on biblioitems.biblionumber=biblio.biblionumber
+						)  LEFT JOIN 
+						(aqorderbreakdown LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid)
+						on aqorders.ordernumber = aqorderbreakdown.ordernumber,
+						aqbasket LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+					WHERE aqorders.basketno = aqbasket.basketno AND
+					(closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY) AND (datereceived = '' or datereceived is null))
+					";
+	$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
+	$strsth .= " AND aqorderbreakdown.branchcode like \'".$branch."\'" if ($branch); 
+	$strsth .= " ORDER BY latesince,basketno,branch, supplier";
+	warn "C4::Acquisition : getlateorders SQL:".$strsth;
+	my $sth = $dbh->prepare($strsth);
+	$sth->execute;
+	my @results;
+	my $hilighted = 1;
+	while (my $data = $sth->fetchrow_hashref) {
+		$data->{hilighted}=$hilighted if ($hilighted>0);
+		push @results, $data;
+		$hilighted= -$hilighted;
+	}
+	$sth->finish;
+	return(scalar(@results),@results);
+}
+
 # FIXME - Never used
 sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
@@ -886,7 +977,16 @@ table of the Koha database.
 #'
 sub branches {
     my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select * from branches order by branchname");
+	my $sth;
+	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
+		my $strsth ="Select * from branches ";
+		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
+		$strsth.= " order by branchname";
+		warn "C4::Acquisition->branches : ".$strsth;
+		$sth=$dbh->prepare($strsth);
+	} else {
+    	$sth = $dbh->prepare("Select * from branches order by branchname");
+	}
     my @results = ();
 
     $sth->execute();
