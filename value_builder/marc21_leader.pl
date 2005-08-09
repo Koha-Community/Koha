@@ -79,7 +79,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-	$result = "     nam                 " unless $result;
+	$result = "     nam         7a      " unless $result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
