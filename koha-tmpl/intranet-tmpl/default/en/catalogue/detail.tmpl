@@ -10,7 +10,7 @@
 		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
 			Duplicate
 		</a>
-		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
+		<a href="acqui.simple/additem.pl?biblionumber=<!-- TMPL_VAR name="biblionumber"-->" class="button catalogue">
 			Edit item
 		</a>
 	
@@ -167,7 +167,7 @@ function Dopop(link) {
 function confirm_deletion() {
 	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
 	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->";
+		window.location="acqui.simple/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
 	}
 }
 </script>

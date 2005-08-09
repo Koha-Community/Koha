@@ -49,18 +49,16 @@ sub find_value {
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
-my $bibid = $input->param('bibid');
-my $oldbiblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-
+my $biblionumber = $input->param('biblionumber');
 
 my $op = $input->param('op');
 my $itemnum = $input->param('itemnum');
 
 # find itemtype
-my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-my $record = MARCgetbiblio($dbh,$bibid);
+my $record = MARCgetbiblio($dbh,$biblionumber);
 my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
@@ -86,7 +84,7 @@ if ($op eq "additem") {
 	push @errors,"barcode_not_unique" if($exists);
 # MARC::Record builded => now, record in DB
 	# if barcode exists, don't create, but report The problem.
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid) unless ($exists);
+	my ($biblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$biblionumber) unless ($exists);
 	if ($exists) {
 		$nextop = "additem";
 		$itemrecord = $record;
@@ -97,13 +95,13 @@ if ($op eq "additem") {
 } elsif ($op eq "edititem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	$itemrecord = MARCgetitem($dbh,$bibid,$itemnum);
+	$itemrecord = MARCgetitem($dbh,$biblionumber,$itemnum);
 	$nextop="saveitem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	&NEWdelitem($dbh,$bibid,$itemnum);
+	&NEWdelitem($dbh,$biblionumber,$itemnum);
 	$nextop="additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
@@ -123,7 +121,7 @@ if ($op eq "additem") {
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
+	my ($biblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$biblionumber,$itemnum,0);
 	$itemnum="";
 	$nextop="additem";
 }
@@ -230,7 +228,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 		my $test = (C4::Context->preference("IndependantBranches")) && 
 					($tag==$branchtagfield) && ($subfield==$branchtagsubfield) &&
 					(C4::Context->userenv->{flags} != 1) && ($value != C4::Context->userenv->{branch}) ;
-		print $input->redirect("additem.pl?bibid=$bibid") if ($test);
+		print $input->redirect("additem.pl?biblionumber=$biblionumber") if ($test);
 		
 		# search for itemcallnumber if applicable
 		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
@@ -318,8 +316,7 @@ my ($template, $loggedinuser, $cookie)
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						bibid => $bibid,
-						biblionumber =>$oldbiblionumber,
+						biblionumber =>$biblionumber,
 						title => $oldrecord->{title},
 						author => $oldrecord->{author},
 						item => \@loop_data,

@@ -13,26 +13,26 @@
 		<a href="javascript:Addbiblio('duplicate')" class="button catalogue">
 			Duplicate
 		</a>
-		<a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">
+		<a href="acqui.simple/additem.pl?biblionumber=<!-- TMPL_VAR name="biblionumber"-->" class="button catalogue">
 			Edit item
 		</a>
 	
 		<a href="javascript:confirm_deletion()" class="button catalogue">
 			delete
 		</a>
-		<a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+		<a href="detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Complete
 		</a>
-		<a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+		<a href="detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Normal
 		</a>
-		<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+		<a href="ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			ISBD
 		</a>
 		<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 			Add to shelf
 		</a>
-		<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+		<a href="javascript:Dopop('detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 			Print
 		</a>
 		<!-- TMPL_IF name="subscriptionsnumber" -->
@@ -42,7 +42,7 @@
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="norequests" -->
 		<!-- TMPL_ELSE -->
-			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
+			<a href="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
 		<!-- /TMPL_IF -->
 		
 
@@ -397,7 +397,7 @@ function active(numlayer)
 function confirm_deletion() {
 	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
 	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->";
+		window.location="acqui.simple/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
 	}
 }
 function Dopop(link) {
@@ -405,11 +405,11 @@ function Dopop(link) {
 }
 function Changefwk(FwkList) {
   var fwk = FwkList.options[FwkList.selectedIndex].value;
-  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+  window.location = "MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
 }
 function Addbiblio(op) {
   var fwk = document.forms[0].Frameworks.options[document.forms[0].Frameworks.selectedIndex].value;
-  window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
+  window.location = "acqui.simple/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>
 </body>

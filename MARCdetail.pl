@@ -64,19 +64,19 @@ my $query=new CGI;
 my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
-my $bibid = $query->param('bibid');
+# my $bibid = $query->param('bibid');
 my $itemtype = $query->param('frameworkcode');
 my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
 
-$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-$itemtype = &MARCfind_frameworkcode($dbh,$bibid) if not ($itemtype);
+# $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
+# $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
+$itemtype = &MARCfind_frameworkcode($dbh,$biblionumber) if not ($itemtype);
 $itemtype = '' if ($itemtype eq 'Default');
-warn "itemtype :".$itemtype;
+# warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
-my $record =MARCgetbiblio($dbh,$bibid);
+my $record =MARCgetbiblio($dbh,$biblionumber);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
@@ -225,7 +225,7 @@ my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
-						bibid => $bibid,
+# 						bibid => $bibid,
 						biblionumber => $biblionumber,
 						subscriptionsnumber => $subscriptionsnumber,
 						popup => $popup,

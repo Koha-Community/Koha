@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 <div class="tabbed">
 	<form method="post" name="f">
-	<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="oldbiblionumber" -->     With Framework :<!--TMPL_VAR Name="framework" --></b></h1>
+	<h1 class="catalogue">Biblionumber : <!-- TMPL_VAR NAME="biblionumber" -->     With Framework :<!--TMPL_VAR Name="framework" --></b></h1>
 	<p>
 		<input type="hidden" name="op" value="addbiblio">
 		<input type="hidden" name="addfield_field">
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
-		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->">
-		<!-- TMPL_IF name="bibid" -->
+		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+		<!-- TMPL_IF name="biblionumber" -->
 			<input type="button" value="Save" onclick="Check(this.form)" accesskey="w" class="button catalogue">
 		<!-- TMPL_ELSE -->
 			<input type="button" value="Add biblio" onclick="Check(this.form)" accesskey="w" class="button catalogue">
@@ -56,7 +56,7 @@
 				<p>You must either :</p>
 				<ul>
 					<p><input type="checkbox" value=1 name="confirm_not_duplicate">confirm it's not a duplicate (and click on Add biblio again)</p>
-					<p>Go to <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->" class="button catalogue">edit items</a> from this duplicate biblio</p>
+					<p>Go to <a href="additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" class="button catalogue">edit items</a> from this duplicate biblio</p>
 				</ul>
 			</div>
 		<!-- /TMPL_IF -->
@@ -515,7 +515,7 @@ function PopupZ3950() {
 		    strQuery += "&issn="+document.forms[0].field_value[i].value;
 		}
 	}
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
 }
 function Changefwk(FwkList) {
   var fwk = FwkList.options[FwkList.selectedIndex].value;

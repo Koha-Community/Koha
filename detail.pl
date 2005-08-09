@@ -19,7 +19,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     });
 
-my $biblionumber=$query->param('bib');
+my $biblionumber=$query->param('biblionumber');
 $template->param(biblionumber => $biblionumber);
 
 
@@ -50,10 +50,9 @@ $template->param(norequests => $norequests);
 my $marc = C4::Context->preference("marc");
 if ($marc eq "yes") {
 	my $dbh = C4::Context->dbh;
-	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 	my $marcflavour = C4::Context->preference("marcflavour");
-	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
-	my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
+	my $marcnotesarray = &getMARCnotes($dbh,$biblionumber,$marcflavour);
+	my $marcsubjctsarray = &getMARCsubjects($dbh,$biblionumber,$marcflavour);
 
 	$template->param(MARCNOTES => $marcnotesarray);
 	$template->param(MARCSUBJCTS => $marcsubjctsarray);

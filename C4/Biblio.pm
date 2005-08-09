@@ -22,6 +22,7 @@ require Exporter;
 use C4::Context;
 use C4::Database;
 use MARC::Record;
+use MARC::File::USMARC;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -477,91 +478,12 @@ sub MARCaddsubfield {
 sub MARCgetbiblio {
 
     # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid ) = @_;
-    my $record = MARC::Record->new();
-#	warn "". $bidid;
-
-    my $sth =
-      $dbh->prepare(
-"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
-		 		 from marc_subfield_table
-		 		 where bibid=? order by tag,tagorder,subfieldorder
-		 	 "
-    );
-    my $sth2 =
-      $dbh->prepare(
-        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute($bibid);
-    my $prevtagorder = 1;
-    my $prevtag      = 'XXX';
-    my $previndicator;
-    my $field;        # for >=10 tags
-    my $prevvalue;    # for <10 tags
-    while ( my $row = $sth->fetchrow_hashref ) {
-
-        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
-            $sth2->execute( $row->{'valuebloblink'} );
-            my $row2 = $sth2->fetchrow_hashref;
-            $sth2->finish;
-            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
-        }
-        if ( $row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag ) {
-            $previndicator .= "  ";
-            if ( $prevtag < 10 ) {
-				if ($prevtag ne '000') {
-                	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
-				} else {
-					$record->leader(sprintf("%24s",$prevvalue));
-				}
-            }
-            else {
-                $record->add_fields($field) unless $prevtag eq "XXX";
-            }
-            undef $field;
-            $prevtagorder  = $row->{tagorder};
-            $prevtag       = $row->{tag};
-            $previndicator = $row->{tag_indicator};
-            if ( $row->{tag} < 10 ) {
-                $prevvalue = $row->{subfieldvalue};
-            }
-            else {
-                $field = MARC::Field->new(
-                    ( sprintf "%03s", $prevtag ),
-                    substr( $row->{tag_indicator} . '  ', 0, 1 ),
-                    substr( $row->{tag_indicator} . '  ', 1, 1 ),
-                    $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'}
-                );
-            }
-        }
-        else {
-            if ( $row->{tag} < 10 ) {
-                $record->add_fields( ( sprintf "%03s", $row->{tag} ),
-                    $row->{'subfieldvalue'} );
-            }
-            else {
-                $field->add_subfields( $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'} );
-            }
-            $prevtag       = $row->{tag};
-            $previndicator = $row->{tag_indicator};
-        }
-    }
-
-    # the last has not been included inside the loop... do it now !
-    if ( $prevtag ne "XXX" )
-    { # check that we have found something. Otherwise, prevtag is still XXX and we
-         # must return an empty record, not make MARC::Record fail because we try to
-         # create a record with XXX as field :-(
-        if ( $prevtag < 10 ) {
-            $record->add_fields( $prevtag, $prevvalue );
-        }
-        else {
-
-            #  		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
-            $record->add_fields($field);
-        }
-    }
+    my ( $dbh, $biblionumber ) = @_;
+	my $sth = $dbh->prepare('select marc from biblioitems where biblionumber=?');
+	$sth->execute($biblionumber);
+	my ($marc) = $sth->fetchrow;
+	my $record = MARC::File::USMARC::decode($marc);
+	warn "$biblionumber => $marc = ".$record->as_usmarc();
     return $record;
 }
 
@@ -836,10 +758,10 @@ sub MARCfindsubfieldid {
 }
 
 sub MARCfind_frameworkcode {
-    my ( $dbh, $bibid ) = @_;
+    my ( $dbh, $biblionumber ) = @_;
     my $sth =
-      $dbh->prepare("select frameworkcode from marc_biblio where bibid=?");
-    $sth->execute($bibid);
+      $dbh->prepare("select frameworkcode from biblio where biblionumber=?");
+    $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
     return $frameworkcode;
 }
@@ -2738,6 +2660,24 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.123  2005/08/09 14:10:28  tipaul
+# 1st commit to go to zebra.
+# don't update your cvs if you want to have a working head...
+#
+# this commit contains :
+# * updater/updatedatabase : get rid with marc_* tables, but DON'T remove them. As a lot of things uses them, it would not be a good idea for instance to drop them. If you really want to play, you can rename them to test head without them but being still able to reintroduce them...
+# * Biblio.pm : modify MARCgetbiblio to find the raw marc record in biblioitems.marc field, not from marc_subfield_table, modify MARCfindframeworkcode to find frameworkcode in biblio.frameworkcode, modify some other subs to use biblio.biblionumber & get rid of bibid.
+# * other files : get rid of bibid and use biblionumber instead.
+#
+# What is broken :
+# * does not do anything on zebra yet.
+# * if you rename marc_subfield_table, you can't search anymore.
+# * you can view a biblio & bibliodetails, go to MARC editor, but NOT save any modif.
+# * don't try to add a biblio, it would add data poorly... (don't try to delete either, it may work, but that would be a surprise ;-) )
+#
+# IMPORTANT NOTE : you need MARC::XML package (http://search.cpan.org/~esummers/MARC-XML-0.7/lib/MARC/File/XML.pm), that requires a recent version of MARC::Record
+# Updatedatabase stores the iso2709 data in biblioitems.marc field & an xml version in biblioitems.marcxml Not sure we will keep it when releasing the stable version, but I think it's a good idea to have something readable in sql, at least for development stage.
+#
 # Revision 1.122  2005/08/04 13:27:48  tipaul
 # synch'ing 2.2 and head
 #
