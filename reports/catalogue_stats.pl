@@ -328,12 +328,12 @@ sub calculate {
  	$linefilter[1] = @$filters[3] if ($line =~ /lccn/ )  ;
  	$linefilter[0] = @$filters[4] if ($line =~ /items.itemcallnumber/ )  ;
  	$linefilter[1] = @$filters[5] if ($line =~ /items.itemcallnumber/ )  ;
- 	@linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
- 	@linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
+ 	$linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
+ 	$linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
- 	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	@linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
+ 	$linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
+ 	$linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
@@ -342,12 +342,12 @@ sub calculate {
  	$colfilter[1] = @$filters[3] if ($column =~ /lccn/ )  ;
  	$colfilter[0] = @$filters[4] if ($column =~ /itemcallnumber/ )  ;
  	$colfilter[1] = @$filters[5] if ($column =~ /itemcallnumber/ )  ;
- 	@colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
- 	@colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
+ 	$colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
+ 	$colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
- 	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	@colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
+ 	$colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
+ 	$colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
 
 # 1st, loop rows.
 	my $linefield;
@@ -454,115 +454,59 @@ sub calculate {
 	}
 
 # preparing calculation
-	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM biblioitems LEFT JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber)";
-	my $cond=0;
+	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM biblioitems LEFT JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber) WHERE 1";
 	if (@$filters[0]){
 		@$filters[0]=~ s/\*/%/g;
-		$strcalc .= " WHERE dewey >" . @$filters[0] ."";
-		$cond=1; 
+		$strcalc .= " AND dewey >" . @$filters[0] ."";
 	}
 	if (@$filters[1]){
 		@$filters[1]=~ s/\*/%/g ;
-		if ($cond){
-			$strcalc .= " AND dewey <" . @$filters[1] ."";
-		} else {
-			$strcalc .= " WHERE dewey <" . @$filters[1] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND dewey <" . @$filters[1] ."";
 		
 	}
 	if (@$filters[2]){
 		@$filters[2]=~ s/\*/%/g ;
-		if ($cond){
-			$strcalc .= " AND lccn >" . @$filters[2] ."" ;
-		} else {
-			$strcalc .= " WHERE lccn > " . @$filters[2] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND lccn >" . @$filters[2] ."" ;
 	}
 	if (@$filters[3]){
 		@$filters[3]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND lccn <" . @$filters[3] ."" ;
-		} else {
-			$strcalc .= " WHERE lccn <" . @$filters[3] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND lccn <" . @$filters[3] ."" ;
 	}
 	if (@$filters[4]){
 		@$filters[4]=~ s/\*/%/g ;
-		if ($cond){
-			$strcalc .= " AND items.itemcallnumber >" . @$filters[4] ."" ;
-		} else {
-			$strcalc .= " WHERE items.itemcallnumber >" . @$filters[4] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND items.itemcallnumber >=" . $dbh->quote(@$filters[4]) ."" ;
 	}
 	
 	if (@$filters[5]){
 		@$filters[5]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND items.itemcallnumber <" . @$filters[5] ."" ;
-		} else {
-			$strcalc .= " WHERE items.itemcallnumber <" . @$filters[5] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND items.itemcallnumber <=" . $dbh->quote(@$filters[5]) ."" ;
 	}
 	
 	if (@$filters[6]){
 		@$filters[6]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND biblioitems.itemtype like '" . @$filters[6] ."'";
-		} else {
-			$strcalc .= " WHERE biblioitems.itemtype like '" . @$filters[6] ."'";
-			$cond=1;
-		}
+		$strcalc .= " AND biblioitems.itemtype like '" . @$filters[6] ."'";
 	}
 	
 	if (@$filters[7]){
 		@$filters[7]=~ s/\*/%/g;
 		@$filters[7].="%" unless @$filters[7]=~/%/;
-		if ($cond){
-			$strcalc .= " AND biblioitems.publishercode like \"" . @$filters[7] ."\"";
-		} else {
-			$strcalc .= " WHERE biblioitems.publishercode like \"" . @$filters[7] ."\"";
-			$cond=1;
-		}
+		$strcalc .= " AND biblioitems.publishercode like \"" . @$filters[7] ."\"";
 	}
 	if (@$filters[8]){
 		@$filters[8]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND publicationyear >" . @$filters[8] ."" ;
-		} else {
-			$strcalc .= " WHERE publicationyear >" . @$filters[8] ."" ;
-			$cond=1;
-		}
+		$strcalc .= " AND publicationyear >" . @$filters[8] ."" ;
 	}
 	if (@$filters[9]){
 		@$filters[9]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND publicationyear <" . @$filters[9] ."";
-		} else {
-			$strcalc .= " WHERE publicationyear <" . @$filters[9] ."";
-			$cond=1;
-		}
+		$strcalc .= " AND publicationyear <" . @$filters[9] ."";
 	}
 	if (@$filters[10]){
 		@$filters[10]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND items.homebranch like '" . @$filters[10] ."'";
-		} else {
-			$strcalc .= " WHERE items.homebranch like '" . @$filters[10] ."'";
-			$cond=1;
-		}
+		$strcalc .= " AND items.homebranch like '" . @$filters[10] ."'";
 	}
 	if (@$filters[11]){
 		@$filters[11]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
-		} else {
-			$strcalc .= " WHERE items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
-		}
+		$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
 	}
 	
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
