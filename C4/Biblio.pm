@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Database;
 use MARC::Record;
 use MARC::File::USMARC;
+use MARC::File::XML;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -483,7 +484,6 @@ sub MARCgetbiblio {
 	$sth->execute($biblionumber);
 	my ($marc) = $sth->fetchrow;
 	my $record = MARC::File::USMARC::decode($marc);
-	warn "$biblionumber => $marc = ".$record->as_usmarc();
     return $record;
 }
 
@@ -950,6 +950,7 @@ sub MARChtml2marc {
 	my $prevvalue; # if tag <10
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
+		next unless @$rvalues[$i];
 		# rebuild MARC::Record
 # 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
@@ -1123,34 +1124,57 @@ sub MARCdelword {
 # it's used with marcimport, and marc management tools
 #
 
-=item ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
+=item ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$frameworkcode);
 
-creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
-are builded from the MARC::Record. If they are passed, they are used.
+creates a biblio from a MARC::Record.
 
 =item NEWnewitem($dbh, $record,$bibid);
 
-adds an item in the db.
+creates an item from a MARC::Record
 
 =cut
 
 sub NEWnewbiblio {
     my ( $dbh, $record, $frameworkcode ) = @_;
-    my $oldbibnum;
-    my $oldbibitemnum;
+    my $biblionumber;
+    my $biblioitemnumber;
     my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
-    $oldbibnum = OLDnewbiblio( $dbh, $olddata );
-	$olddata->{'biblionumber'} = $oldbibnum;
-    $oldbibitemnum = OLDnewbiblioitem( $dbh, $olddata );
+	$olddata->{frameworkcode} = $frameworkcode;
+    $biblionumber = OLDnewbiblio( $dbh, $olddata );
+	$olddata->{biblionumber} = $biblionumber;
+	# add biblionumber into the MARC record (it's the ID for zebra)
+	my ( $tagfield, $tagsubfield ) =
+					MARCfind_marc_from_kohafield( $dbh, "biblio.biblionumber",$frameworkcode );
+	# create the field
+	my $newfield;
+	if ($tagfield<10) {
+		$newfield = MARC::Field->new(
+			$tagfield, $biblionumber,
+		);
+	} else {
+		$newfield = MARC::Field->new(
+			$tagfield, '', '', "$tagsubfield" => $biblionumber,
+		);
+	}
+	# drop old field (just in case it already exist and create new one...
+	my $old_field = $record->field($tagfield);
+	$record->delete_field($old_field);
+	$record->add_fields($newfield);
+
+	#create the marc entry, that stores the rax marc record in Koha 3.0
+	$olddata->{marc} = $record->as_usmarc();
+	$olddata->{marcxml} = $record->as_xml();
+	# and create biblioitem, that's all folks !
+    $biblioitemnumber = OLDnewbiblioitem( $dbh, $olddata );
 
     # search subtiles, addiauthors and subjects
-    my ( $tagfield, $tagsubfield ) =
+    ( $tagfield, $tagsubfield ) =
       MARCfind_marc_from_kohafield( $dbh, "additionalauthors.author",$frameworkcode );
     my @addiauthfields = $record->field($tagfield);
     foreach my $addiauthfield (@addiauthfields) {
         my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
         foreach my $subfieldcount ( 0 .. $#addiauthsubfields ) {
-            OLDmodaddauthor( $dbh, $oldbibnum,
+            OLDmodaddauthor( $dbh, $biblionumber,
                 $addiauthsubfields[$subfieldcount] );
         }
     }
@@ -1160,7 +1184,7 @@ sub NEWnewbiblio {
     foreach my $subtitlefield (@subtitlefields) {
         my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
         foreach my $subfieldcount ( 0 .. $#subtitlesubfields ) {
-            OLDnewsubtitle( $dbh, $oldbibnum,
+            OLDnewsubtitle( $dbh, $biblionumber,
                 $subtitlesubfields[$subfieldcount] );
         }
     }
@@ -1174,67 +1198,8 @@ sub NEWnewbiblio {
             push @subjects, $subjsubfield[$subfieldcount];
         }
     }
-    OLDmodsubject( $dbh, $oldbibnum, 1, @subjects );
-
-    # we must add bibnum and bibitemnum in MARC::Record...
-    # we build the new field with biblionumber and biblioitemnumber
-    # we drop the original field
-    # we add the new builded field.
-# NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
-    # (steve and paul : thinks 090 is a good choice)
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
-    );
-    $sth->execute("biblio.biblionumber");
-    ( my $tagfield1, my $tagsubfield1 ) = $sth->fetchrow;
-    $sth->execute("biblioitems.biblioitemnumber");
-    ( my $tagfield2, my $tagsubfield2 ) = $sth->fetchrow;
-	my $newfield;
-	# biblionumber & biblioitemnumber are in different fields
-    if ( $tagfield1 != $tagfield2 ) {
-		# deal with biblionumber
-		if ($tagfield1<10) {
-			$newfield = MARC::Field->new(
-				$tagfield1, $oldbibnum,
-			);
-		} else {
-			$newfield = MARC::Field->new(
-				$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-			);
-		}
-		# drop old field and create new one...
-		my $old_field = $record->field($tagfield1);
-		$record->delete_field($old_field);
-		$record->add_fields($newfield);
-		# deal with biblioitemnumber
-		if ($tagfield2<10) {
-			$newfield = MARC::Field->new(
-				$tagfield2, $oldbibitemnum,
-			);
-		} else {
-			$newfield = MARC::Field->new(
-				$tagfield2, '', '', "$tagsubfield2" => $oldbibitemnum,
-			);
-		}
-		# drop old field and create new one...
-		$old_field = $record->field($tagfield2);
-		$record->delete_field($old_field);
-		$record->add_fields($newfield);
-	# biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
-	} else {
-		my $newfield = MARC::Field->new(
-			$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-			"$tagsubfield2" => $oldbibitemnum
-		);
-		# drop old field and create new one...
-		my $old_field = $record->field($tagfield1);
-		$record->delete_field($old_field);
-		$record->add_fields($newfield);
-	}
-# 	warn "REC : ".$record->as_formatted;
-    my $bibid = MARCaddbiblio( $dbh, $record, $oldbibnum, $frameworkcode );
-    return ( $bibid, $oldbibnum, $oldbibitemnum );
+    OLDmodsubject( $dbh, $biblionumber, 1, @subjects );
+    return ( $biblionumber, $biblioitemnumber );
 }
 
 sub NEWmodbiblioframework {
@@ -1243,12 +1208,19 @@ sub NEWmodbiblioframework {
 	$sth->execute($frameworkcode);
 	return 1;
 }
+
 sub NEWmodbiblio {
-	my ($dbh,$record,$bibid,$frameworkcode) =@_;
+	my ($dbh,$record,$biblionumber,$frameworkcode) =@_;
 	$frameworkcode="" unless $frameworkcode;
-	&MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
+# 	&MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
 	my $oldbiblio = MARCmarc2koha($dbh,$record,$frameworkcode);
-	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
+	
+	$oldbiblio->{frameworkcode} = $frameworkcode;
+	#create the marc entry, that stores the rax marc record in Koha 3.0
+	$oldbiblio->{marc} = $record->as_usmarc();
+	$oldbiblio->{marcxml} = $record->as_xml();
+	
+	OLDmodbiblio($dbh,$oldbiblio);
 	OLDmodbibitem($dbh,$oldbiblio);
 	# now, modify addi authors, subject, addititles.
 	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
@@ -1256,7 +1228,7 @@ sub NEWmodbiblio {
 	foreach my $addiauthfield (@addiauthfields) {
 		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
 		foreach my $subfieldcount (0..$#addiauthsubfields) {
-			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
+			OLDmodaddauthor($dbh,$biblionumber,$addiauthsubfields[$subfieldcount]);
 		}
 	}
 	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle",$frameworkcode);
@@ -1265,10 +1237,10 @@ sub NEWmodbiblio {
 		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
 		# delete & create subtitle again because OLDmodsubtitle can't handle new subtitles
 		# between 2 modifs
-		$dbh->do("delete from bibliosubtitle where biblionumber=$oldbiblionumber");
+		$dbh->do("delete from bibliosubtitle where biblionumber=$biblionumber");
 		foreach my $subfieldcount (0..$#subtitlesubfields) {
 			foreach my $subtit(split /\||#/,$subtitlesubfields[$subfieldcount]) {
-				OLDnewsubtitle($dbh,$oldbiblionumber,$subtit);
+				OLDnewsubtitle($dbh,$biblionumber,$subtit);
 			}
 		}
 	}
@@ -1281,7 +1253,7 @@ sub NEWmodbiblio {
 			push @subjects,$subjsubfield[$subfieldcount];
 		}
 	}
-	OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
+	OLDmodsubject($dbh,$biblionumber,1,@subjects);
 	return 1;
 }
 
@@ -1415,7 +1387,7 @@ delete a biblio
 sub OLDnewbiblio {
     my ( $dbh, $biblio ) = @_;
 
-    #  my $dbh    = &C4Connect;
+	$dbh->do('lock tables biblio WRITE');
     my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
     $sth->execute;
     my $data   = $sth->fetchrow_arrayref;
@@ -1425,45 +1397,39 @@ sub OLDnewbiblio {
     if ( $biblio->{'seriestitle'} ) { $series = 1 }
     $sth->finish;
     $sth =
-      $dbh->prepare(
-"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?"
+      $dbh->prepare("insert into biblio set	biblionumber=?,	title=?,		author=?,	copyrightdate=?,
+	  										serial=?,		seriestitle=?,	notes=?,	abstract=?,
+											unititle=?"
     );
     $sth->execute(
         $bibnum,             $biblio->{'title'},
         $biblio->{'author'}, $biblio->{'copyrightdate'},
         $biblio->{'serial'},             $biblio->{'seriestitle'},
         $biblio->{'notes'},  $biblio->{'abstract'},
-		$biblio->{'unititle'},
+		$biblio->{'unititle'}
     );
 
     $sth->finish;
-
-    #  $dbh->disconnect;
+	$dbh->do('unlock tables');
     return ($bibnum);
 }
 
 sub OLDmodbiblio {
     my ( $dbh, $biblio ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $query;
-    my $sth;
-
-    $query = "";
-    $sth   =
-      $dbh->prepare(
-"Update biblio set title = ?, author = ?, abstract = ?, copyrightdate = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ? where biblionumber = ?"
+    my $sth = $dbh->prepare("Update biblio set	title=?,		author=?,	abstract=?,	copyrightdate=?,
+												seriestitle=?,	serial=?,	unititle=?,	notes=?,	frameworkcode=? 
+											where biblionumber = ?"
     );
     $sth->execute(
-        $biblio->{'title'},       $biblio->{'author'},
-        $biblio->{'abstract'},    $biblio->{'copyrightdate'},
-        $biblio->{'seriestitle'}, $biblio->{'serial'},
-        $biblio->{'unititle'},    $biblio->{'notes'},
-        $biblio->{'biblionumber'}
+		$biblio->{'title'},       $biblio->{'author'},
+		$biblio->{'abstract'},    $biblio->{'copyrightdate'},
+		$biblio->{'seriestitle'}, $biblio->{'serial'},
+		$biblio->{'unititle'},    $biblio->{'notes'},
+		$biblio->{frameworkcode},
+		$biblio->{'biblionumber'}
     );
-
-    $sth->finish;
-    return ( $biblio->{'biblionumber'} );
+	$sth->finish;
+	return ( $biblio->{'biblionumber'} );
 }    # sub modbiblio
 
 sub OLDmodsubtitle {
@@ -1568,47 +1534,18 @@ sub OLDmodbibitem {
     my ( $dbh, $biblioitem ) = @_;
     my $query;
 
-    $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
-    $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
-    $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
-    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
-    $biblioitem->{'publishercode'} =
-      $dbh->quote( $biblioitem->{'publishercode'} );
-    $biblioitem->{'publicationyear'} =
-      $dbh->quote( $biblioitem->{'publicationyear'} );
-    $biblioitem->{'classification'} =
-      $dbh->quote( $biblioitem->{'classification'} );
-    $biblioitem->{'dewey'}       = $dbh->quote( $biblioitem->{'dewey'} );
-    $biblioitem->{'subclass'}    = $dbh->quote( $biblioitem->{'subclass'} );
-    $biblioitem->{'illus'}       = $dbh->quote( $biblioitem->{'illus'} );
-    $biblioitem->{'pages'}       = $dbh->quote( $biblioitem->{'pages'} );
-    $biblioitem->{'volumeddesc'} = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'bnotes'}      = $dbh->quote( $biblioitem->{'bnotes'} );
-    $biblioitem->{'size'}        = $dbh->quote( $biblioitem->{'size'} );
-    $biblioitem->{'place'}       = $dbh->quote( $biblioitem->{'place'} );
-
-    $query = "Update biblioitems set
-itemtype        = $biblioitem->{'itemtype'},
-url             = $biblioitem->{'url'},
-isbn            = $biblioitem->{'isbn'},
-issn            = $biblioitem->{'issn'},
-publishercode   = $biblioitem->{'publishercode'},
-publicationyear = $biblioitem->{'publicationyear'},
-classification  = $biblioitem->{'classification'},
-dewey           = $biblioitem->{'dewey'},
-subclass        = $biblioitem->{'subclass'},
-illus           = $biblioitem->{'illus'},
-pages           = $biblioitem->{'pages'},
-volumeddesc     = $biblioitem->{'volumeddesc'},
-notes 		= $biblioitem->{'bnotes'},
-size		= $biblioitem->{'size'},
-place		= $biblioitem->{'place'}
-where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
-
-    $dbh->do($query);
-    if ( $dbh->errstr ) {
-        warn "$query";
-    }
+    my $sth = $dbh->prepare("update biblioitems set	itemtype=?,			url=?,				isbn=?,	issn=?,
+										publishercode=?,	publicationyear=?,	classification=?,	dewey=?,
+										subclass=?,			illus=?,			pages=?,			volumeddesc=?,
+										notes=?,			size=?,				place=?,			marc=?,
+										marcxml=?
+							where biblioitemnumber=?");
+	$sth->execute(	$biblioitem->{itemtype},		$biblioitem->{url},		$biblioitem->{isbn},	$biblioitem->{issn},
+    				$biblioitem->{publishercode},	$biblioitem->{publicationyear}, $biblioitem->{classification},	$biblioitem->{dewey},
+    				$biblioitem->{subclass},		$biblioitem->{illus},		$biblioitem->{pages},	$biblioitem->{volumeddesc},
+    				$biblioitem->{bnotes},			$biblioitem->{size},		$biblioitem->{place},	$biblioitem->{marc},
+					$biblioitem->{marcxml},			$biblioitem->{biblioitemnumber});
+# 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
 }    # sub modbibitem
 
 sub OLDmodnote {
@@ -1649,7 +1586,8 @@ sub OLDnewbiblioitem {
 									volumeddesc	 = ?,		illus		 = ?,
 									pages		 = ?,				notes		 = ?,
 									size		 = ?,				lccn		 = ?,
-									marc		 = ?,				place		 = ?"
+									marc		 = ?,				place		 = ?,
+									marcxml		 = ?"
     );
     $sth->execute(
         $bibitemnum,                     $biblioitem->{'biblionumber'},
@@ -1662,7 +1600,8 @@ sub OLDnewbiblioitem {
         $biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
         $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
         $biblioitem->{'size'},           $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},           $biblioitem->{'place'}
+        $biblioitem->{'marc'},           $biblioitem->{'place'},
+		$biblioitem->{marcxml},
     );
     $sth->finish;
 
@@ -2660,6 +2599,14 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.124  2005/08/10 10:21:15  tipaul
+# continuing the road to zebra :
+# - the biblio add begins to work.
+# - the biblio modif begins to work.
+#
+# (still without doing anything on zebra)
+# (no new change in updatedatabase)
+#
 # Revision 1.123  2005/08/09 14:10:28  tipaul
 # 1st commit to go to zebra.
 # don't update your cvs if you want to have a working head...

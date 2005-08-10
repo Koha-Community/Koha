@@ -396,17 +396,17 @@ $record = MARCgetbiblio($dbh,$biblionumber) if ($biblionumber);
 ($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
 
 $is_a_modif=0;
-my ($oldbiblionumtagfield,$oldbiblionumtagsubfield);
-my ($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield,$bibitem,$oldbiblioitemnumber);
+my ($biblionumtagfield,$biblionumtagsubfield);
+my ($biblioitemnumtagfield,$biblioitemnumtagsubfield,$bibitem,$biblioitemnumber);
 if ($biblionumber) {
 	$is_a_modif=1;
-	# if it's a modif, retrieve old biblio and bibitem numbers for the future modification of old-DB.
-	($oldbiblionumtagfield,$oldbiblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber",$frameworkcode);
-	($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
+	# if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
+	($biblionumtagfield,$biblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber",$frameworkcode);
+	($biblioitemnumtagfield,$biblioitemnumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
 	# search biblioitems value
 	my $sth=$dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
 	$sth->execute($biblionumber);
-	($oldbiblioitemnumber) = $sth->fetchrow;
+	($biblioitemnumber) = $sth->fetchrow;
 }
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "addbiblio") {
@@ -429,15 +429,14 @@ if ($op eq "addbiblio") {
 	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
 	if (!$duplicatebiblionumber or $confirm_not_duplicate) {
 		# MARC::Record built => now, record in DB
-		my $oldbibnum;
-		my $oldbibitemnum;
 		if ($is_a_modif) {
 			NEWmodbiblioframework($dbh,$biblionumber,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode);
 			logaction($loggedinuser,"acqui.simple","modify",$biblionumber,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
 		} else {
-			($biblionumber,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","add",$oldbibnum,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
+			my $biblioitemnumber;
+			($biblionumber,$biblioitemnumber) = NEWnewbiblio($dbh,$record,$frameworkcode);
+			logaction($loggedinuser,"acqui.simple","add",$biblionumber,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
 		}
 	# now, redirect to additem page
 		print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
@@ -448,11 +447,11 @@ if ($op eq "addbiblio") {
 		build_hidden_data;
 		$template->param(
 			biblionumber             => $biblionumber,
-			oldbiblionumtagfield        => $oldbiblionumtagfield,
-			oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
-			oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
-			oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-			oldbiblioitemnumber         => $oldbiblioitemnumber,
+			biblionumtagfield        => $biblionumtagfield,
+			biblionumtagsubfield     => $biblionumtagsubfield,
+			biblioitemnumtagfield    => $biblioitemnumtagfield,
+			biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
+			biblioitemnumber         => $biblioitemnumber,
 			duplicatebiblionumber		=> $duplicatebiblionumber,
 			duplicatetitle				=> $duplicatetitle,
 			 );
@@ -479,11 +478,11 @@ if ($op eq "addbiblio") {
 	build_hidden_data;
 	$template->param(
 		biblionumber             => $biblionumber,
-		oldbiblionumtagfield        => $oldbiblionumtagfield,
-		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
-		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
-		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-		oldbiblioitemnumber         => $oldbiblioitemnumber );
+		biblionumtagfield        => $biblionumtagfield,
+		biblionumtagsubfield     => $biblionumtagsubfield,
+		biblioitemnumtagfield    => $biblioitemnumtagfield,
+		biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
+		biblioitemnumber         => $biblioitemnumber );
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
 	&NEWdelbiblio($dbh,$biblionumber);
@@ -491,7 +490,7 @@ if ($op eq "addbiblio") {
 	
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=/cgi-bin/koha/search.marc/search.pl?type=intranet\"></html>";
 	exit;
-#------------------------------------------------------------------------------------------------------------------------------logaction($loggedinuser,"acqui.simple","add","biblionumber :$oldbibnum");
+#------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -506,11 +505,11 @@ if ($op eq "addbiblio") {
 	build_hidden_data;
 	$template->param(
 		biblionumber             => $biblionumber,
-		oldbiblionumtagfield        => $oldbiblionumtagfield,
-		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
-		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
-		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-		oldbiblioitemnumber         => $oldbiblioitemnumber,
+		biblionumtagfield        => $biblionumtagfield,
+		biblionumtagsubfield     => $biblionumtagsubfield,
+		biblioitemnumtagfield    => $biblioitemnumtagfield,
+		biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
+		biblioitemnumber         => $biblioitemnumber,
 		);
 }
 $template->param(
