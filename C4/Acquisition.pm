@@ -572,13 +572,13 @@ sub getlateorders {
 #BEWARE, order of parenthesis and LEFT JOIN is important for speed 
 	my $strsth;
 	my $dbdriver = C4::Context->config("db_scheme")||"mysql";
-	warn " $dbdriver";
+#	warn " $dbdriver";
 	if ($dbdriver eq "mysql"){
 		$strsth ="SELECT aqbasket.basketno,
 					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
 					aqorders.quantity * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
 					aqbooksellers.name as supplier,
-					biblio.title, biblio.author, biblioitems.publishercode as publisher,
+					biblio.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
 					DATEDIFF(CURDATE( ),closedate) AS latesince
 					FROM 
 						((	(
@@ -598,7 +598,7 @@ sub getlateorders {
 					aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib, aqorders.quantity * aqorders.rrp as subtotal
 					aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
 					aqbooksellers.name as supplier,
-					biblio.title, biblio.author, biblioitems.publishercode as publisher,
+					biblio.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
 					(CURDATE -  closedate) AS latesince
 					FROM 
 						((	(

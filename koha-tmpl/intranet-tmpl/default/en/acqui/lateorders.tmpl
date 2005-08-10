@@ -6,11 +6,9 @@
 		<tr>
 			<th class="acquisition">Supplier</th>
 			<th class="acquisition">Order Date</th>
-			<th class="acquisition">Late since</th>
+			<th class="acquisition">Ordered for</th>
 			<th class="acquisition">Including Basket</th>
-			<th class="acquisition">Title</th>
-			<th class="acquisition">Author</th>
-			<th class="acquisition">Publisher</th>
+			<th class="acquisition">Book information</th>
 			<th class="acquisition">Branch</th>
 			<th class="acquisition">Estimated Unit Price</th>
 			<th class="acquisition">Retailer Catalogue Unit Price</th>
@@ -25,10 +23,10 @@
 					<!-- TMPL_VAR name="CGIsupplier" -->
 				</td>
 				<td> &nbsp;</td>
-				<td>
-					<input type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->"> days
+				<td align="center">
+					<input align="right" size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->"> days
 				</td>
-				<td colspan="4">
+				<td colspan="2">
 					&nbsp;
 				</td>
 				<td>
@@ -58,13 +56,9 @@
 					<!-- TMPL_VAR name="basketno" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="title" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="author" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="publisher" -->
+					<b><!-- TMPL_VAR name="title" --></b>
+				<!-- TMPL_IF name="author" --><br/><i>Author:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publisher" --><br/><i>Published by:</i> <!-- TMPL_VAR NAME="publisher" --><!-- TMPL_IF name="publicationyear" --><i> in </i><!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="branch" -->
