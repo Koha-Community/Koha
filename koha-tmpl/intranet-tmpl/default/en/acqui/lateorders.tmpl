@@ -5,16 +5,18 @@
 	<table>
 		<tr>
 			<th class="acquisition">Supplier</th>
-			<th class="acquisition">Budget</th>
+			<th class="acquisition">Order Date</th>
+			<th class="acquisition">Late since</th>
+			<th class="acquisition">Including Basket</th>
 			<th class="acquisition">Title</th>
 			<th class="acquisition">Author</th>
 			<th class="acquisition">Publisher</th>
 			<th class="acquisition">Branch</th>
-			<th class="acquisition">Order Date</th>
-			<th class="acquisition">Including Basket</th>
+			<th class="acquisition">Estimated Unit Price</th>
+			<th class="acquisition">Retailer Catalogue Unit Price</th>
 			<th class="acquisition">Quantity</th>
-			<th class="acquisition">Unit Price</th>
-			<th class="acquisition">Late since</th>
+			<th class="acquisition">Total cost</th>
+			<th class="acquisition">Budget</th>
 			<th class="acquisition">&nbsp;</th>
 		</tr>
 		<tr>
@@ -22,17 +24,18 @@
 				<td>
 					<!-- TMPL_VAR name="CGIsupplier" -->
 				</td>
+				<td> &nbsp;</td>
+				<td>
+					<input type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->"> days
+				</td>
 				<td colspan="4">
 					&nbsp;
 				</td>
 				<td>
 					<!-- TMPL_VAR name="CGIbranch" -->
 				</td>
-				<td colspan="4">
+				<td colspan="5">
 					&nbsp;
-				</td>
-				<td>
-					<input type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->"> days
 				</td>
 				
 				<td>
@@ -46,7 +49,13 @@
 					<!-- TMPL_VAR name="supplier" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="budget" -->
+					<!-- TMPL_VAR name="orderdate" -->
+				</td>
+				<td class="number">
+					<!-- TMPL_VAR name="latesince" -->
+				</td>
+				<td align="center">
+					<!-- TMPL_VAR name="basketno" -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="title" -->
@@ -61,19 +70,19 @@
 					<!-- TMPL_VAR name="branch" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="orderdate" -->
+					<!-- TMPL_VAR name="unitpricelib" -->
 				</td>
-				<td align="center">
-					<!-- TMPL_VAR name="basketno" -->
+				<td>
+					<!-- TMPL_VAR name="unitpricesupplier" -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="quantity" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="unitprice" -->
+					<!-- TMPL_VAR name="subtotal" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="latesince" -->
+					<!-- TMPL_VAR name="budget" -->
 				</td>
 				<td>
 					&nbsp;

@@ -529,7 +529,7 @@ sub getsupplierlistwithlateorders {
 #should be tested with other DBMs
 	
 	my $strsth;
-	my$dbdriver = C4::Context->config("db_scheme")||"mysql";
+	my $dbdriver = C4::Context->config("db_scheme")||"mysql";
 	if ($dbdriver eq "mysql"){
 		$strsth="SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
 					FROM aqorders, aqbasket
@@ -545,7 +545,7 @@ sub getsupplierlistwithlateorders {
 			(closedate < (CURDATE( )-(INTERVAL $delay DAY))) AND (datereceived = '' or datereceived is null))
 			";
 	}
-	warn "C4::Acquisition getsupplierlistwithlateorders : ".$strsth;
+#	warn "C4::Acquisition getsupplierlistwithlateorders : ".$strsth;
 	my $sth = $dbh->prepare($strsth);
 	$sth->execute;
 	my %supplierlist;
@@ -570,26 +570,50 @@ sub getlateorders {
 	
 	my $dbh = C4::Context->dbh;
 #BEWARE, order of parenthesis and LEFT JOIN is important for speed 
-	my $strsth ="SELECT DISTINCT aqbasket.basketno,
-					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.unitprice,
-					aqbookfund.bookfundname as budget, aqorderbreakdown.branchcode as branch,
+	my $strsth;
+	my $dbdriver = C4::Context->config("db_scheme")||"mysql";
+	warn " $dbdriver";
+	if ($dbdriver eq "mysql"){
+		$strsth ="SELECT aqbasket.basketno,
+					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
+					aqorders.quantity * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
 					aqbooksellers.name as supplier,
 					biblio.title, biblio.author, biblioitems.publishercode as publisher,
-					DATEDIFF(DATE_SUB(CURDATE( ),INTERVAL $delay DAY),closedate) AS latesince
+					DATEDIFF(CURDATE( ),closedate) AS latesince
 					FROM 
-						(
-							(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on biblioitems.biblionumber=biblio.biblionumber
-						)  LEFT JOIN 
-						(aqorderbreakdown LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid)
-						on aqorders.ordernumber = aqorderbreakdown.ordernumber,
-						aqbasket LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-					WHERE aqorders.basketno = aqbasket.basketno AND
-					(closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY) AND (datereceived = '' or datereceived is null))
-					";
-	$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
-	$strsth .= " AND aqorderbreakdown.branchcode like \'".$branch."\'" if ($branch); 
-	$strsth .= " ORDER BY latesince,basketno,branch, supplier";
-	warn "C4::Acquisition : getlateorders SQL:".$strsth;
+						((	(
+								(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber
+							)  LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber
+						) LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid
+						),(aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+					WHERE aqorders.basketno = aqbasket.basketno AND (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)) 
+					AND ((datereceived = '' OR datereceived is null) OR (aqorders.quantityreceived < aqorders.quantity) ) ";
+		$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
+		$strsth .= " AND borrowers.branchcode like \'".$branch."\'" if ($branch);
+		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
+		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+	} else {
+		$strsth ="SELECT aqbasket.basketno,
+					DATE(aqbasket.closedate) as orderdate, 
+					aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib, aqorders.quantity * aqorders.rrp as subtotal
+					aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
+					aqbooksellers.name as supplier,
+					biblio.title, biblio.author, biblioitems.publishercode as publisher,
+					(CURDATE -  closedate) AS latesince
+					FROM 
+						((	(
+								(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber
+							)  LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber
+						) LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid
+						),(aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+					WHERE aqorders.basketno = aqbasket.basketno AND (closedate < (CURDATE -(INTERVAL $delay DAY)) 
+					AND ((datereceived = '' OR datereceived is null) OR (aqorders.quantityreceived < aqorders.quantity) ) ";
+		$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
+		$strsth .= " AND borrowers.branchcode like \'".$branch."\'" if ($branch);
+		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
+		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+	}
+#	warn "C4::Acquisition : getlateorders SQL:".$strsth;
 	my $sth = $dbh->prepare($strsth);
 	$sth->execute;
 	my @results;
