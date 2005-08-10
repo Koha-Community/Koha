@@ -36,8 +36,8 @@ use C4::Koha;
 # constants
 
 my %env;
-my $linecolor1='#ffffcc';
-my $linecolor2='white';
+my $linecolor1= 0;
+my $linecolor2= 1;
 
 my $branches = getbranches();
 my $printers = getprinters(\%env);
@@ -63,6 +63,7 @@ my $reqmessage;
 my $cancelled;
 my $setwaiting;
 my $reqbrchname;
+my $allmessages;
 
 my $request=$query->param('request');
 my $borrnum = $query->param('borrowernumber');
@@ -77,6 +78,7 @@ if ($request eq "KillWaiting") {
     CancelReserve(0, $item, $borrnum);
 	$cancelled = 1;
 	$reqmessage =1;
+	$allmessages = 1;
 }
 
 my $ignoreRs = 0;
@@ -87,12 +89,14 @@ if ($request eq "SetWaiting") {
     $ignoreRs = 1;
 	$setwaiting = 1;
 	$reqmessage =1;
+	$allmessages = 1;
 }
 if ($request eq 'KillReserved'){
     my $biblio = $query->param('biblionumber');
     CancelReserve($biblio, 0, $borrnum);
 	$cancelled = 1;
 	$reqmessage =1;
+	$allmessages = 1;
 }
 
 
@@ -180,13 +184,21 @@ foreach ($query->param){
 	push (@trsfitemloop, \%item);
 }
 
-
-my $name;
+my $title;
+my $surname;
+my $firstname;
+my $bornum;
+my $borphone;
+my $borstraddress;
+my $borcity;
+my $borzip;
+my $boremail;
 my $bornum;
 my $borcnum;
 my $itemnumber;
 my $biblionum;
 my $branchname;
+my $wastransferred;
 
 
 #####################
@@ -195,8 +207,17 @@ if ($found) {
     my $res = $messages->{'ResFound'};
 	$branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 	my ($borr) = getpatroninformation(\%env, $res->{'borrowernumber'}, 0);
-	$name = name($borr);
-	$bornum = $borr->{'borrowernumber'}; #Hopefully, borr->{borrowernumber}=res->{borrowernumber}
+	$title = $borr->{'title'};
+	$surname = $borr->{'surname'};
+	$firstname = $borr->{'firstname'};
+	$bornum = $borr->{'borrowernumber'};
+    $borphone = $borr->{'phone'};
+    $borstraddress = $borr->{'streetaddress'};
+	$borcity = $borr->{'city'};
+	$borzip = $borr->{'zipcode'};
+	$boremail = $borr->{'emailadress'};
+	
+	#Hopefully, borr->{borrowernumber}=res->{borrowernumber}
 	$borcnum = $borr->{'cardnumber'};
 	$itemnumber = $res->{'itemnumber'};
 
@@ -214,32 +235,38 @@ if ($found) {
 my @errmsgloop;
 foreach my $code (keys %$messages) {
 	my %err;
-    $err{errbadcode} = ($code eq 'BadBarcode');
+
 	if ($code eq 'BadBarcode') {
 		$err{msg}=$messages->{'BadBarcode'};
+		$err{errbadcode} = 1;
+		$allmessages = 1;
 	}
 
-    $err{errispermanent} = ($code eq 'IsPermanent');
     if ($code eq 'IsPermanent'){
+		$err{errispermanent} = 1;
 		$err{msg} = $branches->{$messages->{'IsPermanent'}}->{'branchname'};
 		# Here, msg contains the branchname
 		# Not so satisfied with this... But should work
+		$allmessages = 1;
     }
     $err{errdesteqholding} = ($code eq 'DestinationEqualsHolding');
 
-	$err{errwasreturned} = ($code eq 'WasReturned');
 	if ($code eq 'WasReturned') {
+		$err{errwasreturned} = 1;
+		$allmessages = 1;
 		my ($borrowerinfo) = getpatroninformation(\%env, $messages->{'WasReturned'}, 0);
-		$name =name($borrowerinfo);
+		$title = $borrowerinfo->{'title'};
+		$surname = $borrowerinfo->{'surname'};
+		$firstname = $borrowerinfo->{'firstname'};
 		$bornum =$borrowerinfo->{'borrowernumber'};
 		$borcnum =$borrowerinfo->{'cardnumber'};
     }
-    if ($code eq 'WasTransfered'){
+#    if ($code eq 'WasTransfered'){
 # Put code here if you want to notify the user that item was transfered...
-    }
+#		$wastransferred = 1;
+#    }
 	push (@errmsgloop, \%err);
 }
-
 
 #######################################################################################
 # Make the page .....
@@ -250,6 +277,10 @@ my ($template, $borrowernumber, $cookie)
                             authnotrequired => 0,
                             flagsrequired => {circulate => 1},
                          });
+if($allmessages){
+	$template->param(allmessages => 1);
+}
+
 $template->param(	genbrname => $genbrname,
 								genprname => $genprname,
 								branch => $branch,
@@ -257,7 +288,14 @@ $template->param(	genbrname => $genbrname,
 								found => $found,
 								reserved => $reserved,
 								waiting => $waiting,
-								name => $name,
+								title => $title,
+								surname => $surname,
+								firstname => $firstname,
+								borphone => $borphone,
+								borstraddress => $borstraddress,
+								borcity => $borcity,
+								borzip => $borzip,
+								boremail => $boremail,
 								bornum => $bornum,
 								borcnum => $borcnum,
 								branchname => $branchname,
@@ -268,6 +306,7 @@ $template->param(	genbrname => $genbrname,
 								reqmessage => $reqmessage,
 								cancelled => $cancelled,
 								setwaiting => $setwaiting,
+								wastransferred => $wastransferred,
 								trsfitemloop => \@trsfitemloop,
 								branchoptionloop => \@branchoptionloop,
 								errmsgloop => \@errmsgloop
