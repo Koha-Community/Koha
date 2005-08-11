@@ -55,6 +55,7 @@ $VERSION = 0.01;
   &MARCfind_marc_from_kohafield
   &MARCfindsubfield
   &MARCfind_frameworkcode
+  &find_biblioitemnumber
   &MARCgettagslib
 
   &NEWnewbiblio &NEWnewitem
@@ -489,66 +490,26 @@ sub MARCgetbiblio {
 
 sub MARCgetitem {
 
-    # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-    my $record = MARC::Record->new();
+    my ( $dbh, $biblionumber, $itemnumber ) = @_;
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
+	# get the complete MARC record
+	my $sth = $dbh->prepare("select marc from biblioitems where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($rawmarc) = $sth->fetchrow;
+	my $record = MARC::File::USMARC::decode($rawmarc);
+	# now, find the relevant itemnumber
+	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
+	# prepare the new item record
+	my $itemrecord = MARC::Record->new();
+	# parse all fields fields from the complete record
+	foreach ($record->field($itemnumberfield)) {
+		# when the item field is found, save it
+		if ($_->subfield($itemnumbersubfield) == $itemnumber) {
+			$itemrecord->append_fields($_);
+		}
+	}
 
-    # search MARC tagorder
-    my $sth2 =
-      $dbh->prepare(
-"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
-    );
-    $sth2->execute( $bibid, $itemnumber );
-    my ($tagorder) = $sth2->fetchrow_array();
-
-    #---- TODO : the leader is missing
-    my $sth =
-      $dbh->prepare(
-"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
-		 		 from marc_subfield_table
-		 		 where bibid=? and tagorder=? order by subfieldcode,subfieldorder
-		 	 "
-    );
-    $sth2 =
-      $dbh->prepare(
-        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute( $bibid, $tagorder );
-    while ( my $row = $sth->fetchrow_hashref ) {
-        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
-            $sth2->execute( $row->{'valuebloblink'} );
-            my $row2 = $sth2->fetchrow_hashref;
-            $sth2->finish;
-            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
-        }
-        if ( $record->field( $row->{'tag'} ) ) {
-            my $field;
-
-#--- this test must stay as this, because of strange behaviour of mySQL/Perl DBI with char var containing a number...
-            #--- sometimes, eliminates 0 at beginning, sometimes no ;-\\\
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            $field = $record->field( $row->{'tag'} );
-            if ($field) {
-                my $x =
-                  $field->add_subfields( $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'} );
-                $record->delete_field($field);
-                $record->add_fields($field);
-            }
-        }
-        else {
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            my $temp =
-              MARC::Field->new( $row->{'tag'}, " ", " ",
-                $row->{'subfieldcode'} => $row->{'subfieldvalue'} );
-            $record->add_fields($temp);
-        }
-
-    }
-    return $record;
+    return $itemrecord;
 }
 
 sub MARCmodbiblio {
@@ -739,31 +700,38 @@ sub MARCfindsubfield {
 }
 
 sub MARCfindsubfieldid {
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    my $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
+	my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
+	my $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
 				where bibid=? and tag=? and tagorder=?
 					and subfieldcode=? and subfieldorder=?"
-    );
-    $sth->execute( $bibid, $tag, $tagorder, $subfield, $subfieldorder );
-    my ($res) = $sth->fetchrow;
-    unless ($res) {
-        $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
+	);
+	$sth->execute( $bibid, $tag, $tagorder, $subfield, $subfieldorder );
+	my ($res) = $sth->fetchrow;
+	unless ($res) {
+		$sth = $dbh->prepare( "select subfieldid from marc_subfield_table
 				where bibid=? and tag=? and tagorder=?
 					and subfieldcode=?"
-        );
-        $sth->execute( $bibid, $tag, $tagorder, $subfield );
-        ($res) = $sth->fetchrow;
-    }
-    return $res;
+		);
+		$sth->execute( $bibid, $tag, $tagorder, $subfield );
+		($res) = $sth->fetchrow;
+	}
+	return $res;
+}
+
+sub find_biblioitemnumber {
+	my ( $dbh, $biblionumber ) = @_;
+	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($biblioitemnumber) = $sth->fetchrow;
+	return $biblioitemnumber;
 }
 
 sub MARCfind_frameworkcode {
-    my ( $dbh, $biblionumber ) = @_;
-    my $sth =
-      $dbh->prepare("select frameworkcode from biblio where biblionumber=?");
-    $sth->execute($biblionumber);
-    my ($frameworkcode) = $sth->fetchrow;
-    return $frameworkcode;
+	my ( $dbh, $biblionumber ) = @_;
+	my $sth = $dbh->prepare("select frameworkcode from biblio where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($frameworkcode) = $sth->fetchrow;
+	return $frameworkcode;
 }
 
 sub MARCdelsubfield {
@@ -1272,38 +1240,30 @@ sub NEWdelbiblio {
 }
 
 sub NEWnewitem {
-    my ( $dbh, $record, $bibid ) = @_;
+    my ( $dbh, $record, $biblionumber, $biblioitemnumber ) = @_;
 
     # add item in old-DB
-	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
     my $item = &MARCmarc2koha( $dbh, $record,$frameworkcode );
     # needs old biblionumber and biblioitemnumber
-    $item->{'biblionumber'} =
-      MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    my $sth =
-      $dbh->prepare(
-        "select biblioitemnumber from biblioitems where biblionumber=?");
-    $sth->execute( $item->{'biblionumber'} );
-    ( $item->{'biblioitemnumber'} ) = $sth->fetchrow;
+    $item->{'biblionumber'} = $biblionumber;
+    $item->{'biblioitemnumber'}=$biblioitemnumber;
+	$item->{marc} = $record->as_usmarc();
     my ( $itemnumber, $error ) = &OLDnewitems( $dbh, $item, $item->{barcode} );
-
-    # add itemnumber to MARC::Record before adding the item.
-    $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    &MARCkoha2marcOnefield( $sth, $record, "items.itemnumber", $itemnumber,$frameworkcode );
-
-    # add the item
-    my $bib = &MARCadditem( $dbh, $record, $item->{'biblionumber'} );
+	return $itemnumber;
 }
 
 sub NEWmoditem {
-    my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
+    my ( $dbh, $record, $biblionumber, $biblioitemnumber, $itemnumber, $delete ) = @_;
     
-	&MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
-	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
+# 	&MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
     my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
+	# add MARC record
+	$olditem->{marc} = $record->as_usmarc();
+	$olditem->{biblionumber} = $biblionumber;
+	$olditem->{biblioitemnumber} = $biblioitemnumber;
+	# and modify item
     OLDmoditem( $dbh, $olditem );
 }
 
@@ -1562,20 +1522,27 @@ sub OLDmodnote {
 }
 
 sub OLDnewbiblioitem {
-    my ( $dbh, $biblioitem ) = @_;
+	my ( $dbh, $biblioitem ) = @_;
 
-    #  my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Select max(biblioitemnumber) from biblioitems");
-    my $data;
-    my $bibitemnum;
+	$dbh->do("lock tables biblioitems WRITE, biblio WRITE");
+	my $sth = $dbh->prepare("Select max(biblioitemnumber) from biblioitems");
+	my $data;
+	my $biblioitemnumber;
 
-    $sth->execute;
-    $data       = $sth->fetchrow_arrayref;
-    $bibitemnum = $$data[0] + 1;
+	$sth->execute;
+	$data       = $sth->fetchrow_arrayref;
+	$biblioitemnumber = $$data[0] + 1;
+	
+	# Insert biblioitemnumber in MARC record, we need it to manage items later...
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblioitem->{biblionumber});
+	my ($biblioitemnumberfield,$biblioitemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'biblioitems.biblioitemnumber',$frameworkcode);
+	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
+	my $field=$record->field($biblioitemnumberfield);
+	$field->update($biblioitemnumbersubfield => "$biblioitemnumber");
+	$biblioitem->{marc} = $record->as_usmarc();
+	$biblioitem->{marcxml} = $record->as_xml();
 
-    $sth->finish;
-
-    $sth = $dbh->prepare( "insert into biblioitems set
+	$sth = $dbh->prepare( "insert into biblioitems set
 									biblioitemnumber = ?,		biblionumber 	 = ?,
 									volume		 = ?,			number		 = ?,
 									classification  = ?,			itemtype         = ?,
@@ -1588,25 +1555,23 @@ sub OLDnewbiblioitem {
 									size		 = ?,				lccn		 = ?,
 									marc		 = ?,				place		 = ?,
 									marcxml		 = ?"
-    );
-    $sth->execute(
-        $bibitemnum,                     $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},         $biblioitem->{'number'},
-        $biblioitem->{'classification'}, $biblioitem->{'itemtype'},
-        $biblioitem->{'url'},            $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},           $biblioitem->{'dewey'},
-        $biblioitem->{'subclass'},       $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},  $biblioitem->{'volumedate'},
-        $biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
-        $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},           $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},           $biblioitem->{'place'},
+	);
+	$sth->execute(
+		$biblioitemnumber,               $biblioitem->{'biblionumber'},
+		$biblioitem->{'volume'},         $biblioitem->{'number'},
+		$biblioitem->{'classification'}, $biblioitem->{'itemtype'},
+		$biblioitem->{'url'},            $biblioitem->{'isbn'},
+		$biblioitem->{'issn'},           $biblioitem->{'dewey'},
+		$biblioitem->{'subclass'},       $biblioitem->{'publicationyear'},
+		$biblioitem->{'publishercode'},  $biblioitem->{'volumedate'},
+		$biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
+		$biblioitem->{'pages'},          $biblioitem->{'bnotes'},
+		$biblioitem->{'size'},           $biblioitem->{'lccn'},
+		$biblioitem->{'marc'},           $biblioitem->{'place'},
 		$biblioitem->{marcxml},
-    );
-    $sth->finish;
-
-    #    $dbh->disconnect;
-    return ($bibitemnum);
+	);
+	$dbh->do("unlock tables");
+	return ($biblioitemnumber);
 }
 
 sub OLDnewsubject {
@@ -1629,16 +1594,16 @@ sub OLDnewsubtitle {
 sub OLDnewitems {
     my ( $dbh, $item, $barcode ) = @_;
 
-    #  my $dbh   = C4Connect;
+# 	warn "OLDNEWITEMS";
+	
+	$dbh->do('lock tables items WRITE, biblio WRITE,biblioitems WRITE');
     my $sth = $dbh->prepare("Select max(itemnumber) from items");
     my $data;
     my $itemnumber;
     my $error = "";
-
     $sth->execute;
     $data       = $sth->fetchrow_hashref;
     $itemnumber = $data->{'max(itemnumber)'} + 1;
-    $sth->finish;
 
 # FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
     if ( $item->{'loan'} ) {
@@ -1675,6 +1640,9 @@ sub OLDnewitems {
 			$item->{'itemcallnumber'},	$item->{'notforloan'},
 			$item->{'location'}
         );
+		if ( defined $sth->errstr ) {
+			$error .= $sth->errstr;
+		}
     }
     else {
         $sth = $dbh->prepare( "Insert into items set
@@ -1705,16 +1673,41 @@ sub OLDnewitems {
 			$item->{'itemcallnumber'},	$item->{'notforloan'},
 			$item->{'location'}
         );
+		if ( defined $sth->errstr ) {
+			$error .= $sth->errstr;
+		}
     }
+	# item stored, now, deal with the marc part...
+	$sth = $dbh->prepare("select biblioitems.marc,biblio.frameworkcode from biblioitems,biblio 
+							where 	biblio.biblionumber=biblioitems.biblionumber and 
+									biblio.biblionumber=?");
+	$sth->execute($item->{biblionumber});
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
-    $sth->finish;
+	my ($rawmarc,$frameworkcode) = $sth->fetchrow;
+	warn "ERROR IN OLDnewitem, MARC record not found FOR $item->{biblionumber} => $rawmarc <=" unless $rawmarc;
+	my $record = MARC::File::USMARC::decode($rawmarc);
+	# ok, we have the marc record, add item number to the item field (in {marc}, and add the field to the record)
+	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
+	my $itemrecord = MARC::File::USMARC::decode($item->{marc});
+	my $itemfield = $itemrecord->field($itemnumberfield);
+	$itemfield->add_subfields($itemnumbersubfield => "$itemnumber");
+	$record->insert_grouped_field($itemfield);
+	# save the record into biblioitem
+	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=?");
+	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber});
+    if ( defined $sth->errstr ) {
+        $error .= $sth->errstr;
+    }
+	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
 
 sub OLDmoditem {
     my ( $dbh, $item ) = @_;
+	my $error;
+	$dbh->do('lock tables items WRITE, biblio WRITE,biblioitems WRITE');
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
     my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
     my @bind = (
@@ -1753,7 +1746,40 @@ sub OLDmoditem {
     }
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
-    $sth->finish;
+	
+	# item stored, now, deal with the marc part...
+	$sth = $dbh->prepare("select biblioitems.marc,biblio.frameworkcode from biblioitems,biblio 
+							where 	biblio.biblionumber=biblioitems.biblionumber and 
+									biblio.biblionumber=? and 
+									biblioitems.biblioitemnumber=?");
+	$sth->execute($item->{biblionumber},$item->{biblioitemnumber});
+    if ( defined $sth->errstr ) {
+        $error .= $sth->errstr;
+    }
+	my ($rawmarc,$frameworkcode) = $sth->fetchrow;
+	warn "ERROR IN OLDmoditem, MARC record not found" unless $rawmarc;
+	my $record = MARC::File::USMARC::decode($rawmarc);
+	# ok, we have the marc record, find the previous item record for this itemnumber and delete it
+	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
+	# prepare the new item record
+	my $itemrecord = MARC::File::USMARC::decode($item->{marc});
+	my $itemfield = $itemrecord->field($itemnumberfield);
+	$itemfield->add_subfields($itemnumbersubfield => '$itemnumber');
+	# parse all fields fields from the complete record
+	foreach ($record->field($itemnumberfield)) {
+		# when the previous field is found, replace by the new one
+		if ($_->subfield($itemnumbersubfield) == $item->{itemnum}) {
+			$_->replace_with($itemfield);
+		}
+	}
+# 	$record->insert_grouped_field($itemfield);
+	# save the record into biblioitem
+	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
+	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
+    if ( defined $sth->errstr ) {
+        $error .= $sth->errstr;
+    }
+	$dbh->do('unlock tables');
 
     #  $dbh->disconnect;
 }
@@ -2599,6 +2625,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.125  2005/08/11 09:00:07  tipaul
+# Ok guys, this time, it seems that item add and modif begin working as expected...
+# Still a lot of bugs to fix, of course
+#
 # Revision 1.124  2005/08/10 10:21:15  tipaul
 # continuing the road to zebra :
 # - the biblio add begins to work.
@@ -2624,566 +2654,5 @@ Paul POULAIN paul.poulain@free.fr
 #
 # IMPORTANT NOTE : you need MARC::XML package (http://search.cpan.org/~esummers/MARC-XML-0.7/lib/MARC/File/XML.pm), that requires a recent version of MARC::Record
 # Updatedatabase stores the iso2709 data in biblioitems.marc field & an xml version in biblioitems.marcxml Not sure we will keep it when releasing the stable version, but I think it's a good idea to have something readable in sql, at least for development stage.
-#
-# Revision 1.122  2005/08/04 13:27:48  tipaul
-# synch'ing 2.2 and head
-#
-# Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
-# fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
-# (Not all items fields mapped to MARC)
-#
-# Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
-# adding decoder for Ä string
-#
-# Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
-# * removing a useless & CPU consuming call to MARCgetbiblio
-# * Leader management.
-# If you create a MARC tag "000", with a subfield '@', it will be managed as the leader.
-# Seems to work correctly.
-#
-# Now going to create a plugin for leader()
-#
-# Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
-# * fixing a bug in subfield order when MARCgetbiblio
-# * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
-# * adding some diacritic decoding (Ä, Ü...)
-#
-# Revision 1.115.2.14  2005/06/27 23:24:06  hdl
-# Display dashed ISBN
-#
-# Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
-# patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
-#
-# Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
-# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
-#
-# Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
-# * removing my for variables already declared
-# * updating biblio.unititle  field as well as other fields in biblio table
-#
-# Revision 1.115.2.10  2005/05/25 09:30:50  hdl
-# Adding NEWmodbiblioframework feature
-# Used by addbiblio.pl when modifying a framework selection.
-#
-# Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
-# adding / to the list of symbols that are replace by spaces for searches
-#
-# Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
-# some improvements :
-# * return immediatly when a subfield is empty
-# * search duplicate on isbn must be done only when there is an isbn ;-)
-#
-# Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
-# * adding glass to opac marc detail.
-# * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
-# * fixing bug with libopac
-#
-# Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
-# Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
-# Longer, but solves problems with repeated subfields.
-#
-# The previous version was not buggy except under certain circumstances (a repeated subfield, that does not exist usually in items)
-#
-# Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
-# exporting MARCdelsubfield sub. It's used in authority merging.
-# Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
-#
-# Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
-# bug in acquisition : the title was also stored as subtitle.
-#
-# Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
-# * multiple main authors are now correctly handled in simple (non-MARC) view
-#
-# Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
-# in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
-#
-# Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
-# bugfix : issn were not stored correctly in non-MARC DB on biblio modification
-#
-# Revision 1.115  2005/01/06 14:32:17  tipaul
-# improvement of speed for bulkmarcimport.
-# A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.
-# this is only a little improvement for normal DB modif, but almost x2 the speed of bulkmarcimport... from 6records/seconds to more than 10.
-#
-# Revision 1.114  2005/01/03 10:48:33  tipaul
-# * bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
-# * partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
-#
-# Revision 1.113  2004/12/10 16:27:53  tipaul
-# limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items)
-# In 2.4, a new DB structure will highly speed things and this limit will be removed.
-# FindDuplicate is activated again, the perf problems were due to this problem.
-#
-# Revision 1.112  2004/12/08 10:14:42  tipaul
-# * desactivate FindDuplicate
-# * fix from Genji
-#
-# Revision 1.111  2004/11/25 17:39:44  tipaul
-# removing useless &branches in package declaration
-#
-# Revision 1.110  2004/11/24 16:00:01  tipaul
-# removing sub branches (commited by chris for MARC=OFF bugfix, but sub branches is already in Acquisition.pm)
-#
-# Revision 1.109  2004/11/24 15:58:31  tipaul
-# * critical fix for acquisition (see RC3 release notes)
-# * critical fix for duplicate finder
-#
-# Revision 1.108  2004/11/19 19:41:22  rangi
-# Shifting branches() from deprecated C4::Catalogue to C4::Biblio
-# Allowing the non marc interface acquisitions to work.
-#
-# Revision 1.107  2004/11/05 10:15:27  tipaul
-# Improving FindDuplicate to find duplicate records on adding biblio
-#
-# Revision 1.106  2004/11/02 16:44:45  tipaul
-# new feature : checking for duplicate biblio.
-#
-# For instance, it's only done on ISBN only. Will be improved soon.
-#
-# When a duplicate is detected, the biblio is not saved, but the user is asked for a confirmations.
-#
-# Revision 1.105  2004/09/23 16:15:37  tipaul
-# indenting diff
-#
-# Revision 1.104  2004/09/16 15:06:46  tipaul
-# enabling # (| still possible too) for repeatable subfields
-#
-# Revision 1.103  2004/09/06 14:17:34  tipaul
-# some commented warning added + 1 major bugfix => drop empty fields, NOT fields containing 0
-#
-# Revision 1.102  2004/09/06 10:00:19  tipaul
-# adding a "location" field to the library.
-# This field is useful when the callnumber contains no information on the room where the item is stored.
-# With this field, we now have 3 levels of informations to find a book :
-# * the branch.
-# * the location.
-# * the callnumber.
-#
-# This should be versatile enough to solve any storing method.
-# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
-#
-# Revision 1.101  2004/08/18 16:01:37  tipaul
-# modifs to support frameworkcodes
-#
-# Revision 1.100  2004/08/13 16:37:25  tipaul
-# adding frameworkcode to API in some subs
-#
-# Revision 1.99  2004/07/30 13:54:50  doxulting
-# Beginning of serial commit
-#
-# Revision 1.98  2004/07/15 09:48:10  tipaul
-# * removing useless sub
-# * minor bugfix in moditem (managing homebranch & holdingbranch)
-#
-# Revision 1.97  2004/07/02 15:53:53  tipaul
-# bugfix (due to frameworkcode field)
-#
-# Revision 1.96  2004/06/29 16:07:10  tipaul
-# last sync for 2.1.0 release
-#
-# Revision 1.95  2004/06/26 23:19:59  rangi
-# Fixing modaddauthor, and adding getitemtypes.
-# Also tidying up formatting of code
-#
-# Revision 1.94  2004/06/17 08:16:32  tipaul
-# merging tag & subfield in marc_word for better perfs
-#
-# Revision 1.93  2004/06/11 15:38:06  joshferraro
-# Changes MARCaddword to index words >= 1 char ... needed for more accurate
-# searches using SearchMarc routines.
-#
-# Revision 1.92  2004/06/10 08:29:01  tipaul
-# MARC authority management (continued)
-#
-# Revision 1.91  2004/06/03 10:03:01  tipaul
-# * frameworks and itemtypes are independant
-# * in the MARC editor, showing the + to duplicate a tag only if the tag is repeatable
-#
-# Revision 1.90  2004/05/28 08:25:53  tipaul
-# hidding hidden & isurl constraints into MARC subfield structure
-#
-# Revision 1.89  2004/05/27 21:47:21  rangi
-# Fix for bug 787
-#
-# Revision 1.88  2004/05/18 15:23:49  tipaul
-# framework management : 1 MARC framework for each itemtype
-#
-# Revision 1.87  2004/05/18 11:54:07  tipaul
-# getitemtypes moved in Koha.pm
-#
-# Revision 1.86  2004/05/03 09:19:22  tipaul
-# some fixes for mysql prepare & execute
-#
-# Revision 1.85  2004/04/02 14:55:48  tipaul
-# renaming items.bulk field to items.itemcallnumber.
-# Will be used to store call number for libraries that don't use dewey classification.
-# Note it's related to ITEMS, not biblio.
-#
-# Revision 1.84  2004/03/24 17:18:30  joshferraro
-# Fixes bug 749 by removing the comma on line 1488.
-#
-# Revision 1.83  2004/03/15 14:31:50  tipaul
-# adding a minor check
-#
-# Revision 1.82  2004/03/07 05:47:31  acli
-# Various updates/fixes from rel_2_0
-# Fixes for bugs 721 (templating), 727, and 734
-#
-# Revision 1.81  2004/03/06 20:26:13  tipaul
-# adding seealso feature in MARC searches
-#
-# Revision 1.80  2004/02/12 13:40:56  tipaul
-# deleting subs duplicated by error
-#
-# Revision 1.79  2004/02/11 08:40:09  tipaul
-# synch'ing 2.0.0 branch and head
-#
-# Revision 1.78.2.3  2004/02/10 13:15:46  tipaul
-# removing 2 warnings
-#
-# Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
-# dealing correctly "bulk" field
-#
-# Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
-# * minor html fixes
-# * adding publisher in acquisition process (& ordering basket by publisher)
-#
-# Revision 1.78  2003/12/09 15:57:28  tipaul
-# rolling back to working char_decode sub
-#
-# Revision 1.77  2003/12/03 17:47:14  tipaul
-# bugfixes for biblio deletion
-#
-# Revision 1.76  2003/12/03 01:43:41  slef
-# conflict markers?
-#
-# Revision 1.75  2003/12/03 01:42:03  slef
-# bug 662 fixes securing DBI
-#
-# Revision 1.74  2003/11/28 09:48:33  tipaul
-# bugfix : misusing prepare & execute => now using prepare(?) and execute($var)
-#
-# Revision 1.73  2003/11/28 09:45:25  tipaul
-# bugfix for iso2709 file import in the "notforloan" field.
-#
-# But notforloan field called "loan" somewhere, so in case "loan" is used, copied to "notforloan" to avoid a bug.
-#
-# Revision 1.72  2003/11/24 17:40:14  tipaul
-# fix for #385
-#
-# Revision 1.71  2003/11/24 16:28:49  tipaul
-# biblio & item deletion now works fine in MARC editor.
-# Stores deleted biblio/item in the marc field of the deletedbiblio/deleteditem table.
-#
-# Revision 1.70  2003/11/24 13:29:55  tipaul
-# moving $id from beginning to end of file (70 commits... huge comments...)
-#
-# Revision 1.69  2003/11/24 13:27:17  tipaul
-# fix for #380 (bibliosubject)
-#
-# Revision 1.68  2003/11/06 17:18:30  tipaul
-# bugfix for #384
-#
-# 1st draft for MARC biblio deletion.
-# Still does not work well, but at least, Biblio.pm compiles & it should'nt break too many things
-# (Note the trash in the MARCdetail, but don't use it, please :-) )
-#
-# Revision 1.67  2003/10/25 08:46:27  tipaul
-# minor fixes for bilbio deletion (still buggy)
-#
-# Revision 1.66  2003/10/17 10:02:56  tipaul
-# Indexing only words longer than 2 letters. Was >=2 before, & 2 letters words usually means nothing.
-#
-# Revision 1.65  2003/10/14 09:45:29  tipaul
-# adding rebuildnonmarc.pl script : run this script when you change a link between marc and non MARC DB. It rebuilds the non-MARC DB (long operation)
-#
-# Revision 1.64  2003/10/06 15:20:51  tipaul
-# fix for 536 (subtitle error)
-#
-# Revision 1.63  2003/10/01 13:25:49  tipaul
-# seems a char encoding problem modified something in char_decode sub... changing back to something that works...
-#
-# Revision 1.62  2003/09/17 14:21:13  tipaul
-# fixing bug that makes a MARC biblio disappear when using full acquisition (order => recieve ==> MARC editor).
-# Before this 2 lines fix, the MARC biblio was deleted during recieve, and had to be entirely recreated :-(
-#
-# Revision 1.61  2003/09/17 10:24:39  tipaul
-# notforloan value in itemtype was overwritting notforloan value in a given item.
-# I changed this behaviour :
-# if notforloan is set for a given item, and NOT for all items from this itemtype, the notforloan is kept.
-# If notforloan is set for itemtype, it's used (and impossible to loan a specific item from this itemtype)
-#
-# Revision 1.60  2003/09/04 14:11:23  tipaul
-# fix for 593 (data duplication in MARC-DB)
-#
-# Revision 1.58  2003/08/06 12:54:52  tipaul
-# fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
-# (note that copyrightdate still extracted to get numeric format)
-#
-# Revision 1.57  2003/07/15 23:09:18  slef
-# change show columns to use biblioitems bnotes too
-#
-# Revision 1.56  2003/07/15 11:34:52  slef
-# fixes from paul email
-#
-# Revision 1.55  2003/07/15 00:02:49  slef
-# Work on bug 515... can we do a single-side rename of notes to bnotes?
-#
-# Revision 1.54  2003/07/11 11:51:32  tipaul
-# *** empty log message ***
-#
-# Revision 1.52  2003/07/10 10:37:19  tipaul
-# fix for copyrightdate problem, #514
-#
-# Revision 1.51  2003/07/02 14:47:17  tipaul
-# fix for #519 : items.dateaccessioned imports incorrectly
-#
-# Revision 1.49  2003/06/17 11:21:13  tipaul
-# improvments/fixes for z3950 support.
-# * Works now even on ADD, not only on MODIFY
-# * able to search on ISBN, author, title
-#
-# Revision 1.48  2003/06/16 09:22:53  rangi
-# Just added an order clause to getitemtypes
-#
-# Revision 1.47  2003/05/20 16:22:44  tipaul
-# fixing typo in Biblio.pm POD
-#
-# Revision 1.46  2003/05/19 13:45:18  tipaul
-# support for subtitles, additional authors, subject.
-# This supports is only for MARC <-> OLD-DB link. It worked previously, but values entered as MARC were not reported to OLD-DB, neither values entered as OLD-DB were reported to MARC.
-# Note that some OLD-DB subs are strange (dummy ?) see OLDmodsubject, OLDmodsubtitle, OLDmodaddiauthor in C4/Biblio.pm
-# For example it seems impossible to have more that 1 addi author and 1 subtitle. In MARC it's not the case. So, if you enter more than one, I'm afraid only the LAST will be stored.
-#
-# Revision 1.45  2003/04/29 16:50:49  tipaul
-# really proud of this commit :-)
-# z3950 search and import seems to works fine.
-# Let me explain how :
-# * a "search z3950" button is added in the addbiblio template.
-# * when clicked, a popup appears and z3950/search.pl is called
-# * z3950/search.pl calls addz3950search in the DB
-# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
-# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
-# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
-#
-# Note :
-# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
-# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
-#
-# Revision 1.44  2003/04/28 13:07:14  tipaul
-# Those fixes solves the "internal server error" with MARC::Record 1.12.
-# It was due to an illegal contruction in Koha : we tried to retrive subfields from <10 tags.
-# That's not possible. MARC::Record accepted this in 0.93 version, but it was fixed after.
-# Now, the construct/retrieving is OK !
-#
-# Revision 1.43  2003/04/10 13:56:02  tipaul
-# Fix some bugs :
-# * worked in 1.9.0, but not in 1.9.1 :
-# - modif of a biblio didn't work
-# - empty fields where not shown when modifying a biblio. empty fields managed by the library (ie in tab 0->9 in MARC parameter table) MUST be entered, even if not presented.
-#
-# * did not work before :
-# - repeatable subfields now works correctly. Enter 2 subfields separated by | and they will be splitted during saving.
-# - dropped the last subfield of the MARC form :-(
-#
-# Internal changes :
-# - MARCmodbiblio now works by deleting and recreating the biblio. It's not perf optimized, but MARC is a "do_something_impossible_to_trace" standard, so, it's the best solution. not a problem for me, as biblio are rarely modified.
-# Note the MARCdelbiblio has been rewritted to enable deletion of a biblio WITHOUT deleting items.
-#
-# Revision 1.42  2003/04/04 08:41:11  tipaul
-# last commits before 1.9.1
-#
-# Revision 1.41  2003/04/01 12:26:43  tipaul
-# fixes
-#
-# Revision 1.40  2003/03/11 15:14:03  tipaul
-# pod updating
-#
-# Revision 1.39  2003/03/07 16:35:42  tipaul
-# * moving generic functions to Koha.pm
-# * improvement of SearchMarc.pm
-# * bugfixes
-# * code cleaning
-#
-# Revision 1.38  2003/02/27 16:51:59  tipaul
-# * moving prepare / execute to ? form.
-# * some # cleaning
-# * little bugfix.
-# * road to 1.9.2 => acquisition and cataloguing merging
-#
-# Revision 1.37  2003/02/12 11:03:03  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.36  2003/02/12 11:01:01  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.35  2003/02/03 18:46:00  acli
-# Minor factoring in C4/Biblio.pm, plus change to export the per-tag
-# 'mandatory' property to a per-subfield 'tag_mandatory' template parameter,
-# so that addbiblio.tmpl can distinguish between mandatory subfields in a
-# mandatory tag and mandatory subfields in an optional tag
-#
-# Not-minor factoring in acqui.simple/addbiblio.pl to make the if-else blocks
-# smaller, and to add some POD; need further testing for this
-#
-# Added function to check if a MARC subfield name is "koha-internal" (instead
-# of checking it for 'lib' and 'tag' everywhere); temporarily added to Koha.pm
-#
-# Use above function in acqui.simple/additem.pl and search.marc/search.pl
-#
-# Revision 1.34  2003/01/28 14:50:04  tipaul
-# fixing MARCmodbiblio API and reindenting code
-#
-# Revision 1.33  2003/01/23 12:22:37  tipaul
-# adding char_decode to decode MARC21 or UNIMARC extended chars
-#
-# Revision 1.32  2002/12/16 15:08:50  tipaul
-# small but important bugfix (fixes a problem in export)
-#
-# Revision 1.31  2002/12/13 16:22:04  tipaul
-# 1st draft of marc export
-#
-# Revision 1.30  2002/12/12 21:26:35  tipaul
-# YAB ! (Yet Another Bugfix) => related to biblio modif
-# (some warning cleaning too)
-#
-# Revision 1.29  2002/12/12 16:35:00  tipaul
-# adding authentification with Auth.pm and
-# MAJOR BUGFIX on marc biblio modification
-#
-# Revision 1.28  2002/12/10 13:30:03  tipaul
-# fugfixes from Dombes Abbey work
-#
-# Revision 1.27  2002/11/19 12:36:16  tipaul
-# road to 1.3.2
-# various bugfixes, improvments, and migration from acquisition.pm to biblio.pm
-#
-# Revision 1.26  2002/11/12 15:58:43  tipaul
-# road to 1.3.2 :
-# * many bugfixes
-# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
-#
-# Revision 1.25  2002/10/25 10:58:26  tipaul
-# Road to 1.3.2
-# * bugfixes and improvements
-#
-# Revision 1.24  2002/10/24 12:09:01  arensb
-# Fixed "no title" warning when generating HTML documentation from POD.
-#
-# Revision 1.23  2002/10/16 12:43:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.22  2002/10/15 13:39:17  tipaul
-# removing Acquisition.pm
-# deleting unused code in biblio.pm, rewriting POD and answering most FIXME comments
-#
-# Revision 1.21  2002/10/13 11:34:14  arensb
-# Replaced expressions of the form "$x = $x <op> $y" with "$x <op>= $y".
-# Thus, $x = $x+2 becomes $x += 2, and so forth.
-#
-# Revision 1.20  2002/10/13 08:28:32  arensb
-# Deleted unused variables.
-# Removed trailing whitespace.
-#
-# Revision 1.19  2002/10/13 05:56:10  arensb
-# Added some FIXME comments.
-#
-# Revision 1.18  2002/10/11 12:34:53  arensb
-# Replaced &requireDBI with C4::Context->dbh
-#
-# Revision 1.17  2002/10/10 14:48:25  tipaul
-# bugfixes
-#
-# Revision 1.16  2002/10/07 14:04:26  tipaul
-# road to 1.3.1 : viewing MARC biblio
-#
-# Revision 1.15  2002/10/05 09:49:25  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.14  2002/10/03 11:28:18  tipaul
-# Extending Context.pm to add stopword management and using it in MARC-API.
-# First benchmarks show a medium speed improvement, which  is nice as this part is heavily called.
-#
-# Revision 1.13  2002/10/02 16:26:44  tipaul
-# road to 1.3.1
-#
-# Revision 1.12.2.4  2002/10/05 07:09:31  arensb
-# Merged in changes from main branch.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12  2002/10/01 11:48:51  arensb
-# Added some FIXME comments, mostly marking duplicate functions.
-#
-# Revision 1.11  2002/09/24 13:49:26  tipaul
-# long WAS the road to 1.3.0...
-# coming VERY SOON NOW...
-# modifying installer and buildrelease to update the DB
-#
-# Revision 1.10  2002/09/22 16:50:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.9  2002/09/20 12:57:46  tipaul
-# long is the road to 1.4.0
-# * MARCadditem and MARCmoditem now wroks
-# * various bugfixes in MARC management
-# !!! 1.3.0 should be released very soon now. Be careful !!!
-#
-# Revision 1.8  2002/09/10 13:53:52  tipaul
-# MARC API continued...
-# * some bugfixes
-# * multiple item management : MARCadditem and MARCmoditem have been added. They suppose that ALL the MARC field linked to koha-item are in the same MARC tag (on the same line of MARC file)
-#
-# Note : it should not be hard for marcimport and marcexport to re-link fields from internal tag/subfield to "legal" tag/subfield.
-#
-# Revision 1.7  2002/08/14 18:12:51  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.6  2002/07/25 13:40:31  tipaul
-# pod documenting the API.
-#
-# Revision 1.5  2002/07/24 16:11:37  tipaul
-# Now, the API...
-# Database.pm and Output.pm are almost not modified (var test...)
-#
-# Biblio.pm is almost completly rewritten.
-#
-# WHAT DOES IT ??? ==> END of Hitchcock suspens
-#
-# 1st, it does... nothing...
-# Every old API should be there. So if MARC-stuff is not done, the behaviour is EXACTLY the same (if there is no added bug, of course). So, if you use normal acquisition, you won't find anything new neither on screen or old-DB tables ...
-#
-# All old-API functions have been cloned. for example, the "newbiblio" sub, now has become :
-# * a "newbiblio" sub, with the same parameters. It just call a sub named OLDnewbiblio
-# * a "OLDnewbiblio" sub, which is a copy/paste of the previous newbiblio sub. Then, when you want to add the MARC-DB stuff, you can modify the newbiblio sub without modifying the OLDnewbiblio one. If we correct a bug in 1.2 in newbiblio, we can do the same in main branch by correcting OLDnewbiblio.
-# * The MARC stuff is usually done through a sub named MARCxxx where xxx is the same as OLDxxx. For example, newbiblio calls MARCnewbiblio. the MARCxxx subs use a MARC::Record as parameter.
-# The last thing to solve was to manage biblios through real MARC import : they must populate the old-db, but must populate the MARC-DB too, without loosing information (if we go from MARC::Record to old-data then back to MARC::Record, we loose A LOT OF ROWS). To do this, there are subs beginning by "NEWxxx" : they manage datas with MARC::Record datas. they call OLDxxx sub too (to populate old-DB), but MARCxxx subs too, with a complete MARC::Record ;-)
-#
-# In Biblio.pm, there are some subs that permits to build a old-style record from a MARC::Record, and the opposite. There is also a sub finding a MARC-bibid from a old-biblionumber and the opposite too.
-# Note we have decided with steve that a old-biblio <=> a MARC-Biblio.
-#
+
+# tipaul cutted previous commit notes

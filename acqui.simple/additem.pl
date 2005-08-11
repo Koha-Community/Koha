@@ -50,16 +50,15 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
-
+my $biblioitemnumber = find_biblioitemnumber($dbh,$biblionumber);
+my $itemnumber = $input->param('itemnumber');
 my $op = $input->param('op');
-my $itemnum = $input->param('itemnum');
 
 # find itemtype
 my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-my $record = MARCgetbiblio($dbh,$biblionumber);
-my $oldrecord = MARCmarc2koha($dbh,$record);
+
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -77,31 +76,25 @@ if ($op eq "additem") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $addeditem = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # check for item barcode # being unique
-	my $oldbibid = MARCmarc2koha($dbh,$record);
-	my $exists = itemdata($oldbibid->{'barcode'});
+	my $addedolditem = MARCmarc2koha($dbh,$addeditem);
+	my $exists = itemdata($addedolditem->{'barcode'});
 	push @errors,"barcode_not_unique" if($exists);
-# MARC::Record builded => now, record in DB
 	# if barcode exists, don't create, but report The problem.
-	my ($biblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$biblionumber) unless ($exists);
-	if ($exists) {
-		$nextop = "additem";
-		$itemrecord = $record;
-	} else {
-		$nextop = "additem";
-	}
+	$itemnumber = NEWnewitem($dbh,$addeditem,$biblionumber,$biblioitemnumber) unless ($exists);
+	$nextop = "additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	$itemrecord = MARCgetitem($dbh,$biblionumber,$itemnum);
+	$itemrecord = MARCgetitem($dbh,$biblionumber,$itemnumber);
 	$nextop="saveitem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	&NEWdelitem($dbh,$biblionumber,$itemnum);
+	&NEWdelitem($dbh,$biblionumber,$itemnumber);
 	$nextop="additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
@@ -118,11 +111,11 @@ if ($op eq "additem") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $itemrecord = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
-# warn "R: ".$record->as_formatted;
-	my ($biblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$biblionumber,$itemnum,0);
-	$itemnum="";
+# warn "ITEM TO MODIFY : ".$itemrecord->as_formatted;
+	NEWmoditem($dbh, $itemrecord, $biblionumber, $biblioitemnumber, $itemnumber,0);
+	$itemnumber="";
 	$nextop="additem";
 }
 
@@ -139,11 +132,15 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+# load the biblio to have the title, the biblioitemnumber & any other useful field
+my $record = MARCgetbiblio($dbh,$biblionumber);
+# warn $record ->as_formatted;
+# warn "REC ".$record->as_formatted;
+my $oldrecord = MARCmarc2koha($dbh,$record);
+
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-# my $temp = MARCgetbiblio($dbh,$bibid);
-# my @fields = $temp->fields();
 my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
@@ -192,7 +189,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	}
 	my %row_data;
 	$row_data{item_value} = $items_data;
-	$row_data{itemnum} = $itemnums[$i];
+	$row_data{itemnumber} = $itemnums[$i];
 	#reporting this_row values
 	$row_data{'nomod'} = $big_array[$i]{'nomod'};
 	push(@item_value_loop,\%row_data);
@@ -317,10 +314,11 @@ my ($template, $loggedinuser, $cookie)
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber =>$biblionumber,
+						biblioitemnumber => $oldrecord->{biblioitemnumber},
 						title => $oldrecord->{title},
 						author => $oldrecord->{author},
 						item => \@loop_data,
-						itemnum => $itemnum,
+						itemnumber => $itemnumber,
 						itemtagfield => $itemtagfield,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,

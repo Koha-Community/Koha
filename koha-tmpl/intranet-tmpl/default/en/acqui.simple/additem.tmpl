@@ -2,7 +2,8 @@
 <div id="mainbloc">
 	<form method="post" action="additem.pl" name="f">
 	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
-	<input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->">
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+	<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 	<div class="tabbed">
 		<h1 class="catalogue"><!-- TMPL_VAR name="title" --> (<!-- TMPL_VAR name="author" --> biblionumber #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 		<a href="addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
@@ -38,8 +39,8 @@
 							<td></td>
 							<td></td>
 						<!-- TMPL_ELSE -->
-							<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
-							<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+							<td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
+							<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
 						<!-- /TMPL_IF -->
 					</tr>
 					<!-- /TMPL_LOOP -->
@@ -62,7 +63,7 @@
 					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
 			</p>
 		<!-- /TMPL_LOOP -->
-	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
+	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
 	<!-- TMPL_IF name="barcode_not_unique" -->
 		<div id="problem"><b>ERROR : Barcode already exists !<b></div>
 	<!-- /TMPL_IF -->
@@ -71,7 +72,8 @@
 	<!-- TMPL_ELSE -->
 	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
 	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
-	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnum" -->">
+	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+	<input type="hidden" name="mandatory" value="0">
 	<input type="button" value="Modify item" onClick="Check(this.form)" accesskey="w" class="button catalogue">
 	<!-- /TMPL_IF -->
 	</center>
