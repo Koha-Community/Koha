@@ -14,9 +14,16 @@
 		<!-- TMPL_IF name="textmessaging"-->
 			<h2>Message from the library</h2>
 			<!-- TMPL_VAR name="textmessaging" -->
-		<!-- /TMPL_IF -->
+		<!-- /TMPL_IF --></div>
+		
+		<!-- TMPL_IF NAME="flagged" --><div class="bloc20">
+		<h2>There are flags on your account!</h2>
+		<!-- TMPL_IF NAME="debarred" --><p><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.  If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</p><!--
+ /TMPL_IF -->
+ <!-- TMPL_IF NAME="gonenoaddress" --><p><strong>Please note:</strong> According to our records, we don't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.  Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</p><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lost" --><p><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</p><!-- /TMPL_IF --></div><!-- /TMPL_IF -->
 
-	</div>
+	
 	<!-- TMPL_IF NAME="amountoverfive" -->
 	<div class="bloc20">
 		<h2>You have outstanding charges and fines of <!-- TMPL_VAR NAME="amountoutstanding" --></b>
