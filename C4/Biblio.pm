@@ -132,6 +132,22 @@ all subs requires/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =cut
 
+sub zebra_create {
+	my ($biblionumber,$record) = @_;
+	# create the iso2709 file for zebra
+	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+	unless (opendir(DIR, "$cgidir")) {
+			$cgidir = C4::Context->intranetdir."/";
+	} 
+
+	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
+	open F,"> $filename";
+	print F $record->as_usmarc();
+	close F;
+	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
+	unlink($filename);
+	warn "$biblionumber : $res";
+}
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
 
@@ -779,7 +795,7 @@ sub NEWmodbiblio {
 	$oldbiblio->{marcxml} = $record->as_xml();
 	
 	REALmodbiblio($dbh,$oldbiblio);
-	REALmodbiblitem($dbh,$oldbiblio);
+	REALmodbiblioitem($dbh,$oldbiblio);
 	# now, modify addi authors, subject, addititles.
 	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
 	my @addiauthfields = $record->field($tagfield);
@@ -1102,7 +1118,7 @@ sub REALmodsubject {
     return ($error);
 }    # sub modsubject
 
-=head2 REALmodbiblitem($dbh, $biblioitem);
+=head2 REALmodbiblioitem($dbh, $biblioitem);
 
 =over 4
 
@@ -1111,7 +1127,7 @@ modify a biblioitem
 =back
 
 =cut
-sub REALmodbiblitem {
+sub REALmodbiblioitem {
     my ( $dbh, $biblioitem ) = @_;
     my $query;
 
@@ -1126,6 +1142,8 @@ sub REALmodbiblitem {
     				$biblioitem->{subclass},		$biblioitem->{illus},		$biblioitem->{pages},	$biblioitem->{volumeddesc},
     				$biblioitem->{bnotes},			$biblioitem->{size},		$biblioitem->{place},	$biblioitem->{marc},
 					$biblioitem->{marcxml},			$biblioitem->{biblioitemnumber});
+	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
+	zebra_create($biblioitem->{biblionumber}, $record);
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
 }    # sub modbibitem
 
@@ -1189,6 +1207,7 @@ sub REALnewbiblioitem {
 		$biblioitem->{marcxml},
 	);
 	$dbh->do("unlock tables");
+	zebra_create($biblioitem->{biblionumber}, $record);
 	return ($biblioitemnumber);
 }
 
@@ -1329,6 +1348,7 @@ sub REALnewitems {
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
+	zebra_create($item->{biblionumber},$record);
 	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
@@ -1415,6 +1435,7 @@ sub REALmoditem {
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
 	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
+	zebra_create($item->biblionumber,$record);
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
@@ -1722,7 +1743,7 @@ modify a biblioitem. The parameter is a hash
 sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh = C4::Context->dbh;
-    &REALmodbiblitem( $dbh, $biblioitem );
+    &REALmodbiblioitem( $dbh, $biblioitem );
 }    # sub modbibitem
 
 =head2 $biblioitemnumber = newbiblioitem($biblioitem)
@@ -2321,6 +2342,30 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.128  2005/08/11 16:12:47  tipaul
+# Playing with the zebra...
+#
+# * go to koha cvs home directory
+# * in misc/zebra there is a unimarc directory. I suggest that marc21 libraries create a marc21 directory
+# * put your zebra.cfg files here & create your database.
+# * from koha cvs home directory, ln -s misc/zebra/marc21 zebra (I mean create a symbolic link to YOUR zebra directory)
+# * now, everytime you add/modify a biblio/item your zebra DB is updated correctly.
+#
+# NOTE :
+# * this uses a system call in perl. CPU consumming, but we are waiting for indexdata Perl/zoom
+# * deletion still not work
+# * UNIMARC zebra config files are provided in misc/zebra/unimarc directory. The most important line being :
+# in zebra.cfg :
+# recordId: (bib1,Local-number)
+# storeKeys:1
+#
+# in .abs file :
+# elm 090            Local-number            -
+# elm 090/?          Local-number            -
+# elm 090/?/9        Local-number            !:w
+#
+# (090$9 being the field mapped to biblio.biblionumber in Koha)
+#
 # Revision 1.127  2005/08/11 14:37:32  tipaul
 # * POD documenting
 # * removing useless subs
