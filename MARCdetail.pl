@@ -63,7 +63,7 @@ my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
-my $biblionumber=$query->param('bib');
+my $biblionumber=$query->param('biblionumber');
 # my $bibid = $query->param('bibid');
 my $itemtype = $query->param('frameworkcode');
 my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
@@ -224,8 +224,6 @@ foreach my $subfield_code (keys(%witness)) {
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						biblionumber => $biblionumber,
-# 						bibid => $bibid,
 						biblionumber => $biblionumber,
 						subscriptionsnumber => $subscriptionsnumber,
 						popup => $popup,
