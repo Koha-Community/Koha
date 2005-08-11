@@ -50,10 +50,7 @@ $VERSION = 0.01;
   &skip &getitemtypes
   &newcompletebiblioitem
 
-  &MARCfind_oldbiblionumber_from_MARCbibid
-  &MARCfind_MARCbibid_from_oldbiblionumber
   &MARCfind_marc_from_kohafield
-  &MARCfindsubfield
   &MARCfind_frameworkcode
   &find_biblioitemnumber
   &MARCgettagslib
@@ -63,14 +60,9 @@ $VERSION = 0.01;
   &NEWdelbiblio &NEWdelitem
   &NEWmodbiblioframework
 
-  &MARCaddbiblio &MARCadditem
-  &MARCmodsubfield &MARCaddsubfield
-  &MARCmodbiblio &MARCmoditem
   &MARCkoha2marcBiblio &MARCmarc2koha
   &MARCkoha2marcItem &MARChtml2marc
   &MARCgetbiblio &MARCgetitem
-  &MARCaddword &MARCdelword
-  &MARCdelsubfield
   &char_decode
   
   &FindDuplicate
@@ -204,30 +196,9 @@ Returns -1 if more than 1 answer
 
 MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
 
-=item &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-
-MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
-If $subfieldorder is not set, delete all the $tag$subfield subfields 
-
 =item &MARCdelbiblio($dbh,$bibid);
 
 MARCdelbiblio delete biblio $bibid
-
-=item &MARCkoha2marcOnefield
-
-used by MARCkoha2marc and should not be useful elsewhere
-
-=item &MARCmarc2kohaOnefield
-
-used by MARCmarc2koha and should not be useful elsewhere
-
-=item MARCaddword
-
-used to manage MARC_word table and should not be useful elsewhere
-
-=item MARCdelword
-
-used to manage MARC_word table and should not be useful elsewhere
 
 =cut
 
@@ -305,177 +276,6 @@ sub MARCfind_marc_from_kohafield {
 	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
 }
 
-sub MARCfind_oldbiblionumber_from_MARCbibid {
-    my ( $dbh, $MARCbibid ) = @_;
-    my $sth =
-      $dbh->prepare("select biblionumber from marc_biblio where bibid=?");
-    $sth->execute($MARCbibid);
-    my ($biblionumber) = $sth->fetchrow;
-    return $biblionumber;
-}
-
-sub MARCfind_MARCbibid_from_oldbiblionumber {
-    my ( $dbh, $oldbiblionumber ) = @_;
-    my $sth =
-      $dbh->prepare("select bibid from marc_biblio where biblionumber=?");
-    $sth->execute($oldbiblionumber);
-    my ($bibid) = $sth->fetchrow;
-    return $bibid;
-}
-
-sub MARCaddbiblio {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-	my ($dbh,$record,$biblionumber,$frameworkcode,$bibid) = @_;
-	my @fields=$record->fields();
-# my $bibid;
-# adding main table, and retrieving bibid
-# if bibid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
-    # if bibid empty => true add, find a new bibid number
-    unless ($bibid) {
-        $dbh->do(
-"lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ"
-        );
-        my $sth =
-          $dbh->prepare(
-"insert into marc_biblio (datecreated,biblionumber,frameworkcode) values (now(),?,?)"
-        );
-        $sth->execute( $biblionumber, $frameworkcode );
-        $sth = $dbh->prepare("select max(bibid) from marc_biblio");
-        $sth->execute;
-        ($bibid) = $sth->fetchrow;
-        $sth->finish;
-    }
-    my $fieldcount = 0;
-
-    # now, add subfields...
-    foreach my $field (@fields) {
-        $fieldcount++;
-        if ( $field->tag() < 10 ) {
-            &MARCaddsubfield( $dbh, $bibid, $field->tag(), '', $fieldcount, '',
-                1, $field->data() );
-        }
-        else {
-            my @subfields = $field->subfields();
-            foreach my $subfieldcount ( 0 .. $#subfields ) {
-                &MARCaddsubfield(
-                    $dbh,
-                    $bibid,
-                    $field->tag(),
-                    $field->indicator(1) . $field->indicator(2),
-                    $fieldcount,
-                    $subfields[$subfieldcount][0],
-                    $subfieldcount + 1,
-                    $subfields[$subfieldcount][1]
-                );
-            }
-        }
-    }
-	# save leader
-	&MARCaddsubfield($dbh,$bibid,'000','',$fieldcount+1,'',1,$record->leader);
-    $dbh->do("unlock tables");
-    return $bibid;
-}
-
-sub MARCadditem {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ($dbh,$record,$biblionumber) = @_;
-# search for MARC biblionumber
-    $dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
-    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
-    my @fields=$record->fields();
-    my $sth = $dbh->prepare("select max(tagorder) from marc_subfield_table where bibid=?");
-    $sth->execute($bibid);
-    my ($fieldcount) = $sth->fetchrow;
-
-    # now, add subfields...
-    foreach my $field (@fields) {
-        my @subfields = $field->subfields();
-        $fieldcount++;
-        foreach my $subfieldcount ( 0 .. $#subfields ) {
-            &MARCaddsubfield(
-                $dbh,
-                $bibid,
-                $field->tag(),
-                $field->indicator(1) . $field->indicator(2),
-                $fieldcount,
-                $subfields[$subfieldcount][0],
-                $subfieldcount + 1,
-                $subfields[$subfieldcount][1]
-            );
-        }
-    }
-    $dbh->do("unlock tables");
-    return $bibid;
-}
-
-sub MARCaddsubfield {
-
-    # Add a new subfield to a tag into the DB.
-    my (
-        $dbh,      $bibid,        $tagid,         $tag_indicator,
-        $tagorder, $subfieldcode, $subfieldorder, $subfieldvalues
-      )
-      = @_;
-	  return unless $subfieldvalues;
-# warn "$tagid / $subfieldcode / $subfieldvalues";
-    # if not value, end of job, we do nothing
-#     if ( length($subfieldvalues) == 0 ) {
-#         return;
-#     }
-    if ( not($subfieldcode) ) {
-        $subfieldcode = ' ';
-    }
-    my @subfieldvalues = split /\||#/, $subfieldvalues;
-    foreach my $subfieldvalue (@subfieldvalues) {
-        if ( length($subfieldvalue) > 255 ) {
-            $dbh->do(
-"lock tables marc_blob_subfield WRITE, marc_subfield_table WRITE"
-            );
-            my $sth =
-              $dbh->prepare(
-                "insert into marc_blob_subfield (subfieldvalue) values (?)");
-            $sth->execute($subfieldvalue);
-            $sth =
-              $dbh->prepare("select max(blobidlink)from marc_blob_subfield");
-            $sth->execute;
-            my ($res) = $sth->fetchrow;
-            $sth =
-              $dbh->prepare(
-"insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)"
-            );
-            $sth->execute( $bibid, ( sprintf "%03s", $tagid ), $tagorder,
-                $tag_indicator, $subfieldcode, $subfieldorder, $res );
-
-            if ( $sth->errstr ) {
-                warn
-"ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
-            }
-            $dbh->do("unlock tables");
-        }
-        else {
-            my $sth =
-              $dbh->prepare(
-"insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)"
-            );
-            $sth->execute(
-                $bibid,        ( sprintf "%03s", $tagid ),
-                $tagorder,     $tag_indicator,
-                $subfieldcode, $subfieldorder,
-                $subfieldvalue
-            );
-            if ( $sth->errstr ) {
-                warn
-"ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
-            }
-        }
-        &MARCaddword(
-            $dbh,          $bibid,         $tagid,       $tagorder,
-            $subfieldcode, $subfieldorder, $subfieldvalue
-        );
-    }
-}
 
 sub MARCgetbiblio {
 
@@ -512,212 +312,6 @@ sub MARCgetitem {
     return $itemrecord;
 }
 
-sub MARCmodbiblio {
-	my ($dbh,$bibid,$record,$frameworkcode,$delete)=@_;
-# 1st delete the biblio,
-# 2nd recreate it
-	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	&MARCdelbiblio($dbh,$bibid,1);
-	&MARCaddbiblio($dbh,$record,$biblionumber,$frameworkcode,$bibid);
-}
-
-sub MARCdelbiblio {
-    my ( $dbh, $bibid, $keep_items ) = @_;
-
-    # if the keep_item is set to 1, then all items are preserved.
-    # This flag is set when the delbiblio is called by modbiblio
-    # due to a too complex structure of MARC (repeatable fields and subfields),
-    # the best solution for a modif is to delete / recreate the record.
-
-# 1st of all, copy the MARC::Record to deletedbiblio table => if a true deletion, MARC data will be kept.
-# if deletion called before MARCmodbiblio => won't do anything, as the oldbiblionumber doesn't
-    # exist in deletedbiblio table
-    my $record = MARCgetbiblio( $dbh, $bibid );
-    my $oldbiblionumber =
-      MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    my $copy2deleted =
-      $dbh->prepare("update deletedbiblio set marc=? where biblionumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $oldbiblionumber );
-
-    # now, delete in MARC tables.
-    if ( $keep_items eq 1 ) {
-
-        #search item field code
-        my $sth =
-          $dbh->prepare(
-"select tagfield from marc_subfield_structure where kohafield like 'items.%'"
-        );
-        $sth->execute;
-        my $itemtag = $sth->fetchrow_hashref->{tagfield};
-        $dbh->do(
-"delete from marc_subfield_table where bibid=$bibid and tag<>$itemtag"
-        );
-        $dbh->do(
-"delete from marc_word where bibid=$bibid and not (tagsubfield like \"$itemtag%\")"
-        );
-    }
-    else {
-        $dbh->do("delete from marc_biblio where bibid=$bibid");
-        $dbh->do("delete from marc_subfield_table where bibid=$bibid");
-        $dbh->do("delete from marc_word where bibid=$bibid");
-    }
-}
-
-sub MARCdelitem {
-
-    # delete the item passed in parameter in MARC tables.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-
-    #    my $record = MARC::Record->new();
-    # search MARC tagorder
-    my $record = MARCgetitem( $dbh, $bibid, $itemnumber );
-    my $copy2deleted =
-      $dbh->prepare("update deleteditems set marc=? where itemnumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
-
-    my $sth2 =
-      $dbh->prepare(
-"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
-    );
-    $sth2->execute( $bibid, $itemnumber );
-    my ($tagorder) = $sth2->fetchrow_array();
-    my $sth =
-      $dbh->prepare(
-        "delete from marc_subfield_table where bibid=? and tagorder=?");
-    $sth->execute( $bibid, $tagorder );
-}
-
-sub MARCmoditem {
-	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	&MARCdelitem($dbh,$bibid,$itemnumber);
-	&MARCadditem($dbh,$record,$biblionumber);
-}
-
-sub MARCmodsubfield {
-
-    # Subroutine changes a subfield value given a subfieldid.
-    my ( $dbh, $subfieldid, $subfieldvalue ) = @_;
-    $dbh->do("lock tables marc_blob_subfield WRITE,marc_subfield_table WRITE");
-    my $sth1 =
-      $dbh->prepare(
-        "select valuebloblink from marc_subfield_table where subfieldid=?");
-    $sth1->execute($subfieldid);
-    my ($oldvaluebloblink) = $sth1->fetchrow;
-    $sth1->finish;
-    my $sth;
-
-    # if too long, use a bloblink
-    if ( length($subfieldvalue) > 255 ) {
-
-        # if already a bloblink, update it, otherwise, insert a new one.
-        if ($oldvaluebloblink) {
-            $sth =
-              $dbh->prepare(
-"update marc_blob_subfield set subfieldvalue=? where blobidlink=?"
-            );
-            $sth->execute( $subfieldvalue, $oldvaluebloblink );
-        }
-        else {
-            $sth =
-              $dbh->prepare(
-                "insert into marc_blob_subfield (subfieldvalue) values (?)");
-            $sth->execute($subfieldvalue);
-            $sth =
-              $dbh->prepare("select max(blobidlink) from marc_blob_subfield");
-            $sth->execute;
-            my ($res) = $sth->fetchrow;
-            $sth =
-              $dbh->prepare(
-"update marc_subfield_table set subfieldvalue=null, valuebloblink=? where subfieldid=?"
-            );
-            $sth->execute( $res, $subfieldid );
-        }
-    }
-    else {
-
-# note this can leave orphan bloblink. Not a big problem, but we should build somewhere a orphan deleting script...
-        $sth =
-          $dbh->prepare(
-"update marc_subfield_table set subfieldvalue=?,valuebloblink=null where subfieldid=?"
-        );
-        $sth->execute( $subfieldvalue, $subfieldid );
-    }
-    $dbh->do("unlock tables");
-    $sth->finish;
-    $sth =
-      $dbh->prepare(
-"select bibid,tag,tagorder,subfieldcode,subfieldid,subfieldorder from marc_subfield_table where subfieldid=?"
-    );
-    $sth->execute($subfieldid);
-    my ( $bibid, $tagid, $tagorder, $subfieldcode, $x, $subfieldorder ) =
-      $sth->fetchrow;
-    $subfieldid = $x;
-    &MARCdelword( $dbh, $bibid, $tagid, $tagorder, $subfieldcode,
-        $subfieldorder );
-    &MARCaddword(
-        $dbh,          $bibid,         $tagid,       $tagorder,
-        $subfieldcode, $subfieldorder, $subfieldvalue
-    );
-    return ( $subfieldid, $subfieldvalue );
-}
-
-sub MARCfindsubfield {
-    my ( $dbh, $bibid, $tag, $subfieldcode, $subfieldorder, $subfieldvalue ) =
-      @_;
-    my $resultcounter = 0;
-    my $subfieldid;
-    my $lastsubfieldid;
-    my $query =
-"select subfieldid from marc_subfield_table where bibid=? and tag=? and subfieldcode=?";
-    my @bind_values = ( $bibid, $tag, $subfieldcode );
-    if ($subfieldvalue) {
-        $query .= " and subfieldvalue=?";
-        push ( @bind_values, $subfieldvalue );
-    }
-    else {
-        if ( $subfieldorder < 1 ) {
-            $subfieldorder = 1;
-        }
-        $query .= " and subfieldorder=?";
-        push ( @bind_values, $subfieldorder );
-    }
-    my $sti = $dbh->prepare($query);
-    $sti->execute(@bind_values);
-    while ( ($subfieldid) = $sti->fetchrow ) {
-        $resultcounter++;
-        $lastsubfieldid = $subfieldid;
-    }
-    if ( $resultcounter > 1 ) {
-
-# Error condition.  Values given did not resolve into a unique record.  Don't know what to edit
-# should rarely occur (only if we use subfieldvalue with a value that exists twice, which is strange)
-        return -1;
-    }
-    else {
-        return $lastsubfieldid;
-    }
-}
-
-sub MARCfindsubfieldid {
-	my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-	my $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
-				where bibid=? and tag=? and tagorder=?
-					and subfieldcode=? and subfieldorder=?"
-	);
-	$sth->execute( $bibid, $tag, $tagorder, $subfield, $subfieldorder );
-	my ($res) = $sth->fetchrow;
-	unless ($res) {
-		$sth = $dbh->prepare( "select subfieldid from marc_subfield_table
-				where bibid=? and tag=? and tagorder=?
-					and subfieldcode=?"
-		);
-		$sth->execute( $bibid, $tag, $tagorder, $subfield );
-		($res) = $sth->fetchrow;
-	}
-	return $res;
-}
-
 sub find_biblioitemnumber {
 	my ( $dbh, $biblionumber ) = @_;
 	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
@@ -734,31 +328,6 @@ sub MARCfind_frameworkcode {
 	return $frameworkcode;
 }
 
-sub MARCdelsubfield {
-
-    # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-	if ($subfieldorder) {
-		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-				tag='$tag' and tagorder='$tagorder'
-				and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
-				"
-		);
-		$dbh->do( "delete from marc_word where bibid='$bibid' and
-				tagsubfield='$tag$subfield' and tagorder='$tagorder'
-				and subfieldorder='$subfieldorder'
-				"
-		);
-	} else {
-		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-				tag='$tag' and tagorder='$tagorder'
-				and subfieldcode='$subfield'"
-		);
-		$dbh->do( "delete from marc_word where bibid='$bibid' and
-				tagsubfield='$tag$subfield' and tagorder='$tagorder'"
-		);
-	}
-}
 
 sub MARCkoha2marcBiblio {
 
@@ -1044,45 +613,6 @@ sub MARCmarc2kohaOneField {
     return $result;
 }
 
-sub MARCaddword {
-
-    # split a subfield string and adds it into the word table.
-    # removes stopwords
-    my (
-        $dbh,        $bibid,         $tag,    $tagorder,
-        $subfieldid, $subfieldorder, $sentence
-      )
-      = @_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-    my @words = split / /, $sentence;
-    my $stopwords = C4::Context->stopwords;
-    my $sth       =
-      $dbh->prepare(
-"insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word)
-			values (?,concat(?,?),?,?,?,soundex(?))"
-    );
-    foreach my $word (@words) {
-# we record only words one char long and not in stopwords hash
-	if (length($word)>=1 and !($stopwords->{uc($word)})) {
-	    $sth->execute($bibid,$tag,$subfieldid,$tagorder,$subfieldorder,$word,$word);
-	    if ($sth->err()) {
-		warn "ERROR ==> insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($bibid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
-	    }
-	}
-    }
-}
-
-sub MARCdelword {
-
-# delete words. this sub deletes all the words from a sentence. a subfield modif is done by a delete then a add
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    my $sth =
-      $dbh->prepare(
-"delete from marc_word where bibid=? and tagsubfield=concat(?,?) and tagorder=? and subfieldorder=?"
-    );
-    $sth->execute( $bibid, $tag, $subfield, $tagorder, $subfieldorder );
-}
-
 #
 #
 # NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
@@ -1171,9 +701,9 @@ sub NEWnewbiblio {
 }
 
 sub NEWmodbiblioframework {
-	my ($dbh,$bibid,$frameworkcode) =@_;
-	my $sth = $dbh->prepare("Update marc_biblio SET frameworkcode=? WHERE bibid=$bibid");
-	$sth->execute($frameworkcode);
+	my ($dbh,$biblionumber,$frameworkcode) =@_;
+	my $sth = $dbh->prepare("Update biblio SET frameworkcode=? WHERE biblionumber=?");
+	$sth->execute($frameworkcode,$biblionumber);
 	return 1;
 }
 
@@ -2625,6 +2155,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.126  2005/08/11 09:13:28  tipaul
+# just removing useless subs (a lot !!!) for code cleaning
+#
 # Revision 1.125  2005/08/11 09:00:07  tipaul
 # Ok guys, this time, it seems that item add and modif begin working as expected...
 # Still a lot of bugs to fix, of course
