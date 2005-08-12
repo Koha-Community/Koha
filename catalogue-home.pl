@@ -8,6 +8,7 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Koha;
 use HTML::Template;
 
 my $query = new CGI;
@@ -21,7 +22,15 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my ($branchcount,@branches)=branches();
-my ($itemtypecount,@itemtypes)=getitemtypes();
+
+my $itemtypes = getitemtypes;
+my @itemtypesloop;
+foreach my $thisitemtype (keys %$itemtypes) {
+	my %row =(value => $thisitemtype,
+				description => $itemtypes->{$thisitemtype}->{'description'},
+			);
+	push @itemtypesloop, \%row;
+}
 
 my $classlist='';
 my $dbh=C4::Context->dbh;
@@ -32,8 +41,8 @@ while (my ($description,$itemtype) = $sth->fetchrow) {
 }
 
 $template->param(classlist => $classlist,
-						type => 'intranet',
-		 branches=>\@branches,
-		 itemtypes=>\@itemtypes);
+				type => 'intranet',
+				branches=>\@branches,
+				itemtypeloop => \@itemtypesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
