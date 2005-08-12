@@ -37,7 +37,6 @@ $VERSION = 0.01;
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT = qw(
-  &updateBiblio &updateBiblioItem &updateItem
   &itemcount &newbiblio &newbiblioitem
   &newsubject &newsubtitle
   &modbiblio &checkitems
@@ -47,8 +46,6 @@ $VERSION = 0.01;
   &getbiblio
   &getbiblioitembybiblionumber
   &getbiblioitem &getitemsbybiblioitem
-  &skip
-  &newcompletebiblioitem
 
   &MARCfind_marc_from_kohafield
   &MARCfind_frameworkcode
@@ -2342,6 +2339,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.129  2005/08/12 13:50:31  tipaul
+# removing useless sub declarations
+#
 # Revision 1.128  2005/08/11 16:12:47  tipaul
 # Playing with the zebra...
 #
