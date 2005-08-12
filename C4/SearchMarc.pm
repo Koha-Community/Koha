@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Biblio;
 use C4::Date;
 use Date::Manip;
+use Net::Z3950;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -161,54 +162,8 @@ returns an array containing hashes. The hash contains all biblio & biblioitems f
 
 =cut
 
-=head2 my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
-
-Returns a reference to an array containing all the notes stored in the MARC database for the given bibid.
-$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
-
-=head2 my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
-
-Returns a reference to an array containing all the subjects stored in the MARC database for the given bibid.
-$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
-
-=cut
-=head2 my $marcurlsarray = &getMARCurls($dbh,$bibid,$marcflavour);
-
-Returns a reference to an array containing all the URLS stored in the MARC database for the given bibid.
-$marcflavour ("MARC21" or "UNIMARC") isn't used in this version because both flavours of MARC use the same subfield for URLS (but eventually when we get the lables working we'll need to change this.
-
-=cut
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring, $extratables) = @_;
-	# build the sql request. She will look like :
-	# select m1.bibid
-	#		from marc_subfield_table as m1, marc_subfield_table as m2
-	#		where m1.bibid=m2.bibid and
-	#		(m1.subfieldvalue like "Des%" and m2.subfieldvalue like "27%")
-
-	# last minute stripping out of stuff
-	# doesn't work @$value =~ s/\'/ /;
-	# @$value = map { $_ =~ s/\'/ /g } @$value;
-	
-	# "Normal" statements
-	my @normal_tags = ();
-	my @normal_and_or = ();
-	my @normal_operator = ();
-	my @normal_value = ();
-	# Extracts the NOT statements from the list of statements
-	my @not_tags = ();
-	my @not_and_or = ();
-	my @not_operator = ();
-	my @not_value = ();
-	my $any_not = 0;
-	$orderby = "biblio.title" unless $orderby;
-	$desc_or_asc = "ASC" unless $desc_or_asc;
-	#last minute stripping out of ' and ,
-# paul : quoting, it's done a few lines lated.
-# 	foreach $_ (@$value) {
-# 		$_=~ s/\'/ /g;
-# 		$_=~ s/\,/ /g;
-# 	}
 
 # the item.notforloan contains an integer. Every value <>0 means "book unavailable for loan".
 # but each library can have it's own table of meaning for each value. Get them
@@ -224,169 +179,106 @@ sub catalogsearch {
 			$notforloanstatus{$authorised_value} = $lib?$lib:$authorised_value;
 		}
 	}
-	for(my $i = 0 ; $i <= $#{$value} ; $i++)
-	{
-		# replace * by %
-		@$value[$i] =~ s/\*/%/g;
-		# remove % at the beginning
-		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if @$operator[$i] eq "contains";
-		if(@$excluding[$i])	# NOT statements
-		{
-			$any_not = 1;
-			if(@$operator[$i] eq "contains")
-			{
-				foreach my $word (split(/ /, @$value[$i]))	# if operator is contains, splits the words in separate requests
-				{
-					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-# 					warn "word : $word";
-					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
-						push @not_tags, @$tags[$i];
-						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
-						push @not_operator, @$operator[$i];
-						push @not_value, $word;
-					}
-				}
-			}
-			else
-			{
-				push @not_tags, @$tags[$i];
-				push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
-				push @not_operator, @$operator[$i];
-				push @not_value, @$value[$i];
-			}
-		}
-		else	# NORMAL statements
-		{
-			if(@$operator[$i] eq "contains") # if operator is contains, splits the words in separate requests
-			{
-				foreach my $word (split(/ /, @$value[$i]))
-				{
-					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-# 					warn "word : $word";
-					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
-						push @normal_tags, @$tags[$i];
-						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
-						push @normal_operator, @$operator[$i];
-						push @normal_value, $word;
-					}
-				}
-			}
-			else
-			{
-				push @normal_tags, @$tags[$i];
-				push @normal_and_or, @$and_or[$i];
-				push @normal_operator, @$operator[$i];
-				push @normal_value, @$value[$i];
-			}
-		}
-	}
+	my $subtitle; # Added by JF for Subtitles
 
-	# Finds the basic results without the NOT requests
-	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
-  $sql_where1 .= $sqlstring;
-  $sql_tables .= $extratables;
-	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( biblio.timestamp ) <30" if $orderby =~ "biblio.timestamp";
-	my $sth;
-	if ($sql_where2) {
-		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc");
-		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby $desc_or_asc term is  @$value";
-	} else {
-		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc");
-		warn "Q : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby $desc_or_asc";
-	}
-	$sth->execute();
-	my @result = ();
-        my $subtitle; # Added by JF for Subtitles
-
-	# Processes the NOT if any and there are results
-	my ($not_sql_tables, $not_sql_where1, $not_sql_where2);
-
-	if( ($sth->rows) && $any_not )	# some results to tune up and some NOT statements
-	{
-		($not_sql_tables, $not_sql_where1, $not_sql_where2) = create_request($dbh,\@not_tags, \@not_and_or, \@not_operator, \@not_value);
-
-		my @tmpresult;
-
-		while (my ($bibid) = $sth->fetchrow) {
-			push @tmpresult,$bibid;
-		}
-		my $sth_not;
-		warn "NOT : select distinct m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)";
-		if ($not_sql_where2) {
-			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)");
-		} else {
-			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where1");
-		}
-		$sth_not->execute();
-
-		if($sth_not->rows)
-		{
-			my %not_bibids = ();
-			while(my $bibid = $sth_not->fetchrow()) {
-				$not_bibids{$bibid} = 1;	# populates the hashtable with the bibids matching the NOT statement
-			}
-
-			foreach my $bibid (@tmpresult)
-			{
-				if(!$not_bibids{$bibid})
-				{
-					push @result, $bibid;
-				}
-			}
-		}
-		$sth_not->finish();
-	}
-	else	# no NOT statements
-	{
-		while (my ($bibid) = $sth->fetchrow) {
-			push @result,$bibid;
-		}
-	}
-
-	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
-	my $counter = $offset;
-	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
-	# so if you dont' has an item, you get a not nice empty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblioitems.*,biblio.*, marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
-							FROM biblio, marc_biblio 
-							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
-							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
-							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
-        my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
-	my @finalresult = ();
-	my @CNresults=();
-	my $totalitems=0;
-	my $oldline;
-	my ($oldbibid, $oldauthor, $oldtitle);
+	# prepare the query to find item status
 	my $sth_itemCN;
 	if (C4::Context->preference('hidelostitem')) {
 		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL)");
 	} else {
 		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
 	}
+	# prepare the query to find date_due where applicable
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
-	# parse all biblios between start & end.
-	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
-		# search & parse all items & note itemcallnumber
-		$sth->execute($result[$counter]);
-		my $continue=1;
-		my $line = $sth->fetchrow_hashref;
-		my $biblionumber=$line->{bn};
+	
+	# prepare the query to find subtitles
+	my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
+
+	# build the z3950 request
+	my $attr;
+# 	if ($type eq 'isbn') {
+# 		$attr='1=7';
+# 	} elsif ($type eq 'title') {
+# 		$attr='1=4';
+# 	} elsif ($type eq 'author') {
+# 		$attr='1=1003';
+# 	} elsif ($type eq 'lccn') {
+# 		$attr='1=9';
+# 	} elsif ($type eq 'keyword') {
+		$attr='1=1016';
+# 	}
+# 	my $term = @$value[0];
+# 	my $query="\@attr $attr \"$term\"";
+	#
+	# now, do stupid things, that have to be modified for 3.0 :
+	# retrieve the 1st MARC tag.
+	# find the matching non-MARC field
+	# find bib1 attribute. This way, we will be MARC-independant (as title is in 200$a in UNIMARC and 245ùa in MARC21, we use "title" !)
+	# the best method to do this would probably to add a "bib1 attribute" column to marc_subfield_structure
+	# (or a CQL attribute name if we don't want to build bib1 requests)
+	# for instance, we manage only author / title / isbn. Any other field is considered as a keyword/anywhere search
+	#
+	my $tagslib = MARCgettagslib($dbh,$1,'');
+	my $query;
+	for(my $i = 0 ; $i <= $#{$value} ; $i++){
+		# 1st split on , then remove ' in the 1st, the find koha field
+		my @x = split /,/, @$tags[$i];
+		$x[0] =~ s/'//g;
+		$x[0] =~ /(...)(.)/;
+		my ($tag,$subfield) = ($1,$2);
+		if (@$value[$i]) { # if there is something to search, build the request
+			# if $query already contains something, add @and
+			$query = "\@and $query" if ($query);
+			my $field = $tagslib->{$tag}->{$subfield}->{kohafield};
+			if ($field eq 'biblio.author') {
+				$query .= "\@attr 1=1003 \"".@$value[$i]."\" ";
+			} elsif ($field eq 'biblio.title') {
+				$query .= "\@attr 1=4 \"".@$value[$i]."\" ";
+			} elsif ($field eq 'biblioitems.isbn') {
+				$query .= "\@attr 1=7 \"".@$value[$i]."\" ";
+			} else {
+				$query .= "\@attr 1=1016 \"".@$value[$i]."\" ";
+			}
+		}
+# 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
+	}
+	warn "QUERY : $query";
+
+	my $conn= new Net::Z3950::Connection('localhost', '2100'); #databaseName => $database, user => $user, password => $password) 
+	eval {$conn->option(elementSetName => 'F')};
+# 	eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "MARC21");
+	eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
+	my $rs=$conn->search($query);
+	my $numresults=$rs->size();
+	if ($numresults eq 0) {
+		warn "no records found\n";
+	} else {
+		warn "$numresults records found, retrieving them (max 80)\n";
+	}
+	my $result='';
+	my $scantimerstart=time();
+	my @finalresult = ();
+	my @CNresults=();
+	my $totalitems=0;
+	$offset=1 unless $offset;
+	# calculate max offset
+	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:$numresults;
+	for (my $i=$offset; $i <= $maxrecordnum; $i++) {
+		# get the MARC record...
+		my $record = MARC::File::USMARC::decode($rs->record($i)->rawdata());
+		# transform it into a meaningul hash
+		my $line = MARCmarc2koha($dbh,$record);
+		my $biblionumber=$line->{biblionumber};
         # Return subtitles first ADDED BY JF
-                $sth_subtitle->execute($biblionumber);
-                my $subtitle_here.= $sth_subtitle->fetchrow." ";
-                chop $subtitle_here;
-                $subtitle = $subtitle_here;
+#                 $sth_subtitle->execute($biblionumber);
+#                 my $subtitle_here.= $sth_subtitle->fetchrow." ";
+#                 chop $subtitle_here;
+#                 $subtitle = $subtitle_here;
 #               warn "Here's the Biblionumber ".$biblionumber;
 #                warn "and here's the subtitle: ".$subtitle_here;
 
         # /ADDED BY JF
 
-# 		$continue=0 unless $line->{bn};
-# 		my $lastitemnumber;
 		$sth_itemCN->execute($biblionumber);
 		my @CNresults = ();
 		my $notforloan=1; # to see if there is at least 1 item that can be issued
@@ -439,106 +331,17 @@ sub catalogsearch {
 		@CNresults = ();
 		push @finalresult, \%newline;
 		$totalitems=0;
-		$counter++;
 	}
-	my $nbresults = $#result+1;
+	my $nbresults = $#finalresult+1;
 	return (\@finalresult, $nbresults);
 }
 
-# Creates the SQL Request
+=head2 my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
 
-sub create_request {
-	my ($dbh,$tags, $and_or, $operator, $value) = @_;
+Returns a reference to an array containing all the notes stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
 
-	my $sql_tables; # will contain marc_subfield_table as m1,...
-	my $sql_where1; # will contain the "true" where
-	my $sql_where2 = "("; # will contain m1.bibid=m2.bibid
-	my $nb_active=0; # will contain the number of "active" entries. an entry is active if a value is provided.
-	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
-
-	my $maxloop=8; # the maximum number of words to avoid a too complex search.
-	$maxloop = @$value if @$value<$maxloop;
-	
-	for(my $i=0; $i<=$maxloop;$i++) {
-		if (@$value[$i]) {
-			$nb_active++;
-			if ($nb_active==1) {
-				if (@$operator[$i] eq "start") {
-					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
-					if (@$tags[$i]) {
-						$sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
-					}
-					$sql_where1.=")";
-				} elsif (@$operator[$i] eq "contains") {
-					$sql_tables .= "marc_word as m$nb_table,";
-					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]");
-					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
-					}
-					$sql_where1.=")";
-				} else {
-					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
-					if (@$tags[$i]) {
-						 $sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
-					}
-					$sql_where1.=")";
-				}
-			} else {
-				if (@$operator[$i] eq "start") {
-					$nb_table++;
-					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
-					if (@$tags[$i]) {
-					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
-					}
-					$sql_where1.=")";
-					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
-				} elsif (@$operator[$i] eq "contains") {
-					if (@$and_or[$i] eq 'and') {
-						$nb_table++;
-						$sql_tables .= "marc_word as m$nb_table,";
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
-						if (@$tags[$i]) {
-							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
-						}
-						$sql_where1.=")";
-						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
-					} else {
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
-						if (@$tags[$i]) {
-							$sql_where1 .="  and m$nb_table.tagsubfield in (@$tags[$i])";
-						}
-						$sql_where1.=")";
-						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
-					}
-				} else {
-					$nb_table++;
-					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] ".$dbh->quote(@$value[$i]);
-					if (@$tags[$i]) {
-					 	$sql_where1 .="  and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
-					}
-					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
-					$sql_where1.=")";
-				}
-			}
-		}
-	}
-
-	if($sql_where2 ne "(")	# some datas added to sql_where2, processing
-	{
-		$sql_where2 = substr($sql_where2, 0, (length($sql_where2)-5)); # deletes the trailing ' and '
-		$sql_where2 .= ")";
-	}
-	else	# no sql_where2 statement, deleting '('
-	{
-		$sql_where2 = "";
-	}
-	chop $sql_tables;	# deletes the trailing ','
-	return ($sql_tables, $sql_where1, $sql_where2);
-}
+=cut
 
 sub getMARCnotes {
         my ($dbh, $bibid, $marcflavour) = @_;
@@ -588,6 +391,13 @@ sub getMARCnotes {
 	return $marcnotesarray;
 }  # end getMARCnotes
 
+
+=head2 my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
+
+Returns a reference to an array containing all the subjects stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+
+=cut
 
 sub getMARCsubjects {
     my ($dbh, $bibid, $marcflavour) = @_;
