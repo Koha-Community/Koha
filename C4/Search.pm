@@ -59,7 +59,7 @@ on what is passed to it, it calls the appropriate search function.
 @ISA = qw(Exporter);
 @EXPORT = qw(
 &CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
-&itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
+&itemdata &bibdata &GetItems &borrdata &itemnodata
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
@@ -2055,118 +2055,6 @@ borrowernumber=? order by date desc,timestamp desc");
    }
    $sth->finish;
    return ($numlines,\@acctlines,$total);
-}
-
-=item itemcount
-
-  ($count, $lcount, $nacount, $fcount, $scount, $lostcount,
-  $mending, $transit,$ocount) =
-    &itemcount($env, $biblionumber, $type);
-
-Counts the number of items with the given biblionumber, broken down by
-category.
-
-C<$env> is ignored.
-
-If C<$type> is not set to C<intra>, lost, very overdue, and withdrawn
-items will not be counted.
-
-C<&itemcount> returns a nine-element list:
-
-C<$count> is the total number of items with the given biblionumber.
-
-C<$lcount> is the number of items at the Levin branch.
-
-C<$nacount> is the number of items that are neither borrowed, lost,
-nor withdrawn (and are therefore presumably on a shelf somewhere).
-
-C<$fcount> is the number of items at the Foxton branch.
-
-C<$scount> is the number of items at the Shannon branch.
-
-C<$lostcount> is the number of lost and very overdue items.
-
-C<$mending> is the number of items at the Mending branch (being
-mended?).
-
-C<$transit> is the number of items at the Transit branch (in transit
-between branches?).
-
-C<$ocount> is the number of items that haven't arrived yet
-(aqorders.quantity - aqorders.quantityreceived).
-
-=cut
-#'
-
-# FIXME - There's also a &C4::Biblio::itemcount.
-# Since they're all exported, acqui/acquire.pl doesn't compile with -w.
-sub itemcount {
-  my ($env,$bibnum,$type)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from items where
-  biblionumber=? ";
-  if ($type ne 'intra'){
-    $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
-    (wthdrawn <> 1 or wthdrawn is NULL)";
-  }
-  my $sth=$dbh->prepare($query);
-  #  print $query;
-  $sth->execute($bibnum);
-  my $count=0;
-  my $lcount=0;
-  my $nacount=0;
-  my $fcount=0;
-  my $scount=0;
-  my $lostcount=0;
-  my $mending=0;
-  my $transit=0;
-  my $ocount=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $count++;
-
-    my $sth2=$dbh->prepare("select * from issues,items where issues.itemnumber=
-    ? and returndate is NULL
-    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
-    items.itemlost <> 2) or items.itemlost is NULL)
-    and (wthdrawn <> 1 or wthdrawn is NULL)");
-    $sth2->execute($data->{'itemnumber'});
-    if (my $data2=$sth2->fetchrow_hashref){
-       $nacount++;
-    } else {
-      if ($data->{'holdingbranch'} eq 'C' || $data->{'holdingbranch'} eq 'LT'){
-        $lcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'F' || $data->{'holdingbranch'} eq 'FP'){
-        $fcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'S' || $data->{'holdingbranch'} eq 'SP'){
-        $scount++;
-      }
-      if ($data->{'itemlost'} eq '1'){
-        $lostcount++;
-      }
-      if ($data->{'itemlost'} eq '2'){
-        $lostcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'FM'){
-        $mending++;
-      }
-      if ($data->{'holdingbranch'} eq 'TR'){
-        $transit++;
-      }
-    }
-    $sth2->finish;
-  }
-#  if ($count == 0){
-    my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-    $sth2->execute($bibnum);
-    if (my $data=$sth2->fetchrow_hashref){
-      $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-    }
-#    $count+=$ocount;
-    $sth2->finish;
-  $sth->finish;
-  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount);
 }
 
 =item itemcount2
