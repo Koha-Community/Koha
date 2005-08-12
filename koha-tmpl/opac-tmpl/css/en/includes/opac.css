@@ -1,5 +1,11 @@
+/*
+	blue/green : # 009999
+	light-blue/green : #ACE6E6
+	orange : #FFB380
+	light orange : #FFD9BF
+*/
 body {
-	background-color:#009999;
+	background-color:#006b6b;
 	font-family:verdana,arial,helvetica,sans-serif;
 	font-size:12pt;
 	margin:0px;
@@ -8,8 +14,9 @@ body {
 
 /* base tags */
 a {
-	background-color: #ACE6E6;
+	background-color: #FFD9BF;
 	text-decoration:none;
+/* 	padding:2px 2px; */
 	color:#000000;
 }
 
@@ -20,11 +27,7 @@ a.transparent {
 }
 
 a:hover {
-/* 	background-color: #FF6600; */
-	background-image: url(/opac-tmpl/css/en/images/bar.gif);
-	background-repeat:repeat-y;
-	text-decoration:none;
-	color:#000000;
+	background-color: #FFB380;
 }
 
 /* the page result number */
@@ -35,7 +38,7 @@ a.results {
 }
 
 a.results:hover {
-	background-color: #FFFFCC;
+	background-color: #FFB380;
 	padding : 0px 2px 0px 2px;
 	margin : 2px 1px 2px 0px;
 }
@@ -65,25 +68,26 @@ img {
 /* main title */
 h1 {
 	color:#FFD9BF;
-	background-color:#FF6600;
+	background-color:#006b6b;
 	font-weight:bold;
 	font-size: 150%;
 	text-align:center;
-	padding: 2px;
-	border: 4px inset #FFD9BF;
-	width:60%;
+	padding: 5px;
+	margin:0px 25% 10px 25%;
+	border: 1px solid black;
+	width:50%;
 }
 
 /* style for library name, on top of menu (defined in LibraryName systempref) */
 /* in opac-main page */
 .LibraryName {
-	color:#FFD9BF;
-	background-color:transparent;
+	color:#000000;
+	background-color:#FFD9BF;
 	font-weight:bold;
 	font-size: 150%;
 	text-align:center;
 	padding: 2px;
-	border: 4px inset #FF6600;
+	border: 1px solid #000000;
 	width:75%;
 }
 
@@ -101,10 +105,10 @@ h1 {
 /* subtitles. headers of blocks */
 h2 {
 	color:#000000;
-	background-image: url(/opac-tmpl/css/en/images/bar.gif);
-	background-repeat:repeat-y;
+	background-color:#009999;
 	font-weight:bold;
 	font-size: 125%;
+	width:100%;
 	margin: 0px 0px 10px 0px;
 }
 
@@ -118,7 +122,8 @@ h3 {
 
 /* paragraphs */
 p {
-	padding-left:10pt;
+	padding-left:10px;
+	padding-right:10px;
 	padding-bottom:0pt;
 	margin:0pt;
 	clear:left;
@@ -142,13 +147,14 @@ p.copyright {
 /* TABLES */
 table {
 	border:1px solid #000000;
+	margin:10px;
+/* 	margin-right:10px; */
 	border-collapse:collapse;
 	position:static;
 }
 /* header */
 th {
 	background-color: #99cccc;
-	background-image: url(/opac-tmpl/css/en/images/background-opac.gif);
 	font-weight:bold;
 	text-align:center;
 	font-size:10pt;
@@ -184,14 +190,10 @@ td.hilighted {
 .button {
 	text-align: center;
 	padding: 2px 2px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: black;
+	border:1px solid #888888;
 	text-decoration: none;
 	color: black;
 	line-height:175%;
-	border-radius: 6px;
-	-moz-border-radius: 6px;
 	background-color:#FFD9BF;
 	margin : 3px 3px 3px 0px;
 }
@@ -199,59 +201,40 @@ td.hilighted {
 .button:hover {
 	text-align: center;
 	padding: 2px 2px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: black;
+	border:1px solid black;
 	text-decoration: none;
 	color: black;
 	line-height:175%;
-	border-radius: 6px;
-	-moz-border-radius: 6px;
-	background-color:#FF6600;
-	background-image: url(/opac-tmpl/css/en/images/bar.gif);
-	background-repeat:no-repeat;
+	background-color:#FFB380;
 	margin : 3px 3px 3px 0px;
 }
 
 /* standard input field */
 input {
-	border:0px;
-	border-bottom:1px solid #000000;
+	border:1px solid #888888;
 	margin-bottom:2px;
-	background-color:#009999;
+	background-color:#FFFFFF;
 }
-
 input:hover {
-	border:0px;
-	border-bottom:1px solid #000000;
-	background-color:#FF6600;
+	border:1px solid #000000;
 }
 
 /* textarea input field */
 textarea {
 	border:0px;
-	border-bottom:1px solid #000000;
-	background-color:#009999;
-}
-textarea:hover {
-	border:0px;
-	border-bottom:1px solid #000000;
-	background-color:#FF6600;
+	border:1px solid #888888;
+	background-color:#FFFFFF;
 }
 
+textarea:hover {
+	border:1px solid #000000;
+}
 /* select input field */
 select {
 	border:0px;
-	border-bottom:1px solid #000000;
-	background-color:#009999;
+	border:1px solid #888888;
+	background-color:#FFFFFF;
 }
-
-select:hover {
-	border:0px;
-	border-bottom:1px solid #000000;
-	background-color:#FF6600;
-}
-
 
 /* span classes */
 /* used to show small 1,2,3, to reach other pages when too much results */
@@ -265,7 +248,7 @@ select:hover {
 }
 
 .smallnumberactive {
-	background-color:#FF6600;
+	background-color:#FFB380;
 	font-family:Times,serif;
 	font-size:small;
 	border:1px solid #000000;
@@ -301,8 +284,9 @@ select:hover {
 }
 
 #homebloc {
-	float:left;
-	width:60%;
+	float:right;
+	width:65%;
+	margin-right:10px;
 	border:0;
 }
 
@@ -311,11 +295,7 @@ select:hover {
 	width:30%;
 	border:0;
 }
-#rightbloc {
-	float:right;
-	width:40%;
-	border:0;
-}
+
 #bottombloc {
 	width:100%;
 	height:200%;
@@ -329,16 +309,16 @@ select:hover {
 #bloc20, .bloc20 {
 	float:left;
 	border:1px solid #000000;
-	margin-right:20px;
-	margin-bottom:20px;
-	padding-right:20px;
+	margin-left:10px;
+	padding-bottom:10px;
+	margin-bottom:10px;
 }
 #bloc60, .bloc60 {
 	float:left;
 	border:1px solid #000000;
-	margin-right:20px;
-	margin-bottom:20px;
-	padding-right:20px;
+	margin-left:10px;
+	padding-bottom:10px;
+	margin-bottom:10px;
 }
 
 /* used in biblio detail */
@@ -351,7 +331,8 @@ select:hover {
 
 #itembloc {
 	float:left;
-	width:50%;
+	padding-left:10px;
+/* 	width:50%; */
 	border:0;
 }
 
@@ -360,9 +341,7 @@ select:hover {
 	border:1px solid #000000;
 	padding-left:10pt;
 	padding-right:10pt;
-/* 	float:left; */
 	margin-bottom:10px;
-	-moz-border-radius: 6px;
 	display:inline;
 }
 
@@ -374,6 +353,7 @@ select:hover {
 #menuline {
 	display:block;
 	margin-left:100px;
+	margin-bottom:20px;
 }
 
 #bibliomenu {
@@ -452,10 +432,10 @@ div.tab {
 
 .MARCtag { /* style for tag definition (700 - Statement of responsability) */
 	font-weight:bold;
-	color:#FF6600;
+	color:#FFB380;
 	background-color:#FFFFFF;
 	background-image:none;
-	border-bottom: thin solid #FF6600;
+	border-bottom: thin solid #FFB380;
 	margin-right:30%;
 }
 
