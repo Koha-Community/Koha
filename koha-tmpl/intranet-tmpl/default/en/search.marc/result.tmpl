@@ -22,9 +22,9 @@
 			<tr>
 				<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 							<!-- TMPL_IF name="MARC_ON" -->
-								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 							<!-- TMPL_ELSE -->
-								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
+								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
@@ -59,7 +59,7 @@
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS name="norequests" -->
-						<p><a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a></p>
+						<p><a class="button catalogue" href="/cgi-bin/koha/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a></p>
 					<!-- TMPL_ELSE -->
 						<p>Not Reservable</p>
 					<!-- /TMPL_UNLESS -->
