@@ -1,18 +1,6 @@
 #!/usr/bin/perl
 
-#things to do
-
-# First sort by branch
-#Then sort by surname
-
-#_Branch_:  Could we have Levin displaying as L, please, not C__
-
-#_Totals_ :
-#*Total Paid *
-#*Total written off*
-#*Total credits (which will include manual credits and credits for lost books returned*
-
-#use strict;
+use strict;
 use CGI;
 use C4::Output;
 use HTML::Template;
@@ -21,21 +9,6 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
-use Data::Dumper;
-
-use Text::CSV_XS;
-
-my $csv = Text::CSV_XS->new(
-    {
-        'quote_char'   => '"',
-        'escape_char'  => '"',
-        'sep_char'     => ',',
-        'binary'       => 1,
-        'always_quote' => 1,
-    }
-);
-
-my $input=new CGI;
 
 
 my $input=new CGI;
@@ -45,16 +18,10 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "stats.screen.tmpl",
                              query => $input,
                              type => "intranet",
-                             authnotrequired => 1,
+                             authnotrequired => ,
                              flagsrequired => {borrowers => 1},
                              debug => 1,
                              });
-
-
-
-#my $time=$input->param('time');
-#my $time="month";
-#my $time="today";
 
 my $date;
 my $date2;
@@ -81,14 +48,8 @@ if ($time=~ /\//){
         $date2=DateCalc($date,$date2);
 }
 
-#my $date=UnixDate($date,'%Y-%m-%d');
-#my $date2=UnixDate($date2,'%Y-%m-%d');
-
-my $date="2005-08-19";
-my $date2="2005-08-20";
-
-#my $date="2005-01-05";
-#my $date2="2005-01-06";
+my $date=UnixDate($date,'%Y-%m-%d');
+my $date2=UnixDate($date2,'%Y-%m-%d');
 
 #get a list of every payment
 my @payments=TotalPaid($date,$date2);
@@ -112,6 +73,7 @@ while ($i<$count ){
            @charges=getcharges($payments[$i]{'borrowernumber'}, $payments[$i]{'timestamp'}, $payments[$i]{'proccode'});
            $totalcharges++;
            $count=@charges;
+
            # getting each of the charges and putting them into a array to be printed out
            #this loops per charge per person
            for (my $i2=0;$i2<$count;$i2++){
@@ -121,9 +83,6 @@ while ($i<$count ){
                my $time="$hour:$min:$sec";
                my $time2="$payments[$i]{'date'}";
                my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
-
-
-               my $fullname = join ' ', $payments[$i]->{'firstname'}, $payments[$i]->{'surname'};
 
                # lets build up a row
                my %rows1 = (branch => $branch,
@@ -145,12 +104,8 @@ while ($i<$count ){
        $totalpaid = $totalpaid + $payments[$i]->{'value'};
 }
 
-
-
 #get credits and append to the bottom of payments
 my @credits=getcredits($date,$date2);
-
-#print Dumper(@credits);
 
 my $count=@credits;
 my $i=0;
@@ -171,9 +126,8 @@ while ($i<$count ){
        ;
 
 }
+
 #takes off first char minus sign "-100.00"
-
-
 $totalcredits = substr($totalcredits, 1);
 
 $template->param( loop1               => \@loop1,
@@ -183,5 +137,3 @@ $template->param( loop1               => \@loop1,
                   totalwritten        => $totalwritten );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
