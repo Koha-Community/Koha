@@ -120,12 +120,21 @@ if ($findborrower) {
 
 # get the borrower information.....
 my $borrower;
+my $picture;
+
+
 if ($borrowernumber) {
 	$borrower = getpatroninformation(\%env,$borrowernumber,0);
 	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
 	$template->param(overduecount => $od,
 							issuecount => $issue,
 							finetotal => $fines);
+							my $htdocs = C4::Context->config('intrahtdocs');
+							$picture = "/borrowerimages/".$borrowernumber.".jpg";
+							if (-e $htdocs."$picture")
+							{ 
+  								$template->param(picture => $picture)
+							};
 }
 
 
