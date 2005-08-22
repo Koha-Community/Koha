@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 use strict;
 use CGI;
 use C4::Output;
@@ -10,6 +9,16 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
+use Text::CSV_XS;
+
+my $csv = Text::CSV_XS->new(
+    {
+        'quote_char'  => '"',
+        'escape_char' => '"',
+        'sep_char'    => ',',
+        'binary'      => 1
+    }
+);
 
 my $input=new CGI;
 my $time=$input->param('time');
@@ -117,9 +126,8 @@ while ($i<$count ){
        push (@loop2, \@rows2);
        $i++;
        $totalcredits = $totalcredits + $credits[$i]->{'amount'};
-       ;
-
 }
+
 #takes off first char minus sign "-100.00"
 $totalcredits = substr($totalcredits, 1);
 
@@ -132,7 +140,7 @@ print "Branch, Datetime, Surame, Firstnames, Description, Type, Invoice amount, 
 
 for my $row ( @loop1 ) {
 
-    my $csv->combine(@$row);
+    $csv->combine(@$row);
     my $string = $csv->string;
     print $string, "\n";
 }
@@ -141,7 +149,7 @@ print ",,,,,,,\n";
 
 for my $row ( @loop2 ) {
 
-    my $csv->combine(@$row);
+    $csv->combine(@$row);
     my $string = $csv->string;
     print $string, "\n";
 }
@@ -151,4 +159,3 @@ print ",,,,,,,\n";
 print ",,Total Amount Paid, $totalpaid\n";
 print ",,Total Number Written, $totalwritten\n";
 print ",,Total Amount Credits, $totalcredits\n";
-
