@@ -212,7 +212,13 @@ foreach (@$alerts) {
 	$_->{$_->{type}}=1;
 	$_->{relatedto} = findrelatedto($_->{type},$_->{externalid});
 }
-
+my $picture;
+my $htdocs = C4::Context->config('intrahtdocs');
+$picture = "/borrowerimages/".$bornum.".jpg";
+if (-e $htdocs."$picture")
+{ 
+  $template->param(picture => $picture)
+};
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
