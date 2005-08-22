@@ -178,10 +178,10 @@ sub getcredits{
         my $timestamp = $a.$b.$c.$padding;
         my $timestamp2 = $x.$y.$z.$padding;
 
-        my $sth;
-
-        $sth=$dbh->prepare("Select * from accountlines where (accounttype =  'CR' or accounttype = 'LR') and timestamp >=? and timestamp <?");
-        $sth->execute($timestamp,$timestamp2);
+        my $sth=$dbh->prepare("Select * from accountlines,borrowers where (((accounttype = 'LR')  or (accounttype <> 'Pay'))
+                                   and amount < 0  and accountlines.borrowernumber = borrowers.borrowernumber
+                                   and timestamp >=?  and timestamp <?)");
+        $sth->execute($timestamp, $timestamp2);
 
         my $i=0;
         my @results;
