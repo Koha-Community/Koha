@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-#use strict;
+use strict;
 use CGI;
 use C4::Output;
 use HTML::Template;
@@ -11,11 +11,11 @@ use C4::Context;
 use Date::Manip;
 use C4::Stats;
 
-
-
 my $input=new CGI;
+my $time=$input->param('time');
 
-
+my @loop1;
+my @loop2;
 my $date;
 my $date2;
 if ($time eq 'yesterday'){
@@ -132,7 +132,7 @@ print "Branch, Datetime, Surame, Firstnames, Description, Type, Invoice amount, 
 
 for my $row ( @loop1 ) {
 
-    $csv->combine(@$row);
+    my $csv->combine(@$row);
     my $string = $csv->string;
     print $string, "\n";
 }
@@ -141,7 +141,7 @@ print ",,,,,,,\n";
 
 for my $row ( @loop2 ) {
 
-    $csv->combine(@$row);
+    my $csv->combine(@$row);
     my $string = $csv->string;
     print $string, "\n";
 }
