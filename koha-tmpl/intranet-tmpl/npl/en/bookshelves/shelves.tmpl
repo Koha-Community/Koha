@@ -6,7 +6,7 @@
 <div id="main">
 
 <!-- TMPL_IF name="edit" -->
-		<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">
+		<form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">
 			<input type="hidden" name="op" value="modifsave" />
 			<table>
 			<caption>Editing Shelf <em><!-- TMPL_VAR name="shelfname"--></em></caption>
@@ -38,7 +38,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF Name="viewshelf" -->
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post" name="mainform">
+	<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post" name="mainform">
 			<table>
 			<caption>Contents of <em><!-- TMPL_VAR NAME="shelfname" --></em></caption>
 			<tr>
@@ -88,7 +88,7 @@
 				<p class="problem"><!-- TMPL_VAR NAME="string" --><p>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
-					<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">								
+					<form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">								
 					<input type="hidden" name="shelves" value="1" /><table>
 						<caption>Bookshelves</caption>
 						<th>&nbsp;</th><th>Title</th><th>Item Count</th>
@@ -103,7 +103,7 @@
 					</p>
 					</form>
 
-			<form class="inline" method="post" action="<!-- TMPL_VAR NAME="script_name" -->">
+			<form class="inline" method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">
 				<input type="hidden" name="shelves" value="1" />
 				<div class="data"><table>
 				<caption>Add Shelf</caption>
