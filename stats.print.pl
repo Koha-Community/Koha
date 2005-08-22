@@ -1,16 +1,5 @@
 #!/usr/bin/perl
 
-#things to do
-
-# First sort by branch
-#Then sort by surname
-
-#_Branch_:  Could we have Levin displaying as L, please, not C__
-
-#_Totals_ :
-#*Total Paid *
-#*Total written off*
-#*Total credits (which will include manual credits and credits for lost books returned*
 
 #use strict;
 use CGI;
@@ -21,25 +10,11 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
-use Data::Dumper;
 
-use Text::CSV_XS;
 
-my $csv = Text::CSV_XS->new(
-    {
-        'quote_char'   => '"',
-        'escape_char'  => '"',
-        'sep_char'     => ',',
-        'binary'       => 1,
-        'always_quote' => 1,
-    }
-);
 
 my $input=new CGI;
 
-#my $time=$input->param('time');
-#my $time="month";
-#my $time="today";
 
 my $date;
 my $date2;
@@ -66,14 +41,9 @@ if ($time=~ /\//){
         $date2=DateCalc($date,$date2);
 }
 
-#my $date=UnixDate($date,'%Y-%m-%d');
-#my $date2=UnixDate($date2,'%Y-%m-%d');
+my $date=UnixDate($date,'%Y-%m-%d');
+my $date2=UnixDate($date2,'%Y-%m-%d');
 
-my $date="2005-08-19";
-my $date2="2005-08-20";
-
-#my $date="2005-01-05";
-#my $date2="2005-01-06";
 
 #get a list of every payment
 my @payments=TotalPaid($date,$date2);
@@ -97,15 +67,18 @@ while ($i<$count ){
            @charges=getcharges($payments[$i]{'borrowernumber'}, $payments[$i]{'timestamp'}, $payments[$i]{'proccode'});
            $totalcharges++;
            $count=@charges;
+
            # getting each of the charges and putting them into a array to be printed out
            #this loops per charge per person
            for (my $i2=0;$i2<$count;$i2++){
+
                my $hour=substr($payments[$i]{'timestamp'},8,2);
                my $min=substr($payments[$i]{'timestamp'},10,2);
                my $sec=substr($payments[$i]{'timestamp'},12,2);
                my $time="$hour:$min:$sec";
                my $time2="$payments[$i]{'date'}";
                my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
+
                my @rows1 = ($branch,          # lets build up a row
                             $payments[$i]->{'datetime'},
                             $payments[$i]->{'surname'},
@@ -115,6 +88,7 @@ while ($i<$count ){
                             sprintf("%.2f", $charges[$i2]->{'amount'}), # rounding amounts to 2dp
                             $payments[$i]->{'type'},
                             $payments[$i]->{'value'});
+
                push (@loop1, \@rows1);
            }
        } else {
@@ -124,12 +98,8 @@ while ($i<$count ){
        $totalpaid = $totalpaid + $payments[$i]->{'value'};
 }
 
-
-
 #get credits and append to the bottom of payments
 my @credits=getcredits($date,$date2);
-
-#print Dumper(@credits);
 
 my $count=@credits;
 my $i=0;
@@ -145,16 +115,13 @@ while ($i<$count ){
                     $credits[$i]->{'amount'});
 
        push (@loop2, \@rows2);
-       $i++; #increment the while loop
+       $i++;
        $totalcredits = $totalcredits + $credits[$i]->{'amount'};
        ;
 
 }
 #takes off first char minus sign "-100.00"
-
-
 $totalcredits = substr($totalcredits, 1);
-
 
 print $input->header(
     -type       => 'application/vnd.ms-excel',
