@@ -2,23 +2,23 @@
 
 <div id="mainbloc">
 <!-- TMPL_IF Name="viewshelf" -->
-	<form>
+	<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
 		<h1 class="catalogue"><!-- TMPL_VAR NAME="shelfname" --></h1>
 
 		<div id="bloc25">
-		<h2 class="catalogue">Shelf content</h2>
+		<h2 class="catalogue">Shelf contents</h2>
 			<table class="small">
 				<tr colspan="4">
-					<th class="catalogue">delete</th>
-					<th class="catalogue">barcode</th>
-					<th class="catalogue">title</th>
+					<th class="catalogue"><!-- TMPL_IF name="manageshelf" -->Delete<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></th>
+					<th class="catalogue">Barcode</th>
+					<th class="catalogue">Title</th>
 					<th class="catalogue">Author</th>
 				</tr>
 				<!-- TMPL_LOOP Name="itemsloop" -->
 					<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-						<td><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+						<td><!-- TMPL_IF name="manageshelf" --><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 						<td><!-- TMPL_VAR NAME="barcode" --></td>
-						<td><a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 						<td><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
@@ -34,7 +34,7 @@
 
 	<!-- TMPL_IF name="manageshelf" -->
 	<div id="bloc25">
-		<form>
+		<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
 		<h2 class="catalogue">Add a book by barcode</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 			<input type="hidden" name="modifyshelfcontents" value="1">
@@ -47,7 +47,7 @@
 	</div>
 	<!-- /TMPL_IF -->
 	<div id="bloc25">
-		<a href="shelves.pl" class="button catalogue">Shelf list</a>
+		<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="button catalogue">Shelf list</a>
 	</div>
 <!-- TMPL_ELSE -->
 	<!-- TMPL_IF Name="shelves" -->
@@ -62,7 +62,7 @@
 		<!-- /TMPL_LOOP -->
 		<div id="bloc25">
 					<h2 class="catalogue">Select Shelves to Delete</h2>
-					<form method="post">
+					<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
 					<input type="hidden" name="shelves" value="1">
 						<!-- TMPL_LOOP Name="shelvesloop" -->
 						<!-- TMPL_IF name="canmanage" -->
@@ -80,7 +80,7 @@
 					</form>
 		</div>
 		<div id="bloc25">
-			<form method="post">
+			<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
 				<input type="hidden" name="shelves" value="1">
 				<h2 class="catalogue">Add Shelf</h2>
 				<p><label>Name</label><input type="text" name="addshelf" size="25"></p>
@@ -98,7 +98,7 @@
 				</p>
 				<p>
 					<input type="submit" value="Add New Shelf" class="button catalogue">
-					<a href="shelves.pl" class="button catalogue">back to shelf list</a>
+					<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="button catalogue">back to shelf list</a>
 				</p>
 
 			</form>
@@ -116,7 +116,7 @@
 				<!-- TMPL_LOOP Name="shelvesloop" -->
 				<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 					<td>
-						<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+						<a href="/cgi-bin/koha/bookshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
 							<!-- TMPL_VAR NAME="shelfname" -->
 						</a>
 					</td>
@@ -136,7 +136,7 @@
 					</td>
 					<!-- TMPL_IF name="mine" -->
 						<td>
-							<a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a>
+							<a href="/cgi-bin/koha/bookshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a>
 							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
 						</td>
 						<!-- TMPL_ELSE -->
@@ -147,14 +147,14 @@
 			</table>
 		</div>
 		<div id="bloc25">
-			<a href="shelves.pl?shelves=1" class="button catalogue">Add or Remove Book Shelves</a>
+			<a href="/cgi-bin/koha/bookshelves/shelves.pl?shelves=1" class="button catalogue">Add or Remove Book Shelves</a>
 		</div>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="edit" -->
 	<div id="bloc25">
-		<form method="post">
+		<form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">
 			<input type="hidden" name="op" value="modifsave">
 			<h2 class="catalogue">Modify shelf</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
