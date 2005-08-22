@@ -1,0 +1,75 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+
+<h1>Till Reconciliation : Payments</h1>
+
+        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+                <tr>
+                        <th class="cell-header">Branch</th>
+                        <th class="cell-header">Date/time</th>
+                        <th class="cell-header">Surname</th>
+                        <th class="cell-header">Firstname</th>
+                        <th class="cell-header">Description</th>
+                        <th class="cell-header">Charge Type</th>
+                        <th class="cell-header">Invoice Amount</th>
+                        <th class="cell-header">Payment Type</th>
+                        <th class="cell-header">Payment Amount</th>
+                </tr>
+                <tr>
+                <!-- TMPL_LOOP NAME=loop1 -->
+                <tr>
+                     <td class="cell"><!-- TMPL_VAR NAME="branch" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="datetime" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="surname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="firstname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="description" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="accountype" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="amount" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="type" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="value" --></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+
+<p>
+        <b>Total amount paid: <!-- TMPL_VAR NAME="totalpaid" --></b>
+        <br>
+        <b>Total number written off: <!-- TMPL_VAR NAME="totalwritten" --></b>
+</p>
+
+
+<h1>Till Reconciliation : Credits</h1>
+
+        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+                <tr>
+                        <th class="cell-header">Branch</th>
+                        <th class="cell-header">Date/time</th>
+                        <th class="cell-header">Surname</th>
+                        <th class="cell-header">Firstname</th>
+                        <th class="cell-header">Description</th>
+                        <th class="cell-header">Charge Type</th>
+                        <th class="cell-header">Invoice Amount</th>
+                </tr>
+                <tr>
+                <!-- TMPL_LOOP NAME=loop2 -->
+                <tr>
+                     <td class="cell"><!-- TMPL_VAR NAME="creditbranch" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditdate" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditsurname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditfirstname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditdescription" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditaccounttype" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditamount" --></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+<p>
+        <b>Total amount credits: <!-- TMPL_VAR NAME="totalcredits" --></b>
+</p>
+
+
+
+
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</body>
+</html>
+
