@@ -30,7 +30,9 @@
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
 			<h2 class="circulation">Borrower information</h2>
-			<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
+			<p>	<!-- TMPL_IF NAME="picture" -->
+		<img src="/intranet-tmpl/<!-- TMPL_VAR NAME="picture" -->">
+	<!-- /TMPL_IF --><br><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
 				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " class="button circulation">
 					detail
 				</a>
