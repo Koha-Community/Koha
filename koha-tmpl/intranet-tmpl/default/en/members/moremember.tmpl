@@ -2,10 +2,15 @@
 
 <div id="mainbloc">
 	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+	<!-- TMPL_IF NAME="picture" -->
+		<img src="/intranet-tmpl/<!-- TMPL_VAR NAME="picture" -->">
+	<!-- /TMPL_IF --><br>
+	<a href="/cgi-bin/koha/members/member-picupload.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&name=<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" -->" class="button">Upload Picture</a><br>
 	<div class="bloc25">
 		<h2 class="members">Membership record</h2>
 		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
-		<p><label class="label100">Card number: </label><!-- TMPL_VAR NAME="cardnumber" --><br>
+		<p><label class="label100">Card number: </label><!-- TMPL_VAR NAME="cardnumber" --><br>	
+
 		<label class="label100">Postal Address: </label><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
 		<!-- TMPL_UNLESS name="I" --><label class="label100">Home Address: </label><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
 		<label class="label100">Phone home: </label><!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
