@@ -18,7 +18,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "stats.screen.tmpl",
                              query => $input,
                              type => "intranet",
-                             authnotrequired => ,
+                             authnotrequired => 0,
                              flagsrequired => {borrowers => 1},
                              debug => 1,
                              });
@@ -51,6 +51,8 @@ if ($time=~ /\//){
 my $date=UnixDate($date,'%Y-%m-%d');
 my $date2=UnixDate($date2,'%Y-%m-%d');
 
+#warn "MASON: DATE: $date, $date2";
+
 #get a list of every payment
 my @payments=TotalPaid($date,$date2);
 
@@ -62,6 +64,9 @@ my $totalcharges=0;
 my $totalcredits=0;
 my $totalpaid=0;
 my $totalwritten=0;
+my @loop1;
+my @loop2;
+
 
 # lets get a a list of all individual item charges paid for by that payment
 while ($i<$count ){
