@@ -9,7 +9,7 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
-
+&Date_Init("DateFormat=non-US"); # set non-USA date, eg:19/08/2005
 
 my $input=new CGI;
 my $time=$input->param('time');
@@ -47,6 +47,13 @@ if ($time=~ /\//){
         $date2=ParseDateDelta('+ 1 day');
         $date2=DateCalc($date,$date2);
 }
+# if time is blank
+if ($time eq ''){
+        $date=ParseDate('today');
+        $date2=ParseDate('tomorrow');
+}
+
+
 
 my $date=UnixDate($date,'%Y-%m-%d');
 my $date2=UnixDate($date2,'%Y-%m-%d');

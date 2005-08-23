@@ -10,6 +10,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Stats;
 use Text::CSV_XS;
+&Date_Init("DateFormat=non-US"); # set non-USA date, eg:19/08/2005
 
 my $csv = Text::CSV_XS->new(
     {
@@ -50,9 +51,16 @@ if ($time=~ /\//){
         $date2=DateCalc($date,$date2);
 }
 
+if ($time eq ''){
+        $date=ParseDate('today');
+        $date2=ParseDate('tomorrow');
+}
+
+
 my $date=UnixDate($date,'%Y-%m-%d');
 my $date2=UnixDate($date2,'%Y-%m-%d');
 
+#warn "MASON: DATE: $date, $date2";
 
 #get a list of every payment
 my @payments=TotalPaid($date,$date2);
@@ -133,7 +141,7 @@ $totalcredits = substr($totalcredits, 1);
 
 print $input->header(
     -type       => 'application/vnd.ms-excel',
-    -attachment => "moo.csv",
+    -attachment => "moo.csv",         
 );
 print "Branch, Datetime, Surame, Firstnames, Description, Type, Invoice amount, Payment type, Payment Amount\n";
 
