@@ -1,24 +1,24 @@
 <!-- TMPL_INCLUDE Name="opac-top.inc" -->
 <div id="mainbloc">
 <!-- TMPL_IF Name="viewshelf" -->
-	<form>
+	<form action="/cgi-bin/koha/opac-shelves.pl" method="get">
 		<h1><!-- TMPL_VAR NAME="shelfname" --></h1>
 
 		<div>
 		<h2>Shelf content</h2>
 			<table class="small">
 				<tr colspan="4">
-					<th>delete</th>
-					<th>barcode</th>
-					<th>title</th>
+					<th><!-- TMPL_IF name="manageshelf" -->Delete<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></th>
+					<th>Barcode</th>
+					<th>Title</th>
 					<th>Author</th>
 				</tr>
 				<!-- TMPL_LOOP Name="itemsloop" -->
 					<tr>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="barcode" --></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="author" --></td>
+						<td><!-- TMPL_IF name="manageshelf" --><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -34,7 +34,7 @@
 
 	<!-- TMPL_IF name="manageshelf" -->
 	<div class="bloc20">
-		<form>
+		<form action="/cgi-bin/koha/opac-shelves.pl" method="get">
 		<h2>Add a book by barcode</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 			<input type="hidden" name="modifyshelfcontents" value="1">
@@ -59,7 +59,7 @@
 		<!-- /TMPL_LOOP -->
 		<div class="bloc20">
 					<h2>Select Shelves to Delete</h2>
-					<form method="post">
+					<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 					<input type="hidden" name="shelves" value="1">
 						<!-- TMPL_LOOP Name="shelvesloop" -->
 						<!-- TMPL_IF name="canmanage" -->
@@ -77,7 +77,7 @@
 					</form>
 		</div>
 		<div id="bloc60">
-			<form method="post">
+			<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 				<input type="hidden" name="shelves" value="1">
 				<h2>Add Shelf</h2>
 				<p><label>Name</label><input type="text" name="addshelf" size="25"></p>
@@ -111,13 +111,13 @@
 					<th>Modify</th>
 				</tr>
 				<!-- TMPL_LOOP Name="shelvesloop" -->
-				<tr>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+				<!-- TMPL_IF NAME="color" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+					<td>
 						<a class="transparent" href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
 							<!-- TMPL_VAR NAME="shelfname" -->
 						</a>
 					</td>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+					<td>
 						<!-- TMPL_IF NAME="category1" -->
 							Private
 						<!-- /TMPL_IF -->
@@ -128,15 +128,15 @@
 							Free
 						<!-- /TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+					<td>
 						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
 					</td>
-					<!-- TMPL_IF name="mine" -->
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
-							<a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">Modify</a>
-							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
+					
+						<td>
+							<!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">Modify</a>
+							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 						</td>
-					<!-- /TMPL_IF -->
+					
 				</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -149,7 +149,7 @@
 
 <!-- TMPL_IF name="edit" -->
 	<div class="bloc20">
-		<form method="post">
+		<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 			<input type="hidden" name="op" value="modifsave">
 			<h2>Modify shelf</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
