@@ -11,7 +11,7 @@
 	<div class="details">
 	<p>Fill this form to suggest the library a new acquisition. You will be emailed when the library processes your purchase suggestion</p>
 	<p>No fields are mandatory. Enter whatever information you have. The "Notes" field can be used to provide any additional information.</p>
-	<form>
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 	<table>
 	<tr><th><label>Title</label></th><td><input type="text" name="title" size="50" maxlentgh="80" /></td></tr>
 	<tr><th><label>Author</label></th><td><input type="text" name="author" size="50" maxlength="80" /></td></tr>
@@ -40,7 +40,7 @@
 			<th>Note</th>
 		</tr>
 		<tr>
-			<form>
+			<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 				<th>
 					Filter by:
 				</th>
@@ -57,18 +57,39 @@
 					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
 				</td>
 				<td>
-					<select name="status">
+<select name="status">
 						<option value="">Any</option>
-						<option value="ASKED" <!-- TMPL_IF name="ASKED" -->selected<!-- /TMPL_IF -->>Requested</option>
-						<option value="ORDERED" <!-- TMPL_IF name="ORDERED" -->selected<!-- /TMPL_IF -->>Ordered</option>
-						<option value="REJECTED"<!-- TMPL_IF name="REJECTED" -->selected<!-- /TMPL_IF -->>Declined</option>
-						<option value="AVAILABLE"<!-- TMPL_IF name="AVAILABLE" -->selected<!-- /TMPL_IF -->>Available</option>
+						<!-- TMPL_IF name="ASKED" -->
+							<option value="ASKED" selected="selected">Requested</option>
+						<!-- TMPL_ELSE -->
+							<option value="ASKED">Asked</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected="selected">Accepted</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">Accepted</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ORDERED" -->
+							<option value="ORDERED" selected="selected">Ordered</option>
+						<!-- TMPL_ELSE -->
+							<option value="ORDERED">Ordered</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="REJECTED" -->
+							<option value="REJECTED" selected="selected">Declined</option>
+						<!-- TMPL_ELSE -->
+							<option value="REJECTED">Declined</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="AVAILABLE" -->
+							<option value="AVAILABLE" selected="selected">Available</option>
+						<!-- TMPL_ELSE -->
+							<option value="AVAILABLE">Available</option>
+						<!-- /TMPL_IF -->
 					</select>
 				</td>
 				<td>
 					<select name="suggestedbyme">
-						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>Me</option>
-						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>Anybody</option>
+						<!-- TMPL_IF NAME="suggestedbyme" --><option value="1" selected="selected"><!-- TMPL_ELSE --><option value="1"><!-- /TMPL_IF -->Me</option>
+						<!-- TMPL_UNLESS name="suggestedbyme" --><option value="0" selected="selected"><!-- TMPL_ELSE --><option value="0"><!-- /TMPL_UNLESS -->Anybody</option>
 					</select>
 				</td>
 				<td>
@@ -79,7 +100,7 @@
 				</td>
 			</form>
 		</tr>
-		<form>
+		<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 			<input type="hidden" name="op" value="delete_confirm" />
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
@@ -123,10 +144,10 @@
 		</form>
 	</table>
 	<!-- TMPL_ELSE --><div class="content-block">There are no pending purchase suggestions</div><!-- /TMPL_IF -->
-	<form>
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 		<input type="hidden" name="op" value="add" />
 		<input type="submit" class="icon add" value="Enter a new purchase suggestion" />
-	<br />
+	</form>
 	<p>Note : if you're viewing purchase suggestions submitted by anybody, the results will contain only <em>new</em> purchase suggestions. Suggestions being processed by a librarian will not be shown.</p>
 <!-- /TMPL_IF -->
 </div>
