@@ -65,7 +65,7 @@
 			<!-- /TMPL_IF --></form><br>
 
 	<!-- TMPL_IF name="manageshelf" -->
-		<form>
+		<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="get">
 		<div class="data"><table>
 		<caption>Add an item by barcode</caption>
 		<tr><th><label for="barcode">Barcode:</label></th><td><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
