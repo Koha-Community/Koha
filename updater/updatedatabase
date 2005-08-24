@@ -885,6 +885,25 @@ my %tabledata = (
             explanation         => 'show or hide "lost" items in OPAC.',
 	    type		=> 'YesNo',
         },
+		 {
+            uniquefieldrequired => 'variable',
+            variable            => 'IndependantBranches',
+            value               => 0,
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn Branch independancy management On an Off',
+            type                => 'YesNo',
+        },
+                {
+            uniquefieldrequired => 'variable',
+            variable            => 'ReturnBeforeExpiry',
+            value               => 'Off',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+            type                => 'YesNo',
+        },
+
     ],
 
 );
@@ -941,6 +960,16 @@ my %fielddefinitions = (
             field   => 'encoding',
             type    => 'varchar(40)',
             null    => '',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+    ],
+	serial => [
+        {
+            field   => 'notes',
+            type    => 'TEXT',
+            null    => 'NULL',
             key     => '',
             default => '',
             extra   => ''
@@ -1470,6 +1499,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.6  2005/08/24 09:02:25  hdl
+# Adding a notes field into serial table.
+# Manage a note for a serial number...
+# Will allow a librarian to say "contact with supplier for this serial : Will be received on date...  " or anything else.
+#
 # Revision 1.100.2.5  2005/06/06 15:23:36  tipaul
 # adding a systempref to choose either to show or hide "lost" items. Note that "lost items" can be related to an authorised value list, so does not necessary mean "item definetly lost". Even here, some libraries want to see lost items, and some don't want. This parameter will make everybody happy !
 #

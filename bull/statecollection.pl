@@ -25,6 +25,7 @@ my @serialids = $query->param('serialid');
 my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
 my @status = $query->param('status');
+my @notes = $query->param('notes');
 my $hassubscriptionexpired = hassubscriptionexpired($subscriptionid);
 if ($op eq 'modsubscriptionhistory') {
 	modsubscriptionhistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
@@ -36,7 +37,7 @@ if ($op eq 'serialchangestatus') {
 		$sth->execute($serialids[$i]);
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
-			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
 		} else {
 			# add a special issue
 			if ($serialseqs[$i]) {
