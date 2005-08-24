@@ -167,6 +167,16 @@ my %fielddefinitions = (
 #             default => ''
 #         },
 #     ],
+	serial => [
+        {
+            field   => 'notes',
+            type    => 'TEXT',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+    ],
 );
 
 #-------------------
@@ -609,6 +619,10 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.121  2005/08/24 08:49:03  hdl
+# Adding a note field in serial table.
+# This will allow librarian to mention a note on a peculiar waiting serial number.
+#
 # Revision 1.120  2005/08/09 14:10:32  tipaul
 # 1st commit to go to zebra.
 # don't update your cvs if you want to have a working head...

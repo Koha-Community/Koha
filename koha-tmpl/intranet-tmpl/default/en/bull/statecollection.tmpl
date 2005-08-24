@@ -25,6 +25,9 @@
 		<th class="bull">
 			Status
 		</th>
+		<th class="bull">
+			Notes
+		</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -66,6 +69,9 @@
 						<option value="6">Delete</option>
 					<!-- /TMPL_IF -->
 				</select>
+			</td>
+			<td>
+				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=10 maxlength=15>
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->

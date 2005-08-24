@@ -360,7 +360,8 @@ sub getserials {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
 	# status = 2 is "arrived"
-	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
+	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate, notes from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
+
 	$sth->execute($subscriptionid);
 	my @serials;
 	while(my $line = $sth->fetchrow_hashref) {
@@ -395,7 +396,7 @@ sub getlatestserials{
 }
 
 sub serialchangestatus {
-	my ($serialid,$serialseq,$planneddate,$status)=@_;
+	my ($serialid,$serialseq,$planneddate,$status,$note)=@_;
 	# 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
@@ -405,8 +406,8 @@ sub serialchangestatus {
 	if ($status eq 6){
 		delissue($serialseq, $subscriptionid) 
 	}else{
-		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=? where serialid = ?");
-		$sth->execute($serialseq,$planneddate,$status,$serialid);
+		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?, notes=? where serialid = ?");
+		$sth->execute($serialseq,$planneddate,$status,$note,$serialid);
 		$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 		$sth->execute($subscriptionid);
 		my ($missinglist,$recievedlist) = $sth->fetchrow;
