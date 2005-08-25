@@ -13,17 +13,17 @@
 		<form action="isbnsearch.pl">
 		<table>
 		<caption>Search Existing Records</caption>
-		<tr><th><label for="title">Title</label></th>
+		<tr><th><label for="title"><span class="accesskey">T</span>itle</label></th>
 		<td><input type="hidden" name="marclist" value="biblio.title"><input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="contains" />
-				<input type="text" name="value" id="title"size="35" /></td></tr>
-		<tr><th><label for="isbn">ISBN</label></th>
+				<input type="text" name="value" id="title" size="35" accesskey="t" /></td></tr>
+		<tr><th><label for="isbn">ISB<span class="accesskey">N</span></label></th>
 		<td><input type="hidden" name="marclist" value="biblioitems.isbn" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="start" />
-				<input type="text" name="value" id="isbn"size="35" /></td></tr>		
+				<input type="text" name="value" id="isbn" size="35" accesskey="n" /></td></tr>		
 		</table></div>
 				<p><input type="submit" value="Search" class="submit" /></p>
 				<div class="help"><ul class="notes"><li>If the ISBN is found into the database, that record will be retrieved and can be modified.</li>
@@ -49,7 +49,7 @@
 
 <!-- Display for NPL //
 <form action="/intranet-bcd.php" method="post">
-	<div class="data"><table><caption>Cataloging Item Search by Barcode</caption><tr><th><label for="barcode">Barcode: </label></th><td><input type="text" size="14" maxlength="14" name="barcode" id="barcode" /> <input type="submit" class="submit" value="Submit" /></td></tr></table></div>
+	<div class="data"><table><caption>Cataloging Item Search by Barcode</caption><tr><th><label for="barcode"><span class="accesskey">B</span>arcode: </label></th><td><input type="text" size="14" maxlength="14" name="barcode" id="barcode" accesskey="b" /> <input type="submit" class="submit" value="Submit" /></td></tr></table></div>
 </form>
 //Display for NPL -->
 </div>
