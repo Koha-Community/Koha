@@ -181,12 +181,12 @@ document.f.sql.value="";
 
 function AddStatement() {
 
-	document.forms[0].op.value="AddStatement";
+	document.forms['f'].op.value="AddStatement";
 	document.f.submit();
 }
 
 function Dopop(link,i) {
-	var searchstring=document.forms[0].value[i].value;
+	var searchstring=document.forms['f'].value[i].value;
 	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
