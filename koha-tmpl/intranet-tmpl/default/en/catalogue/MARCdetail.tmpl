@@ -408,7 +408,7 @@ function Changefwk(FwkList) {
   window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
 }
 function Addbiblio(op) {
-  var fwk = document.forms[0].Frameworks.options[document.forms[0].Frameworks.selectedIndex].value;
+  var fwk = document.forms['f'].Frameworks.options[document.forms['f'].Frameworks.selectedIndex].value;
   window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>
