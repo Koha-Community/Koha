@@ -3,7 +3,6 @@
 #written 26/4/2000
 #script to display reports
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -27,29 +26,40 @@ use Date::Manip;
 use CGI;
 use C4::Output;
 use HTML::Template;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
+my $input = new CGI;
+my $time  = $input->param('time');
 
-my $input=new CGI;
-my $time=$input->param('time');
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/reservereport.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+);
 
-#print $input->header;
-#print startpage;
-#print startmenu('report');
-my $template = gettemplate("reservereport.tmpl");
-#print center;
-#print mktablehdr();
-my ($count,$data)=unfilledreserves();
+my ( $count, $data ) = unfilledreserves();
 
 my @dataloop;
-for (my $i=0;$i<$count;$i++){
-	my %line;
-	$line{name}="$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
-	$line{'reservedate'}=$data->[$i]->{'reservedate'};
-	$line{'title'}=$data->[$i]->{'title'};
-	$line{'classification'}="$data->[$i]->{'classification'}$data->[$i]->{'dewey'}";
-	push(@dataloop,\%line);
+for ( my $i = 0 ; $i < $count ; $i++ ) {
+    warn "here";
+    my %line;
+    $line{name} = "$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
+    $line{'reservedate'}    = $data->[$i]->{'reservedate'};
+    $line{'title'}          = $data->[$i]->{'title'};
+    $line{'classification'} =
+      "$data->[$i]->{'classification'}$data->[$i]->{'dewey'}";
+    push( @dataloop, \%line );
 }
 
-$template->param(	count => $count,
-								dataloop => \@dataloop);
-print "Content-Type: text/html\n\n", $template->output;
+$template->param(
+    count    => $count,
+    dataloop => \@dataloop
+);
+
+output_html_with_http_headers $input, $cookie, $template->output;
