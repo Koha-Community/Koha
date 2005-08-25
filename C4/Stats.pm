@@ -211,7 +211,8 @@ sub Getpaidbranch{
 # Otherwise, it needs a POD.
 sub unfilledreserves {
         my $dbh = C4::Context->dbh;
-        my $sth=$dbh->prepare("select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
+        my $sth=$dbh->prepare("select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where (found <> 'F' or
+	    found is NULL) and cancellationdate
                                                                 is NULL and biblio.biblionumber=reserves.biblionumber and
                                                                 reserves.constrainttype='o'
                                                                 and (reserves.biblionumber=reserveconstraints.biblionumber
@@ -228,7 +229,7 @@ sub unfilledreserves {
                 $i++;
         }
         $sth->finish;
-        $sth=$dbh->prepare("select *,biblio.title from reserves,biblio,borrowers where found <> 'F' and cancellationdate
+        $sth=$dbh->prepare("select *,biblio.title from reserves,biblio,borrowers where (found <> 'F' or found is NULL) and cancellationdate
                 is NULL and biblio.biblionumber=reserves.biblionumber and reserves.constrainttype='a' and
                 reserves.borrowernumber=borrowers.borrowernumber
                 order by
