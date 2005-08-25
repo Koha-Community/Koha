@@ -491,28 +491,28 @@ function Check(f) {
 		}
 		alert(alertString2);
 	} else {
-		document.forms[0].submit();
+		document.forms['f'].submit();
 	}
 }
 function Dopop(link,i) {
-	defaultvalue=document.forms[0].field_value[i].value;
+	defaultvalue=document.forms['f'].field_value[i].value;
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
 
 function PopupZ3950() {
     var strQuery="";
-	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
-		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&isbn="+document.forms[0].field_value[i].value;
+	for (i=0 ; i<document.forms['f'].field_value.length ; i++) {
+		if (document.forms['f'].kohafield[i].value == "biblioitems.isbn" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&isbn="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.title" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&title="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblio.title" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&title="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.author" &&document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&author="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblio.author" &&document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&author="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblioitems.issn" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&issn="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblioitems.issn" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&issn="+document.forms['f'].field_value[i].value;
 		}
 	}
 	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=800,height=400,toolbar=false,scrollbars=yes');
@@ -523,8 +523,8 @@ function Changefwk(FwkList) {
 }
 
 function AddField(field) {
-	document.forms[0].op.value = "addfield";
-	document.forms[0].addfield_field.value=field;
+	document.forms['f'].op.value = "addfield";
+	document.forms['f'].addfield_field.value=field;
 	document.f.submit();
 }
 </script>
