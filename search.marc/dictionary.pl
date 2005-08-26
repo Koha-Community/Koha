@@ -162,7 +162,6 @@ if ($op eq "do_search") {
 
 
 		if (defined(@$curauthresults)) {
-			my $taille = @$curauthresults;
 			for (my $i = 0; $i < @$curauthresults ;$i++) {
 				@$curauthresults[$i]->{jamainentry} = @$curauthresults[$i]->{mainentry};
 				@$curauthresults[$i]->{jamainentry} =~ s/'/\\'/g;
