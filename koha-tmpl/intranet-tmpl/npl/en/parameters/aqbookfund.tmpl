@@ -20,6 +20,7 @@
 <tr>
 	<th>Book Fund</th>
 	<th>Name</th>
+	<th>Branch</th>
 	<th>Edit</th>
 	<th>Delete</th>
 	</tr>
@@ -27,12 +28,14 @@
 	<tr>
 		<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> "><!-- TMPL_VAR name="bookfundid" --></a></td>
 		<td><!-- TMPL_VAR name="bookfundname" --></td>
+		<td><!--TMPL_VAR Name="branchname"--></td>
 		<td><form action="<!-- TMPL_VAR name="action" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
 		<td><form action="<!-- TMPL_VAR name="action" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 	</tr>
 		<tr>
 		<td>&nbsp;</td>
 		<td><b>Budget</b></td>
+		<td>Branch</td>
 		<td><form action="aqbudget.pl" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" /><input type="submit" class="submit" value="Add Budget" /></form></td>
 		<td></td>
 	</tr>
@@ -42,6 +45,13 @@
 			<td>
 				<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" --> : <b><!-- TMPL_VAR name="budgetamount" --></b>
 			</td>
+			<td>
+				<!--TMPL_IF Name="branchcode"-->
+				 	<!--TMPL_VAR Name="branchcode"-->
+				<!--TMPL_ELSE -->
+					&nbsp;
+				<!--/TMPL_IF-->
+				</td>
 			<td><form action="/cgi-bin/koha/admin/aqbudget.pl" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->" /><input type="submit" class="submit" value="Edit" /></form></td>
 			<td><form action="/cgi-bin/koha/admin/aqbudget.pl" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->" /><input type="submit" class="delete" value="Delete" /></form></td>
 
@@ -120,6 +130,7 @@
 <tr><th>Book fund</th><td><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)" /></td></tr>
 <!-- /TMPL_IF -->
 <tr><th>Name</th><td><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" /></td></tr>
+<tr><th><label>Branch</label></th><td><!-- TMPL_VAR NAME="CGIbranch"-->	Select one if budget is branch-specific, otherwise, leave it blank.</td></tr>
 </table>
 </div>
 <p><input type="button" value="<!-- TMPL_VAR name="header" -->" onclick="Check(this.form); return false;" class="submit" /> <input type="submit" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="action" -->'; return false;" /></p>
