@@ -41,6 +41,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
+use C4::Acquisition;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
@@ -48,12 +49,23 @@ use C4::Date;
 use HTML::Template;
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,%branches)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like ?) order by bookfundid");
+	my $strsth= "select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where bookfundname like ? ";
+	if (%branches){
+		$strsth.= "AND (aqbookfund.branchcode is null " ;
+		foreach my $branchcode (keys %branches){
+			$strsth .= "or aqbookfund.branchcode = '".$branchcode."' "; 
+		}
+		$strsth .= ") ";
+	}
+	$strsth.= "order by aqbookfund.bookfundid";
+#	warn "chaine de recherche : ".$strsth;
+	
+	my $sth=$dbh->prepare($strsth);
 	$sth->execute("%$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -91,6 +103,26 @@ $template->param(script_name => $script_name,
 }
 $template->param(action => $script_name);
 
+my @branches;
+my @select_branch;
+my %select_branches;
+my ($count2,@branches)=branches();
+
+push @select_branch,"";
+$select_branches{""}="";
+
+my $homebranch=C4::Context->userenv->{branch};
+for (my $i=0;$i<$count2;$i++){
+	push @select_branch, $branches[$i]->{'branchcode'};#
+	$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+}
+
+my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+			-values   => \@select_branch,
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+$template->param(CGIbranch => $CGIbranch);
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -169,23 +201,34 @@ if ($op eq 'add_form') {
 		$template->param(searchfield => $searchfield);
 	}
 	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($env,$searchfield,%select_branches);
 	my $toggle="white";
 	my @loop_data =();
 	my $dbh = C4::Context->dbh;
-	my $sth2 = $dbh->prepare("Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where bookfundid = ? order by bookfundid");
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+# 		warn "".$results->[$i]{'bookfundid'}." ".$results->[$i]{'bookfundname'}." ".$results->[$i]{'branchcode'};
+		$row_data{branchname} = $select_branches{$results->[$i]{'branchcode'}};
+		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget where aqbudget.bookfundid = ?";
+		if ($homebranch){
+			$strsth2 .= " AND ((aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch).")) " ;
+		} else {
+			$strsth2 .= " AND (aqbudget.branchcode='') " if (C4::Context->userenv->{flags}>1);
+		}
+		$strsth2 .= " order by aqbudgetid";
+# 		warn "".$strsth2;
+		my $sth2 = $dbh->prepare($strsth2);
 		$sth2->execute($row_data{bookfundid});
 		my @budget_loop;
-		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
+		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {
 			my %budgetrow_data;
 			$budgetrow_data{aqbudgetid} = $aqbudgetid;
 			$budgetrow_data{startdate} = format_date($startdate);
 			$budgetrow_data{enddate} = format_date($enddate);
 			$budgetrow_data{budgetamount} = $budgetamount;
+			$budgetrow_data{branchcode} = $branchcode;
 			push @budget_loop,\%budgetrow_data;
 		}
 		$row_data{budget} = \@budget_loop;

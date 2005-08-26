@@ -285,7 +285,7 @@ sub checkauth {
 	# state variables
 	my $loggedin = 0;
 	my %info;
-	my ($userid, $cookie, $sessionID, $flags);
+	my ($userid, $cookie, $sessionID, $flags,$envcookie);
 	my $logout = $query->param('logout.x');
 	if ($userid = $ENV{'REMOTE_USER'}) {
 		# Using Basic Authentication, no cookies required
@@ -294,13 +294,28 @@ sub checkauth {
 				-expires => '');
 		$loggedin = 1;
 	} elsif ($sessionID=$query->cookie('sessionID')) {
+		C4::Context->_new_userenv($sessionID);
+		if (my %hash=$query->cookie('userenv')){
+				C4::Context::set_userenv(
+					$hash{number},
+					$hash{id},
+					$hash{cardnumber},
+					$hash{firstname},
+					$hash{surname},
+					$hash{branch},
+					$hash{flags},
+					$hash{emailaddress},
+				);
+		}
 		my ($ip , $lasttime);
+
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
 								undef, $sessionID);
 		if ($logout) {
 		# voluntary logout the user
 		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		C4::Context->_unset_userenv($sessionID);
 		$sessionID = undef;
 		$userid = undef;
 		open L, ">>/tmp/sessionlog";
@@ -309,69 +324,107 @@ sub checkauth {
 		close L;
 		}
 		if ($userid) {
-		if ($lasttime<time()-$timeout) {
-			# timed logout
-			$info{'timed_out'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$userid = undef;
-			$sessionID = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-			close L;
-		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-			# Different ip than originally logged in from
-			$info{'oldip'} = $ip;
-			$info{'newip'} = $ENV{'REMOTE_ADDR'};
-			$info{'different_ip'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$sessionID = undef;
-			$userid = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
-			close L;
-		} else {
-			$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-			$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
-				undef, (time(), $sessionID));
-			$flags = haspermission($dbh, $userid, $flagsrequired);
-			if ($flags) {
-			$loggedin = 1;
+			if ($lasttime<time()-$timeout) {
+				# timed logout
+				$info{'timed_out'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				$userid = undef;
+				$sessionID = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+				close L;
+			} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+				# Different ip than originally logged in from
+				$info{'oldip'} = $ip;
+				$info{'newip'} = $ENV{'REMOTE_ADDR'};
+				$info{'different_ip'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				$sessionID = undef;
+				$userid = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+				close L;
 			} else {
-			$info{'nopermission'} = 1;
+				$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
+				$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+					undef, (time(), $sessionID));
+				$flags = haspermission($dbh, $userid, $flagsrequired);
+				if ($flags) {
+				$loggedin = 1;
+				} else {
+				$info{'nopermission'} = 1;
+				}
 			}
-		}
 		}
 	}
 	unless ($userid) {
 		$sessionID=int(rand()*100000).'-'.time();
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
+		C4::Context->_new_userenv($sessionID);
 		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 		if ($return) {
-		$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-			undef, ($sessionID, $userid));
-		$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-			undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-		close L;
-		$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-			$loggedin = 1;
+			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+				undef, ($sessionID, $userid));
+			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+			close L;
+			$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$loggedin = 1;
+			} else {
+				$info{'nopermission'} = 1;
+					C4::Context->_unset_userenv($sessionID);
+			}
+			if ($return == 1){
+				my $sth=$dbh->prepare(
+					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress
+					from borrowers where userid=?"
+				);
+				$sth->execute($userid);
+				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
+				my $hash = C4::Context::set_userenv(
+					$bornum,
+					$userid,
+					$cardnumber,
+					$firstname,
+					$surname,
+					$branchcode,
+					$userflags,
+					$emailaddress,
+				);
+				$envcookie=$query->cookie(-name => 'userenv',
+						-value => $hash,
+						-expires => '');
+			} elsif ($return == 2) {
+			#We suppose the user is the superlibrarian
+				my $hash = C4::Context::set_userenv(
+					0,0,
+					C4::Context->config('user'),
+					C4::Context->config('user'),
+					C4::Context->config('user'),
+					"",1,'nobody@nowhere_koha.com'
+				);
+				$envcookie=$query->cookie(-name => 'userenv',
+						-value => $hash,
+						-expires => '');
+			}
 		} else {
-			$info{'nopermission'} = 1;
-		}
-		} else {
-		if ($userid) {
-			$info{'invalid_username_or_password'} = 1;
-		}
+			if ($userid) {
+				$info{'invalid_username_or_password'} = 1;
+				C4::Context->_unset_userenv($sessionID);
+			}
 		}
 	}
 	my $insecure = C4::Context->boolean_preference('insecure');
@@ -383,7 +436,11 @@ sub checkauth {
 					-value => '',
 					-expires => '');
 		}
-		return ($userid, $cookie, $sessionID, $flags);
+		if ($envcookie){
+			return ($userid, [$cookie,$envcookie], $sessionID, $flags)
+		} else {
+			return ($userid, $cookie, $sessionID, $flags);
+		}
 	}
 	# else we have a problem...
 	# get the inputs from the incoming query

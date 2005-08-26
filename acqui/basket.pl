@@ -56,6 +56,20 @@ $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
 
 # get librarian branch...
+if (C4::Context->preference("IndependantBranches")) {
+	my $userenv = C4::Context->userenv;
+	unless ($userenv->{flags} == 1){
+		my $validtest = ($basket->{creationdate} eq '') 
+					|| ($basket->{branch} eq '')
+					|| ($userenv->{branch} eq $basket->{branch})
+					|| ($userenv->{branch} eq '')
+					|| ($basket->{branch} eq '');
+		unless ($validtest) {
+			print $query->redirect("../mainpage.pl");
+			exit 1;
+		}
+	}
+}
 
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});

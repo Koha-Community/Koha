@@ -190,12 +190,16 @@ foreach my $reserveline (@$reserves) {
 	push (@reservedata, \%row);
 }
 
+#Independant branches management
+my $unvalidlibrarian = ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags}!=1) && !($data->{'branchcode'} eq C4::Context->userenv->{branch}));
+
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
 		 totalprice =>$totalprice,
 		 totaldue =>$total,
 		 issueloop       => \@issuedata,
+		 unvalidlibrarian => $unvalidlibrarian,
 		 reserveloop     => \@reservedata);
 
 output_html_with_http_headers $input, $cookie, $template->output;

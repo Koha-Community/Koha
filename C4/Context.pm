@@ -232,6 +232,8 @@ sub new
 	$self->{"dbh"} = undef;		# Database handle
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
+	$self->{"userenv"} = undef;		# User env
+	$self->{"activeuser"} = undef;		# current active user
 
 	bless $self, $class;
 	return $self;
@@ -596,6 +598,92 @@ sub _new_stopwords
 	}
 	$stopwordlist->{A} = "A" unless $stopwordlist;
 	return $stopwordlist;
+}
+
+=item userenv
+
+  C4::Context->userenv;
+
+Builds a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+set_userenv is called in Auth.pm
+
+=cut
+#'
+sub userenv
+{
+	my $var = $context->{"activeuser"};
+	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+	warn "NO CONTEXT for $var";
+}
+
+=item set_userenv
+
+  C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress);
+
+Informs a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+set_userenv is called in Auth.pm
+
+=cut
+#'
+sub set_userenv{
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress)= @_;
+	my $var=$context->{"activeuser"};
+	my $cell = {
+		"number"     => $usernum,
+		"id"         => $userid,
+		"cardnumber" => $usercnum,
+#		"firstname"  => $userfirstname,
+#		"surname"    => $usersurname,
+#possibly a law problem
+		"branch"     => $userbranch,
+		"flags"      => $userflags,
+		"emailaddress"	=> $emailaddress,
+	};
+	$context->{userenv}->{$var} = $cell;
+	return $cell;
+}
+
+=item _new_userenv
+
+  C4::Context->_new_userenv($session);
+
+Builds a hash for user environment variables.
+
+This hash shall be cached for future use: if you call
+C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+
+_new_userenv is called in Auth.pm
+
+=cut
+#'
+sub _new_userenv
+{
+	shift;
+	my ($sessionID)= @_;
+ 	$context->{"activeuser"}=$sessionID;
+}
+
+=item _unset_userenv
+
+  C4::Context->_unset_userenv;
+
+Destroys the hash for activeuser user environment variables.
+
+=cut
+#'
+
+sub _unset_userenv
+{
+	my ($sessionID)= @_;
+	undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
 }
 
 

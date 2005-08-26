@@ -34,8 +34,13 @@
 					<!-- TMPL_LOOP NAME="item_loop" -->
 					<tr>
 						<!-- TMPL_VAR NAME="item_value" -->
-						<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
-						<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+						<!-- TMPL_IF Name="nomod" -->
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+						<!-- TMPL_ELSE -->
+							<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
+							<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+						<!-- /TMPL_IF -->
 					</tr>
 					<!-- /TMPL_LOOP -->
 			</table>
@@ -69,7 +74,6 @@
 	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	<input type="button" value="Modify item" onClick="Check(this.form)" accesskey="w" class="button catalogue">
 	<!-- /TMPL_IF -->
-	</center>
 	</form>
 </div>
 <script LANGUAGE="JavaScript">

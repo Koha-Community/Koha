@@ -108,6 +108,15 @@ if ($op eq 'add' or $op eq 'modify') {
 		push @errors, "ERROR_city";
 		$nok=1;
 	}
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		if ($userenv->{flags} != 1){
+			unless ($userenv->{branch} eq $data{'branchcode'}){
+				push @errors, "ERROR_branch";
+				$nok=1;
+			}
+		}
+	}
 	if ($nok) {
 		foreach my $error (@errors) {
 			$template->param( $error => 1);
@@ -147,6 +156,14 @@ if ($delete){
 		}
 	} else {
 		$data=borrdata('',$borrowernumber);
+	}
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		if ($userenv->{flags} != 1){
+			unless ($userenv->{branch} eq $data->{'branchcode'}){
+				print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+			}
+		}
 	}
 	if ($actionType eq 'Add'){
 		$template->param( updtype => 'I');
@@ -221,9 +238,17 @@ if ($delete){
 	my @select_branch;
 	my %select_branches;
 	my $branches=getbranches();
+	my $default;
 	foreach my $branch (keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+		if ((not C4::Context->preference("IndependantBranches")) || (C4::Context->userenv->{'flags'} == 1)) {
+			push @select_branch, $branch;
+			$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+			$default = $data->{'branchcode'};
+		} else {
+				push @select_branch, $branch if ($branch eq C4::Context->userenv->{'branch'});
+				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
+				$default = C4::Context->userenv->{'branch'};
+		}
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
 				-id => 'branchcode',
