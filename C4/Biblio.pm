@@ -1097,21 +1097,25 @@ sub MARCmarc2koha {
 	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result,$frameworkcode);
 # modify copyrightdate to keep only the 1st year found
 	my $temp = $result->{'copyrightdate'};
-	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
-	if ($1>0) {
-		$result->{'copyrightdate'} = $1;
-	} else { # if no cYYYY, get the 1st date.
-		$temp =~ m/(\d\d\d\d)/;
-		$result->{'copyrightdate'} = $1;
+	if ($temp){
+		$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+		if ($1>0) {
+			$result->{'copyrightdate'} = $1;
+		} else { # if no cYYYY, get the 1st date.
+			$temp =~ m/(\d\d\d\d)/;
+			$result->{'copyrightdate'} = $1;
+		}
 	}
 # modify publicationyear to keep only the 1st year found
 	$temp = $result->{'publicationyear'};
-	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
-	if ($1>0) {
-		$result->{'publicationyear'} = $1;
-	} else { # if no cYYYY, get the 1st date.
-		$temp =~ m/(\d\d\d\d)/;
-		$result->{'publicationyear'} = $1;
+	if ($temp){
+		$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+		if ($1>0) {
+			$result->{'publicationyear'} = $1;
+		} else { # if no cYYYY, get the 1st date.
+			$temp =~ m/(\d\d\d\d)/;
+			$result->{'publicationyear'} = $1;
+		}
 	}
 	return $result;
 }
@@ -2737,6 +2741,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.19  2005/08/26 12:28:57  hdl
+# Adding a test on a temporary value before processing it in Biblio.pm
+# Adding branchcode fields to aqbookfund and aqbasket.
+#
 # Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
 # fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
 # (Not all items fields mapped to MARC)

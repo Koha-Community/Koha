@@ -368,6 +368,15 @@ my %requiretables = (
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
 						)",
+	action_logs			=> "(
+												`timestamp` TIMESTAMP NOT NULL ,
+												`user` INT( 11 ) NOT NULL ,
+												`module` TEXT default '',
+												`action` TEXT default '' ,
+												`object` INT(11) default '' ,
+												`info` TEXT default '' ,
+												PRIMARY KEY ( `timestamp` , `user` )
+									 )",
 );
 
 my %requirefields = (
@@ -402,8 +411,11 @@ my %requirefields = (
     },
     aqorders => { 'budgetdate' => 'date',
 				'sort1' => 'char(80)',
-				'sort2' => 'char(80)', },
-    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
+				'sort2' => 'char(80)',
+},
+    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key',
+					 'branchcode' => 'varchar(4)',},
+    aqbookfund => { 'branchcode' => 'varchar(4)',},
     items => {'paidfor' => 'text', 'location' => 'char(80)'},
 
     #added so that reference items are not available for reserves...
@@ -888,7 +900,7 @@ my %tabledata = (
 		 {
             uniquefieldrequired => 'variable',
             variable            => 'IndependantBranches',
-            value               => 0,
+            value               => '0',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
             explanation         => 'Turn Branch independancy management On an Off',
@@ -897,10 +909,19 @@ my %tabledata = (
                 {
             uniquefieldrequired => 'variable',
             variable            => 'ReturnBeforeExpiry',
-            value               => 'Off',
+            value               => '0',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
             explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+            type                => 'YesNo',
+        },
+		{
+            uniquefieldrequired => 'variable',
+            variable            => 'Activate_Log',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn Log Actions on DB On an Off',
             type                => 'YesNo',
         },
 
@@ -1499,6 +1520,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.7  2005/08/26 12:28:57  hdl
+# Adding a test on a temporary value before processing it in Biblio.pm
+# Adding branchcode fields to aqbookfund and aqbasket.
+#
 # Revision 1.100.2.6  2005/08/24 09:02:25  hdl
 # Adding a notes field into serial table.
 # Manage a note for a serial number...
