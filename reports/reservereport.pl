@@ -28,6 +28,7 @@ use C4::Output;
 use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use Data::Dumper;
 
 my $input = new CGI;
 my $time  = $input->param('time');
@@ -37,7 +38,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "reports/reservereport.tmpl",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
+        authnotrequired => 1,
         flagsrequired   => { editcatalogue => 1 },
         debug           => 1,
     }
@@ -45,17 +46,30 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my ( $count, $data ) = unfilledreserves();
 
+
+#print Dumper($count, $data);
+
 my @dataloop;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    warn "here";
+
     my %line;
-    $line{name} = "$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
+#    $line{name}             = "$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
+    $line{name}             = "<p><a href=\"/cgi-bin/koha/members/moremember.pl?bornum=$data->[$i]->{'borrowernumber'}\">$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}</a></p>";
     $line{'reservedate'}    = $data->[$i]->{'reservedate'};
-    $line{'title'}          = $data->[$i]->{'title'};
-    $line{'classification'} =
-      "$data->[$i]->{'classification'}$data->[$i]->{'dewey'}";
+    $line{'title'}          = "<p><a href=\"/cgi-bin/koha/request.pl?bib=$data->[$i]->{'biblionumber'}\">$data->[$i]->{'title'}</a></p>"; #manky
+    $line{'classification'} = "$data->[$i]->{'classification'}$data->[$i]->{'dewey'}";
+    $line{'status'}         = $data->[$i]->{'found'};
+
+warn "status : $line{'status'} \n";
+
     push( @dataloop, \%line );
 }
+
+#= "<p><a href=\"/cgi-bin/koha/request.pl?bib=$data->[$i]->{'biblionumber'}\">$data->[$i]->{'title'}</a></p>"; #manky
+#= "<p><a href=\"/cgi-bin/koha/members/moremember.pl?bornum=$data->[$i]->{'borrowernumber'}\">$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}</a></p>";
+
+
+
 
 $template->param(
     count    => $count,
