@@ -38,7 +38,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "reports/reservereport.tmpl",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 1,
+        authnotrequired => 0,
         flagsrequired   => { editcatalogue => 1 },
         debug           => 1,
     }
