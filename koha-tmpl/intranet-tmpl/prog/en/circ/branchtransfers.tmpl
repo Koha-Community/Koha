@@ -7,9 +7,9 @@
 	<h3>Reserve Found</h3>
 		
 		<table>
-		<caption><!-- TMPL_IF Name="reserved" -->Reserve found for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF -->
+		<caption><!-- TMPL_IF Name="reserved" -->Reserve found for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="waiting" -->
-    Item is marked waiting at <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF --></caption>
+    Item is marked waiting at <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF --></caption>
 		<tr><th>
 			<!-- TMPL_IF Name="reserved" -->Set reserve to waiting and transfer book to <!-- TMPL_VAR Name="branchname" -->: <!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="waiting" -->Cancel reservation and then attempt transfer: <!-- /TMPL_IF -->
@@ -88,7 +88,7 @@
 			Item is already at destination branch.
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errwasreturned" -->
-			Item was on loan to <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>
+			Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a>
 <!-- TMPL_VAR Name="name" --> and has been returned.
 		<!-- /TMPL_IF -->
 
