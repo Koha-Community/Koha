@@ -917,35 +917,35 @@ sub getLoanLength {
 	# check with borrowertype, itemtype and branchcode, then without one of those parameters
 	$sth->execute($borrowertype,$itemtype,$branchcode);
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 	
 	$sth->execute($borrowertype,$itemtype,"");
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 	
 	$sth->execute($borrowertype,"*",$branchcode);
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*",$itemtype,$branchcode);
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute($borrowertype,"*","");
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*","*",$branchcode);
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*",$itemtype,"");
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*","*","");
 	my $loanlength = $sth->fetchrow_hashref;
-	return $loanlength->{issuelength} if defined($loanlength);
+	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	# if no rule is set => 21 days (hardcoded)
 	return 21;
