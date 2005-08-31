@@ -16,11 +16,11 @@
 		is marked waiting at <b><!-- TMPL_VAR NAME="branchname" --></b> for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
-						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
-						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
-						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
+						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+						<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+						<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 					<!-- /TMPL_LOOP -->
-					<input type="hidden" name="barcode" value=0>
+					<input type="hidden" name="barcode" value="0">
 					<input type="submit" value="OK" class="button circulation">
 					</form>
 			<!-- /TMPL_IF -->
@@ -37,12 +37,12 @@
 				<form method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<!-- TMPL_UNLESS Name="first" -->
-						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
-						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
-						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
+						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+						<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+						<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 					<!-- /TMPL_UNLESS -->
 				<!-- /TMPL_LOOP -->
-				<input type="hidden" name="barcode" value=0>
+				<input type="hidden" name="barcode" value="0">
 				<input type="submit" value="OK" class="button circulation">
 				</form>
 				</center>
@@ -56,9 +56,9 @@
 				for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR NAME="branchname" --></b>.
 				</p>
 				<p>
-				Change status to waiting and print <a href="" class="circulation" onClick="alert(document.forms[0].resslip.value); return false">slip</a>? </p>
+				Change status to waiting and print <a href="" class="circulation" onclick="alert(document.forms['f'].resslip.value); return false">slip</a>? </p>
 				<p>
-				<form method="post" action="returns.pl">
+				<form method="post" action="returns.pl" name="f">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
 					<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
@@ -188,8 +188,8 @@
 				<th class="circulation">Borrower</th>
 			</tr>
 			<!-- TMPL_LOOP Name="riloop" -->
-				<tr>
-					<td bgcolor=<!-- TMPL_VAR NAME="color" -->>
+				<!-- TMPL_IF NAME="color" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+					<td >
 						<!-- TMPL_IF Name="duedate" -->
 							<!-- TMPL_IF Name="early" -->
 								<font color="red">
@@ -222,7 +222,7 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			</table>
-		</div id="bloc25">
+		</div>
 	<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
