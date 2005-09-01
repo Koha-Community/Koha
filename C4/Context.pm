@@ -617,6 +617,7 @@ sub userenv
 {
 	my $var = $context->{"activeuser"};
 	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+	return 0;
 	warn "NO CONTEXT for $var";
 }
 

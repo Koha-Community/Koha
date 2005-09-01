@@ -403,7 +403,7 @@ quantityreceived is NULL) and datecancellationprinted is NULL ";
 		
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		unless ($userenv->{flags} == 1){
+		if (($userenv)&&($userenv->{flags} != 1)){
 			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
 		}
 	}
@@ -500,7 +500,7 @@ quantityreceived is NULL) and datecancellationprinted is NULL ";
 		
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		unless ($userenv->{flags} == 1){
+		if (($userenv) &&($userenv->{flags} != 1)){
 			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
 		}
 	}
@@ -589,7 +589,7 @@ sub getlateorders {
 					AND ((datereceived = '' OR datereceived is null) OR (aqorders.quantityreceived < aqorders.quantity) ) ";
 		$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
 		$strsth .= " AND borrowers.branchcode like \'".$branch."\'" if ($branch);
-		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
+		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv && C4::Context->userenv->{flags}!=1);
 		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
 	} else {
 		$strsth ="SELECT aqbasket.basketno,
@@ -740,7 +740,7 @@ sub histsearch {
 	$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		unless ($userenv->{flags} == 1){
+		if (($userenv) &&($userenv->{flags} != 1)){
 			$query .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
 		}
 	}
@@ -1002,7 +1002,7 @@ table of the Koha database.
 sub branches {
     my $dbh   = C4::Context->dbh;
 	my $sth;
-	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
+	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv) && (C4::Context->userenv->{flags} != 1)){
 		my $strsth ="Select * from branches ";
 		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
 		$strsth.= " order by branchname";
