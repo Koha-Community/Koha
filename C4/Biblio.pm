@@ -1079,17 +1079,20 @@ sub MARCmarc2koha {
 	$sth2->execute;
 	my $field;
 	while (($field)=$sth2->fetchrow) {
+# 		warn "biblio.".$field;
 		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
 		if ($field eq 'notes') { $field = 'bnotes'; }
+# 		warn "biblioitems".$field;
 		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
+# 		warn "items".$field;
 		$result=&MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
 	}
 	# additional authors : specific
@@ -1129,12 +1132,13 @@ sub MARCmarc2kohaOneField {
     my $tagfield;
     my $subfield;
     ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
-    foreach my $field ( $record->field($tagfield) ) {
+	if (($tagfield) && $record->field($tagfield)) {
+		my $field =$record->field($tagfield);
 		if ($field->tag()<10) {
 			if ($result->{$kohafield}) {
-				$result->{$kohafield} .= " | ".$field->data();
+				$result->{$kohafield} .= " | ".$field->data() ;
 			} else {
-				$result->{$kohafield} = $field->data();
+				$result->{$kohafield} = $field->data() ;
 			}
 		} else {
 			if ( $field->subfields ) {
@@ -1142,16 +1146,16 @@ sub MARCmarc2kohaOneField {
 				foreach my $subfieldcount ( 0 .. $#subfields ) {
 					if ($subfields[$subfieldcount][0] eq $subfield) {
 						if ( $result->{$kohafield} ) {
-							$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+							$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1] if ($subfields[$subfieldcount][1]);
 						}
 						else {
-							$result->{$kohafield} = $subfields[$subfieldcount][1];
+							$result->{$kohafield} = $subfields[$subfieldcount][1] if ($subfields[$subfieldcount][1]);
 						}
 					}
 				}
 			}
 		}
-    }
+	}
 # 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
     return $result;
 }
@@ -1584,7 +1588,7 @@ sub OLDmodsubject {
 
     #  my $dbh   = C4Connect;
     my $count = @subject;
-    my $error;
+    my $error="";
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         $subject[$i] =~ s/^ //g;
         $subject[$i] =~ s/ $//g;
@@ -1626,7 +1630,7 @@ sub OLDmodsubject {
         }    # else
         $sth->finish;
     }    # else
-    if ( $error eq '' ) {
+    if ($error eq '') {
         my $sth =
           $dbh->prepare("Delete from bibliosubject where biblionumber = ?");
         $sth->execute($bibnum);
@@ -1778,8 +1782,8 @@ sub OLDnewitems {
     my $error = "";
 
     $sth->execute;
-    $data       = $sth->fetchrow_hashref;
-    $itemnumber = $data->{'max(itemnumber)'} + 1;
+    my ($maxitemnumber)= $sth->fetchrow;
+    $itemnumber = $maxitemnumber + 1;
     $sth->finish;
 
 # FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
@@ -2741,6 +2745,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.20  2005/09/01 13:43:33  hdl
+# Fixing a bug for marcimport.
+# Verifying that a record tag exists before getting its value
+#
 # Revision 1.115.2.19  2005/08/26 12:28:57  hdl
 # Adding a test on a temporary value before processing it in Biblio.pm
 # Adding branchcode fields to aqbookfund and aqbasket.
