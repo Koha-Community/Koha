@@ -349,7 +349,7 @@ sub MARCfind_frameworkcode {
 	return $frameworkcode;
 }
 
-=head2 $MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);
+=head2 $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibliohash);
 
 =over 4
 
@@ -362,79 +362,41 @@ all entries of the hash are transformed into their matching MARC field/subfield.
 
 sub MARCkoha2marcBiblio {
 
-    # this function builds partial MARC::Record from the old koha-DB fields
-    my ( $dbh, $biblionumber, $biblioitemnumber ) = @_;
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    my $record = MARC::Record->new();
+	# this function builds partial MARC::Record from the old koha-DB fields
+	my ( $dbh, $bibliohash ) = @_;
+	# we don't have biblio entries in the hash, so we add them first
+	my $sth = $dbh->prepare("select * from biblio where biblionumber=?");
+	$sth->execute($bibliohash->{biblionumber});
+	my $biblio = $sth->fetchrow_hashref;
+	foreach (keys %$biblio) {
+		$bibliohash->{$_}=$biblio->{$_};
+	}
+	my $sth = $dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
+	my $record = MARC::Record->new();
+	foreach ( keys %$bibliohash ) {
+		&MARCkoha2marcOnefield( $sth, $record, "biblio." . $_, $bibliohash->{$_}, '') if $bibliohash->{$_};
+		&MARCkoha2marcOnefield( $sth, $record, "biblioitems." . $_, $bibliohash->{$_}, '') if $bibliohash->{$_};
+	}
 
-    #--- if bibid, then retrieve old-style koha data
-    if ( $biblionumber > 0 ) {
-        my $sth2 =
-          $dbh->prepare(
-"select biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
-		from biblio where biblionumber=?"
-        );
-        $sth2->execute($biblionumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
-                    $row->{$code}, '');
-            }
-        }
-    }
-
-    #--- if biblioitem, then retrieve old-style koha data
-    if ( $biblioitemnumber > 0 ) {
-        my $sth2 =
-          $dbh->prepare(
-            " SELECT biblioitemnumber,biblionumber,volume,number,classification,
-						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
-						volumedate,volumeddesc,timestamp,illus,pages,notes AS bnotes,size,place
-					FROM biblioitems
-					WHERE biblioitemnumber=?
-					"
-        );
-        $sth2->execute($biblioitemnumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblioitems." . $code,
-                    $row->{$code},'' );
-            }
-        }
-    }
-
-    # other fields => additional authors, subjects, subtitles
-    my $sth2 =
-      $dbh->prepare(
-        " SELECT author FROM additionalauthors WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author",
-            $row->{'author'},'' );
-    }
-    $sth2 =
-      $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject",
-            $row->{'subject'},'' );
-    }
-    $sth2 =
-      $dbh->prepare(
-        " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
-            $row->{'subtitle'},'' );
-    }
-    return $record;
+	# other fields => additional authors, subjects, subtitles
+	my $sth2 = $dbh->prepare(" SELECT author FROM additionalauthors WHERE biblionumber=?");
+	$sth2->execute($bibliohash->{biblionumber});
+	while ( my $row = $sth2->fetchrow_hashref ) {
+		&MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author", $bibliohash->{'author'},'' );
+	}
+	$sth2 = $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
+	$sth2->execute($bibliohash->{biblionumber});
+	while ( my $row = $sth2->fetchrow_hashref ) {
+		&MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject", $row->{'subject'},'' );
+	}
+	$sth2 = $dbh->prepare(" SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
+	$sth2->execute($bibliohash->{biblionumber});
+	while ( my $row = $sth2->fetchrow_hashref ) {
+		&MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle", $row->{'subtitle'},'' );
+	}
+	
+	warn "RECORD : ".$record->as_formatted;
+	return $record;
 }
 
 =head2 $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
@@ -1157,7 +1119,7 @@ adds a biblioitem ($biblioitem is a hash with the values)
 sub REALnewbiblioitem {
 	my ( $dbh, $biblioitem ) = @_;
 
-	$dbh->do("lock tables biblioitems WRITE, biblio WRITE");
+	$dbh->do("lock tables biblioitems WRITE, biblio WRITE, marc_subfield_structure READ");
 	my $sth = $dbh->prepare("Select max(biblioitemnumber) from biblioitems");
 	my $data;
 	my $biblioitemnumber;
@@ -1625,8 +1587,8 @@ sub newbiblio {
     my $bibnum = REALnewbiblio( $dbh, $biblio );
     # finds new (MARC bibid
     # 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
-    my $record = &MARCkoha2marcBiblio( $dbh, $bibnum );
-    MARCaddbiblio( $dbh, $record, $bibnum,'' );
+#     my $record = &MARCkoha2marcBiblio( $dbh, $bibnum );
+#     MARCaddbiblio( $dbh, $record, $bibnum,'' );
     return ($bibnum);
 }
 
@@ -1654,6 +1616,7 @@ sub modbiblio {
 	my ($biblio) = @_;
 	my $dbh  = C4::Context->dbh;
 	my $biblionumber=REALmodbiblio($dbh,$biblio);
+	warn "in MODBIBLIO";
 	my $record = MARCkoha2marcBiblio($dbh,$biblionumber,$biblionumber);
 	# finds new (MARC bibid
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
@@ -1718,11 +1681,12 @@ sub modsubject {
 		# When MARC is off, ensures that the MARC biblio table gets updated with new
 		# subjects, of course, it deletes the biblio in marc, and then recreates.
 		# This check is to ensure that no MARC data exists to lose.
-		if (C4::Context->preference("MARC") eq '0'){
-			my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
-			my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
-			&MARCmodbiblio($dbh,$bibid, $MARCRecord);
-		}
+# 		if (C4::Context->preference("MARC") eq '0'){
+# 		warn "in modSUBJECT";
+# 			my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
+# 			my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+# 			&MARCmodbiblio($dbh,$bibid, $MARCRecord);
+# 		}
 	}
 	return ($error);
 }    # sub modsubject
@@ -1756,15 +1720,10 @@ create a biblioitem, the parameter is a hash
 sub newbiblioitem {
     my ($biblioitem) = @_;
     my $dbh        = C4::Context->dbh;
+	# add biblio information to the hash
+    my $MARCbiblio = MARCkoha2marcBiblio( $dbh, $biblioitem );
+	$biblioitem->{marc} = $MARCbiblio->as_usmarc();
     my $bibitemnum = &REALnewbiblioitem( $dbh, $biblioitem );
-
-    my $MARCbiblio =
-      MARCkoha2marcBiblio( $dbh, 0, $bibitemnum )
-      ; # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
-    my $bibid =
-      &MARCfind_MARCbibid_from_oldbiblionumber( $dbh,
-        $biblioitem->{biblionumber} );
-    &MARCaddbiblio( $dbh, $MARCbiblio, $biblioitem->{biblionumber}, '',$bibid );
     return ($bibitemnum);
 }
 
@@ -2339,6 +2298,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.130  2005/09/02 14:34:14  tipaul
+# continuing the work to move to zebra. Begin of work for MARC=OFF support.
+# IMPORTANT NOTE : the MARCkoha2marc sub API has been modified. Instead of biblionumber & biblioitemnumber, it now gets a hash.
+# The sub is used only in Biblio.pm, so the API change should be harmless (except for me, but i'm aware ;-) )
+#
 # Revision 1.129  2005/08/12 13:50:31  tipaul
 # removing useless sub declarations
 #
