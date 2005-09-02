@@ -98,6 +98,7 @@ my %requiretables = (
 
 my %requirefields = (
 	subscription => { 'letter' => 'char(20) NULL'},
+	itemtypes => { 'imageurl' => 'char(200) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -276,6 +277,7 @@ foreach $table ( keys %fielddefinitions ) {
 		my $field   = $row->{field};
 		my $type    = $row->{type};
 		my $null    = $row->{null};
+# 		$null    = 'YES' if $row->{null} eq 'NULL';
 		my $key     = $row->{key};
 		my $default = $row->{default};
 		$default="''" unless $default;
@@ -619,6 +621,13 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.122  2005/09/02 14:18:38  tipaul
+# new feature : image for itemtypes.
+#
+# * run updater/updatedatabase to create imageurl field in itemtypes.
+# * go to Koha >> parameters >> itemtypes >> modify (or add) an itemtype. You will see around 20 nice images to choose between (thanks to owen). If you prefer your own image, you also can type a complete url (http://www.myserver.lib/path/to/my/image.gif)
+# * go to OPAC, and search something. In the result list, you now have the picture instead of the text itemtype.
+#
 # Revision 1.121  2005/08/24 08:49:03  hdl
 # Adding a note field in serial table.
 # This will allow librarian to mention a note on a peculiar waiting serial number.

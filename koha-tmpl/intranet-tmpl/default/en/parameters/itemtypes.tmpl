@@ -56,6 +56,10 @@ function Check(f) {
 		alert(alertString2);
 	}
 }
+
+function report_itemtype(value_to_report) {
+	Aform.imageurl.value=value_to_report;
+}
 </script>
 <div id="mainbloc">
 <!-- TMPL_IF NAME="add_form" -->
@@ -75,6 +79,13 @@ function Check(f) {
 			<p>
 				<label class="label100">Description</label>
 				<input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" escape=HTML -->">
+			</p>
+			<p>
+				<label class="label100">Image</label>
+				<input type="text" name="imageurl" value="<!-- TMPL_VAR name="imageurl" -->" size="40" maxlength="80">
+				<!-- TMPL_LOOP NAME="IMAGESLOOP" -->
+					 <a href="javascript:report_itemtype('<!-- TMPL_VAR name="KohaImage" -->')"><img src="/opac-tmpl/<!-- TMPL_VAR name="opacthemes" -->/itemtypeimg/<!-- TMPL_VAR name="KohaImage" -->"></a>
+				<!-- /TMPL_LOOP -->
 			</p>
 			<p>
 				<label class="label100">Not for loan</label>
@@ -138,7 +149,16 @@ function Check(f) {
 	</tr>
 	<!-- TMPL_LOOP NAME="loop" -->
 		<tr>
-			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td>
+				<!-- TMPL_IF name="imageurl" -->
+					<!-- TMPL_IF name="absoluteurl" -->
+						<img src="<!-- TMPL_VAR name="imageurl" -->">
+					<!-- TMPL_ELSE -->
+						<img src="/opac-tmpl/<!-- TMPL_VAR name="opacthemes" -->/itemtypeimg/<!-- TMPL_VAR name="imageurl" -->">
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_VAR NAME="itemtype" -->
+			</td>
 			<td><!-- TMPL_VAR NAME="description" --></td>
 			<td><!-- TMPL_IF NAME="notforloan" -->Yes<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_UNLESS name="notforloan" -->

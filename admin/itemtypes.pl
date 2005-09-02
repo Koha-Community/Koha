@@ -96,16 +96,42 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($itemtype) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select itemtype,description,renewalsallowed,rentalcharge,notforloan from itemtypes where itemtype=?");
+		my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
 		$sth->execute($itemtype);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
+	# build list of images
+	my $imagedir = C4::Context->opachtdocs."/".C4::Context->preference('opacthemes');
+	warn "img : $imagedir";
+	unless (opendir(DIR, "$imagedir/itemtypeimg/")) {
+# 		my $cgidir = C4::Context->intranetdir;
+		opendir(DIR, "$imagedir/value_builder") || die "can't opendir $imagedir/value_builder: $!";
+	} 
+	my @imagelist;
+	while (my $line = readdir(DIR)) {
+		if ($line =~ /\.gif$/) {
+			my %x;
+			$x{KohaImage} = "$line";
+			push @imagelist, \%x;
+		}
+	}
+	closedir DIR;
+# 	my $CGIitemtypes = CGI::scrolling_list(-name=>'itemtypes',
+# 					-id=>"itemtypes",
+# 					-values=> \@imagelist,
+# 					-size=>1,
+# 					-multiple=>0,
+# 					);
+# 					
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
 							renewalsallowed => $data->{'renewalsallowed'},
 							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
-							notforloan => $data->{'notforloan'}
+							notforloan => $data->{'notforloan'},
+							imageurl => $data->{'imageurl'},
+							opacthemes => C4::Context->preference('opacthemes'),
+							IMAGESLOOP => \@imagelist,
 							);
 ;
 													# END $OP eq ADD_FORM
@@ -113,11 +139,12 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan) values (?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan,imageurl) values (?,?,?,?,?,?)");
 	$sth->execute(
 		$input->param('itemtype'),$input->param('description'),
 		$input->param('renewalsallowed'),$input->param('rentalcharge'),
-		$input->param('notforloan')?1:0);
+		$input->param('notforloan')?1:0,
+		$input->param('imageurl'));
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;
@@ -143,9 +170,10 @@ if ($op eq 'add_form') {
 	$sth->finish;
 
 	$template->param(itemtype => $itemtype,
-							description => $data->{'description'},
-							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
+							description => $data->{description},
+							renewalsallowed => $data->{renewalsallowed},
+							rentalcharge => sprintf("%.2f",$data->{rentalcharge}),
+							imageurl => $data->{imageurl},
 							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -180,10 +208,16 @@ if ($op eq 'add_form') {
 		$row_data{description} = $results->[$i]{description};
 		$row_data{renewalsallowed} = $results->[$i]{renewalsallowed};
 		$row_data{notforloan} = $results->[$i]{notforloan};
+		if ($results->[$i]{imageurl} =~ /^http/) {
+			$row_data{absoluteurl} = 1;
+		}
+		$row_data{imageurl} = $results->[$i]{imageurl};
 		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{rentalcharge});
 		push(@loop_data, \%row_data);
 	}
-	$template->param(loop => \@loop_data);
+	$template->param(loop => \@loop_data,
+					opacthemes => C4::Context->preference('opacthemes')
+					);
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param(previous => "$script_name?offset=".$prevpage);

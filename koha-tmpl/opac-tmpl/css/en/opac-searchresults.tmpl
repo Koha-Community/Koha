@@ -79,7 +79,11 @@
 					</p>
 				</td>
 				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR name="description" -->
+					<!-- TMPL_IF name="imageurl" -->
+						<img src="/opac-tmpl/<!-- TMPL_VAR name="theme" -->/itemtypeimg/<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->"
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR name="description" -->
+					<!-- /TMPL_IF -->
 				</td>
 				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="totitem" -->
