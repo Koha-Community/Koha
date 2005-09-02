@@ -62,7 +62,7 @@ orders, converting money to different currencies, and so forth.
 		&bookfunds &curconvert &getcurrencies &bookfundbreakdown
 		&updatecurrencies &getcurrency
 
-		&branches &updatesup &insertsup
+		&updatesup &insertsup
 		&bookseller &breakdown
 );
 
@@ -986,41 +986,6 @@ sub breakdown {
   $sth->finish;
   return(scalar(@results),\@results);
 }
-
-=item branches
-
-  ($count, @results) = &branches();
-
-Returns a list of all library branches.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash, whose keys are the fields of the branches
-table of the Koha database.
-
-=cut
-#'
-sub branches {
-    my $dbh   = C4::Context->dbh;
-	my $sth;
-	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
-		my $strsth ="Select * from branches ";
-		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
-		$strsth.= " order by branchname";
-		warn "C4::Acquisition->branches : ".$strsth;
-		$sth=$dbh->prepare($strsth);
-	} else {
-    	$sth = $dbh->prepare("Select * from branches order by branchname");
-	}
-    my @results = ();
-
-    $sth->execute();
-    while (my $data = $sth->fetchrow_hashref) {
-        push(@results,$data);
-    } # while
-
-    $sth->finish;
-    return(scalar(@results), @results);
-} # sub branches
 
 =item updatesup
 

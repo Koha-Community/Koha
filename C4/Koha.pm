@@ -178,7 +178,7 @@ sub subfield_is_koha_internal_p ($) {
 
 my $branches = getbranches;
 my @branchloop;
-foreach my $thisbranch (keys %$branches) {
+foreach my $thisbranch (sort keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;
 	my %row =(value => $thisbranch,
 				selected => $selected,
@@ -202,7 +202,15 @@ sub getbranches {
 # returns a reference to a hash of references to branches...
 	my %branches;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from branches order by branchname");
+	my $sth;
+	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
+		my $strsth ="Select * from branches ";
+		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
+		$strsth.= " order by branchname";
+		$sth=$dbh->prepare($strsth);
+	} else {
+    	$sth = $dbh->prepare("Select * from branches order by branchname");
+	}
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
 		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
@@ -236,7 +244,7 @@ build a HTML select with the following code :
 
 my $itemtypes = getitemtypes;
 my @itemtypesloop;
-foreach my $thisitemtype (keys %$itemtypes) {
+foreach my $thisitemtype (sort keys %$itemtypes) {
 	my $selected = 1 if $thisitemtype eq $itemtype;
 	my %row =(value => $thisitemtype,
 				selected => $selected,
@@ -266,7 +274,7 @@ sub getitemtypes {
 # returns a reference to a hash of references to branches...
 	my %itemtypes;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from itemtypes order by description");
+	my $sth=$dbh->prepare("select * from itemtypes");
 	$sth->execute;
 	while (my $IT=$sth->fetchrow_hashref) {
 			$itemtypes{$IT->{'itemtype'}}=$IT;
