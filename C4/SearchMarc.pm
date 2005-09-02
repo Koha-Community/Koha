@@ -190,6 +190,7 @@ sub catalogsearch {
 	}
 	# prepare the query to find date_due where applicable
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
+	my $sth_itemtype = $dbh->prepare("select itemtypes.description,itemtypes.notforloan,itemtypes.imageurl from itemtypes where itemtype=?");
 	
 	# prepare the query to find subtitles
 	my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
@@ -278,7 +279,12 @@ sub catalogsearch {
 #                warn "and here's the subtitle: ".$subtitle_here;
 
         # /ADDED BY JF
-
+		# search itemtype information
+		$sth_itemtype->execute($line->{itemtype});
+		my ($itemtype_description,$itemtype_notforloan,$itemtype_imageurl) = $sth_itemtype->fetchrow;
+		$line->{description} = $itemtype_description;
+		$line->{imageurl} = $itemtype_imageurl;
+		$line->{notforloan} = $itemtype_notforloan;
 		$sth_itemCN->execute($biblionumber);
 		my @CNresults = ();
 		my $notforloan=1; # to see if there is at least 1 item that can be issued
