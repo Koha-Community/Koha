@@ -4,39 +4,35 @@
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
 </style>
-<style>
-.parameters {
-	background-color: #86c268;
-	color: #FFFFFF;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-a.parameters:hover {
-	background-color: #86c268;
-	color: #FFFFFF;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-.ranges {
-	border:0;
-}
-
-.myTable TD{
-  border-width: 0px;
-  border-color: navy;
-  border-style: solid;
-}
-
+<style type="text/css">
 .panel { 
 	position:relative;
 }
 
 .countryPanel {
-	z-index:1;
-	width:300px;
-	display:none;
-	border:1px solid #000000;
-	padding:0px;
+	background-color : #D8DEB8;
+	z-index : 1;
+	width : 300px;
+	display : none;
+	border-top : 2px outset #FFFFCC;
+	border-left : 2px outset #FFFFCC;
+	border-right : 2px outset #000000;
+	border-bottom : 2px outset #000000;
+	padding : 0;
+	position : absolute;
+	font-size : 80%;
+}
+
+.countryPanel h4 {
+	background-color : #EFF1D8;
+	color : #000066;
+	margin : 0;
+	padding : 3px;
+	text-align : center;
+}
+
+.countryPanel p {
+	text-align : center;
 }
 </style>
 
@@ -193,9 +189,9 @@ function removeItem() {
 	function addCountryCode() {
 		var panel = document.getElementById('addCountryCode');
 		panel.style.display = 'inline';
-		panel.style.top = mouseY;
-		panel.style.left = mouseX;
+		panel.style.top = mouseY+'px';
+		panel.style.left = mouseX+'px';
 	}
 </script>
 </head>
-<body onload="javascript: changeRange(document.getElementById('rangeType'))">
+<body onload="changeRange(document.getElementById('rangeType'))">
