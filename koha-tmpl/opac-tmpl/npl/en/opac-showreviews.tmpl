@@ -1,0 +1,19 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Library Home for  <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="main">
+
+<table>                
+<!--TMPL_LOOP NAME="reviews"-->                                   
+<tr><td><!--TMPL_VAR NAME="review"-->                                         
+<p><!--TMPL_VAR NAME="datereviewed"--></td></tr>                
+<!--/TMPL_LOOP-->                     
+</table>
+
+</div>
+</body>
+</html>
+
+
