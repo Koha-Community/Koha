@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Library Home for  <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="main">
+<h3> Review of: </span><span class="head1"><!--TMPL_VAR NAME="title"></h3>                
+         
+<form action="/cgi-bin/koha/opac-review.pl" method="post"> 
+<input type="hidden" name="biblionumber" value="<!--TMPL_VAR NAME="biblionumber"-->">                              
+<input type="hidden" name="type" value="<TMPL_VAR NAME="type">">             
+         
+<table>                                  
+<tr><td>Review</td></tr>     
+<tr><td><textarea name="review" cols=40 rows=8><!--TMPL_VAR NAME="review"-->></textarea></td></tr>                               
+<tr><td><input type="submit" value="Submit"></td></tr>             
+</table>                 
+</form>
+
+
+</div>
+</body>
+</html>
+
+
