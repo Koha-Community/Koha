@@ -71,6 +71,13 @@
 <!-- TMPL_IF NAME="pages" -->
 	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="reviews" -->                                 
+<tr>             
+<th>Reviews:</th> 
+<td><a href="/cgi-bin/koha/opac-showreviews.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="reviews" --></a></td> 
+</tr>                
+<!-- /TMPL_IF -->
+
 <!-- /TMPL_LOOP -->
 
 <!-- Hide from NPL --> <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
