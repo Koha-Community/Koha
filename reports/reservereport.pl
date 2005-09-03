@@ -22,7 +22,7 @@
 
 use strict;
 use C4::Stats;
-use Date::Manip;
+use C4::Date;
 use CGI;
 use C4::Output;
 use HTML::Template;
@@ -46,16 +46,20 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my ( $count, $data ) = unfilledreserves();
 
 my @dataloop;
+my $toggle;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-
     my %line;
-    $line{name}             = "<p><a href=\"/cgi-bin/koha/members/moremember.pl?bornum=$data->[$i]->{'borrowernumber'}\">$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}</a></p>";
-    $line{'reservedate'}    = $data->[$i]->{'reservedate'};
-    $line{'title'}          = "<p><a href=\"/cgi-bin/koha/request.pl?bib=$data->[$i]->{'biblionumber'}\">$data->[$i]->{'title'}</a></p>"; #manky
-    $line{'classification'} = "$data->[$i]->{'classification'}$data->[$i]->{'dewey'}";
-    $line{'status'}         = $data->[$i]->{'found'};
-
-warn "status : $line{'status'} \n";
+	$toggle = $i%2 ? 0 : 1;
+	$line{'borrowernumber'} = $data->[$i]->{'borrowernumber'};
+	$line{'surname'} = $data->[$i]->{'surname'};
+	$line{'firstname'} = $data->[$i]->{'firstname'};
+    $line{'reservedate'}    = format_date($data->[$i]->{'reservedate'});
+	$line{'biblionumber'} = $data->[$i]->{'biblionumber'};
+	$line{'title'} = $data->[$i]->{'title'};
+	$line{'classification'} = $data->[$i]->{'classification'};
+	$line{'dewey'} = $data->[$i]->{'dewey'};
+    $line{'status'} = $data->[$i]->{'found'};
+	$line{'toggle'} = $toggle;
 
     push( @dataloop, \%line );
 }
