@@ -10,6 +10,8 @@ use HTML::Template;
 use C4::Biblio;
 use C4::SearchMarc;
 use C4::Amazon;
+use C4::Review;
+
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name => "opac-detail.tmpl",
@@ -88,13 +90,11 @@ if (C4::Boolean::true_p($marc)) {
 # 	$template->param(MARCSUBJCTS => $marcsubjctsarray);
 }
 
+# get the number of reviews
+my $reviewcount=numberofreviews($biblionumber);
+$dat->{'reviews'}=$reviewcount;
+
 my @results = ($dat,);
-
-
-
-
-
-
 my $resultsarray=\@results;
 my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
