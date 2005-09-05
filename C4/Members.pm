@@ -49,7 +49,7 @@ C4::Members - Perl Module containing convenience functions for member handling
 @EXPORT = qw();
 
 @EXPORT = qw(
-	&getmember &fixup_cardnumber &findguarantees &modmember &newmember &changepassword
+	&getmember &fixup_cardnumber &findguarantees &findguarantor &modmember &newmember &changepassword
     );
 
 	
@@ -274,6 +274,36 @@ sub findguarantees {
   }
   $sth->finish;
   return($i,\@dat);
+}
+
+=item findguarantor
+
+  $guarantor = &findguarantor($borrower_no);
+  $guarantor_cardno = $guarantor->{"cardnumber"};
+  $guarantor_surname = $guarantor->{"surname"};
+  ...
+
+C<&findguarantor> takes a borrower number (presumably that of a child
+patron), finds the guarantor for C<$borrower_no> (the child's parent),
+and returns the record for the guarantor.
+
+C<&findguarantor> returns a reference-to-hash. Its keys are the fields
+from the C<borrowers> database table;
+
+=cut
+#'
+sub findguarantor{
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("select guarantor from borrowers where borrowernumber=?");
+  $sth->execute($bornum);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($data->{'guarantor'});
+  $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
 }
 
 # =item NewBorrowerNumber

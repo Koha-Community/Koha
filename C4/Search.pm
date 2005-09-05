@@ -62,40 +62,10 @@ on what is passed to it, it calls the appropriate search function.
 &itemdata &bibdata &GetItems &borrdata &itemnodata
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
-&addauthor &bibitems &barcodes &allissues
-&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
+&addauthor &bibitems &barcodes &allissues &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
 &isbnsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
-=item findguarantor
-
-  $guarantor = &findguarantor($borrower_no);
-  $guarantor_cardno = $guarantor->{"cardnumber"};
-  $guarantor_surname = $guarantor->{"surname"};
-  ...
-
-C<&findguarantor> takes a borrower number (presumably that of a child
-patron), finds the guarantor for C<$borrower_no> (the child's parent),
-and returns the record for the guarantor.
-
-C<&findguarantor> returns a reference-to-hash. Its keys are the fields
-from the C<borrowers> database table;
-
-=cut
-#'
-sub findguarantor{
-  my ($bornum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("select guarantor from borrowers where borrowernumber=?");
-  $sth->execute($bornum);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-  $sth->execute($data->{'guarantor'});
-  $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
 
 =item NewBorrowerNumber
 
