@@ -1361,7 +1361,7 @@ sub ItemInfo {
 			$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
 			$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
 			my ($lib) = $sthnflstatus->fetchrow;
-			$data->{notforloan} = $lib;
+			$data->{notforloantext} = $lib;
 		}
 		$results[$i]=$data;
 		$i++;

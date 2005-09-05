@@ -53,7 +53,7 @@ for (my $i = 1; $i < $authorcount; $i++) {
 
 my $norequests = 1;
 foreach my $itm (@items) {
-    $norequests = 0 unless (($itm->{'wthdrawn'}) || ($itm->{'itemlost'}) ||(!$itm->{'itemnumber'}));
+    $norequests = 0 unless (($itm->{'wthdrawn'}) || ($itm->{'itemlost'}) || ($itm->{'itemnotforloan'}) ||(!$itm->{'itemnumber'}));
     $itm->{$itm->{'publictype'}} = 1;
 }
 
