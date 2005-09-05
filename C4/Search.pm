@@ -62,42 +62,10 @@ on what is passed to it, it calls the appropriate search function.
 &itemdata &bibdata &GetItems &borrdata &itemnodata
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
-&addauthor &bibitems &barcodes &findguarantees &allissues
+&addauthor &bibitems &barcodes &allissues
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
 &isbnsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
-
-
-=item findguarantees
-
-  ($num_children, $children_arrayref) = &findguarantees($parent_borrno);
-  $child0_cardno = $children_arrayref->[0]{"cardnumber"};
-  $child0_borrno = $children_arrayref->[0]{"borrowernumber"};
-
-C<&findguarantees> takes a borrower number (e.g., that of a patron
-with children) and looks up the borrowers who are guaranteed by that
-borrower (i.e., the patron's children).
-
-C<&findguarantees> returns two values: an integer giving the number of
-borrowers guaranteed by C<$parent_borrno>, and a reference to an array
-of references to hash, which gives the actual results.
-
-=cut
-#'
-sub findguarantees{
-  my ($bornum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("select cardnumber,borrowernumber, firstname, surname from borrowers where guarantor=?");
-  $sth->execute($bornum);
-
-  my @dat;
-  while (my $data = $sth->fetchrow_hashref)
-  {
-    push @dat, $data;
-  }
-  $sth->finish;
-  return (scalar(@dat), \@dat);
-}
 
 =item findguarantor
 
