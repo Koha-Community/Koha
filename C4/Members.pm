@@ -49,7 +49,7 @@ C4::Members - Perl Module containing convenience functions for member handling
 @EXPORT = qw();
 
 @EXPORT = qw(
-	&getmember &fixup_cardnumber &findguarantees &findguarantor &modmember &newmember &changepassword
+	&getmember &fixup_cardnumber &findguarantees &findguarantor &NewBorrowerNumber &modmember &newmember &changepassword
     );
 
 	
@@ -306,31 +306,25 @@ sub findguarantor{
   return($data);
 }
 
-# =item NewBorrowerNumber
-# 
-#   $num = &NewBorrowerNumber();
-# 
-# Allocates a new, unused borrower number, and returns it.
-# 
-# =cut
-# #'
-# # FIXME - This is identical to C4::Search::NewBorrowerNumber.
-# # Pick one (preferably this one) and stick with it.
-# 
-# # FIXME - Race condition: this function just says what the next unused
-# # number is, but doesn't allocate it. Hence, two clients adding
-# # patrons at the same time could get the same new borrower number and
-# # clobber each other.
-# # A better approach might be to set borrowernumber autoincrement and 
-# 
-# sub NewBorrowerNumber {
-#   my $dbh = C4::Context->dbh;
-#   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
-#   $sth->execute;
-#   my $data=$sth->fetchrow_hashref;
-#   $sth->finish;
-#   $data->{'max(borrowernumber)'}++;
-#   return($data->{'max(borrowernumber)'});
-# }
+=item NewBorrowerNumber
+
+  $num = &NewBorrowerNumber();
+
+Allocates a new, unused borrower number, and returns it.
+
+=cut
+#'
+# FIXME - This is identical to C4::Circulation::Borrower::NewBorrowerNumber.
+# Pick one and stick with it. Preferably use the other one. This function
+# doesn't belong in C4::Search.
+sub NewBorrowerNumber {
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $data->{'max(borrowernumber)'}++;
+  return($data->{'max(borrowernumber)'});
+}
 
 1;

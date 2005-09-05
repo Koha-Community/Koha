@@ -66,28 +66,6 @@ on what is passed to it, it calls the appropriate search function.
 &isbnsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
-
-=item NewBorrowerNumber
-
-  $num = &NewBorrowerNumber();
-
-Allocates a new, unused borrower number, and returns it.
-
-=cut
-#'
-# FIXME - This is identical to C4::Circulation::Borrower::NewBorrowerNumber.
-# Pick one and stick with it. Preferably use the other one. This function
-# doesn't belong in C4::Search.
-sub NewBorrowerNumber {
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $data->{'max(borrowernumber)'}++;
-  return($data->{'max(borrowernumber)'});
-}
-
 =item catalogsearch
 
   ($count, @results) = &catalogsearch($env, $type, $search, $num, $offset);
