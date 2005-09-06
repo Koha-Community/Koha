@@ -524,7 +524,7 @@ sub CreateReserve {
     (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
 						          values
     (?,?,now(),?,?,'Res',?)");
-    $usth->execute($borrnum,$nextacctno,$fee,'Reserve Charge - $title',$fee);
+    $usth->execute($borrnum,$nextacctno,$fee,"Reserve Charge - $title",$fee);
     $usth->finish;
   }
   #if ($const eq 'a'){
