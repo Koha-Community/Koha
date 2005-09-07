@@ -9,16 +9,20 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
+use Data::Dumper;
+
 &Date_Init("DateFormat=non-US"); # set non-USA date, eg:19/08/2005
 
 my $input=new CGI;
 my $time=$input->param('time');
+my $time2=$input->param('time2');
+
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "stats.screen.tmpl",
+    = get_template_and_user({template_name => "stats_screen.tmpl",
                              query => $input,
                              type => "intranet",
-                             authnotrequired => 0,
+                             authnotrequired => 1,
                              flagsrequired => {borrowers => 1},
                              debug => 1,
                              });
@@ -53,15 +57,21 @@ if ($time eq ''){
         $date2=ParseDate('tomorrow');
 }
 
+# if script is called with a start and finsh date range...
+if ($time ne '' && $time2 ne ''){
+          $date=ParseDate($time);
+          $date2=ParseDate($time2);
+}
 
 
 my $date=UnixDate($date,'%Y-%m-%d');
 my $date2=UnixDate($date2,'%Y-%m-%d');
-
-#warn "MASON: DATE: $date, $date2";
+warn "MASON: TIME: $time, $time2";
+warn "MASON: DATE: $date, $date2";
 
 #get a list of every payment
 my @payments=TotalPaid($date,$date2);
+
 
 my $count=@payments;
 # print "MASON: number of payments=$count\n";
@@ -81,7 +91,11 @@ while ($i<$count ){
        my $count;
        my @charges;
 
-       if ($payments[$i]{'type'} ne 'writeoff'){         # lets ignore writeoff payments!.
+
+       if ($payments[$i]{'type'} ne 'writeoff'){
+
+#       warn Dumper $payments[$i];
+
            @charges=getcharges($payments[$i]{'borrowernumber'}, $payments[$i]{'timestamp'}, $payments[$i]{'proccode'});
            $totalcharges++;
            $count=@charges;
@@ -130,7 +144,8 @@ while ($i<$count ){
                     creditfirstname     => $credits[$i]->{'firstname'},
                     creditdescription   => $credits[$i]->{'description'},
                     creditaccounttype   => $credits[$i]->{'accounttype'},
-                    creditamount        => $credits[$i]->{'amount'});
+                    creditamount        => sprintf("%.2f", $credits[$i]->{'amount'})
+                    );
 
        push (@loop2, \%rows2);
        $i++; #increment the while loop
@@ -149,3 +164,4 @@ $template->param( loop1               => \@loop1,
                   totalwritten        => $totalwritten );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
