@@ -443,7 +443,13 @@ sub calculate {
 
 	$strcalc .= "SELECT $linefield, $colfield, ";
 	$strcalc .= "COUNT( * ) " if ($process ==1);
+	if ($process ==2){
+		$strcalc .= "(COUNT(DISTINCT borrowers.borrowernumber))" ;
+	}
 	if ($process ==3){
+		$strcalc .= "(COUNT(DISTINCT itemnumber))" ;
+	}
+	if ($process ==4){
 		my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
 		$rqbookcount->execute;
 		my ($bookcount) = $rqbookcount->fetchrow;
