@@ -159,7 +159,7 @@ if ($delete){
 	}
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		if ($userenv->{flags} != 1){
+		if ($userenv->{flags} != 1 && $data->{branchcode}){
 			unless ($userenv->{branch} eq $data->{'branchcode'}){
 				print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 			}
