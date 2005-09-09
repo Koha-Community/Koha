@@ -7,11 +7,9 @@
 <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="All issues on this title">Issue history</a>
 <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Subscriptions</a>
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Back to biblio</a>
-<!-- TMPL_UNLESS name="totalissues" -->
-		<a href="javascript:confirm_deletion()" class="button bull">
-			delete
-		</a>
-<!-- /TMPL_UNLESS -->
+<a href="javascript:confirm_deletion()" class="button bull">
+	delete
+</a>
 <form method="post" name="f">
 <div id="bloc25">
 	<h2 class="bull">Subscription information</h2>
@@ -151,6 +149,7 @@
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Issue number&nbsp;&nbsp;&nbsp;&nbsp;</th>
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;&nbsp;&nbsp;&nbsp;</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -175,6 +174,9 @@
 					<!-- /TMPL_IF -->
 				</select>
 			</td>
+			<td>
+				<!-- TMPL_VAR name="notes" -->
+			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
@@ -183,7 +185,11 @@
 <script>
 function _(s) { return s } // dummy function for gettext
 function confirm_deletion() {
-	var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	<!-- TMPL_IF name="totalissues" -->
+		var is_confirmed = confirm(_('You already made <!-- TMPL_VAR name="totalissues"--> receipts. Do you confirm deletion?'));
+	<!-- TMPL_ELSE -->
+		var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	<!-- /TMPL_IF -->	
 	if (is_confirmed) {
 		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
 	}

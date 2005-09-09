@@ -289,15 +289,11 @@ sub modsubscription {
 
 sub delsubscription {
 	my ($subscriptionid) = @_;
-	# check again there is only one issue (the subscription is new)
-	my ($totalissues) = getserials($subscriptionid);
-	if ($totalissues eq 1) {
-		my $dbh = C4::Context->dbh;
-		$subscriptionid=$dbh->quote($subscriptionid);
-		$dbh->do("delete from subscription where subscriptionid=$subscriptionid");
-		$dbh->do("delete from subscriptionhistory where subscriptionid=$subscriptionid");
-		$dbh->do("delete from serial where subscriptionid=$subscriptionid");
-	}
+	my $dbh = C4::Context->dbh;
+	$subscriptionid=$dbh->quote($subscriptionid);
+	$dbh->do("delete from subscription where subscriptionid=$subscriptionid");
+	$dbh->do("delete from subscriptionhistory where subscriptionid=$subscriptionid");
+	$dbh->do("delete from serial where subscriptionid=$subscriptionid");
 }
 sub getsubscriptions {
 	my ($title,$ISSN,$biblionumber) = @_;
