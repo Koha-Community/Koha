@@ -97,6 +97,7 @@ for (my $i=0; $i < $count; $i++){
         categorycode => $results->[$i]{'categorycode'},
         streetaddress => $results->[$i]{'streetaddress'},
         city => $results->[$i]{'city'},
+        branchcode => $results->[$i]{'branchcode'},
         odissue => "$od/$issue",
         fines => $fines,
         borrowernotes => $results->[$i]{'borrowernotes'});
