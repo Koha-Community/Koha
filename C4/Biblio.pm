@@ -1169,7 +1169,7 @@ sub MARCaddword {
         $subfieldid, $subfieldorder, $sentence
       )
       = @_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
+    $sentence =~ s/(\.|\?|\:|\!|;|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
     my @words = split / /, $sentence;
     my $stopwords = C4::Context->stopwords;
     my $sth       =
@@ -1668,9 +1668,13 @@ sub OLDmodbibitem {
     $biblioitem->{'illus'}       = $dbh->quote( $biblioitem->{'illus'} );
     $biblioitem->{'pages'}       = $dbh->quote( $biblioitem->{'pages'} );
     $biblioitem->{'volumeddesc'} = $dbh->quote( $biblioitem->{'volumeddesc'} );
+    $biblioitem->{'volumeddate'} = $dbh->quote( $biblioitem->{'volumeddate'} );
     $biblioitem->{'bnotes'}      = $dbh->quote( $biblioitem->{'bnotes'} );
     $biblioitem->{'size'}        = $dbh->quote( $biblioitem->{'size'} );
     $biblioitem->{'place'}       = $dbh->quote( $biblioitem->{'place'} );
+    $biblioitem->{'volume'}       = $dbh->quote( $biblioitem->{'volume'} );
+    $biblioitem->{'number'}       = $dbh->quote( $biblioitem->{'number'} );
+    $biblioitem->{'lccn'}       = $dbh->quote( $biblioitem->{'lccn'} );
 
     $query = "Update biblioitems set
 itemtype        = $biblioitem->{'itemtype'},
@@ -1685,9 +1689,14 @@ subclass        = $biblioitem->{'subclass'},
 illus           = $biblioitem->{'illus'},
 pages           = $biblioitem->{'pages'},
 volumeddesc     = $biblioitem->{'volumeddesc'},
+volumeddate     = $biblioitem->{'volumeddate'},
 notes 		= $biblioitem->{'bnotes'},
 size		= $biblioitem->{'size'},
-place		= $biblioitem->{'place'}
+place		= $biblioitem->{'place'},
+volume		= $biblioitem->{'volume'},
+number		= $biblioitem->{'number'},
+lccn		= $biblioitem->{'lccn'},
+
 where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
 
     $dbh->do($query);
@@ -2745,6 +2754,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.21  2005/09/09 16:11:51  tipaul
+# adding missing fields in biblioitems update
+#
 # Revision 1.115.2.20  2005/09/01 13:43:33  hdl
 # Fixing a bug for marcimport.
 # Verifying that a record tag exists before getting its value
