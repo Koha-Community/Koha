@@ -163,8 +163,8 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
 	$sth->execute($bookfundid);
 	$sth->finish;
-	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
-	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
+	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname,branchcode) values (?,?,?)");
+	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'),$input->param('branchcode'));
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
 	exit;
