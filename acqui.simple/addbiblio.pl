@@ -21,7 +21,6 @@
 
 use strict;
 use CGI;
-use C4::Log;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
@@ -442,10 +441,8 @@ if ($op eq "addbiblio") {
 		if ($is_a_modif) {
 			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","modify",$bibid,"record : ".$record->as_formatted) if (logstatus());
 		} else {
 			($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","add",$bibid,"record : ".$record->as_formatted) if (logstatus());
 		}
 	# now, redirect to additem page
 		print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");

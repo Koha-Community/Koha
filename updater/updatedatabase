@@ -368,15 +368,6 @@ my %requiretables = (
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
 						)",
-	action_logs			=> "(
-												`timestamp` TIMESTAMP NOT NULL ,
-												`user` INT( 11 ) NOT NULL ,
-												`module` TEXT default '',
-												`action` TEXT default '' ,
-												`object` INT(11) default '' ,
-												`info` TEXT default '' ,
-												PRIMARY KEY ( `timestamp` , `user` )
-									 )",
 );
 
 my %requirefields = (
@@ -915,16 +906,6 @@ my %tabledata = (
             explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
             type                => 'YesNo',
         },
-		{
-            uniquefieldrequired => 'variable',
-            variable            => 'Activate_Log',
-            value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Turn Log Actions on DB On an Off',
-            type                => 'YesNo',
-        },
-
     ],
 
 );
@@ -1520,6 +1501,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.8  2005/09/09 08:19:57  hdl
+# Undoing Logs
+#
 # Revision 1.100.2.7  2005/08/26 12:28:57  hdl
 # Adding a test on a temporary value before processing it in Biblio.pm
 # Adding branchcode fields to aqbookfund and aqbasket.
