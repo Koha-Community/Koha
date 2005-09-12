@@ -133,7 +133,17 @@ sub assingFilename {
 	my $tmpFileName = $random.'-'.$ip.'-(From '.$from.' to '.$to.')-['.$day.'.'.$month.'.'.$year.']-['.$hour.':'.$min.':'.$sec.'].pdf';
 	return $tmpFileName;
 }
-
+sub getCallnum {
+#grabs a callnumber for the specified barcode
+my ($barcode) = @_;
+my $query = "select dewey from items,biblioitems where items.biblionumber=biblioitems.biblionumber and items.barcode=?";
+my $dbh = C4::Context->dbh;
+my $sth = $dbh->prepare($query);
+$sth->execute($barcode);
+my ($callnum) = $sth->fetchrow_array();
+warn "Call number is:".$barcode;
+return $callnum;
+}
 # Takes inventary codes from database and if they are between
 # the interval specify by parameters, it generates the correspond barcodes
 sub barcodesGenerator {
@@ -143,7 +153,8 @@ sub barcodesGenerator {
 	# Create the query to database
 	# Assigns a temporary filename for the pdf file
 	my $tmpFileName = &assingFilename($from, $to);
-	if ($rangeType eq 'continuous2') {
+	# warn "range type: ".$rangeType;
+	if ($rangeType eq 'continuous') {
 		# Set the temp directory for pdf´s files
 		if (!defined($ENV{'TEMP'})) {
 			$ENV{'TEMP'} = '/tmp/';
@@ -162,6 +173,7 @@ sub barcodesGenerator {
 			# Generetase checksum
 			my $codeC = &checksum($code);
 			# Generate the corresponde barcode to $code
+			# warn "Code is :-->".$codeC."<--";
 			my $barcode = $pdf->barcode(-font => $tr,	# The font object to use
 										-type => 'ean128',	# Standard of codification
 										-code => $codeC, # Text to codify
@@ -187,8 +199,11 @@ sub barcodesGenerator {
 			$gfx->barcode($barcode, $x, $y , (72/$labelConfig{'systemDpi'}));
 			# Assigns the additional information to the barcode (Legend)
 			$text->translate($x - 48, $y - 22);
+			warn "code is ".$codeC;
 			if ($text_under_label) {
 				$text->text($text_under_label);
+			} else {
+			$text->text(getCallnum($code));
 			}
 		}
 		# Writes the objects added in $gfx to $page
@@ -206,8 +221,8 @@ sub barcodesGenerator {
 		} else {
 			$rangeCondition =  "AND (I.barcode >= " . $from . " AND I.barcode <="  . $to . " )";
 		}
-			
-		my $query = "SELECT CONCAT('$numbersystem',REPEAT('0',((12 - LENGTH('$numbersystem')) - LENGTH(I.barcode))), I.barcode) AS Codigo, B.title, B.author FROM biblio B, items I WHERE (I.biblionumber = B.biblioNumber ) " .$rangeCondition. " AND (I.barcode <> 'FALTA') ORDER BY Codigo";
+		warn "above the query";	
+		my $query = "SELECT CONCAT('$numbersystem',REPEAT('0',((12 - LENGTH('$numbersystem')) - LENGTH(I.barcode))), I.barcode) AS Codigo, I.dewey as dewey B.title, B.author FROM biblio B, items I WHERE (I.biblionumber = B.biblioNumber ) " .$rangeCondition. " AND (I.barcode <> 'FALTA') ORDER BY Codigo";
 		
 		# Prepare the query
 		my $sth = $dbh->prepare($query);
@@ -230,7 +245,7 @@ sub barcodesGenerator {
 			my $tr = $pdf->corefont('Helvetica-Bold');
 			# Barcode position
 			my ($page, $gfx, $text);
-			while (my ($code,$title,$author) = $sth->fetchrow_array) {
+			while (my ($code,$dewey,$title,$author) = $sth->fetchrow_array) {
 				# Generetase checksum
 				$code = &checksum($code);
 				# Generate the corresponde barcode to $code
@@ -262,9 +277,10 @@ sub barcodesGenerator {
 				if ($text_under_label) {
 					$text->text($text_under_label);
 				} else {
-					$text->text(substr $title, 0, 30);
+					warn "here a dewey:".$dewey;
+					$text->text(substr $dewey, 0, 30);
 					$text->translate($x - 48, $y - 29);
-					$text->text(substr $author, 0, 30);
+					#$text->text(substr $author, 0, 30);
 				}
 			}
 			# Writes the objects added in $gfx to $page
