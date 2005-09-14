@@ -35,7 +35,6 @@ my ($websitecount, @websites)             = &getwebsites($biblionumber);
  my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
  my @subs;
  foreach my $subscription (@subscriptions){
- 	warn "subsid :".$subscription->{subscriptionid};
  	my %cell;
  	$cell{subscriptionid}= $subscription->{subscriptionid};
  	$cell{subscriptionnotes}= $subscription->{notes};
@@ -53,7 +52,7 @@ for (my $i = 1; $i < $authorcount; $i++) {
 
 my $norequests = 1;
 foreach my $itm (@items) {
-    $norequests = 0 unless (($itm->{'wthdrawn'}) || ($itm->{'itemlost'}) || ($itm->{'itemnotforloan'}) ||(!$itm->{'itemnumber'}));
+    $norequests = 0 unless (($itm->{'wthdrawn'}) || ($itm->{'itemlost'}) || ($itm->{'notforloan'})|| ($itm->{'itemnotforloan'}) ||(!$itm->{'itemnumber'}));
     $itm->{$itm->{'publictype'}} = 1;
 }
 
