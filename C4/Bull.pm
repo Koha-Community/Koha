@@ -224,6 +224,7 @@ sub get_full_subscription_list_from_biblionumber {
 		if ($year and ($year==$subs->{year})){
 			if ($first eq 1){$first=0;}
 			my $temp=$res[scalar(@res)-1]->{'serials'};
+			warn "STATUS : ".$subs->{status};
 			push @$temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
@@ -237,6 +238,7 @@ sub get_full_subscription_list_from_biblionumber {
 			$aqbooksellername= $subs->{'aqbooksellername'};
 			$bibliotitle= $subs->{'bibliotitle'};
 			my @temp;
+			warn "STATUS : ".$subs->{status};
 			push @temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
