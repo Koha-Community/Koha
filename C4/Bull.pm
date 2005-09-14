@@ -185,6 +185,7 @@ sub get_subscription_list_from_biblionumber {
 		$subs->{missinglist} =~ s/\n/\<br\/\>/g;
 		$subs->{recievedlist} =~ s/\n/\<br\/\>/g;
 		$subs->{"periodicity".$subs->{periodicity}} = 1;
+		$subs->{"status".$subs->{'status'}} = 1;
 		if ($subs->{enddate} eq '0000-00-00') {
 			$subs->{enddate}='';
 		} else {
@@ -198,7 +199,7 @@ sub get_subscription_list_from_biblionumber {
 sub get_full_subscription_list_from_biblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, year(serial.planneddate) as year,subscription.*, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, serial.notes, year(serial.planneddate) as year, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
 							from serial left join subscription on (serial.subscriptionid=subscription.subscriptionid and subscription.biblionumber=serial.biblionumber)
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
 							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
@@ -226,10 +227,7 @@ sub get_full_subscription_list_from_biblionumber {
 			push @$temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
-				'status1' => $subs->{'status'}==1,
-				'status2' => $subs->{'status'}==2,
-				'status3' => $subs->{'status'}==3,
-				'status4' => $subs->{'status'}==4,
+				"status".$subs->{'status'} => 1,
 				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 		}else {
@@ -242,10 +240,7 @@ sub get_full_subscription_list_from_biblionumber {
 			push @temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
-				'status1' => $subs->{'status'}==1,
-				'status2' => $subs->{'status'}==2,
-				'status3' => $subs->{'status'}==3,
-				'status4' => $subs->{'status'}==4,
+				"status".$subs->{'status'} => 1,
 				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 			
