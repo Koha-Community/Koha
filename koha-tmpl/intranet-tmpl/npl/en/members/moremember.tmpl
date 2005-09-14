@@ -9,18 +9,18 @@
 <div class="tabitem">
 			 <form method="post" action="/cgi-bin/koha/circ/circulation.pl"><input name="findborrower" type="hidden" value="<!-- TMPL_VAR name="cardnumber" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /> <input type="submit" class="submit" value="Issue" /></form>
 
-<!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /></form><!-- /TMPL_IF --><!-- /Hide from NPL -->
+<!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /></form><!-- /TMPL_UNLESS --><!-- /TMPL_IF --><!-- /Hide from NPL -->
 
-<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Edit" /></form>
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Edit" /></form>
 <!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form>
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
 
-<form action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR name=bornum -->" /> <input type="submit" class="submit" value="Change Password" /></form>
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR name=bornum -->" /> <input type="submit" class="submit" value="Change Password" /></form><!-- /TMPL_UNLESS -->
 
- <form action="/cgi-bin/koha/members/member-flags.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR name=bornum -->" /> <input type="submit" class="submit" value="Modify Privileges" /></form>
+ <!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form action="/cgi-bin/koha/members/member-flags.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR name=bornum -->" /> <input type="submit" class="submit" value="Modify Privileges" /></form><!-- /TMPL_UNLESS -->
 
 
-<form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR name="bornum" -->" onclick="confirm_deletion(); return false;"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="bornum" -->"><input type="submit" class="cancel" value="Delete"></form>
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR name="bornum" -->" onclick="confirm_deletion(); return false;"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="bornum" -->"><input type="submit" class="cancel" value="Delete"></form><!-- /TMPL_UNLESS -->
 
 </div>
 <!-- TMPL_IF NAME="flagged" -->	<div class="details">
@@ -119,13 +119,11 @@
 		
 		<tr>
 			<!-- TMPL_IF name="totaldue" --><th>Total Due:</th><td>$<!-- TMPL_VAR name="totaldue" --></td></tr><!-- TMPL_ELSE --><td>No Outstanding Charges</td><!-- /TMPL_IF --></table>
-<p><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><input type="submit" value="View Account" class="submit" /></form>
-
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><p><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><input type="submit" value="View Account" class="submit" /></form>
 
 	<form class="inline" action="/cgi-bin/koha/pay.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><input type="submit" value="Pay Fines" class="submit" /></form>
 
-
-</p></div>
+</p><!-- /TMPL_UNLESS --></div>
 
 <form class="inline" action="renewscript.pl" method="post">
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" />
@@ -138,7 +136,7 @@
 		<th>Itemtype</th>
 		<!-- Hide from NPL --><th>Charge</th><!-- /Hide from NPL -->
 		<th>Price</th>
-		<th>Renew</th>
+		<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><th>Renew</th><!-- /TMPL_UNLESS -->
 		<th>Return</th>
 	</tr>
 	</thead>
@@ -156,21 +154,21 @@
 		<td><!-- TMPL_VAR name="itemtype" --></td>
 		<!-- Hide from NPL --><td class="credit"><!-- TMPL_VAR name="charge" --></td><!-- /Hide from NPL -->
 		<td class="credit"><!-- TMPL_VAR name="replacementprice" --></td>
-		<td>
+		<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><td>
 		<!-- TMPL_IF name="norenew" -->
 			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Reserved</a>
 		<!-- TMPL_ELSE -->
 			<input type="checkbox" name="renew_item_<!-- TMPL_VAR name="itemnumber" -->" value="y"<!-- TMPL_IF name="red" -->checked="checked"<!-- /TMPL_IF --> />
 		<!-- /TMPL_IF -->
-		</td>
+		</td><!-- /TMPL_UNLESS -->
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->">Return</a></td>
 	</tr>
 	<!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="7">Patron has no issues.</td></tr><!-- /TMPL_IF -->
 	</tbody>
-	</table><p><input type="submit" class="submit" value="Renew Checked Items" /></p>
+	</table><!-- TMPL_UNLESS NAME="unvalidlibrarian"--><p><input type="submit" class="submit" value="Renew Checked Items" /></p><!-- /TMPL_UNLESS -->
 </form>
 
-<form class="inline" action="renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR name="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form>
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form class="inline" action="renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR name="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form><!-- /TMPL_UNLESS -->
 
 
 
@@ -205,7 +203,7 @@
 	<!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="4">Patron has no reserves</td></tr><!-- /TMPL_IF -->
 
 </table>		<!-- TMPL_IF name="reserveloop" -->
-			<p><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></p>
+			<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><p><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></p><!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF --></form>
 
 

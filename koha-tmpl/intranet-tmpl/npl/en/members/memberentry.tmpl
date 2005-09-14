@@ -26,7 +26,7 @@
 				<li><a href="#firstname">First Name</a></li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_gender" -->
-				<li><a href="sex">Sex</a></li>
+				<li><a href="#sex">Sex</a></li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_address" -->
 				<li><a href="#address">Mailing Address</a></li>
@@ -39,6 +39,9 @@
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_invalid_cardnumber" -->
 				<li><a href="#cardnumber">Invalid Card Number</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_branch" -->
+				<li><a href="#branch">Patron must be at the same branch as you</a></li>
 			<!-- /TMPL_IF -->
 			</ul>
 		</div>
@@ -141,7 +144,7 @@
 <caption>Patron Details</caption>
 	<!-- TMPL_UNLESS NAME="addAction" --><tr><th><label>Member Number:</label></th><td><span class="ex"><!-- TMPL_VAR NAME="member" --></span></td></tr><!-- /TMPL_UNLESS -->
 	<tr><th><label for="categorycode">Category:</label> </th><td><!-- TMPL_VAR NAME="catcodepopup" --></td></tr>
-	<tr><th><label for="branchcode">Branch:</label></th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>	
+	<tr><th><label for="branchcode"><a name="branch" id="branch">Branch:</a></label></th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>	
 	<tr><th><label for="cardnumber"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->><a name="cardnumber" id="cardnumber">Card Number</a></label></th><td><input id="cardnumber" type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->></td></tr>
 </table>
 <table><caption>Additional Fields</caption>
