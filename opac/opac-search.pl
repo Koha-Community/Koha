@@ -74,9 +74,9 @@ if ($op eq "do_search") {
 	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
 	     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=".@$results[0]->{biblionumber});
 	} elsif (C4::Context->preference("BiblioDefaultView") eq "MARC") {
-	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	     print $query->redirect("/cgi-bin/koha/opac-MARCdetail.pl?bib=".@$results[0]->{biblionumber});
 	} else {
-	     print $query->redirect("/cgi-bin/koha/ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
+	     print $query->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
 	}
 	exit;
 	}
