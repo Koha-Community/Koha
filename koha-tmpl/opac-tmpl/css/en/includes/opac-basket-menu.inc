@@ -1,19 +1,14 @@
 	<!-- MENUS -->
-	<div id="menuline" style="font-size:11pt;margin-top:20px;margin-bottom:20px;">
-		<span class="spacer">&nbsp;</span>
-		<A href='javascript:delBasket()' class="menu">Empty</A>
-		<span class="basketspacer">&nbsp;</span>
-		<A href='javascript:delSelRecords()' class="menu">Remove selection</A>
-		<span class="basketspacer">&nbsp;</span>
-		<A href='javascript:sendBasket()' class="menu">Send</A>
-		<span class="basketspacer">&nbsp;</span>
-		<A href='javascript:printBasket()' class="menu">Print</A>
-		<span class="basketspacer">&nbsp;</span>
-		<A href='javascript:quit()' class="menu">Close</A>
+	<div id="menuline" style="font-size:11pt;margin-top:20px;margin-bottom:20px;padding-left:0px;">
+		<a href='javascript:delBasket()' class="menu">Empty</A>
+		<a href='javascript:delSelRecords()' class="menu">Remove selection</A>
+		<a href='javascript:sendBasket()' class="menu">Send</A>
+		<a href='javascript:printBasket()' class="menu">Print</A>
+		<a href='javascript:quit()' class="menu">Close</A>
 		<!-- TMPL_IF NAME="verbose" -->
-			<a href="javascript:showLess()" class="menu">Brief Display</a>
+			<a href="javascript:showLess()" class="menu">Brief</a>
 		<!-- TMPL_ELSE -->
-			<a href="javascript:showMore()" class="menu">More Details</a>
+			<a href="javascript:showMore()" class="menu">Details</a>
 		<!-- /TMPL_IF -->
 
 	</div>

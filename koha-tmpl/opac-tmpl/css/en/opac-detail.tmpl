@@ -69,15 +69,18 @@
 					<p><label><b>Subjects:</b></label></p>
 					<p>
 						<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-							<label>-</label><a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
-								<!-- TMPL_VAR NAME="marcsubjct" -->
-							</a><br>
+							<p><label>-</label>
+							<!-- TMPL_IF name="linkvalue" -->
+								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=<!-- TMPL_VAR name="link" -->&and_or=and&operator==&value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
+							<!-- TMPL_ELSE -->
+								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=start&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
+							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</p>
 				<!-- TMPL_ELSE -->
 					<!-- TMPL_IF name="subjects" --><p><label><b>Subject(s):</b> </label></p>
 						<!-- TMPL_LOOP name="subjects" -->
-							<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator==&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
+							<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=start&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="copyrightdate" --><p><label><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p><!-- /TMPL_IF -->

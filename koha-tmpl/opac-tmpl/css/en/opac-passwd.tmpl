@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="mainbloc">
 
+<!-- TMPL_IF NAME= "Ask_data" -->
+<h1>Change your Password</h1>
 <!-- TMPL_IF NAME= "Error_messages" -->
 <h3>There was a problem with your submission</h3>
 <p class="error">
@@ -15,8 +17,6 @@
 	<!-- /TMPL_IF --></p>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME= "Ask_data" -->
-<h1>Change your Password</h1>
 <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="get">
 <p><label for="password">Current Password:</label><input type="password" id="Oldkey" size="25"  name="Oldkey" /></p>
 <p><label for="Newkey">New Password:</label><input type="password" id="Newkey"  size="25"  name="Newkey" /></p>
