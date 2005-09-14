@@ -26,20 +26,20 @@
 </div>
 <h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
 <!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
-<!-- /TMPL_LOOP -->
+
 <table>
 
 <!-- TMPL_UNLESS NAME="MARCNOTES" -->
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+
 <!-- TMPL_IF NAME="notes" -->
 <tr><th>Notes:</th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr><!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+
 <!-- /TMPL_UNLESS -->
 	
 <!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+
 <!-- TMPL_IF name="subjects" --><tr><th>Subject(s):</th><td><!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></td></tr><!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+
 <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="MARCNOTES" -->
@@ -51,10 +51,17 @@
 <!-- TMPL_IF NAME="MARCSUBJCTS" -->
 		<tr>
 			<th>Related links:</th>
-			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
+			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+							<!-- TMPL_IF name="linkvalue" -->
+								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="link" -->&amp;and_or=and&amp;operator==&amp;value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
+							<!-- TMPL_ELSE -->
+								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=start&amp;value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
+							<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
 
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+
 <!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="copyrightdate" -->
     <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
@@ -92,6 +99,7 @@
 <th>Type/Format</th>
 <th>Call Number</th>
 <th>Location</th>
+<th>Status</th>
 <th>Due Date</th>
 <th>Last Seen</th>
 <!-- <th>Barcode</th> --></tr>
@@ -100,7 +108,19 @@
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
-<td><!-- TMPL_VAR NAME="branchname" --></td>
+				<td>
+					<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+					<!-- TMPL_IF name="itemcallnumber" -->
+						(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+					<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="datedue" -->
+						On loan
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR name="notforloantext" -->
+					<!-- /TMPL_IF -->
+				</td>
 <td><!-- TMPL_VAR NAME="datedue" --></td>
 <td><!-- TMPL_VAR NAME="datelastseen" --></td>
 <!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>
