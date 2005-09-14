@@ -587,26 +587,37 @@ sub getMARCsubjects {
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
 		$mintag = "600";
-		$maxtag = "619";
+		$maxtag = "699";
 	}
-	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
+	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode,tagorder,tag FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder,subfieldorder");
 
 	$sth->execute($bibid,$mintag,$maxtag);
 
 	my @marcsubjcts;
-	my $subjct = "";
-	my $subfield = "";
+	my $subject = "";
+# 	my $subfield = "";
 	my $marcsubjct;
-
-	while (my $data=$sth->fetchrow_arrayref) {
-		my $value = $data->[0];
-		my $subfield = $data->[1];
-		if ($subfield eq "a" && $value ne $subjct) {
-		        $marcsubjct = {MARCSUBJCT => $value,};
+	my $field9;
+	my $activetagorder=0;
+	while (my ($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
+		if ($activetagorder && $tagorder != $activetagorder) {
+			$subject=~ s/ -- $//;
+			$marcsubjct = {MARCSUBJCT => $subject,
+							link => $tag."9",
+							linkvalue => $field9,
+							};
 			push @marcsubjcts, $marcsubjct;
-			$subjct = $value;
+			$subject='';
 		}
+		if ($subfieldcode eq 9) {
+			$field9=$subfieldvalue;
+		} else {
+			$subject .= $subfieldvalue." -- ";
+		}
+		$activetagorder=$tagorder;
 	}
+	$marcsubjct = {MARCSUBJCT => $subject,};
+	push @marcsubjcts, $marcsubjct;
 
 	$sth->finish;
 
