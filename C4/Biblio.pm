@@ -510,7 +510,7 @@ sub MARCgetbiblio {
 				if ($prevtag ne '000') {
                 	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
 				} else {
-					$record->leader(sprintf("%24s",$prevvalue));
+					$record->leader(sprintf("%-24s",$prevvalue));
 				}
             }
             else {
@@ -1668,7 +1668,7 @@ sub OLDmodbibitem {
     $biblioitem->{'illus'}       = $dbh->quote( $biblioitem->{'illus'} );
     $biblioitem->{'pages'}       = $dbh->quote( $biblioitem->{'pages'} );
     $biblioitem->{'volumeddesc'} = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'volumeddate'} = $dbh->quote( $biblioitem->{'volumeddate'} );
+    $biblioitem->{'volumedate'} = $dbh->quote( $biblioitem->{'volumedate'} );
     $biblioitem->{'bnotes'}      = $dbh->quote( $biblioitem->{'bnotes'} );
     $biblioitem->{'size'}        = $dbh->quote( $biblioitem->{'size'} );
     $biblioitem->{'place'}       = $dbh->quote( $biblioitem->{'place'} );
@@ -1689,13 +1689,13 @@ subclass        = $biblioitem->{'subclass'},
 illus           = $biblioitem->{'illus'},
 pages           = $biblioitem->{'pages'},
 volumeddesc     = $biblioitem->{'volumeddesc'},
-volumeddate     = $biblioitem->{'volumeddate'},
+volumedate     = $biblioitem->{'volumedate'},
 notes 		= $biblioitem->{'bnotes'},
 size		= $biblioitem->{'size'},
 place		= $biblioitem->{'place'},
 volume		= $biblioitem->{'volume'},
 number		= $biblioitem->{'number'},
-lccn		= $biblioitem->{'lccn'},
+lccn		= $biblioitem->{'lccn'}
 
 where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
 
@@ -2754,6 +2754,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.22  2005/09/14 10:05:12  tipaul
+# 2 bugfixes :
+# * leader alignment when leader is <24 => should be left aligned, not right !
+# * trailing , in an update recently modified
+#
 # Revision 1.115.2.21  2005/09/09 16:11:51  tipaul
 # adding missing fields in biblioitems update
 #
