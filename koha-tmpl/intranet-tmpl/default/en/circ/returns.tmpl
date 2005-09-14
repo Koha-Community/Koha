@@ -135,7 +135,8 @@
 			<p>
 			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;">
 				<!-- TMPL_VAR NAME="riborcnum" -->
-			</a>
+			</a> 
+			<!-- TMPL_IF NAME="boremail" -->(<a href="mailto:<!-- TMPL_VAR Name="boremail" -->"><!-- TMPL_VAR Name="boremail" --></a>)<!-- /TMPL_IF -->
 			<!-- TMPL_VAR NAME="riborsurname" -->, <!-- TMPL_VAR NAME="ribortitle" --> <!-- TMPL_VAR NAME="riborfirstname" --></p>
 			<!-- TMPL_IF Name="flagset" -->
 				<h2 class="circulation">Flags</h2>
