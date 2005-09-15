@@ -72,6 +72,7 @@ my ($template, $loggedinuser, $cookie)
 			librariannote => $solhistory->{'librariannote'},
 			subscriptionid => $subscriptionid,
 			bibliotitle => $subs->{bibliotitle},
+			biblionumber => $subs->{biblionumber},
 			hassubscriptionexpired =>$hassubscriptionexpired,
 		);
 output_html_with_http_headers $query, $cookie, $template->output;
