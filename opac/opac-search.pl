@@ -49,8 +49,16 @@ if ($op eq "do_search") {
 	}
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
+	
 	my $orderby = $query->param('orderby');
 	my $desc_or_asc = $query->param('desc_or_asc');
+	my $exactsearch = $query->param('exact');
+	if ($exactsearch) {
+		warn "EXACT";
+		foreach (@operator) {
+			$_='=';
+		}
+	}
 	# builds tag and subfield arrays
 	my @tags;
 
