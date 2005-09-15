@@ -59,7 +59,7 @@ if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
 	unless ($userenv->{flags} == 1){
 		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
-			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
+#			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
 			print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
 			exit 1;
 		}
