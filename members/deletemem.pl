@@ -41,16 +41,6 @@ my $flagsrequired;
 $flagsrequired->{borrower}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
-if (C4::Context->preference("IndependantBranches")) {
-	my $userenv = C4::Context->userenv;
-	unless ($userenv->{flags} == 1){
-		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
-			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
-			print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
-			exit 1;
-		}
-	}
-}
 
 
 #print $input->header;
@@ -65,6 +55,16 @@ foreach (sort keys %$issues) {
 	$i++;
 }
 my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+if (C4::Context->preference("IndependantBranches")) {
+	my $userenv = C4::Context->userenv;
+	unless ($userenv->{flags} == 1){
+		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
+			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
+			print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
+			exit 1;
+		}
+	}
+}
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
 $sth->execute($member);
