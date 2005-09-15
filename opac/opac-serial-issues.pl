@@ -25,13 +25,9 @@ if ($selectview eq "full"){
 	my $subscriptions = get_full_subscription_list_from_biblionumber($biblionumber);
 	
 	my $title = $subscriptions->[0]{bibliotitle};
-# 	warn "title ".$title;
 	my $yearmin=$subscriptions->[0]{year};
-# 	warn "yearmin ".$yearmin;
 	my $yearmax=$subscriptions->[scalar(@$subscriptions)-1]{year};
-# 	warn "yearmax ".$yearmax;
-	
-	
+
 	($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "opac-full-serial-issues.tmpl",
 					query => $query,
