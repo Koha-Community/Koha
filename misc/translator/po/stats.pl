@@ -31,6 +31,7 @@ $lang{es_AR} = "Spanish (Argentinian)";
 $lang{fr_FR} = "French"; # FIXME: should be just "fr"
 $lang{it_IT} = "Italian"; # FIXME: should be just "it"
 $lang{my_MM} = "Burmese (Myanmar)";
+$lang{ta_MY} = "Tamoul";
 $lang{pl_PL} = "Polish"; # FIXME: should be just "pl"
 $lang{pt_BR} = "Portuguese (Brazilian)";
 $lang{'sr@Latn'} = "Serbian (Latin)";

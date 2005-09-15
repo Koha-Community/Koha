@@ -50,7 +50,7 @@ for my $spec (
       rename($target, "$target~") if $pot_p;
       exec('./tmpl_process3.pl', ($pot_p? 'create': 'update'),
 	    '-i', "../../koha-tmpl/$module-tmpl/$theme/en/",
-	    '-s', $target, '-r');
+	    '-s', $target, '-r', '-x', '.*unimarc.*');
 
       die "tmpl_process3.pl: exec: $!\n";
    }
