@@ -13,7 +13,7 @@
 
 <form class="inline" action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View Bibliographic Record" /></form>
 
-<!-- TMPL_UNLESS name="totalissues" --><form class="inline" action="subscription-detail.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="hidden" name="op" value="del" /><input type="submit" class="cancel" value="Delete subscription" /></form><!-- /TMPL_UNLESS -->
+<form class="inline" action="subscription-detail.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="hidden" name="op" value="del" /><input type="submit" class="cancel" onclick="confirm_deletion(); return false;" value="Delete subscription" /></form>
 
 <div class="data">
 <table>
@@ -154,6 +154,7 @@
 		<th>Issue number</th>
 		<th>Planned date</th>
 		<th>Status</th>
+		<th>Note</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -177,10 +178,25 @@
 						Missing
 					<!-- /TMPL_IF -->
 			</td>
+			<td>
+				<!-- TMPL_VAR name="notes" -->
+			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
 </div>
 </div>
-
+<script>
+function _(s) { return s } // dummy function for gettext
+function confirm_deletion() {
+	<!-- TMPL_IF name="totalissues" -->
+		var is_confirmed = confirm(_('You already made <!-- TMPL_VAR name="totalissues"--> receipts. Do you confirm deletion?'));
+	<!-- TMPL_ELSE -->
+		var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	<!-- /TMPL_IF -->	
+	if (is_confirmed) {
+		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
+	}
+}
+</script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
