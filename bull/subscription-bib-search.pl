@@ -25,71 +25,9 @@ use C4::Koha;
 use C4::Auth;
 use HTML::Template;
 use C4::Context;
-use C4::Search;
-use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Biblio;
-use C4::Acquisition;
 use C4::SearchMarc;
-use C4::Koha; # XXX subfield_is_koha_internal_p
-
-# Creates the list of active tags using the active MARC configuration
-sub create_marclist {
-	my $dbh = C4::Context->dbh;
-	my $tagslib = &MARCgettagslib($dbh,1);
-	my @marcarray;
-	push @marcarray,"";
-	my $widest_menu_item_width = 0;
-	for (my $pass = 1; $pass <= 2; $pass += 1)
-	{
-		for (my $tabloop = 0; $tabloop<=9;$tabloop++)
-		{
-			my $separator_inserted_p = 0; # FIXME... should not use!!
-			foreach my $tag (sort(keys (%{$tagslib})))
-			{
-				foreach my $subfield (sort(keys %{$tagslib->{$tag}}))
-				{
-					next if subfield_is_koha_internal_p($subfield);
-					next unless ($tagslib->{$tag}->{$subfield}->{tab} eq $tabloop);
-					my $menu_item = "$tag$subfield - $tagslib->{$tag}->{$subfield}->{lib}";
-					if ($pass == 1)
-					{
-						$widest_menu_item_width = length $menu_item if($widest_menu_item_width < length $menu_item);
-					} else {
-						if (!$separator_inserted_p)
-						{
-							my $w = int(($widest_menu_item_width - 3 + 0.5)/2);
-							my $s = ('-' x ($w * 4/5));
-							push @marcarray,  "$s $tabloop $s";
-							$separator_inserted_p = 1;
-						}
-					push @marcarray, $menu_item;
-					}
-				}
-			}
-		}
-	}
-	return \@marcarray;
-}
-
-# Creates a scrolling list with the associated default value.
-# Using more than one scrolling list in a CGI assigns the same default value to all the
-# scrolling lists on the page !?!? That's why this function was written.
-sub create_scrolling_list {
-	my ($params) = @_;
-	my $scrollist = sprintf("<select name=\"%s\" size=\"%d\" onChange='%s'>\n", $params->{'name'}, $params->{'size'}, $params->{'onChange'});
-
-	foreach my $tag (@{$params->{'values'}})
-	{
-		my $selected = "selected " if($params->{'default'} eq $tag);
-		$scrollist .= sprintf("<option %svalue=\"%s\">%s</option>\n", $selected, $tag, $tag);
-	}
-
-	$scrollist .= "</select>\n";
-
-	return $scrollist;
-}
 
 my $query=new CGI;
 my $type=$query->param('type');
@@ -209,64 +147,6 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
-	#$template->param(loggedinuser => $loggedinuser);
-
-	my $marcarray = create_marclist();
-
-	my $marclist = CGI::scrolling_list(-name=>"marclist",
-					-values=> $marcarray,
-					-size=>1,
-					-multiple=>0,
-					-onChange => "sql_update()",
-					);
-
-	my @statements = ();
-
-	# Considering initial search with 3 criterias
-	push @statements, { "marclist" => $marclist, "first" => 1 };
-	push @statements, { "marclist" => $marclist, "first" => 0 };
-	push @statements, { "marclist" => $marclist, "first" => 0 };
-	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
-	$sth->execute;
-	my  @itemtype;
-	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "";
-	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
-	}
-
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-				-values   => \@itemtype,
- 				-labels   => \%itemtypes,
-				-size     => 1,
-				-multiple => 0 );
-	$sth->finish;
-
-	my @branches;
-	my @select_branch;
-	my %select_branches;
-	my ($count2,@branches)=branches();
-	push @select_branch, "";
-	$select_branches{''} = "";
-	for (my $i=0;$i<$count2;$i++){
-		push @select_branch, $branches[$i]->{'branchcode'};#
-		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
-	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0 );
-	$sth->finish;
-
-
-	$template->param("statements" => \@statements,
-			"nbstatements" => 3,
-			CGIitemtype => $CGIitemtype,
-			CGIbranch => $CGIbranch,
-			);
 }
 
 

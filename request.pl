@@ -24,7 +24,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Search;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Auth;
@@ -40,11 +39,11 @@ use C4::Date;
 my $input = new CGI;
 
 # get biblio information....
-my $bib = $input->param('bib');
-my $dat = bibdata($bib);
+my $biblionumber = $input->param('biblionumber');
+my $dat = bibdata($biblionumber);
 
 # get existing reserves .....
-my ($count,$reserves) = FindReserves($bib);
+my ($count,$reserves) = FindReserves($biblionumber);
 my $totalcount = $count;
 foreach my $res (@$reserves) {
     if ($res->{'found'} eq 'W') {
@@ -72,7 +71,7 @@ my $date=format_date("$year-$mon-$mday");
 
 
 # get biblioitem information and build rows for form
-my ($count2,@data) = bibitems($bib);
+my ($count2,@data) = bibitems($biblionumber);
 
 my @bibitemloop;
 foreach my $dat (sort {$b->{'dateaccessioned'} cmp $a->{'dateaccessioned'}} @data) {
@@ -164,21 +163,18 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 my @branches;
 my @select_branch;
 my %select_branches;
-my ($count2,@branches)=branches();
-for (my $i=0;$i<$count2;$i++){
-	push @select_branch, $branches[$i]->{'branchcode'};#
-	$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+my ($count2,@branches)=getbranches();
+my @branchloop;
+foreach my $thisbranch (sort keys %$branches) {
+	my %row =(value => $thisbranch,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
 }
-my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
-			-values   => \@select_branch,
-			-labels   => \%select_branches,
-			-size     => 1,
-			-multiple => 0 );
 
 #get the time for the form name...
 my $time = time();
 
-#setup colours
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "request.tmpl",
 							query => $input,
@@ -187,12 +183,12 @@ my ($template, $borrowernumber, $cookie)
                             flagsrequired => {parameters => 1},
                          });
 $template->param(	optionloop =>\@optionloop,
-								CGIbranch => $CGIbranch,
+								branchloop => \@branchloop,
 								reserveloop => \@reserveloop,
 								'time' => $time,
 								bibitemloop => \@bibitemloop,
 								date => $date,
-								bib => $bib,
+								biblionumber => $biblionumber,
 								title =>$dat->{title});
 # printout the page
 print $input->header(

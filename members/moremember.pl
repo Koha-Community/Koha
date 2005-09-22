@@ -37,7 +37,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Interface::CGI::Template;
 use CGI;
-use C4::Search;
+use C4::Members;
 use Date::Manip;
 use C4::Date;
 use C4::Reserves2;
@@ -174,7 +174,8 @@ for (my $i=0;$i<$count;$i++){
 	# return the correct item type either (or a properly-formatted
 	# charge, for that matter).
 	my ($charge,$itemtype)=calc_charges($dbh,$issue->[$i]{'itemnumber'},$bornum);
-	$row{'itemtype'}=&ItemType($itemtype);
+	my $itemtypedef = getitemtypeinfo($itemtype);
+	$row{'itemtype'}=$itemtypedef->{description};
 	$row{'charge'}= sprintf("%.2f",$charge);
 
 	#check item is not reserved

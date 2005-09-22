@@ -2,7 +2,6 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Search;
 use C4::Auth;
 use C4::Bull; #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
@@ -28,7 +27,7 @@ $template->param(biblionumber => $biblionumber);
 # change back when ive fixed request.pl
 my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 my $dat                                   = &bibdata($biblionumber);
-my ($authorcount, $addauthor)             = &addauthor($biblionumber);
+my ($authorcount, $addauthor)             = &getaddauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);

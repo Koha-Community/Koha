@@ -30,7 +30,7 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Format;
-use C4::Search;
+use C4::Biblio;
 use C4::Stats;
 #use C4::InterfaceCDK;
 #use C4::Interface::AccountsCDK;
@@ -137,7 +137,7 @@ sub reconcileaccount {
   while (my $data=$sth->fetchrow_hashref){
     my $line=$i+1;
     my $amount=0+$data->{'amountoutstanding'};
-    my $itemdata = itemnodata($env,$dbh,$data->{'itemnumber'});
+    my $itemdata = getbibliofromitemnumber($env,$dbh,$data->{'itemnumber'});
     $line= $data->{'accountno'}." ".$data->{'date'}." ".$data->{'accounttype'}." ";
     my $title = $itemdata->{'title'};
     if (length($title) > 15 ) {$title = substr($title,0,15);}

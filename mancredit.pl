@@ -27,7 +27,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use HTML::Template;
-use C4::Search;
+use C4::Members;
 use C4::Accounts2;
 my $input=new CGI;
 

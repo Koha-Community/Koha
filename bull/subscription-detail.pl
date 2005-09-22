@@ -129,6 +129,7 @@ $template->param(
 	bibliotitle => $subs->{bibliotitle},
 	notes => $subs->{notes},
 	letter => $subs->{letter},
+	distributedto => $subs->{distributedto},
 	subscriptionid => $subs->{subscriptionid},
 	serialslist => \@serialslist,
 	totalissues => $totalissues,

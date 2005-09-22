@@ -22,7 +22,7 @@
 
 use strict;
 
-use C4::Search;
+use C4::Biblio;
 use CGI;
 use C4::Output;
 use HTML::Template;

@@ -16,7 +16,7 @@ use lib '/usr/local/koha/intranet/modules/';
 
 use strict;
 use C4::Context;
-use C4::Search;
+use C4::Biblio;
 
 my ($biblionumber,$barcode,$holdingbranch,$pickbranch,$notes,$cardnumber,$lastname,$firstname,$phone,$title,$callno,$rdate,$borrno);
 

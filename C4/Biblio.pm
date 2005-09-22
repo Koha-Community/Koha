@@ -21,6 +21,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Database;
+use C4::Date;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -37,13 +38,18 @@ $VERSION = 0.01;
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT = qw(
-  &itemcount &newbiblio &newbiblioitem
-  &newsubject &newsubtitle
-  &modbiblio &checkitems
-  &newitems &modbibitem
+  &newbiblio &newbiblioitem
+  &newsubject &newsubtitle &newitems 
+  
+  &modbiblio &checkitems &modbibitem
   &modsubtitle &modsubject &modaddauthor &moditem
+  
   &delitem &deletebiblioitem &delbiblio
-  &getbiblio
+  
+  &getbiblio &bibdata &bibitems &bibitemdata 
+  &barcodes &ItemInfo &itemdata &itemissues &itemcount 
+  &getsubject &getaddauthor &getsubtitle
+  &getwebbiblioitems &getwebsites
   &getbiblioitembybiblionumber
   &getbiblioitem &getitemsbybiblioitem
 
@@ -143,7 +149,6 @@ sub zebra_create {
 	close F;
 	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
 	unlink($filename);
-	warn "$biblionumber : $res";
 }
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
@@ -395,7 +400,6 @@ sub MARCkoha2marcBiblio {
 		&MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle", $row->{'subtitle'},'' );
 	}
 	
-	warn "RECORD : ".$record->as_formatted;
 	return $record;
 }
 
@@ -413,38 +417,18 @@ all entries of the hash are transformed into their matching MARC field/subfield.
 sub MARCkoha2marcItem {
 
     # this function builds partial MARC::Record from the old koha-DB fields
-    my ( $dbh, $biblionumber, $itemnumber ) = @_;
+    my ( $dbh, $item ) = @_;
 
     #    my $dbh=&C4Connect;
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
+    my $sth = $dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
     my $record = MARC::Record->new();
 
-    #--- if item, then retrieve old-style koha data
-    if ( $itemnumber > 0 ) {
-
-        #	print STDERR "prepare $biblionumber,$itemnumber\n";
-        my $sth2 =
-          $dbh->prepare(
-"SELECT itemnumber,biblionumber,multivolumepart,biblioitemnumber,barcode,dateaccessioned,
-						booksellerid,homebranch,price,replacementprice,replacementpricedate,datelastborrowed,
-						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,itemcallnumber,issues,renewals,
-					reserves,restricted,binding,itemnotes,holdingbranch,timestamp
-					FROM items
-					WHERE itemnumber=?"
-        );
-        $sth2->execute($itemnumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "items." . $code,
-                    $row->{$code},'' );
-            }
-        }
-    }
+	foreach( keys %$item ) {
+		if ( $item->{$_} ) {
+			&MARCkoha2marcOnefield( $sth, $record, "items." . $_,
+				$item->{$_},'' );
+		}
+	}
     return $record;
 }
 
@@ -1090,13 +1074,15 @@ sub REALmodbiblioitem {
     my ( $dbh, $biblioitem ) = @_;
     my $query;
 
-    my $sth = $dbh->prepare("update biblioitems set	itemtype=?,			url=?,				isbn=?,	issn=?,
+    my $sth = $dbh->prepare("update biblioitems set number=?,volume=?,			volumedate=?,		lccn=?,
+										itemtype=?,			url=?,				isbn=?,				issn=?,
 										publishercode=?,	publicationyear=?,	classification=?,	dewey=?,
 										subclass=?,			illus=?,			pages=?,			volumeddesc=?,
 										notes=?,			size=?,				place=?,			marc=?,
 										marcxml=?
 							where biblioitemnumber=?");
-	$sth->execute(	$biblioitem->{itemtype},		$biblioitem->{url},		$biblioitem->{isbn},	$biblioitem->{issn},
+	$sth->execute(	$biblioitem->{number},			$biblioitem->{volume},	$biblioitem->{volumedate},	$biblioitem->{lccn},
+					$biblioitem->{itemtype},		$biblioitem->{url},		$biblioitem->{isbn},	$biblioitem->{issn},
     				$biblioitem->{publishercode},	$biblioitem->{publicationyear}, $biblioitem->{classification},	$biblioitem->{dewey},
     				$biblioitem->{subclass},		$biblioitem->{illus},		$biblioitem->{pages},	$biblioitem->{volumeddesc},
     				$biblioitem->{bnotes},			$biblioitem->{size},		$biblioitem->{place},	$biblioitem->{marc},
@@ -1203,7 +1189,7 @@ sub REALnewitems {
 
 # 	warn "OLDNEWITEMS";
 	
-	$dbh->do('lock tables items WRITE, biblio WRITE,biblioitems WRITE');
+	$dbh->do('lock tables items WRITE, biblio WRITE,biblioitems WRITE,marc_subfield_structure WRITE');
     my $sth = $dbh->prepare("Select max(itemnumber) from items");
     my $data;
     my $itemnumber;
@@ -1237,7 +1223,7 @@ sub REALnewitems {
         $sth->execute(
 			$itemnumber,				$item->{'biblionumber'},
 			$item->{'multivolumepart'},
-			$item->{'biblioitemnumber'},$barcode,
+			$item->{'biblioitemnumber'},$item->{barcode},
 			$item->{'booksellerid'},	$item->{'dateaccessioned'},
 			$item->{'homebranch'},		$item->{'holdingbranch'},
 			$item->{'price'},			$item->{'replacementprice'},
@@ -1270,7 +1256,7 @@ sub REALnewitems {
         $sth->execute(
 			$itemnumber,				$item->{'biblionumber'},
 			$item->{'multivolumepart'},
-			$item->{'biblioitemnumber'},$barcode,
+			$item->{'biblioitemnumber'},$item->{barcode},
 			$item->{'booksellerid'},
 			$item->{'homebranch'},		$item->{'holdingbranch'},
 			$item->{'price'},			$item->{'replacementprice'},
@@ -1293,7 +1279,7 @@ sub REALnewitems {
         $error .= $sth->errstr;
     }
 	my ($rawmarc,$frameworkcode) = $sth->fetchrow;
-	warn "ERROR IN OLDnewitem, MARC record not found FOR $item->{biblionumber} => $rawmarc <=" unless $rawmarc;
+	warn "ERROR IN REALnewitem, MARC record not found FOR $item->{biblionumber} => $rawmarc <=" unless $rawmarc;
 	my $record = MARC::File::USMARC::decode($rawmarc);
 	# ok, we have the marc record, add item number to the item field (in {marc}, and add the field to the record)
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
@@ -1616,7 +1602,6 @@ sub modbiblio {
 	my ($biblio) = @_;
 	my $dbh  = C4::Context->dbh;
 	my $biblionumber=REALmodbiblio($dbh,$biblio);
-	warn "in MODBIBLIO";
 	my $record = MARCkoha2marcBiblio($dbh,$biblionumber,$biblionumber);
 	# finds new (MARC bibid
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
@@ -1762,11 +1747,14 @@ sub newitems {
     my $itemnumber;
     my $error;
     foreach my $barcode (@barcodes) {
-        ( $itemnumber, $error ) = &REALnewitems( $dbh, $item, uc($barcode) );
-        $errors .= $error;
-        my $MARCitem =
-          &MARCkoha2marcItem( $dbh, $item->{biblionumber}, $itemnumber );
-        &MARCadditem( $dbh, $MARCitem, $item->{biblionumber} );
+		# add items, one by one for each barcode.
+		my $oneitem=$item;
+		$oneitem->{barcode}= $barcode;
+        my $MARCitem = &MARCkoha2marcItem( $dbh, $oneitem);
+		$oneitem->{marc} = $MARCitem->as_usmarc;
+        ( $itemnumber, $error ) = &REALnewitems( $dbh, $oneitem);
+#         $errors .= $error;
+#         &MARCadditem( $dbh, $MARCitem, $item->{biblionumber} );
     }
     return ($errors);
 }
@@ -1902,6 +1890,74 @@ sub getbiblio {
     return ( $count, @results );
 }    # sub getbiblio
 
+=item bibdata
+
+  $data = &bibdata($biblionumber, $type);
+
+Returns information about the book with the given biblionumber.
+
+C<$type> is ignored.
+
+C<&bibdata> returns a reference-to-hash. The keys are the fields in
+the C<biblio>, C<biblioitems>, and C<bibliosubtitle> tables in the
+Koha database.
+
+In addition, C<$data-E<gt>{subject}> is the list of the book's
+subjects, separated by C<" , "> (space, comma, space).
+
+If there are multiple biblioitems with the given biblionumber, only
+the first one is considered.
+
+=cut
+#'
+sub bibdata {
+	my ($bibnum, $type) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $sth   = $dbh->prepare("Select *, biblioitems.notes AS bnotes, biblio.notes
+								from biblio 
+								left join biblioitems on biblioitems.biblionumber = biblio.biblionumber
+								left join bibliosubtitle on
+								biblio.biblionumber = bibliosubtitle.biblionumber
+								left join itemtypes on biblioitems.itemtype=itemtypes.itemtype
+								where biblio.biblionumber = ?
+								");
+	$sth->execute($bibnum);
+	my $data;
+	$data  = $sth->fetchrow_hashref;
+	$sth->finish;
+	# handle management of repeated subtitle
+	$sth   = $dbh->prepare("Select * from bibliosubtitle where biblionumber = ?");
+	$sth->execute($bibnum);
+	my @subtitles;
+	while (my $dat = $sth->fetchrow_hashref){
+		my %line;
+		$line{subtitle} = $dat->{subtitle};
+		push @subtitles, \%line;
+	} # while
+	$data->{subtitles} = \@subtitles;
+	$sth->finish;
+	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
+	$sth->execute($bibnum);
+	my @subjects;
+	while (my $dat = $sth->fetchrow_hashref){
+		my %line;
+		$line{subject} = $dat->{'subject'};
+		push @subjects, \%line;
+	} # while
+	$data->{subjects} = \@subjects;
+	$sth->finish;
+	$sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
+	$sth->execute($bibnum);
+	while (my $dat = $sth->fetchrow_hashref){
+		$data->{'additionalauthors'} .= "$dat->{'author'} - ";
+	} # while
+	chop $data->{'additionalauthors'};
+	chop $data->{'additionalauthors'};
+	chop $data->{'additionalauthors'};
+	$sth->finish;
+	return($data);
+} # sub bibdata
+
 =head2 ($count,@results) = getbiblioitem($biblioitemnumber);
 
 =over 4
@@ -1995,6 +2051,528 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     $sth->finish;
     return ( $count, @results );
 }    # sub getitemsbybiblioitem
+
+=item ItemInfo
+
+  @results = &ItemInfo($env, $biblionumber, $type);
+
+Returns information about books with the given biblionumber.
+
+C<$type> may be either C<intra> or anything else. If it is not set to
+C<intra>, then the search will exclude lost, very overdue, and
+withdrawn items.
+
+C<$env> is ignored.
+
+C<&ItemInfo> returns a list of references-to-hash. Each element
+contains a number of keys. Most of them are table items from the
+C<biblio>, C<biblioitems>, C<items>, and C<itemtypes> tables in the
+Koha database. Other keys include:
+
+=over 4
+
+=item C<$data-E<gt>{branchname}>
+
+The name (not the code) of the branch to which the book belongs.
+
+=item C<$data-E<gt>{datelastseen}>
+
+This is simply C<items.datelastseen>, except that while the date is
+stored in YYYY-MM-DD format in the database, here it is converted to
+DD/MM/YYYY format. A NULL date is returned as C<//>.
+
+=item C<$data-E<gt>{datedue}>
+
+=item C<$data-E<gt>{class}>
+
+This is the concatenation of C<biblioitems.classification>, the book's
+Dewey code, and C<biblioitems.subclass>.
+
+=item C<$data-E<gt>{ocount}>
+
+I think this is the number of copies of the book available.
+
+=item C<$data-E<gt>{order}>
+
+If this is set, it is set to C<One Order>.
+
+=back
+
+=cut
+#'
+sub ItemInfo {
+	my ($env,$biblionumber,$type) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $query = "SELECT *,items.notforloan as itemnotforloan FROM items, biblio, biblioitems 
+					left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
+					WHERE items.biblionumber = ?
+					AND biblioitems.biblioitemnumber = items.biblioitemnumber
+					AND biblio.biblionumber = items.biblionumber";
+	$query .= " order by items.dateaccessioned desc";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($biblionumber);
+	my $i=0;
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		my $datedue = '';
+		my $isth=$dbh->prepare("Select issues.*,borrowers.cardnumber from issues,borrowers where itemnumber = ? and returndate is null and issues.borrowernumber=borrowers.borrowernumber");
+		$isth->execute($data->{'itemnumber'});
+		if (my $idata=$isth->fetchrow_hashref){
+		$data->{borrowernumber} = $idata->{borrowernumber};
+		$data->{cardnumber} = $idata->{cardnumber};
+		$datedue = format_date($idata->{'date_due'});
+		}
+		if ($datedue eq ''){
+			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
+			if ($restype) {
+				$datedue=$restype;
+			}
+		}
+		$isth->finish;
+	#get branch information.....
+		my $bsth=$dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
+		$bsth->execute($data->{'holdingbranch'});
+		if (my $bdata=$bsth->fetchrow_hashref){
+			$data->{'branchname'} = $bdata->{'branchname'};
+		}
+		my $date=format_date($data->{'datelastseen'});
+		$data->{'datelastseen'}=$date;
+		$data->{'datedue'}=$datedue;
+	# get notforloan complete status if applicable
+		my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+		$sthnflstatus->execute;
+		my ($authorised_valuecode) = $sthnflstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+			$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
+			my ($lib) = $sthnflstatus->fetchrow;
+			$data->{notforloan} = $lib;
+		}
+		$results[$i]=$data;
+		$i++;
+	}
+	$sth->finish;
+	return(@results);
+}
+
+=item bibitems
+
+  ($count, @results) = &bibitems($biblionumber);
+
+Given the biblionumber for a book, C<&bibitems> looks up that book's
+biblioitems (different publications of the same book, the audio book
+and film versions, etc.).
+
+C<$count> is the number of elements in C<@results>.
+
+C<@results> is an array of references-to-hash; the keys are the fields
+of the C<biblioitems> and C<itemtypes> tables of the Koha database. In
+addition, C<itemlost> indicates the availability of the item: if it is
+"2", then all copies of the item are long overdue; if it is "1", then
+all copies are lost; otherwise, there is at least one copy available.
+
+=cut
+#'
+sub bibitems {
+    my ($bibnum) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT biblioitems.*,
+                        itemtypes.*,
+                        MIN(items.itemlost)        as itemlost,
+                        MIN(items.dateaccessioned) as dateaccessioned
+                          FROM biblioitems, itemtypes, items
+                         WHERE biblioitems.biblionumber     = ?
+                           AND biblioitems.itemtype         = itemtypes.itemtype
+                           AND biblioitems.biblioitemnumber = items.biblioitemnumber
+                      GROUP BY items.biblioitemnumber");
+    my $count = 0;
+    my @results;
+    $sth->execute($bibnum);
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+        $count++;
+    } # while
+    $sth->finish;
+    return($count, @results);
+} # sub bibitems
+
+
+=item bibitemdata
+
+  $itemdata = &bibitemdata($biblioitemnumber);
+
+Looks up the biblioitem with the given biblioitemnumber. Returns a
+reference-to-hash. The keys are the fields from the C<biblio>,
+C<biblioitems>, and C<itemtypes> tables in the Koha database, except
+that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
+
+=cut
+#'
+sub bibitemdata {
+    my ($bibitem) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("Select *,biblioitems.notes as bnotes from biblio, biblioitems,itemtypes where biblio.biblionumber = biblioitems.biblionumber and biblioitemnumber = ? and biblioitems.itemtype = itemtypes.itemtype");
+    my $data;
+
+    $sth->execute($bibitem);
+
+    $data = $sth->fetchrow_hashref;
+
+    $sth->finish;
+    return($data);
+} # sub bibitemdata
+
+
+=item getbibliofromitemnumber
+
+  $item = &getbibliofromitemnumber($env, $dbh, $itemnumber);
+
+Looks up the item with the given itemnumber.
+
+C<$env> and C<$dbh> are ignored.
+
+C<&itemnodata> returns a reference-to-hash whose keys are the fields
+from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
+database.
+
+=cut
+#'
+sub getbibliofromitemnumber {
+  my ($env,$dbh,$itemnumber) = @_;
+  $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from biblio,items,biblioitems
+    where items.itemnumber = ?
+    and biblio.biblionumber = items.biblionumber
+    and biblioitems.biblioitemnumber = items.biblioitemnumber");
+#  print $query;
+  $sth->execute($itemnumber);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
+}
+
+=item barcodes
+
+  @barcodes = &barcodes($biblioitemnumber);
+
+Given a biblioitemnumber, looks up the corresponding items.
+
+Returns an array of references-to-hash; the keys are C<barcode> and
+C<itemlost>.
+
+The returned items include very overdue items, but not lost ones.
+
+=cut
+#'
+sub barcodes{
+    #called from request.pl
+    my ($biblioitemnumber)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("SELECT barcode, itemlost, holdingbranch FROM items
+                           WHERE biblioitemnumber = ?
+                             AND (wthdrawn <> 1 OR wthdrawn IS NULL)");
+    $sth->execute($biblioitemnumber);
+    my @barcodes;
+    my $i=0;
+    while (my $data=$sth->fetchrow_hashref){
+	$barcodes[$i]=$data;
+	$i++;
+    }
+    $sth->finish;
+    return(@barcodes);
+}
+
+
+=item itemdata
+
+  $item = &itemdata($barcode);
+
+Looks up the item with the given barcode, and returns a
+reference-to-hash containing information about that item. The keys of
+the hash are the fields from the C<items> and C<biblioitems> tables in
+the Koha database.
+
+=cut
+#'
+sub get_item_from_barcode {
+  my ($barcode)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from items,biblioitems where barcode=?
+  and items.biblioitemnumber=biblioitems.biblioitemnumber");
+  $sth->execute($barcode);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
+}
+
+
+=item itemissues
+
+  @issues = &itemissues($biblioitemnumber, $biblio);
+
+Looks up information about who has borrowed the bookZ<>(s) with the
+given biblioitemnumber.
+
+C<$biblio> is ignored.
+
+C<&itemissues> returns an array of references-to-hash. The keys
+include the fields from the C<items> table in the Koha database.
+Additional keys include:
+
+=over 4
+
+=item C<date_due>
+
+If the item is currently on loan, this gives the due date.
+
+If the item is not on loan, then this is either "Available" or
+"Cancelled", if the item has been withdrawn.
+
+=item C<card>
+
+If the item is currently on loan, this gives the card number of the
+patron who currently has the item.
+
+=item C<timestamp0>, C<timestamp1>, C<timestamp2>
+
+These give the timestamp for the last three times the item was
+borrowed.
+
+=item C<card0>, C<card1>, C<card2>
+
+The card number of the last three patrons who borrowed this item.
+
+=item C<borrower0>, C<borrower1>, C<borrower2>
+
+The borrower number of the last three patrons who borrowed this item.
+
+=back
+
+=cut
+#'
+sub itemissues {
+    my ($bibitem, $biblio)=@_;
+    my $dbh   = C4::Context->dbh;
+    # FIXME - If this function die()s, the script will abort, and the
+    # user won't get anything; depending on how far the script has
+    # gotten, the user might get a blank page. It would be much better
+    # to at least print an error message. The easiest way to do this
+    # is to set $SIG{__DIE__}.
+    my $sth   = $dbh->prepare("Select * from items where
+items.biblioitemnumber = ?")
+      || die $dbh->errstr;
+    my $i     = 0;
+    my @results;
+
+    $sth->execute($bibitem)
+      || die $sth->errstr;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        # Find out who currently has this item.
+        # FIXME - Wouldn't it be better to do this as a left join of
+        # some sort? Currently, this code assumes that if
+        # fetchrow_hashref() fails, then the book is on the shelf.
+        # fetchrow_hashref() can fail for any number of reasons (e.g.,
+        # database server crash), not just because no items match the
+        # search criteria.
+        my $sth2   = $dbh->prepare("select * from issues,borrowers
+where itemnumber = ?
+and returndate is NULL
+and issues.borrowernumber = borrowers.borrowernumber");
+
+        $sth2->execute($data->{'itemnumber'});
+        if (my $data2 = $sth2->fetchrow_hashref) {
+            $data->{'date_due'} = $data2->{'date_due'};
+            $data->{'card'}     = $data2->{'cardnumber'};
+	    $data->{'borrower'}     = $data2->{'borrowernumber'};
+        } else {
+            if ($data->{'wthdrawn'} eq '1') {
+                $data->{'date_due'} = 'Cancelled';
+            } else {
+                $data->{'date_due'} = 'Available';
+            } # else
+        } # else
+
+        $sth2->finish;
+
+        # Find the last 3 people who borrowed this item.
+        $sth2 = $dbh->prepare("select * from issues, borrowers
+						where itemnumber = ?
+									and issues.borrowernumber = borrowers.borrowernumber
+									and returndate is not NULL
+									order by returndate desc,timestamp desc") || die $dbh->errstr;
+        $sth2->execute($data->{'itemnumber'}) || die $sth2->errstr;
+        for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
+            if (my $data2 = $sth2->fetchrow_hashref) {
+                $data->{"timestamp$i2"} = $data2->{'timestamp'};
+                $data->{"card$i2"}      = $data2->{'cardnumber'};
+                $data->{"borrower$i2"}  = $data2->{'borrowernumber'};
+            } # if
+        } # for
+
+        $sth2->finish;
+        $results[$i] = $data;
+        $i++;
+    }
+
+    $sth->finish;
+    return(@results);
+}
+
+=item getsubject
+
+  ($count, $subjects) = &getsubject($biblionumber);
+
+Looks up the subjects of the book with the given biblionumber. Returns
+a two-element list. C<$subjects> is a reference-to-array, where each
+element is a subject of the book, and C<$count> is the number of
+elements in C<$subjects>.
+
+=cut
+#'
+sub getsubject {
+  my ($bibnum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from bibliosubject where biblionumber=?");
+  $sth->execute($bibnum);
+  my @results;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $results[$i]=$data;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@results);
+}
+
+=item getaddauthor
+
+  ($count, $authors) = &getaddauthor($biblionumber);
+
+Looks up the additional authors for the book with the given
+biblionumber.
+
+Returns a two-element list. C<$authors> is a reference-to-array, where
+each element is an additional author, and C<$count> is the number of
+elements in C<$authors>.
+
+=cut
+#'
+sub getaddauthor {
+  my ($bibnum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from additionalauthors where biblionumber=?");
+  $sth->execute($bibnum);
+  my @results;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $results[$i]=$data;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@results);
+}
+
+
+=item getsubtitle
+
+  ($count, $subtitles) = &getsubtitle($biblionumber);
+
+Looks up the subtitles for the book with the given biblionumber.
+
+Returns a two-element list. C<$subtitles> is a reference-to-array,
+where each element is a subtitle, and C<$count> is the number of
+elements in C<$subtitles>.
+
+=cut
+#'
+sub getsubtitle {
+  my ($bibnum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from bibliosubtitle where biblionumber=?");
+  $sth->execute($bibnum);
+  my @results;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $results[$i]=$data;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@results);
+}
+
+
+=item getwebsites
+
+  ($count, @websites) = &getwebsites($biblionumber);
+
+Looks up the web sites pertaining to the book with the given
+biblionumber.
+
+C<$count> is the number of elements in C<@websites>.
+
+C<@websites> is an array of references-to-hash; the keys are the
+fields from the C<websites> table in the Koha database.
+
+=cut
+#FIXME : could maybe be deleted. Otherwise, would be better in a Websites.pm package
+#(with add / modify / delete subs)
+
+sub getwebsites {
+    my ($biblionumber) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("Select * from websites where biblionumber = ?");
+    my $count = 0;
+    my @results;
+
+    $sth->execute($biblionumber);
+    while (my $data = $sth->fetchrow_hashref) {
+        # FIXME - The URL scheme shouldn't be stripped off, at least
+        # not here, since it's part of the URL, and will be useful in
+        # constructing a link to the site. If you don't want the user
+        # to see the "http://" part, strip that off when building the
+        # HTML code.
+        $data->{'url'} =~ s/^http:\/\///;	# FIXME - Leaning toothpick
+						# syndrome
+        $results[$count] = $data;
+    	$count++;
+    } # while
+
+    $sth->finish;
+    return($count, @results);
+} # sub getwebsites
+
+=item getwebbiblioitems
+
+  ($count, @results) = &getwebbiblioitems($biblionumber);
+
+Given a book's biblionumber, looks up the web versions of the book
+(biblioitems with itemtype C<WEB>).
+
+C<$count> is the number of items in C<@results>. C<@results> is an
+array of references-to-hash; the keys are the items from the
+C<biblioitems> table of the Koha database.
+
+=cut
+#'
+sub getwebbiblioitems {
+    my ($biblionumber) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("Select * from biblioitems where biblionumber = ?
+and itemtype = 'WEB'");
+    my $count = 0;
+    my @results;
+
+    $sth->execute($biblionumber);
+    while (my $data = $sth->fetchrow_hashref) {
+        $data->{'url'} =~ s/^http:\/\///;
+        $results[$count] = $data;
+        $count++;
+    } # while
+
+    $sth->finish;
+    return($count, @results);
+} # sub getwebbiblioitems
 
 sub char_decode {
 
@@ -2298,6 +2876,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.131  2005/09/22 10:01:45  tipaul
+# see mail on koha-devel : code cleaning on Search.pm + normalizing API + use of biblionumber everywhere (instead of bn, biblio, ...)
+#
 # Revision 1.130  2005/09/02 14:34:14  tipaul
 # continuing the work to move to zebra. Begin of work for MARC=OFF support.
 # IMPORTANT NOTE : the MARCkoha2marc sub API has been modified. Instead of biblionumber & biblioitemnumber, it now gets a hash.

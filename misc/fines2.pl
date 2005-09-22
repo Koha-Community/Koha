@@ -131,7 +131,7 @@ for (my $i=0;$i<$numOverdueItems;$i++){
 	my $dbh = C4::Context->dbh;
 	my $env;
 	my $accountno=C4::Circulation::Circ2::getnextacctno($env,$data->[$i]->{'borrowernumber'},$dbh);
-	my $item=itemnodata($env,$dbh,$data->[$i]->{'itemnumber'});
+	my $item=getbibliofromitemnumber($env,$dbh,$data->[$i]->{'itemnumber'});
 	if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
               # FIXME
               # this should be a separate function

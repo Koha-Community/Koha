@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Search;
+use C4::Biblio;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
@@ -33,7 +33,7 @@ foreach my $biblionumber (@bibs) {
 	$template->param(biblionumber => $biblionumber);
 
 	my $dat                                   = &bibdata($biblionumber);
-	my ($authorcount, $addauthor)             = &addauthor($biblionumber);
+	my ($authorcount, $addauthor)             = &getaddauthor($biblionumber);
 	my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 
 	$dat->{'additional'}=$addauthor->[0]->{'author'};

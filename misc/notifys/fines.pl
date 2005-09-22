@@ -4,7 +4,7 @@
 
 
 use C4::Database;
-use C4::Search;
+use C4::Members;
 use C4::Circulation::Circ2;
 use C4::Circulation::Fines;
 use Date::Manip;
@@ -90,7 +90,7 @@ sub levyFines {
 				        my $env;
 
 		        		my $accountno=C4::Circulation::Circ2::getnextacctno($env,$overdue->{'borrowernumber'},$dbh);
-       					my $item=itemnodata($env,$dbh,$overdue->{'itemnumber'});
+       					my $item=getbibliofromitemnumber($env,$dbh,$overdue->{'itemnumber'});
         				if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
           					$item->{'title'}=~ s/\'/\\'/g;
 					      	my $query="Insert into accountlines (borrowernumber,itemnumber,accountno,date,amount, description,accounttype,amountoutstanding) 
@@ -265,7 +265,7 @@ my %actions;
 	                                        	my %row_data;
 							my $env;	#FIXME what is this varible for?
 						      
- 							if ( my $item = itemnodata($env, $dbh, $over->{'itemnumber'})){
+ 							if ( my $item = getbibliofromitemnumber($env, $dbh, $over->{'itemnumber'})){
 							    print "getting fine ($over->{'itemnumber'} $overdue->{'borrowernumber'} $over->{'borrowernumber'}\n";
 						        my $fine = GetFine($over->{'itemnumber'},$overdue->{'borrowernumber'}); 
 							    

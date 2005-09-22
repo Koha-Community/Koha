@@ -6,7 +6,6 @@ use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
 use C4::Context;
-use C4::Search;
 use C4::Biblio;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -52,7 +51,7 @@ if ($email_add) {
 		$template2->param(biblionumber => $biblionumber);
 
 		my $dat = &bibdata($biblionumber);
-		my ($authorcount, $addauthor) = &addauthor($biblionumber);
+		my ($authorcount, $addauthor) = &getaddauthor($biblionumber);
 		my @items                     = &ItemInfo(undef, $biblionumber, 'opac');
 
 		$dat->{'additional'}=$addauthor->[0]->{'author'};

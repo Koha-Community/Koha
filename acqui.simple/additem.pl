@@ -79,7 +79,7 @@ if ($op eq "additem") {
 	my $addeditem = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # check for item barcode # being unique
 	my $addedolditem = MARCmarc2koha($dbh,$addeditem);
-	my $exists = itemdata($addedolditem->{'barcode'});
+	my $exists = get_item_from_barcode($addedolditem->{'barcode'});
 	push @errors,"barcode_not_unique" if($exists);
 	# if barcode exists, don't create, but report The problem.
 	$itemnumber = NEWnewitem($dbh,$addeditem,$biblionumber,$biblioitemnumber) unless ($exists);

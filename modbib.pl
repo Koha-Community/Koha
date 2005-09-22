@@ -3,10 +3,6 @@
 # $Id$
 
 #script to modify/delete biblios
-#written 8/11/99
-# modified 11/11/99 by chris@katipo.co.nz
-# modified 12/16/2002 by hdl@ifrance.com : templating
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,7 +23,7 @@
 
 use strict;
 
-use C4::Search;
+use C4::Biblio;
 use CGI;
 use C4::Output;
 use HTML::Template;
@@ -39,9 +35,9 @@ my $input = new CGI;
 
 my $bibnum=$input->param('bibnum');
 my $data=&bibdata($bibnum);
-my ($subjectcount, $subject)     = &subject($bibnum);
-my ($subtitlecount, $subtitle)   = &subtitle($bibnum);
-my ($addauthorcount, $addauthor) = &addauthor($bibnum);
+my ($subjectcount, $subject)     = &getsubject($bibnum);
+my ($subtitlecount, $subtitle)   = &getsubtitle($bibnum);
+my ($addauthorcount, $addauthor) = &getaddauthor($bibnum);
 my $sub        = $subject->[0]->{'subject'};
 my $additional = $addauthor->[0]->{'author'};
 my $dewey;

@@ -26,10 +26,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-use C4::Search;
-	# FIXME - C4::Reserves2 uses C4::Search, which uses C4::Reserves2.
-	# So Perl complains that all of the functions here get redefined.
-#use C4::Accounts;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -157,7 +154,7 @@ sub FindReserves {
 			my ($bibitemno) = $csth->fetchrow_array;
 			$csth->finish;
 			# Look up the book we just found.
-			my $bdata = C4::Search::bibitemdata($bibitemno);
+			my $bdata = bibitemdata($bibitemno);
 			# Add the results of this latest search to the current
 			# results.
 			# FIXME - An 'each' would probably be more efficient.

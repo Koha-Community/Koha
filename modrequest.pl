@@ -35,7 +35,7 @@ my $input = new CGI;
 #print $input->Dump;
 
 my @rank=$input->param('rank-request');
-my @biblio=$input->param('biblio');
+my @biblionumber=$input->param('biblionumber');
 my @borrower=$input->param('borrowernumber');
 my @branch=$input->param('pickup');
 my $count=@rank;
@@ -43,12 +43,12 @@ my $count=@rank;
 # goes through and manually changes the reserves record....
 # no attempt is made to check consistency.
 for (my $i=0;$i<$count;$i++){
-    UpdateReserve($rank[$i],$biblio[$i],$borrower[$i],$branch[$i]); #from C4::Reserves2
+    UpdateReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i]); #from C4::Reserves2
 }
 
 my $from=$input->param('from');
 if ($from eq 'borrower'){
   print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrower[0]");
  } else {
-   print $input->redirect("/cgi-bin/koha/request.pl?bib=$biblio[0]");
+   print $input->redirect("/cgi-bin/koha/request.pl?biblionumber=$biblionumber[0]");
 }

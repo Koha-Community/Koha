@@ -28,7 +28,6 @@
 use strict;
 require Exporter;
 
-use C4::Search;
 use C4::Output;
 use C4::Koha;
 use CGI;

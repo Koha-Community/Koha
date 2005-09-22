@@ -5,7 +5,7 @@ use strict;
 require Exporter;
 use CGI;
 
-use C4::Search;
+use C4::Biblio;
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;

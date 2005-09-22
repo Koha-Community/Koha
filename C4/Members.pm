@@ -49,10 +49,84 @@ C4::Members - Perl Module containing convenience functions for member handling
 @EXPORT = qw();
 
 @EXPORT = qw(
-	&getmember &fixup_cardnumber &findguarantees &findguarantor &NewBorrowerNumber &modmember &newmember &changepassword
+	&BornameSearch &getmember &borrdata &borrdata2 &fixup_cardnumber &findguarantees &findguarantor &NewBorrowerNumber &modmember &newmember &changepassword &borrissues &allissues
+	&getboracctrecord
     );
 
-	
+
+=item BornameSearch
+
+  ($count, $borrowers) = &BornameSearch($env, $searchstring, $type);
+
+Looks up patrons (borrowers) by name.
+
+C<$env> is ignored.
+
+BUGFIX 499: C<$type> is now used to determine type of search.
+if $type is "simple", search is performed on the first letter of the
+surname only.
+
+C<$searchstring> is a space-separated list of search terms. Each term
+must match the beginning a borrower's surname, first name, or other
+name.
+
+C<&BornameSearch> returns a two-element list. C<$borrowers> is a
+reference-to-array; each element is a reference-to-hash, whose keys
+are the fields of the C<borrowers> table in the Koha database.
+C<$count> is the number of elements in C<$borrowers>.
+
+=cut
+#'
+#used by member enquiries from the intranet
+#called by member.pl
+sub BornameSearch  {
+	my ($env,$searchstring,$orderby,$type)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query = ""; my $count; my @data;
+	my @bind=();
+
+	if($type eq "simple")	# simple search for one letter only
+	{
+		$query="Select * from borrowers where surname like ? order by $orderby";
+		@bind=("$searchstring%");
+	}
+	else	# advanced search looking in surname, firstname and othernames
+	{
+		@data=split(' ',$searchstring);
+		$count=@data;
+		$query="Select * from borrowers
+		where ((surname like ? or surname like ?
+		or firstname  like ? or firstname like ?
+		or othernames like ? or othernames like ?)
+		";
+		@bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
+		for (my $i=1;$i<$count;$i++){
+		        $query=$query." and (".
+		        " surname like ? or surname like ?
+                        or firstname  like ? or firstname like ?
+		        or othernames like ? or othernames like ?)";
+		        push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
+					# FIXME - .= <<EOT;
+		}
+		$query=$query.") or cardnumber like ?
+		order by $orderby";
+		push(@bind,$searchstring);
+					# FIXME - .= <<EOT;
+	}
+
+	my $sth=$dbh->prepare($query);
+#	warn "Q $orderby : $query";
+	$sth->execute(@bind);
+	my @results;
+	my $cnt=$sth->rows;
+	while (my $data=$sth->fetchrow_hashref){
+	push(@results,$data);
+	}
+	#  $sth->execute;
+	$sth->finish;
+	return ($cnt,\@results);
+}
+
 =item getmember
 
   $borrower = &getmember($cardnumber, $borrowernumber);
@@ -94,6 +168,87 @@ sub getmember {
 	return undef;
 }
 
+=item borrdata
+
+  $borrower = &borrdata($cardnumber, $borrowernumber);
+
+Looks up information about a patron (borrower) by either card number
+or borrower number. If $borrowernumber is specified, C<&borrdata>
+searches by borrower number; otherwise, it searches by card number.
+
+C<&borrdata> returns a reference-to-hash whose keys are the fields of
+the C<borrowers> table in the Koha database.
+
+=cut
+#'
+sub borrdata {
+  my ($cardnumber,$bornum)=@_;
+  $cardnumber = uc $cardnumber;
+  my $dbh = C4::Context->dbh;
+  my $sth;
+  if ($bornum eq ''){
+    $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
+    $sth->execute($cardnumber);
+  } else {
+    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($bornum);
+  }
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  if ($data) {
+  	return($data);
+	} else { # try with firstname
+		if ($cardnumber) {
+			my $sth=$dbh->prepare("select * from borrowers where firstname=?");
+			$sth->execute($cardnumber);
+			my $data=$sth->fetchrow_hashref;
+			$sth->finish;
+			return($data);
+		}
+	}
+	return undef;
+}
+
+
+=item borrdata2
+
+  ($borrowed, $due, $fine) = &borrdata2($env, $borrowernumber);
+
+Returns aggregate data about items borrowed by the patron with the
+given borrowernumber.
+
+C<$env> is ignored.
+
+C<&borrdata2> returns a three-element array. C<$borrowed> is the
+number of books the patron currently has borrowed. C<$due> is the
+number of overdue items the patron currently has borrowed. C<$fine> is
+the total fine currently due by the borrower.
+
+=cut
+#'
+sub borrdata2 {
+  my ($env,$bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $query="Select count(*) from issues where borrowernumber='$bornum' and
+    returndate is NULL";
+    # print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select count(*) from issues where
+    borrowernumber='$bornum' and date_due < now() and returndate is NULL");
+  $sth->execute;
+  my $data2=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
+    borrowernumber='$bornum'");
+  $sth->execute;
+  my $data3=$sth->fetchrow_hashref;
+  $sth->finish;
+
+return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'});
+}
 
 sub modmember {
 	my (%data) = @_;
@@ -325,6 +480,129 @@ sub NewBorrowerNumber {
   $sth->finish;
   $data->{'max(borrowernumber)'}++;
   return($data->{'max(borrowernumber)'});
+}
+
+=item borrissues
+
+  ($count, $issues) = &borrissues($borrowernumber);
+
+Looks up what the patron with the given borrowernumber has borrowed.
+
+C<&borrissues> returns a two-element array. C<$issues> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields from the C<issues>, C<biblio>, and C<items> tables
+in the Koha database. C<$count> is the number of elements in
+C<$issues>.
+
+=cut
+#'
+sub borrissues {
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from issues,biblio,items where borrowernumber=?
+   and items.itemnumber=issues.itemnumber
+	and items.biblionumber=biblio.biblionumber
+	and issues.returndate is NULL order by date_due");
+    $sth->execute($bornum);
+  my @result;
+  while (my $data = $sth->fetchrow_hashref) {
+    push @result, $data;
+  }
+  $sth->finish;
+  return(scalar(@result), \@result);
+}
+
+=item allissues
+
+  ($count, $issues) = &allissues($borrowernumber, $sortkey, $limit);
+
+Looks up what the patron with the given borrowernumber has borrowed,
+and sorts the results.
+
+C<$sortkey> is the name of a field on which to sort the results. This
+should be the name of a field in the C<issues>, C<biblio>,
+C<biblioitems>, or C<items> table in the Koha database.
+
+C<$limit> is the maximum number of results to return.
+
+C<&allissues> returns a two-element array. C<$issues> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
+C<items> tables of the Koha database. C<$count> is the number of
+elements in C<$issues>
+
+=cut
+#'
+sub allissues {
+  my ($bornum,$order,$limit)=@_;
+  #FIXME: sanity-check order and limit
+  my $dbh = C4::Context->dbh;
+  my $query="Select * from issues,biblio,items,biblioitems
+  where borrowernumber=? and
+  items.biblioitemnumber=biblioitems.biblioitemnumber and
+  items.itemnumber=issues.itemnumber and
+  items.biblionumber=biblio.biblionumber order by $order";
+  if ($limit !=0){
+    $query.=" limit $limit";
+  }
+  #print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute($bornum);
+  my @result;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $result[$i]=$data;;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@result);
+}
+
+=item getboracctrecord
+
+  ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
+
+Looks up accounting data for the patron with the given borrowernumber.
+
+C<$env> is ignored.
+
+(FIXME - I'm not at all sure what this is about.)
+
+C<&getboracctrecord> returns a three-element array. C<$acctlines> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields of the C<accountlines> table in the Koha database.
+C<$count> is the number of elements in C<$acctlines>. C<$total> is the
+total amount outstanding for all of the account lines.
+
+=cut
+#'
+sub getboracctrecord {
+   my ($env,$params) = @_;
+   my $dbh = C4::Context->dbh;
+   my @acctlines;
+   my $numlines=0;
+   my $sth=$dbh->prepare("Select * from accountlines where
+borrowernumber=? order by date desc,timestamp desc");
+#   print $query;
+   $sth->execute($params->{'borrowernumber'});
+   my $total=0;
+   while (my $data=$sth->fetchrow_hashref){
+   #FIXME before reinstating: insecure?
+#      if ($data->{'itemnumber'} ne ''){
+#        $query="Select * from items,biblio where items.itemnumber=
+#	'$data->{'itemnumber'}' and biblio.biblionumber=items.biblionumber";
+#	my $sth2=$dbh->prepare($query);
+#	$sth2->execute;
+#	my $data2=$sth2->fetchrow_hashref;
+#	$sth2->finish;
+#	$data=$data2;
+ #     }
+      $acctlines[$numlines] = $data;
+      $numlines++;
+      $total += $data->{'amountoutstanding'};
+   }
+   $sth->finish;
+   return ($numlines,\@acctlines,$total);
 }
 
 1;

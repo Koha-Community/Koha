@@ -49,7 +49,7 @@ if ($submit ne ''){
 
 my $data=bibitemdata($bibitemnum);
 
-my $item=itemnodata('blah','',$itemnum);
+my $item=getbibliofromitemnumber('blah','',$itemnum);
 #my ($analytictitle)=analytic($biblionumber,'t');
 #my ($analyticauthor)=analytic($biblionumber,'a');
 

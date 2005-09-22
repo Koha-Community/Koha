@@ -23,7 +23,7 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Stats;
-use C4::Search;
+use C4::Members;
 use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -253,7 +253,7 @@ EOT
 sub returnlost{
   my ($borrnum,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $borrower=borrdata('',$borrnum); #from C4::Search;
+  my $borrower=borrdata('',$borrnum);
   my $sth=$dbh->prepare("Update issues set returndate=now() where
   borrowernumber=? and itemnumber=? and returndate is null");
   $sth->execute($borrnum,$itemnum);

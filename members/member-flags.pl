@@ -27,7 +27,7 @@ my ($template, $loggedinuser, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
+				flagsrequired => {permissions => 1},
 				debug => 1,
 				});
 

@@ -50,12 +50,12 @@ Koha.pm provides many functions for Koha scripts.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&slashifyDate
+@EXPORT = qw(
 			&fixEthnicity
-			&borrowercategories
+			&borrowercategories &getborrowercategory
 			&ethnicitycategories
 			&subfield_is_koha_internal_p
-			&getbranches &getbranch
+			&getbranches &getbranch &getbranchname
 			&getprinters &getprinter
 			&getitemtypes &getitemtypeinfo
 			&getframeworks &getframeworkinfo
@@ -67,21 +67,7 @@ use vars qw();
 
 my $DEBUG = 0;
 
-=head2 slashifyDate
-
-  $slash_date = &slashifyDate($dash_date);
-
-Takes a string of the form "DD-MM-YYYY" (or anything separated by
-dashes), converts it to the form "YYYY/MM/DD", and returns the result.
-
-=cut
-
-sub slashifyDate {
-    # accepts a date of the form xx-xx-xx[xx] and returns it in the
-    # form xx/xx/xx[xx]
-    my @dateOut = split('-', shift);
-    return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
-}
+# removed slashifyDate => useless
 
 =head2 fixEthnicity
 
@@ -130,6 +116,27 @@ sub borrowercategories {
     $sth->finish;
     return(\@codes,\%labels);
 }
+
+=item getborrowercategory
+
+  $description = &getborrowercategory($categorycode);
+
+Given the borrower's category code, the function returns the corresponding
+description for a comprehensive information display.
+
+=cut
+
+sub getborrowercategory
+{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
+	$sth->execute($catcode);
+	my $description = $sth->fetchrow();
+	$sth->finish();
+	return $description;
+} # sub getborrowercategory
+
 
 =head2 ethnicitycategories
 
@@ -452,6 +459,7 @@ sub getprinters {
     }
     return (\%printers);
 }
+
 sub getbranch ($$) {
     my($query, $branches) = @_; # get branch for this query from branches
     my $branch = $query->param('branch');
@@ -459,6 +467,26 @@ sub getbranch ($$) {
     ($branches->{$branch}) || ($branch=(keys %$branches)[0]);
     return $branch;
 }
+
+=item getbranchname
+
+  $branchname = &getbranchname($branchcode);
+
+Given the branch code, the function returns the corresponding
+branch name for a comprehensive information display
+
+=cut
+
+sub getbranchname
+{
+	my ($branchcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT branchname FROM branches WHERE branchcode = ?");
+	$sth->execute($branchcode);
+	my $branchname = $sth->fetchrow();
+	$sth->finish();
+	return $branchname;
+} # sub getbranchname
 
 sub getprinter ($$) {
     my($query, $printers) = @_; # get printer for this query from printers
