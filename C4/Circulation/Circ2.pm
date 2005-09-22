@@ -86,6 +86,22 @@ sub itemseen {
 	return;
 }
 
+=head2 itemborrowed
+
+&itemseen($itemnum)
+Mark item as borrowed. Is called when an item is issued.
+C<$itemnum> is the item number
+
+=cut
+
+sub itemborrowed {
+	my ($itemnum) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("update items set itemlost=0, datelastborrowed  = now() where items.itemnumber = ?");
+	$sth->execute($itemnum);
+	return;
+}
+
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation,$datelastseen,$offset,$size) = @_;
 	my $dbh = C4::Context->dbh;
@@ -890,6 +906,7 @@ sub issuebook {
 		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
 		$sth->finish;
 		&itemseen($iteminformation->{'itemnumber'});
+	        itemborrowed($iteminformation->{'itemnumber'});
 		# If it costs to borrow this book, charge it to the patron's account.
 		my ($charge,$itemtype)=calc_charges($env, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
 		if ($charge > 0) {
