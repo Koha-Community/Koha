@@ -38,7 +38,7 @@ use C4::Circulation::Main;
 	# use each other, so functions get redefined.
 use C4::Scan;
 use C4::Stats;
-use C4::Search;
+use C4::Members;
 use C4::Print;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -90,7 +90,7 @@ sub Returns {
       if ($resp ne "") {
         #if ($resp eq "Returned") {
 	if ($itemno ne "" ) {
-	  my $item = itemnodata($env,$dbh,$itemno);
+	  my $item = getbibliofromitemnumber($env,$dbh,$itemno);
 	  # FIXME - This relies on C4::Circulation::Main to have a
 	  # "use C4::Circulation::Issues;" line, which is bogus.
 	  my $fmtitem = C4::Circulation::Issues::formatitem($env,$item,"",$amt_owing);
@@ -282,7 +282,7 @@ sub updatelastseen {
 # obsolete. So presumably this function is obsolete too.
 sub find_reserves {
   my ($env,$dbh,$itemno) = @_;
-  my $itemdata = itemnodata($env,$dbh,$itemno);
+  my $itemdata = getbibliofromitemnumber($env,$dbh,$itemno);
   my $sth = $dbh->prepare("select * from reserves where found is null
   and biblionumber = ? and cancellationdate is NULL
   order by priority,reservedate ");

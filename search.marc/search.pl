@@ -343,26 +343,23 @@ else {
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my ($count2,@branches)=branches();
-	push @select_branch, "";
-	$select_branches{''} = "";
-	for (my $i=0;$i<$count2;$i++){
-		push @select_branch, $branches[$i]->{'branchcode'};#
-		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	my $branches=getbranches();
+	my @branchloop;
+	foreach my $thisbranch (sort keys %$branches) {
+# 		my $selected = 1 if $thisbranch eq $branch;
+		my %row =(value => $thisbranch,
+# 					selected => $selected,
+					branchname => $branches->{$thisbranch}->{'branchname'},
+				);
+		push @branchloop, \%row;
 	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-id => 'branch',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0 );
 	$sth->finish;
 
 
 	$template->param("statements" => \@statements,
 			"nbstatements" => 3,
 			CGIitemtype => $CGIitemtype,
-			CGIbranch => $CGIbranch,
+			branchloop => \@branchloop,
 			);
 }
 

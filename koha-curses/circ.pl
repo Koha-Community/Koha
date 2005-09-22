@@ -23,7 +23,7 @@ use strict;
 use lib '/usr/local/koha/intranet/modules';
 use Curses::UI;
 use C4::Circulation::Circ2;
-use C4::Search;
+use C4::Members;
 use C4::Print;
 use C4::Context;
 

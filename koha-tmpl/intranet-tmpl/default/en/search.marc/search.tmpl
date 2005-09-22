@@ -69,7 +69,12 @@
 				<input type="hidden" name="and_or" value="and">
 				<input type="hidden" name="excluding" value="">
 				<input type="hidden" name="operator" value="=">  
-				<!-- TMPL_VAR name="CGIbranch" -->
+				<select name="branch">
+					<option value="">Default</option>
+				<!-- TMPL_LOOP name="branchloop" -->
+					<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
 		</p>
 	</div>
 	<div class="bloc25">
