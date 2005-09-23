@@ -46,6 +46,13 @@ foreach my $biblionumber (@bibs) {
 	$num++;
 	$dat->{'biblionumber'} = $biblionumber;
 	$dat->{ITEM_RESULTS} = \@items;
+	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
+	     $dat->{dest} = "opac-detail.pl";
+	} elsif (C4::Context->preference("BiblioDefaultView") eq "marc") {
+	     $dat->{dest} ="opac-MARCdetail.pl";
+	} else {
+	     $dat->{dest} = "opac-ISBDdetail.pl";
+	}
 	push (@results, $dat);
 }
 
