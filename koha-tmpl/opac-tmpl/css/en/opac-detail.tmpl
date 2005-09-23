@@ -35,15 +35,7 @@
 	<h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="class" --></h1>
 
 	<div id="bibliobloc">
-	<table cellspacing="0">
-		<!-- BIBLIO RECORD TABLE -->
-		<tr>
-			<th>
-				<!-- TMPL_VAR NAME="title" -->
-			</th>
-		</tr>
-		<tr>
-			<td>
+	<h2><!-- TMPL_VAR NAME="title" --></h2>
 				<!-- TMPL_IF name="subtitles" -->
 					<p><label><b>Subtitle(s):</b> </label>
 					<!-- TMPL_LOOP name="subtitles" -->
@@ -69,7 +61,7 @@
 					<p><label><b>Subjects:</b></label></p>
 					<p>
 						<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-							<p><label>-</label>
+							<p>-
 							<!-- TMPL_IF name="linkvalue" -->
 								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=<!-- TMPL_VAR name="link" -->&and_or=and&operator==&value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
 							<!-- TMPL_ELSE -->
@@ -114,19 +106,12 @@
 				<!-- TMPL_IF name="count" -->
 					<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
 				<!-- /TMPL_IF -->
-			</td>
-		</tr>
-	</table>
-	<table>
-	</table>
 	</div>
 	<!-- /TMPL_LOOP -->
 
-	<div id="itembloc">
+	<div id="bloc20">
+	<h2>Item(s)</h2>
 	<table cellspacing="0">
-		<tr>
-			<th colspan="6">Item</th>
-		</tr>
 		<tr>
 			<th>location</th>
 			<th>status</th>
@@ -166,13 +151,16 @@
 		<!-- /TMPL_LOOP -->
 	
 	</table>
+	</div>
 	<!-- TMPL_IF name="subscriptionsnumber" -->
-		<div id="bloc25">
-		<p>This is a serial subscription (we have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title).</p> 
-		<p>Below is a list of the three latest issues related to those subscription(s) :</p>
+		<br />
+		<div id="bloc20">
+		<h2>We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.</h2> 
+		<p>Below is a list of the three latest issues :</p>
 		<!-- TMPL_LOOP Name="subscriptions" -->
-				<h2> Subscription #<!--TMPL_VAR Name="subscriptionid"--> </h2>
-				<p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+				<!-- TMPL_IF name="subscriptionnotes"-->
+					<h2><!--TMPL_VAR Name="subscriptionnotes"--> </h2>
+				<!-- /TMPL_IF -->
 				<!--TMPL_IF Name="latestserials"-->
 				<table>
 				<tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
@@ -208,6 +196,5 @@
 		<p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
 		</div>
  	<!-- /TMPL_IF -->
-	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
