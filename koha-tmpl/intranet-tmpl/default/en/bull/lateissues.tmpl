@@ -16,7 +16,11 @@
 					<!-- TMPL_VAR name="CGIsupplier" -->
 				</td>
 				<td>
-					&nbsp;
+					<p>
+					<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->" class="button bull"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+					</p>
 				</td>
 				<td>
 					<input type="submit" value="filter" class="button bull">

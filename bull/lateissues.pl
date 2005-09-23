@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Bull;
+use C4::Acquisition;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -30,6 +31,10 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 
 my @lateissues;
 @lateissues = GetLateIssues($supplierid) if $supplierid;
+my @supplierinfo;
+my $nothing;
+($nothing,@supplierinfo)=bookseller($supplierid) if $supplierid;
+
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/lateissues.tmpl",
 				query => $query,
@@ -41,6 +46,9 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param(
 	CGIsupplier => $CGIsupplier,
-	lateissues => \@lateissues
+	lateissues => \@lateissues,
+	phone => $supplierinfo[0]->{phone},
+	booksellerfax => $supplierinfo[0]->{booksellerfax},
+	bookselleremail => $supplierinfo[0]->{bookselleremail},
 	);
 output_html_with_http_headers $query, $cookie, $template->output;
