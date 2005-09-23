@@ -24,8 +24,10 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
-my $order_loop= &histsearch($title,$author,$name,$from_placed_on,$to_placed_on);
+my ($order_loop,$total_qty,$total_price)= &histsearch($title,$author,$name,$from_placed_on,$to_placed_on);
 $template->param(suggestions_loop => $order_loop,
+				total_qty => $total_qty,
+				total_price => sprintf  ("%.2f",$total_price),
 				numresults => scalar(@$order_loop),
 				title => $title,
 				author => $author,

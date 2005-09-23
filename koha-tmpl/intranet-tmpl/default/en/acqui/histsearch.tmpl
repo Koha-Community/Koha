@@ -6,9 +6,8 @@
 	<table>
 		<tr>
 			<th class="acquisition">&nbsp;</th>
-			<th class="acquisition">Title</th>
-			<th class="acquisition">Author</th>
 			<th class="acquisition">Supplier</th>
+			<th class="acquisition">Title/Author</th>
 			<th class="acquisition">Placed on</th>
 			<th class="acquisition">Recieved on</th>
 			<th class="acquisition">Quantity ordered</th>
@@ -21,13 +20,11 @@
 					Filter on
 				</th>
 				<th class="acquisition">
-					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
-				</th>
-				<th class="acquisition">
-					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
-				</th>
-				<th class="acquisition">
 					<input type="text" name="name" value="<!-- TMPL_VAR name="name" -->">
+				</th>
+				<th class="acquisition">
+					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">/
+					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
 				</th>
 				<th class="acquisition">
 					From <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
@@ -58,6 +55,7 @@
 							}
 						);
 					</script>
+					<br/>
 					To <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
 					<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text">
 					<script type="text/javascript">
@@ -104,32 +102,77 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<tr>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR NAME="count" -->
 				</td>
-				<td>
-					<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a>
-				</td>
-				<td>
-					<!-- TMPL_VAR NAME="author" -->
-				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR NAME="name" -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<p><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></p>
+					<p><!-- TMPL_VAR NAME="author" --></p>
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR name="creationdate" -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR name="datereceived" -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted number">
+				<!-- TMPL_ELSE -->
+					<td class="number">
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR name="quantity" -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted number">
+				<!-- TMPL_ELSE -->
+					<td class="number">
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR name="ecost" -->
 				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					&nbsp;
+				</td>
+
 			</tr>
 		<!-- /TMPL_LOOP -->
+		<tr>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition"><!-- TMPL_VAR name="total_qty" --></th>
+			<th class="acquisition"><!-- TMPL_VAR name="total_price" --></th>
+			<th class="acquisition">&nbsp;</th>
+		</tr>
 	</table>
 </div>
 
