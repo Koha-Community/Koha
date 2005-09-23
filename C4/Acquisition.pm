@@ -20,6 +20,7 @@ package C4::Acquisition;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Date;
 use MARC::Record;
 # use C4::Biblio;
 
@@ -727,33 +728,43 @@ sub ordersearch {
 
 sub histsearch {
 	my ($title,$author,$name,$from_placed_on,$to_placed_on)=@_;
-	my $dbh= C4::Context->dbh;
-	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
-	
-	$query .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
-	$query .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
-	$query .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
-	$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
-	$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
-	$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
-	$query .= " and creationdate >" .$dbh->quote($from_placed_on) if $from_placed_on;
-	$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
-	if (C4::Context->preference("IndependantBranches")) {
-		my $userenv = C4::Context->userenv;
-		if (($userenv) &&($userenv->{flags} != 1)){
-			$query .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
+	my @order_loop;
+	my $total_qty=0;
+	my $total_price=0;
+	# don't run the query if there are no parameters (list would be too long for sure !
+	if ($title || $author || $name || $from_placed_on || $to_placed_on) {
+		my $dbh= C4::Context->dbh;
+		my $query = "select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
+		
+		$query .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
+		$query .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
+		$query .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
+		$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
+		$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
+		$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
+		$query .= " and creationdate >" .$dbh->quote($from_placed_on) if $from_placed_on;
+		$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
+		if (C4::Context->preference("IndependantBranches")) {
+			my $userenv = C4::Context->userenv;
+			if (($userenv) &&($userenv->{flags} != 1)){
+				$query .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
+			}
+		}
+		$query .=" order by booksellerid";
+		my $sth = $dbh->prepare($query);
+		$sth->execute;
+		my $cnt=1;
+		while (my $line = $sth->fetchrow_hashref) {
+			$line->{count}=$cnt++;
+			$line->{toggle}=1 if $cnt %2;
+			push @order_loop, $line;
+			$line->{creationdate} = format_date($line->{creationdate});
+			$line->{datereceived} = format_date($line->{datereceived});
+			$total_qty += $line->{'quantity'};
+			$total_price += $line->{'quantity'}*$line->{'ecost'};
 		}
 	}
-	warn "C4:Acquisition : ".$query;
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
-	my @order_loop;
-	my $cnt=1;
-	while (my $line = $sth->fetchrow_hashref) {
-		$line->{count}=$cnt++;
-		push @order_loop, $line;
-	}
-	return \@order_loop;
+	return \@order_loop,$total_qty,$total_price;;
 }
 
 #
