@@ -602,7 +602,8 @@ sub TooMany ($$){
 	$sth->execute($iteminformation->{'biblionumber'});
 	my $type = $sth->fetchrow;
 	$sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ? and branchcode = ?');
-	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
+# 	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
+	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s1, items s2 where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s2.itemnumber and s1.itemtype like ? and s1.biblioitemnumber = s2.biblioitemnumber");
 	my $sth3 = $dbh->prepare('select COUNT(*) from issues where borrowernumber = ? and returndate is null');
 	my $alreadyissued;
 	# check the 3 parameters
