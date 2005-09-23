@@ -46,7 +46,7 @@
 				<a href="/cgi-bin/koha/opac-shelves.pl" class="menu">Virtual shelves</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="suggestion" -->
-				<a href="opac-suggestions.pl" class="menu">View & manage suggestions</a>
+				<a href="opac-suggestions.pl" class="menu">Suggestions</a>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
 		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Personal page</a>
