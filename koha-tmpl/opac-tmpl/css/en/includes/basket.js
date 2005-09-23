@@ -351,7 +351,7 @@ document.getElementById == "undefined") {
     }
 }
 
-function openBiblio(biblionumber) {
-	openerURL="opac-detail.pl?bib="+biblionumber;
+function openBiblio(dest,biblionumber) {
+	openerURL=dest+"?bib="+biblionumber;
 	opener.document.location = openerURL;
 }
