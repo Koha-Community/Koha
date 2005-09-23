@@ -79,6 +79,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
+	$result='        d        u  y0frey03      ba' unless $result;
 	my $f1 = substr($result,0,8);
 	my $f2 = substr($result,8,1);
 	my $f3 = substr($result,9,4);
