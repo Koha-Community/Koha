@@ -150,7 +150,7 @@ function Check(f) {
 		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
 		alert(alertString2);
 	} else {
-		document.forms[1].submit();
+		document.forms[0].submit();
 	}
 }
 function Dopop(link,i) {
@@ -178,8 +178,8 @@ function PopupZ3950() {
 }
 
 function AddField(field) {
-	document.forms[1].op.value = "addfield";
-	document.forms[1].addfield_field.value=field;
+	document.forms[0].op.value = "addfield";
+	document.forms[0].addfield_field.value=field;
 	document.f.submit();
 }
 </script>
