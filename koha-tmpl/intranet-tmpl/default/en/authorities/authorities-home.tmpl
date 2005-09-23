@@ -44,6 +44,22 @@
 		</p>
 	</div>
 </form>
+<div id="bloc25">
+<h2 class="authority">Add authority</h2>
+<form name="f2" method="post" action="authorities.pl">
+	<p>Authority type
+	<select name="authtypecode">
+		<!-- TMPL_LOOP name="authtypesloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+				<!-- TMPL_VAR name="authtypetext" -->
+			</option>
+		<!-- /TMPL_LOOP -->
+	</select>
+	<input type="submit" value="Add" class="button authority">
+	</p>
+</form>
+</div>
+
 </div>
 <!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
 
