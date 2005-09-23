@@ -2,7 +2,7 @@
 
 
 <!-- TMPL_UNLESS name="popup" -->
-	<h1 class="catalogue">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
+	<h1 class="catalogue">Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<div class="tabsubs">
@@ -16,7 +16,7 @@
 
 	<!-- TMPL_LOOP NAME="years" -->
 	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
-		<table>
+		<table width="400px">
 			<tr>
 				<th>Date
 				</th>
