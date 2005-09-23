@@ -170,7 +170,7 @@ if ($delete){
 	} else {
 		$template->param( updtype => 'M');
 	}
-	my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
+	my $cardnumber=fixup_cardnumber($data->{'cardnumber'});
 	if ($data->{'sex'} eq 'F'){
 		$template->param(female => 1);
 	}
