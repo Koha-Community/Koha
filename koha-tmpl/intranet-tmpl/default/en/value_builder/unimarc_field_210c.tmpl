@@ -104,7 +104,7 @@
 
 function report(index,summary)
 {	
-	var regexp= /(\d* \/ *)(.*)/;
+	var regexp= /(\d* - *)(.*)/;
 	var result=summary.match(regexp);
 	opener.document.f.field_value[index].value=result[2];
 	self.close();
