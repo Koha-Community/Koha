@@ -923,7 +923,7 @@ my %fielddefinitions = (
     aqbookfund => [
         {
             field   => 'bookfundid',
-            type    => 'char(5)',
+            type    => 'varchar(5)',
             null    => '',
             key     => 'PRI',
             default => ''
@@ -942,7 +942,7 @@ my %fielddefinitions = (
     z3950servers => [
         {
             field   => 'id',
-            type    => 'int',
+            type    => 'int(11)',
             null    => '',
             key     => 'PRI',
             default => '',
@@ -961,7 +961,7 @@ my %fielddefinitions = (
         {
             field   => 'encoding',
             type    => 'varchar(40)',
-            null    => '',
+            null    => 'NOT NULL',
             key     => '',
             default => '',
             extra   => ''
@@ -970,7 +970,7 @@ my %fielddefinitions = (
 	serial => [
         {
             field   => 'notes',
-            type    => 'TEXT',
+            type    => 'varchar(255)',
             null    => 'NULL',
             key     => '',
             default => '',
@@ -1101,6 +1101,7 @@ foreach $table ( keys %fielddefinitions ) {
 	{
 		$definitions->{$column}->{type}    = $type;
 		$definitions->{$column}->{null}    = $null;
+		$definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
 		$definitions->{$column}->{key}     = $key;
 		$definitions->{$column}->{default} = $default;
 		$definitions->{$column}->{extra}   = $extra;
@@ -1109,19 +1110,18 @@ foreach $table ( keys %fielddefinitions ) {
 	foreach my $row (@$fieldrow) {
 		my $field   = $row->{field};
 		my $type    = $row->{type};
-		my $null    = $row->{null};
 		my $key     = $row->{key};
 		my $default = $row->{default};
-		$default="''" unless $default;
+		my $null    = $row->{null};
+# 		$default="''" unless $default;
 		my $extra   = $row->{extra};
 		my $def     = $definitions->{$field};
+
 		unless ( $type eq $def->{type}
 			&& $null eq $def->{null}
 			&& $key eq $def->{key}
-			&& $default eq $def->{default}
 			&& $extra eq $def->{extra} )
 		{
-
 			if ( $null eq '' ) {
 				$null = 'NOT NULL';
 			}
@@ -1131,6 +1131,7 @@ foreach $table ( keys %fielddefinitions ) {
 			unless ( $extra eq 'auto_increment' ) {
 				$extra = '';
 			}
+
 			# if it's a new column use "add", if it's an old one, use "change".
 			my $action;
 			if ($definitions->{$field}->{type}) {
@@ -1501,6 +1502,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.9  2005/09/23 11:08:27  tipaul
+# some code cleaning, should not change anything otherwise
+#
 # Revision 1.100.2.8  2005/09/09 08:19:57  hdl
 # Undoing Logs
 #
