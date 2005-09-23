@@ -72,7 +72,6 @@ $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bi
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 $itemtype = &MARCfind_frameworkcode($dbh,$bibid) if not ($itemtype);
 $itemtype = '' if ($itemtype eq 'Default');
-warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
@@ -100,7 +99,6 @@ while (my ($description, $fwk) =$queryfwk->fetchrow) {
 	$select_fwk{$fwk} = $description;
 }
 $curfwk=$itemtype;
-warn "current fwk :".$curfwk ;
 my $framework=CGI::scrolling_list( -name     => 'Frameworks',
 			-id => 'Frameworks',
 			-default => $curfwk,
@@ -158,6 +156,10 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				$subfield_data{marc_tag}=$fields[$x_i]->tag();
 				push(@subfields_data, \%subfield_data);
 			}
+		}
+		if ($#subfields_data==0) {
+			$subfields_data[0]->{marc_lib}='';
+			$subfields_data[0]->{marc_subfield}='';
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
