@@ -27,6 +27,7 @@ my @planneddates = $query->param('planneddate');
 my @status = $query->param('status');
 my @notes = $query->param('notes');
 my $hassubscriptionexpired = hassubscriptionexpired($subscriptionid);
+my $subscription=getsubscription($subscriptionid);
 if ($op eq 'modsubscriptionhistory') {
 	modsubscriptionhistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 }
@@ -41,7 +42,6 @@ if ($op eq 'serialchangestatus') {
 		} else {
 			# add a special issue
 			if ($serialseqs[$i]) {
-				my $subscription=getsubscription($subscriptionid);
 				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
 			}
 		}
@@ -64,6 +64,7 @@ my ($template, $loggedinuser, $cookie)
 
 	$template->param(
 			serialslist => \@serialslist,
+			biblionumber => $subscription->{biblionumber},
 			histstartdate => format_date($solhistory->{'histstartdate'}),
 			enddate => format_date($solhistory->{'enddate'}),
 			recievedlist => $solhistory->{'recievedlist'},
