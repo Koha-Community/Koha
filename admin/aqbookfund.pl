@@ -209,26 +209,28 @@ if ($op eq 'add_form') {
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
-# 		warn "".$results->[$i]{'bookfundid'}." ".$results->[$i]{'bookfundname'}." ".$results->[$i]{'branchcode'};
+#  		warn "".$results->[$i]{'bookfundid'}." ".$results->[$i]{'bookfundname'}." ".$results->[$i]{'branchcode'};
 		$row_data{branchname} = $select_branches{$results->[$i]{'branchcode'}};
-		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget where aqbudget.bookfundid = ?";
-		if ($homebranch){
-			$strsth2 .= " AND ((aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch).")) " ;
-		} else {
-			$strsth2 .= " AND (aqbudget.branchcode='') " if (C4::Context->userenv->{flags}>1);
-		}
+		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where aqbudget.bookfundid = ?";
+# 		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,branchcode from aqbudget where aqbudget.bookfundid = ?";
+# 		if ($homebranch){
+# 			$strsth2 .= " AND ((aqbudget.branchcode is null) OR (aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch).")) " ;
+# 		} else {
+# 			$strsth2 .= " AND (aqbudget.branchcode='') " if ((C4::Context->userenv) && (C4::Context->userenv->{flags}>1));
+# 		}
 		$strsth2 .= " order by aqbudgetid";
-# 		warn "".$strsth2;
+#  		warn "".$strsth2;
 		my $sth2 = $dbh->prepare($strsth2);
 		$sth2->execute($row_data{bookfundid});
 		my @budget_loop;
-		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {
+# 		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {
+		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
 			my %budgetrow_data;
 			$budgetrow_data{aqbudgetid} = $aqbudgetid;
 			$budgetrow_data{startdate} = format_date($startdate);
 			$budgetrow_data{enddate} = format_date($enddate);
 			$budgetrow_data{budgetamount} = $budgetamount;
-			$budgetrow_data{branchcode} = $branchcode;
+# 			$budgetrow_data{branchcode} = $branchcode;
 			push @budget_loop,\%budgetrow_data;
 		}
 		$row_data{budget} = \@budget_loop;

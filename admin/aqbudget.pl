@@ -103,7 +103,8 @@ if ($op eq 'add_form') {
 	my $dataaqbookfund;
 	if ($aqbudgetid) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,aqbookfund.branchcode as bfbranch,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
+# 		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,aqbookfund.branchcode as bfbranch,startdate,enddate,budgetamount,aqbudget.branchcode from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
+		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,aqbookfund.branchcode as bfbranch,startdate,enddate,budgetamount from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
 		$sth->execute($aqbudgetid);
 		$dataaqbudget=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -130,28 +131,28 @@ if ($op eq 'add_form') {
 	    $template->param(bookfundid => $bookfundid,
 	    							adding => 1);
 	}
-	my @select_branch;
-	my %select_branches;
-	if ($dataaqbookfund->{branchcode}){
-		push @select_branch,$dataaqbookfund->{'branchcode'};
-		$select_branches{$dataaqbookfund->{'branchcode'}}=$dataaqbookfund->{'branchname'};
-	}else {
-		my @branches;
-		my ($count2,@branches)=branches();
-		push @select_branch,"";
-		$select_branches{""}="";
-		for (my $i=0;$i<$count2;$i++){
-			push @select_branch, $branches[$i]->{'branchcode'};#
-			$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
-		}
-	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
-				-default  => ($dataaqbookfund->{branchcode}?$dataaqbookfund->{branchcode}:$dataaqbudget->{branchcode}),
-				-size     => 1,
-				-multiple => 0 );
-	$template->param(CGIbranch => $CGIbranch);
+# 	my @select_branch;
+# 	my %select_branches;
+# 	if ($dataaqbookfund->{branchcode}){
+# 		push @select_branch,$dataaqbookfund->{'branchcode'};
+# 		$select_branches{$dataaqbookfund->{'branchcode'}}=$dataaqbookfund->{'branchname'};
+# 	}else {
+# 		my @branches;
+# 		my ($count2,@branches)=branches();
+# 		push @select_branch,"";
+# 		$select_branches{""}="";
+# 		for (my $i=0;$i<$count2;$i++){
+# 			push @select_branch, $branches[$i]->{'branchcode'};#
+# 			$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+# 		}
+# 	}
+# 	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+# 				-values   => \@select_branch,
+# 				-labels   => \%select_branches,
+# 				-default  => ($dataaqbookfund->{branchcode}?$dataaqbookfund->{branchcode}:$dataaqbudget->{branchcode}),
+# 				-size     => 1,
+# 				-multiple => 0 );
+# 	$template->param(CGIbranch => $CGIbranch);
 
 	$template->param(dateformat => display_date_format(),
 							aqbudgetid => $dataaqbudget->{'aqbudgetid'},
