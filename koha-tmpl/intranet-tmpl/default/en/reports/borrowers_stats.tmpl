@@ -98,8 +98,14 @@
 			</td>
 			<td>&nbsp;</td>
 			</tr>
+			<tr>
+				<td>Branch</td>
+				<td align="center"><input type="radio" name="Line" value="branchcode"></td>
+				<td align="center"><input type="radio" name="Column" value="branchcode"></td>
+				<td ><!-- TMPL_VAR NAME="CGIBranch" --></td>
+			</tr>
 			<!-- TMPL_IF name="hassort1" -->
-				<tr>
+				<tr class="hilighted" >
 				<td>Sort1</td>
 				<td align="center"><input type="radio" name="Line" value="sort1"></td>
 				<td align="center"><input type="radio" name="Column" value="sort1"></td>
@@ -107,7 +113,7 @@
 				</tr>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="hassort2" -->
-				<tr class="hilighted" >
+				<tr>
 				<td>Sort2</td>
 				<td align="center"><input type="radio" name="Line" value="sort2"></td>
 				<td align="center"><input type="radio" name="Column" value="sort2"></td>
