@@ -79,6 +79,15 @@
 			<option value ="10">10</option>
 			</select> digits</td></tr>
 	</table>
+	<table>
+		<caption>Branch</caption>
+		<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col">Limit by Branch</th></tr></thead>
+				<tbody><tr>
+				<td><input type="radio" name="Line" value="branchcode"></td>
+				<td><input type="radio" name="Column" value="branchcode"></td>
+				<td ><!-- TMPL_VAR NAME="CGIBranch" --></td>
+			</tr></tbody>
+	</table>
 			<!-- TMPL_IF name="hassort1" -->
 				<table><caption>Sorting Field 1</caption>
 						<thead><tr><th scope="col">Display as Row</th><th scope="col">Display as Column</th><th scope="col" colspan="2">Limit by Sorting Field 1</th></tr></thead>
