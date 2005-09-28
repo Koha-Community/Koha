@@ -73,7 +73,6 @@ function delCookie(name) {
 
 function openBasket() {
 	var strCookie = "";
-
 	var nameCookie = "bib_list";
 	var valCookie = readCookie(nameCookie);
 	if (valCookie) {
@@ -83,10 +82,10 @@ function openBasket() {
 	if (strCookie) {
 		var iW = 620;
 		var iH = 450;
-
 		var optWin = "dependant=yes,status=yes,scrollbars=yes,resizable=yes,toolbar=yes,height="+iH+",width="+iW;
 		var loc = CGIBIN + "opac-basket.pl?" + strCookie;
 		var basket = open(loc, "basket", optWin);
+		if (window.focus) {basket.focus()}
 	}
 	else {
 		alert(MSG_BASKET_EMPTY);
@@ -359,7 +358,8 @@ document.getElementById == "undefined") {
     }
 }
 
-function openBiblio(biblionumber) {
-	openerURL="opac-detail.pl?bib="+biblionumber;
+function openBiblio(dest,biblionumber) {
+	openerURL=dest+"?bib="+biblionumber;
 	opener.document.location = openerURL;
+	opener.focus();
 }
