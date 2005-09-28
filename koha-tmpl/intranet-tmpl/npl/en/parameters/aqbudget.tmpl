@@ -105,6 +105,9 @@
 <tr><th><label for="startdate">Start date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR NAME="startdate" -->" />&nbsp;</td></tr>
 <tr><th><label for="enddate">End date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR NAME="enddate" -->" /></td></tr>
 <tr><th><label for="budgetamount">Budget amount</label></th><td><input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" /></td></tr>
+<tr><th><label for="branch">Branch</label></th><td>	
+			<!--TMPL_VAR Name="CGIbranch" -->
+			<p>If budget is specifically allowed to a branch, select it here, otherwise leave it empty.</p></td></tr>
 <tr><th><label>Branch</label></th><td>	<!--TMPL_VAR Name="CGIbranch" --> If budget is exclusive to a specific branch, select it here.  Otherwise leave it empty.</td></tr>
 </table></div>
 <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="button" value="<!-- TMPL_VAR NAME="header" -->" class="submit" onclick="Check(this.form)" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" /></form>
