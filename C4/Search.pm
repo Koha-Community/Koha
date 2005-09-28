@@ -1311,7 +1311,7 @@ sub ItemInfo {
 # 		or items.itemlost is NULL)
 # 		and (wthdrawn <> 1 or wthdrawn is NULL)";
 # 	}
-	$query .= " order by items.dateaccessioned desc";
+	$query .= " order by items.homebranch, items.dateaccessioned desc";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($biblionumber);
 	my $i=0;

@@ -355,9 +355,9 @@ sub catalogsearch {
 	my ($oldbibid, $oldauthor, $oldtitle);
 	my $sth_itemCN;
 	if (C4::Context->preference('hidelostitem')) {
-		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL)");
+		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL) order by homebranch");
 	} else {
-		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
+		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? order by homebranch");
 	}
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
 	# parse all biblios between start & end.

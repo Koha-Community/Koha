@@ -1113,7 +1113,7 @@ sub MARCmarc2koha {
 	$temp = $result->{'publicationyear'};
 	if ($temp){
 		$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
-		if ($1>0) {
+		if ($1) {
 			$result->{'publicationyear'} = $1;
 		} else { # if no cYYYY, get the 1st date.
 			$temp =~ m/(\d\d\d\d)/;
@@ -2754,6 +2754,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.23  2005/09/28 14:35:56  hdl
+# ordering search results by branch.
+# Adding independant Branch Management to getBranches in Koha.pm
+#
 # Revision 1.115.2.22  2005/09/14 10:05:12  tipaul
 # 2 bugfixes :
 # * leader alignment when leader is <24 => should be left aligned, not right !
