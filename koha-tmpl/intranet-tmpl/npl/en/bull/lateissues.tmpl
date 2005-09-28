@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials Subscriptions<!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials Subscriptions<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -7,11 +7,6 @@
 
 <h1>Late issues</h1>
 <form action="lateissues.pl" method="post">
-<label for="supplier">Supplier: </label>
-<!-- TMPL_VAR name="CGIsupplier" -->
-<input type="submit" value="Filter" class="submit">
-</form>
-<!-- TMPL_IF NAME="lateissues" -->
 	<table>
 		<tr>
 			<th>Supplier</th>
@@ -20,6 +15,17 @@
 			<th>Late since</th>
 			<th colspan="2">&nbsp;</th>
 		</tr>
+		
+	<tr>
+		<td><!-- TMPL_VAR name="CGIsupplier" --></td>
+		<td><p><!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="bookselleremail" --></p><!-- TMPL_IF NAME="bookselleremail" --><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+					</p><!-- /TMPL_IF --></td>
+		<td><input type="submit" value="Filter" class="submit" /></td>
+		<td colspan="3">&nbsp;</td>	
+	</tr>
+		
 <!-- TMPL_LOOP name="lateissues" -->
 			<tr>
 				<td><!-- TMPL_VAR name="name" --></td>
@@ -30,7 +36,7 @@
 			</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
-<!-- /TMPL_IF -->
+</form>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
