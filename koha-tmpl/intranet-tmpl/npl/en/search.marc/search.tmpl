@@ -27,9 +27,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="title" name="value" onchange="sql_update()" size="35" accesskey="t" />			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+			<input type="text" id="title" name="value" onchange="sql_update()" size="35" accesskey="t" />			<!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)">
 				<strong>...</strong>
-			</a></td>
+			</a><!-- /TMPL_UNLESS --></td>
 		</tr>
 		<tr>
 			<th><label for="author"><span class="accesskey" title="Access Key a">A</span>uthor</label></th>
@@ -37,9 +37,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="author" name="value" onchange="sql_update()" size="35" accesskey="a" />			<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+			<input type="text" id="author" name="value" onchange="sql_update()" size="35" accesskey="a" />			<!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)">
 				<strong>...</strong>
-			</a></td>
+			</a><!-- /TMPL_UNLESS --></td>
 		</tr>
 		<tr>
 			<th><label for="subject"><span class="accesskey" title="Access Key s">S</span>ubject</label></th>
@@ -47,9 +47,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" />			<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" />			<!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)">
 				<strong>...</strong>
-			</a></td>
+			</a><!-- /TMPL_UNLESS --></td>
 		</tr>
 <tr><th><label for="seriestitle">Series title</label></th><td>			
 			<input type="hidden" name="marclist" value="biblio.seriestitle" />
