@@ -5,12 +5,12 @@
 <div id="main">
 	<h1>Order search</h3>
 	<div class="results"><!-- TMPL_VAR Name ="numresults" --> orders were found.</div>
-	<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post"><table>
-		<tr>
+	<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+	<table>
+		<thead><tr>
 			<th>&nbsp;</th>
-			<th>Title</th>
-			<th>Author</th>
 			<th>Supplier</th>
+			<th>Title/Author</th>
 			<th>Placed on</th>
 			<th>Recieved on</th>
 			<th>Quantity ordered</th>
@@ -20,9 +20,8 @@
 		<tr>
 			
 				<th>Filter By:</th>
-				<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
-				<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
 				<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
+				<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /> <input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
 				<th>					From <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
 					<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->">
 					<script language="JavaScript" type="text/javascript">
@@ -50,7 +49,7 @@
 								dateStatusFunc : validate1
 							}
 						);
-					</script>
+					</script><br />
 					To <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" border="0" />
 					<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
 					<script type="text/javascript">
@@ -84,20 +83,36 @@
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 				<th><input type="submit" class="submit" value="Set Filter" /></th>
-		</tr>
+		</tr></thead>
+		<tfoot><tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td class="total"><!-- TMPL_VAR name="total_qty" --></td>
+			<td class="total"><!-- TMPL_VAR name="total_price" --></td>
+			<td>&nbsp;</td>
+		</tr></tfoot>
+		<tbody>
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
-			<tr>
+			<!-- TMPL_IF name="toggle" -->
+					<tr class="highlight">
+				<!-- TMPL_ELSE -->
+					<tr>
+				<!-- /TMPL_IF -->
 				<td><!-- TMPL_VAR NAME="count" --></td>
-				<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-				<td><!-- TMPL_VAR NAME="author" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
+				<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+				</td>
 				<td><!-- TMPL_VAR name="creationdate" --></td>
 				<td><!-- TMPL_VAR name="datereceived" --></td>
 				<td><!-- TMPL_VAR name="quantity" --></td>
-				<td><!-- TMPL_VAR name="ecost" --></td>
+				<td class="credit"><!-- TMPL_VAR name="ecost" --></td>
 				<td>&nbsp;</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
+	</tbody>			
 	</table></form>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
