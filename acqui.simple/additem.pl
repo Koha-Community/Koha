@@ -181,6 +181,10 @@ foreach my $subfield_code  (keys(%witness)) {
 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
 	}
 }
+if (my $subfcode=C4::Context->preference('SortItemsBy')){
+	@big_array = sort {$a->{$subfcode} cmp $b->{$subfcode}} @big_array;
+}
+
 # now, construct template !
 my @item_value_loop;
 my @header_value_loop;
