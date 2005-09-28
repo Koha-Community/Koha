@@ -133,8 +133,7 @@
 	<!-- TMPL_IF name="subscriptionsnumber" -->
 		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
 		<!-- TMPL_LOOP Name="subscriptions" -->
-				<b> Subscription #<!--TMPL_VAR Name="subscriptionid"--> </b>
-				<p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+				<!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR Name="subscriptionnotes"--> </p><!-- /TMPL_IF -->
 				<!--TMPL_IF Name="latestserials"-->
 				<p> The three latest issues related to this subscription:</p>
 				<table>
