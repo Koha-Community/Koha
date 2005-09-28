@@ -24,9 +24,11 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" size="35" />
-			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
-				...
-			</a>
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Author</label> <input type="hidden" name="marclist" value="biblio.author" />
@@ -34,9 +36,11 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" size="35" />
-			<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
-				...
-			</a>
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Subject</label>
@@ -45,9 +49,11 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
 			<input type="text" name="value" size="35" />
-			<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
-				...
-			</a>
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Series title</label>

@@ -206,6 +206,7 @@ if ($op eq "do_search") {
 				-multiple => 0 );
 	$sth->finish;
     
+	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
 	$template->param(classlist => $classlist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,

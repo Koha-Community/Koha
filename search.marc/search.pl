@@ -340,6 +340,7 @@ else {
 	$sth->finish;
 
 
+	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
 	$template->param("statements" => \@statements,
 			"nbstatements" => 3,
 			CGIitemtype => $CGIitemtype,
