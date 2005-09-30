@@ -388,7 +388,7 @@ sub checkauth {
 					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress);
+				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
 				my $sth=$dbh->prepare("select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
 				$sth->execute($userid);
 				($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
