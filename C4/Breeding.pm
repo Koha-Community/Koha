@@ -91,8 +91,10 @@ where isbn=? and title=?");
 				$searchisbn->execute($oldbiblio->{isbn});
 				($biblioitemnumber) = $searchisbn->fetchrow;
 			} else {
-				$searchissn->execute($oldbiblio->{issn});
-				($biblioitemnumber) = $searchissn->fetchrow;
+				if ($oldbiblio->{issn}) {
+                                $searchissn->execute($oldbiblio->{issn});
+                                ($biblioitemnumber) = $searchissn->fetchrow;
+                                }
 			}
 			if ($biblioitemnumber) {
 				$alreadyindb++;
