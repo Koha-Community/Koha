@@ -388,12 +388,17 @@ sub checkauth {
 					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my $sth=$dbh->prepare(
-					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress
-					from borrowers where userid=?"
-				);
+				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress);
+				my $sth=$dbh->prepare("select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
 				$sth->execute($userid);
-				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
+				($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
+				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				unless ($cardnumber){
+					my $sth=$dbh->prepare("select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+					$sth->execute($cardnumber);
+					($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
+					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				}
 				my $hash = C4::Context::set_userenv(
 					$bornum,
 					$userid,
@@ -404,6 +409,7 @@ sub checkauth {
 					$userflags,
 					$emailaddress,
 				);
+				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
 						-expires => '');
@@ -414,7 +420,7 @@ sub checkauth {
 					C4::Context->config('user'),
 					C4::Context->config('user'),
 					C4::Context->config('user'),
-					"",1,'nobody@nowhere_koha.com'
+					"",1,C4::Context->preference('KohaAdminEmailAddress')
 				);
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
