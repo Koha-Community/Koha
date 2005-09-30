@@ -906,6 +906,25 @@ my %tabledata = (
             explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'SortItemsBy',
+            value               => 'b',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'subfield on which whould be sorted items',
+            type                => 'Choice',
+			options				=> 'a|b|c|d'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Disable_Dictionary',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Disables Dictionary buttons if set to yes',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1502,6 +1521,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.10  2005/09/30 13:56:57  hdl
+# Two new system preferences:
+# SortItemsby and Disable_Dictionary
+#
 # Revision 1.100.2.9  2005/09/23 11:08:27  tipaul
 # some code cleaning, should not change anything otherwise
 #
