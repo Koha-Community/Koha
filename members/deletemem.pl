@@ -77,7 +77,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {circulate => 1},
+					flagsrequired => {borrower => 1},
 					debug => 1,
 					});
 	#   print $input->header;
