@@ -597,11 +597,13 @@ sub getMARCsubjects {
 
 	my @marcsubjcts;
 	my $subject = "";
-# 	my $subfield = "";
 	my $marcsubjct;
 	my $field9;
 	my $activetagorder=0;
-	while (my ($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
+	my $lasttag;
+	my ($subfieldvalue,$subfieldcode,$tagorder,$tag);
+	while (($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
+		$lasttag=$tag if $tag;
 		if ($activetagorder && $tagorder != $activetagorder) {
 			$subject=~ s/ -- $//;
 			$marcsubjct = {MARCSUBJCT => $subject,
@@ -610,6 +612,8 @@ sub getMARCsubjects {
 							};
 			push @marcsubjcts, $marcsubjct;
 			$subject='';
+			$tag='';
+			$field9='';
 		}
 		if ($subfieldcode eq 9) {
 			$field9=$subfieldvalue;
@@ -618,7 +622,10 @@ sub getMARCsubjects {
 		}
 		$activetagorder=$tagorder;
 	}
-	$marcsubjct = {MARCSUBJCT => $subject,};
+	$marcsubjct = {MARCSUBJCT => $subject,
+					link => $lasttag."9",
+					linkvalue => $field9,
+					};
 	push @marcsubjcts, $marcsubjct;
 
 	$sth->finish;
