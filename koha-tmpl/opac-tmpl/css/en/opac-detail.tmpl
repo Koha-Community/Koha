@@ -65,7 +65,7 @@
 							<!-- TMPL_IF name="linkvalue" -->
 								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=<!-- TMPL_VAR name="link" -->&and_or=and&operator==&value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
 							<!-- TMPL_ELSE -->
-								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=start&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
+								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
 							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</p>
