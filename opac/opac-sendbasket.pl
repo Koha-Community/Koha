@@ -75,6 +75,7 @@ if ($email_add) {
 
 	# Getting template result
 	my $template_res = $template2->output();
+	my $body;
 
 	# Analysing information and getting mail properties
 	if ($template_res =~ /<SUBJECT>\n(.*)\n<END_SUBJECT>/s) { $mail{'subject'} = $1; }
@@ -86,88 +87,37 @@ if ($email_add) {
 	my $email_file = "basket.txt";
 	if ($template_res =~ /<FILENAME>\n(.*)\n<END_FILENAME>/s) { $email_file = $1; }
 
-	if ($template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s) { $mail{'body'} = $1; }
+	if ($template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s) { $body = $1; }
 
 	my $boundary = "====" . time() . "====";
-# 	$mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
-# 
-# 	$email_header = encode_qp($email_header);
-# 
-# 	$boundary = "--".$boundary;
-# 
-# 	# Writing mail
-# 	$mail{body} =
 	$mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
-
-	my $message = encode_qp( "" );
-
-# $file = $^X; # This is the perl executable
-# 
-# open (F, $file) or die "Cannot read $file: $!";
-# binmode F; undef $/;
-$mail{body} = encode_base64($iso2709);
-# close F;
-
-$boundary = '--'.$boundary;
-$mail{body} = <<END_OF_BODY;
+	my $isofile = encode_base64($iso2709);
+	$boundary = '--'.$boundary;
+	$mail{body} = 
+<<END_OF_BODY;
 $boundary
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-$message
+$body
 $boundary
-Content-Type: application/octet-stream; name="basket"
+Content-Type: application/octet-stream; name="basket.iso2709"
 Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="basket"
+Content-Disposition: attachment; filename="basket.iso2709"
 
-$mail{body}
+$isofile
 $boundary--
 END_OF_BODY
-
-
-
-	 <<END_OF_BODY;
-$boundary
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-$email_header
-
-$mail{'body'}
-
-$boundary--
-END_OF_BODY
-
-$mail{attachment} = $iso2709;
-#	$mail{body} = <<END_OF_BODY;
-#$boundary
-#Content-Type: text/plain; charset="iso-8859-1"
-#Content-Transfer-Encoding: quoted-printable
-#
-#$email_header
-#
-#$boundary
-#Content-Type: text/plain; name="$email_file"
-#Content-Transfer-Encoding: quoted-printable
-#Content-Disposition: attachment; filename="$email_file"
-#
-#$mail{'body'}
-#
-#$boundary--
-#END_OF_BODY
 
 	# Sending mail
 	if (sendmail %mail) {
 	# do something if it works....
-#		warn " ".$mail{body};
-#		warn " ".$mail{PJ};
 		$template->param(SENT => "1");
 		$template->param(email_add => $email_add);
 	} else {
 		# do something if it doesnt work....
 		warn "Error sending mail: $Mail::Sendmail::error \n";
 	}
-
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 else {
