@@ -184,7 +184,7 @@ my ($template, $borrowernumber, $cookie)
 							query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {parameters => 1},
+                            flagsrequired => {reserveforothers => 1},
                          });
 $template->param(	optionloop =>\@optionloop,
 								CGIbranch => $CGIbranch,
