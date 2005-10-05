@@ -130,6 +130,9 @@ if ($data->{'categorycode'} ne 'C'){
 my %bor;
 $bor{'borrowernumber'}=$bornum;
 
+#Independant branches management
+my $unvalidlibrarian = ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags}!=1) && !($data->{'branchcode'} eq C4::Context->userenv->{branch}));
+
 # Converts the branchcode to the branch name
 $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 
@@ -189,9 +192,6 @@ foreach my $reserveline (@$reserves) {
 	}
 	push (@reservedata, \%row);
 }
-
-#Independant branches management
-my $unvalidlibrarian = ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags}!=1) && !($data->{'branchcode'} eq C4::Context->userenv->{branch}));
 
 $template->param($data);
 $template->param(
