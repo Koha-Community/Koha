@@ -127,6 +127,9 @@ if ($data->{'categorycode'} ne 'C'){
 	}
 }
 
+#Independant branches management
+my $unvalidlibrarian = ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags}!=1) && ($data->{'branchcode'} ne C4::Context->userenv->{branch}));
+
 my %bor;
 $bor{'borrowernumber'}=$bornum;
 
