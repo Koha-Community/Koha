@@ -389,15 +389,20 @@ sub checkauth {
 			}
 			if ($return == 1){
 				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
-				my $sth=$dbh->prepare("select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
+				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
 				$sth->execute($userid);
-				($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
-				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
-				unless ($cardnumber){
-					my $sth=$dbh->prepare("select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+				($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+# 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				unless ($sth->rows){
+					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
 					$sth->execute($cardnumber);
-					($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
-					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+# 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+					unless ($sth->rows){
+						$sth->execute($userid);
+						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					}
+# 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				}
 				my $hash = C4::Context::set_userenv(
 					$bornum,
@@ -409,7 +414,7 @@ sub checkauth {
 					$userflags,
 					$emailaddress,
 				);
-				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+# 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
 						-expires => '');
