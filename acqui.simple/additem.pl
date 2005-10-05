@@ -60,6 +60,7 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record = MARCgetbiblio($dbh,$bibid);
+warn "==>".$record->as_formatted;
 my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
@@ -152,7 +153,6 @@ my @big_array;
 my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
 my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$itemtype);
 
-my @itemnums; # array to store itemnums
 foreach my $field (@fields) {
 	next if ($field->tag()<10);
 	my @subf=$field->subfields;
@@ -169,7 +169,7 @@ foreach my $field (@fields) {
 					$this_row{'nomod'}=1;
 			}
 		}
-		push @itemnums,$this_row{$subf[$i][0]} =$subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
+		$this_row{itemnum} = $subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
 	}
 	if (%this_row) {
 		push(@big_array, \%this_row);
@@ -194,7 +194,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	}
 	my %row_data;
 	$row_data{item_value} = $items_data;
-	$row_data{itemnum} = $itemnums[$i];
+	$row_data{itemnum} = $big_array[$i]->{itemnum};
 	#reporting this_row values
 	$row_data{'nomod'} = $big_array[$i]{'nomod'};
 	push(@item_value_loop,\%row_data);
