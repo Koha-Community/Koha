@@ -130,7 +130,15 @@ if ($op eq "do_search") {
 			if ($tag) {
 				push @tags,$dbh->quote("$tag$subfield");
 			} else {
-				push @tags, $dbh->quote(substr($marc,0,4));
+				if ($marc =~ /^(\d){3}(. -)(.)*/)
+				{
+					# The user is using the search catalogue part, more fields
+					push @tags, $dbh->quote(substr($marc,0,4));
+				}
+				else
+				{
+					push @tags, $marc;
+				}
 			}
 		} else {
 			push @tags, "";
