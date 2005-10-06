@@ -908,16 +908,6 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'SortItemsBy',
-            value               => 'b',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'subfield on which whould be sorted items',
-            type                => 'Choice',
-			options				=> 'a|b|c|d'
-        },
-        {
-            uniquefieldrequired => 'variable',
             variable            => 'Disable_Dictionary',
             value               => '0',
             forceupdate         => { 'explanation' => 1,
@@ -1521,6 +1511,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.11  2005/10/06 12:16:46  tipaul
+# removing a useless systempreference
+#
 # Revision 1.100.2.10  2005/09/30 13:56:57  hdl
 # Two new system preferences:
 # SortItemsby and Disable_Dictionary
