@@ -170,7 +170,8 @@ if ($delete){
 	} else {
 		$template->param( updtype => 'M');
 	}
-	my $cardnumber=fixup_cardnumber($data->{'cardnumber'});
+	my $cardnumber=$data->{'cardnumber'};
+	$cardnumber=fixup_cardnumber($data->{'cardnumber'}) if $actionType eq 'Add';
 	if ($data->{'sex'} eq 'F'){
 		$template->param(female => 1);
 	}
