@@ -220,7 +220,8 @@ sub fixup_cardnumber ($) {
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".
 
-    if ($cardnumber !~ /\S/ && $autonumber_members) {
+#     if ($cardnumber !~ /\S/ && $autonumber_members) {
+    if ($autonumber_members) {
 		my $dbh = C4::Context->dbh;
 		if (C4::Context->preference('checkdigit') eq 'katipo') {
 			# if checkdigit is selected, calculate katipo-style cardnumber.
