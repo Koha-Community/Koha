@@ -72,6 +72,13 @@ for (my $i=0;$i<$count;$i++){
 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
 	$line{returndate}=format_date($issues->[$i]->{'returndate'});
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
+	$line{volume} =$issues->[$1]->{'volume'};
+	$line{publicationyear} =$issues->[$1]->{'publicationyear'};
+	$line{publishercode} =$issues->[$1]->{'publishercode'};
+	$line{place} =$issues->[$1]->{'place'};
+	$line{pages} =$issues->[$1]->{'pages'};
+	$line{size} =$issues->[$1]->{'size'};
+	$line{description} =$issues->[$1]->{'description'};
 	push(@loop_reading,\%line);
 }
 
