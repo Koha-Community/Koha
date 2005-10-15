@@ -95,9 +95,11 @@ sub plugin {
 		while (my $data = $sth->fetchrow_hashref){
 			my $libjs=$data->{'lib'};
 			$libjs=~s#\'#\\\'#g;
-			warn $libjs;
+			my $authjs=$data->{'authorised_value'};
+			$authjs=~s#\'#\\\'#g;
 			push @results, {'libjs'=>$libjs,
 							'lib'=>$data->{'lib'},
+							'authjs'=>$authjs,
 							'auth_value'=>$data->{'authorised_value'}} 
 							unless (($total<$startfrom) or ($total>$startfrom+$resultsperpage));
 			$total++;

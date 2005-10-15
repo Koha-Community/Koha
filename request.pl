@@ -38,6 +38,13 @@ use CGI;
 use C4::Date;
 
 my $input = new CGI;
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "request.tmpl",
+							query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {reserveforothers => 1},
+                         });
 
 # get biblio information....
 my $bib = $input->param('bib');
@@ -179,13 +186,6 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
 my $time = time();
 
 #setup colours
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "request.tmpl",
-							query => $input,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => {reserveforothers => 1},
-                         });
 $template->param(	optionloop =>\@optionloop,
 								CGIbranch => $CGIbranch,
 								reserveloop => \@reserveloop,

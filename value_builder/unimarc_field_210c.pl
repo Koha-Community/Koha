@@ -107,7 +107,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
 	defaultvalue=escape(document.forms[0].field_value[subfield_managed].value);
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=no');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 ";
