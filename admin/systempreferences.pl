@@ -80,6 +80,7 @@ $tabsysprefs{ldapserver}="Admin";
 $tabsysprefs{itemcallnumber}="Catalogue";
 $tabsysprefs{maxreserves}="Circulation";
 $tabsysprefs{virtualshelves}="OPAC";
+$tabsysprefs{hide_marc}="Catalogue";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
