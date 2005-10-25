@@ -60,7 +60,7 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record = MARCgetbiblio($dbh,$bibid);
-warn "==>".$record->as_formatted;
+# warn "==>".$record->as_formatted;
 my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
@@ -80,6 +80,21 @@ if ($op eq "additem") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	# if autoBarcode is ON, calculate barcode...
+	if (C4::Context->preference('autoBarcode')) {
+		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
+		unless ($record->field($tagfield)->subfield($tagsubfield)) {
+			my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
+			$sth_barcode->execute;
+			my ($newbarcode) = $sth_barcode->fetchrow;
+			$newbarcode++;
+			# OK, we have the new barcode, now create the entry in MARC record
+			my $fieldItem = $record->field($tagfield);
+			$record->delete_field($fieldItem);
+			$fieldItem->add_subfields($tagsubfield => $newbarcode);
+			$record->insert_fields_ordered($fieldItem);
+		}
+	}
 # check for item barcode # being unique
 	my $oldbibid = MARCmarc2koha($dbh,$record);
 	my $exists = itemdata($oldbibid->{'barcode'});
