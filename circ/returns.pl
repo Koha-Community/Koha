@@ -26,6 +26,7 @@
 use strict;
 use CGI;
 use C4::Circulation::Circ2;
+use C4::Date;
 use C4::Search;
 use C4::Output;
 use C4::Print;
@@ -373,7 +374,7 @@ if ($borrower) {
                 my ($iteminformation) =
                   getiteminformation( \%env, $item->{'itemnumber'}, 0 );
                 my %overdueitem;
-                $overdueitem{duedate}   = $item->{'date_due'};
+                $overdueitem{duedate}   = format_date($item->{'date_due'});
                 $overdueitem{biblionum} = $iteminformation->{'biblionumber'};
                 $overdueitem{barcode}   = $iteminformation->{'barcode'};
                 $overdueitem{title}     = $iteminformation->{'title'};
@@ -429,7 +430,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
               $datearr[5] . '-'
               . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
               . sprintf( "%0.2d", $datearr[3] );
-	    $ri{duedate}=$duedate;
+	    $ri{duedate}=format_date($duedate);
             my ($borrower) =
               getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
             $ri{bornum}       = $borrower->{'borrowernumber'};
