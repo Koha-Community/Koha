@@ -172,6 +172,7 @@ sub create_input () {
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
+	$subfield_data{index} = $i;
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
@@ -276,7 +277,7 @@ sub build_tabs ($$$$) {
 						push (@loop_data, \%tag_data);
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
-					if ($#fields >=1) {
+					if ($#fields >=1 && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
 						my @subfields_data;
 						my %tag_data;
 						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
@@ -523,6 +524,7 @@ if ($op eq "addbiblio") {
 }
 $template->param(
 		frameworkcode => $frameworkcode,
-		itemtype => $frameworkcode # HINT: if the library has itemtype = framework, itemtype is auto filled !
+		itemtype => $frameworkcode, # HINT: if the library has itemtype = framework, itemtype is auto filled !
+		hide_marc => C4::Context->preference('hide_marc'),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;

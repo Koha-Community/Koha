@@ -915,6 +915,15 @@ my %tabledata = (
             explanation         => 'Disables Dictionary buttons if set to yes',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'hide_marc',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'hide marc specific datas like subfield code & indicators to library',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1511,6 +1520,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.12  2005/10/25 12:36:21  tipaul
+# * adding a feature to enable reordering of subfields in MARC editor (can be considered as a bug ? at least one of my libraries think that yes !)
+# * as the MARC editor begins to be really heavy, i've also added a marc_hide systempref. It hides all marc features not requested by libraries that want MARC but not too much. It hides MARC tag & subfield code, reordering buttons as well as indicators. by default, hide_marc is off
+#
 # Revision 1.100.2.11  2005/10/06 12:16:46  tipaul
 # removing a useless systempreference
 #
