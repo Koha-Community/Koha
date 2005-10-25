@@ -141,6 +141,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
 				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
+				$subf[$i][1] =~ s/\n/<br\/>/g;
 				if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} elsif ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{kohafield} eq "biblioitems.isbn") {
@@ -166,7 +167,11 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
 				$tag_data{tag}="";
 			} else {
-				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				if (C4::Context->preference('hide_marc')) {
+					$tag_data{tag}=$tagslib->{$fields[$x_i]->tag()}->{lib};
+				} else {
+					$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				}
 			}
 			my @tmp = @subfields_data;
 			$tag_data{subfield} = \@tmp;
@@ -234,6 +239,7 @@ $template->param(item_loop => \@item_value_loop,
 						biblionumber => $biblionumber,
 						subscriptionsnumber => $subscriptionsnumber,
 						popup => $popup,
+						hide_marc => C4::Context->preference('hide_marc'),
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
 
