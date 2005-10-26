@@ -32,15 +32,20 @@ then
 	exit 1
 fi
 
-#MJR: removed -s option, as we have a #! at the start of z3950-daemon-shell.sh
 su -c $KohaZ3950Shell - $RunAsUser &
 
 exit
 
 #--------------
 # $Log$
-# Revision 1.5  2005/06/20 17:05:17  slef
-# Removed -s from su call after Thomas D reports it breaks FreeBSD
+# Revision 1.6  2005/10/26 09:13:54  tipaul
+# big commit, still breaking things...
+#
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
+#
+# Revision 1.4.4.1  2005/06/27 23:10:55  hdl
+# Removing -s from su call after Thomas D reports it breaks FreeBSD
 #
 # Revision 1.4  2003/11/05 23:33:45  slef
 # Now figures out what directory the scripts are in

@@ -24,7 +24,7 @@ use CGI;
 use C4::Auth;
 use HTML::Template;
 use C4::Context;
-use C4::Search;
+# use C4::Search;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
@@ -92,7 +92,7 @@ sub create_scrolling_list {
 
 my $query=new CGI;
 my $type=$query->param('type');
-my $op = $query->param('op');
+my $op = $query->param('op') || "";
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
@@ -364,6 +364,7 @@ else {
 	$sth->finish;
 
 
+	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
 	$template->param("statements" => \@statements,
 			"nbstatements" => 3,
 			CGIitemtype => $CGIitemtype,

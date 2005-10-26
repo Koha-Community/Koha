@@ -161,7 +161,12 @@ String... so ',items,issues,reserves' allows the items, issues and reserves tabl
 returns an array containing hashes. The hash contains all biblio & biblioitems fields and a reference to an item hash. The "item hash contains one line for each callnumber & the number of items related to the callnumber.
 
 =cut
+=head2 my $marcurlsarray = &getMARCurls($dbh,$bibid,$marcflavour);
 
+Returns a reference to an array containing all the URLS stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") isn't used in this version because both flavours of MARC use the same subfield for URLS (but eventually when we get the lables working we'll need to change this.
+
+=cut
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc,$sqlstring, $extratables) = @_;
 
@@ -413,26 +418,44 @@ sub getMARCsubjects {
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
 		$mintag = "600";
-		$maxtag = "619";
+		$maxtag = "699";
 	}
-	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
+	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode,tagorder,tag FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder,subfieldorder");
 
 	$sth->execute($bibid,$mintag,$maxtag);
 
 	my @marcsubjcts;
-	my $subjct = "";
-	my $subfield = "";
+	my $subject = "";
 	my $marcsubjct;
-
-	while (my $data=$sth->fetchrow_arrayref) {
-		my $value = $data->[0];
-		my $subfield = $data->[1];
-		if ($subfield eq "a" && $value ne $subjct) {
-		        $marcsubjct = {MARCSUBJCT => $value,};
+	my $field9;
+	my $activetagorder=0;
+	my $lasttag;
+	my ($subfieldvalue,$subfieldcode,$tagorder,$tag);
+	while (($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
+		$lasttag=$tag if $tag;
+		if ($activetagorder && $tagorder != $activetagorder) {
+			$subject=~ s/ -- $//;
+			$marcsubjct = {MARCSUBJCT => $subject,
+							link => $tag."9",
+							linkvalue => $field9,
+							};
 			push @marcsubjcts, $marcsubjct;
-			$subjct = $value;
+			$subject='';
+			$tag='';
+			$field9='';
 		}
+		if ($subfieldcode eq 9) {
+			$field9=$subfieldvalue;
+		} else {
+			$subject .= $subfieldvalue." -- ";
+		}
+		$activetagorder=$tagorder;
 	}
+	$marcsubjct = {MARCSUBJCT => $subject,
+					link => $lasttag."9",
+					linkvalue => $field9,
+					};
+	push @marcsubjcts, $marcsubjct;
 
 	$sth->finish;
 

@@ -80,15 +80,20 @@ my $tag;
 my @loop_data =();
 if ($authid) {
 	foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
-			my @subfields_data;
-			my @subf=$field->subfields;
+		my @subfields_data;
+		my @subf=$field->subfields;
 		# loop through each subfield
+		my %result;
 		for my $i (0..$#subf) {
 			$subf[$i][0] = "@" unless $subf[$i][0];
+			$result{$subf[$i][0]}.=$subf[$i][1]."|";
+		}
+		foreach (keys %result) {
 			my %subfield_data;
-			$subfield_data{marc_value}=$subf[$i][1];
-			$subfield_data{marc_subfield}=$subf[$i][0];
-			$subfield_data{marc_tag}=$field->tag();
+			chop $result{$_};
+			$subfield_data{marc_value}=$result{$_};
+			$subfield_data{marc_subfield}=$_;
+# 			$subfield_data{marc_tag}=$field->tag();
 			push(@subfields_data, \%subfield_data);
 		}
 		if ($#subfields_data>=0) {

@@ -47,14 +47,18 @@
 	<!-- TMPL_LOOP NAME="subfield_loop" -->
 		<p>
 			<label class="labelsubfield">
-				<b><!-- TMPL_VAR NAME="subfield" --></b>
+				<!-- TMPL_UNLESS name="hide_marc" -->
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/prev.gif" onClick="javascript:upSubfield('<!-- TMPL_VAR name="index" -->')">
+						<input type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1">
+				<!-- TMPL_ELSE -->
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+				<!-- /TMPL_UNLESS -->
 				<!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
 				<!-- TMPL_VAR NAME="marc_lib" -->
 				<!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
 			</label>
 			<!-- TMPL_VAR NAME="marc_value" -->
 			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
 			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
 			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
 			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
@@ -150,28 +154,28 @@ function Check(f) {
 		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
 		alert(alertString2);
 	} else {
-		document.forms[1].submit();
+		document.forms[0].submit();
 	}
 }
 function Dopop(link,i) {
-	defaultvalue=document.forms[0].field_value[i].value;
+	defaultvalue=document.forms['f'].field_value[i].value;
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
 
 function PopupZ3950() {
     var strQuery="";
-	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
-		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&isbn="+document.forms[0].field_value[i].value;
+	for (i=0 ; i<document.forms['f'].field_value.length ; i++) {
+		if (document.forms['f'].kohafield[i].value == "biblioitems.isbn" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&isbn="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.title" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&title="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblio.title" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&title="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblio.author" &&document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&author="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblio.author" &&document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&author="+document.forms['f'].field_value[i].value;
 		}
-		if (document.forms[0].kohafield[i].value == "biblioitems.issn" && document.forms[0].field_value[i].value.length>0) {
-		    strQuery += "&issn="+document.forms[0].field_value[i].value;
+		if (document.forms['f'].kohafield[i].value == "biblioitems.issn" && document.forms['f'].field_value[i].value.length>0) {
+		    strQuery += "&issn="+document.forms['f'].field_value[i].value;
 		}
 	}
 	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
@@ -182,6 +186,22 @@ function AddField(field) {
 	document.forms[1].addfield_field.value=field;
 	document.f.submit();
 }
+
+function upSubfield(index) {
+	temp = document.forms['f'].field_value[index-1].value;
+	document.forms['f'].field_value[index-1].value=document.forms['f'].field_value[index].value;
+	document.forms['f'].field_value[index].value= temp;
+	temp = document.forms['f'].subfield[index-1].value;
+	document.forms['f'].subfield[index-1].value=document.forms['f'].subfield[index].value;
+	document.forms['f'].subfield[index].value = temp;
+	temp = document.forms['f'].mandatory[index-1].value;
+	document.forms['f'].mandatory[index-1].value=document.forms['f'].mandatory[index].value;
+	document.forms['f'].mandatory[index].value = temp;
+	temp = document.forms['f'].kohafield[index-1].value;
+	document.forms['f'].kohafield[index-1].value=document.forms['f'].kohafield[index].value;
+	document.forms['f'].kohafield[index].value = temp;
+}
+
 </script>
 </body>
 </html>

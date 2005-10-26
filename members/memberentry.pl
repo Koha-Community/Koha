@@ -111,7 +111,7 @@ if ($op eq 'add' or $op eq 'modify') {
 	}
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		if ($userenv->{flags} == 1){
+		if ($userenv->{flags} != 1){
 			unless ($userenv->{branch} eq $data{'branchcode'}){
 				push @errors, "ERROR_branch";
 				$nok=1;
@@ -171,7 +171,8 @@ if ($delete){
 	} else {
 		$template->param( updtype => 'M');
 	}
-	my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
+	my $cardnumber=$data->{'cardnumber'};
+	$cardnumber=fixup_cardnumber($data->{'cardnumber'}) if $actionType eq 'Add';
 	if ($data->{'sex'} eq 'F'){
 		$template->param(female => 1);
 	}
@@ -241,21 +242,14 @@ if ($delete){
 	my $branches=getbranches();
 	my $default;
 	foreach my $branch (keys %$branches) {
-		if (C4::Context->preference("IndependantBranches")) {
-			my $userenv = C4::Context->userenv;
-			if ($userenv->{flags} == 1){
-				push @select_branch, $branch;
-				$select_branches{$branch} = $branches->{$branch}->{'branchname'};
-				$default = $data->{'branchcode'};
-			} else {
-				push @select_branch, $branch if ($branch eq $userenv->{branch});
-				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq $userenv->{branch});
-				$default = $userenv->{branch};
-			}
-		} else {
+		if ((not C4::Context->preference("IndependantBranches")) || (C4::Context->userenv->{'flags'} == 1)) {
 			push @select_branch, $branch;
 			$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 			$default = $data->{'branchcode'};
+		} else {
+				push @select_branch, $branch if ($branch eq C4::Context->userenv->{'branch'});
+				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
+				$default = C4::Context->userenv->{'branch'};
 		}
 	}
 	

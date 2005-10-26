@@ -43,16 +43,20 @@ my @options;
 my $counter=0;
 foreach my $language (getalllanguages()) {
 	next if $language eq 'images';
+	next if $language eq 'CVS';
 	my $selected='0';
 #                            next if $currently_selected_languages->{$language};
 	push @options, { language => $language, counter => $counter };
 	$counter++;
 }
+my $languages_count = @options;
 
+if($languages_count > 1){
+		$template->param(languages => \@options);
+}
 $template->param(CGIitemtype => $CGIitemtype,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
-				languages => \@options,
 				textmessaging => $borrower->{textmessaging},
 				opaclargeimage => C4::Context->preference("opaclargeimage"),
                                 kohaversion => $kohaVersion

@@ -3,7 +3,7 @@
 
 <h1 class="catalogue">Catalogue search</h1>
 
-<form name="f" method="post">
+<form name="f" action="/cgi-bin/koha/bull/subscription-bib-search.pl" method="post">
 	<input type="hidden" name="op" value="do_search">
 	<input type="hidden" name="type" value="intranet">
 	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
@@ -15,7 +15,7 @@
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="text" name="value">
 		</p>
 	</div>
 	<div id="bloc25">
@@ -41,24 +41,10 @@
 	</div>
 </form>
 
-<script>
-function sql_update() {
-document.f.sql.value="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-			document.f.sql.value = document.f.sql.value+
-										document.f.and_or[i].value + ' (' +
-										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + ' ' +
-										document.f.operator[i].value + ' ' +
-										'\''+document.f.value[i].value + '\') ';
-		}
-	}
-}
-
+<script language="Javascript" type="text/javascript">
 function AddStatement() {
 
-	document.forms[0].op.value="AddStatement";
+	document.forms['f'].op.value="AddStatement";
 	document.f.submit();
 }
 

@@ -31,6 +31,10 @@ $borr->{'expiry'}       = format_date($borr->{'expiry'});
 $borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
+if($borr->{'debarred'} || $borr->{'gonenoaddress'} || $borr->{'lost'}){
+	$borr->{'flagged'} =1;
+}
+
 if ($borr->{'amountoutstanding'} > 5) {
     $borr->{'amountoverfive'} = 1;
 }

@@ -173,6 +173,7 @@ sub create_input () {
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
+	$subfield_data{index} = $i;
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
@@ -277,7 +278,7 @@ sub build_tabs ($$$$) {
 						push (@loop_data, \%tag_data);
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
-					if ($#fields >1) {
+					if ($#fields >=1 && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
 						my @subfields_data;
 						my %tag_data;
 						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
@@ -353,6 +354,7 @@ my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
+my $bibid;
 
 
 $frameworkcode = &MARCfind_frameworkcode($dbh,$biblionumber) if ($biblionumber and not ($frameworkcode));
@@ -430,9 +432,8 @@ if ($op eq "addbiblio") {
 	if (!$duplicatebiblionumber or $confirm_not_duplicate) {
 		# MARC::Record built => now, record in DB
 		if ($is_a_modif) {
-			NEWmodbiblioframework($dbh,$biblionumber,$frameworkcode);
-			NEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode);
-			logaction($loggedinuser,"acqui.simple","modify",$biblionumber,"record : ".$record->as_formatted) if (C4::Context->preference("Activate_Log"));
+			NEWmodbiblioframework($dbh,$bibid,$frameworkcode);
+			NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
 		} else {
 			my $biblioitemnumber;
 			($biblionumber,$biblioitemnumber) = NEWnewbiblio($dbh,$record,$frameworkcode);
@@ -514,6 +515,7 @@ if ($op eq "addbiblio") {
 }
 $template->param(
 		frameworkcode => $frameworkcode,
-		itemtype => $frameworkcode # HINT: if the library has itemtype = framework, itemtype is auto filled !
+		itemtype => $frameworkcode, # HINT: if the library has itemtype = framework, itemtype is auto filled !
+		hide_marc => C4::Context->preference('hide_marc'),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;

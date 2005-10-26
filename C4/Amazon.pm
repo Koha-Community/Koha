@@ -70,8 +70,8 @@ my $url = "http://xml.amazon.com/onca/xml3?t=$dev_key&dev-t=$af_tag&type=heavy&f
 #Here's an example asin for the book "Cryptonomicon"
 #0596005423";
 
-use XML::Simple;
-use LWP::Simple;
+# use XML::Simple;
+# use LWP::Simple;
 my $content = get($url);
 die "could not regrieve $url" unless $content;
 

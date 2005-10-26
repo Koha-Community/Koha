@@ -58,7 +58,9 @@ my $op = $input->param('op');
 my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-
+my $record = MARCgetbiblio($dbh,$bibid);
+# warn "==>".$record->as_formatted;
+my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -76,7 +78,22 @@ if ($op eq "additem") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	my $addeditem = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	# if autoBarcode is ON, calculate barcode...
+	if (C4::Context->preference('autoBarcode')) {
+		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
+		unless ($record->field($tagfield)->subfield($tagsubfield)) {
+			my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
+			$sth_barcode->execute;
+			my ($newbarcode) = $sth_barcode->fetchrow;
+			$newbarcode++;
+			# OK, we have the new barcode, now create the entry in MARC record
+			my $fieldItem = $record->field($tagfield);
+			$record->delete_field($fieldItem);
+			$fieldItem->add_subfields($tagsubfield => $newbarcode);
+			$record->insert_fields_ordered($fieldItem);
+		}
+	}
 # check for item barcode # being unique
 	my $addedolditem = MARCmarc2koha($dbh,$addeditem);
 	my $exists = get_item_from_barcode($addedolditem->{'barcode'});
@@ -113,9 +130,9 @@ if ($op eq "additem") {
 	}
 	my $itemrecord = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
-# warn "ITEM TO MODIFY : ".$itemrecord->as_formatted;
-	NEWmoditem($dbh, $itemrecord, $biblionumber, $biblioitemnumber, $itemnumber,0);
-	$itemnumber="";
+# warn "R: ".$record->as_formatted;
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
+	$itemnum="";
 	$nextop="additem";
 }
 
@@ -132,22 +149,18 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-# load the biblio to have the title, the biblioitemnumber & any other useful field
-my $record = MARCgetbiblio($dbh,$biblionumber);
-# warn $record ->as_formatted;
-# warn "REC ".$record->as_formatted;
-my $oldrecord = MARCmarc2koha($dbh,$record);
-
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-my @fields = $record->fields();
+my $temp = MARCgetbiblio($dbh,$bibid);
+my @fields = $temp->fields();
+#my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
 my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
 my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$itemtype);
-my @itemnums; # array to store itemnums
+
 foreach my $field (@fields) {
 	next if ($field->tag()<10);
 	my @subf=$field->subfields;
@@ -160,14 +173,11 @@ foreach my $field (@fields) {
 		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
 			#verifying rights
 			my $userenv = C4::Context->userenv;
-			unless ($userenv->{'flags'} == 1){
-				if (not ($userenv->{'branch'} eq $subf[$i][1])) {
+			unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subf[$i][1]))){
 					$this_row{'nomod'}=1;
-					warn "nomod"
-				}
 			}
 		}
-		push @itemnums,$this_row{$subf[$i][0]} =$subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
+		$this_row{itemnum} = $subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
 	}
 	if (%this_row) {
 		push(@big_array, \%this_row);
@@ -179,6 +189,9 @@ foreach my $subfield_code  (keys(%witness)) {
 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
 	}
 }
+my ($holdingbrtagf,$holdingbrtagsubf) = &MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$itemtype);
+@big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
+
 # now, construct template !
 my @item_value_loop;
 my @header_value_loop;
@@ -189,7 +202,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	}
 	my %row_data;
 	$row_data{item_value} = $items_data;
-	$row_data{itemnumber} = $itemnums[$i];
+	$row_data{itemnum} = $big_array[$i]->{itemnum};
 	#reporting this_row values
 	$row_data{'nomod'} = $big_array[$i]{'nomod'};
 	push(@item_value_loop,\%row_data);
@@ -220,13 +233,11 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 		my ($x,$value);
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
-		
 		#testing branch value if IndependantBranches.
 		my $test = (C4::Context->preference("IndependantBranches")) && 
-					($tag==$branchtagfield) && ($subfield==$branchtagsubfield) &&
-					(C4::Context->userenv->{flags} != 1) && ($value != C4::Context->userenv->{branch}) ;
-		print $input->redirect("additem.pl?biblionumber=$biblionumber") if ($test);
-		
+					($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
+					(C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
+# 		print $input->redirect(".pl?bibid=$bibid") if ($test);
 		# search for itemcallnumber if applicable
 		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
 			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
@@ -301,20 +312,12 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$i++
 	}
 }
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						biblionumber =>$biblionumber,
-						biblioitemnumber => $oldrecord->{biblioitemnumber},
+						bibid => $bibid,
+						biblionumber =>$oldbiblionumber,
 						title => $oldrecord->{title},
 						author => $oldrecord->{author},
 						item => \@loop_data,

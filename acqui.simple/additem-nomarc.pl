@@ -20,12 +20,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
-# Revision 1.7  2005/09/02 14:46:40  tipaul
-# * road to zebra for MARC=OFF
-# * removing Acquisitions/branches.pm call, as it's now in Koha.pm
+# Revision 1.8  2005/10/26 09:11:34  tipaul
+# big commit, still breaking things...
 #
-# Revision 1.6  2005/08/04 12:12:13  tipaul
-# synch'ing 2.2 and head
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
 #
 # Revision 1.4.2.1  2005/03/25 12:52:44  tipaul
 # needs "editcatalogue" flag, not "catalogue"
@@ -133,7 +132,76 @@ else {
 			branchloop  => \@branchloop,
 			itemtypeloop => \@itemtypeloop,
 
-		);
+    ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
+
+    if ( !$bibliocount ) {
+        print $input->redirect('addbooks.pl');
+    }
+    else {
+
+        ( $biblioitemcount, @biblioitems ) =
+          &getbiblioitembybiblionumber($biblionumber);
+        ( $branchcount,   @branches )  = &branches;
+        ( $itemtypecount, @itemtypes ) = &getitemtypes;
+
+        for ( my $i = 0 ; $i < $itemtypecount ; $i++ ) {
+            $itemtypedescriptions{ $itemtypes[$i]->{'itemtype'} } =
+              $itemtypes[$i]->{'description'};
+        }    # for
+
+        for ( my $i = 0 ; $i < $branchcount ; $i++ ) {
+            $branchnames{ $branches[$i]->{'branchcode'} } =
+              $branches[$i]->{'branchname'};
+        }    # for
+
+        #	print $input->header;
+        #	print startpage();
+        #	print startmenu('acquisitions');
+        my $input = new CGI;
+        my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+            {
+                template_name   => "acqui.simple/additem-nomarc.tmpl",
+                query           => $input,
+                type            => "intranet",
+                authnotrequired => 0,
+                flagsrequired   => { editcatalogue => 1 },
+                debug           => 1,
+            }
+        );
+
+        if ( $error eq "nobarcode" ) {
+            $template->param( NOBARCODE => 1 );
+        }
+        elsif ( $error eq "nobiblioitem" ) {
+            $template->param( NOBIBLIOITEM => 1 );
+        }
+        elsif ( $error eq "barcodeinuse" ) {
+            $template->param( BARCODEINUSE => 1 );
+        }    # elsif
+
+        for ( my $i = 0 ; $i < $biblioitemcount ; $i++ ) {
+            if ( $biblioitems[$i]->{'itemtype'} eq "WEB" ) {
+                $biblioitems[$i]->{'WEB'} = 1;
+
+            }
+            $biblioitems[$i]->{'dewey'} =~ /(\d*\.\d\d)/;
+            $biblioitems[$i]->{'dewey'} = $1;
+            ( $itemcount, @items ) =
+              &getitemsbybiblioitem( $biblioitems[$i]->{'biblioitemnumber'} );
+            $biblioitems[$i]->{'items'} = \@items;
+        }    # for
+        $template->param(
+            BIBNUM    => $biblionumber,
+            AUTHOR    => $biblios[0]->{'author'},
+            TITLE     => $biblios[0]->{'title'},
+            COPYRIGHT => $biblios[0]->{'copyrightdate'},
+            SERIES    => $biblios[0]->{'seriestitle'},
+            NOTES     => $biblios[0]->{'notes'},
+            BIBITEMS  => \@biblioitems,
+            BRANCHES  => \@branches,
+            ITEMTYPES => \@itemtypes,
+
+        );
 
         output_html_with_http_headers $input, $cookie, $template->output;
     }    # if

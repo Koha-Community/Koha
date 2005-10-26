@@ -147,7 +147,7 @@ sub CalcFine {
   # firstremind, chargeperiod, accountsent, and chargename from the
   # categoryitem table.
 
-  my $sth=$dbh->prepare("Select * from items,biblioitems,itemtypes,categoryitem where items.itemnumber=?
+  my $sth=$dbh->prepare("Select * from items,biblioitems,itemtypes,issuingrules where items.itemnumber=?
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and

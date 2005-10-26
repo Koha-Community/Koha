@@ -20,7 +20,11 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 			<tr>
-				<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+				<!-- TMPL_IF NAME="even" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 							<!-- TMPL_IF name="MARC_ON" -->
 								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 							<!-- TMPL_ELSE -->

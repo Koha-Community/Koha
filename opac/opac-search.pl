@@ -97,8 +97,16 @@ if ($op eq "do_search") {
   }
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
+	
 	my $orderby = $query->param('orderby');
 	my $desc_or_asc = $query->param('desc_or_asc');
+	my $exactsearch = $query->param('exact');
+	if ($exactsearch) {
+		warn "EXACT";
+		foreach (@operator) {
+			$_='=';
+		}
+	}
 	# builds tag and subfield arrays
 	my @tags;
 
@@ -152,14 +160,14 @@ if ($op eq "do_search") {
   }
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc,$sqlstring, $extratables);
+										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
 	if ($total ==1) {
 	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
 	     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=".@$results[0]->{biblionumber});
-	} elsif (C4::Context->preference("BiblioDefaultView") eq "MARC") {
-	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	} elsif (C4::Context->preference("BiblioDefaultView") eq "marc") {
+	     print $query->redirect("/cgi-bin/koha/opac-MARCdetail.pl?bib=".@$results[0]->{biblionumber});
 	} else {
-	     print $query->redirect("/cgi-bin/koha/ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
+	     print $query->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
 	}
 	exit;
 	}
@@ -353,13 +361,6 @@ $template->param( phraseorterm => $phraseorterm );
 							$defaultview => 1,
 							suggestion => C4::Context->preference("suggestion"),
 							virtualshelves => C4::Context->preference("virtualshelves"),
-                itemtypelist => $itemtypelist,
-              subcategorylist => $subcategorylist,
-              brancheslist => $brancheslist,
-              categorylist => $categorylist,
-              mediatypelist => $mediatypelist,
-              itemtypesstring => $itemtypesstring,
-              avail => $avail,
 							);
 
 } else {
@@ -406,7 +407,8 @@ $template->param( phraseorterm => $phraseorterm );
 				-multiple => 0 );
 	$sth->finish;
     
-	$template->param(itemtypelist => $itemtypelist,
+	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
+	$template->param(classlist => $classlist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),

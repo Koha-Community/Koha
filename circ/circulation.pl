@@ -58,8 +58,8 @@ my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 $findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrnumber');
-my $print=$query->param('print');
-my $barcode = $query->param('barcode');
+my $print=$query->param('print') || '';
+my $barcode = $query->param('barcode') || '';
 my $year=$query->param('year');
 my $month=$query->param('month');
 my $day=$query->param('day');
@@ -280,7 +280,7 @@ if ($borrowerslist) {
 #title
 
 my ($patrontable, $flaginfotable) = patrontable($borrower);
-my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'};
+my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'} || 0;
 my @temp=split(/\$/,$amountold);
 $amountold=$temp[1];
 $template->param(

@@ -155,6 +155,120 @@ my %tabledata = (
             explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
 	    type		=> 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacstylesheet',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacsmallimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclargeimage',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'delimiter',
+            value               => ';',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'separator for reports exported to spreadsheet',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'MIME',
+            value               => 'OPENOFFICE.ORG',
+            forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default application for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> 'EXCEL|OPENOFFICE.ORG'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Delimiter',
+            value               => ';',
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default separator character for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> ';|tabulation|,|/|\|#'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'SubscriptionHistory',
+            value               => ';',
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the information level for serials history in OPAC',
+	        type		=> 'Choice',
+	        options		=> 'simplified|full'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'hidelostitems',
+            value               => 'No',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'show or hide "lost" items in OPAC.',
+	    type		=> 'YesNo',
+        },
+		 {
+            uniquefieldrequired => 'variable',
+            variable            => 'IndependantBranches',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn Branch independancy management On an Off',
+            type                => 'YesNo',
+        },
+                {
+            uniquefieldrequired => 'variable',
+            variable            => 'ReturnBeforeExpiry',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Disable_Dictionary',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Disables Dictionary buttons if set to yes',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'hide_marc',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'hide marc specific datas like subfield code & indicators to library',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -268,6 +382,7 @@ foreach $table ( keys %fielddefinitions ) {
 	{
 		$definitions->{$column}->{type}    = $type;
 		$definitions->{$column}->{null}    = $null;
+		$definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
 		$definitions->{$column}->{key}     = $key;
 		$definitions->{$column}->{default} = $default;
 		$definitions->{$column}->{extra}   = $extra;
@@ -280,16 +395,16 @@ foreach $table ( keys %fielddefinitions ) {
 # 		$null    = 'YES' if $row->{null} eq 'NULL';
 		my $key     = $row->{key};
 		my $default = $row->{default};
-		$default="''" unless $default;
+		my $null    = $row->{null};
+# 		$default="''" unless $default;
 		my $extra   = $row->{extra};
 		my $def     = $definitions->{$field};
+
 		unless ( $type eq $def->{type}
 			&& $null eq $def->{null}
 			&& $key eq $def->{key}
-			&& $default eq $def->{default}
 			&& $extra eq $def->{extra} )
 		{
-
 			if ( $null eq '' ) {
 				$null = 'NOT NULL';
 			}
@@ -299,6 +414,7 @@ foreach $table ( keys %fielddefinitions ) {
 			unless ( $extra eq 'auto_increment' ) {
 				$extra = '';
 			}
+
 			# if it's a new column use "add", if it's an old one, use "change".
 			my $action;
 			if ($definitions->{$field}->{type}) {
@@ -621,6 +737,12 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.123  2005/10/26 09:13:37  tipaul
+# big commit, still breaking things...
+#
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
+#
 # Revision 1.122  2005/09/02 14:18:38  tipaul
 # new feature : image for itemtypes.
 #

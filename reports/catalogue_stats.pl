@@ -220,7 +220,7 @@ if ($do_it) {
 	$req->execute;
 	undef @select;
 	push @select,"";
-	my $CGIholdingbranch=CGI::scrolling_list( -name     => 'Filter',
+	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'holdingbranch',
 				-values   => \@select,
 				-size     => 1,
@@ -332,8 +332,8 @@ sub calculate {
  	$linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
- 	$linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	$linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
+ 	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
+ 	@linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
@@ -346,8 +346,8 @@ sub calculate {
  	$colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
- 	$colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	$colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
+ 	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
+ 	@colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
 
 # 1st, loop rows.
 	my $linefield;
@@ -506,7 +506,11 @@ sub calculate {
 	}
 	if (@$filters[11]){
 		@$filters[11]=~ s/\*/%/g;
-		$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
+		if ($cond){
+			$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
+		} else {
+			$strcalc .= " WHERE items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
+		}
 	}
 	
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";

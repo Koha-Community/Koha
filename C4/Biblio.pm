@@ -142,7 +142,7 @@ sub zebra_create {
 	unless (opendir(DIR, "$cgidir")) {
 			$cgidir = C4::Context->intranetdir."/";
 	} 
-
+	closedir DIR;
 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
 	open F,"> $filename";
 	print F $record->as_usmarc();
@@ -202,7 +202,7 @@ sub MARCgettagslib {
 
     while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
         $res->{$tag}->{lib}        = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
-        $res->{$tab}->{tab}        = "";            # XXX
+        $res->{$tag}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
     }
@@ -376,7 +376,7 @@ sub MARCkoha2marcBiblio {
 	foreach (keys %$biblio) {
 		$bibliohash->{$_}=$biblio->{$_};
 	}
-	my $sth = $dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
+	$sth = $dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
 	my $record = MARC::Record->new();
 	foreach ( keys %$bibliohash ) {
 		&MARCkoha2marcOnefield( $sth, $record, "biblio." . $_, $bibliohash->{$_}, '') if $bibliohash->{$_};
@@ -548,17 +548,20 @@ sub MARCmarc2koha {
 	$sth2->execute;
 	my $field;
 	while (($field)=$sth2->fetchrow) {
+# 		warn "biblio.".$field;
 		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
 		if ($field eq 'notes') { $field = 'bnotes'; }
+# 		warn "biblioitems".$field;
 		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
+# 		warn "items".$field;
 		$result=&MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
 	}
 	# additional authors : specific
@@ -566,12 +569,14 @@ sub MARCmarc2koha {
 	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result,$frameworkcode);
 # modify copyrightdate to keep only the 1st year found
 	my $temp = $result->{'copyrightdate'};
-	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
-	if ($1>0) {
-		$result->{'copyrightdate'} = $1;
-	} else { # if no cYYYY, get the 1st date.
-		$temp =~ m/(\d\d\d\d)/;
-		$result->{'copyrightdate'} = $1;
+	if ($temp){
+		$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+		if ($1>0) {
+			$result->{'copyrightdate'} = $1;
+		} else { # if no cYYYY, get the 1st date.
+			$temp =~ m/(\d\d\d\d)/;
+			$result->{'copyrightdate'} = $1;
+		}
 	}
 # modify publicationyear to keep only the 1st year found
 	$temp = $result->{'publicationyear'};
@@ -1000,7 +1005,7 @@ sub REALmodsubject {
 
     #  my $dbh   = C4Connect;
     my $count = @subject;
-    my $error;
+    my $error="";
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         $subject[$i] =~ s/^ //g;
         $subject[$i] =~ s/ $//g;
@@ -1042,7 +1047,7 @@ sub REALmodsubject {
         }    # else
         $sth->finish;
     }    # else
-    if ( $error eq '' ) {
+    if ($error eq '') {
         my $sth =
           $dbh->prepare("Delete from bibliosubject where biblionumber = ?");
         $sth->execute($bibnum);
@@ -2876,6 +2881,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.132  2005/10/26 09:12:33  tipaul
+# big commit, still breaking things...
+#
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
+#
 # Revision 1.131  2005/09/22 10:01:45  tipaul
 # see mail on koha-devel : code cleaning on Search.pm + normalizing API + use of biblionumber everywhere (instead of bn, biblio, ...)
 #

@@ -37,6 +37,7 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 my $hassubscriptionexpired = hassubscriptionexpired($subscriptionid);
+my $subscription=getsubscription($subscriptionid);
 if ($op eq 'modsubscriptionhistory') {
 	modsubscriptionhistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 }
@@ -66,6 +67,7 @@ my $solhistory = $sth->fetchrow_hashref;
 
 	$template->param(
 			serialslist => \@serialslist,
+			biblionumber => $subscription->{biblionumber},
 			histstartdate => format_date($solhistory->{'histstartdate'}),
 			enddate => format_date($solhistory->{'enddate'}),
 			recievedlist => $solhistory->{'recievedlist'},
@@ -74,6 +76,7 @@ my $solhistory = $sth->fetchrow_hashref;
 			librariannote => $solhistory->{'librariannote'},
 			subscriptionid => $subscriptionid,
 			bibliotitle => $subs->{bibliotitle},
+			biblionumber => $subs->{biblionumber},
 			hassubscriptionexpired =>$hassubscriptionexpired,
 		);
 output_html_with_http_headers $query, $cookie, $template->output;

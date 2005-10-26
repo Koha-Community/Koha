@@ -49,7 +49,8 @@ for (my $i=0;$i<$count;$i++){
 	$totavail+=$avail;
 }
 #currencies
-my ($count,$rates)=getcurrencies();
+my $rates;
+($count,$rates)=getcurrencies();
 my @loop_currency = ();
 for (my $i=0;$i<$count;$i++){
 	my %line;

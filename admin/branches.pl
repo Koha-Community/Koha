@@ -66,7 +66,7 @@ my $input = new CGI;
 my $branchcode=$input->param('branchcode');
 my $branchname=$input->param('branchname');
 my $categorycode = $input->param('categorycode');
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "parameters/branches.tmpl",
@@ -166,7 +166,7 @@ if ($op eq 'add') {
 # html output functions....
 
 sub default {
-	my ($message) = @_;
+	my ($message) = @_ || "";
 	heading("Branches");
 	$template->param('heading-branches-p' => 1);
 	$template->param("$message" => 1);
@@ -261,7 +261,7 @@ sub branchinfotable {
 		$branchinfo = getbranchinfo();
 	}
 	my $toggle;
-	my $i;
+	my $i=0;
 	my @loop_data =();
 	foreach my $branch (@$branchinfo) {
 		($i % 2) ? ($toggle = 1) : ($toggle = 0);
@@ -329,8 +329,6 @@ sub branchinfotable {
 	}
 	my @branchcategories =();
 	my $catinfo = getcategoryinfo();
-	my $toggle;
-	my $i = 0;
 	foreach my $cat (@$catinfo) {
 		($i % 2) ? ($toggle = 1) : ($toggle = 0);
 		push @branchcategories, {

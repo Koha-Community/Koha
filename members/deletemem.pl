@@ -55,24 +55,21 @@ foreach (sort keys %$issues) {
 	$i++;
 }
 my ($bor,$flags)=getpatroninformation(\%env, $member,'');
-
 if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
 	unless ($userenv->{flags} == 1){
 		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
-			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
+#			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
 			print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
 			exit 1;
 		}
 	}
 }
-
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
 $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-
 
 if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 	my ($template, $borrowernumber, $cookie)
@@ -80,7 +77,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {circulate => 1},
+					flagsrequired => {borrower => 1},
 					debug => 1,
 					});
 	#   print $input->header;

@@ -186,6 +186,7 @@ sub get_subscription_list_from_biblionumber {
 		$subs->{missinglist} =~ s/\n/\<br\/\>/g;
 		$subs->{recievedlist} =~ s/\n/\<br\/\>/g;
 		$subs->{"periodicity".$subs->{periodicity}} = 1;
+		$subs->{"status".$subs->{'status'}} = 1;
 		if ($subs->{enddate} eq '0000-00-00') {
 			$subs->{enddate}='';
 		} else {
@@ -199,7 +200,7 @@ sub get_subscription_list_from_biblionumber {
 sub get_full_subscription_list_from_biblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, year(serial.planneddate) as year,subscription.*, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, serial.notes, year(serial.planneddate) as year, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
 							from serial left join subscription on (serial.subscriptionid=subscription.subscriptionid and subscription.biblionumber=serial.biblionumber)
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
 							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
@@ -227,10 +228,7 @@ sub get_full_subscription_list_from_biblionumber {
 			push @$temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
-				'status1' => $subs->{'status'}==1,
-				'status2' => $subs->{'status'}==2,
-				'status3' => $subs->{'status'}==3,
-				'status4' => $subs->{'status'}==4,
+				"status".$subs->{'status'} => 1,
 				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 		}else {
@@ -243,10 +241,7 @@ sub get_full_subscription_list_from_biblionumber {
 			push @temp,
 				{'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
-				'status1' => $subs->{'status'}==1,
-				'status2' => $subs->{'status'}==2,
-				'status3' => $subs->{'status'}==3,
-				'status4' => $subs->{'status'}==4,
+				"status".$subs->{'status'} => 1,
 				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
 				};
 			
@@ -291,15 +286,11 @@ sub modsubscription {
 
 sub delsubscription {
 	my ($subscriptionid) = @_;
-	# check again there is only one issue (the subscription is new)
-	my ($totalissues) = getserials($subscriptionid);
-	if ($totalissues eq 1) {
-		my $dbh = C4::Context->dbh;
-		$subscriptionid=$dbh->quote($subscriptionid);
-		$dbh->do("delete from subscription where subscriptionid=$subscriptionid");
-		$dbh->do("delete from subscriptionhistory where subscriptionid=$subscriptionid");
-		$dbh->do("delete from serial where subscriptionid=$subscriptionid");
-	}
+	my $dbh = C4::Context->dbh;
+	$subscriptionid=$dbh->quote($subscriptionid);
+	$dbh->do("delete from subscription where subscriptionid=$subscriptionid");
+	$dbh->do("delete from subscriptionhistory where subscriptionid=$subscriptionid");
+	$dbh->do("delete from serial where subscriptionid=$subscriptionid");
 }
 sub getsubscriptions {
 	my ($title,$ISSN,$biblionumber) = @_;
@@ -360,8 +351,7 @@ sub getserials {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
 	# status = 2 is "arrived"
-	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate, notes from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
-
+	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate,notes from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
 	$sth->execute($subscriptionid);
 	my @serials;
 	while(my $line = $sth->fetchrow_hashref) {
@@ -396,7 +386,8 @@ sub getlatestserials{
 }
 
 sub serialchangestatus {
-	my ($serialid,$serialseq,$planneddate,$status,$note)=@_;
+	my ($serialid,$serialseq,$planneddate,$status,$notes)=@_;
+# 	warn "($serialid,$serialseq,$planneddate,$status)";
 	# 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
@@ -406,8 +397,8 @@ sub serialchangestatus {
 	if ($status eq 6){
 		delissue($serialseq, $subscriptionid) 
 	}else{
-		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?, notes=? where serialid = ?");
-		$sth->execute($serialseq,$planneddate,$status,$note,$serialid);
+		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?,notes=? where serialid = ?");
+		$sth->execute($serialseq,$planneddate,$status,$notes,$serialid);
 		$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 		$sth->execute($subscriptionid);
 		my ($missinglist,$recievedlist) = $sth->fetchrow;
@@ -420,23 +411,19 @@ sub serialchangestatus {
 		$sth->execute($recievedlist,$missinglist,$subscriptionid);
 	}
 	# create new waited entry if needed (ie : was a "waited" and has changed)
-	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
-	$sth->execute($subscriptionid);
-	my $subscription = $sth->fetchrow_hashref;
 	if ($oldstatus eq 1 && $status ne 1) {
+		$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+		$sth->execute($subscriptionid);
+		my $val = $sth->fetchrow_hashref;
 		# next issue number
-		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($subscription);
+		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
 		# next date (calculated from actual date & frequency parameters)
-		my $nextplanneddate = Get_Next_Date($planneddate,$subscription);
-		newissue($newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextplanneddate);
+		my $nextplanneddate = Get_Next_Date($planneddate,$val);
+		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
 		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
 														innerloop1=?,innerloop2=?,innerloop3=?
 														where subscriptionid = ?");
 		$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
-	}
-	# check if an alert must be sent... (= a letter is defined & status became "arrived"
-	if ($subscription->{letter} && $status eq 2) {
-		sendalerts('issue',$subscription->{subscriptionid},$subscription->{letter});
 	}
 }
 

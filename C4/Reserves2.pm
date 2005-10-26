@@ -312,7 +312,7 @@ sub CancelReserve {
 		$sth->finish;
 
 		# update the database, removing the record...
-		my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
+		$sth = $dbh->prepare("update reserves set cancellationdate = now(),
 											found            = Null,
 											priority         = 0
 									where biblionumber     = ?

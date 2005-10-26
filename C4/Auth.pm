@@ -146,53 +146,53 @@ sub get_template_and_user {
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
-		if ($flags && $flags->{circulate} == 1) {
+		if ($flags && $flags->{circulate} eq 1) {
 			$template->param(CAN_user_circulate => 1); }
 
-		if ($flags && $flags->{catalogue} == 1) {
+		if ($flags && $flags->{catalogue} eq 1) {
 			$template->param(CAN_user_catalogue => 1); }
 		
 
-		if ($flags && $flags->{parameters} == 1) {
+		if ($flags && $flags->{parameters} eq 1) {
 			$template->param(CAN_user_parameters => 1);	
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
 
-		if ($flags && $flags->{borrowers} == 1) {
+		if ($flags && $flags->{borrowers} eq 1) {
 			$template->param(CAN_user_borrowers => 1); }
 		
 
-		if ($flags && $flags->{permissions} == 1) {
+		if ($flags && $flags->{permissions} eq 1) {
 			$template->param(CAN_user_permission => 1); }
 		
-		if ($flags && $flags->{reserveforothers} == 1) {
+		if ($flags && $flags->{reserveforothers} eq 1) {
 			$template->param(CAN_user_reserveforothers => 1); }
 		
 
-		if ($flags && $flags->{borrow} == 1) {
+		if ($flags && $flags->{borrow} eq 1) {
 			$template->param(CAN_user_borrow => 1); }
 		
 
-		if ($flags && $flags->{reserveforself} == 1) {
+		if ($flags && $flags->{reserveforself} eq 1) {
 			$template->param(CAN_user_reserveforself => 1); }
 		
 
-		if ($flags && $flags->{editcatalogue} == 1) {
+		if ($flags && $flags->{editcatalogue} eq 1) {
 			$template->param(CAN_user_editcatalogue => 1); }
 		
 
-		if ($flags && $flags->{updatecharges} == 1) {
+		if ($flags && $flags->{updatecharges} eq 1) {
 			$template->param(CAN_user_updatecharge => 1); }
 		
-		if ($flags && $flags->{acquisition} == 1) {
+		if ($flags && $flags->{acquisition} eq 1) {
 			$template->param(CAN_user_acquisition => 1); }
 		
-		if ($flags && $flags->{management} == 1) {
+		if ($flags && $flags->{management} eq 1) {
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
-		if ($flags && $flags->{tools} == 1) {
+		if ($flags && $flags->{tools} eq 1) {
 			$template->param(CAN_user_tools => 1); }
 		
 	}
@@ -285,7 +285,7 @@ sub checkauth {
 	# state variables
 	my $loggedin = 0;
 	my %info;
-	my ($userid, $cookie, $sessionID, $flags, $envcookie);
+	my ($userid, $cookie, $sessionID, $flags,$envcookie);
 	my $logout = $query->param('logout.x');
 	if ($userid = $ENV{'REMOTE_USER'}) {
 		# Using Basic Authentication, no cookies required
@@ -308,19 +308,20 @@ sub checkauth {
 				);
 		}
 		my ($ip , $lasttime);
+
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
 								undef, $sessionID);
 		if ($logout) {
-			# voluntary logout the user
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			C4::Context->_unset_userenv($sessionID);
-			$sessionID = undef;
-			$userid = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
-			close L;
+		# voluntary logout the user
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		C4::Context->_unset_userenv($sessionID);
+		$sessionID = undef;
+		$userid = undef;
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
+		close L;
 		}
 		if ($userid) {
 			if ($lasttime<time()-$timeout) {
@@ -367,6 +368,7 @@ sub checkauth {
 		$userid=$query->param('userid');
 		C4::Context->_new_userenv($sessionID);
 		my $password=$query->param('password');
+		C4::Context->_new_userenv($sessionID);
 		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 		if ($return) {
 			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
@@ -380,20 +382,29 @@ sub checkauth {
 			$cookie=$query->cookie(-name => 'sessionID',
 						-value => $sessionID,
 						-expires => '');
-			
 			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
 				$loggedin = 1;
 			} else {
 				$info{'nopermission'} = 1;
-				C4::Context->_unset_userenv($sessionID);
+					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my $sth=$dbh->prepare(
-					"select cardnumber,borrowernumber,userid,firstname,surname,flags,branchcode,emailaddress
-					from borrowers where userid=?"
-				);
+				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
+				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
 				$sth->execute($userid);
-				my ($cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow;
+				($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+# 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				unless ($sth->rows){
+					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+					$sth->execute($cardnumber);
+					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+# 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+					unless ($sth->rows){
+						$sth->execute($userid);
+						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					}
+# 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				}
 				my $hash = C4::Context::set_userenv(
 					$bornum,
 					$userid,
@@ -404,6 +415,7 @@ sub checkauth {
 					$userflags,
 					$emailaddress,
 				);
+# 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
 						-expires => '');
@@ -414,7 +426,7 @@ sub checkauth {
 					C4::Context->config('user'),
 					C4::Context->config('user'),
 					C4::Context->config('user'),
-					"",1,'nobody@nowhere_koha.com'
+					"",1,C4::Context->preference('KohaAdminEmailAddress')
 				);
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
@@ -456,7 +468,7 @@ sub checkauth {
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
 	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url, LibraryName=> C4::Context->preference("LibraryName"),);
+	$template->param(url => $self_url, LibraryName=> => C4::Context->preference("LibraryName"),);
 	$template->param(\%info);
 	$cookie=$query->cookie(-name => 'sessionID',
 					-value => $sessionID,
@@ -484,7 +496,7 @@ sub checkpw {
 			return 1,$cardnumber;
 		}
 	}
-	my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+	$sth=$dbh->prepare("select password from borrowers where cardnumber=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
 		my ($md5password) = $sth->fetchrow;
@@ -513,12 +525,15 @@ sub getuserflags {
     my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
     $sth->execute($cardnumber);
     my ($flags) = $sth->fetchrow;
+	$flags=0 unless $flags;
     $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
     while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
-	if (($flags & (2**$bit)) || $defaulton) {
-	    $userflags->{$flag}=1;
-	}
+		if (($flags & (2**$bit)) || $defaulton) {
+			$userflags->{$flag}=1;
+		} else {
+			$userflags->{$flag}=0;
+		}
     }
     return $userflags;
 }

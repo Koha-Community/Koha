@@ -27,6 +27,7 @@ use HTML::Template;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
+use C4::Acquisition;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 
@@ -121,6 +122,22 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my ($count2,@branches)=branches();
+	push @select_branch,"";
+	$select_branches{''}='';
+	for (my $i=0;$i<$count2;$i++){
+			push @select_branch, $branches[$i]->{'branchcode'};#
+			$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+							-values   => \@select_branch,
+							-labels   => \%select_branches,
+							-size     => 1,
+							-multiple => 0 );
+	
 	$req = $dbh->prepare( "select distinctrow sort1 from borrowers order by sort1");
 	$req->execute;
 	my @select_sort1;
@@ -180,7 +197,8 @@ if ($do_it) {
 					CGISort2 => $CGIsort2,
 					hassort2 => $hassort2,
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					CGIBranch => $CGIbranch
 					);
 
 }
@@ -209,14 +227,16 @@ sub calculate {
 	
  	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
  	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
- 	$linefilter = @$filters[2] if ($line =~ /sort1/ ) ;
- 	$linefilter = @$filters[3] if ($line =~ /sort2/ ) ;
+ 	$linefilter = @$filters[2] if ($line =~ /branccode/ ) ;
+ 	$linefilter = @$filters[3] if ($line =~ /sort1/ ) ;
+ 	$linefilter = @$filters[4] if ($line =~ /sort2/ ) ;
 # 
  	my $colfilter = "";
  	$colfilter = @$filters[0] if ($column =~ /categorycode/);
  	$colfilter = @$filters[1] if ($column =~ /zipcode/);
- 	$colfilter = @$filters[2] if ($column =~ /sort1/);
- 	$colfilter = @$filters[3] if ($column =~ /sort2/);
+ 	$colfilter = @$filters[2] if ($column =~ /branchcode/);
+ 	$colfilter = @$filters[3] if ($column =~ /sort1/);
+ 	$colfilter = @$filters[4] if ($column =~ /sort2/);
 
 	my @loopfilter;
 	for (my $i=0;$i<=3;$i++) {
@@ -225,8 +245,9 @@ sub calculate {
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Cat Code " if ($i==0);
 			$cell{crit} .="Zip Code" if ($i==1);
-			$cell{crit} .="Sort1" if ($i==2);
-			$cell{crit} .="Sort2" if ($i==3);
+			$cell{crit} .="Branchcode" if ($i==2);
+			$cell{crit} .="Sort1" if ($i==3);
+			$cell{crit} .="Sort2" if ($i==4);
 			push @loopfilter, \%cell;
 		}
 	}

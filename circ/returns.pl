@@ -26,6 +26,7 @@
 use strict;
 use CGI;
 use C4::Circulation::Circ2;
+use C4::Date;
 use C4::Search;
 use C4::Output;
 use C4::Print;
@@ -201,6 +202,12 @@ if ( $messages->{'ResFound'} ) {
     my ($iteminfo) = getiteminformation( \%env, 0, $barcode );
 
     if ( $res->{'ResFound'} eq "Waiting" ) {
+		if($branch eq $res->{'branchcode'}){
+			$template->param(intransit => 0);
+		} else {
+			$template->param(intransit => 1);
+		}
+	
         $template->param(
             found         => 1,
             name          => $name,
@@ -208,11 +215,15 @@ if ( $messages->{'ResFound'} ) {
             borsurname    => $borr->{'surname'},
             bortitle      => $borr->{'title'},
             borphone      => $borr->{'phone'},
+            boremail         => $borr->{'emailaddress'},
             borstraddress => $borr->{'streetaddress'},
             borcity       => $borr->{'city'},
             borzip        => $borr->{'zipcode'},
             bornum        => $res->{'borrowernumber'},
             borcnum       => $borr->{'cardnumber'},
+			debarred => $borr->{'debarred'},
+			gonenoaddress => $borr->{'gonenoaddress'},
+			currentbranch => $branches->{ $branch }->{'branchname'},
             branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             waiting     => 1,
             itemnumber  => $res->{'itemnumber'},
@@ -230,8 +241,16 @@ if ( $messages->{'ResFound'} ) {
           sprintf( "%0.2d", ( $da[3] + 1 ) ) . "/"
           . sprintf( "%0.2d", ( $da[4] + 1 ) ) . "/"
           . ( $da[5] + 1900 );
+		  
+		 if($branch eq $res->{'branchcode'}){
+			$template->param(intransit => 0);
+		} else {
+			$template->param(intransit => 1);
+		}
+		  
         $template->param(
             found       => 1,
+		currentbranch => $branches->{ $branch }->{'branchname'},
             branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             reserved    => 1,
             today       => $todaysdate,
@@ -251,7 +270,9 @@ if ( $messages->{'ResFound'} ) {
             borsub           => $borr->{'suburb'},
             borcity          => $borr->{'city'},
             borzip           => $borr->{'zipcode'},
-            boremail         => $borr->{'emailadress'},
+            boremail         => $borr->{'emailaddress'},
+			debarred => $borr->{'debarred'},
+			gonenoaddress => $borr->{'gonenoaddress'},
             barcode          => $barcode
         );
     }
@@ -353,7 +374,7 @@ if ($borrower) {
                 my ($iteminformation) =
                   getiteminformation( \%env, $item->{'itemnumber'}, 0 );
                 my %overdueitem;
-                $overdueitem{duedate}   = $item->{'date_due'};
+                $overdueitem{duedate}   = format_date($item->{'date_due'});
                 $overdueitem{biblionum} = $iteminformation->{'biblionumber'};
                 $overdueitem{barcode}   = $iteminformation->{'barcode'};
                 $overdueitem{title}     = $iteminformation->{'title'};
@@ -409,7 +430,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
               $datearr[5] . '-'
               . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
               . sprintf( "%0.2d", $datearr[3] );
-	    $ri{duedate}=$duedate;
+	    $ri{duedate}=format_date($duedate);
             my ($borrower) =
               getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
             $ri{bornum}       = $borrower->{'borrowernumber'};

@@ -135,12 +135,13 @@ sub authoritysearch {
 	while (my ($authid) = $sth->fetchrow) {
 			push @result,$authid;
 		}
-
 	# we have authid list. Now, loads summary from [offset] to [offset]+[length]
-	my $counter = $offset;
+# 	my $counter = $offset;
 	my @finalresult = ();
 	my $oldline;
-	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
+# 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
+	# retrieve everything
+	for (my $counter=0;$counter <=$#result;$counter++) {
 # 		warn " HERE : $counter, $#result, $offset, $length";
 		# get MARC::Record of the authority
 		my $record = AUTHgetauthority($dbh,$result[$counter]);
@@ -158,7 +159,7 @@ sub authoritysearch {
 					my $subfieldcode = $subf[$i][0];
 					my $subfieldvalue = $subf[$i][1];
 					my $tagsubf = $tag.$subfieldcode;
-					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2/g;
+					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 				}
 			}
 		}
@@ -184,11 +185,18 @@ sub authoritysearch {
 		$newline{biblio_fields} = $tags_using_authtype;
 		$newline{even} = $counter % 2;
 		$newline{mainentry} = $record->field($mainentrytag)->subfield('a')." ".$record->field($mainentrytag)->subfield('b') if $record->field($mainentrytag);
-		$counter++;
 		push @finalresult, \%newline;
 	}
+	# sort everything
+	my @finalresult3= sort {$a->{summary} cmp $b->{summary}} @finalresult;
+	# cut from $offset to $offset+$length;
+	my @finalresult2;
+	for (my $i=$offset;$i<=$offset+$length;$i++) {
+		push @finalresult2,$finalresult3[$i] if $finalresult3[$i];
+	}
 	my $nbresults = $#result + 1;
-	return (\@finalresult, $nbresults);
+
+	return (\@finalresult2, $nbresults);
 }
 
 # Creates the SQL Request
@@ -400,7 +408,6 @@ sub AUTHaddauthority {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
 	my ($dbh,$record,$authid,$authtypecode) = @_;
 	my @fields=$record->fields();
-# 	warn "IN AUTHaddauthority $authid => ".$record->as_formatted;
 # adding main table, and retrieving authid
 # if authid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
 # if authid empty => true add, find a new authid number
@@ -428,15 +435,19 @@ sub AUTHaddauthority {
 						);
 		} else {
 			my @subfields=$field->subfields();
-			foreach my $subfieldcount (0..$#subfields) {
-				&AUTHaddsubfield($dbh,$authid,
-						$field->tag(),
-						$field->indicator(1).$field->indicator(2),
-						$fieldcount,
-						$subfields[$subfieldcount][0],
-						$subfieldcount+1,
-						$subfields[$subfieldcount][1]
-						);
+			my $subfieldorder;
+			foreach my $subfield (@subfields) {
+				foreach (split /\|/,@$subfield[1]) {
+					$subfieldorder++;
+					&AUTHaddsubfield($dbh,$authid,
+							$field->tag(),
+							$field->indicator(1).$field->indicator(2),
+							$fieldcount,
+							@$subfield[0],
+							$subfieldorder,
+							$_
+							);
+				}
 			}
 		}
 	}
@@ -458,6 +469,7 @@ sub AUTHaddsubfield {
 	my @subfieldvalues = split /\|/,$subfieldvalues;
 	foreach my $subfieldvalue (@subfieldvalues) {
 		my $sth=$dbh->prepare("insert into auth_subfield_table (authid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
+# 		warn "==> $authid,".(sprintf "%03s",$tagid).",TAG : $tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue";
 		$sth->execute($authid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
 		if ($sth->errstr) {
 			warn "ERROR ==> insert into auth_subfield_table (authid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($authid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
@@ -474,7 +486,7 @@ sub AUTHgetauthority {
 	$record->leader('                        ');
     my $sth=$dbh->prepare("select authid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue
 		 		 from auth_subfield_table
-		 		 where authid=? order by tag,tagorder,subfieldcode
+		 		 where authid=? order by tag,tagorder,subfieldorder
 		 	 ");
 	$sth->execute($authid);
 	my $prevtagorder=1;
@@ -927,8 +939,15 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.20  2005/08/04 13:27:47  tipaul
-# synch'ing 2.2 and head
+# Revision 1.21  2005/10/26 09:12:33  tipaul
+# big commit, still breaking things...
+#
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
+#
+# Revision 1.9.2.8  2005/10/25 12:38:59  tipaul
+# * fixing bug in summary (separator before subfield was in fact after)
+# * fixing bug in authority order : authorities are not ordered alphabetically instead of no order. Requires all the dataset to be retrieved, but the benefits is important !
 #
 # Revision 1.9.2.7  2005/08/01 15:14:50  tipaul
 # minor change in summary handling (accepting 4 digits before the field)

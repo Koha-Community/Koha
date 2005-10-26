@@ -375,43 +375,53 @@ sub fixup_cardnumber ($) {
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".
 
-    if ($cardnumber !~ /\S/ && $autonumber_members) {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select max(substring(borrowers.cardnumber,2,7)) from borrowers");
-	$sth->execute;
-
-	my $data=$sth->fetchrow_hashref;
-	$cardnumber=$data->{'max(substring(borrowers.cardnumber,2,7))'};
-	$sth->finish;
-
-	# purpose: generate checksum'd member numbers.
-	# We'll assume we just got the max value of digits 2-8 of member #'s
-	# from the database and our job is to increment that by one,
-	# determine the 1st and 9th digits and return the full string.
-
-	if (! $cardnumber) { 			# If DB has no values,
-	    $cardnumber = 1000000;		# start at 1000000
-	} else {
-	    $cardnumber += 1;
+#     if ($cardnumber !~ /\S/ && $autonumber_members) {
+    if ($autonumber_members) {
+		my $dbh = C4::Context->dbh;
+		if (C4::Context->preference('checkdigit') eq 'katipo') {
+			# if checkdigit is selected, calculate katipo-style cardnumber.
+			# otherwise, just use the max()
+			# purpose: generate checksum'd member numbers.
+			# We'll assume we just got the max value of digits 2-8 of member #'s
+			# from the database and our job is to increment that by one,
+			# determine the 1st and 9th digits and return the full string.
+			my $sth=$dbh->prepare("select max(substring(borrowers.cardnumber,2,7)) from borrowers");
+			$sth->execute;
+		
+			my $data=$sth->fetchrow_hashref;
+			$cardnumber=$data->{'max(substring(borrowers.cardnumber,2,7))'};
+			$sth->finish;
+			if (! $cardnumber) { 			# If DB has no values,
+				$cardnumber = 1000000;		# start at 1000000
+			} else {
+				$cardnumber += 1;
+			}
+		
+			my $sum = 0;
+			for (my $i = 0; $i < 8; $i += 1) {
+				# read weightings, left to right, 1 char at a time
+				my $temp1 = $weightings[$i];
+		
+				# sequence left to right, 1 char at a time
+				my $temp2 = substr($cardnumber,$i,1);
+		
+				# mult each char 1-7 by its corresponding weighting
+				$sum += $temp1 * $temp2;
+			}
+		
+			my $rem = ($sum%11);
+			$rem = 'X' if $rem == 10;
+		
+			$cardnumber="V$cardnumber$rem";
+		} else {
+			my $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers");
+			$sth->execute;
+		
+			my ($result)=$sth->fetchrow;
+			$sth->finish;
+			$cardnumber=$result+1;
+		}
 	}
-
-	my $sum = 0;
-	for (my $i = 0; $i < 8; $i += 1) {
-	    # read weightings, left to right, 1 char at a time
-	    my $temp1 = $weightings[$i];
-
-	    # sequence left to right, 1 char at a time
-	    my $temp2 = substr($cardnumber,$i,1);
-
-	    # mult each char 1-7 by its corresponding weighting
-	    $sum += $temp1 * $temp2;
-	}
-
-	my $rem = ($sum%11);
-	$rem = 'X' if $rem == 10;
-
-	$cardnumber="V$cardnumber$rem";
-    }
     return $cardnumber;
 }
 

@@ -307,6 +307,79 @@ sub calculate {
         $colfilter[0] = @$filters[9] if ($column =~ /sort1/ )     ;
         $colfilter[0] = @$filters[10] if ($column =~ /sort2/ )     ;
 #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
+                                              
+# 1st, loop rows.                             
+	my $linefield;
+	my $lineorder;                               
+	if (($line =~/closedate/) and ($podsp == 1)) {
+		#Display by day
+		$linefield .="dayname($line)";  
+		$lineorder .="weekday($line)";  
+	} elsif (($line=~/closedate/) and ($podsp == 2)) {
+		#Display by Month
+		$linefield .="monthname($line)";  
+		$lineorder .="month($line)";  
+	} elsif (($line=~/closedate/) and ($podsp == 3)) {
+		#Display by Year
+		$linefield .="Year($line)";
+		$lineorder .=$linefield;  
+	} elsif (($line =~/received/) and ($rodsp == 1)) {
+		#Display by day
+		$linefield .="dayname($line)";  
+		$lineorder .="weekday($line)";  
+	} elsif (($line=~/received/) and ($rodsp == 2)) {
+		#Display by Month
+		$linefield .="monthname($line)";  
+		$lineorder .="month($line)";  
+	} elsif (($line=~/received/) and ($rodsp == 3)) {
+		#Display by Year
+		$linefield .="Year($line)";
+		$lineorder .=$linefield;  
+	} else {
+		$linefield .= $line;
+		$lineorder .=$linefield;  
+	}  
+	
+ 	my $strsth;
+ 	$strsth .= "select distinctrow $linefield from aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) and $line is not null ";
+	
+	if ( @linefilter ) {
+		if ($linefilter[1]){
+			if ($linefilter[0]){
+				$strsth .= " and $line between ? and ? " ;
+			} else {
+				$strsth .= " and $line < ? " ;
+			}
+		} elsif (($linefilter[0]) and (($line=~/closedate/) or ($line=~/received/))){
+ 			$strsth .= " and $line > ? " ;
+		} elsif ($linefilter[0]) {
+			$linefilter[0] =~ s/\*/%/g;
+ 			$strsth .= " and $line LIKE ? " ;
+ 		}
+ 	}
+	$strsth .=" group by $linefield";
+	$strsth .=" order by $lineorder";
+	warn "". $strsth;
+	
+	my $sth = $dbh->prepare( $strsth );
+	if (( @linefilter ) and ($linefilter[1])){
+		$sth->execute("'".$linefilter[0]."'","'".$linefilter[1]."'");
+	} elsif ($linefilter[0]) {
+		$sth->execute($linefilter[0]);
+	} else {
+		$sth->execute;
+	}
+	
+ 	while ( my ($celvalue) = $sth->fetchrow) {
+ 		my %cell;
+		if ($celvalue) {
+			$cell{rowtitle} = $celvalue;
+#		} else {
+#			$cell{rowtitle} = "";
+		}
+ 		$cell{totalrow} = 0;
+		push @loopline, \%cell;
+ 	}
 
 warn "line=$line, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
 
@@ -395,197 +468,176 @@ warn "line=$line, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
 
 warn "column=$column, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
 # 2nd, loop cols.
-        my $colfield;
-        if (($column =~/closedate/) and ($podsp == 1)) {
-                #Display by day
-                $colfield .="dayname($column)";
-        } elsif (($column=~/closedate/) and ($podsp == 2)) {
-                #Display by Month
-                $colfield .="monthname($column)";
-        } elsif (($column=~/closedate/) and ($podsp == 3)) {
-                #Display by Year
-                $colfield .="Year($column)";
+	my $colfield;
+	my $colorder;
+	if (($column =~/closedate/) and ($podsp == 1)) {
+		#Display by day
+		$colfield .="dayname($column)";
+		$colorder .="weekday($column)";
+	} elsif (($column=~/closedate/) and ($podsp == 2)) {
+		#Display by Month
+		$colfield .="monthname($column)";  
+		$colorder .="month($column)";
+	} elsif (($column=~/closedate/) and ($podsp == 3)) {
+		#Display by Year
+		$colfield .="Year($column)";
+		$colorder .= $colfield;
+	} elsif (($column =~/received/) and ($rodsp == 1)) {
+		#Display by day
+		$colfield .="dayname($column)";  
+		$colorder .="weekday($column)";
+	} elsif (($column=~/received/) and ($rodsp == 2)) {
+		#Display by Month
+		$colfield .="monthname($column)";  
+		$colorder .="month($column)";
+	} elsif (($column=~/received/) and ($rodsp == 3)) {
+		#Display by Year
+		$colfield .="Year($column)";
+		$colorder .= $colfield;
+	} else {
+		$colfield .= $column;
+		$colorder .= $colfield;
+	}  
+	
+ 	my $strsth2;
+ 	$strsth2 .= "select distinctrow $colfield from aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) and $column is not null ";
+	
+	if ( @colfilter ) {
+		if ($colfilter[1]){
+			if ($colfilter[0]){
+				$strsth2 .= " and $column between ? and ? " ;
+			} else {
+				$strsth2 .= " and $column < ? " ;
+			}
+		} elsif (($colfilter[0]) and (($column=~/closedate/) or ($column=~/received/))){
+ 			$strsth2 .= " and $column > ? " ;
+		} elsif ($colfilter[0]) {
+			$colfilter[0] =~ s/\*/%/g;
+ 			$strsth2 .= " and $column LIKE ? " ;
+ 		}
+ 	}
+	$strsth2 .=" group by $colfield";
+	$strsth2 .=" order by $colorder";
+ 	warn "". $strsth2;
+	
+	my $sth2 = $dbh->prepare( $strsth2 );
+	if (( @colfilter ) and ($colfilter[1])){
+		warn "from : ".$colfilter[0]." To  :".$colfilter[1];
+		$sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
+	} elsif ($colfilter[0]) {
+		$sth2->execute($colfilter[0]);
+	} else {
+		$sth2->execute;
+	}
 
-        } elsif (($column =~/deliverydate/) and ($rodsp == 1)) {
-                #Display by day
-                $colfield .="dayname($column)";
-        } elsif (($column=~/deliverydate/) and ($rodsp == 2)) {
-                #Display by Month
-                $colfield .="monthname($column)";
-        } elsif (($column=~/deliverydate/) and ($rodsp == 3)) {
-                #Display by Year
-                $colfield .="Year($column)";
+ 	while (my ($celvalue) = $sth2->fetchrow) {
+ 		my %cell;
+		if ($celvalue){
+#		warn "coltitle :".$celvalue;
+			$cell{coltitle} = $celvalue;
+		}
+		push @loopcol, \%cell;
+ 	}
+#	warn "fin des titres colonnes";
 
-        } elsif (($column =~/dateaccessioned/) and ($aodsp == 1)) {
-                #Display by day
-                $colfield .="dayname($column)";
-        } elsif (($column=~/dateaccessioned/) and ($aodsp == 2)) {
-                #Display by Month
-                $colfield .="monthname($column)";
-        } elsif (($column=~/dateaccessioned/) and ($aodsp == 3)) {
-                #Display by Year
-                $colfield .="Year($column)";
-
-        } else {
-                $colfield .= $column;
-        }
-
-        my $strsth2;
-        $strsth2 .= "SELECT distinctrow $colfield FROM aqorders, aqbasket,aqorderbreakdown
-                 LEFT JOIN items ON (aqorders.biblioitemnumber= items.biblioitemnumber)
-                 LEFT JOIN biblioitems ON (aqorders.biblioitemnumber= biblioitems.biblioitemnumber)
-                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
-                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id)
-                 WHERE (aqorders.basketno=aqbasket.basketno) AND (aqorderbreakdown.ordernumber=aqorders.ordernumber)
-                 AND $column IS NOT NULL";
-
-        if ( @colfilter ) {
-                if ($colfilter[1]){
-                        if ($colfilter[0]){
-                                $strsth2 .= " AND $column BETWEEN  ? AND ? " ;
-                        } else {
-                                $strsth2 .= " AND $column < ? " ;
-                        }
-                } elsif (($colfilter[0]) and (($column=~/closedate/) or ($line=~/received/) or ($line=~/acquired/))){
-                        $strsth2 .= " AND $column > ? " ;
-                } elsif ($colfilter[0]) {
-                        $colfilter[0] =~ s/\*/%/g;
-                        $strsth2 .= " AND $column LIKE ? " ;
-                }
-        }
-        $strsth2 .=" GROUP BY $colfield";
-        $strsth2 .=" ORDER BY $colfield";
-#        warn "MASON:. $strsth2";
-
-        my $sth2 = $dbh->prepare( $strsth2 );
-        if (( @colfilter ) and ($colfilter[1])){
-#                warn "from : ".$colfilter[0]." To  :".$colfilter[1];
-                $sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
-        } elsif ($colfilter[0]) {
-                $sth2->execute($colfilter[0]);
-        } else {
-                $sth2->execute;
-        }
-
-        while (my ($celvalue) = $sth2->fetchrow) {
-                my %cell;
-                if ($celvalue){
-#               warn "coltitle :".$celvalue;
-                        $cell{coltitle} = $celvalue;
-                }
-                push @loopcol, \%cell;
-        }
-#       warn "fin des titres colonnes";
-
-        my $i=0;
-        my @totalcol;
-        my $hilighted=-1;
-
-        #Initialization of cell values.....
-        my %table;
-#       warn "init table";
-        foreach my $row ( @loopline ) {
-                foreach my $col ( @loopcol ) {
-#                       warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-                        $table{$row->{rowtitle}}->{$col->{coltitle}}=0;
-                }
-                $table{$row->{rowtitle}}->{totalrow}=0;
-        }
+	my $i=0;
+	my @totalcol;
+	my $hilighted=-1;
+	
+	#Initialization of cell values.....
+	my %table;
+#	warn "init table";
+	foreach my $row ( @loopline ) {
+		foreach my $col ( @loopcol ) {
+#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
+			$table{$row->{rowtitle}}->{$col->{coltitle}}=0;
+		}
+		$table{$row->{rowtitle}}->{totalrow}=0;
+	}
 
 # preparing calculation
-        my $strcalc ;
-        $strcalc .= "SELECT $linefield, $colfield, ";
-        $strcalc .= "COUNT( aqorders.ordernumber ) " if ($process ==1);
-        $strcalc .= "SUM( aqorders.quantity * aqorders.listprice ) " if ($process ==2);
-        $strcalc .= "FROM aqorders, aqbasket,aqorderbreakdown
-                 LEFT JOIN items ON (aqorders.biblioitemnumber= items.biblioitemnumber)
-                 LEFT JOIN biblioitems ON (aqorders.biblioitemnumber= biblioitems.biblioitemnumber)
-                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
-                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) WHERE (aqorders.basketno=aqbasket.basketno)
-                      AND (aqorderbreakdown.ordernumber=aqorders.ordernumber) ";
+	my $strcalc ;
+	$strcalc .= "SELECT $linefield, $colfield, ";
+	$strcalc .= "COUNT( aqorders.ordernumber ) " if ($process ==1);
+	$strcalc .= "SUM( aqorders.quantity * aqorders.listprice ) " if ($process ==2);
+	$strcalc .= "FROM aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) ";
 
-        @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-        $strcalc .= " AND aqbasket.closedate > '" . @$filters[0] ."'" if ( @$filters[0] );
-        @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-        $strcalc .= " AND aqbasket.closedate < '" . @$filters[1] ."'" if ( @$filters[1] );
-        @$filters[2]=~ s/\*/%/g if (@$filters[2]);
-        $strcalc .= " AND aqorderdelivery.deliverydate > '" . @$filters[2] ."'" if ( @$filters[2] );
-        @$filters[3]=~ s/\*/%/g if (@$filters[3]);
-        $strcalc .= " AND aqorderdelivery.deliverydate < '" . @$filters[3] ."'" if ( @$filters[3] );
-        @$filters[4]=~ s/\*/%/g if (@$filters[4]);
-        $strcalc .= " AND aqbasket.closedate > '" . @$filters[4] ."'" if ( @$filters[4] );
-        @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-        $strcalc .= " AND aqbasket.closedate < '" . @$filters[5] ."'" if ( @$filters[5] );
-        @$filters[6]=~ s/\*/%/g if (@$filters[6]);
-        $strcalc .= " AND aqbooksellers.name LIKE '" . @$filters[6] ."'" if ( @$filters[6] );
-        @$filters[7]=~ s/\*/%/g if (@$filters[7]);
-        $strcalc .= " AND biblioitems.itemtype LIKE '" . @$filters[7] ."'" if ( @$filters[7] );
-        @$filters[8]=~ s/\*/%/g if (@$filters[8]);
-        $strcalc .= " AND aqbookfund.bookfundid LIKE '" . @$filters[8] ."'" if ( @$filters[8] );
-        @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-        $strcalc .= " AND aqorders.sort1 LIKE '" . @$filters[9] ."'" if ( @$filters[9] );
-        @$filters[10]=~ s/\*/%/g if (@$filters[10]);
-        $strcalc .= " AND aqorders.sort2 LIKE '" . @$filters[10] ."'" if ( @$filters[10] );
-        $strcalc .= " GROUP BY $linefield, $colfield ORDER BY $linefield,$colfield";
-#        warn "/n/n". $strcalc;
-        my $dbcalc = $dbh->prepare($strcalc);
-        $dbcalc->execute;
+	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
+	$strcalc .= " AND aqbasket.closedate > '" . @$filters[0] ."'" if ( @$filters[0] );
+	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
+	$strcalc .= " AND aqbasket.closedate < '" . @$filters[1] ."'" if ( @$filters[1] );
+	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
+	$strcalc .= " AND aqorderdelivery.deliverydate > '" . @$filters[2] ."'" if ( @$filters[2] );
+	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
+	$strcalc .= " AND aqorderdelivery.deliverydate < '" . @$filters[3] ."'" if ( @$filters[3] );
+	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
+	$strcalc .= " AND aqbooksellers.name like '" . @$filters[4] ."'" if ( @$filters[4] );
+	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
+	$strcalc .= " AND aqbookfund.bookfundid like '" . @$filters[5] ."'" if ( @$filters[5] );
+	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
+	$strcalc .= " AND aqorders.sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
+	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
+	$strcalc .= " AND aqorders.sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
+	$strcalc .= " group by $linefield, $colfield order by $lineorder,$colorder";
+	warn "". $strcalc;
+	my $dbcalc = $dbh->prepare($strcalc);
+	$dbcalc->execute;
 
-#       warn "filling table";
-        my $emptycol;
-        while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-#              warn "filling table $row / $col / $value ";
-                $emptycol = 1 if ($col eq undef);
-                $col = "zzEMPTY" if ($col eq undef);
-                $row = "zzEMPTY" if ($row eq undef);
+# 	warn "filling table";
+	my $emptycol; 
+	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
+#		warn "filling table $row / $col / $value ";
+		$emptycol = 1 if ($col eq undef);
+		$col = "zzEMPTY" if ($col eq undef);
+		$row = "zzEMPTY" if ($row eq undef);
+		
+		$table{$row}->{$col}+=$value;
+		$table{$row}->{totalrow}+=$value;
+		$grantotal += $value;
+	}
 
-                $table{$row}->{$col}+=$value;
-                $table{$row}->{totalrow}+=$value;
-                $grantotal += $value;
-        }
+ 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
+	
+	foreach my $row ( sort keys %table ) {
+		my @loopcell;
+		#@loopcol ensures the order for columns is common with column titles
+		# and the number matches the number of columns
+		foreach my $col ( @loopcol ) {
+			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			push @loopcell, {value => $value  } ;
+		}
+		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
+						'loopcell' => \@loopcell,
+						'hilighted' => ($hilighted >0),
+						'totalrow' => $table{$row}->{totalrow}
+					};
+		$hilighted = -$hilighted;
+	}
+	
+#	warn "footer processing";
+	foreach my $col ( @loopcol ) {
+		my $total=0;
+		foreach my $row ( @looprow ) {
+			$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+		}
+#		warn "summ for column ".$col->{coltitle}."  = ".$total;
+		push @loopfooter, {'totalcol' => $total};
+	}
+			
 
-        push @loopcol,{coltitle => "NULL"} if ($emptycol);
-
-        foreach my $row ( sort keys %table ) {
-                my @loopcell;
-                #@loopcol ensures the order for columns is common with column titles
-                # and the number matches the number of columns
-                foreach my $col ( @loopcol ) {
-                        my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-                        push @loopcell, {value => $value  } ;
-                }
-                push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
-                                                'loopcell' => \@loopcell,
-                                                'hilighted' => ($hilighted >0),
-                                                'totalrow' => $table{$row}->{totalrow}
-                                        };
-                $hilighted = -$hilighted;
-        }
-
-#       warn "footer processing";
-        foreach my $col ( @loopcol ) {
-                my $total=0;
-                foreach my $row ( @looprow ) {
-                        $total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-#                       warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
-                }
-#               warn "summ for column ".$col->{coltitle}."  = ".$total;
-                push @loopfooter, {'totalcol' => $total};
-        }
-
-
-        # the header of the table
-#        $globalline{loopfilter}=\@loopfilter;
-        # the core of the table
-        $globalline{looprow} = \@looprow;
-        $globalline{loopcol} = \@loopcol;
-#       # the foot (totals by borrower type)
-        $globalline{loopfooter} = \@loopfooter;
-        $globalline{total}= $grantotal;
-        $globalline{line} = $line;
-        $globalline{column} = $column;
-        push @mainloop,\%globalline;
-        return \@mainloop;
+	# the header of the table
+	$globalline{loopfilter}=\@loopfilter;
+	# the core of the table
+	$globalline{looprow} = \@looprow;
+	$globalline{loopcol} = \@loopcol;
+# 	# the foot (totals by borrower type)
+	$globalline{loopfooter} = \@loopfooter;
+	$globalline{total}= $grantotal;
+	$globalline{line} = $line;
+	$globalline{column} = $column;
+	push @mainloop,\%globalline;
+	return \@mainloop;
 }
 
 1;

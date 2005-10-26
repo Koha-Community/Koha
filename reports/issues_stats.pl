@@ -453,10 +453,13 @@ sub calculate {
 		$strcalc .= "(COUNT(DISTINCT borrowers.borrowernumber))" ;
 	}
 	if ($process ==3){
+		$strcalc .= "(COUNT(DISTINCT itemnumber))" ;
+	}
+	if ($process ==4){
 		my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
 		$rqbookcount->execute;
 		my ($bookcount) = $rqbookcount->fetchrow;
-		$strcalc .= "100*(COUNT(itemnumber))/ $bookcount " ;
+		$strcalc .= "100*(COUNT(DISTINCT itemnumber))/ $bookcount " ;
 	}
 	$strcalc .= "FROM statistics,borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
 

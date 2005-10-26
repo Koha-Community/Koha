@@ -34,7 +34,7 @@ use C4::Context;
 use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
-use C4::Accounts;
+use C4::Accounts2;
 use Date::Manip;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -618,7 +618,8 @@ sub TooMany ($$){
 	$sth->execute($iteminformation->{'biblionumber'});
 	my $type = $sth->fetchrow;
 	$sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ? and branchcode = ?');
-	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
+# 	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
+	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s1, items s2 where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s2.itemnumber and s1.itemtype like ? and s1.biblioitemnumber = s2.biblioitemnumber");
 	my $sth3 = $dbh->prepare('select COUNT(*) from issues where borrowernumber = ? and returndate is null');
 	my $alreadyissued;
 	# check the 3 parameters
@@ -632,7 +633,7 @@ sub TooMany ($$){
 	}
 	# check for branch=*
 	$sth->execute($cat_borrower, $type, "");
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -640,7 +641,7 @@ sub TooMany ($$){
 	}
 	# check for itemtype=*
 	$sth->execute($cat_borrower, "*", $branch_borrower);
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my ($alreadyissued) = $sth3->fetchrow;
@@ -649,7 +650,7 @@ sub TooMany ($$){
 	}
 	#check for borrowertype=*
 	$sth->execute("*", $type, $branch_borrower);
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -657,7 +658,7 @@ sub TooMany ($$){
 	}
 
 	$sth->execute("*", "*", $branch_borrower);
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
@@ -665,7 +666,7 @@ sub TooMany ($$){
 	}
 
 	$sth->execute("*", $type, "");
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result) && $result->{maxissueqty}>=0) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -673,7 +674,7 @@ sub TooMany ($$){
 	}
 
 	$sth->execute($cat_borrower, "*", "");
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
@@ -681,7 +682,7 @@ sub TooMany ($$){
 	}
 
 	$sth->execute("*", "*", "");
-	my $result = $sth->fetchrow_hashref;
+	$result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
@@ -937,31 +938,31 @@ sub getLoanLength {
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 	
 	$sth->execute($borrowertype,$itemtype,"");
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 	
 	$sth->execute($borrowertype,"*",$branchcode);
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*",$itemtype,$branchcode);
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute($borrowertype,"*","");
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*","*",$branchcode);
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*",$itemtype,"");
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	$sth->execute("*","*","");
-	my $loanlength = $sth->fetchrow_hashref;
+	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
 	# if no rule is set => 21 days (hardcoded)
@@ -1649,7 +1650,7 @@ sub renewstatus {
 		if ($resfound) {
 			$renewokay = 0;
 		}
-		my ($resfound, $resrec) = CheckReserves($itemno);
+		($resfound, $resrec) = CheckReserves($itemno);
                 if ($resfound) {
                         $renewokay = 0;
                 }
@@ -1791,19 +1792,6 @@ EOT
     $sth->finish;
 }
 
-
-sub getnextacctno {
-# Stolen from Accounts.pm
-    my ($env,$bornumber,$dbh)=@_;
-    my $nextaccntno = 1;
-    my $sth = $dbh->prepare("select * from accountlines where (borrowernumber = ?) order by accountno desc");
-    $sth->execute($bornumber);
-    if (my $accdata=$sth->fetchrow_hashref){
-	$nextaccntno = $accdata->{'accountno'} + 1;
-    }
-    $sth->finish;
-    return($nextaccntno);
-}
 
 =item find_reserves
 

@@ -491,7 +491,7 @@ sub getbranchname
 sub getprinter ($$) {
     my($query, $printers) = @_; # get printer for this query from printers
     my $printer = $query->param('printer');
-    ($printer) || ($printer = $query->cookie('printer'));
+    ($printer) || ($printer = $query->cookie('printer')) || ($printer='');
     ($printers->{$printer}) || ($printer = (keys %$printers)[0]);
     return $printer;
 }
@@ -567,7 +567,7 @@ sub getalllanguages {
 		$lang->{$language}=1;
 	    }
 	}
-	my $htdocs=C4::Context->config('opachtdocs');
+	$htdocs=C4::Context->config('opachtdocs');
 	foreach my $theme (getallthemes('opac')) {
 	    opendir D, "$htdocs/$theme";
 	    foreach my $language (readdir D) {

@@ -60,19 +60,17 @@
 						</td>
 					<!-- TMPL_ELSE -->
 						<td>
-							<p>
 							<a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><br/>
 								<!-- TMPL_VAR NAME="author" -->
 								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
-								<!-- TMPL_IF name="notes" --></p><p><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
-							</p>
+								<!-- TMPL_IF name="notes" --></p><p class="doNotPrint"><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
 						</td>
 					<!-- /TMPL_IF -->
-					<td class="number"><!-- TMPL_VAR NAME="rrp" --></td>
-					<td class="doNotPrint number"><!-- TMPL_VAR NAME="ecost" --></td>
-					<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
-					<td class="number"><!-- TMPL_VAR NAME="line_total" --></td>
-					<td class="doNotPrint"><!-- TMPL_VAR NAME="bookfundid" --></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="rrp" --></p></td>
+					<td class="doNotPrint number"><p><!-- TMPL_VAR NAME="ecost" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="quantity" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="line_total" --></p></td>
+					<td class="doNotPrint"><p><!-- TMPL_VAR NAME="bookfundid" --></p></td>
 					<!-- TMPL_IF name="active" -->
 						<!-- TMPL_UNLESS name="closedate" -->
 							<td class="doNotPrint">
@@ -100,20 +98,20 @@
 					<p><!-- TMPL_VAR NAME="gist_est" --></p>
 					<p><!-- TMPL_VAR NAME="grand_total_est" --></p>
 				</td>
-				<td class="acquisition number">
-					<p><!-- TMPL_VAR NAME="sub_total" --></p>
-					<p><!-- TMPL_VAR NAME="gist" --></p>
-					<p><!-- TMPL_VAR NAME="grand_total" --></p>
-				</td>
 				<td class="acquisition">
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition number">
 					<p><!-- TMPL_VAR name="qty_total" --></p>
 					<p>&nbsp;</p>
 					<p>&nbsp;</p>
 				</td>
-				<td class="acquisition">
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
+				<td class="acquisition number">
+					<p><!-- TMPL_VAR NAME="sub_total" --></p>
+					<p><!-- TMPL_VAR NAME="gist" --></p>
+					<p><!-- TMPL_VAR NAME="grand_total" --></p>
 				</td>
 				<td class="acquisition">
 					<p>&nbsp;</p>

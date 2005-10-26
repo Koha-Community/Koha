@@ -16,13 +16,11 @@ function Help() {
 	background-color: #86c268;
 	color:#FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 a.members:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 </style>
 </head>

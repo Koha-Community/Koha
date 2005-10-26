@@ -168,6 +168,8 @@ foreach my $field (@fields) {
 		push(@big_array, \%this_row);
 	}
 }
+my ($holdingbrtagf,$holdingbrtagsubf) = &MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$itemtype);
+@big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 #fill big_row with missing datas
 foreach my $subfield_code  (keys(%witness)) {
 	for (my $i=0;$i<=$#big_array;$i++) {

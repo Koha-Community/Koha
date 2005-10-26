@@ -602,21 +602,6 @@ sub _new_stopwords
 
 =item userenv
 
-  %userenv = C4::Context->userenv;
-
-Returns a hash with userenvironment variables.
-
-This hash is cached for future use: if you call
-C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
-
-Returns Null if userenv is not set.
-userenv is set in _new_userenv, called in Auth.pm
-
-=cut
-#'
-
-=item userenv
-
   C4::Context->userenv;
 
 Builds a hash for user environment variables.
@@ -632,14 +617,15 @@ sub userenv
 {
 	my $var = $context->{"activeuser"};
 	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+	return 0;
 	warn "NO CONTEXT for $var";
 }
 
-=item userenv
+=item set_userenv
 
-  C4::Context->set_userenv;
+  C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress);
 
-Builds a hash for user environment variables.
+Informs a hash for user environment variables.
 
 This hash shall be cached for future use: if you call
 C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
@@ -655,8 +641,9 @@ sub set_userenv{
 		"number"     => $usernum,
 		"id"         => $userid,
 		"cardnumber" => $usercnum,
-		"firstname"  => $userfirstname,
-		"surname"    => $usersurname,
+#		"firstname"  => $userfirstname,
+#		"surname"    => $usersurname,
+#possibly a law problem
 		"branch"     => $userbranch,
 		"flags"      => $userflags,
 		"emailaddress"	=> $emailaddress,
@@ -697,10 +684,9 @@ Destroys the hash for activeuser user environment variables.
 sub _unset_userenv
 {
 	my ($sessionID)= @_;
-#	undef $context->{$sessionID};
 	undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
-# 	$context->{"activeuser"}--;
 }
+
 
 
 1;

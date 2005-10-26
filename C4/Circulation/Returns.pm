@@ -31,7 +31,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-use C4::Accounts;
+use C4::Accounts2;
 use C4::InterfaceCDK;
 use C4::Circulation::Main;
 	# FIXME - C4::Circulation::Main and C4::Circulation::Returns

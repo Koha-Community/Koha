@@ -164,6 +164,7 @@
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Issue number&nbsp;&nbsp;&nbsp;&nbsp;</th>
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;&nbsp;&nbsp;&nbsp;</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -187,6 +188,9 @@
 						Missing
 					<!-- /TMPL_IF -->
 				</select>
+			</td>
+			<td>
+				<!-- TMPL_VAR name="notes" -->
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->

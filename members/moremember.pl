@@ -128,6 +128,9 @@ if ($data->{'categorycode'} ne 'C'){
 	}
 }
 
+#Independant branches management
+my $unvalidlibrarian = ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags}!=1) && ($data->{'branchcode'} ne C4::Context->userenv->{branch}));
+
 my %bor;
 $bor{'borrowernumber'}=$bornum;
 
@@ -174,8 +177,7 @@ for (my $i=0;$i<$count;$i++){
 	# return the correct item type either (or a properly-formatted
 	# charge, for that matter).
 	my ($charge,$itemtype)=calc_charges($dbh,$issue->[$i]{'itemnumber'},$bornum);
-	my $itemtypedef = getitemtypeinfo($itemtype);
-	$row{'itemtype'}=$itemtypedef->{description};
+	$row{'itemtype'}=&ItemType($itemtype);
 	$row{'charge'}= sprintf("%.2f",$charge);
 
 	#check item is not reserved
@@ -226,10 +228,7 @@ $template->param(
 		 totalprice =>$totalprice,
 		 totaldue =>$total,
 		 issueloop       => \@issuedata,
-		 reserveloop     => \@reservedata,
-		 alertloop => $alerts);
-		 independantbranches => C4::Context->preference("IndependantBranches"),
-		 samebranch		 => C4::Context->preference("IndependantBranches"?"":$samebranch,
-		);
+		 unvalidlibrarian => $unvalidlibrarian,
+		 reserveloop     => \@reservedata);
 
 output_html_with_http_headers $input, $cookie, $template->output;

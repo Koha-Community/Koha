@@ -69,6 +69,7 @@
 	</td></tr></table>
 
 <!-- TMPL_ELSE -->
+		<!-- TMPL_IF NAME="allmessages" -->
 	<table>
 	<tr><th class="circulation">Messages</th></tr>
 	<tr><td>
@@ -97,7 +98,7 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->&nbsp;
 	</td></tr></table>
-
+<!-- /TMPL_IF -->
 	<form method="post" action="/cgi-bin/koha/circ/branchtransfers.pl">
 	<p><b>Select Destination Branch: </b><select name="tobranchcd">
 			<!-- TMPL_LOOP Name="branchoptionloop" -->
@@ -115,19 +116,19 @@ onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME=
 	<!-- /TMPL_LOOP --></p>
 
 	</form>
-	<!-- TMPL_IF Name="transferred" -->
+	<!-- TMPL_IF Name="trsfitemloop" -->
 		<p>
 		<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th colspan="6" class="circulation">Transfered Items</th></tr>
 		<tr><th class="circulation">Barcode</th><th class="circulation">Title</th><th class="circulation">Author</th><th class="circulation">Type</th><th class="circulation">From</th><th class="circulation">To</th></tr>
 		<!-- TMPL_LOOP Name="trsfitemloop" -->
-			<tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->">
+			<!-- TMPL_IF NAME="color" --><tr class="hilighted"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --><td align="center">
 			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
-			<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="title" --></td>
-			<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
-			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="itemtype" --></td>
-			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="frbrname" --></td>
-			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="tobrname" --></td>
+			<td><!-- TMPL_VAR NAME="title" --></td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td align="center"><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td align="center"><!-- TMPL_VAR NAME="frbrname" --></td>
+			<td align="center"><!-- TMPL_VAR NAME="tobrname" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 		</table>

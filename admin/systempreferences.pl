@@ -54,12 +54,13 @@ $tabsysprefs{gist}="Acquisitions";
 $tabsysprefs{authoritysep}="Authorities";
 $tabsysprefs{ISBD}="Catalogue";
 $tabsysprefs{marc}="Catalogue";
+$tabsysprefs{autoBarcode}="Catalogue";
 $tabsysprefs{marcflavour}="Catalogue";
-$tabsysprefs{SubscriptionHistory}="Catalogue";
+$tabsysprefs{SubscriptionHistory}="OPAC";
 $tabsysprefs{maxoutstanding}="Circulation";
 $tabsysprefs{printcirculationslips}="Circulation";
 $tabsysprefs{ReturnBeforeExpiry}="Circulation";
-$tabsysprefs{suggestion}="Acquisitions";
+$tabsysprefs{suggestion}="OPAC";
 $tabsysprefs{automembernum}="Members";
 $tabsysprefs{noissuescharge}="Circulation";
 $tabsysprefs{opacthemes}="OPAC";
@@ -67,9 +68,11 @@ $tabsysprefs{opaclanguages}="OPAC";
 $tabsysprefs{LibraryName}="OPAC";
 $tabsysprefs{opacstylesheet}="OPAC";
 $tabsysprefs{BiblioDefaultView}="OPAC";
-$tabsysprefs{hidelostitem}="OPAC";
+$tabsysprefs{opaclargeimage}="OPAC";
+$tabsysprefs{opacsmallimage}="OPAC";
+$tabsysprefs{hidelostitems}="OPAC";
 $tabsysprefs{KohaAdmin}="Admin";
-$tabsysprefs{checkdigit}="Admin";
+$tabsysprefs{checkdigit}="Members";
 $tabsysprefs{dateformat}="Admin";
 $tabsysprefs{insecure}="Admin";
 $tabsysprefs{ldapinfos}="Admin";
@@ -77,36 +80,7 @@ $tabsysprefs{ldapserver}="Admin";
 $tabsysprefs{itemcallnumber}="Catalogue";
 $tabsysprefs{maxreserves}="Circulation";
 $tabsysprefs{virtualshelves}="OPAC";
-
-my %tabsysprefs;
-$tabsysprefs{acquisitions}="Acquisitions";
-$tabsysprefs{gist}="Acquisitions";
-$tabsysprefs{authoritysep}="Authorities";
-$tabsysprefs{ISBD}="Catalogue";
-$tabsysprefs{marc}="Catalogue";
-$tabsysprefs{marcflavour}="Catalogue";
-$tabsysprefs{SubscriptionHistory}="Catalogue";
-$tabsysprefs{maxoutstanding}="Circulation";
-$tabsysprefs{printcirculationslips}="Circulation";
-$tabsysprefs{ReturnBeforeExpiry}="Circulation";
-$tabsysprefs{suggestion}="Acquisitions";
-$tabsysprefs{automembernum}="Members";
-$tabsysprefs{noissuescharge}="Circulation";
-$tabsysprefs{opacthemes}="OPAC";
-$tabsysprefs{opaclanguages}="OPAC";
-$tabsysprefs{LibraryName}="OPAC";
-$tabsysprefs{opacstylesheet}="OPAC";
-$tabsysprefs{BiblioDefaultView}="OPAC";
-$tabsysprefs{hidelostitem}="OPAC";
-$tabsysprefs{KohaAdmin}="Admin";
-$tabsysprefs{checkdigit}="Admin";
-$tabsysprefs{dateformat}="Admin";
-$tabsysprefs{insecure}="Admin";
-$tabsysprefs{ldapinfos}="Admin";
-$tabsysprefs{ldapserver}="Admin";
-$tabsysprefs{itemcallnumber}="Catalogue";
-$tabsysprefs{maxreserves}="Circulation";
-$tabsysprefs{virtualshelves}="OPAC";
+$tabsysprefs{hide_marc}="Catalogue";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -334,7 +308,7 @@ if ($op eq 'add_form') {
 		}
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=".$tabsysprefs{$input->param('variable')}."\"></html>";
 	exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB

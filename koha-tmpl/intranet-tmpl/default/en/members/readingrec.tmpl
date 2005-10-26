@@ -24,7 +24,7 @@
 			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=returndate&amp;limit=<!-- TMPL_VAR NAME="limit" -->">Returned
 		</th>
 		<th>
-			Volume
+			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=returndate&amp;limit=<!-- TMPL_VAR NAME="limit" -->">Returned</a></th>
 		</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="loop_reading" -->
@@ -45,9 +45,6 @@
 		</td>
 		<td>
 			<!-- TMPL_VAR NAME="returndate" -->&nbsp;
-		</td>
-		<td>
-			<!-- TMPL_VAR NAME="volumeddesc" -->&nbsp;
 		</td>
 	<!-- /TMPL_LOOP -->
 	</table>
