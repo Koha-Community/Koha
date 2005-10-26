@@ -415,7 +415,7 @@ sub MARCaddsubfield {
         $tagorder, $subfieldcode, $subfieldorder, $subfieldvalues
       )
       = @_;
-	  return unless $subfieldvalues;
+	  return unless defined($subfieldvalues);
 # warn "$tagid / $subfieldcode / $subfieldvalues";
     # if not value, end of job, we do nothing
 #     if ( length($subfieldvalues) == 0 ) {
@@ -2754,6 +2754,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.24  2005/10/26 16:37:24  doxulting
+# It was impossible to add a subfield with value : 0. Was a problem for loan status.
+#
 # Revision 1.115.2.23  2005/09/28 14:35:56  hdl
 # ordering search results by branch.
 # Adding independant Branch Management to getBranches in Koha.pm
