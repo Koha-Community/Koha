@@ -55,7 +55,7 @@ Koha.pm provides many functions for Koha scripts.
 			&borrowercategories &getborrowercategory
 			&ethnicitycategories
 			&subfield_is_koha_internal_p
-			&getbranches &getbranch &getbranchname
+			&getbranches &getbranch &getbranchdetail
 			&getprinters &getprinter
 			&getitemtypes &getitemtypeinfo
 			&getframeworks &getframeworkinfo
@@ -468,25 +468,26 @@ sub getbranch ($$) {
     return $branch;
 }
 
-=item getbranchname
+=item getbranchdetail
 
-  $branchname = &getbranchname($branchcode);
+  $branchname = &getbranchdetail($branchcode);
 
 Given the branch code, the function returns the corresponding
 branch name for a comprehensive information display
 
 =cut
 
-sub getbranchname
+sub getbranchdetail
 {
 	my ($branchcode) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT branchname FROM branches WHERE branchcode = ?");
+	my $sth = $dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
 	$sth->execute($branchcode);
-	my $branchname = $sth->fetchrow();
+	my $branchname = $sth->fetchrow_hashref();
 	$sth->finish();
 	return $branchname;
 } # sub getbranchname
+
 
 sub getprinter ($$) {
     my($query, $printers) = @_; # get printer for this query from printers

@@ -132,7 +132,7 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchname($value);
+       return getbranchdetail($value)->{branchname};
     }
 
    #---- itemtypes
