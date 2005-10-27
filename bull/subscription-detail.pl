@@ -12,11 +12,11 @@ use C4::Context;
 use HTML::Template;
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;
 my $sth;
 # my $id;
-my ($template, $loggedinuser, $cookie, $subs);
+my ($template, $loggedinuser, $cookie, $subs, $user, $sessionID, $flags);
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
 	$dow, $numberlength, $weeklength, $monthlength,
 	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
@@ -28,7 +28,7 @@ $subscriptionid = $query->param('subscriptionid');
 
 if ($op eq 'modsubscription') {
 	$auser = $query->param('user');
-	$librarian => $query->param('librarian'),
+	$librarian = $query->param('librarian');
 	$cost = $query->param('cost');
 	$aqbooksellerid = $query->param('aqbooksellerid');
 	$biblionumber = $query->param('biblionumber');
@@ -76,7 +76,9 @@ if ($op eq 'del') {
 	exit;
 
 }
-my $subs = &getsubscription($subscriptionid);
+$subs = &getsubscription($subscriptionid);
+# html'ize distributedto
+$subs->{distributedto}=~ s/\n/<br \/>/g;
 my ($totalissues,@serialslist) = getserials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
@@ -89,7 +91,7 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
 				debug => 1,
 				});
 
-my ($user, $cookie, $sessionID, $flags) = checkauth($query, 0, {catalogue => 1}, "intranet");
+($user, $cookie, $sessionID, $flags) = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 $template->param(
 	user => $subs->{auser},

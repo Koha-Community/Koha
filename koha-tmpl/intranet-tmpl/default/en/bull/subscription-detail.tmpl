@@ -4,7 +4,6 @@
 <h1 class="bull">Subscription for <!-- TMPL_VAR name="bibliotitle" --></h1>
 <a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Modify subscription">Edit</a>
 <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Recieve issues">Receive issues</a>
-<a href="distribution.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Recieve issues">Define distribution</a>
 <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="All issues on this title">Issue history</a>
 <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Subscriptions</a>
 <!-- TMPL_IF name="letter" -->
@@ -32,8 +31,8 @@
 				Borrowers can't subscribe to issue alerts
 			<!-- /TMPL_IF -->
 		</p>
-		<p><label>Distributed to</label></p>
-		<p><!-- TMPL_IF name="distributedto" --></p>
+		<p><label>Distributed to</label>
+		<p><ul><!-- TMPL_VAR name="distributedto" --></ul></p>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>

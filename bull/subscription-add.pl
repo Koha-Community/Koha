@@ -38,7 +38,7 @@ my ($template, $loggedinuser, $cookie)
 
 
 #FIXME : If Budgets are never used, then these lines are useless.
-my $dbh = C4::Context->dbh;
+$dbh = C4::Context->dbh;
 my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
 $sthtemp->execute($loggedinuser);
 my ($flags, $homebranch)=$sthtemp->fetchrow;
@@ -48,12 +48,13 @@ if ($op eq 'mod') {
 	my $subscriptionid = $query->param('subscriptionid');
 	my $subs = &getsubscription($subscriptionid);
 	$auser = $subs->{'user'};
-	$librarian => $subs->{'librarian'},
+	$librarian = $subs->{'librarian'};
 	$cost = $subs->{'cost'};
 	$aqbooksellerid = $subs->{'aqbooksellerid'};
 	$aqbooksellername = $subs->{'aqbooksellername'};
 	$bookfundid = $subs->{'bookfundid'};
 	$aqbudgetid = $subs->{'aqbudgetid'};
+	defined $aqbudgetid or $aqbudgetid='';
 	$startdate = $subs->{'startdate'};
 	$periodicity = $subs->{'periodicity'};
 	$dow = $subs->{'dow'};
@@ -84,6 +85,7 @@ if ($op eq 'mod') {
 	$bibliotitle = $subs->{'bibliotitle'},
 	$notes = $subs->{'notes'};
 	$letter = $subs->{'letter'};
+	defined $letter or $letter='';
 	$template->param(
 		$op => 1,
 		user => $auser,
@@ -133,7 +135,7 @@ if ($op eq 'mod') {
 ##FIXME : Looks like never used.
 (my $temp,@budgets) = bookfunds($homebranch);
 # find default value & set it for the template
-for (my $i=0;$i<=$#budgets;$i++) {
+for (my $i=0;$i<$#budgets;$i++) {
 	if ($budgets[$i]->{'aqbudgetid'} eq $aqbudgetid) {
 		$budgets[$i]->{'selected'}=1;
 	}
@@ -143,7 +145,6 @@ $template->param(budgets => \@budgets);
 
 my @letterlist = GetLetterList('serial');
 for (my $i=0;$i<=$#letterlist;$i++) {
-	warn "$letterlist[$i]->{'code'} eq ".$letter;
 	$letterlist[$i]->{'selected'} =1 if $letterlist[$i]->{'code'} eq $letter;
 }
 $template->param(letters => \@letterlist);

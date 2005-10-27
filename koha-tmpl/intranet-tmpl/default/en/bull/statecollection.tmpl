@@ -73,6 +73,9 @@
 			<td>
 				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
 			</td>
+			<td>
+				<a href="javascript:PrintList(<!-- TMPL_VAR name="subscriptionid" -->,'<!-- TMPL_VAR name="serialseq" -->')" class="button bull">print</a>
+			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
@@ -128,9 +131,12 @@
 </table>
 <script language="JavaScript" type="text/javascript">
 
-function popup()
-{
+function popup() {
 	 window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid">","subscription renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+
+function PrintList(subscriptionid,serialseq) {
+	window.open("printlist.pl?subscriptionid="+subscriptionid+"&serialseq="+serialseq);
 }
 </script>
 

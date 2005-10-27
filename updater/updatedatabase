@@ -97,7 +97,7 @@ my %requiretables = (
 );
 
 my %requirefields = (
-	subscription => { 'letter' => 'char(20) NULL'},
+	subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL'},
 	itemtypes => { 'imageurl' => 'char(200) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
@@ -737,6 +737,11 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.124  2005/10/27 12:09:05  tipaul
+# new features for serial module :
+# - the last 5 issues are now shown, and their status can be changed (but not reverted to "waited", as there can be only one "waited")
+# - the library can create a "distribution list". this paper contains a list of borrowers (selected from the borrower list, or manually entered), and print it for a given issue. once printed, the sheet can be put on the issue and distributed to every reader on the list (one by one).
+#
 # Revision 1.123  2005/10/26 09:13:37  tipaul
 # big commit, still breaking things...
 #

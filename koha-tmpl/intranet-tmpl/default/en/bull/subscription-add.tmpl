@@ -15,8 +15,8 @@
 		<input type="hidden" name="op" value="addsubscription">
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
 		<p>Librarian</td><td> <!-- TMPL_VAR name="user" --></p>
-		<p><label class="label100">Supplier</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>)<a href="#" onClick="FindAcqui(f)">...</a></p>
-		<p><label class="label100">Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
+		<p><label class="label100">Supplier</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>)<a href="#" onClick="FindAcqui(f)" class="button bull">...</a></p>
+		<p><label class="label100">Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)<a href="#" onClick="Plugin(f)" class="button bull">...</a></p>
 		<p><label class="label100">Notes</label><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></p>
 		<!-- TMPL_IF name="letters" -->
 			<p><label class="label100">Enable issue alert</label>
@@ -32,6 +32,7 @@
 				</select>
 			</p>
 		<!-- /TMPL_IF -->
+		<p><label class="label100">Distributed to </label><a href="#" onClick="DistributedTo()" class="button bull">...</a></p>
 		<p class="problem">warning</p>
 		<ul>
 			<li>remember you <b>must</b> have created a biblio <b>before</b> creating a subscription</li>
@@ -230,6 +231,11 @@ function Plugin(f)
 function FindAcqui(f)
 {
 	 window.open("acqui-search.pl","Find a supplier",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function DistributedTo()
+{
+	 window.open("distributedto.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->","Distributed to",'width=800,height=600,toolbar=false,scrollbars=yes');
 }
 
 

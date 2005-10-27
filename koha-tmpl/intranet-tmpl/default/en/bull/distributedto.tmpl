@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+<div id="mainbloc">
+	<h1>Select borrowers or enter manually the names</h1>
+	<p>
+		<form action="/cgi-bin/koha/bull/distributedto.pl" method="post" name="Aform">
+			<table>
+			<tr>
+			<td>
+				<input type="text" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
+				<input type="submit" class="button" value="Filter">
+			</td>
+			<td rowspan="2">
+				<h2>Distributed to</h2>
+				<p>
+					<textarea name="distributedto" rows="15" cols="30"><!-- TMPL_VAR name="distributedto" --></textarea>
+				</p>
+				<p>
+					<!-- TMPL_IF name="save" -->
+						saved</p><p>
+					<!-- /TMPL_IF -->
+					<input type="hidden" name="SaveList" value="0">
+					<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+					<input type="button" name="save" value="Save" class="button" onClick="FSaveList()">
+					<input type="button" name="clode" value="Close" class="button" onClick="javascript:window.close()">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<!-- TMPL_VAR NAME="borrowername" -->
+				<select name="borlist" size="15">
+					<!-- TMPL_LOOP name="borlist" -->
+						<option value="<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->">
+							<!-- TMPL_VAR name="surname" --> <!-- TMPL_VAR name="firstname" -->
+						</option>
+					<!-- /TMPL_LOOP -->
+				</select>
+				<input type="button" name="insert" value="&gt;&gt;" class="button" onclick="insertValueQuery()" title="Insert" />
+			</td>
+			</tr>
+			</table>
+		</form>
+	</p>
+	<script language="javascript" type="text/javascript">
+		// GPL code coming from PhpMyAdmin
+		function insertValueQuery() {
+			var myQuery = document.Aform.distributedto;
+			var myListBox = document.Aform.borlist;
+		
+			if(myListBox.options.length > 0) {
+				var chaineAj = "";
+				var NbSelect = 0;
+				for(var i=0; i<myListBox.options.length; i++) {
+					if (myListBox.options[i].selected){
+						NbSelect++;
+						if (NbSelect > 1)
+							chaineAj += ", ";
+						chaineAj += myListBox.options[i].value;
+					}
+				}
+		
+				//IE support
+				if (document.selection) {
+					myQuery.focus();
+					sel = document.selection.createRange();
+					sel.text = chaineAj;
+					document.Aform.insert.focus();
+				}
+				//MOZILLA/NETSCAPE support
+				else if (document.Aform.distributedto.selectionStart || document.Aform.distributedto.selectionStart == "0") {
+					var startPos = document.Aform.distributedto.selectionStart;
+					var endPos = document.Aform.distributedto.selectionEnd;
+					var chaineSql = document.Aform.distributedto.value;
+					myQuery.value = chaineSql.substring(0, startPos) +''+ chaineAj+"\n" + chaineSql.substring(endPos, chaineSql.length);
+				} else {
+					myQuery.value += chaineAj;
+				}
+			}
+		}
+		function FSaveList() {
+			document.Aform.SaveList.value=1;
+			document.Aform.submit();
+		}
+	</script>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
