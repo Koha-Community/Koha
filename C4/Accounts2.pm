@@ -52,15 +52,185 @@ patron.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw( 
-&getnextacctno);
+@EXPORT = qw(&checkaccount &recordpayment &fixaccounts &makepayment &manualinvoice
+&getnextacctno &reconcileaccount);
 
-# FIXME - Never used
-sub displayaccounts{
-  my ($env)=@_;
+=item checkaccount
+
+  $owed = &checkaccount($env, $borrowernumber, $dbh, $date);
+
+Looks up the total amount of money owed by a borrower (fines, etc.).
+
+C<$borrowernumber> specifies the borrower to look up.
+
+C<$dbh> is a DBI::db handle for the Koha database.
+
+C<$env> is ignored.
+
+=cut
+#'
+sub checkaccount  {
+  #take borrower number
+  #check accounts and list amounts owing
+	my ($env,$bornumber,$dbh,$date)=@_;
+	my $select="SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = ?
+			AND amountoutstanding<>0";
+	my @bind = ($bornumber);
+	if ($date && $date ne ''){
+	$select.=" AND date < ?";
+	push(@bind,$date);
+	}
+	#  print $select;
+	my $sth=$dbh->prepare($select);
+	$sth->execute(@bind);
+	my $data=$sth->fetchrow_hashref;
+	my $total = $data->{'total'} || 0;
+	$sth->finish;
+	# output(1,2,"borrower owes $total");
+	#if ($total > 0){
+	#  # output(1,2,"borrower owes $total");
+	#  if ($total > 5){
+	#    reconcileaccount($env,$dbh,$bornumber,$total);
+	#  }
+	#}
+	#  pause();
+	return($total);
 }
 
+=item recordpayment
 
+  &recordpayment($env, $borrowernumber, $payment);
+
+Record payment by a patron. C<$borrowernumber> is the patron's
+borrower number. C<$payment> is a floating-point number, giving the
+amount that was paid. C<$env> is a reference-to-hash;
+C<$env-E<gt>{branchcode}> is the code of the branch where payment was
+made.
+
+Amounts owed are paid off oldest first. That is, if the patron has a
+$1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
+of $1.50, then the oldest fine will be paid off in full, and $0.50
+will be credited to the next one.
+
+=cut
+#'
+sub recordpayment{
+  #here we update both the accountoffsets and the account lines
+  my ($env,$bornumber,$data)=@_;
+    warn "in accounts2.pm";
+  my $dbh = C4::Context->dbh;
+  my $newamtos = 0;
+  my $accdata = "";
+  my $branch=$env->{'branchcode'};
+    warn $branch;
+  my $amountleft = $data;
+  # begin transaction
+  my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
+  # get lines with outstanding amounts to offset
+  my $sth = $dbh->prepare("select * from accountlines
+  where (borrowernumber = ?) and (amountoutstanding<>0)
+  order by date");
+  $sth->execute($bornumber);
+  # offset transactions
+  while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
+     if ($accdata->{'amountoutstanding'} < $amountleft) {
+        $newamtos = 0;
+        $amountleft -= $accdata->{'amountoutstanding'};
+     }  else {
+        $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+        $amountleft = 0;
+     }
+     my $thisacct = $accdata->{accountno};
+     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
+     where (borrowernumber = ?) and (accountno=?)");
+     $usth->execute($newamtos,$bornumber,$thisacct);
+     $usth->finish;
+     $usth = $dbh->prepare("insert into accountoffsets
+     (borrowernumber, accountno, offsetaccount,  offsetamount)
+     values (?,?,?,?)");
+     $usth->execute($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
+     $usth->finish;
+  }
+  # create new line
+  my $usth = $dbh->prepare("insert into accountlines
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
+  values (?,?,now(),?,'Payment,thanks','Pay',?)");
+  $usth->execute($bornumber,$nextaccntno,0-$data,0-$amountleft);
+  $usth->finish;
+  UpdateStats($env,$branch,'payment',$data,'','','',$bornumber);
+  $sth->finish;
+}
+
+=item makepayment
+
+  &makepayment($borrowernumber, $acctnumber, $amount, $branchcode);
+
+Records the fact that a patron has paid off the entire amount he or
+she owes.
+
+C<$borrowernumber> is the patron's borrower number. C<$acctnumber> is
+the account that was credited. C<$amount> is the amount paid (this is
+only used to record the payment. It is assumed to be equal to the
+amount owed). C<$branchcode> is the code of the branch where payment
+was made.
+
+=cut
+#'
+# FIXME - I'm not at all sure about the above, because I don't
+# understand what the acct* tables in the Koha database are for.
+sub makepayment{
+  #here we update both the accountoffsets and the account lines
+  #updated to check, if they are paying off a lost item, we return the item
+  # from their card, and put a note on the item record
+  my ($bornumber,$accountno,$amount,$user,$branch)=@_;
+  my %env;
+  $env{'branchcode'}=$branch;
+  my $dbh = C4::Context->dbh;
+  # begin transaction
+  my $nextaccntno = getnextacctno(\%env,$bornumber,$dbh);
+  my $newamtos=0;
+  my $sth=$dbh->prepare("Select * from accountlines where  borrowernumber=? and accountno=?");
+  $sth->execute($bornumber,$accountno);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+
+  $dbh->do(<<EOT);
+        UPDATE  accountlines
+        SET     amountoutstanding = 0
+        WHERE   borrowernumber = $bornumber
+          AND   accountno = $accountno
+EOT
+
+#  print $updquery;
+  $dbh->do(<<EOT);
+        INSERT INTO     accountoffsets
+                        (borrowernumber, accountno, offsetaccount,
+                         offsetamount)
+        VALUES          ($bornumber, $accountno, $nextaccntno, $newamtos)
+EOT
+
+  # create new line
+  my $payment=0-$amount;
+  $dbh->do(<<EOT);
+        INSERT INTO     accountlines
+                        (borrowernumber, accountno, date, amount,
+                         description, accounttype, amountoutstanding)
+        VALUES          ($bornumber, $nextaccntno, now(), $payment,
+                        'Payment,thanks - $user', 'Pay', 0)
+EOT
+
+  # FIXME - The second argument to &UpdateStats is supposed to be the
+  # branch code.
+  # UpdateStats is now being passed $accountno too. MTJ
+  UpdateStats(\%env,$user,'payment',$amount,'','','',$bornumber,$accountno);
+  $sth->finish;
+  #check to see what accounttype
+  if ($data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L'){
+    returnlost($bornumber,$data->{'itemnumber'});
+  }
+}
 
 =item getnextacctno
 
@@ -90,6 +260,33 @@ sub getnextacctno {
   return($nextaccntno);
 }
 
+=item fixaccounts
+
+  &fixaccounts($borrowernumber, $accountnumber, $amount);
+
+=cut
+#'
+# FIXME - I don't understand what this function does.
+sub fixaccounts {
+  my ($borrowernumber,$accountno,$amount)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from accountlines where borrowernumber=?
+     and accountno=?");
+  $sth->execute($borrowernumber,$accountno);
+  my $data=$sth->fetchrow_hashref;
+        # FIXME - Error-checking
+  my $diff=$amount-$data->{'amount'};
+  my $outstanding=$data->{'amountoutstanding'}+$diff;
+  $sth->finish;
+
+  $dbh->do(<<EOT);
+        UPDATE  accountlines
+        SET     amount = '$amount',
+                amountoutstanding = '$outstanding'
+        WHERE   borrowernumber = $borrowernumber
+          AND   accountno = $accountno
+EOT
+ }
 
 # FIXME - Never used, but not exported, either.
 sub returnlost{
@@ -108,6 +305,64 @@ sub returnlost{
   $sth->finish;
 }
 
+=item manualinvoice
+
+  &manualinvoice($borrowernumber, $itemnumber, $description, $type,
+                 $amount, $user);
+
+C<$borrowernumber> is the patron's borrower number.
+C<$description> is a description of the transaction.
+C<$type> may be one of C<CS>, C<CB>, C<CW>, C<CF>, C<CL>, C<N>, C<L>,
+or C<REF>.
+C<$itemnumber> is the item involved, if pertinent; otherwise, it
+should be the empty string.
+
+=cut
+#'
+# FIXME - Okay, so what does this function do, really?
+sub manualinvoice{
+  my ($bornum,$itemnum,$desc,$type,$amount,$user)=@_;
+  my $dbh = C4::Context->dbh;
+  my $insert;
+  $itemnum=~ s/ //g;
+  my %env;
+  my $accountno=getnextacctno('',$bornum,$dbh);
+  my $amountleft=$amount;
+
+  if ($type eq 'CS' || $type eq 'CB' || $type eq 'CW'
+  || $type eq 'CF' || $type eq 'CL'){
+    my $amount2=$amount*-1;     # FIXME - $amount2 = -$amount
+    $amountleft=fixcredit(\%env,$bornum,$amount2,$itemnum,$type,$user);
+  }
+  if ($type eq 'N'){
+    $desc.="New Card";
+  }
+  if ($type eq 'L' && $desc eq ''){
+    $desc="Lost Item";
+  }
+  if ($type eq 'REF'){
+    $amountleft=refund('',$bornum,$amount);
+  }
+  if ($itemnum ne ''){
+#FIXME to use ? before uncommenting
+#     my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
+#     $sth->execute;
+#     my $data=$sth->fetchrow_hashref;
+#     $sth->finish;
+    $desc.=" ".$itemnum;
+    my $sth=$dbh->prepare("INSERT INTO  accountlines
+                        (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber)
+        VALUES (?, ?, now(), ?,?, ?,?,?)");
+#     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
+     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $itemnum);
+  } else {
+    $desc=$dbh->quote($desc);
+    my $sth=$dbh->prepare("INSERT INTO  accountlines
+                        (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding)
+                        VALUES (?, ?, now(), ?, ?, ?, ?)");
+    $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft);
+  }
+}
 
 # fixcredit
 # $amountleft = &fixcredit($env, $bornumber, $data, $barcode, $type, $user);
@@ -235,6 +490,58 @@ sub refund{
   }
   $sth->finish;
   return($amountleft);
+}
+
+# XXX - POD. Need to figure out C4/Interface/AccountsCDK.pm first,
+# though
+# FIXME - It looks as though this function really wants to be part of
+# a curses-based script.
+sub reconcileaccount {
+  #print put money owing give person opportunity to pay it off
+  my ($env,$dummy,$bornumber,$total)=@_;
+  my $dbh = C4::Context->dbh;
+  #get borrower record
+  my $sth=$dbh->prepare("select * from borrowers
+    where borrowernumber=$bornumber");
+  $sth->execute;
+  my $borrower=$sth->fetchrow_hashref;
+  $sth->finish();
+  #get borrower information
+  $sth=$dbh->prepare("Select * from accountlines where
+  borrowernumber=$bornumber and amountoutstanding<>0 order by date");
+  $sth->execute;
+  #display account information
+  &clearscreen();
+  #&helptext('F11 quits');
+  output(20,0,"Accounts");
+  my @accountlines;
+  my $row=4;
+  my $i=0;
+  my $text;
+  #output (1,2,"Account Info");
+  #output (1,3,"Item\tDate      \tAmount\tDescription");
+  while (my $data=$sth->fetchrow_hashref){
+    my $line=$i+1;
+    my $amount=0+$data->{'amountoutstanding'};
+    my $itemdata = getbibliofromitemnumber($env,$dbh,$data->{'itemnumber'});
+    $line= $data->{'accountno'}." ".$data->{'date'}." ".$data->{'accounttype'}." ";
+    my $title = $itemdata->{'title'};
+    if (length($title) > 15 ) {$title = substr($title,0,15);}
+    $line .= $itemdata->{'barcode'}." $title ".$data->{'description'};
+    $line = fmtstr($env,$line,"L65")." ".fmtdec($env,$amount,"52");
+    push @accountlines,$line;
+    $i++;
+  }
+  #get amount paid and update database
+  my ($data,$reason)=
+    &accountsdialog($env,"Payment Entry",$borrower,\@accountlines,$total);
+  if ($data>0) {
+    &recordpayment($env,$bornumber,$dbh,$data);
+    #Check if the borrower still owes
+    $total=&checkaccount($env,$bornumber,$dbh);
+  }
+  return($total);
+
 }
 
 END { }       # module clean-up code here (global destructor)
