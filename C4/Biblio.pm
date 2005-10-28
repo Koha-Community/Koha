@@ -1340,6 +1340,7 @@ sub NEWmodbiblio {
 	my @addiauthfields = $record->field($tagfield);
 	foreach my $addiauthfield (@addiauthfields) {
 		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
+		$dbh->do("delete from additionalauthors where biblionumber=$oldbiblionumber");
 		foreach my $subfieldcount (0..$#addiauthsubfields) {
 			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
 		}
@@ -2754,6 +2755,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.25  2005/10/28 13:46:50  doxulting
+# There was a bug : Even if you erased the marc field linked to additionalauthors.authors the additionalauthors stayed in database. Now : delete before recreating
+#
 # Revision 1.115.2.24  2005/10/26 16:37:24  doxulting
 # It was impossible to add a subfield with value : 0. Was a problem for loan status.
 #
