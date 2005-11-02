@@ -62,7 +62,9 @@
 								<b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
 							<!-- /TMPL_IF -->
 						<!-- /TMPL_IF -->
-						<!-- TMPL_VAR name="volumeddesc" --><!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="unititle" -->
+						<!-- TMPL_IF name="volume" --> vol <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumeddesc" --> : <!-- TMPL_VAR name="volumeddesc" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="number" --> part <!-- TMPL_VAR name="number" --> <!-- /TMPL_IF --> <!-- TMPL_VAR name="unititle" -->
 					</p>
 					<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
