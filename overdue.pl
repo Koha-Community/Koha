@@ -28,6 +28,7 @@ use C4::Auth;
 
 my $input = new CGI;
 my $type=$input->param('type');
+my $order=$input->param('order');
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 
@@ -55,23 +56,20 @@ my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
 my $dbh = C4::Context->dbh;
-
-my $sth=$dbh->prepare("select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<? order by date_due,borrowernumber");
-$sth->execute($todaysdate);
+my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,itemnumber from issues, borrowers where isnull(returndate) && date_due<'".$todaysdate."' && issues.borrowernumber=borrowers.borrowernumber order by date_due,borrower ";
+$strsth="select date_due,concat(firstname,' ',surname) as borrower, phone, emailaddress,itemnumber from issues, borrowers where isnull(returndate) && date_due<'".$todaysdate."' && issues.borrowernumber=borrowers.borrowernumber order by borrower,date_due " if ($order eq "borrower");
+my $sth=$dbh->prepare($strsth);
+warn "".$strsth;
+$sth->execute();
 
 my @overduedata;
 while (my $data=$sth->fetchrow_hashref) {
   $duedate=$data->{'date_due'};
-  $bornum=$data->{'borrowernumber'};
   $itemnum=$data->{'itemnumber'};
 
-  my $sth1=$dbh->prepare("select concat(firstname,' ',surname),phone,emailaddress from borrowers where borrowernumber=?");
-  $sth1->execute($bornum);
-  $data1=$sth1->fetchrow_hashref;
-  $name=$data1->{'concat(firstname,\' \',surname)'};
-  $phone=$data1->{'phone'};
-  $email=$data1->{'emailaddress'};
-  $sth1->finish;
+  $name=$data->{'borrower'};
+  $phone=$data->{'phone'};
+  $email=$data->{'emailaddress'};
 
   my $sth2=$dbh->prepare("select biblionumber from items where itemnumber=?");
   $sth2->execute($itemnum);
