@@ -243,7 +243,7 @@ sub calculate {
 	
 		while (my ($celvalue) = $sth2->fetchrow) {
 			my %cell;
-			$cell{coltitle} = $celvalue;
+			$cell{'coltitle'} = ($celvalue?$celvalue:"NULL");
 			push @loopcol, \%cell;
 		}
 	#	warn "fin des titres colonnes";
@@ -296,31 +296,29 @@ sub calculate {
 	
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
-	$strcalc .= " order by ";
-	$strcalc .= "$colfield, " if ($colfield);
-	$strcalc .= "RANK DESC ";
-	my $max;
-	if (@loopcol) {
-		$max = $line*@loopcol;
-	} else { $max=$line;}
-	$strcalc .= " LIMIT 0,$max";
+	$strcalc .= " order by RANK DESC";
+	$strcalc .= ",$colfield " if ($colfield);
+# 	my $max;
+# 	if (@loopcol) {
+# 		$max = $line*@loopcol;
+# 	} else { $max=$line;}
+# 	$strcalc .= " LIMIT 0,$max";
 	warn "SQL :". $strcalc;
 	
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
 	my $previous_col;
-	my $i=1;
+	my %indice;
 	while (my  @data = $dbcalc->fetchrow) {
 		my ($row, $rank, $id, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
-		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}->{'name'}=$row;
-		$table[$i]->{$col}->{'count'}=$rank;
-		$table[$i]->{$col}->{'link'}=$id;
-		warn " ".$i." ".$col. " ".$row;
-		$i++;
-		$previous_col=$col;
+		$indice{$col}=1 if (not($indice{$col}));
+		$table[$indice{$col}]->{$col}->{'name'}=$row;
+		$table[$indice{$col}]->{$col}->{'count'}=$rank;
+		$table[$indice{$col}]->{$col}->{'link'}=$id;
+#		warn " ".$i." ".$col. " ".$row;
+		$indice{$col}++;
 	}
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
@@ -328,7 +326,7 @@ sub calculate {
 	for ($i=1; $i<=$line;$i++) {
 		my @loopcell;
 		warn " $i";
-		#@loopcol ensures the order for columns is common with column titles
+		#@loborrowersopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		my $colcount=0;
 		foreach my $col ( @loopcol ) {
