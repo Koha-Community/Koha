@@ -924,6 +924,15 @@ my %tabledata = (
             explanation         => 'hide marc specific datas like subfield code & indicators to library',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'NotifiyBorrowerDeparture',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Delay before expiry where a notice is sent when issuing',
+            type                => 'Integer',
+        },
     ],
 
 );
@@ -1520,6 +1529,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.13  2005/11/29 14:50:30  hdl
+# Adding a notice before departure of a borrower
+#
 # Revision 1.100.2.12  2005/10/25 12:36:21  tipaul
 # * adding a feature to enable reordering of subfields in MARC editor (can be considered as a bug ? at least one of my libraries think that yes !)
 # * as the MARC editor begins to be really heavy, i've also added a marc_hide systempref. It hides all marc features not requested by libraries that want MARC but not too much. It hides MARC tag & subfield code, reordering buttons as well as indicators. by default, hide_marc is off
