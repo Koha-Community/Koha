@@ -25,11 +25,19 @@ use C4::Output;
 use CGI;
 use HTML::Template;
 use C4::Auth;
+use C4::Koha;
+use C4::Acquisition;
 
 my $input = new CGI;
 my $type=$input->param('type');
 my $order=$input->param('order');
-
+my $bornamefilter=$input->param('borname');
+my $borcatfilter=$input->param('borcat');
+my $itemtypefilter=$input->param('itemtype');
+my $borflagsfilter=$input->param('borflags');
+my $branchfilter=$input->param('branch');
+my $showall=$input->param('showall');
+warn "shoall :".$showall;
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 
 my ($template, $loggedinuser, $cookie)
@@ -40,6 +48,73 @@ my ($template, $loggedinuser, $cookie)
 	                                 flagsrequired => {borrowers => 1},
 	                                 debug => 1,
 	                                 });
+my $dbh = C4::Context->dbh;
+my $req;
+$req = $dbh->prepare( "select categorycode, description from categories order by description");
+$req->execute;
+my %select_catcode;
+my @select_catcode;
+push @select_catcode,"";
+$select_catcode{""} = "";
+while (my ($catcode, $description) =$req->fetchrow) {
+	push @select_catcode, $catcode;
+	$select_catcode{$catcode} = $description
+}
+my $CGIcatcode=CGI::scrolling_list( -name     => 'borcat',
+			-id => 'borcat',
+			-values   => \@select_catcode,
+			-labels   => \%select_catcode,
+			-size     => 1,
+			-multiple => 0 );
+$req = $dbh->prepare( "select itemtype, description from itemtypes order by description");
+$req->execute;
+my %select_itemtype;
+my @select_itemtype;
+push @select_itemtype,"";
+$select_itemtype{""} = "";
+while (my ($itemtype, $description) =$req->fetchrow) {
+	push @select_itemtype, $itemtype;
+	$select_itemtype{$itemtype} = $description
+}
+my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
+			-id => 'itemtype',
+			-values   => \@select_itemtype,
+			-labels   => \%select_itemtype,
+			-size     => 1,
+			-multiple => 0 );
+my @branches;
+my @select_branch;
+my %select_branches;
+my ($count2,@branches)=branches();
+push @select_branch,"";
+$select_branches{''}='';
+for (my $i=0;$i<$count2;$i++){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+}
+my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+						-values   => \@select_branch,
+						-labels   => \%select_branches,
+						-size     => 1,
+						-multiple => 0 );
+my @selectflags;
+push @selectflags, " ";#
+push @selectflags,"gonenoaddress";#
+push @selectflags,"debarred";#
+push @selectflags,"lost";#
+my $CGIflags=CGI::scrolling_list( -name     => 'borflags',
+						-id =>'borflags',
+ 						-values   => \@selectflags,
+# 						-labels   => \%selectflags,
+						-size     => 1,
+						-multiple => 0 );
+$template->param(CGIcatcodes        => $CGIcatcode,
+					CGIitemtypes    => $CGIitemtype,
+					CGIbranches     => $CGIbranch,
+					CGIflags     => $CGIflags,
+					borname => $bornamefilter,
+					showall => $showall);
+
 my $duedate;
 my $bornum;
 my $itemnum;
@@ -56,8 +131,25 @@ my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
 my $dbh = C4::Context->dbh;
-my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,itemnumber from issues, borrowers where isnull(returndate) && date_due<'".$todaysdate."' && issues.borrowernumber=borrowers.borrowernumber order by date_due,borrower ";
-$strsth="select date_due,concat(firstname,' ',surname) as borrower, phone, emailaddress,itemnumber from issues, borrowers where isnull(returndate) && date_due<'".$todaysdate."' && issues.borrowernumber=borrowers.borrowernumber order by borrower,date_due " if ($order eq "borrower");
+my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues, borrowers,items,biblioitems, biblio where isnull(returndate) ";
+$strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
+$strsth.= " && issues.borrowernumber=borrowers.borrowernumber && issues.itemnumber=items.itemnumber && biblioitems.biblioitemnumber=items.itemnumber && biblio.biblionumber=items.biblionumber ";
+$strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
+$strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
+$strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
+$strsth.=" && borrowers.flags = '".$borflagsfilter."' " if ($borflagsfilter ne " ") ;
+$strsth.=" && issues.issuingbranch = '".$branchfilter."' " if($branchfilter) ;
+# my $bornamefilter=$input->param('borname');
+# my $borcatfilter=$input->param('borcat');
+# my $itemtypefilter=$input->param('itemtype');
+# my $borflagsfilter=$input->param('borflags');
+# my $branchfilter=$input->param('branch');
+
+if ($order eq "borrower"){
+	$strsth.=" order by borrower,date_due " ;
+} else {
+	$strsth.=" order by date_due,borrower ";
+}
 my $sth=$dbh->prepare($strsth);
 warn "".$strsth;
 $sth->execute();
@@ -71,18 +163,8 @@ while (my $data=$sth->fetchrow_hashref) {
   $phone=$data->{'phone'};
   $email=$data->{'emailaddress'};
 
-  my $sth2=$dbh->prepare("select biblionumber from items where itemnumber=?");
-  $sth2->execute($itemnum);
-  $data2=$sth2->fetchrow_hashref;
-  $biblionumber=$data2->{'biblionumber'};
-  $sth2->finish;
-
-  my $sth3=$dbh->prepare("select title,author from biblio where biblionumber=?");
-  $sth3->execute($biblionumber);
-  $data3=$sth3->fetchrow_hashref;
-  $title=$data3->{'title'};
-  $author=$data3->{'author'};
-  $sth3->finish;
+  $title=$data->{'title'};
+  $author=$data->{'author'};
   push (@overduedata, {	duedate      => $duedate,
 			bornum       => $bornum,
 			itemnum      => $itemnum,
@@ -96,7 +178,6 @@ while (my $data=$sth->fetchrow_hashref) {
 }
 
 $sth->finish;
-
 $template->param(		todaysdate        => $todaysdate,
 		overdueloop       => \@overduedata );
 

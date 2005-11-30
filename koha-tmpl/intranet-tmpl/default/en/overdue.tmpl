@@ -1,11 +1,22 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
 	<h1 class="reports">Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<form method="post" action="/cgi-bin/koha/overdue.pl">
+	<p>Filter on :<br />
+	 	<div class="label100">Name or cardnumber :</div> <input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"><br />
+		<div class="label100">Borrower categorycode :</div><!--TMPL_VAR Name="CGIcatcodes" --><br />
+		<div class="label100">Borrower Flags :</div><!--TMPL_VAR Name="CGIflags" --><br />
+	  	<div class="label100">Itemtype :</div><!--TMPL_VAR Name="CGIitemtypes" --><br />
+		<div class="label100">branch :</div><!--TMPL_VAR Name="CGIbranches" --><br />
+		<div class="label100">Show any items currently issued:</div><input type="checkbox" name="showall" value="show" <!--TMPL_IF Name="showall"-->checked="checked"<!--/TMPL_IF-->><br />
+			<input TYPE="submit" value="Apply Filter" class="button reports">
+	</form>
+	</p>
 	
 	<table>
 	<tr>
-		<th class="reports"><a href="/cgi-bin/koha/overdue.pl?order=date&amp;type=intranet">Due Date</a> </th>
-		<th class="reports"><a href="/cgi-bin/koha/overdue.pl?order=borrower&amp;type=intranet">Patron</a></th>
+		<th class="reports">Due Date <a href="/cgi-bin/koha/overdue.pl?order=date&amp;type=intranet">Sort</a> </th>
+		<th class="reports">Patron <a href="/cgi-bin/koha/overdue.pl?order=borrower&amp;type=intranet">Sort</a></th>
 		<th class="reports">Phone</th>
 		<th class="reports">Title</th>
 		<th class="reports">Author</th>
