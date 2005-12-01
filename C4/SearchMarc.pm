@@ -278,7 +278,7 @@ sub catalogsearch {
 	# Finds the basic results without the NOT requests
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
-	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( marc_biblio.datecreated ) <$desc_or_asc" if $orderby =~ "biblio.timestamp";
+	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( marc_biblio.datecreated ) <$desc_or_asc" if $orderby =~ "biblio.timestamp" && $desc_or_asc>0	;
 	$desc_or_asc="DESC" if $orderby eq "biblio.timestamp";
 # 	$offset=0 if $orderby eq "biblio.timestamp";
 	my $sth;
