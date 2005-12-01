@@ -22,6 +22,7 @@ require Exporter;
 use C4::Context;
 use C4::Date;
 use MARC::Record;
+use C4::Suggestions;
 # use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -320,6 +321,10 @@ sub receiveorder {
 	my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
 											unitprice=?,freight=?,rrp=?
 							where biblionumber=? and ordernumber=?");
+	my $suggestionid = findsuggestion_from_biblionumber($dbh,$biblio);
+	if ($suggestionid) {
+		changestatus($suggestionid,'AVAILABLE','',$biblio);
+	}
 	$sth->execute($quantrec,$invoiceno,$cost,$freight,$rrp,$biblio,$ordnum);
 	$sth->finish;
 }

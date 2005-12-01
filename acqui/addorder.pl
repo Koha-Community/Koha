@@ -99,23 +99,12 @@ if ($quantity ne '0'){
 								});
 		# change suggestion status if applicable
 		if ($suggestionid) {
-			changestatus($suggestionid,'ORDERED');
+			changestatus($suggestionid,'ORDERED','',$bibnum);
 		}
 	} else {
 		$bibnum=$input->param('biblio');
 		$bibitemnum=$input->param('bibitemnum');
 		my $oldtype=$input->param('oldtype');
-# 		&modbibitem({biblioitemnumber => $bibitemnum,
-# 						isbn            => $isbn,
-# 						publishercode   => $publishercode,
-# 		});
-#  		&modbiblio({
-#  			biblionumber  => $bibnum,
-#  			title         => $title?$title:"",
-#  			author        => $author?$author:"",
-#  			copyrightdate => $copyrightdate?$copyrightdate:"",
-#  			series        => $series?$series:"" },
-#  			);
 	}
 	if ($ordnum) {
 # 		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
