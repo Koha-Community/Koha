@@ -324,12 +324,16 @@ sub getsubscriptions {
 	}
 	my @results;
 	my $previoustitle="";
+	my $odd=1;
 	while (my $line = $sth->fetchrow_hashref) {
 		if ($previoustitle eq $line->{title}) {
 			$line->{title}="";
 			$line->{issn}="";
+			$line->{toggle} = 1 if $odd==1;
 		} else {
 			$previoustitle=$line->{title};
+			$odd=-$odd;
+			$line->{toggle} = 1 if $odd==1;
 		}
 		push @results, $line;
 	}
