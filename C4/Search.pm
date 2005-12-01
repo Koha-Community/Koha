@@ -25,6 +25,7 @@ use C4::Reserves2;
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
 use C4::Date;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -1521,6 +1522,7 @@ sub bibdata {
 	$sth->finish;
 	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
 	$sth->execute($bibnum);
+	# handle subjects : DEPRECATED ?
 	my @subjects;
 	while (my $dat = $sth->fetchrow_hashref){
 		my %line;
@@ -1529,6 +1531,7 @@ sub bibdata {
 	} # while
 	$data->{subjects} = \@subjects;
 	$sth->finish;
+	# handle additional authors
 	$sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
 	$sth->execute($bibnum);
 	while (my $dat = $sth->fetchrow_hashref){
@@ -1537,6 +1540,8 @@ sub bibdata {
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
+	# handle ISBN : reintroduce - if there are none
+	$data->{'isbn'} = DisplayISBN($data->{'isbn'});
 	$sth->finish;
 	return($data);
 } # sub bibdata
