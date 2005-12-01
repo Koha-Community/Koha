@@ -131,7 +131,11 @@
 					<!-- TMPL_IF name="datedue" -->
 						On loan
 					<!-- TMPL_ELSE -->
-						<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+							Available
+						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
