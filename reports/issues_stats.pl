@@ -455,7 +455,7 @@ sub calculate {
 		my ($bookcount) = $rqbookcount->fetchrow;
 		$strcalc .= "100*(COUNT(DISTINCT issues.itemnumber))/ $bookcount " ;
 	}
-	$strcalc .= "FROM statistics,borrowers,issues where (statistics.borrowernumber=borrowers.borrowernumber) and issues.borrowernumber=borrowers.borrowernumber and issues.itemnumber=statistics.itemnumber ";
+	$strcalc .= "FROM statistics,borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
 
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND statistics.datetime > '" . @$filters[0] ."'" if ( @$filters[0] );
