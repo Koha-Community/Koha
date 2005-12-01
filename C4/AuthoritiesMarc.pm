@@ -310,8 +310,8 @@ sub AUTHcount_usage {
 	chop $tags_using_authtype;
 	if ($tags_using_authtype) {
 		$sth = $dbh->prepare("select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=?");
-	} else {
-		$sth = $dbh->prepare("select count(*) from marc_subfield_table where subfieldvalue=?");
+# 	} else {
+# 		$sth = $dbh->prepare("select count(*) from marc_subfield_table where subfieldvalue=?");
 	}
 # 	warn "Q : select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=$authid";
 	$sth->execute($authid);
@@ -938,6 +938,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.9  2005/12/01 17:30:26  tipaul
+# no need to do a search on an authority when the authority has no MARC field (like EDITORS pseudo authority)
+#
 # Revision 1.9.2.8  2005/10/25 12:38:59  tipaul
 # * fixing bug in summary (separator before subfield was in fact after)
 # * fixing bug in authority order : authorities are not ordered alphabetically instead of no order. Requires all the dataset to be retrieved, but the benefits is important !
