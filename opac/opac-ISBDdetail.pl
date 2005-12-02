@@ -56,6 +56,7 @@ use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
+use C4::Bull; #uses getsubscriptionfrom biblionumber
 use HTML::Template;
 
 my $query=new CGI;
@@ -70,6 +71,21 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
+
+#coping with subscriptions
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+my $dat = MARCmarc2koha($dbh,$record);
+my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
+my @subs;
+foreach my $subscription (@subscriptions){
+	my %cell;
+	$cell{subscriptionid}= $subscription->{subscriptionid};
+	$cell{subscriptionnotes}= $subscription->{notes};
+	#get the three latest serials.
+	$cell{latestserials}=getlatestserials($subscription->{subscriptionid},3);
+	push @subs, \%cell;
+}
+
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "opac-ISBDdetail.tmpl",
@@ -81,6 +97,8 @@ my ($template, $loggedinuser, $cookie)
 $template->param(LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
+				subscriptions => \@subs,
+				subscriptionsnumber => $subscriptionsnumber,
 );
 
 my $ISBD = C4::Context->preference('ISBD');
