@@ -933,6 +933,15 @@ my %tabledata = (
             explanation         => 'Delay before expiry where a notice is sent when issuing',
             type                => 'Integer',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacPasswordChange',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1529,6 +1538,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.15  2005/12/05 09:50:35  tipaul
+# New systempreference : OpacPasswordChange if set to Yes (default) the user can change it's password. If set to No, he can't. Useful for libraries with LDAP auth, where the password is checked in LDAP, not in Koha, thus Koha can't change it
+#
 # Revision 1.100.2.14  2005/12/05 09:41:35  tipaul
 # typo fix : NofifyBorrowerDeparture instead of NotifiyBorrowerDeparture
 #
