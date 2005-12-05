@@ -1,34 +1,32 @@
 <!-- TMPL_INCLUDE NAME="circulation-top.inc" -->
 <div id="mainbloc">
-	<h1 class="reports">Items Reserved as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<h1 class="circulation">Items Reserved as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
 	
 	<table>
 	<tr>
-		<th class="reports"><a href="/cgi-bin/koha/circ/reserve.pl?order=date&amp;type=intranet">reserve Date</a> </th>
-		<th class="reports"><a href="/cgi-bin/koha/circ/reserve.pl?order=borrower&amp;type=intranet">Patron</a></th>
-		<th class="reports"><a href="/cgi-bin/koha/circ/reserve.pl?order=biblio&amp;type=intranet">Title</a></th>
-		<th class="reports">Author</th>
-		<th class="reports">Priority</th>
-		<th class="reports">Phone</th>
-		<th class="reports">email</th>
-		<th class="reports">Notes</th>
-		<th class="reports">Notification date</th>
-		<th class="reports">Reminder date</th>
+		<th class="circulation">Reserve Date  <a href="/cgi-bin/koha/circ/reserve.pl?order=date&amp;type=intranet">Sort</a> </th>
+		<th class="circulation">Patron  <a href="/cgi-bin/koha/circ/reserve.pl?order=borrower&amp;type=intranet">Sort</a></th>
+		<th class="circulation">Title  <a href="/cgi-bin/koha/circ/reserve.pl?order=biblio&amp;type=intranet">Sort</a></th>
+		<th class="circulation">Reserve Branch</th>
+		<th class="circulation">Location</th>
+		<th class="circulation">Priority</th>
+		<th class="circulation">Notes</th>
+		<th class="circulation">Status</th>
 	</tr>
 	
 	<!-- TMPL_LOOP NAME="reserveloop" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="reservedate" --></td>
-			<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="bornum"-->"><!-- TMPL_VAR NAME="name" --></a></td>
-			<td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></td>
-			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="bornum"-->"><!-- TMPL_VAR NAME="name" --></a><br /><!-- TMPL_VAR NAME="phone" --><br />
+			<!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+<!-- TMPL_VAR NAME="email" --></a><!--/TMPL_IF--></td>
+			<td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><br /><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="branch" --></td>
+			<td><!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
 			<td><!-- TMPL_VAR NAME="priority" --></td>
-			<td><!-- TMPL_VAR NAME="phone" --></td>
-			<td><!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
-<!-- TMPL_VAR NAME="email" --></a><!-- TMPL_ELSE -->&nbsp;<!--/TMPL_IF--></td>
+
 			<td><!-- TMPL_VAR NAME="notes" --></td>
-			<td><!-- TMPL_VAR NAME="notificationdate" --></td>
-			<td><!-- TMPL_VAR NAME="reminderdate" --></td>
+			<td><!-- TMPL_IF NAME="statusw" -->Waiting<!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" -->Fullfilled<!-- /TMPL_IF --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
