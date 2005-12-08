@@ -88,7 +88,7 @@ sub plugin {
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			    });
 		#get bibid

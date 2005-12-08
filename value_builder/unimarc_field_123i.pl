@@ -76,7 +76,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 	my $f1 = substr($result,0,1);

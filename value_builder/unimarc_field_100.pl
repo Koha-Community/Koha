@@ -76,7 +76,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 	$result='        d        u  y0frey03      ba' unless $result;

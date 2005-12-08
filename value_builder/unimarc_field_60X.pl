@@ -102,7 +102,7 @@ sub plugin {
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {parameters => 1},
+					flagsrequired => {editcatalogue => 1},
 					debug => 1,
 					});
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
