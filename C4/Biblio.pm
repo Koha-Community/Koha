@@ -602,7 +602,10 @@ sub MARCmarc2kohaOneField {
     foreach my $field ( $record->field($tagfield) ) {
 		if ($field->tag()<10) {
 			if ($result->{$kohafield}) {
-				$result->{$kohafield} .= " | ".$field->data();
+				# Reverse array filled with elements from repeated subfields 
+				# from first to last to avoid last to first concatenation of 
+				# elements in Koha DB.  -- thd.
+				$result->{$kohafield} .= " | ".reverse($field->data());
 			} else {
 				$result->{$kohafield} = $field->data();
 			}
@@ -2881,7 +2884,13 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.132  2005/10/26 09:12:33  tipaul
+# Revision 1.133  2005/12/12 14:25:51  thd
+#
+#
+# Reverse array filled with elements from repeated subfields
+# to avoid last to first concatenation of elements in Koha DB.-
+#
+# Revision 1.132  2005-10-26 09:12:33  tipaul
 # big commit, still breaking things...
 #
 # * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
