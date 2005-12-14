@@ -100,7 +100,10 @@ for (my $i=0; $i < $count; $i++){
         branchcode => $results->[$i]{'branchcode'},
         odissue => "$od/$issue",
         fines => $fines,
-        borrowernotes => $results->[$i]{'borrowernotes'});
+        borrowernotes => $results->[$i]{'borrowernotes'},
+        sort1 => $results->[$i]{'sort1'},
+        sort2 => $results->[$i]{'sort2'},
+        );
   if ( $background ) { $background = 0; } else {$background = 1; }
   push(@resultsdata, \%row);
 }
