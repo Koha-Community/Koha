@@ -221,7 +221,7 @@ sub catalogsearch {
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g if @$operator[$i] eq "contains";
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/|--)/ /g if @$operator[$i] eq "contains";
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
@@ -230,9 +230,8 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))	# if operator is contains, splits the words in separate requests
 				{
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-# 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
+					unless (C4::Context->stopwords->{uc($word)} or length($word)<=1) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
 						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 						push @not_operator, @$operator[$i];
@@ -255,9 +254,9 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))
 				{
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-# 					warn "word : $word";
+					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
+					unless (C4::Context->stopwords->{uc($word)} or length($word)<=1) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @normal_tags, @$tags[$i];
 						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
 						push @normal_operator, @$operator[$i];
