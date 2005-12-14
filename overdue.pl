@@ -37,7 +37,6 @@ my $itemtypefilter=$input->param('itemtype');
 my $borflagsfilter=$input->param('borflags');
 my $branchfilter=$input->param('branch');
 my $showall=$input->param('showall');
-warn "shoall :".$showall;
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 
 my ($template, $loggedinuser, $cookie)
@@ -138,7 +137,7 @@ $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surna
 $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
 $strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
 $strsth.=" && borrowers.flags = '".$borflagsfilter."' " if ($borflagsfilter ne " ") ;
-$strsth.=" && issues.issuingbranch = '".$branchfilter."' " if($branchfilter) ;
+$strsth.=" && issues.branchcode = '".$branchfilter."' " if($branchfilter) ;
 # my $bornamefilter=$input->param('borname');
 # my $borcatfilter=$input->param('borcat');
 # my $itemtypefilter=$input->param('itemtype');
@@ -151,7 +150,7 @@ if ($order eq "borrower"){
 	$strsth.=" order by date_due,borrower ";
 }
 my $sth=$dbh->prepare($strsth);
-warn "".$strsth;
+# warn "".$strsth;
 $sth->execute();
 
 my @overduedata;
