@@ -45,6 +45,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 <!-- ACQUISITION -->
 <div id="Subm1"> 
   <a href="/cgi-bin/koha/acqui/acqui-home.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">Main page</a>
+  <a href="/cgi-bin/koha/acqui/lateorders.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">Late orders</a>
   <a href="/cgi-bin/koha/acqui/histsearch.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">History search</a>
 </div>
 
