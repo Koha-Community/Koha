@@ -883,12 +883,25 @@ sub MARCkoha2marcBiblio {
     if ( $biblionumber > 0 ) {
         my $sth2 =
           $dbh->prepare(
-"select biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
+"select biblionumber,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
 		from biblio where biblionumber=?"
         );
         $sth2->execute($biblionumber);
         my $row = $sth2->fetchrow_hashref;
         my $code;
+        foreach $code ( keys %$row ) {
+            if ( $row->{$code} ) {
+                &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
+                    $row->{$code}, '');
+            }
+        }
+        #for an unknown reason, mysql fetchrow_hashref returns author BEFORE the title, even if you want it after
+        # that makes a problem for UNIMARC where we have 200 $atitle $fauthor => the record appears $f $a.
+        # this dirty hack fixes the problem
+        $sth2 = $dbh->prepare("select author from biblio where biblionumber=?");
+        $sth2->execute($biblionumber);
+        $row = $sth2->fetchrow_hashref;
+        $code;
         foreach $code ( keys %$row ) {
             if ( $row->{$code} ) {
                 &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
@@ -1874,7 +1887,7 @@ sub OLDmoditem {
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
     my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
     my @bind = (
-        $item->{'barcode'},			$item->{'notes'},
+        $item->{'barcode'},			$item->{'itemnotes'},
         $item->{'itemcallnumber'},	$item->{'notforloan'},
         $item->{'location'},		$item->{multivolumepart},
 		$item->{multivolume},		$item->{stack},
@@ -1886,7 +1899,7 @@ sub OLDmoditem {
 				 			location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
-            $item->{'notes'},          $item->{'homebranch'},
+            $item->{'itemnotes'},          $item->{'homebranch'},
             $item->{'lost'},           $item->{'wthdrawn'},
             $item->{'itemcallnumber'}, $item->{'notforloan'},
             $item->{'location'},		$item->{multivolumepart},
@@ -2166,11 +2179,14 @@ sub newbiblioitem {
     my $bibitemnum = &OLDnewbiblioitem( $dbh, $biblioitem );
 
     my $MARCbiblio =
-      MARCkoha2marcBiblio( $dbh, 0, $bibitemnum )
-      ; # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
+      MARCkoha2marcBiblio( $dbh, $biblioitem->{biblionumber}, $bibitemnum );
+      # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
     my $bibid =
       &MARCfind_MARCbibid_from_oldbiblionumber( $dbh,
         $biblioitem->{biblionumber} );
+    # delete biblio, as we will reintroduce it the line after
+    # the biblio is complete from MARCkoha2marcBiblio (3 lines before)
+    &MARCdelbiblio($dbh,$bibid,1);
     &MARCaddbiblio( $dbh, $MARCbiblio, $biblioitem->{biblionumber}, '',$bibid );
     return ($bibitemnum);
 }
@@ -2755,6 +2771,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.26  2005/12/14 13:08:47  tipaul
+# * fix for items.notes that is not correctly handled in the non-MARC part of the DB
+# * for an unknown reason, mysql fetchrow_hashref returns author BEFORE the title, even if you want it after that makes a problem for UNIMARC where we have 200 $atitle $fauthor => the record appears $f $a.
+# * handling better biblio/biblioitems creation from an acquisition : the biblio is deleted & recreated to avoid strange things like a repeated 200 field in UNIMARC.
+#
 # Revision 1.115.2.25  2005/10/28 13:46:50  doxulting
 # There was a bug : Even if you erased the marc field linked to additionalauthors.authors the additionalauthors stayed in database. Now : delete before recreating
 #
