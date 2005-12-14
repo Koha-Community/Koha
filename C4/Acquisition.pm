@@ -108,7 +108,7 @@ number of elements in C<@orders>.
 sub getbasketcontent {
 	my ($basketno,$supplier,$orderby)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="Select biblio.*,biblioitems.*,aqorders.*,aqorderbreakdown.*,biblio.title from aqorders,biblio,biblioitems
+	my $query="Select aqorderbreakdown.*,biblio.*,biblioitems.*,aqorders.*,biblio.title from aqorders,biblio,biblioitems
 	left join aqorderbreakdown on aqorderbreakdown.ordernumber=aqorders.ordernumber
 	where basketno='$basketno'
 	and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
@@ -625,6 +625,7 @@ sub getlateorders {
 	my $hilighted = 1;
 	while (my $data = $sth->fetchrow_hashref) {
 		$data->{hilighted}=$hilighted if ($hilighted>0);
+		$data->{orderdate} = format_date($data->{orderdate});
 		push @results, $data;
 		$hilighted= -$hilighted;
 	}
