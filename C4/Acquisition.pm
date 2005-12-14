@@ -580,10 +580,10 @@ sub getlateorders {
 #	warn " $dbdriver";
 	if ($dbdriver eq "mysql"){
 		$strsth ="SELECT aqbasket.basketno,
-					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
-					aqorders.quantity * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
+					DATE(aqbasket.closedate) as orderdate, aqorders.quantity - IFNULL(aqorders.quantityreceived,0) as quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
+					(aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
 					aqbooksellers.name as supplier,
-					biblio.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
+					aqorders.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
 					DATEDIFF(CURDATE( ),closedate) AS latesince
 					FROM 
 						((	(
@@ -596,7 +596,7 @@ sub getlateorders {
 		$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
 		$strsth .= " AND borrowers.branchcode like \'".$branch."\'" if ($branch);
 		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv && C4::Context->userenv->{flags}!=1);
-		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+		$strsth .= " HAVING quantity<>0 AND unitpricesupplier<>0 AND unitpricelib<>0 ORDER BY latesince,basketno,borrowers.branchcode, supplier ";
 	} else {
 		$strsth ="SELECT aqbasket.basketno,
 					DATE(aqbasket.closedate) as orderdate, 
@@ -618,7 +618,7 @@ sub getlateorders {
 		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
 		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
 	}
-#	warn "C4::Acquisition : getlateorders SQL:".$strsth;
+	warn "C4::Acquisition : getlateorders SQL:".$strsth;
 	my $sth = $dbh->prepare($strsth);
 	$sth->execute;
 	my @results;
@@ -736,12 +736,12 @@ sub histsearch {
 	my ($title,$author,$name,$from_placed_on,$to_placed_on)=@_;
 	my @order_loop;
 	my $total_qty=0;
+	my $total_qtyreceived=0;
 	my $total_price=0;
 	# don't run the query if there are no parameters (list would be too long for sure !
 	if ($title || $author || $name || $from_placed_on || $to_placed_on) {
 		my $dbh= C4::Context->dbh;
-		my $query = "select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
-		
+		my $query = "select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.quantityreceived, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
 		$query .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
 		$query .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
 		$query .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
@@ -757,6 +757,7 @@ sub histsearch {
 			}
 		}
 		$query .=" order by booksellerid";
+		warn "query histearch: ".$query;
 		my $sth = $dbh->prepare($query);
 		$sth->execute;
 		my $cnt=1;
@@ -767,10 +768,11 @@ sub histsearch {
 			$line->{creationdate} = format_date($line->{creationdate});
 			$line->{datereceived} = format_date($line->{datereceived});
 			$total_qty += $line->{'quantity'};
+			$total_qtyreceived += $line->{'quantityreceived'};
 			$total_price += $line->{'quantity'}*$line->{'ecost'};
 		}
 	}
-	return \@order_loop,$total_qty,$total_price;;
+	return \@order_loop,$total_qty,$total_price,$total_qtyreceived;
 }
 
 #
