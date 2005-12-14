@@ -254,7 +254,6 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))
 				{
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)} or length($word)<=1) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @normal_tags, @$tags[$i];
