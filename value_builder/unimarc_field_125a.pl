@@ -82,7 +82,7 @@ my ($template, $loggedinuser, $cookie)
 	my $f1 = substr($result,0,1);
 	my $f2 = substr($result,1,1);
 	$template->param(index => $index,
-			 "f1$f1" => $f1,"f2$f2" => $f2);
+			 "f1$f1" => 1,"f2$f2" => 1);
 	print $input->header(-cookie => $cookie),$template->output;
 }
 

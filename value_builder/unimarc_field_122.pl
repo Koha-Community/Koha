@@ -85,7 +85,7 @@ my ($template, $loggedinuser, $cookie)
 	my $f4 = substr($result,7,2);
 	my $f5 = substr($result,9,2);
 	$template->param(index => $index,
-							"f1$f1" => $f1,
+							"f1$f1" => 1,
 							f2 => $f2,
 							f3 => $f3,
 							f4 => $f4,
