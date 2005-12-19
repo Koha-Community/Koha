@@ -13,7 +13,7 @@
 		<br>
 		<table>
 			<tr >
-				<th class="reports">Num/Items</th>
+				<th class="reports">Barcode/Titles</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
@@ -24,7 +24,9 @@
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="title" --><b><!-- TMPL_VAR NAME="title" --></b><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="barcode" --> <i><!-- TMPL_VAR NAME="barcode" --></i><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
@@ -70,13 +72,29 @@
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Branch</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All branches</option>
+						<!-- TMPL_LOOP name="branchloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="branchname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Document Type</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All Item Types</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 		</tbody>
 	</table>
