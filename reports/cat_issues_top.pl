@@ -133,10 +133,50 @@ if ($do_it) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
+	#branch
+	my $branches = getallbranches;
+	my @branchloop;
+	foreach my $thisbranch (keys %$branches) {
+# 			my $selected = 1 if $thisbranch eq $branch;
+			my %row =(value => $thisbranch,
+# 									selected => $selected,
+									branchname => $branches->{$thisbranch}->{'branchname'},
+							);
+			push @branchloop, \%row;
+	}
+
+	#doctype
+	my $itemtypes = getitemtypes;
+	my @itemtypeloop;
+	foreach my $thisitemtype (keys %$itemtypes) {
+# 			my $selected = 1 if $thisbranch eq $branch;
+			my %row =(value => $thisitemtype,
+# 									selected => $selected,
+									description => $itemtypes->{$thisitemtype}->{'description'},
+							);
+			push @itemtypeloop, \%row;
+	}
 	
+	#borcat
+ 	my ($codes,$labels) = borrowercategories;
+ 	my @borcatloop;
+ 	foreach my $thisborcat (sort keys %$labels) {
+ # 			my $selected = 1 if $thisbranch eq $branch;
+ 			my %row =(value => $thisborcat,
+ # 									selected => $selected,
+ 									description => $labels->{$thisborcat},
+ 							);
+ 			push @borcatloop, \%row;
+ 	}
+	
+	#Day
+	#Month
 	$template->param(
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					branchloop =>\@branchloop,
+					itemtypeloop =>\@itemtypeloop,
+					borcatloop =>\@borcatloop,
 					);
 output_html_with_http_headers $input, $cookie, $template->output;
 }

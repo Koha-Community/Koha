@@ -220,31 +220,82 @@ function Dopop(link) {
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Branch</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All branches</option>
+						<!-- TMPL_LOOP name="branchloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="branchname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Document Type</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All Item Types</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr class="hilighted">
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Borrower Category</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All Borrower Categories</option>
+						<!-- TMPL_LOOP name="borcatloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Day</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">Any Day</option>
+						<option value="Monday">Monday</option>
+						<option value="Tuesday">Tuesday</option>
+						<option value="Wednesday">Wednesday</option>
+						<option value="Thursday">Thursday</option>
+						<option value="Friday">Friday</option>
+						<option value="Saturday">Saturday</option>
+						<option value="Sunday">Sunday</option>
+					</select>
+				</td>
 			</tr>
 			<tr class="hilighted">
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Month</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">Any Month</option>
+						<option value="January">January</option>
+						<option value="February">February</option>
+						<option value="March">March</option>
+						<option value="April">April</option>
+						<option value="May">May</option>
+						<option value="June">June</option>
+						<option value="July">July</option>
+						<option value="August">August</option>
+						<option value="September">September</option>
+						<option value="October">October</option>
+						<option value="November">November</option>
+						<option value="December">December</option>
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
