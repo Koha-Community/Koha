@@ -1424,6 +1424,7 @@ $dbh->do('ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( frameworkcode, tagfie
 $dbh->do('ALTER TABLE marc_subfield_structure drop primary key');
 $dbh->do('ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( frameworkcode, tagfield, tagsubfield )');
 
+$dbh->do("alter table marc_subfield_table change tagorder tagorder int not null default '1'");
 # Get list of columns from marc_word table
 my %marc_word;
 my %nullenabled;
@@ -1444,6 +1445,36 @@ if ($marc_word{subfieldid}) {
 	$dbh->do("create index Search_Marc on marc_word (tagsubfield,word)");
 }
 # Populate tables with required data
+
+
+# synch table and deletedtable.
+foreach my $table (('borrowers','items','biblio','biblioitems')) {
+	my %deletedborrowers;
+	print "synch'ing $table\n";
+	$sth = $dbh->prepare("show columns from deleted$table");
+	$sth->execute;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		$deletedborrowers{$column}=1;
+	}
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute;
+	my $previous;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		unless ($deletedborrowers{$column}) {
+			my $newcol="alter table deleted$table add $column $type";
+			if ($null eq 'YES') {
+				$newcol .= " NULL ";
+			} else {
+				$newcol .= " NOT NULL ";
+			}
+			$newcol .= "default $default" if $default;
+			$newcol .= " after $previous" if $previous;
+			$previous=$column;
+			print "creating column $column\n";
+			$dbh->do($newcol);
+		}
+	}
+}
 
 # fill aqbasket if it's empty and aqorder is not
 # => it means it has just been created & must be filled
@@ -1538,6 +1569,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.16  2005/12/30 11:13:29  tipaul
+# * tool to synchronise TABLE and deletedTABLE structures in updatedatabase
+#
 # Revision 1.100.2.15  2005/12/05 09:50:35  tipaul
 # New systempreference : OpacPasswordChange if set to Yes (default) the user can change it's password. If set to No, he can't. Useful for libraries with LDAP auth, where the password is checked in LDAP, not in Koha, thus Koha can't change it
 #
