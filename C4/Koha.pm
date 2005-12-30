@@ -550,6 +550,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		push @languages, $language;
 	    }
 	    return sort @languages;
@@ -560,6 +562,8 @@ sub getalllanguages {
 		foreach my $language (readdir D) {
 		    next if $language=~/^\./;
 		    next if $language eq 'all';
+			next if $language=~ /png$/;
+			next if $language=~ /css$/;
 		    $lang->{$language}=1;
 		}
 	    }
@@ -573,6 +577,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		push @languages, $language;
 	    }
 	    return sort @languages;
@@ -583,6 +589,8 @@ sub getalllanguages {
 		foreach my $language (readdir D) {
 		    next if $language=~/^\./;
 		    next if $language eq 'all';
+			next if $language=~ /png$/;
+			next if $language=~ /css$/;
 		    $lang->{$language}=1;
 		}
 	    }
@@ -597,6 +605,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		$lang->{$language}=1;
 	    }
 	}
@@ -606,6 +616,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		$lang->{$language}=1;
 	    }
 	}
