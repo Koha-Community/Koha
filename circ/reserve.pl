@@ -25,6 +25,7 @@ use C4::Output;
 use CGI;
 use HTML::Template;
 use C4::Auth;
+use C4::Date;
 
 my $input = new CGI;
 my $type=$input->param('type');
@@ -80,7 +81,7 @@ my @reservedata;
 while (my $data=$sth->fetchrow_hashref) {
   push (@reservedata, 
 			{
-				reservedate  => $data->{reservedate},
+				reservedate  => format_date($data->{reservedate}),
 				priority	 => $data->{priority},
 				name         => $data->{borrower},
 				title        => $data->{title},
@@ -106,7 +107,7 @@ while (my $data=$sth->fetchrow_hashref) {
 
 $sth->finish;
 
-$template->param(		todaysdate        => $todaysdate,
+$template->param(		todaysdate        => format_date($todaysdate),
 		reserveloop       => \@reservedata );
 
 print "Content-Type: text/html\n\n", $template->output;
