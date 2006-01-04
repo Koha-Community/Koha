@@ -51,51 +51,39 @@ my $dbh = C4::Context->dbh;
 my $req;
 $req = $dbh->prepare( "select categorycode, description from categories order by description");
 $req->execute;
-my %select_catcode;
-my @select_catcode;
-push @select_catcode,"";
-$select_catcode{""} = "";
+my @borcatloop;
 while (my ($catcode, $description) =$req->fetchrow) {
-	push @select_catcode, $catcode;
-	$select_catcode{$catcode} = $description
+	my $selected = 1 if $catcode eq $borcatfilter;
+	my %row =(value => $catcode,
+				selected => $selected,
+				catname => $description,
+			);
+	push @borcatloop, \%row;
 }
-my $CGIcatcode=CGI::scrolling_list( -name     => 'borcat',
-			-id => 'borcat',
-			-values   => \@select_catcode,
-			-labels   => \%select_catcode,
-			-size     => 1,
-			-multiple => 0 );
+
 $req = $dbh->prepare( "select itemtype, description from itemtypes order by description");
 $req->execute;
-my %select_itemtype;
-my @select_itemtype;
-push @select_itemtype,"";
-$select_itemtype{""} = "";
+my @itemtypeloop;
 while (my ($itemtype, $description) =$req->fetchrow) {
-	push @select_itemtype, $itemtype;
-	$select_itemtype{$itemtype} = $description
+	my $selected = 1 if $itemtype eq $itemtypefilter;
+	my %row =(value => $itemtype,
+				selected => $selected,
+				itemtypename => $description,
+			);
+	push @itemtypeloop, \%row;
 }
-my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
-			-id => 'itemtype',
-			-values   => \@select_itemtype,
-			-labels   => \%select_itemtype,
-			-size     => 1,
-			-multiple => 0 );
-my @branches;
-my @select_branch;
-my %select_branches;
-my ($count2,@branches)=branches();
-push @select_branch,"";
-$select_branches{''}='';
-for (my $i=0;$i<$count2;$i++){
-		push @select_branch, $branches[$i]->{'branchcode'};#
-		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+
+my $branches=getbranches();
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+	my $selected = 1 if $thisbranch eq $branchfilter;
+	my %row =(value => $thisbranch,
+				selected => $selected,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
 }
-my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
-						-values   => \@select_branch,
-						-labels   => \%select_branches,
-						-size     => 1,
-						-multiple => 0 );
+
 my @selectflags;
 push @selectflags, " ";#
 push @selectflags,"gonenoaddress";#
@@ -104,14 +92,14 @@ push @selectflags,"lost";#
 my $CGIflags=CGI::scrolling_list( -name     => 'borflags',
 						-id =>'borflags',
  						-values   => \@selectflags,
-# 						-labels   => \%selectflags,
 						-size     => 1,
 						-multiple => 0 );
-$template->param(CGIcatcodes        => $CGIcatcode,
-					CGIitemtypes    => $CGIitemtype,
-					CGIbranches     => $CGIbranch,
+$template->param(borcatloop=> \@borcatloop,
+					itemtypeloop => \@itemtypeloop,
+					branchloop=> \@branchloop,
 					CGIflags     => $CGIflags,
 					borname => $bornamefilter,
+					order => $order,
 					showall => $showall);
 
 my $duedate;
