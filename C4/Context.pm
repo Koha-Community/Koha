@@ -408,8 +408,12 @@ sub _new_dbh
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
 	my $db_passwd = $context->{"config"}{"pass"};
-	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
+	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
+	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
+	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
+	$dbh->do("set NAMES 'utf8'");
+	return $dbh;
 }
 
 =item dbh

@@ -277,10 +277,10 @@ sub MARCgetbiblio {
 
     # Returns MARC::Record of the biblio passed in parameter.
     my ( $dbh, $biblionumber ) = @_;
-	my $sth = $dbh->prepare('select marc from biblioitems where biblionumber=?');
+	my $sth = $dbh->prepare('select marcxml from biblioitems where biblionumber=?');
 	$sth->execute($biblionumber);
 	my ($marc) = $sth->fetchrow;
-	my $record = MARC::File::USMARC::decode($marc);
+	my $record = MARC::Record::new_from_xml($marc);
     return $record;
 }
 
@@ -2884,6 +2884,14 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.134  2006/01/04 15:54:55  tipaul
+# utf8 is a : go for beta test in HEAD.
+# some explanations :
+# - updater/updatedatabase => will transform all tables in innoDB (not related to utf8, just to warn you) AND collate them in utf8 / utf8_general_ci. The SQL command is : ALTER TABLE tablename DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci.
+# - *-top.inc will show the pages in utf8
+# - THE HARD THING : for me, mysql-client and mysql-server were set up to communicate in iso8859-1, whatever the mysql collation ! Thus, pages were improperly shown, as datas were transmitted in iso8859-1 format ! After a full day of investigation, someone on usenet pointed "set NAMES 'utf8'" to explain that I wanted utf8. I could put this in my.cnf, but if I do that, ALL databases will "speak" in utf8, that's not what we want. Thus, I added a line in Context.pm : everytime a DB handle is opened, the communication is set to utf8.
+# - using marcxml field and no more the iso2709 raw marc biblioitems.marc field.
+#
 # Revision 1.133  2005/12/12 14:25:51  thd
 #
 #

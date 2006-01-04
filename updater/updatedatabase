@@ -545,6 +545,22 @@ unless ($marcdone) {
 	print "\rdone\n";
 }
 
+# MOVE all tables TO UTF-8 and innoDB
+$sth = $dbh->prepare("show table status");
+$sth->execute;
+while ( my $table = $sth->fetchrow_hashref ) {
+	if ($table->{Engine} ne 'InnoDB') {
+		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+		print "moving $table->{Name} to InnoDB\n";
+	}
+	unless ($table->{Collation} =~ /^utf8/) {
+		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
+		print "moving $table->{Name} to utf8\n";
+	} else {
+	}
+}
+
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
 	my @fields = split /,/,$uselessfields{$table};
@@ -737,6 +753,14 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.125  2006/01/04 15:54:55  tipaul
+# utf8 is a : go for beta test in HEAD.
+# some explanations :
+# - updater/updatedatabase => will transform all tables in innoDB (not related to utf8, just to warn you) AND collate them in utf8 / utf8_general_ci. The SQL command is : ALTER TABLE tablename DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci.
+# - *-top.inc will show the pages in utf8
+# - THE HARD THING : for me, mysql-client and mysql-server were set up to communicate in iso8859-1, whatever the mysql collation ! Thus, pages were improperly shown, as datas were transmitted in iso8859-1 format ! After a full day of investigation, someone on usenet pointed "set NAMES 'utf8'" to explain that I wanted utf8. I could put this in my.cnf, but if I do that, ALL databases will "speak" in utf8, that's not what we want. Thus, I added a line in Context.pm : everytime a DB handle is opened, the communication is set to utf8.
+# - using marcxml field and no more the iso2709 raw marc biblioitems.marc field.
+#
 # Revision 1.124  2005/10/27 12:09:05  tipaul
 # new features for serial module :
 # - the last 5 issues are now shown, and their status can be changed (but not reverted to "waited", as there can be only one "waited")

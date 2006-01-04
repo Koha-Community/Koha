@@ -15,7 +15,7 @@
 </script>
 <!-- /Additions for Calendar-system -->
 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <script language="JavaScript" type="text/javascript">
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
