@@ -3,15 +3,28 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
 <div id="main"><h1>MARC Export</h1>
-<div class="details"><h4>Export in MARC format the following biblios:</h4>
-<form method="post">
-<p>From biblio number: <input type="text" name="start_bib" />
-to biblio number: <input type="text" name="end_bib" /></p>
-<p>(leave blank to export every biblio)</p>
-<input type="hidden" name="op" value="export" />
-<input type="submit" value="Export" class="submit" />
-</form></div>
-<p>Note : the items are NOT exported by this tool</p>
+<div class="data">
+<form method="post" action="/cgi-bin/koha/export/marc.pl">
+<table>
+<caption>Select biblios to export</caption>
+<tr><th scope="row">From biblio number:</th><td><input type="text" name="start_bib"></td></tr>
+<tr><th scope="row">...to biblio number:</th><td><input type="text" name="end_bib"></td></tr>
+<tr><th scope="row">Item Type: </th><td><!--TMPL_VAR Name="CGIitemtype"--></td></tr>
+<tr><th scope="row">Branch:</th><td><select name="branch">
+			<option value="">Default</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select></td></tr>
+<tr><th scope="row">From itemcallnumber:</th><td><input type="text" name="start_callnumber"></td></tr>
+<tr><th scope="row">...to itemcallnumber:</th><td><input type="text" name="end_callnumber"></td></tr>
+<tr><th scope="row">Limit to: </th><td><input type="text" name="limit"> first biblio</td></tr>
+</table></div>
+<p>Note: the items are NOT exported by this tool</p>
+<p>			<input type="hidden" name="op" value="export">
+			<input type="submit" value="Export" class="submit"></p>
+		</form>
 
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
