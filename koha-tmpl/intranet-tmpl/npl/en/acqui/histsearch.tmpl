@@ -14,6 +14,7 @@
 			<th>Placed on</th>
 			<th>Recieved on</th>
 			<th>Quantity ordered</th>
+			<th>Quantity received</th>
 			<th>Unit cost</th>
 			<th>&nbsp;</th>
 		</tr>
@@ -82,6 +83,7 @@
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
+				<th>&nbsp;</th>
 				<th><input type="submit" class="submit" value="Set Filter" /></th>
 		</tr></thead>
 		<tfoot><tr>
@@ -90,7 +92,9 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 			<td class="total"><!-- TMPL_VAR name="total_qty" --></td>
+			<td class="total"><!-- TMPL_VAR name="total_qtyreceived" --></td>
 			<td class="total"><!-- TMPL_VAR name="total_price" --></td>
 			<td>&nbsp;</td>
 		</tr></tfoot>
@@ -108,6 +112,7 @@
 				<td><!-- TMPL_VAR name="creationdate" --></td>
 				<td><!-- TMPL_VAR name="datereceived" --></td>
 				<td><!-- TMPL_VAR name="quantity" --></td>
+				<td><!-- TMPL_VAR NAME="quantityreceived" --></td>
 				<td class="credit"><!-- TMPL_VAR name="ecost" --></td>
 				<td>&nbsp;</td>
 			</tr>
