@@ -9,7 +9,7 @@ var index_start = <!-- TMPL_VAR NAME="index" -->;
 var whichfield = opener.opener.document.f.tag[index_start].value;
 i=index_start
 // go forward, until reaching the end of the field.
-while (i<=opener.opener.document.f.field_value.length) {
+while (i<opener.opener.document.f.field_value.length) {
 	if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
 		opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="authid">";
 	}

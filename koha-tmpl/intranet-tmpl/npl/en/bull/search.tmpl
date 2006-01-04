@@ -18,6 +18,18 @@
 				<option value="50">50</option>
 				<option value="100">100</option>
 			</select></td></tr>
+			
+		<tr><th>
+			<label for="itemtype">Itemtype</label></th><td>
+			<!-- TMPL_VAR name="CGIitemtype" -->
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="category" -->" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->" />
+		</td></tr>
+			
 		<tr><th><label for="orderby">Order by:</label></th><td><select name="orderby" id="orderby" size="1">
 				<option value="biblio.title">Title</option>
 				<option value="biblio.author">Author</option>
