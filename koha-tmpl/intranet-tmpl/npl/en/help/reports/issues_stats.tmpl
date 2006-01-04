@@ -1,0 +1,48 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Online Help: Circulation Statistics<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="main-compact">
+
+<h1>Circulation Statistics</h1>
+<p>This page is to be used as a wizard to compose two entries table stats on issues.</p>
+<p>You must bear in mind what the table will look like :</p>
+<p>	<table>
+	<tr> <th> row/colunm </th> <th> column criteria1 </th> <th> column criteria2 </th> <th> total rows</th> </tr>
+	<tr> <td> row criteria1</td> <td> count11 </td> <td> count12 </td> <td>total row1 </td> </tr>
+	<tr> <td> row criteria2</td> <td> count21 </td> <td> count22 </td> <td>total row2 </td> </tr>
+<tfoot>	<tr> <td> Total cols</td> <td> total col1</td> <td> total col2</td> <td> Global total</td> </tr></tfoot>
+	</table></p>
+<p>	For instance, if you choose to check row for Borrower Category Column for Branches, you will be displayed a table containing the different borrowers categorycodes on rows, and different branchcodes on columns as such :
+</p><p>	<table>
+	<tr> <th> catcode/branchcode </th> <th> BranchA</th> <th> BranchB</th> <th> total </th> </tr>
+	<tr> <td> A</td> <td> 12 </td> <td> 22 </td> <td>34</td> </tr>
+	<tr> <td> C</td> <td> 11</td> <td> 12 </td> <td>23</td> </tr>
+	<tr> <td> I</td> <td> 21</td> <td> 22</td> <td>43</td> </tr>
+	<tfoot><tr> <td> Total </td> <td> 44</td> <td> 56</td> <td> 100</td> </tr></tfoot>
+	</table>
+</p><p>	You can choose to display the results on screen or get them in your office suite (would it be gnucalc, oocalc, or another calc) with the radio button display. You can change the set of the file generated changing Export in the textarea.
+</p>
+<p>
+ <h2> Criteria on row/column</h2>
+ <li>You can choose Branch, itemtype or borrower category.</li>
+ <li>Period you can select whether you want it to be issue or return period. </li>
+ <li>You can group results by day, by Month, by year. </li>
+ </ul>
+ 
+</p>
+<p>
+ <h2> Filters </h2>
+ <ul> <li>You can filter period in a From/to calendar.</li>
+ <li>You can choose to see only One day on the period, or one month.</li>
+ <li>You can filter on itemtypes, branch or borrowers category.</li>
+ <li>Branches itemtypes and borrowers category are chosen in a select list.</li>
+ </ul>
+</p>
+<p>
+ <h2> Cell Value</h2>
+<p> You can choose to count 
+ <ul> <li>distinct borrowers</li>
+ <li>distinct items</li>
+ <li>distinct issues (that is one borrower, one item)</li>
+ <li>circulation rate (rate items issued out of total number of items)</li>
+ </ul>
+</p>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
