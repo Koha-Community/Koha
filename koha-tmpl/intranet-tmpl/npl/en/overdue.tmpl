@@ -1,16 +1,50 @@
-<!-- TMPL_INCLUDE NAME="main-top-print.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Overdues<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
 <div id="main"><!-- the site -->
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
 
-<div class="table"><table>
-  <tr>
-    <th>Due Date</th>
-    <th>Patron</th>
-    <th>Phone</th>
-    <th>Title</th>
-    <th>Author</th>
-  </tr>
+	<form method="post" action="/cgi-bin/koha/overdue.pl">
+<div class="data">	<table>
+	<caption>Filter Results:</caption>
+	 	<tr><th scope="row"><label for="borname">Name or cardnumber :</label></th><td><input type="text" name="borname" id="borname" value="<!--TMPL_VAR Name="borname"-->"></td></tr>
+		<tr><th scope="row"><label for="borcat">Borrower categorycode :</label></th><td><select name="borcat" id="borcat"><option value="">Any</option>
+			<!-- TMPL_LOOP name="borcatloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="">Borrower Flags :</label></th><td><!--TMPL_VAR Name="CGIflags" --></td></tr>
+	  	<tr><th scope="row"><label for="itemtype">Itemtype :</label></th><td><select name="itemtype" id="itemtype"><option value="">Any</option>
+			<!-- TMPL_LOOP name="itemtypeloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="branch">Branch :</label></th><td><select name="branch" id="branch">
+				<option value="">Any</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="showall">Show any items currently issued:</label></th><td><input type="checkbox" name="showall" id="showall" value="show" <!--TMPL_IF Name="showall"--> checked="checked"<!--/TMPL_IF-->></td></tr>
+		<tr><th scope="row"><label for="order">Sort By</label></th><td><select name="order" id="order">
+<option<!--TMPL_UNLESS name="order"--> selected="selected"<!-- /TMPL_UNLESS--> value="">Due Date</option>
+<option<!--TMPL_IF name="order"--> selected="selected"<!-- /TMPL_IF--> value="borrower">Borrower</option>
+</select></td></tr>
+</table></div>
+			<input type="submit" class="submit" value="Apply Filter" class="button reports">
+	</form>
+	</p>
+
+<table>
+	<tr>
+		<th>Due Date</th>
+		<th>Patron</th>
+		<th>Phone</th>
+		<th>Title</th>
+		<th>Author</th>
+	</tr>
 
   <!-- TMPL_LOOP NAME="overdueloop" -->
     <tr>
@@ -25,10 +59,8 @@
       <td><!-- TMPL_VAR NAME="author" --></td>
     </tr>
   <!-- /TMPL_LOOP -->
-</table></div>
+</table>
 
 </div>
 
-
-<!-- endmenu -->
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
