@@ -422,7 +422,7 @@ sub MARCaddsubfield {
 #         return;
 #     }
     if ( not($subfieldcode) ) {
-        $subfieldcode = ' ';
+        $subfieldcode = ' ' unless $subfieldcode eq '0';
     }
     my @subfieldvalues = split /\||#/, $subfieldvalues;
     foreach my $subfieldvalue (@subfieldvalues) {
@@ -2771,6 +2771,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.27  2006/01/05 15:13:55  tipaul
+# bugfix with $0 subfield
+#
 # Revision 1.115.2.26  2005/12/14 13:08:47  tipaul
 # * fix for items.notes that is not correctly handled in the non-MARC part of the DB
 # * for an unknown reason, mysql fetchrow_hashref returns author BEFORE the title, even if you want it after that makes a problem for UNIMARC where we have 200 $atitle $fauthor => the record appears $f $a.

@@ -148,7 +148,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			my @subf=$fields[$x_i]->subfields;
 	# loop through each subfield
 			for my $i (0..$#subf) {
-				$subf[$i][0] = "@" unless $subf[$i][0];
+				$subf[$i][0] = "@" unless $subf[$i][0] or $subf[$i][0] eq '0';
 				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
 				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden});
 				my %subfield_data;
