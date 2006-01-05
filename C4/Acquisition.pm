@@ -830,11 +830,11 @@ sub bookfunds {
   
   if (!($branch eq '')) {
       $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
+      =aqbudget.bookfundid and startdate<now() and enddate>now() and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
       group by aqbookfund.bookfundid order by bookfundname";
   } else {
       $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid
+      =aqbudget.bookfundid and startdate<now() and enddate>now()
       group by aqbookfund.bookfundid order by bookfundname";
   }
   my $sth=$dbh->prepare($strsth);
@@ -853,19 +853,27 @@ sub bookfunds {
 
 =item bookfundbreakdown
 
-	returns the total comtd & spent for a given bookfund
+	returns the total comtd & spent for a given bookfund, and a given year
 	used in acqui-home.pl
 =cut
 #'
 
 sub bookfundbreakdown {
-  my ($id)=@_;
+  my ($id, $year)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
-  from aqorders,aqorderbreakdown where bookfundid=? and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber
-  and (datecancellationprinted is NULL or
-  datecancellationprinted='0000-00-00')");
+  my $sth=$dbh->prepare("SELECT startdate, enddate, quantity, datereceived, freight, unitprice, listprice, ecost, quantityreceived, subscription
+FROM aqorders, aqorderbreakdown, aqbudget, aqbasket
+WHERE aqorderbreakdown.bookfundid = ?
+AND aqorders.ordernumber = aqorderbreakdown.ordernumber
+AND (
+datecancellationprinted IS NULL
+OR datecancellationprinted = '0000-00-00'
+)
+AND aqbudget.bookfundid = aqorderbreakdown.bookfundid
+AND aqbasket.basketno = aqorders.basketno
+AND aqbasket.creationdate >= startdate
+AND enddate >= aqbasket.creationdate
+and startdate<=now() and enddate>=now()");
   $sth->execute($id);
   my $comtd=0;
   my $spent=0;
