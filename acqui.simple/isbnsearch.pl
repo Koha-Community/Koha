@@ -62,7 +62,7 @@ my $dbh = C4::Context->dbh;
 	my $title= @value[0];
 	my $isbn = @value[1];
 	my $resultsperpage= $input->param('resultsperpage');
-	$resultsperpage = 5 if(!defined $resultsperpage);
+	$resultsperpage = 10 if(!defined $resultsperpage);
 	my $startfrom=$input->param('startfrom');
 	$startfrom=0 if(!defined $startfrom);
 	my $orderby = $input->param('orderby');
@@ -86,7 +86,7 @@ my $dbh = C4::Context->dbh;
 	findseealso($dbh,\@tags);
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom, $resultsperpage,'biblio.title','ASC');
+										$startfrom*$resultsperpage, $resultsperpage,'biblio.title','ASC');
 # 	@results = @$resultsref;
 
 #     my @loop_data = ();
