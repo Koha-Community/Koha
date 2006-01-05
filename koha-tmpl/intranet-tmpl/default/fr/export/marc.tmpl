@@ -6,9 +6,19 @@
 		<h2 class="parameters">Sélectionnez les notices à exporter :</h2>
 		<form method="post">
 			<p>de la notice : <input type="text" name="start_bib"> à  la notice : <input type="text" name="end_bib"></p>
-			<input type="hidden" name="op" value="export">
-			<p>(laisser des blancs pour exporter toutes les notices)</p>
+			<p>Type document : <!--TMPL_VAR Name="CGIitemtype"--></p>
+			<p>Site :  <select name="branch">
+			<option value="">Par défaut</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+</p>
+			<p>de la cote : <input type="text" name="start_callnumber"> à  la cote : <input type="text" name="end_callnumber"></p>
+			<p>Limiter aux <input type="text" name="limit"> premières notices</p>
 			<p>Remarque : les exemplaires NE SONT PAS exportés par cet outil</p>
+			<input type="hidden" name="op" value="export">
 			<input type="submit" value="Exportation" class="button">
 		</form>
 	</div>

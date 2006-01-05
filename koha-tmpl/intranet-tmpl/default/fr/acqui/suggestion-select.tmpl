@@ -9,9 +9,9 @@
 			<th class="acquisition">&nbsp;</th>
 		</tr>
 		<tr>
-			<form>
+			<form action="/cgi-bin/koha/acqui/suggestion-select.pl" method="get">
 				<th class="acquisition">
-					<p>Filtre sur : titre : <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->"> auteur : <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->"> éditeur : <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
+					<p>Sélectionner sur : titre : <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->"> auteur : <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->"> éditeur : <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
 				</th>
 				<th class="acquisition">
 					&nbsp;
@@ -20,7 +20,7 @@
 					&nbsp;
 				</th>
 				<th class="acquisition">
-					<input type="submit" class="button acquisition" value="Filtrer">
+					<input type="submit" class="button acquisition" value="Sélectionner">
 				</th>
 			</form>
 		</tr>
@@ -41,7 +41,7 @@
 					<!-- TMPL_VAR NAME="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamesuggestedby" -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR NAME="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+					<!-- TMPL_VAR NAME="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_IF name="biblionumber" -->
@@ -53,6 +53,5 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	<form>
 </div>
 <!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

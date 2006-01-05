@@ -95,8 +95,8 @@
 			<p><label>&nbsp;</label><input type="submit" value="OK" class="button"></p>
 		</div>
 		<div id="bloc25">
-			<h2 class="parameters">Interne à Koha (vous ne devriez pas avoir de raisons pour modifier les valeurs par défaut suivantes)</h2>
-			<p>Type de variable : <input type="text" name="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40">  (Choice, YesNo,Integer,Textarea,Float,Themes, Languages)</p>
+			<h2 class="parameters">Interne à Koha (vous ne devriez pas avoir de raison de modifier les valeurs par défaut suivantes)</h2>
+			<p> Type de variable : <input type="text" name="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40">  (Choice, YesNo,Integer,Textarea,Float,Themes, Languages)</p>
 			Options de la variable : <input type="text" name="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="80" maxlength="80"> (liste de choix pour Choice (séparé par |) et colonnes|lignes pour Textarea)
 		</div>
 		</form>
@@ -135,11 +135,82 @@
 	
 	<!-- TMPL_IF NAME="else" -->
 	<h1>Gestion des préférences système</h1>
-	<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
-		<input type="text" name="searchfield" value="">
-		<input type="reset" name="reset" value="eff">
-	</form>
-	<!-- TMPL_VAR NAME="searchfield" -->
+	<table>
+		<tr>
+			<td>
+				<!--TMPL_IF Name="Admin"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="button">Admin
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Acquisitions"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="button">Acquisitions
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Authorities"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="button">Autorités
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Autorités
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Catalogue"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="button">Catalogue
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Circulation"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="button">Prêt
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Prêt
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Members"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="button">Lecteurs
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Lecteurs
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="OPAC"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="button">OPAC
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Others"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="button">Autres
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Autres
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+	</table>
 	<table border="0" cellspacing="0" cellpadding="2">
 	<tr valign="top" bgcolor="#99cc33">
 		<th>Variable</th>

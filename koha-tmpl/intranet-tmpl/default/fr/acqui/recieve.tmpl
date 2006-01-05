@@ -3,14 +3,14 @@
 <div id="mainbloc">
 	<h1 class="acquisition">
 		<!-- TMPL_IF name="invoice" -->
-			Résumé de livraison pour <i><!-- TMPL_VAR NAME="name" --></i> Facture <i><!-- TMPL_VAR NAME="invoice" --></i>
+			Récapitulatif de réception pour <i><!-- TMPL_VAR NAME="name" --></i> Facture/BL <i><!-- TMPL_VAR NAME="invoice" --></i>
 		<!-- TMPL_ELSE -->
 			Commandes en attente pour <!-- TMPL_VAR NAME="name" -->
 		<!-- /TMPL_IF -->
 	</h1>
 	
 	<div id="bloc25">
-		Facture : <!-- TMPL_VAR NAME="invoice" --><br>
+		Facture/BL : <!-- TMPL_VAR NAME="invoice" --><br>
 		Reçu Par : <!-- TMPL_VAR NAME="user" --><br>
 		<!-- TMPL_VAR NAME="date" -->
 	</div>
@@ -64,9 +64,7 @@
 		<tr>
 			<td colspan="5" rowspan=2  bgcolor="#ffdf61">
 			<b>AIDE</b>
-			<br>
-			Le total en bas de la page devra être proche de quelques centimes du total de la facture.<p>
-			Lorsque vous aurez fini cette facture, sauvez les modifications.
+				<p>Le total en bas de la page devra être proche de quelques centimes du total de la facture.</p>
 			</td>
 			<td colspan="2" align="right"><b>TVA</b></td>
 			<td><!-- TMPL_VAR NAME="gst" --></td>

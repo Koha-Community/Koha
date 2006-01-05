@@ -32,7 +32,7 @@
 		</form>
 		<input type="image" name="submit" value="modifier" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
 		<input type="image" name="delete" value="supprimer" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
-		<a class="button" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Demandes</a>
+		<a class="button" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Réservations</a>
 	<!-- /TMPL_LOOP -->
 	</div>
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
@@ -54,12 +54,12 @@
 	<b>Dernier emprunteur 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
 	<b>Dernier emprunteur 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
 	<b>Prix de remplacement :</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
-	document perdu :</b> <!-- TMPL_VAR NAME="itemlost" --><br>
+	<b>Exemplaire perdu</b> <!-- TMPL_IF NAME="itemlost" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br>
 	<b>Payé pour :</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 	<b>Remarques :</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 	<b>Renouvellement :</b> <!-- TMPL_VAR NAME="renewals" --><br>
 	<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">Date d'accès:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
-	<b>Annulé :</b> <!-- TMPL_VAR NAME="wthdrawn" --><br>
+	<b> Annulé</b> <!-- TMPL_IF NAME="wthdrawn" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br>
 	<b><a
 	href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total des sorties:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
 	<b>Numéro de Groupe:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>

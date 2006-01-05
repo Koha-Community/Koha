@@ -42,6 +42,15 @@
 			if (!(layer = MM_findObj('Hint' + item))) return;
 			layer.style.visibility = 'hidden';
 		}
+		function addauthority() {
+			X = document.forms["f"].authtype.value;
+			window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
+		}
+		function searchauthority() {
+			X = document.forms["f"].authtype2.value;
+			Y = document.forms["f"].value.value;
+			window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+		}
 	</script>
 	<script language="javascript" type="text/javascript">
 	var blnOk=true;
@@ -112,14 +121,81 @@
 		<div id="Hint3" class="hint">
 			<h1 class="acquisition">Acquisitions</h1>
 			Commander des documents, receptionner des commandes, gérer des budgets...
+			<form action="/cgi-bin/koha/acqui/order.pl" method="post">
+			Nom Fournisseur : <input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button acquisition" value="OK">
+			</form>
+			<p>ou <a href="histsearch.pl" class="button acquisition">Recherche dans l'historique des commandes</a></p>
+			
 		</div>
 		<div id="Hint4" class="hint">
 			<h1 class="reports">Bilans</h1>
 			Tous les bilans du système
+			<div id="bloc25">
+			<h2 class="reports">Bilan</h2>
+			<ul>
+			<li>sur le catalogue
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/inventory.pl">Inventaire/récolement</a></p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Recherche par Type de document</a></p>
+			<li>sur les prêts
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/stats.pl?time=yesterday">Cas réglés:</a> Rapport quotidien (hier)</p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/stats.pl?time=today">Cas réglés:</a> Rapport quotidien (aujourd'hui)</p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/overdue.pl">Documents en retard</a></p>
+			</ul>
+			</div>
+			<div id="bloc25">
+			<h2 class="reports">Assistant de bilan</h2>
+			<table>
+			<tr>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></td>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/borrowers_stats.pl">Lecteurs</a></td>
+			</tr>
+			<tr>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue</a></td>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/issues_stats.pl">Prêt</a></td>
+			</tr>
+			</table>
+			</div>
+			<div id="bloc25">
+			<h2 class="reports">Les plus</h2>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/bor_issues_top.pl">Plus gros usagers</a></p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/cat_issues_top.pl">Documents les plus empruntés</a></p>
+			</div>
 		</div>
+		
 		<div id="Hint5" class="hint">
-			<h1 class="reports">Autorités</h1>
+			<h1 class="authority">Autorités</h1>
 			Gestion et recherche des autorités
+			<form name="f" >
+				<h2 >
+					<select name="authtype">
+					<!-- TMPL_LOOP NAME="authtypesloop" -->
+						<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR NAME="authtypetext" -->
+						</option>
+					<!-- /TMPL_LOOP -->
+					</select>
+					<a href="javascript:addauthority()" class="authority">Ajouter autorité</a>
+				</h2>
+				<h2>Rechercher <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->"> dans
+					<select name="authtype2">
+					<!-- TMPL_LOOP NAME="authtypesloop" -->
+						<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR NAME="authtypetext" -->
+						</option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</h2>
+				<input type="hidden" name="marclist" value="">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="hidden" name="op" value="do_search">
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
+				<a href="javascript:searchauthority()" class="authority">
+					Recherche
+				</a>
+			</form>
 		</div>
 		<div id="Hint6" class="hint">
 			<h1 class="parameters">Paramètres</h1>
@@ -130,6 +206,22 @@
 		<div id="Hint7" class="hint">
 			<h1 class="circulation">Prêt</h1>
 			A la banque de prêt, effectuez les prêts et les retours, en utilisant uniquement un lecteur de code barre et une souris
+				<h2 class="circulation">
+					Prêter
+				</h2>
+				<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+					<p>entrer le n° de carte de lecteur ou une partie du nom <input name="findborrower">
+					<input type="submit" value="OK" class="button circulation"></p>
+				</form>
+				<h2 class="circulation">
+					Date du retour
+				</h2>
+				<form method="post" action="/cgi-bin/koha/circ/returns.pl">
+				<p>Entrez le code à barres du livre</p>
+				<label class="label20">Code à Barres de l'exemplaire :</label><input name="barcode" size="10">
+				<input type="submit" value="OK" class="button circulation">
+				</form>
+
 		</div>
 <!-- MAIN MENU -->
 		<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" class="acquisition" onMouseOver="SetOn(3);">Acquisitions</a><br/>

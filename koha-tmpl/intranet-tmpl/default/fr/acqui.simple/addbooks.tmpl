@@ -10,9 +10,25 @@
 	
 	<div id="bloc25">
 		<form action="isbnsearch.pl">
-			<h2 class="catalogue">Pour ajouter une nouvelle notice/exemplaire, scannez ou entrez le code ISBN/ ISSN</h2>
-			<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
-			<p><label class="label20">Titre</label> <input type="text" name="title" /></p>
+			<h2 class="catalogue"> Pour ajouter une nouvelle notice/exemplaire, scannez ou entrez le code ISBN/ ISSN</h2>
+			<p>
+				<label class="label100" for="title">Titre</label>
+				<input type="hidden" name="marclist" value="biblio.title">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="title"size="35">
+			</p>
+			<p>
+				<label class="label100" for="title">ISBN</label>
+				<input type="hidden" name="marclist" value="biblioitems.isbn">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="start">
+				<input type="text" name="value" id="title"size="35">
+			</p>
 			<p><input type="submit" value="Lancer" class="button catalogue"></p>
 		</form>
 		<!-- TMPL_IF NAME="NOTMARC" -->
@@ -33,7 +49,7 @@
 	</div>
 	<div id="bloc25">
 		<h2 class="catalogue">Optimisation</h2>
-		<p>Si l'ISBN ou le titre est trouvé dans la table il peut être récupéré puis modifié<br/>
+		<p>Si l'ISBN ou le titre est trouvé dans la base, la notice sera retrouvée et pourra être modifiée.<br/>
 				Si l'ISBN ou le titre est trouvé dans le réservoir, il sera récupéré et une notice sera rajoutée<br/>
 				Sinon, une notice peut-être ajoutée en partant de zéro.</p>
 	</div>

@@ -3,14 +3,12 @@
 
 <h1 class="authority">Recherche autorité</h1>
 
-<form name="f" method="post">
+<form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
 	<input type="hidden" name="op" value="do_search">
 	<input type="hidden" name="type" value="intranet">
 	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
 	<div id="bloc25">
-		<h2 class="authority">Rechercher sur</h2>
-		<p>
-			<label class="label100">Type d'autorité</label>
+		<h2 class="authority">Rechercher sur
 			<select name="authtypecode">
 			<!-- TMPL_LOOP NAME="authtypesloop" -->
 				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
@@ -18,20 +16,50 @@
 				</option>
 			<!-- /TMPL_LOOP -->
 			</select>
+		</h2>
+		<p>
+			<label class="label100">Vedette</label>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="mainentry">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
 		</p>
 		<p>
-			<label class="label100">Valeur de Recherche</label>
+			<label class="label100">Partout</label>
 			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
 		</p>
 		<p>
 			<input type="submit" value="Lancer la recherche" class="button authority">
 		</p>
 	</div>
 </form>
+<div id="bloc25">
+<h2 class="authority">Ajouter autorité</h2>
+<form name="f2" method="post" action="authorities.pl">
+	<p>Type d'autorité
+	<select name="authtypecode">
+		<!-- TMPL_LOOP name="authtypesloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+				<!-- TMPL_VAR name="authtypetext" -->
+			</option>
+		<!-- /TMPL_LOOP -->
+	</select>
+	<input type="submit" value="Ajouter" class="button authority">
+	</p>
+</form>
+</div>
+
 </div>
 <!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
 

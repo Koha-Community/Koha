@@ -3,7 +3,7 @@
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
 <h1 class="bull">Abonnement pour <!-- TMPL_VAR name="bibliotitle" --></h1>
-<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Abonnement</a>
+<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="detail of the subscription">Abonnement</a> <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Abonnements</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Notice</a>
 
 <div id="bloc25">
 <h2 class="bull">Numéros attendus ou en retard</h2>
@@ -22,6 +22,9 @@
 		</th>
 		<th class="bull">
 			Etat
+		</th>
+		<th class="bull">
+			Notes
 		</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
@@ -53,14 +56,45 @@
 					<!-- TMPL_ELSE -->
 						<option value="4">Manquant</option>
 					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status5" -->
+						<option value="5" selected>Non publié</option>
+					<!-- TMPL_ELSE -->
+						<option value="5">Non publié</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status6" -->
+						<option value="6" selected>Supprimer</option>
+					<!-- TMPL_ELSE -->
+						<option value="6">Supprimer</option>
+					<!-- /TMPL_IF -->
 				</select>
+			</td>
+			<td>
+				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
+	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
+		<tr>
+			<td>
+				Bulletin hors série <input type="text" name="serialseq" size=30 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="planneddate" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="0">
+				<select name="status" size="1">
+						<option value="2">Arrivé</option>
+						<option value="3" selected>En retard</option>
+						<option value="4">Manquant</option>
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_UNLESS -->
 	</table>
 	<input type="submit" value="Enregistrer les changements" accesskey="w" class="button bull">
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
-		<p>L'abonnement a expiré.L'état du prochain numero attendu ne peut-être changé. <a href="#" onClick="popup()" class="button bull">Renouveller</a>votre abonnement</p>
+		<p>L'abonnement a expiré.L'état du prochain numero attendu ne peut-être changé. <a href="#" onClick="popup()" class="button bull">Renouveler</a>votre abonnement</p>
 	<!-- /TMPL_IF -->
 	</form>
 </div>

@@ -3,7 +3,7 @@
 
 <h1 class="authority">Recherche autorité</h1>
 
-<form name="f" method="post">
+<form name="f" action="/cgi-bin/koha/authorities/auth_finder.pl" method="post">
 	<input type="hidden" name="op" value="do_search">
 	<input type="hidden" name="type" value="intranet">
 	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
@@ -11,15 +11,29 @@
 		<h2 class="authority">Rechercher sur</h2>
 		<p>
 			<label class="label100">Type d'autorité</label>
-			<!-- TMPL_VAR NAME="category" -->
+			<!-- TMPL_VAR NAME="authtypecode" -->
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
 		</p>
 		<p>
-			<label class="label100">Valeur de Recherche</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
-			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="category" -->">
+			<label class="label100">Vedette</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
+			<input type="hidden" name="marclist" value="mainentry">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="start">commence par</option>
+				<option value="contains">contient</option>
+			</select>
+			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+		</p>
+		<p>
+			<label class="label100">Partout</label><input type="text" name="value">
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
 			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 		</p>
 		<p>

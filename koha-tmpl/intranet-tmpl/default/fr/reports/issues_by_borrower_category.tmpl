@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
-<div id="mainbloc">
+<div id="mainbloc" >
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
-	<h1>Koha : Emprunts par catégorie de lecteur <!--TMPL_IF NAME="borrower_category" --> pour la catégorie = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
+	<h1 class="reports">Koha : Emprunts par catégorie de lecteur <!--TMPL_IF NAME="borrower_category" --> pour la catégorie = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
 	<table>
 		<tr>
 			<th>&nbsp;</th>
@@ -32,16 +32,16 @@
 						<!-- TMPL_VAR NAME="issues" -->
 					</th>
 				<!-- /TMPL_LOOP -->
-				<th>&nbsp;</th>
+				<th><!-- TMPL_VAR NAME="grantotal" --></th>
 			</tr>
 	</table>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Prêts par catégorie de lecteur</h1>
+	<h1 class = "reports">Prêts par catégorie de lecteur</h1>
 	<form method="post">
-		<p>Sélectionner une catégorie de lecteur (ou rien si vous souhaitez visualiser l'état global) <input type="text" name="value"></p>
+		<p> Sélectionner une catégorie de lecteur (ou rien si vous souhaitez visualiser l'état global) <input type="text" name="value"></p>
 		<p>Sélectionnez une annexe : <!-- TMPL_VAR NAME="CGIbranch" --></p>
-		<input type="submit" value="OK" class="button">
+		<input type="submit" value="OK" class="button reports">
 		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
 		<input type="hidden" name="do_it" value="1">
 	</form>

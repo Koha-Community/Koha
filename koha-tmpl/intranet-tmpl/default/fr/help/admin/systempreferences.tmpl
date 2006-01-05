@@ -14,7 +14,7 @@
 
 <li><b>dateformat --</b> Choisir le format de date "metric," "us," ou "iso "(us=mm/jj/aaaa, metric=jj/mm/aaaa, ISO=aaaa/mm/jj).Cela contrôle comment les dates sont affichées, mais pas comment elles sont stockées dans la base de données.</li>
 
-<li><b>tva --</b> "tva"est le taux de tva.Si vos lois sur les taxes exigent que vous payiez une taxe sur vos achats chez vos fournisseurs, entrez le taux de la taxe ici.Choisissez "0"si vous ne devez pas payé de taxe.</li>
+<li><b>tva --</b> "tva"est le taux de tva. Si vos lois sur les taxes exigent que vous payiez une taxe sur vos achats chez vos fournisseurs, entrez le taux de la taxe ici. Choisissez "0"si vous ne devez pas payer de taxe.</li>
 
 <li><b>insecure --</b> Le meilleur choix est "non."Si vous choisissez "oui", les utilisateurs n'auront pas à  s'identifier et toute l'interface professionnelle sera accessible à chacun.Soyez vigilant si vous choisissez "oui!"</li>
 
@@ -30,18 +30,18 @@
 		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br/>
 		#210|<br/><label>Editeur</label>|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br/>
 		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br/>
-		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|<br/>
+		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d} { + 215e}|<br/>
 		#225|<br/><label>Description</label>|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br/>
-		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;<br/>
+		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt; br/&gt;<br/>
 		#995|&lt;br&gt;Exemplaires :|{\\n995b}{ - 995j}{/995k}|<br/>
 	</i></p>
 </li>
 
 <li><b>KohaAdminEmailAddress --</b>L'adresse électronique à laquelle les lecteurs enverront leurs demandes de modification de leurs documents enregistrés.</li>
 
-<li><b>ldapserver and ldapinfos --</b> Koha 2.0 sait utiliser un annuaire LDAP (Lightweight Directory Access Protocol,voir http://search.cpan.org/~gbarr/ perl-ldap- 0.3202/lib/Net/LDAP.pod)pour gérer les accès des utilisateurs et leurs droits.Pour obtenir un paquetage Perl utilisable en bibliothèque sans ldap, tout ce qui est relié au LDAP a été déplacé dans KohaInstall/modules/ C4/Auth_with_ldap.pm.Demandez à votre administrateur système de régler le LDAP avec Auth_with_ldap.pm (perldoc Auth_with_ldap. pm for help).Ces 2 paramétrages seront inutiles dans la 2.2 et ne devraient plus apparaïtre pour une nouvelle installation.</li>
+<li><b>ldapserver and ldapinfos --</b> Koha 2.0 sait utiliser un annuaire LDAP (Lightweight Directory Access Protocol,voir http://search.cpan.org/~gbarr/ perl-ldap- 0.3202/lib/Net/LDAP.pod)pour gérer les accès des utilisateurs et leurs droits.Pour obtenir un paquetage Perl utilisable en bibliothèque sans ldap, tout ce qui est relié au LDAP a été déplacé dans KohaInstall/modules/ C4/Auth_with_ldap.pm.Demandez à votre administrateur système de régler le LDAP avec Auth_with_ldap.pm (perldoc Auth_with_ldap. pm for help).Ces 2 paramétrages seront inutiles dans la 2.2 et ne devraient plus apparaître pour une nouvelle installation.</li>
 
-<li><b>Bibliothèque</b> Le nom de la bibliothèque ou le message qui s'affichera sur la page d'accueil de l'OPAC.Exemple : Bienvenu à <i>Koha<br/>SIGB sous licence libre</i></li>
+<li><b>Bibliothèque</b> Le nom de la bibliothèque ou le message qui s'affichera sur la page d'accueil de l'OPAC.Exemple : Bienvenue à <i>Koha<br/>SIGB sous licence libre</i></li>
 
 <li><b>marc --</b> Active le format MARC.Choisissez le "no" si vous n'avez pas l'intention d'utiliser les notices MARC.</li>
 
@@ -49,9 +49,9 @@
 
 <li><b>maxoutstanding --</b> Le montant maximum de dettes non réglées qu'un lecteur peut avoir avant d'être interdit de réservation.Le nombre représente des unités de votre devise nationale (par exemple "5" signifie 5E, si l'Euro est votre devise.)</li>
 
-<li><b>maxreserves --</b> Le nombre maximum de réservation qu'un lecteur peut faire.</li>
+<li> <b>maxreserves --</b> Le nombre maximum de réservation qu'un lecteur peut faire.</li>
 
-<li><b>noissuescharge --</b> Le montant maximum de charges non réglées qu'un lecteur peut avoir avant d'être interdit de prêts.Le nombre représente des unités de votre monnaie locale (par exemple "5"signifie 5€, si l'Euro est votre monnaie locale.)</li>
+<li><b>noissuescharge --</b> Le montant maximum de charges non réglées qu'un lecteur peut avoir avant d'être interdit de prêts.Le nombre représente des unités de votre monnaie locale (par exemple "5"signifie 5E, si l'Euro est votre monnaie locale.)</li>
 
 <li><b>opaclanguages --</b> Choisissez votre préférence de langue.(En dépit du nom, ce choix contrôle la langue utilisée pour tous les écrans de Koha, pas seulement pour l'OPAC).La langue au début de votre liste sera essayée d'abord</li>
 
@@ -63,7 +63,7 @@
 
 <li><b>template --</b> Ordre de préférence des modèles d'écran.Koha propose plusieurs options différentes pour les modèles d'écran qui contrôlent l'aspect et la convivialité des écrans Koha, mais vous pouvez aussi écrire vos propres modèles.</li>
 
-<li><b>timeout --</b></li>
+<li><b>timeout --</b>Durée d'inactivité (en secondes) avant déconnexion automatique. Si un poste informatique (OPAC ou professionnel) reste inactif pendant une durée supérieure à ce "timeout", l'utilisateur devra se connecter à nouveau</li>
 
 <li><b>virtualshelves --</b></li>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

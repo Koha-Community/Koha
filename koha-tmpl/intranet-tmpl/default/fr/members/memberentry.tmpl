@@ -7,7 +7,7 @@
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1>
-		Mettre à jour les détails-lecteur
+		Mettre à jour les coordonnées du lecteur
 	</h1>
 	<!-- /TMPL_IF -->
 
@@ -30,21 +30,23 @@
 			<!-- TMPL_IF NAME="ERROR_surname" -->
 				Nom de famille<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="aERROR_ddress" -->
+			<!-- TMPL_IF NAME="ERROR_address" -->
 				Rue de l'adresse<br>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_city" -->
 				Ville (Code Postal)<br>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_branch" -->
+				Site : les lecteurs doivent être du même site que vous<br>
+			<!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
-		<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
-		<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->">
 		<input type="hidden" name="type" value="borrowers">
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
 		<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
+		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<!-- TMPL_IF NAME="addAction" -->
 			<input type="hidden" name="op" value="add">
 		<!-- TMPL_ELSE -->
@@ -52,10 +54,10 @@
 		<!-- /TMPL_IF -->
 		<table>
 			<tr>
-				<td colspan="5"><b>Member# <!-- TMPL_VAR NAME="member" -->, Card number*</b> <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
+				<td colspan="5"><b>Lecteur# <!-- TMPL_VAR NAME="member" -->, Numéro de carte*</b> <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
 			</tr>
 			<tr>
-				<th colspan="5">NOUVEAU LECTEUR <!-- TMPL_UNLESS name="institution" -->DETAILS PERSONNELS<!-- /TMPL_UNLESS --> DETAILS DU CONTACT</th>
+				<th colspan="5">NOUVEAU LECTEUR <!-- TMPL_UNLESS name="institution" -->DETAILS PERSONNELS<!-- /TMPL_UNLESS --> COORDONNEES</th>
 			</tr>
 			<tr>
 				<td><!-- TMPL_UNLESS name="institution" -->Titre de politesse<!-- /TMPL_UNLESS --></td>
@@ -150,7 +152,7 @@
 				<td>Site d'inscription</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="text" name="address" size="40" value="<!-- TMPL_VAR NAME="address" -->"></td>
+				<td colspan="2"><input type="text" name="streetaddress" size="40" value="<!-- TMPL_VAR NAME="address" -->"></td>
 				<td>
 					<input type="text" name="zipcode" size="10" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->">
 				</td>
@@ -169,7 +171,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="text" name="streetaddress" size="40" value="<!-- TMPL_VAR NAME="streetaddress" -->"></td>
+				<td colspan="2"><input type="text" name="physstreet" size="40" value="<!-- TMPL_VAR NAME="physstreet" -->"></td>
 				<td>
 					<input type="text" name="homezipcode" size="10" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->">
 				</td>
@@ -204,7 +206,7 @@
 
 			<!-- TMPL_UNLESS name="institution" -->
 			<tr>
-				<th colspan="5">Détails d'un autre contact</th>
+				<th colspan="5">Coordonnées d'un autre contact</th>
 			</tr>
 
 			<tr>
@@ -235,15 +237,25 @@
 				<th colspan="5" >Utilisation de la bibliothèque</th>
 			</tr>
 			<tr>
+				<!-- TMPL_IF NAME="addAction" -->
+					<td>Date d'inscription (vide=aujourd'hui)</td>
+					<td><input type="text" name="joining" size="12" maxlength="10" value="<!-- TMPL_VAR name="joining" -->"></td>
+				<!-- TMPL_ELSE -->
+					<td>Date d'inscription</td>
+					<td><!-- TMPL_VAR name="joining" --></td>
+				<!-- /TMPL_IF -->
+				<td>Expire le (laisser blanc pour calcul automatique)</td>
+				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->"></td>
+			</tr>
+			<tr>
 				<td>Message Lecteur (apparaît dans l'OPAC)</td>
 				<td colspan="4"><textarea name="textmessaging" cols="70" rows="3"><!-- TMPL_VAR NAME="textmessaging" --></textarea></td>
 			</tr>
 			<tr>
-				<td>Note de prêt (apparaît pendant les sortie/retour</td>
+				<td>Note de prêt (apparaît pendant les sortie/retour)</td>
 				<td colspan="4"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
 			</tr>
-			<!-- TMPL_IF NAME="modify" -->
-				<tr><td colspan="5">Autorisations</td></tr>
+				<tr><td colspan="5">Avertissement</td></tr>
 				<!-- TMPL_LOOP NAME="flagloop" -->
 				<tr>
 					<td colspan="2"><!-- TMPL_VAR NAME="html" --></td>
@@ -251,20 +263,27 @@
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
-			<!-- /TMPL_IF -->
 
 			<tr>
 				<td colspan="5">Les deux champs suivants sont disponibles pour votre usage propre. Ils peuvent être utiles pour des besoins statistiques.</td>
 			<tr>
 				<td>Champ de tri 1</td>
 				<td colspan="4">
-					<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+					<!-- TMPL_IF Name="CGIsort1" -->
+						<!-- TMPL_VAR Name="CGIsort1" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+					<!--/TMPL_IF -->
 				</td>
 			</tr>
 			<tr>
 				<td>Champ de tri 2</td>
 				<td colspan="4">
-					<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+					<!-- TMPL_IF Name="CGIsort2" -->
+						<!-- TMPL_VAR Name="CGIsort2" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+					<!--/TMPL_IF -->
 				</td>
 			</tr>
 

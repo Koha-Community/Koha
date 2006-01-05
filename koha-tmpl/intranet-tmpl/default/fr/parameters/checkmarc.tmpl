@@ -17,7 +17,7 @@
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>N° exemplaires : le champ numéro d'exemplaire est relié à un champ dans l'onglet -1</i></td>
+			<td><i> N° exemplaires : le champ numéro d'exemplaire est relié à un champ dans l'onglet -1</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
@@ -31,14 +31,26 @@
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>Tous les champs d'exemplaires sont sous la même étiquette et dans le même onglet</i></td>
+			<td><i> Tous les champs d'exemplaires sont sous la même étiquette et dans le même onglet</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtags" -->
+		<tr>
+			<td><b>Champ UNIMARC des exemplaires</b></td>
+			<td>Il y a plus d'un champ MARC relié à l'onglet des exemplaires (onglet 10) : <!-- TMPL_VAR name="itemtags" --></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>1 seul champ MARC relié aux exemplaires</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="itemtypes_empty" -->
 		<tr>
 			<td><b>Table types de document vide</b></td>
-			<td>la table des types de document est vide.Elle doit contenir au moins une valeur</td>
+			<td> la table des types de document est vide.Elle doit contenir au moins une valeur</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
@@ -104,7 +116,7 @@
 	<!-- TMPL_IF NAME="biblionumber" -->
 		<tr>
 			<td><b>biblio et biblionumber</b></td>
-			<td>Les champs du biblio.biblionumber et du biblioitems.biblioitemnumber DOIVENT :<br/>
+			<td> Les champs du biblio.biblionumber et du biblioitems.biblioitemnumber DOIVENT :<br/>
 				<li>être relié à un sous-champ MARC</li>
 				<li>être dans le même champ (par exemple : 090$a et 090 $b)</li>
 				<li>être dans l'onglet-1</li></td>
@@ -113,6 +125,21 @@
 		<tr>
 			<td>OK</td>
 			<td><i>Biblionumber et biblioitemnumber correctement construits</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="frameworknull" -->
+		<tr>
+			<td><b>valeur de "framework"</b></td>
+			<td>Il y a une valeur NULL dans frameworkcode. Vérifier les tables suivantes<br/>
+				<li>select * from marc_subfield_structure where frameworkcode is NULL</li>
+				<li>select * from marc_tag_structure where frameworkcode is NULL</li>
+				<li>select * from marc_biblio where frameworkcode is NULL</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Pas de valeur NULL dans le "frameworkcode"</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->

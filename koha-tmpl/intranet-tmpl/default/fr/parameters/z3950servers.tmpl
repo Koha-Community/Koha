@@ -117,7 +117,7 @@
 				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)">
 			</p>
 			<p>
-				<label class="label100">Syntaxe (le serveur Z3950 peut envoyer les enregistrements selon divers formats. Choisissez en un)</label>
+				<label class="label100"> Syntaxe (le serveur Z3950 peut envoyer les enregistrements selon divers formats. Choisissez en un)</label>
 				<select name="syntax">
 					<option value="MARC21">MARC21</option>
 					<option value="UNIMARC">UNIMARC</option>
@@ -213,7 +213,7 @@
 					<th> </td>
 				</tr>
 				<!-- TMPL_LOOP NAME="loop" -->
-				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR NAME="name" --></td>
 					<td><!-- TMPL_VAR NAME="host" --></td>
 					<td><!-- TMPL_VAR NAME="port" --></td>
