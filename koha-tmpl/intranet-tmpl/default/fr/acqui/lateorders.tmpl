@@ -1,0 +1,105 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="acquisition"><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Numéros en retard</h1>
+	<table>
+		<tr>
+			<th class="acquisition doNotPrint">Fournisseur</th>
+			<th class="acquisition">Date de la commande</th>
+			<th class="acquisition">Commandé pour</th>
+			<th class="acquisition doNotPrint">Panier</th>
+			<th class="acquisition">Information document</th>
+			<th class="acquisition doNotPrint">Site</th>
+			<th class="acquisition doNotPrint">Prix unitaire estimé</th>
+			<th class="acquisition">Prix unitaire catalogue</th>
+			<th class="acquisition">Quantité</th>
+			<th class="acquisition">Total coût</th>
+			<th class="acquisition doNotPrint">Budget</th>
+			<th class="acquisition doNotPrint">&nbsp;</th>
+		</tr>
+		<tr class="doNotPrint">
+			<form action="lateorders.pl" method="post">
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="CGIsupplier" -->
+				</td>
+				<td> &nbsp;</td>
+				<td align="center" class="doNotPrint">
+					<input align="right" size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" > jours
+				</td>
+				<td colspan="2">
+					&nbsp;
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="CGIbranch" -->
+				</td>
+				<td colspan="5">
+					&nbsp;
+				</td>
+				
+				<td class="doNotPrint">
+					<input type="submit" value="filtre" class="button acquisition">
+				</td>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP name="lateorders" -->
+			<!--TMPL_IF Name="hilighted" --> <tr class="hilighted"> <!--TMPL_ELSE--> <tr> <!-- /TMPL_IF -->
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="supplier" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="orderdate" -->
+				</td>
+				<td class="number" align="right">
+					<!-- TMPL_VAR name="latesince" -->
+				</td>
+				<td align="center" class="doNotPrint">
+					<!-- TMPL_VAR name="basketno" -->
+				</td>
+				<td >
+					<b><!-- TMPL_VAR name="title" --></b>
+				<!-- TMPL_IF name="author" --><br/><i>Auteur:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publisher" --><br/><i>Edité par :</i> <!-- TMPL_VAR NAME="publisher" --><!-- TMPL_IF name="publicationyear" --><i>en </i><!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="branch" -->
+				</td>
+				<td align="right" class="doNotPrint">
+					<!-- TMPL_VAR name="unitpricelib" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="unitpricesupplier" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="quantity" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="subtotal" -->
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="budget" -->
+				</td>
+				<td class="doNotPrint">
+					&nbsp;
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr> 
+				<th class="acquisition">
+					Total
+				</th>
+				<th class="acquisition" colspan="2">
+					&nbsp;
+				</th>
+				<th class="acquisition" class="doNotPrint"> &nbsp;</th>
+				<th class="acquisition"  colspan="5">
+					&nbsp;
+				</th>
+				
+				<th class="acquisition">
+					<!-- TMPL_VAR name="total" -->
+				</th>
+		</tr>
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+
