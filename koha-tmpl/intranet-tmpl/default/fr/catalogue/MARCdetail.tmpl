@@ -1,9 +1,13 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 
+
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
-		<h1 class="catalogue">Notice MARC : <!-- TMPL_VAR NAME="bibid" --></h1>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Editer notice </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Editer exemplaires </a> <a href="javascript:confirm_deletion()" class="button catalogue"> Supprimer </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Normal </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter dans étagère virtuelle </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer </a>
+	<form Name="f">
+		<h1 class="catalogue">Notice N°<!-- TMPL_VAR NAME="biblionumber" --> <b> grille <!--TMPL_VAR Name="framework" --></b>
+</h1>
+	</form>
+		<a href="javascript:Addbiblio('')" class="button catalogue"> Editer notice </a> <a href="javascript:Addbiblio('duplicate')" class="button catalogue"> Dupliquer </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Editer exemplaires </a> <a href="javascript:confirm_deletion()" class="button catalogue"> Supprimer </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Complète </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Normal </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter dans étagère virtuelle </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer </a>
 		<!-- TMPL_IF name="subscriptionsnumber" -->
 		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Abonnement(s)
@@ -13,6 +17,8 @@
 		<!-- TMPL_ELSE -->
 			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Réservation</a>
 		<!-- /TMPL_IF -->
+		
+
 	</div>
 <!-- /TMPL_UNLESS -->
 	<div class="tabs">
@@ -60,17 +66,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -90,17 +94,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -120,17 +122,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -150,17 +150,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -180,17 +178,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -210,17 +206,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -240,17 +234,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -270,17 +262,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -300,17 +290,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -330,17 +318,15 @@
 				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
-					<label class="labelsubfield">
-					<!-- TMPL_IF name="link" -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- TMPL_ELSE -->
-						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-					<!-- /TMPL_IF -->
-					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
-					</a>
-					<!-- TMPL_VAR NAME="marc_subfield" -->
+					<label class="labelsubfield">&nbsp;
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+						</a>
+					<!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="authority" -->
 						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
 					<!-- /TMPL_IF -->
@@ -389,6 +375,14 @@ function confirm_deletion() {
 }
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "MARCdetail.pl?bib=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+}
+function Addbiblio(op) {
+  var fwk = document.forms['f'].Frameworks.options[document.forms['f'].Frameworks.selectedIndex].value;
+  window.location = "acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
 }
 </script>
 </body>

@@ -2,49 +2,41 @@
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
 	<h1 class="bull">Late issues</h1>
+	<p>
+		<form action="lateissues.pl" method="post">
+			<!-- TMPL_VAR name="CGIsupplier" -->
+				<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->" class="button bull"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+			<input type="submit" value="filter" class="button bull">
+		</form>
+	</p>
 	<table>
 		<tr>
-			<th class="bull">Supplier</th>
 			<th class="bull">Title</th>
 			<th class="bull">Issue number</th>
 			<th class="bull">Late since</th>
 			<th class="bull" colspan=2>&nbsp;</th>
 		</tr>
-		<tr>
-			<form action="lateissues.pl" method="post">
-				<td>
-					<!-- TMPL_VAR name="CGIsupplier" -->
-				</td>
-				<td>
-					<p>
-					<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->" class="button bull"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
-					</p>
-				</td>
-				<td>
-					<input type="submit" value="filter" class="button bull">
-				</td>
-			</form>
-		</tr>
 		<!-- TMPL_LOOP name="lateissues" -->
 			<tr>
-				<td>
-					<!-- TMPL_VAR name="name" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="Title" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="serialseq" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="planneddate" -->
-				</td>
-				<td>
-					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>
-					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
-				</td>
+				<!-- TMPL_IF name="odd" -->
+					<td class="hilighted"><!-- TMPL_IF name="Title" --><!-- TMPL_VAR name="Title" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF --></td>
+					<td class="hilighted"><!-- TMPL_VAR name="serialseq" --></td>
+					<td class="hilighted"><!-- TMPL_VAR name="planneddate" --></td>
+					<td class="hilighted">
+						<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>
+						<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
+					</td>
+				<!-- TMPL_ELSE -->
+					<td><!-- TMPL_VAR name="Title" --></td>
+					<td><!-- TMPL_VAR name="serialseq" --></td>
+					<td><!-- TMPL_VAR name="planneddate" --></td>
+					<td>
+						<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>
+						<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
+					</td>
+				<!-- /TMPL_IF -->
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

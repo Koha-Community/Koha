@@ -117,16 +117,13 @@ if ($op eq "do_search") {
 	my $total;
 	my @catresults;
 	my $javalue;
-
 	while (my ($value,$ctresults)=$sth->fetchrow) {
-# 		warn "countresults : ".$ctresults;
-
 		# This $javalue is used for the javascript selectentry function (javalue for javascript value !)
 		$javalue = $value;
 		$javalue =~s/'/\\'/g;
 
 		push @catresults,{value=> $value, 
-							javalue=> $javalue,
+						  javalue=> $javalue,
 						  even=>($total-$startfrom*$resultsperpage)%2,
 						  count=>$ctresults
 						  } if (($total>=$startfrom*$resultsperpage) and ($total<($startfrom+1)*$resultsperpage));
@@ -138,8 +135,6 @@ if ($op eq "do_search") {
 	foreach my $listtags (@tags){
 		my @taglist=split /,/,$listtags;
 		foreach my $curtag (@taglist){
-			# regexp used to prevent errors if user puts spaces in "search also" of the framework description.
-
 			$curtag =~s/\s+//;
 			$strsth.="(tagfield='".substr($curtag,1,3)."' AND tagsubfield='".substr($curtag,4,1)."') OR";
 		}
@@ -159,15 +154,12 @@ if ($op eq "do_search") {
 	while ((my $authtypecode) = $sth->fetchrow) {
 		my ($curauthresults,$nbresults) = authoritysearch($dbh,[''],[''],[''],['contains'],
 														\@search,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
-
-
 		if (defined(@$curauthresults)) {
 			for (my $i = 0; $i < @$curauthresults ;$i++) {
 				@$curauthresults[$i]->{jamainentry} = @$curauthresults[$i]->{mainentry};
 				@$curauthresults[$i]->{jamainentry} =~ s/'/\\'/g;
 			}
 		}
-
 		push @authresults, @$curauthresults;
 		$authnbresults+=$nbresults;
 #		warn "auth : $authtypecode nbauthresults : $nbresults";

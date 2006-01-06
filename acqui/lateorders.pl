@@ -41,6 +41,8 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-size     => 1,
 			-multiple => 0 );
 
+$template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
+
 my @select_branches;
 my %select_branches;
 push @select_branches,"";
@@ -58,11 +60,15 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 				-multiple => 0 );
 
 my ($count, @lateorders) = getlateorders($delay,$supplierid,$branch);
-
+my $total;
+foreach my $lateorder (@lateorders){
+	$total+=$lateorder->{subtotal};
+}
 $template->param(delay=>$delay) if ($delay);
 $template->param(
 	CGIbranch => $CGIbranch,
 	CGIsupplier => $CGIsupplier,
-	lateorders => \@lateorders
+	lateorders => \@lateorders,
+	total=>$total,
 	);
 output_html_with_http_headers $query, $cookie, $template->output;

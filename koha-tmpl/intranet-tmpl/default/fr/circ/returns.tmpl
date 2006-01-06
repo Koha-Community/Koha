@@ -3,7 +3,7 @@
 <div id="mainbloc">
 	<h1 class="circulation">Prêt: Retours</h1>
 	<p>
-		<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Réglages</a>
+		<b>Site:</b> <!-- TMPL_VAR NAME="genbrname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="genprname" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Réglages</a>
 	</p>
 	
 	<!-- TMPL_IF Name="found" -->
@@ -13,11 +13,11 @@
 			<p>Le document <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) est noté en attente à <b><!-- TMPL_VAR NAME="branchname" --></b> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
-						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
-						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
-						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
+						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+						<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+						<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 					<!-- /TMPL_LOOP -->
-					<input type="hidden" name="barcode" value=0>
+					<input type="hidden" name="barcode" value="0">
 					<input type="submit" value="OK" class="button circulation">
 					</form>
 			<!-- /TMPL_IF -->
@@ -30,24 +30,24 @@
 				<form method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<!-- TMPL_UNLESS Name="first" -->
-						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
-						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
-						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
+						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+						<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+						<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 					<!-- /TMPL_UNLESS -->
 				<!-- /TMPL_LOOP -->
-				<input type="hidden" name="barcode" value=0>
+				<input type="hidden" name="barcode" value="0">
 				<input type="submit" value="OK" class="button circulation">
 				</form>
 				</center>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="reserved" -->
 				<h2 class="circulation">Réservation trouvée</h2>
-				<p>Exemplaire : <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;"> <!-- TMPL_VAR NAME="itembarcode" --> </a> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) peut être retiré à <b> <!-- TMPL_VAR NAME="branchname" --></b>.
+				<p> Exemplaire : <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;"> <!-- TMPL_VAR NAME="itembarcode" --> </a> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) peut être retiré à <b> <!-- TMPL_VAR NAME="branchname" --></b>.
 				</p>
 				<p>
-				Mettre en attente et imprimer <a href="" class="circulation" onClick="alert(document.forms[0].resslip.value); return false">bon de prêt</a> ? </p>
+				Mettre en attente et imprimer <a href="" class="circulation" onclick="alert(document.forms['f'].resslip.value); return false">bon de prêt</a> ? </p>
 				<p>
-				<form method="post" action="returns.pl">
+				<form method="post" action="returns.pl" name="f">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
 					<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
@@ -76,7 +76,7 @@
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	">
-				<input type="submit" value="Imprimer" class="button circulation">
+				<input type="submit" value="Oui" class="button circulation">
 				</form>
 			<!-- /TMPL_IF -->
 		</div>
@@ -122,9 +122,13 @@
 			<p>Titre : <!-- TMPL_VAR NAME="itemtitle" --></p>
 			<h2 class="circulation">Information lecteur</h2>
 			<p>
-			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;"> <!-- TMPL_VAR NAME="riborcnum" --> </a> <!-- TMPL_VAR NAME="riborsurname" -->, <!-- TMPL_VAR NAME="ribortitle" --> <!-- TMPL_VAR NAME="riborfirstname" --></p>
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;">
+				<!-- TMPL_VAR NAME="riborcnum" -->
+			</a> 
+			<!-- TMPL_IF NAME="boremail" -->(<a href="mailto:<!-- TMPL_VAR Name="boremail" -->"><!-- TMPL_VAR Name="boremail" --></a>)<!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="riborsurname" -->, <!-- TMPL_VAR NAME="ribortitle" --> <!-- TMPL_VAR NAME="riborfirstname" --></p>
 			<!-- TMPL_IF Name="flagset" -->
-				<h2 class="circulation">Autorisations</h2>
+				<h2 class="circulation">Avertissement</h2>
 				<!-- TMPL_LOOP Name="flagloop" -->
 					<p>
 						<!-- TMPL_IF Name="redfont" --><div class="problem"><!-- /TMPL_IF -->
@@ -172,13 +176,13 @@
 				<th class="circulation">Emprunteur</th>
 			</tr>
 			<!-- TMPL_LOOP Name="riloop" -->
-				<tr>
-					<td bgcolor=<!-- TMPL_VAR NAME="color" -->>
+				<!-- TMPL_IF NAME="color" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+					<td >
 						<!-- TMPL_IF Name="duedate" -->
 							<!-- TMPL_IF Name="early" -->
 								<font color="red">
 							<!-- /TMPL_IF -->
-								<!-- TMPL_VAR NAME="year" -->/<!-- TMPL_VAR NAME="month" -->/<!-- TMPL_VAR NAME="day" -->
+								<!-- TMPL_VAR NAME="duedate" -->
 							<!-- TMPL_IF Name="early" -->
 								</font>
 							<!-- /TMPL_IF -->
@@ -206,7 +210,7 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			</table>
-		</div id="bloc25">
+		</div>
 	<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->

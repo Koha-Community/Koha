@@ -11,6 +11,9 @@
 		<p><!-- TMPL_IF name="faxnumber" -->Fax: <!-- TMPL_VAR NAME="faxnumber" --><!-- /TMPL_IF --></p>
 		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
 		<p><a href="/cgi-bin/koha/opac-userupdate.pl" class="button">Update Record</a></p>
+		<!-- TMPL_IF name="OpacPasswordChange" -->
+			<p><a href="/cgi-bin/koha/opac-passwd.pl" class="button">Change your password</a></p>
+		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="textmessaging"-->
 			<h2>Message from the library</h2>
 			<!-- TMPL_VAR name="textmessaging" -->

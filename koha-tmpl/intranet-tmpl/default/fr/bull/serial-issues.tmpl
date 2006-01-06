@@ -1,12 +1,13 @@
-<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
-<h1 class="catalogue">N° parus pour un abonnement</h1>
-<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Notice bibliographique</a>
-<form method="post" name="f">
-<div id="bloc25">
-	<h2 class="catalogue">Information d'abonnement</h2>
-		<p>Pour <b><!-- TMPL_VAR name="bibliotitle" --></b> qui commence en <b><!-- TMPL_VAR name="startdate" --></b> et paraît chaque <b>
+	<h1 class="bull">N° parus pour un abonnement</h1>
+	<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Retour aux abonnements</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Retour à la notice</a><a class="button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=full">Vue complète</a>
+
+	<!-- TMPL_LOOP name="subscription_LOOP" -->
+	<div id="bloc25">
+		<h2 class="bull">Information d'abonnement pour <!-- TMPL_VAR name="bibliotitle" --></h2>
+		<p>Commence en <b><!-- TMPL_VAR name="histstartdate" --></b> et paraît chaque <b>
 		<!--TMPL_IF name="periodicity1" -->
 				jour
 		<!-- /TMPL_IF -->
@@ -41,46 +42,58 @@
 				2 ans
 		<!-- /TMPL_IF -->
 		</b>
-		le
-		<b>
 		<!--TMPL_IF name="arrival1" -->
-			Lundi
+			le <b>lundi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival2" -->
-				Mardi
+			le <b>mardi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival3" -->
-				Mercredi
+			le <b>mercredi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival4" -->
-				Jeudi
+			le <b>jeudi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival5" -->
-				Vendredi
+			le <b>vendredi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival6" -->
-				Samedi
+			le <b>samedi</b>
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival7" -->
-				Dimanche
+			le <b>dimanche</b>
 		<!-- /TMPL_IF -->
-		</b>
-		</p>
-		<p>Abonnement pour 
+		pour <b>
 			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> sorties<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> semaines<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> mois<!-- /TMPL_IF -->
-			)
+			</b>
 		</p>
+		<p>Dernier renouvellement le <b><!-- TMPl_VAR name="startdate" --></b></p>
+		<!-- TMPL_IF name="enddate" --><p><b>L'abonnement est terminé. Le dernier bulletin a été reçu le <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF name="enddate" -->
+	<!--TMPL_UNLESS Name=fullinfo -->
 		<p><!-- TMPL_VAR name="notes" --></p>
-</div>
-<div id="bloc25">
-	<h2 class="catalogue">Résumé des n° parus</h2>
-	<p>
-		<!-- TMPL_VAR name="librariannote" -->
-	</p>
-</div>
-
+		<!-- TMPL_IF name="opacnote" -->
+			<h3 class="bull">Résumé des n° parus</h2>
+			<p>
+				<!-- TMPL_VAR name="opacnote" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="recievedlist" -->
+			<h3 class="bull">Bulletins reçus</h2>
+			<p>
+				<!-- TMPL_VAR name="recievedlist" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="missinglist" -->
+			<h3 class="bull">Bulletins manquants</h2>
+			<p>
+				<!-- TMPL_VAR name="missinglist" -->
+			</p>
+		<!-- /TMPL_IF -->
+	</div>
+	<!-- /TMPL_UNLESS -->
+<!-- /TMPL_LOOP -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

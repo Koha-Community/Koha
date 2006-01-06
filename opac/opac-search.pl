@@ -75,12 +75,15 @@ if ($op eq "do_search") {
 	my @excluding = $query->param('excluding');
 	my @operator = $query->param('operator');
 	my @value = $query->param('value');
+	my $orderby = $query->param('orderby');
+	my $desc_or_asc = $query->param('desc_or_asc');
+	my $exactsearch = $query->param('exact');
 
 	for (my $i=0;$i<=$#marclist;$i++) {
 		if ($searchdesc) { # don't put the and_or on the 1st search term
-			$searchdesc .= $and_or[$i]." ".$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+			$searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
 		} else {
-			$searchdesc = $excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+			$searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
 		}
 	}
   if ($itemtypesstring ne ''){
@@ -98,11 +101,7 @@ if ($op eq "do_search") {
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	
-	my $orderby = $query->param('orderby');
-	my $desc_or_asc = $query->param('desc_or_asc');
-	my $exactsearch = $query->param('exact');
 	if ($exactsearch) {
-		warn "EXACT";
 		foreach (@operator) {
 			$_='=';
 		}
@@ -315,7 +314,8 @@ $template->param( phraseorterm => $phraseorterm );
 		push @field_data, { term => "operator", val=>$operator[$i] };
 		push @field_data, { term => "value", val=>$value[$i] };
 	}
-
+	push @field_data, {term => "desc_or_asc", val => $desc_or_asc} if $desc_or_asc;
+	push @field_data, {term => "orderby", val => $orderby} if $orderby;
 	my @numbers = ();
 
 	if ($total>$resultsperpage)

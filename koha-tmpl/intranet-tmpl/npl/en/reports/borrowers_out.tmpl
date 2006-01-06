@@ -6,16 +6,16 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Patrons with No Issues </h1>
+		<h1>Koha : Borrowers with No Issues </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_IF NAME="err" --> <span class="error"> <b><!--/TMPL_IF --><strong><!-- TMPL_VAR NAME="crit"--> =</strong><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
-		
+		<br>
 		<table>
-			<tr>
+			<tr >
 				<th>Num/Borrowers</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -23,10 +23,10 @@
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
@@ -35,19 +35,20 @@
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Koha : Borrowers with no Issues  </h1>
-	<form method="post">
-	
+	<h1 class = "reports">Koha : Borrowers with no Issues  </h1>
+	<form method="post" action="/cgi-bin/koha/reports/borrowers_out.pl">
+	<div class="data">
 	<table>
 		<thead>
 			<tr>
-			<th>Limit to </th>
-			<th>By </th>
-			<th colspan="2">Filters</th>
+			<th scope="col">&nbsp;</th>
+			<th scope="col">Limit to </th>
+			<th scope="col">By </th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
+				<td>&nbsp;</td>
 				<td>
 					<select name="Limit">
 						<option value ="" checked>None</option>
@@ -68,20 +69,27 @@
 						<option value ="itemtype">Itemtype</option>
 					</select>
 				</td>
-				<td colspan="2">&nbsp;</td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td><label for="borrowercategory">Borrower Category</label></td>
-				<td><input type="text" name="Filter" id="borrowercategory" value="" /></td>
+			<th colspan="3" scope="col">Filters</th></tr>
+			<tr class="hilighted">
+				
+				<th scope="row">Borrower Category</th>
+				<td colspan="2">
+					<select name="Filter">
+						<option value="">All Borrower Categories</option>
+						<!-- TMPL_LOOP name="borcatloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
-						<tr class="hilighted">
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td><label for="issuessince">Without issues since:</label> </td>
-				<td><input size="10" id="to" id="issuessince" name="Filter" value="" type="text" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" />
+			<tr class="hilighted">
+				
+				<th scope="row">Without issues since</th>
+				<td colspan="2"><input size="10" id="to" name="Filter" value="" type="text">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
 							<script type="text/javascript">
 								Calendar.setup(
 									{
@@ -94,22 +102,21 @@
 			</tr>
 		</tbody>
 	</table>
-	
-<table>
-	<caption>Output Options</caption>
-	<tr><td colspan="2"><label for="screen">To the Screen</label> <input type="radio" checked name="output" value="screen" id="screen" /></td></tr>
-	<tr><td colspan="2"><label for="file">To file a file</label><input type="radio" name="output" value="file" id="file" /></td></tr>
-<tr><td>&nbsp;</td><td><label for="basename">...named:</label>   <input type="text" id="basename" name="basename" value="Export" /></td></td></tr>
-<tr><td>&nbsp;</td><td><label for="MIME">File Format:</label> <!-- TMPL_VAR NAME="CGIextChoice" --></td></tr>
-<tr><td>&nbsp;</td><td><label for="sep">Delimiter:</label> <!-- TMPL_VAR NAME="CGIsepChoice" --></td></tr>
-</table>
-		
-	<p>
-	<input type="submit" value="Generate Report" class="submit" />
-	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
-	</form></p>
 	</div>
+	<div class="details">
+		<h3> Output </h3>
+		<input type="radio" checked="checked" name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input type="submit" value="Generate Report" class="submit">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

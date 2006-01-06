@@ -4,37 +4,76 @@
 	<h1 class="bull">Abonnements Périodiques</h1>
 	<table>
 		<tr>
-			<th class="bull">Titre</th>
 			<th class="bull">ISSN</th>
+			<th class="bull">Titre</th>
+			<th class="bull">
+				Note
+			</td>
 			<th class="bull" colspan=2>&nbsp;</th>
 		</tr>
 		<tr>
 			<form action="bull-home.pl" method="post">
 			<td>
-				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->">
+				<input type="text" size=10 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="Saisir un ISSN pour filtrer les abonnements">
 			</td>
 			<td>
-				<input type="text" size=11 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->" title="Saisir un tire (complet ou partiel) pour filtrer les abonnements">
 			</td>
-			<td colspan=3>
-				<input type="submit" value="filtre" class="button bull">
+			<td>
+				&nbsp;
+			</td>
+			<td colspan=2>
+				<input type="submit" value="filtre" class="button bull" title="Filtrer sur ISSN/titre">
 			</td>
 		</tr>
 		<!-- TMPL_LOOP name="subscriptions" -->
 			<tr>
-				<td>
-					<!-- TMPL_VAR name="title" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ISSN" -->
+						<a href="bull/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="Résumé des n° parus"><!-- TMPL_VAR name="ISSN" --></a>
+					<!-- /TMPL_IF -->
+					
 				</td>
-				<td>
-					<!-- TMPL_VAR name="ISSN" -->
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="title" -->
+						<!-- TMPL_VAR name="title" -->
+					<!-- TMPL_ELSE -->
+						|
+					<!-- /TMPL_IF -->
 				</td>
-				<td>
-					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Détail</a> <a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Réceptionner</a>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Détail de l'abonnement">Détail</a>
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Bulletiner pour cet abonnement">Réception</a>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	<a href="/cgi-bin/koha/bull/subscription-add.pl" class="button bull">Ajouter un abonnement</a>
+	<a href="/cgi-bin/koha/bull/subscription-add.pl" class="button bull">Ajouter abonnement</a>
 </div>
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
 

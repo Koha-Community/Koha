@@ -22,6 +22,7 @@ require Exporter;
 use C4::Context;
 use C4::Date;
 use MARC::Record;
+use C4::Suggestions;
 # use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -107,7 +108,7 @@ number of elements in C<@orders>.
 sub getbasketcontent {
 	my ($basketno,$supplier,$orderby)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="Select biblio.*,biblioitems.*,aqorders.*,aqorderbreakdown.*,biblio.title from aqorders,biblio,biblioitems
+	my $query="Select aqorderbreakdown.*,biblio.*,biblioitems.*,aqorders.*,biblio.title from aqorders,biblio,biblioitems
 	left join aqorderbreakdown on aqorderbreakdown.ordernumber=aqorders.ordernumber
 	where basketno='$basketno'
 	and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
@@ -320,6 +321,10 @@ sub receiveorder {
 	my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
 											unitprice=?,freight=?,rrp=?
 							where biblionumber=? and ordernumber=?");
+	my $suggestionid = findsuggestion_from_biblionumber($dbh,$biblio);
+	if ($suggestionid) {
+		changestatus($suggestionid,'AVAILABLE','',$biblio);
+	}
 	$sth->execute($quantrec,$invoiceno,$cost,$freight,$rrp,$biblio,$ordnum);
 	$sth->finish;
 }
@@ -575,10 +580,10 @@ sub getlateorders {
 #	warn " $dbdriver";
 	if ($dbdriver eq "mysql"){
 		$strsth ="SELECT aqbasket.basketno,
-					DATE(aqbasket.closedate) as orderdate, aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
-					aqorders.quantity * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
+					DATE(aqbasket.closedate) as orderdate, aqorders.quantity - IFNULL(aqorders.quantityreceived,0) as quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
+					(aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
 					aqbooksellers.name as supplier,
-					biblio.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
+					aqorders.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
 					DATEDIFF(CURDATE( ),closedate) AS latesince
 					FROM 
 						((	(
@@ -591,7 +596,7 @@ sub getlateorders {
 		$strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
 		$strsth .= " AND borrowers.branchcode like \'".$branch."\'" if ($branch);
 		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv && C4::Context->userenv->{flags}!=1);
-		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+		$strsth .= " HAVING quantity<>0 AND unitpricesupplier<>0 AND unitpricelib<>0 ORDER BY latesince,basketno,borrowers.branchcode, supplier ";
 	} else {
 		$strsth ="SELECT aqbasket.basketno,
 					DATE(aqbasket.closedate) as orderdate, 
@@ -613,13 +618,14 @@ sub getlateorders {
 		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
 		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
 	}
-#	warn "C4::Acquisition : getlateorders SQL:".$strsth;
+	warn "C4::Acquisition : getlateorders SQL:".$strsth;
 	my $sth = $dbh->prepare($strsth);
 	$sth->execute;
 	my @results;
 	my $hilighted = 1;
 	while (my $data = $sth->fetchrow_hashref) {
 		$data->{hilighted}=$hilighted if ($hilighted>0);
+		$data->{orderdate} = format_date($data->{orderdate});
 		push @results, $data;
 		$hilighted= -$hilighted;
 	}
@@ -730,12 +736,12 @@ sub histsearch {
 	my ($title,$author,$name,$from_placed_on,$to_placed_on)=@_;
 	my @order_loop;
 	my $total_qty=0;
+	my $total_qtyreceived=0;
 	my $total_price=0;
 	# don't run the query if there are no parameters (list would be too long for sure !
 	if ($title || $author || $name || $from_placed_on || $to_placed_on) {
 		my $dbh= C4::Context->dbh;
-		my $query = "select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
-		
+		my $query = "select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.quantityreceived, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
 		$query .= ",borrowers " if (C4::Context->preference("IndependantBranches")); 
 		$query .=" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
 		$query .= " and aqbasket.authorisedby=borrowers.borrowernumber" if (C4::Context->preference("IndependantBranches"));
@@ -751,6 +757,7 @@ sub histsearch {
 			}
 		}
 		$query .=" order by booksellerid";
+		warn "query histearch: ".$query;
 		my $sth = $dbh->prepare($query);
 		$sth->execute;
 		my $cnt=1;
@@ -761,10 +768,11 @@ sub histsearch {
 			$line->{creationdate} = format_date($line->{creationdate});
 			$line->{datereceived} = format_date($line->{datereceived});
 			$total_qty += $line->{'quantity'};
+			$total_qtyreceived += $line->{'quantityreceived'};
 			$total_price += $line->{'quantity'}*$line->{'ecost'};
 		}
 	}
-	return \@order_loop,$total_qty,$total_price;;
+	return \@order_loop,$total_qty,$total_price,$total_qtyreceived;
 }
 
 #
@@ -821,11 +829,11 @@ sub bookfunds {
   
   if ($branch) {
       $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
+      =aqbudget.bookfundid and startdate<now() and enddate>now() and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
       group by aqbookfund.bookfundid order by bookfundname";
   } else {
       $strsth="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid
+      =aqbudget.bookfundid and startdate<now() and enddate>now()
       group by aqbookfund.bookfundid order by bookfundname";
   }
   my $sth=$dbh->prepare($strsth);
@@ -844,19 +852,27 @@ sub bookfunds {
 
 =item bookfundbreakdown
 
-	returns the total comtd & spent for a given bookfund
+	returns the total comtd & spent for a given bookfund, and a given year
 	used in acqui-home.pl
 =cut
 #'
 
 sub bookfundbreakdown {
-  my ($id)=@_;
+  my ($id, $year)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
-  from aqorders,aqorderbreakdown where bookfundid=? and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber
-  and (datecancellationprinted is NULL or
-  datecancellationprinted='0000-00-00')");
+  my $sth=$dbh->prepare("SELECT startdate, enddate, quantity, datereceived, freight, unitprice, listprice, ecost, quantityreceived, subscription
+FROM aqorders, aqorderbreakdown, aqbudget, aqbasket
+WHERE aqorderbreakdown.bookfundid = ?
+AND aqorders.ordernumber = aqorderbreakdown.ordernumber
+AND (
+datecancellationprinted IS NULL
+OR datecancellationprinted = '0000-00-00'
+)
+AND aqbudget.bookfundid = aqorderbreakdown.bookfundid
+AND aqbasket.basketno = aqorders.basketno
+AND aqbasket.creationdate >= startdate
+AND enddate >= aqbasket.creationdate
+and startdate<=now() and enddate>=now()");
   $sth->execute($id);
   my $comtd=0;
   my $spent=0;

@@ -32,15 +32,14 @@
 				<th class="acquisition doNotPrint">Order</th>
 				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[order]</a></th>
 				<th class="acquisition">Title</th>
-				<th class="acquisition">rrp</th>
-				<th class="acquisition doNotPrint">est</th>
+				<th class="acquisition doNotPrint">rrp</th>
+				<th class="acquisition">est</th>
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
 				<th class="acquisition doNotPrint">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
 				<!-- TMPL_IF name="active" -->
-					<!-- TMPL_UNLESS name="closedate" -->
-						<th class="acquisition doNotPrint">Remove</th>
-					<!-- /TMPL_UNLESS -->
+				<th class="acquisition doNotPrint">Remove</th>
+				<th class="acquisition doNotPrint">Edit</th>
 				<!-- /TMPL_IF -->
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
@@ -66,19 +65,22 @@
 								<!-- TMPL_IF name="notes" --></p><p class="doNotPrint"><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
 						</td>
 					<!-- /TMPL_IF -->
-					<td class="number"><p><!-- TMPL_VAR NAME="rrp" --></p></td>
-					<td class="doNotPrint number"><p><!-- TMPL_VAR NAME="ecost" --></p></td>
+					<td class="doNotPrint number"><p><!-- TMPL_VAR NAME="rrp" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="ecost" --></p></td>
 					<td class="number"><p><!-- TMPL_VAR NAME="quantity" --></p></td>
 					<td class="number"><p><!-- TMPL_VAR NAME="line_total" --></p></td>
 					<td class="doNotPrint"><p><!-- TMPL_VAR NAME="bookfundid" --></p></td>
 					<!-- TMPL_IF name="active" -->
-						<!-- TMPL_UNLESS name="closedate" -->
-							<td class="doNotPrint">
-								<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
-									<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
-								</a>
-							</td>
-						<!-- /TMPL_UNLESS -->
+						<td class="doNotPrint">
+							<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+								<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
+							</a>
+						</td>
+						<td class="doNotPrint">
+							<a href="newbiblio.pl?sub=&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&ordnum=<!-- TMPL_VAR NAME="ordernumber" --><!--TMPL_IF name="closedate"-->&close=1<!--/TMPL_IF -->">
+								<img src="/intranet-tmpl/default/images/fileopen.png" alt="Edit" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
+							</a>
+						</td>
 					<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->

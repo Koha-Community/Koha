@@ -53,7 +53,12 @@
 	<!-- TMPL_LOOP NAME="subfield_loop" -->
 		<p>
 			<label class="labelsubfield">
-				<b><!-- TMPL_VAR NAME="subfield" --></b>
+				<!-- TMPL_UNLESS name="hide_marc" -->
+					<a href="#" onclick="upSubfield('<!-- TMPL_VAR name="index" -->'); return false;">Previous</a>
+						<input type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1">
+				<!-- TMPL_ELSE -->
+						<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+				<!-- /TMPL_UNLESS -->
 				<!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
 				<!-- TMPL_VAR NAME="marc_lib" -->
 				<!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
@@ -188,5 +193,21 @@ function AddField(field) {
 	document.forms[1].addfield_field.value=field;
 	document.f.submit();
 }
+
+function upSubfield(index) {
+	temp = document.forms['f'].field_value[index-1].value;
+	document.forms['f'].field_value[index-1].value=document.forms['f'].field_value[index].value;
+	document.forms['f'].field_value[index].value= temp;
+	temp = document.forms['f'].subfield[index-1].value;
+	document.forms['f'].subfield[index-1].value=document.forms['f'].subfield[index].value;
+	document.forms['f'].subfield[index].value = temp;
+	temp = document.forms['f'].mandatory[index-1].value;
+	document.forms['f'].mandatory[index-1].value=document.forms['f'].mandatory[index].value;
+	document.forms['f'].mandatory[index].value = temp;
+	temp = document.forms['f'].kohafield[index-1].value;
+	document.forms['f'].kohafield[index-1].value=document.forms['f'].kohafield[index].value;
+	document.forms['f'].kohafield[index].value = temp;
+}
+
 </script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -70,7 +70,15 @@
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Borrower Category</td>
-				<td><input type="text" name="Filter" value=""></td>
+				<td>
+					<select name="Filter">
+						<option value="">All Borrower Categories</option>
+						<!-- TMPL_LOOP name="borcatloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr class="hilighted">
 				<td>&nbsp;</td>

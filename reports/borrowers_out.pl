@@ -133,9 +133,22 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
+	my ($codes,$labels) = borrowercategories;
+	my @borcatloop;
+	foreach my $thisborcat (sort keys %$labels) {
+ # 			my $selected = 1 if $thisbranch eq $branch;
+ 			my %row =(value => $thisborcat,
+ # 									selected => $selected,
+									description => $labels->{$thisborcat},
+							);
+			push @borcatloop, \%row;
+	}
+	
+	
 	$template->param(
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					borcatloop =>\@borcatloop,
 					);
 output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -237,17 +250,22 @@ sub calculate {
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
 	if (@$filters[1]){
-		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp>?");
-		$queryfilter->execute(@$filters[1]);
-		while (my ($bornum)=$queryfilter->fetchrow){
-			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
-		}
+		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ";
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ");
+		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+		
+# 		$queryfilter->execute(@$filters[1]);
+# 		while (my ($bornum)=$queryfilter->fetchrow){
+# 			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+# 		}
 	} else {
+		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues ";
 		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
 		$queryfilter->execute;
-		while (my ($bornum)=$queryfilter->fetchrow){
-			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
-		}
+		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+# 		while (my ($bornum)=$queryfilter->fetchrow){
+# 			$strcalc .= " AND borrowers.borrowernumber <> $bornum ";
+# 		}
 	}
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
@@ -276,7 +294,7 @@ sub calculate {
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
 	
-	my $max =(($line)?$line:@table);
+	my $max =(($line)?$line:@table -1);
  	for ($i=1; $i<=$max;$i++) {
  		my @loopcell;
  		#@loopcol ensures the order for columns is common with column titles

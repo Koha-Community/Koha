@@ -45,6 +45,7 @@ my $ordnum=$input->param('ordnum');
 my $biblio=$input->param('biblio');
 my $basketno=$input->param('basketno');
 my $suggestionid = $input->param('suggestionid');
+my $close= $input->param('close');
 my $data;
 my $new;
 my $dbh = C4::Context->dbh;
@@ -147,6 +148,12 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-labels   => \%select_bookfunds,
 			-size     => 1,
 			-multiple => 0 );
+my $bookfundname;
+my $bookfundid;
+if ($close){
+	$bookfundid=$data->{'bookfundid'};
+	$bookfundname= $select_bookfunds{$bookfundid};
+}
 
 #Build sort lists
 my $CGIsort1 = buildCGIsort("Asort1","sort1",$data->{'sort1'});
@@ -164,6 +171,9 @@ if ($CGIsort2) {
 }
 
 # fill template
+$template->param( close=> $close, bookfundid=>$bookfundid, bookfundname=>$bookfundname) if ($close);
+
+
 $template->param( existing => $biblio,
 						title => $title,
 						ordnum => $ordnum,
@@ -177,8 +187,8 @@ $template->param( existing => $biblio,
 						listincgst => $booksellers[0]->{'listincgst'},
 						listprice => $booksellers[0]->{'listprice'},
 						gstreg => $booksellers[0]->{'gstreg'},
-						invoiceinc => $booksellers[0]->{'invoiceincgst'},                              
-						invoicedisc => $booksellers[0]->{'invoicedisc'},                               
+						invoiceinc => $booksellers[0]->{'invoiceincgst'},
+						invoicedisc => $booksellers[0]->{'invoicedisc'},
 						nocalc => $booksellers[0]->{'nocalc'},
 						name => $booksellers[0]->{'name'},
 						currency => $booksellers[0]->{'listprice'},

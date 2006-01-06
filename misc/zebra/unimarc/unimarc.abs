@@ -7,6 +7,18 @@ marc unimarc.mar
 
 esetname B @
 esetname F @
+encoding utf8
+
+
+# 010a is isbn
+elm 020                 isbn            -
+elm 020/?               isbn            !:w
+elm 020/?/a             isbn            !:w,!:p
+
+# 011a is issn
+elm 011                 issn            -
+elm 011/?               issn            !:w
+elm 011/?/a             issn            !:w,!:p
 
 elm 700            Author                  -
 elm 700/?          Author                  -

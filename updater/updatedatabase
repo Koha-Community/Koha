@@ -269,6 +269,24 @@ my %tabledata = (
             explanation         => 'hide marc specific datas like subfield code & indicators to library',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'NotifyBorrowerDeparture',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Delay before expiry where a notice is sent when issuing',
+            type                => 'Integer',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacPasswordChange',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -437,6 +455,37 @@ foreach $table ( keys %fielddefinitions ) {
 
 
 # Populate tables with required data
+
+
+# synch table and deletedtable.
+foreach my $table (('borrowers','items','biblio','biblioitems')) {
+	my %deletedborrowers;
+	print "synch'ing $table\n";
+	$sth = $dbh->prepare("show columns from deleted$table");
+	$sth->execute;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		$deletedborrowers{$column}=1;
+	}
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute;
+	my $previous;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		unless ($deletedborrowers{$column}) {
+			my $newcol="alter table deleted$table add $column $type";
+			if ($null eq 'YES') {
+				$newcol .= " NULL ";
+			} else {
+				$newcol .= " NOT NULL ";
+			}
+			$newcol .= "default $default" if $default;
+			$newcol .= " after $previous" if $previous;
+			$previous=$column;
+			print "creating column $column\n";
+			$dbh->do($newcol);
+		}
+	}
+}
+
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
@@ -753,6 +802,13 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.126  2006/01/06 16:39:42  tipaul
+# synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
+# Seems not to break too many things, but i'm probably wrong here.
+# at least, new features/bugfixes from 2.2.5 are here (tested on some features on my head local copy)
+#
+# - removing useless directories (koha-html and koha-plucene)
+#
 # Revision 1.125  2006/01/04 15:54:55  tipaul
 # utf8 is a : go for beta test in HEAD.
 # some explanations :

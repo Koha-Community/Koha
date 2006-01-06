@@ -12,25 +12,37 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-				<th class="catalogue">Résumé</th>
+				<th class="catalogue">Abrégé</th>
+				<th class="catalogue">Type de document</th>
 				<th class="catalogue">Nombre d'exemplaires</th>
 				<th class="catalogue">Localisation</th>
 				<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 			<tr>
-				<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+				<!-- TMPL_IF NAME="even" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 							<!-- TMPL_IF name="MARC_ON" -->
 								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 							<!-- TMPL_ELSE -->
-								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
-						<p><!-- TMPL_VAR NAME="author" -->
-						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
+								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volume" --> vol. <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumeddesc" --> : <!-- TMPL_VAR name="volumeddesc" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="number" --> partie <!-- TMPL_VAR name="number" --><!-- /TMPL_IF -->
+					<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<p><!-- TMPL_VAR NAME="description" --></p>
 				</td>
 				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR NAME="totitem" -->
@@ -46,14 +58,18 @@
 									(<!-- TMPL_VAR NAME="itemcallnumber" -->)
 								<!-- /TMPL_IF -->
 							<!-- /TMPL_IF -->
+							<!-- TMPL_IF name="notforloan" -->
+								<i>(<!-- TMPL_VAR name="notforloan" -->)</i>
+							<!-- /TMPL_IF -->
 						</p>
 					<!-- /TMPL_LOOP -->
+					<!-- TMPL_IF name="onorder" --><p>En commande</p><!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS name="norequests" -->
-						<a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Réservation</a>
+						<p><a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Réservation</a></p>
 					<!-- TMPL_ELSE -->
-						Non Réservable
+						<p>Non Réservable</p>
 					<!-- /TMPL_UNLESS -->
 				</td>
 			</tr>

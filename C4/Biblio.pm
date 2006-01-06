@@ -752,6 +752,7 @@ sub NEWmodbiblio {
 	my @addiauthfields = $record->field($tagfield);
 	foreach my $addiauthfield (@addiauthfields) {
 		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
+		$dbh->do("delete from additionalauthors where biblionumber=$biblionumber");
 		foreach my $subfieldcount (0..$#addiauthsubfields) {
 			REALmodaddauthor($dbh,$biblionumber,$addiauthsubfields[$subfieldcount]);
 		}
@@ -1323,7 +1324,7 @@ sub REALmoditem {
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
     my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
     my @bind = (
-        $item->{'barcode'},			$item->{'notes'},
+        $item->{'barcode'},			$item->{'itemnotes'},
         $item->{'itemcallnumber'},	$item->{'notforloan'},
         $item->{'location'},		$item->{multivolumepart},
 		$item->{multivolume},		$item->{stack},
@@ -1335,7 +1336,7 @@ sub REALmoditem {
 				 			location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
-            $item->{'notes'},          $item->{'homebranch'},
+            $item->{'itemnotes'},          $item->{'homebranch'},
             $item->{'lost'},           $item->{'wthdrawn'},
             $item->{'itemcallnumber'}, $item->{'notforloan'},
             $item->{'location'},		$item->{multivolumepart},
@@ -2884,6 +2885,13 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.135  2006/01/06 16:39:37  tipaul
+# synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
+# Seems not to break too many things, but i'm probably wrong here.
+# at least, new features/bugfixes from 2.2.5 are here (tested on some features on my head local copy)
+#
+# - removing useless directories (koha-html and koha-plucene)
+#
 # Revision 1.134  2006/01/04 15:54:55  tipaul
 # utf8 is a : go for beta test in HEAD.
 # some explanations :

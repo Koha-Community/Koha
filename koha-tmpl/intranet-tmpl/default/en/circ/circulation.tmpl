@@ -33,10 +33,12 @@
 			<p>	<!-- TMPL_IF NAME="picture" -->
 		<img src="/intranet-tmpl/<!-- TMPL_VAR NAME="picture" -->">
 	<!-- /TMPL_IF --><br><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
+			<!--TMPL_IF Name="warndeparture"--><p class="problem"><!--TMPL_ELSE--><p><!--/TMPL_IF--><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
 				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " class="button circulation">
 					detail
 				</a>
-				<a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">edit</a>
+				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">edit</a>
+			<!--TMPL_IF Name="warndeparture"--><br /> Borrower will leave soon<br /><!--/TMPL_IF-->
 			</p>
 			<p>
 				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->

@@ -76,14 +76,13 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 	my $f1 = substr($result,0,2);
 	my $f2 = substr($result,2,2);
 	$template->param(index => $index,
-			 "f1$f1" => $f1,
-			f2 => $f2);
+			 "f1$f1" => 1);
 	print $input->header(-cookie => $cookie),$template->output;
 }
 

@@ -147,6 +147,27 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
+	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
+	$sth->execute;
+	my  @itemtype;
+	my %itemtypes;
+	push @itemtype, "";
+	$itemtypes{''} = "";
+	while (my ($value,$lib) = $sth->fetchrow_array) {
+		push @itemtype, $value;
+		$itemtypes{$value}=$lib;
+	}
+
+	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
+				-values   => \@itemtype,
+ 				-labels   => \%itemtypes,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
+
+	$template->param(
+			CGIitemtype => $CGIitemtype,
+			);
 }
 
 

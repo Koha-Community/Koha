@@ -26,10 +26,10 @@
 			<th>Name</th>
 			<th>Branch</th>
 			<th>Category</th>
-			<th>Address</th>
 			<th>OD/Issues</th>
 			<th>Charges</th>
-			<th>Notes</th>
+			<th>Sort1</th>
+			<th>Sort2</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="resultsloop" -->
 			<!-- TMPL_IF NAME="background" -->
@@ -39,13 +39,17 @@
 			<!-- /TMPL_IF -->
 				<td><!-- TMPL_VAR NAME="count" --></td>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
-				<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a></td>
+				<td>
+					<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <b><!-- TMPL_VAR NAME="firstname" --></b></a></p>
+					<p><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" --></p>
+					<p><i><!-- TMPL_VAR NAME="borrowernotes" --></i></p>
+				</td>
 				<td><!-- TMPL_VAR name="branchcode" --></td>
 				<td><!-- TMPL_VAR NAME="categorycode" --></td>
-				<td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" --></td>
 				<td><!-- TMPL_VAR NAME="odissue" --></td>
 				<td><!-- TMPL_VAR NAME="fines" --></td>
-				<td><!-- TMPL_VAR NAME="borrowernotes" --></td>
+				<td><!-- TMPL_VAR NAME="sort1" --></td>
+				<td><!-- TMPL_VAR NAME="sort2" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

@@ -30,6 +30,11 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label100" for="author">Auteur</label> <input type="hidden" name="marclist" value="biblio.author">
@@ -37,6 +42,11 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
 			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label100" for="subject">Sujet</label>
@@ -45,6 +55,11 @@
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">  
 			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label100" for="itemtype">Type de document</label>
@@ -143,10 +158,14 @@
 				<option value="biblioitems.publicationyear">Année de Publication</option>
 				<option value="biblioitems.publishercode">Editeur</option>
 			</select>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Croissant</option>
+				<option value="DESC">Décroissant</option>
+			</select>
 		</p>
 		<p>
 			<input type="submit" value="Lancer la recherche" class="button catalogue">
-			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Suggestions</a>
+			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Suggestion orthographique</a>
 		</p>
 	</div>
 </form>
@@ -168,9 +187,15 @@ document.f.sql.value="";
 
 function AddStatement() {
 
-	document.forms[0].op.value="AddStatement";
+	document.forms['f'].op.value="AddStatement";
 	document.f.submit();
 }
+
+function Dopop(link,i) {
+	var searchstring=document.forms['f'].value[i].value;
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
 
 function PopupSuggestion() {
     var strQuery="";

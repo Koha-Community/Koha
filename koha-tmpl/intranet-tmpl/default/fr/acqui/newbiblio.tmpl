@@ -5,6 +5,9 @@
 function update(f){
   //collect values
   quantity=f.quantity.value
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+  }
   discount=f.discount.value
   listinc=parseInt(f.listinc.value)
   currency=f.currency.value
@@ -32,20 +35,35 @@ function update(f){
   f.ecost.value=ecost;
   f.GST.value=GST;
   f.total.value=total;
-
+  return true;
 }
 
 
 
 function messenger(X,Y,etc){
-win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
-win.focus();
-win.document.close();
-win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
-win.document.write(etc);
-win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
-win.document.write("</font></body></html>");
+	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+	win.focus();
+	win.document.close();
+	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
+	win.document.write(etc);
+	win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
+	win.document.write("</font></body></html>");
 }
+
+function check(f) {
+  quantity=f.quantity.value
+  title=f.title.value
+  if (title == "") {
+  	alert("Title can't be empty");
+	return false;
+  }
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+	return false;
+  }
+	document.frusin.submit();
+}
+
 //-->
 
 </script>
@@ -123,7 +141,7 @@ win.document.write("</font></body></html>");
 			<!-- /TMPL_IF -->
 		</p>
 		<p>
-			<label class="label100">Collections</label>
+			<label class="label100">Collection</label>
 			<!-- TMPL_IF name="biblio" -->
 				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->"><!-- TMPL_VAR NAME="seriestitle" -->
 			<!-- TMPL_ELSE -->
@@ -139,38 +157,54 @@ win.document.write("</font></body></html>");
 		<h2 class="acquisition">Détails de comptabilité</h2>
 		<p>
 			<label class="label100">Quantité</label>
-			<input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);">
+			<!-- TMPL_IF name="close" -->
+				<input type="hidden" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->"><!-- TMPL_VAR NAME="quantity" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);">
+		  	<!--/TMPL_IF-->
 		</p>
 		<p>
 			<label class="label100">Ligne de crédit</label>
-			<!-- TMPL_VAR NAME="CGIbookfund" -->
+			<!-- TMPL_IF name="close" -->
+				<input type="hidden" size="20" name="bookfund" value="<!-- TMPL_VAR NAME="bookfundid" -->"><!-- TMPL_VAR NAME="bookfundname" -->
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_VAR NAME="CGIbookfund" -->
+		  	<!--/TMPL_IF-->
 		</p>
 		<p>
-			<label class="label100">Barème Fournisseur</label>
-			<input type="text" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)">
+			<label class="label100">Prix fournisseur</label>
+			<!-- TMPL_IF name="close" -->
+				<input type="hidden" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->"><!-- TMPL_VAR NAME="listprice" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)">
+		  	<!--/TMPL_IF-->
 		</p>
 		<p>
-			<label class="label100">CoÃ»t de Remplacement </label>
-			<input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" onchange="update(this.form)">
+			<label class="label100">Coût de Remplacement </label>
+			<!-- TMPL_IF name="close" -->
+				<input type="hidden" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->"><!-- TMPL_VAR NAME="rrp" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->">
+		  	<!--/TMPL_IF-->
 		</p>
 		<p>
-			<label class="label100">CoÃ»t budgeté</label>
-			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" onchange="update(this.form)">
+			<label class="label100">Coût budgété</label>
+			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
 			<label class="label100">TVA budgetée</label>
-			<input type="text" size="20" name="GST" value="" onchange="update(this.form)">
+			<input type="text" size="20" name="GST" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
 			<label class="label100"><b>TOTAL BUDGETE</b></label>
-			<input type="text" size="20" name="total" value="" onchange="update(this.form)">
+			<input type="text" size="20" name="total" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
-			<label class="label100">CoÃ»t Réel</label>
-			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->">
+			<label class="label100">Coût Réel</label>
+			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
-			<label class="label100">Numéro de Facture *</label>
+			<label class="label100">Numéro Facture/BL *</label>
 			<input type="text" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->">
 		<p>
 			<label class="label100">Notes</label>
@@ -179,14 +213,22 @@ win.document.write("</font></body></html>");
 		<p>Les deux champs suivants sont disponibles pour votre usage propre. Ils peuvent être utiles pour des besoins statistiques.</p>
 		<p>
 			<label class="label100">Champ de tri 1</label>
-			<input type="text" size="20" name=sort1 value="<!-- TMPL_VAR NAME="sort1" -->">
+			<!-- TMPL_IF Name="CGIsort1" -->
+				<!-- TMPL_VAR Name="CGIsort1" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+			<!--/TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Champ de tri 2</label>
-			<input type="text" size="20" name=sort2 value="<!-- TMPL_VAR NAME="sort2" -->">
+			<!-- TMPL_IF Name="CGIsort2" -->
+				<!-- TMPL_VAR Name="CGIsort2" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+			<!--/TMPL_IF -->
 		</p>
 		<p>
-			<input type="submit" value="OK" class="button acquisition">
+			<input type="button" value="OK" class="button acquisition" onClick="check(this.form)">
 		</p>
 	</form>
 	</div>

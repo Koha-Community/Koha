@@ -17,26 +17,20 @@ function Help() {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 a.about:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 </style>
 </head>
 <body>
 
-<!-- MENUS -->
-<div id="menubar">
-	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
-	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Prêt</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Lecteurs</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Bilans</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a> <a class="about" href="/cgi-bin/koha/about.pl">A propos</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Aide</a>
-</div>
 
+<!-- TMPL_INCLUDE name="menus.inc" -->
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align="left">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Déconnecter</a>]</p>
+    <p class="user">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Déconnecter</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Connectez-vous</a> à Koha</p>
+    <p class="user"><a href="/cgi-bin/koha/opac-user.pl">Connectez-vous</a> à Koha</p>
 <!-- /TMPL_IF -->

@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# small script that import an iso2709 file into koha 2.0
 
 use strict;
 
@@ -9,6 +8,7 @@ use MARC::Record;
 use MARC::Batch;
 use C4::Context;
 use C4::Biblio;
+use ZOOM;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
@@ -21,9 +21,7 @@ GetOptions(
 unless ($confirm) {
 	print <<EOF
 
-script to write files for zebra DB reindexing. Once it's done, run zebraidx update biblios
-
-run the script with -c to confirm the reindexing.
+Script to create the zebra DB from a Koha DB
 
 EOF
 ;#'
@@ -33,6 +31,36 @@ die;
 $|=1; # flushes output
 
 my $dbh = C4::Context->dbh;
+my $Zconn;
+eval {
+	$Zconn = new ZOOM::Connection('localhost','2100');
+};
+if ($@) {
+	print "Error ", $@->code()," : ",$@->message()."\n";
+	die;
+}
+
+# first, drop Zebra DB
+eval {
+	my $Zpackage = $Zconn->package();
+	$Zpackage->option(databaseName => 'Koha');
+# 	$Zpackage->send("drop");
+};
+if ($@) {
+	print "Error dropping /CODE:", $@->code()," /MSG: ",$@->message(),"\n";
+# 	die;
+}
+# then recreate it
+eval {
+	my $Zpackage = $Zconn->package();
+	$Zpackage->option(databaseName => 'Koha');
+# 	$Zpackage->send("create");
+};
+if ($@) {
+	print "Error creating /CODE:", $@->code(),"\n /MSG:",$@->message(),"\n\n";
+# 	die;
+}
+
 my $cgidir = C4::Context->intranetdir ."/cgi-bin";
 unless (opendir(DIR, "$cgidir")) {
 		$cgidir = C4::Context->intranetdir."/";
@@ -44,10 +72,22 @@ $sth->execute;
 my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
 	my $record = MARCgetbiblio($dbh,$biblionumber);
-	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
-	open F,"> $filename";
-	print F $record->as_usmarc();
-	close F;
+# 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
+# 	open F,"> $filename";
+# 	print F $record->as_usmarc();
+# 	close F;
+	my $Zpackage = $Zconn->package();
+# 	print "=>".$record->as_xml()."\n";
+	$Zpackage->option(action => "recordInsert");
+	$Zpackage->option(record => $record->as_usmarc());
+	eval {
+		$Zpackage->send("update");
+	};
+	if ($@) {
+		print "Error updating /CODE:", $@->code()," /MSG:",$@->message(),"\n";
+		die;
+	}
+	$Zpackage->destroy;
 	$i++;
 	print "\r$i" unless ($i % 100);
 }

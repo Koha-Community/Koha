@@ -20,6 +20,11 @@
 <li>Valeur autorisée : signifie que la valeur n'est pas libre, mais dans une liste de valeurs autorisées du genre sélectionné</li>
 <li>Liste d'autorité : signifie que la valeur n'est libre, mais doit être choisie dans la liste d'autorité de la catégorie choisie</li>
 <li>module d'extension : signifie que la valeur est calculée ou gérée par un module d'extension.Par exemple, dans UNIMARC il y a des modules d'extension pour chaque champ 1xx, qui sont des champs codés.Le module d'extension est une aide considérable pour le catalogueur!</li>
-<li>La boucle est pour l'instant</li>
+<li>lien : si vous entrez un champ/sous-champ ici (200b), une loupe de recherche apparait après le sous-champ. Si l'utilisateur clique sur la loupe de recherche, une recherche est faite dans la base. La recherche est faite sur les champs/sous-champs que vous indiquez ici. Cela est utile pour 2 choses principalement : 
+	<ul>
+		<li>Sur un champ comme l'auteur (200f), mettez 200f ici, et vous pourrez trouver toutes les notices avec cet auteur</li>
+		<li>Sur un champ de lien (4xx), pour "sauter" sur d'une notice à une autre. Par exemple, mettez 011a dans le 464$x. Vous trouverez le périodique avec cet ISSN. Avec le plugin 4xx, vous disposez d'un outil performant pour gérer les liens entre notices.</li>
+	</ul>
+</li>
 </ul>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

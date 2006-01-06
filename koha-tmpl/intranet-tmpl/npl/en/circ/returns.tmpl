@@ -136,7 +136,7 @@
 		<caption>Returned Items</caption>
 		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Patron</th></tr>
 		<!-- TMPL_LOOP Name="riloop" -->
-			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->/<!-- TMPL_VAR Name="year" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
+			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="duedate" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
 			<td>
 			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
 			<td><!-- TMPL_VAR Name="itemtitle" --></td>

@@ -40,8 +40,8 @@ my $searchfield=$input->param('searchfield');
 $searchfield=0 unless $searchfield;
 $searchfield=~ s/\,//g;
 
-my $offset=$input->param('offset');
-my $op = $input->param('op');
+my $offset=$input->param('offset') || 0;
+my $op = $input->param('op') || '';
 my $dspchoice = $input->param('select_display');
 my $pagesize=20;
 
@@ -350,6 +350,7 @@ sub StringSearch  {
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
+	warn "=> ".$data->{liblibrarian};
 	}
 	#  $sth->execute;
 	$sth->finish;

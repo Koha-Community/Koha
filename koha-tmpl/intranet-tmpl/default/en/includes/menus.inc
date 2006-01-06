@@ -45,6 +45,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 <!-- ACQUISITION -->
 <div id="Subm1"> 
   <a href="/cgi-bin/koha/acqui/acqui-home.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">Main page</a>
+  <a href="/cgi-bin/koha/acqui/lateorders.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">Late orders</a>
   <a href="/cgi-bin/koha/acqui/histsearch.pl" class="submenu acquisition" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(1)">History search</a>
 </div>
 
@@ -55,7 +56,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 	<hr>
 	<a class="submenu bull" href="/cgi-bin/koha/bull-home.pl" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(2)">Subscriptions</a>
 	<a href="/cgi-bin/koha/bull/lateissues.pl" class="submenu bull" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(2)">Late issues</a>
-	<hr>
+	<hr />
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu catalogue" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(2)">Virtual shelves</a>
 </div>
 <!-- CIRC -->
@@ -63,6 +64,8 @@ var ns7 = (document.getElementById) ? 1:0;*/
 	<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Issues</a>
 	<a href="/cgi-bin/koha/circ/returns.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Returns</a>
 	<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Branch transfers</a>
+	<hr />
+	<a href="/cgi-bin/koha/circ/reserve.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Reserves pending</a>
 </div>
 <!-- MEMBERS -->
 <div id="Subm4"> 
@@ -80,10 +83,10 @@ var ns7 = (document.getElementById) ? 1:0;*/
 	<a href="/cgi-bin/koha/reports/borrowers_stats.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Borrowers</a>
 	<a href="/cgi-bin/koha/reports/catalogue_stats.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Catalogue</a>
 	<a href="/cgi-bin/koha/reports/issues_stats.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Circulation</a>
-	<hr>
+	<hr />
 	<a href="/cgi-bin/koha/reports/bor_issues_top.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Most issuing Borrowers</a>
 	<a href="/cgi-bin/koha/reports/cat_issues_top.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Most issued items</a>
-	<hr>
+	<hr />
 	<a href="/cgi-bin/koha/reports/borrowers_out.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Borrowers without issues</a>
 	<a href="/cgi-bin/koha/reports/catalogue_out.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Items not issued</a>
 	<a href="/cgi-bin/koha/reports/inventory.pl" class="submenu reports" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(6)">Inventory/Stocktaking</a>
@@ -103,10 +106,10 @@ var ns7 = (document.getElementById) ? 1:0;*/
 		<a href="/cgi-bin/koha/admin/aqbookfund.pl" title="Book fund administration. Remember to edit your book funds before you start editing the budgets." class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Book funds</a>
 		<a href="/cgi-bin/koha/admin/currency.pl" title="Define exchange rates"class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Currencies</a>
 		<a href="/cgi-bin/koha/admin/itemtypes.pl" title="Define item types"class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Item types</a>
-		<hr>
+		<hr />
 		<a href="/cgi-bin/koha/admin/categorie.pl" title="Define the categories of borrowers"class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Borrower categories</a>
 		<a href="/cgi-bin/koha/admin/issuingrules.pl" title="Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)"class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Issuing rules</a>
-		<hr>
+		<hr />
 		<a href="/cgi-bin/koha/admin/authorised_values.pl" title="Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Authorised values</a>
 	</TMPL_IF>
 		

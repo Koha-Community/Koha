@@ -172,8 +172,7 @@ my ($input) = @_;
 					query => $query,
 					type => 'intranet',
 					authnotrequired => 0,
-					flagsrequired => {borrowers => 1},
-					flagsrequired => {catalogue => 1},
+					flagsrequired => {editcatalogue => 1},
 					debug => 1,
 					});
 	

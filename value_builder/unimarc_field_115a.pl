@@ -74,7 +74,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
  	my $f1 = substr($result,0,1);
@@ -97,24 +97,24 @@ my ($template, $loggedinuser, $cookie)
  	my $f18 = substr($result,19,1);
 
 	$template->param(index => $index,
-							"f1$f1" => $f1,
+							"f1$f1" => 1,
 							"f2" => $f2,
-							"f3$f3" => $f3,
-							"f4$f4" => $f4,
-							"f5$f5" => $f5,
-							"f6$f6" => $f6,
-							"f7$f7" => $f7,
-							"f8$f8" => $f8,
- 							"f9$f9" => $f9,
- 							"f10$f10" => $f10,
- 							"f11$f11" => $f11,
- 							"f12$f12" => $f12,
- 							"f13$f13" => $f13,
- 							"f14$f14" => $f14,
- 							"f15$f15" => $f15,
- 							"f16$f16" => $f16,
- 							"f17$f17" => $f17,
- 							"f18$f18" => $f18
+							"f3$f3" => 1,
+							"f4$f4" => 1,
+							"f5$f5" => 1,
+							"f6$f6" => 1,
+							"f7$f7" => 1,
+							"f8$f8" => 1,
+ 							"f9$f9" => 1,
+ 							"f10$f10" => 1,
+ 							"f11$f11" => 1,
+ 							"f12$f12" => 1,
+ 							"f13$f13" => 1,
+ 							"f14$f14" => 1,
+ 							"f15$f15" => 1,
+ 							"f16$f16" => 1,
+ 							"f17$f17" => 1,
+ 							"f18$f18" => 1
  );
 	print $input->header(-cookie => $cookie),$template->output;
 }

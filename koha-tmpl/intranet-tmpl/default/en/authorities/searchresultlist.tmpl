@@ -35,26 +35,32 @@
 		<table>
 			<tr>
 				<th class="authority">Summary</th>
-				<th class="authority">Used in</th>
+				<!-- TMPL_UNLESS name="isEDITORS" -->
+					<th class="authority">Used in</th>
+				<!-- /TMPL_UNLESS -->
 				<th class="authority">View</th>
 				<th class="authority">Delete</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
 					<td><!-- TMPL_VAR NAME="summary" --></td>
-					<td><a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)</a></td>
+					<!-- TMPL_UNLESS name="isEDITORS" -->
+						<td>
+							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
+						</td>
+					<!-- /TMPL_UNLESS -->
 					<td>
 						<a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR NAME="authid" -->" title="Authority number<!-- TMPL_VAR NAME="authid" -->">
 						</a>
 					</td>
-					<td>
-						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">
-							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
-						</a>
-						<!-- /TMPL_UNLESS -->
-					</td>
+						<td>
+							<!-- TMPL_UNLESS name="used" -->
+							<a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">
+								<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+							</a>
+							<!-- /TMPL_UNLESS -->
+						</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>

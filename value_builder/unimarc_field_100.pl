@@ -76,7 +76,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 	$result='        d        u  y0frey03      ba' unless $result;
@@ -100,19 +100,19 @@ my ($template, $loggedinuser, $cookie)
 	$template->param(index => $index,
 							f1 => $f1,
 							f3 => $f3,
-							"f2$f2" => $f2,
+							"f2$f2" => 1,
 							f4 => $f4,
-			                                "f5$f5" => $f5,
-							"f6$f6" => $f6,
-			                                "f7$f7" => $f7,
-							"f8$f8" => $f8,
-			                                "f9$f9" => $f9,
+							"f5$f5" => 1,
+							"f6$f6" => 1,
+							"f7$f7" => 1,
+							"f8$f8" => 1,
+							"f9$f9" => 1,
 							"f10" => $f10,
-			                                "f11$f11" => $f11,
-			                                "f12$f12" => $f12,
-			                                "f13$f13" => $f13,
+							"f11$f11" => 1,
+							"f12$f12" => 1,
+							"f13$f13" => 1,
 							"f14" => $f14,
-			                                "f15$f15" => $f15
+							"f15$f15" => 1
 			                                );
 	print $input->header(-cookie => $cookie),$template->output;
 }

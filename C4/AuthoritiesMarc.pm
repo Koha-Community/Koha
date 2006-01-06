@@ -311,8 +311,8 @@ sub AUTHcount_usage {
 	chop $tags_using_authtype;
 	if ($tags_using_authtype) {
 		$sth = $dbh->prepare("select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=?");
-	} else {
-		$sth = $dbh->prepare("select count(*) from marc_subfield_table where subfieldvalue=?");
+# 	} else {
+# 		$sth = $dbh->prepare("select count(*) from marc_subfield_table where subfieldvalue=?");
 	}
 # 	warn "Q : select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=$authid";
 	$sth->execute($authid);
@@ -939,6 +939,13 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.22  2006/01/06 16:39:37  tipaul
+# synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
+# Seems not to break too many things, but i'm probably wrong here.
+# at least, new features/bugfixes from 2.2.5 are here (tested on some features on my head local copy)
+#
+# - removing useless directories (koha-html and koha-plucene)
+#
 # Revision 1.21  2005/10/26 09:12:33  tipaul
 # big commit, still breaking things...
 #

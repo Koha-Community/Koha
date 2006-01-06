@@ -6,28 +6,30 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Items with No Issues </h1>
+		<h1>Koha : Items with no Issues </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_IF NAME="err" --> <span class="error"> <b><!--/TMPL_IF --><strong><!-- TMPL_VAR NAME="crit"--> =</strong><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </span> </b><!--/TMPL_IF --></p>
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
-		
+		<br>
 		<table>
-			<tr>
-				<th>Num/Items</th>
+			<tr >
+				<th>Barcode/Titles</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="title" --><b><!-- TMPL_VAR NAME="title" --></b><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="barcode" --> <i><!-- TMPL_VAR NAME="barcode" --></i><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
@@ -36,18 +38,19 @@
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Koha : Items with no Issues </h1>
-	<form method="post">
-	
+	<form method="post" action="/cgi-bin/koha/reports/catalogue_out.pl">
+	<div class="data">
 	<table>
 		<thead>
 			<tr>
-			<th>Limit to </th>
-			<th>By </th>
-			<th colspan="2">Filters</th>
+			<th scope="col">&nbsp;</th>
+			<th scope="col">Limit to </th>
+			<th colspan="2">By</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
+				<td>&nbsp;</td>
 				<td>
 					<select name="Limit">
 						<option value ="" checked>None</option>
@@ -68,38 +71,50 @@
 						<option value ="itemtype">Itemtype</option>
 					</select>
 				</td>
-				<td colspan="2">&nbsp;</td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>Branch</td>
-				<td><input type="text" name="Filter" value=""></td>
+			<th scope="col" colspan="3">Filters</th></tr>
+			<tr class="hilighted">
+								<th scope="row">Branch</th>
+				<td colspan="2">
+					<select name="Filter">
+						<option value="">All branches</option>
+						<!-- TMPL_LOOP name="branchloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="branchname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>Document Type</td>
-				<td><input type="text" name="Filter" value=""></td>
+								<th scope="row">Document Type</th>
+				<td colspan="2">
+					<select name="Filter">
+						<option value="">All Item Types</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 		</tbody>
 	</table>
-<div class="data">
-<table>
-	<caption>Output Options</caption>
-	<tr><td colspan="2"><label for="screen">To the Screen</label> <input type="radio" checked name="output" value="screen" id="screen" /></td></tr>
-	<tr><td colspan="2"><label for="file">To file a file</label><input type="radio" name="output" value="file" id="file" /></td></tr>
-<tr><td>&nbsp;</td><td><label for="basename">...named:</label>   <input type="text" id="basename" name="basename" value="Export" /></td></td></tr>
-<tr><td>&nbsp;</td><td><label for="MIME">File Format:</label> <!-- TMPL_VAR NAME="CGIextChoice" --></td></tr>
-<tr><td>&nbsp;</td><td><label for="sep">Delimiter:</label> <!-- TMPL_VAR NAME="CGIsepChoice" --></td></tr>
-</table>
-		
-	<p>
-	<input type="submit" value="Generate Report" class="submit" />
-	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
-	</form></p>
 	</div>
+	<div class="details">
+		<h3> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</div>
+	<p>
+	<input type="submit" value="Generate Report" class="submit">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
 <!-- /TMPL_IF -->
+
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

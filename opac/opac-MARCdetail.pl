@@ -89,12 +89,25 @@ my $tag;
 # loop through each tab 0 through 9
 for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # loop through each tag
-	my @fields = $record->fields();
 	my @loop_data =();
-# 	foreach my $field (@fields) {
 	my @subfields_data;
+	# deal with leader
+	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop  or $tagslib->{'000'}->{'@'}->{hidden}) {
+		my %subfield_data;
+		$subfield_data{marc_lib}=$tagslib->{'000'}->{'@'}->{lib};
+		$subfield_data{marc_value}=$record->leader();
+		$subfield_data{marc_subfield}='@';
+		$subfield_data{marc_tag}='000';
+		push(@subfields_data, \%subfield_data);
+		my %tag_data;
+			$tag_data{tag}='000 -'. $tagslib->{'000'}->{lib};
+		my @tmp = @subfields_data;
+		$tag_data{subfield} = \@tmp;
+		push (@loop_data, \%tag_data);
+		undef @subfields_data;
+	}
+	my @fields = $record->fields();
 	for (my $x_i=0;$x_i<=$#fields;$x_i++) {
-# 		warn "$tabloop => $x_i";
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($fields[$x_i]->tag()<10) {
 			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
@@ -115,6 +128,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
 				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
+				$subf[$i][1] =~ s/\n/<br\/>/g;
 				if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} elsif ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{kohafield} eq "biblioitems.isbn") {

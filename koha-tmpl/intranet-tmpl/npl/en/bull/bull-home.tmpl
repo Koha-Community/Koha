@@ -25,9 +25,13 @@
 		</tr>
 		<!-- TMPL_IF NAME="subscriptions" -->
 		<!-- TMPL_LOOP name="subscriptions" -->
-			<tr>
-				<td>
-					<!-- TMPL_VAR name="title" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="toggle" -->
+					<tr class="highlight">
+				<!-- TMPL_ELSE -->
+					<tr>
+				<!-- /TMPL_IF -->
+				<td><!-- TMPL_IF name="title" --><!-- TMPL_VAR name="title" --><!-- TMPL_ELSE --> |
+					<!-- /TMPL_IF --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="ISSN" -->

@@ -8,7 +8,7 @@
 <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 <h2>Welcome <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
 <p>	<!-- Hide from NPL--> <a href="/cgi-bin/koha/opac-account.pl">my fines</a> | <!-- Hide from NPL -->
-	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a>	| <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a>	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></p>
+	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a> | 		<!-- TMPL_IF name="OpacPasswordChange" --><a href="/cgi-bin/koha/opac-passwd.pl">change my password</a> | <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a>	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></p>
 		<!-- TMPL_IF name="textmessaging"-->
 			<div class="error"><h3>Message from the library</h3>
 			<p><!-- TMPL_VAR name="textmessaging" --></p></div>

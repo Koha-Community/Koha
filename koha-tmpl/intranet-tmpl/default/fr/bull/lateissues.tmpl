@@ -1,0 +1,43 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="bull">Numéros en retard</h1>
+	<p>
+		<form action="lateissues.pl" method="post">
+			<!-- TMPL_VAR name="CGIsupplier" -->
+				<!-- TMPL_IF name="phone" -->Téléphone : <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->" class="button bull"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+			<input type="submit" value="filtre" class="button bull">
+		</form>
+	</p>
+	<table>
+		<tr>
+			<th class="bull">Titre</th>
+			<th class="bull">Numéro d'exemplaire</th>
+			<th class="bull">Retard depuis</th>
+			<th class="bull" colspan=2>&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP name="lateissues" -->
+			<tr>
+				<!-- TMPL_IF name="odd" -->
+					<td class="hilighted"><!-- TMPL_IF name="Title" --><!-- TMPL_VAR name="Title" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF --></td>
+					<td class="hilighted"><!-- TMPL_VAR name="serialseq" --></td>
+					<td class="hilighted"><!-- TMPL_VAR name="planneddate" --></td>
+					<td class="hilighted">
+						<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Détail</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Réceptionner</a>
+					</td>
+				<!-- TMPL_ELSE -->
+					<td><!-- TMPL_VAR name="Title" --></td>
+					<td><!-- TMPL_VAR name="serialseq" --></td>
+					<td><!-- TMPL_VAR name="planneddate" --></td>
+					<td>
+						<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Détail</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Réceptionner</a>
+					</td>
+				<!-- /TMPL_IF -->
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+

@@ -28,10 +28,8 @@
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
 			<h2 class="circulation">Information lecteur</h2>
-			<p>
-				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " onclick="openWindow(this,'Member', 480, 640)">
-					<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
-				</a>
+			<!--TMPL_IF Name="warndeparture"--><p class="problem"><!--TMPL_ELSE--><p><!--/TMPL_IF--><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->) <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " class="button circulation"> détail </a> <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">Modifier</a>
+			<!--TMPL_IF Name="warndeparture"--><br /> La carte lecteur va bientôt expirer<br /><!--/TMPL_IF-->
 			</p>
 			<p>
 				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->
@@ -49,7 +47,7 @@
 					<input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
 					<input type="hidden" value="circ" name="destination" />
 					<input type="hidden" name="status" value="0" />
-					<input type="submit" class="button circulation" value="Lift Debarment" />
+					<input type="submit" class="button circulation" value="Réactiver lecteur">
 				</form>
 			<!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
@@ -180,6 +178,9 @@
 			<!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
 				<p class="problem">Pas de renouvellements supplémentaires possibles</p>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="EXPIRED" -->
+				<p class="problem">La carte du lecteur a expiré</p>
+			<!-- /TMPL_IF -->
 			<br/>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
@@ -245,7 +246,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Cote</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="todayissues" -->
-		<tr>
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="dd" --></td>
 			<td>
 				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
@@ -274,7 +275,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Cote</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="previssues" -->
-			<tr>
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="od" -->
 					<td class="problem">
 						<!-- TMPL_VAR NAME="dd" -->
@@ -284,7 +285,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 					</td>
 					<td class="problem"><!-- TMPL_VAR NAME="title" --></td>
 					<td class="problem"><!-- TMPL_VAR NAME="author" --></td>
-					<td class="problem"><!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" --></td>
+					<td class="problem"><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 				<!-- TMPL_ELSE -->
 					<td>
 						<!-- TMPL_VAR NAME="dd" -->

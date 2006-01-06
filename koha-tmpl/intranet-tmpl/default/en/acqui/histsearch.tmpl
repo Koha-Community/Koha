@@ -11,6 +11,7 @@
 			<th class="acquisition">Placed on</th>
 			<th class="acquisition">Recieved on</th>
 			<th class="acquisition">Quantity ordered</th>
+			<th class="acquisition">Quantity received</th>
 			<th class="acquisition">Unit cost</th>
 			<th class="acquisition">&nbsp;</th>
 		</tr>
@@ -158,6 +159,9 @@
 					&nbsp;
 				</th>
 				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
 					<input type="submit" class="button acquisition" value="Set Filter">
 				</th>
 			</form>
@@ -212,6 +216,13 @@
 				<!-- TMPL_ELSE -->
 					<td class="number">
 				<!-- /TMPL_IF -->
+					<!-- TMPL_VAR name="quantityreceived" -->
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted number">
+				<!-- TMPL_ELSE -->
+					<td class="number">
+				<!-- /TMPL_IF -->
 					<!-- TMPL_VAR name="ecost" -->
 				</td>
 				<!-- TMPL_IF name="toggle" -->
@@ -230,8 +241,8 @@
 			<th class="acquisition">&nbsp;</th>
 			<th class="acquisition">&nbsp;</th>
 			<th class="acquisition">&nbsp;</th>
-			<th class="acquisition">&nbsp;</th>
 			<th class="acquisition"><!-- TMPL_VAR name="total_qty" --></th>
+			<th class="acquisition"><!-- TMPL_VAR name="total_qtyreceived" --></th>
 			<th class="acquisition"><!-- TMPL_VAR name="total_price" --></th>
 			<th class="acquisition">&nbsp;</th>
 		</tr>

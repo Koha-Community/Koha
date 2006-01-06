@@ -3,12 +3,10 @@
 	<!-- TMPL_IF NAME="add" -->
 	
 	<h1>
-	<!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-branches-p" -->Sites<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Sites : Ajouter Site<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Sites : Modifier Site<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Sites : Modifier Catégorie<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
 	</h1>
 	
 	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
@@ -86,15 +84,35 @@
 	
 	<!-- TMPL_IF NAME="else" -->
 		<h1>
-		<!-- TMPL_IF NAME="use-heading-flags-p" -->
 		<!-- TMPL_IF NAME="heading-branches-p" -->Sites<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Sites : Ajouter Site<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Sites : Modifier Site<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Sites : Modifier Catégorie<!-- /TMPL_IF -->
-		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
 		</h1>
 	
-		<font color="red"><!-- TMPL_VAR NAME="message" --></font>
+		<font color="red">
+		<!-- TMPL_IF name="MESSAGE1" -->
+			Impossible de modifier le site. Vous devez spécifier un nom et un code
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE2" -->
+			Site modifié
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE3" -->
+			Site supprimé
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE4" -->
+			Impossible de modifier le site. Vous devez spécifier un nom et un code
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE5" -->
+			Modification enregistrée
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE6" -->
+			Catégorie supprimée
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="MESSAGE7" -->
+			Le site ne peut être supprimé parce qu'il y a des documents qui s'y rapportent
+		<!-- /TMPL_IF -->
+		</font>
 		<table border="1" cellpadding="5" cellspacing="0">
 			<tr>
 				<th colspan="6" align="left" bgcolor="#99cc33">

@@ -127,10 +127,10 @@
 	<li><!-- TMPL_VAR NAME="phone" --></li>
 	<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 	<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-	<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
+	<li>(<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
 	</ul>
 	</div>
-	<h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
+	<h3<!--TMPL_IF Name="warndeparture"--> class="error"<!--/TMPL_IF-->><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!--TMPL_IF Name="warndeparture"--><br /> Borrower will leave soon<!--/TMPL_IF--></h3>
 <h4> &nbsp; &nbsp; <!-- TMPL_VAR NAME="issuecount" --> out<!-- TMPL_IF NAME="overduecount" -->, <span class="error"><!-- TMPL_VAR name="overduecount" --> overdue</span><!-- /TMPL_IF --></h4> <!-- Display for NPL // <h4> &nbsp; &nbsp; <!-- TMPL_IF NAME="avcount" --><!-- TMPL_VAR NAME="avcount" --> AV Issues, <!-- TMPL_IF NAME="avflag" --><span class="error">AV Limit Reached!</span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> More Allowed<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> AV Issues Allowed<!-- /TMPL_IF --> //Display for NPL --></h4><br clear="right" />
 
 <!-- TMPL_IF NAME="flagged" -->

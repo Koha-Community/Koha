@@ -359,7 +359,7 @@ sub calculate {
  	}
 	$strsth .=" group by $linefield";
 	$strsth .=" order by $lineorder";
-	warn "". $strsth;
+	warn "rows: ". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
 	if (( @linefilter ) and ($linefilter[1])){
@@ -377,7 +377,7 @@ sub calculate {
 #		} else {
 #			$cell{rowtitle} = "";
 		}
- 		$cell{totalrow} = 0;
+		$cell{totalrow} = 0;
 		push @loopline, \%cell;
  	}
 
@@ -518,7 +518,7 @@ warn "column=$column, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
  	}
 	$strsth2 .=" group by $colfield";
 	$strsth2 .=" order by $colorder";
- 	warn "". $strsth2;
+ 	warn "columns : ". $strsth2;
 	
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if (( @colfilter ) and ($colfilter[1])){
@@ -573,7 +573,7 @@ warn "column=$column, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
 	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
 	$strcalc .= " AND aqbooksellers.name like '" . @$filters[4] ."'" if ( @$filters[4] );
 	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-	$strcalc .= " AND aqbookfund.bookfundid like '" . @$filters[5] ."'" if ( @$filters[5] );
+	$strcalc .= " AND aqorderbreakdown.bookfundid like '" . @$filters[5] ."'" if ( @$filters[5] );
 	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
 	$strcalc .= " AND aqorders.sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
 	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
@@ -596,20 +596,20 @@ warn "column=$column, podsp=$podsp, rodsp=$rodsp, aodsp=$aodsp\n";
 		$grantotal += $value;
 	}
 
- 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
+	push @loopcol,{coltitle => "NULL"} if ($emptycol);
 	
-	foreach my $row ( sort keys %table ) {
+	foreach my $row (@loopline) {
 		my @loopcell;
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
-			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			my $value =$table{($row->{'rowtitle'} eq "NULL")?"zzEMPTY":$row->{'rowtitle'}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
 			push @loopcell, {value => $value  } ;
 		}
-		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
+		push @looprow,{ 'rowtitle' => $row->{'rowtitle'},
 						'loopcell' => \@loopcell,
 						'hilighted' => ($hilighted >0),
-						'totalrow' => $table{$row}->{totalrow}
+						'totalrow' => $table{($row->{'rowtitle'} eq "NULL")?"zzEMPTY":$row->{'rowtitle'}}->{totalrow}
 					};
 		$hilighted = -$hilighted;
 	}

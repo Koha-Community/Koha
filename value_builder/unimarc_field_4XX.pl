@@ -88,7 +88,7 @@ sub plugin {
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			    });
 		#get bibid
@@ -105,13 +105,49 @@ sub plugin {
 		my $subfield_value_0;
 		$subfield_value_0=$marcrecord->field('001')->data if $marcrecord->field('001');
 		my $subfield_value_a;
-		if ($marcrecord->field('200')){
-			$subfield_value_a=$marcrecord->field('200')->subfield("f");
-		} elsif ($marcrecord->field('700')){
+		if ($marcrecord->field('700')){
 			$subfield_value_a=$marcrecord->field('700')->subfield("a");
+			$subfield_value_a.=", ".$marcrecord->field('700')->subfield("b") if ($marcrecord->field('700')->subfield("b"));
+			$subfield_value_a.=" ".$marcrecord->field('700')->subfield("d") if ($marcrecord->field('700')->subfield("d"));
+			$subfield_value_a.=" (".$marcrecord->field('700')->subfield("c")." - " if ($marcrecord->field('700')->subfield("c"));
+			$subfield_value_a.=" (" if (($marcrecord->field('700')->subfield("f")) and not( $marcrecord->field('700')->subfield("c")));
+			$subfield_value_a.=$marcrecord->field('700')->subfield("f") if ($marcrecord->field('700')->subfield("f"));
+			$subfield_value_a.=")" if ($marcrecord->field('701')->subfield("f")) or ($marcrecord->field('701')->subfield("c"));
+		} elsif ($marcrecord->field('702')){
+			$subfield_value_a=$marcrecord->field('702')->subfield("a");
+			$subfield_value_a.=", ".$marcrecord->field('702')->subfield("b") if ($marcrecord->field('702')->subfield("b"));
+			$subfield_value_a.=" ".$marcrecord->field('702')->subfield("d") if ($marcrecord->field('702')->subfield("d"));
+			$subfield_value_a.=" (".$marcrecord->field('702')->subfield("c")."; " if ($marcrecord->field('702')->subfield("c"));
+			$subfield_value_a.=" (" if (($marcrecord->field('702')->subfield("f")) and not($marcrecord->field('702')->subfield("c")) );
+			$subfield_value_a.=$marcrecord->field('702')->subfield("f") if ($marcrecord->field('702')->subfield("f"));
+			$subfield_value_a.=")" if ($marcrecord->field('702')->subfield("f")) or ($marcrecord->field('702')->subfield("c"));
+		} elsif ($marcrecord->field('710')){
+			$subfield_value_a=$marcrecord->field('710')->subfield("d")."° " if ($marcrecord->field('710')->subfield("d"));
+			$subfield_value_a.=$marcrecord->field('710')->subfield("a") if ($marcrecord->field('710')->subfield("a"));
+			$subfield_value_a.=", ".$marcrecord->field('710')->subfield("b") if ($marcrecord->field('710')->subfield("b"));
+			$subfield_value_a.=" (".$marcrecord->field('710')->subfield("f")." - " if ($marcrecord->field('710')->subfield("f"));
+			$subfield_value_a.=" (" if (($marcrecord->field('710')->subfield("e")) and not( $marcrecord->field('710')->subfield("f")));
+			$subfield_value_a.=$marcrecord->field('710')->subfield("e") if ($marcrecord->field('710')->subfield("e"));
+			$subfield_value_a.=")" if (($marcrecord->field('710')->subfield("e")) or ($marcrecord->field('710')->subfield("f")));
 		} elsif ($marcrecord->field('701')){
 			$subfield_value_a=$marcrecord->field('701')->subfield("a");
-		}
+			$subfield_value_a.=", ".$marcrecord->field('701')->subfield("b") if ($marcrecord->field('701')->subfield("b"));
+			$subfield_value_a.=" ".$marcrecord->field('701')->subfield("d") if ($marcrecord->field('701')->subfield("d"));
+			$subfield_value_a.=" (".$marcrecord->field('701')->subfield("c")." - " if ($marcrecord->field('701')->subfield("c"));
+			$subfield_value_a.=" (" if (($marcrecord->field('701')->subfield("f")) and not( $marcrecord->field('701')->subfield("c")));
+			$subfield_value_a.=$marcrecord->field('701')->subfield("f") if ($marcrecord->field('701')->subfield("f"));
+			$subfield_value_a.=")" if ($marcrecord->field('701')->subfield("f")) or ($marcrecord->field('701')->subfield("c"));
+		} elsif ($marcrecord->field('712')){
+			$subfield_value_a=$marcrecord->field('712')->subfield("d")."° " if ($marcrecord->field('712')->subfield("d"));
+			$subfield_value_a.=$marcrecord->field('712')->subfield("a") if ($marcrecord->field('712')->subfield("a"));
+			$subfield_value_a.=", ".$marcrecord->field('712')->subfield("b") if ($marcrecord->field('712')->subfield("b"));
+			$subfield_value_a.=" (".$marcrecord->field('712')->subfield("f")." - " if ($marcrecord->field('712')->subfield("f"));
+			$subfield_value_a.=" (" if (($marcrecord->field('712')->subfield("e")) and not( $marcrecord->field('712')->subfield("f")));
+			$subfield_value_a.=$marcrecord->field('712')->subfield("e") if ($marcrecord->field('712')->subfield("e"));
+			$subfield_value_a.=")" if (($marcrecord->field('712')->subfield("e")) or ($marcrecord->field('712')->subfield("f")));
+		} elsif ($marcrecord->field('200')){
+			$subfield_value_a=$marcrecord->field('200')->subfield("f");
+		} 
 		my $subfield_value_c = $marcrecord->field('210')->subfield("a") if ($marcrecord->field('210'));
 		my $subfield_value_d = $marcrecord->field('210')->subfield("d") if ($marcrecord->field('210'));
 		

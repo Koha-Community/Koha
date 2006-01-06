@@ -35,6 +35,7 @@ use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
 use C4::Date;
+use Date::Manip;
 
 #
 # PARAMETERS READING
@@ -126,6 +127,13 @@ my $picture;
 if ($borrowernumber) {
 	$borrower = getpatroninformation(\%env,$borrowernumber,0);
 	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
+	warn $borrower->{'expiry'};
+ 	my $warningdate = DateCalc($borrower->{'expiry'},"- ".C4::Context->preference('NotifyBorrowerDeparture')."  days");
+	my $warning=Date_Cmp(ParseDate("today"),$warningdate);
+	if ($warning>0){ 
+		#borrowercard expired
+		$template->param(warndeparture=>$warning);
+	}
 	$template->param(overduecount => $od,
 							issuecount => $issue,
 							finetotal => $fines);

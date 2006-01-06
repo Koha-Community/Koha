@@ -34,27 +34,33 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-				<th class="authority">Résumé</th>
-				<th class="authority">Utilisé</th>
+				<th class="authority">Abrégé</th>
+				<!-- TMPL_UNLESS name="isEDITORS" -->
+					<th class="authority">Utilisé</th>
+				<!-- /TMPL_UNLESS -->
 				<th class="authority">Voir</th>
 				<th class="authority">Supprimer</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
 					<td><!-- TMPL_VAR NAME="summary" --></td>
-					<td><a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> notices</a></td>
+					<!-- TMPL_UNLESS name="isEDITORS" -->
+						<td>
+							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> notices</a>
+						</td>
+					<!-- /TMPL_UNLESS -->
 					<td>
 						<a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" width="32" hspace="0" vspace="0" border="0" alt='Autorité numéro <!-- TMPL_VAR NAME="authid" -->' title='autorité numéro <!-- TMPL_VAR NAME="authid" -->'>
 						</a>
 					</td>
-					<td>
-						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:do_delete('authorities-home.pl?op=delete&authid=<!-- TMPL_VAR NAME="authid" -->')">
-							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
-						</a>
-						<!-- /TMPL_UNLESS -->
-					</td>
+						<td>
+							<!-- TMPL_UNLESS name="used" -->
+							<a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">
+								<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+							</a>
+							<!-- /TMPL_UNLESS -->
+						</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
@@ -87,8 +93,11 @@
 
 
 <script language="JavaScript" type="text/javascript" >
-function do_delete(page)
-{
-window.location = page;
+function confirm_deletion(id) {
+	
+	var is_confirmed = confirm('Are you sure you want to delete this authority?');
+	if (is_confirmed) {
+		window.location="authorities-home.pl?op=delete&amp;authid="+id;
+	}
 }
 </script>

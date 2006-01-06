@@ -81,7 +81,7 @@ sub GetLateIssues {
 							WHERE subscription.subscriptionid = serial.subscriptionid AND
 							((planneddate < now() and serial.STATUS =1) OR serial.STATUS = 3) and
 							subscription.aqbooksellerid=$supplierid and
-							biblio.biblionumber = subscription.biblionumber
+							biblio.biblionumber = subscription.biblionumber order by title
 							");
 	} else {
 		$sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
@@ -89,16 +89,19 @@ sub GetLateIssues {
 							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
 							WHERE subscription.subscriptionid = serial.subscriptionid AND
 							((planneddate < now() and serial.STATUS <=3) OR serial.STATUS = 3) and
-							biblio.biblionumber = subscription.biblionumber
+							biblio.biblionumber = subscription.biblionumber order by title
 							");
 	}
 	$sth->execute;
 	my @issuelist;
 	my $last_title;
+	my $odd=0;
 	while (my $line = $sth->fetchrow_hashref) {
+		$odd++ unless $line->{title} eq $last_title;
 		$line->{title} = "" if $line->{title} eq $last_title;
 		$last_title = $line->{title} if ($line->{title});
 		$line->{planneddate} = format_date($line->{planneddate});
+		$line->{'odd'} = 1 if $odd %2 ;
 		push @issuelist,$line;
 	}
 	return @issuelist;
@@ -299,37 +302,41 @@ sub getsubscriptions {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($biblionumber) {
-		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=?");
+		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=? order by title");
 		$sth->execute($biblionumber);
 	} else {
 		if ($ISSN and $title)
 		{
-			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
+			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? order by title )");
 			$sth->execute("%$title%",$ISSN);
 		}
 		else
 		{
 			if ($ISSN)
 			{
-				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ?");
+				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ? order by title");
 				$sth->execute($ISSN);
 			}
 			else
 			{
 				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
- biblio.biblionumber=subscription.biblionumber and biblio.title like ? ");
+ biblio.biblionumber=subscription.biblionumber and biblio.title like ?  order by title");
 				$sth->execute("%$title%");
 			}
 		}
 	}
 	my @results;
 	my $previoustitle="";
+	my $odd=1;
 	while (my $line = $sth->fetchrow_hashref) {
 		if ($previoustitle eq $line->{title}) {
 			$line->{title}="";
 			$line->{issn}="";
+			$line->{toggle} = 1 if $odd==1;
 		} else {
 			$previoustitle=$line->{title};
+			$odd=-$odd;
+			$line->{toggle} = 1 if $odd==1;
 		}
 		push @results, $line;
 	}

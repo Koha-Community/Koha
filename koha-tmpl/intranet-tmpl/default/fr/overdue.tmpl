@@ -1,11 +1,22 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
-	<h1 class="reports">exemplaire en retard depuis le <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<h1 class="reports">Documents en retard au <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<form method="post" action="/cgi-bin/koha/overdue.pl">
+	<p>Filtrer<br />
+	 	<div class="label100">Nom ou numéro de carte :</div> <input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"><br />
+		<div class="label100">Catégorie du lecteur</div><!--TMPL_VAR Name="CGIcatcodes" --><br />
+		<div class="label100">Infos lecteurs</div><!--TMPL_VAR Name="CGIflags" --><br />
+	  	<div class="label100">Type de document :</div><!--TMPL_VAR Name="CGIitemtypes" --><br />
+		<div class="label100">Site :</div><!--TMPL_VAR Name="CGIbranches" --><br />
+		<div class="label100">Tous les documents actuellement en prêt</div><input type="checkbox" name="showall" value="afficher" checked="checked"><br />
+			<input type="submit" value="Filtrer" class="button reports">
+	</form>
+	</p>
 	
 	<table>
 	<tr>
-		<th class="reports">Date de retour</th>
-		<th class="reports">Emprunteur</th>
+		<th class="reports">Retour le <a href="/cgi-bin/koha/overdue.pl?order=date&amp;type=intranet">Trier</a> </th>
+		<th class="reports">Lecteur <a href="/cgi-bin/koha/overdue.pl?order=borrower&amp;type=intranet">Trier</a></th>
 		<th class="reports">Téléphone</th>
 		<th class="reports">Titre</th>
 		<th class="reports">Auteur</th>

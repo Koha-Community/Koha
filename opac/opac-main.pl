@@ -44,6 +44,8 @@ my $counter=0;
 foreach my $language (getalllanguages()) {
 	next if $language eq 'images';
 	next if $language eq 'CVS';
+	next if $language=~ /png$/;
+	next if $language=~ /css$/;
 	my $selected='0';
 #                            next if $currently_selected_languages->{$language};
 	push @options, { language => $language, counter => $counter };

@@ -5,7 +5,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-	<h1 class="authority">Authority search results</h1>
+	<h1>Authority search results</h1>
 	<div id="resultnumber">
 		<p>
 			<!-- TMPL_IF name="displayprev" -->
@@ -39,15 +39,19 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-				<th class="authority">Summary</th>
-				<th class="authority">Used in</th>
-				<th class="authority">View</th>
-				<th class="authority">Delete</th>
+				<th>Summary</th>
+				<!-- TMPL_UNLESS name="isEDITORS" --><th>Used in</th><!-- /TMPL_UNLESS -->
+				<th>View</th>
+				<th>Delete</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
 					<td><!-- TMPL_VAR NAME="summary" --></td>
-					<td><a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)</a></td>
+						<!-- TMPL_UNLESS name="isEDITORS" -->
+						<td>
+							<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
+						</td>
+					<!-- /TMPL_UNLESS -->
 					<td>
 						<a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Edit</a>
 					</td>

@@ -76,7 +76,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 	my $f1 = substr($result,0,1);
@@ -87,13 +87,13 @@ my ($template, $loggedinuser, $cookie)
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
 	$template->param(index => $index,
-							"f1$f1" => $f1,
-							"f2$f2" => $f2,
+							"f1$f1" => 1,
+							"f2$f2" => 1,
 							f3 => $f3,
-							"f4$f4" => $f4,
-							"f5$f5" => $f5,
-							"f6$f6" => $f6,
-							"f7$f7" => $f7);
+							"f4$f4" => 1,
+							"f5$f5" => 1,
+							"f6$f6" => 1,
+							"f7$f7" => 1);
 	print $input->header(-cookie => $cookie),$template->output;
 }
 

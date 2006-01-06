@@ -49,6 +49,9 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
+			acquired in the last
+			<input type="text" name="desc_or_asc" size="3" value="30" />
+			days
 			<input type="hidden" name="orderby" value="biblio.timestamp" />
 			<input type="hidden" name="desc_or_asc" value="desc" />
 			<input type="submit" value="OK" class="button" />
@@ -56,24 +59,26 @@
 	</form>
 	<h2>Other options</h2>
 	<!-- TMPL_IF NAME="loggedinusername" -->
-		<!-- TMPL_IF name="virtualshelves" -->
-			<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="suggestion" -->
-			<a href="opac-suggestions.pl" class="button">View & manage suggestions</a>
-		<!-- /TMPL_IF -->
-		<a href="/cgi-bin/koha/opac-user.pl" class="button">
-			My personnal details
-		</a>
-		<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
-		
-		<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
-			Log Out
-		</a>
-		<!-- TMPL_IF name="textmessaging"-->
-			<h2>Message from the library</h2>
-			<!-- TMPL_VAR name="textmessaging" -->
-		<!-- /TMPL_IF -->
+		<p>
+			<!-- TMPL_IF name="virtualshelves" -->
+				<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="suggestion" -->
+				<a href="opac-suggestions.pl" class="button">Suggestions</a>
+			<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/opac-user.pl" class="button">
+				My details
+			</a>
+			<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
+			
+			<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
+				Log Out
+			</a>
+			<!-- TMPL_IF name="textmessaging"-->
+				<h2>Message from the library</h2>
+				<!-- TMPL_VAR name="textmessaging" -->
+			<!-- /TMPL_IF -->
+		</p>
 	<!-- TMPL_ELSE -->
 		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->

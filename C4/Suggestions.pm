@@ -64,6 +64,7 @@ Suggestions done by other can be seen when not "AVAILABLE"
 				&delsuggestion
 				&countsuggestion
 				&changestatus
+				&findsuggestion_from_biblionumber
 			);
 
 =item SearchSuggestion
@@ -192,15 +193,25 @@ sub countsuggestion {
 }
 
 sub changestatus {
-	my ($suggestionid,$status,$managedby) = @_;
+	my ($suggestionid,$status,$managedby,$biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($managedby>0) {
-		$sth = $dbh->prepare("update suggestions set status=?,managedby=? where suggestionid=?");
-		$sth->execute($status,$managedby,$suggestionid);
+		if ($biblionumber) {
+			$sth = $dbh->prepare("update suggestions set status=?,managedby=?,biblionumber=? where suggestionid=?");
+			$sth->execute($status,$managedby,$biblionumber,$suggestionid);
+		} else {
+			$sth = $dbh->prepare("update suggestions set status=?,managedby=? where suggestionid=?");
+			$sth->execute($status,$managedby,$suggestionid);
+		}
 	} else {
-		$sth = $dbh->prepare("update suggestions set status=? where suggestionid=?");
-		$sth->execute($status,$suggestionid);
+		if ($biblionumber) {
+			$sth = $dbh->prepare("update suggestions set status=?,biblionumber=? where suggestionid=?");
+			$sth->execute($status,$biblionumber,$suggestionid);
+		} else {
+			$sth = $dbh->prepare("update suggestions set status=? where suggestionid=?");
+			$sth->execute($status,$suggestionid);
+		}
 
 	}
 	# check mail sending.
@@ -231,6 +242,14 @@ sub changestatus {
 				 );
 sendmail(%mail);
 # 	warn "sending email to $emailinfo->{byemail} from $emailinfo->{libemail} to notice new status $emailinfo->{status} for $emailinfo->{title} / $emailinfo->{author}";
+}
+
+sub findsuggestion_from_biblionumber {
+	my ($dbh,$biblionumber) = @_;
+	my $sth = $dbh->prepare("select suggestionid from suggestions where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($biblionumber) = $sth->fetchrow;
+	return $biblionumber;
 }
 
 =back

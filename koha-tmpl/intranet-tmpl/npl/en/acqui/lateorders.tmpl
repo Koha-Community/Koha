@@ -1,0 +1,110 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Acquisitions: Late Orders<!-- TMPL_INCLUDE NAME="doc-head-close-calendar.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-full-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+	<h1><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Late issues</h1>
+	<div class="data">
+	<table>
+		<tr>
+			<th scope="col">Supplier</th>
+			<th scope="col">Order Date</th>
+			<th scope="col">Ordered for</th>
+			<th scope="col">Including Basket</th>
+			<th scope="col">Book information</th>
+			<th scope="col">Branch</th>
+			<th scope="col">Estimated Unit Price</th>
+			<th scope="col">Retailer Catalogue Unit Price</th>
+			<th scope="col">Quantity</th>
+			<th scope="col">Total cost</th>
+			<th scope="col">Budget</th>
+			<th scope="col">&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="lateorders.pl" method="post">
+				<td>
+					<!-- TMPL_VAR name="CGIsupplier" -->
+				</td>
+				<td> &nbsp;</td>
+				<td>
+					<input size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days
+				</td>
+				<td colspan="2">
+					&nbsp;
+				</td>
+				<td>
+					<!-- TMPL_VAR name="CGIbranch" -->
+				</td>
+				<td colspan="5">
+					&nbsp;
+				</td>
+				
+				<td>
+					<input type="submit" value="Filter" class="submit" />
+				</td>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP name="lateorders" -->
+			<!--TMPL_IF Name="hilighted" --> <tr class="highlight"> <!--TMPL_ELSE--> <tr> <!-- /TMPL_IF -->
+				<td>
+					<!-- TMPL_VAR name="supplier" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="orderdate" -->
+				</td>
+				<td class="number">
+					<!-- TMPL_VAR name="latesince" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="basketno" -->
+				</td>
+				<td >
+					<b><!-- TMPL_VAR name="title" --></b>
+				<!-- TMPL_IF name="author" --><br/><i>Author:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publisher" --><br/><i>Published by:</i> <!-- TMPL_VAR NAME="publisher" --><!-- TMPL_IF name="publicationyear" --><i> in </i><!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="branch" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="unitpricelib" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="unitpricesupplier" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="quantity" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="subtotal" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="budget" -->
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tfoot><tr> 
+				<th>
+					Total
+				</th>
+				<th colspan="2">
+					&nbsp;
+				</th>
+				<th> &nbsp;</th>
+				<th colspan="7">
+					&nbsp;
+				</th>
+				
+				<th>
+					<!-- TMPL_VAR name="total" -->
+				</th>
+		</tr></tfoot>
+	</table>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

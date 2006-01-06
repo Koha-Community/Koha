@@ -7,7 +7,7 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <div class="details">
 <div class="detail-sidebar">
-<!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" /><!-- /TMPL_IF -->
+<!-- Display for NPL <!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" /><!-- /TMPL_IF --> //Display for NPL -->
 <div class="operations">
 <ul>
 <!-- TMPL_UNLESS NAME="norequests" --><li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Place Reserve</a></li><!-- /TMPL_UNLESS -->
@@ -106,7 +106,23 @@
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
-<td><!-- TMPL_VAR NAME="branchname" --></td>
+				<td>
+					<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+					<!-- TMPL_IF name="itemcallnumber" -->
+						(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+					<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="datedue" -->
+						On loan
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+							Available
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				</td>
 <td><!-- TMPL_VAR NAME="datedue" --></td>
 <td><!-- TMPL_VAR NAME="datelastseen" --></td>
 <!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>

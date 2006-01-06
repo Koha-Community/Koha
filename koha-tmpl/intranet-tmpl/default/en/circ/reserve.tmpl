@@ -1,0 +1,42 @@
+<!-- TMPL_INCLUDE NAME="circulation-top.inc" -->
+<div id="mainbloc">
+	<h1 class="circulation">Items Reserved as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<div id="resultlist">
+		<table>
+		<tr>
+			<th class="circulation">Priority</th>
+			<th class="circulation">Reserve Date  <a href="/cgi-bin/koha/circ/reserve.pl?order=date&amp;type=intranet">Sort</a> </th>
+			<th class="circulation">Patron  <a href="/cgi-bin/koha/circ/reserve.pl?order=borrower&amp;type=intranet">Sort</a></th>
+			<th class="circulation">Title  <a href="/cgi-bin/koha/circ/reserve.pl?order=biblio&amp;type=intranet">Sort</a></th>
+			<th class="circulation">Location</th>
+			<th class="circulation">Notes</th>
+		</tr>
+		
+		<!-- TMPL_LOOP NAME="reserveloop" -->
+			<tr>
+				<td><p><!-- TMPL_VAR NAME="priority" --></p></td>
+				<td>
+					<p><!-- TMPL_VAR NAME="reservedate" --></p>
+					<p>in <!-- TMPL_VAR NAME="branch" --></p>
+					<!-- TMPL_IF NAME="statusw" --><p>Waiting</p><!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" --><p>Fullfilled</p><!-- /TMPL_IF -->
+				</td>
+				<td>
+					<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="bornum"-->"><!-- TMPL_VAR NAME="name" --></a><br /><!-- TMPL_VAR NAME="phone" --><br />
+				<!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+	<!-- TMPL_VAR NAME="email" --></a><!--/TMPL_IF-->
+					</p>
+				</td>
+				<td>
+					<p>
+						<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><br /><!-- TMPL_VAR NAME="author" -->
+					</p>
+				</td>
+				<td><p><!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
+	
+				<td><p><!-- TMPL_VAR NAME="notes" --></p></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="circulation-bottom.inc" -->

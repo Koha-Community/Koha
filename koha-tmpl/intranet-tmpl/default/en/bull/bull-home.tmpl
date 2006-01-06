@@ -28,20 +28,46 @@
 		</tr>
 		<!-- TMPL_LOOP name="subscriptions" -->
 			<tr>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ISSN" -->
 						<a href="bull/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
 					<!-- /TMPL_IF -->
 					
 				</td>
-				<td>
-					<!-- TMPL_VAR name="title" -->
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="title" -->
+						<!-- TMPL_VAR name="title" -->
+					<!-- TMPL_ELSE -->
+						|
+					<!-- /TMPL_IF -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
 				</td>
-				<td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="subscription detail">Detail</a>
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
 					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="receive issues for this subscription">Receive</a>
 				</td>
 			</tr>

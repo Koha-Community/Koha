@@ -139,6 +139,7 @@ if ($op eq "do_search") {
 							to=>$to,
 							numbers=>\@numbers,
 							authtypecode=>$authtypecode,
+							isEDITORS => $authtypecode eq 'EDITORS',
 							);
 
 } elsif ($op eq "delete") {

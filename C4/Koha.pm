@@ -60,7 +60,8 @@ Koha.pm provides many functions for Koha scripts.
 			&getitemtypes &getitemtypeinfo
 			&getframeworks &getframeworkinfo
 			&getauthtypes &getauthtype
-			&getallthemes &getalllanguages 
+			&getallthemes &getalllanguages
+			&getallbranches
 			$DEBUG);
 
 use vars qw();
@@ -180,6 +181,8 @@ sub subfield_is_koha_internal_p ($) {
   $branches = &getbranches();
   returns informations about branches.
   Create a branch selector with the following code
+  Is branchIndependant sensitive
+   When IndependantBranches is set AND user is not superlibrarian, displays only user's branch
   
 =head3 in PERL SCRIPT
 
@@ -218,6 +221,64 @@ sub getbranches {
 	} else {
     	$sth = $dbh->prepare("Select * from branches order by branchname");
 	}
+	$sth->execute;
+	while (my $branch=$sth->fetchrow_hashref) {
+		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
+		$nsth->execute($branch->{'branchcode'});
+		while (my ($cat) = $nsth->fetchrow_array) {
+			# FIXME - This seems wrong. It ought to be
+			# $branch->{categorycodes}{$cat} = 1;
+			# otherwise, there's a namespace collision if there's a
+			# category with the same name as a field in the 'branches'
+			# table (i.e., don't create a category called "issuing").
+			# In addition, the current structure doesn't really allow
+			# you to list the categories that a branch belongs to:
+			# you'd have to list keys %$branch, and remove those keys
+			# that aren't fields in the "branches" table.
+			$branch->{$cat} = 1;
+			}
+			$branches{$branch->{'branchcode'}}=$branch;
+	}
+	return (\%branches);
+}
+
+=head2 getallbranches
+
+  $branches = &getallbranches();
+  returns informations about ALL branches.
+  Create a branch selector with the following code
+  IndependantBranches Insensitive...
+  
+=head3 in PERL SCRIPT
+
+my $branches = getallbranches;
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+	my $selected = 1 if $thisbranch eq $branch;
+	my %row =(value => $thisbranch,
+				selected => $selected,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
+}
+
+
+=head3 in TEMPLATE  
+			<select name="branch">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+
+=cut
+
+sub getallbranches {
+# returns a reference to a hash of references to ALL branches...
+	my %branches;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+   	$sth = $dbh->prepare("Select * from branches order by branchname");
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
 		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
@@ -518,6 +579,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		push @languages, $language;
 	    }
 	    return sort @languages;
@@ -528,6 +591,8 @@ sub getalllanguages {
 		foreach my $language (readdir D) {
 		    next if $language=~/^\./;
 		    next if $language eq 'all';
+			next if $language=~ /png$/;
+			next if $language=~ /css$/;
 		    $lang->{$language}=1;
 		}
 	    }
@@ -541,6 +606,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		push @languages, $language;
 	    }
 	    return sort @languages;
@@ -551,6 +618,8 @@ sub getalllanguages {
 		foreach my $language (readdir D) {
 		    next if $language=~/^\./;
 		    next if $language eq 'all';
+			next if $language=~ /png$/;
+			next if $language=~ /css$/;
 		    $lang->{$language}=1;
 		}
 	    }
@@ -565,6 +634,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		$lang->{$language}=1;
 	    }
 	}
@@ -574,6 +645,8 @@ sub getalllanguages {
 	    foreach my $language (readdir D) {
 		next if $language=~/^\./;
 		next if $language eq 'all';
+		next if $language=~ /png$/;
+		next if $language=~ /css$/;
 		$lang->{$language}=1;
 	    }
 	}
