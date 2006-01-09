@@ -56,9 +56,48 @@ my $itemfield = '995'; # enter the TAG number where your items are stored.
 
 my %whattodo = (
 	# authority code (the one you've choosen (or will choose) in Koha >> parameters >> thesaurus structure >> add)
+	TU =>	{	taglist	=> "500",
+				key		=> "a|i|x|k|l|m|n|q|y|z",
+				other	=> "",
+				authtag => "230",
+			},
+	
+	SAUT =>	{
+				taglist	=> "600",
+				key		=> "a|b|c|d|f|x|y|z",
+				other	=> "j",
+				authtag => "200",
+			},
+	SAUTTIT =>	{
+				taglist	=> "604",
+				key		=> "a|b|c|d|f|x|y|z",
+				other	=> "j",
+				authtag => "240",
+			},
+	SCO =>	{	taglist	=> "601",
+				key		=> "a|b",
+				other	=> "c|d|f|g|p",
+				authtag => "210",
+			},
+	STU =>	{	taglist	=> "605",
+				key		=> "a|i|x|k|l|m|n|q|y|z",
+				other	=> "",
+				authtag => "230",
+			},
+	SNG =>	{	taglist	=> "607",
+				key		=> "a|x|y|z",
+				other	=> "",
+				authtag => "215",
+			},
+	SNC => 	{	taglist	=> "606",
+				key		=> "a|x|y|z",
+				other	=> "",
+				authtag => "250",
+			},
+	
 	NP =>	{
 				# the list of MARC tags using this authority
-				taglist	=> "600|700|701|702",
+				taglist	=> "700|701|702",
 				# the list of MARC subfields used as key for authority. 2 entries in biblio having the same key will be considered as the same.
 				key		=> "a|b|c|d|f|x|y|z",
 				# the list of MARC subfields not used as key, but to be copied in authority.
@@ -66,25 +105,10 @@ my %whattodo = (
 				# the field in authority that will be reported in biblio. Remember that all subfields in tag "authtag" will be reported in the same subfield of the biblio (in MARC tags that are in "taglist")
 				authtag => "200",
 			},
-	CO =>	{	taglist	=> "601|710|711|712",
+	CO =>	{	taglist	=> "710|711|712",
 				key		=> "a|b",
 				other	=> "c|d|f|g|p",
 				authtag => "210",
-			},
-	NG =>	{	taglist	=> "607",
-				key		=> "a|x|y|z",
-				other	=> "",
-				authtag => "215",
-			},
-	TU =>	{	taglist	=> "500|605",
-				key		=> "a|i|x|k|l|m|n|q|y|z",
-				other	=> "",
-				authtag => "230",
-			},
-	NC => 	{	taglist	=> "606",
-				key		=> "a|x|y|z",
-				other	=> "",
-				authtag => "250",
 			},
 );
 my %authorities;
