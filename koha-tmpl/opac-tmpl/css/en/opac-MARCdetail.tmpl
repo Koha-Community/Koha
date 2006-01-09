@@ -71,7 +71,7 @@
 			<!-- TMPL_LOOP name="subfield" -->
 				<p>
 					<label class="labelsubfield">
-						<!-- TMPL_VAR name="marc_subfield" -->
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
 					<!-- TMPL_VAR name="marc_value" -->

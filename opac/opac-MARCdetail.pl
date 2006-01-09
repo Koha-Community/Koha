@@ -150,7 +150,11 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
 				$tag_data{tag}="";
 			} else {
-				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				if (C4::Context->preference('hide_marc')) {
+					$tag_data{tag}=$tagslib->{$fields[$x_i]->tag()}->{lib};
+				} else {
+					$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				}
 			}
 			my @tmp = @subfields_data;
 			$tag_data{subfield} = \@tmp;
@@ -212,6 +216,7 @@ $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
 						bibid => $bibid,
+						hide_marc => C4::Context->preference('hide_marc'),
 						biblionumber => $biblionumber);
 output_html_with_http_headers $query, $cookie, $template->output;
 
