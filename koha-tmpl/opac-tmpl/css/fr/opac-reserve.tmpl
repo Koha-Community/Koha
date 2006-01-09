@@ -4,7 +4,7 @@
 <!-- TMPL_IF NAME="message" -->
 	<h2>Impossible d'établir la réservation parce que </h2>
 	<ul>
-		<!-- TMPL_IF name="noreserve" --><li>You can't make reserve in this library (feature unactivated)</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="noreserve" --><li>Vous ne pouvez pas faire de réservation dans cette bibliothèque (fonctionnalité désactivée)</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_much_oweing" --><li>vous devez <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_many_reserves" --><li>vous ne pouvez faire plus de <!-- TMPL_VAR NAME="too_many_reserves" --> réservations</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà une réservation en cours pour ce document</li><!-- /TMPL_IF -->
@@ -19,7 +19,7 @@
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
 	<p> Il y a déjà <b><!-- TMPL_VAR NAME="reservecount" --></b> réservations pour ce document </p>
-	<p>Sélectionnez les types de documents qui vous conviennent. Le premier qui correspondra à votre souhait sera mis de coté lorsqu'il sera disponible</p>
+	<p>Sélectionnez les types de documents qui vous conviennent. Le premier qui correspondra à votre souhait sera mis de coté lorsqu'il sera disponible.</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="item_types_selected" value="1" />
@@ -42,7 +42,10 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		<p>Merci de sélectionner l'annexe où vous souhaitez récupérer le document <!-- TMPL_VAR NAME="CGIbranch" --></p>
+		<p>Merci de sélectionner l'annexe où vous souhaitez récupérer le document <select name="branch" id="branch">
+		<option>-- Sélectionnez votre site --</option>
+		<!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
+</select></p>
 				
 		<input class="button" type="submit" value="Soumettre">
 	</form>
@@ -50,7 +53,7 @@
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p>Merci de confirmer que vous souhaitez demander un document de ces types</p>
+	<p>Merci de confirmer que vous souhaitez réserver un document de ces types :</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1" />

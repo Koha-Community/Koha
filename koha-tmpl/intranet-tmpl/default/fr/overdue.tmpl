@@ -4,19 +4,37 @@
 	<form method="post" action="/cgi-bin/koha/overdue.pl">
 	<p>Filtrer<br />
 	 	<div class="label100">Nom ou numéro de carte :</div> <input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"><br />
-		<div class="label100">Catégorie du lecteur</div><!--TMPL_VAR Name="CGIcatcodes" --><br />
+		<div class="label100">Catégorie du lecteur</div><select name="borcat" id="borcat"><option value="">Tous</option>
+			<!-- TMPL_LOOP name="borcatloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select><br />
 		<div class="label100">Infos lecteurs</div><!--TMPL_VAR Name="CGIflags" --><br />
-	  	<div class="label100">Type de document :</div><!--TMPL_VAR Name="CGIitemtypes" --><br />
-		<div class="label100">Site :</div><!--TMPL_VAR Name="CGIbranches" --><br />
-		<div class="label100">Tous les documents actuellement en prêt</div><input type="checkbox" name="showall" value="afficher" checked="checked"><br />
+	  	<div class="label100">Type de document :</div><select name="itemtype" id="itemtype"><option value="">Tous</option>
+			<!-- TMPL_LOOP name="itemtypeloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
+			<!-- /TMPL_LOOP -->
+			</select><br />
+		<div class="label100">Site :</div><select name="branch" id="branch">
+				<option value="">Tous</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+<br />
+		<div class="label100">Tous les documents actuellement en prêt</div><input type="checkbox" name="showall" value="afficher" checked="checked"><br /><br />
+		<div class="label100">Trié par</div><select name="order" tabindex="0" size="1" id="order">
+<option <!--TMPL_UNLESS name="order"-->selected<!-- /TMPL_UNLESS--> value="">Date de retour</option>
+<option <!--TMPL_IF name="order"-->selected<!-- /TMPL_IF--> value="borrower">Emprunteur</option>
+</select><br />
 			<input type="submit" value="Filtrer" class="button reports">
 	</form>
 	</p>
 	
 	<table>
 	<tr>
-		<th class="reports">Retour le <a href="/cgi-bin/koha/overdue.pl?order=date&amp;type=intranet">Trier</a> </th>
-		<th class="reports">Lecteur <a href="/cgi-bin/koha/overdue.pl?order=borrower&amp;type=intranet">Trier</a></th>
+		<th class="reports">Date de retour </th>
+		<th class="reports">Lecteur </th>
 		<th class="reports">Téléphone</th>
 		<th class="reports">Titre</th>
 		<th class="reports">Auteur</th>

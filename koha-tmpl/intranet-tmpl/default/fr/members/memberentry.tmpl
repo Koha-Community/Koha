@@ -39,6 +39,9 @@
 			<!-- TMPL_IF NAME="ERROR_branch" -->
 				Site : les lecteurs doivent être du même site que vous<br>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_date" -->
+				La date de fin d'inscription est AVANT la date de début<br>
+			<!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">

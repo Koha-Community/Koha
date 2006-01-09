@@ -4,39 +4,39 @@
 	<h1>Saisir une nouvelle suggestion</h1>
 	<p>Remplissez ce formulaire pour suggérer une nouvelle acquisition. Vous serez prévenu par messagerie lorsque la bibliothèque traitera votre suggestion</p>
 	<p>Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le champ "Note" peut être utilisé pour ce que vous voulez</p>
-	<form>
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 		<input type="hidden" name="op" value="add_confirm">
-		<p><label>Titre</label><input type="text" name="title" size=60 maxlentgh=80></p>
-		<p><label>Auteur</label><input type="text" name="author" size=60 maxlength=80></p>
-		<p><label>Date copyright</label><input type="text" name="copyrightdate" size="5" maxlength="4"></p>
-		<p><label>Editeur</label><input type="text" name="publishercode" size="60" maxlength="80"></p>
-		<p><label>Volume</label><input type="text" name="volumedesc" size="60" maxlength="80"></p>
-		<p><label>Année de Publication</label><input type="text" name="publicationyear" size="5" maxlength="4"></p>
-		<p><label>Lieu de Publication</label><input type="text" name="place" size="60" maxlength="80"></p>
-		<p><label>ISBN/ISSN</label><input type="text" name="isbn" size="14" maxlength="10"></p>
-		<p><label>Remarque</label><textarea name="note" rows="10" cols="60"></textarea></p>
+		<p><label for="stitle">Titre</label><input type="text" name="title" id="stitle" size="60" maxlength="80"></p>
+		<p><label for="author">Auteur</label><input type="text" name="author" id="author" size="60" maxlength="80"></p>
+		<p><label for="copyrightdate">Date copyright</label><input type="text" name="copyrightdate" id="copyrightdate" size="5" maxlength="4"></p>
+		<p><label for="publishercode">Editeur</label><input type="text" name="publishercode" id="publishercode" size="60" maxlength="80"></p>
+		<p><label for="volumedesc">Reliure</label><input type="text" name="volumedesc" id="volumedesc" size="60" maxlength="80"></p>
+		<p><label for="publicationyear">Année de Publication</label><input type="text" name="publicationyear" id="publicationyear" size="5" maxlength="4"></p>
+		<p><label for="place">Lieu de Publication</label><input type="text" name="place" id="place" size="60" maxlength="80"></p>
+		<p><label for="isbn">ISBN/ISSN</label><input type="text" name="isbn" id="isbn" size="14" maxlength="10"></p>
+		<p><label for="note">Note</label><textarea name="note" id="note" rows="10" cols="60"></textarea></p>
 		<p><label>&nbsp;</label><input type="submit" value="Envoyer la suggestion à l'équipe de la bibliothèque" class="button"></p>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-	<h1>Suggestions d'achat</h1>
+	<h1>Suggestions</h1>
 	<table>
 		<tr>
 			<th>&nbsp;</th>
 			<th>Titre</th>
 			<th>Auteur</th>
-			<th>©</th>
+			<th>&copy;</th>
 			<th>Editeur</th>
 			<th>Etat</th>
 			<th>Suggéré par</th>
-			<th>Géré par</th>
-			<th>Remarque</th>
+			<th>Traité par</th>
+			<th>Note</th>
 		</tr>
 		<tr>
-			<form>
+			<form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
 				<th>
-					Filtrer sur
+					Chercher sur
 				</th>
 				<th>
 					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
@@ -82,51 +82,51 @@
 				</th>
 				<th>
 					<select name="suggestedbyme">
-						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>Me</option>
-						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>Quelqu'un</option>
+						<!-- TMPL_IF NAME="suggestedbyme" --><option value="1" selected="selected"><!-- TMPL_ELSE --><option value="1"><!-- /TMPL_IF -->Moi-même</option>
+						<!-- TMPL_UNLESS name="suggestedbyme" --><option value="0" selected="selected"><!-- TMPL_ELSE --><option value="0"><!-- /TMPL_UNLESS -->Tous</option>
 					</select>
 				</th>
 				<th>
 					&nbsp;
 				</th>
 				<th>
-					<input type="submit" class="button" value="Etablir un filtre">
+					<input type="submit" class="button" value="Chercher">
 				</th>
 			</form>
 		</tr>
-		<form>
+		<form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
 			<input type="hidden" name="op" value="delete_confirm">
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
-			<tr>
+			<!-- TMPL_IF NAME="even" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 				<td>
 					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->">
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR NAME="title" -->
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR NAME="author" -->
 				</td>
-				<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+				<td align="center">
 					<!-- TMPL_VAR NAME="copyrightdate" -->
 				</td>
-				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+				<td align="center">
 					<!-- TMPL_VAR name="publishercode" -->
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_IF name="ASKED" -->Demandé<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ACCEPTED" -->Accepté, sera commandé rapidement<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ORDERED" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="REJECTED" -->Suggestion rejetée : ne sera pas acheté<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="AVAILABLE" -->Reçu par la bibliothèque<!-- /TMPL_IF -->
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR name="note" -->
 				</td>
 			</tr>
@@ -149,8 +149,8 @@
 	<form>
 		<input type="hidden" name="op" value="add">
 		<input type="submit" class="button" value="Saisir une nouvelle suggestion">
-	<br />
-	<p>Note : si vous filtrez sur les suggestions faites par n'importe qui, la liste ne contiendra que les suggestions nouvelles. Les suggestions déjà traitées par un bibliothécaire n'apparaitront pas</p>
+	</form>
+	<p>Note : si vous cherchez dans les suggestions faites par chacun, la liste ne contiendra que les nouvelles suggestions.Les suggestions déjà traitées par un bibliothécaire n'apparaîtront pas.</p>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

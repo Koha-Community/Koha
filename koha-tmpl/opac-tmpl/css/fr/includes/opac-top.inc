@@ -16,31 +16,39 @@
 		//
 	</script>
 	<script type="text/javascript" language="javascript">
-	var MSG_BASKET_EMPTY = _("Le panier est vide");
+	var MSG_BASKET_EMPTY = _("Le Panier est vide");
 	var MSG_RECORD_IN_BASKET = _("Cette notice est déjà dans le panier");
 	var MSG_RECORD_ADDED = _("Notice ajoutée au panier");
-	var MSG_NRECORDS_ADDED = _("Notice(s) ajoutée(s)");
-	var MSG_NRECORDS_IN_BASKET = _("Envoyer le panier");
+	var MSG_NRECORDS_ADDED = _("Notice(s) ajoutée");
+	var MSG_NRECORDS_IN_BASKET = _("Déjà dans le panier");
 	var MSG_NO_RECORD_SELECTED = _("Aucune notice sélectionnée");
 	var MSG_NO_RECORD_ADDED = _("Aucune notice ajoutée");
 	function Dopop(link) {
-		newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+		newin=window.open(link,'popup','width=700,height=500,toolbar=false,scrollbars=yes');
 	}
 	</script>
 </head>
 <body>
 	<!-- MENUS -->
-	<div id="menuline">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="Logo Koha" style="float: left">
+	<div id="title">
+		<!-- TMPL_IF name="opacsmallimage" -->
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="65" alt="Logo Koha">
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="Logo Koha">
+		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
-		<span class="spacer">&nbsp;</span>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Page d'accueil Koha">Accueil</a>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Recherche avancée">Recherche avancée</a>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Page d'accueil Membre">Vos informations</a>
-		<span class="spacer">&nbsp;</span>
+	</div>
+	<div id="menuline">
+		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Accueil</a> <a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Recherche avancée</a>
+		<!-- TMPL_IF NAME="loggedinusername" -->
+			<!-- TMPL_IF name="virtualshelves" -->
+				<a href="/cgi-bin/koha/opac-shelves.pl" class="menu">Etagères virtuelles</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="suggestion" -->
+				<a href="opac-suggestions.pl" class="menu">Suggestions</a>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Accueil lecteur">Page personnelle</a>
 		<a class="menu" href="javascript:openBasket()" title="Panier de notices">Panier de notices <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
 	</div>
 	<!-- MAIN BODY OF PAGE -->

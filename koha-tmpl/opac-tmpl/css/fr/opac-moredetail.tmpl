@@ -30,12 +30,12 @@
 <b>Editeur:</b> <!-- TMPL_VAR NAME="publishercode" --> <br>
 <b>Emplacement:</b> <!-- TMPL_VAR NAME="place" --><br>
 <b>Date de publication :</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="volumeddesc" --><br>
+<b>Reliure</b> <!-- TMPL_VAR NAME="volumeddesc" --><br>
 <b>Pages:</b> <!-- TMPL_VAR NAME="pages" --><br>
 <b>Illus:</b> <!-- TMPL_VAR NAME="illus" --><br>
-<b>Taille :</b> <!-- TMPL_VAR NAME="size" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="bnotes" --><br>
-</b> <!-- TMPL_VAR NAME="count" -->'><b>Nbre. d'exemplaires:</b> 
+<b>Format :</b> <!-- TMPL_VAR NAME="size" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="bnotes" --><br>
+<b>Nbre. d'exemplaires:</b> <!-- TMPL_VAR NAME="count" -->
 </td>
 </tr>
 </table>
@@ -56,7 +56,7 @@
 <input type="image" name="submit" value="modifier" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input type="image" name="delete" value="Supprimer" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
-</b> <!-- TMPL_VAR NAME="homebranch" -->'><b>Site d'origine:</b> <br>
+<b>Site d'origine:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
 <b>Vu le :</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
 <b>Dernier emprunteur :</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
 Indicateur de prêt <!-- FIXME - What's this, then? -->
@@ -66,12 +66,12 @@ Indicateur de prêt <!-- FIXME - What's this, then? -->
 <b>Prix de Remplacement :</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
 <b> Document perdu :</b> <!-- TMPL_VAR NAME="itemlost" --><br>
 <b>Payé pour:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 <b>Renouvellements:</b> <!-- TMPL_VAR NAME="renewals" --><br>
 <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">vu le</a>:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
 <b>Annulé <!-- TMPL_VAR NAME="wthdrawn" --><br>
 <b>Total des prêts:</b> <!-- TMPL_VAR NAME="issues" --><br>
-<b>Nombre Total de documents <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
+<b>N° de groupe</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
 <b>Numéro de notice :</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
 
 </td>
