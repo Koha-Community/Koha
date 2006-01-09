@@ -125,6 +125,7 @@ sub searchsuggestion  {
 	} else {
 		$query .= " and managedby is NULL";
 	}
+	$query .= " order by title";
 	my $sth=$dbh->prepare($query);
 	$sth->execute(@sql_params);
 	my @results;
