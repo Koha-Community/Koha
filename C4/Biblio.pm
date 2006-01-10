@@ -66,6 +66,7 @@ $VERSION = 0.01;
   &MARCkoha2marcBiblio &MARCmarc2koha
   &MARCkoha2marcItem &MARChtml2marc
   &MARCgetbiblio &MARCgetitem
+  &XMLgetbiblio
   &char_decode
   
   &FindDuplicate
@@ -282,6 +283,26 @@ sub MARCgetbiblio {
 	my ($marc) = $sth->fetchrow;
 	my $record = MARC::Record::new_from_xml($marc);
     return $record;
+}
+
+=head2 $XML = &XMLgetbiblio($dbh,$biblionumber);
+
+=over 4
+
+Returns a raw XML for the biblio $biblionumber.
+
+=cut
+
+sub XMLgetbiblio {
+
+    # Returns MARC::Record of the biblio passed in parameter.
+    my ( $dbh, $biblionumber ) = @_;
+	my $sth = $dbh->prepare('select marcxml,marc from biblioitems where biblionumber=?');
+	$sth->execute($biblionumber);
+	my ($XML,$marc) = $sth->fetchrow;
+# 	my $record =MARC::Record::new_from_usmarc($marc);
+# 	warn "MARC : \n*-************************\n".$record->as_xml."\n*-************************\n";
+    return $XML;
 }
 
 =head2 $MARCrecord = &MARCgetitem($dbh,$biblionumber);
@@ -2885,6 +2906,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.136  2006/01/10 17:01:29  tipaul
+# adding a XMLgetbiblio in Biblio.pm (1st draft, to use with zebra)
+#
 # Revision 1.135  2006/01/06 16:39:37  tipaul
 # synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
 # Seems not to break too many things, but i'm probably wrong here.
