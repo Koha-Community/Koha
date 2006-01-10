@@ -46,21 +46,12 @@ eval {
 	$Zpackage->option(databaseName => 'Koha');
 # 	$Zpackage->send("drop");
 };
-if ($@) {
-	print "Error dropping /CODE:", $@->code()," /MSG: ",$@->message(),"\n";
-# 	die;
-}
-# then recreate it
+
 eval {
 	my $Zpackage = $Zconn->package();
 	$Zpackage->option(databaseName => 'Koha');
-# 	$Zpackage->send("create");
+	$Zpackage->send("create");
 };
-if ($@) {
-	print "Error creating /CODE:", $@->code(),"\n /MSG:",$@->message(),"\n\n";
-# 	die;
-}
-
 my $cgidir = C4::Context->intranetdir ."/cgi-bin";
 unless (opendir(DIR, "$cgidir")) {
 		$cgidir = C4::Context->intranetdir."/";
@@ -71,25 +62,20 @@ my $sth = $dbh->prepare("select biblionumber from biblio");
 $sth->execute;
 my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
-	my $record = MARCgetbiblio($dbh,$biblionumber);
-# 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
-# 	open F,"> $filename";
-# 	print F $record->as_usmarc();
-# 	close F;
+	my $record = XMLgetbiblio($dbh,$biblionumber);
 	my $Zpackage = $Zconn->package();
-# 	print "=>".$record->as_xml()."\n";
+	$Zpackage->option(databaseName => 'Koha');
 	$Zpackage->option(action => "recordInsert");
-	$Zpackage->option(record => $record->as_usmarc());
-	eval {
-		$Zpackage->send("update");
-	};
-	if ($@) {
-		print "Error updating /CODE:", $@->code()," /MSG:",$@->message(),"\n";
-		die;
-	}
+	$Zpackage->option(record => $record);
+	$Zpackage->send("update");
 	$Zpackage->destroy;
 	$i++;
-	print "\r$i" unless ($i % 100);
+	print '.';
+	print "$i\r" unless ($i % 100);
+# 	exit if $i>100;
 }
+my $Zpackage = $Zconn->package();
+$Zpackage->option(databaseName => 'Koha');
+$Zpackage->send("commit");
 my $timeneeded = gettimeofday - $starttime;
-print "\n$i MARC record done in $timeneeded seconds\n";
+print "\n\n$i MARC record done in $timeneeded seconds\n";
