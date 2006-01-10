@@ -8,43 +8,60 @@
 	<table>
 		<caption>Serials Subscriptions</caption>
 		<tr>
-			<th>Title</th>
 			<th>ISSN</th>
+			<th>Title</th>
+			<th>
+				Note
+			</td>
 			<th colspan="2">&nbsp;</th>
 		</tr>
 		<tr>
 			<td>
-				<input type="text" size="40" maxlength="40" name="title" value="<!-- TMPL_VAR name="title" -->">
+				<input type="text" size="10" maxlength="11" name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription" />
 			</td>
 			<td>
-				<input type="text" size="11" maxlength="11" name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+				<input type="text" size="40" maxlength="40" name="title" value="<!-- TMPL_VAR name="title" -->" title="type a title -complete or partial- to filter subscription" />
+			</td>
+			<td>
+				&nbsp;
 			</td>
 			<td colspan="2">
-				<input type="submit" value="Search" class="submit">
+				<input type="submit" value="Filter" class="submit" title="set a filter on ISSN / title" />
 			</td>
 		</tr>
-		<!-- TMPL_IF NAME="subscriptions" -->
 		<!-- TMPL_LOOP name="subscriptions" -->
 			<!-- TMPL_IF name="toggle" -->
-					<tr class="highlight">
+				<tr class="highlight">
 				<!-- TMPL_ELSE -->
-					<tr>
+				<tr>
 				<!-- /TMPL_IF -->
-				<td><!-- TMPL_IF name="title" --><!-- TMPL_VAR name="title" --><!-- TMPL_ELSE --> |
-					<!-- /TMPL_IF --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+					<td>
+					<!-- TMPL_IF name="ISSN" -->
+						<a href="bull/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
+					<!-- /TMPL_IF -->
+					
 				</td>
 				<td>
-					<!-- TMPL_VAR name="ISSN" -->
+						<!-- TMPL_IF name="title" -->
+						<!-- TMPL_VAR name="title" -->
+					<!-- TMPL_ELSE -->
+						|
+					<!-- /TMPL_IF -->
+				</td>
+					<td>
+								<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+				</td>
+					<td>
+								<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="subscription detail">Detail</a>
 				</td>
 				<td>
-					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a></td><td><a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a></td>
+					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="receive issues for this subscription">Receive</a>
+				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
-		<!-- TMPL_ELSE -->
-		<tr><td colspan="3">Enter search terms above to display subscriptions</td></tr>
-		<!-- /TMPL_IF -->
-	</table></form>
-	<p><form action="/cgi-bin/koha/bull/subscription-add.pl" method="get"><input type="submit" class="submit" value="Add Subscription" /></form></p>
+	</table>
+	</form>
+	<p><form action="/cgi-bin/koha/bull/subscription-add.pl" method="get"><input type="submit" value="Add Subscription" class="submit" /></form></p>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

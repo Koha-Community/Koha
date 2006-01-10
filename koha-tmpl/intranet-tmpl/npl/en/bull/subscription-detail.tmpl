@@ -4,33 +4,44 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h1>Subscription: <!-- TMPL_VAR name="bibliotitle" --></h1>
-<form class="inline" action="subscription-add.pl" method="get"><input type="hidden" name="op" value="mod" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="Edit Subscription" /></form> 
+<h1>Subscription Details:  <!-- TMPL_VAR name="bibliotitle" --></h1>
+<form class="inline" method="get" action="subscription-add.pl">
+<input type="hidden" name="op" value="mod" />
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="submit" class="submit" title="Modify subscription" value="Edit" /></form>
 
-<form class="inline" action="statecollection.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="View Issues" /></form>
+<form class="inline" method="get" action="statecollection.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="submit" class="submit" value="Receive Issues" /></form>
 
-<form class="inline" action="/cgi-bin/koha/bull/statecollection.pl" method="get"><input type="hidden" name="subscriptionid" value="1" /><input type="submit" class="submit" value="Receive Issues" /></form>
+<form class="inline" method="get" action="serial-issues.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="All issues on this title" value="Issue History" /></form>
 
-<form class="inline" action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View Bibliographic Record" /></form>
+<form class="inline" method="get" action="/cgi-bin/koha/bull-home.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->" value="Subscriptions" /></form>
 
-<form class="inline" action="subscription-detail.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="hidden" name="op" value="del" /><input type="submit" class="cancel" onclick="confirm_deletion(); return false;" value="Delete subscription" /></form>
+<form class="inline" method="get" action="/cgi-bin/koha/MARCdetail.pl">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="go to <!-- TMPL_VAR name="bibliotitle" -->" value="View Biblio Record" /></form>
+
+<form class="inline"><input type="submit" class="cancel" value="Delete Subscription" onclick="confirm_deletion(); return false;" /></form>
 
 <div class="data">
-<table>
-	<caption>Subscription Information</caption>
-		<tr><th>Librarian identity:</th><td> <!-- TMPL_VAR name="librarian" --></td></tr>
-		<tr><th>Supplier: </th><td><!-- TMPL_VAR name="aqbooksellername" --></td></tr>
-		<tr><th>Cost:</th><td><!-- TMPL_VAR name="cost" --></td></tr>
-		<tr><th>Budget:</th><td><!-- TMPL_VAR name="bookfundid" --></td></tr>
-		<tr><th>Title:</th><td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="bibliotitle" --></a></td></tr>
-		<tr><th>Notes:</th><td><!-- TMPL_VAR name="notes" --></td></tr>
-</table>
+<table>	<caption>Subscription information</caption>
+		<tr><th scope="row">Librarian identity:</td><td> <!-- TMPL_VAR name="librarian" --></td></tr>
+		<tr><th scope="row">Supplier: </th><td><!-- TMPL_VAR name="aqbooksellername" --></td></tr>
+		<tr><th scope="row">Cost:</th><td><!-- TMPL_VAR name="cost" --></td></tr>
+		<tr><th scope="row">Budget:</th><td><!-- TMPL_VAR name="bookfundid" --></td></tr>
+		<tr><th scope="row">Title:</th><td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="bibliotitle" --></a></td></tr>
+		<tr><th scope="row">Notes:</th><td><!-- TMPL_VAR name="notes" --></td></tr></table>
 </div>
+
 <div class="data">
-<table>
-	<caption>Planning</caption>
-	<tr><th>Beginnning date:</th><td><!-- TMPL_VAR name="startdate" --></td></tr>
-	<tr><th>Frequency (*):</th><td>
+<table>	<caption>Planning</caption>
+	<tr><th scope="row">Beginnning date:</th><td> <!-- TMPL_VAR name="startdate" --></td></tr>
+	<tr><th scope="row">Frequency (*):</th><td>
 		<!--TMPL_IF name="periodicity1" -->
 				1/day
 		<!-- /TMPL_IF -->
@@ -47,25 +58,25 @@
 				1/Month
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity6" -->
-				1/2 Monthes
+				1/2 Months (6/year)
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity7" -->
-				1/3 Monthes
+				1/Quarter
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity8" -->
-				1/quarter
+				1/Quarter
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity9" -->
-				1/2 quarters
+				2/Year
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity10" -->
-				1/year
+				1/Year
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="periodicity11" -->
-				1/2 years
+				1/2 Years
 		<!-- /TMPL_IF -->
 	</td></tr>
-	<tr><th>Arrives on:</th><td>
+	<tr><th scope="row">Arrives on:</th><td>
 		<!--TMPL_IF name="arrival1" -->
 			Monday
 		<!-- /TMPL_IF -->
@@ -86,28 +97,27 @@
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival7" -->
 				Sunday
-		<!-- /TMPL_IF -->
-		</td></tr></table>
+		<!-- /TMPL_IF --></table>
 </div>
 <div class="data">
-	<table>
-	<caption>Subscription length</caption>
-	<tr><th>Number of issues:</th><td><!-- TMPL_VAR name="numberlength" --></td></tr>
-	<tr><th>Number of weeks:</th><td><!-- TMPL_VAR name="weeklength" --></td></tr>
-	<tr><th>Number of months:</th><td><!-- TMPL_VAR name="monthlength" --></td></tr>
-</table>
+<table>	<caption>Subscription length</caption>
+	<tr><th scope="row">Number of issues:</th><td><!-- TMPL_VAR name="numberlength" --></td></tr>
+	<tr><th scope="row">Number of weeks:</th><td><!-- TMPL_VAR name="weeklength" --></td></tr>
+	<tr><th scope="row">Number of months:</th><td><!-- TMPL_VAR name="monthlength" --></td></tr></table>
+
 </div>
-<div class="data"><h2>Numbering calculation</h2>
-	<table>
-	<caption>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></caption>
+<div class="data">
+	<h2>Numbering calculation</h2>
+		
+		<table><caption>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></caption>
 			<tr>
-				<th>&nbsp;</th>
+				<th scope="row">&nbsp;</th>
 				<th scope="col">X</th>
 				<th scope="col">Y</th>
 				<th scope="col">Z</th>
 			</tr>
 			<tr>
-				<th scope="row">Add</th>
+				<th scope="row">Add:</th>
 				<td>
 					<!-- TMPL_VAR name="add1" -->
 				</td>
@@ -119,13 +129,13 @@
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">once every</th>
+				<th scope="row">once every:</th>
 				<td><!-- TMPL_VAR name="every1" --></td>
 				<td><!-- TMPL_VAR name="every2" --></td>
 				<td><!-- TMPL_VAR name="every3" --></td>
 			</tr>
 			<tr>
-				<th scope="row">When more than</th>
+				<th scope="row">When more than:</th>
 				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
 					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
@@ -134,13 +144,15 @@
 					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
-				<th scope="row">Set back to</th>
+				<th scope="row">Set back to:</th>
 				<td><!-- TMPL_VAR name="setto1" --></td>
 				<td><!-- TMPL_VAR name="setto2" --></td>
 				<td><!-- TMPL_VAR name="setto3" --></td>
 			</tr>
 			<tr>
-				<th scope="row">Last value</th>
+				<th scope="row">
+						Last value:
+				</th>
 				<td><!-- TMPL_VAR name="lastvalue1" --></td>
 				<td><!-- TMPL_VAR name="lastvalue2" --></td>
 				<td><!-- TMPL_VAR name="lastvalue3" --></td>
@@ -148,13 +160,13 @@
 		</table>
 </div>
 <div class="data">
+	<h2>Issues</h2>
 	<table>
-	<caption>Issues</caption>
 	<tr>
-		<th>Issue number</th>
-		<th>Planned date</th>
-		<th>Status</th>
-		<th>Note</th>
+		<th scope="col">Issue number:</th>
+		<th scope="col">Planned date:</th>
+		<th scope="col">Status:</th>
+		<th scope="col">Note:</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -186,7 +198,7 @@
 	</table>
 </div>
 </div>
-<script>
+<script language="JavaScript" type="text/javascript">
 function _(s) { return s } // dummy function for gettext
 function confirm_deletion() {
 	<!-- TMPL_IF name="totalissues" -->

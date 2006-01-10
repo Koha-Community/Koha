@@ -5,38 +5,39 @@
 
 <div id="main">
 
-<h1>Late issues</h1>
-<form action="lateissues.pl" method="post">
+	<h1>Late issues</h1>
+	<div class="details">
+		<form action="lateissues.pl" method="post">
+			<label for="supplierid">Choose a Supplier: </label><!-- TMPL_VAR name="CGIsupplier" -->
+				<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" -->; <!-- /TMPL_IF -->
+				<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" -->; <!-- /TMPL_IF -->
+				<!-- TMPL_IF name="bookselleremail" --><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+			<input type="submit" value="Submit" class="submit" />
+		</form>
+	</div>
 	<table>
 		<tr>
-			<th>Supplier</th>
 			<th>Title</th>
 			<th>Issue number</th>
 			<th>Late since</th>
 			<th colspan="2">&nbsp;</th>
 		</tr>
-		
-	<tr>
-		<td><!-- TMPL_VAR name="CGIsupplier" --></td>
-		<td><p><!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="bookselleremail" --></p><!-- TMPL_IF NAME="bookselleremail" --><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
-					</p><!-- /TMPL_IF --></td>
-		<td><input type="submit" value="Filter" class="submit" /></td>
-		<td colspan="3">&nbsp;</td>	
-	</tr>
-		
-<!-- TMPL_LOOP name="lateissues" -->
+		<!-- TMPL_LOOP name="lateissues" -->
+			<!-- TMPL_IF name="odd" -->
 			<tr>
-				<td><!-- TMPL_VAR name="name" --></td>
-				<td><!-- TMPL_VAR name="Title" --></td>
-				<td><!-- TMPL_VAR name="serialseq" --></td>
-				<td><!-- TMPL_VAR name="planneddate" --></td>
-				<td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Details</a></td><td><a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a></td>
-			</tr>
-	<!-- /TMPL_LOOP -->
+			<!-- TMPL_ELSE -->
+			<tr class="highlight">
+			<!-- /TMPL_IF -->
+			<td><!-- TMPL_IF name="Title" --><a href="/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->"><!-- TMPL_VAR name="Title" --></a><!-- /TMPL_IF --></td>
+					<td><!-- TMPL_VAR name="serialseq" --></td>
+					<td><!-- TMPL_VAR name="planneddate" --></td>
+					<td>
+						<a href="/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Details</a></td><td>
+						<a href="/cgi-bin/koha/bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a>
+					</td>
+						</tr>
+		<!-- /TMPL_LOOP -->
 	</table>
-</form>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
