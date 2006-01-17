@@ -26,6 +26,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.1  2006/01/17 16:40:54  tipaul
+# moving acqui.simple directory to cataloguing, as acqui.simple contains cataloguing scripts...
+#
 # Revision 1.3  2005/05/04 08:45:22  tipaul
 # synch'ing 2.2 and head
 #
