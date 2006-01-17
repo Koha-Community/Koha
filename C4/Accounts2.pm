@@ -492,57 +492,6 @@ sub refund{
   return($amountleft);
 }
 
-# XXX - POD. Need to figure out C4/Interface/AccountsCDK.pm first,
-# though
-# FIXME - It looks as though this function really wants to be part of
-# a curses-based script.
-sub reconcileaccount {
-  #print put money owing give person opportunity to pay it off
-  my ($env,$dummy,$bornumber,$total)=@_;
-  my $dbh = C4::Context->dbh;
-  #get borrower record
-  my $sth=$dbh->prepare("select * from borrowers
-    where borrowernumber=$bornumber");
-  $sth->execute;
-  my $borrower=$sth->fetchrow_hashref;
-  $sth->finish();
-  #get borrower information
-  $sth=$dbh->prepare("Select * from accountlines where
-  borrowernumber=$bornumber and amountoutstanding<>0 order by date");
-  $sth->execute;
-  #display account information
-  &clearscreen();
-  #&helptext('F11 quits');
-  output(20,0,"Accounts");
-  my @accountlines;
-  my $row=4;
-  my $i=0;
-  my $text;
-  #output (1,2,"Account Info");
-  #output (1,3,"Item\tDate      \tAmount\tDescription");
-  while (my $data=$sth->fetchrow_hashref){
-    my $line=$i+1;
-    my $amount=0+$data->{'amountoutstanding'};
-    my $itemdata = getbibliofromitemnumber($env,$dbh,$data->{'itemnumber'});
-    $line= $data->{'accountno'}." ".$data->{'date'}." ".$data->{'accounttype'}." ";
-    my $title = $itemdata->{'title'};
-    if (length($title) > 15 ) {$title = substr($title,0,15);}
-    $line .= $itemdata->{'barcode'}." $title ".$data->{'description'};
-    $line = fmtstr($env,$line,"L65")." ".fmtdec($env,$amount,"52");
-    push @accountlines,$line;
-    $i++;
-  }
-  #get amount paid and update database
-  my ($data,$reason)=
-    &accountsdialog($env,"Payment Entry",$borrower,\@accountlines,$total);
-  if ($data>0) {
-    &recordpayment($env,$bornumber,$dbh,$data);
-    #Check if the borrower still owes
-    $total=&checkaccount($env,$bornumber,$dbh);
-  }
-  return($total);
-
-}
 
 END { }       # module clean-up code here (global destructor)
 
