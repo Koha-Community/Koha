@@ -50,12 +50,12 @@ my @loop_pricescurrency;
 my @loop_invoicecurrency;
 for (my $i=0;$i<$count;$i++) {
 	if ($booksellers[0]->{'listprice'} eq $currencies->[$i]->{'currency'}) {
-		push @loop_pricescurrency, { currency => "<option selected value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>" };
+		push @loop_pricescurrency, { currency => "<option selected=\"selected\" value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>" };
 	} else {
 		push @loop_pricescurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
 	}
 	if ($booksellers[0]->{'invoiceprice'} eq $currencies->[$i]->{'currency'}) {
-		push @loop_invoicecurrency, { currency => "<option selected value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
+		push @loop_invoicecurrency, { currency => "<option selected=\"selected\" value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
 	} else {
 		push @loop_invoicecurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
 	}

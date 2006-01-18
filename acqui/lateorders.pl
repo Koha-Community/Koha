@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::Acquisition;
 use C4::Auth;
+use C4::Koha;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -43,21 +44,14 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 
 $template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
 
-my @select_branches;
-my %select_branches;
-push @select_branches,"";
-$select_branches{""}="";
-my ($count, @branches) = branches(); 
-#branches is IndependantBranches aware
-foreach my $branch (@branches){
-	push @select_branches, $branch->{branchcode};
-	$select_branches{$branch->{branchcode}}=$branch->{branchname};
+my $branches = getbranches;
+my @branchloop;
+foreach my $thisbranch (sort keys %$branches) {
+	my %row =(value => $thisbranch,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
 }
-my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
-				-values   => \@select_branches,
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0 );
 
 my ($count, @lateorders) = getlateorders($delay,$supplierid,$branch);
 my $total;
@@ -66,7 +60,7 @@ foreach my $lateorder (@lateorders){
 }
 $template->param(delay=>$delay) if ($delay);
 $template->param(
-	CGIbranch => $CGIbranch,
+	branchloop => \@branchloop,
 	CGIsupplier => $CGIsupplier,
 	lateorders => \@lateorders,
 	total=>$total,
