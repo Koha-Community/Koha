@@ -144,7 +144,7 @@ if (C4::Context->preference("IndependantBranches")) {
 	$samebranch =1 if ($userenv->{flags} == 1);
 }
 
-$data->{'branchcode'} = &getbranchname($data->{'branchcode'});
+$data->{'branchname'} = &getbranchdetail($data->{'branchcode'});
 
 # Converts the categorycode to the description
 $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});

@@ -199,9 +199,10 @@ if ($delete){
 	my @relshipdata;
 	while (@relationships) {
 		my $relship = shift @relationships;
+		next unless $relship;
 		my %row = ('relationship' => $relship);
 		if ($data->{'altrelationship'} eq $relship) {
-			$row{'selected'}=' selected';
+			$row{'selected'}=' selected = "selected"';
 		} else {
 			$row{'selected'}='';
 		}
@@ -220,11 +221,11 @@ if ($delete){
 			'name'  => $flags{$key}[0],
 			'html'  => $flags{$key}[1]);
 	if ($data->{$key}) {
-		$row{'yes'}=' checked';
+		$row{'yes'}=' checked="checked"';
 		$row{'no'}='';
 	} else {
 		$row{'yes'}='';
-		$row{'no'}=' checked';
+		$row{'no'}=' checked="checked"';
 	}
 	push(@flagdata, \%row);
 	}

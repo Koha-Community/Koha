@@ -1,5 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Add Child<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+
 <form action="/cgi-bin/koha/newjmember.pl" method="post">
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->" />
 	<input type="hidden" name="updtype" value="I" />
@@ -13,44 +16,62 @@
 	<input type="hidden" name="faxnumber" value="<!-- TMPL_VAR NAME="faxnumber" -->" />
 	<input type="hidden" name="emailaddress" value="<!-- TMPL_VAR NAME="emailaddress" -->" />
 	<input type="hidden" name="contactname" value="<!-- TMPL_VAR NAME="contactname" -->" />
-	<input type="hidden" name="altphone" value"<!-- TMPL_VAR NAME="altphone" -->" />
+	<input type="hidden" name="altphone" value="<!-- TMPL_VAR NAME="altphone" -->" />
 
 	<h1>Add Child</h1>
-<table>
-  <caption>Parent or Guardian</caption>
-	<tr><th scope="row"><label for="firstname_guardian">First Name</label></th><td><input type="text" name="firstname_guardian" id="firstname_guardian" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" /></td></tr>
-		<tr><th scope="row"><label for="surname_guardian">Last Name</label></th><td><input type="text" name="surname_guardian" id="surname_guardian" size="20" value="<!-- TMPL_VAR NAME="surname" -->" /></td></tr>
-		<tr><th scope="row"><label for="guardian_number">Library Card Number</label></th><td><input type="text" name="guardian_number" id="guardian_number" size="20" value="<!-- TMPL_VAR NAME="cardnumber" -->" /></td></tr>
-</table></div>
 
-	<div class="table"><!-- TMPL_LOOP NAME="cmemloop" -->
-	<table>
-		<caption>Child <!-- TMPL_VAR NAME="count" --></caption>
-	<tr>
-		<th scope="row"><label for="cmember">Member Number</label></th><td><!-- TMPL_VAR NAME="cmember" --></td>
-	</tr>
-	<tr>
-	<th scope="row"><label for="cardnumber_child_<!-- TMPL_VAR NAME="i" -->">Card Number</label></th><td><input type="text" id="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" name="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" size="20" value="<!-- TMPL_VAR NAME="jcardnumber" -->" /><input type="hidden" name="bornumber_child_<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="cmember" -->" /></td>
-	</tr>
-	<tr>
-		<th scope="row"><label for="firstname_child_<!-- TMPL_VAR NAME="i" -->">First Name(s)</label></th><td><input type="text" id="firstname_child_<!-- TMPL_VAR NAME="i" -->" name="firstname_child_<!-- TMPL_VAR NAME="i" -->" size="20"  /></td></tr>
-		<tr><th scope="row"><label for="surname_child_<!-- TMPL_VAR NAME="i" -->">Last Name</label></th><td><input type="text" id="surname_child_<!-- TMPL_VAR NAME="i" -->" name="surname_child_<!-- TMPL_VAR NAME="i" -->" size="20"  /></td></tr>
-		<tr><th scope="row"><label for="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->">Date of Birth (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" name="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" id="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" size="10"  /></td></tr>
-		<tr><th scope="row"><label for="sex_child_<!-- TMPL_VAR NAME="i" -->">Sex</label></th><td>
-			<input type="radio" id="sex_child_<!-- TMPL_VAR NAME="i" -->" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="F" />F
-			<input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="M" />M
-		</td></tr>
-	<tr><th scope="row"><label for="school_child_<!-- TMPL_VAR NAME="i" -->">School</label></th><td><input type="text" id="school_child_<!-- TMPL_VAR NAME="i" -->" name="school_child_<!-- TMPL_VAR NAME="i" -->" size="20" ></td>
-	</tr>
-	<tr>
-		<th scope="row"><label for="altnotes_child_<!-- TMPL_VAR NAME="i" -->">Notes</label></th><td><textarea name="altnotes_child_<!-- TMPL_VAR NAME="i" -->" id="altnotes_child_<!-- TMPL_VAR NAME="i" -->" cols="40" rows="3"></textarea></td>
-	</tr>
-	</table>
-	<!-- /TMPL_LOOP -->
+<h2>Parent or Guardian</h2>
+<p>
+	<label for="firstname_guardian">First Name</label>
+	<input type="text" name="firstname_guardian" id="firstname_guardian" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
+</p>
+<p>
+	<label for="surname_guardian">Last Name</label>
+	<input type="text" name="surname_guardian" id="surname_guardian" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+</p>
+<p>
+	<label for="guardian_number">Library Card Number</label>
+	<input type="text" name="guardian_number" id="guardian_number" size="20" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+</p>
+<!-- TMPL_LOOP NAME="cmemloop" -->
+	<h2>Child <!-- TMPL_VAR NAME="count" --></h2>
+	<p>
+		<label>Member Number</label>
+		<!-- TMPL_VAR NAME="cmember" -->
+	</p>
+	<p>
+		<label for="cardnumber_child_<!-- TMPL_VAR NAME="i" -->">Card Number</label>
+		<input type="text" id="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" name="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" size="20" value="<!-- TMPL_VAR NAME="jcardnumber" -->" />
+		<input type="hidden" name="bornumber_child_<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="cmember" -->" />
+	</p>
+	<p>
+		<label for="firstname_child_<!-- TMPL_VAR NAME="i" -->">First Name(s)</label>
+		<input type="text" id="firstname_child_<!-- TMPL_VAR NAME="i" -->" name="firstname_child_<!-- TMPL_VAR NAME="i" -->" size="20"  />
+	</p>
+	<p>
+		<label for="surname_child_<!-- TMPL_VAR NAME="i" -->">Last Name</label>
+		<input type="text" id="surname_child_<!-- TMPL_VAR NAME="i" -->" name="surname_child_<!-- TMPL_VAR NAME="i" -->" size="20"  />
+	</p>
+	<p>
+		<label for="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->">Date of Birth (<!-- TMPL_VAR NAME="dateformat" -->)</label>
+		<input type="text" name="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" id="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" size="10"  />
+	</p>
+	<p>
+		<label for="sex_child_<!-- TMPL_VAR NAME="i" -->">Sex</label>
+		<input type="radio" id="sex_child_<!-- TMPL_VAR NAME="i" -->" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="F" />F
+		<input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="M" />M
+	</p>
+	<p>
+		<label for="school_child_<!-- TMPL_VAR NAME="i" -->">School</label>
+		<input type="text" id="school_child_<!-- TMPL_VAR NAME="i" -->" name="school_child_<!-- TMPL_VAR NAME="i" -->" size="20" />
+	</p>
+	<p>
+		<label for="altnotes_child_<!-- TMPL_VAR NAME="i" -->">Notes</label>
+		<textarea name="altnotes_child_<!-- TMPL_VAR NAME="i" -->" id="altnotes_child_<!-- TMPL_VAR NAME="i" -->" cols="40" rows="3"></textarea>
+	</p>
+<!-- /TMPL_LOOP -->
 
 <input type="submit" value="Add New Member" />
-
 </form>
-
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

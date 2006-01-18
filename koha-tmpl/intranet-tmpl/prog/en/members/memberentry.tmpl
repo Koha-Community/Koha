@@ -1,5 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="modify" -->Edit Record<!-- TMPL_ELSE -->Add New <!-- TMPL_IF NAME="institution" -->Institutional <!-- /TMPL_IF -->Member<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+
 	<!-- TMPL_IF NAME="addAction" -->
 	<h1>
 		Add New <!-- TMPL_IF NAME="institution" -->Institutional <!-- /TMPL_IF -->Member
@@ -12,7 +15,6 @@
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF Name="NOK" -->
-		
 		<h3>Missing Information</h3>
 			<p>The following fields have a forbidden value. Correct them and press OK again :</p><ul>
 			<!-- TMPL_IF NAME="ERROR_surname" -->
@@ -28,7 +30,7 @@
 				<li><a href="#address">Mailing Address</a></li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_city" -->
-				<li><a href="#city">Mailing Address City/State</a><br>
+				<li><a href="#city">Mailing Address City/State</a></li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
 				<li><a href="#cardnumber">Card Number</a></li>
@@ -37,7 +39,6 @@
 				<li><a href="#cardnumber">Invalid Card Number</a></li>
 			<!-- /TMPL_IF -->
 			</ul>
-		
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
@@ -50,104 +51,204 @@
 		<!-- TMPL_ELSE -->
 			<input type="hidden" name="op" value="modify" />
 		<!-- /TMPL_IF -->
-<table>
-	<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="title">Salutation:</label></th><td><!-- TMPL_VAR NAME="Mr" -->
-				<select name="title" id="title">
-					<option <!-- TMPL_VAR NAME="title_selected_ " --> value="">No Title</option>
-					<option value="Miss" <!-- TMPL_VAR NAME="title_Miss" -->>Miss</option>
-					<option value="Mrs" <!-- TMPL_VAR NAME="title_Mrs" -->>Mrs</option>
-					<option value="Ms" <!-- TMPL_VAR NAME="title_Ms" -->>Ms</option>
-					<option <!-- TMPL_VAR NAME="title_Mr" --> value="Mr" >Mr</option>
-					<option value="Dr" <!-- TMPL_VAR NAME="title_Dr" -->>Dr</option>
-					<option value="Sir" <!-- TMPL_VAR NAME="title_Sir" -->>Sir</option>
-				</select>
-				</td></tr><!-- /TMPL_UNLESS -->
-	<tr><th scope="row"><label for="surname"><a name="lastname" id="lastname"><!-- TMPL_IF NAME="institution" -->Institution name:<!-- TMPL_ELSE -->Last Name: <!-- /TMPL_IF --></a></label></th><td><input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->"></td></tr>
+	
+	<!-- TMPL_UNLESS name="institution" -->
+		<p>
+		<label for="title">Salutation:</label><!-- TMPL_VAR NAME="Mr" -->
+		<select name="title" id="title">
+			<option <!-- TMPL_VAR NAME="title_selected_ " --> value="">No Title</option>
+			<option value="Miss" <!-- TMPL_VAR NAME="title_Miss" -->>Miss</option>
+			<option value="Mrs" <!-- TMPL_VAR NAME="title_Mrs" -->>Mrs</option>
+			<option value="Ms" <!-- TMPL_VAR NAME="title_Ms" -->>Ms</option>
+			<option <!-- TMPL_VAR NAME="title_Mr" --> value="Mr" >Mr</option>
+			<option value="Dr" <!-- TMPL_VAR NAME="title_Dr" -->>Dr</option>
+			<option value="Sir" <!-- TMPL_VAR NAME="title_Sir" -->>Sir</option>
+		</select>
+		</p>
+	<!-- /TMPL_UNLESS -->
+	<p>
+		<label for="surname">
+			<!-- TMPL_IF NAME="institution" -->Institution name:<!-- TMPL_ELSE -->Last Name: <!-- /TMPL_IF -->
+		</label>
+		<input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+	</p>
 
-	<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="firstname"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->><a name="firstname" id="firstname">First Name:</a></label> </th><td><input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->></td></tr><!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS name="institution" -->
+	<p>
+		<label for="firstname">First Name:</label>
+		<input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
+	</p>
+	<!-- /TMPL_UNLESS -->
 				
-	<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="initials">Initials:</label></th><td><input type="text" id="initials" name="initials" size="5" value="<!-- TMPL_VAR NAME="initials" -->"></td></tr><!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS name="institution" -->
+	<p>
+		<label for="initials">Initials:</label>
+		<input type="text" id="initials" name="initials" size="5" value="<!-- TMPL_VAR NAME="initials" -->" />
+	</p>
+	<!-- /TMPL_UNLESS -->
 					
-	<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="othernames">Prefered Name:</label></th><td><input type="text" id="othernames" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->"></td></tr><!-- /TMPL_UNLESS -->
-
-<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="sex"><a name="sex" id="sex">Sex:</a> </label></th><td><input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF -->>F	<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked="checked"<!-- /TMPL_UNLESS -->> M</td>
-</tr><!-- /TMPL_UNLESS -->
-
-<!-- TMPL_UNLESS name="institution" --><tr><th scope="row"><label for="dateofbirth">Date of Birth: </label></th><td><input type="text" id="dateofbirth" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->"> (<!-- TMPL_VAR NAME="dateformat" -->)</td>
-</tr><!-- /TMPL_UNLESS -->
-
-	<tr><th scope="row">Addresses:</th><td><fieldset><legend>Mailing Address</legend><label for="streetaddress"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->><a name="address" id="address">Address:</a> </label><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->>
-<br><label for="city"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF -->><a name="#city" id="#city">City, State:</a></label> <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF --> />
-<br><label for="zipcode">Zip Code:</label> <input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->"></fieldset>
-
-<fieldset><legend>Street Address (if different)</legend>
-<label for="physstreet">Address:</label><input type="text" id="physstreet" name="physstreet" size="25" value="<!-- TMPL_VAR NAME="physstreet" -->" />
-<br><label for="streetcity">City, State: </label><input type="text" id="streetcity" name="streetcity" size="20" value="<!-- TMPL_VAR NAME="streetcity" -->" />
-<br><label for="homezipcode">Zip Code:</label><input type="text" id="homezipcode" name="homezipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->" /> 
-</fieldset>
-</td></tr>
-
-	<tr><th scope="row"><label for="phone">Phone (Home):</label> </th><td><input type="text" id="phone" name="phone" size="20" value="<!-- TMPL_VAR NAME="phone" -->" /></td></tr>
-	<tr><th scope="row"><label for="phoneday">Phone (Daytime):</label> </th><td><input type="text" id="phoneday" name="phoneday" size="20" value="<!-- TMPL_VAR NAME="phoneday" -->" /></td></tr>
-	<tr><th scope="row"><label for="faxnumber">Fax: </label></th><td><input type="text" id="faxnumber" name="faxnumber" size="20" value="<!-- TMPL_VAR NAME="faxnumber" -->" /></td></tr>
-	<tr><th scope="row"><label for="emailaddress">Email :</label> </th><td><input type="text" id="emailaddress" name="emailaddress" size="40" value="<!-- TMPL_VAR NAME="emailaddress" -->" /></td></tr>
-			</tr>
-	<tr><th scope="row"><label for="textmessaging">Member message:</label><p> (appears in OPAC)</p></th><td><textarea id="textmessaging" name="textmessaging" cols="30" rows="3"><!-- TMPL_VAR NAME="textmessaging" --></textarea></td></tr>
-	<tr><th scope="row"><label for="borrowernotes">Circulation note:</label> <p>(appears in Circulation)</p> </th><td><textarea id="borrowernotes" name="borrowernotes" cols="30" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td></tr>
-
-			<tr>
-				<!-- TMPL_IF NAME="addAction" -->
-					<th scope="row">Joining date (leave blank for today): </th>
-					<td><input type="text" name="joining" size="12" maxlength="10" value="<!-- TMPL_VAR name="joining" -->" /></td>
-				<!-- TMPL_ELSE -->
-					<th scope="row">Joining date: </th>
-					<td><!-- TMPL_VAR name="joining" --></td>
-				<!-- /TMPL_IF -->
-			</tr>
-			<tr>
-				<th scope="row">Expiry date (leave blank for auto calc): </th>
-				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->" /></td>
-			</tr>
-
-			</table>
-
+	<!-- TMPL_UNLESS name="institution" -->
+	<p>
+		<label for="othernames">Prefered Name:</label>
+		<input type="text" id="othernames" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->" />
+	</p>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS name="institution" -->
+	<p>
+		<label for="sex">Sex:</label>
+		<input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF --> />F	<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked="checked"<!-- /TMPL_UNLESS --> /> M
+	</p>
+	<!-- /TMPL_UNLESS -->
 
 <!-- TMPL_UNLESS name="institution" -->
-		<table>
-		<caption>Alternate Contact</caption>
-		<tr><th scope="row"><label for="contactname">Name: </label></th><td><input type="text" id="contactname"  name="contactname" size="40" value="<!-- TMPL_VAR NAME="contactname" -->"></td></tr>
-		<tr><th scope="row"><label for="altphone">Phone:</label> </th><td><input type="text" id="altphone" name="altphone" size="20" value="<!-- TMPL_VAR NAME="altphone" -->"></td></tr>
-		<tr><th scope="row"><label for="altrelationship">Relationship:</label> </th><td><select id="altrelationship" name="altrelationship" size="1">
-					<!-- TMPL_LOOP NAME="relshiploop" -->
-						<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
-					<!-- /TMPL_LOOP -->
-					</select></td></tr>
-		<tr><th scope="row"><label for="altnotes">Notes: </label></th><td><textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR NAME="altnotes" --></textarea></td></tr>
-		</table><!-- /TMPL_UNLESS -->
+	<p><label for="dateofbirth">Date of Birth: </label><input type="text" id="dateofbirth" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->" /> (<!-- TMPL_VAR NAME="dateformat" -->)</p>
+<!-- /TMPL_UNLESS -->
 
-<table>
-	<caption>Flags</caption>
-	<!-- TMPL_LOOP NAME="flagloop" -->
-	<tr><th scope="row"><label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" --></label></th><td><input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Yes <input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>No</td></tr>
-				<!-- /TMPL_LOOP -->
-</table>
+<p>Addresses:</p>
+<fieldset>
+	<legend>Mailing Address</legend>
+	<p>
+		<label for="streetaddress">Address:</label>
+		<input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->" />
+	</p>
+	<p>
+		<label for="city">City, State:</label>
+		<input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
+	</p>
+	<p>
+		<label for="zipcode">Zip Code:</label>
+		<input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->" />
+	</p>
+</fieldset>
 
-<table>
-<caption>Member Details</caption>
-	<!-- TMPL_UNLESS NAME="addAction" --><tr><th scope="row"><label>Member Number:</label></th><td><span class="ex"><!-- TMPL_VAR NAME="member" --></span></td></tr><!-- /TMPL_UNLESS -->
-	<tr><th scope="row"><label for="categorycode">Category:</label> </th><td><!-- TMPL_VAR NAME="catcodepopup" --></td></tr>
-	<tr><th scope="row"><label for="branchcode">Branch:</label></th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>	
-	<tr><th scope="row"><label for="cardnumber"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->><a name="cardnumber" id="cardnumber">Card Number</a></label></th><td><input id="cardnumber" type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->></td></tr>
-</table>
-<table><caption>Additional Fields</caption>
-	<tr><th scope="row"><label for="sort1">Sorting field 1</label></th><td><input type="text" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->"></td><td rowspan="2"><p>These fields are available for your own usage. They can be useful for statistical purposes</p></td></tr>
-	<tr><th scope="row"><label for="sort2">Sorting field 2</label></th><td><input type="text" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->"></td></tr>
-</table>
+<fieldset>
+	<legend>Street Address (if different)</legend>
+	<p>
+		<label for="physstreet">Address:</label>
+		<input type="text" id="physstreet" name="physstreet" size="25" value="<!-- TMPL_VAR NAME="physstreet" -->" />
+	</p>
+	<p>
+		<label for="streetcity">City, State: </label>
+		<input type="text" id="streetcity" name="streetcity" size="20" value="<!-- TMPL_VAR NAME="streetcity" -->" />
+	</p>
+	<p>
+		<label for="homezipcode">Zip Code:</label>
+		<input type="text" id="homezipcode" name="homezipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->" />
+	</p>
+</fieldset>
+<p>
+	<label for="phone">Phone (Home):</label>
+	<input type="text" id="phone" name="phone" size="20" value="<!-- TMPL_VAR NAME="phone" -->" />
+</p>
+<p>
+	<label for="phoneday">Phone (Daytime):</label>
+	<input type="text" id="phoneday" name="phoneday" size="20" value="<!-- TMPL_VAR NAME="phoneday" -->" />
+</p>
+<p>
+	<label for="faxnumber">Fax: </label>
+	<input type="text" id="faxnumber" name="faxnumber" size="20" value="<!-- TMPL_VAR NAME="faxnumber" -->" />
+</p>
+<p>
+	<label for="emailaddress">Email :</label>
+	<input type="text" id="emailaddress" name="emailaddress" size="40" value="<!-- TMPL_VAR NAME="emailaddress" -->" />
+</p>
+<p><label for="textmessaging">Member message: (appears in OPAC)</label></p>
+<p>
+	<textarea id="textmessaging" name="textmessaging" cols="30" rows="3">
+		<!-- TMPL_VAR NAME="textmessaging" -->
+	</textarea>
+</p>
+<p>
+	<label for="borrowernotes">Circulation note:(appears in Circulation)</label>
+	<textarea id="borrowernotes" name="borrowernotes" cols="30" rows="3">
+		<!-- TMPL_VAR NAME="borrowernotes" -->
+	</textarea>
+</p>
+<!-- TMPL_IF NAME="addAction" -->
+	<p>
+		<label>Joining date (leave blank for today): </label>
+		<input type="text" name="joining" size="12" maxlength="10" value="<!-- TMPL_VAR name="joining" -->" />
+	</p>
+<!-- TMPL_ELSE -->
+	<p>
+		<label>Joining date: </label>
+		<!-- TMPL_VAR name="joining" -->
+	</p>
+<!-- /TMPL_IF -->
+<p>
+	<label>Expiry date (leave blank for auto calc): </label>
+	<input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->" />
+</p>
 
+<!-- TMPL_UNLESS name="institution" -->
+<h2>Alternate Contact</h2>
+<p>
+	<label for="contactname">Name: </label>
+	<input type="text" id="contactname"  name="contactname" size="40" value="<!-- TMPL_VAR NAME="contactname" -->" />
+</p>
+<p>
+	<label for="altphone">Phone:</label>
+	<input type="text" id="altphone" name="altphone" size="20" value="<!-- TMPL_VAR NAME="altphone" -->" />
+</p>
+<p>
+	<label for="altrelationship">Relationship:</label>
+	<select id="altrelationship" name="altrelationship" size="1">
+		<!-- TMPL_LOOP NAME="relshiploop" -->
+			<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
+		<!-- /TMPL_LOOP -->
+	</select>
+</p>
+<p>
+	<label for="altnotes">Notes: </label>
+	<textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR NAME="altnotes" --></textarea>
+</p>
+<!-- /TMPL_UNLESS -->
 
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-	<input name="submit" type="submit" class="submit" value="<!-- TMPL_IF NAME="modify" -->Update<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> This Member" />
-	</form>
+<h2>Flags</h2>
+<!-- TMPL_LOOP NAME="flagloop" -->
+	<p>
+		<label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" --></label>
+		<input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" --> />Yes 
+		<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" --> />No
+	</p>
+<!-- /TMPL_LOOP -->
+
+<h2>Member Details</h2>
+	<!-- TMPL_UNLESS NAME="addAction" -->
+		<p>
+			<label>Member Number:</label>
+			<span class="ex"><!-- TMPL_VAR NAME="member" --></span>
+		</p>
+	<!-- /TMPL_UNLESS -->
+	<p>
+		<label for="categorycode">Category:</label>
+		<!-- TMPL_VAR NAME="catcodepopup" -->
+	</p>
+	<p>
+		<label for="branchcode">Branch:</label>
+		<!-- TMPL_VAR NAME="CGIbranch" -->
+	</p>
+	<p>
+		<label for="cardnumber">
+			<a name="cardnumber">Card Number</a>
+		</label>
+		<input id="cardnumber" type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+	</p>
+
+<h2>Additional Fields</h2>
+<p>These fields are available for your own usage. They can be useful for statistical purposes</p>
+<p>
+	<label for="sort1">Sorting field 1</label>
+	<input type="text" id="sort1" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+</p>
+<p>
+	<label for="sort2">Sorting field 2</label>
+	<input type="text" id="sort2" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+</p>
+
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<input name="submit" type="submit" class="submit" value="<!-- TMPL_IF NAME="modify" -->Update<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> This Member" />
+</form>
 
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

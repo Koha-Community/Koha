@@ -38,7 +38,7 @@ my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 #my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
 #my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "boraccount.tmpl",
+    = get_template_and_user({template_name => "members/boraccount.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
