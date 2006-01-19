@@ -48,7 +48,7 @@ my $error   = $query->param('error');
 my $success = $query->param('biblioitem');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui.simple/addbooks.tmpl",
+        template_name   => "cataloguing/addbooks.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

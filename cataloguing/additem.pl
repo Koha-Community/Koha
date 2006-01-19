@@ -58,7 +58,7 @@ my $op = $input->param('op');
 my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-my $record = MARCgetbiblio($dbh,$bibid);
+my $record = MARCgetbiblio($dbh,$biblionumber);
 # warn "==>".$record->as_formatted;
 my $oldrecord = MARCmarc2koha($dbh,$record);
 my $itemrecord;
@@ -95,11 +95,11 @@ if ($op eq "additem") {
 		}
 	}
 # check for item barcode # being unique
-	my $addedolditem = MARCmarc2koha($dbh,$addeditem);
+	my $addedolditem = MARCmarc2koha($dbh,$record);
 	my $exists = get_item_from_barcode($addedolditem->{'barcode'});
 	push @errors,"barcode_not_unique" if($exists);
 	# if barcode exists, don't create, but report The problem.
-	$itemnumber = NEWnewitem($dbh,$addeditem,$biblionumber,$biblioitemnumber) unless ($exists);
+	$itemnumber = NEWnewitem($dbh,$addedolditem,$biblionumber,$biblioitemnumber) unless ($exists);
 	$nextop = "additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
@@ -123,7 +123,7 @@ if ($op eq "additem") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-#	my $itemnum = $input->param('itemnum');
+#	my $itemnumber = $input->param('itemnumber');
 	my %indicators;
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
@@ -131,8 +131,8 @@ if ($op eq "additem") {
 	my $itemrecord = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
-	$itemnum="";
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$biblionumber,$itemnumber,0);
+	$itemnumber="";
 	$nextop="additem";
 }
 
@@ -141,7 +141,7 @@ if ($op eq "additem") {
 # build screen with existing items. and "new" one
 #------------------------------------------------------------------------------------------------------------------------------
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
+    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -152,7 +152,7 @@ my ($template, $loggedinuser, $cookie)
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-my $temp = MARCgetbiblio($dbh,$bibid);
+my $temp = MARCgetbiblio($dbh,$biblionumber);
 my @fields = $temp->fields();
 #my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
@@ -237,7 +237,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 		my $test = (C4::Context->preference("IndependantBranches")) && 
 					($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
 					(C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
-# 		print $input->redirect(".pl?bibid=$bibid") if ($test);
+# 		print $input->redirect(".pl?biblionumber=$biblionumber") if ($test);
 		# search for itemcallnumber if applicable
 		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
 			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
@@ -316,8 +316,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						bibid => $bibid,
-						biblionumber =>$oldbiblionumber,
+						biblionumber => $biblionumber,
 						title => $oldrecord->{title},
 						author => $oldrecord->{author},
 						item => \@loop_data,
