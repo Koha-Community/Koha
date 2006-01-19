@@ -1,0 +1,83 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+<h1>Serials</h1>
+<div id="serials_home">
+	<h2>Serials subscriptions</h2>
+	<table>
+		<tr>
+			<th>ISSN</th>
+			<th>Title</th>
+			<th>
+				Note
+			</td>
+			<th colspan=2>&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="serials-home.pl" method="post">
+			<td>
+				<input type="text" size=10 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription">
+			</td>
+			<td>
+				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->" title="type a title -complete or partial- to filter subscription">
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td colspan=2>
+				<input type="submit" value="filter" class="button bull" title="set a filter on ISSN / title">
+			</td>
+		</tr>
+		<!-- TMPL_LOOP name="subscriptions" -->
+			<tr>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ISSN" -->
+						<a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
+					<!-- /TMPL_IF -->
+					
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="title" -->
+						<!-- TMPL_VAR name="title" -->
+					<!-- TMPL_ELSE -->
+						|
+					<!-- /TMPL_IF -->
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="subscription detail">Detail</a>
+				</td>
+				<!-- TMPL_IF name="toggle" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="receive issues for this subscription">Receive</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<a href="/cgi-bin/koha/serials/subscription-add.pl" class="button bull">Add subscription</a>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

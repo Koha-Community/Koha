@@ -1,0 +1,46 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+<h1>Late issues</h1>
+<p>
+	<form action="lateissues.pl" method="post">
+		<!-- TMPL_VAR name="CGIsupplier" -->
+			<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+		<input type="submit" value="filter">
+	</form>
+</p>
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Issue number</th>
+		<th>Late since</th>
+		<th colspan=2>&nbsp;</th>
+	</tr>
+	<!-- TMPL_LOOP name="lateissues" -->
+		<tr>
+			<!-- TMPL_IF name="odd" -->
+				<td class="hilighted"><!-- TMPL_IF name="Title" --><!-- TMPL_VAR name="Title" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF --></td>
+				<td class="hilighted"><!-- TMPL_VAR name="serialseq" --></td>
+				<td class="hilighted"><!-- TMPL_VAR name="planneddate" --></td>
+				<td class="hilighted">
+					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a>
+					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Recieve</a>
+				</td>
+			<!-- TMPL_ELSE -->
+				<td><!-- TMPL_VAR name="Title" --></td>
+				<td><!-- TMPL_VAR name="serialseq" --></td>
+				<td><!-- TMPL_VAR name="planneddate" --></td>
+				<td>
+					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a>
+					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Recieve</a>
+				</td>
+			<!-- /TMPL_IF -->
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

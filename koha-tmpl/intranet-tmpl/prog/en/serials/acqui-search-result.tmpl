@@ -1,0 +1,26 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit -- Select supplier<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<h1>Supplier Search Results</h1>
+<h2>You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
+<table>
+	<tr>
+		<th>Book seller</th>
+		<th>Select</th>
+	</tr>
+	<!-- TMPL_LOOP name="loop_suppliers" -->
+		<tr>
+			<td><!-- TMPL_VAR name="name" --></td>
+			<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">Get It !</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+
+<script language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  self.close();
+}
+</script>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
