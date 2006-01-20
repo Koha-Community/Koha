@@ -6,12 +6,14 @@
 
 <h1>Receipt Summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></h1>
 
-<ul><li>Invoice: <!-- TMPL_VAR NAME="invoice" --></li>
-<li>Received By: <!-- TMPL_VAR NAME="user" --></li>
-<li>Date: <!-- TMPL_VAR NAME="date" --></li>
-</ul>
+<div id="acqui_acquire_summary">
+	Invoice: <!-- TMPL_VAR NAME="invoice" --></p>
+	<p>Received By: <!-- TMPL_VAR NAME="user" --></p>
+	<p>Date: <!-- TMPL_VAR NAME="date" --></p>
+</div>
 
 <!-- TMPL_IF name="count" -->
+<div id="acqui_acquire_neworder">
 	<script language="javascript" type="text/javascript">
 	<!--
 	function messenger(X,Y,etc){
@@ -68,9 +70,9 @@
 		<p><label>Invoice Number</label><!-- TMPL_VAR NAME="invoice" --><input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" /></p>
 		<p><label>Notes</label><input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" /></p>
 	</form>
-
+</div>
 <!-- TMPL_ELSE -->
-
+<div id="acqui_acquire_orderlist">
 	<table>
 	<tr>
 		<th>Basket</th>
@@ -91,6 +93,7 @@
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

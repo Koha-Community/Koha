@@ -10,18 +10,13 @@
 			orders not yet recieved for <!-- TMPL_VAR NAME="name" -->
 		<!-- /TMPL_IF -->
 	</h1>
-	
-		<p>Invoice: <!-- TMPL_VAR NAME="invoice" --></p>
-		<p>Received By: <!-- TMPL_VAR NAME="user" --></p>
-		<p>On: <!-- TMPL_VAR NAME="date" --></p>
-	
-		<form action="/cgi-bin/koha/acqui/acquire.pl">
-			<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-			<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
-			<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
-			<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
-			<p><b>Search ISBN or Title:</b> <input type="text" size="25" name="recieve" /></p>
-		</form>
+<div id="acqui_recieve_summary">
+	<p>Invoice: <!-- TMPL_VAR NAME="invoice" --></p>
+	<p>Received By: <!-- TMPL_VAR NAME="user" --></p>
+	<p>On: <!-- TMPL_VAR NAME="date" --></p>
+</div>
+<div id="acqui_recieve_recievelist">
+	<h2>Recieve list</h2>
 	<form action="" method="get" name="orderform">
 	<table>
 		<tr>
@@ -70,4 +65,15 @@
 		</tr>
 	</table>
 	</form>
+</div>
+<div id="acqui_recieve_search">
+	<h2>Add a book to the receipt</h2>
+	<form action="/cgi-bin/koha/acqui/acquire.pl">
+		<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
+		<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
+		<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
+		<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
+		<p><b>Search ISBN or Title:</b> <input type="text" size="25" name="recieve" /></p>
+	</form>
+</div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -5,100 +5,102 @@
 <!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
 
 	<h1>Order search</h1>
-	<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
-	<table>
-		<tr>
-			<th>&nbsp;</th>
-			<th>Title</th>
-			<th>Author</th>
-			<th>Supplier</th>
-			<th>Placed on</th>
-			<th>Recieved on</th>
-			<th>Quantity ordered</th>
-			<th>Unit cost</th>
-			<th>&nbsp;</th>
-		</tr>
-		<tr>
-			
-				<th>Filter By:</th>
-				<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
-				<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
-				<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
-				<th>From <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" alt="calendar" />
-					<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" />
-					<script language="JavaScript" type="text/javascript">
-						function validate1(date) {
-							var day = date.getDate();
-							var month = date.getMonth() + 1;
-							var year = date.getFullYear();
-							var weekDay = date.getDay();
-							var dayMonth = month + '-' + day;
-							var dateString = year + '-' + month + '-' + day;
-							var dateTo = document.getElementById('to').value.split("-");
-							var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-							if (date > limitDate) {
-								return true;
-							} else {
-								return false;
-							}
-						}
-						Calendar.setup(
-							{
-								inputField : "from",
-								ifFormat : "%Y-%m-%d",
-								button : "openCalendarFrom",
-								disableFunc : validate1,
-								dateStatusFunc : validate1
-							}
-						);
-					</script>
-					To <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="calendar" />
-					<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
-					<script type="text/javascript">
-						function validate2(date) {
-							var day = date.getDate();
-							var month = date.getMonth() + 1;
-							var year = date.getFullYear();
-							var weekDay = date.getDay();
-							var dayMonth = month + '-' + day;
-							var dateString = year + '-' + month + '-' + day;
-							var dateFrom = document.getElementById('from').value.split("-");
-							var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-							if (limitDate > date) {
-								return true;
-							} else {
-								return false;
-							}
-						}
-
-						Calendar.setup(
-							{
-								inputField : "to",
-								ifFormat : "%Y-%m-%d",
-								button : "openCalendarTo",
-								disableFunc : validate2,
-								dateStatusFunc : validate2
-							}
-						);
-					</script></th>
-				<th>&nbsp;</th>
-				<th>&nbsp;</th>
-				<th>&nbsp;</th>
-				<th><input type="submit" value="Set Filter" /></th>
-		</tr>
-		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+	<div id="acqui_histsearch">
+		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+		<table>
 			<tr>
-				<td>&nbsp;</td>
-				<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-				<td><!-- TMPL_VAR NAME="author" --></td>
-				<td><!-- TMPL_VAR NAME="name" --></td>
-				<td><!-- TMPL_VAR name="creationdate" --></td>
-				<td><!-- TMPL_VAR name="datereceived" --></td>
-				<td><!-- TMPL_VAR name="quantity" --></td>
-				<td><!-- TMPL_VAR name="ecost" --></td>
-				<td>&nbsp;</td>
+				<th>&nbsp;</th>
+				<th>Title</th>
+				<th>Author</th>
+				<th>Supplier</th>
+				<th>Placed on</th>
+				<th>Recieved on</th>
+				<th>Quantity ordered</th>
+				<th>Unit cost</th>
+				<th>&nbsp;</th>
 			</tr>
-		<!-- /TMPL_LOOP -->
-	</table></form>
+			<tr>
+					<th>Filter By:</th>
+					<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
+					<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
+					<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
+					<th>From <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" alt="calendar" />
+						<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" />
+						<script language="JavaScript" type="text/javascript">
+							function validate1(date) {
+								var day = date.getDate();
+								var month = date.getMonth() + 1;
+								var year = date.getFullYear();
+								var weekDay = date.getDay();
+								var dayMonth = month + '-' + day;
+								var dateString = year + '-' + month + '-' + day;
+								var dateTo = document.getElementById('to').value.split("-");
+								var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+								if (date > limitDate) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+							Calendar.setup(
+								{
+									inputField : "from",
+									ifFormat : "%Y-%m-%d",
+									button : "openCalendarFrom",
+									disableFunc : validate1,
+									dateStatusFunc : validate1
+								}
+							);
+						</script>
+						To <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="calendar" />
+						<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
+						<script type="text/javascript">
+							function validate2(date) {
+								var day = date.getDate();
+								var month = date.getMonth() + 1;
+								var year = date.getFullYear();
+								var weekDay = date.getDay();
+								var dayMonth = month + '-' + day;
+								var dateString = year + '-' + month + '-' + day;
+								var dateFrom = document.getElementById('from').value.split("-");
+								var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+								if (limitDate > date) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+	
+							Calendar.setup(
+								{
+									inputField : "to",
+									ifFormat : "%Y-%m-%d",
+									button : "openCalendarTo",
+									disableFunc : validate2,
+									dateStatusFunc : validate2
+								}
+							);
+						</script></th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th><input type="submit" value="Set Filter" /></th>
+			</tr>
+			<!-- TMPL_LOOP NAME="suggestions_loop" -->
+				<tr>
+					<td>&nbsp;</td>
+					<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+					<td><!-- TMPL_VAR NAME="author" --></td>
+					<td><!-- TMPL_VAR NAME="name" --></td>
+					<td><!-- TMPL_VAR name="creationdate" --></td>
+					<td><!-- TMPL_VAR name="datereceived" --></td>
+					<td><!-- TMPL_VAR name="quantity" --></td>
+					<td><!-- TMPL_VAR name="ecost" --></td>
+					<td>&nbsp;</td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		</form>
+	</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

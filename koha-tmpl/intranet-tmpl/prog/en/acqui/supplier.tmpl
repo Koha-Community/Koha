@@ -2,15 +2,14 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
 
-	<form action="updatesupplier.pl" method="post">
-	
-	<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
-	
 	<!-- TMPL_IF name="id" -->
 		<h1>Update: <!-- TMPL_VAR NAME="name" --></h1>
 	<!-- TMPL_ELSE -->
 		<h1>Add supplier</h1>
 	<!-- /TMPL_IF -->
+	<form action="updatesupplier.pl" method="post">
+	<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
+	<div id="acqui_supplier_company">
 		<h2>COMPANY DETAILS</h2>
 		<p>
 			<label>Company Name</label>
@@ -65,6 +64,8 @@
 			<label>Notes</label>
 			<textarea name="notes" cols="40" rows="4"><!-- TMPL_VAR NAME="contnotes" --></textarea>
 		</p>
+	</div>
+	<div id="acqui_supplier_status">
 		<h2>CURRENT STATUS</h2>
 		<p>
 			<label>Supplier is</label>
@@ -76,6 +77,8 @@
 					<input type="radio" name="status" value="0" checked="checked" />Inactive
 				<!-- /TMPL_IF -->
 		</p>
+	</div>
+	<div id="acqui_supplier_ordering">
 		<h2>ORDERING INFORMATION</h2>
 		<p>
 			<label>Publishers and Imprints</label>
@@ -131,8 +134,8 @@
 			<label>Discount</label>
 			<input type="text" size="3" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %
 		</p>
-	<br/>
-	<br/><input type="submit"  name="submit" title="save" />
+	</div>
+	<input type="submit"  name="submit" title="save" />
 	</form>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

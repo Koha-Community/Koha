@@ -2,11 +2,11 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
 
-	<h1>Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
-		<form method="get" action="receive.pl">
-		<p>
-			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
-			<h2 class="acquisition">Supplier invoice information</h2>
+<h1>Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+<div id="acqui_recieveorder">
+	<h2 class="acquisition">Supplier invoice information</h2>
+	<form method="get" action="receive.pl">
+		<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
 		<p>
 			<label>Supplier Invoice Number</label>
 			<input type="text" size="20" name="invoice">
@@ -22,6 +22,6 @@
 		<p>
 			<input type="submit" class="button acquisition" value="save">
 		</p>
-		</form>
-
+	</form>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

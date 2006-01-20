@@ -66,13 +66,33 @@ function check(f) {
   }
 	document.frusin.submit();
 }
-
-//-->
-
 </script>
+<h1>
+	<!-- TMPL_IF name="ordnum" -->
+		Modify order details (line #<!-- TMPL_VAR NAME="ordnum" -->)
+	<!-- TMPL_ELSE -->
+		New order
+	<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="suggestionid" -->(defined from suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
+</h1>
+	<div id="acqui_basket_summary">
+		<h2>Basket Details</h2>
+		<table>
+		<tr><th>Basket Number:</th><td><!-- TMPL_VAR NAME="basketno" --></td></tr>
+		<tr><th>Managed By:</th><td><!-- TMPL_VAR NAME="authorisedbyname" --></td></tr>
+		<tr><th>Open On:</th><td><!-- TMPL_VAR NAME="creationdate" --></td></tr>
+		<tr><th>For:</th><td>Supplier Id <!-- TMPL_VAR NAME="booksellerid" --></td></tr>
+		<tr><th>Invoice Number:</th><td><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></td></tr>
+		<!-- TMPL_IF name="closedate" --><tr><th>Closed On:</th><td> <!-- TMPL_VAR name="closedate" --></td></tr><!-- /TMPL_IF -->
+		</table>
+	</div>
+
+<div id="acqui_newbiblio_edit_catalogue">
+	<h2>catalogue details</h2>
 	<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin">
-	<!-- TMPL_UNLESS name="existing" --><input type="hidden" name="existing" value="no" /><!-- /TMPL_UNLESS -->
-	<!-- <!-- TMPL_VAR NAME="title" --> -->
+	<!-- TMPL_UNLESS name="existing" -->
+		<input type="hidden" name="existing" value="no" />
+	<!-- /TMPL_UNLESS -->
 	<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordnum" -->" />
 	<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
 	<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
@@ -87,17 +107,6 @@ function check(f) {
 	<!-- TMPL_LOOP NAME="loop_currencies" -->
 		<input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
 	<!-- /TMPL_LOOP -->
-	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->" class="button acquisition">View Basket</a>
-	<h1>
-		<!-- TMPL_IF name="ordnum" -->
-			Modify order details (line #<!-- TMPL_VAR NAME="ordnum" -->)
-		<!-- TMPL_ELSE -->
-			New order
-		<!-- /TMPL_IF -->
-		 <!-- TMPL_IF name="suggestionid" -->(defined from suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
-	</h1>
-	Shopping Basket For <!-- TMPL_VAR NAME="name" -->
-	<h2>catalogue details</h2>
 	<p>
 		<label><b>Title *</b></label>
 		<!-- TMPL_IF name="biblio" -->
