@@ -34,6 +34,7 @@ use C4::Context;
 use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
+use C4::Biblio;
 use C4::Accounts;
 use Date::Manip;
 
@@ -476,6 +477,14 @@ sub transferbook {
 	#actually do the transfer....
 	if ($dotransfer) {
 		dotransfer($iteminformation->{'itemnumber'}, $fbr, $tbr);
+		my $dbh= C4::Context->dbh;
+		my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"items.holdingbranch");
+		my $bibid = MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $iteminformation->{'biblionumber'} );
+		my $marcitem = MARCgetitem($dbh, $bibid, $iteminformation->{'itemnumber'});
+		if ($marcitem->field($tagfield)){
+			$marcitem->field($tagfield)->update($tagsubfield=> $tbr);
+			MARCmoditem($dbh,$marcitem,$bibid,$iteminformation->{'itemnumber'});
+		}
 		$messages->{'WasTransfered'} = 1;
 	}
 	return ($dotransfer, $messages, $iteminformation);
