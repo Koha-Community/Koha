@@ -197,7 +197,7 @@ $template->param($data);
 $template->param(
 		 bornum          => $bornum,
 		 totalprice =>$totalprice,
-		 totaldue =>$total,
+		 totaldue => sprintf("%.2f",$total),
 		 issueloop       => \@issuedata,
 		 unvalidlibrarian => $unvalidlibrarian,
 		 reserveloop     => \@reservedata);
