@@ -310,6 +310,164 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
+	aqbasket =>  [
+		{
+			field	=> 'booksellerid',
+			type	=> 'int(11)',
+			null	=> 'NOT NULL',
+			key		=> '',
+			default	=> '1',
+			extra	=> '',
+		},
+	],
+);
+
+my %indexes = (
+#	table => [
+# 		{	indexname => 'index detail'
+# 		}
+#	],
+	shelfcontents => [
+		{	indexname => 'shelfnumber',
+			content => 'shelfnumber',
+		},
+		{	indexname => 'itemnumber',
+			content => 'itemnumber',
+		}
+	],
+	bibliosubject => [
+		{	indexname => 'biblionumber',
+			content => 'biblionumber',
+		}
+	],
+	items => [
+		{	indexname => 'homebranch',
+			content => 'homebranch',
+		},
+		{	indexname => 'holdingbranch',
+			content => 'holdingbranch',
+		}
+	],
+	aqbooksellers => [
+		{	indexname => 'PRIMARY',
+			content => 'id',
+			type => 'PRIMARY',
+		}
+	],
+	aqbasket => [
+		{	indexname => 'booksellerid',
+			content => 'booksellerid',
+		},
+	],
+	aqorders => [
+		{	indexname => 'basketno',
+			content => 'basketno',
+		},
+	],
+	aqorderbreakdown => [
+		{	indexname => 'ordernumber',
+			content => 'ordernumber',
+		},
+	],
+);
+
+my %foreign_keys = (
+#	table => [
+# 		{	key => 'the key in table' (must be indexed)
+#			foreigntable => 'the foreigntable name', # (the parent)
+#			foreignkey => 'the foreign key column(s)' # (in the parent)
+#			onUpdate => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+#			onDelete => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+# 		}
+#	],
+	shelfcontents => [
+		{	key => 'shelfnumber',
+			foreigntable => 'bookshelf',
+			foreignkey => 'shelfnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	biblioitems => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	items => [
+		{	key => 'biblioitemnumber',
+			foreigntable => 'biblioitems',
+			foreignkey => 'biblioitemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'homebranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+		{	key => 'holdingbranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+	],
+	additionalauthors => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	bibliosubject => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	aqbasket => [
+		{	key => 'booksellerid',
+			foreigntable => 'aqbooksellers',
+			foreignkey => 'id',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
+		},
+# 		{	key => 'booksellerid',
+# 			foreigntable => 'aqbooksellers',
+# 			foreignkey => 'id',
+# 			onUpdate => 'CASCADE',
+# 			onDelete => 'RESTRICT',
+# 		},
+	],
+	aqorders => [
+		{	key => 'basketno',
+			foreigntable => 'aqbasket',
+			foreignkey => 'basketno',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	aqorderbreakdown => [
+		{	key => 'ordernumber',
+			foreigntable => 'aqorders',
+			foreignkey => 'ordernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
 );
 
 #-------------------
@@ -498,36 +656,102 @@ foreach my $table ( keys %tabledata ) {
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
         );
         $sth->execute($uniquevalue);
-	if ($sth->rows) {
-	    foreach my $field (keys %$forceupdate) {
-		if ($forceupdate->{$field}) {
-		    my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
-		    $sth->execute($row->{$field}, $uniquevalue);
+		if ($sth->rows) {
+			foreach my $field (keys %$forceupdate) {
+				if ($forceupdate->{$field}) {
+					my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
+					$sth->execute($row->{$field}, $uniquevalue);
+				}
+	    	}
+		} else {
+			print "Adding row to $table: " unless $silent;
+			my @values;
+			my $fieldlist;
+			my $placeholders;
+			foreach my $field ( keys %$row ) {
+				next if $field eq 'uniquefieldrequired';
+				next if $field eq 'forceupdate';
+				my $value = $row->{$field};
+				push @values, $value;
+				print "  $field => $value" unless $silent;
+				$fieldlist .= "$field,";
+				$placeholders .= "?,";
+			}
+			print "\n" unless $silent;
+			$fieldlist    =~ s/,$//;
+			$placeholders =~ s/,$//;
+			my $sth =
+			$dbh->prepare(
+				"insert into $table ($fieldlist) values ($placeholders)");
+			$sth->execute(@values);
 		}
-	    }
-	} else {
-            print "Adding row to $table: " unless $silent;
-            my @values;
-            my $fieldlist;
-            my $placeholders;
-            foreach my $field ( keys %$row ) {
-                next if $field eq 'uniquefieldrequired';
-		next if $field eq 'forceupdate';
-                my $value = $row->{$field};
-                push @values, $value;
-                print "  $field => $value" unless $silent;
-                $fieldlist .= "$field,";
-                $placeholders .= "?,";
-            }
-            print "\n" unless $silent;
-            $fieldlist    =~ s/,$//;
-            $placeholders =~ s/,$//;
-            my $sth =
-              $dbh->prepare(
-                "insert into $table ($fieldlist) values ($placeholders)");
-            $sth->execute(@values);
-        }
-    }
+	}
+}
+
+#
+# check indexes and create them when needed
+#
+print "Checking for index required...\n" unless $silent;
+foreach my $table ( keys %indexes ) {
+	#
+	# read all indexes from $table
+	#
+	$sth = $dbh->prepare("show index from $table");
+	$sth->execute;
+	my %existingindexes;
+	while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow ) {
+		$existingindexes{$key_name} = 1;
+	}
+	# read indexes to check
+	my $tablerows = $indexes{$table};
+	foreach my $row (@$tablerows) {
+		my $key_name=$row->{indexname};
+		if ($existingindexes{$key_name} eq 1) {
+# 			print "$key_name existing";
+		} else {
+			print "Creating $key_name in $table\n";
+			my $sql;
+			if ($row->{indexname} eq 'PRIMARY') {
+				$sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
+			} else {
+				$sql = "alter table $table ADD INDEX $key_name ($row->{content}) $row->{type}";
+			}
+ 			$dbh->do($sql);
+            print "Error $sql : $dbh->err \n" if $dbh->err;
+		}
+	}
+}
+
+#
+# check foreign keys and create them when needed
+#
+print "Checking for foreign keys required...\n" unless $silent;
+foreach my $table ( keys %foreign_keys ) {
+	#
+	# read all indexes from $table
+	#
+	$sth = $dbh->prepare("show table status like '$table'");
+	$sth->execute;
+	my $stat = $sth->fetchrow_hashref;
+	# read indexes to check
+	my $tablerows = $foreign_keys{$table};
+	foreach my $row (@$tablerows) {
+		my $foreign_table=$row->{foreigntable};
+		if ($stat->{'Comment'} =~/$foreign_table/) {
+# 			print "$foreign_table existing\n";
+		} else {
+			print "Creating $foreign_table in $table\n";
+			# first, drop any orphan value in child table
+			my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
+			$dbh->do($sql);
+            print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
+			$sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
+			$sql .= " on update ".$row->{onUpdate} if $row->{onUpdate};
+			$sql .= " on delete ".$row->{onDelete} if $row->{onDelete};
+			$dbh->do($sql);
+            print "SQL ERROR: $sql : $dbh->errstr \n" if $dbh->err;
+		}
+	}
 }
 
 #
@@ -802,6 +1026,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.127  2006/01/24 17:57:17  tipaul
+# DB improvements : adding foreign keys on some tables. partial stuff done.
+#
 # Revision 1.126  2006/01/06 16:39:42  tipaul
 # synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
 # Seems not to break too many things, but i'm probably wrong here.
