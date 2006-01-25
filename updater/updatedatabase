@@ -103,6 +103,12 @@ my %requirefields = (
 );
 
 my %dropable_table = (
+	sessionqueries	=> 'sessionqueries',
+	marcrecorddone	=> 'marcrecorddone',
+	users			=> 'users',
+	itemsprices		=> 'itemsprices',
+	biblioanalysis	=> 'biblioanalysis',
+	borexp			=> 'borexp',
 # tablename => 'tablename',
 );
 
@@ -320,6 +326,42 @@ my %fielddefinitions = (
 			extra	=> '',
 		},
 	],
+	aqbooksellers =>  [
+		{
+			field	=> 'listprice',
+			type	=> 'varchar(10)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'invoiceprice',
+			type	=> 'varchar(10)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
+	issues =>  [
+		{
+			field	=> 'borrowernumber',
+			type	=> 'int(11)',
+			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'itemnumber',
+			type	=> 'int(11)',
+			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
 );
 
 my %indexes = (
@@ -368,6 +410,15 @@ my %indexes = (
 		{	indexname => 'ordernumber',
 			content => 'ordernumber',
 		},
+		{	indexname => 'bookfundid',
+			content => 'bookfundid',
+		},
+	],
+	currency => [
+		{	indexname => 'PRIMARY',
+			content => 'currency',
+			type => 'PRIMARY',
+		}
 	],
 );
 
@@ -394,12 +445,20 @@ my %foreign_keys = (
 			onDelete => 'CASCADE',
 		},
 	],
+	# onDelete is RESTRICT on reference tables (branches, itemtype) as we don't want items to be 
+	# easily deleted, but branches/itemtype not too easy to empty...
 	biblioitems => [
 		{	key => 'biblionumber',
 			foreigntable => 'biblio',
 			foreignkey => 'biblionumber',
 			onUpdate => 'CASCADE',
 			onDelete => 'CASCADE',
+		},
+		{	key => 'itemtype',
+			foreigntable => 'itemtypes',
+			foreignkey => 'itemtype',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
 		},
 	],
 	items => [
@@ -412,13 +471,13 @@ my %foreign_keys = (
 		{	key => 'homebranch',
 			foreigntable => 'branches',
 			foreignkey => 'branchcode',
-			onUpdate => 'RESTRICT',
+			onUpdate => 'CASCADE',
 			onDelete => 'RESTRICT',
 		},
 		{	key => 'holdingbranch',
 			foreigntable => 'branches',
 			foreignkey => 'branchcode',
-			onUpdate => 'RESTRICT',
+			onUpdate => 'CASCADE',
 			onDelete => 'RESTRICT',
 		},
 	],
@@ -445,17 +504,31 @@ my %foreign_keys = (
 			onUpdate => 'CASCADE',
 			onDelete => 'RESTRICT',
 		},
-# 		{	key => 'booksellerid',
-# 			foreigntable => 'aqbooksellers',
-# 			foreignkey => 'id',
-# 			onUpdate => 'CASCADE',
-# 			onDelete => 'RESTRICT',
-# 		},
 	],
 	aqorders => [
 		{	key => 'basketno',
 			foreigntable => 'aqbasket',
 			foreignkey => 'basketno',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	aqbooksellers => [
+		{	key => 'listprice',
+			foreigntable => 'currency',
+			foreignkey => 'currency',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'invoiceprice',
+			foreigntable => 'currency',
+			foreignkey => 'currency',
 			onUpdate => 'CASCADE',
 			onDelete => 'CASCADE',
 		},
@@ -467,7 +540,126 @@ my %foreign_keys = (
 			onUpdate => 'CASCADE',
 			onDelete => 'CASCADE',
 		},
+		{	key => 'bookfundid',
+			foreigntable => 'aqbookfund',
+			foreignkey => 'bookfundid',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
 	],
+	branchtransfers => [
+		{	key => 'frombranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'tobranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	issuingrules => [
+		{	key => 'categorycode',
+			foreigntable => 'categories',
+			foreignkey => 'categorycode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemtype',
+			foreigntable => 'itemtypes',
+			foreignkey => 'itemtype',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	issues => [	# constraint is SET NULL : when a borrower or an item is deleted, we keep the issuing record
+	# for stat purposes
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	reserves => [
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'branchcode',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	borrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
+	# but prevent deleting a branch as soon as it has 1 borrower !
+		{	key => 'categorycode',
+			foreigntable => 'categories',
+			foreignkey => 'categorycode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+		{	key => 'branchcode',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+	],
+	accountlines => [
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	auth_tag_structure => [
+		{	key => 'authtypecode',
+			foreigntable => 'auth_types',
+			foreignkey => 'authtypecode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	# FIXME : don't constraint auth_*_table and auth_word, as they may be replaced by zebra
 );
 
 #-------------------
@@ -742,14 +934,25 @@ foreach my $table ( keys %foreign_keys ) {
 		} else {
 			print "Creating $foreign_table in $table\n";
 			# first, drop any orphan value in child table
-			my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
-			$dbh->do($sql);
-            print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
-			$sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
+			if ($row->{onDelete} ne "RESTRICT") {
+				my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
+				$dbh->do($sql);
+				print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
+			}
+			my $sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
 			$sql .= " on update ".$row->{onUpdate} if $row->{onUpdate};
 			$sql .= " on delete ".$row->{onDelete} if $row->{onDelete};
 			$dbh->do($sql);
-            print "SQL ERROR: $sql : $dbh->errstr \n" if $dbh->err;
+			if ($dbh->err) {
+				print "====================
+An error occured during :
+\t$sql
+It probably means there is something wrong in your DB : a row ($table.$row->{key}) refers to a value in $row->{foreigntable}.$row->{foreignkey} that does not exist. solve the problem and run updater again (or just the previous SQL statement).
+You can find those values with select
+\t$table.* from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})
+====================\n
+";
+			}
 		}
 	}
 }
@@ -1026,6 +1229,15 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.128  2006/01/25 15:16:06  tipaul
+# updating DB :
+# * removing useless tables
+# * adding useful indexes
+# * altering some columns definitions
+# * The goal being to have updater working fine for foreign keys.
+#
+# For me it's done, let me know if it works for you. You can see an updated schema of the DB (with constraints) on the wiki
+#
 # Revision 1.127  2006/01/24 17:57:17  tipaul
 # DB improvements : adding foreign keys on some tables. partial stuff done.
 #
