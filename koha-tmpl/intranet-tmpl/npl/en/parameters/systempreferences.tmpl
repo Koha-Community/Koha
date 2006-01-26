@@ -84,7 +84,11 @@
 				<!-- TMPL_IF NAME="type-choice" -->
 					<select name="value" id="value">
 						<!-- TMPL_LOOP NAME="options" -->
-							<option value="<!-- TMPL_VAR NAME="option" -->"<!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
+<!-- TMPL_IF NAME="selected" -->
+							<option value="<!-- TMPL_VAR NAME="option" -->" selected="selected"><!-- TMPL_VAR NAME="option" --></option>
+<!-- TMPL_ELSE -->
+							<option value="<!-- TMPL_VAR NAME="option" -->"><!-- TMPL_VAR NAME="option" --></option>
+<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</select>
 				<!-- /TMPL_IF -->
@@ -95,7 +99,13 @@
 					<input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->No<!-- /TMPL_IF -->
 				</td></tr>
 		</table></div>
-		<p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->" class="submit"> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
+		<p>
+		<!-- TMPL_IF NAME="modify" -->
+		<input type="submit" value="Save Changes" class="submit" />
+	<!-- TMPL_ELSE -->
+		<input type="submit" value="Add this Preference" class="submit" />
+	<!-- /TMPL_IF -->
+<input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
 		
 <h3>Koha internal</h3>		
 		<div class="details"><span class="note">Note: you should have no reasons to modify the following default values</span>

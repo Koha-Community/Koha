@@ -43,9 +43,6 @@
 			<!-- TMPL_IF NAME="ERROR_branch" -->
 				<li><a href="#branch">Patron must be at the same branch as you</a></li>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="ERROR_date" -->
-				<li><a href="#expiry">Expiration date must fall AFTER enrollment date</a></li>
-			<!-- /TMPL_IF -->
 			</ul>
 		</div>
 	<!-- /TMPL_IF -->
@@ -75,21 +72,27 @@
 				</td></tr><!-- /TMPL_UNLESS -->
 	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="initials">Initials:</label></th><td colspan="4"><input type="text" id="initials" name="initials" size="5" value="<!-- TMPL_VAR NAME="initials" -->"></td></tr><!-- /TMPL_UNLESS -->
 
-	<tr><th><label for="surname"<!-- TMPL_IF NAME="ERROR_surname" --> class="focus"<!-- /TMPL_IF -->><a name="lastname" id="lastname"><!-- TMPL_IF NAME="institution" -->Institution name:<!-- TMPL_ELSE -->Last Name: <!-- /TMPL_IF --></a></label></th><td><input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->"<!-- TMPL_IF NAME="ERROR_surname" --> class="focus"<!-- /TMPL_IF -->></td>
+	<tr><th><!-- TMPL_IF NAME="ERROR_surname" --><label for="surname" class="focus"><!-- TMPL_ELSE --><label for="surname"><!-- /TMPL_IF --><a name="lastname" id="lastname"><!-- TMPL_IF NAME="institution" -->Institution name:<!-- TMPL_ELSE -->Last Name: <!-- /TMPL_IF --></a></label></th><td><input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->"<!-- TMPL_IF NAME="ERROR_surname" --> class="focus"<!-- /TMPL_IF -->></td>
 
-<!-- TMPL_UNLESS name="institution" --><th><label for="sex"<!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->><a name="sex" id="sex">Sex:</a> </label></th><td><input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->>F	<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked="checked"<!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->> M</td><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS name="institution" --><th><!-- TMPL_IF NAME="ERROR_gender" --><label for="sex" class="focus"><!-- TMPL_ELSE --><label for="sex"><!-- /TMPL_IF --><a name="sex" id="sex">Sex:</a> </label></th><td><input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->>F	<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked="checked"<!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->> M</td><!-- /TMPL_UNLESS -->
 </tr>
 
-	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="firstname"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->><a name="firstname" id="firstname">First Name:</a></label> </th><td><input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->></td>
+	<!-- TMPL_UNLESS name="institution" --><tr><th><!-- TMPL_IF NAME="ERROR_firstname" --><label for="firstname" class="focus"><!-- TMPL_ELSE --><label for="firstname"><!-- /TMPL_IF --><a name="firstname" id="firstname">First Name:</a></label> </th><td><input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->></td>
 
 <!-- TMPL_UNLESS name="institution" --><th><label for="dateofbirth">Date of Birth: </label></th><td><input type="text" id="dateofbirth" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->"> (<!-- TMPL_VAR NAME="dateformat" -->)</td><!-- /TMPL_UNLESS -->
 </tr><!-- /TMPL_UNLESS -->
 					
 	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="othernames">Prefered Name:</label></th><td colspan="4"><input type="text" id="othernames" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->"></td></tr><!-- /TMPL_UNLESS -->
 
-	<tr><th>Addresses:</th><td colspan="4"><fieldset><legend>Mailing Address</legend><label for="streetaddress"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->><a name="address" id="address">Address:</a> </label><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->"<!-- TMPL_IF NAME="ERROR_address" --> class="focus"<!-- /TMPL_IF -->>
-<br><label for="city"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF -->><a name="#city" id="#city">City, State:</a></label> <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->"<!-- TMPL_IF NAME="ERROR_city" --> class="focus"<!-- /TMPL_IF --> />
-<br><label for="zipcode">Zip Code:</label> <input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->"></fieldset>
+	<tr><th>Addresses:</th><td colspan="4"><fieldset><legend>Mailing Address</legend><!-- TMPL_IF NAME="ERROR_address" --><label for="streetaddress" class="focus"><!-- TMPL_ELSE --><label for="streetaddress"><!-- /TMPL_IF --><a name="address" id="address">Address:</a> </label>
+<!-- TMPL_IF NAME="ERROR_address" -->
+<input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->" class="focus" /><!-- TMPL_ELSE --><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->" /><!-- /TMPL_IF -->
+
+<br><!-- TMPL_IF NAME="ERROR_city" --><label for="city" class="focus"><!-- TMPL_ELSE --><label for="city"><!-- /TMPL_IF --><a name="#city" id="#city">City, State:</a></label>
+<!-- TMPL_IF NAME="ERROR_city" -->
+<input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" class="focus" /><!-- TMPL_ELSE --><input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" /><!-- /TMPL_IF -->
+
+<br><label for="zipcode">Zip Code:</label> <input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->" /></fieldset>
 
 <fieldset><legend>Street Address (if different)</legend>
 <label for="physstreet">Address:</label><input type="text" id="physstreet" name="physstreet" size="25" value="<!-- TMPL_VAR NAME="physstreet" -->" />
@@ -116,7 +119,7 @@
 				<!-- /TMPL_IF -->
 			</tr>
 			<tr>
-				<th><a name="expiry" id="expiry">Expiry date (leave blank for auto calc): </a></th>
+				<th>Expiry date (leave blank for auto calc): </th>
 				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->" /></td>
 			</tr>
 
@@ -164,8 +167,8 @@
 </table>
 </div>
 
-<p>	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-	<input name="submit" type="submit" class="submit" value="<!-- TMPL_IF NAME="modify" -->Update<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> This Patron" /></p>
+<p>	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_IF NAME="addAction" -->
+	<input name="submit" type="submit" class="submit" value="Add This Patron" /><!-- TMPL_ELSE --><input name="submit" type="submit" class="submit" value="Update This Patron" /><!-- /TMPL_IF --></p>
 	</form>
 </div>
 

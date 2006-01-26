@@ -22,20 +22,20 @@
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
-<tr<!-- TMPL_IF NAME="toggle" --><!-- TMPL_ELSE --> class="highlight"<!-- /TMPL_IF -->>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
+<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="returndate" --><td><!-- TMPL_ELSE --><td class="onissue"><!-- /TMPL_IF -->
  		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>&nbsp;
 	</td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
+	<!-- TMPL_IF NAME="returndate" --><td><!-- TMPL_ELSE --><td class="onissue"><!-- /TMPL_IF -->
  		<!-- TMPL_VAR name="author" -->&nbsp;
 	</td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="classification" --></td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="returndate" --><td><!-- TMPL_ELSE --><td class="onissue"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="classification" --></td>
+	<!-- TMPL_IF NAME="returndate" --><td><!-- TMPL_ELSE --><td class="onissue"><!-- /TMPL_IF --><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
 	</td>
 <!-- /TMPL_LOOP -->
 </table>
 
-<p><form action="moremember.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->"><input type="submit" class="submit" value="Return to Member Record" /></form></p>
+<p><form action="/cgi-bin/koha/members/moremember.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->"><input type="submit" class="submit" value="Return to Member Record" /></form></p>
 
 </div></div>
 
