@@ -60,6 +60,10 @@ $template->param(norequests => $norequests);
 
   ## get notes and subjects from MARC record
 my $marc = C4::Context->preference("marc");
+
+#preformat isbn for amazon content
+$dat->{'isbn'} =~ s|-||g;
+
 my @results = ($dat,);
 if (C4::Boolean::true_p($marc)) {
 	my $dbh = C4::Context->dbh;
