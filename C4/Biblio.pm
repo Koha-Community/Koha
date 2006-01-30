@@ -388,20 +388,22 @@ sub MARCadditem {
 
     # now, add subfields...
     foreach my $field (@fields) {
-        my @subfields = $field->subfields();
-        $fieldcount++;
-        foreach my $subfieldcount ( 0 .. $#subfields ) {
-            &MARCaddsubfield(
-                $dbh,
-                $bibid,
-                $field->tag(),
-                $field->indicator(1) . $field->indicator(2),
-                $fieldcount,
-                $subfields[$subfieldcount][0],
-                $subfieldcount + 1,
-                $subfields[$subfieldcount][1]
-            );
-        }
+		unless ($field->tag<100){
+			my @subfields = $field->subfields();
+			$fieldcount++;
+			foreach my $subfieldcount ( 0 .. $#subfields ) {
+				&MARCaddsubfield(
+					$dbh,
+					$bibid,
+					$field->tag(),
+					$field->indicator(1) . $field->indicator(2),
+					$fieldcount,
+					$subfields[$subfieldcount][0],
+					$subfieldcount + 1,
+					$subfields[$subfieldcount][1]
+				);
+			}
+		}
     }
     $dbh->do("unlock tables");
     return $bibid;
@@ -1380,6 +1382,15 @@ sub NEWmodbiblio {
 			push @subjects,$subjsubfield[$subfieldcount];
 		}
 	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"items.itemnotes",$frameworkcode);
+	my @notes = $record->field($tagfield);
+	my @itemnotes;
+	foreach my $note (@notes) {
+		my @itemnotefields = $note->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#itemnotes) {
+			push @itemnotes,$itemnotefields[$subfieldcount];
+		}
+	}
 	OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
 	return 1;
 }
@@ -1427,7 +1438,6 @@ sub NEWnewitem {
 
 sub NEWmoditem {
     my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
-    
 	&MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
     my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
@@ -2002,6 +2012,7 @@ where biblioitemnumber = ?"
         my $query = "Insert into deleteditems set ";
         my @bind  = ();
         foreach my $temp ( keys %$data ) {
+			next if ($temp =~/itemcallnumber/);
             $query .= "$temp = ?,";
             push ( @bind, $data->{$temp} );
         }
@@ -2649,6 +2660,17 @@ sub FindDuplicate {
 # 			warn "for title, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
 	}
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for title, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
 	# ... and on biblio.author
 	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author","");
 	if ($record->field($tag)) {
@@ -2771,6 +2793,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.28  2006/01/30 16:06:26  hdl
+# BugFix : leader management was annoying for MARCadditem. Changing. Avoiding fields which tag is under 100. (Could be a simple different from 000) But in UNIMARC, fields under 100 donot have subfields.
+#
+# Some Improvements on notes and subject management
+#
 # Revision 1.115.2.27  2006/01/05 15:13:55  tipaul
 # bugfix with $0 subfield
 #
