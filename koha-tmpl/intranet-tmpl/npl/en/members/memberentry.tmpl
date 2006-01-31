@@ -43,6 +43,9 @@
 			<!-- TMPL_IF NAME="ERROR_branch" -->
 				<li><a href="#branch">Patron must be at the same branch as you</a></li>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_date" -->
+				<li><a href="#expiry">Expiration date must fall AFTER enrollment date</a></li>
+			<!-- /TMPL_IF -->
 			</ul>
 		</div>
 	<!-- /TMPL_IF -->
@@ -119,7 +122,7 @@
 				<!-- /TMPL_IF -->
 			</tr>
 			<tr>
-				<th>Expiry date (leave blank for auto calc): </th>
+				<th><a name="expiry" id="expiry">Expiry date (leave blank for auto calc): </a></th>
 				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->" /></td>
 			</tr>
 
