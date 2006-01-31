@@ -84,6 +84,8 @@ my $dbh = C4::Context->dbh;
 		}
 	}
 	findseealso($dbh,\@tags);
+	my $from = $startfrom*$resultsperpage+1;
+	
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,'biblio.title','ASC');
@@ -113,6 +115,14 @@ my $dbh = C4::Context->dbh;
 	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
 		$displaynext = 1;
 	}
+	my $to;
+
+	if($total < (($startfrom+1)*$resultsperpage))
+	{
+		$to = $total;
+	} else {
+		$to = (($startfrom+1)*$resultsperpage);
+	}
 
 	my @field_data = ();
 
@@ -137,15 +147,6 @@ my $dbh = C4::Context->dbh;
 					startfrom => ($i-1)};
 			}
     	}
-	}
-	my $from = $startfrom*$resultsperpage+1;
-	my $to;
-
-	if($total < (($startfrom+1)*$resultsperpage))
-	{
-		$to = $total;
-	} else {
-		$to = (($startfrom+1)*$resultsperpage);
 	}
 
     # fill with books in breeding farm
