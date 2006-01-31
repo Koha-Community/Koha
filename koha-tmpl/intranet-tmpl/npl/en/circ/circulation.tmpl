@@ -126,7 +126,7 @@
 	<li><!-- TMPL_VAR NAME="phone" --></li>
 	<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 	<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-	<li>(<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
+	<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
 	</ul>
 	</div>
 	<h3<!--TMPL_IF Name="warndeparture"--> class="error"<!--/TMPL_IF-->><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!--TMPL_IF Name="warndeparture"--><br /> Borrower will leave soon<!--/TMPL_IF--></h3>
@@ -281,7 +281,7 @@
 		</tr>
 	<!-- TMPL_IF NAME="todayissues" -->
 		<!-- TMPL_LOOP NAME="todayissues" -->
-		<tr>
+		<!-- TMPL_IF NAME="togglecolor" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="dd" --></td>
 			<td><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><br/><i><!-- TMPL_VAR name="itemnotes" --></i></td>
 			<td><!-- TMPL_VAR NAME="author" --></td>
@@ -295,7 +295,7 @@
 <!-- TMPL_IF NAME="previssues" -->
 		<tr><th colspan="6"><a name="previous" id="previous">Previous Issues</a></th></tr>
 		<!-- TMPL_LOOP NAME="previssues" -->
-			<tr>
+			<!-- TMPL_IF NAME="togglecolor" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 			<td><!-- TMPL_IF NAME="od" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></span><!-- /TMPL_IF --></td>
 			<td><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><br/><i><!-- TMPL_VAR name="itemnotes" --></i></td>
 			<td><!-- TMPL_VAR NAME="author" --></td>
