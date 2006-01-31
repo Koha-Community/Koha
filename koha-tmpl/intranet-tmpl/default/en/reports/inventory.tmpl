@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
 	<h1 class="reports">Inventory/Stocktaking</h1>
-	<form method="post">
+	<div id="bloc25"><form method="post">
 		<h2 class="reports">Select items you want to check</h2>
 		<p>
 			Item Location (items.itemcallnumber) between 
@@ -22,6 +22,24 @@
 		</p>
 	</form>
 	
+	</div>
+	<div id="bloc25">
+		<form  name="barcodefile" method="post">
+		<h2 class="reports">Use a barcode file</h2>
+		<p>barcode filename : <input type="file" name="uploadbarcodes" /></p>
+		<p>Set datelastseen to : <input type="text" name="setdate" /></p>
+		<p><input type="submit" value="OK" class="button reports"></p>
+		</form>
+		<!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
+		<!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> can't be opened</p><!-- /TMPL_IF-->
+	</div>
+	<!--TMPL_LOOP Name="errorloop"--><p class="error"><!--TMPL_VAR Name="barcode"-->
+	<!--TMPL_IF Name="ERR_BARCODE"--> : barcode not found<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_WTHDRAWN"--> : item withdrawn<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_RET"--> : item was on loan. It was returned before marked as seen<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"--> : item was on loan. couldn't be returned.<!--/TMPL_IF-->
+	</p><!-- /TMPL_LOOP-->
+	<!-- TMPL_IF NAME="loop" -->
 	<form method="post">
 	<input type="hidden" name="markseen" value="1">
 	<input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->">
@@ -29,7 +47,6 @@
 	<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->">
 	<input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->">
 	<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="offset" -->">
-	<!-- TMPL_IF NAME="loop" -->
 	<table>
 		<tr>
 			<th class="reports">Seen</th>
