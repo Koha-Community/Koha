@@ -52,9 +52,10 @@ sub StringSearch  {
 	my ($env,$searchstring,%branches)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
+	my @data=split(' ',$searchstring) if ($searchstring ne "");
 	my $count=@data;
-	my $strsth= "select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where bookfundname like ? ";
+	my $strsth= "select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where 1 ";
+	$strsth.=" AND bookfundname like ? " if ($searchstring ne "");
 	if (%branches){
 		$strsth.= "AND (aqbookfund.branchcode is null " ;
 		foreach my $branchcode (keys %branches){
@@ -63,13 +64,18 @@ sub StringSearch  {
 		$strsth .= ") ";
 	}
 	$strsth.= "order by aqbookfund.bookfundid";
-#	warn "chaine de recherche : ".$strsth;
+	warn "chaine de recherche : ".$strsth;
 	
 	my $sth=$dbh->prepare($strsth);
-	$sth->execute("%$data[0]%");
+	if ($searchstring){
+		$sth->execute("%$data[0]%");
+	} else {
+		$sth->execute;
+	}
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 		push(@results,$data);
+		warn "id ".$data->{bookfundid}." name ".$data->{bookfundname}." branchcode ".$data->{branchcode};
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -163,9 +169,15 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
 	$sth->execute($bookfundid);
 	$sth->finish;
-	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname,branchcode) values (?,?,?)");
-	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'),$input->param('branchcode'));
-	$sth->finish;
+	if ($input->param('branchcode') ne ""){
+		my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname,branchcode) values (?,?,?)");
+		$sth->execute($input->param('bookfundid'),$input->param('bookfundname'),$input->param('branchcode'));
+		$sth->finish;
+	} else {
+		my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
+		$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
+		$sth->finish;
+	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
 	exit;
 			
@@ -206,6 +218,7 @@ if ($op eq 'add_form') {
 	my @loop_data =();
 	my $dbh = C4::Context->dbh;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+# 		warn "i ".$i." offset".$offset." pagesize ".$pagesize." id ".$results->[$i]{bookfundid}." name ".$results->[$i]{bookfundname}." branchcode ".$results->[$i]{branchcode};
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
@@ -236,6 +249,10 @@ if ($op eq 'add_form') {
 		$row_data{budget} = \@budget_loop;
 		push @loop_data,\%row_data;
 	}
+	$template->param(max => (($count>$offset+$pagesize)?$offset+$pagesize:$count));
+	$template->param(min => ($offset?$offset:1));
+	$template->param(nbresults => $count);
+	$template->param(Next => ($count>$offset+$pagesize)) if ($count>$offset+$pagesize);
 	$template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT
 
