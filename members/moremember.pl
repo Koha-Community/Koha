@@ -196,7 +196,7 @@ foreach my $reserveline (@$reserves) {
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
-		 totalprice =>$totalprice,
+		 totalprice =>sprintf("%.2f",$totalprice),
 		 totaldue => sprintf("%.2f",$total),
 		 issueloop       => \@issuedata,
 		 unvalidlibrarian => $unvalidlibrarian,
