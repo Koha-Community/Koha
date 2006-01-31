@@ -10,7 +10,7 @@
 <input type="hidden" name="type" value="intranet" />
 <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 
-<div class="form">
+<div class="data">
 <table>
 <caption>Quick Search</caption>
 					<tr>
@@ -57,7 +57,9 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" id="seriestitle" name="value" size="35"/></td></tr>
-	</table><input type="submit" value="Start search" class="submit" /><table>
+	</table>
+	<p><input type="submit" value="Start search" class="submit" /></p>
+	<table>
 		<tr>
 			<th><label for="itemtype">Item Type</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.itemtype" />
@@ -107,7 +109,7 @@
 			<input type="text" id="publisher" name="value" onchange="sql_update()" size="35"  accesskey="p" /></td>
 		</tr>
 		</table>
-		<input type="submit" value="Start search" class="submit" />
+		<p><input type="submit" value="Start search" class="submit" /></p>
 </div>
 
 <div class="table">
