@@ -49,11 +49,12 @@ my $count;
 my $toggle;
 
 my $record;
-my $oldbiblio;
+my $biblionumber;
 if ($bibid > 0) {
 	$record = MARCgetbiblio($dbh,$bibid);
-	$oldbiblio = MARCmarc2koha($dbh,$record);
+	$biblionumber=MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
 }
+
 my $errmsg;
 unless ($random) { # if random is a parameter => we're just waiting for the search to end, it's a refresh.
 	if ($isbn) {
@@ -102,7 +103,7 @@ $template->param(isbn => $isbn,
 						breeding_loop => \@breeding_loop,
 						refresh => ($numberpending eq 0 ? 0 : "search.pl?bibid=$bibid&random=$random"),
 						numberpending => $numberpending,
-						oldbiblionumber => $oldbiblio->{'biblionumber'},
+						oldbiblionumber => $biblionumber,
 						);
 
 print $input->header(
