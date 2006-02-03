@@ -942,6 +942,15 @@ my %tabledata = (
             explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
             type                => 'YesNo',
         },
+	{   
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacNav',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
+            type                => 'free',
+        },
     ],
 
 );
@@ -1569,6 +1578,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.17  2006/02/03 20:55:16  kados
+# Adding a new system preference: OpacNav. Can be used to add HTML
+# navigation links to the left-hand navbar in the OPAC.
+#
 # Revision 1.100.2.16  2005/12/30 11:13:29  tipaul
 # * tool to synchronise TABLE and deletedTABLE structures in updatedatabase
 #
