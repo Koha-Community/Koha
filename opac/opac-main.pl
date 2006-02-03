@@ -55,9 +55,12 @@ if($languages_count > 1){
 		$template->param(languages => \@options);
 }
 $template->param(CGIitemtype => $CGIitemtype,
+				
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				textmessaging => $borrower->{textmessaging},
 				opaclargeimage => C4::Context->preference("opaclargeimage"),
+				LibraryName => C4::Context->preference("LibraryName"),
+				OpacNav => C4::Context->preference("OpacNav"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
