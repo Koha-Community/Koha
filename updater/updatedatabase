@@ -951,6 +951,26 @@ my %tabledata = (
             explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
             type                => 'free',
         },
+        {                                                                                   uniquefieldrequired => 'variable',
+            variable            => 'AmazonContent',
+	    value               => '0',
+            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
+            explanation         => 'Turn on/off Amazon Content',
+            type                => 'YesNo',
+        },                                                                              {                                                                                   
+	    uniquefieldrequired => 'variable',
+            variable            => 'AmazonDevKey',
+	    value               => '',
+            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
+            explanation         => 'Put your Amazon Developers Key here',
+            type                => 'free',
+        },                                                                              {                                                                                   uniquefieldrequired => 'variable',
+            variable            => 'AmazonAssocTag',
+	    value               => '',
+            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
+            explanation         => 'Put your Amazon Associates Tag here',
+            type                => 'free',
+        },                                                                      
     ],
 
 );
@@ -1578,6 +1598,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.18  2006/02/03 23:12:23  kados
+# Adds system prefs for using Amazon.com content in the OPAC
+#
 # Revision 1.100.2.17  2006/02/03 20:55:16  kados
 # Adding a new system preference: OpacNav. Can be used to add HTML
 # navigation links to the left-hand navbar in the OPAC.
