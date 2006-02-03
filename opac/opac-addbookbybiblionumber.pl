@@ -78,11 +78,16 @@ if ($shelfnumber) {
 						LibraryName => C4::Context->preference("LibraryName"),
 						suggestion => C4::Context->preference("suggestion"),
 						virtualshelves => C4::Context->preference("virtualshelves"),
+						OpacNav => C4::Context->preference("OpacNav"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.3  2006/02/03 21:03:57  kados
+# Updating script for new system preference: OpacNav
+# ----------------------------------------------------------------------
+#
 # Revision 1.1.2.2  2005/03/25 17:04:27  tipaul
 # adding virtual shelves & suggestions button to the top
 #
