@@ -131,14 +131,13 @@ $strsth.=" && issues.branchcode = '".$branchfilter."' " if($branchfilter) ;
 # my $itemtypefilter=$input->param('itemtype');
 # my $borflagsfilter=$input->param('borflags');
 # my $branchfilter=$input->param('branch');
-
 if ($order eq "borrower"){
 	$strsth.=" order by borrower,date_due " ;
 } else {
 	$strsth.=" order by date_due,borrower ";
 }
 my $sth=$dbh->prepare($strsth);
-# warn "".$strsth;
+warn "overdue.pl : query string ".$strsth;
 $sth->execute();
 
 my @overduedata;
