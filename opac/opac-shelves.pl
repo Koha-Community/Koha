@@ -60,6 +60,7 @@ my ($shelflist) = GetShelfList($loggedinuser,2);
 $template->param({	loggedinuser => $loggedinuser,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),
+					OpacNav => C4::Context->preference("OpacNav"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -186,6 +187,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.5  2006/02/03 21:13:29  kados
+# Updating script for new system preference: OpacNav
+#
 # Revision 1.3.2.4  2005/03/25 17:04:28  tipaul
 # adding virtual shelves & suggestions button to the top
 #

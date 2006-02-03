@@ -63,5 +63,6 @@ $template->param(suggestions_loop => $suggestions_loop,
 				"op_$op" => 1,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
+				OpacNav => C4::Context->preference("OpacNav"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
