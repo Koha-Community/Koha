@@ -46,7 +46,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{name}="$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
 	$line{'reservedate'}=$data->[$i]->{'reservedate'};
 	$line{'title'}=$data->[$i]->{'title'};
-	$line{'classification'}="$data->[$i]->{'classification'}$data->[$i]->{'dewey'}");
+	$line{'classification'}=$data->[$i]->{'classification'}.$data->[$i]->{'dewey'};
 	push(@dataloop,\%line);
 }
 
