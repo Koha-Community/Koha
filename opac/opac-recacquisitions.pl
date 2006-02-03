@@ -1,0 +1,62 @@
+#!/usr/bin/perl
+use strict;
+require Exporter;
+use CGI;
+use HTML::Template;
+
+use C4::Auth;       # get_template_and_user
+use C4::Acquisition;       # get_template_and_user
+use C4::Interface::CGI::Output;
+use C4::Koha;
+
+my $input = new CGI;
+my $dbh = C4::Context->dbh;
+my $query="Select itemtype,description from itemtypes order by description";
+my $sth=$dbh->prepare($query);
+$sth->execute;
+my  @itemtype;
+my %itemtypes;
+while (my ($value,$lib) = $sth->fetchrow_array) {
+	push @itemtype, $value;
+	$itemtypes{$value}=$lib;
+}
+
+my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
+			-values   => \@itemtype,
+			-labels   => \%itemtypes,
+			-size     => 1,
+			-multiple => 0 );
+$sth->finish;
+
+my @branches;
+my @select_branch;
+my %select_branches;
+my ($count2,@branches)=branches();
+push @select_branch, "";
+$select_branches{''} = "";
+for (my $i=0;$i<$count2;$i++){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+}
+my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+						-values   => \@select_branch,
+						-labels   => \%select_branches,
+						-size     => 1,
+						-multiple => 0 );
+$sth->finish;
+
+
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "opac-recacquisitions.tmpl",
+			     type => "opac",
+			     query => $input,
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			 });
+my $borrower = getmember('',$borrowernumber);
+my @options;
+my $counter=0;
+$template->param(CGIitemtype => $CGIitemtype,
+				CGIbranch=>$CGIbranch
+);
+output_html_with_http_headers $input, $cookie, $template->output;
