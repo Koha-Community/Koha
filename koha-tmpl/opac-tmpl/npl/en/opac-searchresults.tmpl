@@ -38,7 +38,11 @@
 <input type="submit" class="icon addchecked" value="Add Checked Items to Book Bag" onclick="addMultiple(); return false;"> <input type="reset" value="Clear All" class="icon clearall">
 	<table>
 		<tr>
+			<!-- TMPL_IF NAME="AmazonContent" -->
+			<th colspan="3">Title</th>
+			<!-- TMPL_ELSE -->
 			<th colspan="2">Title</th>
+			<!-- /TMPL_IF -->
 			<th>Author</th>
 			<th>Call Number</th>
 			<th>Copies</th>
@@ -48,6 +52,10 @@
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
 			<td><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></label><br /><input type="checkbox" name="bibid" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" value="<!-- TMPL_VAR NAME="biblionumber" -->" /></td>
+<!-- TMPL_IF NAME="AmazonContent" -->
+<td><div id="menu"> <a class="p1" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="Book Cover Image" class="thumbnail" /><!--<img class="large"  src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01._PE_SCLZZZZZZZ_.jpg" title="Enlarged view of image" alt="Enlarged view of image" />
+--></a></div></td>
+<!-- /TMPL_IF -->
 
 				<td><!-- TMPL_IF name="BiblioDefaultViewmarc" --><a href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --><!-- /TMPL_IF -->				
 			 <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
