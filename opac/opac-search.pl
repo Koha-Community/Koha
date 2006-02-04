@@ -42,14 +42,13 @@ if ($op eq "do_search") {
 	my $orderby = $query->param('orderby');
 	my $desc_or_asc = $query->param('desc_or_asc');
 	my $exactsearch = $query->param('exact');
-
 	for (my $i=0;$i<=$#marclist;$i++) {
-		if ($searchdesc) { # don't put the and_or on the 1st search term
-			$searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
-		} else {
-			$searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
-		}
-	}
+                if ($searchdesc) { # don't put the and_or on the 1st search term
+                        $searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+                } else {                        $searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+                }
+        }
+	
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	
