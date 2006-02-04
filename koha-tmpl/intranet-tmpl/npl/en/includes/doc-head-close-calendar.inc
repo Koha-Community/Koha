@@ -3,6 +3,7 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
+	<!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
 </style>
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME='themelang' -->/includes/calendar/calendar-system.css">

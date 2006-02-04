@@ -7,6 +7,7 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
+	<!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/tabs.css);
 </style>
 <script language="JavaScript" type="text/javascript">
