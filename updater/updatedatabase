@@ -954,21 +954,27 @@ my %tabledata = (
         {                                                                                   uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
 	    value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
-            explanation         => 'Turn on/off Amazon Content',
-            type                => 'YesNo',
-        },                                                                              {                                                                                   
+            forceupdate         => { 'explanation' => 1,                                                             '
+	    				type' => 1},
+            explanation         => 'Turn On Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled',
+	    type                => 'YesNo',
+        },                                                                              
+	{                                                                                   
 	    uniquefieldrequired => 'variable',
             variable            => 'AmazonDevKey',
 	    value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
-            explanation         => 'Put your Amazon Developers Key here',
+            forceupdate         => { 'explanation' => 1,                                                             '
+	    				type' => 1},
+            explanation         => 'Put your Amazon Developers Key here. Get one from aws-portal.amazon.com/gp/aws/developer/registration/index.html',
             type                => 'free',
-        },                                                                              {                                                                                   uniquefieldrequired => 'variable',
+        },                                                                              
+	{                                                                                   
+	    uniquefieldrequired => 'variable',
             variable            => 'AmazonAssocTag',
 	    value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             'type' => 1},
-            explanation         => 'Put your Amazon Associates Tag here',
+            forceupdate         => { 'explanation' => 1,                                                             '
+	    				type' => 1},
+            explanation         => 'Put your Amazon Associates ID here. Get one from associates.amazon.com/gp/flex/associates/apply-login.html',
             type                => 'free',
         },                                                                      
     ],
@@ -1598,6 +1604,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.19  2006/02/04 01:44:59  kados
+# Adds Fully Preferences-based Amazon.com feature. See mail to koha-devel
+# for details.
+#
 # Revision 1.100.2.18  2006/02/03 23:12:23  kados
 # Adds system prefs for using Amazon.com content in the OPAC
 #
