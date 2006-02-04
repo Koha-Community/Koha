@@ -50,7 +50,7 @@ sub get_amazon_details {
 	my ( $isbn ) = @_;
 
 	#get rid of MARC cataloger's nonsense
-	$isbn ~= /(p|-)//g;
+	$isbn =~ s/(p|-)//g;
 
 	# grab the developer's key: mine is 'ektostoukadou-20'
 	my $dev_key=C4::Context->preference('AmazonDevKey');
