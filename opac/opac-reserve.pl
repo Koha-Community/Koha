@@ -178,6 +178,7 @@ $template->param(totalwidth => 2*$width-1,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 
 if ($query->param('item_types_selected')) {

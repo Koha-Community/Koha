@@ -146,6 +146,7 @@ $template->param(waiting_count => $wcount,
 				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
 				textmessaging => $borr->{textmessaging},
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

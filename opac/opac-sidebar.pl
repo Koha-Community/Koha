@@ -30,6 +30,7 @@ $template->param(url => $self_url,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -79,11 +79,15 @@ if ($shelfnumber) {
 						suggestion => C4::Context->preference("suggestion"),
 						virtualshelves => C4::Context->preference("virtualshelves"),
 						OpacNav => C4::Context->preference("OpacNav"),
+						opaccredits => C4::Context->preference("opaccredits"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.4  2006/02/04 16:47:21  kados
+# Adding support for opaccredits to opac scripts
+#
 # Revision 1.1.2.3  2006/02/03 21:03:57  kados
 # Updating script for new system preference: OpacNav
 # ----------------------------------------------------------------------

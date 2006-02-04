@@ -62,5 +62,6 @@ $template->param(CGIitemtype => $CGIitemtype,
 				opaclargeimage => C4::Context->preference("opaclargeimage"),
 				LibraryName => C4::Context->preference("LibraryName"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

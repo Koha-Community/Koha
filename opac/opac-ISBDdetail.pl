@@ -100,6 +100,7 @@ $template->param(LibraryName => C4::Context->preference("LibraryName"),
 				subscriptions => \@subs,
 				subscriptionsnumber => $subscriptionsnumber,
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 
 my $ISBD = C4::Context->preference('ISBD');

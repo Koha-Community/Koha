@@ -61,6 +61,7 @@ $template->param({	loggedinuser => $loggedinuser,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),
 					OpacNav => C4::Context->preference("OpacNav"),
+					opaccredits => C4::Context->preference("opaccredits"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -187,6 +188,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.6  2006/02/04 16:47:21  kados
+# Adding support for opaccredits to opac scripts
+#
 # Revision 1.3.2.5  2006/02/03 21:13:29  kados
 # Updating script for new system preference: OpacNav
 #

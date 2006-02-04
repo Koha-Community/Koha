@@ -82,6 +82,7 @@ $template->param(LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 );
 
 # fill arrays

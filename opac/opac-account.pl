@@ -64,6 +64,7 @@ $template->param( ACCOUNT_LINES => $accts,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
 
  );
 

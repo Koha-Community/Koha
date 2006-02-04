@@ -161,6 +161,7 @@ if ($op eq "do_search") {
 							suggestion => C4::Context->preference("suggestion"),
 							virtualshelves => C4::Context->preference("virtualshelves"),
 							OpacNav => C4::Context->preference("OpacNav"),
+							opaccredits => C4::Context->preference("opaccredits"),
 							AmazonContent => C4::Context->preference("AmazonContent"),
 							);
 
@@ -216,6 +217,7 @@ if ($op eq "do_search") {
 					virtualshelves => C4::Context->preference("virtualshelves"),
 					LibraryName => C4::Context->preference("LibraryName"),
 					OpacNav => C4::Context->preference("OpacNav"),
+					opaccredits => C4::Context->preference("opaccredits"),
 					AmazonContent => C4::Context->preference("AmazonContent"),
 	);
 }
