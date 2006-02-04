@@ -160,6 +160,8 @@ if ($op eq "do_search") {
 							$defaultview => 1,
 							suggestion => C4::Context->preference("suggestion"),
 							virtualshelves => C4::Context->preference("virtualshelves"),
+							OpacNav => C4::Context->preference("OpacNav"),
+							AmazonContent => C4::Context->preference("AmazonContent"),
 							);
 
 } else {
