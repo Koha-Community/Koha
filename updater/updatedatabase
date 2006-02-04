@@ -816,9 +816,36 @@ my %tabledata = (
             value               => '',
 	    forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1},
-            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+            explanation         => 'Enter a complete URL to use an alternate layout stylesheet in OPAC',
 	    type		=> 'free',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'opaccolorstylesheet',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate color stylesheet in OPAC',
+            type                => 'free',
+        },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'intranetstylesheet',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate layout stylesheet in Intranet',
+            type                => 'free',
+        },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'intranetcolorstylesheet',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate color stylesheet in Intranet',
+            type                => 'free',
+        },  
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacsmallimage',
@@ -1614,6 +1641,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.21  2006/02/04 18:17:00  kados
+# Adds opaccolorstylesheet, intranetstylesheet, intranetcolorstylesheet
+# to systemprefs.
+#
 # Revision 1.100.2.20  2006/02/04 05:16:40  kados
 # Allows putting credits at bottom of OPAC page
 #
