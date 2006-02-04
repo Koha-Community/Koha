@@ -10,5 +10,6 @@
 	</p>
 <!-- /TMPL_IF -->
 </div>
+<div id="footer"><!-- TMPL_VAR NAME="opaccredits" --></div>
 </body>
 </html>
