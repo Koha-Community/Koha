@@ -951,7 +951,8 @@ my %tabledata = (
             explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
             type                => 'free',
         },
-        {                                                                                   uniquefieldrequired => 'variable',
+        {                                                                                   
+	    uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
 	    value               => '0',
             forceupdate         => { 'explanation' => 1,                                                             '
@@ -977,6 +978,15 @@ my %tabledata = (
             explanation         => 'Put your Amazon Associates ID here. Get one from associates.amazon.com/gp/flex/associates/apply-login.html',
             type                => 'free',
         },                                                                      
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'opaccredits',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,                                                             '
+                                        type' => 1},
+            explanation         => 'Put any HTML Credits at the bottom of the OPAC page',
+            type                => 'free',
+        },
     ],
 
 );
@@ -1604,6 +1614,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.20  2006/02/04 05:16:40  kados
+# Allows putting credits at bottom of OPAC page
+#
 # Revision 1.100.2.19  2006/02/04 01:44:59  kados
 # Adds Fully Preferences-based Amazon.com feature. See mail to koha-devel
 # for details.
