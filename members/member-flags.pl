@@ -81,7 +81,9 @@ if ($input->param('newflags')) {
     $template->param(member => $member,
 			surname => $bor->{'surname'},
 			firstname => $bor->{'firstname'},
-			loop => \@loop);
+			loop => \@loop,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+			);
 
     output_html_with_http_headers $input, $cookie, $template->output;
 

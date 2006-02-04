@@ -16,5 +16,6 @@ my ($template, $loggedinuser, $cookie)
 				authnotrequired => 0,
 				flagsrequired => {catalogue => 1},
 				debug => 1,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 				});
 output_html_with_http_headers $query, $cookie, $template->output;

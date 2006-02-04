@@ -107,7 +107,9 @@ while (my $data=$sth->fetchrow_hashref) {
 
 $sth->finish;
 
-$template->param(		todaysdate        => format_date($todaysdate),
-		reserveloop       => \@reservedata );
+$template->param(todaysdate        => format_date($todaysdate),
+		reserveloop       => \@reservedata,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;

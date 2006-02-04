@@ -92,7 +92,9 @@ $template->param(
 						firstname => $data->{'firstname'},
 						cardnumber => $data->{'cardnumber'},
 						showfulllink => ($count > 50),					
-						loop_reading => \@loop_reading);
+						loop_reading => \@loop_reading,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

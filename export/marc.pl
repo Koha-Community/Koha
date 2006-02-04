@@ -103,7 +103,10 @@ if ($op eq "export") {
 					flagsrequired => {parameters => 1, management => 1, tools => 1},
 					debug => 1,
 					});
-	$template->param(branchloop=>\@branchloop,CGIitemtype=>$CGIitemtype);
+	$template->param(branchloop=>\@branchloop,
+			CGIitemtype=>$CGIitemtype,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+			);
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 

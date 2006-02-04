@@ -32,8 +32,10 @@ while (my ($description,$itemtype) = $sth->fetchrow) {
 }
 
 $template->param(classlist => $classlist,
-						type => 'intranet',
-		 branches=>\@branches,
-		 itemtypes=>\@itemtypes);
+		type => 'intranet',
+		branches=>\@branches,
+		itemtypes=>\@itemtypes,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

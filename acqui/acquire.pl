@@ -156,6 +156,7 @@ if ($count == 1){
 		unitprice => $results[0]->{'unitprice'},
 		invoice => $invoice,
 		notes => $results[0]->{'notes'},
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 	);
 } else {
 	my @loop;

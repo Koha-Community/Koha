@@ -153,7 +153,9 @@ while ($i<$count){
 
 $template->param( loop1   => \@loop,
 		  totalw => $totalw,
-		  total  => $total );
+		  total  => $total,
+		  intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		  );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -60,6 +60,8 @@ for (my $i = 0; $i < $count; $i++) {
 } # for
 
 $template->param(	biblionumber => $biblionumber,
-								websitesloop => \@websitesloop);
+			websitesloop => \@websitesloop,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;

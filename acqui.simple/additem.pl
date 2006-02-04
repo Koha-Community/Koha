@@ -332,7 +332,9 @@ $template->param(item_loop => \@item_value_loop,
 						itemtagfield => $itemtagfield,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
-						opisadd => ($nextop eq "saveitem")?0:1);
+						opisadd => ($nextop eq "saveitem")?0:1,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 foreach my $error (@errors) {
 	$template->param($error => 1);
 }

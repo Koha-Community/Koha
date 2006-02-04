@@ -126,7 +126,9 @@ $res =~ s/\n/<br\/>/g;
 # remove empty ()
 $res =~ s/\(\)//g;
 $template->param(ISBD => $res,
-				biblionumber => $biblionumber);
+		biblionumber => $biblionumber,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),	
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

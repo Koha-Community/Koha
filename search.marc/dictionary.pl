@@ -252,9 +252,11 @@ if ($op eq "do_search") {
  
  }
 $template->param(search => $search[0],
-					marclist =>$field,
-					type=>$type,
-					anindex => $input->param('index'));
+		marclist =>$field,
+		type=>$type,
+		anindex => $input->param('index'),
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 # Print the page
 output_html_with_http_headers $input, $cookie, $template->output;

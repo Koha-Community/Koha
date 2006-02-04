@@ -96,7 +96,9 @@ $template->param(	bib => $bib,
 								holdingbranch => $holdingbranch,
 								lastdate =>  format_date($lastdate),
 								count =>  $count,
-								branchloop => \@branchloop);
+								branchloop => \@branchloop
+								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;
 

@@ -40,7 +40,9 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		report_name => $report_name);
+		report_name => $report_name,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
 unless (opendir(DIR, "$cgidir")) {
 	$cgidir = C4::Context->intranetdir."/reports/";

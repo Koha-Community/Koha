@@ -201,6 +201,8 @@ $template->param( existing => $biblio,
 						invoice => $data->{'booksellerinvoicenumber'},
 						ecost => $data->{'ecost'},
 						notes => $data->{'notes'},
-						publishercode => $data->{'publishercode'});
+						publishercode => $data->{'publishercode'},
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 
 output_html_with_http_headers $input, $cookie, $template->output;

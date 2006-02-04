@@ -182,6 +182,8 @@ if ($op eq "do_search") {
 
 
 # Print the page
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:

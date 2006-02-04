@@ -129,7 +129,9 @@ $template->param(	title => $data->{'title'},
 								itemwithdrawn => ($item->{'wthdrawn'} ==1),
 								biblionumber => $data->{'biblionumber'},
 								biblioitemnumber => $data->{'biblioitemnumber'},
-								itemnumber => $itemnum);
+								itemnumber => $itemnum,
+								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;
 #12/16/2002 hdl@ifrance.com : templating

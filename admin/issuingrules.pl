@@ -185,5 +185,7 @@ $sth->finish;
 $template->param(title => \@title_loop,
 						row => \@row_loop,
 						branchloop => \@branchloop,
-						branch => $branch);
+						branch => $branch,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 output_html_with_http_headers $input, $cookie, $template->output;

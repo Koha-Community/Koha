@@ -42,7 +42,9 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		report_name => $report_name);
+		report_name => $report_name,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 my $plugin = "./".$report_name.".plugin";
 require $plugin;
 if ($do_it) {

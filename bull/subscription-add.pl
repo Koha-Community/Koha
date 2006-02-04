@@ -127,7 +127,9 @@ for (my $i=0;$i<=$#budgets;$i++) {
 		$budgets[$i]->{'selected'}=1;
 	}
 }
-$template->param(budgets => \@budgets);
+$template->param(budgets => \@budgets,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 if ($op eq 'addsubscription') {
 	my $auser = $query->param('user');

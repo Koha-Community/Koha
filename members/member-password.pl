@@ -80,6 +80,8 @@ if ( $newpassword ) {
 
 }
 
-$template->param( member => $member );
+$template->param( member => $member,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

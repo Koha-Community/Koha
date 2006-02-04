@@ -69,6 +69,8 @@ foreach my $thisframeworkcode (keys %$frameworks) {
 
 my $marc_p = C4::Context->boolean_preference("marc");
 $template->param( NOTMARC => !$marc_p,
-				frameworkcodeloop => \@frameworkcodeloop );
+				frameworkcodeloop => \@frameworkcodeloop,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+				);
 
 output_html_with_http_headers $query, $cookie, $template->output;

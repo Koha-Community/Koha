@@ -84,6 +84,8 @@ $template->param(id => $id,
 					invoiceincgst => $booksellers[0]->{'invoiceincgst'},
 					discount => $booksellers[0]->{'discount'},
 					loop_pricescurrency => \@loop_pricescurrency,
-					loop_invoicecurrency => \@loop_invoicecurrency,);
+					loop_invoicecurrency => \@loop_invoicecurrency,
+					intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+					);
 
 output_html_with_http_headers $query, $cookie, $template->output;

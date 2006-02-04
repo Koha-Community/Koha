@@ -98,14 +98,14 @@ for (my $i=0; $i <= $#results; $i++) {
 }
 
 $template->param(isbn => $isbn,
-						title => $title,
-						author => $author,
-						breeding_loop => \@breeding_loop,
-						refresh => ($numberpending eq 0 ? 0 : "search.pl?bibid=$bibid&random=$random"),
-						numberpending => $numberpending,
-						oldbiblionumber => $biblionumber,
-						);
-
+		title => $title,
+		author => $author,
+		breeding_loop => \@breeding_loop,
+		refresh => ($numberpending eq 0 ? 0 : "search.pl?bibid=$bibid&random=$random"),
+		numberpending => $numberpending,
+		oldbiblionumber => $biblionumber,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 print $input->header(
 -type => guesstype($template->output),
 -cookie => $cookie

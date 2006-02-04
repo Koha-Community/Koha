@@ -464,7 +464,8 @@ $template->param(
     genprname  => $printers->{$printer}->{'printername'},
     branch     => $branch,
     printer    => $printer,
-    errmsgloop => \@errmsgloop
+    errmsgloop => \@errmsgloop,
+    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 );
 
 # actually print the page!

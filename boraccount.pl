@@ -98,6 +98,8 @@ $template->param(
 			bornum          => $bornum,
 			total           => sprintf("%.2f",$total),
 			totalcredit => $totalcredit,
-			accounts        => \@accountrows );
+			accounts        => \@accountrows,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

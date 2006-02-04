@@ -47,6 +47,7 @@ my ($template, $loggedinuser, $cookie)
 $template->param(
 		name => $booksellers[0]->{'name'},
 		supplierid => $supplierid,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

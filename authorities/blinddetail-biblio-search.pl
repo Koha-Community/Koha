@@ -135,6 +135,8 @@ $template->param("0XX" =>\@loop_data);
 
 $template->param(authid => $authid?$authid:"",
 # 				authtypesloop => \@authtypesloop,
-				index => $index);
+				index => $index
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+				);
 output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -526,5 +526,6 @@ $template->param(
 		frameworkcode => $frameworkcode,
 		itemtype => $frameworkcode, # HINT: if the library has itemtype = framework, itemtype is auto filled !
 		hide_marc => C4::Context->preference('hide_marc'),
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;

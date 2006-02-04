@@ -50,5 +50,6 @@ $template->param(
 	phone => $supplierinfo[0]->{phone},
 	booksellerfax => $supplierinfo[0]->{booksellerfax},
 	bookselleremail => $supplierinfo[0]->{bookselleremail},
+	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 	);
 output_html_with_http_headers $query, $cookie, $template->output;

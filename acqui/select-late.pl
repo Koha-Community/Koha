@@ -97,6 +97,8 @@ for (my $i=0; $i<$count; $i++) {
 }
 $template->param(loop_suppliers => \@loop_suppliers,
 						supplier => $supplier,
-						count => $count);
+						count => $count,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 
 output_html_with_http_headers $query, $cookie, $template->output;

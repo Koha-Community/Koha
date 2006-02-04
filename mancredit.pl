@@ -53,7 +53,9 @@ if ($add){
 					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
-	$template->param( bornum => $bornum);
+	$template->param( bornum => $bornum,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+			);
 	print $input->header(
 	    -type => guesstype($template->output),
 	    -cookie => $cookie

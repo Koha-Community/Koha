@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.4.2.2  2006/02/04 21:26:47  kados
+# Adds support for intranetcolorstylesheet
+#
 # Revision 1.4.2.1  2005/03/25 12:52:44  tipaul
 # needs "editcatalogue" flag, not "catalogue"
 #
@@ -134,6 +137,7 @@ else {
             BIBITEMS  => \@biblioitems,
             BRANCHES  => \@branches,
             ITEMTYPES => \@itemtypes,
+	    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 
         );
 

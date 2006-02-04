@@ -164,7 +164,9 @@ while (my $data=$sth->fetchrow_hashref) {
 }
 
 $sth->finish;
-$template->param(		todaysdate        => $todaysdate,
-		overdueloop       => \@overduedata );
+$template->param(todaysdate        => $todaysdate,
+		overdueloop       => \@overduedata,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;

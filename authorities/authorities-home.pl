@@ -243,7 +243,9 @@ else {
 
 }
 
-$template->param(authtypesloop => \@authtypesloop);
+$template->param(authtypesloop => \@authtypesloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

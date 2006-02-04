@@ -70,4 +70,6 @@ if ($selectview eq "full"){
 		virtualshelves => C4::Context->preference("virtualshelves"),
 		);
 }
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;

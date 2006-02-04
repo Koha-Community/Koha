@@ -185,5 +185,7 @@ if ($res) {
 	$total++;
 }
 
-$template->param(total => $total);
+$template->param(total => $total,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

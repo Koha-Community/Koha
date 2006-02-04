@@ -263,5 +263,6 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

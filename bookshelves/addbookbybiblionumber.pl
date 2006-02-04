@@ -76,11 +76,15 @@ if ($shelfnumber) {
 						title => $biblios[0]->{'title'},
 						author => $biblios[0]->{'author'},
 						CGIbookshelves => $CGIbookshelves,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.3.2.1  2006/02/04 21:26:47  kados
+# Adds support for intranetcolorstylesheet
+#
 # Revision 1.3  2004/12/15 17:28:22  tipaul
 # adding bookshelf features :
 # * create bookshelf on the fly

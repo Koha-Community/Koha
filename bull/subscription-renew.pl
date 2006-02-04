@@ -59,6 +59,7 @@ $template->param(startdate => format_date(subscriptionexpirationdate($subscripti
 				subscriptionid => $subscriptionid,
 				bibliotitle => $subscription->{bibliotitle},
 				$op => 1,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 			);
 
 # Print the page

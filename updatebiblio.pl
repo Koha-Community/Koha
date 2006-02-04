@@ -91,8 +91,10 @@ if ($error ne ''){
 		} # if
 	} # for
 	$template->param(substring =>$subs[0],
-						error =>$error,
-						dataloop => \@dataloop);
+			error =>$error,
+			dataloop => \@dataloop,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+						);
 		print "Content-Type: text/html\n\n", $template->output;
 } else {
 	print $input->redirect("detail.pl?type=intra&bib=$bibnum");

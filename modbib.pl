@@ -94,7 +94,9 @@ $template->param ( biblionumber => $bibnum,
 						subtitle => $data->{'subtitle'},
 						unititle => $data->{'unititle'},
 						notes => $data->{'bnotes'},
-						serial => $data->{'serial'});
+						serial => $data->{'serial'},
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

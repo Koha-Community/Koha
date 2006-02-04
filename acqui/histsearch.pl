@@ -34,6 +34,7 @@ $template->param(suggestions_loop => $order_loop,
 				author => $author,
 				name => $name,
 				from_placed_on =>$from_placed_on,
-				to_placed_on =>$to_placed_on
+				to_placed_on =>$to_placed_on,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

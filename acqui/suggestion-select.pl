@@ -46,5 +46,6 @@ $template->param(suggestions_loop => $suggestions_loop,
 				basketno => $basketno,
 				supplierid => $supplierid,
 				"op_$op" => 1,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

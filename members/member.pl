@@ -111,6 +111,8 @@ for (my $i=0; $i < $count; $i++){
 $template->param( 
 			member          => $member,
 			numresults		=> $count,
-			resultsloop     => \@resultsdata );
+			resultsloop     => \@resultsdata,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+			);
 
 output_html_with_http_headers $input, $cookie, $template->output;

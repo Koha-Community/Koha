@@ -20,7 +20,9 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 my $biblionumber=$query->param('bib');
-$template->param(biblionumber => $biblionumber);
+$template->param(biblionumber => $biblionumber,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 
 # change back when ive fixed request.pl

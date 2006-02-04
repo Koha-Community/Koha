@@ -98,7 +98,9 @@ $template->param(member => $member,
 				dateofbirth	=> $data->{'dateofbirth'},
 				dateformat      => display_date_format(),
 				cardnumber_institution => $cardnumber,
-				CGIbranch => $CGIbranch);
+				CGIbranch => $CGIbranch,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+				);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -64,7 +64,9 @@ my ($template, $borrowernumber, $cookie)
 				flagsrequired => {editcatalogue => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($line, $column, $rodsp, $podsp, $calc, \@filters);

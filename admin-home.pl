@@ -21,6 +21,8 @@ my $dbh = C4::Context->dbh;
 my $sth = $dbh->prepare("select count(*) from stopwords");
 $sth->execute;
 my ($total) = $sth->fetchrow;
-$template->param(stopwords => $total);
+$template->param(stopwords => $total,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -144,9 +144,10 @@ for (my $i=0;$i<3;$i++){
 	}
 
 # FIXME IF main and image are not fetched by HTML::TEMPLATE get them into identsloop
-$template->param( 	NOK => ($missing==1),
-								identsloop => \@identsloop,
-								inputsloop => \@inputsloop,
-								);
+$template->param(NOK => ($missing==1),
+		identsloop => \@identsloop,
+		inputsloop => \@inputsloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -115,7 +115,9 @@ if ($check ==0){
 							surname => $data->{'surname'},
 							bornum => $bornum,
 							loop_pay => \@loop_pay,
-							total => sprintf("%.2f",$total));
+							total => sprintf("%.2f",$total),
+							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+							);
 	print "Content-Type: text/html\n\n", $template->output;
 
 } else {

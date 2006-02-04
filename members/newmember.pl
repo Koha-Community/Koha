@@ -204,7 +204,8 @@ if ($ok == 0) {
     # Nothing to do; the "OK" and "string" variables have already been set
     ;
 }
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

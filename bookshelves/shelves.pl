@@ -108,7 +108,9 @@ foreach my $element (sort keys %$shelflist) {
 ;
 		push (@shelvesloop, \%line);
 		}
-$template->param(shelvesloop => \@shelvesloop);
+$template->param(shelvesloop => \@shelvesloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -190,6 +192,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.5.2.3  2006/02/04 21:26:47  kados
+# Adds support for intranetcolorstylesheet
+#
 # Revision 1.5.2.2  2005/04/27 18:15:27  oleonard
 # Left out some instances in the previous update
 #

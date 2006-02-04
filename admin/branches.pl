@@ -525,7 +525,8 @@ sub checkcategorycode {
     }
     return $message;
 }
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:

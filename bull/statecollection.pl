@@ -75,5 +75,6 @@ my ($template, $loggedinuser, $cookie)
 			bibliotitle => $subs->{bibliotitle},
 			biblionumber => $subs->{biblionumber},
 			hassubscriptionexpired =>$hassubscriptionexpired,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		);
 output_html_with_http_headers $query, $cookie, $template->output;

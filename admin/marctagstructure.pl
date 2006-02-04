@@ -333,7 +333,9 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-$template->param(loggeninuser => $loggedinuser);
+$template->param(loggeninuser => $loggedinuser,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

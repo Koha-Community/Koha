@@ -309,7 +309,8 @@ $template->param(	genbrname => $genbrname,
 								wastransferred => $wastransferred,
 								trsfitemloop => \@trsfitemloop,
 								branchoptionloop => \@branchoptionloop,
-								errmsgloop => \@errmsgloop
+								errmsgloop => \@errmsgloop,
+								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 							);
 output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -417,5 +417,6 @@ foreach my $thisauthtype (keys %$authtypes) {
 $template->param(authtypesloop => \@authtypesloop,
 				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
 				hide_marc => C4::Context->preference('hide_marc'),
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 				);
 output_html_with_http_headers $input, $cookie, $template->output;

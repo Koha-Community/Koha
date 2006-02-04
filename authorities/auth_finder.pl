@@ -157,7 +157,9 @@ if ($op eq "do_search") {
 }
 
 $template->param(authtypesloop => \@authtypesloop,
-				authtypecode => $authtypecode);
+		authtypecode => $authtypecode,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

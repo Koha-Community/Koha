@@ -145,5 +145,6 @@ $template->param(basketno => $basketno,
 				grand_total_est =>$grand_total_est,
 				currency => $booksellers[0]->{'listprice'},
 				qty_total => $qty_total,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 				);
 output_html_with_http_headers $query, $cookie, $template->output;
