@@ -95,6 +95,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 );
 
 ## Amazon.com stuff
+#not used unless preference set
 if (C4::Context->preference("AmazonContent")==1) {
 	my $isbn=$dat->{'isbn'};
 	my $amazon_details = &get_amazon_details($isbn);
