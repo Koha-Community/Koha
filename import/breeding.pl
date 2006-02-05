@@ -96,6 +96,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 }
 $template-param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 my $menu;
@@ -105,6 +106,10 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.2.4.4  2006/02/05 21:59:21  kados
+# Adds script support for IntranetNav ... see mail to koha-devel for
+# details
+#
 # Revision 1.2.4.3  2006/02/05 21:45:26  kados
 # Adds support for intranetstylesheet system pref in Koha scripts
 #

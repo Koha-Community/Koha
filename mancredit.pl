@@ -56,6 +56,7 @@ if ($add){
 	$template->param( bornum => $bornum,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 			);
 	print $input->header(
 	    -type => guesstype($template->output),

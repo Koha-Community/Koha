@@ -66,6 +66,7 @@ my ($template, $borrowernumber, $cookie)
 $template->param(do_it => $do_it,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 if ($do_it) {
 	my $results = calculate($line, $column, $podsp, $rodsp, $calc, \@filters);

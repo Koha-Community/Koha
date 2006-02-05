@@ -335,6 +335,7 @@ $template->param(item_loop => \@item_value_loop,
 						opisadd => ($nextop eq "saveitem")?0:1,
 						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 						);
 foreach my $error (@errors) {
 	$template->param($error => 1);

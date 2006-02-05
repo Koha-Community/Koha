@@ -101,6 +101,7 @@ $template->param( biblionumber => $data->{'biblionumber'},
 								loggedinuser => $loggedinuser,
 								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 								);
 
 my ($count,@bibitems)=bibitems($data->{'biblionumber'});

@@ -466,6 +466,7 @@ sub checkauth {
 	$template->param(INPUTS => \@inputs,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 			);
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 

@@ -45,6 +45,7 @@ $template->param(do_it => $do_it,
 		report_name => $report_name,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 my $plugin = "./".$report_name.".plugin";
 require $plugin;

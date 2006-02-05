@@ -54,5 +54,6 @@ $template->param(	count => $count,
 			dataloop => \@dataloop,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 			);
 print "Content-Type: text/html\n\n", $template->output;

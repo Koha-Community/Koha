@@ -78,11 +78,16 @@ if ($shelfnumber) {
 						CGIbookshelves => $CGIbookshelves,
 						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.3.2.3  2006/02/05 21:59:21  kados
+# Adds script support for IntranetNav ... see mail to koha-devel for
+# details
+#
 # Revision 1.3.2.2  2006/02/05 21:45:25  kados
 # Adds support for intranetstylesheet system pref in Koha scripts
 #

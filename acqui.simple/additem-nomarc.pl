@@ -20,6 +20,10 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.4.2.4  2006/02/05 21:59:21  kados
+# Adds script support for IntranetNav ... see mail to koha-devel for
+# details
+#
 # Revision 1.4.2.3  2006/02/05 21:45:25  kados
 # Adds support for intranetstylesheet system pref in Koha scripts
 #
@@ -142,6 +146,7 @@ else {
             ITEMTYPES => \@itemtypes,
 	    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 
         );
 

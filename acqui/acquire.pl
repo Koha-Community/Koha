@@ -158,6 +158,7 @@ if ($count == 1){
 		notes => $results[0]->{'notes'},
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 	);
 } else {
 	my @loop;
