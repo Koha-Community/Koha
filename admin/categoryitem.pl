@@ -194,6 +194,7 @@ if ($op eq 'add_form') {
 
 } #---- END $OP eq DEFAULT
 $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 

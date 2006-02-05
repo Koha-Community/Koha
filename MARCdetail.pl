@@ -254,6 +254,7 @@ $template->param(item_loop => \@item_value_loop,
 						popup => $popup,
 						hide_marc => C4::Context->preference('hide_marc'),
 						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
 

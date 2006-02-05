@@ -59,6 +59,7 @@ $template->param(classlist => $classlist,
 						totcomtd => sprintf("%.2f",$totcomtd),
 						totavail => sprintf("%.2f",$totavail),
 						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 						);
 
 output_html_with_http_headers $query, $cookie, $template->output;

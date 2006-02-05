@@ -114,5 +114,6 @@ $template->param(MARGIN_LEFT => $labelConfig{'marginLeft'});
 $template->param(SCRIPT_NAME => '/cgi-bin/koha/barcodes/printerConfig.pl');
 $template->param("$labelConfig{'pageType'}" => 1);
 $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;

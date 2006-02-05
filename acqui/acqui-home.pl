@@ -66,6 +66,7 @@ $template->param(classlist => $classlist,
 						totavail => sprintf("%.2f",$totavail),
 						nobudget => $#results==-1?1:0,
 						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 						);
 
 output_html_with_http_headers $query, $cookie, $template->output;

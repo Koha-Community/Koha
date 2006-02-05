@@ -100,6 +100,7 @@ $template->param(member => $member,
 				cardnumber_institution => $cardnumber,
 				CGIbranch => $CGIbranch,
 				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 				);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -98,6 +98,7 @@ $template->param(	bib => $bib,
 								count =>  $count,
 								branchloop => \@branchloop
 								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 print "Content-Type: text/html\n\n", $template->output;

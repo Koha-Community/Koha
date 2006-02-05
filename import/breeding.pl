@@ -95,6 +95,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 
 }
 $template-param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 my $menu;
@@ -104,6 +105,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.2.4.3  2006/02/05 21:45:26  kados
+# Adds support for intranetstylesheet system pref in Koha scripts
+#
 # Revision 1.2.4.2  2006/02/04 21:26:47  kados
 # Adds support for intranetcolorstylesheet
 #

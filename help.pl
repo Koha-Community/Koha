@@ -42,6 +42,7 @@ sub gethelptemplate {
 							theme => $theme,
 							lang => $lang
 							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			);
 	return $template;
 }

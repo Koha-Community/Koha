@@ -315,6 +315,7 @@ if ($delete){
 				CGIbranch => $CGIbranch);
 	$template->param(Institution => 1) if ($categorycode eq "I");
 	$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			);
 	output_html_with_http_headers $input, $cookie, $template->output;
 

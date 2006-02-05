@@ -129,6 +129,7 @@ for (my $i=0;$i<=$#budgets;$i++) {
 }
 $template->param(budgets => \@budgets,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 if ($op eq 'addsubscription') {

@@ -105,6 +105,7 @@ $template->param(isbn => $isbn,
 		numberpending => $numberpending,
 		oldbiblionumber => $biblionumber,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 print $input->header(
 -type => guesstype($template->output),

@@ -70,6 +70,7 @@ my ($template, $borrowernumber, $cookie)
 				});
 $template->param(do_it => $do_it,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 if ($do_it) {
 # Displaying results

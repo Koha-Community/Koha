@@ -36,7 +36,8 @@ my ($template, $loggedinuser, $cookie)
 my $marc_p = C4::Context->boolean_preference("marc");
 $template->param(NOTMARC => !$marc_p);
 $template->param(authtypesloop => \@authtypesloop,
-intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

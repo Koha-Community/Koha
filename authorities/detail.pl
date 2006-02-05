@@ -146,6 +146,7 @@ $template->param(authid => $authid,
 		authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
 		authtypesloop => \@authtypesloop,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 output_html_with_http_headers $query, $cookie, $template->output;
 

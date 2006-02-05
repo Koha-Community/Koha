@@ -117,6 +117,7 @@ if ($check ==0){
 							loop_pay => \@loop_pay,
 							total => sprintf("%.2f",$total),
 							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 							);
 	print "Content-Type: text/html\n\n", $template->output;
 

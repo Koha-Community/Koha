@@ -245,6 +245,7 @@ else {
 
 $template->param(authtypesloop => \@authtypesloop,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 # Print the page

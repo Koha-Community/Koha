@@ -466,6 +466,7 @@ $template->param(
     printer    => $printer,
     errmsgloop => \@errmsgloop,
     intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 );
 
 # actually print the page!

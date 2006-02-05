@@ -100,6 +100,7 @@ $template->param(BIBITEM_DATA => \@results,
 		ITEM_DATA => \@items,
 		loggedinuser => $loggedinuser,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

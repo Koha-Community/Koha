@@ -53,5 +53,6 @@ for (my $i=0;$i<$count;$i++){
 $template->param(	count => $count,
 			dataloop => \@dataloop,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			);
 print "Content-Type: text/html\n\n", $template->output;

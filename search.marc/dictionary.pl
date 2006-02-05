@@ -256,6 +256,7 @@ $template->param(search => $search[0],
 		type=>$type,
 		anindex => $input->param('index'),
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 # Print the page

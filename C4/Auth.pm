@@ -465,6 +465,7 @@ sub checkauth {
 	my $template = gettemplate($template_name, $type,$query);
 	$template->param(INPUTS => \@inputs,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			);
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 

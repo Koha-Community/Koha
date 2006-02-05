@@ -97,6 +97,7 @@ $template->param( member => $member,
 			titleloop       => \@titledata,
 			cmemloop        => \@cmemdata,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			);
 
 

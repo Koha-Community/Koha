@@ -56,6 +56,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 $template->param("loop" => \@loop_suggests,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

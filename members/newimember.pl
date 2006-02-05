@@ -130,6 +130,7 @@ if ($missing !=1) {
     }
 }
 $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
