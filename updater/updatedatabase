@@ -978,6 +978,15 @@ my %tabledata = (
             explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
             type                => 'free',
         },
+	{
+            uniquefieldrequired => 'variable',
+	    variable            => 'IntranetNav',
+            value               => '',
+	    forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
+            type                => 'free',
+        },
         {                                                                                   
 	    uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
@@ -1641,6 +1650,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.22  2006/02/05 21:53:54  kados
+# Adds database support for IntranetNav systempref -- used to add HTML
+# tags to left-hand navigation menu on Intranet.
+# ----------------------------------------------------------------------
+#
 # Revision 1.100.2.21  2006/02/04 18:17:00  kados
 # Adds opaccolorstylesheet, intranetstylesheet, intranetcolorstylesheet
 # to systemprefs.
