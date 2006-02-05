@@ -28,19 +28,6 @@
 </li><li><a href="/cgi-bin/koha/about.pl">About Koha</a></li><!-- /Hide from NPL -->
 <!-- TMPL_IF NAME="loggedinusername" --><li>
     Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> <ul><li><a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a></li></ul></li><!-- /TMPL_IF -->
-				<!-- Display for NPL <li><h4>Public Web Site</h4></li>
-	            <li><a href="http://www.athenscounty.lib.oh.us/index.html">public home</a></li>
-    	        <li><a href="http://www.athenscounty.lib.oh.us/library.html">your
-                  library</a></li>
-        	    <li><a href="http://www.athenscounty.lib.oh.us/kids/index.asp">kids</a></li>
-            	<li><a href="http://www.athenscounty.lib.oh.us/teens/index.asp">teens</a></li>
-	            <li><a href="http://koha.athenscounty.lib.oh.us/cgi-bin/koha/opac-main.pl">library
-                  catalog</a></li>
-	            <li><a href="http://www.athenscounty.lib.oh.us/programs.asp">programs</a></li>
-
-	            <li><a href="http://www.athenscounty.lib.oh.us/branch.html">branches</a></li>
-	            <li><a href="http://www.athenscounty.lib.oh.us/mobile.asp">the bookmobile</a></li>
-	            <li><a href="http://www.oplin.org">OPLIN</a></li>
-	            <li><a href="http://www.athenscounty.lib.oh.us/contact.html">contact</a></li> /Display for NPL -->
-				</ul>
+<!-- TMPL_IF NAME="IntranetNav" --><!-- TMPL_VAR NAME="IntranetNav" --><!-- /TMPL_IF -->
+</ul>
 </div>
