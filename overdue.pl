@@ -118,6 +118,9 @@ my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
 my $dbh = C4::Context->dbh;
+$bornamefilter =~s/\*/\%/g;
+$bornamefilter =~s/\?/\_/g;
+
 my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues, borrowers,items,biblioitems, biblio where isnull(returndate) ";
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
 $strsth.= " && issues.borrowernumber=borrowers.borrowernumber && issues.itemnumber=items.itemnumber && biblioitems.biblioitemnumber=items.itemnumber && biblio.biblionumber=items.biblionumber ";
