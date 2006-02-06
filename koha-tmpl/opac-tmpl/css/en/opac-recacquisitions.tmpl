@@ -6,13 +6,6 @@
 <form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
 	
 	<div id="bloc60">
-			<!-- TMPL_VAR name="CGIbranch" --> 
-			<input type="hidden" name="marclist" value="items.homebranch" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="=" />
-			<input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
 			<!-- TMPL_VAR name="CGIitemtype" --> 
 			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
@@ -20,9 +13,21 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			acquired in the last
-			<input type="text" name="desc_or_asc" size="3" />
-			days
+			acquired by
+                        <select name="branch">
+                                <option value="">Any Branch</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+			<input type="hidden" name="marclist" value="items.homebranch" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			in the last <input type="text" name="desc_or_asc" size="3" /> days
 			<input type="hidden" name="orderby" value="biblio.timestamp" />
 			<input type="submit" value="OK" class="button" />
 	</div>
