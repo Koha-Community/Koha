@@ -194,6 +194,12 @@ $template->param(	optionloop =>\@optionloop,
 								date => $date,
 								bib => $bib,
 								title =>$dat->{title});
+								
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
+	
 # printout the page
 print $input->header(
 	-type => C4::Interface::CGI::Output::guesstype($template->output),
