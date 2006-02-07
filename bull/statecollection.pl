@@ -116,21 +116,29 @@ foreach my $thisitemlocation (keys %$itemlocationhash) {
 			);
 	push @itemlocationloop, \%row;
 }
-				
-foreach my $data (@serialslist){
-	$data->{"itemstatusloop"}=\@itemstatusloop if ((C4::Context->preference("serialsadditems")) && scalar(@itemstatusloop));
-	$data->{"itemlocationloop"}=\@itemlocationloop if ((C4::Context->preference("serialsadditems")) && scalar(@itemlocationloop));
-	$data->{"branchloop"}=\@branchloop;
-				}
+
+if (C4::Context->preference("serialsadditems")){
+	foreach my $data (@serialslist){
+		$data->{"itemstatusloop"}=\@itemstatusloop if (scalar(@itemstatusloop));
+		$data->{"itemlocationloop"}=\@itemlocationloop if (scalar(@itemlocationloop));
+		$data->{"branchloop"}=\@branchloop ;
+	}
+}
+	
 my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
 $sth->execute($subscriptionid);
 my $solhistory = $sth->fetchrow_hashref;
 
-$template->param(serialadditems =>C4::Context->preference("serialsadditems"),
+if (C4::Context->preference("serialsadditems")){
+	$template->param(serialadditems =>C4::Context->preference("serialsadditems"),
 					branchloop => \@branchloop,
-					) if (C4::Context->preference("serialsadditems"));
-$template->param(itemstatus=>1,itemstatusloop=>\@itemstatusloop) if ((C4::Context->preference("serialsadditems")) && scalar(@itemstatusloop));
-$template->param(itemlocation=>1,itemlocationloop=>\@itemlocationloop) if ((C4::Context->preference("serialsadditems")) && scalar(@itemlocationloop));
+					) ;
+	$template->param(itemstatus=>1,itemstatusloop=>\@itemstatusloop) if (scalar(@itemstatusloop));
+	$template->param(itemlocation=>1,itemlocationloop=>\@itemlocationloop) if (scalar(@itemlocationloop));
+}else{
+	$template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
+}
+	
 $template->param(
 			serialslist => \@serialslist,
 			biblionumber => $subscription->{biblionumber},
