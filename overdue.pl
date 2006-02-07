@@ -123,7 +123,7 @@ $bornamefilter =~s/\?/\_/g;
 
 my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues, borrowers,items,biblioitems, biblio where isnull(returndate) ";
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
-$strsth.= " && issues.borrowernumber=borrowers.borrowernumber && issues.itemnumber=items.itemnumber && biblioitems.biblioitemnumber=items.itemnumber && biblio.biblionumber=items.biblionumber ";
+$strsth.= " && issues.borrowernumber=borrowers.borrowernumber && issues.itemnumber=items.itemnumber && biblioitems.biblioitemnumber=items.biblioitemnumber && biblio.biblionumber=items.biblionumber ";
 $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
 $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
 $strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
