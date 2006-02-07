@@ -22,6 +22,8 @@ use strict;
 use C4::Date;
 use Date::Manip;
 use C4::Suggestions;
+use C4::Biblio;
+use C4::Search;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -47,7 +49,7 @@ Give all XYZ functions
 @EXPORT = qw(&newsubscription &modsubscription &delsubscription &getsubscriptions &getsubscription 
 			&getsubscriptionfrombiblionumber &get_subscription_list_from_biblionumber
 			&get_full_subscription_list_from_biblionumber 
-			&modsubscriptionhistory &newissue
+			&modsubscriptionhistory &newissue &serialsitemize
 			&getserials &getlatestserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
 			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
@@ -450,12 +452,107 @@ sub newissue {
 	$sth->execute($recievedlist,$missinglist,$subscriptionid);
 }
 
+=head2 serialsitemize
+
+  serialitemize($serialid, $info);
+  $info is a hashref containing  barcode branch, itemcallnumber, status, location
+  $serialid the serialid
+=cut
+sub serialsitemize {
+	my ($serialid, $info) =@_;
+
+	my $dbh= C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * from serial WHERE serialid=?");
+	$sth->execute($serialid);
+	my $data=$sth->fetchrow_hashref;
+	my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$data->{biblionumber});
+	my $fwk=MARCfind_frameworkcode($dbh,$bibid);
+	if ($info->{barcode}){
+		my @errors;
+		my $exists = itemdata($info->{'barcode'});
+		push @errors,"barcode_not_unique" if($exists);
+		unless ($exists){
+			my $marcrecord = MARC::Record->new();
+			my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.barcode",$fwk);
+			warn "items.barcode : $tag , $subfield";
+			my $newField = MARC::Field->new(
+				"$tag",'','',
+				"$subfield" => $info->{barcode}
+			);
+			$marcrecord->insert_fields_ordered($newField);
+			if ($info->{branch}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.homebranch",$fwk);
+				warn "items.homebranch : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{branch}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$fwk);
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{branch}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{notes}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.itemnotes",$fwk);
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{notes})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{notes}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{location}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.location",$fwk);
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{location})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{location}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{status}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.notforloan",$fwk);
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{status})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{status}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			NEWnewitem($dbh,$marcrecord,$bibid);
+			return 1;
+		}
+		return (0,@errors);
+	}
+}
+
 sub delissue {
 	my ($serialseq,$subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("delete from serial where serialseq= ? and subscriptionid= ? ");
 	$sth->execute($serialseq,$subscriptionid);
 }
+
 
 sub Get_Next_Date(@) {
 	my ($planneddate,$subscription) = @_;

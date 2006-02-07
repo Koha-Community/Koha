@@ -4,6 +4,8 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Date;
+use C4::Biblio;
+use C4::Koha;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -26,8 +28,15 @@ my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
 my @status = $query->param('status');
 my @notes = $query->param('notes');
+my @barcodes = $query->param('barcode');
+my @itemcallnumbers = $query->param('itemcallnumber');
+my @locations = $query->param('location');
+my @itemstatus = $query->param('itemstatus');
+my @homebranches = $query->param('branch');
 my $hassubscriptionexpired = hassubscriptionexpired($subscriptionid);
 my $subscription=getsubscription($subscriptionid);
+
+
 if ($op eq 'modsubscriptionhistory') {
 	modsubscriptionhistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 }
@@ -36,23 +45,39 @@ if ($op eq 'serialchangestatus') {
 	my $sth = $dbh->prepare("select status from serial where serialid=?");
 	for (my $i=0;$i<=$#serialids;$i++) {
 		$sth->execute($serialids[$i]);
+		
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
 			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+			if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
+				my %info;
+				$info{branch}=$homebranches[$i];
+				$info{barcode}=$barcodes[$i];
+				$info{itemcallnumber}=$itemcallnumbers[$i];
+				$info{location}=$locations[$i];
+				$info{status}=$itemstatus[$i];
+				$info{notes}=$serialseqs[$i];
+				my ($status, @errors)= serialsitemize($serialids[$i],\%info);
+			}
 		} else {
 			# add a special issue
 			if ($serialseqs[$i]) {
 				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
 			}
+			if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
+				my %info;
+				$info{branch}=$homebranches[$i];
+				$info{barcode}=$barcodes[$i];
+				$info{itemcallnumber}=$itemcallnumbers[$i];
+				$info{location}=$locations[$i];
+				$info{status}=$itemstatus[$i];
+				$info{notes}=$serialseqs[$i];
+				my ($status, @errors)= serialsitemize($serialids[$i],\%info);
+			}
+
 		}
 	}
 }
-my $subs = &getsubscription($subscriptionid);
-my ($totalissues,@serialslist) = getserials($subscriptionid);
-
-my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
-$sth->execute($subscriptionid);
-my $solhistory = $sth->fetchrow_hashref;
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/statecollection.tmpl",
 				query => $query,
@@ -62,7 +87,51 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
-	$template->param(
+my $subs = &getsubscription($subscriptionid);
+my ($totalissues,@serialslist) = getserials($subscriptionid);
+my $branches = getbranches;
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+	my %row =(value => $thisbranch,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
+}
+
+my $itemstatushash = getitemstatus;
+my @itemstatusloop;
+foreach my $thisitemstatus (keys %$itemstatushash) {
+	my %row =(itemval => $thisitemstatus,
+				itemlib => $itemstatushash->{$thisitemstatus},
+			);
+	warn "".$row{'itemval'}.", ". $row{"itemlib"};
+	push @itemstatusloop, \%row;
+}
+
+my $itemlocationhash = getitemlocation;
+my @itemlocationloop;
+foreach my $thisitemlocation (keys %$itemlocationhash) {
+	my %row =(value => $thisitemlocation,
+				itemlocationname => $itemlocationhash->{$thisitemlocation},
+			);
+	push @itemlocationloop, \%row;
+}
+				
+foreach my $data (@serialslist){
+	$data->{"itemstatusloop"}=\@itemstatusloop if ((C4::Context->preference("serialsadditems")) && scalar(@itemstatusloop));
+	$data->{"itemlocationloop"}=\@itemlocationloop if ((C4::Context->preference("serialsadditems")) && scalar(@itemlocationloop));
+	$data->{"branchloop"}=\@branchloop;
+				}
+my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
+$sth->execute($subscriptionid);
+my $solhistory = $sth->fetchrow_hashref;
+
+$template->param(serialadditems =>C4::Context->preference("serialsadditems"),
+					branchloop => \@branchloop,
+					) if (C4::Context->preference("serialsadditems"));
+$template->param(itemstatus=>1,itemstatusloop=>\@itemstatusloop) if ((C4::Context->preference("serialsadditems")) && scalar(@itemstatusloop));
+$template->param(itemlocation=>1,itemlocationloop=>\@itemlocationloop) if ((C4::Context->preference("serialsadditems")) && scalar(@itemlocationloop));
+$template->param(
 			serialslist => \@serialslist,
 			biblionumber => $subscription->{biblionumber},
 			histstartdate => format_date($solhistory->{'histstartdate'}),
@@ -76,7 +145,7 @@ my ($template, $loggedinuser, $cookie)
 			biblionumber => $subs->{biblionumber},
 			hassubscriptionexpired =>$hassubscriptionexpired,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+			IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 output_html_with_http_headers $query, $cookie, $template->output;

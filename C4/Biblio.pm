@@ -72,6 +72,8 @@ $VERSION = 0.01;
   
   &FindDuplicate
   &DisplayISBN
+  &getitemstatus
+  &getitemlocation
 );
 
 #
@@ -2778,6 +2780,129 @@ sub DisplayISBN {
 	return "$seg1-$seg2-$seg3-$seg4";
 }
 
+=head2 getitemstatus
+
+  $itemstatushash = &getitemstatus($fwkcode);
+  returns information about status.
+  Can be MARC dependant.
+  fwkcode is optional.
+  But basically could be can be loan or not
+  Create a status selector with the following code
+  
+=head3 in PERL SCRIPT
+
+my $itemstatushash = getitemstatus;
+my @itemstatusloop;
+foreach my $thisstatus (keys %$itemstatushash) {
+	my %row =(value => $thisstatus,
+				statusname => $itemstatushash->{$thisstatus}->{'statusname'},
+			);
+	push @itemstatusloop, \%row;
+}
+$template->param(statusloop=>\@itemstatusloop);
+
+
+=head3 in TEMPLATE  
+			<select name="statusloop">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP name="statusloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="statusname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+
+=cut
+sub getitemstatus {
+# returns a reference to a hash of references to status...
+	my ($fwk)=@_;
+	my %itemstatus;
+ 	my $dbh = C4::Context->dbh;
+ 	my $sth;
+	$fwk='' unless ($fwk);
+ 	my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.notforloan",$fwk);
+	if ($tag and $subfield){
+		my $sth = $dbh->prepare("select authorised_value from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+		$sth->execute($tag,$subfield,$fwk);
+		if (my ($authorisedvaluecat)=$sth->fetchrow){
+			my $authvalsth=$dbh->prepare("select authorised_value, lib from authorised_values where category=? order by lib");
+			$authvalsth->execute($authorisedvaluecat);
+			while (my ($authorisedvalue, $lib)=$authvalsth->fetchrow){
+				$itemstatus{$authorisedvalue}=$lib;
+			}
+			$authvalsth->finish;
+			return \%itemstatus;
+			exit 1;
+		} else{
+			#No authvalue list
+			# build default
+		}
+		$sth->finish;
+	}
+	#No authvalue list
+	#build default
+	$itemstatus{"1"}="Not For Loan";
+	return \%itemstatus;
+}
+=head2 getitemlocation
+
+  $itemlochash = &getitemlocation($fwk);
+  returns informations about location.
+  where fwk stands for an optional framework code.
+  Create a location selector with the following code
+  
+=head3 in PERL SCRIPT
+
+my $itemlochash = getitemlocation;
+my @itemlocloop;
+foreach my $thisloc (keys %$itemlochash) {
+	my $selected = 1 if $thisbranch eq $branch;
+	my %row =(locval => $thisloc,
+				selected => $selected,
+				locname => $itemlochash->{$thisloc},
+			);
+	push @itemlocloop, \%row;
+}
+$template->param(itemlocationloop => \@itemlocloop);
+
+=head3 in TEMPLATE  
+			<select name="location">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP name="itemlocationloop" -->
+				<option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+
+=cut
+sub getitemlocation {
+# returns a reference to a hash of references to location...
+	my ($fwk)=@_;
+	my %itemlocation;
+ 	my $dbh = C4::Context->dbh;
+ 	my $sth;
+	$fwk='' unless ($fwk);
+ 	my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.location",$fwk);
+	if ($tag and $subfield){
+		my $sth = $dbh->prepare("select authorised_value from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+		$sth->execute($tag,$subfield,$fwk);
+		if (my ($authorisedvaluecat)=$sth->fetchrow){
+			my $authvalsth=$dbh->prepare("select authorised_value, lib from authorised_values where category=? order by lib");
+			$authvalsth->execute($authorisedvaluecat);
+			while (my ($authorisedvalue, $lib)=$authvalsth->fetchrow){
+				$itemlocation{$authorisedvalue}=$lib;
+			}
+			$authvalsth->finish;
+			return \%itemlocation;
+			exit 1;
+		} else{
+			#No authvalue list
+			# build default
+		}
+		$sth->finish;
+	}
+	#No authvalue list
+	#build default
+	$itemlocation{"1"}="Not For Loan";
+	return \%itemlocation;
+}
 
 END { }    # module clean-up code here (global destructor)
 
@@ -2793,6 +2918,14 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.29  2006/02/07 15:33:35  hdl
+# Adding a new system preference : serialsadditem
+#
+# Adding two functions in Biblio.pm : getitemlocation and getitemstatus (helpful to get location list and status list, status is supposed to be in relation with items.notforloan)
+#
+# Adding a new function in Bull.pm : serialsitemize which take serial id and item information and creates the item
+# Modifying statecollection to add a new line (used for data input)
+#
 # Revision 1.115.2.28  2006/01/30 16:06:26  hdl
 # BugFix : leader management was annoying for MARCadditem. Changing. Avoiding fields which tag is under 100. (Could be a simple different from 000) But in UNIMARC, fields under 100 donot have subfields.
 #

@@ -32,7 +32,7 @@
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
 			<td>
-				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+				Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
 			</td>
 			<td>
 				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
@@ -74,6 +74,46 @@
 				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
 			</td>
 		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+			<td>
+				Callnumber <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+				Barcode <input type="text" name="barcode" value="" size=20 maxlength=20>
+			</td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Branch</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemstatus"-->
+					<select name="status" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
 		<tr>
@@ -92,6 +132,46 @@
 				</select>
 			</td>
 		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+			<td>
+				Callnumber <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+				Barcode <input type="text" name="barcode" value="" size=20 maxlength=20>
+			</td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Branch</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemstatus"-->
+					<select name="status" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_UNLESS -->
 	</table>
 	<input type="submit" value="Save changes" accesskey="w" class="button bull">

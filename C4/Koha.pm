@@ -61,7 +61,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getframeworks &getframeworkinfo
 			&getauthtypes &getauthtype
 			&getallthemes &getalllanguages
-			&getallbranches
+			&getallbranches 
 			$DEBUG);
 
 use vars qw();
