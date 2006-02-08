@@ -1,7 +1,7 @@
     <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="mainbloc">
 
-<h1 class="catalogue">Acquisitions récentes</h1>
+<h1 class="catalogue">Recent Acquisitions</h1>
 
 <form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
 	
@@ -13,9 +13,9 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			Acquis par
+			Acquired by
                         <select name="branch">
-                                <option value="">Toutes les Biblioth&egrave;ques</option>
+                                <option value="">Any Branch</option>
                         <!-- TMPL_LOOP name="branchloop" -->
                                 <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
 ="branchname" --></option>
@@ -27,7 +27,7 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			au cours des <input type="text" name="desc_or_asc" size="3" /> derniers jours
+			over the last <input type="text" name="desc_or_asc" size="3" /> days
 			<input type="hidden" name="orderby" value="biblio.timestamp" />
 			<input type="submit" value="OK" class="button" />
 	</div>
