@@ -24,7 +24,7 @@ $sth->execute;
 my  @itemtype;
 my %itemtypes;
 push @itemtype, "";
-$itemtypes{''}="Any doc Type";
+$itemtypes{''}="Tout type de document";
 while (my ($value,$lib) = $sth->fetchrow_array) {
 	push @itemtype, $value;
 	$itemtypes{$value}=$lib;
