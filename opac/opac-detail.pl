@@ -9,7 +9,6 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Biblio;
 use C4::SearchMarc;
-use C4::Amazon;
 
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -98,6 +97,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 ## Amazon.com stuff
 #not used unless preference set
 if (C4::Context->preference("AmazonContent")==1) {
+	use C4::Amazon;
 	my $isbn=$dat->{'isbn'};
 	my $amazon_details = &get_amazon_details($isbn);
 
