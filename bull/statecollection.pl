@@ -89,47 +89,43 @@ my ($template, $loggedinuser, $cookie)
 
 my $subs = &getsubscription($subscriptionid);
 my ($totalissues,@serialslist) = getserials($subscriptionid);
-my $branches = getbranches;
-my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-	my %row =(value => $thisbranch,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-			);
-	push @branchloop, \%row;
-}
-
-my $itemstatushash = getitemstatus;
-my @itemstatusloop;
-foreach my $thisitemstatus (keys %$itemstatushash) {
-	my %row =(itemval => $thisitemstatus,
-				itemlib => $itemstatushash->{$thisitemstatus},
-			);
-	warn "".$row{'itemval'}.", ". $row{"itemlib"};
-	push @itemstatusloop, \%row;
-}
-
-my $itemlocationhash = getitemlocation;
-my @itemlocationloop;
-foreach my $thisitemlocation (keys %$itemlocationhash) {
-	my %row =(value => $thisitemlocation,
-				itemlocationname => $itemlocationhash->{$thisitemlocation},
-			);
-	push @itemlocationloop, \%row;
-}
 
 if (C4::Context->preference("serialsadditems")){
+	my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$subscription->{biblionumber});
+	my $fwk=MARCfind_frameworkcode($dbh,$bibid);
+
+	my $branches = getbranches;
+	my @branchloop;
+	foreach my $thisbranch (keys %$branches) {
+		my %row =(value => $thisbranch,
+					branchname => $branches->{$thisbranch}->{'branchname'},
+				);
+		push @branchloop, \%row;
+	}
+	
+	my $itemstatushash = getitemstatus($fwk);
+	my @itemstatusloop;
+	foreach my $thisitemstatus (keys %$itemstatushash) {
+		my %row =(itemval => $thisitemstatus,
+					itemlib => $itemstatushash->{$thisitemstatus},
+				);
+		warn "".$row{'itemval'}.", ". $row{"itemlib"};
+		push @itemstatusloop, \%row;
+	}
+	
+	my $itemlocationhash = getitemlocation($fwk);
+	my @itemlocationloop;
+	foreach my $thisitemlocation (keys %$itemlocationhash) {
+		my %row =(value => $thisitemlocation,
+					itemlocationname => $itemlocationhash->{$thisitemlocation},
+				);
+		push @itemlocationloop, \%row;
+	}
 	foreach my $data (@serialslist){
 		$data->{"itemstatusloop"}=\@itemstatusloop if (scalar(@itemstatusloop));
 		$data->{"itemlocationloop"}=\@itemlocationloop if (scalar(@itemlocationloop));
 		$data->{"branchloop"}=\@branchloop ;
 	}
-}
-	
-my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
-$sth->execute($subscriptionid);
-my $solhistory = $sth->fetchrow_hashref;
-
-if (C4::Context->preference("serialsadditems")){
 	$template->param(serialadditems =>C4::Context->preference("serialsadditems"),
 					branchloop => \@branchloop,
 					) ;
@@ -138,6 +134,11 @@ if (C4::Context->preference("serialsadditems")){
 }else{
 	$template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
 }
+	
+my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
+$sth->execute($subscriptionid);
+my $solhistory = $sth->fetchrow_hashref;
+
 	
 $template->param(
 			serialslist => \@serialslist,

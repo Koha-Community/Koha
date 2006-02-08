@@ -474,7 +474,7 @@ sub serialsitemize {
 		unless ($exists){
 			my $marcrecord = MARC::Record->new();
 			my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.barcode",$fwk);
-			warn "items.barcode : $tag , $subfield";
+# 			warn "items.barcode : $tag , $subfield";
 			my $newField = MARC::Field->new(
 				"$tag",'','',
 				"$subfield" => $info->{barcode}
@@ -482,7 +482,7 @@ sub serialsitemize {
 			$marcrecord->insert_fields_ordered($newField);
 			if ($info->{branch}){
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.homebranch",$fwk);
-				warn "items.homebranch : $tag , $subfield";
+# 				warn "items.homebranch : $tag , $subfield";
 				if ($marcrecord->field($tag)) {
 					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
 				}else {
@@ -493,6 +493,7 @@ sub serialsitemize {
 					$marcrecord->insert_fields_ordered($newField);
 				}
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$fwk);
+# 				warn "items.holdingbranch : $tag , $subfield";
 				if ($marcrecord->field($tag)) {
 					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
 				}else {
@@ -503,8 +504,22 @@ sub serialsitemize {
 					$marcrecord->insert_fields_ordered($newField);
 				}
 			}
+			if ($info->{itemcallnumber}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.itemcallnumber",$fwk);
+# 				warn "items.itemcallnumber : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{itemcallnumber})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{itemcallnumber}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
 			if ($info->{notes}){
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.itemnotes",$fwk);
+# 				warn "items.itemnotes : $tag , $subfield";
 				if ($marcrecord->field($tag)) {
 					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{notes})
 				}else {
@@ -517,6 +532,7 @@ sub serialsitemize {
 			}
 			if ($info->{location}){
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.location",$fwk);
+# 				warn "items.location : $tag , $subfield";
 				if ($marcrecord->field($tag)) {
 					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{location})
 				}else {
@@ -529,6 +545,7 @@ sub serialsitemize {
 			}
 			if ($info->{status}){
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.notforloan",$fwk);
+# 				warn "items.notforloan : $tag , $subfield";
 				if ($marcrecord->field($tag)) {
 					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{status})
 				}else {
