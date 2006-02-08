@@ -12,6 +12,10 @@
 	@import url(<TMPL_VAR NAME="themelang">/includes/marc-editor.css);	
 </style>
 	<!-- /TMPL_IF -->
+<script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/main.js"></script>
+<!-- TMPL_IF NAME="AmazonContent" -->
+<script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/amazonimages.js"></script>
+<! /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/script.js"></script>
 <script type="text/javascript" language="javascript" src="<TMPL_VAR NAME="themelang">/includes/basket.js"></script>
 <script type="text/javascript" language="javascript">
