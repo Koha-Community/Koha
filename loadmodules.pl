@@ -46,7 +46,7 @@ sub acquisitions {
 	#       other - Same as "normal"
 
 	if ($aq_type eq 'simple') {
-			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+			print $input->redirect("/cgi-bin/koha/cataloguing/addbooks.pl");
 	} else {
 		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
 	}
@@ -55,9 +55,9 @@ sub acquisitions {
 sub addbiblio {
 	my $marc_bool = C4::Context->boolean_preference("MARC") || 0;
 		if ($marc_bool eq "1") {
-			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+			print $input->redirect("/cgi-bin/koha/cataloguing/addbooks.pl");
 		} else {
-			print $input->redirect("/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl");
+			print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio-nomarc.pl");
 		}
 }
 
