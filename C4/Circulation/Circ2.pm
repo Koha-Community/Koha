@@ -742,7 +742,7 @@ sub canbookbeissued {
 	unless ($iteminformation->{barcode}) {
 		$issuingimpossible{UNKNOWN_BARCODE} = 1;
 	}
-	if ($iteminformation->{'notforloan'} > 0) {
+	if ($iteminformation->{'notforloan'} && $iteminformation->{'notforloan'} > 0) {
 		$issuingimpossible{NOT_FOR_LOAN} = 1;
 	}
 	if ($iteminformation->{'itemtype'} &&$iteminformation->{'itemtype'} eq 'REF') {
@@ -1265,25 +1265,25 @@ sub patronflags {
 	$flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$amount;
 		$flags{'CHARGES'} = \%flaginfo;
 	}
-	if ($patroninformation->{'gonenoaddress'} == 1) {
+	if ($patroninformation->{'gonenoaddress'} && $patroninformation->{'gonenoaddress'} == 1) {
 		my %flaginfo;
 		$flaginfo{'message'} = 'Borrower has no valid address.';
 		$flaginfo{'noissues'} = 1;
 		$flags{'GNA'} = \%flaginfo;
 	}
-	if ($patroninformation->{'lost'} == 1) {
+	if ($patroninformation->{'lost'} && $patroninformation->{'lost'} == 1) {
 		my %flaginfo;
 		$flaginfo{'message'} = 'Borrower\'s card reported lost.';
 		$flaginfo{'noissues'} = 1;
 		$flags{'LOST'} = \%flaginfo;
 	}
-	if ($patroninformation->{'debarred'} == 1) {
+	if ($patroninformation->{'debarred'} && $patroninformation->{'debarred'} == 1) {
 		my %flaginfo;
 		$flaginfo{'message'} = 'Borrower is Debarred.';
 		$flaginfo{'noissues'} = 1;
 		$flags{'DBARRED'} = \%flaginfo;
 	}
-	if ($patroninformation->{'borrowernotes'}) {
+	if ($patroninformation->{'borrowernotes'} && $patroninformation->{'borrowernotes'}) {
 		my %flaginfo;
 		$flaginfo{'message'} = "$patroninformation->{'borrowernotes'}";
 		$flags{'NOTES'} = \%flaginfo;
