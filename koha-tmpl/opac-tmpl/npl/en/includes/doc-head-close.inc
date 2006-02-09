@@ -2,9 +2,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <meta http-equiv="Content-Language" content="en-us" />
 <link rel="shortcut icon" href="<TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
-	<!-- TMPL_IF name="opacstylesheet" -->
+	<!-- TMPL_IF name="opaccolorstylesheet" -->
 <style type="text/css"> 
-	@import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);
+	@import url(<!-- TMPL_VAR NAME="opaccolorstylesheet" -->);
 </style>
 	<!-- TMPL_ELSE -->
 <style type="text/css"> 
