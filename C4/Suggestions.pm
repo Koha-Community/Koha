@@ -248,8 +248,8 @@ sub findsuggestion_from_biblionumber {
 	my ($dbh,$biblionumber) = @_;
 	my $sth = $dbh->prepare("select suggestionid from suggestions where biblionumber=?");
 	$sth->execute($biblionumber);
-	my ($biblionumber) = $sth->fetchrow;
-	return $biblionumber;
+	my ($suggestionid) = $sth->fetchrow;
+	return $suggestionid;
 }
 
 =back

@@ -121,7 +121,7 @@ sub authoritysearch {
 	# Finds the basic results without the NOT requests
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
-	my $sth;
+
 
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)");
@@ -167,7 +167,7 @@ sub authoritysearch {
 		$summary =~ s/\n/<br>/g;
 
 		# find biblio MARC field using this authtypecode (to jump to biblio)
-		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
+		$authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
 		my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
 		$sth->execute($authtypecode);
 		my $tags_using_authtype;
@@ -939,6 +939,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.23  2006/02/09 01:52:14  rangi
+# Cleaning up some unessecary my statements
+#
 # Revision 1.22  2006/01/06 16:39:37  tipaul
 # synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
 # Seems not to break too many things, but i'm probably wrong here.
