@@ -83,6 +83,7 @@ if (!$query){
 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 							theme => $theme,
 							opacstylesheet => $opacstylesheet,
+							opaccolorstylesheet => C4::Context->preference('opaccolorstylesheet'),
 							opacsmallimage => C4::Context->preference('opacsmallimage'),
 							lang => $lang);
 
