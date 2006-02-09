@@ -41,11 +41,11 @@ if ($@) {
 }
 
 # first, drop Zebra DB
-eval {
-	my $Zpackage = $Zconn->package();
-	$Zpackage->option(databaseName => 'Koha');
-# 	$Zpackage->send("drop");
-};
+# eval {
+# 	my $Zpackage = $Zconn->package();
+# 	$Zpackage->option(databaseName => 'Koha');
+# # 	$Zpackage->send("drop");
+# };
 
 eval {
 	my $Zpackage = $Zconn->package();
@@ -56,19 +56,20 @@ my $cgidir = C4::Context->intranetdir ."/cgi-bin";
 unless (opendir(DIR, "$cgidir")) {
 		$cgidir = C4::Context->intranetdir."/";
 } 
-
 my $starttime = gettimeofday;
 my $sth = $dbh->prepare("select biblionumber from biblio");
 $sth->execute;
 my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
 	my $record = XMLgetbiblio($dbh,$biblionumber);
+# 	warn "\n==============\n$record\n==================\n";
 	my $Zpackage = $Zconn->package();
 	$Zpackage->option(databaseName => 'Koha');
-	$Zpackage->option(action => "recordInsert");
+	$Zpackage->option(action => "specialUpdate");
+# 	$Zpackage->option(recordIdNumber => $biblionumber);
 	$Zpackage->option(record => $record);
 	$Zpackage->send("update");
-	$Zpackage->destroy;
+# 	$Zpackage->destroy;
 	$i++;
 	print '.';
 	print "$i\r" unless ($i % 100);
