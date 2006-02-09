@@ -11,6 +11,8 @@ use HTML::Template;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Koha;
+
 my @spsuggest; # the array for holding suggestions
 my $suggest;   # a flag to be set (if there are suggestions it's 1)
 my $firstbiblionumber; # needed for directly sending user to first item
@@ -390,15 +392,14 @@ $template->param( phraseorterm => $phraseorterm );
 				-multiple => 0 );
 	$sth->finish;
 	
-	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my ($count2,@branches)=branches();
+	my $branches=getbranches();
 	push @select_branch, "";
 	$select_branches{''} = "";
-	for (my $i=0;$i<$count2;$i++){
-		push @select_branch, $branches[$i]->{'branchcode'};#
-		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+        foreach my $branch ( keys %$branches ){
+		push @select_branch, $branches->{$branch}->{'branchcode'};
+		$select_branches{$branches->{$branch}->{'branchcode'}} = $branches->{$branch}->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
 				-values   => \@select_branch,
