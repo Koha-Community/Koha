@@ -40,7 +40,7 @@ sub gethelptemplate {
 	$template->param(themelang => '/intranet-tmpl' . "/$theme/$lang",
 							interface => '/intranet-tmpl',
 							theme => $theme,
-							lang => $lang
+							lang => $lang,
 							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
