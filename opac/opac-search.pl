@@ -408,7 +408,10 @@ $template->param( phraseorterm => $phraseorterm );
 	$sth->finish;
     
 	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
-	$template->param(classlist => $classlist,
+	$template->param(
+	    
+# CHRIS : Whats this? 	    
+#	    classlist => $classlist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
