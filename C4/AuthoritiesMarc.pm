@@ -644,13 +644,13 @@ sub AUTHfindsubfieldid {
     return $res;
 }
 
-sub AUTHfind_authtypecode {
-	my ($dbh,$authid) = @_;
-	my $sth = $dbh->prepare("select authtypecode from auth_header where authid=?");
-	$sth->execute($authid);
-	my ($authtypecode) = $sth->fetchrow;
-	return $authtypecode;
-}
+# sub AUTHfind_authtypecode {
+#	my ($dbh,$authid) = @_;
+#	my $sth = $dbh->prepare("select authtypecode from auth_header where authid=?");
+#	$sth->execute($authid);
+#	my ($authtypecode) = $sth->fetchrow;
+#	return $authtypecode;
+# }
 
 sub AUTHdelsubfield {
 # delete a subfield for $authid / tag / tagorder / subfield / subfieldorder
@@ -939,6 +939,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.24  2006/02/09 01:56:20  rangi
+# Hmm there seem to be quite a few subroutines twice in this module....
+#
+# Paul could you take a look and remove the ones that shouldnt be there please
+#
 # Revision 1.23  2006/02/09 01:52:14  rangi
 # Cleaning up some unessecary my statements
 #
