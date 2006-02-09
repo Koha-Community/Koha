@@ -135,7 +135,7 @@ $template->param("0XX" =>\@loop_data);
 
 $template->param(authid => $authid?$authid:"",
 # 				authtypesloop => \@authtypesloop,
-				index => $index
+				index => $index,
 				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
