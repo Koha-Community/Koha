@@ -30,7 +30,7 @@
 use strict;
 
 # standard or CPAN modules used
-use CGI;
+use CGI qw(:standard);
 use DBI;
 
 # Koha modules used
@@ -106,6 +106,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.2.4.5  2006/02/10 01:36:17  kados
+# Fixes a bug I experienced with missing qw(:standard) from CGI declaration
+#
 # Revision 1.2.4.4  2006/02/05 21:59:21  kados
 # Adds script support for IntranetNav ... see mail to koha-devel for
 # details
