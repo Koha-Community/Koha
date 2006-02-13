@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Biblio;
 use C4::Date;
 use Date::Manip;
-use Net::Z3950;
+use ZOOM;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -94,6 +94,7 @@ sub findseealso {
 	my ($dbh, $fields) = @_;
 	my $tagslib = MARCgettagslib ($dbh,1);
 	for (my $i=0;$i<=$#{$fields};$i++) {
+		next unless @$fields[$i];
 		my ($tag) =substr(@$fields[$i],1,3);
 		my ($subfield) =substr(@$fields[$i],4,1);
 		@$fields[$i].=','.$tagslib->{$tag}->{$subfield}->{seealso} if ($tagslib->{$tag}->{$subfield}->{seealso});
@@ -200,21 +201,6 @@ sub catalogsearch {
 	# prepare the query to find subtitles
 	my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
 
-	# build the z3950 request
-	my $attr;
-# 	if ($type eq 'isbn') {
-# 		$attr='1=7';
-# 	} elsif ($type eq 'title') {
-# 		$attr='1=4';
-# 	} elsif ($type eq 'author') {
-# 		$attr='1=1003';
-# 	} elsif ($type eq 'lccn') {
-# 		$attr='1=9';
-# 	} elsif ($type eq 'keyword') {
-		$attr='1=1016';
-# 	}
-# 	my $term = @$value[0];
-# 	my $query="\@attr $attr \"$term\"";
 	#
 	# now, do stupid things, that have to be modified for 3.0 :
 	# retrieve the 1st MARC tag.
@@ -225,36 +211,42 @@ sub catalogsearch {
 	# for instance, we manage only author / title / isbn. Any other field is considered as a keyword/anywhere search
 	#
 	my $tagslib = MARCgettagslib($dbh,$1,'');
-	my $query;
+	my $query='';
 	for(my $i = 0 ; $i <= $#{$value} ; $i++){
 		# 1st split on , then remove ' in the 1st, the find koha field
 		my @x = split /,/, @$tags[$i];
-		$x[0] =~ s/'//g;
-		$x[0] =~ /(...)(.)/;
+		$x[0] =~ s/'//g if $x[0];
+		$x[0] =~ /(...)(.)/ if $x[0];
 		my ($tag,$subfield) = ($1,$2);
 		if (@$value[$i]) { # if there is something to search, build the request
 			# if $query already contains something, add @and
-			$query = "\@and $query" if ($query);
+			$query .= " and " if ($query);
 			my $field = $tagslib->{$tag}->{$subfield}->{kohafield};
 			if ($field eq 'biblio.author') {
-				$query .= "\@attr 1=1003 \"".@$value[$i]."\" ";
+				$query .= "Author= ".@$value[$i];
 			} elsif ($field eq 'biblio.title') {
-				$query .= "\@attr 1=4 \"".@$value[$i]."\" ";
+				$query .= "Title= ".@$value[$i];
 			} elsif ($field eq 'biblioitems.isbn') {
-				$query .= "\@attr 1=7 \"".@$value[$i]."\" ";
+				$query .= "Isbn= ".@$value[$i];
 			} else {
-				$query .= "\@attr 1=1016 \"".@$value[$i]."\" ";
+				$query .= @$value[$i];
 			}
 		}
 # 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
 	}
 	warn "QUERY : $query";
-
-	my $conn= new Net::Z3950::Connection('localhost', '2100'); #databaseName => $database, user => $user, password => $password) 
-	eval {$conn->option(elementSetName => 'F')};
-# 	eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "MARC21");
-	eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
-	my $rs=$conn->search($query);
+	my $Zconn;
+	eval {
+		$Zconn = new ZOOM::Connection('localhost','2100');
+	};
+	warn "ICI";
+	$Zconn->option(cqlfile => "/home/paul/koha.dev/head/zebra/pqf.properties");
+	$Zconn->option(preferredRecordSyntax => "xml");
+	warn "LA";
+	my $q = new ZOOM::Query::CQL2RPN( $query, $Zconn);
+# 	warn "ERROR : ".$Zconn->errcode();
+	warn "Q : $q";
+	my $rs = $Zconn->search($q);
 	my $numresults=$rs->size();
 	if ($numresults eq 0) {
 		warn "no records found\n";
@@ -270,8 +262,10 @@ sub catalogsearch {
 	# calculate max offset
 	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:$numresults;
 	for (my $i=$offset; $i <= $maxrecordnum; $i++) {
-		# get the MARC record...
-		my $record = MARC::File::USMARC::decode($rs->record($i)->rawdata());
+		# get the MARC record (in XML)...
+		# warn "REC $i = ".$rs->record($i)->raw();
+# FIXME : it's a silly way to do things : XML => MARC::Record => hash. We had better developping a XML=> hash (in biblio.pm)
+		my $record = MARC::Record->new_from_xml($rs->record($i)->raw());
 		# transform it into a meaningul hash
 		my $line = MARCmarc2koha($dbh,$record);
 		my $biblionumber=$line->{biblionumber};
