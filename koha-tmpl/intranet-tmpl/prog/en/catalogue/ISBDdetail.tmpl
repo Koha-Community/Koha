@@ -1,0 +1,64 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue MARC detail<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+
+<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="biblionumber" --></h1>
+
+	<div id="catalogue_ISBDdetail">
+		<!-- TMPL_VAR NAME="ISBD" -->
+	</div>
+</div>
+
+<div id="action">
+		<form action="javascript:Addbiblio('')">
+			<input type="submit" value="Edit biblio" />
+		</form>
+		<form action="javascript:Addbiblio('duplicate')">
+			<input type="submit" value="Duplicate" />
+		</form>
+		<form action="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->">
+			<input type="submit" value="Edit item" />
+		</form>
+		<form action="javascript:confirm_deletion()">
+			<input type="submit" value="delete" />
+		</form>
+		<form action="MARCdetail.pl">
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+			<input type="submit" value="Complete" />
+		</form>
+		<form action="#">
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+			<input type="submit" value="Normal" />
+		</form>
+		<form action="ISBDdetail.pl">
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+			<input type="submit" value="ISBD" />
+		</form>
+		<form action="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
+			<input type="submit" value="Add to shelf" />
+		</form>
+		<form action="javascript:Dopop('detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
+			<input type="submit" value="Print" />
+		</form>
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<form action="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+			<input type="submit" value="Subscription(s)" />
+		</form>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="norequests" -->
+		<!-- TMPL_ELSE -->
+			<form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+				<input type="submit" value="Request" />
+			</form>
+		<!-- /TMPL_IF -->
+</div>
+
+<script language="javascript" type="text/javascript">
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
