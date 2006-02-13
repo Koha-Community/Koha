@@ -184,6 +184,7 @@ returns a hash with all values for all fields and subfields for a given MARC fra
 sub MARCgettagslib {
     my ( $dbh, $forlibrarian, $frameworkcode ) = @_;
     $frameworkcode = "" unless $frameworkcode;
+    $forlibrarian = 1 unless $forlibrarian;
     my $sth;
     my $libfield = ( $forlibrarian eq 1 ) ? 'liblibrarian' : 'libopac';
 
@@ -262,6 +263,7 @@ kohafield is "table.field" where table= biblio|biblioitems|items, and field a fi
 sub MARCfind_marc_from_kohafield {
     my ( $dbh, $kohafield,$frameworkcode ) = @_;
     return 0, 0 unless $kohafield;
+    $frameworkcode='' unless $frameworkcode;
 	my $relations = C4::Context->marcfromkohafield;
 	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
 }
@@ -278,10 +280,10 @@ sub MARCgetbiblio {
 
     # Returns MARC::Record of the biblio passed in parameter.
     my ( $dbh, $biblionumber ) = @_;
-	my $sth = $dbh->prepare('select marcxml from biblioitems where biblionumber=?');
+	my $sth = $dbh->prepare('select marc from biblioitems where biblionumber=?');
 	$sth->execute($biblionumber);
 	my ($marc) = $sth->fetchrow;
-	my $record = MARC::Record::new_from_xml($marc);
+	my $record = MARC::Record::new_from_usmarc($marc);
     return $record;
 }
 
@@ -2906,6 +2908,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.137  2006/02/13 16:34:26  tipaul
+# fixing some warnings (perl -w should be quiet)
+#
 # Revision 1.136  2006/01/10 17:01:29  tipaul
 # adding a XMLgetbiblio in Biblio.pm (1st draft, to use with zebra)
 #
