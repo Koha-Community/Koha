@@ -237,10 +237,10 @@ sub catalogsearch {
 	warn "QUERY : $query";
 	my $Zconn;
 	eval {
-		$Zconn = new ZOOM::Connection('localhost','2100');
+		$Zconn = new ZOOM::Connection('localhost:2100/koha3');
 	};
 	warn "ICI";
-	$Zconn->option(cqlfile => "/home/paul/koha.dev/head/zebra/pqf.properties");
+	$Zconn->option(cqlfile => "/usr/local/koha3/intranet/zebra/pqf.properties");
 	$Zconn->option(preferredRecordSyntax => "xml");
 	warn "LA";
 	my $q = new ZOOM::Query::CQL2RPN( $query, $Zconn);
@@ -258,10 +258,10 @@ sub catalogsearch {
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
-	$offset=1 unless $offset;
+	$offset=0 unless $offset;
 	# calculate max offset
 	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:$numresults;
-	for (my $i=$offset; $i <= $maxrecordnum; $i++) {
+	for (my $i=$offset; $i < $maxrecordnum; $i++) {
 		# get the MARC record (in XML)...
 		# warn "REC $i = ".$rs->record($i)->raw();
 # FIXME : it's a silly way to do things : XML => MARC::Record => hash. We had better developping a XML=> hash (in biblio.pm)
