@@ -136,6 +136,8 @@ $template->param(
 $template->param(
 			"periodicity$subs->{periodicity}" => 1,
 			"arrival$subs->{dow}" => 1,
+			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
 			);
 
 output_html_with_http_headers $query, $cookie, $template->output;
