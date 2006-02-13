@@ -35,7 +35,7 @@
 <tbody>
 	<!-- TMPL_LOOP name="result" -->
 		<tr<!-- TMPL_IF NAME="even" --> class="highlight"<!-- /TMPL_IF -->>
-			<td><p><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></p>
+			<td><p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></p>
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
@@ -45,7 +45,7 @@
 					</p></td>
 					<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="totitem" --></td>
-<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)	<!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td><td><!-- TMPL_UNLESS name="norequests" --><a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Reserves</a><!-- TMPL_ELSE -->Not Reservable<!-- /TMPL_UNLESS --></td>
+<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)	<!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td><td><!-- TMPL_UNLESS name="norequests" --><a href="/cgi-bin/koha/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Reserves</a><!-- TMPL_ELSE -->Not Reservable<!-- /TMPL_UNLESS --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
