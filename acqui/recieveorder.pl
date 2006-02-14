@@ -30,9 +30,17 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
 use C4::Acquisition;
+use Smart::Comments;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
+my $order=$input->param('orderby');
+my $startfrom=$input->param('startfrom');
+my $code=$input->param('filter');
+my $datefrom=$input->param('datefrom');
+my $dateto=$input->param('dateto');
+my $resultsperpage = $input->param('resultsperpage');
+
 my ($count,@booksellers)=bookseller($supplierid);
 
 my ($template, $loggedinuser, $cookie)
@@ -44,6 +52,71 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+
+$resultsperpage = 20 unless ($resultsperpage);
+my ($count,@results)=getparcels($supplierid, $order, $code,$datefrom,$dateto);
+
+# multi page display gestion
+$startfrom=0 unless ($startfrom);
+if ($count>$resultsperpage){
+	my $displaynext=0;
+	my $displayprev=$startfrom;
+	if(($count - ($startfrom+$resultsperpage)) > 0 ) {
+		$displaynext = 1;
+	}
+	
+	my @numbers = ();
+	if ($count>$resultsperpage) {
+		for (my $i=1; $i<$count/$resultsperpage+1; $i++) {
+			if ($i<16) {
+				my $highlight=0;
+				($startfrom/$resultsperpage==($i-1)) && ($highlight=1);
+				push @numbers, { number => $i,
+					highlight => $highlight ,
+# 					searchdata=> "test",
+					startfrom => ($i-1)*$resultsperpage};
+			}
+		}
+	}
+	
+	my $from = $startfrom*$resultsperpage+1;
+	my $to;
+	
+	if($count < (($startfrom+1)*$resultsperpage))
+	{
+		$to = $count;
+	} else {
+		$to = (($startfrom+1)*$resultsperpage);
+	}
+	$template->param(numbers=>\@numbers, 
+					 displaynext=>$displaynext,
+					 displayprev=>$displayprev,
+					 nextstartfrom=>(($startfrom+$resultsperpage<$count)?$startfrom+$resultsperpage:$count),
+					 prevstartfrom=>(($startfrom-$resultsperpage>0)?$startfrom-$resultsperpage:0)
+					);
+}
+my @loopres;
+
+for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$resultsperpage-1:$count-1);$i++){
+### startfrom: $startfrom
+### resultsperpage: $resultsperpage
+### count: $count
+### code: $results[$i]->{booksellerinvoicenumber}
+### datereceived: $results[$i]->{datereceived}
+
+	my %cell;
+	$cell{number}=$i+1;
+	$cell{code}=$results[$i]->{booksellerinvoicenumber};
+	$cell{nullcode}=$results[$i]->{booksellerinvoicenumber} eq "NULL";
+	$cell{emptycode}=$results[$i]->{booksellerinvoicenumber} eq '';
+	$cell{datereceived}=$results[$i]->{datereceived};
+	$cell{bibcount}=$results[$i]->{biblio};
+	$cell{reccount}=$results[$i]->{itemsreceived};
+	$cell{itemcount}=$results[$i]->{itemsexpected};
+	push @loopres, \%cell;
+}
+$template->param(searchresults=>\@loopres, count=>$count) if ($count);
+$template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$dateto, resultsperpage=>$resultsperpage);
 $template->param(
 		name => $booksellers[0]->{'name'},
 		supplierid => $supplierid,

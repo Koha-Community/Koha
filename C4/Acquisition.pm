@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Date;
 use MARC::Record;
 use C4::Suggestions;
+use Smart::Comments;
 # use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -60,7 +61,8 @@ orders, converting money to different currencies, and so forth.
 		&updaterecorder &newordernum
 		&getsupplierlistwithlateorders
 		&getlateorders
-
+		&getparcels
+		
 		&bookfunds &curconvert &getcurrencies &bookfundbreakdown
 		&updatecurrencies &getcurrency
 
@@ -1113,6 +1115,42 @@ sub insertsup {
   $data->{'id'}=$data2->{'max(id)'};
   updatesup($data);
   return($data->{'id'});
+}
+
+=item getparcels
+
+  ($count, $results) = &getparcels($dbh, $bookseller, $order, $limit);
+
+get a lists of parcels
+Returns the count of parcels returned and a pointer on a hash list containing parcel informations as such :
+		Creation date
+		Last operation
+		Number of biblio
+		Number of items
+		
+
+=cut
+#'
+sub getparcels {
+  my ($bookseller, $order, $code,$datefrom,$dateto, $limit)=@_;
+	my $dbh = C4::Context->dbh;
+	my $strsth = "SELECT aqorders.booksellerinvoicenumber, datereceived, count(DISTINCT biblionumber) as biblio, sum(quantity) as itemsexpected, sum(quantityreceived) as itemsreceived from aqorders, aqbasket where aqbasket.basketno = aqorders.basketno and aqbasket.booksellerid = $bookseller and datereceived is not null ";
+	$strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" " if ($code);
+	$strsth .= "and datereceived >=".$dbh->quote($datefrom)." " if ($datefrom);
+	$strsth .= "and datereceived <=".$dbh->quote($dateto)." " if ($dateto);
+	$strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
+	$strsth .= "order by $order " if ($order);
+	$strsth .= " LIMIT 0,$limit" if ($limit);
+	my $sth=$dbh->prepare($strsth);
+###	getparcels:  $strsth
+	$sth->execute;
+	my @results;
+	while (my $data2=$sth->fetchrow_hashref) {
+		push @results, $data2;
+	}
+	
+   $sth->finish;
+   return(scalar(@results), @results);
 }
 
 END { }       # module clean-up code here (global destructor)
