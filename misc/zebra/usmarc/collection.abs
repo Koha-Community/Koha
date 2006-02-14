@@ -1,0 +1,32 @@
+# $Id$
+
+# complete UNIMARC indexing rules for Bath level 0 and 1 service
+# (author, title, subject, keyword and exact services).
+# inspired by marc21.abs, from indexdata
+# Feel free to
+# elaborate on it, and if you do, please consider sharing your additions.
+# NOTE: This is designed to be used with the grs.marcxml input filter
+# for ISO2709 (ANSI Z39.2) or grs.xml for MARCXML-formatted records. It
+# won't work for the old grs.marc input filter, which yields a different
+# internal structure.
+
+name collection
+attset bib1.att
+
+esetname F @
+esetname B @
+
+marc usmarc.mar
+xpath enable
+
+all any
+
+melm 090$c      identifier-standard,identifier-standard:p
+melm 100        author,author:p
+melm 245$a      title,title:p
+melm 020$a      isbn
+melm 011$a      issn
+#elm 090            Identifier-standard            -
+#elm 090/?          Identifier-standard            -
+#elm 090/?/a        Identifier-standard            !:w
+
