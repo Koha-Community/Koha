@@ -75,7 +75,7 @@ sub search {
 	    $string.="$var=\"$search->{$var}\" ";
 	}	    
 	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-	$Zconn->option(preferredRecordSyntax => "usmarc");
+	$Zconn->option(preferredRecordSyntax => "xml");
 	$q = new ZOOM::Query::CQL2RPN( $string, $Zconn);	
 	}
     eval {
@@ -84,22 +84,18 @@ sub search {
 	if ($n >0){
 	    $raw=$rs->record(0)->raw();
 	}
-#	print "here is $n";
-#	$raw=$rs->record(0)->raw();
-	print $raw;
-
-
     };
     if ($@) {
 	print "Error ", $@->code(), ": ", $@->message(), "\n";
     }   
-    my $record = MARC::Record->new_from_usmarc($raw);
+    my $record = MARC::Record->new_from_xml($raw);
     ### $record                                                                                                    
     # transform it into a meaningul hash                                                                       
     my $line = MARCmarc2koha($dbh,$record);                                                                    
     ### $line                                                                                                      
     my $biblionumber=$line->{biblionumber};                                                                    
     my $title=$line->{title};                                                                                  
+    ### $title
 
 
 }
