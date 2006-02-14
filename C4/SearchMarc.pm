@@ -223,9 +223,9 @@ sub catalogsearch {
 			$query .= " and " if ($query);
 			my $field = $tagslib->{$tag}->{$subfield}->{kohafield};
 			if ($field eq 'biblio.author') {
-				$query .= "Author= ".@$value[$i];
+				$query .= "Author= \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblio.title') {
-				$query .= "Title= ".@$value[$i];
+				$query .= "Title= \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblioitems.isbn') {
 				$query .= "Isbn= ".@$value[$i];
 			} else {
@@ -260,8 +260,8 @@ sub catalogsearch {
 	my $totalitems=0;
 	$offset=0 unless $offset;
 	# calculate max offset
-	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:$numresults;
-	for (my $i=$offset; $i < $maxrecordnum; $i++) {
+	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:($numresults);
+	for (my $i=$offset-1; $i <= $maxrecordnum-1; $i++) {
 		# get the MARC record (in XML)...
 		# warn "REC $i = ".$rs->record($i)->raw();
 # FIXME : it's a silly way to do things : XML => MARC::Record => hash. We had better developping a XML=> hash (in biblio.pm)
