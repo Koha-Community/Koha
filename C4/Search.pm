@@ -21,6 +21,9 @@ use strict;
 use ZOOM;
 use Smart::Comments;
 use C4::Context;
+use MARC::Record;
+use MARC::File::XML;
+use C4::Biblio;
 
 require Exporter;
 
@@ -55,13 +58,16 @@ other databases.
 
 sub search {
     my ($search,$type)=@_;
+    my $dbh=C4::Context->dbh();
     my $q;
     my $host=C4::Context->config("zebraserver");
     my $port=C4::Context->config("zebraport");
     my $intranetdir=C4::Context->config("intranetdir");
+    my $database="koha3";
     my $Zconn;
+    my $raw;
     eval {
-	$Zconn = new ZOOM::Connection($host,$port);
+	$Zconn = new ZOOM::Connection("$host:$port/$database");
     };
     if ($@) {
 	warn "Error ", $@->code(), ": ", $@->message(), "\n";                  
@@ -73,17 +79,33 @@ sub search {
 	    $string.="$var=\"$search->{$var}\" ";
 	}	    
 	$Zconn->option(cqlfile => "$intranetdir/zebra/pqf.properties");
-	$Zconn->option(preferredRecordSyntax => "xml");
+	$Zconn->option(preferredRecordSyntax => "usmarc");
 	$q = new ZOOM::Query::CQL2RPN( $string, $Zconn);	
 	}
     eval {
 	my $rs = $Zconn->search($q);
 	my $n = $rs->size();
-	###$rs->record(0)->render();
+	if ($n >0){
+	    $raw=$rs->record(0)->raw();
+	}
+#	print "here is $n";
+#	$raw=$rs->record(0)->raw();
+	print $raw;
+
+
     };
     if ($@) {
 	print "Error ", $@->code(), ": ", $@->message(), "\n";
     }   
+    my $record = MARC::Record->new_from_usmarc($raw);
+    ### $record                                                                                                    
+    # transform it into a meaningul hash                                                                       
+    my $line = MARCmarc2koha($dbh,$record);                                                                    
+    ### $line                                                                                                      
+    my $biblionumber=$line->{biblionumber};                                                                    
+    my $title=$line->{title};                                                                                  
+
+
 }
 1;
 __END__
