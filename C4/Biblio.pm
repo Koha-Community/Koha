@@ -25,6 +25,7 @@ use C4::Date;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
+use ZOOM;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -158,6 +159,11 @@ sub zebra_create {
 	eval {
 		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
 	};
+	if ($@){
+	        warn "Error ", $@->code(), ": ", $@->message(), "\n";
+	        die "Fatal error, cant connect to z3950 server";
+	}
+
 	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
 # 	my $record = XMLgetbiblio($dbh,$biblionumber);
 	my $Zpackage = $Zconn->package();
@@ -2923,6 +2929,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.140  2006/02/14 21:36:03  kados
+# adding a 'use ZOOM' to biblio.pm, needed for non-mod_perl install.
+# also adding diagnostic error if not able to connect to Zebra
+#
 # Revision 1.139  2006/02/14 19:53:25  rangi
 # Just a little missing my
 #
