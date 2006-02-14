@@ -71,6 +71,9 @@ $VERSION = 0.01;
   
   &FindDuplicate
   &DisplayISBN
+    
+    get_item_from_barcode
+    MARCfind_MARCbibid_from_oldbiblionumber
 );
 
 =head1 NAME
@@ -150,6 +153,7 @@ sub zebra_create {
 # 	close F;
 # 	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
 # 	unlink($filename);
+        my $Zconn;
 	warn "zebra_create : $biblionumber =".$record->as_formatted;
 	eval {
 		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
@@ -2919,6 +2923,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.139  2006/02/14 19:53:25  rangi
+# Just a little missing my
+#
+# Seems to be working great Paul, and I like what you did with zebradb
+#
 # Revision 1.138  2006/02/14 11:25:22  tipaul
 # road to 3.0 : updating a biblio in zebra seems to work. Still working on it, there are probably some bugs !
 #
