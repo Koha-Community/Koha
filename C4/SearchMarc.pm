@@ -237,15 +237,12 @@ sub catalogsearch {
 	warn "QUERY : $query";
 	my $Zconn;
 	eval {
-		$Zconn = new ZOOM::Connection('localhost:2100/koha3');
+		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
 	};
-	warn "ICI";
-	$Zconn->option(cqlfile => "/usr/local/koha3/intranet/zebra/pqf.properties");
+	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
 	$Zconn->option(preferredRecordSyntax => "xml");
-	warn "LA";
 	my $q = new ZOOM::Query::CQL2RPN( $query, $Zconn);
 # 	warn "ERROR : ".$Zconn->errcode();
-	warn "Q : $q";
 	my $rs = $Zconn->search($q);
 	my $numresults=$rs->size();
 	if ($numresults eq 0) {
@@ -258,7 +255,7 @@ sub catalogsearch {
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
-	$offset=0 unless $offset;
+	$offset=1 unless $offset;
 	# calculate max offset
 	my $maxrecordnum = $offset+$length<$numresults?$offset+$length:($numresults);
 	for (my $i=$offset-1; $i <= $maxrecordnum-1; $i++) {

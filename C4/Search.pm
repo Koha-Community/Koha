@@ -60,14 +60,10 @@ sub search {
     my ($search,$type)=@_;
     my $dbh=C4::Context->dbh();
     my $q;
-    my $host=C4::Context->config("zebraserver");
-    my $port=C4::Context->config("zebraport");
-    my $intranetdir=C4::Context->config("intranetdir");
-    my $database="koha3";
     my $Zconn;
     my $raw;
     eval {
-	$Zconn = new ZOOM::Connection("$host:$port/$database");
+	$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
     };
     if ($@) {
 	warn "Error ", $@->code(), ": ", $@->message(), "\n";                  
@@ -78,7 +74,7 @@ sub search {
 	foreach my $var (keys %$search) {
 	    $string.="$var=\"$search->{$var}\" ";
 	}	    
-	$Zconn->option(cqlfile => "$intranetdir/zebra/pqf.properties");
+	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
 	$Zconn->option(preferredRecordSyntax => "usmarc");
 	$q = new ZOOM::Query::CQL2RPN( $string, $Zconn);	
 	}
