@@ -139,17 +139,27 @@ all subs requires/use $dbh as 1st parameter and a hash as 2nd parameter.
 sub zebra_create {
 	my ($biblionumber,$record) = @_;
 	# create the iso2709 file for zebra
-	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-	unless (opendir(DIR, "$cgidir")) {
-			$cgidir = C4::Context->intranetdir."/";
-	} 
-	closedir DIR;
-	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
-	open F,"> $filename";
-	print F $record->as_usmarc();
-	close F;
-	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
-	unlink($filename);
+# 	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+# 	unless (opendir(DIR, "$cgidir")) {
+# 			$cgidir = C4::Context->intranetdir."/";
+# 	} 
+# 	closedir DIR;
+# 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
+# 	open F,"> $filename";
+# 	print F $record->as_usmarc();
+# 	close F;
+# 	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
+# 	unlink($filename);
+	warn "zebra_create : $biblionumber =".$record->as_formatted;
+	eval {
+		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
+	};
+	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
+# 	my $record = XMLgetbiblio($dbh,$biblionumber);
+	my $Zpackage = $Zconn->package();
+	$Zpackage->option(action => "specialUpdate");
+	$Zpackage->option(record => $record->as_xml());
+	$Zpackage->send("update");
 }
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
@@ -765,9 +775,10 @@ sub NEWmodbiblio {
 	
 	$oldbiblio->{frameworkcode} = $frameworkcode;
 	#create the marc entry, that stores the rax marc record in Koha 3.0
+	$oldbiblio->{biblionumber} = $biblionumber unless $oldbiblio->{biblionumber};
 	$oldbiblio->{marc} = $record->as_usmarc();
 	$oldbiblio->{marcxml} = $record->as_xml();
-	
+	warn "dans NEWmodbiblio $biblionumber = ".$oldbiblio->{biblionumber}." = ".$oldbiblio->{marcxml};
 	REALmodbiblio($dbh,$oldbiblio);
 	REALmodbiblioitem($dbh,$oldbiblio);
 	# now, modify addi authors, subject, addititles.
@@ -2908,6 +2919,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.138  2006/02/14 11:25:22  tipaul
+# road to 3.0 : updating a biblio in zebra seems to work. Still working on it, there are probably some bugs !
+#
 # Revision 1.137  2006/02/13 16:34:26  tipaul
 # fixing some warnings (perl -w should be quiet)
 #
