@@ -99,7 +99,7 @@ if ($op eq "additem") {
 	my $exists = get_item_from_barcode($addedolditem->{'barcode'});
 	push @errors,"barcode_not_unique" if($exists);
 	# if barcode exists, don't create, but report The problem.
-	$itemnumber = NEWnewitem($dbh,$addedolditem,$biblionumber,$biblioitemnumber) unless ($exists);
+	$itemnumber = NEWnewitem($dbh,$record,$biblionumber,$biblioitemnumber) unless ($exists);
 	$nextop = "additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
