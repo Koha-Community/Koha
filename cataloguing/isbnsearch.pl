@@ -40,7 +40,7 @@ my $dbh = C4::Context->dbh;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "acqui.simple/isbnsearch.tmpl",
+            template_name   => "cataloguing/isbnsearch.tmpl",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
