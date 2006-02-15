@@ -90,7 +90,7 @@ Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMP
 		<!-- TMPL_IF NAME="NOTMARC" -->
 			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->">Add New Record</a>
 		<!-- TMPL_ELSE -->
-		<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="post">
+		<form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="post">
 			<input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->" />
 			<input type="hidden" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" /><label for="frameworkcode">Choose a Framework: </label><select id="frameworkcode" name="frameworkcode">
 				<option value="">Default</option><!-- TMPL_LOOP NAME="frameworkcodeloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option><!-- /TMPL_LOOP --></select> <input type="submit" class="submit" value="Add New Record" /></form>
