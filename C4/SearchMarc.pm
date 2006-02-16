@@ -411,7 +411,22 @@ sub getMARCsubjects {
 		$mintag = "600";
 		$maxtag = "699";
 	}
-	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode,tagorder,tag FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder,subfieldorder");
+	my $sth=$dbh->prepare("SELECT `subfieldvalue`,`subfieldcode`,`tagorder`,`tag` FROM `marc_subfield_table` WHERE `bibid`= ? AND `subfieldcode` NOT IN ('2','4','6','8') AND `tag` BETWEEN ? AND ? ORDER BY `tagorder`,`subfieldorder`");
+	# Subfield exclusion for $2, $4, $6, $8 protects against searching for
+	# variant data in otherwise invariant authorised subject headings when all
+	# returned subfields are used to form a query for matching subjects.  One
+	# example is the use of $2 in MARC 21 where the value of $2 changes for
+	# different editions of the thesaurus used, even where the subject heading
+	# is otherwise the same.  There is certainly a better fix for many cases
+	# where the value of the subfield may be parsed for the invariant data.  
+	# More complete display values may also be separated from query values
+	# containing only the actual invariant authorised subject headings.  More
+	# coding is required for careful value parsing, or display and query
+	# separation; instead of blanket subfield exclusion.
+	# 
+	# As implemented, $3 is passed and might still pose a problem.  Passing $3
+	# could have benefits for some proper use of $3 for UNIMARC, however, might
+	# restrict query usage to a given material type.  -- thd
 
 	$sth->execute($bibid,$mintag,$maxtag);
 
@@ -437,11 +452,14 @@ sub getMARCsubjects {
 		}
 		if ($subfieldcode eq 9) {
 			$field9=$subfieldvalue;
+		} elsif ($subfieldcode eq (3 || 5)) {
+			$subject .= $subfieldvalue . " ";
 		} else {
-			$subject .= $subfieldvalue." -- ";
+			$subject .= $subfieldvalue . " -- ";
 		}
 		$activetagorder=$tagorder;
 	}
+	$subject=~ s/ -- $//;
 	$marcsubjct = {MARCSUBJCT => $subject,
 					link => $lasttag."9",
 					linkvalue => $field9,
