@@ -155,21 +155,30 @@ sub zebra_create {
 # 	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
 # 	unlink($filename);
         my $Zconn;
-	warn "zebra_create : $biblionumber =".$record->as_formatted;
-	eval {
+        my $xmlrecord;
+#	warn "zebra_create : $biblionumber =".$record->as_formatted;
+        eval {
+	    $xmlrecord=$record->as_xml();
+	    };
+        if ($@){
+	    warn "ERROR badly formatted marc record";
+	    warn "Skipping record";
+	} 
+        else {
+	    eval {
 		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
-	};
-	if ($@){
+	    };
+	    if ($@){
 	        warn "Error ", $@->code(), ": ", $@->message(), "\n";
 	        die "Fatal error, cant connect to z3950 server";
+	    }
+	    
+	    $Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
+	    my $Zpackage = $Zconn->package();
+	    $Zpackage->option(action => "specialUpdate");        
+	    $Zpackage->option(record => $xmlrecord);
+	    $Zpackage->send("update");
 	}
-
-	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-# 	my $record = XMLgetbiblio($dbh,$biblionumber);
-	my $Zpackage = $Zconn->package();
-	$Zpackage->option(action => "specialUpdate");
-	$Zpackage->option(record => $record->as_xml());
-	$Zpackage->send("update");
 }
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
@@ -586,7 +595,7 @@ builds a hash with old-db datas from a MARC::Record
 sub MARCmarc2koha {
 	my ($dbh,$record,$frameworkcode) = @_;
 	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
-	my $result;
+	my $result;  
 	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
 	$sth2->execute;
 	my $field;
@@ -870,7 +879,8 @@ sub NEWnewitem {
     # needs old biblionumber and biblioitemnumber
     $item->{'biblionumber'} = $biblionumber;
     $item->{'biblioitemnumber'}=$biblioitemnumber;
-	$item->{marc} = $record->as_usmarc();
+    $item->{marc} = $record->as_usmarc();
+    warn $item->{marc};
     my ( $itemnumber, $error ) = &REALnewitems( $dbh, $item, $item->{barcode} );
 	return $itemnumber;
 }
@@ -1336,7 +1346,10 @@ sub REALnewitems {
 	my $record = MARC::File::USMARC::decode($rawmarc);
 	# ok, we have the marc record, add item number to the item field (in {marc}, and add the field to the record)
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
-	my $itemrecord = MARC::File::USMARC::decode($item->{marc});
+	my $itemrecord = MARC::Record->new_from_usmarc($item->{marc});
+        warn $itemrecord;
+        warn $itemnumberfield;
+        warn $itemrecord->field($itemnumberfield);
 	my $itemfield = $itemrecord->field($itemnumberfield);
 	$itemfield->add_subfields($itemnumbersubfield => "$itemnumber");
 	$record->insert_grouped_field($itemfield);
@@ -2929,6 +2942,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.141  2006/02/16 19:47:22  rangi
+# Trying to error trap a little more.
+#
 # Revision 1.140  2006/02/14 21:36:03  kados
 # adding a 'use ZOOM' to biblio.pm, needed for non-mod_perl install.
 # also adding diagnostic error if not able to connect to Zebra
