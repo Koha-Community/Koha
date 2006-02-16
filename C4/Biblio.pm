@@ -178,6 +178,7 @@ sub zebra_create {
 	    $Zpackage->option(action => "specialUpdate");        
 	    $Zpackage->option(record => $xmlrecord);
 	    $Zpackage->send("update");
+	    $Zpackage->destroy;
 	}
 }
 
@@ -2942,6 +2943,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.142  2006/02/16 20:49:56  kados
+# destroy a connection after we're done -- we really should just have one
+# connection object and not destroy it until the whole transaction is
+# finished -- but this will do for now
+#
 # Revision 1.141  2006/02/16 19:47:22  rangi
 # Trying to error trap a little more.
 #
