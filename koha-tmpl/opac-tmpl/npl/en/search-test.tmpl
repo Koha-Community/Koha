@@ -1,0 +1,53 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> -- Library Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<div class="content-block">
+
+<!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_ELSE --><div id="sidebar">
+<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+<h3>Log in to Check Your Account</h3>
+<p><label for="userid">Card Number:</label><!-- Hide from NPL --><input type="text" id="userid" size="10" name="userid" /><!-- /Hide from NPL --> <!-- Display for NPL // <input type="text" id="userid" size="10" name="userid" onblur="ValidateCode();" /> //Display for NPL --></p>
+<p><label for="password">Password:</label> <input type="password" id="password" size="10" name="password" /></p>
+<p><input type="submit" value="Log In" class="submit" /></p>
+</form></div>
+<!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/search-test.pl">
+<h3>Search the Library Catalog</h3>
+<p>
+<label for="value">Enter CQL:</label>
+<textarea name="cql" cols=40 rows=5></textarea>
+		<p><input type="submit" value="Search" class="submit" /></p>
+		<p>
+<!-- TMPL_IF NAME="CQL"-->
+<h3> Results </h3>
+<table>
+<!-- TMPL_LOOP NAME="results"-->
+<tr><td>title</td><td><!-- TMPL_VAR NAME="title" --></td></tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="loggedinusername" -->
+<div class="content-block">
+<h3>You're logged in as <em><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span><!-- /TMPL_LOOP --></h3>
+<p><a href="/cgi-bin/koha/opac-user.pl">my library home</a> | <!-- Hide from NPL--> <a href="/cgi-bin/koha/opac-account.pl">my fines</a> | <!-- Hide from NPL -->
+	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a>	| <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a>	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></p>
+		<!-- TMPL_IF name="textmessaging"-->
+			<h3>Message from the library</h3>
+			<p><!-- TMPL_VAR name="textmessaging" --></p>
+		<!-- /TMPL_IF -->
+<form method="post" action="/cgi-bin/koha/opac-logout.pl">
+<p><input type="submit" class="submit" name="logout" value="Log Out" /></p>
+</form>
+</div><!-- /TMPL_IF -->
+
+
+</div>
+
+</body>
+</html>

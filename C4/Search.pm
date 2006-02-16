@@ -31,7 +31,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-          shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
+    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
+};
 
 =head1 NAME
 
@@ -52,53 +53,94 @@ other databases.
 
 =cut
 
-@ISA = qw(Exporter);
-@EXPORT = qw(search);
+@ISA    = qw(Exporter);
+@EXPORT = qw(search get_record);
+
 # make all your functions, whether exported or not;
 
 sub search {
-    my ($search,$type)=@_;
-    my $dbh=C4::Context->dbh();
+    my ( $search, $type, $number ) = @_;
+    my $dbh = C4::Context->dbh();
     my $q;
     my $Zconn;
     my $raw;
-    eval {
-	$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
-    };
+    eval { $Zconn = new ZOOM::Connection( C4::Context->config("zebradb") ); };
     if ($@) {
-	warn "Error ", $@->code(), ": ", $@->message(), "\n";                  
+        warn "Error ", $@->code(), ": ", $@->message(), "\n";
     }
-    
-    if ($type eq 'CQL'){
-	my $string;
-	foreach my $var (keys %$search) {
-	    $string.="$var=\"$search->{$var}\" ";
-	}	    
-	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-	$Zconn->option(preferredRecordSyntax => "xml");
-	$q = new ZOOM::Query::CQL2RPN( $string, $Zconn);	
-	}
+
+    if ( $type eq 'CQL' ) {
+        my $string;
+        if ( $search->{'cql'} ) {
+            $string = $search->{'cql'};
+        }
+        else {
+            foreach my $var ( keys %$search ) {
+                $string .= "$var=\"$search->{$var}\" ";
+            }
+        }
+        $Zconn->option( cqlfile => C4::Context->config("intranetdir")
+              . "/zebra/pqf.properties" );
+        $Zconn->option( preferredRecordSyntax => "xml" );
+        $q = new ZOOM::Query::CQL2RPN( $string, $Zconn );
+    }
+    my $rs;
+    my $n;
     eval {
-	my $rs = $Zconn->search($q);
-	my $n = $rs->size();
-	if ($n >0){
-	    $raw=$rs->record(0)->raw();
-	}
+        $rs = $Zconn->search($q);
+        $n  = $rs->size();
     };
     if ($@) {
-	print "Error ", $@->code(), ": ", $@->message(), "\n";
-    }   
-    my $record = MARC::Record->new_from_xml($raw);
-    ### $record                                                                                                    
-    # transform it into a meaningul hash                                                                       
-    my $line = MARCmarc2koha($dbh,$record);                                                                    
-    ### $line                                                                                                      
-    my $biblionumber=$line->{biblionumber};                                                                    
-    my $title=$line->{title};                                                                                  
-    ### $title
-
+        print "Error ", $@->code(), ": ", $@->message(), "\n";
+    }
+    my $i = 0;
+    my @results;
+    while ( $i < $n && $i < $number ) {
+        $raw = $rs->record($i)->raw();
+        my $record = MARC::Record->new_from_xml($raw);
+        my $line = MARCmarc2koha( $dbh, $record );
+        push @results, $line;
+	$i++;
+    }
+    return ( \@results );
 
 }
+
+sub get_record {
+
+    # pass in an id (localnumber) and get back a MARC record
+    my ($id) = @_;
+    my $q;
+    my $Zconn;
+    my $raw;
+    eval { $Zconn = new ZOOM::Connection( C4::Context->config("zebradb") ); };
+    if ($@) {
+        warn "Error ", $@->code(), ": ", $@->message(), "\n";
+    }
+    $Zconn->option( cqlfile => C4::Context->config("intranetdir")
+          . "/zebra/pqf.properties" );
+    $Zconn->option( preferredRecordSyntax => "xml" );
+    my $string = "id=$id";
+    warn $id;
+
+    #    $q = new ZOOM::Query::CQL2RPN( $string, $Zconn);
+    eval {
+        my $rs = $Zconn->search_pqf("\@attr 1=12 $id");
+        my $n  = $rs->size();
+        if ( $n > 0 ) {
+            $raw = $rs->record(0)->raw();
+        }
+    };
+    if ($@) {
+
+        print "Error ", $@->code(), ": ", $@->message(), "\n";
+    }
+    ###$raw
+    my $record = MARC::Record->new_from_xml($raw);
+    ###$record
+    return ($record);
+}
+
 1;
 __END__
 
@@ -109,3 +151,4 @@ __END__
 Koha Developement team <info@koha.org>
 
 =cut
+ 
