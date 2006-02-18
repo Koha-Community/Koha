@@ -100,7 +100,7 @@ $template->param(isbn => $isbn,
 						title => $title,
 						author => $author,
 						breeding_loop => \@breeding_loop,
-						refresh => ($numberpending eq 0 ? 0 : "search.pl?bibid=$bibid&random=$random"),
+						refresh => ($numberpending eq 0 ? "" : "search.pl?bibid=$bibid&random=$random"),
 						numberpending => $numberpending,
 						oldbiblionumber => $oldbiblio->{'biblionumber'},
 						);
