@@ -17,4 +17,5 @@
 	<a href="/cgi-bin/koha/export/marc.pl">Export</a>
 	<a href="/cgi-bin/koha/import/breeding.pl">Reservoir</a>
 	<a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes</a>
+	<a href="/cgi-bin/koha/admin/viewlog.pl">Log viewer</a>
 </p>
