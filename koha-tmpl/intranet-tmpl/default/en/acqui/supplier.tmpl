@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div id="mainbloc">
+<!--TMPL_IF Name="enter"-->
 	<form action=updatesupplier.pl method="post">
 	
 	<input type="hidden" name="id" value=<!-- TMPL_VAR NAME="id" -->>
@@ -124,5 +125,109 @@
 	</form>
 	</div>
 </div>
-
+<!--TMPL_ELSE-->
+<a href="recieveorder.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition"> Receive Parcel </a>
+<a href="order.pl?supplier=<!--TMPL_VAR Name="name"-->" class="button acquisition"> Manage Orders </a>
+<a href="supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition"> Edit Supplier </a>
+	<h1 class="acquisition">Information for : <!-- TMPL_VAR NAME="name" --></h1>
+	<div id="bloc25">
+		<h2 class="acquisition">COMPANY DETAILS</h2>
+		<p>
+			<label>Company Name</label>
+			<!-- TMPL_VAR NAME="name" -->
+		</p>
+		<p>
+			<label class="label100">Postal Address</label>
+				<!-- TMPL_VAR NAME="postal" -->
+		</p>
+		<p>
+			<label class="label100">Physical Address</label>
+			<!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" -->
+		</p>
+		<p>
+			<label>Phone</label>
+			<!-- TMPL_VAR NAME="phone" -->
+		</p>
+		<p>
+			<label>Fax</label>
+			<!-- TMPL_VAR NAME="fax" -->
+		</p>
+		<p>
+			<label>Website</label>
+			<!-- TMPL_VAR NAME="url" -->
+		</p>
+		
+		<h2 class="acquisition">CONTACT DETAILS</h2>
+		<p>
+			<label>Contact Name</label>
+			<!-- TMPL_VAR NAME="contact" -->
+		</p>
+		<p>
+			<label>Position</label>
+			<!-- TMPL_VAR NAME="contpos" -->
+		</p>
+		<p>
+			<label>Phone</label>
+			<!-- TMPL_VAR NAME="contphone" -->
+		</p>
+		<p>
+			<label>Alternative phone</label>
+			<!-- TMPL_VAR NAME="contaltphone" -->
+		</p>
+		<p>
+			<label>Fax</label>
+			<!-- TMPL_VAR NAME="contfax" -->
+		</p>
+		<p>
+			<label>E-mail</label>
+			<!-- TMPL_VAR NAME="contemail" -->
+		</p>
+		<p>
+			<label>Notes</label>
+			<!-- TMPL_VAR NAME="contnotes" -->
+		</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="acquisition">CURRENT STATUS</h2>
+		<p>
+			<label>Supplier is</label>
+				<!-- TMPL_IF name="active" -->
+					Active
+				<!-- TMPL_ELSE -->
+					Inactive
+				<!-- /TMPL_IF -->
+		</p>
+		<h2 class="acquisition">ORDERING INFORMATION</h2>
+		</p>
+		<p>
+			<label>Publishers and Imprints</label>
+			<!-- TMPL_VAR NAME="specialty" -->
+		</p>
+		<p>
+			<label class="label100">List Prices are</label><!--TMPL_VAR Name="listprice"-->
+		</p>
+		<p>
+			<label class="label100">Invoice Prices are</label><!--TMPL_VAR Name="invoiceprice"-->
+		</p>
+		<p>
+			<label class="label100">GST Registered</label>
+				<!-- TMPL_IF name="gstreg" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">List Item Price Includes GST</label>
+				<!-- TMPL_IF name="listincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Invoice Item Price Includes GST</label>
+				<!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<label class="label100">Discount</label>
+			<!-- TMPL_VAR NAME="discount" --> %
+		</p>
+	<br/>
+	<br/>
+	</div>
+</div>
+<!--/TMPL_IF-->
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
