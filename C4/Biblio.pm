@@ -182,6 +182,78 @@ sub zebra_create {
 	}
 }
 
+=head
+
+z3950_extended_services can handle any interaction with Zebra's extended serices package.
+
+$Zconn contains the server connection object (which is set before calling this s
+ubroutine)
+
+$service type is one of:
+        itemorder,create,drop,commit,update,xmlupdate
+
+$service_options is a hash of key/value pairs. For instance,
+if service_type is 'update', $service_options should contain:
+
+action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
+(recordidOpaque => Opaque Record ID (user supplied)
+
+or
+
+recordidNumber => Record ID number (system number))
+record => the record itself
+
+and maybe:
+
+syntax => the record syntax (transfer syntax)
+databaseName = Database from connection object
+
+=cut
+sub z3950_extended_services {
+
+        my ($Zconn,$serviceType,$serviceOptions,$record);
+
+        # create a new package object
+        my $Zpackage = $Zconn->package();
+
+        # set our options
+        $Zpackage->option(action => $serviceOptions->{'action'});
+
+        if ($serviceOptions->{'databaseName'}) {
+                $Zpackage->option(databaseName => $serviceOptions->{'databaseName'});
+        }
+        if ($serviceOptions->{'recordIdNumber'}) {
+                $Zpackage->option(recordIdNumber => $serviceOptions->{'recordIdNumber'});
+        }
+        if ($serviceOptions->{'recordIdOpaque'}) {
+                $Zpackage->option(recordIdOpaque => $serviceOptions->{'recordIdOpaque'});
+        }
+
+        # this is an ILL request (Zebra doesn't support it)
+        if ($serviceType eq 'itemorder') {
+           $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
+           $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
+           $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
+           $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
+        }
+
+        if ($record) {
+           $Zpackage->option(record => $record);
+           if ($serviceOptions->{'syntax'}) {
+              $Zpackage->option(syntax => $serviceOptions->{'syntax'});
+           }
+        }
+
+        # send the request, handle any exception encountered
+        eval {  $Zpackage->send($serviceType) };
+        if ($@ && $@->isa("ZOOM::Exception")) {
+                print "Oops!  ", $@->message(), "\n";
+                return $@->code();
+        }
+        # free up package resources
+        $Zpackage->destroy();
+}
+
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
 
 =over 4
@@ -2943,6 +3015,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.143  2006/02/20 13:26:11  kados
+# A new subroutine to handle Z39.50 extended services. You pass it a
+# connection object, service type, service options, and a record, and
+# it performs the service and handles any exception found.
+#
 # Revision 1.142  2006/02/16 20:49:56  kados
 # destroy a connection after we're done -- we really should just have one
 # connection object and not destroy it until the whole transaction is
