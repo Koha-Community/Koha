@@ -210,8 +210,7 @@ databaseName = Database from connection object
 
 =cut
 sub z3950_extended_services {
-
-        my ($Zconn,$serviceType,$serviceOptions,$record);
+        my ($Zconn,$serviceType,$serviceOptions,$record) = @_;
 
         # create a new package object
         my $Zpackage = $Zconn->package();
@@ -3015,6 +3014,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.144  2006/02/20 14:22:38  kados
+# typo
+#
 # Revision 1.143  2006/02/20 13:26:11  kados
 # A new subroutine to handle Z39.50 extended services. You pass it a
 # connection object, service type, service options, and a record, and
