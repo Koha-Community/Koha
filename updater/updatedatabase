@@ -810,6 +810,19 @@ my %tabledata = (
 	    type		=> 'Choice',
 	    options		=> 'normal|marc|isbd'
         },
+
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'LabeledMARCView',
+            value               => 'normal',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1,
+                                     'options' => 1},
+            explanation         => 'Define how a MARC record will display',
+            type                => 'Choice',
+            options             => 'standard|economical'
+        },
+
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacstylesheet',
@@ -1659,6 +1672,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.24  2006/02/21 18:40:08  kados
+# Adding LabeledMARCView systempref to choose whether tags are displayed
+# in standard or economical format. Later, this can be used to display
+# 'strict' format with no labels for insane librarians who want that.
+#
 # Revision 1.100.2.23  2006/02/07 15:33:35  hdl
 # Adding a new system preference : serialsadditem
 #
