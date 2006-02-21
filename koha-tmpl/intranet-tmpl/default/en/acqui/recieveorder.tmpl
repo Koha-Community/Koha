@@ -53,7 +53,7 @@ Results per page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resul
 <!-- TMPL_LOOP NAME="searchresults" -->
 	<tr>
 			<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-				<a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" ESCAPE=URL -->"<!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="Code" ESCAPE=URL --><!--/TMPL_IF-->>
+				<a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" ESCAPE=URL --><!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="code" ESCAPE=URL --><!--/TMPL_IF-->">
 					<!-- TMPL_VAR NAME="number" -->
 				</a>
 			</td>
