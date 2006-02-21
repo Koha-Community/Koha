@@ -70,5 +70,6 @@ $template->param(
 	CGIsupplier => $CGIsupplier,
 	lateorders => \@lateorders,
 	total=>$total,
+	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 	);
 output_html_with_http_headers $query, $cookie, $template->output;
