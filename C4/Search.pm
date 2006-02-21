@@ -100,6 +100,7 @@ sub search {
         my $record = MARC::Record->new_from_xml($raw);
         my $line = MARCmarc2koha( $dbh, $record );
         push @results, $line;
+#	 push @results,$raw;
 	$i++;
     }
     return ( \@results );
@@ -108,7 +109,7 @@ sub search {
 
 sub get_record {
 
-    # pass in an id (localnumber) and get back a MARC record
+    # pass in an id (biblionumber at this stage) and get back a MARC record
     my ($id) = @_;
     my $q;
     my $Zconn;
@@ -120,12 +121,13 @@ sub get_record {
     $Zconn->option( cqlfile => C4::Context->config("intranetdir")
           . "/zebra/pqf.properties" );
     $Zconn->option( preferredRecordSyntax => "xml" );
-    my $string = "id=$id";
-    warn $id;
+    my $string = "identifier=$id";
+    warn $string;
 
-    #    $q = new ZOOM::Query::CQL2RPN( $string, $Zconn);
+        $q = new ZOOM::Query::CQL2RPN( $string, $Zconn);
     eval {
-        my $rs = $Zconn->search_pqf("\@attr 1=12 $id");
+#        my $rs = $Zconn->search_pqf("\@attr 1=12 $id");
+	my $rs = $Zconn->search($q);
         my $n  = $rs->size();
         if ( $n > 0 ) {
             $raw = $rs->record(0)->raw();
