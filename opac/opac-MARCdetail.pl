@@ -63,13 +63,15 @@ my $query=new CGI;
 my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
-my $bibid = $query->param('bibid');
-$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-my $tagslib = &MARCgettagslib($dbh,0,$itemtype);
+# my $bibid = $query->param('bibid');
+# $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
+# $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
+# my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+my $framework = "";
+my $itemtype = "";
+my $tagslib = &MARCgettagslib($dbh,0,$framework);
 
-my $record =MARCgetbiblio($dbh,$bibid);
+my $record = get_record($biblionumber);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "opac-MARCdetail.tmpl",
@@ -147,11 +149,11 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
-			if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
-				$tag_data{tag}="";
-			} else {
+	#		if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
+	#			$tag_data{tag}="";
+	#		} else {
 				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
-			}
+	#		}
 			my @tmp = @subfields_data;
 			$tag_data{subfield} = \@tmp;
 			push (@loop_data, \%tag_data);
@@ -210,8 +212,7 @@ foreach my $subfield_code (keys(%witness)) {
 
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						biblionumber => $biblionumber,
-						bibid => $bibid,
+#						bibid => $bibid,
 						biblionumber => $biblionumber);
 output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -220,12 +221,12 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchdetail($value)->{branchname};
+#       return getbranchdetail($value)->{branchname};
     }
 
    #---- itemtypes
    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-       return ItemType($value);
+#       return ItemType($value);
     }
 
    #---- "true" authorized value
