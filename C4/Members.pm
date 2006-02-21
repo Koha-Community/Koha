@@ -144,13 +144,13 @@ sub newmember {
 	my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 	firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
 	altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-	initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,sort1,sort2) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+	initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,debarred,gonenoaddress,lost,sort1,sort2) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
 	'$data{'sex'}','$data{'ethnotes'}','$data{'streetaddress'}','$data{'faxnumber'}',
 	'$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
 	'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 	'$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
 	'$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-	'$data{'ethnicity'}','$data{'physstreet'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'sort1'}','$data{'sort2'}')";
+	'$data{'ethnicity'}','$data{'physstreet'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'debarred'}','$data{'gonenoaddress'}','$data{'lost'}','$data{'sort1'}','$data{'sort2'}')";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
