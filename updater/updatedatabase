@@ -814,7 +814,7 @@ my %tabledata = (
 	{
             uniquefieldrequired => 'variable',
             variable            => 'LabeledMARCView',
-            value               => 'normal',
+            value               => 'standard',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1,
                                      'options' => 1},
@@ -1672,6 +1672,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.25  2006/02/21 20:00:13  kados
+# setting default value for LabelMARCView to 'standard'
+# ----------------------------------------------------------------------
+#
 # Revision 1.100.2.24  2006/02/21 18:40:08  kados
 # Adding LabeledMARCView systempref to choose whether tags are displayed
 # in standard or economical format. Later, this can be used to display
