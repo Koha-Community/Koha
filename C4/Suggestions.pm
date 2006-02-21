@@ -111,9 +111,11 @@ sub searchsuggestion  {
 	}
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
-		unless ($userenv->{flags} == 1){
+		if ($userenv) {
+		  unless ($userenv->{flags} == 1){
 			push @sql_params,$userenv->{branch};
 			$query .= " and (U1.branchcode = ? or U1.branchcode ='')";
+		  }
 		}
 	}
 	if ($suggestedbyme) {
