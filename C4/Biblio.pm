@@ -30,7 +30,8 @@ use ZOOM;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+                shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 @ISA = qw(Exporter);
 
@@ -156,7 +157,7 @@ sub zebra_create {
 # 	unlink($filename);
         my $Zconn;
         my $xmlrecord;
-#	warn "zebra_create : $biblionumber =".$record->as_formatted;
+	warn "zebra_create : $biblionumber =".$record->as_formatted;
         eval {
 	    $xmlrecord=$record->as_xml();
 	    };
@@ -237,7 +238,8 @@ sub z3950_extended_services {
         }
 
         if ($record) {
-           $Zpackage->option(record => $record);
+	   my $xmlrecord = marc2xml($record);
+           $Zpackage->option(record => $xmlrecord);
            if ($serviceOptions->{'syntax'}) {
               $Zpackage->option(syntax => $serviceOptions->{'syntax'});
            }
@@ -252,6 +254,30 @@ sub z3950_extended_services {
         # free up package resources
         $Zpackage->destroy();
 }
+
+sub marc2xml {
+	my ($record) = @_;
+	my $xmlrecord;
+	eval {
+		$xmlrecord=$record->as_xml();
+	};
+	if ($@){
+		warn "ERROR badly formatted marc record";
+		warn "Skipping record";
+	}
+	return $xmlrecord;
+}
+sub set_service_options {
+	my ($option) = @_;
+	my $serviceOptions;
+	if ($option eq 'update') {
+		$serviceOptions->{ 'action' } = 'specialUpdate';
+		$serviceOptions->{ 'syntax' } = 'xml'; #zebra doesn't support others
+	}
+
+	return $serviceOptions;
+}
+
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
 
@@ -1223,7 +1249,11 @@ sub REALmodbiblioitem {
     				$biblioitem->{bnotes},			$biblioitem->{size},		$biblioitem->{place},	$biblioitem->{marc},
 					$biblioitem->{marcxml},			$biblioitem->{biblioitemnumber});
 	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
-	zebra_create($biblioitem->{biblionumber}, $record);
+
+	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
+	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+
+
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
 }    # sub modbibitem
 
@@ -1287,7 +1317,9 @@ sub REALnewbiblioitem {
 		$biblioitem->{marcxml},
 	);
 	$dbh->do("unlock tables");
-	zebra_create($biblioitem->{biblionumber}, $record);
+	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
+	 z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	#zebra_create($biblioitem->{biblionumber}, $record);
 	return ($biblioitemnumber);
 }
 
@@ -1431,7 +1463,9 @@ sub REALnewitems {
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
-	zebra_create($item->{biblionumber},$record);
+    	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
+	 z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	 #zebra_create($item->{biblionumber},$record);
 	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
@@ -1518,7 +1552,9 @@ sub REALmoditem {
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
 	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
-	zebra_create($item->biblionumber,$record);
+	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
+	 z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	 #zebra_create($item->biblionumber,$record);
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
@@ -3014,6 +3050,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.145  2006/02/22 01:02:39  kados
+# Replacing all calls to zebra_update with calls to
+# z3950_extended_services. More work coming, but it's
+# working now.
+#
 # Revision 1.144  2006/02/20 14:22:38  kados
 # typo
 #
