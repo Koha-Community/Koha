@@ -16,11 +16,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id$
-# Revision History:
-# 2004-08-11 A. Tarallo: Added the function db_escheme2dbi, tested my bugfixes,
-# further  details about them in the code.
-# 2004-11-23 A. Tarallo, E. Silva: Bugfixes for running in a mod_perl environment.
-# Clean up of previous bugfixes, better documentation of what was done. 
 
 package C4::Context;
 use strict;
@@ -80,6 +75,7 @@ environment variable to the pathname of a configuration file to use.
 =over 2
 
 =cut
+
 #'
 # In addition to what is said in the POD above, a Context object is a
 # reference-to-hash with the following fields:
@@ -93,6 +89,8 @@ environment variable to the pathname of a configuration file to use.
 # dbh_stack
 #	Used by &set_dbh and &restore_dbh to hold other database
 #	handles for this context.
+# Zconn
+# 	A connection object for the Zebra server
 
 use constant CONFIG_FNAME => "/etc/koha.conf";
 				# Default config file, if none is specified
@@ -203,6 +201,7 @@ C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
 
 =cut
+
 #'
 # Revision History:
 # 2004-08-10 A. Tarallo: Added check if the conf file is not empty
@@ -230,6 +229,7 @@ sub new
 	return undef if !defined($self->{"config"});
 
 	$self->{"dbh"} = undef;		# Database handle
+	$self->{"Zconn"} = undef;	# Zebra Connection
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
 	$self->{"userenv"} = undef;		# User env
@@ -255,6 +255,7 @@ sets the context to C<$context>, which will be used in future
 operations. To restore the previous context, use C<&restore_context>.
 
 =cut
+
 #'
 sub set_context
 {
@@ -293,6 +294,7 @@ sub set_context
 Restores the context set by C<&set_context>.
 
 =cut
+
 #'
 sub restore_context
 {
@@ -325,6 +327,7 @@ method names. If there is a configuration variable called "new", then
 C<C4::Config-E<gt>new> will not return it.
 
 =cut
+
 #'
 sub config
 {
@@ -350,6 +353,7 @@ systempreferences table of the Koha database, and returns it. If the
 variable is not set, or in case of error, returns the undefined value.
 
 =cut
+
 #'
 # FIXME - The preferences aren't likely to change over the lifetime of
 # the script (and things might break if they did change), so perhaps
@@ -397,6 +401,56 @@ sub AUTOLOAD
 	return $self->config($AUTOLOAD);
 }
 
+=item Zconn
+
+$Zconn = C4::Context->Zconn
+
+Returns a connection to the Zebra database for the current
+context. If no connection has yet been made, this method 
+creates one and connects.
+
+=cut
+
+sub Zconn {
+        my $self = shift;
+        my $rs;
+	my $Zconn;
+        if (defined($context->{"Zconn"})) {
+	    $Zconn = $context->{"Zconn"};
+            $rs=$Zconn->search_pqf('@attr 1=4 mineral');
+	    if ($Zconn->errcode() != 0) {
+		$context->{"Zconn"} = &new_Zconn();
+		return $context->{"Zconn"};
+	    }
+	    return $context->{"Zconn"};
+	} else { 
+		$context->{"Zconn"} = &new_Zconn();
+		return $context->{"Zconn"};
+        }
+}
+
+=item new_Zconn
+
+Internal helper function. creates a new database connection from
+the data given in the current context and returns it.
+
+=cut
+
+sub new_Zconn {
+	use ZOOM;
+	my $Zconn;
+	eval {
+		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
+	};
+	if ($@){
+		warn "Error ", $@->code(), ": ", $@->message(), "\n";
+		die "Fatal error, cant connect to z3950 server";
+	}
+	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
+	$Zconn->option(preferredRecordSyntax => "xml");
+	return $Zconn;
+}
+
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
@@ -430,6 +484,7 @@ times. If you need a second database handle, use C<&new_dbh> and
 possibly C<&set_dbh>.
 
 =cut
+
 #'
 sub dbh
 {
@@ -459,6 +514,7 @@ convenience function; the point is that it knows which database to
 connect to so that the caller doesn't have to know.
 
 =cut
+
 #'
 sub new_dbh
 {
@@ -483,6 +539,7 @@ the current database handle to C<$my_dbh>.
 C<$my_dbh> is assumed to be a good database handle.
 
 =cut
+
 #'
 sub set_dbh
 {
@@ -505,6 +562,7 @@ Restores the database handle saved by an earlier call to
 C<C4::Context-E<gt>set_dbh>.
 
 =cut
+
 #'
 sub restore_dbh
 {
@@ -533,6 +591,7 @@ This hash is cached for future use: if you call
 C<C4::Context-E<gt>marcfromkohafield> twice, you will get the same hash without real DB access
 
 =cut
+
 #'
 sub marcfromkohafield
 {
@@ -573,6 +632,7 @@ This hash is cached for future use: if you call
 C<C4::Context-E<gt>stopwords> twice, you will get the same hash without real DB access
 
 =cut
+
 #'
 sub stopwords
 {
@@ -616,6 +676,7 @@ C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB ac
 set_userenv is called in Auth.pm
 
 =cut
+
 #'
 sub userenv
 {
@@ -668,6 +729,7 @@ C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB ac
 _new_userenv is called in Auth.pm
 
 =cut
+
 #'
 sub _new_userenv
 {
@@ -717,3 +779,18 @@ DBI(3)
 Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
+# $Log$
+# Revision 1.30  2006/02/22 00:56:59  kados
+# First go at a connection object for Zebra. You can now get a
+# connection object by doing:
+#
+# my $Zconn = C4::Context->Zconn;
+#
+# My initial tests indicate that as soon as your funcion ends
+# (ie, when you're done doing something) the connection will be
+# closed automatically. There may be some other way to make the
+# connection more stateful, I'm not sure...
+#
+# Local Variables:
+# tab-width: 4
+# End:
