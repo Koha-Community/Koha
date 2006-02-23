@@ -335,7 +335,7 @@ sub catalogsearch {
 			push @result,$bibid;
 		}
 	}
-if (C4::Context->preference("sortbynonfilingchars")==1) {
+if (C4::Context->preference("sortbynonfiling")==1) {
 #~~#~~# next part added by SH Modified by JF
 # This code resorts the biblio.title results eliminating the
 # marc non-filing chars
