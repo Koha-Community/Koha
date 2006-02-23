@@ -681,6 +681,15 @@ my %tabledata = (
             explanation         => 'Turn on MARC support',
 	    type		=> 'YesNo'
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'sortbynonfiling',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1 },
+            value               => 'no',
+            explanation         => 'Sort search results by MARC nonfiling characters',
+            type                => 'YesNo'
+        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'marcflavour',
@@ -1672,6 +1681,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.26  2006/02/23 03:19:48  kados
+# Adds the 'sortbynonfiling' systempref. With this enabled, Koha will
+# correctly sort title searches according to the nonfiling characters
+# in the MARC records.
+#
 # Revision 1.100.2.25  2006/02/21 20:00:13  kados
 # setting default value for LabelMARCView to 'standard'
 # ----------------------------------------------------------------------
