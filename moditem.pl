@@ -40,7 +40,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 
 my $input = new CGI;
-my $submit=$input->param('delete.x');
+my $submit=$input->param('delete.x') || $input->param('delete');
 my $itemnum=$input->param('item');
 my $bibitemnum=$input->param('bibitem');
 if ($submit ne ''){
