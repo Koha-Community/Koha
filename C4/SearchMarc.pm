@@ -335,7 +335,68 @@ sub catalogsearch {
 			push @result,$bibid;
 		}
 	}
+if (C4::Context->preference("sortbynonfilingchars")==1) {
+#~~#~~# next part added by SH Modified by JF
+# This code resorts the biblio.title results eliminating the
+# marc non-filing chars
+#this is a big problem perf wise
+#
+# A better way is to create a new column in marc_word called
+# subfield_string.  it's made without non-filing chars and you
+# sort by it ...
+# or maybe you just quer marc_subfield_table in the origiinal query.
+#
+#
+#
+#
+#
+        if ($orderby eq "biblio.title") {    #don't sort by title if another orderby is specified
+                my $msth = $dbh->prepare("SELECT tagfield, tagsubfield FROM marc_subfield_structure WHERE kohafield='biblio.title'");
+		$msth->execute();    #  get MARC tag and subfield that is mapped to biblio.title
+                my $tagdata = $msth->fetchrow_hashref;
+                my $tag = $tagdata->{tagfield};
+                my $subfieldcode = $tagdata->{tagsubfield};
+                $msth->finish;
 
+                my $tsth = $dbh->prepare("SELECT title, tag_indicator FROM marc_biblio, marc_subfield_table, biblio
+                                                         WHERE marc_biblio.bibid = ?
+                                                         AND marc_subfield_table.bibid=marc_biblio.bibid
+                                                         AND biblio.biblionumber=marc_biblio.biblionumber
+                                                         AND tag=? and subfieldcode=?");
+                my %titles = ();    #to hold title data for sorting
+                my $sorttitle;
+                my $bibidno;
+                my @resultnew = ();    #clear previous list of bibids
+
+                foreach my $bibidno (@result) {
+                        $tsth->execute($bibidno,$tag,$subfieldcode);
+                        my $titledat = $tsth->fetchrow_hashref;
+                        $sorttitle = lc($titledat->{title});
+                        #warn "Here's the sorttitle beforehand:".$sorttitle;
+                        if (length($titledat->{tag_indicator})==2) {
+                                my $filechar=substr($titledat->{tag_indicator},1,1);
+                                $sorttitle = substr($sorttitle,$filechar,-1,"");  #remove nonfiling characters
+                        #       warn "Here it is afterwards:".$sorttitle;
+                        }
+                        $titles{$bibidno} = $sorttitle; #} = $bibidno;
+#                       push @resultnew, $titles{$sorttitle};
+# sorttitle is key ... biblionumber is value
+# but it needs to be the other way around
+                }
+
+                $tsth->finish;
+                #while ( my ($k,$v) = each %titles ) { warn "$k => $v\n"; }
+
+
+                foreach my $bibses (sort {$titles{$a} cmp $titles{$b}} (keys(%titles))) {
+                        push @resultnew, $bibses;
+                }
+                #@resultnew = sort { $titles{$a} <=> $titles{$b} } keys %titles;
+                @result = ();
+                @result = @resultnew;
+        }
+#~~#~~#  above added by SH
+}    
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
