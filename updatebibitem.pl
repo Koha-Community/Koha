@@ -34,6 +34,7 @@ my $bibnum          = checkinp($input->param('bibnum'));
 my $itemtype        = checkinp($input->param('Item'));
 my $url             = checkinp($input->param('url'));
 my $isbn            = checkinp($input->param('ISBN'));
+my $issn            = checkinp($input->param('ISSN'));
 my $publishercode   = checkinp($input->param('Publisher'));
 my $publicationdate = checkinp($input->param('Publication'));
 my $class           = checkinp($input->param('Class'));
@@ -112,6 +113,7 @@ if ($existing eq 'YES'){
 	  itemtype        => $itemtype?$itemtype:"",
 	  url             => $url?$url:"",
 	  isbn            => $isbn?$isbn:"",
+	  issn            => $issn?$issn:"",				       
 	  publishercode   => $publishercode?$publishercode:"",
 	  publicationyear => $publicationdate?$publicationdate:"",
 	  volumeddesc     => $volumeddesc?$volumeddesc:"",
@@ -145,6 +147,7 @@ if ($existing eq 'YES'){
 	  itemtype         => $itemtype?$itemtype:"",
 	  url              => $url?$url:"",
 	  isbn             => $isbn?$isbn:"",
+	  issn             => $issn?$issn:"",
 	  publishercode    => $publishercode?$publishercode:"",
 	  publicationyear  => $publicationdate?$publicationdate:"",
 	  classification   => $classification?$classification:"",
@@ -177,6 +180,7 @@ if ($existing eq 'YES'){
 	 itemtype         => $itemtype?$itemtype:"",
 	 url              => $url?$url:"",
 	 isbn             => $isbn?$isbn:"",
+	 issn             => $issn?$issn:"",
 	 publishercode    => $publishercode?$publishercode:"",
          publicationyear  => $publicationdate?$publicationdate:"",
          classification   => $classification?$classification:"",
