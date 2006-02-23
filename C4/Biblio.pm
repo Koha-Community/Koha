@@ -428,7 +428,8 @@ sub MARCaddsubfield {
     if ( not($subfieldcode) ) {
         $subfieldcode = ' ' unless $subfieldcode eq '0';
     }
-    my @subfieldvalues = split /\||#/, $subfieldvalues;
+    my @subfieldvalues; # = split /\||#/, $subfieldvalues;
+    push @subfieldvalues,$subfieldvalues;
     foreach my $subfieldvalue (@subfieldvalues) {
         if ( length($subfieldvalue) > 255 ) {
             $dbh->do(
@@ -2921,6 +2922,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.31  2006/02/23 08:39:11  kados
+# Fix for splitting up fixed fields containing | in them causing
+# incorrect storage of fixed fields in Koha DB.
+#
 # Revision 1.115.2.30  2006/02/20 09:18:57  thd
 # Reverse array filled with elements from repeated subfields from first to last
 # to avoid last to first concatenation of elements in Koha DB.
