@@ -75,7 +75,7 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/mediatype.tmpl",
+    = get_template_and_user({template_name => "admin/mediatype.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

@@ -36,7 +36,7 @@ my $op=$input->param('op');
 my $script_name = 'koha2marclinks.pl';
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/koha2marclinks.tmpl",
+    = get_template_and_user({template_name => "admin/koha2marclinks.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

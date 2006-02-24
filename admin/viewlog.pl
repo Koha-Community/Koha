@@ -42,7 +42,7 @@ plugin that shows a stats on borrowers
 
 my $input = new CGI;
 my $do_it=$input->param('do_it');
-my $fullreportname = "parameters/viewlog.tmpl";
+my $fullreportname = "admin/viewlog.tmpl";
 my $modulename = $input->param("module");
 my $userfilter = $input->param("user");
 my $actionfilter = $input->param("action");

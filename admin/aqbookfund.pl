@@ -88,7 +88,7 @@ my $op = $input->param('op') || '';
 $searchfield=~ s/\,//g;
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/aqbookfund.tmpl",
+    = get_template_and_user({template_name => "admin/aqbookfund.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

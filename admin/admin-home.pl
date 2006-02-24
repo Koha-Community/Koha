@@ -10,7 +10,7 @@ use HTML::Template;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/admin-home.tmpl",
+    = get_template_and_user({template_name => "admin/admin-home.tmpl",
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,

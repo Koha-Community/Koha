@@ -57,7 +57,7 @@ my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/marc_subfields_structure.tmpl",
+    = get_template_and_user({template_name => "admin/marc_subfields_structure.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

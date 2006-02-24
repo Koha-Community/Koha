@@ -57,7 +57,7 @@ my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
 my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "parameters/z3950servers.tmpl",
+    = get_template_and_user({template_name => "admin/z3950servers.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,

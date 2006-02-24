@@ -39,7 +39,7 @@ my $op = $input->param('op');
 # my $flagsrequired;
 # $flagsrequired->{circulation}=1;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/issuingrules.tmpl",
+    = get_template_and_user({template_name => "admin/issuingrules.tmpl",
                              query => $input,
                              type => "intranet",
                              authnotrequired => 0,

@@ -45,7 +45,7 @@ my $dbh = C4::Context->dbh;
 my $authoritysep = C4::Context->preference("authoritysep");
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/thesaurus.tmpl",
+    = get_template_and_user({template_name => "admin/thesaurus.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

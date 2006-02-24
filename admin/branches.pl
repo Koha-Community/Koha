@@ -69,7 +69,7 @@ my $categorycode = $input->param('categorycode');
 my $op = $input->param('op') || '';
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/branches.tmpl",
+    = get_template_and_user({template_name => "admin/branches.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

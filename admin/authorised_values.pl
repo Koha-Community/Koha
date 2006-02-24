@@ -55,7 +55,7 @@ my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/authorised_values.tmpl",
+    = get_template_and_user({template_name => "admin/authorised_values.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

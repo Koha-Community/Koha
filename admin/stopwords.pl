@@ -76,7 +76,7 @@ my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
 my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "parameters/stopwords.tmpl",
+    = get_template_and_user({template_name => "admin/stopwords.tmpl",
                             query => $input,
                             type => "intranet",
  			    flagsrequired => {parameters => 1, management => 1},
