@@ -1,0 +1,140 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: MARC Check: 
+<!-- TMPL_IF name="total" --><!-- TMPL_VAR name="total" --> errors found<!-- TMPL_ELSE -->Configuration OK!<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<h1>MARC Checks</h1>
+<table>
+	<tr>
+		<th>Test</th>
+		<th>Result</th>
+	</tr>
+<!-- -->
+<!-- TMPL_IF name="itemnum" -->
+	<tr>
+		<td>itemnum</td>
+		<td><ul><li>The field itemnum MUST be mapped </li>
+			<li>The correspounding subfield MUST be in with -1 (ignore) tab</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>itemnum : the field itemnumber is mapped to a field in tab -1</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="itemfields" -->
+	<tr>
+		<td>item fields</td>
+		<td>ALL items fields MUST :<br />
+			<ul><li>be mapped to the same tag,</li>
+			<li>and they must all be in the 10 (items) tab</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>All item fields are in the same tag and in item tab</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+	<!-- TMPL_IF NAME="itemtags" -->
+		<tr>
+			<td>Item tag</td>
+			<td>There is more than 1 MARC tag related to items tab (10) : <!-- TMPL_VAR name="itemtags" --></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Only 1 MARC tag mapped to items</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!--  -->
+<!-- TMPL_IF name="itemtype" -->
+	<tr>
+		<td>itemtype NOT mapped</td>
+		<td>the biblioitems.itemtype field MUST :<br />
+			<ul><li>be mapped to a MARC subfield, </li>
+			<li>the correspounding subfield MUST have authorised_value=itemtype</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>biblioitems.itemtype defined</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="branch" -->
+	<tr>
+		<td>homebranch NOT mapped</td>
+		<td>the items.homebranch field MUST :<br />
+			<ul><li>be mapped to a MARC subfield,</li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>homebranch defined</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="holdingbranch" -->
+	<tr>
+		<td>holdingbranch NOT mapped</td>
+		<td>the items.holdingbranch field MUST :<br />
+			<ul><li>be mapped to a MARC subfield, </li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>holdingbranch defined</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="biblionumber" -->
+	<tr>
+		<td>biblio and biblionumber</td>
+		<td>The biblio.biblionumber and biblioitems.biblioitemnumber fields MUST :
+			<ul><li>be mapped to a MARC subfield,</li>
+			<li>be in the SAME tag (for example : 090$a and 090$b)</li>
+			<li>be in tab -1</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td>biblionumber and biblioitemnumber mapped correctly</td>
+	</tr>
+<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="frameworknull" -->
+		<tr>
+			<td>framework values</td>
+			<td>there is a null value in a frameworkcode. Check the following tables<br/>
+				<li>select * from marc_subfield_structure where frameworkcode is NULL</li>
+				<li>select * from marc_tag_structure where frameworkcode is NULL</li>
+				<li>select * from marc_biblio where frameworkcode is NULL</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>no NULL value in frameworkcode</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="total" -->
+	<tr>
+		<td>TOTAL</td>
+		<td>You have <!-- TMPL_VAR name="total" --> error(s) in your MARC configuration. Please fix them before using Koha</td>
+	</tr>
+</table>
+<!-- TMPL_ELSE -->
+	</table>
+		<p>Configuration OK, you don't have errors in your MARC parameters table</p>
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

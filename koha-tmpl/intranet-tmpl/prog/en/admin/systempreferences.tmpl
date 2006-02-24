@@ -1,0 +1,245 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
+		}
+		//
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		//
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
+			return false;
+		}
+		return true;
+		}
+		//
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		//
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.variable.value.length==0) {
+				_alertString += "\n- " + _("variable missing");
+			}
+			if (f.value.value.length==0) {
+				_alertString += "\n- " + _("value missing");
+			}
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Form not submitted because of the following problem(s)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
+		}
+		</script>
+
+<!-- TMPL_IF NAME="add_form" -->
+	
+		<!-- TMPL_IF NAME="modify" -->
+			<h1>Modify a system preference</h1>
+		<!-- TMPL_ELSE -->
+			<h1>Add a system preference</h1>
+		<!-- /TMPL_IF -->
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		
+		
+		<table>
+			<tr><td><label for="explanation">Explanation: </label></td><td><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></td></tr>
+			<tr><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label></td><td><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td>
+			<!-- TMPL_ELSE --><td><label for="variable">Variable</label></td><td><input type="text" name="variable" id="variable" size="60" /></td><!-- /TMPL_IF --></tr>
+			<tr><td><label for="value">Value</label></td><td><!-- TMPL_IF NAME="type-free" -->
+					<input type="text" id="value" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->" />
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-textarea" -->
+					<textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-choice" -->
+					<select name="value" id="value">
+						<!-- TMPL_LOOP NAME="options" -->
+							<option value="<!-- TMPL_VAR NAME="option" -->"<!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-yesno" -->
+					<!-- TMPL_IF NAME="value-yes" -->
+					<input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->Yes
+				<!-- TMPL_IF NAME="value-no" -->	
+					<input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->No<!-- /TMPL_IF -->
+				</td></tr>
+		</table>
+		<p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <input type="button"  value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
+		
+<h3>Koha internal</h3>		
+		Note: you should have no reasons to modify the following default values
+		<table>
+		<tr><td><label for="preftype">Variable type:</label></td><td><input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"><span class="formfield-notes"> (Choice, YesNo, Integer, Textarea, Float, Themes, or Languages)</td></tr>
+		<tr><td><label for="prefoptions">Variable options:</label></td><td><input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" />(a choice list for Choice (separated by |) or cols|rows for Texarea)</td></tr>
+		</table>
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	
+
+		<h3>Data recorded</h3>
+		
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="OK" />
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	
+	<table>
+		<caption>Confirm Deletion of <!-- TMPL_VAR NAME="searchfield" -->?</caption>
+		<tr>
+			<th>Variable Name:</th>
+			<td><!-- TMPL_VAR NAME="searchfield" --></td>
+		</tr>
+		<tr><th>Value: </th><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr></table>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+		<input type="submit"  value="Yes, Delete"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
+	
+	
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	
+		<h3>Data deleted</h3>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="Back to System Preferences" />
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+	<h1>System preferences admin</h1>
+		<ul>
+			<li>
+				<!--TMPL_IF Name="Admin"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="here">Admin
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Acquisitions"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="here">Acquisitions
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Authorities"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="here">Authorities
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Catalogue"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="here">Catalogue
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Circulation"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="here">Circulation
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Members"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="here">Members
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Members
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="OPAC"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="here">OPAC
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+			<li>
+				<!--TMPL_IF Name="Others"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="here">Others
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Others
+					</a>
+				<!--/TMPL_IF-->
+			</li>
+		</ul>
+
+	<!-- TMPL_VAR NAME="searchfield" -->
+	<table>
+	<tr>
+		<th>Variable</th>
+		<th>Value</th>
+		<th colspan="3">Explanation</th>
+	</tr>
+	<!-- TMPL_LOOP NAME="loop" -->
+	<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+		<td><!-- TMPL_VAR NAME="variable" --></td>
+		<td><!-- TMPL_VAR NAME="value" --></td>
+		<td><!-- TMPL_VAR NAME="explanation" --></td>
+		<td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	</form>
+	
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form" />
+		<input type="submit" value="Add a System Preference" />
+	</form>
+	
+	<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

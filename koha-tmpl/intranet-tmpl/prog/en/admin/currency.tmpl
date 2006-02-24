@@ -1,0 +1,193 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<!-- TMPL_IF NAME=add_form -->
+        <script>
+        //
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+   return false;
+                }
+                return true;
+        }
+        //
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        //
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull=="0" && v.value=="") {
+                return false;
+        }
+        return true;
+        }
+        //
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        //
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.currency.value.length==0) {
+                        _alertString += "- Currency name missing\\n";
+                }
+                if (f.rate.value.length==0) {
+                        _alertString += "- Rate missing\\n";
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2 = "Form not submitted because of the following problem(s)\\n";
+                        alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+                        alertString2 += _alertString;
+                        alert(alertString2);
+                }
+        }
+        </SCRIPT>
+
+        <form action="<!-- TMPL_VAR NAME=script_name -->" name="Aform" method="post">
+        <input type="hidden" name="op" value="add_validate" />
+
+	<table>
+	<caption><!-- TMPL_IF NAME=searchfield -->
+		Modify currency
+	<!-- TMPL_ELSE -->
+		Add currency
+	<!-- /TMPL_IF --></caption>
+	<!-- TMPL_IF NAME="searchfield" -->
+		<tr>
+			<th>Currency</th>
+			<td>
+				<input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
+			</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<th>Currency</th>
+			<td>
+				<input type="text" name="currency" size="50" maxlength="50" onblur="toUC(this);" />
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+
+        	<tr>
+			<th>Rate</th	>
+			<td>
+				<input type="text" name="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
+			</td>
+		</tr>
+        </table>
+		
+		<input type="button" value="Update" onClick="Check(this.form)" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
+        </form>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="add_validate" -->
+<h3>Data Recorded</h3>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="OK" />
+        </form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<div class="table details">	<table><caption>Confirm Deletion of Currency <!-- TMPL_VAR NAME="searchfield" --></caption>
+
+		<tr>
+			<th>Currency</th>
+			<td><!-- TMPL_VAR NAME="searchfield" --></td>
+		</tr>
+
+
+        
+        	<tr>
+			<th>Rate</th>
+			<td><!-- TMPL_VAR NAME="rate" --></td>
+		</tr>
+		</table>
+		<!-- TMPL_IF NAME="totalgtzero" -->
+
+				<span class="alert">This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span>
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="OK" />
+				</form>
+		<!-- TMPL_ELSE -->
+     	<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed" />
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+				<input type="submit" value="Delete this Currency" />
+				</form>
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="Do Not Delete" />
+				</form>
+		<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirmed" -->
+<h3>Currency Deleted</h3>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="OK" />
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+
+<h2>Currencies Management</h2>
+	<!-- TMPL_IF NAME="searchfield" -->
+		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
+	<!-- /TMPL_IF -->	
+        <form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
+                <input type="text" name="description" value="<!-- TMPL_VAR NAME=searchfield -->" />
+                <input type="submit" name="Search" value="Search" />
+        </form>	
+	<div class="table"><table>
+		<tr>
+			<th>Currency</th>
+			<th>Rate</th>
+			<th colspan="2">&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="currency" --></td>
+			<td><!-- TMPL_VAR NAME="rate" --></td>
+			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Edit" /></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Delete" /></form></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
+        <input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Currency" />
+        </form>
+
+	
+	<!-- TMPL_IF NAME="offsetgtzero" -->
+		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Prev</a>
+	<!-- /TMPL_IF -->
+
+
+	<!-- TMPL_IF NAME="ltcount" -->
+		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>	
+	<!-- /TMPL_iF -->
+
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
