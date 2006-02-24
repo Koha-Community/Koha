@@ -1,0 +1,83 @@
+<!-- TMPL_INCLUDE NAME="doc-head-barcodes.inc" -->
+
+	<h1>Printer Configuration</h1>
+	<h3>Set printer configuration corresponding to your environment</h3>
+	<ul>
+		<li>Set width and height of the label that you are going to work with.</li>
+		<li>Set your system's default DPI.</li>
+		<li>Set the page type.</li>
+		<li>Select how many columns and rows are in your page type.</li>
+		<li>Set left- and bottom-margins of the page that you are going to use. This parameter will help to center the barcodes on the labels.</li>
+	</ul>
+	<br>
+	<form id="formulario" method="POST" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1">
+		<input type="hidden" name="saveSettings" value="1" />
+		<table>
+			<tr>
+				<th scope="row">
+					Label width (Expressed in mm)
+				</th><td> 
+					<input id="labelWidth" type="text" name="labelWidth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_WIDTH" -->">
+				</td></tr>
+				<th scope="row">
+					Label heigth (Expressed in mm)
+				</th><td> 
+					<input id="labelHeigth" type="text" name="labelHeigth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_HEIGTH" -->">
+				</td></tr>
+				<th scope="row">
+					System dpi
+				</th><td>
+					<input id="systemDpi" type="text" name="systemDpi" size="5"
+					       value="<!-- TMPL_VAR NAME="SYSTEM_DPI" -->">
+				</td></tr>
+				<th scope="row">
+					Page Type
+				</th>	<td>
+					<select name="pageType" id="pageType" size="1">
+						<!-- TMPL_IF name="A4" -->
+							<option value="A4" selected>A4</option>
+				        <!-- TMPL_ELSE -->
+							<option value="A4">A4</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Letter" -->
+							<option value="Letter" selected>Letter</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Letter">Letter</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Legal" -->
+							<option value="Legal" selected>Legal</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Legal">Legal</option>
+						<!-- /TMPL_IF -->
+		            </select>
+				</td></tr>
+				<th scope="row">
+					Columns
+				</th>  <td>
+					<input id="columns" type="text" name="columns" size="5"
+					       value="<!-- TMPL_VAR NAME="COLUMNS" -->">
+				</td></tr>
+				<th scope="row">
+					Rows
+				</th>   <td>
+					<input id="rows" type="text" name="rows" size="5"
+					       value="<!-- TMPL_VAR NAME="ROWS" -->">
+				</td></tr>
+				<th scope="row">
+					Margin Bottom (Expressed in mm)
+				</th>   <td>
+					<input id="marginBottom" type="text" name="marginBottom" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_TOP" -->">
+				</td></tr>
+				<th scope="row">
+					Margin Left (Expressed in mm)
+				</th>   <td>
+					<input id="marginLeft" type="text" name="marginLeft" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_LEFT" -->">
+				</td></tr>
+			</table><input type="submit" value="Save Settings" />
+	</form>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
