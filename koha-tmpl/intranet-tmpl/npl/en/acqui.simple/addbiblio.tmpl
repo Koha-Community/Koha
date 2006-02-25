@@ -17,7 +17,6 @@
 
 <div class="tabitem">		<input type="hidden" name="op" value="addbiblio" />
 		<input type="hidden" name="addfield_field" />
-		<input type="hidden" name="addfield_subfield" />
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->" />
 		<!-- TMPL_IF name="bibid" -->
@@ -84,7 +83,7 @@
 				<!-- /TMPL_UNLESS -->
 				<!-- TMPL_VAR NAME="tag_lib" -->
 				<!-- TMPL_IF name="repeatable" -->
-					<a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR NAME="tagfirstsubfield"-->')">+</a>
+					<a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a>
 				<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_IF -->
@@ -669,10 +668,9 @@ function Changefwk(FwkList) {
   window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
 }
 
-function AddField(field,subfield) {
+function AddField(field) {
 	document.forms['f'].op.value = "addfield";
 	document.forms['f'].addfield_field.value=field;
-	document.forms['f'].addfield_subfield.value=subfield;
 	document.f.submit();
 }
 
