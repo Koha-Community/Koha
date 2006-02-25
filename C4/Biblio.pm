@@ -69,7 +69,6 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &MARCkoha2marcItem &MARChtml2marc
   &MARCgetbiblio &MARCgetitem
   &XMLgetbiblio
-  &char_decode
   
   &FindDuplicate
   &DisplayISBN
@@ -148,31 +147,35 @@ all subs require/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =cut
 
-=head
+=head ZEBRA
 
-z3950_extended_services can handle any interaction with Zebra's extended serices package.
+=cut
 
-$Zconn contains the server connection object (which is set before calling this s
-ubroutine)
+=head2 z3950_extended_services
 
-$service type is one of:
-        itemorder,create,drop,commit,update,xmlupdate
+z3950_extended_services($Zconn,$serviceType,$serviceOptions,$record);
 
-$service_options is a hash of key/value pairs. For instance,
-if service_type is 'update', $service_options should contain:
+	z3950_extended_services is used to handle all interactions with Zebra's extended serices package.
 
-action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
-(recordidOpaque => Opaque Record ID (user supplied)
+C<$Zconn> a connection object to the Zebra server
 
-or
+C<$serviceType> one of: itemorder,create,drop,commit,update,xmlupdate
 
-recordidNumber => Record ID number (system number))
-record => the record itself
+C<$serviceOptions> a has of key/value pairs. For instance, if service_type is 'update', $service_options should contain:
 
-and maybe:
+	action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
 
-syntax => the record syntax (transfer syntax)
-databaseName = Database from connection object
+and maybe
+
+	recordidOpaque => Opaque Record ID (user supplied) or recordidNumber => Record ID number (system number).
+	syntax => the record syntax (transfer syntax)
+	databaseName = Database from connection object
+
+	To set serviceOptions, call set_service_options($serviceType)
+
+C<$record> the record, if one is needed for the service type
+
+	A record should be in XML. You can convert it to XML from MARC by running it through marc2xml().
 
 =cut
 sub z3950_extended_services {
@@ -219,6 +222,12 @@ sub z3950_extended_services {
         # free up package resources
         $Zpackage->destroy();
 }
+
+=head2 marc2xml
+
+C<$Zconn>
+
+=cut
 
 sub marc2xml {
 	my ($record) = @_;
@@ -2721,147 +2730,6 @@ and itemtype = 'WEB'");
     return($count, @results);
 } # sub getwebbiblioitems
 
-sub char_decode {
-
-    # converts ISO 5426 coded string to ISO 8859-1
-    # sloppy code : should be improved in next issue
-    my ( $string, $encoding ) = @_;
-    $_ = $string;
-
-    # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
-    if ( $encoding eq "UNIMARC" ) {
-#         s/\xe1/Æ/gm;
-        s/\xe2/Ð/gm;
-        s/\xe9/Ø/gm;
-        s/\xec/þ/gm;
-        s/\xf1/æ/gm;
-        s/\xf3/ð/gm;
-        s/\xf9/ø/gm;
-        s/\xfb/ß/gm;
-        s/\xc1\x61/à/gm;
-        s/\xc1\x65/è/gm;
-        s/\xc1\x69/ì/gm;
-        s/\xc1\x6f/ò/gm;
-        s/\xc1\x75/ù/gm;
-        s/\xc1\x41/À/gm;
-        s/\xc1\x45/È/gm;
-        s/\xc1\x49/Ì/gm;
-        s/\xc1\x4f/Ò/gm;
-        s/\xc1\x55/Ù/gm;
-        s/\xc2\x41/Á/gm;
-        s/\xc2\x45/É/gm;
-        s/\xc2\x49/Í/gm;
-        s/\xc2\x4f/Ó/gm;
-        s/\xc2\x55/Ú/gm;
-        s/\xc2\x59/Ý/gm;
-        s/\xc2\x61/á/gm;
-        s/\xc2\x65/é/gm;
-        s/\xc2\x69/í/gm;
-        s/\xc2\x6f/ó/gm;
-        s/\xc2\x75/ú/gm;
-        s/\xc2\x79/ý/gm;
-        s/\xc3\x41/Â/gm;
-        s/\xc3\x45/Ê/gm;
-        s/\xc3\x49/Î/gm;
-        s/\xc3\x4f/Ô/gm;
-        s/\xc3\x55/Û/gm;
-        s/\xc3\x61/â/gm;
-        s/\xc3\x65/ê/gm;
-        s/\xc3\x69/î/gm;
-        s/\xc3\x6f/ô/gm;
-        s/\xc3\x75/û/gm;
-        s/\xc4\x41/Ã/gm;
-        s/\xc4\x4e/Ñ/gm;
-        s/\xc4\x4f/Õ/gm;
-        s/\xc4\x61/ã/gm;
-        s/\xc4\x6e/ñ/gm;
-        s/\xc4\x6f/õ/gm;
-        s/\xc8\x41/Ä/gm;
-        s/\xc8\x45/Ë/gm;
-        s/\xc8\x49/Ï/gm;
-        s/\xc8\x61/ä/gm;
-        s/\xc8\x65/ë/gm;
-        s/\xc8\x69/ï/gm;
-        s/\xc8\x6F/ö/gm;
-        s/\xc8\x75/ü/gm;
-        s/\xc8\x76/ÿ/gm;
-        s/\xc9\x41/Ä/gm;
-        s/\xc9\x45/Ë/gm;
-        s/\xc9\x49/Ï/gm;
-        s/\xc9\x4f/Ö/gm;
-        s/\xc9\x55/Ü/gm;
-        s/\xc9\x61/ä/gm;
-        s/\xc9\x6f/ö/gm;
-        s/\xc9\x75/ü/gm;
-        s/\xca\x41/Å/gm;
-        s/\xca\x61/å/gm;
-        s/\xd0\x43/Ç/gm;
-        s/\xd0\x63/ç/gm;
-
-        # this handles non-sorting blocks (if implementation requires this)
-        $string = nsb_clean($_);
-    }
-    elsif ( $encoding eq "USMARC" || $encoding eq "MARC21" ) {
-        if (/[\xc1-\xff]/) {
-            s/\xe1\x61/à/gm;
-            s/\xe1\x65/è/gm;
-            s/\xe1\x69/ì/gm;
-            s/\xe1\x6f/ò/gm;
-            s/\xe1\x75/ù/gm;
-            s/\xe1\x41/À/gm;
-            s/\xe1\x45/È/gm;
-            s/\xe1\x49/Ì/gm;
-            s/\xe1\x4f/Ò/gm;
-            s/\xe1\x55/Ù/gm;
-            s/\xe2\x41/Á/gm;
-            s/\xe2\x45/É/gm;
-            s/\xe2\x49/Í/gm;
-            s/\xe2\x4f/Ó/gm;
-            s/\xe2\x55/Ú/gm;
-            s/\xe2\x59/Ý/gm;
-            s/\xe2\x61/á/gm;
-            s/\xe2\x65/é/gm;
-            s/\xe2\x69/í/gm;
-            s/\xe2\x6f/ó/gm;
-            s/\xe2\x75/ú/gm;
-            s/\xe2\x79/ý/gm;
-            s/\xe3\x41/Â/gm;
-            s/\xe3\x45/Ê/gm;
-            s/\xe3\x49/Î/gm;
-            s/\xe3\x4f/Ô/gm;
-            s/\xe3\x55/Û/gm;
-            s/\xe3\x61/â/gm;
-            s/\xe3\x65/ê/gm;
-            s/\xe3\x69/î/gm;
-            s/\xe3\x6f/ô/gm;
-            s/\xe3\x75/û/gm;
-            s/\xe4\x41/Ã/gm;
-            s/\xe4\x4e/Ñ/gm;
-            s/\xe4\x4f/Õ/gm;
-            s/\xe4\x61/ã/gm;
-            s/\xe4\x6e/ñ/gm;
-            s/\xe4\x6f/õ/gm;
-            s/\xe8\x45/Ë/gm;
-            s/\xe8\x49/Ï/gm;
-            s/\xe8\x65/ë/gm;
-            s/\xe8\x69/ï/gm;
-            s/\xe8\x76/ÿ/gm;
-            s/\xe9\x41/Ä/gm;
-            s/\xe9\x4f/Ö/gm;
-            s/\xe9\x55/Ü/gm;
-            s/\xe9\x61/ä/gm;
-            s/\xe9\x6f/ö/gm;
-            s/\xe9\x75/ü/gm;
-            s/\xea\x41/Å/gm;
-            s/\xea\x61/å/gm;
-
-            # this handles non-sorting blocks (if implementation requires this)
-            $string = nsb_clean($_);
-        }
-    }
-    return ($string);
-}
-
 sub nsb_clean {
     my $NSB = '\x88';    # NSB : begin Non Sorting Block
     my $NSE = '\x89';    # NSE : Non Sorting Block end
@@ -3023,6 +2891,15 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.149  2006/02/25 20:30:32  kados
+# IMPORTANT: Paul, I've removed the decode_char routine because it's no
+# longer necessary. If we need to convert from MARC-8 for display, we should:
+#
+# 1. use utf-8
+# 2. do it with MARC::Charset
+#
+# If you still need it, let me know and I'll put it back in.
+#
 # Revision 1.148  2006/02/25 19:23:01  kados
 # cleaning up POD docs, deleting zebra_create as it's no longer used (
 # replaced by z3950_extended_services).
