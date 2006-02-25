@@ -305,6 +305,7 @@ sub build_tabs ($$$$) {
 					$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
 					$tag_data{indicator} = $indicator;
 					$tag_data{subfield_loop} = \@subfields_data;
+					$tag_data{tagfirstsubfield} = $tag_data{subfield_loop}[0];
 					push (@loop_data, \%tag_data);
 				}
 			}
@@ -469,6 +470,7 @@ if ($op eq "addbiblio") {
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
 	my $addedfield = $input->param('addfield_field');
+	my $tagaddfield_subfield = $input->param('addfield_subfield');
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
@@ -481,7 +483,8 @@ if ($op eq "addbiblio") {
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# adding an empty field
-	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
+	my $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
+	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
