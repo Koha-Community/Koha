@@ -12,11 +12,16 @@ use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
+
+my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
+
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding, $verbose);
+my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit);
+
 GetOptions(
+	'commit:f'	=> \$commit,
     'file:s'    => \$input_marc_file,
-    'n' => \$number,
+    'n:f' => \$number,
     'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
@@ -31,17 +36,20 @@ parameters :
 \th : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
 \tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
-\tn : the number of the record to import. If missing, all the file is imported
+\tn : the number of records to import. If missing, all the file is imported
+\tcommit : the number of records to wait before performing a 'commit' operation
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
 \tc : the char encoding. At the moment, only MARC21 and UNIMARC supported. MARC21 by default.
-\d : delete EVERYTHING related to biblio in koha-DB before import  :tables :
+\td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
 \t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
 \t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
-IMPORTANT : don't use this script before you've entered and checked twice (or more) your  MARC parameters tables.
-If you fail this, the import won't work correctly and you will get invalid datas.
+IMPORTANT : don't use this script before you've entered and checked your MARC parameters tables twice (or more!).
+Otherwise, the import won't work correctly and you will get invalid data.
 
-SAMPLE : ./bulkmarcimport.pl -file /home/paul/koha.dev/local/npl -n 1
+SAMPLE : 
+\t\$ export KOHA_CONF=/etc/koha.conf
+\t\$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 -file /home/jmf/koha.mrc -n 3000
 EOF
 ;#'
 die;
@@ -73,11 +81,29 @@ my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
+$commit = 50 unless ($commit);
+
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
+warn "I:".$i;
+warn "NUM:".$number;
 	$i++;
+
+	if ($i==$number) {
+		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+		print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+
+		my $timeneeded = gettimeofday - $starttime;
+		die "$i MARC records imported in $timeneeded seconds\n";
+	}
+	# perform the commit operation ever so often
+	if ($i==$commit) {
+		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+		$commit*=2;
+		print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+	}
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
     ## create an empty record object to populate
@@ -98,9 +124,9 @@ while ( my $record = $batch->next() ) {
 
 	# go through each subfield code/data pair
 	foreach my $pair ( $oldField->subfields() ) { 
-		$pair->[1] =~ s/\<//g;
-		$pair->[1] =~ s/\>//g;
-		push( @newSubfields, $pair->[0], char_decode($pair->[1],$char_encoding) );
+		#$pair->[1] =~ s/\<//g;
+		#$pair->[1] =~ s/\>//g;
+		push( @newSubfields, $pair->[0], $pair->[1] ); #char_decode($pair->[1],$char_encoding) );
 	}
 
 	# add the new field to our new record
@@ -114,7 +140,6 @@ while ( my $record = $batch->next() ) {
 	$newRecord->append_fields( $newField );
 
     }
-
 
 	warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
 	my @fields = $newRecord->field($tagfield);
@@ -131,13 +156,16 @@ while ( my $record = $batch->next() ) {
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$Zconn,$newRecord,'');
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
-			NEWnewitem($dbh,$items[$i],$bibid);
+			NEWnewitem($dbh,$Zconn,$items[$i],$bibid);
 		}
 	}
 }
-# $dbh->do("unlock tables");
+# final commit of the changes
+z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+
 my $timeneeded = gettimeofday - $starttime;
-print "$i MARC record done in $timeneeded seconds";
+print "$i MARC records done in $timeneeded seconds\n";
