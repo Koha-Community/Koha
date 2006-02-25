@@ -1289,11 +1289,10 @@ sub REALmodbiblioitem {
     				$biblioitem->{subclass},		$biblioitem->{illus},		$biblioitem->{pages},	$biblioitem->{volumeddesc},
     				$biblioitem->{bnotes},			$biblioitem->{size},		$biblioitem->{place},	$biblioitem->{marc},
 					$biblioitem->{marcxml},			$biblioitem->{biblioitemnumber});
+
 	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
 
-	#my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
 	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
-	 #z3950_extended_services($Zconn,'commit',set_service_options('commit'));
 
 
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
@@ -1361,10 +1360,7 @@ sub REALnewbiblioitem {
 		$biblioitem->{marcxml},
 	);
 	$dbh->do("unlock tables");
-	#my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
 	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
-	#z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-	#zebra_create($biblioitem->{biblionumber}, $record);
 	return ($biblioitemnumber);
 }
 
@@ -1401,7 +1397,7 @@ create a item. $item is a hash and $barcode the barcode.
 =cut
 
 sub REALnewitems {
-    my ( $dbh, $Zconn,$item, $barcode ) = @_;
+    my ( $dbh, $Zconn, $item, $barcode ) = @_;
 
 # 	warn "OLDNEWITEMS";
 	
@@ -1512,10 +1508,7 @@ sub REALnewitems {
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
-    	#my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
-	 z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
-	 # z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-	 #zebra_create($item->{biblionumber},$record);
+	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
 	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
@@ -1603,16 +1596,12 @@ sub REALmoditem {
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
 	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
-	#my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
-	 z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
-	 # z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-	 #zebra_create($item->biblionumber,$record);
+	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
 	$dbh->do('unlock tables');
 
-    #  $dbh->disconnect;
 }
 
 =head2 REALdelitem($dbh,$itemnum);
@@ -2132,7 +2121,7 @@ sub getbiblio {
     return ( $count, @results );
 }    # sub getbiblio
 
-=item bibdata
+=head2 bibdata
 
   $data = &bibdata($biblionumber, $type);
 
@@ -2300,7 +2289,7 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     return ( $count, @results );
 }    # sub getitemsbybiblioitem
 
-=item ItemInfo
+=head2 ItemInfo
 
   @results = &ItemInfo($env, $biblionumber, $type);
 
@@ -2403,7 +2392,7 @@ sub ItemInfo {
 	return(@results);
 }
 
-=item bibitems
+=head2 bibitems
 
   ($count, @results) = &bibitems($biblionumber);
 
@@ -2445,7 +2434,7 @@ sub bibitems {
 } # sub bibitems
 
 
-=item bibitemdata
+=head2 bibitemdata
 
   $itemdata = &bibitemdata($biblioitemnumber);
 
@@ -2471,7 +2460,7 @@ sub bibitemdata {
 } # sub bibitemdata
 
 
-=item getbibliofromitemnumber
+=head2 getbibliofromitemnumber
 
   $item = &getbibliofromitemnumber($env, $dbh, $itemnumber);
 
@@ -2499,7 +2488,7 @@ sub getbibliofromitemnumber {
   return($data);
 }
 
-=item barcodes
+=head2 barcodes
 
   @barcodes = &barcodes($biblioitemnumber);
 
@@ -2531,7 +2520,7 @@ sub barcodes{
 }
 
 
-=item itemdata
+=head2 itemdata
 
   $item = &itemdata($barcode);
 
@@ -2554,7 +2543,7 @@ sub get_item_from_barcode {
 }
 
 
-=item itemissues
+=head2 itemissues
 
   @issues = &itemissues($biblioitemnumber, $biblio);
 
@@ -2667,7 +2656,7 @@ and issues.borrowernumber = borrowers.borrowernumber");
     return(@results);
 }
 
-=item getsubject
+=head2 getsubject
 
   ($count, $subjects) = &getsubject($biblionumber);
 
@@ -2693,7 +2682,7 @@ sub getsubject {
   return($i,\@results);
 }
 
-=item getaddauthor
+=head2 getaddauthor
 
   ($count, $authors) = &getaddauthor($biblionumber);
 
@@ -2722,7 +2711,7 @@ sub getaddauthor {
 }
 
 
-=item getsubtitle
+=head2 getsubtitle
 
   ($count, $subtitles) = &getsubtitle($biblionumber);
 
@@ -2750,7 +2739,7 @@ sub getsubtitle {
 }
 
 
-=item getwebsites
+=head2 getwebsites
 
   ($count, @websites) = &getwebsites($biblionumber);
 
@@ -2790,7 +2779,7 @@ sub getwebsites {
     return($count, @results);
 } # sub getwebsites
 
-=item getwebbiblioitems
+=head2 getwebbiblioitems
 
   ($count, @results) = &getwebbiblioitems($biblionumber);
 
@@ -2983,6 +2972,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.153  2006/02/25 22:39:10  kados
+# Another purely documentation commit. Just changing formatting to ease
+# readability.
+#
 # Revision 1.152  2006/02/25 21:17:20  kados
 # Purely documentation change: converted all =head2 entries to use function
 # name as title rather than usage as title
