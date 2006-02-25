@@ -483,7 +483,6 @@ if ($op eq "addbiblio") {
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# adding an empty field
-	my $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
 	build_tabs ($template, $record, $dbh,$encoding);
