@@ -81,7 +81,13 @@ my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
-$commit = 50 unless ($commit);
+my $commitnum = 50;
+
+if ($commit) {
+
+$commitnum = $commit;
+
+}
 
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
@@ -93,7 +99,7 @@ warn "NUM:".$number;
 
 	if ($i==$number) {
 		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-		print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+		print "COMMIT OPERATION SUCCESSFUL\n";
 
 		my $timeneeded = gettimeofday - $starttime;
 		die "$i MARC records imported in $timeneeded seconds\n";
@@ -101,8 +107,8 @@ warn "NUM:".$number;
 	# perform the commit operation ever so often
 	if ($i==$commit) {
 		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-		$commit*=2;
-		print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+		$commit+=$commitnum;
+		print "COMMIT OPERATION SUCCESSFUL\n";
 	}
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
@@ -165,7 +171,7 @@ warn "NUM:".$number;
 }
 # final commit of the changes
 z3950_extended_services($Zconn,'commit',set_service_options('commit'));
-print "COMMIT OPERATION SUCCESSFUL\n" if $verbose;
+print "COMMIT OPERATION SUCCESSFUL\n";
 
 my $timeneeded = gettimeofday - $starttime;
 print "$i MARC records done in $timeneeded seconds\n";
