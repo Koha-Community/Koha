@@ -1045,6 +1045,9 @@ sub MARChtml2marc {
 	my $prevvalue; # if tag <10
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
+	if ( @$rvalues[$i] eq "" ) {
+	# DO NOTHING, THIS IS A BLANK FIELD
+	} else {
 		# rebuild MARC::Record
 # 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
@@ -1082,6 +1085,7 @@ sub MARChtml2marc {
 			}
 			$prevtag= @$rtags[$i];
 		}
+	}
 	}
 	# the last has not been included inside the loop... do it now !
 	$record->add_fields($field) if $field;
@@ -2922,6 +2926,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.32  2006/02/25 00:33:59  kados
+# VERY IMPORTANT BUGFIX: before this, if a blank MARC tag or subfield
+# was submitted, it would be saved. This fix checks to see if it is
+# blank and if not allows it to be saved.
+#
 # Revision 1.115.2.31  2006/02/23 08:39:11  kados
 # Fix for splitting up fixed fields containing | in them causing
 # incorrect storage of fixed fields in Koha DB.
