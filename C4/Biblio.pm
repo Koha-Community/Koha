@@ -143,11 +143,9 @@ all subs require/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =back
 
-=head1 API
+=head1 FUNCTIONS
 
-=head2 ZEBRA
-
-=head3 z3950_extended_services
+=head2 z3950_extended_services
 
 z3950_extended_services($Zconn,$serviceType,$serviceOptions,$record);
 
@@ -274,7 +272,9 @@ sub marc2xml {
 	return $xmlrecord;
 }
 
-=head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
+=head2 MARCgettagslib
+
+@tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
 
 =over 4
 
@@ -371,7 +371,9 @@ sub MARCgettagslib {
     return $res;
 }
 
-=head2 ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,$kohafield);
+=head2 MARCfind_marc_from_kohafield
+
+($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,$kohafield);
 
 =over 4
 
@@ -390,7 +392,9 @@ sub MARCfind_marc_from_kohafield {
 	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
 }
 
-=head2 $MARCRecord = &MARCgetbiblio($dbh,$biblionumber);
+=head2 MARCgetbiblio
+
+$MARCRecord = &MARCgetbiblio($dbh,$biblionumber);
 
 =over 4
 
@@ -409,7 +413,9 @@ sub MARCgetbiblio {
     return $record;
 }
 
-=head2 $XML = &XMLgetbiblio($dbh,$biblionumber);
+=head2 XMLgetbiblio
+
+$XML = &XMLgetbiblio($dbh,$biblionumber);
 
 =over 4
 
@@ -429,7 +435,9 @@ sub XMLgetbiblio {
     return $XML;
 }
 
-=head2 $MARCrecord = &MARCgetitem($dbh,$biblionumber);
+=head2 MARCgetitem
+
+$MARCrecord = &MARCgetitem($dbh,$biblionumber);
 
 =over 4
 
@@ -463,7 +471,9 @@ sub MARCgetitem {
     return $itemrecord;
 }
 
-=head2 sub find_biblioitemnumber($dbh,$biblionumber);
+=head2 find_biblioitemnumber
+
+my $biblioitemnumber = find_biblioitemnumber($dbh,$biblionumber);
 
 =over 4
 
@@ -481,7 +491,9 @@ sub find_biblioitemnumber {
 	return $biblioitemnumber;
 }
 
-=head2 $frameworkcode = MARCfind_frameworkcode($dbh,$biblionumber);
+=head2 MARCfind_frameworkcode
+
+my $frameworkcode = MARCfind_frameworkcode($dbh,$biblionumber);
 
 =over 4
 
@@ -499,7 +511,9 @@ sub MARCfind_frameworkcode {
 	return $frameworkcode;
 }
 
-=head2 $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibliohash);
+=head2 MARCkoha2marcBiblio
+
+$MARCRecord = &MARCkoha2marcBiblio($dbh,$bibliohash);
 
 =over 4
 
@@ -548,7 +562,9 @@ sub MARCkoha2marcBiblio {
 	return $record;
 }
 
-=head2 $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
+=head2 MARCkoha2marcItem
+
+$MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
 
 MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB items :
 all entries of the hash are transformed into their matching MARC field/subfield.
@@ -608,7 +624,9 @@ sub MARCkoha2marcOnefield {
     return $record;
 }
 
-=head2 $MARCrecord = MARChtml2marc($dbh,$rtags,$rsubfields,$rvalues,%indicators);
+=head2 MARChtml2marc
+
+$MARCrecord = MARChtml2marc($dbh,$rtags,$rsubfields,$rvalues,%indicators);
 
 =over 4
 
@@ -675,7 +693,9 @@ sub MARChtml2marc {
 }
 
 
-=head2 $hash = &MARCmarc2koha($dbh,$MARCRecord);
+=head2 MARCmarc2koha
+
+$hash = &MARCmarc2koha($dbh,$MARCRecord);
 
 =over 4
 
@@ -774,7 +794,9 @@ sub MARCmarc2kohaOneField {
     return $result;
 }
 
-=head2 ($biblionumber,$biblioitemnumber) = NEWnewbibilio($dbh,$MARCRecord,$frameworkcode);
+=head2 NEWnewbibilio
+
+($biblionumber,$biblioitemnumber) = NEWnewbibilio($dbh,$MARCRecord,$frameworkcode);
 
 =over 4
 
@@ -852,7 +874,9 @@ sub NEWnewbiblio {
     return ( $biblionumber, $biblioitemnumber );
 }
 
-=head2 NEWmodbilbioframework($dbh,$biblionumber,$frameworkcode);
+=head2 NEWmodbilbioframework
+
+NEWmodbilbioframework($dbh,$biblionumber,$frameworkcode);
 
 =over 4
 
@@ -869,7 +893,9 @@ sub NEWmodbiblioframework {
 	return 1;
 }
 
-=head2 NEWmodbiblio($dbh,$Zconn,$MARCrecord,$biblionumber,$frameworkcode);
+=head2 NEWmodbiblio
+
+NEWmodbiblio($dbh,$Zconn,$MARCrecord,$biblionumber,$frameworkcode);
 
 =over 4
 
@@ -929,7 +955,9 @@ sub NEWmodbiblio {
 	return 1;
 }
 
-=head2 NEWmodbilbioframework($dbh,$biblionumber,$frameworkcode);
+=head2 NEWmodbilbioframework
+
+NEWmodbilbioframework($dbh,$biblionumber,$frameworkcode);
 
 =over 4
 
@@ -953,7 +981,9 @@ sub NEWdelbiblio {
     &MARCdelbiblio( $dbh, $bibid, 0 );
 }
 
-=head2 $itemnumber = NEWnewitem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber);
+=head2 NEWnewitem
+
+$itemnumber = NEWnewitem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber);
 
 =over 4
 
@@ -979,7 +1009,9 @@ sub NEWnewitem {
 }
 
 
-=head2 $itemnumber = NEWmoditem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber,$itemnumber);
+=head2 NEWmoditem
+
+$itemnumber = NEWmoditem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber,$itemnumber);
 
 =over 4
 
@@ -1003,7 +1035,9 @@ sub NEWmoditem {
 }
 
 
-=head2 $itemnumber = NEWdelitem($dbh, $biblionumber, $biblioitemnumber, $itemnumber);
+=head2 NEWdelitem
+
+$itemnumber = NEWdelitem($dbh, $biblionumber, $biblioitemnumber, $itemnumber);
 
 =over 4
 
@@ -1021,7 +1055,9 @@ sub NEWdelitem {
 }
 
 
-=head2 $biblionumber = REALnewbiblio($dbh,$biblio);
+=head2 REALnewbiblio
+
+$biblionumber = REALnewbiblio($dbh,$biblio);
 
 =over 4
 
@@ -1061,7 +1097,9 @@ sub REALnewbiblio {
     return ($bibnum);
 }
 
-=head2 $biblionumber = REALmodbiblio($dbh,$biblio);
+=head2 REALmodbiblio
+
+$biblionumber = REALmodbiblio($dbh,$biblio);
 
 =over 4
 
@@ -1089,7 +1127,9 @@ sub REALmodbiblio {
 	return ( $biblio->{'biblionumber'} );
 }    # sub modbiblio
 
-=head2 REALmodsubtitle($dbh,$bibnum,$subtitle);
+=head2 REALmodsubtitle
+
+REALmodsubtitle($dbh,$bibnum,$subtitle);
 
 =over 4
 
@@ -1108,7 +1148,9 @@ sub REALmodsubtitle {
     $sth->finish;
 }    # sub modsubtitle
 
-=head2 REALmodaddauthor($dbh,$bibnum,$author);
+=head2 REALmodaddauthor
+
+REALmodaddauthor($dbh,$bibnum,$author);
 
 =over 4
 
@@ -1142,7 +1184,9 @@ sub REALmodaddauthor {
     }
 }    # sub modaddauthor
 
-=head2 $errors = REALmodsubject($dbh,$bibnum, $force, @subject);
+=head2 REALmodsubject
+
+$errors = REALmodsubject($dbh,$bibnum, $force, @subject);
 
 =over 4
 
@@ -1217,7 +1261,9 @@ sub REALmodsubject {
     return ($error);
 }    # sub modsubject
 
-=head2 REALmodbiblioitem($dbh, $biblioitem);
+=head2 REALmodbiblioitem
+
+REALmodbiblioitem($dbh, $biblioitem);
 
 =over 4
 
@@ -1253,7 +1299,9 @@ sub REALmodbiblioitem {
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
 }    # sub modbibitem
 
-=head2 REALnewbiblioitem($dbh,$Zconn,$biblioitem);
+=head2 REALnewbiblioitem
+
+REALnewbiblioitem($dbh,$Zconn,$biblioitem);
 
 =over 4
 
@@ -1320,7 +1368,9 @@ sub REALnewbiblioitem {
 	return ($biblioitemnumber);
 }
 
-=head2 REALnewsubtitle($dbh,$bibnum,$subtitle);
+=head2 REALnewsubtitle
+
+REALnewsubtitle($dbh,$bibnum,$subtitle);
 
 =over 4
 
@@ -1338,7 +1388,9 @@ sub REALnewsubtitle {
     $sth->finish;
 }
 
-=head2 ($itemnumber,$errors)= REALnewitems($dbh,$Zconn,$item,$barcode);
+=head2 REALnewitems
+
+($itemnumber,$errors)= REALnewitems($dbh,$Zconn,$item,$barcode);
 
 =over 4
 
@@ -1709,7 +1761,9 @@ sub REALdelbiblio {
     $sth->finish;
 }
 
-=head2 $number = itemcount($biblio);
+=head2 itemcount
+
+$number = itemcount($biblio);
 
 =over 4
 
@@ -1731,7 +1785,9 @@ sub itemcount {
     return ( $data->{'count(*)'} );
 }
 
-=head2 $biblionumber = newbiblio($biblio);
+=head2 newbiblio
+
+$biblionumber = newbiblio($biblio);
 
 =over 4
 
@@ -1752,7 +1808,9 @@ sub newbiblio {
     return ($bibnum);
 }
 
-=head2   $biblionumber = &modbiblio($biblio);
+=head2  modbiblio
+
+$biblionumber = &modbiblio($biblio);
 
 =over 4
 
@@ -1783,7 +1841,7 @@ sub modbiblio {
 	return($biblionumber);
 } # sub modbiblio
 
-=head2   &modsubtitle($biblionumber, $subtitle);
+=head2 &modsubtitle($biblionumber, $subtitle);
 
 =over 4
 
@@ -1821,7 +1879,9 @@ sub modaddauthor {
     &REALmodaddauthor( $dbh, $bibnum, @authors );
 }    # sub modaddauthor
 
-=head2 $error = &modsubject($biblionumber, $force, @subjects);
+=head2 modsubject
+
+$error = &modsubject($biblionumber, $force, @subjects);
 
 =over 4
 
@@ -1866,7 +1926,9 @@ sub modbibitem {
     &REALmodbiblioitem( $dbh, $Zconn, $biblioitem );
 }    # sub modbibitem
 
-=head2 $biblioitemnumber = newbiblioitem($biblioitem)
+=head2 newbiblioitem
+
+$biblioitemnumber = newbiblioitem($biblioitem)
 
 =over 4
 
@@ -1903,7 +1965,9 @@ sub newsubtitle {
     &REALnewsubtitle( $dbh, $bibnum, $subtitle );
 }
 
-=head2 $errors = newitems($dbh, $Zconn, $item, @barcodes);
+=head2 newitems
+
+$errors = newitems($dbh, $Zconn, $item, @barcodes);
 
 =over 4
 
@@ -1955,7 +2019,9 @@ sub moditem {
     &MARCmoditem( $dbh, $MARCitem, $bibid, $item->{itemnum}, 0 );
 }
 
-=head2 $error = checkitems($count,@barcodes);
+=head2 checkitems
+
+$error = checkitems($count,@barcodes);
 
 =over 4
 
@@ -1981,7 +2047,7 @@ sub checkitems {
     return ($error);
 }
 
-=head2 $delitem($itemnum);
+=head2 delitem($itemnum);
 
 =over 4
 
@@ -2031,7 +2097,9 @@ sub delbiblio {
     &MARCdelbiblio( $dbh, $bibid, 0 );
 }
 
-=head2 ($count,@results) = getbiblio($biblionumber);
+=head2 getbiblio
+
+($count,@results) = getbiblio($biblionumber);
 
 =over 4
 
@@ -2132,7 +2200,9 @@ sub bibdata {
 	return($data);
 } # sub bibdata
 
-=head2 ($count,@results) = getbiblioitem($biblioitemnumber);
+=head2 getbiblioitem
+
+($count,@results) = getbiblioitem($biblioitemnumber);
 
 =over 4
 
@@ -2164,7 +2234,9 @@ biblioitemnumber = ?"
     return ( $count, @results );
 }    # sub getbiblioitem
 
-=head2 ($count,@results) = getbiblioitembybiblionumber($biblionumber);
+=head2 getbiblioitembybiblionumber
+
+($count,@results) = getbiblioitembybiblionumber($biblionumber);
 
 =over 4
 
@@ -2192,7 +2264,9 @@ sub getbiblioitembybiblionumber {
     return ( $count, @results );
 }    # sub
 
-=head2 ($count,@results) = getitemsbybiblioitem($biblionumber);
+=head2 getitemsbybiblioitem
+
+($count,@results) = getitemsbybiblioitem($biblionumber);
 
 =over 4
 
@@ -2909,6 +2983,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.152  2006/02/25 21:17:20  kados
+# Purely documentation change: converted all =head2 entries to use function
+# name as title rather than usage as title
+#
 # Revision 1.151  2006/02/25 21:02:20  kados
 #
 # Further cleanup, convering new routines to 4-chars
