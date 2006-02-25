@@ -73,59 +73,64 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   
   &FindDuplicate
   &DisplayISBN
-  &z3950_extended_services
 
+  &z3950_extended_services
   &set_service_options
-   get_item_from_barcode
-    MARCfind_MARCbibid_from_oldbiblionumber
+  
+  &get_item_from_barcode
+  &MARCfind_MARCbibid_from_oldbiblionumber
+
 );
 
 =head1 NAME
 
-C4::Biblio - acquisition, catalog  management functions
+C4::Biblio - Acquisitions, Catalog Management Functions
 
 =head1 SYNOPSIS
 
-( lot of changes for Koha 3.0)
+( lot of changes for Koha 3.X)
 
-Koha 1.2 and previous version used a specific API to manage biblios. This API uses old-DB style parameters.
-They are based on a hash, and store data in biblio/biblioitems/items tables (plus additionalauthors, bibliosubject and bibliosubtitle where applicable)
+Koha 1.2 and previous versions used a specific API to manage biblios. This API uses old-DB style parameters.
+They are based on a hash, and store data in biblio/biblioitems/items tables (plus additionalauthors, 
+bibliosubject and bibliosubtitle where applicable).
 
-In Koha 2.0, we introduced a MARC-DB.
+In Koha 2.X, we introduced a MARC-DB.
 
-In Koha 3.0 we removed this MARC-DB for search as we wanted to use Zebra as search system.
+In Koha 3.X, we removed this MARC-DB for search as we wanted to use Zebra as search system.
 
-So in Koha 3.0, saving a record means :
- - storing the raw marc record (iso2709) in biblioitems.marc field. It contains both biblio & items informations.
+So in Koha 3.X, saving a record means :
+
+ - storing the raw marc record (iso2709) in biblioitems.marc field. It contains both biblio & items information.
  - storing the "decoded information" in biblio/biblioitems/items as previously.
- - using zebra to manage search & indexing on the MARC datas.
+ - using zebra to manage search & indexing on the MARC data.
  
- In Koha, there is a systempreference saying "MARC=ON" or "MARC=OFF"
+ In Koha, there is a systempreference for "MARC=ON" or "MARC=OFF" :
  
- * MARC=ON : when MARC=ON, koha uses a MARC::Record object (in sub parameters). Saving informations in the DB means : 
+ * MARC=ON : when MARC=ON, Koha uses a MARC::Record object (in sub parameters). Saving information in the DB means : 
+
  - transform the MARC record into a hash
- - add the raw marc record into the hash
- - store them & update zebra
+ - add the raw MARC record into the hash
+ - store them & update Zebra
  
- * MARC=OFF : when MARC=OFF, koha uses a hash object (in sub parameters). Saving informations in the DB means :
+ * MARC=OFF : when MARC=OFF, Koha uses a hash object (in sub parameters). Saving information in the DB means :
+
  - transform the hash into a MARC record
  - add the raw marc record into the hash
- - store them and update zebra
- 
+ - store them & update zebra
  
 That's why we need 3 types of subs :
 
 =head2 REALxxx subs
 
-all I<subs beginning by REAL> does effective storage of information (with a hash, one field of the hash being the raw marc record). Those subs also update the record in zebra. REAL subs should be only for internal use (called by NEW or "something else" subs
+all I<subs beginning by REAL> do the effective storage of information (with a hash, one field of the hash being the raw marc record). Those subs also update the record in Zebra. REAL subs should be only for internal use (called by NEW or "something else" subs).
 
 =head2 NEWxxx related subs
 
 =over 4
 
-all I<subs beginning by NEW> use MARC::Record as parameters. it's the API that MUST be used in MARC acquisition system. They just create the hash, add it the raw marc record. Then, they call REALxxx sub.
+all I<subs beginning by NEW> use MARC::Record as parameters. It's the API that MUST be used in the MARC acquisition system. They just create the hash, add it the raw marc record. Then, they call REALxxx sub.
 
-all subs requires/use $dbh as 1st parameter and a MARC::Record object as 2nd parameter. they sometimes requires another parameter.
+all subs requires/use $dbh as 1st parameter and a MARC::Record object as 2nd parameter. They sometimes require another parameter.
 
 =back
 
@@ -133,57 +138,15 @@ all subs requires/use $dbh as 1st parameter and a MARC::Record object as 2nd par
 
 =over 4
 
-all I<subs beginning by seomething else> are the old-style API. They use a hash as parameter, transform the hash into a -small- marc record, and calls REAL subs.
+all I<subs beginning by seomething else> are the old-style API. They use a hash as parameter, transform the hash into a -small- marc record, and call REAL subs.
 
-all subs requires/use $dbh as 1st parameter and a hash as 2nd parameter.
+all subs require/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =back
 
 =head1 API
 
 =cut
-
-sub zebra_create {
-	my ($biblionumber,$record) = @_;
-	# create the iso2709 file for zebra
-# 	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-# 	unless (opendir(DIR, "$cgidir")) {
-# 			$cgidir = C4::Context->intranetdir."/";
-# 	} 
-# 	closedir DIR;
-# 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
-# 	open F,"> $filename";
-# 	print F $record->as_usmarc();
-# 	close F;
-# 	my $res = system("cd $cgidir/zebra;/usr/local/bin/zebraidx update biblios");
-# 	unlink($filename);
-        my $Zconn;
-        my $xmlrecord;
-	warn "zebra_create : $biblionumber =".$record->as_formatted;
-        eval {
-	    $xmlrecord=$record->as_xml();
-	    };
-        if ($@){
-	    warn "ERROR badly formatted marc record";
-	    warn "Skipping record";
-	} 
-        else {
-	    eval {
-		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
-	    };
-	    if ($@){
-	        warn "Error ", $@->code(), ": ", $@->message(), "\n";
-	        die "Fatal error, cant connect to z3950 server";
-	    }
-	    
-	    $Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-	    my $Zpackage = $Zconn->package();
-	    $Zpackage->option(action => "specialUpdate");        
-	    $Zpackage->option(record => $xmlrecord);
-	    $Zpackage->send("update");
-	    $Zpackage->destroy;
-	}
-}
 
 =head
 
@@ -3060,6 +3023,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.148  2006/02/25 19:23:01  kados
+# cleaning up POD docs, deleting zebra_create as it's no longer used (
+# replaced by z3950_extended_services).
+#
 # Revision 1.147  2006/02/25 19:09:59  kados
 # readding some lost subs
 #
