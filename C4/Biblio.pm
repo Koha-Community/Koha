@@ -429,7 +429,7 @@ sub MARCaddsubfield {
         $subfieldcode = ' ' unless $subfieldcode eq '0';
     }
     my @subfieldvalues; # = split /\||#/, $subfieldvalues;
-    push @subfieldvalues,$subfieldvalues;
+	push @subfieldvalues,$subfieldvalues;
     foreach my $subfieldvalue (@subfieldvalues) {
         if ( length($subfieldvalue) > 255 ) {
             $dbh->do(
@@ -1045,22 +1045,19 @@ sub MARChtml2marc {
 	my $prevvalue; # if tag <10
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
-	if ( @$rvalues[$i] eq "" ) {
-	# DO NOTHING, THIS IS A BLANK FIELD
-	} else {
 		# rebuild MARC::Record
 # 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
-					if ($prevtag ne '000') {
+					if (($prevtag ne '000') && ($prevvalue ne "")) {
 						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
-					} else {
+					} elsif ($prevvalue ne ""){
 						$record->leader($prevvalue);
 					}
 				}
 			} else {
-				if ($field) {
+				if (($field) && ($field ne "")) {
 					$record->add_fields($field);
 				}
 			}
@@ -1070,7 +1067,11 @@ sub MARChtml2marc {
 				undef $field;
 			} else {
 				undef $prevvalue;
+				if (@$rvalues[$i] eq "") {
+				undef $field;
+				} else {
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+				}
 # 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
 			$prevtag = @$rtags[$i];
@@ -1086,10 +1087,12 @@ sub MARChtml2marc {
 			$prevtag= @$rtags[$i];
 		}
 	}
-	}
+	#}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field) if $field;
-# 	warn "HTML2MARC=".$record->as_formatted;
+	#use Data::Dumper;
+	#warn Dumper($field->{_subfields});
+	$record->add_fields($field) if (($field) && $field ne "");
+ 	#warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
 
@@ -2926,14 +2929,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.115.2.32  2006/02/25 00:33:59  kados
-# VERY IMPORTANT BUGFIX: before this, if a blank MARC tag or subfield
-# was submitted, it would be saved. This fix checks to see if it is
-# blank and if not allows it to be saved.
-#
-# Revision 1.115.2.31  2006/02/23 08:39:11  kados
-# Fix for splitting up fixed fields containing | in them causing
-# incorrect storage of fixed fields in Koha DB.
+# Revision 1.115.2.33  2006/02/25 03:55:08  kados
+# Fixes bug with previous commit. addbiblio.pl should now correctly
+# NOT save fields that are empty.
 #
 # Revision 1.115.2.30  2006/02/20 09:18:57  thd
 # Reverse array filled with elements from repeated subfields from first to last
