@@ -145,13 +145,9 @@ all subs require/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =head1 API
 
-=cut
+=head2 ZEBRA
 
-=head ZEBRA
-
-=cut
-
-=head2 z3950_extended_services
+=head3 z3950_extended_services
 
 z3950_extended_services($Zconn,$serviceType,$serviceOptions,$record);
 
@@ -223,38 +219,65 @@ sub z3950_extended_services {
         $Zpackage->destroy();
 }
 
+=head2 set_service_options
+
+my $serviceOptions = set_service_options($serviceType);
+
+C<$serviceType> itemorder,create,drop,commit,update,xmlupdate
+
+Currently, we only support 'create', 'commit', and 'update'. 'drop' support will be added as soon as Zebra supports it.
+
+=cut
+
+sub set_service_options {
+	my ($serviceType) = @_;
+	my $serviceOptions;
+
+	if ($serviceType eq 'update') {
+		$serviceOptions->{ 'action' } = 'specialUpdate';
+
+	# FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
+	#	$serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
+	}
+
+	if ($serviceType eq 'commit') {
+	# nothing to do
+
+	}
+	
+        if ($serviceType eq 'create') {
+        # nothing to do
+
+        }
+	
+	if (serviceType eq 'drop') {
+		die "ERROR: 'drop' not currently supported (by Zebra)";
+	}
+	return $serviceOptions;
+}
+
 =head2 marc2xml
 
-C<$Zconn>
+my $xmlrecord = marc2xml($record);
+
+Convert from MARC to XML. Note that MARC::File::XML will automatically encode from MARC-8 to UTF-8 as of version .8
+
+C<$record> a MARC record
 
 =cut
 
 sub marc2xml {
-	my ($record) = @_;
-	my $xmlrecord;
-	eval {
-		$xmlrecord=$record->as_xml();
-	};
-	if ($@){
-		warn "ERROR badly formatted marc record";
-		warn "Skipping record";
-	}
-	return $xmlrecord;
+        my ($record) = @_;
+        my $xmlrecord;
+        eval {
+                $xmlrecord=$record->as_xml();
+        };
+        #TODO: better error handling here
+        if ($@){
+                warn "ERROR: I suspect a badly formatted MARC record";
+        }
+        return $xmlrecord;
 }
-sub set_service_options {
-	my ($option) = @_;
-	my $serviceOptions;
-	if ($option eq 'update') {
-		$serviceOptions->{ 'action' } = 'specialUpdate';
-		$serviceOptions->{ 'syntax' } = 'xml'; #zebra doesn't support others
-	}
-	if ($option eq 'commit') {
-
-	}
-
-	return $serviceOptions;
-}
-
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
 
@@ -2891,6 +2914,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.150  2006/02/25 20:49:15  kados
+# Better documentation, added warning if serviceType is 'drop' since it's
+# not supported in Zebra.
+#
 # Revision 1.149  2006/02/25 20:30:32  kados
 # IMPORTANT: Paul, I've removed the decode_char routine because it's no
 # longer necessary. If we need to convert from MARC-8 for display, we should:
