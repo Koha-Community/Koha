@@ -175,48 +175,48 @@ C<$record> the record, if one is needed for the service type
 
 =cut
 sub z3950_extended_services {
-        my ($Zconn,$serviceType,$serviceOptions,$record) = @_;
+	my ($Zconn,$serviceType,$serviceOptions,$record) = @_;
+        
+	# create a new package object
+	my $Zpackage = $Zconn->package();
 
-        # create a new package object
-        my $Zpackage = $Zconn->package();
+	# set our options
+	$Zpackage->option(action => $serviceOptions->{'action'});
 
-        # set our options
-        $Zpackage->option(action => $serviceOptions->{'action'});
+	if ($serviceOptions->{'databaseName'}) {
+		$Zpackage->option(databaseName => $serviceOptions->{'databaseName'});
+	}
+	if ($serviceOptions->{'recordIdNumber'}) {
+ 		$Zpackage->option(recordIdNumber => $serviceOptions->{'recordIdNumber'});
+	}
+	if ($serviceOptions->{'recordIdOpaque'}) {
+		$Zpackage->option(recordIdOpaque => $serviceOptions->{'recordIdOpaque'});
+	}
 
-        if ($serviceOptions->{'databaseName'}) {
-                $Zpackage->option(databaseName => $serviceOptions->{'databaseName'});
-        }
-        if ($serviceOptions->{'recordIdNumber'}) {
-                $Zpackage->option(recordIdNumber => $serviceOptions->{'recordIdNumber'});
-        }
-        if ($serviceOptions->{'recordIdOpaque'}) {
-                $Zpackage->option(recordIdOpaque => $serviceOptions->{'recordIdOpaque'});
-        }
+	# this is an ILL request (Zebra doesn't support it)
+	#if ($serviceType eq 'itemorder') {
+	#   $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
+	#   $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
+	#   $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
+	#   $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
+	#}
 
-        # this is an ILL request (Zebra doesn't support it)
-        if ($serviceType eq 'itemorder') {
-           $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
-           $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
-           $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
-           $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
-        }
+	if ($record) {
+		my $xmlrecord = marc2xml($record);
+		$Zpackage->option(record => $xmlrecord);
+		if ($serviceOptions->{'syntax'}) {
+			$Zpackage->option(syntax => $serviceOptions->{'syntax'});
+		}
+	}
 
-        if ($record) {
-	   my $xmlrecord = marc2xml($record);
-           $Zpackage->option(record => $xmlrecord);
-           if ($serviceOptions->{'syntax'}) {
-              $Zpackage->option(syntax => $serviceOptions->{'syntax'});
-           }
-        }
-
-        # send the request, handle any exception encountered
-        eval {  $Zpackage->send($serviceType) };
-        if ($@ && $@->isa("ZOOM::Exception")) {
-                print "Oops!  ", $@->message(), "\n";
-                return $@->code();
-        }
-        # free up package resources
-        $Zpackage->destroy();
+	# send the request, handle any exception encountered
+	eval { $Zpackage->send($serviceType) };
+		if ($@ && $@->isa("ZOOM::Exception")) {
+			print "Oops!  ", $@->message(), "\n";
+			return $@->code();
+		}
+	# free up package resources
+	$Zpackage->destroy();
 }
 
 =head2 set_service_options
@@ -244,13 +244,10 @@ sub set_service_options {
 	# nothing to do
 
 	}
-	
-        if ($serviceType eq 'create') {
+	if ($serviceType eq 'create') {
         # nothing to do
-
-        }
-	
-	if (serviceType eq 'drop') {
+	}
+	if ($serviceType eq 'drop') {
 		die "ERROR: 'drop' not currently supported (by Zebra)";
 	}
 	return $serviceOptions;
@@ -267,16 +264,14 @@ C<$record> a MARC record
 =cut
 
 sub marc2xml {
-        my ($record) = @_;
-        my $xmlrecord;
-        eval {
-                $xmlrecord=$record->as_xml();
-        };
-        #TODO: better error handling here
-        if ($@){
-                warn "ERROR: I suspect a badly formatted MARC record";
-        }
-        return $xmlrecord;
+	my ($record) = @_;
+	my $xmlrecord;
+	eval { $xmlrecord=$record->as_xml() };
+	#TODO: better error handling here
+	if ($@){
+		warn "ERROR: I suspect a badly formatted MARC record";
+	}
+	return $xmlrecord;
 }
 
 =head2 @tagslib = &MARCgettagslib($dbh,1|0,$frameworkcode);
@@ -2914,6 +2909,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.151  2006/02/25 21:02:20  kados
+#
+# Further cleanup, convering new routines to 4-chars
+#
 # Revision 1.150  2006/02/25 20:49:15  kados
 # Better documentation, added warning if serviceType is 'drop' since it's
 # not supported in Zebra.
