@@ -62,12 +62,8 @@ sub search {
     my ( $search, $type, $number ) = @_;
     my $dbh = C4::Context->dbh();
     my $q;
-    my $Zconn;
+    my $Zconn = C4::Context->Zconn;
     my $raw;
-    eval { $Zconn = new ZOOM::Connection( C4::Context->config("zebradb") ); };
-    if ($@) {
-        warn "Error ", $@->code(), ": ", $@->message(), "\n";
-    }
 
     if ( $type eq 'CQL' ) {
         my $string;
@@ -79,9 +75,6 @@ sub search {
                 $string .= "$var=\"$search->{$var}\" ";
             }
         }
-        $Zconn->option( cqlfile => C4::Context->config("intranetdir")
-              . "/zebra/pqf.properties" );
-        $Zconn->option( preferredRecordSyntax => "xml" );
         $q = new ZOOM::Query::CQL2RPN( $string, $Zconn );
     }
     my $rs;
@@ -112,15 +105,8 @@ sub get_record {
     # pass in an id (biblionumber at this stage) and get back a MARC record
     my ($id) = @_;
     my $q;
-    my $Zconn;
+    my $Zconn = C4::Context->Zconn
     my $raw;
-    eval { $Zconn = new ZOOM::Connection( C4::Context->config("zebradb") ); };
-    if ($@) {
-        warn "Error ", $@->code(), ": ", $@->message(), "\n";
-    }
-    $Zconn->option( cqlfile => C4::Context->config("intranetdir")
-          . "/zebra/pqf.properties" );
-    $Zconn->option( preferredRecordSyntax => "xml" );
     my $string = "identifier=$id";
     warn $string;
 
