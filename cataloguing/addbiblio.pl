@@ -354,7 +354,6 @@ my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
-my $Zconn = C4::Context->Zconn;
 
 $frameworkcode = &MARCfind_frameworkcode($dbh,$biblionumber) if ($biblionumber and not ($frameworkcode));
 $frameworkcode='' if ($frameworkcode eq 'Default');
@@ -433,7 +432,7 @@ if ($op eq "addbiblio") {
 		if ($is_a_modif) {
 		warn "ITS A MODIF : .$biblionumber";
 			NEWmodbiblioframework($dbh,$biblionumber,$frameworkcode);
-			NEWmodbiblio($dbh,$Zconn,$record,$biblionumber,$frameworkcode);
+			NEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode);
 		} else {
 			my $biblioitemnumber;
 			($biblionumber,$biblioitemnumber) = NEWnewbiblio($dbh,$record,$frameworkcode);
