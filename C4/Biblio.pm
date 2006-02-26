@@ -26,7 +26,7 @@ use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
-
+our $Zconn=C4::Context->Zconn;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -147,11 +147,9 @@ all subs require/use $dbh as 1st parameter and a hash as 2nd parameter.
 
 =head2 z3950_extended_services
 
-z3950_extended_services($Zconn,$serviceType,$serviceOptions,$record);
+z3950_extended_services($serviceType,$serviceOptions,$record);
 
 	z3950_extended_services is used to handle all interactions with Zebra's extended serices package.
-
-C<$Zconn> a connection object to the Zebra server
 
 C<$serviceType> one of: itemorder,create,drop,commit,update,xmlupdate
 
@@ -173,8 +171,9 @@ C<$record> the record, if one is needed for the service type
 
 =cut
 sub z3950_extended_services {
-	my ($Zconn,$serviceType,$serviceOptions,$record) = @_;
-        
+	my ($serviceType,$serviceOptions,$record) = @_;
+
+    my $Zconn = C4::Context->Zconn; 
 	# create a new package object
 	my $Zpackage = $Zconn->package();
 
@@ -807,7 +806,7 @@ creates a biblio from a MARC::Record.
 =cut
 
 sub NEWnewbiblio {
-    my ( $dbh,$Zconn,$record,$frameworkcode ) = @_;
+    my ( $dbh,$record,$frameworkcode ) = @_;
     my $biblionumber;
     my $biblioitemnumber;
     my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
@@ -837,7 +836,7 @@ sub NEWnewbiblio {
 	$olddata->{marc} = $record->as_usmarc();
 	$olddata->{marcxml} = $record->as_xml();
 	# and create biblioitem, that's all folks !
-    $biblioitemnumber = REALnewbiblioitem( $dbh, $Zconn, $olddata );
+    $biblioitemnumber = REALnewbiblioitem( $dbh, $olddata );
 
     # search subtiles, addiauthors and subjects
     ( $tagfield, $tagsubfield ) =
@@ -895,7 +894,7 @@ sub NEWmodbiblioframework {
 
 =head2 NEWmodbiblio
 
-NEWmodbiblio($dbh,$Zconn,$MARCrecord,$biblionumber,$frameworkcode);
+NEWmodbiblio($dbh,$MARCrecord,$biblionumber,$frameworkcode);
 
 =over 4
 
@@ -906,7 +905,7 @@ modify a biblio (MARC=ON)
 =cut
 
 sub NEWmodbiblio {
-	my ($dbh,$Zconn,$record,$biblionumber,$frameworkcode) =@_;
+	my ($dbh,$record,$biblionumber,$frameworkcode) =@_;
 	$frameworkcode="" unless $frameworkcode;
 # 	&MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
 	my $oldbiblio = MARCmarc2koha($dbh,$record,$frameworkcode);
@@ -918,7 +917,7 @@ sub NEWmodbiblio {
 	$oldbiblio->{marcxml} = $record->as_xml();
 	warn "dans NEWmodbiblio $biblionumber = ".$oldbiblio->{biblionumber}." = ".$oldbiblio->{marcxml};
 	REALmodbiblio($dbh,$oldbiblio);
-	REALmodbiblioitem($dbh,$Zconn,$oldbiblio);
+	REALmodbiblioitem($dbh,$oldbiblio);
 	# now, modify addi authors, subject, addititles.
 	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
 	my @addiauthfields = $record->field($tagfield);
@@ -983,7 +982,7 @@ sub NEWdelbiblio {
 
 =head2 NEWnewitem
 
-$itemnumber = NEWnewitem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber);
+$itemnumber = NEWnewitem($dbh, $record, $biblionumber, $biblioitemnumber);
 
 =over 4
 
@@ -994,7 +993,7 @@ creates an item from a MARC::Record
 =cut
 
 sub NEWnewitem {
-    my ( $dbh,$Zconn,$record,$biblionumber,$biblioitemnumber ) = @_;
+    my ( $dbh,$record,$biblionumber,$biblioitemnumber ) = @_;
 
     # add item in old-DB
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
@@ -1003,15 +1002,15 @@ sub NEWnewitem {
     $item->{'biblionumber'} = $biblionumber;
     $item->{'biblioitemnumber'}=$biblioitemnumber;
     $item->{marc} = $record->as_usmarc();
-    warn $item->{marc};
-    my ( $itemnumber, $error ) = &REALnewitems( $dbh, $Zconn, $item, $item->{barcode} );
+    #warn $item->{marc};
+    my ( $itemnumber, $error ) = &REALnewitems( $dbh, $item, $item->{barcode} );
 	return $itemnumber;
 }
 
 
 =head2 NEWmoditem
 
-$itemnumber = NEWmoditem($dbh, $Zconn, $record, $biblionumber, $biblioitemnumber,$itemnumber);
+$itemnumber = NEWmoditem($dbh, $record, $biblionumber, $biblioitemnumber,$itemnumber);
 
 =over 4
 
@@ -1022,7 +1021,7 @@ Modify an item
 =cut
 
 sub NEWmoditem {
-    my ( $dbh, $Zconn, $record, $biblionumber, $biblioitemnumber, $itemnumber) = @_;
+    my ( $dbh, $record, $biblionumber, $biblioitemnumber, $itemnumber) = @_;
     
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
     my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
@@ -1031,7 +1030,7 @@ sub NEWmoditem {
 	$olditem->{biblionumber} = $biblionumber;
 	$olditem->{biblioitemnumber} = $biblioitemnumber;
 	# and modify item
-    REALmoditem( $dbh, $Zconn, $olditem );
+    REALmoditem( $dbh, $olditem );
 }
 
 
@@ -1273,7 +1272,7 @@ modify a biblioitem
 
 =cut
 sub REALmodbiblioitem {
-    my ( $dbh, $Zconn, $biblioitem ) = @_;
+    my ( $dbh, $biblioitem ) = @_;
     my $query;
 
     my $sth = $dbh->prepare("update biblioitems set number=?,volume=?,			volumedate=?,		lccn=?,
@@ -1292,7 +1291,7 @@ sub REALmodbiblioitem {
 
 	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
 
-	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	z3950_extended_services('update',set_service_options('update'),$record);
 
 
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
@@ -1300,7 +1299,7 @@ sub REALmodbiblioitem {
 
 =head2 REALnewbiblioitem
 
-REALnewbiblioitem($dbh,$Zconn,$biblioitem);
+REALnewbiblioitem($dbh,$biblioitem);
 
 =over 4
 
@@ -1311,7 +1310,7 @@ adds a biblioitem ($biblioitem is a hash with the values)
 =cut
 
 sub REALnewbiblioitem {
-	my ( $dbh, $Zconn, $biblioitem ) = @_;
+	my ( $dbh, $biblioitem ) = @_;
 
 	$dbh->do("lock tables biblioitems WRITE, biblio WRITE, marc_subfield_structure READ");
 	my $sth = $dbh->prepare("Select max(biblioitemnumber) from biblioitems");
@@ -1360,7 +1359,7 @@ sub REALnewbiblioitem {
 		$biblioitem->{marcxml},
 	);
 	$dbh->do("unlock tables");
-	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	z3950_extended_services('update',set_service_options('update'),$record);
 	return ($biblioitemnumber);
 }
 
@@ -1386,7 +1385,7 @@ sub REALnewsubtitle {
 
 =head2 REALnewitems
 
-($itemnumber,$errors)= REALnewitems($dbh,$Zconn,$item,$barcode);
+($itemnumber,$errors)= REALnewitems($dbh,$item,$barcode);
 
 =over 4
 
@@ -1397,7 +1396,7 @@ create a item. $item is a hash and $barcode the barcode.
 =cut
 
 sub REALnewitems {
-    my ( $dbh, $Zconn, $item, $barcode ) = @_;
+    my ( $dbh, $item, $barcode ) = @_;
 
 # 	warn "OLDNEWITEMS";
 	
@@ -1496,9 +1495,9 @@ sub REALnewitems {
 	# ok, we have the marc record, add item number to the item field (in {marc}, and add the field to the record)
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
 	my $itemrecord = MARC::Record->new_from_usmarc($item->{marc});
-        warn $itemrecord;
-        warn $itemnumberfield;
-        warn $itemrecord->field($itemnumberfield);
+        #warn $itemrecord;
+        #warn $itemnumberfield;
+        #warn $itemrecord->field($itemnumberfield);
 	my $itemfield = $itemrecord->field($itemnumberfield);
 	$itemfield->add_subfields($itemnumbersubfield => "$itemnumber");
 	$record->insert_grouped_field($itemfield);
@@ -1508,12 +1507,12 @@ sub REALnewitems {
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
-	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	z3950_extended_services('update',set_service_options('update'),$record);
 	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
 
-=head2 REALmoditem($dbh,$Zconn,$item);
+=head2 REALmoditem($dbh,$item);
 
 =over 4
 
@@ -1524,7 +1523,7 @@ modify item
 =cut
 
 sub REALmoditem {
-    my ( $dbh, $Zconn, $item ) = @_;
+    my ( $dbh, $item ) = @_;
     $item->{'bibitemnum'} = 1;
 	my $error;
 	$dbh->do('lock tables items WRITE, biblio WRITE,biblioitems WRITE');
@@ -1596,7 +1595,7 @@ sub REALmoditem {
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
 	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
-	z3950_extended_services($Zconn,'update',set_service_options('update'),$record);
+	z3950_extended_services('update',set_service_options('update'),$record);
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
@@ -1899,7 +1898,7 @@ sub modsubject {
 	return ($error);
 }    # sub modsubject
 
-=head2 modbibitem($dbh, $Zconn,$biblioitem);
+=head2 modbibitem($dbh, $biblioitem);
 
 =over 4
 
@@ -1910,9 +1909,9 @@ modify a biblioitem. The parameter is a hash
 =cut
 
 sub modbibitem {
-    my ($dbh, $Zconn, $biblioitem) = @_;
+    my ($dbh, $biblioitem) = @_;
     #my $dbh = C4::Context->dbh;
-    &REALmodbiblioitem( $dbh, $Zconn, $biblioitem );
+    &REALmodbiblioitem( $dbh, $biblioitem );
 }    # sub modbibitem
 
 =head2 newbiblioitem
@@ -1928,12 +1927,12 @@ create a biblioitem, the parameter is a hash
 =cut
 
 sub newbiblioitem {
-    my ($dbh, $Zconn, $biblioitem) = @_;
+    my ($dbh, $biblioitem) = @_;
     #my $dbh        = C4::Context->dbh;
 	# add biblio information to the hash
     my $MARCbiblio = MARCkoha2marcBiblio( $dbh, $biblioitem );
 	$biblioitem->{marc} = $MARCbiblio->as_usmarc();
-    my $bibitemnum = &REALnewbiblioitem( $dbh, $Zconn, $biblioitem );
+    my $bibitemnum = &REALnewbiblioitem( $dbh, $biblioitem );
     return ($bibitemnum);
 }
 
@@ -1956,7 +1955,7 @@ sub newsubtitle {
 
 =head2 newitems
 
-$errors = newitems($dbh, $Zconn, $item, @barcodes);
+$errors = newitems($dbh, $item, @barcodes);
 
 =over 4
 
@@ -1968,7 +1967,7 @@ insert items ($item is a hash)
 
 
 sub newitems {
-    my ( $dbh, $Zconn, $item, @barcodes ) = @_;
+    my ( $dbh, $item, @barcodes ) = @_;
     #my $dbh = C4::Context->dbh;
     my $errors;
     my $itemnumber;
@@ -1979,14 +1978,14 @@ sub newitems {
 		$oneitem->{barcode}= $barcode;
         my $MARCitem = &MARCkoha2marcItem( $dbh, $oneitem);
 		$oneitem->{marc} = $MARCitem->as_usmarc;
-        ( $itemnumber, $error ) = &REALnewitems( $dbh,$Zconn,$oneitem);
+        ( $itemnumber, $error ) = &REALnewitems( $dbh, $oneitem);
 #         $errors .= $error;
 #         &MARCadditem( $dbh, $MARCitem, $item->{biblionumber} );
     }
     return ($errors);
 }
 
-=head2 moditem($dbh,$Zconn,$item);
+=head2 moditem($dbh,$item);
 
 =over 4
 
@@ -1998,9 +1997,9 @@ modify an item ($item is a hash with all item informations)
 
 
 sub moditem {
-    my ($dbh,$Zconn,$item) = @_;
+    my ($dbh, $item) = @_;
     #my $dbh = C4::Context->dbh;
-    &REALmoditem( $dbh, $Zconn, $item );
+    &REALmoditem( $dbh, $item );
     my $MARCitem =
       &MARCkoha2marcItem( $dbh, $item->{'biblionumber'}, $item->{'itemnum'} );
     my $bibid =
@@ -2972,6 +2971,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.154  2006/02/26 00:08:20  kados
+# moving all $Zconn s to z3950_extended_services (currently, nothing
+# works).
+#
 # Revision 1.153  2006/02/25 22:39:10  kados
 # Another purely documentation commit. Just changing formatting to ease
 # readability.
