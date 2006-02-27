@@ -1062,6 +1062,12 @@ sub MARChtml2marc {
 				}
 			}
 			$indicators{@$rtags[$i]}.='  ';
+		        # skip blank tags, I hope this works 
+		        if (@$rtags[$i] eq ''){
+			    $prevtag = @$rtags[$i];
+			    undef $field;
+			    next;
+			}
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
 				undef $field;
@@ -2929,6 +2935,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.34  2006/02/27 07:17:55  rangi
+# Hopefully a fix for a problem Joshua was having with blank tags being added
+#
 # Revision 1.115.2.33  2006/02/25 03:55:08  kados
 # Fixes bug with previous commit. addbiblio.pl should now correctly
 # NOT save fields that are empty.
