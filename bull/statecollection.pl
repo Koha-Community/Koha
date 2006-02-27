@@ -64,7 +64,7 @@ if ($op eq 'serialchangestatus') {
 			if ($serialseqs[$i]) {
 				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
 			}
-			if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
+			if (($status[$i]==2) && C4::Context->preference("serialsadditems") && !hassubscriptionexpired($subscriptionid)){
 				my %info;
 				$info{branch}=$homebranches[$i];
 				$info{barcode}=$barcodes[$i];
