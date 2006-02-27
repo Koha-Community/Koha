@@ -93,7 +93,19 @@ my %requiretables = (
 					KEY borrowernumber (borrowernumber),
 					KEY type (type,externalid)
 				)",
-
+	overduerules	=>"(`branchcode` varchar(255) NOT NULL default '',
+					`categorycode` char(2) NOT NULL default '',
+					`delay1` int(4) default '0',
+					`letter1` varchar(20) default NULL,
+					`debarred1` char(1) default '0',
+					`delay2` int(4) default '0',
+					`debarred2` char(1) default '0',
+					`letter2` varchar(20) default NULL,
+					`delay3` int(4) default '0',
+					`letter3` varchar(20) default NULL,
+					`debarred3` int(1) default '0',
+					PRIMARY KEY  (`branchcode`,`categorycode`)
+					)",
 );
 
 my %requirefields = (
@@ -1229,6 +1241,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.129  2006/02/27 18:19:33  hdl
+# New table used in overduerules.pl tools page.
+#
 # Revision 1.128  2006/01/25 15:16:06  tipaul
 # updating DB :
 # * removing useless tables
