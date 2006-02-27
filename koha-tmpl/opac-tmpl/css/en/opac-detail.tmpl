@@ -107,6 +107,15 @@
 					<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
 				<!-- /TMPL_IF -->
 	</div>
+		<!-- TMPL_IF NAME="AmazonContent" -->
+			<!-- TMPL_IF NAME="isbn" -->
+			<div id="bloc20">
+			<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+				<img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" />
+			</a>
+			</div>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 
 	<div id="bloc20">
@@ -200,5 +209,39 @@
 		<p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
 		</div>
  	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="AmazonContent" -->
+			<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+			<!-- TMPL_IF NAME="rating" -->
+			<!-- Amazon Reviews -->
+			<div id="bloc20">
+					<h2>Amazon Reader Reviews:</h2>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->		
+				<!-- TMPL_IF NAME="rating" -->
+					<h4>Rating (from Amazon.com):
+						<div id="starMT">
+						<div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px">
+						</div>
+						</div>
+					</h4>
+					<!-- TMPL_LOOP NAME="REVIEWS" -->
+						<div class="content_set">
+						<!-- TMPL_IF NAME="summary" -->
+						<h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="comment" -->
+							<p><!-- TMPL_VAR NAME="comment" -->
+						</p><!-- /TMPL_IF -->
+						</div>
+					<!-- /TMPL_LOOP -->
+				<h4>
+					<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">Add your own review</a>
+				</h4>
+			<!-- /TMPL_IF -->
+		</div> <!-- itemReviews -->
+	<!-- /TMPL_IF-->
 </div>
+
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -62,7 +62,6 @@ $template->param(norequests => $norequests);
 my $marc = C4::Context->preference("marc");
 
 #preformat isbn for amazon content
-$dat->{'isbn'} =~ s|-||g;
 my @results = ($dat,);
 if (C4::Boolean::true_p($marc)) {
 	my $dbh = C4::Context->dbh;
@@ -98,8 +97,10 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 #not used unless preference set
 if (C4::Context->preference("AmazonContent")==1) {
 	use C4::Amazon;
-	my $isbn=$dat->{'isbn'};
-	my $amazon_details = &get_amazon_details($isbn);
+	$dat->{'amazonisbn'}=$dat->{'isbn'};
+	$dat->{'amazonisbn'} =~ s|-||g;
+
+	my $amazon_details = &get_amazon_details($dat->{amazonisbn});
 
 	foreach my $result (@{$amazon_details->{Details}}){
         	$template->param(item_description => $result->{ProductDescription});
