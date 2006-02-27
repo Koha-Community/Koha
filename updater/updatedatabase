@@ -1048,7 +1048,7 @@ my %tabledata = (
 	{
             uniquefieldrequired => 'variable',
             variable            => 'serialsadditems',
-            value               => '1',
+            value               => '0',
             forceupdate         => { 'explanation' => 1,                                                             '
                                         type' => 1},
             explanation         => 'If set, a new item will be automatically added when receiving an issue',
@@ -1681,6 +1681,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.27  2006/02/27 15:40:32  tipaul
+# setting serialadditems systempreference to 0 by default : no behaviour change when upgrading Koha
+#
 # Revision 1.100.2.26  2006/02/23 03:19:48  kados
 # Adds the 'sortbynonfiling' systempref. With this enabled, Koha will
 # correctly sort title searches according to the nonfiling characters
