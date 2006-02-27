@@ -1,0 +1,127 @@
+RELEASE NOTES
+=============
+
+Koha is the 1st Open-Source Integrated Library System.
+Released at first in New zealand, in 2000 januaray, it is maintained by a team of volunteers from around the globe, the Koha system is a full catalogue, opac, circulation and acquisitions system.
+
+Koha 2.2 is more than 247 000 lines of code, developped by more than 30 differents developpers (excluding translators).
+
+With the 2.2 version, Koha is now a mature product, with a lot of nice features. It's used in more than 100 libraries, from all kinds (public, schools, search, religious...), of all size (from 1 to 8 branches, from 1000 to 300 000 items).
+
+
+========
+WARNINGS
+========
+* The librarian interface is tested only with mozilla/firefox. Should work (partially) with IE. OPAC should work fine with any navigator.
+* The installer is *wrong* on languages available. In this release, french & english are uptodate. Other language po files are provided in the package. If you update/complete one of them, please send it at paul.poulain @ free.fr, it will be included in a 2.2.4b release !
+
+KNOWN BUGS :
+******
+Critical/blocking : none
+see bugs.koha.org for more information. Please report any problem in bugs.koha.org
+
+Apple users : it seems there is an annoying bug in firefox, that you can have in librarian biblio search : only the 1st MARC field list is available, the others can't be opened. The problem is related and fixed here : http://www.macfixit.com/article.php?story=20051226091140372
+
+=======
+DIFFS
+=======
+Diff 2.2.4 => 2.2.5
+*******************
+
+DB MODIFS :
+***********
+
+DB structure : none
+DB content : none
+Koha opac stylesheets : none
+
+BUGFIXES
+	=== ACQUISITION ===
+	* suggestion/acquisition bugfixes :
+		- 200 field is no more splitted in 2 parts
+		- author is after title in UNIMARC (dirty code, but mySQL has a strange behaviour)
+		- when the book is recieved, the suggestion is marked "available" and a mail is sent
+	* printing stylesheet dropped ALL <p> (hiding too many things in order printing)
+	* when a budget has no line (or an outdated line) it does not appear anymore in acquisition
+	* orders where always attached to the last budget line, not to their real line (=depending on date)
+	
+	=== CATALOGUE ===
+	* There was an annoying bug in search when 2 search terms were separated by 2 spaces or an "empty character" (like .,; ...) : the search was truncated and the result not correct.
+	
+	=== CATALOGUING ===
+	* Repeated subfield in authority were not being reported in the biblio while cataloguing
+	* when AutoBarcode=ON and MARC=ON the barcode was not calculated automatically. Now, the barcode will be calculated (and any manual entry discarded during save)
+	* added a feature to enable reordering of subfields in MARC editor (can be considered as a bug ? at least one of my libraries think that yes !)
+	* when a note is added to items it was not stored into non MARC-DB
+	* permission required to use a plugin was wrong. Changed to "editcatalogue", more convenient.
+	* if the last field was an authority, the authority report generated a javascript error (going after array size)
+	* It was impossible to add a subfield with value 0.
+	* additionalauthors were uncompletly deleted on biblio deletion.
+	* (UNIMARC specific bugfix) when an editor is entered, with no ISBN, the collection plugin (225a) can find collections attached to the editor name. Note that if there are more than 1 EDITORS authority for a given editor, only the 1st will be used to create collection list.
+	* when adding a biblio, after searching in DB and reservoir, the page manager in the result list was buggy (isbnsearch.pl)
+	* bugfix in almost all unimarc plugins : under certain circumstances, for some digits, a value could be lost on modification (1 byte values mainly)
+	* added a usmarc_field_952v.pl plugin (joshua) : Adds a function to autogenerate the date for dateaccessioned for usmarc
+	* in MARC editor, if the last field of last tab was an authority, it was impossible to report the selected authority into the biblio.
+	* deleted biblio/biblioitems/items tables had a not the same structure than their non deleted "sister". During update, a new tool modify automatically their structure to have deleted records correctly stored.
+	
+	=== AUTHORITIES ===
+	* fixing bug in summary (separator before subfield was in fact after)
+	* fixing bug in authority order : authorities are not ordered alphabetically instead of no order. Requires all the dataset to be retrieved, but the benefits is important !
+	* The "used in X biblios" button has been removed for EDITORS, as it's always 0 and does not work as EDITORS are pseudo-authorities
+
+	=== SERIALS ===
+	* Ordering bull-home better : by title
+	
+	=== CIRCULATION ===
+	* minor bugfix : showing date in format from systempreferences
+	* minor bugfix : the "edit borrower link in circulation screen was buggy
+	
+	=== MEMBERS ===
+	
+	=== REPORTS ===
+	* Lot of bugfixes and improvements in borrower issues, catalogue issues, issues stats (not detailed, sorry, discover by yourself)
+	
+	=== ALL ===
+	* bugfixes in ldap auth (bugfixes from 2.2.4, 2.2.3 was not buggy)
+	
+	=== OPAC ===
+	* adding dashes in isbn in opac-detail.pl
+	* translation bug ISSN translated to ISBN in french , very annoying mistake ! + some other translations
+	* ordering by acquisition date was buggy.
+	
+IMPROVEMENTS
+	=== ACQUISITION ===
+	* added a menu & a screen to see late issues attached to a bookseller.
+	
+	=== CIRCULATION===
+	* In overdue list, Added some filter features :
+	- filter on borrower firstname, surname or cardnumber. **This can be discussed and changed**
+	- filter on borrowercategory
+	- filter on itemtype
+	- filter on branch
+	- show all current issues.
+	* Added a reserve management page in circulation module. It basically displays all the reservations not cancelled.
+	* Adding a systempreference to notice the library before departure of a borrower. when borrower leaves the library in less than 'NotifiyBorrowerDeparture', the circulation desk shows it.
+	
+	=== CATALOGUE ===
+	
+	=== CATALOGUING ===
+	* as the MARC editor begins to be really heavy, i've also added a marc_hide systempref. It hides all marc features not requested by libraries that want MARC but not too much. It hides MARC tag & subfield code, reordering buttons as well as indicators. by default, hide_marc is off
+	
+	=== MEMBERS ===
+	
+	=== OPAC ===
+	* by default, recent acquisitions are done on 30 days.
+	* New systempreference : OpacPasswordChange if set to Yes (default) the user can change it's password. If set to No, he can't. Useful for libraries with LDAP auth, where the password is checked in LDAP, not in Koha, thus Koha can't change it
+	* New alternate stylesheet for OPAC : go to librarian interface >> parameters >> System preferences >> OPAC >> modify opacstylesheet and enter : /opac-tmpl/css/opac2.css
+	
+	=== SERIALS ===
+	* ordering lists by biblio title
+	* when adding a subscription and searching a biblio, you can filter on itemtype (useful as libraries usually have one or few itemtypes specific for serials)
+	
+	=== SYSTEM PREFERENCES ===
+	* The export tool has been improved a lot : the library can now select a branch, and itemtype or callnumber limits. Plus the export can be limited to X records (for testing purposes before a larger export)
+	
+	=== ALL ==
+	* online help added for some screens.
+

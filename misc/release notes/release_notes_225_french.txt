@@ -1,0 +1,142 @@
+NOTES DE VERSION
+=============
+Koha est le 1er SIGB sous licence libre.
+Il est apparu en Nouvelle Zélande en janvier 2000, et est maintenu par
+une équipe de volontaires et de professionnels tout autour du globe.
+Koha est un système complet comportant des modules d'acquisition, de
+catalogage, de circulation, et un OPAC.
+
+Koha 2.2 représente plus de 247 000 lignes de codes, développées par
+plus de 30 personnes différentes (hors traducteurs).
+
+Avec la version 2.2, Koha est un produit mature, avec beaucoup de
+fonctionnalités utiles. il est en production dans plus de 50
+bibliothèques, de tous types (publiques, écoles, recherche, privées...)
+et de toute taille (de 1000 à 300 000 exemplaires)
+
+Koha 2.2.5 contient essentiellement des corrections de bugs, sachant que la définition du bug est assez large ! Il y a quelques améliorations mineures (notamment 2 préférences systèmes).
+
+Pour la prochaine version majeure (3.0), elle devrait avancer assez rapidement maintenant : en effet, la société indexdata, éditeur de zebra, l'outil qui servira pour la gestion du catalogue, nous a livré l'interface Perl dont nous avions besoin (sous licence GPL comme d'habitude, indexdata ne produit que du code sous GPL comme l'équipe Koha)
+Encore une démonstration du dynamisme généré par les licences libres !
+
+========
+AVERTISSEMENT
+========
+* L'interface bibliothécaire est testée seulement avec Mozilla-firefox.
+Elle devrait fonctionner partiellement avec IE. L'OPAC devrait
+fonctionner correctement avec n'importe quel navigateur.
+* L'installeur se trompe dans la liste des langues disponibleS. Seuls le
+français et l'anglais sont à jour dans cette version. Les autres
+fichiers de traduction sont fournis dans cette version. si vous en
+complétez/corrigez un, envoyez le à paul.poulain @ free.fr, il sera
+inclus dans une version 2.2.4b !
+
+PROBLEMES CONNUS
+******
+Critiques/bloquants : aucun
+Voir bugs.koha.org pour plus d'information
+
+Utilisateurs Apple : il semble qu'il y ait un bug génant dans Firefox, dans l'interface de recherche du bibliothécaire : seule la 1ere liste dans les champs MARC est accessibles, les autres ne peuvent pas être ouvertes. Le problème est abordé et traité ici : http://www.macfixit.com/article.php?story=20051226091140372
+
+
+=======
+DIFFS
+=======
+Diff 2.2.4 => 2.2.5
+*******************
+
+MODIFS DB
+***********
+
+structure BD : aucune
+Contenu BD : 2 préférences systèmes ajoutées (voir plus bas)
+Feuilles de style OPAC : aucune modifications, 1 nouvelle feuille proposée en standard (voir plus bas)
+
+BUGFIXES
+	=== ACQUISITION ===
+	* Suggestion/acquisition :
+		- le champ 200 n'est plus dupliqué en 2 parties
+		- l'auteur est après le titre en UNIMARC (code assez sale, mais mySQL se comporte bizarrement)
+		- quand le document est réceptionné, la suggestion est marquée "disponible" et un mail est envoyé
+	* la feuille de style d'impression supprimait toutes les balises <p> (ce qui cachait pas mal de choses lors de l'impression d'une commande !!!
+	* quand un poste budgétaire n'a pas de ligne (ou une ligne périmée), il n'apparaît plus dans les acquisitions.
+	* les commandes étaient toujours attachées à la dernière ligne budgétaire, pas à celle dépendant de la date de saisie
+	
+	=== CATALOGUE ===
+	* Il y avait un bug ennuyeux dans la recherche lorsque 2 mots étaient séparés par 2 espaces ou "caractères vides (comme .,;) : la recherche était tronquée et le résultat incorrect
+	
+	=== CATALOGAGE ===
+	* Les champs répétés dans les autorités n'étaient pas bien reportés dans la notice bibliographique
+	* Quand AutoBarcode=ON et MARC=ON, le code barre n'était pas calculé correctement. Maintenant le code est bien calculé, et un code saisi manuellement est ignoré lors de l'enregistrement.
+	* Ajout d'une fonctionnalité pour réordonner les sous-champs dans l'éditeur MARC (était-ce un bug ? au moins une bibliothèque pensait que oui !)
+	* lorsqu'une note était ajoutée aux exemplaires, elle n'était pas stockée correctement dans la base non MARC
+	* les habilitations pour utiliser un plugin étaient erronées. Il faut maintenant "editcatalogue", ce qui est logique
+	* Si le dernier champ d'une grille de catalogage était une autorité, le report de l'autorité dans la notice biblio était impossible.
+	* Il était impossible d'ajouter un sous-champ avec la valeur 0
+	* les auteurs additionnels n'étaient pas complètement supprimés lors de la suppression d'une notice biblio.
+	* (spécifique UNIMARC) quand un éditeur est saisi, sans ISBN, le plugin de sélection des collections peut trouver les collections attachées à l'éditeur à partir du nom. Notez que s'il y a plus d'une autorité avec le même nom d'éditeur, le plugin n'utilise que les collections du 1er d'entre eux.
+	* Lors de l'ajout d'une notice, après recherche dans la base et le réservoir, le gestionnaire de pages (suivant/précédent) était buggué
+	* bugfix dans presque tous les plugins UNIMARC : dans certains cas, pour certains champs une valeur était perdue à la modifications (champs d'1 position)
+	* Ajout d'un plugin pour us_marc_field_952v (par joshua) : Ajoute une fonction pour générer automatiquement le champ dateaccessioned pour l'USMARC
+	* les tables "deleted..." n'avaient plus la même structure que leur "soeur" ... (non "deleted") Lors de la mise à jour, un nouvel outil modifie automatiquement la structure pour que les suppressions soient correctement stockées dans la base.
+	
+	=== AUTORITES ===
+	* Correction d'un bug dans le résumé (le séparateur qui aurait dû être avant le champ était en fait après)
+	* Correction d'un bug dans le tri des autorités : elles n'étaient pas triée, elles sont maintenant triées par ordre alphabétique. Nécessite de récupérer toutes les réponses au lieu de la seule page demandée, mais le jeu en vaut la chandelle !
+	* le lien "utilisé dans X notices" a été enlevé pour les autorités EDITORS, c'est toujours 0 et le lien ne fonctionne pas puisque les EDITORS sont des pseudo-autorités.
+
+	=== BULLETINAGE ===
+	* la liste sur bull-home est triée par titre
+	
+	=== CIRCULATION ===
+	* bug mineur : la date est affichée dans le format défini dans les préférences systèmes
+	* bug mineur : le lien "modification lecteur" dans l'écran de circulation était erroné
+	
+	=== LECTEURS ===
+	* la date de fin d'inscription doit être postérieure à la date de début
+	
+	=== BILANS ===
+	* Nombreuses corrections de bugs et améliorations (pas de détail, désolé, c'est à découvrir par vous-même !)
+	
+	=== TOUT ===
+	* correction de bugs dans le module d'authentification LDAP (2.2.3 était correct, les bugs n'affectaient que la 2.2.4)
+	
+	=== OPAC ===
+	* ajout des - dans les isbn dans opac-detail.pl
+	* bug de traduction qui faisait apparaitre "ISBN" comme traduction de "ISSN" !
+	* le tri par date d'acquisition était buggué
+	
+AMELIORATIONS
+	=== ACQUISITION ===
+	* Ajout d'un menu et d'un écran pour voir les commandes en retard chez un libraire donné
+	
+	=== CIRCULATION===
+	* Dans la liste des retards, ajout de filtres :
+	- filtre sur le nom/prénom/carte lecteur
+	- filtre sur la catégorie lecteur, le type de document, le site
+	- bouton pour afficher tous les prêts en cours
+	* Ajout d'une page pour voir toutes les réservations en cours (menu circulation également)
+	* ajout d'une préférence système pour être informé du départ prochain d'un lecteur : Si le lecteur quitte la bibliothèque dans moins de 'NotifyBorrowerDeparture' jours, l'écran de circulation prévient le bibliothécaire
+	
+	=== CATALOGUE ===
+	
+	=== CATALOGAGE ===
+	* L'éditeur MARC devient de plus en plus lours, une préférence système a été ajoutée pour l'alléger : elle cache toutes les particularités MARC inutiles pour les bibliothèques qui veulent du MARC mais pas trop. Ca cache les codes de champ, de sous-champ, les boutons de réorganisation de sous champ et les indicateurs. Par défaut, hide_marc est OFF
+	
+	=== MEMBERS ===
+	
+	=== OPAC ===
+	* Par défaut, les acquisitions récentes sont faites sur les 30 derniers jours.
+	* Nouvelle préférence système : OpacPasswordChange. Si elle est positionnée à Oui (valeur par défaut), l'utilisateur peut changer son mot de passe à l'OPAC. Si elle est positionnée à Non, il ne peut pas. C'est utile notamment pour les bibliothèques avec une authentification LDAP, ou le mot de passe est géré par le LDAP, pas par Koha.
+	* Une feuille de style alternative est fournie avec Koha. Pour la sélectionner : interface bibliothécaire >> paramètres >> préférences systèmes >> OPAC >> modifier opacstylesheet et saisir /opac-tmpl/css/opac2.css
+	
+	=== BULLETINAGE ===
+	* les listes sont triées par titre
+	* Dans l'ajout d'un abonnement, lors de la recherche du titre, il est possible de filtrer sur le type de document (c'est utile parce que généralement les bibliothèques on 1 ou quelques types de documents dédiés aux périodiques !)
+	
+	=== PREFERENCES SYSTEME ===
+	* L'outil d'export de catalogue a été bien amélioré : la bibliothèque peut sélectionner un seul site, un seul type de documents, un groupe de cotes. De plus, il est possible de n'exporter que X notices (pour faire des tests avant un export plus complet, par exemple)
+	
+	=== TOUT ==
+	* l'aide en ligne a été ajoutée pour certains écrans (notamment bilans)
+
