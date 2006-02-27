@@ -61,7 +61,7 @@ orders, converting money to different currencies, and so forth.
 		&updaterecorder &newordernum
 		&getsupplierlistwithlateorders
 		&getlateorders
-		&getparcels
+		&getparcels &getparcelinformation
 		
 		&bookfunds &curconvert &getcurrencies &bookfundbreakdown
 		&updatecurrencies &getcurrency
@@ -499,7 +499,7 @@ sub getallorders {
   my $dbh = C4::Context->dbh;
   my @results = ();
 	my $strsth ="Select count(*),authorisedby,creationdate,aqbasket.basketno,
-closedate,surname,firstname,aqorders.title 
+closedate,surname,firstname,aqorders.biblionumber,aqorders.title, aqorders.ordernumber 
 from aqorders 
 left join aqbasket on aqbasket.basketno=aqorders.basketno 
 left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
@@ -519,6 +519,48 @@ quantityreceived is NULL) and datecancellationprinted is NULL ";
     push(@results,$data);
   }
   $sth->finish;
+  return(scalar(@results),@results);
+}
+=item getparcelinformation
+
+  ($count, @results) = &getparcelinformation($booksellerid, $code, $date);
+
+Looks up all of the received items from the supplier with the given
+bookseller ID at the given date, for the given code. Ignores cancelled and completed orders.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash. The keys of each element are fields from
+the aqorders, biblio, and biblioitems tables of the Koha database.
+
+C<@results> is sorted alphabetically by book title.
+
+=cut
+#'
+sub getparcelinformation {
+  #gets all orders from a certain supplier, orders them alphabetically
+  my ($supplierid,$code, $datereceived)=@_;
+  my $dbh = C4::Context->dbh;
+  my @results = ();
+  
+	my $strsth ="Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code%\" and aqorders.datereceived= \'$datereceived\'";
+		
+	if (C4::Context->preference("IndependantBranches")) {
+		my $userenv = C4::Context->userenv;
+		if (($userenv) &&($userenv->{flags} != 1)){
+			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
+		}
+	}
+	$strsth.=" order by aqbasket.basketno";
+	### parcelinformation : $strsth
+	my $sth=$dbh->prepare($strsth);
+  $sth->execute($supplierid);
+  while (my $data=$sth->fetchrow_hashref){
+    push(@results,$data);
+  }
+  my $count =scalar(@results);
+  ### countparcelbiblio: $count
+  $sth->finish;
+  
   return(scalar(@results),@results);
 }
 =item getsupplierlistwithlateorders
