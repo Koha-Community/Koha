@@ -13,8 +13,6 @@ use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 
-my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
-
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit);
 
@@ -98,7 +96,7 @@ warn "NUM:".$number;
 	$i++;
 
 	if ($i==$number) {
-		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+		z3950_extended_services('commit',set_service_options('commit'));
 		print "COMMIT OPERATION SUCCESSFUL\n";
 
 		my $timeneeded = gettimeofday - $starttime;
@@ -106,7 +104,7 @@ warn "NUM:".$number;
 	}
 	# perform the commit operation ever so often
 	if ($i==$commit) {
-		z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+		z3950_extended_services('commit',set_service_options('commit'));
 		$commit+=$commitnum;
 		print "COMMIT OPERATION SUCCESSFUL\n";
 	}
@@ -162,15 +160,15 @@ warn "NUM:".$number;
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$Zconn,$newRecord,'');
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
-			NEWnewitem($dbh,$Zconn,$items[$i],$bibid);
+			NEWnewitem($dbh,$items[$i],$bibid);
 		}
 	}
 }
 # final commit of the changes
-z3950_extended_services($Zconn,'commit',set_service_options('commit'));
+z3950_extended_services('commit',set_service_options('commit'));
 print "COMMIT OPERATION SUCCESSFUL\n";
 
 my $timeneeded = gettimeofday - $starttime;
