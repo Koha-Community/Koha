@@ -61,7 +61,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getframeworks &getframeworkinfo
 			&getauthtypes &getauthtype
 			&getallthemes &getalllanguages
-			&getallbranches
+			&getallbranches &getletters
 			$DEBUG);
 
 use vars qw();
@@ -298,6 +298,57 @@ sub getallbranches {
 			$branches{$branch->{'branchcode'}}=$branch;
 	}
 	return (\%branches);
+}
+
+=head2 getletters
+
+  $letters = &getletters($category);
+  returns informations about letters.
+  if needed, $category filters for letters given category
+  Create a letter selector with the following code
+  
+=head3 in PERL SCRIPT
+
+my $letters = getletters($cat);
+my @letterloop;
+foreach my $thisletter (keys %$letters) {
+	my $selected = 1 if $thisletter eq $letter;
+	my %row =(value => $thisletter,
+				selected => $selected,
+				lettername => $letters->{$thisletter},
+			);
+	push @letterloop, \%row;
+}
+
+
+=head3 in TEMPLATE  
+			<select name="letter">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP name="letterloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+
+=cut
+
+sub getletters {
+# returns a reference to a hash of references to ALL letters...
+	my $cat =@_;
+	my %letters;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+   	if ($cat ne ""){
+		$sth = $dbh->prepare("Select * from letter where module = \'".$cat."\' order by name");
+	} else {
+		$sth = $dbh->prepare("Select * from letter order by name");
+	}
+	$sth->execute;
+	my $count;
+	while (my $letter=$sth->fetchrow_hashref) {
+			$letters{$letter->{'code'}}=$letter->{'name'};
+			$count++;
+	}
+	return ($count,\%letters);
 }
 
 =head2 getitemtypes
