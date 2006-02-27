@@ -235,14 +235,8 @@ sub catalogsearch {
 # 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
 	}
 	warn "QUERY : $query";
-	my $Zconn;
-	eval {
-		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
-	};
-	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-	$Zconn->option(preferredRecordSyntax => "xml");
+	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
 	my $q = new ZOOM::Query::CQL2RPN( $query, $Zconn);
-# 	warn "ERROR : ".$Zconn->errcode();
 	my $rs = $Zconn->search($q);
 	my $numresults=$rs->size();
 	if ($numresults eq 0) {
