@@ -26,7 +26,6 @@ use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
-our $Zconn=C4::Context->Zconn;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -2971,6 +2970,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.155  2006/02/27 01:08:31  kados
+# Removing 'our Zconn' from top...
+#
 # Revision 1.154  2006/02/26 00:08:20  kados
 # moving all $Zconn s to z3950_extended_services (currently, nothing
 # works).
