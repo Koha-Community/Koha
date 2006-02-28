@@ -43,31 +43,54 @@ my ($template, $loggedinuser, $cookie)
                              query => $input,
                              type => "intranet",
                              authnotrequired => 0,
- 			     flagsrequired => {parameters => 1, management => 1},
+ 			     flagsrequired => {parameters => 1, tools => 1},
 			      debug => 1,
                              });
-# save the values entered
+my $err=0;
+
+# save the values entered into tables
+my %temphash;
 if ($op eq 'save') {
 	my @names=$input->param();
 	my $sth_search = $dbh->prepare("select count(*) as total from overduerules where branchcode=? and categorycode=?");
 
-	my $sth_insert = $dbh->prepare("insert into overduerules (branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth_insert = $dbh->prepare("insert into overduerules (branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3) values (?,?,?,?,?,?,?,?,?,?,?)");
 	my $sth_update=$dbh->prepare("Update overduerules set delay1=?, letter1=?, debarred1=?, delay2=?, letter2=?, debarred2=?, delay3=?, letter3=?, debarred3=? where branchcode=? and categorycode=?");
 	my $sth_delete=$dbh->prepare("delete from overduerules where branchcode=? and categorycode=?");
-	my %temphash;
 	foreach my $key (@names){
 		# ISSUES
 		if ($key =~ /(.*)([1-3])-(.*)/) {
 			my $type = $1; # data type
 			my $num = $2; # From 1 to 3
 			my $bor = $3; # borrower category
-			$temphash{$bor}->{"$type$num"}=$input->param("$key");
+			$temphash{$bor}->{"$type$num"}=$input->param("$key") if (($input->param("$key") ne "") or ($input->param("$key")>0));
 		}
 	}
 	foreach my $bor (keys %temphash){
-		$sth_search->execute($branch,$bor);
-		my $res = $sth_search->fetchrow_hashref();
-		if ($res->{'total'}>0) {
+		# Do some Checking here : delay1 < delay2 <delay3 all of them being numbers
+		# Raise error if not true
+		if ($temphash{$bor}->{delay1}=~/[^0-9]/ and $temphash{$bor}->{delay1} ne ""){
+			$template->param("ERROR"=>1,"ERRORDELAY"=>"delay1","BORERR"=>$bor);
+			$err=1;
+		} elsif ($temphash{$bor}->{delay2}=~/[^0-9]/ and $temphash{$bor}->{delay2} ne ""){
+			$template->param("ERROR"=>1,"ERRORDELAY"=>"delay2","BORERR"=>$bor);
+			$err=1;
+		} elsif ($temphash{$bor}->{delay3}=~/[^0-9]/ and $temphash{$bor}->{delay3} ne ""){
+			$template->param("ERROR"=>1,"ERRORDELAY"=>"delay3","BORERR"=>$bor);
+			$err=1;
+		}elsif ($temphash{$bor}->{delay3} and ($temphash{$bor}->{delay3}<=$temphash{$bor}->{delay2}
+			or $temphash{$bor}->{delay3}<=$temphash{$bor}->{delay1})
+			or $temphash{$bor}->{delay2} and ($temphash{$bor}->{delay2}<=$temphash{$bor}->{delay1})){
+				$template->param("ERROR"=>1,"ERRORORDER"=>1,"BORERR"=>$bor);
+				$err=1;
+		}
+		unless ($err){
+			if (($temphash{$bor}->{delay1} and ($temphash{$bor}->{"letter1"} or $temphash{$bor}->{"debarred1"}))
+				or ($temphash{$bor}->{delay2} and ($temphash{$bor}->{"letter2"} or $temphash{$bor}->{"debarred2"}))
+				or ($temphash{$bor}->{delay3} and ($temphash{$bor}->{"letter3"} or $temphash{$bor}->{"debarred3"}))) {
+				$sth_search->execute($branch,$bor);
+				my $res = $sth_search->fetchrow_hashref();
+				if ($res->{'total'}>0) {
 					$sth_update->execute(
 						($temphash{$bor}->{"delay1"}?$temphash{$bor}->{"delay1"}:0),
 						($temphash{$bor}->{"letter1"}?$temphash{$bor}->{"letter1"}:""),
@@ -81,7 +104,6 @@ if ($op eq 'save') {
 						$branch ,$bor
 						);
 				} else {
-# 					warn "insert  overduenotice1: $data[0],delay1: $data[1], letter1 : $data[2],debarred1 : $data[3], notice2 : $data[4], delay2 : $data[5], letter2 : $data[6],debarred2 : $data[7], 3 : $data[8],3 : $data[9],3 : $data[10],3 : $data[11], $br ,$bor ";
 					$sth_insert->execute($branch,$bor,
 						($temphash{$bor}->{"delay1"}?$temphash{$bor}->{"delay1"}:0),
 						($temphash{$bor}->{"letter1"}?$temphash{$bor}->{"letter1"}:""),
@@ -94,8 +116,10 @@ if ($op eq 'save') {
 						($temphash{$bor}->{"debarred3"}?$temphash{$bor}->{"debarred3"}:0)
 						);
 				}
+			}
+		}
 	}
-
+	unless ($err) {$template->param(datasaved=>1);}
 }
 my $branches = getbranches;
 my @branchloop;
@@ -125,32 +149,52 @@ while (my $data=$sth->fetchrow_hashref){
 				toggle => $toggle,
 				line => $data->{'description'}
 				);
-	my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? and categorycode=?");
-	$sth2->execute($branch,$data->{'categorycode'});
-	my $dat=$sth2->fetchrow_hashref;
-# 	foreach my $test (keys %$dat){
-# 		warn "$test : ".$dat->{$test};
-# 	}
-	for (my $i=1;$i<=3;$i++){
-		if ($countletters){
-			my @letterloop;
-			foreach my $thisletter (keys %$letters) {
-				my $selected = 1 if $thisletter eq $dat->{"letter$i"};
-				my %letterrow =(value => $thisletter,
-							selected => $selected,
-							lettername => $letters->{$thisletter},
-						);
-				push @letterloop, \%letterrow;
+	if (%temphash){
+		for (my $i=1;$i<=3;$i++){
+			$row{"delay$i"}=$temphash{$data->{'categorycode'}}->{"delay$i"};
+			$row{"debarred$i"}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
+			if ($countletters){
+				my @letterloop;
+				foreach my $thisletter (keys %$letters) {
+					my $selected = 1 if $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"};
+					my %letterrow =(value => $thisletter,
+								selected => $selected,
+								lettername => $letters->{$thisletter},
+							);
+					push @letterloop, \%letterrow;
+				}
+				$row{"letterloop$i"}=\@letterloop;
+			} else {
+				$row{"noletter"}=1;
+				$row{"letter$i"}=$temphash{$data->{'categorycode'}}->{"letter$i"};
 			}
-			$row{"letterloop$i"}=\@letterloop;
-		} else {
-			$row{"noletter"}=1;
-			if ($dat->{"letter$i"}){$row{"letter$i"}=$dat->{"letter$i"};}
 		}
-		if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
-		if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
+	} else {
+	#getting values from table
+		my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? and categorycode=?");
+		$sth2->execute($branch,$data->{'categorycode'});
+		my $dat=$sth2->fetchrow_hashref;
+		for (my $i=1;$i<=3;$i++){
+			if ($countletters){
+				my @letterloop;
+				foreach my $thisletter (keys %$letters) {
+					my $selected = 1 if $thisletter eq $dat->{"letter$i"};
+					my %letterrow =(value => $thisletter,
+								selected => $selected,
+								lettername => $letters->{$thisletter},
+							);
+					push @letterloop, \%letterrow;
+				}
+				$row{"letterloop$i"}=\@letterloop;
+			} else {
+				$row{"noletter"}=1;
+				if ($dat->{"letter$i"}){$row{"letter$i"}=$dat->{"letter$i"};}
+			}
+			if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
+			if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
+		}
+		$sth2->finish;
 	}
-	$sth2->finish;
 	push @line_loop,\%row;
 }
 $sth->finish;
