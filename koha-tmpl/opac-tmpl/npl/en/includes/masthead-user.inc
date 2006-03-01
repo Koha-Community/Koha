@@ -1,5 +1,5 @@
 <div id="masthead">
-<h1>Library Catalog Search</h1>
+<h1><!-- TMPL_IF NAME="opacsmallimage" --><img alt="<!-- TMPL_VAR NAME="LibraryName" -->" src="<!-- TMPL_VAR NAME='opacsmallimage' -->" /><!-- /TMPL_IF -->Library Catalog Search</h1>
 <div class="menu"><form action="/cgi-bin/koha/opac-search.pl" method="post">
 <p><a href="/cgi-bin/koha/opac-main.pl">Search Home</a> | <a href="" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag</a></p> <p><label for="value">Search the Catalog</label>
   <input type="hidden" name="op" value="do_search" />
