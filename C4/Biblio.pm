@@ -1043,7 +1043,7 @@ sub MARChtml2xml {
         my $prevtag=-1;
         my $first=1;
         for (my $i=0;$i<=@$tags;$i++){
-            if ((@$tags[$i] ne $prevtag) && ($prevtag != -1)){
+            if ((@$tags[$i] ne $prevtag)){
                 if (!$first){
 		    $xml.="</datafield>\n";
 		    $first=1;
@@ -1062,6 +1062,7 @@ sub MARChtml2xml {
 		    }
 		    else {
 			$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
+			$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
 			$first=0;			
 		    }
 		    }
@@ -1070,9 +1071,9 @@ sub MARChtml2xml {
                 if (@$values[$i] eq "") {
                 }
                 else {
-		    if (!$first){
-			$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-		    }
+		    
+		    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+
                 }
             }
             $prevtag = @$tags[$i];
@@ -2978,6 +2979,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.39  2006/03/01 04:52:08  rangi
+# More testing
+#
 # Revision 1.115.2.38  2006/03/01 04:43:25  rangi
 # Fixing it again, for testing
 #
