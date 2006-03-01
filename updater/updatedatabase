@@ -859,7 +859,16 @@ my %tabledata = (
             explanation         => 'Enter the name of the layout stylesheet to use in the OPAC',
             type                => 'free',
         },
-
+	
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclanguages',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn on/off display of Change Language feature on OPAC',
+            type                => 'YesNo',
+        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'patronimages',
@@ -1700,6 +1709,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.29  2006/03/01 15:51:28  kados
+# adds opaclanguages syspref, which allows turning on/off the display of
+# the languages pref on OPAC (default is on)
+#
 # Revision 1.100.2.28  2006/03/01 15:38:53  kados
 # Adding patronimages syspref. Adding opaclayoutstylesheet. Some explainations
 # are in order:
