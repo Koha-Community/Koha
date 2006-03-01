@@ -7,8 +7,9 @@
 	@import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);
 </style>
 	<!-- TMPL_ELSE -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
 <style type="text/css"> 
-	@import url(<!-- TMPL_VAR NAME="themelang" -->/includes/opac.css);
+	@import url(<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
 </style>
 	<!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/script.js"></script>
