@@ -847,8 +847,27 @@ my %tabledata = (
             value               => '',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation         => 'Enter a complete URL to use an alternate color stylesheet in OPAC',
+            explanation         => 'Enter the name of the color stylesheet to use in the OPAC',
             type                => 'free',
+        },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclayoutstylesheet',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enter the name of the layout stylesheet to use in the OPAC',
+            type                => 'free',
+        },
+
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'patronimages',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn on/off display of patron images in Intranet',
+            type                => 'YesNo',
         },
 	{
             uniquefieldrequired => 'variable',
@@ -865,7 +884,7 @@ my %tabledata = (
             value               => '',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation         => 'Enter a complete URL to use an alternate color stylesheet in Intranet',
+            explanation         => 'Enter the name of the color stylesheet to use in Intranet',
             type                => 'free',
         },  
         {
@@ -1681,6 +1700,18 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.28  2006/03/01 15:38:53  kados
+# Adding patronimages syspref. Adding opaclayoutstylesheet. Some explainations
+# are in order:
+#
+# Right now there are three stylesheet sysprefs:
+#
+# opacstylesheet - an external stylesheet specified by URL (replaces all other
+# stylesheets)
+#
+# opaccolorstylesheet - local stylesheet specified by filename
+# opaclayoutstylesheet - local stylesheet specified by filename
+#
 # Revision 1.100.2.27  2006/02/27 15:40:32  tipaul
 # setting serialadditems systempreference to 0 by default : no behaviour change when upgrading Koha
 #
