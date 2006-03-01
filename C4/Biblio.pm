@@ -1059,24 +1059,26 @@ sub MARChtml2xml {
 
 			# leader
 			if (@$tags[$i] eq "000") {
-			$xml.="<leader>@$values[$i]</leader>\n";
-			$first=1;
+			    $xml.="<leader>@$values[$i]</leader>\n";
+			    $first=1;
 
-			# rest of the fixed fields
+			    # rest of the fixed fields
 			} elsif (@$tags[$i] lt "010") {
-			warn "IN THE IF";
-			$xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
-			$first=1;
+			    warn "IN THE IF";
+			    $xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+			    $first=1;
 
 			# everything else
 			} else {
-			warn "NOT CALLED";
-			warn @$tags[$i];
-                        $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
-                        $first=0;
+			    warn "NOT CALLED";
+			    warn @$tags[$i];
+			    $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
+			    $first=0;
 			}
                     }
-                    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+		    if (!$first){
+			$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+		    }
                 }
             }
             $prevtag = @$tags[$i];
@@ -2982,6 +2984,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.36  2006/03/01 03:09:15  rangi
+# Commiting for joshua to test
+#
 # Revision 1.115.2.35  2006/03/01 03:02:59  kados
 # some updates.
 #
