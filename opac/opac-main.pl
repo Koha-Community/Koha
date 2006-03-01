@@ -63,5 +63,9 @@ $template->param(CGIitemtype => $CGIitemtype,
 				LibraryName => C4::Context->preference("LibraryName"),
 				OpacNav => C4::Context->preference("OpacNav"),
 				opaccredits => C4::Context->preference("opaccredits"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

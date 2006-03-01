@@ -58,10 +58,14 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-					suggestion => C4::Context->preference("suggestion"),
-					virtualshelves => C4::Context->preference("virtualshelves"),
-					OpacNav => C4::Context->preference("OpacNav"),
-					opaccredits => C4::Context->preference("opaccredits"),
+				LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -188,6 +192,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.7  2006/03/01 22:33:25  oleonard
+# Enabling several new system preferences: opacreadinghistory, opaccolorstylesheet, opaclanguagesdisplay, opaclayoutstylesheet, opacsmallimage
+#
 # Revision 1.3.2.6  2006/02/04 16:47:21  kados
 # Adding support for opaccredits to opac scripts
 #

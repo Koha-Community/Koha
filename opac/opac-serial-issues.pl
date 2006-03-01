@@ -68,6 +68,10 @@ if ($selectview eq "full"){
 		subscription_LOOP => $subscriptions,
 		suggestion => C4::Context->preference("suggestion"),
 		virtualshelves => C4::Context->preference("virtualshelves"),
+				LibraryName => C4::Context->preference("LibraryName"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 		);
 }
 output_html_with_http_headers $query, $cookie, $template->output;

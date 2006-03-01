@@ -85,12 +85,15 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				SITE_RESULTS => $sitearray,
 				subscriptions => \@subs,
 				subscriptionsnumber => $subscriptionsnumber,
-			     	LibraryName => C4::Context->preference("LibraryName"),
+			    LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
 				opaccredits => C4::Context->preference("opaccredits"),
 				AmazonContent => C4::Context->preference("AmazonContent"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 );
 
 ## Amazon.com stuff

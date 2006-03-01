@@ -73,6 +73,15 @@ if ( $query->param('Oldkey') && $query->param('Newkey') && $query->param('Confir
 # Called Empty, Ask for data.
 	$template->param('Ask_data' => '1');
 }
+
+$template->param(LibraryName => C4::Context->preference("LibraryName"),
+				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
 

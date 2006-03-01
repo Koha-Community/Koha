@@ -147,6 +147,9 @@ $template->param(waiting_count => $wcount,
 				textmessaging => $borr->{textmessaging},
 				OpacNav => C4::Context->preference("OpacNav"),
 				opaccredits => C4::Context->preference("opaccredits"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
