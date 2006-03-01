@@ -28,9 +28,11 @@ use C4::Biblio;
 use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
+#use Smart::Comments;
 use HTML::Template;
 use MARC::File::USMARC;
-
+use MARC::File::XML;
+  
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
@@ -427,11 +429,8 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $record=MARC::Record::new_from_xml($xml);
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -481,7 +480,9 @@ if ($op eq "addbiblio") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	my $record=MARC::Record::new_from_xml($xml);
+	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
