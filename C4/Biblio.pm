@@ -1038,6 +1038,7 @@ sub MARCkoha2marcOnefield {
 }
 sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
+	use MARC::File::XML;
 	my $xml= MARC::File::XML::header();
         my $prevvalue;
         my $prevtag=-1;
@@ -2991,6 +2992,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.44  2006/03/01 17:26:08  kados
+# Adding 'use MARC::File::XML' to routine ... needed for additem.pl to work
+# for some reason. This should be fixed.
+#
 # Revision 1.115.2.43  2006/03/01 14:36:31  kados
 # This seems to be a fully working version -- it supports repeated tags and
 # subfields, should preserve any order specified in the template, and also
