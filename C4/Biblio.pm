@@ -1049,6 +1049,7 @@ sub MARChtml2xml {
 		    $first=1;
                 }
 		else {
+		    if (@$values[$i] ne "") {
 		    # leader
 		    if (@$tags[$i] eq "000") {
 			$xml.="<leader>@$values[$i]</leader>\n";
@@ -1062,6 +1063,7 @@ sub MARChtml2xml {
 		    else {
 			$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
 			$first=0;			
+		    }
 		    }
 		}
             } else {
@@ -2976,6 +2978,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.38  2006/03/01 04:43:25  rangi
+# Fixing it again, for testing
+#
 # Revision 1.115.2.37  2006/03/01 03:47:15  rangi
 # This may actually work .. hopefully anyway
 #
