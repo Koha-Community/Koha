@@ -75,11 +75,13 @@ if ($op eq "additem") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	#my %indicators;
+	#for (my $i=0;$i<=$#ind_tag;$i++) {
+	#	$indicators{$ind_tag[$i]} = $indicator[$i];
+	#}
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $record=MARC::Record::new_from_xml($xml);
+	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# if autoBarcode is ON, calculate barcode...
 	if (C4::Context->preference('autoBarcode')) {
 		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
@@ -131,11 +133,13 @@ if ($op eq "additem") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 #	my $itemnum = $input->param('itemnum');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	#my %indicators;
+	#for (my $i=0;$i<=$#ind_tag;$i++) {
+	#	$indicators{$ind_tag[$i]} = $indicator[$i];
+	#}
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $record=MARC::Record::new_from_xml($xml);
+	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
