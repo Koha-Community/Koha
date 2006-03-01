@@ -1042,10 +1042,13 @@ sub MARChtml2xml {
         my $prevvalue;
         my $prevtag=-1;
         my $first=1;
+	my $j = -1;
         for (my $i=0;$i<=@$tags;$i++){
 
-	
             if ((@$tags[$i] ne $prevtag)){
+		$j++ unless (@$tags[$i] eq "");
+		warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
+
                 if (!$first){
 		    $xml.="</datafield>\n";
 		    $first=1;
@@ -1062,7 +1065,9 @@ sub MARChtml2xml {
 			$first=1;
 		    }
 		    else {
-			$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
+			my $ind1 = substr(@$indicator[$j],0,1);
+			my $ind2 = substr(@$indicator[$j],1,1);
+			$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
 			$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
 			$first=0;			
 		    }
@@ -1073,7 +1078,9 @@ sub MARChtml2xml {
                 }
                 else {
 		if ($first){
-		$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
+		my $ind1 = substr(@$indicator[$j],0,1);                        
+		my $ind2 = substr(@$indicator[$j],1,1);
+		$xml.="<datafield tag=\"@$tags[$j]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
 		$first=0;
 		}
 		    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
@@ -1083,6 +1090,7 @@ sub MARChtml2xml {
             $prevtag = @$tags[$i];
         }
         $xml.= MARC::File::XML::footer();
+	warn $xml;
 	return $xml
 }
 sub MARChtml2marc {
@@ -2983,11 +2991,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.115.2.41  2006/03/01 05:21:22  kados
-# get rid of warns
-#
-# Revision 1.115.2.40  2006/03/01 05:20:17  kados
-# Repeated tags working now. Indicators next
+# Revision 1.115.2.42  2006/03/01 05:52:33  kados
+# Adds support for indicators (still seems to be buggy in some instances
+# of repeated tags)
 #
 # Revision 1.115.2.39  2006/03/01 04:52:08  rangi
 # More testing
