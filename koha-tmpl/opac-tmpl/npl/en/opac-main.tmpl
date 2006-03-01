@@ -35,10 +35,10 @@
 <!-- Display for NPL // <p>Find the latest additions: <br /><a href="/opac-format-search.php">Search by format and date</a></p> //Display for NPL -->
 	</form>
 	<!-- TMPL_IF NAME="loggedinusername" -->
-<!-- TMPL_ELSE --><br clear="right" /><!-- /TMPL_IF -->
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
 </div>
 
-<!-- Hide from NPL --><div class="content-block">
+<div class="content-block">
 	<h3>Recent acquisitions</h3>
 	<form action="/cgi-bin/koha/opac-search.pl">
 		<p>
@@ -56,23 +56,23 @@
 			<input type="submit" value="Search" class="submit" />
 		</p>
 	</form>
-</div><!-- /Hide from NPL -->
+</div>
 	
 <!-- TMPL_IF NAME="loggedinusername" -->
 <div class="content-block">
 <h3>You're logged in as <em><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span><!-- /TMPL_LOOP --></h3>
-<p><a href="/cgi-bin/koha/opac-user.pl">my library home</a> | <!-- Hide from NPL--> <a href="/cgi-bin/koha/opac-account.pl">my fines</a> | <!-- Hide from NPL -->
-	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a> | <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a>	| <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a>	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></p>
+<p><a href="/cgi-bin/koha/opac-user.pl">my library home</a> | <a href="/cgi-bin/koha/opac-account.pl">my fines</a> | 
+	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a> | <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a>	<!-- TMPL_IF NAME="opacreadinghistory" -->| <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></p>
 		<!-- TMPL_IF name="textmessaging"-->
 			<h3>Message from the library</h3>
-			<p><!-- TMPL_VAR name="textmessaging" --></p>
+			<p class="error"><!-- TMPL_VAR name="textmessaging" --></p>
 		<!-- /TMPL_IF -->
 <form method="post" action="/cgi-bin/koha/opac-logout.pl">
 <p><input type="submit" class="submit" name="logout" value="Log Out" /></p>
 </form>
 </div><!-- /TMPL_IF -->
 
-	<!-- Hide from NPL --><div class="content-block">
+	<!-- TMPL_IF NAME="opaclanguagesdisplay" --><div class="content-block">
 	<h4 class="inline">Change Language:</h3>
 	<form action="/cgi-bin/koha/changelanguage.pl" method="post" class="inline">
 		<select name="language">
@@ -81,6 +81,6 @@
 			<!-- /TMPL_LOOP -->
 		</select>
 		<input type="submit" value="Switch" class="submit">
-	</form></div> <!-- /Hide from NPL -->
+	</form></div><!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
