@@ -64,7 +64,7 @@ $VERSION = 0.01;
   &MARCmodsubfield &MARCaddsubfield
   &MARCmodbiblio &MARCmoditem
   &MARCkoha2marcBiblio &MARCmarc2koha
-  &MARCkoha2marcItem &MARChtml2marc
+  &MARCkoha2marcItem &MARChtml2marc &MARChtml2xml
   &MARCgetbiblio &MARCgetitem
   &MARCaddword &MARCdelword
   &MARCdelsubfield
@@ -1036,7 +1036,54 @@ sub MARCkoha2marcOnefield {
     }
     return $record;
 }
+sub MARChtml2xml {
+	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;
+        
+	my $xml= MARC::File::XML::header();
+        my $prevvalue;
+        my $prevtag=-1;
+        my $first=1;
 
+        for (my $i=0;$i<=@$tags;$i++){
+
+            if ((@$tags[$i] ne $prevtag) && ($prevtag != -1)){
+                if ($first == 0){
+              $xml.="</datafield>\n";
+                $first=1;
+                }
+            } else {
+                if (@$values[$i] eq "") {
+                }
+                else {
+                    if ($first == 1){
+
+			# leader
+			if (@$tags[$i] eq "000") {
+			$xml.="<leader>@$values[$i]</leader>\n";
+			$first=1;
+
+			# rest of the fixed fields
+			} elsif (@$tags[$i] lt "010") {
+			warn "IN THE IF";
+			$xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+			$first=1;
+
+			# everything else
+			} else {
+			warn "NOT CALLED";
+			warn @$tags[$i];
+                        $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"   \" ind2=\"   \">\n";
+                        $first=0;
+			}
+                    }
+                    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                }
+            }
+            $prevtag = @$tags[$i];
+        }
+        $xml.= MARC::File::XML::footer();
+	return $xml
+}
 sub MARChtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = -1;
@@ -2935,6 +2982,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.35  2006/03/01 03:02:59  kados
+# some updates.
+#
 # Revision 1.115.2.34  2006/02/27 07:17:55  rangi
 # Hopefully a fix for a problem Joshua was having with blank tags being added
 #
