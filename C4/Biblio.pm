@@ -1058,7 +1058,6 @@ sub MARChtml2xml {
 			$first=1;
 			# rest of the fixed fields
 		    } elsif (@$tags[$i] < 10) {
-			warn "IN THE IF";
 			$xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
 			$first=1;
 		    }
@@ -1084,7 +1083,6 @@ sub MARChtml2xml {
             $prevtag = @$tags[$i];
         }
         $xml.= MARC::File::XML::footer();
-	warn $xml;
 	return $xml
 }
 sub MARChtml2marc {
@@ -2985,6 +2983,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.41  2006/03/01 05:21:22  kados
+# get rid of warns
+#
 # Revision 1.115.2.40  2006/03/01 05:20:17  kados
 # Repeated tags working now. Indicators next
 #
