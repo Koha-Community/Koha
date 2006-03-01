@@ -72,23 +72,26 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/marc21_leader.tmpl",
+    = get_template_and_user({template_name => "value_builder/marc21_leader_computerfile.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     nam  22     7a  4500" unless $result;
+	$result = "     nmm         7a      " unless $result;
+	warn "RESULT:".$result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
+	warn "F6".$f6;
 	my $f7 = substr($result,7,1);
+	warn "F7:".$f7;
 	my $f8 = substr($result,8,1);
 	my $f9 = substr($result,9,1);
 	my $f17 = substr($result,17,1);
 	my $f18 = substr($result,18,1);
 	my $f19 = substr($result,19,1);
-	my $f2023 = substr($result,20,4);
+
 	$template->param(index => $index,
 							"f5$f5" => 1,
 							"f6$f6" => 1,
@@ -98,7 +101,6 @@ my ($template, $loggedinuser, $cookie)
 							"f17$f17" => 1,
 							"f18$f18" => 1,
 							"f19$f19" => 1,
-							"f2023" => $f2023,
 					);
 	print $input->header(-cookie => $cookie),$template->output;
 }
