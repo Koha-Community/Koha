@@ -862,7 +862,7 @@ my %tabledata = (
 	
         {
             uniquefieldrequired => 'variable',
-            variable            => 'opaclanguages',
+            variable            => 'opaclanguagesdisplay',
             value               => '1',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
@@ -1709,6 +1709,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.30  2006/03/01 15:52:13  kados
+# Whoops ... should have checked, that name is already used. Changed it to
+# opaclanguagesdisplay.
+#
 # Revision 1.100.2.29  2006/03/01 15:51:28  kados
 # adds opaclanguages syspref, which allows turning on/off the display of
 # the languages pref on OPAC (default is on)
