@@ -1080,7 +1080,7 @@ sub MARChtml2xml {
 		if ($first){
 		my $ind1 = substr(@$indicator[$j],0,1);                        
 		my $ind2 = substr(@$indicator[$j],1,1);
-		$xml.="<datafield tag=\"@$tags[$j]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+		$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
 		$first=0;
 		}
 		    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
@@ -2991,6 +2991,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.43  2006/03/01 14:36:31  kados
+# This seems to be a fully working version -- it supports repeated tags and
+# subfields, should preserve any order specified in the template, and also
+# preserves ALL indicators (not just one per tag set as with the previous
+# hash of indicators).
+#
 # Revision 1.115.2.42  2006/03/01 05:52:33  kados
 # Adds support for indicators (still seems to be buggy in some instances
 # of repeated tags)
