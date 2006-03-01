@@ -859,7 +859,16 @@ my %tabledata = (
             explanation         => 'Enter the name of the layout stylesheet to use in the OPAC',
             type                => 'free',
         },
-	
+
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'opacreadinghistory',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn on/off display of Patron Reading History in OPAC',
+            type                => 'YesNo',
+        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclanguagesdisplay',
@@ -1709,6 +1718,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.31  2006/03/01 21:44:16  kados
+# Adds 'opacreadinghistory' syspref for turning this on/off for libraries
+# who are scared of their government (ie, in countries where there a
+# patriot act) :-)
+#
 # Revision 1.100.2.30  2006/03/01 15:52:13  kados
 # Whoops ... should have checked, that name is already used. Changed it to
 # opaclanguagesdisplay.
