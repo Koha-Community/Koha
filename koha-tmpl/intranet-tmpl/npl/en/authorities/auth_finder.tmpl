@@ -1,37 +1,46 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="masthead.inc" -->
-<!-- TMPL_INCLUDE NAME="authorities-topmenu.inc" -->
-<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
-
 <div id="main">
 
 <h1>Authority search</h1>
 
-<form name="f" method="post">
-	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="type" value="intranet" />
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR name="nbstatements" -->" />
-	<div class="details">
-		<h2>Search on</h2>
-		<p>
-			<label>Authority type</label>
-			<!-- TMPL_VAR NAME="category" -->
-		</p>
-		<p>
-			<label>Search value</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->" />
-			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="category" -->" />
-			<input type="hidden" name="marclist" value="" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->" />
-		</p>
-		<p>
-			<input type="submit" value="Start search" class="submit" />
-		</p>
-	</div>
-</form>
+<form name="f" method="post" action="auth_finder.pl">
+			<input type="hidden" name="op" value="do_search">
+			<input type="hidden" name="type" value="intranet">
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+
+				<h2>Search on</h2>
+				<p>
+					<label>Authority type</label>
+					<!-- TMPL_VAR NAME="authtypecode" -->
+					<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+				</p>
+				<p>
+					<label for="mainentry">Main entry</label><select name="operator">
+						<option value="start">start by</option>
+						<option value="contains">contains</option>
+					</select><input type="text" id="mainentry" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
+					<input type="hidden" name="marclist" value="mainentry">
+					<input type="hidden" name="and_or" value="and">
+					<input type="hidden" name="excluding" value="">
+					
+					<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+				</p>
+				<p>
+					<label for="anywhere">Anywhere</label><select name="operator">
+						<option value="contains">contains</option>
+						<option value="start">start by</option>
+					</select><input type="text" name="value">
+					<input type="hidden" id="anywhere" name="marclist" value="">
+					<input type="hidden" name="and_or" value="and">
+					<input type="hidden" name="excluding" value="">
+					
+					<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+				</p>
+				<p>
+				<input type="submit" value="Start search" class="submit" />
+				</p>
+		</form>
 </div>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
