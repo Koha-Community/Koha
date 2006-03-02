@@ -129,7 +129,7 @@ if ($barcode) {
 	$found = $messages->{'ResFound'};
 	if ($transfered) {
 		my %item;
-		my $frbranchcd = $iteminformation->{'holdingbranch'};
+		my $frbranchcd = $iteminformation->{'frbranchcd'};
 		if (not ($found)) {
 			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 			$item{'color'}=$color;
