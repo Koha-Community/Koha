@@ -421,7 +421,7 @@ sub Zconn {
 #	    if ($Zconn->errcode() != 0) {
 #		$context->{"Zconn"} = &new_Zconn();
 #		return $context->{"Zconn"};
-	    }
+# 	    }
 	    return $context->{"Zconn"};
 	} else { 
 		$context->{"Zconn"} = &new_Zconn();
@@ -780,6 +780,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.32  2006/03/03 17:25:01  hdl
+# Bug fixing : a line missed a comment sign.
+#
 # Revision 1.31  2006/03/03 16:45:36  kados
 # Remove the search that tests the Zconn -- warning, still no fault
 # tollerance
