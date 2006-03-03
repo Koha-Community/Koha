@@ -1061,7 +1061,7 @@ my %tabledata = (
 	    value               => '',
             forceupdate         => { 'explanation' => 1,                                                             '
 	    				type' => 1},
-            explanation         => 'Put your Amazon Developers Key here. Get one from aws-portal.amazon.com/gp/aws/developer/registration/index.html',
+            explanation         => 'see: aws-portal.amazon.com/gp/aws/developer/registration/index.html',
             type                => 'free',
         },                                                                              
 	{                                                                                   
@@ -1070,7 +1070,7 @@ my %tabledata = (
 	    value               => '',
             forceupdate         => { 'explanation' => 1,                                                             '
 	    				type' => 1},
-            explanation         => 'Put your Amazon Associates ID here. Get one from associates.amazon.com/gp/flex/associates/apply-login.html',
+            explanation         => 'see: associates.amazon.com/gp/flex/associates/apply-login.html',
             type                => 'free',
         },                                                                      
 	{
@@ -1718,6 +1718,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.32  2006/03/03 16:20:23  kados
+# hopefully fixes truncated amazon.com links in syspref
+# ----------------------------------------------------------------------
+#
 # Revision 1.100.2.31  2006/03/01 21:44:16  kados
 # Adds 'opacreadinghistory' syspref for turning this on/off for libraries
 # who are scared of their government (ie, in countries where there a
