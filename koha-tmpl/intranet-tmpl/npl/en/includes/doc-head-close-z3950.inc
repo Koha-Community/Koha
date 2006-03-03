@@ -1,5 +1,5 @@
 </title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- TMPL_IF name="refresh" --><meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->" /><!-- /TMPL_IF -->
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
