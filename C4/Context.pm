@@ -417,10 +417,10 @@ sub Zconn {
 	my $Zconn;
         if (defined($context->{"Zconn"})) {
 	    $Zconn = $context->{"Zconn"};
-            $rs=$Zconn->search_pqf('@attr 1=4 mineral');
-	    if ($Zconn->errcode() != 0) {
-		$context->{"Zconn"} = &new_Zconn();
-		return $context->{"Zconn"};
+#  	    $rs=$Zconn->search_pqf('@attr 1=4 mineral');
+#	    if ($Zconn->errcode() != 0) {
+#		$context->{"Zconn"} = &new_Zconn();
+#		return $context->{"Zconn"};
 	    }
 	    return $context->{"Zconn"};
 	} else { 
@@ -780,6 +780,10 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.31  2006/03/03 16:45:36  kados
+# Remove the search that tests the Zconn -- warning, still no fault
+# tollerance
+#
 # Revision 1.30  2006/02/22 00:56:59  kados
 # First go at a connection object for Zebra. You can now get a
 # connection object by doing:
