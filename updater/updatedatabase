@@ -93,6 +93,35 @@ my %requiretables = (
 					KEY borrowernumber (borrowernumber),
 					KEY type (type,externalid)
 				)",
+	opac_news => "(
+				`idnew` int(10) unsigned NOT NULL auto_increment,
+				`title` varchar(250) NOT NULL default '',
+				`new` text NOT NULL,
+				`lang` varchar(4) NOT NULL default '',
+				`timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+				PRIMARY KEY  (`idnew`)
+				)",
+	repeatable_holidays => "(
+				`id` int(11) NOT NULL auto_increment,
+				`branchcode` varchar(4) NOT NULL default '',
+				`weekday` smallint(6) default NULL,
+				`day` smallint(6) default NULL,
+				`month` smallint(6) default NULL,
+				`title` varchar(50) NOT NULL default '',
+				`description` text NOT NULL,
+				PRIMARY KEY  (`id`)
+				)",
+	special_holidays => "(
+				`id` int(11) NOT NULL auto_increment,
+				`branchcode` varchar(4) NOT NULL default '',
+				`day` smallint(6) NOT NULL default '0',
+				`month` smallint(6) NOT NULL default '0',
+				`year` smallint(6) NOT NULL default '0',
+				`isexception` smallint(1) NOT NULL default '1',
+				`title` varchar(50) NOT NULL default '',
+				`description` text NOT NULL,
+				PRIMARY KEY  (`id`)
+				)",
 	overduerules	=>"(`branchcode` varchar(255) NOT NULL default '',
 					`categorycode` char(2) NOT NULL default '',
 					`delay1` int(4) default '0',
@@ -913,7 +942,7 @@ foreach my $table ( keys %indexes ) {
 		if ($existingindexes{$key_name} eq 1) {
 # 			print "$key_name existing";
 		} else {
-			print "Creating $key_name in $table\n";
+			print "\tCreating index $key_name in $table\n";
 			my $sql;
 			if ($row->{indexname} eq 'PRIMARY') {
 				$sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
@@ -944,7 +973,7 @@ foreach my $table ( keys %foreign_keys ) {
 		if ($stat->{'Comment'} =~/$foreign_table/) {
 # 			print "$foreign_table existing\n";
 		} else {
-			print "Creating $foreign_table in $table\n";
+			print "\tCreating foreign key $foreign_table in $table\n";
 			# first, drop any orphan value in child table
 			if ($row->{onDelete} ne "RESTRICT") {
 				my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
@@ -1038,11 +1067,12 @@ $sth = $dbh->prepare("show table status");
 $sth->execute;
 while ( my $table = $sth->fetchrow_hashref ) {
 	if ($table->{Engine} ne 'InnoDB') {
-		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+# 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
 		print "moving $table->{Name} to InnoDB\n";
 	}
 	unless ($table->{Collation} =~ /^utf8/) {
-		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		#$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+# 		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
 		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
 		print "moving $table->{Name} to utf8\n";
 	} else {
@@ -1241,6 +1271,21 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.130  2006/03/03 16:35:21  tipaul
+# commit for holidays and news management.
+#
+# Contrib from Tümer Garip (from Turkey) :
+# * holiday :
+# in /tools/ the holiday.pl script let you define holidays (days where the library is closed), branch by branch. You can define 3 types of holidays :
+# - single day : only this day is closed
+# - repet weekly (like "sunday") : the day is holiday every week
+# - repet yearly (like "July, 4") : this day is closed every year.
+#
+# You can also put exception :
+# - sunday is holiday, but "2006 March, 5th" the library will be open
+#
+# The holidays are used for return date calculation : the return date is set to the next date where the library is open. A systempreference (useDaysMode) set ON (Calendar) or OFF (Normal) the calendar calculation.
+#
 # Revision 1.129  2006/02/27 18:19:33  hdl
 # New table used in overduerules.pl tools page.
 #

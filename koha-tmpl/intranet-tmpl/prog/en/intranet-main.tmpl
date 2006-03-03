@@ -70,5 +70,21 @@
 		<li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li><li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes generator</a></li></ul></li>
 
 </ul>
-
+<div id="news">
+	<h1>News</h1>
+	<!-- TMPL_LOOP name="koha_news" -->
+			<table>
+				<tr>
+				<th>
+					<!-- TMPL_VAR NAME="title" --></th>
+					<td>
+					<!-- TMPL_VAR NAME="new" --> 
+					</td>
+				<td>
+						<!-- TMPL_VAR NAME="newdate" --> 
+					</td>
+				</tr>
+			</table>
+	<!-- /TMPL_LOOP -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

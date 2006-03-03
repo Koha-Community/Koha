@@ -1,0 +1,214 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<!-- TMPL_INCLUDE NAME="holidays-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<!-- ******************************** FLAT PANELS ******************************************* -->
+<!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
+<!-- **************************************************************************************** -->
+
+<!-- ********************** Panel for showing already loaded holidays *********************** -->
+<div class="panel" style="position:absolute;background-color:#CCCCCC" id="showHoliday">
+ 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post" style="display:inline">
+		<p onclick="javascript: hidePanel('showHoliday');hidePanel('information')" style="cursor:pointer">
+			Hide Details
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/signClose.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle">
+		</p>
+		<p>
+			<label>Day name</label>
+			<input type="text" size="20" id="showDayname" name="showDayname" readonly
+						   style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			<input type="hidden" name="showWeekday"/>
+		</p>
+		<p>
+			<label>Library</label>
+			<input type="text" size="20" id="showBranchName" name="showBranchName" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+		</p>
+		<div style="display:inline">
+			Day <input type="text" size="2" id="showDay" name="showDay" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Month <input type="text" size="2" id="showMonth" name="showMonth" readonly
+						        style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Year <input type="text" size="4" id="showYear" name="showYear" readonly
+						       style="background-color:#FFFFFF;color:Black;font-size:10px;"/>		
+		</div>
+	    <p>Add a description to holiday day.</p>
+		<p>
+			<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
+		</p>
+		<div id="exceptionPosibility" style="position:static">
+			<input type="radio" name="showOperation" value="exception"> Generate an exception to this holiday
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0"   style="vertical-align:middle;cursor:pointer"
+					onclick="javascript: additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')">
+			<br>
+		</div>
+		<input type="radio" name="showOperation" value="delete" checked> Delete this holiday.
+		<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
+			onclick="javascript: additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')">
+		<p>
+			<input type="submit" name="submit" id="submit" value="Save">
+			<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick="javascript: hidePanel('showHoliday');hidePanel('information')">
+		</p>
+	</form>
+</div>
+
+<!-- ***************************** Panel to deal with new holidays **********************  -->
+<div class="panel" style="position:absolute;background-color:#CCCCCC" id="newHoliday">
+ 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post" style="display:inline">
+		<h2>
+			Add new holiday
+		</h2>
+		<p>
+			<label>Day name</label>
+			<input type="text" size="20" id="newDayname" name="newDayname" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			<input type="hidden" name="newWeekday"/>
+		</p>
+		<p>
+			<label>Library</label>
+			<input type="text" size="20" id="newBranchName" name="newBranchName" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+		</p>
+		<div style="display:inline">
+			Day <input type="text" size="2" id="newDay" name="newDay" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Month <input type="text" size="2" id="newMonth" name="newMonth"  readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Year <input type="text" size="4" id="newYear" name="newYear" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+		</div>
+		<p>
+			<label>Add a description to holiday day</label>
+			<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
+		</p>
+			<input type="radio" name="newOperation" value="holiday" checked> Holiday only on this day.
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
+			onclick="javascript: additionalInformation('This will take this date to make it holiday just for this time. Through this option, you can set a single holiday. For example, suppose you are in August 1st, and only for this year you want to make it holiday.')">
+			<br>
+			<input type="radio" name="newOperation" value="weekday"> Holiday repeated every same day of the week
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick="javascript: additionalInformation('This will take this week day and make it holiday. No matter what date it is, this option will repeat this rule for every week. For example, if this date correspond to a saturday, every saturdays will be holidays.')">
+			<br>
+			<input type="radio" name="newOperation" value="repeatable">Holiday repeated yearly on the same date.
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick="javascript: additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, if this date correspond to a August 1st, every August 1st will be holiday, no matter what year you are.')">
+			<p>
+				<input type="submit" name="submit" id="submit" value="Save"/>
+				<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick="javascript: hidePanel('newHoliday');hidePanel('information')">
+			</p>
+ 	</form>
+</div>
+
+
+<!-- *************************************************************************************** -->
+<!-- ******                          END OF FLAT PANELS                               ****** -->
+<!-- *************************************************************************************** -->
+
+
+
+<!-- *************************************************************************************** -->
+<!-- ******                     START OF INFORMATION PANEL                            ****** -->
+<!-- *************************************************************************************** -->
+
+<div class="information" style="position:absolute" id="information" onclick="javascript: hidePanel('information')" onblur="javascript: hidePanel('information')">
+	<table>
+		<tr>
+			<td valign="top">
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/info.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle">
+			</td>
+			<td valign="top">
+				<p id="explanation" style="display:inline;align:justify"></p>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<!-- ************************************************************************************** -->
+<!-- ******                      END OF INFORMATION PANEL                            ****** -->
+<!-- ************************************************************************************** -->
+
+
+
+<h1>Define the holidays for branch <!-- TMPL_VAR name="BRANCHES" --></h1>
+	<ul>
+		<li>Search in the calendar the day you want to set as holiday.</li>
+		<li>Complete the information in the right area.</li>
+		<li>Once you finish the steps above, click Save.</li>
+	</ul>
+	<p>
+		<span class="normalday">Working day</span>
+		<span class="holiday">Unique holiday</span>
+		<span class="repeatableday">Repetible holiday</span>
+		<span class="exception">Holiday exception</span>
+	</p>
+
+<!-- ************************************************************************************** -->
+<!-- ******                              MAIN SCREEN CODE                            ****** -->
+<!-- ************************************************************************************** -->
+<h2>Calendar information</h2>
+<div id="calendar-container">
+<script type="text/javascript">
+	/* Creates all the structures to deal with all diferents kinds of holidays */
+	var week_days = new Array();
+	var holidays = new Array();
+	var exception_holidays = new Array();
+	var day_month_holidays = new Array();
+	var hola= "<!-- TMPL_VAR NAME="code" -->";
+	<!-- TMPL_LOOP NAME="WEEK_DAYS_LOOP" -->
+	week_days["<!-- TMPL_VAR NAME="KEY" -->"] = {title:"<!-- TMPL_VAR NAME="TITLE" -->", description:"<!-- TMPL_VAR NAME="DESCRIPTION" -->"};
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="HOLIDAYS_LOOP" -->
+	holidays["<!-- TMPL_VAR NAME="KEY" -->"] = {title:"<!-- TMPL_VAR NAME="TITLE" -->", description:"<!-- TMPL_VAR NAME="DESCRIPTION" -->"};
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="EXCEPTION_HOLIDAYS_LOOP" -->
+	exception_holidays["<!-- TMPL_VAR NAME="KEY" -->"] = {title:"<!-- TMPL_VAR NAME="TITLE" -->", description:"<!-- TMPL_VAR NAME="DESCRIPTION" -->"};
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
+	day_month_holidays["<!-- TMPL_VAR NAME="KEY" -->"] = {title:"<!-- TMPL_VAR NAME="TITLE" -->", description:"<!-- TMPL_VAR NAME="DESCRIPTION" -->"};
+	<!-- /TMPL_LOOP -->
+
+	/* This function gives css clases to each kind of day */
+	function dateStatusHandler(date) {
+		var day = date.getDate();
+		var month = date.getMonth() + 1;
+		var year = date.getFullYear();
+		var weekDay = date.getDay();
+		var dayMonth = month + '/' + day;
+		var dateString = year + '/' + month + '/' + day;
+		if (exception_holidays[dateString] != null) {
+			return 'exception';
+		} else if ((week_days[weekDay] != null) || (day_month_holidays[dayMonth] != null)) {
+			return 'repeatableday';
+		} else if (holidays[dateString] != null) {
+			return 'holiday';
+		} else {
+			return 'normalday';
+		}
+	}
+
+	/* This function is in charge of showing the correct panel considering the kind of holiday */
+	function dateChanged(calendar) {
+		var day = calendar.date.getDate();
+		var month = calendar.date.getMonth() + 1;
+		var year = calendar.date.getFullYear();
+		var weekDay = calendar.date.getDay();
+		var dayName = calendar.date.print('%A');
+		var dayMonth = month + '/' + day;
+		var dateString = year + '/' + month + '/' + day;
+		if (calendar.dateClicked) {
+			if (holidays[dateString] != null) {
+				showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description);
+			} else if (exception_holidays[dateString] != null) {
+				showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description);
+			} else if (week_days[weekDay] != null) {
+				showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description);
+			} else if (day_month_holidays[dayMonth] != null) {
+				showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description);
+			} else {
+				newHoliday(dayName, day, month, year, weekDay);
+			}
+		}
+	};
+	Calendar.setup(
+		{
+			flat : "calendar-container",
+			flatCallback : dateChanged,
+			dateStatusFunc : dateStatusHandler
+		}
+	);
+</script>
+</div>
+<!-- TMPL_INCLUDE NAME="holidays-bottom.inc" -->
