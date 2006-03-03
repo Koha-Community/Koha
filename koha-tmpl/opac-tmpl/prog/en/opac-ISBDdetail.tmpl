@@ -1,0 +1,69 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- ISBD
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+	<h3>ISBD</h3>
+	<p><!-- TMPL_VAR name="ISBD" --></p>
+	
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<h2>We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.</h2> 
+		<p>Below is a list of the three latest issues :</p>
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<!-- TMPL_IF name="subscriptionnotes"-->
+					<h2><!--TMPL_VAR Name="subscriptionnotes"--> </h2>
+				<!-- /TMPL_IF -->
+				<!--TMPL_IF Name="latestserials"-->
+				<table>
+				<tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Pending
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Arrived
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Late
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Missing
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Not Issued
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
+ 	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_UNLESS NAME="norequests" -->
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+    <input type="submit" name="submit"  value="Place Reserve" />
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form>
+<!-- /TMPL_UNLESS -->
+
+<form action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="MARC View" /></form>
+
+<form action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Simple View" /></form>
+
+<form action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Print" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form>
+
+<form action="opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" value="Add to Shelf" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form>
+
+<form><input type="submit"  onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

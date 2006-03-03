@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Your Book Bag<!-- TMPL_IF NAME="print_basket" --><!-- TMPL_INCLUDE NAME="doc-head-close-basket-print.inc" --><!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" --><!-- /TMPL_IF -->
+
+<div id="window">
+	<!-- TMPL_UNLESS NAME="print_basket" --><h3>Your Book Bag</h3>
+	<!-- MENUS -->
+	
+<!-- TMPL_IF NAME="verbose" -->
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="showLess(); return false;" value="Brief Display" /></form>
+<!-- TMPL_ELSE -->
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="showMore(); return false;" value="More Details" /></form>
+<!-- /TMPL_IF -->
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="delSelRecords(); return false;" value="Remove Selected Items" /></form>
+
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="sendBasket(); return false;" value="Send" /></form>
+
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="printBasket(); return false;" value="Print" /></form>
+
+		<form action="opac-basket.pl" method="get"><input type="submit" onclick="delBasket(); return false;" value="Empty and Close" /></form> 
+<form action="opac-basket.pl" method="get"><input type="submit" onclick="quit(); return false;" value="Hide Window" /></form>
+<!-- /TMPL_UNLESS -->
+			
+
+<!-- TMPL_IF NAME="verbose" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<h3><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></h3>
+<table>
+				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td colspan="2"><form><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)"> Select this Item</label></form></td></tr><!-- /TMPL_UNLESS -->
+
+				<!-- TMPL_IF name="isbn" --><tr><th scope="row">ISBN:</th><td><!-- TMPL_VAR NAME="ISBN" --></td></tr><!-- /TMPL_IF -->
+						
+						<!-- TMPL_IF name="author" --><tr><th scope="row">Author:</th><td> <!-- TMPL_VAR NAME="author" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="additional" --><tr><th scope="row">Additional authors:</th><td><!-- TMPL_VAR NAME="additional" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th scope="row">Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th scope="row">Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="collection" --><tr><th scope="row">Collection:</th><td> <!-- TMPL_VAR NAME="seriestitle" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="subject" --><tr><th scope="row">Subject:</th><td> <!-- TMPL_VAR NAME="subject" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="copyrightdate" --><tr><th scope="row">Copyright:</th><td> <!-- TMPL_VAR NAME="copyrightdate" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --><tr><th scope="row">Notes:</th><td> <!-- TMPL_VAR NAME="notes" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="unititle" --><tr><th scope="row">Unified title:</th><td> <!-- TMPL_VAR NAME="unititle" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="serial" --><tr><th scope="row">Serial:</th><td><!-- TMPL_VAR NAME="serial" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="dewey" --><tr><th scope="row">Dewey:</th><td><!-- TMPL_VAR name="dewey" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="classification" --><tr><th scope="row">Call Number:</th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="lccn" --><tr><th scope="row">LCCN:</th><td> <!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="url" --><tr><th scope="row">URL:</th><td> <!-- TMPL_VAR NAME="url" --></td></tr><!-- /TMPL_IF -->
+			</table>
+							<table><tr>
+					<th>Location: </th>
+					<th>Barcode: </th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+					<tr>
+						<td>
+							<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+					</tr>
+				<!-- /TMPL_LOOP --></table>
+			<br>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+<table><!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+				<!-- BIBLIO RECORD TABLE -->
+<!-- TMPL_IF NAME="even" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+<td><form><!-- TMPL_UNLESS NAME="print_basket" --><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></label><br><input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked);"><!-- /TMPL_UNLESS --></form></td><td><p><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" -->
+						<!-- TMPL_IF name="place" --> <!-- TMPL_VAR name="place" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --><p><!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
+					</p></td><td><!-- TMPL_VAR NAME="classification" --></td></tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="print_basket" -->
+<form name="myform"><input type="hidden" name="records"></form>
+<!-- /TMPL_UNLESS -->
+</div>
+</body>
+</html>
