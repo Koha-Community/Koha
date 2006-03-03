@@ -334,6 +334,16 @@ my %tabledata = (
             explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'useDaysMode',
+            value               => 'Calendar',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation			=> 'How to calculate return dates : Calendar means holidays will be controled, Days means the return date don\'t depend on holidays',
+	        type		=> 'Choice',
+	        options		=> 'Calendar|Days'
+        },
     ],
 
 );
@@ -1271,6 +1281,10 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.131  2006/03/03 17:02:22  tipaul
+# commit for holidays and news management.
+# (some forgotten files)
+#
 # Revision 1.130  2006/03/03 16:35:21  tipaul
 # commit for holidays and news management.
 #
