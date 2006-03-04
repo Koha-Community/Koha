@@ -241,9 +241,12 @@ else {
 }
 
 $template->param(authtypesloop => \@authtypesloop,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+		                LibraryName => C4::Context->preference("LibraryName"),
+                                OpacNav => C4::Context->preference("OpacNav"),
+                                opaccredits => C4::Context->preference("opaccredits"),
+                                opacsmallimage => C4::Context->preference("opacsmallimage"),
+                                opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+                                opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 		);
 
 # Print the page
