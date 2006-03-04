@@ -53,7 +53,7 @@
 			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
 			<td><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></label><br /><input type="checkbox" name="bibid" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" value="<!-- TMPL_VAR NAME="biblionumber" -->" /></td>
 <!-- TMPL_IF NAME="AmazonContent" -->
-<td><div id="menu"> <a class="p1" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="<!-- TMPL_IF NAME="amazonisbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="Book Cover Image" class="thumbnail" /><!--<img class="large"  src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01._PE_SCLZZZZZZZ_.jpg" title="Enlarged view of image" alt="Enlarged view of image" />
+<td><div id="menu"> <a class="p1" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="Book Cover Image" class="thumbnail" /><!--<img class="large"  src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01._PE_SCLZZZZZZZ_.jpg" title="Enlarged view of image" alt="Enlarged view of image" />
 --></a></div></td>
 <!-- /TMPL_IF -->
 
