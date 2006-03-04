@@ -328,11 +328,9 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+        # 
 # MARC::Record built => now, record in DB
 	# check for a duplicate
 	my ($duplicateauthid,$duplicateauthvalue) = FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
@@ -366,11 +364,9 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
-	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+        # 
 	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
 	$record->append_fields($field);
 
