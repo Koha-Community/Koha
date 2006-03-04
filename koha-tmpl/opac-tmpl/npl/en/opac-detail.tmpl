@@ -7,7 +7,7 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <div class="details">
 <div class="detail-sidebar">
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a><!-- TMPL_ELSE --><img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Book Cover Image" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a><!-- TMPL_ELSE --><img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Book Cover Image" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 <div class="operations">
 <ul>
@@ -185,8 +185,8 @@
         <h2>Amazon Reader Reviews:</h2>
         <h4>
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	<!-- TMPL_IF NAME="isbn" -->
-		<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">Add your own review</a></h4>
+	<!-- TMPL_IF NAME="amazonisbn" -->
+		<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="amazonisbn" -->&store=books">Add your own review</a></h4>
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP --><br/>
 
