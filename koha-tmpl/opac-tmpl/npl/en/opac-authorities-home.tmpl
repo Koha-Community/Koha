@@ -1,0 +1,68 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Advanced Search
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<h1>Authority search</h1>
+
+<form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="opac">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div class="details">
+		<h2>Search on
+			<select name="authtypecode">
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+			<!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="authtypetext" --></option>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</h2>
+		<p>
+			<label for="mainentry">Main entry</label>
+			<input type="hidden" name="marclist" value="mainentry">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" id="mainentry" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+		</p>
+		<p>
+			<label for="anywhere">Anywhere</label>
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" id="anywhere" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+		</p>
+		<p>
+			<input type="submit" value="Start search" class="submit">
+		</p>
+	</div>
+</form>
+<div class="details">
+<h2>Add authority</h2>
+<form name="f2" method="post" action="authorities.pl">
+	<p><label for="authtypecode">Authority type</label>
+	<select name="authtypecode" id="authtypecode">
+		<!-- TMPL_LOOP name="authtypesloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+				<!-- TMPL_VAR name="authtypetext" -->
+			</option>
+		<!-- /TMPL_LOOP -->
+	</select>
+	<input type="submit" value="Add" class="submit">
+	</p>
+</form>
+</div>
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
