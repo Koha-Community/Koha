@@ -15,7 +15,8 @@ my $op=$query->param("op");
 my $dbh=C4::Context->dbh;
 
 if ($op eq "export") {
-	print $query->header('Content-Type: text/marc');
+	print $query->header(	-type => 'application/octet-stream',
+				-attachment=>'koha.mrc');
 	my $start_bib = $query->param("start_bib");
 	my $end_bib = $query->param("end_bib");
 	my $format = $query->param("format");
