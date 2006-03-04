@@ -43,6 +43,10 @@ if ($op eq "do_search") {
 	my $desc_or_asc = $query->param('desc_or_asc');
 	my $exactsearch = $query->param('exact');
 	for (my $i=0;$i<=$#marclist;$i++) {
+
+		if ($marclist[$i] eq "biblioitems.isbn") {
+			$value[$i] =~ s/-//g;
+		}
                 if ($searchdesc) { # don't put the and_or on the 1st search term
                         $searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
                 } else {                        $searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
