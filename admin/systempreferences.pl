@@ -116,7 +116,7 @@ sub StringSearch  {
 		}
 		$strsth =~ s/,$/) /;
 		$strsth .= " order by variable";
-		warn $strsth;
+		#warn $strsth;
 		my $sth=$dbh->prepare($strsth);
 		$sth->execute();
 		while (my $data=$sth->fetchrow_hashref){
