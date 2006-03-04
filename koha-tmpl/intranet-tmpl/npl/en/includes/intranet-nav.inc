@@ -10,23 +10,28 @@
 				<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
 				<input type="submit" class="submit" value="Submit" />
 	</form></li><li><a accesskey="r" href="/cgi-bin/koha/circ/returns.pl"><span class="accesskey">R</span>eturns</a>
-</li><!-- Display for NPL <li><a href="/reserve_list.php">Reserve List</a></li><li><a href="http://66.213.78.70/secret/reserves/index.cfm">New Title Waiting List</a></li> /Display for NPL --><!-- Hide from NPL --><li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li><!-- /Hide from NPL --></ul></li>
+</li>
+<li><a href="/cgi-bin/koha/circ/reserve.pl">Reserve List</a></li>
+<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
+</ul></li>
 				<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a><ul><li><form action="/cgi-bin/koha/members/member.pl" method="post">
 	<label for="navmember">Search:</label><input id="navmember" type="text" size="10" name="member" />
 	<input type="submit" value="Search" class="submit" />
 
 	</form></li></ul></li>
-				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="navkeyword"><span class="accesskey">Q</span>uick Search:</label><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="navkeyword" name="value" size="10" accesskey="q" /><input type="submit" value="Start search" class="submit" /></form></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li><li><a href="http://live.moreforohio.org:8080/vdx/">MORE Search</a></li> /Display for NPL -->
+				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="navkeyword"><span class="accesskey">Q</span>uick Search:</label><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="navkeyword" name="value" size="10" accesskey="q" /><input type="submit" value="Start search" class="submit" /></form></li>
 </ul></li>
-<li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul><!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Add Temp</a> </li> /Display for NPL --><li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li><!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
+<li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul>
+<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li>
+<li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
 <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
 <li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li>
-<li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li><!-- /Hide from NPL --></ul></li>
-<!-- Hide from NPL --><li><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports</a></li>
+<li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li></ul></li>
+<li><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports</a></li>
 <li><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a>
 <ul><li><a href="/cgi-bin/koha/admin-home.pl">System Administration</a></li>
 <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li></ul>
-</li><li><a href="/cgi-bin/koha/about.pl">About Koha</a></li><!-- /Hide from NPL -->
+</li><li><a href="/cgi-bin/koha/about.pl">About Koha</a></li>
 <!-- TMPL_IF NAME="loggedinusername" --><li>
     Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> <ul><li><a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a></li></ul></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="IntranetNav" --><!-- TMPL_VAR NAME="IntranetNav" --><!-- /TMPL_IF -->
