@@ -1046,6 +1046,16 @@ my %tabledata = (
             explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
             type                => 'free',
         },
+	
+        {                                                                       
+            uniquefieldrequired => 'variable',
+            variable            => 'AnonSuggestions',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,                                                             '
+                                        type' => 1},
+            explanation         => 'Set to anonymous borrowernumber to enable Anonymous suggestions',
+            type                => 'free',
+        },                           
         {                                                                                   
 	    uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
@@ -1718,6 +1728,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.33  2006/03/04 06:05:13  kados
+# New syspref: AnonSuggestions to allow an anonymous patron to make a
+# suggestion (requested by NPL). To enable, set to the borrowernumber
+# of the anonymous patron (must be created).
+#
 # Revision 1.100.2.32  2006/03/03 16:20:23  kados
 # hopefully fixes truncated amazon.com links in syspref
 # ----------------------------------------------------------------------
