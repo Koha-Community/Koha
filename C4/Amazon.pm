@@ -59,7 +59,7 @@ sub get_amazon_details {
 	my $af_tag=C4::Context->preference('AmazonAssocTag');
 
 	my $asin=$isbn;
-	my $url = "http://xml.amazon.com/onca/xml3?t=$dev_key&dev-t=$af_tag&type=heavy&f=xml&AsinSearch=" . $asin;
+	my $url = "http://xml.amazon.com/onca/xml3?t=$af_tag&dev-t=$dev_key&type=heavy&f=xml&AsinSearch=" . $asin;
 	my $content = get($url);
 	warn "could not retrieve $url" unless $content;
 	my $xmlsimple = XML::Simple->new();
