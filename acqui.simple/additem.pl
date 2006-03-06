@@ -80,7 +80,11 @@ if ($op eq "additem") {
 	#	$indicators{$ind_tag[$i]} = $indicator[$i];
 	#}
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+<<<<<<< additem.pl
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+=======
         my $record=MARC::Record::new_from_xml($xml, UTF-8);
+>>>>>>> 1.27.2.14
 	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# if autoBarcode is ON, calculate barcode...
 	if (C4::Context->preference('autoBarcode')) {
@@ -138,7 +142,7 @@ if ($op eq "additem") {
 	#	$indicators{$ind_tag[$i]} = $indicator[$i];
 	#}
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, UTF-8);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
