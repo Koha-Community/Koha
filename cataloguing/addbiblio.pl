@@ -64,7 +64,7 @@ sub find_value {
 			my @subfields = $field->subfields();
 			foreach my $subfield (@subfields) {
 				if (@$subfield[0] eq $insubfield) {
-					push @result,char_decode(@$subfield[1],$encoding);
+					push @result,@$subfield[1]);
 					$indicator = $field->indicator(1).$field->indicator(2);
 				}
 			}
@@ -246,7 +246,7 @@ sub build_tabs ($$$$) {
 						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
-						push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {
 						my @subfields=$field->subfields();
@@ -255,7 +255,7 @@ sub build_tabs ($$$$) {
 							my $value=$subfields[$subfieldcount][1];
 							next if (length $subfield !=1);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-							push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 							$i++;
 						}
 					}
