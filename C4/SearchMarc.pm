@@ -223,13 +223,15 @@ sub catalogsearch {
 			$query .= " and " if ($query);
 			my $field = $tagslib->{$tag}->{$subfield}->{kohafield};
 			if ($field eq 'biblio.author') {
-				$query .= "Author= \"".@$value[$i]."\"";
+				$query .= "Author all \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblio.title') {
-				$query .= "Title= \"".@$value[$i]."\"";
+				$query .= "Title all \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblioitems.isbn') {
 				$query .= "Isbn= ".@$value[$i];
 			} else {
-				$query .= @$value[$i];
+			        my @spacedout=split(/ /,@$value[$i]);
+			        my $text = join(" and ",@spacedout);
+				$query .= "$text";
 			}
 		}
 # 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
