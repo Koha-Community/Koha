@@ -50,6 +50,9 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
+if (!$biblionumber){
+    $biblionumber=$input->param('bibid');
+}
 my $biblioitemnumber = find_biblioitemnumber($dbh,$biblionumber);
 my $itemnumber = $input->param('itemnumber');
 my $op = $input->param('op');
@@ -135,7 +138,7 @@ if ($op eq "additem") {
 # build screen with existing items. and "new" one
 #------------------------------------------------------------------------------------------------------------------------------
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
+    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -311,6 +314,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
+                                                bibid        => $biblionumber, 
 						title => $oldrecord->{title},
 						author => $oldrecord->{author},
 						item => \@loop_data,
