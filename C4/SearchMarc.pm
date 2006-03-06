@@ -228,7 +228,12 @@ sub catalogsearch {
 				$query .= "Title all \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblioitems.isbn') {
 				$query .= "Isbn= ".@$value[$i];
+			} elsif ($field eq 'bibliosubject.subject'){
+			    $query.="Subject all \"@$value[$i]\"";
+			} elsif ($field eq 'biblioitems.itemtype'){
+			    $query="Itemtype=@$value[$i]";
 			} else {
+			        warn $field;
 			        my @spacedout=split(/ /,@$value[$i]);
 			        my $text = join(" and ",@spacedout);
 				$query .= "$text";
