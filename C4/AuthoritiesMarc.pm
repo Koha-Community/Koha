@@ -47,7 +47,7 @@ $VERSION = 0.01;
 	&authoritysearch
 	
 	&MARCmodsubfield
-	&AUTHhtml2marc
+	&AUTHhtml2marc &AUTHhtml2xml
 	&AUTHaddword
 	&MARCaddword &MARCdelword
 	&char_decode
@@ -146,10 +146,55 @@ sub authoritysearch {
 		# get MARC::Record of the authority
 		my $record = AUTHgetauthority($dbh,$result[$counter]);
 		# then build the summary
+		#FIXME: all of this should be moved to the template eventually
 		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
 		my $authref = getauthtype($authtypecode);
-		my $summary = $authref->{summary};
+		my $heading; # = $authref->{summary};
+		my $altheading;
+		my $seeheading;
+		my $see;
+		my $authtype;
+		if ($record->field('.00')) {
+			$authtype.= "Personal Name";
+		}
+                if ($record->field('.10')) {
+                        $authtype.= "Corporate Name";
+                }
+                if ($record->field('.11')) {
+                        $authtype.= "Meeting Name";
+                }
+                if ($record->field('.30')) {
+                        $authtype.= "Uniform Title";
+                }
+                if ($record->field('.48')) {
+                        $authtype.= "Chronological Term";
+                }
+                if ($record->field('.50')) {
+                        $authtype.= "Topical Term";
+                }
+                if ($record->field('.51')) {
+                        $authtype.= "Geographic Name";
+                }
+                if ($record->field('.55')) {
+                        $authtype = "Genre/Form Term";
+                }
+
 		my @fields = $record->fields();
+	
+		foreach my $field ($record->field('1..')) {
+			$heading.= $field->as_string();
+		}
+		my $summary; #.="<b>".$heading."</b><br>";
+
+		foreach my $field ($record->field('4..')) {
+                        $summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br>";
+			$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br>";	
+                }
+                foreach my $field ($record->field('5..')) {
+			$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br>";	
+                        $altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br>";
+                        $altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br>";
+                }
 		foreach my $field (@fields) {
 			my $tag = $field->tag();
 			if ($tag<10) {
@@ -159,12 +204,9 @@ sub authoritysearch {
 					my $subfieldcode = $subf[$i][0];
 					my $subfieldvalue = $subf[$i][1];
 					my $tagsubf = $tag.$subfieldcode;
-					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 				}
 			}
 		}
-		$summary =~ s/\[(.*?)]//g;
-		$summary =~ s/\n/<br>/g;
 
 		# find biblio MARC field using this authtypecode (to jump to biblio)
 		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
@@ -176,10 +218,11 @@ sub authoritysearch {
 			$tags_using_authtype.= $tagfield."9,";
 		}
 		chop $tags_using_authtype;
-		
+		$summary = "<b><a href='http://opac.liblime.com/cgi-bin/koha/opac-search.pl?type=opac&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br>".$seeheading.$altheading.$summary;	
 		# then add a line for the template loop
 		my %newline;
 		$newline{summary} = $summary;
+		$newline{authtype} = $authtype;
 		$newline{authid} = $result[$counter];
 		$newline{used} = &AUTHcount_usage($result[$counter]);
 		$newline{biblio_fields} = $tags_using_authtype;
@@ -660,6 +703,64 @@ sub AUTHdelsubfield {
 			");
 }
 
+sub AUTHhtml2xml {
+        my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;
+        use MARC::File::XML;
+        my $xml= MARC::File::XML::header();
+        my $prevvalue;
+        my $prevtag=-1;
+        my $first=1;
+        my $j = -1;
+        for (my $i=0;$i<=@$tags;$i++){
+
+            if ((@$tags[$i] ne $prevtag)){
+                $j++ unless (@$tags[$i] eq "");
+                warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
+
+                if (!$first){
+                    $xml.="</datafield>\n";
+                    $first=1;
+                }
+                else {
+                    if (@$values[$i] ne "") {
+                    # leader
+                    if (@$tags[$i] eq "000") {
+                        $xml.="<leader>@$values[$i]</leader>\n";
+                        $first=1;
+                        # rest of the fixed fields
+                    } elsif (@$tags[$i] < 10) {
+                        $xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+                        $first=1;
+                    }
+                    else {
+                        my $ind1 = substr(@$indicator[$j],0,1);
+                        my $ind2 = substr(@$indicator[$j],1,1);
+                        $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                        $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                        $first=0;
+                    }
+                    }
+                }
+            } else {
+                if (@$values[$i] eq "") {
+                }
+                else {
+                if ($first){
+                my $ind1 = substr(@$indicator[$j],0,1);
+                my $ind2 = substr(@$indicator[$j],1,1);
+                $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                $first=0;
+                }
+                    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+
+                }
+            }
+            $prevtag = @$tags[$i];
+        }
+        $xml.= MARC::File::XML::footer();
+        warn $xml;
+        return $xml
+}
 sub AUTHhtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = -1;
@@ -938,6 +1039,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.10  2006/03/06 19:11:55  kados
+# Fixes buggy use of ISBD for summary in Authorities display. Previously,
+# it was not possible to properly display repeated tags/subfields in the
+# correct order. This code uses the MARC21 guidelines for display of the
+# main heading, see and see also listings.
+#
 # Revision 1.9.2.9  2005/12/01 17:30:26  tipaul
 # no need to do a search on an authority when the authority has no MARC field (like EDITORS pseudo authority)
 #
