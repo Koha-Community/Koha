@@ -58,25 +58,30 @@ use C4::Biblio;
 use C4::Acquisition;
 use C4::Bull; #uses getsubscriptionsfrombiblionumber
 use HTML::Template;
+use C4::Search;
 
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('biblionumber');
+if (!$biblionumber){
+    $biblionumber = $query->param('bib');
+}
 # my $bibid = $query->param('bibid');
 my $itemtype = $query->param('frameworkcode');
 my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's just to show the biblio
 
 # $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 # $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-$itemtype = &MARCfind_frameworkcode($dbh,$biblionumber) if not ($itemtype);
-$itemtype = '' if ($itemtype eq 'Default');
+# $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber) if not ($itemtype);
+# $itemtype = '' if ($itemtype eq 'Default');
 # warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
+my $record = get_record($biblionumber);
 
-my $record =MARCgetbiblio($dbh,$biblionumber);
+# my $record =MARCgetbiblio($dbh,$biblionumber);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
@@ -235,13 +240,13 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchdetail($value)->{branchname};
+#       return getbranchdetail($value)->{branchname};
     }
 
    #---- itemtypes
    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-   		my $itemtypedef = getitemtypeinfo($itemtype);
-       return $itemtypedef->{description};
+ #  		my $itemtypedef = getitemtypeinfo($itemtype);
+ #      return $itemtypedef->{description};
     }
 
    #---- "true" authorized value
