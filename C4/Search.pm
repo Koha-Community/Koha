@@ -105,7 +105,7 @@ sub get_record {
     # pass in an id (biblionumber at this stage) and get back a MARC record
     my ($id) = @_;
     my $q;
-    my $Zconn = C4::Context->Zconn
+    my $Zconn = C4::Context->Zconn;
     my $raw;
     my $string = "identifier=$id";
     warn $string;
