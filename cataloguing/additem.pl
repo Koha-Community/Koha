@@ -75,7 +75,7 @@ if ($op eq "additem") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# if autoBarcode is ON, calculate barcode...
 	if (C4::Context->preference('autoBarcode')) {
 		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
@@ -122,7 +122,7 @@ if ($op eq "additem") {
 	my @indicator = $input->param('indicator');
 #	my $itemnumber = $input->param('itemnumber');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $itemrecord=MARC::Record::new_from_xml($xml);
+        my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$biblionumber,$itemnumber,0);

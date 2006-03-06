@@ -419,7 +419,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -464,7 +464,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml);
+        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
 	$record->append_fields($field);
