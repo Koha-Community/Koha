@@ -33,29 +33,30 @@
 <div class="searchresults">
 		<table>
 			<tr>
-				<th>Summary</th>
 				<!-- TMPL_UNLESS name="isEDITORS" -->
-					<th>Used in</th>
+					<th width="10%"># of Bib Records</th>
 				<!-- /TMPL_UNLESS -->
-				<th>View</th>
-				<th>Delete</th>
+				<th width="70%">Authorized Headings</th>
+				<th width="10%">Type of Heading</th>
+				<th width="10%">Full Authorized Heading</th>				
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
-					<td><!-- TMPL_VAR NAME="summary" --></td>
+
 					<!-- TMPL_UNLESS name="isEDITORS" -->
 						<td>
-							<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
+							<!-- <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --></a> --> <!-- TMPL_VAR NAME="used" -->
 						</td>
 					<!-- /TMPL_UNLESS -->
-					<td>
-						<a href="opac-authoritiesdetail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">View Authority Record: <!-- TMPL_VAR NAME="authid" --></a>
-					</td>
+					<td><!-- TMPL_VAR NAME="summary" --></td>
+
 						<td>
-							<!-- TMPL_UNLESS name="used" -->
-							<a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">Delete</a>
-							<!-- /TMPL_UNLESS -->
+					<!-- TMPL_VAR NAME="authtype" -->
 						</td>
+						<td>
+						                                                <a href="opac-authoritiesdetail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">View Full Heading</a>             
+												                                        </td>
+
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>

@@ -48,21 +48,6 @@
 		</p>
 	</div>
 </form>
-<div class="details">
-<h2>Add authority</h2>
-<form name="f2" method="post" action="authorities.pl">
-	<p><label for="authtypecode">Authority type</label>
-	<select name="authtypecode" id="authtypecode">
-		<!-- TMPL_LOOP name="authtypesloop" -->
-			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
-				<!-- TMPL_VAR name="authtypetext" -->
-			</option>
-		<!-- /TMPL_LOOP -->
-	</select>
-	<input type="submit" value="Add" class="submit">
-	</p>
-</form>
-</div>
 
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
