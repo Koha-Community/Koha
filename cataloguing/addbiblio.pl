@@ -64,7 +64,7 @@ sub find_value {
 			my @subfields = $field->subfields();
 			foreach my $subfield (@subfields) {
 				if (@$subfield[0] eq $insubfield) {
-					push @result,@$subfield[1]);
+					push @result,@$subfield[1];
 					$indicator = $field->indicator(1).$field->indicator(2);
 				}
 			}
