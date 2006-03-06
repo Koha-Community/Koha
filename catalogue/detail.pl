@@ -19,6 +19,9 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 my $biblionumber=$query->param('biblionumber');
+if (!$biblionumber){
+    $biblionumber=$query->param('bib');
+    }
 $template->param(biblionumber => $biblionumber);
 
 
