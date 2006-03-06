@@ -103,6 +103,8 @@ if (C4::Context->preference("AmazonContent")==1) {
 	$dat->{'amazonisbn'}=$dat->{'isbn'};
 	$dat->{'amazonisbn'} =~ s|-||g;
 
+	$template->param( amazonisbn => $dat->{amazonisbn} );
+
 	my $amazon_details = &get_amazon_details($dat->{amazonisbn});
 
 	foreach my $result (@{$amazon_details->{Details}}){
