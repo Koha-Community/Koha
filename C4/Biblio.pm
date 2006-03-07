@@ -22,6 +22,7 @@ require Exporter;
 use C4::Context;
 use C4::Database;
 use C4::Date;
+use C4::Search;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -1032,16 +1033,19 @@ delete a biblio
 
 sub NEWdelbiblio {
     my ( $dbh, $bibid ) = @_;
-    my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    &REALdelbiblio( $dbh, $biblio );
+#    my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
+    &REALdelbiblio( $dbh, $bibid );
     my $sth =
       $dbh->prepare(
         "select biblioitemnumber from biblioitems where biblionumber=?");
-    $sth->execute($biblio);
+    $sth->execute($bibid);
     while ( my ($biblioitemnumber) = $sth->fetchrow ) {
         REALdelbiblioitem( $dbh, $biblioitemnumber );
     }
-    &MARCdelbiblio( $dbh, $bibid, 0 );
+#    &MARCdelbiblio( $dbh, $bibid, 0 );
+    # delete from zebra
+    my $record = get_record($bibid);
+#    z3950_extended_services('update',set_service_options('update'),$record);
 }
 
 =head2 NEWnewitem
@@ -1112,9 +1116,9 @@ delete an item
 
 sub NEWdelitem {
     my ( $dbh, $bibid, $itemnumber ) = @_;
-    my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
     &REALdelitem( $dbh, $itemnumber );
-    &MARCdelitem( $dbh, $bibid, $itemnumber );
+#    &MARCdelitem( $dbh, $bibid, $itemnumber );
+    # we must now delete the item data from zebra
 }
 
 
@@ -3035,6 +3039,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.159  2006/03/07 21:54:47  rangi
+# Starting work on deletes
+#
 # Revision 1.158  2006/03/06 02:45:41  kados
 # Adding fixes to MARC editor to HEAD
 #
