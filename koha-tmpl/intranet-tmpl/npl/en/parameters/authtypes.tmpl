@@ -58,45 +58,62 @@ function Check(f) {
 </script>
 <div id="main">
 <!-- TMPL_IF NAME="add_form" -->
-
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-	<table>
-		<!-- TMPL_IF NAME="authtypecode" -->
+<div class="data"><table>
+	<!-- TMPL_IF NAME="authtypecode" -->
 		<caption>Modify authority type</caption>
 	<!-- TMPL_ELSE -->
 		<caption>Add authority type</caption>
 	<!-- /TMPL_IF -->
+	
+		<input type="hidden" name="op" value="add_validate" />
+		<input type="hidden" name="checked" value="0" />
 			<!-- TMPL_IF NAME="authtypecode" -->
-				<tr><td><label for="authtypecode">Authority type<label></td><td><input type="hidden" name="op" value="add_validate" />
-		<input type="hidden" name="checked" value="0" /><input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /><!-- TMPL_VAR NAME="authtypecode" --></td></tr>
+				<tr><th><label for="authtypecode">Authority type<label><input type="hidden" id="authtypecode" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /></th><td><!-- TMPL_VAR NAME="authtypecode" --></td></tr>
 			<!-- TMPL_ELSE -->
-				<tr><td><label for="authtypecode">Authority type<label></td><td><input id="authtypecode" type="text" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
+				<tr><th><label for="authtypecode">Authority type<label></th><td><input type="text" id="authtypecode" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
 			<!-- /TMPL_IF -->
-		<tr><td><label for="authtypetext">Description</label></td><td><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->" /></td></tr>
-		<tr><td><label for="summary">Summary</label></td><td><textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea></td></tr>
-		<tr><td><label for="auth_tag_to_report">Report tag</label></td><td><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</td></tr></table>
-	<p><input type="submit" value="OK" class="submit" onclick="Check(this.form); return false;" />
+			<tr><th>
+				<label for="authtypetext">Description</label></th><td>
+				<input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->" />
+			</td></tr>
+			<tr><th>
+				<label for="summary">Summary</label></th><td>
+				<textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea>
+			</td></tr>
+			<tr><th><label for="auth_tag_to_report">Report tag</label></th><td>
+				<input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />
+				<div class="help">Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</div></td></tr>
+			</td></tr></table>
+			<p>
+				<!-- TMPL_IF NAME="authtypecode" -->
+		<input type="submit" value="Update Authority Type" class="submit" onclick="Check(this.form); return false;" />
+	<!-- TMPL_ELSE -->
+		<input type="submit" value="Add Authority Type" class="submit" onclick="Check(this.form); return false;" />
+	<!-- /TMPL_IF -->
+				
 			</p>
+			</div>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-<div>
+<div class="details">
 	<h2>Authority structure definition for <!-- TMPL_VAR NAME="authtypetext" --> (<!-- TMPL_VAR NAME="authtypecode" -->)</h2>
 	<!-- TMPL_IF NAME="total" -->
 		<p>
 			<b>This record is used <!-- TMPL_VAR NAME="total" --> times</b>
 		</p>
 	<!-- /TMPL_IF -->
-	<p>CONFIRM DELETION</p>
+	<h3>Are you sure you want to delete this Authority Type?</h3>
 	<p>
-		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-			<input type="submit" value="YES" class="submit" />
+			<input type="submit" value="Yes, Delete It" class="cancel" />
 		</form>
-		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="NO" class="submit" />
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="No, Don't Delete It" class="submit" />
 		</form>
 	</p>
 </div>
@@ -139,10 +156,11 @@ function Check(f) {
 </table>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form" />
-	<input type="submit" class="submit" value="Add authority type" title="Add authority type" alt="Add authority type" />
-	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --></td>
-	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF --></td>
+	<input type="submit" class="submit" value="Add authority type" />
 </form>
+	<!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
