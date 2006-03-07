@@ -122,8 +122,10 @@ if (C4::Context->preference("serialsadditems")){
 		push @itemlocationloop, \%row;
 	}
 	foreach my $data (@serialslist){
-		$data->{"itemstatusloop"}=\@itemstatusloop if (scalar(@itemstatusloop));
-		$data->{"itemlocationloop"}=\@itemlocationloop if (scalar(@itemlocationloop));
+		if (scalar(@itemstatusloop)){$data->{"itemstatusloop"}=\@itemstatusloop;}
+		else { $data->{"itemstatusloop"}=[];}
+		if (scalar(@itemlocationloop)){$data->{"itemlocationloop"}=\@itemlocationloop;}
+		else {$data->{"itemlocationloop"}=[];}
 		$data->{"branchloop"}=\@branchloop ;
 	}
 	$template->param(serialadditems =>C4::Context->preference("serialsadditems"),
