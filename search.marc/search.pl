@@ -207,6 +207,8 @@ if ($op eq "do_search") {
 							from=>$from,
 							to=>$to,
 							numbers=>\@numbers,
+							desc_asc=>$desc_or_asc,
+							orderby=>$orderby,
 							MARC_ON => C4::Context->preference("marc"),
 							);
 
