@@ -210,13 +210,13 @@ if ($op eq 'add_form') {
 	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,$authtypecode);
-	my $toggle="white";
+	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+	  	if ($toggle eq 1){
+			$toggle=0;
 	  	} else {
-			$toggle="white";
+			$toggle=1;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
@@ -227,7 +227,7 @@ if ($op eq 'add_form') {
 		$row_data{subfield_link} ="auth_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&authtypecode=".$authtypecode;
 		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&authtypecode=".$authtypecode;
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&authtypecode=".$authtypecode;
-		$row_data{bgcolor} = $toggle;
+		$row_data{toggle} = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data,
