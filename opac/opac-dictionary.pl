@@ -205,7 +205,10 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
-	$template->param(anindex => $input->param('index'));
+	$template->param(anindex => $input->param('index'),
+	opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+        opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+	);
 	$template->param(result => \@results,
 					 catresult=> \@catresults,
 						search => $search[0],
