@@ -232,6 +232,10 @@ sub catalogsearch {
 			    $query.="Subject all \"@$value[$i]\"";
 			} elsif ($field eq 'biblioitems.itemtype'){
 			    $query="Itemtype=@$value[$i]";
+			} elsif ($field eq 'items.homebranch'){
+			    $query="Branch=@$value[$i]";
+			} elsif ($field eq 'items.barcode'){
+			    $query="Barcode=@$value[$i]";
 			} else {
 			        warn $field;
 			        my @spacedout=split(/ /,@$value[$i]);
