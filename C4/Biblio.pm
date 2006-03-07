@@ -227,11 +227,18 @@ Currently, we only support 'create', 'commit', and 'update'. 'drop' support will
 =cut
 
 sub set_service_options {
-	my ($serviceType) = @_;
+	my ($serviceType,$action,$recordId) = @_;
 	my $serviceOptions;
 
 	if ($serviceType eq 'update') {
+		if ($action) {
+		$serviceOptions->{ 'action' } = $action;
+		} else {
 		$serviceOptions->{ 'action' } = 'specialUpdate';
+		}
+		if ($recordId) {
+		$serviceOptions->{'recordIdNumber'} = $recordId;
+		}
 
 	# FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
 	#	$serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
@@ -247,6 +254,8 @@ sub set_service_options {
 	if ($serviceType eq 'drop') {
 		die "ERROR: 'drop' not currently supported (by Zebra)";
 	}
+
+	#check action
 	return $serviceOptions;
 }
 
@@ -3039,6 +3048,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.160  2006/03/07 22:00:18  kados
+# adding support for 'delete' function
+#
 # Revision 1.159  2006/03/07 21:54:47  rangi
 # Starting work on deletes
 #
