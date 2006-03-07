@@ -349,6 +349,9 @@ sub build_hidden_data () {
 my $input = new CGI;
 my $error = $input->param('error');
 my $biblionumber=$input->param('biblionumber'); # if biblionumber exists, it's a modif, not a new biblio.
+if (!$biblionumber){
+    $biblionumber=$input->param('oldbiblionumber');
+    }
 my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
@@ -358,7 +361,7 @@ my $dbh = C4::Context->dbh;
 $frameworkcode = &MARCfind_frameworkcode($dbh,$biblionumber) if ($biblionumber and not ($frameworkcode));
 $frameworkcode='' if ($frameworkcode eq 'Default');
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/addbiblio.tmpl",
+    = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
