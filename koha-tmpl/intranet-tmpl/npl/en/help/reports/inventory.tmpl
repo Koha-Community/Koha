@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Online Help: Catalogue Statistics<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="main-compact">
+
+<h1>Inventory help</h1>
+<p>With this utility you can take invetory of your collection</p>
+<p>There are two ways to do this :</p>
+<ul>
+<li>list books that haven't been 'seen' and then search for them on the shelves</li>
+<li>Scan all books which will tell Koha they have been 'seen'</li>
+</ul>
+<p>Koha supports both methods:</p>
+<h2>List unseen books and search for them on the shelves</h2>
+<p> In the 1st bloc, you can select :
+<ul>
+<li>a itemcallnumber range: to limit the list to a small physical shelf</li>
+<li>a date last seen: to see only books which have been unseen for a long time</li>
+</ul>
+<p>If you validate your search, you'll get a list of items. Go to the shelves, search them, and, if you see them, click on them</p>
+<h2>Scan all books and tell Koha you've seen them</h2>
+<p>This feature is new in Koha 2.2.6 : you can now scan ALL the books in your shelves (with a barcode reader and a laptop) and store them in a text file (from notepad or any text-only editor <b>This does NOT include MS-word or OpenOffice.org</b>)</p>
+<p>Once you have a long barcode list, reach the second bloc on inventory.pl, and upload the file : all items you have scanned will automatically be modified to have datelastseen set to whatever you wan</p>
+<p>Once you're done with your library, you can look at missing books by querying the 1st bloc for books unseen since the beginning of your inventory</p>
+
+<p>Note that inventory is calculated on a "date last seen" flag. This flag is automatically set every time a book circulate</p>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

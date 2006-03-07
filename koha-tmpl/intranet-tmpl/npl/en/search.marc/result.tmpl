@@ -12,17 +12,17 @@
 
 <!-- TMPL_IF name="total" --><div id="pages">
 <!-- TMPL_IF NAME="displayprev" -->
-			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;</a> 
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search">&lt;&lt;</a> 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
 			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search">&gt;&gt;</a>
 				<!-- /TMPL_IF --></div>
 <!-- TMPL_ELSE --><!-- /TMPL_IF -->
 
@@ -56,17 +56,17 @@
 
 <!-- TMPL_IF name="total" --><div id="pages">
 <!-- TMPL_IF NAME="displayprev" -->
-			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;</a> 
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search">&lt;&lt;</a> 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
 			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME=number --></a>
+			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME=number --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;<!--TMPL_IF NAME="orderby"-->orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;<!--/TMPL_IF--><!--TMPL_IF NAME="desc_asc"-->desc_or_asc=<!-- TMPL_VAR NAME="desc_asc" -->&amp;<!--/TMPL_IF-->type=intranet&amp;op=do_search">&gt;&gt;</a>
 				<!-- /TMPL_IF --></div>
 <!-- TMPL_ELSE --><!-- /TMPL_IF -->
 
