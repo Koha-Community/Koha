@@ -1,16 +1,15 @@
-<script language="JavaScript" type="text/javascript">
-function addauthority() {
-	X = document.forms[0].authtype.value;
-	window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
-}
-function searchauthority() {
-	X = document.forms[0].authtype2.value;
-	Y = document.forms[0].value.value;
-	window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
-}
-</script>
-
 <div id="topmenu">
-	<form><select name="authtype2" id="authtype2"><!-- TMPL_LOOP name="authtypesloop" --><option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option><!-- /TMPL_LOOP --></select>
-	<input type="text" size="10" maxlength="100" name="value" /><input type="button" class="submit" value="Search" onclick="searchauthority(); return false;" /> <select name="authtype" id="authtype"><!-- TMPL_LOOP name="authtypesloop" --><option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option><!-- /TMPL_LOOP --></select>
-	<input type="button" class="submit" value="Add Authority" onclick="addauthority(); return false;" /></form></div>
+<form class="inline" name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="type" value="intranet" />
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->"> <select name="authtypecode" />
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="authtypetext" --></option>
+			
+			<!-- /TMPL_LOOP -->
+			</select> <input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value=""> <input type="hidden" name="operator" value="contains" /> <input type="text" id="anywhere" size="10" name="value" value="<!-- TMPL_VAR NAME="value" -->" /> <input type="submit" value="Search" class="submit" /></form>
+
+<form name="f2" method="post" action="authorities.pl"><select name="authtypecode" id="authtypecode"><!-- TMPL_LOOP name="authtypesloop" --><!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF --><!-- TMPL_VAR name="authtypetext" --></option><!-- /TMPL_LOOP --></select> <input type="submit" value="Add" class="submit"></form>
+</div>
