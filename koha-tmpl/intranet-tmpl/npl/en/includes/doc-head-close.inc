@@ -5,39 +5,10 @@
 	<!-- TMPL_IF NAME="intranetstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetstylesheet" -->);<!-- TMPL_ELSE -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
 </style>
+<!-- TMPL_INCLUDE NAME="common.js.inc" -->
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
-function Help() {
-	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
-}
 
-function openWindow(targeturl, windowname) {
-	newwin =
-	window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
-}
- 
- 	var newwin;
-	
-	// Open the popup window if it doesn't already exist and give it focus.
-	function PopWin(targeturl, windowname) {
-	
-		if (!newwin || newwin.closed) newwin = window.open(targeturl,windowname, "height=300,width=400,scrollbars=yes,resizable=yes");
-	  newwin.focus();
-	}
-	
-  // Set the value of the form field to the passed value and optionally shift
-	// focus and close the popup.
-	function FillForm(val,formname,formfield) {
-	
-		document.forms[formname].elements[formfield].value = val;
-
-		// Uncomment below to shift focus after clicking link in popup.
-		document.forms[formname].elements[formfield].focus();
-		
-		// Uncomment below to close popup after clicking link.
-		newwin.close();
-	}
-	
 	function CheckAll() {
 		count = document.mainform.elements.length;
 	    for (i=0; i < count; i++) {
