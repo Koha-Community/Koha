@@ -25,39 +25,21 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-	<h1>Purchase Suggestions</h1>
+	<h3>Search Purchase Suggestions</h3>
 	<!-- TMPL_IF NAME="suggestions_loop" -->
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 	<table>
-		<tr>
-			<th>&nbsp;</th>
-			<th>Title</th>
-			<th>Author</th>
-			<th>&copy;</th>
-			<th>Publisher</th>
-			<th>Status</th>
-			<th>Suggested by</th>
-			<th>Managed by</th>
-			<th>Note</th>
-		</tr>
-		<tr>
-			<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-				<th>
-					Search:
-				</th>
-				<td>
-					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
-				</td>
-				<td>
-					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" />
-				</td>
-				<td>
-					&nbsp;
-				</td>
-				<td>
-					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
-				</td>
-				<td>
-<select name="status">
+<tr>			<th><label for="title">Title</label></th><td>
+					<input type="text" id="title" name="title" value="<!-- TMPL_VAR name="title"-->" />
+				</td></tr>
+			<tr><th><label for="author">Author</label></th><td>
+					<input type="text" id="author" name="author" value="<!-- TMPL_VAR name="author" -->" />
+				</td></tr>
+			<tr><th><label for="publishercode">Publisher</label></th><td>
+					<input type="text" id="publishercode" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
+				</td></tr>
+			<tr><th><label for="status">Status</label></th><td>
+<select name="status" id="status">
 						<option value="">Any</option>
 						<!-- TMPL_IF name="ASKED" -->
 							<option value="ASKED" selected="selected">Requested</option>
@@ -85,23 +67,31 @@
 							<option value="AVAILABLE">Available</option>
 						<!-- /TMPL_IF -->
 					</select>
-				</td>
-				<td>
-					<select name="suggestedbyme">
+				</td></tr>
+			<tr><th><label for="suggestedbyme">Suggested by</label></th><td>
+					<select id="suggestedbyme" name="suggestedbyme">
 						<!-- TMPL_IF NAME="suggestedbyme" --><option value="1" selected="selected"><!-- TMPL_ELSE --><option value="1"><!-- /TMPL_IF -->Me</option>
 						<!-- TMPL_UNLESS name="suggestedbyme" --><option value="0" selected="selected"><!-- TMPL_ELSE --><option value="0"><!-- /TMPL_UNLESS -->Anybody</option>
 					</select>
-				</td>
-				<td>
-					&nbsp;
-				</td>
-				<td>
-					<input type="submit" class="submit" value="Set Filter" />
-				</td>
-			</form>
-		</tr>
+				</td></tr>
+		</table>
+		<p><input type="submit" class="submit" value="Search Suggestions" /></p>
+
 		<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 			<input type="hidden" name="op" value="delete_confirm" />
+				<table>
+				<caption>Pending Purchase Suggestions</caption>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>&copy;</th>
+			<th>Publisher</th>
+			<th>Status</th>
+			<th>Suggested by</th>
+			<th>Managed by</th>
+			<th>Note</th>
+		</tr>
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 				<td>
