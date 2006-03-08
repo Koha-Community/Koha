@@ -1045,6 +1045,12 @@ sub MARChtml2xml {
     my $first=1;
 	my $j = -1;
     for (my $i=0;$i<=@$tags;$i++){
+		@$values[$i] =~ s/&/&amp;/g;
+		@$values[$i] =~ s/</&lt;/g;
+		@$values[$i] =~ s/>/&gt;/g;
+		@$values[$i] =~ s/"/&quot;/g;
+		@$values[$i] =~ s/'/&apos;/g;
+
 		if ((@$tags[$i] ne $prevtag)){
 			$j++ unless (@$tags[$i] eq "");
 			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
@@ -2995,6 +3001,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.48  2006/03/08 16:50:14  kados
+# re-adding paul's fix for improper XML characters.
+#
 # Revision 1.115.2.47  2006/03/08 16:39:01  kados
 # removing blank subfield values
 #
