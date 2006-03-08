@@ -121,8 +121,9 @@
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
 	<div id="notes">
+	<!-- TMPL_IF NAME="patronimages" --><img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="" border="0" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 	<ul>
-	<li><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></li>
+	<li><!-- TMPL_VAR NAME="streetaddress" --><br /> <!-- TMPL_VAR NAME="city" --></li>
 	<li><!-- TMPL_VAR NAME="phone" --></li>
 	<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 	<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
