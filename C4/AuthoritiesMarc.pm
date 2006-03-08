@@ -154,47 +154,72 @@ sub authoritysearch {
 		my $seeheading;
 		my $see;
 		my $authtype;
-		if ($record->field('.00')) {
-			$authtype.= "Personal Name";
-		}
-                if ($record->field('.10')) {
-                        $authtype.= "Corporate Name";
-                }
-                if ($record->field('.11')) {
-                        $authtype.= "Meeting Name";
-                }
-                if ($record->field('.30')) {
-                        $authtype.= "Uniform Title";
-                }
-                if ($record->field('.48')) {
-                        $authtype.= "Chronological Term";
-                }
-                if ($record->field('.50')) {
-                        $authtype.= "Topical Term";
-                }
-                if ($record->field('.51')) {
-                        $authtype.= "Geographic Name";
-                }
-                if ($record->field('.55')) {
-                        $authtype = "Genre/Form Term";
-                }
+		# KADOS : why do you handle hardcoded $authtype, as you have it in $authref ?
+# 		if ($record->field('.00')) {
+# 			$authtype.= "Personal Name";
+# 		}
+# 		if ($record->field('.10')) {
+# 				$authtype.= "Corporate Name";
+# 		}
+# 		if ($record->field('.11')) {
+# 				$authtype.= "Meeting Name";
+# 		}
+# 		if ($record->field('.30')) {
+# 				$authtype.= "Uniform Title";
+# 		}
+# 		if ($record->field('.48')) {
+# 				$authtype.= "Chronological Term";
+# 		}
+# 		if ($record->field('.50')) {
+# 				$authtype.= "Topical Term";
+# 		}
+# 		if ($record->field('.51')) {
+# 				$authtype.= "Geographic Name";
+# 		}
+# 		if ($record->field('.55')) {
+# 				$authtype = "Genre/Form Term";
+# 		}
+		$authtype=$authref->{authtypetext};
 
 		my @fields = $record->fields();
-	
-		foreach my $field ($record->field('1..')) {
-			$heading.= $field->as_string();
+		my $summary; #.="<b>".$heading."</b><br />";
+		if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+		# construct UNIMARC summary, that is quite different from MARC21 one
+			# accepted form
+			foreach my $field ($record->field('2..')) {
+				$heading.= $field->as_string();
+			}
+			# rejected form(s)
+			foreach my $field ($record->field('4..')) {
+				$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+			}
+			# see :
+			foreach my $field ($record->field('5..')) {
+				$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+			}
+			# // form
+			foreach my $field ($record->field('7..')) {
+				$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+				$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+				$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+			}
+		} else {
+		# construct MARC21 summary
+			foreach my $field ($record->field('1..')) {
+				$heading.= $field->as_string();
+			}
+			foreach my $field ($record->field('4..')) {
+				$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
+			}
+			foreach my $field ($record->field('5..')) {
+				$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+				$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+				$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+			}
 		}
-		my $summary; #.="<b>".$heading."</b><br>";
-
-		foreach my $field ($record->field('4..')) {
-                        $summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br>";
-			$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br>";	
-                }
-                foreach my $field ($record->field('5..')) {
-			$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br>";	
-                        $altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br>";
-                        $altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br>";
-                }
 		foreach my $field (@fields) {
 			my $tag = $field->tag();
 			if ($tag<10) {
@@ -218,7 +243,7 @@ sub authoritysearch {
 			$tags_using_authtype.= $tagfield."9,";
 		}
 		chop $tags_using_authtype;
-		$summary = "<b><a href='http://opac.liblime.com/cgi-bin/koha/opac-search.pl?type=opac&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br>".$seeheading.$altheading.$summary;	
+		$summary = "<b><a href='/cgi-bin/koha/opac-search.pl?type=opac&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br />".$seeheading.$altheading.$summary;	
 		# then add a line for the template loop
 		my %newline;
 		$newline{summary} = $summary;
@@ -1039,6 +1064,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.11  2006/03/08 15:17:09  tipaul
+# fixing some UNIMARC behaviour + removing some hardcoded strings
+#
 # Revision 1.9.2.10  2006/03/06 19:11:55  kados
 # Fixes buggy use of ISBD for summary in Authorities display. Previously,
 # it was not possible to properly display repeated tags/subfields in the
