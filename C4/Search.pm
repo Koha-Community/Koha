@@ -90,7 +90,7 @@ sub search {
     my @results;
     while ( $i < $n && $i < $number ) {
         $raw = $rs->record($i)->raw();
-        my $record = MARC::Record->new_from_xml($raw);
+        my $record = MARC::Record->new_from_xml($raw, 'UTF-8');
         my $line = MARCmarc2koha( $dbh, $record );
         push @results, $line;
 #	 push @results,$raw;
@@ -124,7 +124,7 @@ sub get_record {
         print "Error ", $@->code(), ": ", $@->message(), "\n";
     }
     ###$raw
-    my $record = MARC::Record->new_from_xml($raw);
+    my $record = MARC::Record->new_from_xml($raw, 'UTF-8');
     ###$record
     return ($record);
 }

@@ -267,7 +267,7 @@ sub catalogsearch {
 		# get the MARC record (in XML)...
 		# warn "REC $i = ".$rs->record($i)->raw();
 # FIXME : it's a silly way to do things : XML => MARC::Record => hash. We had better developping a XML=> hash (in biblio.pm)
-		my $record = MARC::Record->new_from_xml($rs->record($i)->raw());
+		my $record = MARC::Record->new_from_xml($rs->record($i)->raw(), 'UTF-8');
 		# transform it into a meaningul hash
 		my $line = MARCmarc2koha($dbh,$record);
 		my $biblionumber=$line->{biblionumber};
