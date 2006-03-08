@@ -884,8 +884,8 @@ my %tabledata = (
             value               => '0',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation         => 'Turn on/off display of patron images in Intranet',
-            type                => 'YesNo',
+            explanation         => 'Turn on/off display of patron images in Intranet and specify a file extension for images',
+            type                => 'free',
         },
 	{
             uniquefieldrequired => 'variable',
@@ -1731,6 +1731,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.35  2006/03/08 17:50:55  kados
+# Modifying patronimages: now it can be used to specify the file extension
+# of the images (to avoid hard-codeing in templates).
+#
 # Revision 1.100.2.34  2006/03/08 13:28:23  tipaul
 # changing the size of some new systempref to a bloc (more convenient)
 #
