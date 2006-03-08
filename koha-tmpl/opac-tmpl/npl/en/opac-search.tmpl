@@ -119,22 +119,35 @@
 	</div>
 </form>
 
-<!-- Hide from NPL --><div class="content-block">
-<h3>Recent acquisitions</h3>
-	<form action="/cgi-bin/koha/opac-search.pl">
-		<p>
-			<!-- TMPL_VAR name="CGIitemtype" --> acquired recently (the most recent being first)
+<div class="content-block">
+	<h3>Recent acquisitions</h3>
+<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
 			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="orderby" value="biblio.timestamp desc" />
+			<!-- TMPL_VAR name="CGIitemtype" --> 
+			Acquired by
+			<input type="hidden" name="marclist" value="items.homebranch" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+                        <select name="value">
+                                <option value="">Any Branch</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+			<br>over the last <input type="text" name="desc_or_asc" size="3" /> days
+			<input type="hidden" name="orderby" value="biblio.timestamp" />
 			<input type="submit" value="Search" class="submit" />
-		</p>
-	</form>
-</div><!-- /Hide from NPL -->
+</form>
+</div>
 <script type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
