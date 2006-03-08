@@ -212,19 +212,23 @@
 			</td>
 		</tr>
 	</table>
-	<table border="0" cellspacing="0" cellpadding="2">
-	<tr valign="top" bgcolor="#99cc33">
-		<th>Variable</th>
-		<th>Value</th>
-		<th colspan="3">Explanation</th>
-	</tr>
+	<table>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<!-- TMPL_IF NAME="toggle" --><tr valign="top" class="hilighted"><!-- TMPL_ELSE --><tr valign="top"><!-- /TMPL_IF -->
-		<td><!-- TMPL_VAR NAME="variable" --></td>
-		<td><!-- TMPL_VAR NAME="value" --></td>
-		<td><!-- TMPL_VAR NAME="explanation" --></td>
-		<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"><br>Edit</a></td>
-		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"><br>Delete</a></td>
+		<!-- TMPL_IF NAME="toggle" -->
+			<tr valign="top" class="hilighted">
+		<!-- TMPL_ELSE -->
+			<tr valign="top">
+		<!-- /TMPL_IF -->
+		<td>
+			<p><b><!-- TMPL_VAR NAME="variable" -->:</b> <!-- TMPL_VAR NAME="value" --></p>
+			<p align="right"><i>(<!-- TMPL_VAR NAME="explanation" -->)</i></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="edit" -->" class="button parameters">Modify</a></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="delete" -->" class="button parameters">Delete</a></p>
+		</td>
 	</tr>
 	<!-- /TMPL_LOOP -->
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
