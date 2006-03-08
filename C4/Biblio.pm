@@ -1040,58 +1040,60 @@ sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
 	use MARC::File::XML;
 	my $xml= MARC::File::XML::header();
-        my $prevvalue;
-        my $prevtag=-1;
-        my $first=1;
+	my $prevvalue;
+	my $prevtag=-1;
+	my $first=1;
 	my $j = -1;
-        for (my $i=0;$i<=@$tags;$i++){
-
-            if ((@$tags[$i] ne $prevtag)){
-		$j++ unless (@$tags[$i] eq "");
-		warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
-
-                if (!$first){
-		    $xml.="</datafield>\n";
-		    $first=1;
-                }
-		else {
-		    if (@$values[$i] ne "") {
-		    # leader
-		    if (@$tags[$i] eq "000") {
-			$xml.="<leader>@$values[$i]</leader>\n";
-			$first=1;
-			# rest of the fixed fields
-		    } elsif (@$tags[$i] < 10) {
-			$xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
-			$first=1;
-		    }
-		    else {
-			my $ind1 = substr(@$indicator[$j],0,1);
-			my $ind2 = substr(@$indicator[$j],1,1);
-			$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-			$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-			$first=0;			
-		    }
-		    }
+	for (my $i=0;$i<=@$tags;$i++){
+		if ((@$tags[$i] ne $prevtag)){
+			$j++ unless (@$tags[$i] eq "");
+			# deal with &, <, >,", ' that are not valid in a XML file.
+			@$values[$i] =~ s/&/&amp;/g;
+			@$values[$i] =~ s/</&lt;/g;
+			@$values[$i] =~ s/>/&gt;/g;
+			@$values[$i] =~ s/"/&quot;/g;
+			@$values[$i] =~ s/'/&apos;/g;
+			if (!$first){
+				$xml.="</datafield>\n";
+				$first=1;
+				}
+			else {
+				if (@$values[$i] ne "") {
+					# leader
+					if (@$tags[$i] eq "000") {
+						$xml.="<leader>@$values[$i]</leader>\n";
+						$first=1;
+						# rest of the fixed fields
+					} elsif (@$tags[$i] < 10) {
+						$xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+						$first=1;
+					}
+					else {
+						my $ind1 = substr(@$indicator[$j],0,1);
+						my $ind2 = substr(@$indicator[$j],1,1);
+						$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+						$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+						$first=0;			
+					}
+				}
+			}
+		} else {
+			if (@$values[$i] eq "") {
+			}
+			else {
+				if ($first){
+					my $ind1 = substr(@$indicator[$j],0,1);                        
+					my $ind2 = substr(@$indicator[$j],1,1);
+					$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+					$first=0;
+				}
+				$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+			}
 		}
-            } else {
-                if (@$values[$i] eq "") {
-                }
-                else {
-		if ($first){
-		my $ind1 = substr(@$indicator[$j],0,1);                        
-		my $ind2 = substr(@$indicator[$j],1,1);
-		$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-		$first=0;
-		}
-		    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-
-                }
-            }
-            $prevtag = @$tags[$i];
+			$prevtag = @$tags[$i];
         }
         $xml.= MARC::File::XML::footer();
-	warn $xml;
+# 	warn $xml;
 	return $xml
 }
 sub MARChtml2marc {
@@ -2992,6 +2994,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.45  2006/03/08 10:49:36  tipaul
+# deal with &, <, >,", ' that are not valid in a XML file.
+#
 # Revision 1.115.2.44  2006/03/01 17:26:08  kados
 # Adding 'use MARC::File::XML' to routine ... needed for additem.pl to work
 # for some reason. This should be fixed.
