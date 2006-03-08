@@ -11,6 +11,7 @@ use HTML::Template;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Koha;
 # use C4::Search;
 
 my $classlist='';
@@ -177,7 +178,7 @@ if ($op eq "do_search") {
 	my  @itemtype;
 	my %itemtypes;
 	push @itemtype, "";
-	$itemtypes{''} = "";
+	$itemtypes{''} = "Any Document Type";
 	while (my ($value,$lib) = $sth->fetchrow_array) {
 		push @itemtype, $value;
 		$itemtypes{$value}=$lib;
@@ -189,26 +190,41 @@ if ($op eq "do_search") {
 				-size     => 1,
 				-multiple => 0 );
 	$sth->finish;
-	
-	my @branches;
-	my @select_branch;
-	my %select_branches;
-	my ($count2,@branches)=branches();
-	push @select_branch, "";
-	$select_branches{''} = "";
-	for (my $i=0;$i<$count2;$i++){
-		push @select_branch, $branches[$i]->{'branchcode'};#
-		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+
+	my @oldbranches;
+	my @oldselect_branch;
+	my %oldselect_branches;
+	my ($oldcount2,@oldbranches)=branches();
+	push @oldselect_branch, "";
+	$oldselect_branches{''} = "";
+	for (my $i=0;$i<$oldcount2;$i++){
+		push @oldselect_branch, $oldbranches[$i]->{'branchcode'};#
+		$oldselect_branches{$oldbranches[$i]->{'branchcode'}} = $oldbranches[$i]->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
+				-values   => \@oldselect_branch,
+				-labels   => \%oldselect_branches,
 				-size     => 1,
 				-multiple => 0 );
 	$sth->finish;
-    
+
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches = getallbranches();
+	my @branchloop;
+	foreach my $thisbranch (keys %$branches) {
+        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        my %row =(value => $thisbranch,
+                                selected => $selected,
+                                branchname => $branches->{$thisbranch}->{'branchname'},
+                        );
+        push @branchloop, \%row;
+	}
+ 
 	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
 	$template->param(classlist => $classlist,
+					branchloop=>\@branchloop,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
