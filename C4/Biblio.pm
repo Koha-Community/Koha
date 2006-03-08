@@ -1050,7 +1050,7 @@ sub MARChtml2xml {
 			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 			if (!$first){
 		    	$xml.="</datafield>\n";
-				if (@$tags[$i] > 10) {
+				if ((@$tags[$i] > 10) && (@$values[$i] ne "")){
 						my $ind1 = substr(@$indicator[$j],0,1);
                         my $ind2 = substr(@$indicator[$j],1,1);
                         $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
@@ -2995,6 +2995,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.47  2006/03/08 16:39:01  kados
+# removing blank subfield values
+#
 # Revision 1.115.2.46  2006/03/08 16:31:04  kados
 # bugfix for Biblio.pm based on feedback from production system. previous
 # version was dropping subfields in cases where the previous tag in the
