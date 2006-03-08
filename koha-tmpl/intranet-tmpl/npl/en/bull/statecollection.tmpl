@@ -4,7 +4,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h1>Receive Issues for <!-- TMPL_VAR name="bibliotitle" --></h1>
+<div class="data"><h1>Receive Issues for <!-- TMPL_VAR name="bibliotitle" --></h1>
 
 <form class="inline" method="get" action="subscription-detail.pl">
 <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
@@ -18,39 +18,28 @@
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
 <input class="submit" type="submit" title="go to <!-- TMPL_VAR name="bibliotitle" -->" value="View Biblio Record" /></form>
 
-<div class="data">
-<form method="post" name="f" action="statecollection.pl">
-		<input type="hidden" name="op" value="serialchangestatus">
-		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
-		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-<table><caption>Awaited or Late Subscription Issues</caption>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="serialchangestatus" />
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->" />
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->" />
 	
-	<tr>
-		<th scope="col">
-			Numbered
-		</th>
-		<th scope="col">
-			Expected On
-		</th>
-		<th scope="col">
-			Status
-		</th>
-		<th scope="col">
-			Notes
-		</th>
-	</tr>
+	<h2>Awaited or Late Subscription Issues</h2>
+	<table>
+	<caption>Next Expected Issue:</caption>
 	<!-- TMPL_LOOP name="serialslist" -->
-		<tr>
-			<td>
-				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="30" maxlength="100">
-			</td>
-			<td>
-				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
-			</td>
-			<td>
-				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
-				<select name="status" size="1">
+	<tr>
+		<th scope="row"><label for="serialseq">Numbered: </label></th><td>
+		 <input type="text" id="serialseq" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="30" maxlength="100" />
+			</td></tr>
+			<tr>
+		<th scope="row"><label for="planneddate">Expected On:</label> </th><td>
+				<input type="text" id="planneddate" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
+			</td></tr>
+			<tr>
+		<th scope="row"><label for="status">Status:</label> </th><td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
+				<select id="status" name="status" size="1">
 					<!--TMPL_IF name="status1" -->
 						<option value="1" selected>Waited</option>
 					<!-- /TMPL_IF -->
@@ -80,60 +69,140 @@
 						<option value="6">Delete</option>
 					<!-- /TMPL_IF -->
 				</select>
+			</td></tr>
+			<tr>
+		<th scope="row"><label for="issue-notes">Notes</label></th><td>
+				<input type="text" id="issue-notes" name="notes" value="<!-- TMPL_VAR name="notes" -->" size="20" maxlength="255" />
 			</td>
+	</tr>
+	
+	
+
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+			
+				<th><label for="itemcallnumber">Callnumber: </label></th> <td><input type="text" id="itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
+				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td>
+		<tr><th><label for="branch">Branch:</label> </th>
+				<td><select  id="branch" name="branch" size="1">
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td></tr>
+			<!--TMPL_IF Name="itemstatus"--><tr><th scope="row"><label for="itemstatus">Item Status:</label> </th>
 			<td>
-				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size="20" maxlength="255">
+				
+					<select id="itemstatus" name="itemstatus" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				
+			</td></tr><!--/TMPL_IF-->
+			<tr><th scope="row"><label for="location">Location:</label> </th>
+			<td>
+				<!--TMPL_IF Name="itemlocation"-->
+					<select id="location" name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
 			</td>
 		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_LOOP -->
+	</table>
+	
+	<table>
+	<caption>Enter Manual Issue: </caption>
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
-		<tr>
+		<tr><th scope="row"><label for="manual-serialseq">Numbered:</label> </th>
 			<td>
-				<label for="serialseq">Enter Manual issue </label><input type="text" name="serialseq" id="serialseq" size="30" maxlength="100">
+				 <input type="text" id="manual-serialseq" name="serialseq" size="30" maxlength="100" />
 			</td>
+			</tr>
+			<tr><th scope="row"><label for="manual-planneddate">Expected On: </label></th>
 			<td>
-				<input type="text" id="planneddate" name="planneddate" size="10" maxlength="15">
-			</td>
+				<input type="text" id="manual-planneddate" name="planneddate" size="10" maxlength="15" />
+			</td></tr>
+			<tr><th scope="row"><label for="manual-status">Status:</label> </th>
 			<td>
-				<input type="hidden" name="serialid" value="0">
-				<select name="status" size="1">
+				<input type="hidden" id="serialid" name="serialid" value="0" />
+				<select id="manual-status" name="status" size="1">
 						<option value="2">Arrived</option>
 						<option value="3" selected>Late</option>
 						<option value="4">Missing</option>
 				</select>
 			</td>
-			<td>&nbsp;</td>
 		</tr>
+		<!--TMPL_IF name="serialadditems" -->
+			<tr><th scope="row"><label for="manual-itemcallnumber">Callnumber: </label></th><td>
+				 <input type="text" id="manual-itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
+			
+				<tr><th scope="row"><label for="manual-barcode">Barcode: </label></th><td> <input type="text" id="manual-barcode" name="barcode" value="" size="20" maxlength="20" />
+			</td></tr>
+			<tr><th scope="row"><label for="manual-branch">Branch: </label></th><td>
+				<select id="manual-branch" name="branch" size="1">
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td></tr>
+			<!-- TMPL_IF name="itemstatus"--><tr><th scope="row"><label for="manual-itemstatus">Item Status: </label></th><td>
+				
+					<select id="manual-itemstatus" name="itemstatus" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				
+			</td></tr><!--/TMPL_IF -->
+			<tr><th scope="row"><label for="manual-location">Location: </label></th><td>
+				<!-- TMPL_IF name="itemlocation"-->
+					<select id="manual-location" name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_UNLESS -->
 	</table>
-	<p><input type="submit" class="submit" value="Save changes" accesskey="w" /></p>
+	<input type="submit" value="Save changes" accesskey="w" class="submit" />
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
-		<div class="error">Subscription has expired. Awaited last issue status can't be changed. <a href="#" onclick="popup(); return false;">Renew</a> your subscription</div>
+		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
 	<!-- /TMPL_IF -->
-	</form>
-</div>
+	</form></div><br>
 
-<div class="data">
-	<form method="post" name="f" action="statecollection.pl">
-		<input type="hidden" name="op" value="modsubscriptionhistory">
-		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+	<div class="data"><form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory" />
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->" />
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-	<table><caption>Subscription summary</caption>	
-		<tr><th scope="row"><label for="">Librarian:</label></th><td><!-- TMPL_VAR name="user" --></td></tr>
-		<tr><th scope="row"><label for="histstartdate">Beginnning date<sup>*</sup>:</label></th><td><input type="text" id="histstartdate" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></td></tr>
-		<tr><th scope="row"><label for="enddate">End :</label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></td></tr>
-		<tr><th scope="row"><label for="recievedlist">Recieved issues:</label></th><td><textarea id="recievedlist" name="recievedlist" cols="40" rows="2"><!-- TMPL_VAR name="recievedlist" --></textarea></td></tr>
-		<tr><th scope="row"><label for="missinglist">Missing issues:</label></th><td>
-<textarea id="missinglist" name="missinglist" cols="40" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></td></tr>
-		<tr><th scope="row"><label for="opacnote">OPAC Note:</label></th><td>
-<textarea id="opacnote" name="opacnote" cols="40" rows="2"><!-- TMPL_VAR name="opacnote" --></textarea></td></tr>
-</table>
-		<p><input type="submit" value="Save changes" class="submit"></p>
-	</form>
-</div>
+		<table>
+		<caption>Subscription summary</caption>
+		<tr><th scope="row"><label>Librarian: </label></th><td><!-- TMPL_VAR name="user" --></td></tr>
+		<tr><th scope="row"><label for="histstartdate">Beginnning date (*): </label></th><td><input id="histstartdate" type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /></td></tr>
+		<tr><th scope="row"><label for="enddate">End date: </label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" /></td></tr>
+		<tr><th scope="row"><label for="recievedlist">Recieved issues</label></th><td><textarea id="recievedlist" name="recievedlist" cols="30" rows="2"><!-- TMPL_VAR name="recievedlist" --></textarea></td></tr>
+		<tr><th scope="row"><label for="missinglist">Missing issues</label></th><td><textarea id="missinglist" name="missinglist" cols="30" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></td></tr>
+		<tr><th scope="row"><label for="opacnote">Opac note</label></th><td><textarea id="opacnote" name="opacnote" cols="30" rows="2"><!-- TMPL_VAR name="opacnote" --></textarea></td></tr>
+	</table>
+		<p><input type="submit" value="Save changes" class="submit" /></p>
+	</form></div>
 
-</table>
 <script language="JavaScript" type="text/javascript">
 
 function popup()
@@ -141,5 +210,4 @@ function popup()
 	 window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid">","subscription renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
-
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
