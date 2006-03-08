@@ -69,8 +69,9 @@
 			<a href="/cgi-bin/koha/opac-user.pl" class="button">
 				My details
 			</a>
-			<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
-			
+			<!-- TMPL_IF name="opacreadinghistory" -->
+				<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
+			<!-- /TMPL_IF -->
 			<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
 				Log Out
 			</a>
@@ -82,16 +83,18 @@
 	<!-- TMPL_ELSE -->
 		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->
-	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
-		<p>
-			<select name="language">
-				<TMPL_LOOP NAME="languages">
-					<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
-				</TMPL_LOOP>
-			</select>
-			<input type="submit" value="Change Language" class="button" />
-		</p>
-	</form>
+	<!-- TMPL_IF name="opaclanguagesdisplay" -->
+		<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+			<p>
+				<select name="language">
+					<TMPL_LOOP NAME="languages">
+						<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+					</TMPL_LOOP>
+				</select>
+				<input type="submit" value="Change Language" class="button" />
+			</p>
+		</form>
+	<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opaccredits" -->
 	<p class="copyright"><!-- TMPL_VAR NAME="opaccredits" --></p>
 <!-- TMPL_ELSE -->
