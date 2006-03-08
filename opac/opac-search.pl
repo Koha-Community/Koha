@@ -161,16 +161,6 @@ if ($op eq "do_search") {
 							numbers=>\@numbers,
 							searchdesc=> $searchdesc,
 							$defaultview => 1,
-							suggestion => C4::Context->preference("suggestion"),
-							virtualshelves => C4::Context->preference("virtualshelves"),
-							OpacNav => C4::Context->preference("OpacNav"),
-							opaccredits => C4::Context->preference("opaccredits"),
-							AmazonContent => C4::Context->preference("AmazonContent"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
-				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
-				LibraryName => C4::Context->preference("LibraryName"),
 							);
 
 } else {

@@ -58,14 +58,6 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-				LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
-				OpacNav => C4::Context->preference("OpacNav"),
-				opaccredits => C4::Context->preference("opaccredits"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -192,6 +184,12 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.8  2006/03/08 13:46:55  tipaul
+# some opac systempreferences are set by all pages.
+# Moving the $template->param where the template is open. This way, nothing can be forgotten, and code is more readable. Feel free to move to Auth.pm any new systempref
+#
+# (note : where it has been moved, the pref is set even if the user is not logged in, that's what we want)
+#
 # Revision 1.3.2.7  2006/03/01 22:33:25  oleonard
 # Enabling several new system preferences: opacreadinghistory, opaccolorstylesheet, opaclanguagesdisplay, opaclayoutstylesheet, opacsmallimage
 #

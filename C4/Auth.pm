@@ -196,6 +196,19 @@ sub get_template_and_user {
 			$template->param(CAN_user_tools => 1); }
 		
 	}
+	unless ($in->{'type'} eq "intranet") {
+	$template->param(
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
+				AmazonContent => C4::Context->preference("AmazonContent"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
+		);
+	}
 	$template->param(
 			     LibraryName => C4::Context->preference("LibraryName"),
 		);

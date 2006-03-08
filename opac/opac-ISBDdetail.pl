@@ -94,16 +94,9 @@ my ($template, $loggedinuser, $cookie)
 			     authnotrequired => 1,
 			     debug => 1,
 			     });
-$template->param(LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
+$template->param(
 				subscriptions => \@subs,
 				subscriptionsnumber => $subscriptionsnumber,
-				OpacNav => C4::Context->preference("OpacNav"),
-				opaccredits => C4::Context->preference("opaccredits"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 );
 
 my $ISBD = C4::Context->preference('ISBD');

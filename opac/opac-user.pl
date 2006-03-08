@@ -140,16 +140,8 @@ foreach my $res (@$reserves) {
 
 $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount,
-				LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
-				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
 				textmessaging => $borr->{textmessaging},
-				OpacNav => C4::Context->preference("OpacNav"),
-				opaccredits => C4::Context->preference("opaccredits"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
