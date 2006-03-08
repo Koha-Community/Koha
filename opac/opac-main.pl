@@ -17,6 +17,8 @@ my $sth=$dbh->prepare($query);
 $sth->execute;
 my  @itemtype;
 my %itemtypes;
+push @itemtype, "";
+$itemtypes{''}="Any Document Type";
 while (my ($value,$lib) = $sth->fetchrow_array) {
 	push @itemtype, $value;
 	$itemtypes{$value}=$lib;
@@ -28,6 +30,20 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
 			-size     => 1,
 			-multiple => 0 );
 $sth->finish;
+
+my @branches;
+my @select_branch;
+my %select_branches;
+my $branches = getallbranches();
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        my %row =(value => $thisbranch,
+                                selected => $selected,
+                                branchname => $branches->{$thisbranch}->{'branchname'},
+                        );
+        push @branchloop, \%row;
+}
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-main.tmpl",
@@ -55,7 +71,7 @@ if($languages_count > 1){
 		$template->param(languages => \@options);
 }
 $template->param(CGIitemtype => $CGIitemtype,
-				
+				branchloop=>\@branchloop,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				textmessaging => $borrower->{textmessaging},
