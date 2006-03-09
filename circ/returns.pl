@@ -124,7 +124,7 @@ if ( $query->param('resbarcode') ) {
         $template->param(
             itemtitle  => $iteminfo->{'title'},
             iteminfo   => $iteminfo->{'author'},
-            branchname => $branchname,
+            tobranchname => $branchname,
             name       => $name,
             bornum     => $borrnum,
             borcnum    => $borcnum,
@@ -224,7 +224,7 @@ if ( $messages->{'ResFound'} ) {
 			debarred => $borr->{'debarred'},
 			gonenoaddress => $borr->{'gonenoaddress'},
 			currentbranch => $branches->{ $branch }->{'branchname'},
-            branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
+            tobranchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             waiting     => 1,
             itemnumber  => $res->{'itemnumber'},
             itemtitle   => $iteminfo->{'title'},
@@ -251,7 +251,7 @@ if ( $messages->{'ResFound'} ) {
         $template->param(
             found       => 1,
 		currentbranch => $branches->{ $branch }->{'branchname'},
-            branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
+            tobranchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             reserved    => 1,
             today       => $todaysdate,
             itemnumber  => $res->{'itemnumber'},
@@ -462,7 +462,7 @@ $template->param( riloop => \@riloop );
 $template->param(
     genbrname  => $branches->{$branch}->{'branchname'},
     genprname  => $printers->{$printer}->{'printername'},
-    branch     => $branch,
+    branchname     => $branches->{$branch}->{'branchname'},
     printer    => $printer,
     errmsgloop => \@errmsgloop,
     intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),

@@ -22,7 +22,7 @@
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is DEBARRED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
 			</ul></td></tr>
-	<tr><!-- TMPL_IF NAME="intransit" --><th>&nbsp;</th><td><strong>Transfer</strong> to <!-- TMPL_VAR Name="branchname" --> </td><!-- TMPL_ELSE --><th>&nbsp;</th><td><strong>Hold</strong> in <!-- TMPL_VAR Name="branchname" --></td><!-- /TMPL_IF --></tr>
+	<tr><!-- TMPL_IF NAME="intransit" --><th>&nbsp;</th><td><strong>Transfer</strong> to <!-- TMPL_VAR Name="tobranchname" --> </td><!-- TMPL_ELSE --><th>&nbsp;</th><td><strong>Hold</strong> in <!-- TMPL_VAR Name="tobranchname" --></td><!-- /TMPL_IF --></tr>
 		</table></div><form method="post" action="returns.pl" name="mainform" id="mainform">
 			<input type="submit" value="Confirm" class="submit" /><!-- TMPL_LOOP Name="inputloop" -->
 				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
@@ -70,7 +70,7 @@
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is DEBARRED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
 			</ul></td></tr>
-			<tr><!-- TMPL_IF NAME="intransit" --><th>&nbsp;</th><td><strong>Transfer</strong> to <!-- TMPL_VAR Name="branchname" --> </td><!-- TMPL_ELSE --><th>&nbsp;</th><td><strong>Hold</strong> in <!-- TMPL_VAR Name="branchname" --></td><!-- /TMPL_IF --></tr></table>
+			<tr><!-- TMPL_IF NAME="intransit" --><th>&nbsp;</th><td><strong>Transfer</strong> to <!-- TMPL_VAR Name="tobranchname" --> </td><!-- TMPL_ELSE --><th>&nbsp;</th><td><strong>Hold</strong> in <!-- TMPL_VAR Name="tobranchname" --></td><!-- /TMPL_IF --></tr></table>
 			</div> <form method="post" action="returns.pl" name="mainform" id="mainform">
 			<input type="submit" class="submit" value="Confirm" />
 			<!-- TMPL_LOOP Name="inputloop" -->
