@@ -7,9 +7,9 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <h3 class="title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
 	<!-- TMPL_VAR NAME="class" --></h3><div class="details">
-			<!-- Display for NPL // <!-- TMPL_IF NAME="isbn" --><div style="float: right;">
+			<!-- TMPL_IF NAME="isbn" --><div style="float: right;">
 <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" />
-</div><!-- /TMPL_IF --> //Display for NPL -->
+</div><!-- /TMPL_IF --> 
 
 	<div class="tabitem"><form action="MARCdetail.pl" method="get">
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
