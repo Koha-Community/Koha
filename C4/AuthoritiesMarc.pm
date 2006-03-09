@@ -208,7 +208,33 @@ sub authoritysearch {
 		} else {
 		# construct MARC21 summary
 			foreach my $field ($record->field('1..')) {
-				$heading.= $field->as_string();
+				if ($record->field('100')) {
+					$heading.= $field->as_string('abcdefghjklmnopqrstvxyz68');
+				} elsif ($record->field('110')) {
+                                        $heading.= $field->as_string('abcdefghklmnoprstvxyz68');
+				} elsif ($record->field('111')) {
+                                        $heading.= $field->as_string('acdefghklnpqstvxyz68');
+				} elsif ($record->field('130')) {
+                                        $heading.= $field->as_string('adfghklmnoprstvxyz68');
+				} elsif ($record->field('148')) {
+                                        $heading.= $field->as_string('abvxyz68');
+				} elsif ($record->field('150')) {
+					$heading.= $field->as_string('abvxyz68');	
+				} elsif ($record->field('151')) {
+                                        $heading.= $field->as_string('avxyz68');
+				} elsif ($record->field('155')) {
+                                        $heading.= $field->as_string('abvxyz68');
+				} elsif ($record->field('180')) {
+                                        $heading.= $field->as_string('vxyz68');
+				} elsif ($record->field('181')) {
+                                        $heading.= $field->as_string('vxyz68');
+				} elsif ($record->field('182')) {
+                                        $heading.= $field->as_string('vxyz68');
+				} elsif ($record->field('185')) {
+                                        $heading.= $field->as_string('vxyz68');
+				} else {
+					$heading.= $field->as_string();
+				}
 			}
 			foreach my $field ($record->field('4..')) {
 				$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
@@ -1064,6 +1090,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.12  2006/03/09 01:45:14  kados
+# Refining list of appropriate subfields to display for the authorized
+# heading.
+#
 # Revision 1.9.2.11  2006/03/08 15:17:09  tipaul
 # fixing some UNIMARC behaviour + removing some hardcoded strings
 #
