@@ -32,17 +32,19 @@
 			</tr>
 			<tr>
 				<th><label for="notforloan">Not for loan</label></th>
-				<td><input type="checkbox" id="notforloan" name="notforloan"<!-- TMPL_IF name="notforloan" --> checked="checked"<!-- /TMPL_IF --> value="1"> (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</td>
+				<td>
+				<!-- TMPL_IF name="notforloan" --><input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" /><!-- TMPL_ELSE --><input type="checkbox" id="notforloan" name="notforloan" value="1" /><!-- /TMPL_IF -->
+ (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</td>
 			</tr>
 			<tr>
 			<tr>
 				<th><label for="renewalsallowed">Renewals</label></th>
-				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /><!-- Display for NPL //<input type="hidden" name="rentalcharge" value="0" /> //Display for NPL --></td>
+				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /></td>
 			</tr>
-<!-- Hide from NPL--> 			<tr>
+ 			<tr>
 				<th><label for="rentalcharge">Rental charge</label></th>
 				<td><input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" /></td>
-			</tr><!--  /Hide from NPL -->
+			</tr>
 		</table><input type="button" value="Save Changes" onclick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="history.back();" />
 	</form>
 <!-- /TMPL_IF -->
