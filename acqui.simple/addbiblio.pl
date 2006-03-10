@@ -164,6 +164,9 @@ sub build_authorized_values_list ($$$$$) {
 =cut
 sub create_input () {
 	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	# must be encoded as utf-8 before it reaches the editor
+        use Encode;
+        $value = encode('utf-8', $value);
 	$value =~ s/"/&quot;/g;
 	my $dbh = C4::Context->dbh;
 	my %subfield_data;
@@ -430,6 +433,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	warn "XML HERE".$xml;
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
@@ -512,8 +516,10 @@ if ($op eq "addbiblio") {
 		$bibid = "";
 		$oldbiblionumber= "";
 	}
- 
-	build_tabs ($template, $record, $dbh,$encoding);
+	#FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
+        my $uxml = $record->as_xml;
+        my $urecord = MARC::Record::new_from_xml($uxml, 'UTF-8'); 
+	build_tabs ($template, $urecord, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
 		oldbiblionumber             => $oldbiblionumber,
