@@ -643,128 +643,69 @@ sub MARChtml2xml {
         my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;
         use MARC::File::XML;
         my $xml= MARC::File::XML::header();
-        my $prevvalue;
-        my $prevtag=-1;
-        my $first=1;
+    my $prevvalue;
+    my $prevtag=-1;
+    my $first=1;
         my $j = -1;
-        for (my $i=0;$i<=@$tags;$i++){
+    for (my $i=0;$i<=@$tags;$i++){
+                @$values[$i] =~ s/&/&amp;/g;
+                @$values[$i] =~ s/</&lt;/g;
+                @$values[$i] =~ s/>/&gt;/g;
+                @$values[$i] =~ s/"/&quot;/g;
+                @$values[$i] =~ s/'/&apos;/g;
 
-            if ((@$tags[$i] ne $prevtag)){
-                $j++ unless (@$tags[$i] eq "");
-                warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
-
-                if (!$first){
-                    $xml.="</datafield>\n";
-                    $first=1;
-                }
-                else {
-                    if (@$values[$i] ne "") {
-                    # leader
-                    if (@$tags[$i] eq "000") {
-                        $xml.="<leader>@$values[$i]</leader>\n";
-                        $first=1;
-                        # rest of the fixed fields
-                    } elsif (@$tags[$i] < 10) {
-                        $xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
-                        $first=1;
-                    }
-                    else {
-                        my $ind1 = substr(@$indicator[$j],0,1);
+                if ((@$tags[$i] ne $prevtag)){
+                        $j++ unless (@$tags[$i] eq "");
+                        #warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
+                        if (!$first){
+                        $xml.="</datafield>\n";
+                                if ((@$tags[$i] > 10) && (@$values[$i] ne "")){
+                                                my $ind1 = substr(@$indicator[$j],0,1);
                         my $ind2 = substr(@$indicator[$j],1,1);
                         $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                         $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                         $first=0;
-                    }
-                    }
-                }
+                                } else {
+                        $first=1;
+                                }
             } else {
+                        if (@$values[$i] ne "") {
+                                # leader
+                                if (@$tags[$i] eq "000") {
+                                                $xml.="<leader>@$values[$i]</leader>\n";
+                                                $first=1;
+                                        # rest of the fixed fields
+                                } elsif (@$tags[$i] < 10) {
+                                                $xml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+                                                $first=1;
+                                } else {
+                                                my $ind1 = substr(@$indicator[$j],0,1);
+                                                my $ind2 = substr(@$indicator[$j],1,1);
+                                                $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                                                $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                                                $first=0;
+                                }
+                        }
+                        }
+                } else { # @$tags[$i] eq $prevtag
                 if (@$values[$i] eq "") {
                 }
                 else {
-                if ($first){
-                my $ind1 = substr(@$indicator[$j],0,1);
-                my $ind2 = substr(@$indicator[$j],1,1);
-                $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-                $first=0;
+                                        if ($first){
+                                                my $ind1 = substr(@$indicator[$j],0,1);
+                                                my $ind2 = substr(@$indicator[$j],1,1);
+                                                $xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                                                $first=0;
+                                        }
+                        $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                                }
                 }
-                    $xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-
-                }
-            }
-            $prevtag = @$tags[$i];
+                $prevtag = @$tags[$i];
         }
         $xml.= MARC::File::XML::footer();
         warn $xml;
         return $xml
 }
-=head2 MARChtml2marc
-
-$MARCrecord = MARChtml2marc($dbh,$rtags,$rsubfields,$rvalues,%indicators);
-
-=over 4
-
-transforms the parameters (coming from HTML form) into a MARC::Record
-parameters with r are references to arrays.
-
-FIXME : should be improved for 3.0, to avoid having 4 differents arrays
-
-=back
-
-=cut
-
-sub MARChtml2marc {
-	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
-	my $prevtag = -1;
-	my $record = MARC::Record->new();
-# 	my %subfieldlist=();
-	my $prevvalue; # if tag <10
-	my $field; # if tag >=10
-	for (my $i=0; $i< @$rtags; $i++) {
-		next unless @$rvalues[$i];
-		# rebuild MARC::Record
-# 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
-		if (@$rtags[$i] ne $prevtag) {
-			if ($prevtag < 10) {
-				if ($prevvalue) {
-					if ($prevtag ne '000') {
-						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
-					} else {
-						$record->leader($prevvalue);
-					}
-				}
-			} else {
-				if ($field) {
-					$record->add_fields($field);
-				}
-			}
-			$indicators{@$rtags[$i]}.='  ';
-			if (@$rtags[$i] <10) {
-				$prevvalue= @$rvalues[$i];
-				undef $field;
-			} else {
-				undef $prevvalue;
-				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
-# 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-			}
-			$prevtag = @$rtags[$i];
-		} else {
-			if (@$rtags[$i] <10) {
-				$prevvalue=@$rvalues[$i];
-			} else {
-				if (length(@$rvalues[$i])>0) {
-					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
-# 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-				}
-			}
-			$prevtag= @$rtags[$i];
-		}
-	}
-	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field) if $field;
-# 	warn "HTML2MARC=".$record->as_formatted;
-	return $record;
-}
-
 
 =head2 MARCmarc2koha
 
@@ -3048,6 +2989,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.161  2006/03/10 02:40:38  kados
+# syncing MARChtml2xml wtih rel_2_2, removing unused MARChtml2marc
+#
 # Revision 1.160  2006/03/07 22:00:18  kados
 # adding support for 'delete' function
 #
