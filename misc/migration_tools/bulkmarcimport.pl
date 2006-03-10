@@ -77,6 +77,9 @@ my $i=0;
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
+    #FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
+    my $uxml = $record->as_xml;
+    $record = MARC::Record::new_from_xml($uxml, 'UTF-8');
 	$i++;
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
