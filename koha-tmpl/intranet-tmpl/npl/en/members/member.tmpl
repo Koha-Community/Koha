@@ -15,7 +15,7 @@
 	<th>Branch</th>
     <th>Address</th>
     <th>OD/Issues</th>
-	<!-- Hide from NPL --><th>Charges</th><!-- /Hide from NPL -->
+	<th>Charges</th>
     <th>Notes</th>
 	<th>&nbsp;</th>
   </tr>
@@ -32,8 +32,8 @@
       <td><!-- TMPL_VAR NAME="categorycode" --></td>
 	  <td><!-- TMPL_VAR name="branchcode" --></td>
       <td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city --></td>
-      <td><!-- TMPL_VAR NAME="odissue" --></td>
-		<!-- Hide from NPL --><td><!-- TMPL_VAR NAME="fines" --></td><!-- /Hide from NPL -->
+      <td><!-- TMPL_IF NAME="overdues" --><span class="overdue"><!-- TMPL_VAR NAME="overdues" --></span><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->/<!-- TMPL_VAR NAME="issues" --></td>
+	 <td><!-- TMPL_VAR NAME="fines" --></td>
       <td><div class="notes"><!-- TMPL_VAR NAME="borrowernotes" --></div></td>
 	  <td><a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;modify=edit">Edit</a></td>
     </tr>
