@@ -124,12 +124,16 @@ my $borrower;
 if ($borrowernumber) {
 	$borrower = getpatroninformation(\%env,$borrowernumber,0);
 	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
-	warn $borrower->{'expiry'};
+	#warn $borrower->{'expiry'};
  	my $warningdate = DateCalc($borrower->{'expiry'},"- ".C4::Context->preference('NotifyBorrowerDeparture')."  days");
+	my $offset = '+ 30 days';
+	my $renewaldate = DateCalc($warningdate, $offset);
+	$renewaldate = UnixDate($renewaldate,'%Y-%m-%d');
 	my $warning=Date_Cmp(ParseDate("today"),$warningdate);
 	if ($warning>0){ 
 		#borrowercard expired
-		$template->param(warndeparture=>$warning);
+		$template->param(warndeparture=>$warning,
+				renewaldate=>$renewaldate);
 	}
 	$template->param(overduecount => $od,
 							issuecount => $issue,
