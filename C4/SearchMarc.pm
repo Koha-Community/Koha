@@ -245,6 +245,7 @@ sub catalogsearch {
 		}
 # 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
 	}
+#        $query.= " ordered title";
 	warn "QUERY : $query";
 	my $Zconn = C4::Context->Zconn or die "unable to set Zconn";
 	my $q = new ZOOM::Query::CQL2RPN( $query, $Zconn);
@@ -255,6 +256,14 @@ sub catalogsearch {
 	} else {
 		warn "$numresults records found, retrieving them (max 80)\n";
 	}
+        # sort result set 
+        # in theory this should sort by title
+        if ($rs->sort("yaz", "1=4 <i") < 0) {
+                 warn "sort failed";
+        }
+        else {
+	    warn "sorted";
+	    }
 	my $result='';
 	my $scantimerstart=time();
 	my @finalresult = ();

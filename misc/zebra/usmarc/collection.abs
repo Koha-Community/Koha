@@ -21,9 +21,9 @@ xpath enable
 
 all any
 
-melm 090$c      identifier-standard,identifier-standard:p
-melm 020$a				isbn:w
-melm 100                author,author:p
+melm 090$c		identifier-standard,identifier-standard:p
+melm 020$a		isbn:w,!:s
+melm 100                author,author:p,!:s
 melm 110                author
 melm 111                author
 melm 130                title
@@ -32,6 +32,7 @@ melm 242                title,title:p
 melm 243                title,title:p
 melm 245$c              author
 melm 245                title,title:p
+melm 245/?/a            title           !:w,!:p,!:s
 melm 246                title,title:p
 melm 247                title,title:p
 melm 400$t              title,author
