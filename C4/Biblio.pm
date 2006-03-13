@@ -994,8 +994,11 @@ sub NEWdelbiblio {
     }
 #    &MARCdelbiblio( $dbh, $bibid, 0 );
     # delete from zebra
-    my $record = get_record($bibid);
+#    my $record = get_record($bibid);
 #    z3950_extended_services('update',set_service_options('update'),$record);
+    warn "heres the record to delete $bibid";
+    z3950_extended_services('update',set_service_options('update','recordDelete',$bibid));
+    z3950_extended_services('commit');
 }
 
 =head2 NEWnewitem
@@ -1310,6 +1313,7 @@ sub REALmodbiblioitem {
 	my $record = MARC::File::USMARC::decode($biblioitem->{marc});
 
 	z3950_extended_services('update',set_service_options('update'),$record);
+        z3950_extended_services('commit');
 
 
 # 	warn "MOD : $biblioitem->{biblioitemnumber} = ".$biblioitem->{marc};
@@ -1378,6 +1382,7 @@ sub REALnewbiblioitem {
 	);
 	$dbh->do("unlock tables");
 	z3950_extended_services('update',set_service_options('update'),$record);
+        z3950_extended_services('commit');
 	return ($biblioitemnumber);
 }
 
@@ -1526,6 +1531,7 @@ sub REALnewitems {
         $error .= $sth->errstr;
     }
 	z3950_extended_services('update',set_service_options('update'),$record);
+	z3950_extended_services('commit');
 	$dbh->do('unlock tables');
     return ( $itemnumber, $error );
 }
@@ -1614,6 +1620,7 @@ sub REALmoditem {
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
 	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
 	z3950_extended_services('update',set_service_options('update'),$record);
+        z3950_extended_services('commit');
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
@@ -2989,6 +2996,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.162  2006/03/13 23:12:44  rangi
+# Adding commits, so that changes stick
+#
 # Revision 1.161  2006/03/10 02:40:38  kados
 # syncing MARChtml2xml wtih rel_2_2, removing unused MARChtml2marc
 #
