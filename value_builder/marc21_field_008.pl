@@ -65,7 +65,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms[0].field_value[i].value;
+	defaultvalue=document.forms['f'].field_value[i].value;
 	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
