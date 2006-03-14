@@ -296,6 +296,7 @@ $template->param(
 		printername => $printers->{$printer}->{'printername'},
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
+		expiry => format_date($borrower->{'expiry'}),
 		categorycode => $borrower->{'categorycode'},
 		streetaddress => $borrower->{'streetaddress'},
 		emailaddress => $borrower->{'emailaddress'},
