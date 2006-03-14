@@ -251,6 +251,9 @@ sub build_tabs ($$$$) {
 						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
+						#next if (($tagslib->{$tag}->{$subfield}->{hidden}==3) && ($value eq ''));
+						#warn "VALUE: $value";
+						#warn "OUTSIDE TAGSLIB";
 						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {
@@ -269,6 +272,10 @@ sub build_tabs ($$$$) {
 						next if (length $subfield !=1);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tag<10);
+						if ($tagslib->{$tag}->{$subfield}->{hidden}==3) {
+							warn "TAGSLIB:".$tag."==";
+						}
+						next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
 						next if (defined($field->subfield($subfield)));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
@@ -300,6 +307,7 @@ sub build_tabs ($$$$) {
 				my @subfields_data;
 				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 					next if (length $subfield !=1);
+					next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
