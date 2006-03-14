@@ -128,15 +128,16 @@
 	<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 	<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
 	<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
-	</ul>
+</ul>
 	</div>
-	<h3<!--TMPL_IF Name="warndeparture"--> class="error"<!--/TMPL_IF-->><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!--TMPL_IF Name="warndeparture"--><br /> Borrower will leave soon<!--/TMPL_IF--></h3>
+	<h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
 <h4> &nbsp; &nbsp; <!-- TMPL_VAR NAME="issuecount" --> out<!-- TMPL_IF NAME="overduecount" -->, <span class="error"><!-- TMPL_VAR name="overduecount" --> overdue</span><!-- /TMPL_IF --></h4> <!-- Display for NPL // <h4> &nbsp; &nbsp; <!-- TMPL_IF NAME="avcount" --><!-- TMPL_VAR NAME="avcount" --> AV Issues, <!-- TMPL_IF NAME="avflag" --><span class="error">AV Limit Reached!</span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> More Allowed<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="avleftcount" --> AV Issues Allowed<!-- /TMPL_IF --> //Display for NPL --></h4><br clear="right" />
 
 <!-- TMPL_IF NAME="flagged" -->
 </div><div class="details">
 <ul>
 <!-- Display for NPL // <!-- TMPL_IF NAME="avflag" --><li>Patron has reached the <span class="error">AV issue limit</span></li><!-- /TMPL_IF --> //Display for NPL -->
+<!--TMPL_IF Name="warndeparture"--><li><span class="error">Patron Expiration:</span> Patron Expires on <!-- TMPL_VAR NAME="expiry" --> <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" value="circ" name="destination" /><input type="hidden" name="renewaldate" value="<!-- TMPL_VAR NAME="renewaldate" -->" /><input type="submit" class="submit" value="Renew" /></form> <form class="inline compact" action="/cgi-bin/koha/members/memberentry.pl" method="get"><input type="hidden" name="modify" value="edit" /><input type="hidden" name="destination" value="circ" /><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="submit" class="submit" value="Edit Details" /></form></li><!--/TMPL_IF-->
 <!-- TMPL_IF NAME="gna" -->
 <li><span class="error">Address:</span> Patron's address in doubt</li>
 <!-- /TMPL_IF -->
@@ -144,7 +145,7 @@
 <li><span class="error">Lost:</span> Patron's card is lost</li>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<li><span class="error">Debarred:</span> Patron is debarred <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" value="circ" name="destination" /><input type="hidden" name="status" value="0" /><input type="submit" class="submit" value="Lift Debarment" /></form></li>
+<li><span class="error">Debarred:</span> Patron is debarred <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" value="circ" name="destination" /><input type="hidden" name="status" value="0" /><input type="submit" class="submit" value="Lift Debarment" /></form></li>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="odues" -->	<li><!-- TMPL_IF name="nonreturns" -->
 					<span class="error">Overdues:</span> Patron has <span class="error">ITEMS OVERDUE</span> See highlighted items <a href="#previous">below</a>
