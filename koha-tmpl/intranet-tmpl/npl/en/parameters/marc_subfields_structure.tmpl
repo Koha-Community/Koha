@@ -29,7 +29,9 @@
 	<tr><th><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian:</label></th><td><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></td></tr>
 	<tr><th><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC:</label></th><td><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></td></tr>
 	<tr><th><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab:</label></th><td><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</td></tr>
-	<tr><th><label for="hidden<!-- TMPL_VAR NAME="row" -->">Hidden: </label></th><td><!-- TMPL_VAR NAME="hidden" --> (subfield is managed, but hidden. -should be filled by a plugin or thesaurus-)</td></tr>
+
+	<tr><th><label for="hidden<!-- TMPL_VAR NAME="row" -->">Hidden:</label></th><td><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (subfield is managed but hidden, '1' means hidden in the OPAC, '2' means hidden in the editor, '3' means the field is obsolete )</td></tr>
+
 	<tr><th><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL: </label></th><td><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</td></tr>
 <tr><th><label>Default Options: <p>(choose one)</p></label></th><td>
 <ul>

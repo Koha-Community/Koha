@@ -216,11 +216,7 @@ if ($op eq 'add_form') {
 	-value => 1,
 	-label => '',
 	-id => "mandatory$i");
-		$row_data{hidden} = CGI::checkbox( -name=>"hidden$i",
-			-id => "hidden$i",
-			-checked => $data->{'hidden'}?'checked':'',
-			-value => 1,
-			-label => '');
+		$row_data{hidden} = CGI::escapeHTML($data->{hidden});
 		$row_data{isurl} = CGI::checkbox( -name => "isurl$i",
 			-id => "isurl$i",
 			-checked => $data->{'isurl'}?'checked':'',
