@@ -247,6 +247,7 @@ if ($op eq 'add_form') {
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
+		$row_data{hidden} = "";
 		$row_data{repeatable} = CGI::checkbox( -name=> 'repeatable',
 				-id => "repeatable$i",
 				-checked => '',
@@ -255,11 +256,6 @@ if ($op eq 'add_form') {
 		$row_data{mandatory} = CGI::checkbox( -name=> 'mandatory',
 			-id => "mandatory$i",
 			-checked => '',
-			-value => 1,
-			-label => '');
-		$row_data{hidden} = CGI::checkbox( -name => 'hidden',
-			-id => "hidden$i",
-			-checked=> '',
 			-value => 1,
 			-label => '');
 		$row_data{isurl} = CGI::checkbox(-name => 'isurl',
@@ -313,6 +309,7 @@ if ($op eq 'add_form') {
 	my @kohafield		= $input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
+	my @hidden		= $input->param('hidden');
 	my @authorised_values	= $input->param('authorised_value');
 	my @authtypecodes	= $input->param('authtypecode');
 	my @value_builder	=$input->param('value_builder');
@@ -331,7 +328,7 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $authtypecode		=$authtypecodes[$i];
 		my $value_builder=$value_builder[$i];
-		my $hidden = $input->param("hidden$i")?1:0;
+		my $hidden = $hidden[$i]; #input->param("hidden$i");
 		my $isurl = $input->param("isurl$i")?1:0;
 		my $link = $link[$i];
 		if ($liblibrarian) {
