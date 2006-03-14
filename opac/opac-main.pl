@@ -66,7 +66,6 @@ foreach my $language (getalllanguages()) {
 	$counter++;
 }
 my $languages_count = @options;
-
 if($languages_count > 1){
 		$template->param(languages => \@options);
 }
@@ -85,4 +84,7 @@ $template->param(CGIitemtype => $CGIitemtype,
 				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
 );
+
+$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
+
 output_html_with_http_headers $input, $cookie, $template->output;
