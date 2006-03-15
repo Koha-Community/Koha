@@ -165,6 +165,8 @@ sub authoritysearch {
 			my @fields = $record->fields();
 			foreach my $field (@fields) {
 				my $tag = $field->tag();
+				my $tagvalue = $field->as_string();
+				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
 				if ($tag<10) {
 				} else {
 					my @subf = $field->subfields;
@@ -1043,6 +1045,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.14  2006/03/15 15:10:29  tipaul
+# added a new feature in summary building (for an authority)
+# If you enter [XXX*] ([250*] for example), the whole field will be displayed as it's saved. This will solve the problem with reordered subfields.
+#
 # Revision 1.9.2.13  2006/03/15 10:46:31  tipaul
 # removing hardcoded link in summary of authority (on $heading) : it can be set in the template (in the # of biblios column) :
 # <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --></a>  <!-- TMPL_VAR NAME="used" -->
