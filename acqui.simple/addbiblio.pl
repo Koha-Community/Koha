@@ -178,7 +178,7 @@ sub create_input () {
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
-	$subfield_data{visibility} = "display:none" if ($tagslib->{$tag}->{$subfield}->{hidden}>=2);
+	$subfield_data{visibility} = "display:none" unless ($tagslib->{$tag}->{$subfield}->{hidden}%2==0); #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
@@ -272,10 +272,7 @@ sub build_tabs ($$$$) {
 						next if (length $subfield !=1);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tag<10);
-						if ($tagslib->{$tag}->{$subfield}->{hidden}==3) {
-							warn "TAGSLIB:".$tag."==";
-						}
-						next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
+						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=4) ); #check for visibility flag
 						next if (defined($field->subfield($subfield)));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
@@ -307,7 +304,9 @@ sub build_tabs ($$$$) {
 				my @subfields_data;
 				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 					next if (length $subfield !=1);
-					next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
+					next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=4) ); #check for visibility flag
+					
+					#next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
