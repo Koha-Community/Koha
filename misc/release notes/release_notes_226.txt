@@ -73,11 +73,13 @@ IMPROVEMENTS
 		- when recieving an order, you now see the list of existing parcels. The parcel code was, before this release, the " Supplier invoice information". Now when you go to the reciept page, you see all previous recieves, and can create a new parcel, exactly as before. This does not require any change in Koha internals, but we hope it's more clear than previously.
 		- when recieving an order in a parcel, you now see all orders still waiting for a receipt. Thus, you can enter isbn/title as previously, or directly clic on a title in the list.
 	We worked hard on those new acquisition screens, and hope that you'll find it more easy to use than previously.
+	=== AUTHORITIES ===
+	* if the library don't define a summary for an authority, a standard/default one will be builded automatically.
 	=== CIRCULATION===
 	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
 
 	=== CATALOGUE ===
-	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will check 
+	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The king Henry IV" to letter "K".
 	=== CATALOGUING ===
 	* added a (crontab) script : delete_authority.pl, that deletes all entries of an authority in a biblio.
 	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 than in UNIMARC ! Note that plugins help you filling a tag/subfield in the MARC editor.
@@ -92,6 +94,7 @@ IMPROVEMENTS
 	* new systempref : opaclanguagesdisplay. If set to "yes" (default value), the list of available language is shown. Otherwise, there is no list, koha will stay in default language only.
 	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
 	* new systempref : opacnav. In this preference, you can put any html that will be added to your menu. For example, to add a button to reach the koha website : <a class="menu" href="http://www.koha.org" title="Koha english website">Koha</a>
+	* authorities heading search : a new menu has been added : the user can search in authorities (same behaviour as in intranet)
 
 	=== REPORTS ===
 	* Inventory : you can now scan in a text file, on an unconnected laptop, every book in your library. Then, just upload the file in Koha. It will "mark as seen" all books. Once you've scanned everything in your library, just query for all books not seen since the beginning of the inventory, and you'll get "lost" books.
