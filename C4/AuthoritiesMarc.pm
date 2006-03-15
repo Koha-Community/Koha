@@ -149,118 +149,9 @@ sub authoritysearch {
 		#FIXME: all of this should be moved to the template eventually
 		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
 		my $authref = getauthtype($authtypecode);
-		my $heading; # = $authref->{summary};
-		my $altheading;
-		my $seeheading;
-		my $see;
-		my $authtype;
-		# KADOS : why do you handle hardcoded $authtype, as you have it in $authref ?
-# 		if ($record->field('.00')) {
-# 			$authtype.= "Personal Name";
-# 		}
-# 		if ($record->field('.10')) {
-# 				$authtype.= "Corporate Name";
-# 		}
-# 		if ($record->field('.11')) {
-# 				$authtype.= "Meeting Name";
-# 		}
-# 		if ($record->field('.30')) {
-# 				$authtype.= "Uniform Title";
-# 		}
-# 		if ($record->field('.48')) {
-# 				$authtype.= "Chronological Term";
-# 		}
-# 		if ($record->field('.50')) {
-# 				$authtype.= "Topical Term";
-# 		}
-# 		if ($record->field('.51')) {
-# 				$authtype.= "Geographic Name";
-# 		}
-# 		if ($record->field('.55')) {
-# 				$authtype = "Genre/Form Term";
-# 		}
-		$authtype=$authref->{authtypetext};
-
-		my @fields = $record->fields();
-		my $summary; #.="<b>".$heading."</b><br />";
-		if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
-		# construct UNIMARC summary, that is quite different from MARC21 one
-			# accepted form
-			foreach my $field ($record->field('2..')) {
-				$heading.= $field->as_string();
-			}
-			# rejected form(s)
-			foreach my $field ($record->field('4..')) {
-				$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-			}
-			# see :
-			foreach my $field ($record->field('5..')) {
-				$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-			}
-			# // form
-			foreach my $field ($record->field('7..')) {
-				$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
-				$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-				$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
-			}
-		} else {
-		# construct MARC21 summary
-			foreach my $field ($record->field('1..')) {
-				if ($record->field('100')) {
-					$heading.= $field->as_string('abcdefghjklmnopqrstvxyz68');
-				} elsif ($record->field('110')) {
-                                        $heading.= $field->as_string('abcdefghklmnoprstvxyz68');
-				} elsif ($record->field('111')) {
-                                        $heading.= $field->as_string('acdefghklnpqstvxyz68');
-				} elsif ($record->field('130')) {
-                                        $heading.= $field->as_string('adfghklmnoprstvxyz68');
-				} elsif ($record->field('148')) {
-                                        $heading.= $field->as_string('abvxyz68');
-				} elsif ($record->field('150')) {
-					$heading.= $field->as_string('abvxyz68');	
-				} elsif ($record->field('151')) {
-                                        $heading.= $field->as_string('avxyz68');
-				} elsif ($record->field('155')) {
-                                        $heading.= $field->as_string('abvxyz68');
-				} elsif ($record->field('180')) {
-                                        $heading.= $field->as_string('vxyz68');
-				} elsif ($record->field('181')) {
-                                        $heading.= $field->as_string('vxyz68');
-				} elsif ($record->field('182')) {
-                                        $heading.= $field->as_string('vxyz68');
-				} elsif ($record->field('185')) {
-                                        $heading.= $field->as_string('vxyz68');
-				} else {
-					$heading.= $field->as_string();
-				}
-			}
-			foreach my $field ($record->field('4..')) {
-				$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-				$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
-			}
-			foreach my $field ($record->field('5..')) {
-				$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
-				$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-				$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
-			}
-		}
-		foreach my $field (@fields) {
-			my $tag = $field->tag();
-			if ($tag<10) {
-			} else {
-				my @subf = $field->subfields;
-				for my $i (0..$#subf) {
-					my $subfieldcode = $subf[$i][0];
-					my $subfieldvalue = $subf[$i][1];
-					my $tagsubf = $tag.$subfieldcode;
-				}
-			}
-		}
-
+		my $authtype =$authref->{authtypetext};
+		my $summary = $authref->{summary};
 		# find biblio MARC field using this authtypecode (to jump to biblio)
-		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
 		my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
 		$sth->execute($authtypecode);
 		my $tags_using_authtype;
@@ -269,7 +160,69 @@ sub authoritysearch {
 			$tags_using_authtype.= $tagfield."9,";
 		}
 		chop $tags_using_authtype;
-		$summary = "<b><a href='/cgi-bin/koha/opac-search.pl?type=opac&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br />".$seeheading.$altheading.$summary;	
+		# if the library has a summary defined, use it. Otherwise, build a standard one
+		if ($summary) {
+			my @fields = $record->fields();
+			foreach my $field (@fields) {
+				my $tag = $field->tag();
+				if ($tag<10) {
+				} else {
+					my @subf = $field->subfields;
+					for my $i (0..$#subf) {
+						my $subfieldcode = $subf[$i][0];
+						my $subfieldvalue = $subf[$i][1];
+						my $tagsubf = $tag.$subfieldcode;
+						$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+					}
+				}
+			}
+			$summary =~ s/\[(.*?)]//g;
+			$summary =~ s/\n/<br>/g;
+		} else {
+			my $heading; # = $authref->{summary};
+			my $altheading;
+			my $seeheading;
+			my $see;
+			my @fields = $record->fields();
+			if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+			# construct UNIMARC summary, that is quite different from MARC21 one
+				# accepted form
+				foreach my $field ($record->field('2..')) {
+					$heading.= $field->as_string();
+				}
+				# rejected form(s)
+				foreach my $field ($record->field('4..')) {
+					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+				}
+				# see :
+				foreach my $field ($record->field('5..')) {
+					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+				}
+				# // form
+				foreach my $field ($record->field('7..')) {
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+				}
+				$summary = "<b>".$heading."</b><br />".$seeheading.$altheading.$summary;	
+			} else {
+			# construct MARC21 summary
+				foreach my $field ($record->field('1..')) {
+					$heading.= $field->as_string();
+				}
+				foreach my $field ($record->field('4..')) {
+					$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
+				}
+				foreach my $field ($record->field('5..')) {
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+				}
+			}
+		}
 		# then add a line for the template loop
 		my %newline;
 		$newline{summary} = $summary;
@@ -1090,6 +1043,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.13  2006/03/15 10:46:31  tipaul
+# removing hardcoded link in summary of authority (on $heading) : it can be set in the template (in the # of biblios column) :
+# <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --></a>  <!-- TMPL_VAR NAME="used" -->
+#
+# that's what I did for css templates, it work like a charm. It's better I think because when the library defines it's own summary, the hardcoded link didn't appear.
+#
 # Revision 1.9.2.12  2006/03/09 01:45:14  kados
 # Refining list of appropriate subfields to display for the authorized
 # heading.
