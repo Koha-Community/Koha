@@ -272,7 +272,7 @@ sub build_tabs ($$$$) {
 						next if (length $subfield !=1);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tag<10);
-						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=5) ); #check for visibility flag
+						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-4) or ($tagslib->{$tag}->{$subfield}->{hidden}>=5) ); #check for visibility flag
 						next if (defined($field->subfield($subfield)));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
