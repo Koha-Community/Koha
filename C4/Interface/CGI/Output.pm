@@ -106,7 +106,6 @@ corresponds to the HTML page $html.
 
 sub output_html_with_http_headers ($$$) {
     my($query, $cookie, $html) = @_;
-    binmode(STDOUT, ":utf8");
     print $query->header(
 	-type   => guesstype($html),
 	-cookie => $cookie,

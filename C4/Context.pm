@@ -466,7 +466,7 @@ sub _new_dbh
 			    $db_user, $db_passwd);
 	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
 	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
-#	$dbh->do("set NAMES 'utf8'");
+	$dbh->do("set NAMES 'utf8'");
 	return $dbh;
 }
 
@@ -780,6 +780,13 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.33  2006/03/15 11:21:56  plg
+# bug fixed: utf-8 data where not displayed correctly in screens. Supposing
+# your data are truely utf-8 encoded in your database, they should be
+# correctly displayed. "set names 'UTF8'" on mysql connection (C4/Context.pm)
+# is mandatory and "binmode" to utf8 (C4/Interface/CGI/Output.pm) seemed to
+# converted data twice, so it was removed.
+#
 # Revision 1.32  2006/03/03 17:25:01  hdl
 # Bug fixing : a line missed a comment sign.
 #
