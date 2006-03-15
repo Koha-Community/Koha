@@ -1,0 +1,50 @@
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1>Authority search</h1>
+
+<div id="bloc60">
+	<form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+		<input type="hidden" name="op" value="do_search">
+		<input type="hidden" name="type" value="opac">
+		<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+		<div class="details">
+			<h2>Search on
+				<select name="authtypecode">
+				<!-- TMPL_LOOP NAME="authtypesloop" -->
+				<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+				<!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="authtypetext" --></option>
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+				</select>
+			</h2>
+			<p>
+				<label for="mainentry">Main entry</label>
+				<input type="hidden" name="marclist" value="mainentry">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<select name="operator">
+					<option value="contains">contains</option>
+					<option value="start">start by</option>
+				</select>
+				<input type="text" id="mainentry" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			</p>
+			<p>
+				<label for="anywhere">Anywhere</label>
+				<input type="hidden" name="marclist" value="">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<select name="operator">
+					<option value="contains">contains</option>
+					<option value="start">start by</option>
+				</select>
+				<input type="text" id="anywhere" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			</p>
+			<p>
+				<input type="submit" value="Start search" class="submit">
+			</p>
+		</div>
+	</form>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
