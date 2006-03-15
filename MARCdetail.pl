@@ -118,7 +118,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 	my @loop_data =();
 	my @subfields_data;
 	# deal with leader
-	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop  or $tagslib->{'000'}->{'@'}->{hidden}) {
+	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop  or ($tagslib->{'000'}->{'@'}->{hidden}==(-7|-4|-3|-2|2|3|5|8))) {
 		my %subfield_data;
 		$subfield_data{marc_lib}=$tagslib->{'000'}->{'@'}->{lib};
 		$subfield_data{marc_value}=$record->leader();
@@ -137,7 +137,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($fields[$x_i]->tag()<10) {
 			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
-			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{hidden});
+			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{hidden}==(-7|-4|-3|-2|2|3|5|8));
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{'@'}->{lib};
 			$subfield_data{marc_value}=$fields[$x_i]->data();
@@ -150,7 +150,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			for my $i (0..$#subf) {
 				$subf[$i][0] = "@" unless $subf[$i][0] or $subf[$i][0] eq '0';
 				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
-				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden});
+				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden}==(-7|-4|-3|-2|2|3|5|8));
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
 				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
@@ -209,7 +209,7 @@ foreach my $field (@fields) {
 # loop through each subfield
 	for my $i (0..$#subf) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
-		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
+		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden}==(-7|-4|-3|-2|2|3|5|8));
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 		$this_row{$subf[$i][0]} =$subf[$i][1];
 	}
