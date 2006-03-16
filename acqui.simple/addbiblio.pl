@@ -173,6 +173,7 @@ sub create_input () {
 	$subfield_data{tag}=$tag;
 	$subfield_data{subfield}=$subfield;
 	$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+	$subfield_data{marc_lib_plain}=$tagslib->{$tag}->{$subfield}->{lib};
 	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
@@ -184,7 +185,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"67\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -197,16 +198,16 @@ sub create_input () {
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=\"67\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
 		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
-			$subfield_data{marc_value}="<textarea name=\"field_value\" cols=\"70\" rows=\"5\" >$value</textarea>";
+			$subfield_data{marc_value}="<textarea name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
 		}
