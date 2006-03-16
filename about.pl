@@ -38,15 +38,17 @@ $template->param(
                                         zebraVersion       => $zebraVersion,
 		);
 
+my @component_names =
+    qw/MARC::File::XML   MARC::Charset     Class::Accessor
+       LWP::Simple       XML::Simple       Net::Z3950
+       Event             Net::LDAP         PDF::API2
+       Mail::Sendmail    MARC::Record      Digest::MD5
+       HTML::Template    DBD::mysql        Date::Manip
+       DBI               Smart::Comments   ZOOM
+      /;
 my @components = ();
 
-foreach my $component (qw/MARC::File::XML   MARC::Charset   Class::Accessor
-                          LWP::Simple       XML::Simple     Net::Z3950
-                          Event             Net::LDAP       PDF::API2
-                          Mail::Sendmail    MARC::Record    Digest::MD5
-                          HTML::Template    DBD::mysql      Date::Manip
-                          DBI               Smart::Comments ZOOM
-                         /) {
+foreach my $component (sort @component_names) {
     my $version;
     if (eval "require $component") {
         $version = $component->VERSION;
@@ -58,11 +60,13 @@ foreach my $component (qw/MARC::File::XML   MARC::Charset   Class::Accessor
         $version = 'module is missing';
     }
 
-    push @components,
+    push (
+        @components,
         {
-        name    => $component,
-        version => $version,
-    };
+            name    => $component,
+            version => $version,
+        }
+    );
 }
 
 $template->param(
