@@ -8,6 +8,8 @@ use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Context;
 use CGI;
+use LWP::Simple;
+use XML::Simple;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -25,6 +27,7 @@ my $perlVersion = $];
 my $mysqlVersion = `mysql -V`;
 my $apacheVersion =  `httpd -v`;
 $apacheVersion =  `httpd2 -v` unless $apacheVersion;
+my $zebraVersion = `zebraidx -V`;
 
 $template->param(
 					kohaVersion => $kohaVersion,
@@ -32,6 +35,38 @@ $template->param(
 					perlVersion        => $perlVersion,
 					mysqlVersion       => $mysqlVersion,
 					apacheVersion      => $apacheVersion,
+                                        zebraVersion       => $zebraVersion,
 		);
+
+my @components = ();
+
+foreach my $component (qw/MARC::File::XML   MARC::Charset   Class::Accessor
+                          LWP::Simple       XML::Simple     Net::Z3950
+                          Event             Net::LDAP       PDF::API2
+                          Mail::Sendmail    MARC::Record    Digest::MD5
+                          HTML::Template    DBD::mysql      Date::Manip
+                          DBI               Smart::Comments ZOOM
+                         /) {
+    my $version;
+    if (eval "require $component") {
+        $version = $component->VERSION;
+        if ($version eq '' ) {
+            $version = 'unknown';
+        }
+    }
+    else {
+        $version = 'module is missing';
+    }
+
+    push @components,
+        {
+        name    => $component,
+        version => $version,
+    };
+}
+
+$template->param(
+    components => \@components
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

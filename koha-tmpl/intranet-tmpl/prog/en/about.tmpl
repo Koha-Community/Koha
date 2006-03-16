@@ -11,6 +11,16 @@
 	<tr><th scope="row">Perl version: </th><td><!-- TMPL_VAR ESCAPE=HTML name="perlVersion" --></td></tr>
 	<tr><th scope="row">MySQL version: </th><td><!-- TMPL_VAR ESCAPE=HTML name="mysqlVersion" --></td></tr>
 	<tr><th scope="row">Apache version: </th><td><!-- TMPL_VAR ESCAPE=HTML name="apacheVersion" --></td></tr>
+	<tr><th scope="row">Zebra version: </th><td><!-- TMPL_VAR ESCAPE=HTML name="zebraVersion" --></td></tr>
+</table>
+
+<table>
+	<!-- TMPL_LOOP name="components" -->
+	<tr>
+	  <th scope="row"><!-- TMPL_VAR NAME="name" --></th>
+          <td><!-- TMPL_VAR NAME="version" --></td>
+        </tr>
+	<!-- /TMPL_LOOP -->
 </table>
 
 	
