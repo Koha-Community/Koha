@@ -185,7 +185,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -198,18 +198,18 @@ sub create_input () {
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" value=\"$value\">";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
-			$subfield_data{marc_value}="<textarea name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
+			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
+			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
 		}
 	}
 	return \%subfield_data;
@@ -285,6 +285,10 @@ sub build_tabs ($$$$) {
 						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
 						$tag_data{indicator} = $record->field($tag)->indicator(1). $record->field($tag)->indicator(2) if ($tag>=10);
 						$tag_data{subfield_loop} = \@subfields_data;
+						if ($tag<10) {
+                                                	$tag_data{fixedfield} = 1;
+                                        	}
+
 						push (@loop_data, \%tag_data);
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
@@ -296,6 +300,10 @@ sub build_tabs ($$$$) {
 						$tag_data{tag_lib} = '';
 						$tag_data{indicator} = '';
 						$tag_data{subfield_loop} = \@subfields_data;
+						if ($tag<10) {
+       		                                        $tag_data{fixedfield} = 1;
+	                                        }
+
 						push (@loop_data, \%tag_data);
 						$i++;
 					}
@@ -320,6 +328,9 @@ sub build_tabs ($$$$) {
 					$tag_data{indicator} = $indicator;
 					$tag_data{subfield_loop} = \@subfields_data;
 					$tag_data{tagfirstsubfield} = $tag_data{subfield_loop}[0];
+					if ($tag<10) {
+						$tag_data{fixedfield} = 1;
+					}
 					push (@loop_data, \%tag_data);
 				}
 			}
@@ -549,5 +560,6 @@ $template->param(
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
+		advancedMARCEditor => C4::Context->preference("advancedMARCEditor"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
