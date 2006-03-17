@@ -79,7 +79,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     nam  22     7a  4500" unless $result;
+	$result = "     nam a22     7a  4500" unless $result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
