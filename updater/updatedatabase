@@ -1058,6 +1058,15 @@ my %tabledata = (
             explanation         => 'Set to anonymous borrowernumber to enable Anonymous suggestions',
             type                => 'free',
         },                           
+		{
+        uniquefieldrequired => 'variable',
+            variable            => 'MARCOrgCode',
+        value               => '0',
+            forceupdate         => { 'explanation' => 1,                                                             '
+                        type' => 1},
+            explanation         => 'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
+        type                => 'free',
+        },
         {                                                                                   
 	    uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
@@ -1731,6 +1740,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.36  2006/03/18 22:55:26  kados
+# add syspref for the MARC Organization Code of the library
+#
 # Revision 1.100.2.35  2006/03/08 17:50:55  kados
 # Modifying patronimages: now it can be used to specify the file extension
 # of the images (to avoid hard-codeing in templates).
