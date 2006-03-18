@@ -179,7 +179,7 @@ sub create_input () {
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
-	$subfield_data{visibility} = "display:none" unless ($tagslib->{$tag}->{$subfield}->{hidden}%2==0); #check parity
+	$subfield_data{visibility} = "display:none" unless (($tagslib->{$tag}->{$subfield}->{hidden}%2==0) or $value ne ''); #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
