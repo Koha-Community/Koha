@@ -43,6 +43,13 @@ my $function_name= "100".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
+    for (i=0 ; i<document.f.field_value.length ; i++) {
+		if (document.f.tag[i].value == '000') {
+			if (!document.f.field_value[i].value) {
+				document.f.field_value[i].value = '     nam a22     7a  4500';
+			}
+		}
+	}
 return 1;
 }
 
