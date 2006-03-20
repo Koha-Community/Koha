@@ -119,9 +119,17 @@ if ($op eq "additem") {
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
 #------------------------------------------------------------------------------------------------------------------------------
-# retrieve item if exist => then, it's a modif
-	&NEWdelitem($dbh,$bibid,$itemnum);
-	$nextop="additem";
+	# check that there is no issue on this item before deletion.
+	my $sth=$dbh->prepare("select * from issues i where i.returndate is null and i.itemnumber=?");
+	$sth->execute($itemnum);
+	my $onloan=$sth->fetchrow;
+	push @errors,"book_on_loan" if ($onloan); ##error book_on_loan added to template as well
+	if ($onloan){
+	$nextop = "additem";
+	}else{
+		&NEWdelitem($dbh,$bibid,$itemnum);
+		$nextop="additem";
+	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -212,6 +220,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
 		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
 	}
 	my %row_data;
+	$items_data =~ s/"/&quot;/g;
 	$row_data{item_value} = $items_data;
 	$row_data{itemnum} = $big_array[$i]->{itemnum};
 	#reporting this_row values
@@ -244,6 +253,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 		my ($x,$value);
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
+		$value =~ s/"/&quot;/g;
 		#testing branch value if IndependantBranches.
 		my $test = (C4::Context->preference("IndependantBranches")) && 
 					($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
