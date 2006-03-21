@@ -538,8 +538,12 @@ if ($op eq "addbiblio") {
 	}
 	unless ($record == -1) {
 	#FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
-        my $uxml = $record->as_xml;
-        $record = MARC::Record::new_from_xml($uxml, 'UTF-8'); 
+	eval {
+        	my $uxml = $record->as_xml;
+		my $newrecord = MARC::Record::new_from_xml($uxml, 'UTF-8');
+		$record = $newrecord;
+	};
+
 	}
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
