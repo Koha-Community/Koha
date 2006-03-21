@@ -225,7 +225,7 @@ sub catalogsearch {
 			if ($field eq 'biblio.author') {
 				$query .= "Author all \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblio.title') {
-				$query .= "Title all \"".@$value[$i]."\"";
+			    $query .= "Title all \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblioitems.isbn') {
 				$query .= "Isbn= ".@$value[$i];
 			} elsif ($field eq 'bibliosubject.subject'){
@@ -258,7 +258,30 @@ sub catalogsearch {
 	}
         # sort result set 
         # in theory this should sort by title
-        if ($rs->sort("yaz", "1=4 <i") < 0) {
+        my $sort;
+        if ($orderby eq 'biblio.title'){
+            $sort="1=4";
+        }
+        elsif ($orderby eq 'biblio.author'){
+	    $sort="1=1003";
+	    }
+        elsif ($orderby eq 'biblioitems.dewey'){
+	    $sort="1=13";
+	    }
+        elsif ($orderby eq 'biblioitems.publicationyear'){
+	    $sort="1=30";
+	    }
+        elsif ($orderby eq 'biblioitems.publishercode'){
+	    $sort="1=1018";
+	    }
+        if ($desc_or_asc eq 'ASC'){
+	    $sort.=" <i";
+	    }
+        else {
+	    $sort.=" >i";
+	    }
+
+        if ($rs->sort("yaz", $sort) < 0) {
                  warn "sort failed";
         }
         else {
