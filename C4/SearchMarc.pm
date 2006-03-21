@@ -372,7 +372,7 @@ sub catalogsearch {
 		$totalitems=0;
 	}
 	my $nbresults = $#finalresult+1;
-	return (\@finalresult, $nbresults);
+	return (\@finalresult, $numresults);
 }
 
 =head2 my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
