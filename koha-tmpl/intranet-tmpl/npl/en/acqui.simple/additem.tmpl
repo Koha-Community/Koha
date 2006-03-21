@@ -47,15 +47,13 @@
 		<caption>Edit Item</caption>
 	<!-- /TMPL_IF -->	
 		<!-- TMPL_LOOP NAME="item" -->
-		<!-- TMPL_UNLESS NAME="hidden" -->
-			<tr>
+			<tr style="<!-- TMPL_VAR NAME='hidden' -->;">
 					<th><label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label></th>
 					<td><!-- TMPL_VAR NAME="marc_value" -->
 					<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
 					<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
 					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"></td>
 		</tr>
-		<!-- /TMPL_UNLESS -->
 		<!-- /tmpl_loop -->
 		</table>
 	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
