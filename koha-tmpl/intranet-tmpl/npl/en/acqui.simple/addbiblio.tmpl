@@ -22,7 +22,7 @@
 		<!-- TMPL_IF name="bibid" -->
 			<input type="button" value="Save Bibliographic Record and go to Items" onclick="Check(this.form);" accesskey="w" class="submit" />
 		<!-- TMPL_ELSE -->
-			<input type="button" value="Add Bibliographic Record and go to Items" onclick="document.write(' Check(this.form);" accesskey="w" class="submit" />
+			<input type="button" value="Add Bibliographic Record and go to Items" onclick="Check(this.form);" accesskey="w" class="submit" />
 		<!-- /TMPL_IF -->
 	<input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" / ></div>
 
@@ -529,6 +529,8 @@ function cloneSubfield(index) {
  clonetrigger = clone.getElementsByTagName('a')[0];
  clonetrigger.setAttribute("onclick","cloneSubfield('" + index + index + "')");
  clone.setAttribute("tabindex","1");
+ var orginput = original.getElementsByTagName('input')[0];
+ orginput.value = '';
  original.parentNode.insertBefore( clone, original.nextSibling); 
 }
 
