@@ -251,6 +251,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 		$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+		$subfield_data{hidden}= "display:none" if $tagslib->{$tag}->{$subfield}->{hidden};
 		my ($x,$value);
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
 		$value =~ s/"/&quot;/g;
