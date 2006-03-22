@@ -274,11 +274,11 @@ sub catalogsearch {
         elsif ($orderby eq 'biblioitems.publishercode'){
 	    $sort="1=1018";
 	    }
-        if ($desc_or_asc eq 'ASC'){
-	    $sort.=" <i";
+        if ($desc_or_asc eq 'DESC'){
+	    $sort.=" >i";
 	    }
         else {
-	    $sort.=" >i";
+	    $sort.=" <i";
 	    }
 
         if ($rs->sort("yaz", $sort) < 0) {
