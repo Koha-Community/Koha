@@ -9,7 +9,7 @@
 <!-- TMPL_ELSE -->
 <form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon detail" onclick="showMore(); return false;" value="More Details" /></form>
 <!-- /TMPL_IF -->
-<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="submit" onclick="delSelRecords(); return false;" value="Remove Selected Items" /></form>
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon remove" onclick="delSelRecords(); return false;" value="Remove Selected Items" /></form>
 
 <form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon send" onclick="sendBasket(); return false;" value="Send" /></form>
 
@@ -22,7 +22,8 @@
 
 <!-- TMPL_IF NAME="verbose" -->
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><div class="details">
-<h3><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></h3>
+<h3><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a></h3>
+
 <table>
 				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td colspan="2"><form><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)"> Select this Item</label></form></td></tr><!-- /TMPL_UNLESS -->
 
@@ -46,7 +47,10 @@
 						<!-- TMPL_IF name="classification" --><tr><th>Call Number:</th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="lccn" --><tr><th>LCCN:</th><td> <!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="url" --><tr><th>URL:</th><td> <!-- TMPL_VAR NAME="url" --></td></tr><!-- /TMPL_IF -->
-			</table></div>
+<tr><th>&nbsp;</th><td><a href="opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openBiblio('opac-reserve.pl',<!-- TMPL_VAR name="biblionumber" -->); return false;">Place Reserve</a></td></tr>
+			</table>
+			
+			</div>
 							<table><tr>
 					<th>Location: </th>
 					<th>Barcode: </th>
@@ -72,7 +76,7 @@
 						<!-- TMPL_IF name="place" --> <!-- TMPL_VAR name="place" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="notes" --><p><!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
-					</p></td><td><!-- TMPL_VAR NAME="classification" --></td></tr>
+					</p></td><td><!-- TMPL_VAR NAME="classification" --></td><td><a href="opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openBiblio('opac-reserve.pl',<!-- TMPL_VAR name="biblionumber" -->); return false;">Reserve</a></td></tr>
 	<!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
