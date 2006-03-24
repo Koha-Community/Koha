@@ -155,10 +155,10 @@ if ($op eq "do_search") {
 	    # detail.pl
 	    my $marc_bool = C4::Context->boolean_preference("MARC") || 0;
 	    if ($marc_bool eq "1") {                              
-		print $query->redirect("/cgi-bin/koha/MARCdetail.pl?biblionumber=".@$results[0]->{biblionumber});
+		print $query->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=".@$results[0]->{biblionumber});
 	    }
 	    else {
-		print $query->redirect("/cgi-bin/koha/detail.pl?biblionumber=".@$results[0]->{biblionumber});
+		print $query->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=".@$results[0]->{biblionumber});
 	    }
 		 exit
 	}
