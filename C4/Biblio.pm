@@ -994,10 +994,18 @@ sub NEWdelbiblio {
     }
 #    &MARCdelbiblio( $dbh, $bibid, 0 );
     # delete from zebra
-#    my $record = get_record($bibid);
+    warn "heres the bibid $bibid";
+#    my $record = C4::Search::get_record($bibid);
+    my $record = C4::Search::get_xml_record($bibid);
 #    z3950_extended_services('update',set_service_options('update'),$record);
     warn "heres the record to delete $bibid";
-    z3950_extended_services('update',set_service_options('update','recordDelete',$bibid));
+#    my $Zconn = C4::Context->Zconn;
+#    my $p = $Zconn->package();
+#    $p->option(action => "recordDelete");
+#    $p->option(record => $record);
+#    $p->send("update");
+#    $p->destroy();
+    z3950_extended_services('update',set_service_options('update','recordDelete',$record));
     z3950_extended_services('commit');
 }
 
@@ -2996,6 +3004,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.163  2006/03/28 23:05:08  rangi
+# Delete working now
+#
 # Revision 1.162  2006/03/13 23:12:44  rangi
 # Adding commits, so that changes stick
 #

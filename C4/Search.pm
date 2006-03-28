@@ -54,7 +54,7 @@ other databases.
 =cut
 
 @ISA    = qw(Exporter);
-@EXPORT = qw(search get_record);
+@EXPORT = qw(search get_record get_xml_record);
 
 # make all your functions, whether exported or not;
 
@@ -108,7 +108,8 @@ sub get_record {
     my $Zconn = C4::Context->Zconn;
     my $raw;
     my $string = "identifier=$id";
-    warn $string;
+#    my $string = "title=delete";
+#    warn $string;
 
         $q = new ZOOM::Query::CQL2RPN( $string, $Zconn);
     eval {
@@ -121,13 +122,43 @@ sub get_record {
     };
     if ($@) {
 
-        print "Error ", $@->code(), ": ", $@->message(), "\n";
+        warn "Error ", $@->code(), ": ", $@->message(), "\n";
     }
     ###$raw
     my $record = MARC::Record->new_from_xml($raw, 'UTF-8');
     ###$record
     return ($record);
 }
+
+
+sub get_xml_record {
+    # pass in an id (biblionumber at this stage) and get back a MARC record
+    my ($id) = @_;
+    my $q;
+    my $Zconn = C4::Context->Zconn;
+    my $raw;
+    my $string = "identifier=$id";
+#    my $string = "title=delete";
+#    warn $string;
+
+        $q = new ZOOM::Query::CQL2RPN( $string, $Zconn);
+    eval {
+#        my $rs = $Zconn->search_pqf("\@attr 1=12 $id");
+	my $rs = $Zconn->search($q);
+        my $n  = $rs->size();
+        if ( $n > 0 ) {
+            $raw = $rs->record(0)->raw();
+        }
+    };
+    if ($@) {
+
+        warn "Error ", $@->code(), ": ", $@->message(), "\n";
+    }
+    ###$raw
+    my $record = $raw;
+    ###$record
+    return ($record);
+}    
 
 1;
 __END__
