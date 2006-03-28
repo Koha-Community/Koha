@@ -223,13 +223,13 @@ sub catalogsearch {
 			$query .= " and " if ($query);
 			my $field = $tagslib->{$tag}->{$subfield}->{kohafield};
 			if ($field eq 'biblio.author') {
-				$query .= "Author all \"".@$value[$i]."\"";
+				$query .= "Author all /relevant \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblio.title') {
-			    $query .= "Title all \"".@$value[$i]."\"";
+			    $query .= "dc.title all /relevant \"".@$value[$i]."\"";
 			} elsif ($field eq 'biblioitems.isbn') {
 				$query .= "Isbn= ".@$value[$i];
 			} elsif ($field eq 'bibliosubject.subject'){
-			    $query.="Subject all \"@$value[$i]\"";
+			    $query.="Subject all /relevant \"@$value[$i]\"";
 			} elsif ($field eq 'biblioitems.itemtype'){
 			    $query="Itemtype=@$value[$i]";
 			} elsif ($field eq 'items.homebranch'){
@@ -238,9 +238,10 @@ sub catalogsearch {
 			    $query="Barcode=@$value[$i]";
 			} else {
 			        warn $field;
-			        my @spacedout=split(/ /,@$value[$i]);
-			        my $text = join(" and ",@spacedout);
-				$query .= "$text";
+#			        my @spacedout=split(/ /,@$value[$i]);
+#			        my $text = join(" and ",@spacedout);
+			        
+				$query .= "dc.any all /relevant \"@$value[$i]\"";
 			}
 		}
 # 		warn "$i : ".@$tags[$i]. "=> $tag / $subfield = ".$tagslib->{$tag}->{$subfield}->{kohafield};
