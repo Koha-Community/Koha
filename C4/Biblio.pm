@@ -999,13 +999,13 @@ sub NEWdelbiblio {
     my $record = C4::Search::get_xml_record($bibid);
 #    z3950_extended_services('update',set_service_options('update'),$record);
     warn "heres the record to delete $bibid";
-#    my $Zconn = C4::Context->Zconn;
-#    my $p = $Zconn->package();
-#    $p->option(action => "recordDelete");
-#    $p->option(record => $record);
-#    $p->send("update");
-#    $p->destroy();
-    z3950_extended_services('update',set_service_options('update','recordDelete',$record));
+    my $Zconn = C4::Context->Zconn;
+    my $p = $Zconn->package();
+    $p->option(action => "recordDelete");
+    $p->option(record => $record);
+    $p->send("update");
+    $p->destroy();
+#    z3950_extended_services('update',set_service_options('update','recordDelete',$record));
     z3950_extended_services('commit');
 }
 
@@ -3004,6 +3004,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.164  2006/03/29 01:56:25  rangi
+# Delete isnt working using the extended services method
+#
 # Revision 1.163  2006/03/28 23:05:08  rangi
 # Delete working now
 #
