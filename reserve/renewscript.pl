@@ -24,43 +24,50 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-# use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
-#get input
-my $input= new CGI;
-#print $input->header;
 
-#print $input->dump;
+my $input = new CGI;
+my @names = $input->param();
 
-my @names=$input->param();
-my $count=@names;
-my %data;
+#
+# find items to renew, all items or a selection of items
+#
 
-for (my $i=0;$i<$count;$i++){
-  if ($names[$i] =~ /renew/){
-    my $temp=$names[$i];
-    $temp=~ s/renew_item_//;
-    $data{$temp}=$input->param($names[$i]);
-  }
+# create a look-up table to check efficiently parameter availability
+my %is_param = map {$_ => 1} @names;
+
+my @data;
+if ($is_param{renew_all}) {
+    @data = $input->param('all_items[]');
 }
+else {
+    @data = $input->param('items[]');
+}
+
+#
+# renew items
+#
 my %env;
-my $destination = $input->param("destination");
 my $cardnumber = $input->param("cardnumber");
-my $bornum=$input->param("bornum");
-while ( my ($itemno, $value) = each %data) {
-#    warn "$itemno = $value\n";
-   if ($value eq 'y'){
-     #means we want to renew this item
-     #check its status
-     my $status=renewstatus(\%env,$bornum,$itemno);
-     if ($status == 1){
-       renewbook(\%env,$bornum,$itemno);
-     }
-   }
+my $bornum = $input->param("bornum");
+
+foreach my $itemno (@data) {
+    #check status before renewing issue
+    if (renewstatus(\%env,$bornum,$itemno)){
+        renewbook(\%env,$bornum,$itemno);
+    }
 }
 
-if($destination eq "circ"){
-	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
-} else {
-	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
+#
+# redirection to the referrer page
+#
+if ($input->param('destination') eq "circ"){
+    print $input->redirect(
+        '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber
+    );
+}
+else {
+    print $input->redirect(
+        '/cgi-bin/koha/members/moremember.pl?bornum='.$bornum
+    );
 }
