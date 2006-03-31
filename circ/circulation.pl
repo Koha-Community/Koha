@@ -204,6 +204,7 @@ if ($borrower) {
 	# split in 2 arrays for today & previous
 	foreach my $it (keys %$issueslist) {
 		my $issuedate = $issueslist->{$it}->{'timestamp'};
+		$issuedate =~ s/-//g;
 		$issuedate = substr($issuedate, 0, 8);
 		if ($todaysdate == $issuedate) {
 			push @todaysissues, $issueslist->{$it};
