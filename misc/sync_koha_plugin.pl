@@ -129,6 +129,15 @@ system(
     $opt{rel_2_2_dir}.'/koha-tmpl/intranet-tmpl/npl/en/cataloguing'
 );
 
+## Add the 'record.abs' symlink
+system(
+    'ln',
+    '-s',
+    $opt{head_dir}.'/misc/zebra/usmarc/collection.abs',
+    $opt{head_dir}.'/misc/zebra/usmarc/record.abs'
+);
+
+
 print "Finished\n\nRemember, you still need to:
 
 1. Edit moredetail.tmpl and detail.tmpl to allow for deletions
