@@ -125,8 +125,8 @@ system(
 system(
     'ln',
     '-s',
-    $opt{rel_2_2_dir}.'/acqui.simple',
-    $opt{rel_2_2_dir}.'/cataloguing'
+    $opt{rel_2_2_dir}.'/koha-tmpl/intranet-tmpl/npl/en/acqui.simple',
+    $opt{rel_2_2_dir}.'/koha-tmpl/intranet-tmpl/npl/en/cataloguing'
 );
 
 print "Finished\n\nRemember, you still need to:
