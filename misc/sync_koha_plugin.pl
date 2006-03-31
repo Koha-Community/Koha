@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+use C4::Context;
 use Getopt::Long;
 
 my %opt = ();
@@ -137,6 +138,13 @@ system(
     $opt{head_dir}.'/misc/zebra/usmarc/record.abs'
 );
 
+## Create symlink from intranet/zebra to head zebra directory
+system(
+    'ln',
+    '-s',
+    $opt{head_dir}.'/misc/zebra/usmarc',
+    C4::Context->config("intranetdir").'/zebra'
+);
 
 print "Finished\n\nRemember, you still need to:
 
