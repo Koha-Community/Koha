@@ -160,10 +160,11 @@ warn "NUM:".$number;
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
+		my ($bibid,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
-			NEWnewitem($dbh,$items[$i],$bibid);
+		    warn "here is the biblioitemnumber $oldbibitemnum";
+			NEWnewitem($dbh,$items[$i],$bibid,$oldbibitemnum);
 		}
 	}
 }

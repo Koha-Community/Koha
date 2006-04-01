@@ -1033,7 +1033,7 @@ creates an item from a MARC::Record
 
 sub NEWnewitem {
     my ( $dbh,$record,$biblionumber,$biblioitemnumber ) = @_;
-
+    warn "here is the $biblioitemnumber";
     # add item in old-DB
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
     my $item = &MARCmarc2koha( $dbh,$record,$frameworkcode );
@@ -1454,7 +1454,7 @@ sub REALnewitems {
     if ( $item->{'loan'} ) {
         $item->{'notforloan'} = $item->{'loan'};
     }
-	$item->{'biblioitemnumber'} = 1;
+#	$item->{'biblioitemnumber'} = 1;
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
     if ( $item->{'dateaccessioned'} ) {
         $sth = $dbh->prepare( "Insert into items set
@@ -3014,6 +3014,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.166  2006/04/01 22:10:50  rangi
+# Fixing the problem that all items were getting biblioitem=1 set
+#
 # Revision 1.165  2006/04/01 21:22:05  rangi
 # Adding a little fake subroutine that a few scripts in the opac depend on, can be removed once the opac scripts are rewritten
 #
