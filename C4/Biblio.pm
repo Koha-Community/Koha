@@ -68,6 +68,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &MARCkoha2marcBiblio &MARCmarc2koha
   &MARCkoha2marcItem &MARChtml2marc &MARChtml2xml
   &MARCgetbiblio &MARCgetitem
+  MARCfind_MARCbibid_from_oldbiblionumber
   &XMLgetbiblio
   
   &FindDuplicate
@@ -310,6 +311,15 @@ returns a hash with all values for all fields and subfields for a given MARC fra
 =back
 
 =cut
+
+
+# old subroutine to provide backwards compatibility.
+# opac-detail breaks without this. Can be removed once opac-detail is fixed
+sub MARCfind_MARCbibid_from_oldbiblionumber {
+    my ($biblionumber)=@_;
+    return ($biblionumber);
+    
+}
 
 sub MARCgettagslib {
     my ( $dbh, $forlibrarian, $frameworkcode ) = @_;
@@ -3004,6 +3014,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.165  2006/04/01 21:22:05  rangi
+# Adding a little fake subroutine that a few scripts in the opac depend on, can be removed once the opac scripts are rewritten
+#
 # Revision 1.164  2006/03/29 01:56:25  rangi
 # Delete isnt working using the extended services method
 #
