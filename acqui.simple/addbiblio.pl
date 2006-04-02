@@ -165,8 +165,8 @@ sub build_authorized_values_list ($$$$$) {
 sub create_input () {
 	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
 	# must be encoded as utf-8 before it reaches the editor
-        use Encode;
-        $value = encode('utf-8', $value);
+        #use Encode;
+        #$value = encode('utf-8', $value);
 	$value =~ s/"/&quot;/g;
 	my $dbh = C4::Context->dbh;
 	my %subfield_data;
@@ -252,9 +252,6 @@ sub build_tabs ($$$$) {
 						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
-						#next if (($tagslib->{$tag}->{$subfield}->{hidden}==3) && ($value eq ''));
-						#warn "VALUE: $value";
-						#warn "OUTSIDE TAGSLIB";
 						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {
@@ -302,8 +299,7 @@ sub build_tabs ($$$$) {
 						$tag_data{subfield_loop} = \@subfields_data;
 						if ($tag<10) {
        		                                        $tag_data{fixedfield} = 1;
-	                                        }
-
+	                    			}
 						push (@loop_data, \%tag_data);
 						$i++;
 					}
@@ -314,8 +310,6 @@ sub build_tabs ($$$$) {
 				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 					next if (length $subfield !=1);
 					next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=4) ); #check for visibility flag
-					
-					#next if ($tagslib->{$tag}->{$subfield}->{hidden}==3);
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
@@ -453,7 +447,6 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	warn "XML HERE".$xml;
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
@@ -500,13 +493,8 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my %indicators;
-	for (my $i=0;$i<=$#ind_tag;$i++) {
-		$indicators{$ind_tag[$i]} = $indicator[$i];
-	}
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 	my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
