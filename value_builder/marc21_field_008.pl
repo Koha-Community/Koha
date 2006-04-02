@@ -37,7 +37,6 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 
 $year +=1900; $mon +=1;
 my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
-warn "DATE".$dateentered;
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
