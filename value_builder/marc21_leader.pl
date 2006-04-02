@@ -46,7 +46,7 @@ function Focus$function_name(subfield_managed) {
     for (i=0 ; i<document.f.field_value.length ; i++) {
 		if (document.f.tag[i].value == '000') {
 			if (!document.f.field_value[i].value) {
-				document.f.field_value[i].value = '     nam a22     7a  4500';
+				document.f.field_value[i].value = '     nam a22     7a 4500';
 			}
 		}
 	}
@@ -86,7 +86,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     nam a22     7a  4500" unless $result;
+	$result = "     nam a22     7a 4500" unless $result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
