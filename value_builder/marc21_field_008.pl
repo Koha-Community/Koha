@@ -33,19 +33,11 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 
 =cut
 # find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-                                                               localtime(time);
-$year = substr($year,1,2);
-$mon +=1;
-my $date = "$year-$mon-$mday";
-my $res  = "";
-if (length($mon)==1) {
-	$mon='0'.$mon;
-}
-if (length($mday)==1) {
-        $mday='0'.$mday;
-}
-my $dateentered = "$year$mon$mday";
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); 
+
+$year +=1900; $mon +=1;
+my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
+warn "DATE".$dateentered;
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
@@ -57,6 +49,13 @@ my $function_name= "100".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
+    for (i=0 ; i<document.f.field_value.length ; i++) {
+        if (document.f.tag[i].value == '008') {
+            if (!document.f.field_value[i].value) {
+                document.f.field_value[i].value = '$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
+            }
+        }
+    }
 return 1;
 }
 
@@ -94,7 +93,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 #	$result = "      t        xxu           00  0 eng d" unless $result;
-	$result = "      t        xxu||||| |||| 00| 0 eng d" unless $result;
+	$result = "$dateentered"."t        xxu||||| |||| 00| 0 eng d" unless $result;
+	my $f1 = substr($result,0,6);
 	my $f6 = substr($result,6,1);
 	my $f710 = substr($result,7,4);
 	my $f1114 = substr($result,11,4);
@@ -113,8 +113,12 @@ my ($template, $loggedinuser, $cookie)
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
 
+if (!$f1){
+	$f1=$dateentered
+}
+
 	$template->param(				index => $index,
-							dateentered => $dateentered,
+							f1 => $f1,
 							f6 => $f6,
 							"f6$f6" => $f6,
 							f710 => $f710,

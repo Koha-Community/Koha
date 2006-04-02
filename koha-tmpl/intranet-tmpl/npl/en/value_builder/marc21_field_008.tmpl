@@ -8,6 +8,7 @@
 	<tr>
 		<td>1-5 Date entered on file</td>
 		<td>(auto-filled)</td>
+		<td><input type="text" name="f1" maxlength=6 size=7 value="<!-- TMPL_VAR name="f1" -->"></td>
 	</tr>
 	<tr>
 		<!-- 06 Type of date / Publication status -->
@@ -607,7 +608,7 @@
 <script>
 function report() {
 		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
-			'<!-- TMPL_VAR NAME="dateentered" -->'+
+			document.f_pop.f1.value+
 			document.f_pop.f6.value+
 			document.f_pop.f710.value+
 			document.f_pop.f1114.value+
