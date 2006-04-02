@@ -64,9 +64,10 @@ system(
 );
 system(
     'cp',
-    $opt{head_dir}.'/C4/Amazon.pm',
+    $opt{head_dir}.'/C4/Log.pm',
     $opt{rel_2_2_dir}.'/C4/'
 );
+
 system(
     'cp',
     $opt{head_dir}.'/C4/Review.pm',
@@ -74,7 +75,7 @@ system(
 );
 system(
     'cp',
-    $opt{head_dir}.'/C4/Search.pm',
+    $opt{head_dir}.'/misc/plugin/Search.pm',
     $opt{rel_2_2_dir}.'/C4/'
 );
 
@@ -130,7 +131,7 @@ system(
     $opt{rel_2_2_dir}.'/koha-tmpl/intranet-tmpl/npl/en/cataloguing'
 );
 
-## Add the 'record.abs' symlink
+## Add the 'record.abs' symlink	
 system(
     'ln',
     '-s',
@@ -149,9 +150,8 @@ system(
 print "Finished\n\nRemember, you still need to:
 
 1. Edit moredetail.tmpl and detail.tmpl to allow for deletions
-2. symlink your Koha directory's intranet/zebra dir to the zebra dir
-   where the pqf file is
-3. add  <option value="biblio.title">Title</option> to the detail.tmpl
+
+2. add  <option value=''>Relevance</option> to the search
    pages to sort by relevance by default
 
 \n";
