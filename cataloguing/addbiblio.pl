@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
+use C4::Search;
 use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
 use C4::Context;
 use C4::Log;
@@ -367,6 +368,7 @@ my $error = $input->param('error');
 my $biblionumber=$input->param('biblionumber'); # if biblionumber exists, it's a modif, not a new biblio.
 if (!$biblionumber){
     $biblionumber=$input->param('oldbiblionumber');
+	warn "OLDBIBLIONUMBER".$biblionumber;
     }
 my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
@@ -411,7 +413,9 @@ $template->param( framework => $framework);
 $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;
 my $encoding="";
-$record = MARCgetbiblio($dbh,$biblionumber) if ($biblionumber);
+#$record = MARCgetbiblio($dbh,$biblionumber) if ($biblionumber);
+$record=get_record($biblionumber) if ($biblionumber);
+
 ($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
 
 $is_a_modif=0;
@@ -438,7 +442,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+    my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -446,7 +450,7 @@ if ($op eq "addbiblio") {
 	if (!$duplicatebiblionumber or $confirm_not_duplicate) {
 		# MARC::Record built => now, record in DB
 		if ($is_a_modif) {
-		warn "ITS A MODIF : .$biblionumber";
+		warn "CONFIRM ITS A MODIF : .$biblionumber";
 			NEWmodbiblioframework($dbh,$biblionumber,$frameworkcode);
 			NEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode);
 		} else {
@@ -462,6 +466,7 @@ if ($op eq "addbiblio") {
 		build_tabs ($template, $record, $dbh,$encoding);
 		build_hidden_data;
 		$template->param(
+			oldbiblionumber          => $biblionumber,
 			biblionumber             => $biblionumber,
 			biblionumtagfield        => $biblionumtagfield,
 			biblionumtagsubfield     => $biblionumtagsubfield,
@@ -490,6 +495,7 @@ if ($op eq "addbiblio") {
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
+		oldbiblionumber          => $biblionumber,
 		biblionumber             => $biblionumber,
 		biblionumtagfield        => $biblionumtagfield,
 		biblionumtagsubfield     => $biblionumtagsubfield,
@@ -522,6 +528,7 @@ if ($op eq "addbiblio") {
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
+	    oldbiblionumber			 => $biblionumber,
 		biblionumber             => $biblionumber,
 		biblionumtagfield        => $biblionumtagfield,
 		biblionumtagsubfield     => $biblionumtagsubfield,
