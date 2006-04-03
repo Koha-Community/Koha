@@ -20,7 +20,7 @@
 <!-- RESULT OF ISSUING REQUEST -->
 
 <!-- TMPL_IF NAME="IMPOSSIBLE" -->
-<fieldset>
+<fieldset id="circ_circulation_impossible">
   <legend>Error Issuing Item</legend>
 
   <ul>
@@ -64,7 +64,7 @@
 <!-- /TMPL_IF --> <!-- IMPOSSIBLE -->
   
 <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
-<fieldset>
+<fieldset id="circ_circulation_needsconfirmation">
   <legend>Please Confirm Issue</legend>
 
   <ul>
@@ -147,7 +147,7 @@
 
 <!-- TMPL_IF NAME="CGIselectborrower" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
-  <fieldset>
+  <fieldset id="circ_circulation_selectborrower">
     <legend>Borrower selection</legend>
   
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
@@ -169,7 +169,7 @@
 <!-- TMPL_ELSE --> <!-- CGIselectborrower -->
 
   <!-- TMPL_IF NAME="borrowernumber" -->
-<fieldset>
+<fieldset id="circ_circulation_borrower_informations">
   <legend>Borrower informations</legend>
 
   <h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
@@ -269,7 +269,7 @@
 
 <!-- No card entered yet -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
-  <fieldset>
+  <fieldset id="circ_circulation_borrower_search">
     <legend>Search a borrower</legend>
   
     <p>
@@ -289,7 +289,7 @@
 
 <!-- TMPL_IF NAME="borrowernumber" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
-  <fieldset>
+  <fieldset id="circ_circulation_issue">
     <legend>Issue an item</legend>
 
     <table>
@@ -303,60 +303,297 @@
         <td>
           <select name="day" id="day">
             <option value="0">Day</option>
-            <option value="1"<!-- TMPL_IF NAME="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
-            <option value="2"<!-- TMPL_IF NAME="day2" --> selected="selected"<!-- /TMPL_IF -->>2</option>
-            <option value="3"<!-- TMPL_IF NAME="day3" --> selected="selected"<!-- /TMPL_IF -->>3</option>
-            <option value="4"<!-- TMPL_IF NAME="day4" --> selected="selected"<!-- /TMPL_IF -->>4</option>
-            <option value="5"<!-- TMPL_IF NAME="day5" --> selected="selected"<!-- /TMPL_IF -->>5</option>
-            <option value="6"<!-- TMPL_IF NAME="day6" --> selected="selected"<!-- /TMPL_IF -->>6</option>
-            <option value="7"<!-- TMPL_IF NAME="day7" --> selected="selected"<!-- /TMPL_IF -->>7</option>
-            <option value="8"<!-- TMPL_IF NAME="day8" --> selected="selected"<!-- /TMPL_IF -->>8</option>
-            <option value="9"<!-- TMPL_IF NAME="day9" --> selected="selected"<!-- /TMPL_IF -->>9</option>
-            <option value="10"<!-- TMPL_IF NAME="day10" --> selected="selected"<!-- /TMPL_IF -->>10</option>
-            <option value="11"<!-- TMPL_IF NAME="day11" --> selected="selected"<!-- /TMPL_IF -->>11</option>
-            <option value="12"<!-- TMPL_IF NAME="day12" --> selected="selected"<!-- /TMPL_IF -->>12</option>
-            <option value="13"<!-- TMPL_IF NAME="day13" --> selected="selected"<!-- /TMPL_IF -->>13</option>
-            <option value="14"<!-- TMPL_IF NAME="day14" --> selected="selected"<!-- /TMPL_IF -->>14</option>
-            <option value="15"<!-- TMPL_IF NAME="day15" --> selected="selected"<!-- /TMPL_IF -->>15</option>
-            <option value="16"<!-- TMPL_IF NAME="day16" --> selected="selected"<!-- /TMPL_IF -->>16</option>
-            <option value="17"<!-- TMPL_IF NAME="day17" --> selected="selected"<!-- /TMPL_IF -->>17</option>
-            <option value="18"<!-- TMPL_IF NAME="day18" --> selected="selected"<!-- /TMPL_IF -->>18</option>
-            <option value="19"<!-- TMPL_IF NAME="day19" --> selected="selected"<!-- /TMPL_IF -->>19</option>
-            <option value="20"<!-- TMPL_IF NAME="day20" --> selected="selected"<!-- /TMPL_IF -->>20</option>
-            <option value="21"<!-- TMPL_IF NAME="day21" --> selected="selected"<!-- /TMPL_IF -->>21</option>
-            <option value="22"<!-- TMPL_IF NAME="day22" --> selected="selected"<!-- /TMPL_IF -->>22</option>
-            <option value="23"<!-- TMPL_IF NAME="day23" --> selected="selected"<!-- /TMPL_IF -->>23</option>
-            <option value="24"<!-- TMPL_IF NAME="day24" --> selected="selected"<!-- /TMPL_IF -->>24</option>
-            <option value="25"<!-- TMPL_IF NAME="day25" --> selected="selected"<!-- /TMPL_IF -->>25</option>
-            <option value="26"<!-- TMPL_IF NAME="day26" --> selected="selected"<!-- /TMPL_IF -->>26</option>
-            <option value="27"<!-- TMPL_IF NAME="day27" --> selected="selected"<!-- /TMPL_IF -->>27</option>
-            <option value="28"<!-- TMPL_IF NAME="day28" --> selected="selected"<!-- /TMPL_IF -->>28</option>
-            <option value="29"<!-- TMPL_IF NAME="day29" --> selected="selected"<!-- /TMPL_IF -->>29</option>
-            <option value="30"<!-- TMPL_IF NAME="day30" --> selected="selected"<!-- /TMPL_IF -->>30</option>
-            <option value="31"<!-- TMPL_IF NAME="day31" --> selected="selected"<!-- /TMPL_IF -->>31</option>
+  <!-- TMPL_IF NAME="day1" -->
+            <option value="1" selected="selected">1</option>
+  <!-- TMPL_ELSE -->
+            <option value="1">1</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day2" -->
+            <option value="2" selected="selected">2</option>
+  <!-- TMPL_ELSE -->
+            <option value="2">2</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day3" -->
+            <option value="3" selected="selected">3</option>
+  <!-- TMPL_ELSE -->
+            <option value="3">3</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day4" -->
+            <option value="4" selected="selected">4</option>
+  <!-- TMPL_ELSE -->
+            <option value="4">4</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day5" -->
+            <option value="5" selected="selected">5</option>
+  <!-- TMPL_ELSE -->
+            <option value="5">5</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day6" -->
+            <option value="6" selected="selected">6</option>
+  <!-- TMPL_ELSE -->
+            <option value="6">6</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day7" -->
+            <option value="7" selected="selected">7</option>
+  <!-- TMPL_ELSE -->
+            <option value="7">7</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day8" -->
+            <option value="8" selected="selected">8</option>
+  <!-- TMPL_ELSE -->
+            <option value="8">8</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day9" -->
+            <option value="9" selected="selected">9</option>
+  <!-- TMPL_ELSE -->
+            <option value="9">9</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day10" -->
+            <option value="10" selected="selected">10</option>
+  <!-- TMPL_ELSE -->
+            <option value="10">10</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day11" -->
+            <option value="11" selected="selected">11</option>
+  <!-- TMPL_ELSE -->
+            <option value="11">11</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day12" -->
+            <option value="12" selected="selected">12</option>
+  <!-- TMPL_ELSE -->
+            <option value="12">12</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day13" -->
+            <option value="13" selected="selected">13</option>
+  <!-- TMPL_ELSE -->
+            <option value="13">13</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day14" -->
+            <option value="14" selected="selected">14</option>
+  <!-- TMPL_ELSE -->
+            <option value="14">14</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day15" -->
+            <option value="15" selected="selected">15</option>
+  <!-- TMPL_ELSE -->
+            <option value="15">15</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day16" -->
+            <option value="16" selected="selected">16</option>
+  <!-- TMPL_ELSE -->
+            <option value="16">16</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day17" -->
+            <option value="17" selected="selected">17</option>
+  <!-- TMPL_ELSE -->
+            <option value="17">17</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day18" -->
+            <option value="18" selected="selected">18</option>
+  <!-- TMPL_ELSE -->
+            <option value="18">18</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day19" -->
+            <option value="19" selected="selected">19</option>
+  <!-- TMPL_ELSE -->
+            <option value="19">19</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day20" -->
+            <option value="20" selected="selected">20</option>
+  <!-- TMPL_ELSE -->
+            <option value="20">20</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day21" -->
+            <option value="21" selected="selected">21</option>
+  <!-- TMPL_ELSE -->
+            <option value="21">21</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day22" -->
+            <option value="22" selected="selected">22</option>
+  <!-- TMPL_ELSE -->
+            <option value="22">22</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day23" -->
+            <option value="23" selected="selected">23</option>
+  <!-- TMPL_ELSE -->
+            <option value="23">23</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day24" -->
+            <option value="24" selected="selected">24</option>
+  <!-- TMPL_ELSE -->
+            <option value="24">24</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day25" -->
+            <option value="25" selected="selected">25</option>
+  <!-- TMPL_ELSE -->
+            <option value="25">25</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day26" -->
+            <option value="26" selected="selected">26</option>
+  <!-- TMPL_ELSE -->
+            <option value="26">26</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day27" -->
+            <option value="27" selected="selected">27</option>
+  <!-- TMPL_ELSE -->
+            <option value="27">27</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day28" -->
+            <option value="28" selected="selected">28</option>
+  <!-- TMPL_ELSE -->
+            <option value="28">28</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day29" -->
+            <option value="29" selected="selected">29</option>
+  <!-- TMPL_ELSE -->
+            <option value="29">29</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day30" -->
+            <option value="30" selected="selected">30</option>
+  <!-- TMPL_ELSE -->
+            <option value="30">30</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="day31" -->
+            <option value="31" selected="selected">31</option>
+  <!-- TMPL_ELSE -->
+            <option value="31">31</option>
+  <!-- /TMPL_IF -->
           </select>
           <select name="month">
             <option value="0">Month</option>
-            <option value="1"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
-            <option value="2"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
-            <option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
-            <option value="4"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
-            <option value="5"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>May</option>
-            <option value="6"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
-            <option value="7"<!-- TMPL_IF NAME="month7" --> selected="selected"<!-- /TMPL_IF -->>Jul</option>
-            <option value="8"<!-- TMPL_IF NAME="month8" --> selected="selected"<!-- /TMPL_IF -->>Aug</option>
-            <option value="9"<!-- TMPL_IF NAME="month9" --> selected="selected"<!-- /TMPL_IF -->>Sep</option>
-            <option value="10"<!-- TMPL_IF NAME="month10" --> selected="selected"<!-- /TMPL_IF -->>Oct</option>
-            <option value="11"<!-- TMPL_IF NAME="month11" --> selected="selected"<!-- /TMPL_IF -->>Nov</option>
-            <option value="12"<!-- TMPL_IF NAME="month12" --> selected="selected"<!-- /TMPL_IF -->>Dec</option>
+  <!-- TMPL_IF NAME="month1" -->
+            <option value="1" selected="selected">Jan</option>
+  <!-- TMPL_ELSE -->
+            <option value="1">Jan</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month2" -->
+            <option value="2" selected="selected">Feb</option>
+  <!-- TMPL_ELSE -->
+            <option value="2">Feb</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month3" -->
+            <option value="3" selected="selected">Mar</option>
+  <!-- TMPL_ELSE -->
+            <option value="3">Mar</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month4" -->
+            <option value="4" selected="selected">Apr</option>
+  <!-- TMPL_ELSE -->
+            <option value="4">Apr</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month5" -->
+            <option value="5" selected="selected">May</option>
+  <!-- TMPL_ELSE -->
+            <option value="5">May</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month6" -->
+            <option value="6" selected="selected">Jun</option>
+  <!-- TMPL_ELSE -->
+            <option value="6">Jun</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month7" -->
+            <option value="7" selected="selected">Jul</option>
+  <!-- TMPL_ELSE -->
+            <option value="7">Jul</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month8" -->
+            <option value="8" selected="selected">Aug</option>
+  <!-- TMPL_ELSE -->
+            <option value="8">Aug</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month9" -->
+            <option value="9" selected="selected">Sep</option>
+  <!-- TMPL_ELSE -->
+            <option value="9">Sep</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month10" -->
+            <option value="10" selected="selected">Oct</option>
+  <!-- TMPL_ELSE -->
+            <option value="10">Oct</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month11" -->
+            <option value="11" selected="selected">Nov</option>
+  <!-- TMPL_ELSE -->
+            <option value="11">Nov</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="month12" -->
+            <option value="12" selected="selected">Dec</option>
+  <!-- TMPL_ELSE -->
+            <option value="12">Dec</option>
+  <!-- /TMPL_IF -->
           </select>
           <select name="year">
             <option value="0">Year</option>
-            <option value="2004"<!-- TMPL_IF NAME="year2004" --> selected="selected"<!-- /TMPL_IF -->>2004</option>
-            <option value="2005"<!-- TMPL_IF NAME="year2005" --> selected="selected"<!-- /TMPL_IF -->>2005</option>
-            <option value="2006"<!-- TMPL_IF NAME="year2006" --> selected="selected"<!-- /TMPL_IF -->>2006</option>
-            <option value="2007"<!-- TMPL_IF NAME="year2007" --> selected="selected"<!-- /TMPL_IF -->>2007</option>
-            <option value="2008"<!-- TMPL_IF NAME="year2008" --> selected="selected"<!-- /TMPL_IF -->>2008</option>
+  <!-- TMPL_IF NAME="year2004" -->
+            <option value="2004" selected="selected">2004</option>
+  <!-- TMPL_ELSE -->
+            <option value="2004">2004</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="year2005" -->
+            <option value="2005" selected="selected">2005</option>
+  <!-- TMPL_ELSE -->
+            <option value="2005">2005</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="year2006" -->
+            <option value="2006" selected="selected">2006</option>
+  <!-- TMPL_ELSE -->
+            <option value="2006">2006</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="year2007" -->
+            <option value="2007" selected="selected">2007</option>
+  <!-- TMPL_ELSE -->
+            <option value="2007">2007</option>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME="year2008" -->
+            <option value="2008" selected="selected">2008</option>
+  <!-- TMPL_ELSE -->
+            <option value="2008">2008</option>
+  <!-- /TMPL_IF -->
           </select>
         </td>
       </tr>
@@ -391,8 +628,8 @@
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <!-- TMPL_IF NAME="borrowernumber" -->
 <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
-  <fieldset>
-    <legend>Borrower existing issues</legend>
+  <fieldset id="circ_circulation_borrower_issues">
+    <legend>Borrower current issues</legend>
 
     <p>
       <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a>
@@ -414,6 +651,9 @@
       </tr>
     
   <!-- TMPL_IF NAME="todayissues" -->
+      <tr>
+        <th colspan="6"><a name="today" id="today">Today Issues</a></th>
+      </tr>
     <!-- TMPL_LOOP NAME="todayissues" -->
       <!-- TMPL_IF NAME="togglecolor" -->
       <tr>
@@ -430,11 +670,17 @@
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
           <input type="checkbox"
-                 name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->"
-                value="y"
+                 name="items[]"
+                value="<!-- TMPL_VAR NAME="itemnumber" -->"
       <!-- TMPL_IF NAME="od" -->
               checked="checked"
       <!-- /TMPL_IF -->
+          />
+          <input type="checkbox"
+                 name="all_items[]"
+                value="<!-- TMPL_VAR NAME="itemnumber" -->"
+              checked="checked"
+                style="display: none;"
           />
         </td>
       </tr>
@@ -484,6 +730,7 @@
         </td>
       </tr>
     <!-- /TMPL_LOOP --> <!-- previssues -->
+  <!-- /TMPL_IF --> <!-- previssues -->
     </table>
 
     <div id="action">
@@ -494,7 +741,6 @@
   </fieldset>
 </form>
 
-  <!-- /TMPL_IF --> <!-- previssues -->
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

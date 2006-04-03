@@ -27,17 +27,13 @@ use CGI;
 use C4::Circulation::Circ2;
 
 my $input = new CGI;
-my @names = $input->param();
 
 #
 # find items to renew, all items or a selection of items
 #
 
-# create a look-up table to check efficiently parameter availability
-my %is_param = map {$_ => 1} @names;
-
 my @data;
-if ($is_param{renew_all}) {
+if ($input->param('renew_all')) {
     @data = $input->param('all_items[]');
 }
 else {

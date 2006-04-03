@@ -154,7 +154,7 @@
 	<!-- /TMPL_IF -->
 
 <h2>Items On Loan</h2>
-<form action="renewscript.pl" method="post">
+<form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
 <table>
 	<tr>
@@ -184,24 +184,30 @@
 		<!-- TMPL_IF name="norenew" -->
 			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
 		<!-- TMPL_ELSE -->
-			<input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF name="red" -->checked="checked"<!-- /TMPL_IF --> />
+		  <input type="checkbox"
+                         name="items[]"
+                        value="<!-- TMPL_VAR NAME="itemnumber" -->"
+                  <!-- TMPL_IF NAME="red" -->
+                      checked="checked"
+                  <!-- /TMPL_IF -->
+		  />
+		  <input type="checkbox"
+		         name="all_items[]"
+		        value="<!-- TMPL_VAR NAME="itemnumber" -->"
+		      checked="checked"
+		        style="display: none;"
+		  />
 		<!-- /TMPL_IF -->
 		</td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
 	</tr>
 	<!-- /tmpl_loop -->
 	<tr><td colspan="3">Total Replacement Cost:</td><td><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="2">&nbsp;</td></tr>
-	</table><p><input type="submit" value="Renew Checked Items" /></p>
-</form>
-
-<form action="renewscript.pl" method="post">
-	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
-	<!-- TMPL_LOOP NAME="issueloop" -->
-		<!-- TMPL_UNLESS NAME="norenew" -->
-			<input type="hidden" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y" />
-		<!-- /TMPL_UNLESS -->
-	<!-- /TMPL_LOOP -->
-	<input type="submit" value="Renew All" />
+	</table>
+        <div id="action">
+          <input type="submit" name="renew_checked" value="Renew Checked Items" />
+          <input type="submit" name="renew_all" value="Renew All" />
+        </div>
 </form>
 
 <h2>Reserves</h2>
