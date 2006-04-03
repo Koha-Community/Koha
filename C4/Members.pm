@@ -414,7 +414,11 @@ sub fixup_cardnumber ($) {
 		
 			$cardnumber="V$cardnumber$rem";
 		} else {
-			my $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers");
+			# MODIFIED BY JF: mysql4.1 allows casting as an integer, which is probably
+            # better. I'll leave the original in in case it needs to be changed for you
+            my $sth=$dbh->prepare("select max(cast(cardnumber as signed)) from borrowers");
+            #my $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers");
+
 			$sth->execute;
 		
 			my ($result)=$sth->fetchrow;
