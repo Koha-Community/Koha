@@ -26,6 +26,8 @@ use C4::Search;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
+use Smart::Comments;
+
 use ZOOM;
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -1624,20 +1626,26 @@ sub REALmoditem {
         $error .= $sth->errstr;
     }
 	my ($rawmarc,$frameworkcode) = $sth->fetchrow;
-	warn "ERROR IN REALmoditem, MARC record not found" unless $rawmarc;
+#	warn "ERROR IN REALmoditem, MARC record not found" unless $rawmarc;
 #	my $record = MARC::File::USMARC::decode($rawmarc);
 	my $record=C4::Search::get_record($item->{biblionumber});
+####$record
 	# ok, we have the marc record, find the previous item record for this itemnumber and delete it
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
 	# prepare the new item record
 	my $itemrecord = MARC::File::USMARC::decode($item->{marc});
 	my $itemfield = $itemrecord->field($itemnumberfield);
-	$itemfield->add_subfields($itemnumbersubfield => '$itemnumber');
+
+#	$itemfield->add_subfields($itemnumbersubfield => '$itemnumber');
 	# parse all fields fields from the complete record
 	foreach ($record->field($itemnumberfield)) {
 		# when the previous field is found, replace by the new one
 		if ($_->subfield($itemnumbersubfield) == $item->{itemnum}) {
 			$_->replace_with($itemfield);
+		}
+	    else {
+		my $temptest = $_->subfield($itemnumbersubfield);
+		warn " failed itemnum is $item->{itemnum} and value in record is $temptest";
 		}
 	}
 # 	$record->insert_grouped_field($itemfield);
@@ -3021,6 +3029,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.168  2006/04/03 04:00:02  rangi
+# Modify item now works
+#
+# BUT only if there is only one item, if there is more than one item, it gets messed up.
+# They get combined into the form, ill work on this next
+#
 # Revision 1.167  2006/04/03 02:12:49  kados
 # some modifs to improve plugin support
 #

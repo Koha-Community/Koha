@@ -30,6 +30,7 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Search;
 use HTML::Template;
 use MARC::File::USMARC;
+use Smart::Comments;
 
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
@@ -55,6 +56,10 @@ if (!$biblionumber){
 }
 my $biblioitemnumber = find_biblioitemnumber($dbh,$biblionumber);
 my $itemnumber = $input->param('itemnumber');
+if (!$itemnumber){
+    $itemnumber=$input->param('itemnum');
+    }
+
 my $op = $input->param('op');
 
 # find itemtype
@@ -105,7 +110,7 @@ if ($op eq "additem") {
 } elsif ($op eq "edititem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	$itemrecord = MARCgetitem($dbh,$biblionumber,$itemnumber);
+	$itemrecord = get_record($biblionumber);
 	$nextop="saveitem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
@@ -128,7 +133,7 @@ if ($op eq "additem") {
         my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$biblionumber,$itemnumber,0);
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$itemrecord,$biblionumber,$itemnumber,0);
 	$itemnumber="";
 	$nextop="additem";
 }
@@ -149,7 +154,7 @@ my ($template, $loggedinuser, $cookie)
 my %indicators;
 $indicators{995}='  ';
 # now, build existiing item list
-my $temp = MARCgetbiblio($dbh,$biblionumber);
+my $temp = get_record($biblionumber);
 my @fields = $temp->fields();
 #my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
@@ -319,6 +324,7 @@ $template->param(item_loop => \@item_value_loop,
 						author => $oldrecord->{author},
 						item => \@loop_data,
 						itemnumber => $itemnumber,
+    						itemnum => $itemnumber,
 						itemtagfield => $itemtagfield,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
