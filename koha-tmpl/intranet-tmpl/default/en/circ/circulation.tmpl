@@ -36,6 +36,11 @@
 				</a>
 				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">edit</a>
 			<!--TMPL_IF Name="warndeparture"--><br /> Borrower will leave soon<br /><!--/TMPL_IF-->
+			<!-- TMPL_IF NAME="patronimages" -->
+				<div class="bloc25">
+					<img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="NO IMAGE" border="0" />
+				</div>
+			<!-- /TMPL_IF -->
 			</p>
 			<p>
 				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->

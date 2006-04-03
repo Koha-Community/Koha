@@ -160,7 +160,11 @@
 	<div class="bloc25">
 		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a>
 	</div>
-
+	<!-- TMPL_IF NAME="patronimages" -->
+		<div class="bloc25">
+			<img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="NO IMAGE" border="0" />
+		</div>
+	<!-- /TMPL_IF -->
 	<div class="bloc25">
 		<h2 class="members">Items currently on issue</h2>
 		<!-- TMPL_IF NAME="issueloop" -->
