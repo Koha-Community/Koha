@@ -13,99 +13,107 @@
 </head>
 
 <body>
-<div id="leftbloc">
-	<!-- TMPL_IF name="opaclargeimage" -->
-		<img class="relative" src="<!-- TMPL_VAR name="opaclargeimage"-->" title="koha" alt="koha" />
+<div id="title">
+	<!-- TMPL_IF name="opacsmallimage" -->
+		<img src="<!-- TMPL_VAR name="opacsmallimage"-->" title="koha" alt="koha" />
 	<!-- TMPL_ELSE -->
-		<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-small.gif" title="koha" alt="koha" />
 	<!-- /TMPL_IF -->
+	<div class="SmallLibraryName"><TMPL_VAR name="LibraryName"></div>
 </div>
-
-<div id="homebloc">
-	<h1 class="LibraryName"><TMPL_VAR name="LibraryName"></h1>
-	<h2>Search the catalogue</h2>
-	<form action="/cgi-bin/koha/opac-search.pl">
-		<p>
-			<input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="marclist" value="" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			Quick search : <input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
-		</p>
-		<p>
-			<a href="/cgi-bin/koha/opac-search.pl" class="button">Advanced Search, More Options	</a>
-		</p>
-	</form>
-
-	<h2>Recent acquisitions</h2>
-	<form action="/cgi-bin/koha/opac-search.pl">
-		<p>
-			<!-- TMPL_VAR name="CGIitemtype" --> 
-			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="=" />
-			<input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
-			acquired in the last
-			<input type="text" name="desc_or_asc" size="3" value="30" />
-			days
-			<input type="hidden" name="orderby" value="biblio.timestamp" />
-			<input type="submit" value="OK" class="button" />
-		</p>
-	</form>
-	<p>Search recent <a href="opac-recacquisitions.pl" class="button">acquisitions by branch</a></p>
-	<h2>Other options</h2>
-	<!-- TMPL_IF NAME="loggedinusername" -->
-		<p>
-			<!-- TMPL_IF name="virtualshelves" -->
-				<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="suggestion" -->
-				<a href="opac-suggestions.pl" class="button">Suggestions</a>
-			<!-- /TMPL_IF -->
-			<a href="/cgi-bin/koha/opac-user.pl" class="button">
-				My details
-			</a>
-			<!-- TMPL_IF name="opacreadinghistory" -->
-				<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
-			<!-- /TMPL_IF -->
-			<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
-				Log Out
-			</a>
-			<!-- TMPL_IF name="textmessaging"-->
-				<h2>Message from the library</h2>
-				<!-- TMPL_VAR name="textmessaging" -->
-			<!-- /TMPL_IF -->
-		</p>
-	<!-- TMPL_ELSE -->
-		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="opaclanguagesdisplay" -->
-		<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+<!-- TMPL_INCLUDE name="menus.inc" -->
+<div id="mainbloc">
+	<div id="bloc60">
+		<h2>Search the catalogue</h2>
+		<form action="/cgi-bin/koha/opac-search.pl">
 			<p>
-				<select name="language">
-					<TMPL_LOOP NAME="languages">
-						<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
-					</TMPL_LOOP>
-				</select>
-				<input type="submit" value="Change Language" class="button" />
+				<input type="hidden" name="op" value="do_search" />
+				<input type="hidden" name="type" value="opac" />
+				<input type="hidden" name="marclist" value="" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				Quick search : <input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
+			</p>
+			<p>
+				<a href="/cgi-bin/koha/opac-search.pl" class="button">Advanced Search, More Options	</a>
 			</p>
 		</form>
-	<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opaccredits" -->
-	<p class="copyright"><!-- TMPL_VAR NAME="opaccredits" --></p>
-<!-- TMPL_ELSE -->
-	<p class="copyright">
-		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards
-		<a href="http://validator.w3.org/check/referer">
-			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="16" width="44" />
-		</a>
-	</p>
-<!-- /TMPL_IF -->
+		<h2>Recent acquisitions</h2>
+		<form action="/cgi-bin/koha/opac-search.pl">
+			<p>
+				<select name="value">
+					<option value="">Any item type</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+								</option>
+						<!-- /TMPL_LOOP -->
+				</select>
+				<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />
+				<input type="hidden" name="op" value="do_search" />
+				<input type="hidden" name="type" value="opac" />
+				acquired in the last
+				<input type="text" name="desc_or_asc" size="3" value="30" />
+				days
+				<input type="hidden" name="orderby" value="biblio.timestamp" />
+				<input type="submit" value="OK" class="button" />
+			</p>
+		</form>
+		<p>Search recent <a href="opac-recacquisitions.pl" class="button">acquisitions by branch</a></p>
+		<h2>Other options</h2>
+		<!-- TMPL_IF NAME="loggedinusername" -->
+			<p>
+				<!-- TMPL_IF name="virtualshelves" -->
+					<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="suggestion" -->
+					<a href="opac-suggestions.pl" class="button">Suggestions</a>
+				<!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/opac-user.pl" class="button">
+					My details
+				</a>
+				<!-- TMPL_IF name="opacreadinghistory" -->
+					<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">My reading history</a>
+				<!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
+					Log Out
+				</a>
+				<!-- TMPL_IF name="textmessaging"-->
+					<h2>Message from the library</h2>
+					<!-- TMPL_VAR name="textmessaging" -->
+				<!-- /TMPL_IF -->
+			</p>
+		<!-- TMPL_ELSE -->
+			<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="opaclanguagesdisplay" -->
+			<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+				<p>
+					<select name="language">
+						<TMPL_LOOP NAME="languages">
+							<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+						</TMPL_LOOP>
+					</select>
+					<input type="submit" value="Change Language" class="button" />
+				</p>
+			</form>
+		<!-- /TMPL_IF -->
+	</div>
 </div>
-
+<div id="bottombloc">
+	<!-- TMPL_IF NAME="opaccredits" -->
+		<p class="copyright"><!-- TMPL_VAR NAME="opaccredits" --></p>
+	<!-- TMPL_ELSE -->
+		<p class="copyright">
+			This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards
+			<a href="http://validator.w3.org/check/referer">
+				<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="16" width="44" />
+			</a>
+		</p>
+	<!-- /TMPL_IF -->
+</div>
 </body>
 </html>

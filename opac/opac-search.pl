@@ -173,22 +173,17 @@ if ($op eq "do_search") {
 				});
 	
 	
-	$sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
+	my $query="Select itemtype,description from itemtypes order by description";
+	my $sth=$dbh->prepare($query);
 	$sth->execute;
-	my  @itemtype;
+	my  @itemtypeloop;
 	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "Any Document Type";
 	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
+		my %row =(	value => $value,
+					description => $lib,
+				);
+		push @itemtypeloop, \%row;
 	}
-	
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-				-values   => \@itemtype,
-				-labels   => \%itemtypes,
-				-size     => 1,
-				-multiple => 0 );
 	$sth->finish;
 
 	my @oldbranches;
@@ -225,7 +220,7 @@ if ($op eq "do_search") {
 	$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
 	$template->param(classlist => $classlist,
 					branchloop=>\@branchloop,
-					CGIitemtype => $CGIitemtype,
+					itemtypeloop => \@itemtypeloop,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),
