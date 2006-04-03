@@ -212,7 +212,33 @@ sub authoritysearch {
 			} else {
 			# construct MARC21 summary
 				foreach my $field ($record->field('1..')) {
-					$heading.= $field->as_string();
+					if ($record->field('100')) {
+						$heading.= $field->as_string('abcdefghjklmnopqrstvxyz68');
+					} elsif ($record->field('110')) {
+	                                        $heading.= $field->as_string('abcdefghklmnoprstvxyz68');
+					} elsif ($record->field('111')) {
+	                                        $heading.= $field->as_string('acdefghklnpqstvxyz68');
+					} elsif ($record->field('130')) {
+	                                        $heading.= $field->as_string('adfghklmnoprstvxyz68');
+					} elsif ($record->field('148')) {
+	                                        $heading.= $field->as_string('abvxyz68');
+					} elsif ($record->field('150')) {
+						$heading.= $field->as_string('abvxyz68');	
+					} elsif ($record->field('151')) {
+	                                        $heading.= $field->as_string('avxyz68');
+					} elsif ($record->field('155')) {
+	                                        $heading.= $field->as_string('abvxyz68');
+					} elsif ($record->field('180')) {
+	                                        $heading.= $field->as_string('vxyz68');
+					} elsif ($record->field('181')) {
+	                                        $heading.= $field->as_string('vxyz68');
+					} elsif ($record->field('182')) {
+	                                        $heading.= $field->as_string('vxyz68');
+					} elsif ($record->field('185')) {
+	                                        $heading.= $field->as_string('vxyz68');
+					} else {
+						$heading.= $field->as_string();
+					}
 				}
 				foreach my $field ($record->field('4..')) {
 					$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
@@ -1045,6 +1071,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.16  2006/04/03 12:52:50  tipaul
+# oups, sorry kados, I had removed something you wrote for MARC21 authorities...
+#
 # Revision 1.9.2.15  2006/03/30 14:20:03  tipaul
 # don't use + on a numeric value when you want to do a concat !!!
 #
