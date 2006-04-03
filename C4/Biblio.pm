@@ -473,7 +473,8 @@ sub MARCgetitem {
 	my $sth = $dbh->prepare("select marc from biblioitems where biblionumber=?");
 	$sth->execute($biblionumber);
 	my ($rawmarc) = $sth->fetchrow;
-	my $record = MARC::File::USMARC::decode($rawmarc);
+	my $record = C4::Search::get_record($biblionumber);
+	warn "ITEMRECORD".$record->as_formatted;
 	# now, find the relevant itemnumber
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
 	# prepare the new item record
@@ -481,11 +482,16 @@ sub MARCgetitem {
 	# parse all fields fields from the complete record
 	foreach ($record->field($itemnumberfield)) {
 		# when the item field is found, save it
+		warn "Itenumberfield = $itemnumberfield";
 		if ($_->subfield($itemnumbersubfield) == $itemnumber) {
+			warn "Inside if subfield=$itemnumbersubfield";
 			$itemrecord->append_fields($_);
+		} else {
+			warn "No match subfield=$itemnumbersubfield and
+			               itemnumber=$itemnumber";
 		}
 	}
-
+	warn "ITEMS".$itemrecord->as_formatted;
     return $itemrecord;
 }
 
@@ -1619,7 +1625,8 @@ sub REALmoditem {
     }
 	my ($rawmarc,$frameworkcode) = $sth->fetchrow;
 	warn "ERROR IN REALmoditem, MARC record not found" unless $rawmarc;
-	my $record = MARC::File::USMARC::decode($rawmarc);
+#	my $record = MARC::File::USMARC::decode($rawmarc);
+	my $record=C4::Search::get_record($item->{biblionumber});
 	# ok, we have the marc record, find the previous item record for this itemnumber and delete it
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
 	# prepare the new item record
@@ -3014,6 +3021,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.167  2006/04/03 02:12:49  kados
+# some modifs to improve plugin support
+#
 # Revision 1.166  2006/04/01 22:10:50  rangi
 # Fixing the problem that all items were getting biblioitem=1 set
 #
