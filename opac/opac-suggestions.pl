@@ -28,24 +28,21 @@ my ($template, $borrowernumber, $cookie);
 my $dbh = C4::Context->dbh;
 
 if (C4::Context->preference("AnonSuggestions")) {
-
-($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-suggestions.tmpl",
-                                        query => $input,
-                                        type => "opac",
-                                        authnotrequired => 1,
-                         });
+	($template, $borrowernumber, $cookie)
+		= get_template_and_user({template_name => "opac-suggestions.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
+							});
 if (!$borrowernumber) {
 	$borrowernumber = C4::Context->preference("AnonSuggestions");
 }
-
 } else {
-
-($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-suggestions.tmpl",
-					query => $input,
-                                        type => "opac",
-                                        authnotrequired => 1,
+	($template, $borrowernumber, $cookie)
+		= get_template_and_user({template_name => "opac-suggestions.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
 			 });
 }
 
