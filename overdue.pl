@@ -34,7 +34,7 @@ my $order=$input->param('order');
 my $bornamefilter=$input->param('borname');
 my $borcatfilter=$input->param('borcat');
 my $itemtypefilter=$input->param('itemtype');
-my $borflagsfilter=$input->param('borflags');
+my $borflagsfilter=$input->param('borflags') || " ";
 my $branchfilter=$input->param('branch');
 my $showall=$input->param('showall');
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
@@ -121,9 +121,13 @@ my $dbh = C4::Context->dbh;
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
-my $strsth="select date_due,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues, borrowers,items,biblioitems, biblio where isnull(returndate) ";
+my $strsth="select date_due,concat(surname,' ', firstname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues
+LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber 
+LEFT JOIN items ON issues.itemnumber=items.itemnumber
+LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
+LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber 
+where isnull(returndate) ";
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
-$strsth.= " && issues.borrowernumber=borrowers.borrowernumber && issues.itemnumber=items.itemnumber && biblioitems.biblioitemnumber=items.biblioitemnumber && biblio.biblionumber=items.biblionumber ";
 $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
 $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
 $strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
