@@ -1,37 +1,37 @@
 RELEASE NOTES
 =============
 
-Koha is the 1st Open-Source Integrated Library System.
-Released at first in New zealand, in 2000 januaray, it is maintained by a team of volunteers from around the globe, the Koha system is a full catalogue, opac, circulation and acquisitions system.
+Koha is the first Open-Source Integrated Library System.
+Released in New Zealand, in January 2000, it is maintained by a team of volunteers from around the globe. The Koha system is a full catalogue, opac, circulation and acquisitions system.
 
-Koha 2.2 is more than 247 000 lines of code, developped by more than 30 differents developpers (excluding translators).
+Koha 2.4 is more than 247 000 lines of code, developed by more than 30 differents developers (and even more translators).
 
-With the 2.2 version, Koha is now a mature product, with a lot of nice features. It's used in more than 100 libraries, from all kinds (public, schools, search, religious...), of all size (from 1 to 8 branches, from 1000 to 300 000 items).
+With the 2.4 version, Koha is now a mature product, with a lot of nice features. It's used in more than 100 libraries, of all kinds (public, schools, religious...), of different sizes (from 1 to 8 branches, from 1000 to 300 000 items).
 
 
 ========
 WARNINGS
 ========
-* The librarian interface is tested only with mozilla/firefox. Should work (partially) with IE. OPAC should work fine with any navigator.
-* The installer is *wrong* on languages available. In this release, french & english are uptodate. Other language po files are provided in the package. If you update/complete one of them, please send it at paul.poulain @ free.fr, it will be included in a 2.2.4b release !
+* The librarian interface is tested only with Mozilla/Firefox. Should work (partially) with IE. OPAC should work fine with any browser.
+* In this release, french & english are uptodate. Other language po files are provided in the package. If you update/complete one of them, please send it at paul.poulain @ free.fr, it will be included in a 2.2.4b release !
 * NEW PACKAGES REQUIRED : MARC::File::xml (0.82), MARC::Charset (0.95), Class::Accessor (0.22), LWP::Simple and XML::Simple
 
 
-KNOWN BUGS :
-******
+KNOWN BUGS
+**********
 Critical/blocking : none
 see bugs.koha.org for more information. Please report any problem in bugs.koha.org
 
-Apple users : it seems there is an annoying bug in firefox, that you can have in librarian biblio search : only the 1st MARC field list is available, the others can't be opened. The problem is related and fixed here : http://www.macfixit.com/article.php?story=20051226091140372
+Apple users : it seems there is an annoying bug in Firefox, that you can have in librarian biblio search: only the first MARC field list is available and the others can't be opened. The problem is described and fixed at http://www.macfixit.com/article.php?story=20051226091140372
 
 =======
-DIFFS
+CHANGES
 =======
-Diff 2.2.4 => 2.2.5
-*******************
+Changes 2.2.4 => 2.2.5
+**********************
 
-DB MODIFS :
-***********
+DB CHANGES
+**********
 
 DB structure : none
 DB content : none
@@ -67,51 +67,51 @@ BUGFIXES
 	
 IMPROVEMENTS
 This version has been labelled 2.4.0 as there are many many improvements. Almost nothing has changed in the DB, so the stability should be good. But you are warned that some/few bugs may occur.
-Please READ those release notes. Everything is previous versions, so, if you just install Koha, you should have the same behaviour as previously. But you will miss many interesting features !
+Please READ the release notes. Everything is compatible with previous versions, so, if you just install Koha, you should have the same behaviour as previously, but you will miss many interesting features!
 
 	=== ACQUISITION ===
 	* added a (crontab) script : check_suggestion.pl, that send a mail to the librarian when a suggestion is pending
 	* *MAJOR IMPROVEMENT* :
 		- online help has been added
-		- the order.pl page don't show basket closed since more than 6 months anymore.
-		- when recieving an order, you now see the list of existing parcels. The parcel code was, before this release, the " Supplier invoice information". Now when you go to the reciept page, you see all previous recieves, and can create a new parcel, exactly as before. This does not require any change in Koha internals, but we hope it's more clear than previously.
-		- when recieving an order in a parcel, you now see all orders still waiting for a receipt. Thus, you can enter isbn/title as previously, or directly clic on a title in the list.
-	We worked hard on those new acquisition screens, and hope that you'll find it more easy to use than previously.
+		- the order.pl page doesn't show baskets closed for more than 6 months anymore.
+		- when recieving an order, you now see the list of existing parcels. The parcel code used to be the "Supplier invoice information". Now when you go to the reciept page, you see all previous recieves, and can create a new parcel, exactly as before. This does not require any change in Koha internals, but we hope it's clearer than before.
+		- when recieving an order in a parcel, you now see all orders still waiting for a receipt. Thus, you can enter isbn/title as previously, or directly click on a title in the list.
+	We worked hard on those new acquisition screens, and hope that you'll find it easier to use than before.
 	=== AUTHORITIES ===
-	* if the library don't define a summary for an authority, a standard/default one will be builded automatically.
+	* if the library doesn't define a summary for an authority, a standard/default one will be built automatically.
 	=== CIRCULATION===
-	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
+	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for the overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
 
 	=== CATALOGUE ===
-	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The king Henry IV" to letter "K". This systempref is USELESS for UNIMARC (as UNIMARC don't manage non filling chars in an indicator as MARC21)
+	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The King Henry IV" to letter "K". This systempref is USELESS for UNIMARC (as UNIMARC doesn't manage non-filing chars in an indicator, unlike MARC21)
 	=== CATALOGUING ===
 	* added a (crontab) script : delete_authority.pl, that deletes all entries of an authority in a biblio.
-	* *MAJOR IMPROVEMENT* in MARC editors :
+	* *MAJOR IMPROVEMENT* in MARC editing :
 		- duplicating a field (+ on the tag) does not require a server call anymore : it's highly faster.
-		- duplicating a subfield is no more done through the pipe (|), but by clicking on the + facing the subfield
-		- the "hidden" property of the framework now have 19 possible values. Look in online help to see them. The immediate interesting value is -1 : the subfield is minimized on the MARC editor, you must click on it to expand it. Rarely used fields/subfields are easier to manage.
-		- a advancedMARCeditor systempref has been added. If set, tag/subfield values are not shown, except when putting the mouse on the tag/subfield. This systempref is only for "MARC addict" !
-	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 than in UNIMARC ! Note that plugins help you filling a tag/subfield in the MARC editor.
+		- duplicating a subfield is no longer done with a pipe (|), but by clicking on the + facing the subfield
+		- the "hidden" property of the framework now has 19 possible values. Look in the online help to see them. The immediate interesting value is -1, which means the subfield is minimized on the MARC editor and you must click on it to expand it. Rarely used fields/subfields are easier to manage.
+		- a advancedMARCeditor systempref has been added. If set, tag/subfield values are not shown, except when putting the mouse on the tag/subfield. This systempref is only for "MARC addicts"!
+	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 as in UNIMARC! Note that plugins help you filling a tag/subfield in the MARC editor.
 
 	=== MEMBERS ===
 	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages. The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
 	=== OPAC ===
-	Many preferences have been added to OPAC. Read them carefully, as you will be able to modify highly the look and behaviour of your OPAC !
+	Many preferences have been added to OPAC. Read them carefully, as you will be able to modify highly the look and behaviour of your OPAC!
 	* new default stylesheet for css (purple on white). A new stylesheet (contributed by liblime.com) has been added to show everybody the changes in OPAC. If you want to stay with the old one (dark/light green), just reach Koha >> Parameters >> Systempreferences >> OPAC >> opacstylesheet > modify > /opac-tmpl/default/opac_old.css
-	* Amazon content : if AmazonContent new systempref is set AND an AmazonDevKey/AmazoneDevTag (available on www.amazon.com) is entered in systempreferences AND XML::Simple package is installed, OPAC will show amazon cover pages when available. Note that this feature is not legal everywhere. For example, it seems it's not legal in France (you must ask each editor for permission)
-	* new systempref : opaccredit. If something (including html) is stored there, the footer of OPAC pages will contain what is there (instead of "Library powered by Koha..." that is on css default templates)
-	* new systempref : opacnav. In this preference, you can put any html that will be added to your menu. For example, to add a button to reach the koha website : <a class="menu" href="http://www.koha.org" title="Koha english website">Koha</a>
-	* authorities heading search : a new menu has been added : the user can search in authorities (same behaviour as in intranet)
+	* Amazon content : if the new AmazonContent systempref is set AND an AmazonDevKey/AmazoneDevTag (available on www.amazon.com) is entered in systempreferences AND XML::Simple package is installed, OPAC will show amazon cover pages when available. Note that this feature may not be legal everywhere. For example, it seems it may not be legal in France (you must ask each editor for permission)
+	* new systempref : opaccredit. If something (including html) is stored there, the footer of OPAC pages will contain what is there (instead of the "Library powered by Koha..." that is on css default templates)
+	* new systempref : opacnav. In this preference, you can put any html that will be added to your menu. For example, to add a button to reach the koha website : <a class="menu" href="http://www.koha.org" title="Koha world website">Koha</a>
+	* authorities heading search : a new menu has been added so the user can search in authorities (same behaviour as in intranet)
 	* new systempref : opaclanguagesdisplay. If set to "yes" (default value), the list of available language is shown. Otherwise, there is no list, koha will stay in default language only.
 	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
 	* Recent Acquisition : added a new page to filter recent acquisitions on a given branch.
 	* if you use npl templates, you can have an alternate stylesheet (to set it, go to librarian interface >> Parameters > Systempreferences > OPAC > opacstylesheet > modify > /opac-tmpl/npl/en/includes/opac.liblime.css)
 
 	=== REPORTS ===
-	* Inventory : you can now scan in a text file, on an unconnected laptop, every book in your library. Then, just upload the file in Koha. It will "mark as seen" all books. Once you've scanned everything in your library, just query for all books not seen since the beginning of the inventory, and you'll get "lost" books.
+	* Inventory : you can now scan in a text file, on an unconnected laptop, with every book in your library. Then, just upload the file in Koha. It will "mark as seen" all books. Once you've scanned everything in your library, just query for all books not seen since the beginning of the inventory, and you'll get "lost" books.
 	=== SERIALS ===
-	* MAJOR IMPROVEMENT : Adding item creation on the fly when recieving serial : if you activate systempref > Catalogue > serialsadditems, below the recieve of an serial, you'll have a form to create an item on the fly. The item contains the callnumber, the branch, the barcode and the location (where applicable). Go to the catalogue after setting a serial to "arrived", and you should see the item created. If you let serialsadditems to OFF, behaviour is unchanged.
-	* the last 5 arrived serials are shown when recieving serials.
+	* MAJOR IMPROVEMENT : Adding item creation on the fly when receiving serial : if you activate systempref > Catalogue > serialsadditems, you'll have a form to create an item on the fly at the end of the serial receipt form. The item contains the callnumber, the branch, the barcode and the location (where applicable). Go to the catalogue after setting a serial to "arrived", and you should see the item created. If you let serialsadditems to OFF, behaviour is unchanged from previous releases.
+	* the last 5 arrived serials are shown when receiving serials.
 	
 	=== SYSTEM PREFERENCES ===
 	
