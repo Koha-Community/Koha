@@ -32,26 +32,11 @@
 	<!-- MENUS -->
 	<div id="title">
 		<!-- TMPL_IF name="opacsmallimage" -->
-			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="65" alt="koha logo"/>
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" alt="koha logo"/>
 		<!-- TMPL_ELSE -->
-			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo"/>
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" alt="koha logo"/>
 		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
 	</div>
-	<div id="menuline">
-		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Home</a>
-		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Advanced search</a>
-		<!-- TMPL_IF NAME="loggedinusername" -->
-			<!-- TMPL_IF name="virtualshelves" -->
-				<a href="/cgi-bin/koha/opac-shelves.pl" class="menu">Virtual shelves</a>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="suggestion" -->
-				<a href="opac-suggestions.pl" class="menu">Suggestions</a>
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-		<a class="menu" href="/cgi-bin/koha/opac-authorities-home.pl">Authorities Headings Search</a>
-		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Personal page</a>
-		<a class="menu" href="javascript:openBasket()" title="Biblio basket">Biblio basket <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
-		<!-- TMPL_VAR name="opacnav" -->
-	</div>
+	<!-- TMPL_INCLUDE name="menus.inc" -->
 	<!-- MAIN BODY OF PAGE -->

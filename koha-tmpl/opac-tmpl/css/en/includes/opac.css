@@ -1,11 +1,18 @@
 /*
-	blue/green : # 009999
-	light-blue/green : #ACE6E6
-	orange : #FFB380
-	light orange : #FFD9BF
+	bleu : #3366CC;
+	jaune-vert : CCFF00;
+	vert : 99cc00
+	jaune : ffff99
+	orange : ffdd75
+	gris clair : efefef
+	bleu profond : 000066
+	jaune vert 2 : d3dfad
+	th : ccffcc
+	violet : 993366
 */
+
 body {
-	background-color:#006b6b;
+	background-color:white;
 	font-family:verdana,arial,helvetica,sans-serif;
 	font-size:12pt;
 	margin:0px;
@@ -14,10 +21,10 @@ body {
 
 /* base tags */
 a {
-	background-color: #FFD9BF;
-	text-decoration:none;
+	color: #993366;
+/* 	text-decoration:none; */
 /* 	padding:2px 2px; */
-	color:#000000;
+/* 	color:#000000; */
 }
 
 a.transparent {
@@ -27,7 +34,7 @@ a.transparent {
 }
 
 a:hover {
-	background-color: #FFB380;
+	color: #99cc00;
 }
 
 /* the page result number */
@@ -67,33 +74,29 @@ img {
 
 /* main title */
 h1 {
-	color:#FFD9BF;
-	background-color:#006b6b;
+	color:#000066;
 	font-weight:bold;
 	font-size: 150%;
-	text-align:center;
 	padding: 5px;
-	margin:0px 25% 10px 25%;
-	border: 1px solid black;
-	width:50%;
+/* 	margin:0px 25% 10px 25%; */
+/* 	border-bottom: 1px solid #000066; */
 }
 
 /* style for library name, on top of menu (defined in LibraryName systempref) */
 /* in opac-main page */
 .LibraryName {
-	color:#000000;
-	background-color:#FFD9BF;
+	color:#000066;
 	font-weight:bold;
 	font-size: 150%;
-	text-align:center;
+	text-align:left;
 	padding: 2px;
-	border: 1px solid #000000;
 	width:75%;
+	border-bottom:0px;
 }
 
 /* in all other pages */
 .SmallLibraryName {
-	color:#FFD9BF;
+	color:#000066;
 	background-color:transparent;
 	font-weight:bold;
 	font-size: 115%;
@@ -104,8 +107,7 @@ h1 {
 
 /* subtitles. headers of blocks */
 h2 {
-	color:#000000;
-	background-color:#009999;
+	color:#000066;
 	font-weight:bold;
 	font-size: 125%;
 	width:100%;
@@ -148,12 +150,12 @@ p.copyright {
 table {
 	border:1px solid #000000;
 	border-collapse:collapse;
-	width:80%;
+	width:100%;
 	position:static;
 }
 /* header */
 th {
-	background-color: #99cccc;
+	background-color: #ccffcc;
 	font-weight:bold;
 	text-align:center;
 	font-size:10pt;
@@ -180,7 +182,7 @@ td {
 tr.hilighted td, td.hilighted {
 	font-size:10pt;
 	border-left:1px solid #000000;
-	background-color:#ffffcc;
+	background-color:#efefef;
 	vertical-align:top;
 }
 
@@ -189,25 +191,25 @@ tr.hilighted td, td.hilighted {
 .button {
 	text-align: center;
 	padding: 2px 2px;
-	border-bottom:1px solid #FFB380;
-	border-left: 3px solid #FFB380;
 	text-decoration: none;
 	color: black;
 	line-height:175%;
-	background-color:#FFD9BF;
+	background-color:#993366;
+	color : #FEEDDB;
 	margin : 3px 3px 3px 0px;
+	border-style: outset;
 }
 
 .button:hover {
 	text-align: center;
 	padding: 2px 2px;
-	border-bottom:1px solid #FFB380;
-	border-left: 3px solid #FFB380;
 	text-decoration: none;
 	color: black;
 	line-height:175%;
-	background-color:#FFB380;
+	background-color:#993366;
+	color : #FEEDDB;
 	margin : 3px 3px 3px 0px;
+	border-style: outset;
 }
 
 /* standard input field */
@@ -280,19 +282,18 @@ select {
 	padding-top:10px;
 	padding-right:10px;
 	width:80%; 
-	background:#e7ebec;
 }
 
 #homebloc {
-	float:right;
-	width:65%;
+	float:left;
+/* 	width:%; */
 	margin-right:10px;
+	margin-left:0px;
 	border:0;
 }
 
 #leftbloc {
 	float:left;
-	width:30%;
 	border:0;
 }
 
@@ -308,16 +309,18 @@ select {
 /* used in members */
 #bloc20, .bloc20 {
 	float:left;
-	border:1px solid #000000;
-	padding-bottom:10px;
+	border:0px;
+	padding:10px;
 	margin-bottom:10px;
 	margin-left:10px;
+	background:#efefef;
 }
 #bloc60, .bloc60 {
 	float:left;
-	border:1px solid #000000;
-	padding-bottom:10px;
+	border:0px;
+	padding:30px;
 	margin-bottom:10px;
+	background:#efefef;
 }
 
 /* used in biblio detail */
@@ -339,6 +342,7 @@ select {
 
 #title {
 	display:block;
+	width:100%;
 	margin-left:0px;
 	padding-left:0px;
 	padding-top:0px;
@@ -351,16 +355,19 @@ select {
 	padding-bottom:10px;
 	padding-top:10px;
 	font-weight:bold;
-	font-size:12px;
-	color:black;
-	border-bottom:1px solid black;
+	font-size:14px;
+	color:white;
+	font-family:serif;
+	border-bottom:1px solid #99cc00;
 	text-decoration:none;
-	background:#e7ebec;
+	background:#993366;
 }
 
 #menuline {
 	display:block;
 	float:left;
+	position:absolute;
+	left:0px;
 	padding-right:0px;
 	padding-left:0px;
 	padding-bottom:0px;
