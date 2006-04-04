@@ -126,10 +126,16 @@
 	</div>
 </div>
 <!--TMPL_ELSE-->
-<a href="recieveorder.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition"> Receive Parcel </a>
-<a href="order.pl?supplier=<!--TMPL_VAR Name="name"-->" class="button acquisition"> Manage Orders </a>
-<a href="supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition"> Edit Supplier </a>
 	<h1 class="acquisition">Information for : <!-- TMPL_VAR NAME="name" --></h1>
+	<a href="supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition">
+		Edit Supplier
+	</a>
+	<a href="order.pl?supplier=<!--TMPL_VAR Name="name"-->" class="button acquisition">
+		Manage Orders
+	</a>
+	<a href="recieveorder.pl?supplierid=<!--TMPL_VAR Name="id"-->" class="button acquisition"> 
+		Receive Parcel
+	</a>
 	<div id="bloc25">
 		<h2 class="acquisition">COMPANY DETAILS</h2>
 		<p>

@@ -90,7 +90,7 @@ function check(f) {
 		<!-- TMPL_IF name="ordnum" -->
 			Modify order details (line #<!-- TMPL_VAR NAME="ordnum" -->)
 		<!-- TMPL_ELSE -->
-			New order
+			New order line
 		<!-- /TMPL_IF -->
 		 <!-- TMPL_IF name="suggestionid" -->(defined from suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
 	</h1>
@@ -205,7 +205,7 @@ function check(f) {
 			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
-			<label class="label100">Invoice Number *</label>
+			<label class="label100"><i>Parcel code</i></label>
 			<input type="text" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->">
 		<p>
 			<label class="label100">Notes</label>
