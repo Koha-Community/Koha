@@ -49,7 +49,7 @@ $template->param(
 	lateissues => \@lateissues,
 	phone => $supplierinfo[0]->{phone},
 	booksellerfax => $supplierinfo[0]->{booksellerfax},
-	bookselleremail => $supplierinfo[0]->{bookselleremail},
+	contemail => $supplierinfo[0]->{contemail},
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
