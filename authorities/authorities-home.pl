@@ -38,11 +38,8 @@ my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $dbh = C4::Context->dbh;
 
-my $startfrom=$query->param('startfrom');
 my $authid=$query->param('authid');
-$startfrom=0 if(!defined $startfrom);
 my ($template, $loggedinuser, $cookie);
-my $resultsperpage;
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
@@ -62,85 +59,90 @@ if ($op eq "do_search") {
 	my @operator = $query->param('operator');
 	my @value = $query->param('value');
 
-	$resultsperpage= $query->param('resultsperpage');
-	$resultsperpage = 19 if(!defined $resultsperpage);
-	my @tags;
-	my ($results,$total) = authoritysearch($dbh, \@marclist,\@and_or,
-										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "authorities/searchresultlist.tmpl",
-				query => $query,
-				type => 'intranet',
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
+    my $startfrom = $query->param('startfrom') || 1;
+    my $resultsperpage = $query->param('resultsperpage') || 19;
 
-	# multi page display gestion
-	my $displaynext=0;
-	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
-		$displaynext = 1;
-	}
+	my ($results,$total) = authoritysearch(
+        $dbh,
+        \@marclist,
+        \@and_or,
+        \@excluding,
+        \@operator,
+        \@value,
+        ($startfrom - 1)*$resultsperpage,
+        $resultsperpage,
+        $authtypecode
+    );
+
+	($template, $loggedinuser, $cookie)
+		= get_template_and_user({
+            template_name => "authorities/searchresultlist.tmpl",
+            query => $query,
+            type => 'intranet',
+            authnotrequired => 0,
+            flagsrequired => {borrowers => 1},
+            flagsrequired => {catalogue => 1},
+            debug => 1,
+        });
 
 	my @field_data = ();
 
-	# we must get parameters once again. Because if there is a mainentry, it has been replaced by something else during the search, thus the links next/previous would not work anymore 
+	# we must get parameters once again. Because if there is a mainentry, it
+	# has been replaced by something else during the search, thus the links
+	# next/previous would not work anymore
 	my @marclist_ini = $query->param('marclist');
 	for(my $i = 0 ; $i <= $#marclist ; $i++)
 	{
-		push @field_data, { term => "marclist", val=>$marclist_ini[$i] };
-		push @field_data, { term => "and_or", val=>$and_or[$i] };
-		push @field_data, { term => "excluding", val=>$excluding[$i] };
-		push @field_data, { term => "operator", val=>$operator[$i] };
-		push @field_data, { term => "value", val=>$value[$i] };
+		push @field_data, { term => "marclist"  , val=>$marclist_ini[$i] };
+		push @field_data, { term => "and_or"    , val=>$and_or[$i] };
+		push @field_data, { term => "excluding" , val=>$excluding[$i] };
+		push @field_data, { term => "operator"  , val=>$operator[$i] };
+		push @field_data, { term => "value"     , val=>$value[$i] };
 	}
 
-	my @numbers = ();
+    # construction of the url of each page
+    my $base_url =
+        'authorities-home.pl?'
+        .join(
+            '&amp;',
+            map { $_->{term}.'='.$_->{val} } @field_data
+        )
+        .'&amp;'
+        .join(
+            '&amp;',
+            map { $_->{term}.'='.$_->{val} } (
+                {term => 'resultsperpage', val => $resultsperpage},
+                {term => 'type'          , val => 'intranet'},
+                {term => 'op'            , val => 'do_search'},
+                {term => 'authtypecode'  , val => $authtypecode}
+            )
+        )
+        ;
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
-	    		my $highlight=0;
-	    		($startfrom==($i-1)) && ($highlight=1);
-	    		push @numbers, { number => $i,
-					highlight => $highlight ,
-					searchdata=> \@field_data,
-					startfrom => ($i-1)};
-			}
-    	}
-	}
-
-	my $from = $startfrom*$resultsperpage+1;
+	my $from = ($startfrom - 1) * $resultsperpage + 1;
 	my $to;
 
- 	if($total < (($startfrom+1)*$resultsperpage))
-	{
+ 	if ($total < $startfrom * $resultsperpage) {
 		$to = $total;
-	} else {
-		$to = (($startfrom+1)*$resultsperpage);
 	}
+    else {
+		$to = $startfrom * $resultsperpage;
+	}
+
 	$template->param(result => $results) if $results;
+
 	$template->param(
-							startfrom=> $startfrom,
-							displaynext=> $displaynext,
-							displayprev=> $displayprev,
-							resultsperpage => $resultsperpage,
-							startfromnext => $startfrom+1,
-							startfromprev => $startfrom-1,
-							searchdata=>\@field_data,
-							total=>$total,
-							from=>$from,
-							to=>$to,
-							numbers=>\@numbers,
-							authtypecode=>$authtypecode,
-							isEDITORS => $authtypecode eq 'EDITORS',
-							);
+        pagination_bar => pagination_bar(
+            $base_url,
+            int($total/$resultsperpage)+1,
+            $startfrom,
+            'startfrom'
+            ),
+        total=>$total,
+        from=>$from,
+        to=>$to,
+        isEDITORS => $authtypecode eq 'EDITORS',
+    );
 
 } elsif ($op eq "delete") {
 

@@ -51,7 +51,7 @@ C4::Output - Functions for managing templates
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&themelanguage &gettemplate setlanguagecookie
+		&themelanguage &gettemplate setlanguagecookie pagination_bar
 		);
 
 #FIXME: this is a quick fix to stop rc1 installing broken
@@ -146,6 +146,7 @@ sub themelanguage {
   }
 }
 
+
 sub setlanguagecookie {
    my ($query,$language,$uri)=@_;
    my $cookie=$query->cookie(-name => 'KohaOpacLanguage',
@@ -154,6 +155,144 @@ sub setlanguagecookie {
    print $query->redirect(-uri=>$uri,
    -cookie=>$cookie);
 }				   
+
+=item pagination_bar
+
+   pagination_bar($base_url, $nb_pages, $current_page, $startfrom_name)
+
+Build an HTML pagination bar based on the number of page to display, the
+current page and the url to give to each page link.
+
+C<$base_url> is the URL for each page link. The
+C<$startfrom_name>=page_number is added at the end of the each URL.
+
+C<$nb_pages> is the total number of pages available.
+
+C<$current_page> is the current page number. This page number won't become a
+link.
+
+This function returns HTML, without any language dependency.
+
+=cut
+
+sub pagination_bar {
+    my ($base_url, $nb_pages, $current_page, $startfrom_name) = @_;
+
+    # how many pages to show before and after the current page?
+    my $pages_around = 2;
+
+    my $url =
+        $base_url
+        .($base_url =~ m/&/ ? '&amp;' : '?')
+        .$startfrom_name.'='
+        ;
+
+    my $pagination_bar = '';
+
+    # current page detection
+    if (not defined $current_page) {
+        $current_page = 1;
+    }
+
+    # navigation bar useful only if more than one page to display !
+    if ($nb_pages > 1) {
+        # link to first page?
+        if ($current_page > 1) {
+            $pagination_bar.=
+                "\n".'&nbsp;'
+                .'<a href="'.$url.'1" rel="start">'
+                .'&lt;&lt;'
+                .'</a>'
+                ;
+        }
+        else {
+            $pagination_bar.=
+                "\n".'&nbsp;<span class="inactive">&lt;&lt;</span>';
+        }
+
+        # link on previous page ?
+        if ($current_page > 1) {
+            my $previous = $current_page - 1;
+
+            $pagination_bar.=
+                "\n".'&nbsp;'
+                .'<a href="'
+                .$url.$previous
+                .'" rel="prev">'
+                .'&lt;'
+                .'</a>'
+                ;
+        }
+        else {
+            $pagination_bar.=
+                "\n".'&nbsp;<span class="inactive">&lt;</span>';
+        }
+
+        my $min_to_display = $current_page - $pages_around;
+        my $max_to_display = $current_page + $pages_around;
+        my $last_displayed_page = undef;
+
+        for my $page_number (1..$nb_pages) {
+            if ($page_number == 1
+                or $page_number == $nb_pages
+                or ($page_number >= $min_to_display and $page_number <= $max_to_display)
+            ) {
+                if (defined $last_displayed_page
+                    and $last_displayed_page != $page_number - 1
+                ) {
+                    $pagination_bar.=
+                        "\n".'&nbsp;<span class="inactive">...</span>'
+                        ;
+                }
+
+                if ($page_number == $current_page) {
+                    $pagination_bar.=
+                        "\n".'&nbsp;'
+                        .'<span class="currentPage">'.$page_number.'</span>'
+                        ;
+                }
+                else {
+                    $pagination_bar.=
+                        "\n".'&nbsp;'
+                        .'<a href="'.$url.$page_number.'">'.$page_number.'</a>'
+                        ;
+                }
+                $last_displayed_page = $page_number;
+            }
+        }
+
+        # link on next page?
+        if ($current_page < $nb_pages) {
+            my $next = $current_page + 1;
+
+            $pagination_bar.=
+                "\n".'&nbsp;<a href="'.$url.$next.'" rel="next">'
+                .'&gt;'
+                .'</a>'
+                ;
+        }
+        else {
+            $pagination_bar.=
+                "\n".'&nbsp;<span class="inactive">&gt;</span>'
+                ;
+        }
+
+        # link to last page?
+        if ($current_page != $nb_pages) {
+            $pagination_bar.=
+                "\n".'&nbsp;<a href="'.$url.$nb_pages.'" rel="last">'
+                .'&gt;&gt;'
+                .'</a>'
+                ;
+        }
+        else {
+            $pagination_bar.=
+                "\n".'&nbsp;<span class="inactive">&gt;&gt;</span>';
+        }
+    }
+
+    return $pagination_bar;
+}
 
 
 END { }       # module clean-up code here (global destructor)
