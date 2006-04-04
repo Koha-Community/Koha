@@ -23,7 +23,6 @@ use C4::Context;
 use C4::Date;
 use MARC::Record;
 use C4::Suggestions;
-use Smart::Comments;
 # use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -407,8 +406,7 @@ from aqorders
 left join aqbasket on aqbasket.basketno=aqorders.basketno 
 left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
 where booksellerid=? and (quantity > quantityreceived or
-quantityreceived is NULL) and datecancellationprinted is NULL ";
-		
+quantityreceived is NULL) and datecancellationprinted is NULL and (to_days(now())-to_days(closedate) < 180 or closedate is null)";
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
 		if (($userenv)&&($userenv->{flags} != 1)){
@@ -541,8 +539,8 @@ sub getparcelinformation {
   my ($supplierid,$code, $datereceived)=@_;
   my $dbh = C4::Context->dbh;
   my @results = ();
-  
-	my $strsth ="Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code%\" and aqorders.datereceived= \'$datereceived\'";
+  $code .='%' if $code; # add % if we search on a given code (otherwise, let him empty)
+	my $strsth ="Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code\" and aqorders.datereceived= \'$datereceived\'";
 		
 	if (C4::Context->preference("IndependantBranches")) {
 		my $userenv = C4::Context->userenv;
