@@ -109,7 +109,6 @@ if (C4::Context->preference("serialsadditems")){
 		my %row =(itemval => $thisitemstatus,
 					itemlib => $itemstatushash->{$thisitemstatus},
 				);
-		warn "".$row{'itemval'}.", ". $row{"itemlib"};
 		push @itemstatusloop, \%row;
 	}
 	
