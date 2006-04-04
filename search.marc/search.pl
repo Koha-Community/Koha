@@ -213,7 +213,6 @@ if ($op eq "do_search") {
 							);
 
 } elsif ($op eq "AddStatement") {
-
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/search.tmpl",
 				query => $query,

@@ -140,7 +140,6 @@ if ($op eq "do_search") {
 							authtypecode=>$authtypecode,
 							isEDITORS => $authtypecode eq 'EDITORS',
 							);
-
 }
 else {
 	($template, $loggedinuser, $cookie)
