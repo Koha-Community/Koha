@@ -28,13 +28,13 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
+use C4::Date;
 use HTML::Template;
 use C4::Acquisition;
-use Smart::Comments;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
-my $order=$input->param('orderby');
+my $order=$input->param('orderby') || "datereceived desc";
 my $startfrom=$input->param('startfrom');
 my $code=$input->param('filter');
 my $datefrom=$input->param('datefrom');
@@ -97,6 +97,7 @@ if ($count>$resultsperpage){
 }
 my @loopres;
 
+my $hilighted=0;
 for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$resultsperpage-1:$count-1);$i++){
 ### startfrom: $startfrom
 ### resultsperpage: $resultsperpage
@@ -109,10 +110,13 @@ for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$res
 	$cell{code}=$results[$i]->{booksellerinvoicenumber};
 	$cell{nullcode}=$results[$i]->{booksellerinvoicenumber} eq "NULL";
 	$cell{emptycode}=$results[$i]->{booksellerinvoicenumber} eq '';
-	$cell{datereceived}=$results[$i]->{datereceived};
+	$cell{raw_datereceived}=$results[$i]->{datereceived};
+	$cell{datereceived}=format_date($results[$i]->{datereceived});
 	$cell{bibcount}=$results[$i]->{biblio};
 	$cell{reccount}=$results[$i]->{itemsreceived};
 	$cell{itemcount}=$results[$i]->{itemsexpected};
+	$cell{hilighted} = $hilighted%2;
+	$hilighted++;
 	push @loopres, \%cell;
 }
 $template->param(searchresults=>\@loopres, count=>$count) if ($count);
