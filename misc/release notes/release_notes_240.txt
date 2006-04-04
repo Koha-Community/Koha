@@ -46,6 +46,7 @@ BUGFIXES
 	* no more saving of an empty field in the DB
 	* Fix for splitting up fixed fields containing | in them causing
 	incorrect storage of fixed fields in Koha DB.
+	* An item that is on loan can't be deleted anymore.
 	=== AUTHORITIES ===
 
 	=== SERIALS ===
@@ -65,9 +66,12 @@ BUGFIXES
 	=== OPAC ===
 	
 IMPROVEMENTS
+This version has been labelled 2.4.0 as there are many many improvements. Almost nothing has changed in the DB, so the stability should be good. But you are warned that some/few bugs may occur.
+Please READ those release notes. Everything is previous versions, so, if you just install Koha, you should have the same behaviour as previously. But you will miss many interesting features !
+
 	=== ACQUISITION ===
 	* added a (crontab) script : check_suggestion.pl, that send a mail to the librarian when a suggestion is pending
-	* Many improvement in acquisition :
+	* *MAJOR IMPROVEMENT* :
 		- online help has been added
 		- the order.pl page don't show basket closed since more than 6 months anymore.
 		- when recieving an order, you now see the list of existing parcels. The parcel code was, before this release, the " Supplier invoice information". Now when you go to the reciept page, you see all previous recieves, and can create a new parcel, exactly as before. This does not require any change in Koha internals, but we hope it's more clear than previously.
@@ -79,27 +83,35 @@ IMPROVEMENTS
 	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
 
 	=== CATALOGUE ===
-	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The king Henry IV" to letter "K".
+	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The king Henry IV" to letter "K". This systempref is USELESS for UNIMARC (as UNIMARC don't manage non filling chars in an indicator as MARC21)
 	=== CATALOGUING ===
 	* added a (crontab) script : delete_authority.pl, that deletes all entries of an authority in a biblio.
+	* *MAJOR IMPROVEMENT* in MARC editors :
+		- duplicating a field (+ on the tag) does not require a server call anymore : it's highly faster.
+		- duplicating a subfield is no more done through the pipe (|), but by clicking on the + facing the subfield
+		- the "hidden" property of the framework now have 19 possible values. Look in online help to see them. The immediate interesting value is -1 : the subfield is minimized on the MARC editor, you must click on it to expand it. Rarely used fields/subfields are easier to manage.
+		- a advancedMARCeditor systempref has been added. If set, tag/subfield values are not shown, except when putting the mouse on the tag/subfield. This systempref is only for "MARC addict" !
 	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 than in UNIMARC ! Note that plugins help you filling a tag/subfield in the MARC editor.
 
 	=== MEMBERS ===
-	
+	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages. The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
 	=== OPAC ===
-	* Amazon content : if AmazonContent new systempref is set AND an AmazonDevKey/AmazoneDevTag is entered in systempreferences AND XML::Simple package is installed, OPAC will show amazon cover pages when available.
-	* Recent Acquisition : added a new page to filter recent acquisitions on a given branch.
-	* if you use npl templates, you can have an alternate stylesheet (to set it, go to librarian interface >> Parameters > Systempreferences > OPAC > opacstylesheet > modify > /opac-tmpl/npl/en/includes/opac.liblime.css)
+	Many preferences have been added to OPAC. Read them carefully, as you will be able to modify highly the look and behaviour of your OPAC !
+	* new default stylesheet for css (purple on white). A new stylesheet (contributed by liblime.com) has been added to show everybody the changes in OPAC. If you want to stay with the old one (dark/light green), just reach Koha >> Parameters >> Systempreferences >> OPAC >> opacstylesheet > modify > /opac-tmpl/default/opac_old.css
+	* Amazon content : if AmazonContent new systempref is set AND an AmazonDevKey/AmazoneDevTag (available on www.amazon.com) is entered in systempreferences AND XML::Simple package is installed, OPAC will show amazon cover pages when available. Note that this feature is not legal everywhere. For example, it seems it's not legal in France (you must ask each editor for permission)
 	* new systempref : opaccredit. If something (including html) is stored there, the footer of OPAC pages will contain what is there (instead of "Library powered by Koha..." that is on css default templates)
-	* new systempref : opaclanguagesdisplay. If set to "yes" (default value), the list of available language is shown. Otherwise, there is no list, koha will stay in default language only.
-	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
 	* new systempref : opacnav. In this preference, you can put any html that will be added to your menu. For example, to add a button to reach the koha website : <a class="menu" href="http://www.koha.org" title="Koha english website">Koha</a>
 	* authorities heading search : a new menu has been added : the user can search in authorities (same behaviour as in intranet)
+	* new systempref : opaclanguagesdisplay. If set to "yes" (default value), the list of available language is shown. Otherwise, there is no list, koha will stay in default language only.
+	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
+	* Recent Acquisition : added a new page to filter recent acquisitions on a given branch.
+	* if you use npl templates, you can have an alternate stylesheet (to set it, go to librarian interface >> Parameters > Systempreferences > OPAC > opacstylesheet > modify > /opac-tmpl/npl/en/includes/opac.liblime.css)
 
 	=== REPORTS ===
 	* Inventory : you can now scan in a text file, on an unconnected laptop, every book in your library. Then, just upload the file in Koha. It will "mark as seen" all books. Once you've scanned everything in your library, just query for all books not seen since the beginning of the inventory, and you'll get "lost" books.
 	=== SERIALS ===
-	* Adding item creation on the fly when recieving serial : if you activate systempref > Catalogue > serialsadditems, below the recieve of an serial, you'll have a form to create an item on the fly. The item contains the callnumber, the branch, the barcode and the location (where applicable). Go to the catalogue after setting a serial to "arrived", and you should see the item created. If you let serialsadditems to OFF, behaviour is unchanged.
+	* MAJOR IMPROVEMENT : Adding item creation on the fly when recieving serial : if you activate systempref > Catalogue > serialsadditems, below the recieve of an serial, you'll have a form to create an item on the fly. The item contains the callnumber, the branch, the barcode and the location (where applicable). Go to the catalogue after setting a serial to "arrived", and you should see the item created. If you let serialsadditems to OFF, behaviour is unchanged.
+	* the last 5 arrived serials are shown when recieving serials.
 	
 	=== SYSTEM PREFERENCES ===
 	
