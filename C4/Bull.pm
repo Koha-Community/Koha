@@ -357,6 +357,18 @@ sub modsubscriptionhistory {
 sub getserials {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
+	# OK, now add the last 5 issues arrives/missing
+	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate,notes from serial where subscriptionid = ? and (status in (2,4,5)) order by serialid DESC");
+	$sth->execute($subscriptionid);
+	my $counter=0;
+	my @serials;
+	while((my $line = $sth->fetchrow_hashref) && $counter <5) {
+		$counter++;
+		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
+		$line->{"planneddate"} = format_date($line->{"planneddate"});
+		push @serials,$line;
+	}
+	
 	# status = 2 is "arrived"
 	my $sth=$dbh->prepare("select serialid,serialseq, status, planneddate,notes from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
 	$sth->execute($subscriptionid);
