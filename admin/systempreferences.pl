@@ -50,6 +50,7 @@ use C4::Context;
 
 my %tabsysprefs;
 $tabsysprefs{acquisitions}="Acquisitions";
+$tabsysprefs{advancedMARCEditor}="Catalogue";
 $tabsysprefs{AmazonAssocTag}="OPAC";
 $tabsysprefs{AmazonContent}="OPAC";
 $tabsysprefs{AmazonDevKey}="OPAC";
@@ -88,6 +89,7 @@ $tabsysprefs{opacsmallimage}="OPAC";
 $tabsysprefs{opacstylesheet}="OPAC";
 $tabsysprefs{opacthemes}="OPAC";
 $tabsysprefs{noissuescharge}="Circulation";
+$tabsysprefs{patronimages}="Circulation";
 $tabsysprefs{printcirculationslips}="Circulation";
 $tabsysprefs{ReturnBeforeExpiry}="Circulation";
 $tabsysprefs{serialsadditems}="Catalogue";

@@ -1113,6 +1113,15 @@ my %tabledata = (
             explanation         => 'If set, a new item will be automatically added when receiving an issue',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'advancedMARCeditor',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,                                                             '
+                                        type' => 1},
+            explanation         => "If set, the MARC editor won't show you tag/subfields description",
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1740,6 +1749,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.37  2006/04/04 13:54:10  tipaul
+# advancedMARCeditor systempref management
+#
 # Revision 1.100.2.36  2006/03/18 22:55:26  kados
 # add syspref for the MARC Organization Code of the library
 #
