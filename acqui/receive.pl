@@ -36,10 +36,11 @@ use strict;
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
 my ($count,@booksellers)=bookseller($supplierid);
-my $invoice=$input->param('invoice');
+my $invoice=$input->param('code') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
 my $date=$input->param('datereceived');
+my $code=$input->param('code');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/recieve.tmpl",
