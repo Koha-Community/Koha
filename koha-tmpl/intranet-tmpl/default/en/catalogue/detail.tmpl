@@ -144,7 +144,11 @@
 					<!-- TMPL_IF name="datedue" -->
 						On issue to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>
 					<!-- TMPL_ELSE -->
-						<!-- TMPL_VAR name="notforloan" -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+							Available
+						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
