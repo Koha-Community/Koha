@@ -1093,7 +1093,19 @@ my %tabledata = (
 	    				type' => 1},
             explanation         => 'see: associates.amazon.com/gp/flex/associates/apply-login.html',
             type                => 'free',
-        },                                                                      
+        },                                                                     
+		{   
+            uniquefieldrequired => 'variable',
+			forceupdate     => { 'explanation' => 1,
+                         'type' => 1,
+                     'options' => 1 },
+            variable            => 'TemplateEncoding',
+            value               => 'iso-8859-1',
+            explanation         => 'Specify the encoding to use in Templates',
+        	type        => 'Choice',
+        	options         => 'iso-8859-1|utf-8'
+        },
+ 
 	{
             uniquefieldrequired => 'variable',
             variable            => 'opaccredits',
@@ -1749,6 +1761,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.38  2006/04/05 14:58:04  kados
+# adding TemplateEncoding syspref: allows librarian to specify the
+# encoding to use on templates.
+#
 # Revision 1.100.2.37  2006/04/04 13:54:10  tipaul
 # advancedMARCeditor systempref management
 #
