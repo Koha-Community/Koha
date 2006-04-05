@@ -317,6 +317,7 @@ sub checkauth {
 					$hash{firstname},
 					$hash{surname},
 					$hash{branch},
+					$hash{branchname},
 					$hash{flags},
 					$hash{emailaddress},
 				);
@@ -403,18 +404,18 @@ sub checkauth {
 			}
 			if ($return == 1){
 				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
-				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
+				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers,branches where borrowers.branchcode=branches.branchcode and userid=?");
 				$sth->execute($userid);
-				($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+				($bornum,$firstname,$surname,$userflags,$branchcode,$branchname, $emailaddress) = $sth->fetchrow if ($sth->rows);
 # 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				unless ($sth->rows){
-					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers,branches where borrowers.branchcode=branches.branchcode and cardnumber=?");
 					$sth->execute($cardnumber);
-					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					($bornum,$firstname,$surname,$userflags,$branchcode, $branchname,$emailaddress) = $sth->fetchrow if ($sth->rows);
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 					unless ($sth->rows){
 						$sth->execute($userid);
-						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+						($bornum,$firstname,$surname,$userflags,$branchcode, $branchname, $emailaddress) = $sth->fetchrow if ($sth->rows);
 					}
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				}
@@ -425,6 +426,7 @@ sub checkauth {
 					$firstname,
 					$surname,
 					$branchcode,
+					$branchname, 
 					$userflags,
 					$emailaddress,
 				);
@@ -439,7 +441,7 @@ sub checkauth {
 					C4::Context->config('user'),
 					C4::Context->config('user'),
 					C4::Context->config('user'),
-					"",1,C4::Context->preference('KohaAdminEmailAddress')
+					"","",1,C4::Context->preference('KohaAdminEmailAddress')
 				);
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
