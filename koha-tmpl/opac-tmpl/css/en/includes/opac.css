@@ -156,6 +156,7 @@ table {
 /* header */
 th {
 	background-color: #ccffcc;
+	color:black;
 	font-weight:bold;
 	text-align:center;
 	font-size:10pt;
@@ -209,7 +210,7 @@ tr.hilighted td, td.hilighted {
 	background-color:#993366;
 	color : #FEEDDB;
 	margin : 3px 3px 3px 0px;
-	border-style: outset;
+	border-style: inset;
 }
 
 /* standard input field */
@@ -327,9 +328,11 @@ select {
 
 #bibliobloc {
 	float:left;
-	width:40%;
-	border:0;
-	border:1px solid #000000;
+	border:0px;
+	padding:10px;
+	margin-bottom:10px;
+	margin-left:10px;
+	background:#efefef;
 }
 
 #itembloc {
@@ -384,9 +387,7 @@ select {
 
 #bibliomenu {
 	display:block;
-	padding-left:100px;
-	margin:10px;
-/* 	width:100%; */
+	margin-left:20%;
 }
 
 /* a little spacer. should not be used */
@@ -397,7 +398,7 @@ select {
 
 /* for SubscritptionHistory view  */
 div.tabsubs {
-	margin-left:150px;
+	margin-left:20%;
 	position:inline;
 }
 
@@ -408,14 +409,17 @@ div.tabsubs a {
 	padding: 10px 10px;
 	-moz-border-radius: 5px 5px 0px 0px;
 }
+div.tabsubs a:hover {
+	background-color:#993366;
+}
 
 div.tabsub {
-	background-color: #ACE6E6;
+	background-color: white;
 	position:absolute;
 	visibility:hidden;
-	margin-left:150px;
+	margin-left:20%;
 	margin-top:0px;
-border:4px;
+	margin-right:5%;
 }
 
 /* for MARC view  */
