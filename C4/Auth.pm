@@ -207,6 +207,7 @@ sub get_template_and_user {
 				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
 				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
+				TemplateEncoding => C4::Context->preference("TemplateEncoding"),
 		);
 	}
 	$template->param(
@@ -478,8 +479,10 @@ sub checkauth {
 	my $template = gettemplate($template_name, $type,$query);
 	$template->param(INPUTS => \@inputs,
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+			IntranetNav => C4::Context->preference("IntranetNav"),
+			TemplateEncoding => C4::Context->preference("TemplateEncoding"),
+
 			);
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
