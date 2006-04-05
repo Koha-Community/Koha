@@ -403,13 +403,13 @@ sub checkauth {
 					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
-				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers,branches where borrowers.branchcode=branches.branchcode and userid=?");
+				my ($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$emailaddress);
+				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?");
 				$sth->execute($userid);
 				($bornum,$firstname,$surname,$userflags,$branchcode,$branchname, $emailaddress) = $sth->fetchrow if ($sth->rows);
 # 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				unless ($sth->rows){
-					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers,branches where borrowers.branchcode=branches.branchcode and cardnumber=?");
+					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,borrowers.branchcode,branchname,emailaddress from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?");
 					$sth->execute($cardnumber);
 					($bornum,$firstname,$surname,$userflags,$branchcode, $branchname,$emailaddress) = $sth->fetchrow if ($sth->rows);
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
