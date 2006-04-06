@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Cataloging: MARC Export<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
+
+<div id="main"><h1>MARC Export</h1>
+<div class="details"><h4>Export in MARC format the following biblios:</h4>
+<form method="post">
+<p>From date (yyyy-mm-dd): <input type="text" name="start_bib" />
+to date (yyyy-mm-dd): <input type="text" name="end_bib" /></p>
+<p>(leave blank to export every biblio, giving only 'from date' exports starting 'from date')</p>
+<input type="hidden" name="op" value="export" />
+<input type="submit" value="Export" class="submit" />
+</form></div>
+<p>Note : Exporting all by this tool may take some time</p>
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
