@@ -747,6 +747,13 @@ sub canbookbeissued {
 	if ($iteminformation->{'restricted'} == 1) {
 		$issuingimpossible{RESTRICTED} = 1;
 	}
+	if (C4::Context->preference("IndependantBranches")){
+		my $userenv = C4::Context->userenv;
+		if (($userenv)&&($userenv->{flags} != 1)){
+			$issuingimpossible{NOTSAMEBRANCH} = 1 if ($iteminformation->{'holdingbranch'} ne $userenv->{branch} ) ;
+		}
+	}
+
 
 
 

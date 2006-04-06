@@ -165,6 +165,9 @@
 	<div id="bloc25">
 		<!-- TMPL_IF NAME="IMPOSSIBLE" -->
 		<h2 class="problem">Issuing impossible</h2>
+			<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+				<p class="problem">You are trying to issue a book which is not in your branch.</p>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="INVALID_DATE" -->
 				<p class="problem">The due date is invalid</p>
 			<!-- /TMPL_IF -->
