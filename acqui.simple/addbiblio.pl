@@ -447,7 +447,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+    my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -524,15 +524,15 @@ if ($op eq "addbiblio") {
 		$bibid = "";
 		$oldbiblionumber= "";
 	}
-	unless ($record == -1) {
+	#unless ($record == -1) {
 	#FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
-	eval {
-        	my $uxml = $record->as_xml;
-		my $newrecord = MARC::Record::new_from_xml($uxml, 'UTF-8');
-		$record = $newrecord;
-	};
+	#eval {
+    #   	my $uxml = $record->as_xml;
+	#	my $newrecord = MARC::Record::new_from_xml($uxml, 'UTF-8');
+	#	$record = $newrecord;
+	#};
 
-	}
+	#}
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
