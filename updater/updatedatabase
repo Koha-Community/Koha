@@ -21,8 +21,8 @@ use Getopt::Long;
 use C4::Context;
 
 use MARC::Record;
-use MARC::File::XML;
-
+use MARC::File::XML ( BinaryEncoding => 'utf8' );
+ 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
@@ -140,6 +140,7 @@ my %requiretables = (
 my %requirefields = (
 	subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL'},
 	itemtypes => { 'imageurl' => 'char(200) NULL'},
+	aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -1057,7 +1058,7 @@ unless ($marcdone) {
 	# changing marc field type
 	$dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` BLOB NULL DEFAULT NULL ');
 	# adding marc xml, just for convenience
-	$dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` TEXT NOT NULL');
+	$dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ');
 	# moving data from marc_subfield_value to biblio
 	$sth = $dbh->prepare('select bibid,biblionumber from marc_biblio');
 	$sth->execute;
@@ -1065,6 +1066,7 @@ unless ($marcdone) {
 	my $totaldone=0;
 	while (my ($bibid,$biblionumber) = $sth->fetchrow) {
 		my $record = MARCgetbiblio($dbh,$bibid);
+		print $record->as_formatted if ($biblionumber==3902);
 		$sth_update->execute($record->as_usmarc(),$record->as_xml(),$biblionumber);
 		$totaldone++;
 		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
@@ -1072,22 +1074,6 @@ unless ($marcdone) {
 	print "\rdone\n";
 }
 
-# MOVE all tables TO UTF-8 and innoDB
-$sth = $dbh->prepare("show table status");
-$sth->execute;
-while ( my $table = $sth->fetchrow_hashref ) {
-	if ($table->{Engine} ne 'InnoDB') {
-# 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
-		print "moving $table->{Name} to InnoDB\n";
-	}
-	unless ($table->{Collation} =~ /^utf8/) {
-		#$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
-# 		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
-		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
-		print "moving $table->{Name} to utf8\n";
-	} else {
-	}
-}
 
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
@@ -1113,6 +1099,23 @@ foreach $table ( keys %uselessfields ) {
 }    # foreach
 
 
+# MOVE all tables TO UTF-8 and innoDB
+$sth = $dbh->prepare("show table status");
+$sth->execute;
+while ( my $table = $sth->fetchrow_hashref ) {
+# 	if ($table->{Engine} ne 'InnoDB') {
+# 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+# 		print "moving $table->{Name} to InnoDB\n";
+# 	}
+	unless ($table->{Collation} =~ /^utf8/) {
+		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
+		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
+ 		print "moving $table->{Name} to utf8\n";
+	} else {
+	}
+}
+
 $sth->finish;
 
 #
@@ -1122,6 +1125,7 @@ $sth->finish;
 # are still here, but uses other tables
 # (the ones that are filled by updatedatabase !)
 #
+
 sub MARCgetbiblio {
 
     # Returns MARC::Record of the biblio passed in parameter.
@@ -1281,6 +1285,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.132  2006/04/06 12:37:05  hdl
+# Bugfixing : aqbookfund needed a field.
+#
 # Revision 1.131  2006/03/03 17:02:22  tipaul
 # commit for holidays and news management.
 # (some forgotten files)
