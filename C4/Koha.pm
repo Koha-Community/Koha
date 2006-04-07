@@ -62,6 +62,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getauthtypes &getauthtype
 			&getallthemes &getalllanguages
 			&getallbranches &getletters
+                        getnbpages
 			$DEBUG);
 
 use vars qw();
@@ -732,6 +733,18 @@ sub getallthemes {
     return @themes;
 }
 
+=item getnbpages
+
+Returns the number of pages to display in a pagination bar, given the number
+of items and the number of items per page.
+
+=cut
+
+sub getnbpages {
+    my ($nb_items, $nb_items_per_page) = @_;
+
+    return int(($nb_items - 1) / $nb_items_per_page) + 1;
+}
 
 1;
 __END__
