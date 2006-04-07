@@ -177,7 +177,11 @@ for (my $i=0;$i<$count;$i++){
 	# return the correct item type either (or a properly-formatted
 	# charge, for that matter).
 	my ($charge,$itemtype)=calc_charges($dbh,$issue->[$i]{'itemnumber'},$bornum);
-	$row{'itemtype'} = getitemtypeinfo($itemtype)->{description};
+
+        my $itemtypeinfo = getitemtypeinfo($itemtype);
+	$row{'itemtype_description'} = $itemtypeinfo->{description};
+        $row{'itemtype_image'} = $itemtypeinfo->{imageurl};
+
 	$row{'charge'}= sprintf("%.2f",$charge);
 
 	#check item is not reserved

@@ -40,12 +40,15 @@
 
 use strict;
 use CGI;
+use HTML::Template;
+use List::Util qw/min/;
+
+use C4::Koha;
 use C4::Context;
 use C4::Output;
 use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -66,10 +69,9 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('description');
-my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/itemtypes.pl";
 my $itemtype=$input->param('itemtype');
-my $pagesize=20;
+my $pagesize=5;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
@@ -102,49 +104,70 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	}
 	# build list of images
-	my $imagedir = C4::Context->opachtdocs."/".C4::Context->preference('opacthemes');
-	warn "img : $imagedir";
-	unless (opendir(DIR, "$imagedir/itemtypeimg/")) {
-# 		my $cgidir = C4::Context->intranetdir;
-		opendir(DIR, "$imagedir/value_builder") || die "can't opendir $imagedir/value_builder: $!";
-	} 
+	my $imagedir_filesystem = getitemtypeimagedir();
+    my $imagedir_web = getitemtypeimagesrc();
+    opendir(DIR, $imagedir_filesystem)
+        or die "can't opendir ".$imagedir_filesystem.": ".$!;
 	my @imagelist;
 	while (my $line = readdir(DIR)) {
-		if ($line =~ /\.gif$/) {
-			my %x;
-			$x{KohaImage} = "$line";
-			push @imagelist, \%x;
+		if ($line =~ /\.(gif|png)$/i) {
+            push(
+                @imagelist,
+                {
+                    KohaImage => $line,
+                    KohaImageSrc => $imagedir_web.'/'.$line,
+                    checked => $line eq $data->{imageurl} ? 1 : 0,
+                }
+            );
 		}
 	}
 	closedir DIR;
-# 	my $CGIitemtypes = CGI::scrolling_list(-name=>'itemtypes',
-# 					-id=>"itemtypes",
-# 					-values=> \@imagelist,
-# 					-size=>1,
-# 					-multiple=>0,
-# 					);
-# 					
-	$template->param(itemtype => $itemtype,
-							description => $data->{'description'},
-							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
-							notforloan => $data->{'notforloan'},
-							imageurl => $data->{'imageurl'},
-							opacthemes => C4::Context->preference('opacthemes'),
-							IMAGESLOOP => \@imagelist,
-							);
-;
+
+    my $remote_image = undef;
+    if (defined $data->{imageurl} and $data->{imageurl} =~ m/^http/) {
+        $remote_image = $data->{imageurl};
+    }
+
+	$template->param(
+        itemtype => $itemtype,
+        description => $data->{'description'},
+        renewalsallowed => $data->{'renewalsallowed'},
+        rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
+        notforloan => $data->{'notforloan'},
+        imageurl => $data->{'imageurl'},
+        template => C4::Context->preference('template'),
+        IMAGESLOOP => \@imagelist,
+        remote_image => $remote_image,
+    );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan,imageurl) values (?,?,?,?,?,?)");
+
+    my $query = '
+UPDATE itemtypes
+  SET description = ?
+    , renewalsallowed = ?
+    , rentalcharge = ?
+    , notforloan = ?
+    , imageurl = ?
+  WHERE itemtype = ?
+';
+    my $sth=$dbh->prepare($query);
 	$sth->execute(
-		$input->param('itemtype'),$input->param('description'),
-		$input->param('renewalsallowed'),$input->param('rentalcharge'),
-		$input->param('notforloan')?1:0,
-		$input->param('imageurl'));
+        $input->param('description'),
+		$input->param('renewalsallowed'),
+        $input->param('rentalcharge'),
+		$input->param('notforloan') ? 1 : 0,
+        $input->param('image') eq 'removeImage'
+            ? undef
+            : $input->param('image') eq 'remoteImage'
+                ? $input->param('remoteImage')
+                : $input->param('image'),
+		$input->param('itemtype'),
+    );
+
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;
@@ -192,40 +215,40 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle=0;
-	my @loop_data;
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row_data;
-		if ($toggle eq 0){
-			$toggle=1;
-		} else {
-			$toggle=0;
-		}
-		$row_data{toggle} = $toggle;
-		$row_data{itemtype} = $results->[$i]{itemtype};
-		$row_data{description} = $results->[$i]{description};
-		$row_data{renewalsallowed} = $results->[$i]{renewalsallowed};
-		$row_data{notforloan} = $results->[$i]{notforloan};
-		if ($results->[$i]{imageurl} =~ /^http/) {
-			$row_data{absoluteurl} = 1;
-		}
-		$row_data{imageurl} = $results->[$i]{imageurl};
-		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{rentalcharge});
-		push(@loop_data, \%row_data);
-	}
-	$template->param(loop => \@loop_data,
-					opacthemes => C4::Context->preference('opacthemes')
-					);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
-	}
+    my $env;
+    my ($count,$results)=StringSearch($env,$searchfield,'web');
+
+    my $page = $input->param('page') || 1;
+    my $first = ($page - 1) * $pagesize;
+
+    # if we are on the last page, the number of the last word to display
+    # must not exceed the length of the results array
+    my $last = min(
+        $first + $pagesize - 1,
+        scalar @{$results} - 1,
+    );
+
+    my $toggle = 0;
+    my @loop;
+    foreach my $result (@{$results}[$first .. $last]) {
+        my $itemtype = $result;
+        $itemtype->{toggle} = ($toggle eq 0 ? 1 : 0);
+        $itemtype->{imageurl} =
+            getitemtypeimagesrcfromurl($itemtype->{imageurl});
+        $itemtype->{rentalcharge} = sprintf('%.2f', $itemtype->{rentalcharge});
+
+        push(@loop, $itemtype);
+    }
+
+    $template->param(
+        loop => \@loop,
+        pagination_bar => pagination_bar(
+            $script_name,
+            getnbpages(scalar @{$results}, $pagesize),
+            $page,
+            'page'
+        )
+    );
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
 

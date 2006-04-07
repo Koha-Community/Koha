@@ -63,6 +63,9 @@ Koha.pm provides many functions for Koha scripts.
 			&getallthemes &getalllanguages
 			&getallbranches &getletters
                         getnbpages
+                        getitemtypeimagedir
+                        getitemtypeimagesrc
+                        getitemtypeimagesrcfromurl
 			$DEBUG);
 
 use vars qw();
@@ -543,7 +546,39 @@ sub getitemtypeinfo {
 	my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
 	$sth->execute($itemtype);
 	my $res = $sth->fetchrow_hashref;
+
+        $res->{imageurl} = getitemtypeimagesrcfromurl($res->{imageurl});
+
 	return $res;
+}
+
+sub getitemtypeimagesrcfromurl {
+    my ($imageurl) = @_;
+
+    if (defined $imageurl and $imageurl !~ m/^http/) {
+        $imageurl =
+            getitemtypeimagesrc()
+            .'/'.$imageurl
+            ;
+    }
+
+    return $imageurl;
+}
+
+sub getitemtypeimagedir {
+    return
+        C4::Context->intrahtdocs
+        .'/'.C4::Context->preference('template')
+        .'/itemtypeimg'
+        ;
+}
+
+sub getitemtypeimagesrc {
+    return
+        '/intranet-tmpl'
+        .'/'.C4::Context->preference('template')
+        .'/itemtypeimg'
+        ;
 }
 
 =head2 getprinters
