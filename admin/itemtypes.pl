@@ -232,7 +232,7 @@ UPDATE itemtypes
     my @loop;
     foreach my $result (@{$results}[$first .. $last]) {
         my $itemtype = $result;
-        $itemtype->{toggle} = ($toggle eq 0 ? 1 : 0);
+        $itemtype->{toggle} = ($toggle++%2 eq 0 ? 1 : 0);
         $itemtype->{imageurl} =
             getitemtypeimagesrcfromurl($itemtype->{imageurl});
         $itemtype->{rentalcharge} = sprintf('%.2f', $itemtype->{rentalcharge});
