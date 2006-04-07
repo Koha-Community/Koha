@@ -31,25 +31,25 @@
 <div class="searchresults">
 		<table>
 			<tr>
-				<!-- TMPL_UNLESS name="isEDITORS" -->
-					<th width="10%"># of Bib Records</th>
-				<!-- /TMPL_UNLESS -->
 				<th width="70%">Authorized Headings</th>
 				<th width="10%">Type of Heading</th>
+				<!-- TMPL_UNLESS name="isEDITORS" -->
+					<th width="10%">Bib Records</th>
+				<!-- /TMPL_UNLESS -->
 				<th width="10%">Full Authorized Heading</th>				
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
-					<!-- TMPL_UNLESS name="isEDITORS" -->
-						<td>
-							 <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --></a>
-						</td>
-					<!-- /TMPL_UNLESS -->
 					<td><!-- TMPL_VAR NAME="summary" --></td>
 
 						<td>
 					<!-- TMPL_VAR NAME="authtype" -->
 						</td>
+					<!-- TMPL_UNLESS name="isEDITORS" -->
+						<td>
+							 <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="used" --> biblios</a>
+						</td>
+					<!-- /TMPL_UNLESS -->
 						<td>
 							<a href="opac-authoritiesdetail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">View Full Heading</a>
 						</td>
