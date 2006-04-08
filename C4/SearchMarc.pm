@@ -638,7 +638,7 @@ sub getMARCsubjects {
     my ($dbh, $bibid, $marcflavour) = @_;
 	my ($mintag, $maxtag);
 	if ($marcflavour eq "MARC21") {
-	        $mintag = "600";
+        $mintag = "600";
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
 		$mintag = "600";
@@ -671,11 +671,12 @@ sub getMARCsubjects {
 	my $lasttag;
 	my ($subfieldvalue,$subfieldcode,$tagorder,$tag);
 	while (($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
-		$lasttag=$tag if $tag;
+	warn "IN MARCSUBJECTS $subfieldvalue $subfieldcode $tagorder $tag\n";
 		if ($activetagorder && $tagorder != $activetagorder) {
+		warn "ACTIVETAGORDER".$activetagorder;
 			$subject=~ s/ -- $//;
 			$marcsubjct = {MARCSUBJCT => $subject,
-							link => $tag."9",
+							link => $lasttag."9",
 							linkvalue => $field9,
 							};
 			push @marcsubjcts, $marcsubjct;
@@ -691,6 +692,7 @@ sub getMARCsubjects {
 			$subject .= $subfieldvalue . " -- ";
 		}
 		$activetagorder=$tagorder;
+		$lasttag=$tag if $tag;
 	}
 	$subject=~ s/ -- $//;
 	$marcsubjct = {MARCSUBJCT => $subject,
@@ -702,7 +704,7 @@ sub getMARCsubjects {
 	$sth->finish;
 
 	my $marcsubjctsarray=\@marcsubjcts;
-        return $marcsubjctsarray;
+	return $marcsubjctsarray;
 }  #end getMARCsubjects
 
 END { }       # module clean-up code here (global destructor)
