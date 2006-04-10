@@ -42,7 +42,11 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
-					<td><!-- TMPL_VAR NAME="summary" --></td>
+					<!-- TMPL_IF NAME="used" -->
+                    <td><a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR NAME="summary" --></a></td>
+                    <!-- TMPL_ELSE -->
+                    <td><!-- TMPL_VAR NAME="summary" --></td>
+                    <!-- /TMPL_IF -->
 						<td>
 					<!-- TMPL_VAR NAME="authtype" -->
 						</td>
@@ -76,12 +80,3 @@
 	</div>	
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-
-<script language="JavaScript" type="text/javascript" >
-function confirm_deletion(id) {
-	var is_confirmed = confirm('Are you sure you want to delete this authority?');
-	if (is_confirmed) {
-		window.location="authorities-home.pl?op=delete&amp;authid="+id;
-	}
-}
-</script>
