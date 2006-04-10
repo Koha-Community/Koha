@@ -70,7 +70,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &MARCkoha2marcBiblio &MARCmarc2koha
   &MARCkoha2marcItem &MARChtml2marc &MARChtml2xml
   &MARCgetbiblio &MARCgetitem
-  MARCfind_MARCbibid_from_oldbiblionumber
+  &MARCmoditemonefield
   &XMLgetbiblio
   
   &FindDuplicate
@@ -275,7 +275,7 @@ C<$record> a MARC record
 sub marc2xml {
 	my ($record) = @_;
 	my $xmlrecord;
-	eval { $xmlrecord=$record->as_xml() };
+	eval { $xmlrecord=$record->as_xml_record() };
 	#TODO: better error handling here
 	if ($@){
 		warn "ERROR: I suspect a badly formatted MARC record";
@@ -476,7 +476,7 @@ sub MARCgetitem {
 	$sth->execute($biblionumber);
 	my ($rawmarc) = $sth->fetchrow;
 	my $record = C4::Search::get_record($biblionumber);
-	warn "ITEMRECORD".$record->as_formatted;
+#	warn "ITEMRECORD".$record->as_formatted;
 	# now, find the relevant itemnumber
 	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
 	# prepare the new item record
@@ -484,17 +484,51 @@ sub MARCgetitem {
 	# parse all fields fields from the complete record
 	foreach ($record->field($itemnumberfield)) {
 		# when the item field is found, save it
-		warn "Itenumberfield = $itemnumberfield";
+#		warn "Itenumberfield = $itemnumberfield";
 		if ($_->subfield($itemnumbersubfield) == $itemnumber) {
-			warn "Inside if subfield=$itemnumbersubfield";
+#			warn "Inside if subfield=$itemnumbersubfield";
 			$itemrecord->append_fields($_);
 		} else {
 			warn "No match subfield=$itemnumbersubfield and
 			               itemnumber=$itemnumber";
 		}
 	}
-	warn "ITEMS".$itemrecord->as_formatted;
+#	warn "ITEMS".$itemrecord->as_formatted;
     return $itemrecord;
+}
+
+
+##Changes only field or subfield from the holdings fields of MARC record used for branch transfers or onloan flag -TG
+
+
+sub MARCmoditemonefield{
+my ($dbh,$biblionumber,$itemnumber,$itemfield,$newvalue)=@_;
+
+my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
+	# get the complete MARC record
+	my $sth = $dbh->prepare("select marc from biblioitems where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($rawmarc) = $sth->fetchrow;
+my $bibliorecord=MARC::File::USMARC::decode($rawmarc);
+	# now, find the relevant itemnumber
+	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber',$frameworkcode);
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,$itemfield,$frameworkcode);
+	
+	# parse all fields fields from the complete record
+	foreach ($bibliorecord->field($itemnumberfield)) {
+		# when the item field is found, update it
+		if ($_->subfield($itemnumbersubfield) == $itemnumber) {
+			$_->update($tagsubfield =>$newvalue);
+		} 
+	}
+
+ # save the record into biblioitem
+$dbh->do('lock tables biblioitems WRITE');
+	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=?");
+	$sth->execute($bibliorecord->as_usmarc(),$bibliorecord->as_xml_record(),$biblionumber);
+	z3950_extended_services('update',set_service_options('update'),$bibliorecord);
+        z3950_extended_services('commit');
+  	$dbh->do('unlock tables');
 }
 
 =head2 find_biblioitemnumber
@@ -867,7 +901,7 @@ sub NEWnewbiblio {
 
 	#create the marc entry, that stores the rax marc record in Koha 3.0
 	$olddata->{marc} = $record->as_usmarc();
-	$olddata->{marcxml} = $record->as_xml();
+	$olddata->{marcxml} = $record->as_xml_record();
 	# and create biblioitem, that's all folks !
     $biblioitemnumber = REALnewbiblioitem( $dbh, $olddata );
 
@@ -947,7 +981,7 @@ sub NEWmodbiblio {
 	#create the marc entry, that stores the rax marc record in Koha 3.0
 	$oldbiblio->{biblionumber} = $biblionumber unless $oldbiblio->{biblionumber};
 	$oldbiblio->{marc} = $record->as_usmarc();
-	$oldbiblio->{marcxml} = $record->as_xml();
+	$oldbiblio->{marcxml} = $record->as_xml_record();
 	warn "dans NEWmodbiblio $biblionumber = ".$oldbiblio->{biblionumber}." = ".$oldbiblio->{marcxml};
 	REALmodbiblio($dbh,$oldbiblio);
 	REALmodbiblioitem($dbh,$oldbiblio);
@@ -1376,7 +1410,7 @@ sub REALnewbiblioitem {
 	my $field=$record->field($biblioitemnumberfield);
 	$field->update($biblioitemnumbersubfield => "$biblioitemnumber");
 	$biblioitem->{marc} = $record->as_usmarc();
-	$biblioitem->{marcxml} = $record->as_xml();
+	$biblioitem->{marcxml} = $record->as_xml_record();
 
 	$sth = $dbh->prepare( "insert into biblioitems set
 									biblioitemnumber = ?,		biblionumber 	 = ?,
@@ -1552,7 +1586,7 @@ sub REALnewitems {
 	$record->insert_grouped_field($itemfield);
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=?");
-	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber});
+	$sth->execute($record->as_usmarc(),$record->as_xml_record(),$item->{biblionumber});
     if ( defined $sth->errstr ) {
         $error .= $sth->errstr;
     }
@@ -1651,7 +1685,7 @@ sub REALmoditem {
 # 	$record->insert_grouped_field($itemfield);
 	# save the record into biblioitem
 	$sth=$dbh->prepare("update biblioitems set marc=?,marcxml=? where biblionumber=? and biblioitemnumber=?");
-	$sth->execute($record->as_usmarc(),$record->as_xml(),$item->{biblionumber},$item->{biblioitemnumber});
+	$sth->execute($record->as_usmarc(),$record->as_xml_record(),$item->{biblionumber},$item->{biblioitemnumber});
 	z3950_extended_services('update',set_service_options('update'),$record);
         z3950_extended_services('commit');
     if ( defined $sth->errstr ) {
@@ -3029,6 +3063,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.169  2006/04/10 20:39:49  tgarip1957
+# New sub to use by Circ2.pm . Allows one subfield of MARC holdings fields to be updated to use with branch transfer(holdingbranch) and onloan flag when set
+#
 # Revision 1.168  2006/04/03 04:00:02  rangi
 # Modify item now works
 #
