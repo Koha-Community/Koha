@@ -6,6 +6,21 @@
 <div id="main">
 <div class="tabbed">
 	<h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<<<<<<< opac-authoritiesdetail.tmpl
+	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->')">Print</a>
+	<a href="../search.marc/search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR name="count" --> biblios</a>
+</div>
+<table><!-- TMPL_LOOP name="0XX" -->
+        <tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+        <!-- TMPL_LOOP name="subfield" -->
+                <tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+                    <td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+</table>
+=======
 	</div>
 
 <div name="0XX" id="0XX" class="tab" style="visibility:visible">
@@ -23,18 +38,7 @@
 		<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
 </div>
+>>>>>>> 1.1.2.2
 </div>	
-<script language="JavaScript" type="text/javascript">
-
-function confirm_deletion() {
-	var is_confirmed = confirm('Are you sure you want to delete this authority?');
-	if (is_confirmed) {
-		window.location="authorities-home.pl?op=delete&amp;authid=<!-- TMPL_VAR NAME="authid" -->";
-	}
-}
-function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-</script>
 </body>
 </html>
