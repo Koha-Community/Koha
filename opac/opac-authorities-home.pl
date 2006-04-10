@@ -140,6 +140,95 @@ if ($op eq "do_search") {
 							authtypecode=>$authtypecode,
 							isEDITORS => $authtypecode eq 'EDITORS',
 							);
+
+} elsif ($op eq "delete") {
+
+	&AUTHdelauthority($dbh,$authid, 1);
+
+	($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
+				query => $query,
+				type => 'intranet',
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});
+# 	$template->param("statements" => \@statements,
+# 						"nbstatements" => $nbstatements);
+}
+elsif ($op eq "AddStatement") {
+
+	($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
+				query => $query,
+				type => 'intranet',
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});
+
+	# Gets the entered information
+	my @marcfields = $query->param('marclist');
+	my @and_or = $query->param('and_or');
+	my @excluding = $query->param('excluding');
+	my @operator = $query->param('operator');
+	my @value = $query->param('value');
+
+	my @statements = ();
+
+	# List of the marc tags to display
+	my $marcarray = create_marclist();
+
+	my $nbstatements = $query->param('nbstatements');
+	$nbstatements = 1 if(!defined $nbstatements);
+
+	for(my $i = 0 ; $i < $nbstatements ; $i++)
+	{
+		my %fields = ();
+
+		# Recreates the old scrolling lists with the previously selected values
+		my $marclist = create_scrolling_list({name=>"marclist",
+					values=> $marcarray,
+					size=> 1,
+					default=>$marcfields[$i],
+					onChange => "sql_update()"}
+					);
+
+		$fields{'marclist'} = $marclist;
+		$fields{'first'} = 1 if($i == 0);
+
+		# Restores the and/or parameters (no need to test the 'and' for activation because it's the default value)
+		$fields{'or'} = 1 if($and_or[$i] eq "or");
+
+		#Restores the "not" parameters
+		$fields{'not'} = 1 if($excluding[$i]);
+
+		#Restores the operators (most common operators first);
+		if($operator[$i] eq "=") { $fields{'eq'} = 1; }
+		elsif($operator[$i] eq "contains") { $fields{'contains'} = 1; }
+		elsif($operator[$i] eq "start") { $fields{'start'} = 1; }
+		elsif($operator[$i] eq ">") { $fields{'gt'} = 1; }	#greater than
+		elsif($operator[$i] eq ">=") { $fields{'ge'} = 1; } #greater or equal
+		elsif($operator[$i] eq "<") { $fields{'lt'} = 1; } #lower than
+		elsif($operator[$i] eq "<=") { $fields{'le'} = 1; } #lower or equal
+
+		#Restores the value
+		$fields{'value'} = $value[$i];
+
+		push @statements, \%fields;
+	}
+	$nbstatements++;
+
+	# The new scrolling list
+	my $marclist = create_scrolling_list({name=>"marclist",
+				values=> $marcarray,
+				size=>1,
+				onChange => "sql_update()"});
+	push @statements, {"marclist" => $marclist };
+
+	$template->param("statements" => \@statements,
+						"nbstatements" => $nbstatements);
+
 }
 else {
 	($template, $loggedinuser, $cookie)
@@ -153,6 +242,12 @@ else {
 }
 
 $template->param(authtypesloop => \@authtypesloop,
+		                LibraryName => C4::Context->preference("LibraryName"),
+                                OpacNav => C4::Context->preference("OpacNav"),
+                                opaccredits => C4::Context->preference("opaccredits"),
+                                opacsmallimage => C4::Context->preference("opacsmallimage"),
+                                opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+                                opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 		);
 
 # Print the page
