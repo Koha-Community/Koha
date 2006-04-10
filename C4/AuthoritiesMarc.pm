@@ -223,7 +223,7 @@ sub authoritysearch {
 					} elsif ($record->field('148')) {
 	                                        $heading.= $field->as_string('abvxyz68');
 					} elsif ($record->field('150')) {
-						$heading.= $field->as_string('abvxyz68');	
+											$heading.= $field->as_string('abvxyz68');	
 					} elsif ($record->field('151')) {
 	                                        $heading.= $field->as_string('avxyz68');
 					} elsif ($record->field('155')) {
@@ -239,16 +239,17 @@ sub authoritysearch {
 					} else {
 						$heading.= $field->as_string();
 					}
-				}
+				} #See From
 				foreach my $field ($record->field('4..')) {
-					$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
-				}
+					$seeheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$seeheading."<br />";	
+				} #See Also
 				foreach my $field ($record->field('5..')) {
-					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
 					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$altheading."<br />";
 				}
+				$summary.=$heading.$seeheading.$altheading;
 			}
 		}
 		# then add a line for the template loop
@@ -484,15 +485,22 @@ sub AUTHaddauthority {
 	my @fields=$record->fields();
 # adding main table, and retrieving authid
 # if authid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
-# if authid empty => true add, find a new authid number
-	unless ($authid) {
+#  In fact, it could still be a true add, in the case of a bulkauthimort for instance with previously
+#  existing authids in the records. I've adjusted below to account for this instance --JF.
+	if ($authid) {
 		$dbh->do("lock tables auth_header WRITE,auth_subfield_table WRITE, auth_word WRITE, stopwords READ");
-		my $sth=$dbh->prepare("insert into auth_header (datecreated,authtypecode) values (now(),?)");
-		$sth->execute($authtypecode);
-		$sth=$dbh->prepare("select max(authid) from auth_header");
-		$sth->execute;
-		($authid)=$sth->fetchrow;
+		my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode) values (?,now(),?)");
+		$sth->execute($authid,$authtypecode);
 		$sth->finish;
+# if authid empty => true add, find a new authid number
+	} else {
+        $dbh->do("lock tables auth_header WRITE,auth_subfield_table WRITE, auth_word WRITE, stopwords READ");
+        my $sth=$dbh->prepare("insert into auth_header (datecreated,authtypecode) values (now(),?)");
+        $sth->execute($authtypecode);
+        $sth=$dbh->prepare("select max(authid) from auth_header");
+        $sth->execute;
+        ($authid)=$sth->fetchrow;
+        $sth->finish;
 	}
 	my $fieldcount=0;
 	# now, add subfields...
@@ -1071,6 +1079,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.17  2006/04/10 20:06:15  kados
+# Adding support for bulkauthimport of records where authid already exists.
+# This commit should be tested with other uses of AUTHaddauthority to ensure
+# it works.
+#
 # Revision 1.9.2.16  2006/04/03 12:52:50  tipaul
 # oups, sorry kados, I had removed something you wrote for MARC21 authorities...
 #
