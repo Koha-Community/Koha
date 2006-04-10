@@ -21,6 +21,9 @@
 		<div class="error">
 		<h3>Error Issuing Item:</h3>
 			<ul>
+			<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+			<li>It is not possible to issue a book which does not belong to your branch.</li>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="INVALID_DATE" -->
 				<li>The due date is invalid</li>
 			<!-- /TMPL_IF -->
