@@ -6,9 +6,8 @@
 <div id="main">
 <div class="tabbed">
 	<h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
-<<<<<<< opac-authoritiesdetail.tmpl
-	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->')">Print</a>
-	<a href="../search.marc/search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR name="count" --> biblios</a>
+	<a href="javascript:Dopop('opac-detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->')">Print</a>
+	<a href="opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR name="count" --> biblios</a>
 </div>
 <table><!-- TMPL_LOOP name="0XX" -->
         <tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
@@ -20,25 +19,6 @@
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 </table>
-=======
-	</div>
-
-<div name="0XX" id="0XX" class="tab" style="visibility:visible">
-	<!-- TMPL_LOOP NAME="0XX" -->
-			<p class="MARCtag">
-				<!-- TMPL_VAR NAME="tag" -->
-			</p>
-		<!-- TMPL_LOOP NAME="subfield" -->
-			<p>
-				<label class="labelsubfield">
-				<!-- TMPL_VAR NAME="marc_subfield" -->
-				<!-- TMPL_VAR NAME="marc_lib" --></label>
-				<!-- TMPL_VAR NAME="marc_value" -->
-			</p>
-		<!-- /TMPL_LOOP -->
-	<!-- /TMPL_LOOP -->
-</div>
->>>>>>> 1.1.2.2
 </div>	
 </body>
 </html>
