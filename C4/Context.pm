@@ -230,6 +230,7 @@ sub new
 
 	$self->{"dbh"} = undef;		# Database handle
 	$self->{"Zconn"} = undef;	# Zebra Connection
+	$self->{"Zconnauth"} = undef;	# Zebra Connection for updating
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
 	$self->{"userenv"} = undef;		# User env
@@ -429,6 +430,24 @@ sub Zconn {
         }
 }
 
+=item Zconnauth
+Returns a connection to the Zebradb with write privileges.Requires setting from etc/koha.conf
+zebradb,zebraport,zebrauser,zebrapass
+
+=cut
+
+sub Zconnauth {
+        my $self = shift;
+	my $Zconnauth;
+	 if (defined($context->{"Zconnauth"})) {
+	    $Zconnauth = $context->{"Zconnauth"};
+          	    return $context->{"Zconnauth"};
+	} else {
+		$context->{"Zconnauth"} = &new_Zconnauth();
+		return $context->{"Zconnauth"};
+	}	
+}
+
 =item new_Zconn
 
 Internal helper function. creates a new database connection from
@@ -451,6 +470,32 @@ sub new_Zconn {
 	return $Zconn;
 }
 
+
+## Zebra handler with write permission
+sub new_Zconnauth {
+use ZOOM;
+my $Zconnauth;
+my $option1=new ZOOM::Options();
+$option1->option(user=>$context->{"config"}{"zebrauser"});
+my $option2=new ZOOM::Options();
+$option2->option(password=>$context->{"config"}{"zebrapass"});
+my $opts = new ZOOM::Options($option1,$option2);
+
+ $Zconnauth=create ZOOM::Connection($opts);
+
+	eval {
+	$Zconnauth->connect($context->{"config"}{"zebradb"},$context->{"config"}{"zebraport"});
+	};
+	if ($@){	
+		warn "Error-auth ", $@->code(), ": ", $@->message(), "\n";
+		die "Fatal error, cant connect to z3950 server";
+		
+	}
+	$Zconnauth->option(preferredRecordSyntax => "XML");
+	$Zconnauth->option(elementSetName=> "F");
+	$Zconnauuth->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
+	return $Zconnauth;
+}
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
@@ -780,6 +825,20 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.34  2006/04/10 21:40:23  tgarip1957
+# A new handler defined for zebra Zconnauth with read/write permission. Zconnauth should only be called in biblio.pm where write operations are. Use of this handler will break things unless koha.conf contains new variables:
+# zebradb=localhost
+# zebraport=<your port>
+# zebrauser=<username>
+# zebrapass=<password>
+#
+# The zebra.cfg file should read:
+# perm.anonymous:r
+# perm.username:rw
+# passw.c:<yourpasswordfile>
+#
+# Password file should be prepared with Apaches htpasswd utility in encrypted mode and should exist in a folder zebra.cfg can read
+#
 # Revision 1.33  2006/03/15 11:21:56  plg
 # bug fixed: utf-8 data where not displayed correctly in screens. Supposing
 # your data are truely utf-8 encoded in your database, they should be
