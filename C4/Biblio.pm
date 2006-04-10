@@ -350,6 +350,8 @@ sub MARCaddbiblio {
     # now, add subfields...
     foreach my $field (@fields) {
         $fieldcount++;
+		# make sure we're dealing with valid MARC tags
+		if ($field->tag =~ /^[0-9A-Za-z]{3}$/) {
         if ( $field->tag() < 10 ) {
             &MARCaddsubfield( $dbh, $bibid, $field->tag(), '', $fieldcount, '',
                 1, $field->data() );
@@ -369,6 +371,7 @@ sub MARCaddbiblio {
                 );
             }
         }
+		}
     }
 	# save leader
 	&MARCaddsubfield($dbh,$bibid,'000','',$fieldcount+1,'',1,$record->leader);
@@ -3001,6 +3004,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.49  2006/04/10 19:53:44  kados
+# adds a quick sanity check to make sure we're dealing with valid MARC
+# tags (a client of mine had tags from a Dynix system that were '???' and
+# this was causing bulkmarcimport.pl to fail horribly. This fixes that
+# problem).
+#
 # Revision 1.115.2.48  2006/03/08 16:50:14  kados
 # re-adding paul's fix for improper XML characters.
 #
