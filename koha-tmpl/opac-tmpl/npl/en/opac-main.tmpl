@@ -52,7 +52,13 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			<!-- TMPL_VAR name="CGIitemtype" --> 
+			<select name="value">
+					<option value="">Any item type</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+								</option>
+						<!-- /TMPL_LOOP -->
+				</select> 
 			Acquired by
 			<input type="hidden" name="marclist" value="items.homebranch" />
 			<input type="hidden" name="and_or" value="and" />
