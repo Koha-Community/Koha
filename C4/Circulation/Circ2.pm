@@ -36,6 +36,7 @@ use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts2;
 use Date::Manip;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -512,7 +513,21 @@ sub dotransfer {
 	#update holdingbranch in items .....
 	$dbh->do("UPDATE items set holdingbranch = $tbr WHERE	items.itemnumber = $itm");
 	&itemseen($itm);
+	&domarctransfer($dbh,$itm);
 	return;
+}
+
+##New sub to dotransfer in marc tables as well. Not exported -TG 10/04/2006
+sub domarctransfer{
+
+my ($dbh,$itemnumber) = @_;
+$itemnumber=~s /\'//g; ##itemnumber seems to come with quotes-TG
+my $sth=$dbh->prepare("select biblionumber,holdingbranch from items where itemnumber=$itemnumber");
+	$sth->execute();
+while (my ($biblionumber,$holdingbranch)=$sth->fetchrow ){
+&MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'items.holdingbranch',$holdingbranch,0);
+}
+return;
 }
 
 =head2 canbookbeissued
