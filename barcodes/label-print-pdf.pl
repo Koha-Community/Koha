@@ -299,19 +299,14 @@ sub build_circ_barcode {
         $value = substr( $value, 0, 12 );
 
         eval {
-            PDF::Reuse::Barcode::EAN13(
-                x     => ( $x_pos_circ + 27 ),
-                y     => ( $y_pos + 15 ),
+  	    PDF::Reuse::Barcode::EAN13(
+                x     => ( $x_pos_circ + 32 ),
+                y     => ( $y_pos + 18 ),
                 value => $value,
 
                 #            prolong => 2.96,
-                #            xSize   => 1.5,
-
-                # ySize   => 1.2,
-
-# added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
-# i think its embedding extra fonts in the pdf file.
-#  mode => 'graphic',
+                xSize   => 1.5,
+                ySize   => 1.2,
             );
         };
         if ($@) {
