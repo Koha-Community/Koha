@@ -1,0 +1,58 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Labels<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="label-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+<div id="main">
+<h1 class="bull">Labels to be Printed</h1>
+<p>
+	Printing will start on row number <b><!-- TMPL_VAR NAME="startrow" --></b><br />
+	Printing will use <b><!-- TMPL_VAR NAME="sheets"--> sheets</b><br />
+	Currently <b>6 spare rows</b> on sheet 2
+</p>
+
+<!-- TMPL_IF NAME="resultsloop" -->
+<h2>Items</h2>
+<table border="0" cellspacing="0" cellpadding="0" class="collapse">
+<tr valign="top">
+        <td class="cell-header">Label Number</td>
+        <td class="cell-header">Summary</td>
+        <td class="cell-header">Item Type</td>
+        <td class="cell-header">Delete</td>
+</tr>
+<!-- TMPL_LOOP NAME="resultsloop" -->
+<tr>
+        <td class="cell">
+                <!-- TMPL_VAR NAME="labelno" -->
+        </td>
+        <td class="cell">
+                <b><!-- TMPL_VAR NAME="title" -->:</b> <!-- TMPL_VAR NAME="author" -->:
+                <!-- TMPL_VAR NAME="isbn" -->: <!-- TMPL_VAR NAME="barcode" -->
+        </td>
+        <td class="cell">
+                <!-- TMPL_VAR NAME="itemtype" -->
+        </td>
+        <td class="cell">
+                <a href="/cgi-bin/koha/barcodes/label-manager.pl?op=delete&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Delete</a>
+        </td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+<p><br />
+        <a href="#" onClick="Plugin()">Add Item</a> &nbsp;&nbsp;
+        <a href="/cgi-bin/koha/barcodes/label-print.pl">Preview</a> &nbsp;&nbsp;
+        <a href="/cgi-bin/koha/barcodes/label-manager.pl?op=deleteall">Delete All</a>
+</p>
+ <!-- TMPL_ELSE -->
+        <a href="#" onClick="Plugin()">Add Item</a>
+<!-- /TMPL_IF -->
+</form>
+</div>
+
+<script type="text/javascript">
+function Plugin() {
+	window.open('label-item-search.pl','FindABibIndex','width=500,height=400,toolbar=no,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="label-bottom.inc" -->
