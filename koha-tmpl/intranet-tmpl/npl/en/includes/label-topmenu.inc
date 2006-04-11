@@ -1,0 +1,1 @@
+<div id="topmenu"><a href="/cgi-bin/koha/label-home.pl">Labels Options</a> | <a href="/cgi-bin/koha/barcodes/label-manager.pl">Add Labels</a> | <a href="/cgi-bin/koha/barcodes/label-print.pl">Web Preview</a> | <a href="/cgi-bin/koha/barcodes/label-print-pdf.pl">Generate PDF</a</div>
