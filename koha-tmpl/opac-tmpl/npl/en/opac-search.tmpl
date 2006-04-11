@@ -50,18 +50,18 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="title" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+			<input type="text" id="title" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=opac&amp;index=title',1); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
 <tr><th><label for="author">Author</label></th><td><input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="author" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+			<input type="text" id="author" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=opac&amp;index=author',2); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
 <tr><th><label for="subject">Subject</label></th><td>			
 			<input type="hidden" name="marclist" value="bibliosubject.subject" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" id="subject" name="value" size="35" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+			<input type="text" id="subject" name="value" size="35" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=opac&amp;index=subject',3); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
 <tr><th><label for="seriestitle">Series title</label></th><td>			
 			<input type="hidden" name="marclist" value="biblio.seriestitle" />
 			<input type="hidden" name="and_or" value="and" />
@@ -136,51 +136,15 @@
 			<input type="hidden" name="operator" value="=" />
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-                        <select name="value">
-                                <option value="">Any Branch</option>
-                        <!-- TMPL_LOOP name="branchloop" -->
-                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
-="branchname" --></option>
-                        <!-- /TMPL_LOOP -->
-                        </select>
-			<br>over the last <input type="text" name="desc_or_asc" size="3" /> days
+		<select name="value"><option value="">Any Branch</option>
+			<!-- TMPL_LOOP name="branchloop" --><option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option><!-- /TMPL_LOOP -->
+       </select>
+			<br />over the last <input type="text" name="desc_or_asc" size="3" /> days
 			<input type="hidden" name="orderby" value="biblio.timestamp" />
 			<input type="submit" value="Search" class="submit" />
 </form>
 </div>
-<script type="text/javascript">
-function sql_update() {
-document.f.sql.value="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-			document.f.sql.value = document.f.sql.value+
-										document.f.and_or[i].value + ' (' +
-										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + ' ' +
-										document.f.operator[i].value + ' ' +
-										'\''+document.f.value[i].value + '\') ';
-		}
-	}
-}
-
-function AddStatement() {
-
-	document.forms[0].op.value="AddStatement";
-	document.f.submit();
-}
-
-function PopupSuggestion() {
-    var strQuery="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-		    strQuery += " "+document.f.value[i].value;
-		}
-	}
-	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-</script>
-
 
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
