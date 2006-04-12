@@ -38,7 +38,7 @@
 			</div><!-- TMPL_IF NAME="CAN_user_editcatalogue" --><div class="tabitem">
 		<form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Edit Record" /></form>
 		<form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate Record" /></form>
-		<form action="acqui.simple/additem.pl" method="get" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR name="biblionumber"-->" /><input type="submit" class="submit" value="Edit Items" />
+		<form action="acqui.simple/additem.pl" method="get" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR name="biblionumber"-->" /><input type="submit" class="submit" value="Edit Items" /></form>
 		<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->" /><input type="submit" class="cancel" value="Delete Record" onclick="confirm_deletion(); return false;" /></form>
 		</div><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
