@@ -8,7 +8,7 @@
 <!-- TMPL_IF NAME="loggedinusername" --><div id="members">
 	<ul>
 		<li>Logged in as <span class="loggedinusername"><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP --></span></li>
-		<li><a href="/cgi-bin/koha/opac-shelves.pl">My Book Lists</a></li>
+		<li><a href="/cgi-bin/koha/opac-shelves.pl">My Virtual Shelves</a></li>
 		<li><a href="/cgi-bin/koha/opac-user.pl">My Account</a></li>
 		<li><a class="logout" href="/cgi-bin/koha/opac-logout.pl">Log Out</a></li>
 	</ul>	
