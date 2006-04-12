@@ -1,0 +1,93 @@
+    <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+<div class="popup-block">
+
+<h1 class="catalogue">Catalogue Item Search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+
+	<h2 class="catalogue">Search On</h2>
+	<table cellpadding="0" cellspacing="5" border="0">
+	<tr><td>
+		<label class="label20">Title</label>
+	    </td>
+	    <td>
+		<input type="hidden" name="marclist" value="biblio.title">
+		<input type="hidden" name="and_or" value="and">
+		<input type="hidden" name="excluding" value="">
+		<input type="hidden" name="operator" value="contains">
+		<input type="text" name="value" onchange="sql_update()"  class="form-box-small">
+	    </td></tr>
+	<tr><td>
+		<label class="label20">ISSN</label>
+	    </td>
+	    <td>
+		<input type="hidden" name="marclist" value="biblioitems.issn">
+		<input type="hidden" name="and_or" value="and">
+		<input type="hidden" name="excluding" value="">
+		<input type="hidden" name="operator" value="=">
+		<input type="text" name="value" id="issn" onchange="sql_update()" class="form-box-small">
+	    </td></tr>
+	<tr><td>
+		Results per page:
+	    </td>
+	    <td>
+		<select align="right" name="resultsperpage" size="1">
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+		Ordered by
+		<select name="orderby" size="1">
+			<option value="biblio.title">Title</option>
+			<option value="biblio.author">Author</option>
+			<option value="biblioitems.dewey">Dewey</option>
+			<option value="biblioitems.publicationyear">Publication Year</option>
+			<option value="biblioitems.publishercode">Publisher</option>
+		</select>
+	    </td></tr>
+	<tr><td>
+		&nbsp;
+	    </td>
+	    <td>
+		<input type="submit" value="Start search" class="button catalogue">
+		<!--	<a href="javascript:PopupSuggestion()" class="button catalogue">Suggestions</a> -->
+	    </td></tr>
+	</table>
+</form>
+
+<script>
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
+</div>
