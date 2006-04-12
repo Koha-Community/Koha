@@ -1,0 +1,808 @@
+<html>
+<head>
+<title>UNIMARC Field 117 builder</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Presentation materielle</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aa" -->
+				<option value="aa" SELECTED>Trousse pedagogique</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Trousse pedagogique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ab" -->
+				<option value="ab" SELECTED>Trousse de laboratoire et de construction</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Trousse de laboratoire et de construction</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ac" -->
+				<option value="ac" SELECTED>Specimens (biologie)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Specimens (biologie)</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ad" -->
+				<option value="ad" SELECTED>Faune</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Faune</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ae" -->
+				<option value="ae" SELECTED>Flore</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Flore</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1af" -->
+				<option value="af" SELECTED>Mineraux</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Mineraux</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ag" -->
+				<option value="ag" SELECTED>Plaques de microscopes</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Plaques de microscopes</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ah" -->
+				<option value="ah" SELECTED>Jeux de patience (puzzle)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Jeux de patience (puzzle)</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ai" -->
+				<option value="ai" SELECTED>Outils et equipements</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Outils et equipements</option>
+	
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f1aj" -->
+				<option value="aj" SELECTED>Armes</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Armes</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ak" -->
+				<option value="ak" SELECTED>Recipients</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Recipients</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1al" -->
+				<option value="al" SELECTED>Mobilier</option>
+			<!-- TMPL_ELSE -->
+				<option value="al">Mobilier</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1be" -->
+				<option value="be" SELECTED>Production industrielle</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Production industrielle</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bf" -->
+				<option value="bf" SELECTED>Machines</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Machines</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bg" -->
+				<option value="bg" SELECTED>Monnaies</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Monnaies</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bh" -->
+				<option value="bh" SELECTED>Medailles</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Medailles</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bi" -->
+				<option value="bi" SELECTED>Joaillerie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Joaillerie</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1am" -->
+				<option value="am" SELECTED>Transport</option>
+			<!-- TMPL_ELSE -->
+				<option value="am">Transport</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1an" -->
+				<option value="an" SELECTED>Textile</option>
+			<!-- TMPL_ELSE -->
+				<option value="an">Textile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ao" -->
+				<option value="ao" SELECTED>Vetements</option>
+			<!-- TMPL_ELSE -->
+				<option value="ao">Vetements</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ap" -->
+				<option value="ap" SELECTED>Jeux</option>
+			<!-- TMPL_ELSE -->
+				<option value="ap">Jeux</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aq" -->
+				<option value="aq" SELECTED>Jouets</option>
+			<!-- TMPL_ELSE -->
+				<option value="aq">Jouets</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ar" -->
+				<option value="ar" SELECTED>Poupees</option>
+			<!-- TMPL_ELSE -->
+				<option value="ar">Poupees</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1as" -->
+				<option value="as" SELECTED>Modeles reduit</option>
+			<!-- TMPL_ELSE -->
+				<option value="as">Modeles reduit</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1at" -->
+				<option value="at" SELECTED>Modeles a assembler</option>
+			<!-- TMPL_ELSE -->
+				<option value="at">Modeles a assembler</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ba" -->
+				<option value="ba" SELECTED>Dioramas</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Dioramas</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bb" -->
+				<option value="bb" SELECTED>Duplicata</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Duplicata</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bc" -->
+				<option value="bc" SELECTED>Sculptures</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Sculptures</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bd" -->
+				<option value="bd" SELECTED>Materiel a dessin</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Materiel a dessin</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bj" -->
+				<option value="bj" SELECTED>Artefacts</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Artefacts</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Materiau 1</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2aa" -->
+				<option value="aa" SELECTED>Terre cuite</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Terre cuite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ab" -->
+				<option value="ab" SELECTED>Cire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Cire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ac" -->
+				<option value="ac" SELECTED>Argile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Argile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ad" -->
+				<option value="ad" SELECTED>Majolique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Majolique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ae" -->
+				<option value="ae" SELECTED>Porcelaine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Porcelaine</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2af" -->
+				<option value="af" SELECTED>Ceramique</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Ceramique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ag" -->
+				<option value="ag" SELECTED>Platre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Platre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ah" -->
+				<option value="ah" SELECTED>Verre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Verre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ba" -->
+				<option value="ba" SELECTED>Bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Bois</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ca" -->
+				<option value="ca" SELECTED>Ivoire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Ivoire</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2da" -->
+				<option value="da" SELECTED>Pierre</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">Pierre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2db" -->
+				<option value="db" SELECTED>Pierres precieuses</option>
+			<!-- TMPL_ELSE -->
+				<option value="db">Pierre precieuses</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2dc" -->
+				<option value="dc" SELECTED>Marbre</option>
+			<!-- TMPL_ELSE -->
+				<option value="dc">Marbre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2dd" -->
+				<option value="dd" SELECTED>Basalte</option>
+			<!-- TMPL_ELSE -->
+				<option value="dd">Basalte</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2df" -->
+				<option value="df" SELECTED>Porphyre</option>
+			<!-- TMPL_ELSE -->
+				<option value="df">Porphyre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ea" -->
+				<option value="ea" SELECTED>Papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ea">Papier</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2eb" -->
+				<option value="eb" SELECTED>Carton</option>
+			<!-- TMPL_ELSE -->
+				<option value="eb">Carton</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2fa" -->
+				<option value="fa" SELECTED>Metal Precieux</option>
+			<!-- TMPL_ELSE -->
+				<option value="fa">Metal Precieux</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2fb" -->
+				<option value="fb" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="fb">Metal</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2fc" -->
+				<option value="fc" SELECTED>Bronze</option>
+			<!-- TMPL_ELSE -->
+				<option value="fc">Bronze</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2fd" -->
+				<option value="fd" SELECTED>Cuivre</option>
+			<!-- TMPL_ELSE -->
+				<option value="fd">Cuivre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ga" -->
+				<option value="ga" SELECTED>Synthetique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">Synthetique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ha" -->
+				<option value="ha" SELECTED>Textile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ha">Textile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2ia" -->
+				<option value="ia" SELECTED>Plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ia">Plastique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Materiau 2</td>
+		<td>
+			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f3aa" -->
+				<option value="aa" SELECTED>Terre cuite</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Terre cuite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ab" -->
+				<option value="ab" SELECTED>Cire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Cire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ac" -->
+				<option value="ac" SELECTED>Argile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Argile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ad" -->
+				<option value="ad" SELECTED>Majolique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Majolique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ae" -->
+				<option value="ae" SELECTED>Porcelaine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Porcelaine</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3af" -->
+				<option value="af" SELECTED>Ceramique</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Ceramique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ag" -->
+				<option value="ag" SELECTED>Platre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Platre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ah" -->
+				<option value="ah" SELECTED>Verre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Verre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ba" -->
+				<option value="ba" SELECTED>Bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Bois</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ca" -->
+				<option value="ca" SELECTED>Ivoire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Ivoire</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3da" -->
+				<option value="da" SELECTED>Pierre</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">Pierre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3db" -->
+				<option value="db" SELECTED>Pierres precieuses</option>
+			<!-- TMPL_ELSE -->
+				<option value="db">Pierre precieuses</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3dc" -->
+				<option value="dc" SELECTED>Marbre</option>
+			<!-- TMPL_ELSE -->
+				<option value="dc">Marbre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3dd" -->
+				<option value="dd" SELECTED>Basalte</option>
+			<!-- TMPL_ELSE -->
+				<option value="dd">Basalte</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3df" -->
+				<option value="df" SELECTED>Porphyre</option>
+			<!-- TMPL_ELSE -->
+				<option value="df">Porphyre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ea" -->
+				<option value="ea" SELECTED>Papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ea">Papier</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3eb" -->
+				<option value="eb" SELECTED>Carton</option>
+			<!-- TMPL_ELSE -->
+				<option value="eb">Carton</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3fa" -->
+				<option value="fa" SELECTED>Metal Precieux</option>
+			<!-- TMPL_ELSE -->
+				<option value="fa">Metal Precieux</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3fb" -->
+				<option value="fb" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="fb">Metal</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3fc" -->
+				<option value="fc" SELECTED>Bronze</option>
+			<!-- TMPL_ELSE -->
+				<option value="fc">Bronze</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3fd" -->
+				<option value="fd" SELECTED>Cuivre</option>
+			<!-- TMPL_ELSE -->
+				<option value="fd">Cuivre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ga" -->
+				<option value="ga" SELECTED>Synthetique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">Synthetique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ha" -->
+				<option value="ha" SELECTED>Textile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ha">Textile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3ia" -->
+				<option value="ia" SELECTED>Plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ia">Plastique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Materiau 3</td>
+		<td>
+			<select name="f4" size="1">
+			<!-- TMPL_IF name="f4  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4aa" -->
+				<option value="aa" SELECTED>Terre cuite</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Terre cuite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ab" -->
+				<option value="ab" SELECTED>Cire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Cire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ac" -->
+				<option value="ac" SELECTED>Argile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Argile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ad" -->
+				<option value="ad" SELECTED>Majolique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Majolique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ae" -->
+				<option value="ae" SELECTED>Porcelaine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Porcelaine</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4af" -->
+				<option value="af" SELECTED>Ceramique</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Ceramique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ag" -->
+				<option value="ag" SELECTED>Platre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Platre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ah" -->
+				<option value="ah" SELECTED>Verre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Verre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ba" -->
+				<option value="ba" SELECTED>Bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Bois</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ca" -->
+				<option value="ca" SELECTED>Ivoire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Ivoire</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4da" -->
+				<option value="da" SELECTED>Pierre</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">Pierre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4db" -->
+				<option value="db" SELECTED>Pierres precieuses</option>
+			<!-- TMPL_ELSE -->
+				<option value="db">Pierre precieuses</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4dc" -->
+				<option value="dc" SELECTED>Marbre</option>
+			<!-- TMPL_ELSE -->
+				<option value="dc">Marbre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4dd" -->
+				<option value="dd" SELECTED>Basalte</option>
+			<!-- TMPL_ELSE -->
+				<option value="dd">Basalte</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4df" -->
+				<option value="df" SELECTED>Porphyre</option>
+			<!-- TMPL_ELSE -->
+				<option value="df">Porphyre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ea" -->
+				<option value="ea" SELECTED>Papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ea">Papier</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4eb" -->
+				<option value="eb" SELECTED>Carton</option>
+			<!-- TMPL_ELSE -->
+				<option value="eb">Carton</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4fa" -->
+				<option value="fa" SELECTED>Metal Precieux</option>
+			<!-- TMPL_ELSE -->
+				<option value="fa">Metal Precieux</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4fb" -->
+				<option value="fb" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="fb">Metal</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4fc" -->
+				<option value="fc" SELECTED>Bronze</option>
+			<!-- TMPL_ELSE -->
+				<option value="fc">Bronze</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4fd" -->
+				<option value="fd" SELECTED>Cuivre</option>
+			<!-- TMPL_ELSE -->
+				<option value="fd">Cuivre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ga" -->
+				<option value="ga" SELECTED>Synthetique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">Synthetique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ha" -->
+				<option value="ha" SELECTED>Textile</option>
+			<!-- TMPL_ELSE -->
+				<option value="ha">Textile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ia" -->
+				<option value="ia" SELECTED>Plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ia">Plastique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+
+
+
+	<tr>
+		<td>Couleur</td>
+		<td>
+	<select name="f5" size="1">
+			<!-- TMPL_IF name="f5 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5a" -->
+				<option value="a" SELECTED>Monochrome</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">Monochrome</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5b" -->
+				<option value="b" SELECTED>Noir et blanc</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Noir et blanc</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" SELECTED>Multicolore</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Multicolore</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" SELECTED>Colorie a la main</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Colorie a la main</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5v" -->
+				<option value="v" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Composite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+	</tr>
+
+	
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-catalog.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-search-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-addBiblio-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/bull-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-subscriptions-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-4">
+	<a href="/cgi-bin/koha/bull/lateissues.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-lateIssues-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-5">
+	<a href="/cgi-bin/koha/bookshelves/shelves.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-virtualShelves-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Catalog: MARC Search Results</dt>
+<dd>
+
+<div id="main">
+<!-- TMPL_IF NAME="searchdesc" -->
+    <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span></h3>
+<!-- TMPL_ELSE -->
+  		<h3>You did not specify any search criteria</h3>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="total" --><div id="pages">
+<!-- TMPL_IF NAME="displayprev" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;</a> 
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" -->
+			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
+				<!-- TMPL_ELSE -->
+			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
+
+<div id="results"><!-- TMPL_IF name="total" -->Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --> records.<!-- TMPL_ELSE -->No results found.<!-- /TMPL_IF --></div>
+
+<div class="table searchresults"><table>
+	<tr>
+	<th>Type</th>
+	<th>Title</th>
+	<th>Copies</th>
+	<th>Location</th>
+	<th>&nbsp;</th>
+	</tr>
+<tbody>
+	<!-- TMPL_LOOP name="result" -->
+		<tr<!-- TMPL_IF NAME="even" --> class="highlight"<!-- /TMPL_IF -->>
+			<td><!-- TMPL_VAR NAME="description" --></td>			
+			<td><p><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></p>
+						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
+					</p></td>
+			<td><!-- TMPL_VAR NAME="totitem" --></td>
+<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_IF name="date_due" --><div id="issued"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)<!-- TMPL_IF name="date_due" --></div><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td><td><!-- TMPL_UNLESS name="norequests" --><a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Reserves</a><!-- TMPL_ELSE -->Not Reservable<!-- /TMPL_UNLESS --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table></div>
+
+<!-- TMPL_IF name="total" --><div id="pages">
+<!-- TMPL_IF NAME="displayprev" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;</a> 
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" -->
+			 	 <span class="current"><!-- TMPL_VAR NAME="number" --></span>
+				<!-- TMPL_ELSE -->
+			  	  <a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME=number --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
+
+</div>
+
+</dd>
+</dl>
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-catalog.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-search-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-addBiblio-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/bull-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-subscriptions-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-4">
+	<a href="/cgi-bin/koha/bull/lateissues.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-lateIssues-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-5">
+	<a href="/cgi-bin/koha/bookshelves/shelves.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-virtualShelves-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Subscriptions: Serials - Late Issues</dt>
+<dd>
+
+<div id="main">
+
+<h1>Late issues</h1>
+<form action="lateissues.pl" method="post">
+	<table>
+		<tr>
+			<th>Supplier</th>
+			<th>Title</th>
+			<th>Issue number</th>
+			<th>Late since</th>
+			<th colspan="2">&nbsp;</th>
+		</tr>
+		
+	<tr>
+		<td><!-- TMPL_VAR name="CGIsupplier" --></td>
+		<td><p><!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="bookselleremail" --></p><!-- TMPL_IF NAME="bookselleremail" --><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+					</p><!-- /TMPL_IF --></td>
+		<td><input type="submit" value="Filter" class="submit" /></td>
+		<td colspan="3">&nbsp;</td>	
+	</tr>
+		
+<!-- TMPL_LOOP name="lateissues" -->
+			<tr>
+				<td><!-- TMPL_VAR name="name" --></td>
+				<td><!-- TMPL_VAR name="Title" --></td>
+				<td><!-- TMPL_VAR name="serialseq" --></td>
+				<td><!-- TMPL_VAR name="planneddate" --></td>
+				<td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Details</a></td><td><a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a></td>
+			</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</form>
+</div>
+
+<br />
+<br />
+<br />
+<br />
+</dd>
+</dl>
+</body>
+</html>
+

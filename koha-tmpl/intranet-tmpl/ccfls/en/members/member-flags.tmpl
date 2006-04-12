@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-members.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/members/members-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-search-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-addMember-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-addOrganization-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Patrons: Set Privileges</dt>
+<dd>
+
+<div id="main">
+<form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+	<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="member" -->" />
+	<input type="hidden" name="newflags" value="1" />
+<div class="table">	<table>
+	<caption>Set Privileges for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></caption>
+	<tr><th>Flag</th><th>Name</th><th>Description</th></tr>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td>
+				<input type="checkbox" name="flag-<!-- TMPL_VAR NAME="bit" -->" <!-- TMPL_VAR NAME="checked" --> />
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="flag" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="flagdesc" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table></div>
+<p><input type="submit" value="Set Flags" class="submit" /> <input class="cancel" type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="member" -->'; return false;" /></p>
+
+</form>
+</div>
+
+</dd>
+</dl>
+</body>
+</html>

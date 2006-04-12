@@ -1,0 +1,87 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-noneSelected.inc" -->
+
+<dl>
+<dt>Barcodes Generator</dt>
+<dd>
+
+
+<!--   START OF ADD COUNTRY CODE PANEL  -->
+<div class="countryPanel" id="addCountryCode">
+ 	<form action="/cgi-bin/koha/barcodes/barcodes.pl" method="post" style="display:inline">
+		<input type="hidden" name="addCode" value="1" />
+<h4>Add a new Country Code</h4>
+<ul>
+	<li><label for="countryName">Country Name:</label> <input type="text" size="10" id="countryName" name="countryName" /></li>
+	<li><label for="countryCode">Country Code:</label> <input type="text" size="3" id="countryCode" name="countryCode" /></li>
+</ul>
+<p><input type="submit" name="submit" id="submit" class="submit" value="Save Code"/>
+<input type="button" name="cancel" id="cancel" class="cancel" value="Cancel" onclick="document.getElementById('addCountryCode').style.display = 'none'" /></p>
+	</form>
+</div>
+
+<!--   END OF ADD COUNTRY CODE PANEL  -->
+
+	<h1>Barcodes Generator</h1>
+	<h3>Generate barcodes from inventory codes</h3>
+	<div class="help"><ul class="notes">
+		<li>Select a range of inventary codes. You can choose a continuous range or individual inventory codes</li>
+		<li>Select the standard type to generate barcodes.</li>
+		<li>Define the page size for output the PDF.</li>
+		<li>Depending on page size, Koha will show you how the page is arranged
+		    for each barcode. You can define which point to start printing the page.
+		</li>
+	</ul></div>
+	
+<!-- TMPL_IF NAME="ERROR" -->Can't find inventory codes in that range. Please try again.<!-- /TMPL_IF -->
+
+	<form id="formulario" method="POST" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1" onsubmit="return checkFields(this);" target="_blank">
+
+<div class="data">
+<table>
+	<tr><th><label for="rangeType">Type of Interval: </label></th><td><!-- TMPL_VAR NAME="RANGE_TYPE" --><div id="continuous" class="panel" style="display:block">
+	<ul>
+		<li><label for="from">From:</label><input id="from" type="text" name="from" size="20" /></li>
+		<li><label for="to">To:</label><input id="to" type="text" name="to" size="20" /></li>
+	</ul>
+</div>
+
+					 
+ <div id="individuals" class="panel" style="display:none;">
+<label for="inventaryCode">Inventory Code: </label><input id="inventaryCode" type="text" name="inventaryCode" size="20" />
+<a href="#" onclick="addItem(); return false;">[+]</a>	
+<a href="#" onclick="removeItem(); return false;">[-]</a>
+<select id="inventaryList" size="5" style="width:150px">
+</select>
+<input type="hidden" id="individualCodes" name="individualCodes">																						
+</div></td></tr>		
+	<tr><th><label for="numbersystem">Country Code: </label></th><td><!-- TMPL_VAR NAME="NUMBER_SYSTEM" --><a href="#" onClick="addCountryCode(); return false;">[+]</a></td></tr>		
+	<tr><th><label for="pageType">Page Size: </label></th><td><input type="text" id="pageType" name="pageType" readonly="readonly" disabled="disabled" value="<!-- TMPL_VAR NAME="PAGES" -->"  size="10" /><a href="/cgi-bin/koha/barcodes/printerConfig.pl">[Go to Printer Configuration]</a></td></tr>		
+	<tr><th><label for="text_under_label">Text under label: </label></th><td><input type="text" id="text_under_label" name="text_under_label" size="40" value="<!-- TMPL_VAR name="text_under_label -->" /> If this field is empty, author and title will be used instead</td></tr>		
+		
+</table></div>
+
+			    	<table>
+						<tr>
+							<th colspan="<!-- TMPL_VAR NAME="COL_SPAN" -->">Label number to start printing</th>
+						</tr>
+						<!-- TMPL_LOOP NAME="LABEL_TABLE" -->
+							<tr>
+								<!-- TMPL_LOOP NAME="columns" -->
+									<td>
+										<input type="radio" id="label" value="<!-- TMPL_VAR NAME="tagname" -->" name="label" <!-- TMPL_VAR NAME="check" --> />  Label  <!-- TMPL_VAR NAME="labelname" --></td>
+								<!-- /TMPL_LOOP -->
+							</tr>
+						<!-- /TMPL_LOOP -->  			    
+					</table>
+
+<input type="submit" value="Generate Barcodes" class="submit" name="B1" />
+<input type="reset" value="Clear Fields" class="cancel" name="B2" />
+</form>
+</div>
+
+</dd>
+</dl>
+</body>
+</html>

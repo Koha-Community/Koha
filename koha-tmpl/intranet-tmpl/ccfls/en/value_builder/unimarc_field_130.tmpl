@@ -1,0 +1,376 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 130</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Presentation materielle:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Carte a fenetre</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Carte a fenetre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Microfilm en cartouche</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Microfilm en cartouche</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Microfilm en cassette</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Microfilm en cassette</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Microfilm en bobine</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Microfilm en bobine</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Microfiche</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Microfiche</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>Microfiche en cassette</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Microfiche en cassette</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1g" -->
+				<option value="g" SELECTED>Micro opaque</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Micro opaque</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>Bande microfilm</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Bande microfilm</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Polarite:</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Positif</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Positif</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Negatif</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Negatif</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Plusieurs polarites</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Plusieurs polarites</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Dimensions:</td>
+		<td>
+			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3a" -->
+				<option value="a" SELECTED>8 mm (microfilm)</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">8 mm (microfilm)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3d" -->
+				<option value="d" SELECTED>16 mm (microfilm)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">16 mm (microfilm)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3f" -->
+				<option value="f" SELECTED>35 mm (microfilm)</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">35 mm (microfilm)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3g" -->
+				<option value="g" SELECTED>70 mm (microfilm)</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">70 mm (microfilm)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3h" -->
+				<option value="h" SELECTED>105 mm (microfilm)</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">105 mm (microfilm)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3l" -->
+				<option value="l" SELECTED>3 x 5 pouces</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">3 x 5 pouces</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3m" -->
+				<option value="m" SELECTED>4 x 6 pouces</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">4 x 6 pouces</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3o" -->
+				<option value="o" SELECTED>6 x 9 pouces</option>
+			<!-- TMPL_ELSE -->
+				<option value="o">6 x 9 pouces</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3p" -->
+				<option value="p" SELECTED>9 x 19 cm</option>
+			<!-- TMPL_ELSE -->
+				<option value="p">9 x 19 cm</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Rapport de reduction:</td>
+		<td>
+			<select name="f4" size="1">
+			<!-- TMPL_IF name="f4 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4a" -->
+				<option value="a" SELECTED>Faible reduction</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Faible reduction</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4b" -->
+				<option value="b" SELECTED>Normale (16x - 30x)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Normale (16x - 30x)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4c" -->
+				<option value="c" SELECTED>Elevee (31x - 60x)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Elevee (31x - 60x)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4d" -->
+				<option value="d" SELECTED>Tres elevee (61x - 90x)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Tres elevee (61x - 90x)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4e" -->
+				<option value="e" SELECTED>Ultra elevee (91x -)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Ultra elevee (91x -)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4v" -->
+				<option value="v" SELECTED>Divers</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Divers</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+    <tr>
+                <td>Rapport de reduction specifique</td>
+                <td><input type="text" name="f5" maxlength=3 size=4 
+value="<!-- TMPL_VAR name="f5" -->"></td>
+        </tr>
+
+		</td></tr>
+	<tr>
+		<td>Couleur:</td>
+		<td>
+			<select name="f6" size="1">
+			<!-- TMPL_IF name="f6 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" SELECTED>Monochrome</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Monochrome</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6b" -->
+				<option value="b" SELECTED>Couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Couleur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6v" -->
+				<option value="v" SELECTED>Divers</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Divers</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Emulsion:</td>
+		<td>
+			<select name="f7" size="1">
+			<!-- TMPL_IF name="f7 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7a" -->
+				<option value="a" SELECTED>Sel d'argent</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Sel d'argent</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7b" -->
+				<option value="b" SELECTED>Diazoique</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Diazoique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7c" -->
+				<option value="c" SELECTED>Vesiculaire</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Vesiculaire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7d" -->
+				<option value="d" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7u" -->
+				<option value="u" SELECTED>Emulsions diverses</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Emulsions diverses</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Generation (copies):</td>
+		<td>
+			<select name="f8" size="1">
+			<!-- TMPL_IF name="f8 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8a" -->
+				<option value="a" SELECTED>Premiere generation (master)</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Premiere generation (master)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8b" -->
+				<option value="b" SELECTED>Tirage</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Tirage</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8c" -->
+				<option value="c" SELECTED>Copie de service</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Copie de service</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8v" -->
+				<option value="v" SELECTED>Generations diverses</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Generations diverses</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Support de film:</td>
+		<td>
+			<select name="f9" size="1">
+			<!-- TMPL_IF name="f9 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9a" -->
+				<option value="a" SELECTED>Support de securite</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Support de securite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9b" -->
+				<option value="b" SELECTED>Il ne s'agit pas d'un support de securite</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Il ne s'agit pas d'un support de securite</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+	    document.f_pop.f5.value=document.f_pop.f5.value+'   ';
+
+
+
+	    document.f_pop.f5.value=document.f_pop.f5.value.substring(0,3);
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value ;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

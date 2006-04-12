@@ -1,0 +1,54 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-members.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/members/members-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-search-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-addMember-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-members-addOrganization-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Patrons: Create Manual Invoice</dt>
+<dd>
+
+<div id="main">
+<form class="inline" action="/cgi-bin/koha/maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+	<div class="data"><table>
+	<caption>Manual Invoice</caption>
+	<tr><th>Borrowernumber</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+	<tr><th>Type</th><td><select name="type">
+<option value="L">Lost Item</option>
+<option value="F">Fine</option>
+<option value="A">Account Management Fee</option>
+<option value="N">New Card</option>
+<option value="M">Sundry</option>
+<option value="REF">Cash Refund</option>
+</select></td></tr>
+	<tr><th>Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th>Amount</th><td>$<input type="text" name="amount" /></td></tr>
+	</table></div>
+<input type="submit" name="add" value="Add Charge" class="submit" />
+</form> <form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Cancel" /></form>
+
+
+</div>
+
+
+</dd>
+</dl>
+</body>
+</html>

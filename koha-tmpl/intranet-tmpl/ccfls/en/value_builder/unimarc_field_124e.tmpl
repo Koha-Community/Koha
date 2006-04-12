@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 124e</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Categorie du satellite pour la teledetection:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Meteorologique</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Meteorologique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Exploration terrestre</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Exploration terrestre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Observation spatiale</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Observation spatiale</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

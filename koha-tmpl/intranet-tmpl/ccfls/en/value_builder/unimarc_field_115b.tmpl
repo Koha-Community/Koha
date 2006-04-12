@@ -1,0 +1,685 @@
+<html>
+<head>
+<title>UNIMARC Field 115b builder</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Copie (generation)</td>
+		<td>
+			<select name="f1" size="1">
+   <!-- TMPL_IF name="f1 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Original</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Original</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Master</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Master</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Copie</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Copie</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Tirage de reference / copie de controle</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Tirage de reference / copie de controle</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1x" -->
+				<option value="x" SELECTED>Non-applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non-applicable</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Elements de production (montage)</td>
+		<td>
+			<select name="f2" size="1">
+   <!-- TMPL_IF name="f2 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Epreuve</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Epreuve</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Amorces</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Amorces</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Chutes</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Chutes</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Rushes</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Rushes</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>Pistes de mixage</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Pistes de mixage</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2g" -->
+				<option value="g" SELECTED>Generiques/bobines inter-titres</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Generiques/bobines inter-titres</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2h" -->
+				<option value="h" SELECTED>Bobines de production</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Bobines de production</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+
+
+
+	<tr>
+		<td>Categories fines de couleurs (films)</td>
+		<td>
+	<select name="f3" size="1">
+   <!-- TMPL_IF name="f3 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f3a" -->
+				<option value="a" SELECTED>Trois couches de pigment</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Trois couches de pigment</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f3b" -->
+				<option value="b" SELECTED>Deux couleurs, simple bande</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Deux couleurs, simple bande</option>
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f3c" -->
+				<option value="c" SELECTED>Indeterminee, 2 couleurs</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Indeterminee, 2 couleurs</option>
+	
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f3d" -->
+				<option value="d" SELECTED>Indeterminee, 3 couleurs</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Indeterminee, 3 couleurs</option>
+	
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f3e" -->
+				<option value="e" SELECTED>Trois bandes de couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Trois bandes de couleur</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3f" -->
+				<option value="f" SELECTED>Deux bandes de couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Deux bandes de couleur</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3g" -->
+				<option value="g" SELECTED>Bande rouge</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Bande rouge</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3h" -->
+				<option value="h" SELECTED>Bande bleue ou verte</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Bande bleue ou verte</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3i" -->
+				<option value="i" SELECTED>Bande cyan</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Bande cyan</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3j" -->
+				<option value="j" SELECTED>Bande magenta</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Bande magenta</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3k" -->
+				<option value="k" SELECTED>Bande jaune</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Bande jaune</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3l" -->
+				<option value="l" SELECTED>SEN 2</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">SEN 2</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3m" -->
+				<option value="m" SELECTED>SEN 3</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">SEN 3</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3n" -->
+				<option value="n" SELECTED>Tirage sepia</option>
+			<!-- TMPL_ELSE -->
+				<option value="n">Tirage sepia</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3o" -->
+				<option value="o" SELECTED>Autre tirage</option>
+			<!-- TMPL_ELSE -->
+				<option value="o">Autre tirage</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3p" -->
+				<option value="p" SELECTED>Colore</option>
+			<!-- TMPL_ELSE -->
+				<option value="p">Colore</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3q" -->
+				<option value="q" SELECTED>Colore et teinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="q">Colore et teinte</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3r" -->
+				<option value="r" SELECTED>Colore au pochoir</option>
+			<!-- TMPL_ELSE -->
+				<option value="r">Colore au pochoir</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3s" -->
+				<option value="s" SELECTED>Colore a la main</option>
+			<!-- TMPL_ELSE -->
+				<option value="s">Colore a la main</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+	
+			<!-- /TMPL_IF -->
+
+
+				</select>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td>Emulsion (polarite)</td>
+		<td>
+			<select name="f4" size="1">
+   <!-- TMPL_IF name="f4 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4a" -->
+				<option value="a" SELECTED>Positif</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Positif</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4b" -->
+				<option value="b" SELECTED>Negatif</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Negatif</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td>Support de film</td>
+		<td>
+			<select name="f5" size="1">
+   <!-- TMPL_IF name="f5 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5a" -->
+				<option value="a" SELECTED>Securite (triacetate)</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Securite (triacetate)</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5b" -->
+				<option value="b" SELECTED>Nitrate</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Nitrate</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" SELECTED>Securite (diacetate)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Securite (diacetate)</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" SELECTED>Polyester</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Polyester</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f5x" -->
+				<option value="x" SELECTED>Support composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Support composite</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f5z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+
+        </tr>
+
+
+
+
+
+
+	<tr>
+		<td>Type de sonorisation</td>
+		<td>
+			<select name="f6" size="1">
+   <!-- TMPL_IF name="f6 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" SELECTED>Monaural</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Monaural</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6b" -->
+				<option value="b" SELECTED>Stereophonique</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Stereophonique</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6c" -->
+				<option value="c" SELECTED>Multicanaux, en relief ou quadriphonique</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Multicanaux, en relief ou quadriphonique</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6v" -->
+				<option value="v" SELECTED>Canaux varies</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Canaux varies</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f6x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f6z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+
+
+	<tr>
+		<td>Type de film ou d'epreuve (tirage)</td>
+		<td>
+			<select name="f7" size="1">
+   <!-- TMPL_IF name="f7 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7a" -->
+				<option value="a" SELECTED>Procede par imbibition</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Procede par imbibition</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7b" -->
+				<option value="b" SELECTED>Procede tricouches</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Procede tricouches</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7c" -->
+				<option value="c" SELECTED>Procede tricouches (faible contraste)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Procede tricouches (faible contraste)</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7d" -->
+				<option value="d" SELECTED>Pellicule positive par duplication</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Pellicule positive par duplication</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f7x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f7z" -->
+				<option value="z" SELECTED>Autres</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autres</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+
+        </tr>
+
+
+	<tr>
+		<td>Etat de la copie (deterioration)</td>
+		<td>
+			<select name="f8" size="1">
+   <!-- TMPL_IF name="f8 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8a" -->
+				<option value="a" SELECTED>Nitrate - odeur suspecte</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Nitrate - odeur suspecte</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8c" -->
+				<option value="c" SELECTED>Nitrate - odeur acre</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Nitrate - odeur acre</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8d" -->
+				<option value="d" SELECTED>Nitrate - brunissage, decoloration, pali, poussiereux</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Nitrate - brunissage, decoloration, pali, poussiereux</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8e" -->
+				<option value="e" SELECTED>Nitrate - collant</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Nitrate - collant</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8f" -->
+				<option value="f" SELECTED>Nitrate - mousse, bulles, cloques</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Nitrate - mousse, bulles, cloques</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8g" -->
+				<option value="g" SELECTED>Nitrate, coagule</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Nitrate, coagule</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8h" -->
+				<option value="h" SELECTED>Nitrate, poudre</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Nitrate, poudre</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8k" -->
+				<option value="k" SELECTED>Non-nitrate - deterioration visible (par exemple odeur de diacetate)</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Non-nitrate - deterioration visible (par exemple odeur de diacetate)</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8l" -->
+				<option value="l" SELECTED>Non-nitrate, deterioration avancee</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">Non-nitrate, deterioration avancee</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8m" -->
+				<option value="m" SELECTED>Non-nitrate - deterioration catastrophique</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Non-nitrate - deterioration catastrophique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8y" -->
+				<option value="y" SELECTED>Pas de deterioration</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Pas de deterioration</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+
+        </tr>
+
+	<tr>
+		<td>Etat de la version (completude)</td>
+		<td>
+			<select name="f9" size="1">
+   <!-- TMPL_IF name="f9 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9a" -->
+				<option value="a" SELECTED>Incomplet</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Incomplet</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9b" -->
+				<option value="b" SELECTED>Complet</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Complet</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+
+        </tr>
+
+
+
+
+   <tr>
+                <td>Date d'enregistrement</td>
+                <td>Annee <input type="text" name="f10" maxlength=4 size=5 value="<!-- TMPL_VAR name="f10" -->"></td>
+                <td>mois <input type="text" name="f11" maxlength=2 size=3 value="<!-- TMPL_VAR name="f11" -->"></td>
+        </tr>
+	
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+document.f_pop.f10.value=document.f_pop.f10.value+'    ';
+document.f_pop.f10.value=document.f_pop.f10.value.substring(0,4);
+document.f_pop.f11.value=document.f_pop.f11.value+'  ';
+document.f_pop.f11.value=document.f_pop.f11.value.substring(0,2);
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

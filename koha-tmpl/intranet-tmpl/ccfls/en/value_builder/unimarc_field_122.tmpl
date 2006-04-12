@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 122</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Ere code:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>La date
+				tombe avant l'an 1 du calendrier gregorien</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">La date tombe avant
+				l'an 1 du calendrier gregorien</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>La date
+				tombe apres l'an 1</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">La date tombe apres
+				l'an 1</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Spatiale</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Spatiale</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+<tr>		<td>Annee:</td>
+		   <td><input type="text" name="f2" maxlength=4 size=5
+		   value="<!-- TMPL_VAR name="f2" -->">
+		</td>
+
+		<td>Mois:</td>
+		         <td><input type="text" name="f3" maxlength=2
+		         size=3
+                   value="<!-- TMPL_VAR name="f3" -->"></td>
+		<td>Jour:</td>
+		         <td><input type="text" name="f4" maxlength=2
+		         size=3
+                   value="<!-- TMPL_VAR name="f4" -->"></td>
+
+		<td>Heure:</td>
+		         <td><input type="text" name="f5" maxlength=2
+		         size=3
+                   value="<!-- TMPL_VAR name="f5" -->"></td>
+
+		</tr>
+
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+document.f_pop.f2.value=document.f_pop.f2.value+'    ';
+document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+document.f_pop.f4.value=document.f_pop.f4.value+'  ';
+document.f_pop.f5.value=document.f_pop.f5.value+'  ';
+
+
+
+document.f_pop.f2.value=document.f_pop.f2.value.substring(0,4);
+document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
+document.f_pop.f5.value=document.f_pop.f5.value.substring(0,2);
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value ;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

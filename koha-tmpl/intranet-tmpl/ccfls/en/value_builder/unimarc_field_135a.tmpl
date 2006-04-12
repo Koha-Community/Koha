@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 135a</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Type de fichier informatique:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Donnees numeriques</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Donnees numeriques</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Programmes</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Programmes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Representations</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Representations</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Texte</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Texte</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1v" -->
+				<option value="v" SELECTED>Combinaison de donnees</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Combinaison de donnees</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

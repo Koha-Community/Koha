@@ -1,0 +1,1 @@
+<div id="topmenu"><a href="/cgi-bin/koha/admin-home.pl">System Administration Home</a> | <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></div>

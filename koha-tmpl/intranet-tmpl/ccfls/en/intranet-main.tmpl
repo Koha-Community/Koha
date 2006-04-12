@@ -1,0 +1,82 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-noneSelected.inc" -->
+
+<dl>
+<dt>Intranet: Home</dt>
+<div id="mainNULL">
+  <div id="menuNULL">
+    <dd><a href="/cgi-bin/koha/circ/circulation.pl"> Circulation</a></dd>
+    <dd>
+      <ul>
+        <li><a href="/cgi-bin/koha/circ/circulation.pl">Issues</a></li>
+        <li><a href="/cgi-bin/koha/circ/returns.pl">Returns</a></li>
+        <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
+        <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set Branch</a></li>
+      </ul>
+    </dd>
+    <dd><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></dd>
+    <dd>Start with a search to add, update, or delete a record, check accounts, &amp; renew items.
+      <form action="/cgi-bin/koha/members/member.pl" method="post">
+        <label for="member">Enter Name or Barcode</label>
+        <input id="member" type="text" size="25" name="member" />
+        <input type="submit" value="Search" class="submit" />
+      </form>
+    </dd>
+    <dd><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog Search</a></dd>
+    <dd>Search bibilographic records
+      <form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl">
+        <input type="hidden" name="op" value="do_search" />
+        <input type="hidden" name="type" value="intranet" />
+        <input type="hidden" name="nbstatements" value="3" />
+        <label for="keyword">Quick Search: </label>
+        <input type="hidden" name="marclist" value="" />
+        <input type="hidden" name="and_or" value="and" />
+        <input type="hidden" name="excluding" value="" />
+        <input type="hidden" name="operator" value="contains" />
+        <input type="text" id="keyword" name="value" size="25" />
+        <input type="submit" value="Start search" class="submit">
+      </form>
+      <ul>
+        <li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li>
+        <!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL -->
+        <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual shelves</a></li>
+      </ul>
+    </dd>
+  </div>
+  <div id="submenuNULL">
+    <dd><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a></dd>
+    <dd>
+      <ul>
+        <!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Enter Brief Record (Temp Cards)</a> </li> /Display for NPL -->
+        <li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a></li>
+        <!-- Hide from NPL -->
+        <li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
+        <li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li>
+        <!-- /Hide from NPL -->
+      </ul>
+    </dd>
+    <!-- Hide from NPL -->
+    <dd><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports </a></dd>
+    <dd>Till reconciliation, overdues, and inventory</dd>
+    <!-- /Hide from NPL -->
+    <!-- Hide from NPL -->
+    <dd><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a></dd>
+    <dd>
+      <ul>
+        <li><a href="/cgi-bin/koha/admin-home.pl">System Adminstration Home</a></li>
+        <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li>
+        <li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes generator</a></li>
+        <li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></li>
+        <li><a href="/cgi-bin/koha/import/breeding.pl">Import to reservoir</a></li>
+      </ul>
+<br clear="both" />
+    </dd>
+    <!-- /Hide from NPL -->
+  </div>
+</div>
+
+</dl>
+</body>
+</html>
+

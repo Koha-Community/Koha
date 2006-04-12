@@ -1,0 +1,63 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-catalog.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-search-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-addBiblio-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/bull-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-subscriptions-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-4">
+	<a href="/cgi-bin/koha/bull/lateissues.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-lateIssues-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-5">
+	<a href="/cgi-bin/koha/bookshelves/shelves.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-virtualShelves-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Subscriptions: Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --></dt>
+<dd>
+
+<div id="main-compact">
+
+<h1>Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
+
+<form name="f" method="post" action="subscription-renew.pl">
+	<div class="data">
+		<table><tr><th><label>Start Date: </label></th><td><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" /><input type="hidden" name="op" value="renew" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /></td></tr></table>	
+		
+	<table><caption>Subscription Length:</caption>
+	<tr><th><label for="numberlength">Number of Issues: </label></th><td><input type="text" name="numberlength" id="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></td></tr>
+	<tr><th><label for="weeklength">Number of Weeks: </label></th><td><input type="text" name="weeklength" id="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></td></tr>
+	<tr><th><label for="monthlength">Number of Months: </label></th><td><input type="text" name="monthlength" id="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></td></tr>
+	<tr><th><label for="note">Comments for the librarian that will manage your renewal request:</label></th><td><textarea name="note" id="note" rows="3" cols="30"></textarea></td></tr>
+	</table>
+	<p><input type="submit" value="Request a renewal" class="submit" /></p>
+</div>
+</form>
+</div>
+
+
+</dd>
+</dl>
+</body>
+</html>
+

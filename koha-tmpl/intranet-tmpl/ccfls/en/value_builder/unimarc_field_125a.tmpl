@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 125a</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Type de partition:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Partition d'orchestre</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Partition d'orchestre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Partition miniature ou d'etude</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Partition miniature ou d'etude</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Partition chant, accompagnement reduit pour le piano</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Partition chant, accompagnement reduit pour le piano</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Partition vocale, partition chorale, sans accompagnement</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Partition vocale, partition chorale, sans accompagnement</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Partition condensee, partition de direction a partir du piano</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Partition condensee, partition de direction a partir du piano</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1g" -->
+				<option value="g" SELECTED>Partition combinee dans laquelle plusieurs voix sont sur la meme portee</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Partition combinee dans laquelle plusieurs voix sont sur la meme portee</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1m" -->
+				<option value="m" SELECTED>Formes diverses</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Formes diverses</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1x" -->
+				<option value="x" SELECTED>Non applicable ce n'est pas une partition</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable ce n'est pas une partition</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Indicateur de parties:</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Parties existantes</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Parties existantes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2y" -->
+				<option value="y" SELECTED>Parties inexistantes</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Parties inexistantes</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

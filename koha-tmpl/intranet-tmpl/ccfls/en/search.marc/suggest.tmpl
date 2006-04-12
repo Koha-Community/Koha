@@ -1,0 +1,75 @@
+<!-- TMPL_INCLUDE NAME="head.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top.inc" -->
+<!-- TMPL_INCLUDE NAME="body-top-catalog.inc" -->
+
+<div id="subTab-1">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-search-selected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-2">
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-addBiblio-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-3">
+	<a href="/cgi-bin/koha/bull-home.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-subscriptions-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-4">
+	<a href="/cgi-bin/koha/bull/lateissues.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-lateIssues-unselected.png" border="0" />
+	</a>
+</div>
+
+<div id="subTab-5">
+	<a href="/cgi-bin/koha/bookshelves/shelves.pl">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/subTab-catalog-virtualShelves-unselected.png" border="0" />
+	</a>
+</div>
+
+<dl>
+<dt>Catalog: Search Suggestions</dt>
+<dd>
+
+<div id="main">
+		<table>
+		<caption>Catalog Search</caption>
+			<tr>
+				<th>Initial word</th>
+				<th>Suggested</th>
+				<th>Used X times</th>
+			</tr>
+		<!-- TMPL_LOOP NAME="loop" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="word" --></td>
+				<td><a href="javascript:Import('<!-- TMPL_VAR NAME="word" -->','<!-- TMPL_VAR NAME="suggestion" -->')">
+						<!-- TMPL_VAR NAME="suggestion" -->
+					</a></td>
+				<td><!-- TMPL_VAR NAME="count" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+</div>
+<script language="javascript" type="text/javascript">
+	function Import(Replaced,ReplaceBy) {
+		for (i=0 ; i<opener.document.f.value.length ; i++) {
+				opener.document.forms['f'].value[i].value = opener.document.forms['f'].value[i].value.replace(Replaced,ReplaceBy);
+//			if (document.forms['f'].kohafield[i].value == "biblioitems.isbn" && document.forms['f'].field_value[i].value.length>0) {
+//				strQuery += "&isbn="+document.forms['f'].field_value[i].value;
+//			}
+//			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
+			self.close();
+//			return false;
+		}
+	}
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+

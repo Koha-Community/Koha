@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 124b</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Forme du document cartographique:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Atlas</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Atlas</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Diagramme</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Diagramme</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Globe</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Globe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Carte</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Carte</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Maquette</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Maquette</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>Profil</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Profil</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1g" -->
+				<option value="g" SELECTED>Image de teledetection</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Image de teledetection</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>Coupe</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Coupe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1i" -->
+				<option value="i" SELECTED>Vue</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Vue</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1j" -->
+				<option value="j" SELECTED>Plan</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Plan</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

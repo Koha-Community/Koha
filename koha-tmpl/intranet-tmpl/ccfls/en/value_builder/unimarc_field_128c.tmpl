@@ -1,0 +1,472 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 128c</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Instruments ou voix dans un ensemble:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ba" -->
+				<option value="ba" SELECTED>Cor</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Cor</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bb" -->
+				<option value="bb" SELECTED>Trompette</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Trompette</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bc" -->
+				<option value="bc" SELECTED>Cornet a piston</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Cornet a piston</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bd" -->
+				<option value="bd" SELECTED>Trombone</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Trombone</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1be" -->
+				<option value="be" SELECTED>Tuba</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Tuba</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bf" -->
+				<option value="bf" SELECTED>Saxophone</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Saxophone</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bt" -->
+				<option value="bt" SELECTED>Ethniques</option>
+			<!-- TMPL_ELSE -->
+				<option value="bt">Ethniques</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bu" -->
+				<option value="bu" SELECTED>Non precise (Cuivre)</option>
+			<!-- TMPL_ELSE -->
+				<option value="bu">Non precise (Cuivre)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1bz" -->
+				<option value="bz" SELECTED>Autre cuivre</option>
+			<!-- TMPL_ELSE -->
+				<option value="bz">Autre cuivre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ca" -->
+				<option value="ca" SELECTED>Mixtes</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Mixtes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1cb" -->
+				<option value="cb" SELECTED>Femmes </option>
+			<!-- TMPL_ELSE -->
+				<option value="cb">Femmes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1cc" -->
+				<option value="cc" SELECTED>Hommes</option>
+			<!-- TMPL_ELSE -->
+				<option value="cc">Hommes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1cd" -->
+				<option value="cd" SELECTED>Enfants</option>
+			<!-- TMPL_ELSE -->
+				<option value="cd">Enfants</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ct" -->
+				<option value="ct" SELECTED>Ethniques</option>
+			<!-- TMPL_ELSE -->
+				<option value="ct">Ethniques</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1cu" -->
+				<option value="cu" SELECTED>Non precise (Choeurs)</option>
+			<!-- TMPL_ELSE -->
+				<option value="cu">Non precise (Choeurs)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1oa" -->
+				<option value="oa" SELECTED>Orchestre symphonique</option>
+			<!-- TMPL_ELSE -->
+				<option value="oa">Orchestre symphonique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ob" -->
+				<option value="ob" SELECTED>Orchestre de chambre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ob">Orchestre de chambre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1oc" -->
+				<option value="oc" SELECTED>Orchestres a cordes</option>
+			<!-- TMPL_ELSE -->
+				<option value="oc">Orchestres a cordes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1od" -->
+				<option value="od" SELECTED>Fanfare</option>
+			<!-- TMPL_ELSE -->
+				<option value="od">Fanfare</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1oe" -->
+				<option value="oe" SELECTED>Orchestre de danse</option>
+			<!-- TMPL_ELSE -->
+				<option value="oe">Orchestre de danse</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1of" -->
+				<option value="of" SELECTED>Grand ensemble - orchestre de cuivres</option>
+			<!-- TMPL_ELSE -->
+				<option value="of">Grand ensemble - orchestre de cuivres</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ot" -->
+				<option value="ot" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ot">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ou" -->
+				<option value="ou" SELECTED>Non precise (orchestre)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ou">Non precise (orchestre)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1oz" -->
+				<option value="oz" SELECTED>Autre orchestre</option>
+			<!-- TMPL_ELSE -->
+				<option value="oz">Autre orchestre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pa" -->
+				<option value="pa" SELECTED>Tympanon</option>
+			<!-- TMPL_ELSE -->
+				<option value="pa">Tympanon</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pb" -->
+				<option value="pb" SELECTED>Xylophone</option>
+			<!-- TMPL_ELSE -->
+				<option value="pb">Xylophone</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pc" -->
+				<option value="pc" SELECTED>Marimba</option>
+			<!-- TMPL_ELSE -->
+				<option value="pc">Marimba</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pd" -->
+				<option value="pd" SELECTED>Tambour, batterie</option>
+			<!-- TMPL_ELSE -->
+				<option value="pd">Tambour, batterie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pt" -->
+				<option value="pt" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="pt">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pu" -->
+				<option value="pu" SELECTED>Non precise (percussion)</option>
+			<!-- TMPL_ELSE -->
+				<option value="pu">Non precise (percussion)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1pz -->
+				<option value="pz" SELECTED>Autre percussions</option>
+			<!-- TMPL_ELSE -->
+				<option value="pz">Autre percussions</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sa" -->
+				<option value="sa" SELECTED>Violon</option>
+			<!-- TMPL_ELSE -->
+				<option value="sa">Violon</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sb" -->
+				<option value="sb" SELECTED>Alto</option>
+			<!-- TMPL_ELSE -->
+				<option value="sb">Alto</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sc" -->
+				<option value="sc" SELECTED>Violoncelle</option>
+			<!-- TMPL_ELSE -->
+				<option value="sc">Violoncelle</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sd" -->
+				<option value="sd" SELECTED>Contrebasse</option>
+			<!-- TMPL_ELSE -->
+				<option value="sd">Contrebasse</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1se" -->
+				<option value="se" SELECTED>Viole</option>
+			<!-- TMPL_ELSE -->
+				<option value="se">Viole</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sf" -->
+				<option value="sf" SELECTED>Viole d'amour</option>
+			<!-- TMPL_ELSE -->
+				<option value="sf">Viole d'amour</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sg" -->
+				<option value="sg" SELECTED>Viole de gambe</option>
+			<!-- TMPL_ELSE -->
+				<option value="sg">Viole de gambe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1st" -->
+				<option value="st" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="st">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1su" -->
+				<option value="su" SELECTED>Non precise (Corde frottee)</option>
+			<!-- TMPL_ELSE -->
+				<option value="su">Non precise (Corde frottee)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1sz" -->
+				<option value="sz" SELECTED>Autre (Corde frottee)</option>
+			<!-- TMPL_ELSE -->
+				<option value="sz">Autre (Corde frottee)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1uu" -->
+				<option value="uu" SELECTED>Non precise (Non precise)</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Non precise (Non precise)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ea" -->
+				<option value="ea" SELECTED>Synthetiseur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ea">Synthetiseur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1eb" -->
+				<option value="eb" SELECTED>Bande magnetique</option>
+			<!-- TMPL_ELSE -->
+				<option value="eb">Bande magnetique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ec" -->
+				<option value="ec" SELECTED>Ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ec">Ordinateur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ed" -->
+				<option value="ed" SELECTED>Ondes Martenot</option>
+			<!-- TMPL_ELSE -->
+				<option value="ed">Ondes Martenot</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1eu" -->
+				<option value="eu" SELECTED>Non precise (Electronique)</option>
+			<!-- TMPL_ELSE -->
+				<option value="eu">Non precise (Electronique)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ez" -->
+				<option value="ez" SELECTED>Autre (Electronique)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ez">Autre (Electronique)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ka" -->
+				<option value="ka" SELECTED>Piano</option>
+			<!-- TMPL_ELSE -->
+				<option value="ka">Piano</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kb" -->
+				<option value="kb" SELECTED>Orgue</option>
+			<!-- TMPL_ELSE -->
+				<option value="kb">Orgue</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kc" -->
+				<option value="kc" SELECTED>Clavecin</option>
+			<!-- TMPL_ELSE -->
+				<option value="kc">Clavecin</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kd" -->
+				<option value="kd" SELECTED>Clavicorde</option>
+			<!-- TMPL_ELSE -->
+				<option value="kd">Clavicorde</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ke" -->
+				<option value="ke" SELECTED>Continuo</option>
+			<!-- TMPL_ELSE -->
+				<option value="ke">Continuo</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kf" -->
+				<option value="kf" SELECTED>Celesta</option>
+			<!-- TMPL_ELSE -->
+				<option value="kf">Celesta</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kt" -->
+				<option value="kt" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="kt">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ku" -->
+				<option value="ku" SELECTED>Non precise (clavier)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ku">Non precise (clavier)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1kz" -->
+				<option value="kz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="kz">Autre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1va" -->
+				<option value="va" SELECTED>Soprano</option>
+			<!-- TMPL_ELSE -->
+				<option value="va">Soprano</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vb" -->
+				<option value="vb" SELECTED>Mezzo-soprano</option>
+			<!-- TMPL_ELSE -->
+				<option value="vb">Mezzo-soprano</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vc" -->
+				<option value="vc" SELECTED>Alto</option>
+			<!-- TMPL_ELSE -->
+				<option value="vc">Alto</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vd" -->
+				<option value="vd" SELECTED>Tenor</option>
+			<!-- TMPL_ELSE -->
+				<option value="vd">Tenor</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ve" -->
+				<option value="ve" SELECTED>Baryton</option>
+			<!-- TMPL_ELSE -->
+				<option value="ve">Baryton</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vf" -->
+				<option value="vf" SELECTED>Basse</option>
+			<!-- TMPL_ELSE -->
+				<option value="vf">Basse</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vg" -->
+				<option value="vg" SELECTED>Haute contre</option>
+			<!-- TMPL_ELSE -->
+				<option value="vg">Haute contre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vh" -->
+				<option value="vh" SELECTED>Voix aigues</option>
+			<!-- TMPL_ELSE -->
+				<option value="vh">Voix aigues</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vi" -->
+				<option value="vi" SELECTED>Voix medium</option>
+			<!-- TMPL_ELSE -->
+				<option value="vi">Voix medium</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vj" -->
+				<option value="vj" SELECTED>Voix graves</option>
+			<!-- TMPL_ELSE -->
+				<option value="vj">Voix graves</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vt" -->
+				<option value="vt" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="vt">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1vu" -->
+				<option value="vu" SELECTED>Non precise (Voix precise)</option>
+			<!-- TMPL_ELSE -->
+				<option value="vu">Non precise (Voix precise)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ta" -->
+				<option value="ta" SELECTED>Harpe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ta">Harpe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1tb" -->
+				<option value="tb" SELECTED>Famille de la guitare</option>
+			<!-- TMPL_ELSE -->
+				<option value="tb">Famille de la guitare</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1tc" -->
+				<option value="tc" SELECTED>Famille du luth</option>
+			<!-- TMPL_ELSE -->
+				<option value="tc">Famille du luth</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1td" -->
+				<option value="td" SELECTED>Mandoline</option>
+			<!-- TMPL_ELSE -->
+				<option value="td">Mandoline</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1tt" -->
+				<option value="tt" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="tt">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1tu" -->
+				<option value="tu" SELECTED>Non precise (Cordes pincees)</option>
+			<!-- TMPL_ELSE -->
+				<option value="tu">Non precise (Cordes pincees)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1tz" -->
+				<option value="tz" SELECTED>Autre corde pincee</option>
+			<!-- TMPL_ELSE -->
+				<option value="tz">Autre corde pincee</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wa" -->
+				<option value="wa" SELECTED>Flute traversiere</option>
+			<!-- TMPL_ELSE -->
+				<option value="wa">Flute traversiere</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wb" -->
+				<option value="wb" SELECTED>Hautbois</option>
+			<!-- TMPL_ELSE -->
+				<option value="wb">Hautbois</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wc" -->
+				<option value="wc" SELECTED>Clarinette</option>
+			<!-- TMPL_ELSE -->
+				<option value="wc">Clarinette</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wd" -->
+				<option value="wd" SELECTED>Basson</option>
+			<!-- TMPL_ELSE -->
+				<option value="wd">Basson</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1we" -->
+				<option value="we" SELECTED>Piccolo</option>
+			<!-- TMPL_ELSE -->
+				<option value="we">Piccolo</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wf" -->
+				<option value="wf" SELECTED>Cor anglais</option>
+			<!-- TMPL_ELSE -->
+				<option value="wf">Cor anglais</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wg" -->
+				<option value="wg" SELECTED>Clarinette basse</option>
+			<!-- TMPL_ELSE -->
+				<option value="wg">Clarinette basse</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wh" -->
+				<option value="wh" SELECTED>Flute a bec </option>
+			<!-- TMPL_ELSE -->
+				<option value="wh">Flute a bec</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wi" -->
+				<option value="wi" SELECTED>Saxophone</option>
+			<!-- TMPL_ELSE -->
+				<option value="wi">Saxophone</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wt" -->
+				<option value="wt" SELECTED>Ethnique</option>
+			<!-- TMPL_ELSE -->
+				<option value="wt">Ethnique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wu" -->
+				<option value="wu" SELECTED>Non precise</option>
+			<!-- TMPL_ELSE -->
+				<option value="wu">Non precise</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1wz" -->
+				<option value="wz" SELECTED>Autre bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="wz">Autre bois</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

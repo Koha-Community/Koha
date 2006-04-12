@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 126b</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Type de disque, cylindre ou bande magnetique:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Gravure directe</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Gravure directe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Production industrielle</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Production industrielle</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Bande "Master"</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Bande "Master"</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Bande reproduite a partir du "master"</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Bande reproduite a partir du master</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Disque "pere" (negatif)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Disque "pere" (negatif)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>Disque "mere" (positif)</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Disque "mere" (positif)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1g" -->
+				<option value="g" SELECTED>Matrice (negatif)</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Matrice (negatif)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>Pressage de test</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Pressage de test</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Type de document:</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2g" -->
+				<option value="g" SELECTED>Cire (gravure directe)</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Cire (gravure directe)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2h" -->
+				<option value="h" SELECTED>Plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Plastique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Laque</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Laque</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Metal</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Pressage laque</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Pressage laque</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Pressage plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Pressage plastique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>Metal et plastique</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Metal et plastique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2i" -->
+				<option value="i" SELECTED>Dos papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Dos papier</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2j" -->
+				<option value="j" SELECTED>Acetate</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Acetate</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2k" -->
+				<option value="k" SELECTED>P.V.C.</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">P.V.C.</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2l" -->
+				<option value="l" SELECTED>Polyester</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">Polyester</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr>
+		<td>Type de gravure:</td>
+		<td>
+			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3a" -->
+				<option value="a" SELECTED>Gravure laterale ou combinee</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Gravure laterale ou combinee</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3b" -->
+				<option value="b" SELECTED>Gravure verticale</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Gravure verticale</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3u" -->
+				<option value="u" SELECTED>Gravure inconnue</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Gravure inconnue</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value ;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>
