@@ -19,11 +19,11 @@ if ($op eq "export") {
 	my $dbh=C4::Context->dbh;
 	my $sth;
 	if ($start_bib && $end_bib) {
-		$sth=$dbh->prepare("select biblionumber from biblioitems where timestamp >=? and timestamp <=? order by biblionumber");
-		$sth->execute($start_bib,$end_bib);
+		$sth=$dbh->prepare("select biblionumber from biblioitems where timestamp >='$start_bib' and timestamp <='$end_bib' order by biblionumber");
+		$sth->execute();
 	} elsif ($start_bib ) {
-		$sth=$dbh->prepare("select biblionumber from biblioitems where timestamp >=?  order by biblionumber");
-		$sth->execute($start_bib);
+		$sth=$dbh->prepare("select biblionumber from biblioitems where timestamp >='$start_bib'  order by biblionumber");
+		$sth->execute();
 	}else {
 		$sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber");
 		$sth->execute();
