@@ -9,15 +9,14 @@ use C4::Context;
 use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
+use PDF::Report;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
 
 my $spine_text = "";
 
-#--------------------------------------------------------
 # get the printing settings
-
 my $dbh    = C4::Context->dbh;
 my $query2 = " SELECT * FROM labels_conf LIMIT 1 ";
 my $sth    = $dbh->prepare($query2);
@@ -30,8 +29,6 @@ my $barcodetype = $conf_data->{'barcodetype'};
 my $startrow    = $conf_data->{'startrow'};
 
 $sth->finish;
-
-#------------------
 
 # get the actual items to be printed.
 my @data;
@@ -66,15 +63,10 @@ my $lowerLeftY  = 0;
 my $upperRightX = 612;
 my $upperRightY = 792;
 
-#----------------------------------
 # setting up the pdf doc
-
 prFile("$htdocs_path/barcodes/new.pdf");
 prLogDir("$htdocs_path/barcodes");
-
-#prMbox ( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 prMbox( 0, 0, 612, 792 );
-
 prFont('Times-Roman');    # Just setting a font
 prFontSize(10);
 
@@ -85,35 +77,19 @@ my $spine_width  = 72;
 my $circ_width   = 207;
 my $colspace     = 27;
 
-my $x_pos_spine = 36;
-my $x_pos_circ1 = 135;
-my $x_pos_circ2 = 369;
-
-my $pageheight = 792;
-
-my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
+my $x_pos_spine            = 36;
+my $x_pos_circ1            = 135;
+my $x_pos_circ2            = 369;
+my $pageheight             = 792;
+my $y_pos_initial          = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
   ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
 
-my $y_pos_initial = ( ( 792 - 36 ) - 90 );
-
-my $y_pos = $y_pos_initial_startrow;
-
-#my $y_pos            = $y_pos_initial;
+my $y_pos_initial    = ( ( 792 - 36 ) - 90 );
+my $y_pos            = $y_pos_initial_startrow;
 my $rowspace         = 36;
 my $page_break_count = $startrow;
 my $codetype         = 'Code39';
-
-# do border---------------
-my $str = "q\n";    # save the graphic state
-$str .= "4 w\n";                # border color red
-$str .= "0.0 0.0 0.0  RG\n";    # border color red
-$str .= "1 1 1 rg\n";           # fill color blue
-$str .= "0 0 612 792 re\n";     # a rectangle
-$str .= "B\n";                  # fill (and a little more)
-$str .= "Q\n";                  # save the graphic state
-
-# do border---------------
 
 prAdd($str);
 my $item;
@@ -122,7 +98,8 @@ my $i2 = 1;
 foreach $item (@resultsloop) {
     if ( $i2 == 1 ) {
 
-        #draw_boxes();
+       # uncomment this for guide boxes around barcode labels, good for testing.
+       #draw_boxes();
     }
 
     #building up spine text
@@ -154,20 +131,10 @@ foreach $item (@resultsloop) {
 
 prEnd();
 
-#----------------------------------------------------------------------------
-
-use PDF::Table;
-use Acme::Comment;
-
-$file = '/usr/local/opus-dev/intranet/htdocs/intranet-tmpl/barcodes/new.pdf';
-use PDF::Report;
+$file = "$htdocs_path/barcodes/new.pdf";
 
 my $pdf = new PDF::Report( File => $file );
 
-# my $pdf = new PDF::Report(PageSize => "letter",
-#                                  PageOrientation => "Landscape");
-
-#$pdf->newpage($nopage);
 my $pagenumber = 1;
 $pdf->openpage($pagenumber);
 
@@ -238,11 +205,8 @@ foreach $item (@resultsloop) {
         $firstrow = 1;
     }
 
-    #$pdf->drawRect(
-    #    $x_pos_spine, $y_pos,
-    #    ( $x_pos_spine + $spine_width ),
-    #    ( $y_pos - $label_height )
-    #);
+# uncomment this for guide boxes around spine labels, good for testing.
+#$pdf->drawRect( $x_pos_spine, $y_pos, ( $x_pos_spine + $spine_width ), ( $y_pos - $label_height ));
 
     $y_pos = ( $y_pos - $label_height );
     if ( $page_break_count == 8 ) {
@@ -253,51 +217,34 @@ foreach $item (@resultsloop) {
         $i2               = 0;
         $y_pos            = ( $y_pos_initial + 90 );
     }
-
     $page_break_count++;
     $i2++;
-
 }
-$DB::single = 1;
 $pdf->saveAs($file);
-
-#------------------------------------------------
 
 print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
 
-# draw boxes------------------
 sub draw_boxes {
-
     my $y_pos_initial = ( ( 792 - 36 ) - 90 );
     my $y_pos         = $y_pos_initial;
     my $i             = 1;
 
     for ( $i = 1 ; $i <= 8 ; $i++ ) {
-
         &drawbox( $x_pos_spine, $y_pos, ($spine_width), ($label_height) );
-
-        &drawbox( $x_pos_circ1, $y_pos, ($circ_width), ($label_height) );
-        &drawbox( $x_pos_circ2, $y_pos, ($circ_width), ($label_height) );
-
+        &drawbox( $x_pos_circ1, $y_pos, ($circ_width),  ($label_height) );
+        &drawbox( $x_pos_circ2, $y_pos, ($circ_width),  ($label_height) );
         $y_pos = ( $y_pos - $label_height );
-
     }
 }
 
-# draw boxes------------------
-
 sub build_circ_barcode {
     my ( $x_pos_circ, $y_pos, $value, $barcodetype ) = @_;
-
-    #$DB::single = 1;
-
     if ( $barcodetype eq 'EAN13' ) {
 
         #testing EAN13 barcodes hack
         $value = $value . '000000000';
         $value =~ s/-//;
         $value = substr( $value, 0, 12 );
-
         eval {
             PDF::Reuse::Barcode::EAN13(
                 x     => ( $x_pos_circ + 27 ),
@@ -317,7 +264,6 @@ sub build_circ_barcode {
         if ($@) {
             $item->{'barcodeerror'} = 1;
         }
-
     }
     elsif ( $barcodetype eq 'Code39' ) {
 
@@ -508,8 +454,6 @@ sub build_circ_barcode {
     }
 }
 
-#-----------------------------
-
 sub drawbox {
     my ( $llx, $lly, $urx, $ury ) = @_;
 
@@ -521,6 +465,5 @@ sub drawbox {
     $str .= "Q\n";                         # save the graphic state
 
     prAdd($str);
-
 }
 
