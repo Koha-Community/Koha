@@ -84,7 +84,10 @@
 	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="publishercode" -->
-	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> </td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publicationyear" -->
+		<tr><th>Publication Year:</th><td><!-- TMPL_VAR NAME="publicationyear" --></td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="pages" -->
 	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
