@@ -28,7 +28,10 @@
 <h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
 <!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
 
+
+
 <table>
+<!-- TMPL_IF name="additional" --><tr><th>Additional Author(s):</th><td><div class="notes"><!-- TMPL_VAR NAME="additional" --></div></td></tr><!-- /TMPL_IF -->
 
 <!-- TMPL_UNLESS NAME="MARCNOTES" -->
 
