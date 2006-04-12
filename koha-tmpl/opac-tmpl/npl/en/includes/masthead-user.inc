@@ -10,7 +10,7 @@
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" size="12" name="value" id="value" />&nbsp;<input type="submit"  class="submit" name="Go" value="Search" /></form></p></div>
 <!-- <div class="menu"><a href="/cgi-bin/koha/opac-user.pl">your library home</a> |   
-	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a> | <a href="/cgi-bin/koha/opac-shelves.pl">My Book Lists</a> | <a class="logout" href="/cgi-bin/koha/opac-logout.pl">log out</a>
+	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a> | <a href="/cgi-bin/koha/opac-shelves.pl">My Virtual Shelves</a> | <a class="logout" href="/cgi-bin/koha/opac-logout.pl">log out</a>
   </ul>
 </div> -->
 <!-- TMPL_IF NAME="loggedinusername" --><div id="members">
