@@ -141,6 +141,7 @@ my %requirefields = (
 	subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL'},
 	itemtypes => { 'imageurl' => 'char(200) NULL'},
 	aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
+	aqbudget => { 'branchcode' => 'varchar(4) NULL'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -1285,6 +1286,27 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.133  2006/04/13 08:36:42  plg
+# new: function C4::Date::get_date_format_string_for_DHTMLcalendar based on
+# the system preference prefered date format.
+#
+# improvement: book fund list and budget list screen redesigned. Filters on
+# each field. Columns are not sortable yet. Using DHTML Calendar to fill date
+# fields instead of manual filling. Pagination system. From the book fund
+# list, you can reach the budget list, filtered on a book fund, or not. A
+# budget can be added only from book fund list screen.
+#
+# bug fixed: branchcode was missing in table aqbudget.
+#
+# bug fixed: when setting a branchcode to a book fund, all associated budgets
+# move to this branchcode.
+#
+# modification: when adding/modifying budget/fund, MySQL specific "REPLACE..."
+# statements replaced by standard SQL compliant statement.
+#
+# bug fixed: when adding/modifying a budget, if the book fund is associated to
+# a branch, the branch selection is disabled and set to the book fund branch.
+#
 # Revision 1.132  2006/04/06 12:37:05  hdl
 # Bugfixing : aqbookfund needed a field.
 #

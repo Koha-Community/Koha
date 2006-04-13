@@ -1,36 +1,179 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF name="else" -->Budget admin<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+Koha -- System Administration: Budgets
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 
-<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR NAME="header" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="add_validate" -->Budget Data Recorded<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Delete Book Fund '<!-- TMPL_VAR NAME="bookfundid" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->Book fund deleted<!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<ul id="_informations">
+<!-- TMPL_IF NAME="add_validate" -->
+  <li>Budget Data Recorded, return to <a href="<!-- TMPL_VAR name="script_name" -->">budget list</a></li>
+<!-- /TMPL_IF --> <!-- add_validate -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+  <li>Budget deleted, return to <a href="<!-- TMPL_VAR name="script_name" -->">budget list</a></li>
+<!-- /TMPL_IF --> <!-- delete_confirmed -->
+</ul>
 
 <!-- TMPL_IF name="else" -->
-<h1>Budget admin</h1><form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
-	<input type="text" name="searchfield" value="" /> <input type="submit" name="search" value="Search" /></form>
-	<!-- TMPL_IF name="search" -->
-	You Searched for <!-- TMPL_VAR NAME="searchfield" --></span>
-	<!-- /TMPL_IF -->
+<h1>Budget admin</h1>
+
 <table>
-	<tr><th>Book fund</th><th>Start date</th><th>End date</th><th>Budget amount</th><th colspan="2">&nbsp;</th></tr>
-	<!-- TMPL_LOOP name="budget" -->
-		<tr>
-			<td><!-- TMPL_VAR NAME="bookfundid" --> (<!-- TMPL_VAR NAME="bookfundname" -->)</td>
-			<td><!-- TMPL_VAR NAME="startdate" --></td>
-			<td><!-- TMPL_VAR NAME="enddate" --></td>
-			<td><!-- TMPL_VAR NAME="budgetamount" --></td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->">Edit</a></td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->">Delete</a></td>
-		</tr>
-	<!-- /TMPL_LOOP -->
-	</table>
-	<form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
-	<p><input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Budget" /></p></form>
-<!-- /TMPL_IF -->
+  <tr>
+    <th>Book fund</th>
+    <th>Branch</th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Budget amount</th>
+    <th>Actions</th>
+  </tr>
+
+<form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
+  <tr class="filter">
+    <td>
+      <select name="filter_bookfundid">
+        <option value="">----</option>
+    <!-- TMPL_LOOP name="filter_bookfundids" -->
+      <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="bookfundid" -->" selected="selected"><!-- TMPL_VAR name="bookfundid" --></option>
+      <!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></option>
+      <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+      </select>
+    </td>
+    <td>
+      <select name="filter_branchcode">
+        <option value="">----</option>
+    <!-- TMPL_LOOP name="filter_branches" -->
+      <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="name" --></option>
+      <!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="name" --></option>
+      <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+      </select>
+    </td>
+    <td>
+      <select name="filter_startdate_sign">
+    <!-- TMPL_IF NAME="filter_startdate_sign_equal_selected" -->
+        <option value="=" selected="selected">=</option>
+    <!-- TMPL_ELSE -->
+        <option value="=">=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_startdate_sign_superior_selected" -->
+        <option value="&gt;=" selected="selected">&gt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&gt;=">&gt;=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_startdate_sign_inferior_selected" -->
+        <option value="&lt;=" selected="selected">&lt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&lt;=">&lt;=</option>
+    <!-- /TMPL_IF -->
+      </select>
+      <input type="text" size="10" id="filter_startdate" name="filter_startdate" value="<!-- TMPL_VAR Name="filter_startdate" -->" />
+      <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="filter_startdate_button" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "filter_startdate",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "filter_startdate_button"
+          }
+        );
+      </script>
+    </td>
+    <td>
+      <select name="filter_enddate_sign">
+    <!-- TMPL_IF NAME="filter_enddate_sign_equal_selected" -->
+        <option value="=" selected="selected">=</option>
+    <!-- TMPL_ELSE -->
+        <option value="=">=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_enddate_sign_superior_selected" -->
+        <option value="&gt;=" selected="selected">&gt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&gt;=">&gt;=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_enddate_sign_inferior_selected" -->
+        <option value="&lt;=" selected="selected">&lt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&lt;=">&lt;=</option>
+    <!-- /TMPL_IF -->
+      </select>
+      <input type="text" size="8" maxlength="10" id="filter_enddate" name="filter_enddate" value="<!-- TMPL_VAR Name="filter_enddate" -->" />
+      <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="filter_enddate_button" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "filter_enddate",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "filter_enddate_button"
+          }
+        );
+      </script>
+    </td>
+    <td>
+      <select name="filter_amount_sign">
+    <!-- TMPL_IF NAME="filter_amount_sign_equal_selected" -->
+        <option value="=" selected="selected">=</option>
+    <!-- TMPL_ELSE -->
+        <option value="=">=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_amount_sign_superior_selected" -->
+        <option value="&gt;=" selected="selected">&gt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&gt;=">&gt;=</option>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="filter_amount_sign_inferior_selected" -->
+        <option value="&lt;=" selected="selected">&lt;=</option>
+    <!-- TMPL_ELSE -->
+        <option value="&lt;=">&lt;=</option>
+    <!-- /TMPL_IF -->
+      </select>
+      <input type="text" name="filter_amount" value="<!-- TMPL_VAR NAME="filter_amount" -->" size="8"/>
+    </td>
+    <td>
+      <input type="submit" name="filter" value="Filter" />
+    </td>
+  </tr>
+</form>
+  
+  <!-- TMPL_LOOP name="budget" -->
+    <!-- TMPL_IF NAME="toggle" -->
+  <tr class="highlight">
+    <!-- TMPL_ELSE -->
+  <tr>
+    <!-- /TMPL_IF -->
+    <td><!-- TMPL_VAR NAME="bookfundid" --></td>
+    <td><!-- TMPL_VAR NAME="branchname" --></td>
+    <td><!-- TMPL_VAR NAME="startdate" --></td>
+    <td><!-- TMPL_VAR NAME="enddate" --></td>
+    <td><!-- TMPL_VAR NAME="budgetamount" --></td>
+    <td>
+      <a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">Edit</a>
+      <a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">Delete</a>
+    </td>
+  </tr>
+  <!-- /TMPL_LOOP --> <!-- budget -->
+</table>
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+<!-- /TMPL_IF --> <!-- else -->
 
 <!-- TMPL_IF name="add_form" -->
 <script language="JavaScript" type="text/javascript">
@@ -85,52 +228,136 @@
 			alert(alertString2);
 		}
 	}
-	</script>
+</script>
 
 <form action="/cgi-bin/koha/admin/aqbudget.pl" name="Aform" method="post">
-<input type="hidden" name="op" value="add_validate" />
-<input type="hidden" name="checked" value="0" />
-<h1><!-- TMPL_VAR NAME="header" --></h1>
+  <fieldset>
+    <legend>Add budget</legend>
+    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="checked" value="0" />
 
-<table>
-<!-- TMPL_IF name="modify" -->
-<tr><th>Book fund</th><td><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
-<tr><th>Book fund name</th><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
-<!-- /TMPL_IF -->
+    <table>
+      <tr>
+        <th>Book fund</th>
+        <td>
+          <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" />
+          <!-- TMPL_VAR NAME="bookfundname" -->
+        </td>
+      </tr>
 
-<!-- TMPL_IF name="adding" -->
-<tr><th><label for="bookfundid">Bookfund</label></th><td><input type="hidden" name="bookfundid" id="bookfundid" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundid" --></td></tr>
-<!-- /TMPL_IF -->
+      <tr>
+        <th>
+          <label for="startdate">Start date (<!-- TMPL_VAR NAME="dateformat" -->)</label>
+        </th>
+        <td>
+          <input type="text" size="8" maxlength="10" id="startdate" name="startdate" value="<!-- TMPL_VAR Name="startdate" -->" />
+          <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="startdate_button" />
+          <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+              {
+                inputField : "startdate",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "startdate_button"
+              }
+            );
+          </script>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="enddate">End date (<!-- TMPL_VAR NAME="dateformat" -->)</label>
+        </th>
+        <td>
+          <input type="text" size="8" maxlength="10" id="enddate" name="enddate" value="<!-- TMPL_VAR Name="enddate" -->" />
+          <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="enddate_button" />
+          <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+              {
+                inputField : "enddate",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "enddate_button"
+              }
+            );
+          </script>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="budgetamount">Budget amount</label>
+        </th>
+        <td>
+          <input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" size="8" />
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="branch">Branch</label>
+        </th>
+        <td>
+  <!-- TMPL_IF NAME="disable_branchselection" -->
+          <!-- Pierrick's note: I've found that a disabled select was not -->
+          <!-- giving its value to Perl :-/ So I use a hidden field trick -->
+          <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+          <select name="branch" disabled="disabled">
+  <!-- TMPL_ELSE -->
+          <select name="branch">
+  <!-- /TMPL_IF -->
 
-<tr><th><label for="startdate">Start date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR NAME="startdate" -->" />&nbsp;</td></tr>
-<tr><th><label for="enddate">End date (<!-- TMPL_VAR NAME="dateformat" -->)</label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR NAME="enddate" -->" /></td></tr>
-<tr><th><label for="budgetamount">Budget amount</label></th><td><input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" /></td></tr>
-</table>
-<input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="button" value="<!-- TMPL_VAR NAME="header" -->" onclick="Check(this.form)" /> <input type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" /></form>
-<!-- /TMPL_IF -->
+            <option value="">----</option>
+  <!-- TMPL_LOOP NAME="branches" -->
+    <!-- TMPL_IF NAME="selected" -->
+            <option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+    <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+    <!-- /TMPL_IF -->
+  <!-- /TMPL_LOOP -->
+          </select>
+        </td>
+      </tr>
+    </table>
 
-<!-- TMPL_IF name="add_validate" -->
-<h3>Budget Data Recorded</h3><table><tr><td>
-<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
-<input type="submit" value="Continue" />
-</form></td></tr></table>
-<!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="aqbudgetid" -->
+    <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
+  <!-- /TMPL_IF -->
+
+    <p id="action">
+      <input type="button" value="Submit" onclick="Check(this.form)" />
+      <input type="submit" value="Cancel" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;" />
+    </p>
+  </fieldset>
+</form>
+<!-- /TMPL_IF --> <!-- add_form -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<h3>Delete Book Budget?</h3>
-<table>
-<tr><th>Start date</th><td><!-- TMPL_VAR NAME="startdate" --></td></tr>
-<tr><th>End date</th><td><!-- TMPL_VAR NAME="enddate" --></td></tr>
-<tr><th>Budget Amount</th><td><!-- TMPL_VAR NAME="budgetamount" --></td></tr>
-</table>
-
-<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" /><input type="submit" value="Delete this Book Fund" /></form> <form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="delete_confirmed" -->
-<h3>Budget deleted</h3>
 <form action="<!-- TMPL_VAR NAME="action" -->" method="post">
-<input type="submit" value="Continue" />
+  <fieldset>
+    <legend>Delete Book Budget?</legend>
+
+    <table>
+      <tr>
+        <th>Start date</th>
+        <td><!-- TMPL_VAR NAME="startdate" --></td>
+      </tr>
+      
+      <tr>
+        <th>End date</th>
+        <td><!-- TMPL_VAR NAME="enddate" --></td>
+      </tr>
+      
+      <tr>
+        <th>Budget Amount</th>
+        <td><!-- TMPL_VAR NAME="budgetamount" --></td>
+      </tr>
+    </table>
+
+    <input type="hidden" name="op" value="delete_confirmed" />
+    <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
+
+    <p id="action">
+      <input type="submit" value="Delete this budget" />
+      <input type="submit" value="Do Not Delete" />
+    </p>
+  </fieldset>
 </form>
 <!-- /TMPL_IF -->
 

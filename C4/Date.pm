@@ -18,6 +18,7 @@ $VERSION = 0.01;
              &display_date_format
              &format_date
              &format_date_in_iso
+             get_date_format_string_for_DHTMLcalendar
 );
 
 
@@ -48,6 +49,25 @@ sub display_date_format
 	{
 		return "Invalid date format: $dateformat. Please change in system preferences";
 	}
+}
+
+sub get_date_format_string_for_DHTMLcalendar {
+    my $dateformat = get_date_format();
+
+    if ($dateformat eq 'us') {
+        return '%m/%d/%Y';
+    }
+    elsif ($dateformat eq 'metric') {
+        return '%d/%m/%Y';
+    }
+    elsif ($dateformat eq "iso") {
+        return '%Y-%m-%d';
+    }
+    else {
+        return
+            'Invalid date format: '.$dateformat.'.'
+            .' Please change in system preferences';
+    }
 }
 
 
