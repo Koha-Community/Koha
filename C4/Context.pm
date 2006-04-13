@@ -493,7 +493,7 @@ my $opts = new ZOOM::Options($option1,$option2);
 	}
 	$Zconnauth->option(preferredRecordSyntax => "XML");
 	$Zconnauth->option(elementSetName=> "F");
-	$Zconnauuth->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
+	$Zconnauth->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
 	return $Zconnauth;
 }
 # _new_dbh
@@ -825,6 +825,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.35  2006/04/13 08:40:11  plg
+# bug fixed: typo on Zconnauth name
+#
 # Revision 1.34  2006/04/10 21:40:23  tgarip1957
 # A new handler defined for zebra Zconnauth with read/write permission. Zconnauth should only be called in biblio.pm where write operations are. Use of this handler will break things unless koha.conf contains new variables:
 # zebradb=localhost
