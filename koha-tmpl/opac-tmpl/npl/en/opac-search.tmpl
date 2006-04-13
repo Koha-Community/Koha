@@ -73,7 +73,9 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<!-- TMPL_VAR name="CGIitemtype" --></td></tr>
+			<select name="value"><option value="">Any Itemtype</option>
+			<!-- TMPL_LOOP name="itemtypeloop" --><option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option><!-- /TMPL_LOOP -->
+			</td></tr>
 <tr><th><label for="branch">Location</label></th><td><input type="hidden" name="marclist" value="items.homebranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
