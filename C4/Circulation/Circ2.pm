@@ -236,6 +236,12 @@ sub getpatroninformation {
 	$sth->finish;
 	$borrower->{'flags'}=$flags;
 	$borrower->{'authflags'} = $accessflagshash;
+
+	# find out how long the membership lasts
+	my $sth=$dbh->prepare("select enrolmentperiod from categories where categorycode = ?");
+	$sth->execute($borrower->{'categorycode'});
+	my $enrolment = $sth->fetchrow;
+	$borrower->{'enrolmentperiod'} = $enrolment;
 	return ($borrower); #, $flags, $accessflagshash);
 }
 
