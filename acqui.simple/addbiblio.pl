@@ -32,7 +32,9 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 use HTML::Template;
 use MARC::File::USMARC;
 use MARC::File::XML;
-  
+if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+	MARC::File::XML->default_record_format( 'UNIMARC' );
+}
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
@@ -447,7 +449,10 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-    my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+	#warn $xml;
+  	my $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	warn $record->as_formatted;
+	warn "IN ADDBIB";
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -494,7 +499,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+	my $record=MARC::Record->new_from_xml($xml, C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
