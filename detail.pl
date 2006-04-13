@@ -49,7 +49,7 @@ foreach my $itm (@items) {
 }
 
 $template->param(norequests => $norequests);
-
+my @results = ($dat,);
 ## get notes and subjects from MARC record
 my $dbh = C4::Context->dbh;
 my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
@@ -57,15 +57,14 @@ $template->param(bibid => $bibid);
 if (C4::Context->preference("marc") eq "yes") {
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
-	$dat[0]->{MARCNOTES} = $marcnotesarray;
+	$results[0]->{MARCNOTES} = $marcnotesarray;
 	my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
-	$dat[0]->{MARCSUBJCTS} = $marcsubjctsarray;
+	$results[0]->{MARCSUBJCTS} = $marcsubjctsarray;
 	#$template->param(MARCNOTES => $marcnotesarray,
 	#				MARCSUBJCTS => $marcsubjctsarray,
 	#);
 }
 
-my @results = ($dat,);
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
