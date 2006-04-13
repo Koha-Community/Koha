@@ -1041,8 +1041,9 @@ sub MARCkoha2marcOnefield {
 }
 sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
-	use MARC::File::XML;
-	my $xml= MARC::File::XML::header();
+	#use MARC::File::XML;
+	my $xml= MARC::File::XML::header(C4::Context->preference('marcflavour'),C4::Context->preference('TemplateEncoding')); 
+	#$xml =~ s/UTF-8/ISO-8859-1/;
     my $prevvalue;
     my $prevtag=-1;
     my $first=1;
@@ -1103,7 +1104,7 @@ sub MARChtml2xml {
 		$prevtag = @$tags[$i];
 	}
 	$xml.= MARC::File::XML::footer();
-	warn $xml;
+	#warn $xml;
 	return $xml
 }
 sub MARChtml2marc {
@@ -3004,6 +3005,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.50  2006/04/13 05:49:23  kados
+# Partial fix for encoding problems in MARC editor.
+#
 # Revision 1.115.2.49  2006/04/10 19:53:44  kados
 # adds a quick sanity check to make sure we're dealing with valid MARC
 # tags (a client of mine had tags from a Dynix system that were '???' and
