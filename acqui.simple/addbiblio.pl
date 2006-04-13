@@ -451,8 +451,8 @@ if ($op eq "addbiblio") {
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 	#warn $xml;
   	my $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-	warn $record->as_formatted;
-	warn "IN ADDBIB";
+	#warn $record->as_formatted;
+	#warn "IN ADDBIB";
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
