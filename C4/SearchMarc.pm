@@ -671,9 +671,9 @@ sub getMARCsubjects {
 	my $lasttag;
 	my ($subfieldvalue,$subfieldcode,$tagorder,$tag);
 	while (($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
-	warn "IN MARCSUBJECTS $subfieldvalue $subfieldcode $tagorder $tag\n";
+	#warn "IN MARCSUBJECTS $subfieldvalue $subfieldcode $tagorder $tag\n";
 		if ($activetagorder && $tagorder != $activetagorder) {
-		warn "ACTIVETAGORDER".$activetagorder;
+	#	warn "ACTIVETAGORDER".$activetagorder;
 			$subject=~ s/ -- $//;
 			$marcsubjct = {MARCSUBJCT => $subject,
 							link => $lasttag."9",
@@ -694,13 +694,14 @@ sub getMARCsubjects {
 		$activetagorder=$tagorder;
 		$lasttag=$tag if $tag;
 	}
-	$subject=~ s/ -- $//;
-	$marcsubjct = {MARCSUBJCT => $subject,
+	if ($subject) {
+		$subject=~ s/ -- $//;
+		$marcsubjct = {MARCSUBJCT => $subject,
 					link => $lasttag."9",
 					linkvalue => $field9,
 					};
-	push @marcsubjcts, $marcsubjct;
-
+		push @marcsubjcts, $marcsubjct;
+	}
 	$sth->finish;
 
 	my $marcsubjctsarray=\@marcsubjcts;
