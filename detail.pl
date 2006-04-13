@@ -54,7 +54,7 @@ my @results = ($dat,);
 my $dbh = C4::Context->dbh;
 my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 $template->param(bibid => $bibid);
-if (C4::Context->preference("marc") eq "yes") {
+if (C4::Context->preference("marc")) {
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
 	$results[0]->{MARCNOTES} = $marcnotesarray;
