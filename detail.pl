@@ -57,9 +57,9 @@ $template->param(bibid => $bibid);
 if (C4::Context->preference("marc") eq "yes") {
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
-	$results[0]->{MARCNOTES} = $marcnotesarray;
+	$dat[0]->{MARCNOTES} = $marcnotesarray;
 	my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
-	$results[0]->{MARCSUBJCTS} = $marcsubjctsarray;
+	$dat[0]->{MARCSUBJCTS} = $marcsubjctsarray;
 	#$template->param(MARCNOTES => $marcnotesarray,
 	#				MARCSUBJCTS => $marcsubjctsarray,
 	#);
