@@ -210,6 +210,7 @@ sub get_template_and_user {
 		);
 	}
 	$template->param(
+				TemplateEncoding => C4::Context->preference("TemplateEncoding"),
 				AmazonContent => C4::Context->preference("AmazonContent"),
 			     LibraryName => C4::Context->preference("LibraryName"),
 		);
