@@ -78,7 +78,7 @@ my $data=borrdata('',$bornum);
 $template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I"> => instutitional (A for Adult & C for children)
 
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
-$data->{'expiry'} = format_date($data->{'expiry'});
+$data->{'dateexpiry'} = format_date($data->{'dateexpiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
@@ -91,13 +91,13 @@ $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 
 if ($data->{'categorycode'} eq 'C'){
-	my $data2=borrdata('',$data->{'guarantor'});
-	$data->{'streetaddress'}=$data2->{'streetaddress'};
+	my $data2=borrdata('',$data->{'guarantorid'});
+	$data->{'address'}=$data2->{'address'};
 	$data->{'city'}=$data2->{'city'};
-	$data->{'physstreet'}=$data2->{'physstreet'};
-	$data->{'streetcity'}=$data2->{'streetcity'};
+	$data->{'B_address'}=$data2->{'B_address'};
+	$data->{'B_city'}=$data2->{'B_city'};
 	$data->{'phone'}=$data2->{'phone'};
-	$data->{'phoneday'}=$data2->{'phoneday'};
+	$data->{'mobile'}=$data2->{'mobile'};
 	$data->{'zipcode'} = $data2->{'zipcode'};
 }
 
@@ -106,7 +106,7 @@ if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
 	$template->param(printethnicityline => 1);
 }
 
-if ($data->{'categorycode'} ne 'C'){
+if ($data->{'category_type'} ne 'C'){
 	$template->param(isguarantee => 1);
 	# FIXME
 	# It looks like the $i is only being returned to handle walking through
@@ -122,9 +122,9 @@ if ($data->{'categorycode'} ne 'C'){
 	$template->param(guaranteeloop => \@guaranteedata);
 
 } else {
-	my ($guarantor)=findguarantor($data->{'borrowernumber'});
-	unless ($guarantor->{'borrowernumber'} == 0){
-		$template->param(guarantorborrowernumber => $guarantor->{'borrowernumber'}, guarantorcardnumber => $guarantor->{'cardnumber'});
+	my ($guarantorid)=findguarantor($data->{guarantorid});
+	if ($guarantorid->{'borrowernumber'}){
+		$template->param(guarantorborrowernumber => $guarantorid->{'borrowernumber'}, guarantorcardnumber => $guarantorid->{'cardnumber'});
 	}
 }
 

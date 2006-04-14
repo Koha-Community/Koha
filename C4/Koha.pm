@@ -35,9 +35,6 @@ C4::Koha - Perl Module containing convenience functions for Koha scripts
 
 
   $date = slashifyDate("01-01-2002")
-  $ethnicity = fixEthnicity('asian');
-  ($categories, $labels) = borrowercategories();
-  ($categories, $labels) = ethnicitycategories();
 
 =head1 DESCRIPTION
 
@@ -51,9 +48,6 @@ Koha.pm provides many functions for Koha scripts.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-			&fixEthnicity
-			&borrowercategories &getborrowercategory
-			&ethnicitycategories
 			&subfield_is_koha_internal_p
 			&getbranches &getbranch &getbranchdetail
 			&getprinters &getprinter
@@ -66,108 +60,13 @@ Koha.pm provides many functions for Koha scripts.
                         getitemtypeimagedir
                         getitemtypeimagesrc
                         getitemtypeimagesrcfromurl
+			&getcities
+			&getroadtypes
 			$DEBUG);
 
 use vars qw();
 
 my $DEBUG = 0;
-
-# removed slashifyDate => useless
-
-=head2 fixEthnicity
-
-  $ethn_name = &fixEthnicity($ethn_code);
-
-Takes an ethnicity code (e.g., "european" or "pi") and returns the
-corresponding descriptive name from the C<ethnicity> table in the
-Koha database ("European" or "Pacific Islander").
-
-=cut
-#'
-
-sub fixEthnicity($) {
-
-    my $ethnicity = shift;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Select name from ethnicity where code = ?");
-    $sth->execute($ethnicity);
-    my $data=$sth->fetchrow_hashref;
-    $sth->finish;
-    return $data->{'name'};
-}
-
-=head2 borrowercategories
-
-  ($codes_arrayref, $labels_hashref) = &borrowercategories();
-
-Looks up the different types of borrowers in the database. Returns two
-elements: a reference-to-array, which lists the borrower category
-codes, and a reference-to-hash, which maps the borrower category codes
-to category descriptions.
-
-=cut
-#'
-
-sub borrowercategories {
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Select categorycode,description from categories order by description");
-    $sth->execute;
-    my %labels;
-    my @codes;
-    while (my $data=$sth->fetchrow_hashref){
-      push @codes,$data->{'categorycode'};
-      $labels{$data->{'categorycode'}}=$data->{'description'};
-    }
-    $sth->finish;
-    return(\@codes,\%labels);
-}
-
-=item getborrowercategory
-
-  $description = &getborrowercategory($categorycode);
-
-Given the borrower's category code, the function returns the corresponding
-description for a comprehensive information display.
-
-=cut
-
-sub getborrowercategory
-{
-	my ($catcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
-	$sth->execute($catcode);
-	my $description = $sth->fetchrow();
-	$sth->finish();
-	return $description;
-} # sub getborrowercategory
-
-
-=head2 ethnicitycategories
-
-  ($codes_arrayref, $labels_hashref) = &ethnicitycategories();
-
-Looks up the different ethnic types in the database. Returns two
-elements: a reference-to-array, which lists the ethnicity codes, and a
-reference-to-hash, which maps the ethnicity codes to ethnicity
-descriptions.
-
-=cut
-#'
-
-sub ethnicitycategories {
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Select code,name from ethnicity order by name");
-    $sth->execute;
-    my %labels;
-    my @codes;
-    while (my $data=$sth->fetchrow_hashref){
-      push @codes,$data->{'code'};
-      $labels{$data->{'code'}}=$data->{'name'};
-    }
-    $sth->finish;
-    return(\@codes,\%labels);
-}
 
 # FIXME.. this should be moved to a MARC-specific module
 sub subfield_is_koha_internal_p ($) {
@@ -655,90 +554,102 @@ Returns an array of all available languages.
 =cut
 
 sub getalllanguages {
-    my $type=shift;
-    my $theme=shift;
-    my $htdocs;
-    my @languages;
-    if ($type eq 'opac') {
-	$htdocs=C4::Context->config('opachtdocs');
-	if ($theme and -d "$htdocs/$theme") {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		next if $language=~ /png$/;
-		next if $language=~ /css$/;
-		push @languages, $language;
-	    }
-	    return sort @languages;
-	} else {
-	    my $lang;
-	    foreach my $theme (getallthemes('opac')) {
-		opendir D, "$htdocs/$theme";
-		foreach my $language (readdir D) {
-		    next if $language=~/^\./;
-		    next if $language eq 'all';
-			next if $language=~ /png$/;
-			next if $language=~ /css$/;
-		    $lang->{$language}=1;
+	my $type=shift;
+	my $theme=shift;
+	my $htdocs;
+	my @languages;
+	if ($type eq 'opac') {
+		$htdocs=C4::Context->config('opachtdocs');
+		if ($theme and -d "$htdocs/$theme") {
+			opendir D, "$htdocs/$theme";
+			foreach my $language (readdir D) {
+				next if $language=~/^\./;
+				next if $language eq 'all';
+				next if $language=~ /png$/;
+				next if $language=~ /css$/;
+				next if $language=~ /CVS$/;
+				next if $language=~ /itemtypeimg$/;
+				push @languages, $language;
+			}
+			return sort @languages;
+		} else {
+			my $lang;
+			foreach my $theme (getallthemes('opac')) {
+				opendir D, "$htdocs/$theme";
+				foreach my $language (readdir D) {
+					next if $language=~/^\./;
+					next if $language eq 'all';
+					next if $language=~ /png$/;
+					next if $language=~ /css$/;
+					next if $language=~ /CVS$/;
+					next if $language=~ /itemtypeimg$/;
+					$lang->{$language}=1;
+				}
+			}
+			@languages=keys %$lang;
+			return sort @languages;
 		}
-	    }
-	    @languages=keys %$lang;
-	    return sort @languages;
-	}
-    } elsif ($type eq 'intranet') {
-	$htdocs=C4::Context->config('intrahtdocs');
-	if ($theme and -d "$htdocs/$theme") {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		next if $language=~ /png$/;
-		next if $language=~ /css$/;
-		push @languages, $language;
-	    }
-	    return sort @languages;
-	} else {
-	    my $lang;
-	    foreach my $theme (getallthemes('opac')) {
-		opendir D, "$htdocs/$theme";
-		foreach my $language (readdir D) {
-		    next if $language=~/^\./;
-		    next if $language eq 'all';
-			next if $language=~ /png$/;
-			next if $language=~ /css$/;
-		    $lang->{$language}=1;
+	} elsif ($type eq 'intranet') {
+		$htdocs=C4::Context->config('intrahtdocs');
+		if ($theme and -d "$htdocs/$theme") {
+			opendir D, "$htdocs/$theme";
+			foreach my $language (readdir D) {
+				next if $language=~/^\./;
+				next if $language eq 'all';
+				next if $language=~ /png$/;
+				next if $language=~ /css$/;
+				next if $language=~ /CVS$/;
+				next if $language=~ /itemtypeimg$/;
+				push @languages, $language;
+			}
+			return sort @languages;
+		} else {
+			my $lang;
+			foreach my $theme (getallthemes('opac')) {
+				opendir D, "$htdocs/$theme";
+				foreach my $language (readdir D) {
+					next if $language=~/^\./;
+					next if $language eq 'all';
+					next if $language=~ /png$/;
+					next if $language=~ /css$/;
+					next if $language=~ /CVS$/;
+					next if $language=~ /itemtypeimg$/;
+					$lang->{$language}=1;
+				}
+			}
+			@languages=keys %$lang;
+			return sort @languages;
 		}
-	    }
-	    @languages=keys %$lang;
-	    return sort @languages;
-	}
     } else {
-	my $lang;
-	my $htdocs=C4::Context->config('intrahtdocs');
-	foreach my $theme (getallthemes('intranet')) {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		next if $language=~ /png$/;
-		next if $language=~ /css$/;
-		$lang->{$language}=1;
-	    }
-	}
-	$htdocs=C4::Context->config('opachtdocs');
-	foreach my $theme (getallthemes('opac')) {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		next if $language=~ /png$/;
-		next if $language=~ /css$/;
-		$lang->{$language}=1;
-	    }
-	}
-	@languages=keys %$lang;
-	return sort @languages;
+		my $lang;
+		my $htdocs=C4::Context->config('intrahtdocs');
+		foreach my $theme (getallthemes('intranet')) {
+			opendir D, "$htdocs/$theme";
+			foreach my $language (readdir D) {
+				next if $language=~/^\./;
+				next if $language eq 'all';
+				next if $language=~ /png$/;
+				next if $language=~ /css$/;
+				next if $language=~ /CVS$/;
+				next if $language=~ /itemtypeimg$/;
+				$lang->{$language}=1;
+			}
+		}
+		$htdocs=C4::Context->config('opachtdocs');
+		foreach my $theme (getallthemes('opac')) {
+		opendir D, "$htdocs/$theme";
+		foreach my $language (readdir D) {
+			next if $language=~/^\./;
+			next if $language eq 'all';
+			next if $language=~ /png$/;
+			next if $language=~ /css$/;
+			next if $language=~ /CVS$/;
+			next if $language=~ /itemtypeimg$/;
+			$lang->{$language}=1;
+			}
+		}
+		@languages=keys %$lang;
+		return sort @languages;
     }
 }
 
@@ -779,6 +690,81 @@ sub getnbpages {
     my ($nb_items, $nb_items_per_page) = @_;
 
     return int(($nb_items - 1) / $nb_items_per_page) + 1;
+}
+
+
+=head2 getcities (OUEST-PROVENCE)
+
+  ($id_cityarrayref, $city_hashref) = &getcities();
+
+Looks up the different city and zip in the database. Returns two
+elements: a reference-to-array, which lists the zip city
+codes, and a reference-to-hash, which maps the name of the city.
+WHERE =>OUEST PROVENCE OR EXTERIEUR
+
+=cut
+sub getcities {
+    #my ($type_city) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("Select cityid,city_name from cities order by cityid  ");
+    #$sth->execute($type_city);
+    $sth->execute();    
+    my %city;
+    my @id;
+#    insert empty value to create a empty choice in cgi popup 
+	 
+while (my $data=$sth->fetchrow_hashref){
+      
+	push @id,$data->{'cityid'};
+      $city{$data->{'cityid'}}=$data->{'city_name'};
+    }
+	
+	#test to know if the table contain some records if no the function return nothing
+	my $id=@id;
+	$sth->finish;
+	if ($id eq 0)
+	{
+	return();
+	}
+	else{
+	unshift (@id ,"");
+	return(\@id,\%city);
+	}
+}
+
+
+=head2 getroadtypes (OUEST-PROVENCE)
+
+  ($idroadtypearrayref, $roadttype_hashref) = &getroadtypes();
+
+Looks up the different road type . Returns two
+elements: a reference-to-array, which lists the id_roadtype
+codes, and a reference-to-hash, which maps the road type of the road .
+
+
+=cut
+sub getroadtypes {
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("Select roadtypeid,road_type from roadtype order by road_type  ");
+    $sth->execute();
+    my %roadtype;
+    my @id;
+#    insert empty value to create a empty choice in cgi popup 
+while (my $data=$sth->fetchrow_hashref){
+	push @id,$data->{'roadtypeid'};
+      $roadtype{$data->{'roadtypeid'}}=$data->{'road_type'};
+    }
+	#test to know if the table contain some records if no the function return nothing
+	my $id=@id;
+	$sth->finish;
+	if ($id eq 0)
+	{
+	return();
+	}
+	else{
+		unshift (@id ,"");
+		return(\@id,\%roadtype);
+	}
 }
 
 1;

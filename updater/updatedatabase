@@ -135,6 +135,15 @@ my %requiretables = (
 					`debarred3` int(1) default '0',
 					PRIMARY KEY  (`branchcode`,`categorycode`)
 					)",
+	cities			=> "(`cityid` int auto_increment,
+						`city_name` char(100) NOT NULL,
+						`city_zipcode` char(20),
+						PRIMARY KEY (`cityid`)
+					)",
+	roadtype			=> "(`roadtypeid` int auto_increment,
+						`road_type` char(100) NOT NULL,
+						PRIMARY KEY (`roadtypeid`)
+					)",
 );
 
 my %requirefields = (
@@ -157,6 +166,7 @@ my %dropable_table = (
 
 my %uselessfields = (
 # tablename => "field1,field2",
+	borrowers => "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
 	);
 # the other hash contains other actions that can't be done elsewhere. they are done
 # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
@@ -346,6 +356,24 @@ my %tabledata = (
 	        type		=> 'Choice',
 	        options		=> 'Calendar|Days'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'borrowerMandatoryField',
+            value               => 'zipcode|surname',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'List all mandatory fields for borrowers',
+            type                => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'borrowerRelationship',
+            value               => 'father|mother,grand-mother',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'The relationships between a guarantor & a guarantee (separated by | or ,)',
+            type                => 'free',
+        },
     ],
 
 );
@@ -415,6 +443,78 @@ my %fielddefinitions = (
 			extra	=> '',
 		},
 	],
+	borrowers => [
+		{	field => 'B_email',
+		 	type => 'text',
+		 	null => 'NULL',
+		 	after => 'B_zipcode',
+		 },
+		 {
+			field => 'streetnumber', # street number (hidden if streettable table is empty)
+			type => 'char(10)',
+			null => 'NULL',
+			after => 'initials',
+		},
+		{
+			field => 'streettype', # street table, list builded from a system table
+			type => 'char(50)',
+			null => 'NULL',
+			after => 'streetnumber',
+		},
+		 {
+			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
+			type => 'char(10)',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'B_streettype', # street table, list builded from a system table
+			type => 'char(50)',
+			null => 'NULL',
+			after => 'B_streetnumber',
+		},
+		{
+			field => 'phonepro',
+			type => 'text',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'address2', # complement address
+			type => 'text',
+			null => 'NULL',
+			after => 'address',
+		},
+		{
+			field => 'emailpro',
+			type => 'text',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'contactfirstname', # contact's firstname
+			type => 'text',
+			null => 'NULL',
+			after => 'contactname',
+		},
+		{
+			field => 'contacttitle', # contact's title
+			type => 'text',
+			null => 'NULL',
+			after => 'contactfirstname',
+		},
+	],
+	categories =>  [
+		{
+			field	=> 'category_type',
+			type	=> 'char(1)',
+			null	=> 'NOT NULL',
+			key		=> '',
+			default	=> 'A',
+			extra	=> '',
+		},
+	],
+
 );
 
 my %indexes = (
@@ -715,6 +815,123 @@ my %foreign_keys = (
 	# FIXME : don't constraint auth_*_table and auth_word, as they may be replaced by zebra
 );
 
+
+# column changes
+my %column_change = (
+	# table
+	borrowers => [
+				{
+					from => 'emailaddress',
+					to => 'email',
+					after => 'city',
+				},
+				{
+					from => 'streetaddress',
+					to => 'address',
+					after => 'initials',
+				},
+				{
+					from => 'faxnumber',
+					to => 'fax',
+					after => 'phone',
+				},
+				{
+					from => 'textmessaging',
+					to => 'opacnote',
+					after => 'userid',
+				},
+				{
+					from => 'altnotes',
+					to => 'contactnote',
+					after => 'opacnote',
+				},
+				{
+					from => 'physstreet',
+					to => 'B_address',
+					after => 'fax',
+				},
+				{
+					from => 'streetcity',
+					to => 'B_city',
+					after => 'B_address',
+				},
+				{
+					from => 'phoneday',
+					to => 'mobile',
+					after => 'phone',
+				},
+				{
+					from => 'zipcode',
+					to => 'zipcode',
+					after => 'city',
+				},
+				{
+					from => 'homezipcode',
+					to => 'B_zipcode',
+					after => 'B_city',
+				},
+				{
+					from => 'altphone',
+					to => 'B_phone',
+					after => 'B_zipcode',
+				},
+				{
+					from => 'expiry',
+					to => 'dateexpiry',
+					after => 'dateenrolled',
+				},
+				{
+					from => 'guarantor',
+					to => 'guarantorid',
+					after => 'contactname',
+				},
+				{
+					from => 'textmessaging',
+					to => 'opacnotes',
+					after => 'flags',
+				},
+				{
+					from => 'altnotes',
+					to => 'contactnotes',
+					after => 'opacnotes',
+				},
+				{
+					from => 'altrelationship',
+					to => 'relationship',
+					after => 'borrowernotes',
+				},
+			],
+		);
+		
+foreach my $table (keys %column_change) {
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute();
+	undef %types;
+	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+	{
+		$types{$column}->{type} ="$type";
+		$types{$column}->{null} = "$null";
+		$types{$column}->{key} = "$key";
+		$types{$column}->{default} = "$default";
+		$types{$column}->{extra} = "$extra";
+	}    # while
+	my $tablerows = $column_change{$table};
+	foreach my $row ( @$tablerows ) {
+		if ($types{$row->{from}}->{type}) {
+			print "altering $table $row->{from} to $row->{to}\n";
+			# ALTER TABLE `borrowers` CHANGE `faxnumber` `fax` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+# 			alter table `borrowers` change `faxnumber` `fax` type text  null after phone
+			my $sql = 
+				"alter table `$table` change `$row->{from}` `$row->{to}` $types{$row->{from}}->{type} ".
+				($types{$row->{from}}->{null} eq 'YES'?" NULL":" NOT NULL").
+				($types{$row->{from}}->{default}?" default ".$types{$row->{from}}->{default}:"").
+				"$types{$row->{from}}->{extra} after $row->{after} ";
+# 			print "$sql";
+			$dbh->do($sql);
+		}
+	}
+}
+
 #-------------------
 # Initialize
 
@@ -820,6 +1037,7 @@ foreach $table ( keys %fielddefinitions ) {
 # 		$default="''" unless $default;
 		my $extra   = $row->{extra};
 		my $def     = $definitions->{$field};
+		my $after	= ($row->{after}?" after ".$row->{after}:"");
 
 		unless ( $type eq $def->{type}
 			&& $null eq $def->{null}
@@ -846,16 +1064,15 @@ foreach $table ( keys %fielddefinitions ) {
 # if it's a primary key, drop the previous pk, before altering the table
 			my $sth;
 			if ($key ne 'PRIMARY KEY') {
-				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ?");
+				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
 			} else {
-				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ?");
+				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
 			}
 			$sth->execute($default);
-			print "  Alter $field in $table\n" unless $silent;
+			print "  alter or create $field in $table\n" unless $silent;
 		}
 	}
 }
-
 
 # Populate tables with required data
 
@@ -1286,6 +1503,16 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.134  2006/04/14 09:37:29  tipaul
+# improvements from SAN Ouest Provence :
+# * introducing a category_type into categories. It can be A (adult), C (children), P (Professionnal), I (institution/organisation).
+# * each category_type has it's own forms to create members.
+# * the borrowers table has been heavily modified (many fields changed), to get something more logic & readable
+# * reintroducing guarantor/guanrantee system that is now independant from hardcoded C/A for categories
+# * updating templates to fit template rules
+#
+# (see mail feb, 17 on koha-devel "new features for borrowers" for more details)
+#
 # Revision 1.133  2006/04/13 08:36:42  plg
 # new: function C4::Date::get_date_format_string_for_DHTMLcalendar based on
 # the system preference prefered date format.

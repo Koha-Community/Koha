@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Guarantor Search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+</head>
+<h1>Search guarantor</h1>
+	Search on
+	<form action="/cgi-bin/koha/members/guarantor_search.pl" method="post">
+		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->"> Ordered by
+		<select name="orderby">
+			<option value="surname,firstname">Surname</option>
+			<option value="cardnumber">cardnumber</option>
+		</select>
+		<input type="submit" class="button" value="OK">
+	</form>
+</div>
+
+<!--TMPL_IF NAME="results" -->
+	<p>filter on <!-- TMPL_VAR NAME="member" -->, <!-- TMPL_VAR Name ="numresults" --> members found</p>
+	<table>
+		<tr>
+			<th>cardnumber</th>
+			<th>surname</th>
+			<th>firstname</th>
+			<th>Date of birth</th>
+			<th>address</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="resultsloop" -->
+			<!-- TMPL_IF NAME="background" -->
+				<tr bgcolor="#ffffcc">
+			<!-- TMPL_ELSE -->
+				<tr bgcolor="white">
+			<!-- /TMPL_IF -->
+				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
+				<td><p><a href="javascript:window.opener.document.form.guarantorid.value=<!-- TMPL_VAR NAME="borrowernumber" -->;self.close();"><!-- TMPL_VAR NAME="surname" --></a></p>
+				<td><b><!-- TMPL_VAR NAME="firstname" --></b></td> 
+				<td><!-- TMPL_VAR NAME="dateofbirth" --></td>
+				<td><p><!-- TMPL_VAR NAME="address" --> <!-- TMPL_VAR NAME="city" --></p></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+<!--/TMPL_IF-->
+
+</html>
+
+

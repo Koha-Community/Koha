@@ -6,64 +6,30 @@
 <h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
 
 <ul>
-	<!-- TMPL_IF name="IS_ADULT" -->
-	<li>
-	<form action="/cgi-bin/koha/members/jmemberentry.pl" method="post">
-		<input type="submit" name="submit" value="Add Child" alt="Add Child" />
-		<input type="hidden" name="type" value="add" />
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-	</form>
-	</li>
-	<!-- /TMPL_IF -->
-	<li>
-	<!-- TMPL_IF name="I" -->
-	<form action="/cgi-bin/koha/members/imemberentry.pl" method="post">
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" />
-		<input type="submit" name="modify" value="Edit this Record" />
-	</form>
-	<!-- TMPL_ELSE -->
-		<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
-			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" />
-			<input type="submit" name="modify" value="Edit this Record" />
-		</form>
-	<!-- /TMPL_IF -->
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/member-password.pl" method="post">
-			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" />
-			<input type="submit" value="Change Member's Password" />
-		</form>
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/member-flags.pl" method="post">
-			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" />
-			<input type="submit" value="Modify Member's Privileges" />
-		</form>
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->">
-			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" />
-			<input type="submit" class="cancel" value="Delete this Member" />
-		</form>
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/boraccount.pl" method="get">
-			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
-			<input type="submit" value="View Account" />
-		</form>
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/pay.pl" method="get">
-			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
-			<input type="submit" value="Pay Fines" />
-		</form>
-	</li>
-	<li>
-		<form action="/cgi-bin/koha/members/readingrec.pl" method="get">
-			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
-			<input type="submit" value="Member's Reading Record" />
-		</form>
-	</li>
+	<!-- TMPL_UNLESS name="guarantorborrowernumber" -->
+	<a href="/cgi-bin/koha/members/jmemberentry.pl?type=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Add child</a> 
+	<!-- /TMPL_UNLESS -->
+	<a href="/cgi-bin/koha/members/imemberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->">
+		Edit this Record
+	</a> 
+	<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME=bornum -->">
+		Change Member's Password
+	</a> 
+	<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME=bornum -->">
+		Modify Member's Privileges
+	</a> 
+	<a href="/cgi-bin/koha/members/deletemem.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->">
+		Delete this Member
+	</a> 
+	<a href="/cgi-bin/koha/members/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+		View Account
+	</a> 
+	<a href="/cgi-bin/koha/members/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+		Pay Fines
+	</a> 
+	<a href="/cgi-bin/koha/members/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+		Member's Reading Record
+	</a>
 </ul>
 
 <!-- TMPL_IF NAME="flagged" -->
@@ -83,172 +49,176 @@
 
 <!-- /TMPL_IF -->
 
-<h2>Borrower Information</h2>
-<p><label>Title (borrowers.title):</label><!-- TMPL_VAR NAME="title" --></p>
-<p><label>First Name (borrowers.firstname):</label><!-- TMPL_VAR NAME="firstname" --></p>
-<p><label>Last Name (borrowers.lastname): </label><!-- TMPL_VAR NAME="surname" --></p>
-<p><label>Othernames (borrowers.othernames): </label><!-- TMPL_VAR NAME="othernames" --></p>
-<p><label>Initials (borrowers.initials): </label><!-- TMPL_VAR NAME="initials" --></p>
-<p><label>Street Address (borrowers.streetaddress): </label><!-- TMPL_VAR NAME="streetaddress" --></p>
-<p><label>City (borrowers.city): </label><!-- TMPL_VAR NAME="city" --></p>
-<p><label>Zip Code (borrowers.zipcode): </label><!-- TMPL_VAR NAME="zipcode" --></p>
+<fieldset>
+<legend>Borrower Information</legend>
+	<p><label>Title:</label><!-- TMPL_VAR NAME="title" --></p>
+	<p><label>First Name:</label><!-- TMPL_VAR NAME="firstname" --></p>
+	<p><label>Last Name: </label><!-- TMPL_VAR NAME="surname" --></p>
+	<p><label>Othernames: </label><!-- TMPL_VAR NAME="othernames" --></p>
+	<p><label>Initials: </label><!-- TMPL_VAR NAME="initials" --></p>
+	<p><label>Address: </label><!-- TMPL_VAR NAME="address" --></p>
+	<p><label>City: </label><!-- TMPL_VAR NAME="city" --></p>
+	<p><label>Zip Code: </label><!-- TMPL_VAR NAME="zipcode" --></p>
+	<!-- TMPL_UNLESS NAME="I"-->
+	<p><label>alt address: </label><!-- TMPL_VAR NAME="B_address" --></p>
+	<p><label>alt city: </label><!-- TMPL_VAR NAME="B_city" --></p>
+	<p><label>alt zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
+	<!-- /TMPL_UNLESS -->
+	<p><label>Home Phone: </label><!-- TMPL_VAR NAME="phone" --></p>
+	<p><label>Cell phone: </label><!-- TMPL_VAR NAME="mobile" --></p>
+	<p><label>Fax: </label><!-- TMPL_VAR NAME="fax" --></p>
+	<p><label>E-mail Address:</label><!-- TMPL_VAR NAME="email" --></p>
+	<!-- TMPL_UNLESS name="I" -->
+	<p><label>Date of Birth:</label><!-- TMPL_VAR NAME="dateofbirth" --></p>
+	<p><label>Sex:</label><!-- TMPL_VAR NAME="sex" --></p>
+	<!-- /TMPL_UNLESS -->
+</fieldset>
+<fieldset>
+	<legend>Library use</legend>
+	<p><label>Member Number:</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
+	<p><label>Category:</label><!-- TMPL_VAR NAME="categorycode" --></p>
+	<p><label>Registration Date:</label><!-- TMPL_VAR NAME="dateenrolled" --></p>
+	<p><label>Expiration Date: </label><!-- TMPL_VAR NAME="dateexpiry" --></p>
+	<p><label>Registration Branch:</label><!-- TMPL_VAR NAME="branchname" --></p>
 
-<!-- TMPL_UNLESS NAME="I"-->
-<p><label>(borrowers.physstreet): </label><!-- TMPL_VAR NAME="physstreet" --></p>
-<p><label>(borrowers.streetcity): </label><!-- TMPL_VAR NAME="streetcity" --></p>
-<p><label>(borrowers.homezipcode): </label><!-- TMPL_VAR NAME="homezipcode" --></p>
-<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF NAME="printethnicityline" -->
+	<p><label>Ethnicity:</label><!-- TMPL_VAR NAME="ethnicity" --></p>
+	<p><label>Ethnicity Notes: </label><!-- TMPL_VAR NAME="ethnotes" --></p>
+	<!-- /TMPL_IF -->
 
-<p><label>Home Phone (borrowers.phone): </label><!-- TMPL_VAR NAME="phone" --></p>
-<p><label>Daytime Phone (borrowers.phoneday): </label><!-- TMPL_VAR NAME="phoneday" --></p>
-<p><label>Fax (borrowers.faxnumber): </label><!-- TMPL_VAR NAME="faxnumber" --></p>
-<p><label>E-mail Address (borrowers.emailaddress):</label><!-- TMPL_VAR NAME="emailaddress" --></p>
-
-<!-- TMPL_UNLESS name="I" -->
-<p><label>Date of Birth (borrowers.dateofbirth):</label><!-- TMPL_VAR NAME="dateofbirth" --></p>
-<p><label>Sex (borrowers.sex):</label><!-- TMPL_VAR NAME="sex" --></p>
-<!-- /TMPL_UNLESS -->
-
-<p><label>Member Number (borrowers.borrowernumber):</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
-<p><label>Category (borrowers.categorycode):</label><!-- TMPL_VAR NAME="categorycode" --></p>
-<p><label>Registration Date (borrowers.dateenrolled):</label><!-- TMPL_VAR NAME="dateenrolled" --></p>
-<p><label>Expiration Date (borrowers.expiry): </label><!-- TMPL_VAR NAME="expiry" --></p>
-<p><label>Registration Branch (borrowers.branchcode):</label><!-- TMPL_VAR NAME="branchname" --></p>
-
-<!-- TMPL_IF NAME="printethnicityline" -->
-<p><label>Ethnicity (borrowers.ethnicity):</label><!-- TMPL_VAR NAME="ethnicity" --></p>
-<p><label>Ethnicity Notes (borrowers.ethnotes): </label><!-- TMPL_VAR NAME="ethnotes" --></p>
-<!-- /TMPL_IF -->
-
-<p><label>Sort field 1 (borrowers.sort1): </label><!-- TMPL_VAR NAME="sort1" --></p>
-<p><label>Sort field 2 (borrowers.sort2):</label><!-- TMPL_VAR NAME="sort2" --></p>
-<p><label>OPAC login (borrowers.userid): </label><!-- TMPL_VAR name="userid" --></p>
-<p><label>OPAC Password (borrowers.password): </label><!-- TMPL_VAR NAME="password" --></p> 
-<p><label>Circulation Notes (borrowers.borrowernotes) :</label><!-- TMPL_VAR name="borrowernotes" --></p>
-<p><label>Patron Message (borrowers.textmessaging):</label><!-- TMPL_VAR NAME="textmessaging" --></p>
-
-<!-- TMPL_UNLESS name="I" -->
-<p><label>Alternate Contact Name (borrowers.contactname):</label><!-- TMPL_VAR NAME="contactname" --></p>
-<p><label>Alternate Contact Phone (borrowers.altphone): </label><!-- TMPL_VAR NAME="altphone" --></p>
-<p><label>Alternate Contact Relationship (borrowers.altrelationship):</label><!-- TMPL_VAR NAME="altrelationship" --></p>
-<p><label>Alternate Contact Notes (borrowers.altnotes): </label><!-- TMPL_VAR NAME="altnotes" --></p>
-<!-- /TMPL_UNLESS -->
-
-		<!-- TMPL_UNLESS name="I" -->
-			<!-- TMPL_IF name="isguarantee" -->
-				<!-- TMPL_IF NAME="guaranteeloop" -->
-					<p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a></li><!-- /tmpl_loop --></ul></p>
-				<!-- /TMPL_IF -->
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_IF name="guarantorborrowernumber" -->
-					<p><label>Guarantor:</label><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a></p>
-				<!-- /TMPL_IF -->
+	<p><label>Sort field 1: </label><!-- TMPL_VAR NAME="sort1" --></p>
+	<p><label>Sort field 2:</label><!-- TMPL_VAR NAME="sort2" --></p>
+	<p><label>OPAC login: </label><!-- TMPL_VAR name="userid" --></p>
+	<p><label>OPAC Password: </label><!-- TMPL_VAR NAME="password" --></p> 
+	<p><label>Circulation Notes:</label><!-- TMPL_VAR name="borrowernotes" --></p>
+	<p><label>Patron Message:</label><!-- TMPL_VAR NAME="opacnote" --></p>
+</fieldset>
+<fieldset>
+	<legend>Alternate contact</legend>
+	<!-- TMPL_UNLESS name="I" -->
+	<p><label>Name:</label><!-- TMPL_VAR NAME="contactname" --></p>
+	<p><label>Phone: </label><!-- TMPL_VAR NAME="B_phone" --></p>
+	<p><label>Relationship:</label><!-- TMPL_VAR NAME="relationship" --></p>
+	<p><label>Notes: </label><!-- TMPL_VAR NAME="contactnote" --></p>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS name="I" -->
+		<!-- TMPL_IF name="isguarantee" -->
+			<!-- TMPL_IF NAME="guaranteeloop" -->
+				<p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a></li><!-- /tmpl_loop --></ul></p>
 			<!-- /TMPL_IF -->
-		<!-- /TMPL_UNLESS -->
-
-<h2>Fines &amp; Charges</h2>
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_IF name="guarantorborrowernumber" -->
+				<p><label>Guarantor:</label><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a></p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
+</fieldset>
+<fieldset>
+	<legend>Fines &amp; Charges</legend>
 	<!-- TMPL_IF name="totaldue" -->
 		<p>Total Due: <!-- TMPL_VAR NAME="totaldue" --></p>
 	<!-- TMPL_ELSE -->
 		<p>No Outstanding Charges</p>
 	<!-- /TMPL_IF -->
-
-<h2>Items On Loan</h2>
-<form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
-	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
-<table>
-	<tr>
-		<th scope="col">Title</th>
-		<th scope="col">Due</th>
-		<th scope="col">Itemtype</th>
-		<th scope="col">Charge</th>
-		<th scope="col">Price</th>
-		<th scope="col">Renew</th>
-		<th scope="col">Return</th>
-	</tr>
-
-	<!-- tmpl_loop name="issueloop" -->
-	<tr>
-		<td>
-			<!-- TMPL_IF name="red" --><span class="overdue"><!-- /TMPL_IF -->
-			<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="red" --></span><!-- /TMPL_IF -->
-			<a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
-				<!-- TMPL_VAR NAME="barcode" -->
-			</a>
-		</td>
-		<td><!-- TMPL_VAR NAME="date_due" --></td>
-		<td>
-                  <!-- TMPL_VAR NAME="itemtype_description" -->
-                  <!-- TMPL_IF NAME="itemtype_image" -->
-                  <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
-                  <!-- /TMPL_IF -->
-                </td>
-		<td><!-- TMPL_VAR NAME="charge" --></td>
-		<td><!-- TMPL_VAR NAME="replacementprice" --></td>
-		<td>
-		<!-- TMPL_IF name="norenew" -->
-			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
-		<!-- TMPL_ELSE -->
-		  <input type="checkbox"
-                         name="items[]"
-                        value="<!-- TMPL_VAR NAME="itemnumber" -->"
-                  <!-- TMPL_IF NAME="red" -->
-                      checked="checked"
-                  <!-- /TMPL_IF -->
-		  />
-		  <input type="checkbox"
-		         name="all_items[]"
-		        value="<!-- TMPL_VAR NAME="itemnumber" -->"
-		      checked="checked"
-		        style="display: none;"
-		  />
-		<!-- /TMPL_IF -->
-		</td>
-		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
-	</tr>
-	<!-- /tmpl_loop -->
-	<tr><td colspan="3">Total Replacement Cost:</td><td><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="2">&nbsp;</td></tr>
-	</table>
-        <div id="action">
-          <input type="submit" name="renew_checked" value="Renew Checked Items" />
-          <input type="submit" name="renew_all" value="Renew All" />
-        </div>
-</form>
-
-<h2>Reserves</h2>
-<form action="/cgi-bin/koha/modrequest.pl" method="post">
-	<input type="hidden" name="from" value="borrower" />
+</fieldset>
+<fieldset>
+	<legend>Items On Loan</legend>
+	<form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
+		<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" />
 	<table>
-	<tr>
-		<th scope="row">Title</th>
-		<th scope="row">Requested</th>
-		<th scope="row">Remove</th>
-	</tr>
-
-	<!-- TMPL_LOOP name="reserveloop" -->
-	<tr>
-		<td>
-			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
-			<!-- TMPL_IF name="volumeddesc" -->
-				<!-- TMPL_VAR NAME="volumeddesc" -->
-				<!-- TMPL_VAR NAME="itemtype" -->
+		<tr>
+			<th scope="col">Title</th>
+			<th scope="col">Due</th>
+			<th scope="col">Itemtype</th>
+			<th scope="col">Charge</th>
+			<th scope="col">Price</th>
+			<th scope="col">Renew</th>
+			<th scope="col">Return</th>
+		</tr>
+	
+		<!-- tmpl_loop name="issueloop" -->
+		<tr>
+			<td>
+				<!-- TMPL_IF name="red" --><span class="overdue"><!-- /TMPL_IF -->
+				<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="red" --></span><!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+					<!-- TMPL_VAR NAME="barcode" -->
+				</a>
+			</td>
+			<td><!-- TMPL_VAR NAME="date_due" --></td>
+			<td>
+					<!-- TMPL_VAR NAME="itemtype_description" -->
+					<!-- TMPL_IF NAME="itemtype_image" -->
+					<img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
+					<!-- /TMPL_IF -->
+					</td>
+			<td><!-- TMPL_VAR NAME="charge" --></td>
+			<td><!-- TMPL_VAR NAME="replacementprice" --></td>
+			<td>
+			<!-- TMPL_IF name="norenew" -->
+				<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
+			<!-- TMPL_ELSE -->
+			<input type="checkbox"
+							name="items[]"
+							value="<!-- TMPL_VAR NAME="itemnumber" -->"
+					<!-- TMPL_IF NAME="red" -->
+						checked="checked"
+					<!-- /TMPL_IF -->
+			/>
+			<input type="checkbox"
+					name="all_items[]"
+					value="<!-- TMPL_VAR NAME="itemnumber" -->"
+				checked="checked"
+					style="display: none;"
+			/>
 			<!-- /TMPL_IF -->
-		</td>
-		<td><!-- TMPL_VAR NAME="reservedate2" --></td>
-		<td>
-			<select name="rank-request">
-			<option value="n">No</option>
-			<option value="del">Yes</option>
-			</select>
-		</td>
-		<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" />
-	</tr>
-	<!-- /tmpl_loop -->
-</table>
-<!-- TMPL_IF name="reserveloop" -->
-	<input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" />
-<!-- /TMPL_IF -->
-</form>
-
+			</td>
+			<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
+		</tr>
+		<!-- /tmpl_loop -->
+		<tr><td colspan="3">Total Replacement Cost:</td><td><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="2">&nbsp;</td></tr>
+		</table>
+			<div id="action">
+			<input type="submit" name="renew_checked" value="Renew Checked Items" />
+			<input type="submit" name="renew_all" value="Renew All" />
+			</div>
+	</form>
+</fieldset>
+<fieldset>
+	<legend>Reserves</legend>
+	<form action="/cgi-bin/koha/modrequest.pl" method="post">
+		<input type="hidden" name="from" value="borrower" />
+		<table>
+		<tr>
+			<th scope="row">Title</th>
+			<th scope="row">Requested</th>
+			<th scope="row">Remove</th>
+		</tr>
+	
+		<!-- TMPL_LOOP name="reserveloop" -->
+		<tr>
+			<td>
+				<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
+				<!-- TMPL_IF name="volumeddesc" -->
+					<!-- TMPL_VAR NAME="volumeddesc" -->
+					<!-- TMPL_VAR NAME="itemtype" -->
+				<!-- /TMPL_IF -->
+			</td>
+			<td><!-- TMPL_VAR NAME="reservedate2" --></td>
+			<td>
+				<select name="rank-request">
+				<option value="n">No</option>
+				<option value="del">Yes</option>
+				</select>
+			</td>
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->" />
+		</tr>
+		<!-- /tmpl_loop -->
+	</table>
+	<!-- TMPL_IF name="reserveloop" -->
+		<input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" />
+	<!-- /TMPL_IF -->
+	</form>
+</fieldset>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
