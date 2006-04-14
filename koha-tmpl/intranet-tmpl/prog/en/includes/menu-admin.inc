@@ -14,8 +14,5 @@
 	<a href="/cgi-bin/koha/admin/printers.pl">Printers</a>
 	<a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a>
 	<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a>
-	<a href="/cgi-bin/koha/export/marc.pl">Export</a>
 	<a href="/cgi-bin/koha/import/breeding.pl">Reservoir</a>
-	<a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes</a>
-	<a href="/cgi-bin/koha/admin/viewlog.pl">Log viewer</a>
 </p>
