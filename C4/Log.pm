@@ -62,6 +62,7 @@ Adds a record into action_logs table to report the different changes upon the da
 #'
 sub logaction{
   my ($usernumber,$modulename, $actionname, $objectnumber, $infos)=@_;
+	$usernumber='' unless $usernumber;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
 	$sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
