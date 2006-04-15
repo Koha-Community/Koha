@@ -1284,8 +1284,10 @@ unless ($marcdone) {
 	my $totaldone=0;
 	while (my ($bibid,$biblionumber) = $sth->fetchrow) {
 		my $record = MARCgetbiblio($dbh,$bibid);
+	#Force UTF-8 in record leader
+		$record->encoding('UTF-8');
 		print $record->as_formatted if ($biblionumber==3902);
-		$sth_update->execute($record->as_usmarc(),$record->as_xml(),$biblionumber);
+		$sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
 		$totaldone++;
 		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
 	}
@@ -1503,6 +1505,10 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.135  2006/04/15 02:37:03  tgarip1957
+# Marc record should be set to UTF-8 in leader.Force it.
+# XML should be with<record> wrappers
+#
 # Revision 1.134  2006/04/14 09:37:29  tipaul
 # improvements from SAN Ouest Provence :
 # * introducing a category_type into categories. It can be A (adult), C (children), P (Professionnal), I (institution/organisation).
