@@ -898,7 +898,8 @@ sub NEWnewbiblio {
 	my $old_field = $record->field($tagfield);
 	$record->delete_field($old_field);
 	$record->add_fields($newfield);
-
+	#Change MARC Leader to UTF-8 incase user did not set it.New M::F::XML is sensitive to this
+	$record->encoding('UTF-8');
 	#create the marc entry, that stores the rax marc record in Koha 3.0
 	$olddata->{marc} = $record->as_usmarc();
 	$olddata->{marcxml} = $record->as_xml_record();
@@ -3063,6 +3064,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.170  2006/04/15 02:47:47  tgarip1957
+# Change the MARC Leader to UTF-8 incase user did not set it. Important for Zebra.
+# The new M::F::XML is sensitive to leader settings
+#
 # Revision 1.169  2006/04/10 20:39:49  tgarip1957
 # New sub to use by Circ2.pm . Allows one subfield of MARC holdings fields to be updated to use with branch transfer(holdingbranch) and onloan flag when set
 #
