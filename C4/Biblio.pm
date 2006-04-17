@@ -1105,7 +1105,7 @@ sub MARChtml2xml {
 	}
 	$xml.= MARC::File::XML::footer();
 	#warn $xml;
-	return $xml
+	return $xml;
 }
 sub MARChtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
@@ -3005,6 +3005,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51  2006/04/17 13:50:59  tgarip1957
+# Missing semicolon
+#
 # Revision 1.115.2.50  2006/04/13 05:49:23  kados
 # Partial fix for encoding problems in MARC editor.
 #
