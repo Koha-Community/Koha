@@ -18,6 +18,7 @@ use strict;
 # CPAN modules
 use DBI;
 use Getopt::Long;
+
 # Koha modules
 use C4::Context;
 
@@ -38,9 +39,7 @@ my (
 );
 
 my $silent;
-GetOptions(
-	's' =>\$silent
-	);
+GetOptions( 's' => \$silent );
 my $dbh = C4::Context->dbh;
 print "connected to your DB. Checking & modifying it\n" unless $silent;
 
@@ -212,14 +211,14 @@ my %requiretables = (
 				flag char(30), flagdesc char(255),
 				defaulton int(11)
 			)",
-	auth_types => "(
+    auth_types => "(
 					authtypecode char(10) not NULL,
 					authtypetext char(255) not NULL,
 					auth_tag_to_report char(3) not NULL,
 					summary text not NULL,
 					PRIMARY KEY (authtypecode)
 			)",
-	biblio_framework => "(
+    biblio_framework => "(
 					frameworkcode char(4) not NULL,
 					frameworktext char(255) not NULL,
 					PRIMARY KEY (frameworkcode)
@@ -285,7 +284,7 @@ my %requiretables = (
 				KEY word (word),
 				KEY sndx_word (sndx_word)
 			)",
-	suggestions => "(
+    suggestions => "(
 				suggestionid int(8) NOT NULL auto_increment,
 				suggestedby int(11) NOT NULL default '0',
 				managedby int(11) default NULL ,
@@ -306,7 +305,7 @@ my %requiretables = (
 				KEY suggestedby(suggestedby) ,
 				KEY managedby(managedby)
 			)",
-	aqbasket => "(basketno int(11) NOT NULL auto_increment,
+    aqbasket => "(basketno int(11) NOT NULL auto_increment,
 				creationdate date,
 				closedate date,
 				booksellerid varchar(10),
@@ -314,7 +313,7 @@ my %requiretables = (
 				booksellerinvoicenumber text,
 				PRIMARY KEY (basketno)
 				)",
-	serial => "(serialid int(11) NOT NULL auto_increment,
+    serial => "(serialid int(11) NOT NULL auto_increment,
 				biblionumber varchar(100) NOT NULL default '',
 				subscriptionid varchar(100) NOT NULL default '',
 				serialseq varchar(100) NOT NULL default '',
@@ -322,7 +321,7 @@ my %requiretables = (
 				planneddate date NOT NULL default '0000-00-00',
 				PRIMARY KEY  (serialid)
 				)",
-	subscription => "(biblionumber int(11) NOT NULL default '0',
+    subscription => "(biblionumber int(11) NOT NULL default '0',
 						subscriptionid int(11) NOT NULL auto_increment,
 						librarian varchar(100) default '',
 						startdate date default '0000-00-00',
@@ -357,7 +356,7 @@ my %requiretables = (
 						lastvalue3 int(11),
 						PRIMARY KEY  (subscriptionid)
 						)",
-	subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
+    subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
 							subscriptionid int(11) NOT NULL default '0',
 							histstartdate date NOT NULL default '0000-00-00',
 							enddate date default '0000-00-00',
@@ -367,14 +366,33 @@ my %requiretables = (
 							librariannote varchar(150) NOT NULL default '',
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
-						)",
+				)",
+    labels => "(labelid int(11) NOT NULL auto_increment,
+                            itemnumber varchar(100) NOT NULL default '',
+                            timestamp timestamp(14) NOT NULL,
+                            PRIMARY KEY  (labelid),
+                            )",
+    labels_conf => "(id int(4) NOT NULL auto_increment,
+                           barcodetype char(100) default '',
+                           title tinyint(1) default '0',
+                           isbn tinyint(1) default '0',
+                           itemtype tinyint(1) default '0',
+                           barcode tinyint(1) default '0',
+                           dewey tinyint(1) default '0',
+                           class tinyint(1) default '0',
+                           author tinyint(1) default '0',
+                           papertype char(100) default '',
+                           startrow int(2) default NULL,
+                           PRIMARY KEY  (id),
+                           )",
 );
 
 my %requirefields = (
     biblio        => { 'abstract' => 'text' },
     deletedbiblio => { 'abstract' => 'text', 'marc' => 'blob' },
-    deleteditems => { 'marc' => 'blob', 'paidfor' => 'text', 'location' => 'varchar(80)'},
-    biblioitems   => {
+    deleteditems =>
+      { 'marc' => 'blob', 'paidfor' => 'text', 'location' => 'varchar(80)' },
+    biblioitems => {
         'lccn' => 'char(25)',
         'url'  => 'varchar(255)',
         'marc' => 'text'
@@ -391,42 +409,49 @@ my %requirefields = (
         'nocalc'      => 'int(11)'
     },
     borrowers => {
-		'userid'        => 'char(30)',
-		'password'      => 'char(30)',
-		'flags'         => 'int(11)',
-		'textmessaging' => 'varchar(30)',
-		'zipcode' => 'varchar(25)',
-		'homezipcode' => 'varchar(25)',
-		'sort1' => 'char(80)',
-		'sort2' => 'char(80)',
+        'userid'        => 'char(30)',
+        'password'      => 'char(30)',
+        'flags'         => 'int(11)',
+        'textmessaging' => 'varchar(30)',
+        'zipcode'       => 'varchar(25)',
+        'homezipcode'   => 'varchar(25)',
+        'sort1'         => 'char(80)',
+        'sort2'         => 'char(80)',
     },
-    aqorders => { 'budgetdate' => 'date',
-				'sort1' => 'char(80)',
-				'sort2' => 'char(80)',
-},
-    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key',
-					 'branchcode' => 'varchar(4)',},
-    aqbookfund => { 'branchcode' => 'varchar(4)',},
-    items => {'paidfor' => 'text', 'location' => 'char(80)'},
+    aqorders => {
+        'budgetdate' => 'date',
+        'sort1'      => 'char(80)',
+        'sort2'      => 'char(80)',
+    },
+    aqbudget => {
+        'aqbudgetid' => 'tinyint(4) auto_increment primary key',
+        'branchcode' => 'varchar(4)',
+    },
+    aqbookfund => { 'branchcode' => 'varchar(4)', },
+    items      => { 'paidfor'    => 'text', 'location' => 'char(80)' },
 
     #added so that reference items are not available for reserves...
-    itemtypes         => { 'notforloan'  => 'smallint(6)' },
-    systempreferences => { 'explanation' => 'char(80)',
-    		 	   'type' => 'char(20)',
-			   'options' => 'text' },
-    z3950servers      => { 'syntax'      => 'char(80)' },
-	marc_tag_structure =>{
-							'frameworkcode' => 'char(4) not NULL default \'\''},
-    marc_subfield_structure =>{'seealso'  => 'char(255)',
-							'frameworkcode' => 'char(4) not NULL default \'\'',
-							'hidden' => 'tinyint(1)',
-							'isurl' => 'tinyint(1)',
-							'link' => 'char(80)',
-							},
-    bookshelf => {'owner' => 'char(80)',
-    					'category' => 'char(1)',
-				},
-    marc_biblio        => { 'frameworkcode' => 'char(4) not NULL default \'\'' },
+    itemtypes         => { 'notforloan' => 'smallint(6)' },
+    systempreferences => {
+        'explanation' => 'char(80)',
+        'type'        => 'char(20)',
+        'options'     => 'text'
+    },
+    z3950servers       => { 'syntax' => 'char(80)' },
+    marc_tag_structure =>
+      { 'frameworkcode' => 'char(4) not NULL default \'\'' },
+    marc_subfield_structure => {
+        'seealso'       => 'char(255)',
+        'frameworkcode' => 'char(4) not NULL default \'\'',
+        'hidden'        => 'tinyint(1)',
+        'isurl'         => 'tinyint(1)',
+        'link'          => 'char(80)',
+    },
+    bookshelf => {
+        'owner'    => 'char(80)',
+        'category' => 'char(1)',
+    },
+    marc_biblio => { 'frameworkcode' => 'char(4) not NULL default \'\'' },
 );
 
 my %dropable_table = (
@@ -441,13 +466,14 @@ my %dropable_table = (
 );
 
 my %uselessfields = (
-	aqorders => "requisitionedby,authorisedby,booksellerid,
+    aqorders => "requisitionedby,authorisedby,booksellerid,
 			deliverydays,followupdays,
 			numberfollowupsallowed,numberfollowupssent,
 			dateprinted,sourced,quantityreceiveddamaged,
 			subscriptionfrom,subscriptionto
 			"
-	);
+);
+
 # the other hash contains other actions that can't be done elsewhere. they are done
 # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
 
@@ -558,581 +584,742 @@ my %tabledata = (
             flag                => 'tools',
             flagdesc            => 'Use tools (export, import, barcodes)',
             defaulton           => 0
-        },        
+        },
     ],
     systempreferences => [
         {
             uniquefieldrequired => 'variable',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            variable            => 'LibraryName',
-            value               => '<i><b>Koha<br/>Free Software ILS<br/><br/></b>Koha : a gift, a contribution<br/> in Maori</i>',
-            explanation         => 'Library name as shown on main opac page',
-	    type		=> ''
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            variable => 'LibraryName',
+            value    =>
+'<i><b>Koha<br/>Free Software ILS<br/><br/></b>Koha : a gift, a contribution<br/> in Maori</i>',
+            explanation => 'Library name as shown on main opac page',
+            type        => ''
 
         },
         {
             uniquefieldrequired => 'variable',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            variable            => 'autoMemberNum',
-            value               => '1',
-            explanation         => 'Member number is auto-calculated',
-	    type		=> 'YesNo'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            variable    => 'autoMemberNum',
+            value       => '1',
+            explanation => 'Member number is auto-calculated',
+            type        => 'YesNo'
 
         },
         {
             uniquefieldrequired => 'variable',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1 },
-            variable            => 'acquisitions',
-            value               => 'normal',
-            explanation         =>
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            variable    => 'acquisitions',
+            value       => 'normal',
+            explanation =>
 'Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions',
-	    type		=> 'Choice',
-	    options 		=> 'simple|normal'
+            type    => 'Choice',
+            options => 'simple|normal'
         },
         {
             uniquefieldrequired => 'variable',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1 },
-            variable            => 'dateformat',
-            value               => 'metric',
-            explanation         =>
-            'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
-	    type		=> 'Choice',
-	    options 		=> 'metric|us|iso'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            variable    => 'dateformat',
+            value       => 'metric',
+            explanation =>
+              'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
+            type    => 'Choice',
+            options => 'metric|us|iso'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'template',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'default',
-            explanation         => 'Preference order for intranet interface templates',
-	    type		=> 'Themes'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'default',
+            explanation => 'Preference order for intranet interface templates',
+            type        => 'Themes'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'autoBarcode',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'yes',
-            explanation         => 'Barcode is auto-calculated',
-	    type		=> 'YesNo'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'yes',
+            explanation => 'Barcode is auto-calculated',
+            type        => 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'insecure',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'no',
-            explanation         =>
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'no',
+            explanation =>
 'If YES, no auth at all is needed. Be careful if you set this to yes!',
-	    type		=> 'YesNo'
+            type => 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'authoritysep',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1 },
-            value               => '--',
-            explanation         =>
-            'the separator used in authority/thesaurus. Usually --',
-	    type		=> 'free',
-	    options		=> '10'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            value       => '--',
+            explanation =>
+              'the separator used in authority/thesaurus. Usually --',
+            type    => 'free',
+            options => '10'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclanguages',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'en',
-            explanation         => 'Set the preferred order for translations.  The top language will be tried first.',
-	    type		=> 'Languages'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'en',
+            explanation =>
+'Set the preferred order for translations.  The top language will be tried first.',
+            type => 'Languages'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacthemes',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'css',
-            explanation         => 'Set the preferred order for themes.  The top theme will be tried first.',
-	    type		=> 'Themes'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'css',
+            explanation =>
+'Set the preferred order for themes.  The top theme will be tried first.',
+            type => 'Themes'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'timeout',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '1200',
-            explanation         => 'Inactivity timeout for cookies authentication (in seconds)',
-	    type		=> 'Integer'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '1200',
+            explanation =>
+              'Inactivity timeout for cookies authentication (in seconds)',
+            type => 'Integer'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'marc',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'yes',
-            explanation         => 'Turn on MARC support',
-	    type		=> 'YesNo'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'yes',
+            explanation => 'Turn on MARC support',
+            type        => 'YesNo'
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'sortbynonfiling',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1 },
-            value               => 'no',
-            explanation         => 'Sort search results by MARC nonfiling characters',
-            type                => 'YesNo'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'no',
+            explanation => 'Sort search results by MARC nonfiling characters',
+            type        => 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'marcflavour',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            value               => 'MARC21',
-            explanation         =>
-            'your MARC flavor (MARC21 or UNIMARC) used for character encoding',
-	    type		=> 'Choice',
-	    options		=> 'MARC21|UNIMARC'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            value       => 'MARC21',
+            explanation =>
+'your MARC flavor (MARC21 or UNIMARC) used for character encoding',
+            type    => 'Choice',
+            options => 'MARC21|UNIMARC'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'checkdigit',
             value               => 'none',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            explanation         => 'Validity checks on membership number: none or "Katipo" style checks',
-	    type		=> 'Choice',
-	    options		=> 'none|katipo'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation =>
+'Validity checks on membership number: none or "Katipo" style checks',
+            type    => 'Choice',
+            options => 'none|katipo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'maxoutstanding',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '5',
-            explanation         =>
-            'maximum amount withstanding to be able make reserves ',
-	    type		=> 'Integer'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '5',
+            explanation =>
+              'maximum amount withstanding to be able make reserves ',
+            type => 'Integer'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'maxreserves',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '5',
-            explanation         =>
-            'maximum number of reserves a member can make',
-	    type		=> 'Integer'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '5',
+            explanation => 'maximum number of reserves a member can make',
+            type        => 'Integer'
 
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'noissuescharge',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '5',
-            explanation         =>
-            'maximum amount withstanding to be able to check out an item',
-	    type		=> 'Integer'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '5',
+            explanation =>
+              'maximum amount withstanding to be able to check out an item',
+            type => 'Integer'
 
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'KohaAdminEmailAddress',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'your.mail@here',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'your.mail@here',
             explanation => 'the email address where borrowers modifs are sent',
-	    type		=> 'free'
+            type        => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'gist',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '0.125',
-            explanation => 'the gist rate. NOT in %, but in numeric form (0.12 for 12%)',
-	    type		=> 'free'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '0.125',
+            explanation =>
+              'the gist rate. NOT in %, but in numeric form (0.12 for 12%)',
+            type => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'printcirculationslips',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '0',
-            explanation => 'if set to 1, print circulation slips. If set to 0, don\'t',
-	    type		=> 'free'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '0',
+            explanation =>
+              'if set to 1, print circulation slips. If set to 0, don\'t',
+            type => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'suggestion',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '0',
             explanation => 'if set to 1, suggestions are activated in OPAC',
-	    type		=> 'free'
+            type        => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'ISBD',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => 'Fill with appropriate value...',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => 'Fill with appropriate value...',
             explanation => 'ISBD',
-	    type		=> 'free'
+            type        => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'virtualshelves',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '0',
             explanation => 'Set virtual shelves management ON or OFF',
-	    type		=> 'YesNo'
+            type        => 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'itemcallnumber',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '676a',
-            explanation => 'The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC : 676a for Dewey, 680a for Loc)',
-	    type		=> 'free'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '676a',
+            explanation =>
+'The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC : 676a for Dewey, 680a for Loc)',
+            type => 'free'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'BiblioDefaultView',
             value               => 'normal',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            explanation         => 'Define the default view of a biblio. Can be either normal, marc or isbd',
-	    type		=> 'Choice',
-	    options		=> 'normal|marc|isbd'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation =>
+'Define the default view of a biblio. Can be either normal, marc or isbd',
+            type    => 'Choice',
+            options => 'normal|marc|isbd'
         },
 
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'LabelMARCView',
             value               => 'standard',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1,
-                                     'options' => 1},
-            explanation         => 'Define how a MARC record will display',
-            type                => 'Choice',
-            options             => 'standard|economical'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation => 'Define how a MARC record will display',
+            type        => 'Choice',
+            options     => 'standard|economical'
         },
 
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacstylesheet',
             value               => '',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'Enter a complete URL to use an alternate layout stylesheet in OPAC',
-	    type		=> 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Enter a complete URL to use an alternate layout stylesheet in OPAC',
+            type => 'free',
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'opaccolorstylesheet',
             value               => '',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Enter the name of the color stylesheet to use in the OPAC',
-            type                => 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Enter the name of the color stylesheet to use in the OPAC',
+            type => 'free',
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'opaclayoutstylesheet',
             value               => '',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Enter the name of the layout stylesheet to use in the OPAC',
-            type                => 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Enter the name of the layout stylesheet to use in the OPAC',
+            type => 'free',
         },
 
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'opacreadinghistory',
             value               => '1',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Turn on/off display of Patron Reading History in OPAC',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Turn on/off display of Patron Reading History in OPAC',
+            type => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclanguagesdisplay',
             value               => '1',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Turn on/off display of Change Language feature on OPAC',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Turn on/off display of Change Language feature on OPAC',
+            type => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'patronimages',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Turn on/off display of patron images in Intranet and specify a file extension for images',
-            type                => 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Turn on/off display of patron images in Intranet and specify a file extension for images',
+            type => 'free',
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'intranetstylesheet',
             value               => '',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Enter a complete URL to use an alternate layout stylesheet in Intranet',
-            type                => 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Enter a complete URL to use an alternate layout stylesheet in Intranet',
+            type => 'free',
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'intranetcolorstylesheet',
             value               => '',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Enter the name of the color stylesheet to use in Intranet',
-            type                => 'free',
-        },  
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Enter the name of the color stylesheet to use in Intranet',
+            type => 'free',
+        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacsmallimage',
             value               => '',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
-	    type		=> 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
+            type => 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclargeimage',
             value               => '',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
-	    type		=> 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
+            type => 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'delimiter',
             value               => ';',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'separator for reports exported to spreadsheet',
-	    type		=> 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation => 'separator for reports exported to spreadsheet',
+            type        => 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'MIME',
             value               => 'OPENOFFICE.ORG',
-            forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            explanation         => 'Define the default application for report exportations into files',
-	        type		=> 'Choice',
-	        options		=> 'EXCEL|OPENOFFICE.ORG'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation =>
+'Define the default application for report exportations into files',
+            type    => 'Choice',
+            options => 'EXCEL|OPENOFFICE.ORG'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'Delimiter',
             value               => ';',
-	        forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            explanation         => 'Define the default separator character for report exportations into files',
-	        type		=> 'Choice',
-	        options		=> ';|tabulation|,|/|\|#'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation =>
+'Define the default separator character for report exportations into files',
+            type    => 'Choice',
+            options => ';|tabulation|,|/|\|#'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'SubscriptionHistory',
             value               => ';',
-	        forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1,
-				     'options' => 1},
-            explanation         => 'Define the information level for serials history in OPAC',
-	        type		=> 'Choice',
-	        options		=> 'simplified|full'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            explanation =>
+              'Define the information level for serials history in OPAC',
+            type    => 'Choice',
+            options => 'simplified|full'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'hidelostitems',
             value               => 'No',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'show or hide "lost" items in OPAC.',
-	    type		=> 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation => 'show or hide "lost" items in OPAC.',
+            type        => 'YesNo',
         },
-		 {
+        {
             uniquefieldrequired => 'variable',
             variable            => 'IndependantBranches',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Turn Branch independancy management On an Off',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation => 'Turn Branch independancy management On an Off',
+            type        => 'YesNo',
         },
-                {
+        {
             uniquefieldrequired => 'variable',
             variable            => 'ReturnBeforeExpiry',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+            type => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'Disable_Dictionary',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Disables Dictionary buttons if set to yes',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation => 'Disables Dictionary buttons if set to yes',
+            type        => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'hide_marc',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'hide marc specific datas like subfield code & indicators to library',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'hide marc specific datas like subfield code & indicators to library',
+            type => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'NotifyBorrowerDeparture',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Delay before expiry where a notice is sent when issuing',
-            type                => 'Integer',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+              'Delay before expiry where a notice is sent when issuing',
+            type => 'Integer',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'OpacPasswordChange',
             value               => '1',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
+            type => 'YesNo',
         },
-	{   
+        {
             uniquefieldrequired => 'variable',
             variable            => 'OpacNav',
             value               => '',
-            forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
-            type                => 'Textarea',
-            options				=> '70|10'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
+            type    => 'Textarea',
+            options => '70|10'
         },
-	{
+        {
             uniquefieldrequired => 'variable',
-	    variable            => 'IntranetNav',
+            variable            => 'IntranetNav',
             value               => '',
-	    forceupdate         => { 'explanation' => 1,
-                                     'type' => 1},
-            explanation         => 'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
-            type                => 'Textarea',
-            options				=> '70|10'
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            explanation =>
+'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
+            type    => 'Textarea',
+            options => '70|10'
         },
-	
-        {                                                                       
+
+        {
             uniquefieldrequired => 'variable',
             variable            => 'AnonSuggestions',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             '
-                                        type' => 1},
-            explanation         => 'Set to anonymous borrowernumber to enable Anonymous suggestions',
-            type                => 'free',
-        },                           
-		{
-        uniquefieldrequired => 'variable',
-            variable            => 'MARCOrgCode',
-        value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             '
-                        type' => 1},
-            explanation         => 'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
-        type                => 'free',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+              'Set to anonymous borrowernumber to enable Anonymous suggestions',
+            type => 'free',
         },
-        {                                                                                   
-	    uniquefieldrequired => 'variable',
-            variable            => 'AmazonContent',
-	    value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             '
-	    				type' => 1},
-            explanation         => 'Turn On Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled',
-	    type                => 'YesNo',
-        },                                                                              
-	{                                                                                   
-	    uniquefieldrequired => 'variable',
-            variable            => 'AmazonDevKey',
-	    value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             '
-	    				type' => 1},
-            explanation         => 'see: aws-portal.amazon.com/gp/aws/developer/registration/index.html',
-            type                => 'free',
-        },                                                                              
-	{                                                                                   
-	    uniquefieldrequired => 'variable',
-            variable            => 'AmazonAssocTag',
-	    value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             '
-	    				type' => 1},
-            explanation         => 'see: associates.amazon.com/gp/flex/associates/apply-login.html',
-            type                => 'free',
-        },                                                                     
-		{   
+        {
             uniquefieldrequired => 'variable',
-			forceupdate     => { 'explanation' => 1,
-                         'type' => 1,
-                     'options' => 1 },
-            variable            => 'TemplateEncoding',
-            value               => 'iso-8859-1',
-            explanation         => 'Specify the encoding to use in Templates',
-        	type        => 'Choice',
-        	options         => 'iso-8859-1|utf-8'
+            variable            => 'MARCOrgCode',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                        type' => 1
+            },
+            explanation =>
+'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
+            type => 'free',
         },
- 
-	{
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'AmazonContent',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+	    				type' => 1
+            },
+            explanation =>
+'Turn On Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled',
+            type => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'AmazonDevKey',
+            value               => '',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+	    				type' => 1
+            },
+            explanation =>
+'see: aws-portal.amazon.com/gp/aws/developer/registration/index.html',
+            type => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'AmazonAssocTag',
+            value               => '',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+	    				type' => 1
+            },
+            explanation =>
+              'see: associates.amazon.com/gp/flex/associates/apply-login.html',
+            type => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1,
+                'options'     => 1
+            },
+            variable    => 'TemplateEncoding',
+            value       => 'iso-8859-1',
+            explanation => 'Specify the encoding to use in Templates',
+            type        => 'Choice',
+            options     => 'iso-8859-1|utf-8'
+        },
+
+        {
             uniquefieldrequired => 'variable',
             variable            => 'opaccredits',
             value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             '
-                                        type' => 1},
-            explanation         => 'Put any HTML Credits at the bottom of the OPAC page',
-            type                => 'Textarea',
-            options				=> '70|10'
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+              'Put any HTML Credits at the bottom of the OPAC page',
+            type    => 'Textarea',
+            options => '70|10'
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'serialsadditems',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             '
-                                        type' => 1},
-            explanation         => 'If set, a new item will be automatically added when receiving an issue',
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+'If set, a new item will be automatically added when receiving an issue',
+            type => 'YesNo',
         },
-	{
+        {
             uniquefieldrequired => 'variable',
             variable            => 'advancedMARCeditor',
             value               => '0',
-            forceupdate         => { 'explanation' => 1,                                                             '
-                                        type' => 1},
-            explanation         => "If set, the MARC editor won't show you tag/subfields description",
-            type                => 'YesNo',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+"If set, the MARC editor won't show you tag/subfields description",
+            type => 'YesNo',
         },
     ],
 
@@ -1163,8 +1350,8 @@ my %fielddefinitions = (
             type    => 'tinyint(4)',
             null    => '',
             key     => 'PRI',
-		  default =>'',
-            extra => 'auto_increment'
+            default => '',
+            extra   => 'auto_increment'
         },
     ],
     z3950servers => [
@@ -1177,7 +1364,7 @@ my %fielddefinitions = (
             extra   => 'auto_increment'
         },
     ],
-	marc_breeding => [
+    marc_breeding => [
         {
             field   => 'z3950random',
             type    => 'varchar(40)',
@@ -1195,7 +1382,7 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
-	serial => [
+    serial => [
         {
             field   => 'notes',
             type    => 'varchar(255)',
@@ -1230,11 +1417,10 @@ while ( my ($table) = $sth->fetchrow ) {
     $existingtables{$table} = 1;
 }
 
-
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     unless ( $existingtables{$table} ) {
-	print "Adding $table table...\n" unless $silent;
+        print "Adding $table table...\n" unless $silent;
         my $sth = $dbh->prepare("create table $table $requiretables{$table}");
         $sth->execute;
         if ( $sth->err ) {
@@ -1246,18 +1432,20 @@ foreach $table ( keys %requiretables ) {
 
 # now drop useless tables
 foreach $table ( keys %dropable_table ) {
-	if ( $existingtables{$table} ) {
-		print "Dropping unused table $table\n" if $debug and not $silent;
-		$dbh->do("drop table $table");
-		if ( $dbh->err ) {
-			print "Error : $dbh->errstr \n";
-		}
-	}
+    if ( $existingtables{$table} ) {
+        print "Dropping unused table $table\n" if $debug and not $silent;
+        $dbh->do("drop table $table");
+        if ( $dbh->err ) {
+            print "Error : $dbh->errstr \n";
+        }
+    }
 }
 unless ( $existingtables{'z3950servers'} ) {
-	#MJR: added syntax entries to close bug 624
+
+    #MJR: added syntax entries to close bug 624
     print "Adding z3950servers table...\n" unless $silent;
-    my $sti = $dbh->prepare( "create table z3950servers (
+    my $sti = $dbh->prepare(
+        "create table z3950servers (
 										host char(255),
 										port int,
 										db char(255),
@@ -1270,7 +1458,8 @@ unless ( $existingtables{'z3950servers'} ) {
 										syntax char(80))"
     );
     $sti->execute;
-    $sti = $dbh->prepare( "insert into z3950servers
+    $sti = $dbh->prepare(
+        "insert into z3950servers
 								values ('z3950.loc.gov',
 								7090,
 								'voyager',
@@ -1281,13 +1470,14 @@ unless ( $existingtables{'z3950servers'} ) {
     $sti->execute;
 }
 unless ( $existingtables{'issuingrules'} ) {
-	$dbh->do("alter table categoryitem rename issuingrules");
-	$dbh->do("ALTER TABLE issuingrules ADD maxissueqty int(4) default NULL");
-	$dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) default NULL");
-	$dbh->do("ALTER TABLE issuingrules ADD branchcode varchar(4) NOT NULL default ''");
-	print "renaming categoryitem\n" unless $silent;
+    $dbh->do("alter table categoryitem rename issuingrules");
+    $dbh->do("ALTER TABLE issuingrules ADD maxissueqty int(4) default NULL");
+    $dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) default NULL");
+    $dbh->do(
+        "ALTER TABLE issuingrules ADD branchcode varchar(4) NOT NULL default ''"
+    );
+    print "renaming categoryitem\n" unless $silent;
 }
-
 
 #---------------------------------
 # Columns
@@ -1302,7 +1492,8 @@ foreach $table ( keys %requirefields ) {
         $types{$column} = $type;
     }    # while
     foreach $column ( keys %{ $requirefields{$table} } ) {
-        print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
+        print "  Check column $column  [$types{$column}]\n"
+          if $debug and not $silent;
         if ( !$types{$column} ) {
 
             # column doesn't exist
@@ -1321,63 +1512,73 @@ foreach $table ( keys %requirefields ) {
 }    # foreach table
 
 foreach $table ( keys %fielddefinitions ) {
-	print "Check table $table\n" if $debug;
-	$sth = $dbh->prepare("show columns from $table");
-	$sth->execute();
-	my $definitions;
-	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-	{
-		$definitions->{$column}->{type}    = $type;
-		$definitions->{$column}->{null}    = $null;
-		$definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
-		$definitions->{$column}->{key}     = $key;
-		$definitions->{$column}->{default} = $default;
-		$definitions->{$column}->{extra}   = $extra;
-	}    # while
-	my $fieldrow = $fielddefinitions{$table};
-	foreach my $row (@$fieldrow) {
-		my $field   = $row->{field};
-		my $type    = $row->{type};
-		my $key     = $row->{key};
-		my $default = $row->{default};
-		my $null    = $row->{null};
-# 		$default="''" unless $default;
-		my $extra   = $row->{extra};
-		my $def     = $definitions->{$field};
+    print "Check table $table\n" if $debug;
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute();
+    my $definitions;
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $definitions->{$column}->{type}    = $type;
+        $definitions->{$column}->{null}    = $null;
+        $definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
+        $definitions->{$column}->{key}     = $key;
+        $definitions->{$column}->{default} = $default;
+        $definitions->{$column}->{extra}   = $extra;
+    }    # while
+    my $fieldrow = $fielddefinitions{$table};
+    foreach my $row (@$fieldrow) {
+        my $field   = $row->{field};
+        my $type    = $row->{type};
+        my $key     = $row->{key};
+        my $default = $row->{default};
+        my $null    = $row->{null};
 
-		unless ( $type eq $def->{type}
-			&& $null eq $def->{null}
-			&& $key eq $def->{key}
-			&& $extra eq $def->{extra} )
-		{
-			if ( $null eq '' ) {
-				$null = 'NOT NULL';
-			}
-			if ( $key eq 'PRI' ) {
-				$key = 'PRIMARY KEY';
-			}
-			unless ( $extra eq 'auto_increment' ) {
-				$extra = '';
-			}
+        # 		$default="''" unless $default;
+        my $extra = $row->{extra};
+        my $def   = $definitions->{$field};
 
-			# if it's a new column use "add", if it's an old one, use "change".
-			my $action;
-			if ($definitions->{$field}->{type}) {
-				$action="change $field"
-			} else {
-				$action="add";
-			}
-# if it's a primary key, drop the previous pk, before altering the table
-			my $sth;
-			if ($key ne 'PRIMARY KEY') {
-				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ?");
-			} else {
-				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ?");
-			}
-			$sth->execute($default);
-			print "  Alter $field in $table\n" unless $silent;
-		}
-	}
+        unless ( $type eq $def->{type}
+            && $null  eq $def->{null}
+            && $key   eq $def->{key}
+            && $extra eq $def->{extra} )
+        {
+            if ( $null eq '' ) {
+                $null = 'NOT NULL';
+            }
+            if ( $key eq 'PRI' ) {
+                $key = 'PRIMARY KEY';
+            }
+            unless ( $extra eq 'auto_increment' ) {
+                $extra = '';
+            }
+
+            # if it's a new column use "add", if it's an old one, use "change".
+            my $action;
+            if ( $definitions->{$field}->{type} ) {
+                $action = "change $field";
+            }
+            else {
+                $action = "add";
+            }
+
+        # if it's a primary key, drop the previous pk, before altering the table
+            my $sth;
+            if ( $key ne 'PRIMARY KEY' ) {
+                $sth =
+                  $dbh->prepare(
+"alter table $table $action $field $type $null $key $extra default ?"
+                  );
+            }
+            else {
+                $sth =
+                  $dbh->prepare(
+"alter table $table drop primary key, $action $field $type $null $key $extra default ?"
+                  );
+            }
+            $sth->execute($default);
+            print "  Alter $field in $table\n" unless $silent;
+        }
+    }
 }
 
 # Get list of columns from borrowers table
@@ -1387,7 +1588,7 @@ $sth = $dbh->prepare("show columns from borrowers");
 $sth->execute;
 while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 {
-    $itemtypes{$column} = $type;
+    $itemtypes{$column}   = $type;
     $nullenabled{$column} = $null;
 }
 
@@ -1395,31 +1596,30 @@ unless ( $itemtypes{'cardnumber'} eq 'varchar(20)' ) {
     $itemtypes{'cardnumber'} =~ /varchar\((\d+)\)/;
     my $oldlength = $1;
     if ( $oldlength < 16 ) {
-        print "Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n" unless $silent;
+        print
+"Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n"
+          unless $silent;
         my $sti =
           $dbh->prepare(
             "alter table borrowers change cardnumber cardnumber varchar(16)");
         $sti->execute;
         $sti->finish;
-        $sti =
-          $dbh->prepare(
-            "alter table borrowers drop index cardnumber");
+        $sti = $dbh->prepare("alter table borrowers drop index cardnumber");
         $sti->execute;
         $sti->finish;
-        $sti =
-          $dbh->prepare(
-            "alter table borrowers add unique(cardnumber)");
+        $sti = $dbh->prepare("alter table borrowers add unique(cardnumber)");
         $sti->execute;
         $sti->finish;
     }
 }
+
 #
 # Get list of columns from items table
 $sth = $dbh->prepare("show columns from items");
 $sth->execute;
 while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 {
-    $itemtypes{$column} = $type;
+    $itemtypes{$column}   = $type;
     $nullenabled{$column} = $null;
 }
 
@@ -1427,69 +1627,101 @@ unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
     $itemtypes{'barcode'} =~ /varchar\((\d+)\)/;
     my $oldlength = $1;
     if ( $oldlength < 20 ) {
-        print "Setting maximum barcode length to 20 (was $oldlength).\n" unless $silent;
+        print "Setting maximum barcode length to 20 (was $oldlength).\n"
+          unless $silent;
         my $sti =
-          $dbh->prepare(
-            "alter table items change barcode barcode varchar(20)");
+          $dbh->prepare("alter table items change barcode barcode varchar(20)");
         $sti->execute;
     }
 }
+
 #
 # dropping unique barcode index & setting barcode to null allowed.
 #
 $sth = $dbh->prepare("show index from items");
 $sth->execute;
-while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+while (
+    my (
+        $table,       $non_unique, $key_name,    $Seq_in_index,
+        $Column_name, $Collation,  $cardinality, $sub_part,
+        $Packed,      $comment
+    )
+    = $sth->fetchrow
+  )
 {
-	if ($key_name eq 'barcode' && $non_unique eq 0) {
-		print "dropping BARCODE index to enable empty barcodes\n" unless $silent;
-		$dbh->do("ALTER TABLE `items` DROP INDEX `barcode`");
-	}
+    if ( $key_name eq 'barcode' && $non_unique eq 0 ) {
+        print "dropping BARCODE index to enable empty barcodes\n"
+          unless $silent;
+        $dbh->do("ALTER TABLE `items` DROP INDEX `barcode`");
+    }
 }
-$dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )") unless ($nullenabled{barcode} eq 'YES');
+$dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )")
+  unless ( $nullenabled{barcode} eq 'YES' );
 
 #
 # creating fulltext index in bibliothesaurus if needed
 #
 $sth = $dbh->prepare("show index from bibliothesaurus");
 $sth->execute;
-my $exists=0;
-while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+my $exists = 0;
+while (
+    my (
+        $table,       $non_unique, $key_name,    $Seq_in_index,
+        $Column_name, $Collation,  $cardinality, $sub_part,
+        $Packed,      $comment
+    )
+    = $sth->fetchrow
+  )
 {
-	if ($key_name eq 'category_2') {
-		$exists=1;
-	}
+    if ( $key_name eq 'category_2' ) {
+        $exists = 1;
+    }
 }
 print "Creating fulltext index on bibliothesaurus\n" unless $exists or $silent;
-$dbh->do('create fulltext index category_2 on bibliothesaurus (category,freelib)') unless $exists;
+$dbh->do(
+    'create fulltext index category_2 on bibliothesaurus (category,freelib)')
+  unless $exists;
 
 #
 # creating  index in z3950results if needed
 #
 $sth = $dbh->prepare("show index from z3950results");
 $sth->execute;
-my $exists=0;
-while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+my $exists = 0;
+while (
+    my (
+        $table,       $non_unique, $key_name,    $Seq_in_index,
+        $Column_name, $Collation,  $cardinality, $sub_part,
+        $Packed,      $comment
+    )
+    = $sth->fetchrow
+  )
 {
-	if ($key_name eq 'query_server') {
-		$exists=1;
-	}
+    if ( $key_name eq 'query_server' ) {
+        $exists = 1;
+    }
 }
 print "Creating  index on z3950results\n" unless $exists or $silent;
-$dbh->do('create unique index query_server on z3950results (queryid,server)') unless $exists;
+$dbh->do('create unique index query_server on z3950results (queryid,server)')
+  unless $exists;
 
 # changing z3950daemon field to NULL in marc_breeding
-$dbh->do("ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )");
+$dbh->do(
+"ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )"
+);
 
 # making borrowernumber an auto_increment field
-$dbh->do("ALTER TABLE `borrowers` CHANGE `borrowernumber` `borrowernumber` INTEGER auto_increment");
+$dbh->do(
+"ALTER TABLE `borrowers` CHANGE `borrowernumber` `borrowernumber` INTEGER auto_increment"
+);
 
 # changing indexes in marc_*_structure to use frameworkcode
 $dbh->do('alter table marc_subfield_structure drop index tab');
 $dbh->do('create index tab on marc_subfield_structure (frameworkcode,tab)');
 $dbh->do('alter table marc_subfield_structure drop index kohafield');
-$dbh->do('create index kohafield on marc_subfield_structure (frameworkcode,kohafield)');
-
+$dbh->do(
+'create index kohafield on marc_subfield_structure (frameworkcode,kohafield)'
+);
 
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
@@ -1502,7 +1734,8 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 }
 
 unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
-    print "Setting type of datesent in branchtransfers to datetime.\n" unless $silent;
+    print "Setting type of datesent in branchtransfers to datetime.\n"
+      unless $silent;
     my $sti =
       $dbh->prepare(
         "alter table branchtransfers change datesent datesent datetime");
@@ -1510,7 +1743,8 @@ unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
 }
 
 unless ( $branchtransfers{'datearrived'} eq 'datetime' ) {
-    print "Setting type of datearrived in branchtransfers to datetime.\n" unless $silent;
+    print "Setting type of datearrived in branchtransfers to datetime.\n"
+      unless $silent;
     my $sti =
       $dbh->prepare(
         "alter table branchtransfers change datearrived datearrived datetime");
@@ -1529,11 +1763,12 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 
 unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
     print
-"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n" unless $silent;
+"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n"
+      unless $silent;
     my $sti =
       $dbh->prepare(
 "alter table branchcategories change categorycode categorycode varchar(4) not null"
-    );
+      );
     $sti->execute;
     $sti =
       $dbh->prepare(
@@ -1542,7 +1777,8 @@ unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
 }
 
 unless ( $branchcategories{'categoryname'} eq 'text' ) {
-    print "Changing branchcode in branchcategories to categoryname text.\n" unless $silent;
+    print "Changing branchcode in branchcategories to categoryname text.\n"
+      unless $silent;
     my $sth =
       $dbh->prepare(
         "alter table branchcategories change branchcode categoryname text");
@@ -1551,11 +1787,12 @@ unless ( $branchcategories{'categoryname'} eq 'text' ) {
 
 unless ( $branchcategories{'codedescription'} eq 'text' ) {
     print
-"Replacing branchholding in branchcategories with codedescription text.\n" unless $silent;
+      "Replacing branchholding in branchcategories with codedescription text.\n"
+      unless $silent;
     my $sth =
       $dbh->prepare(
         "alter table branchcategories change branchholding codedescription text"
-    );
+      );
     $sth->execute;
 }
 
@@ -1569,12 +1806,17 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
     $items{$column} = $type;
 }
 
-if ($items{'bulk'} eq "varchar(30)") {
+if ( $items{'bulk'} eq "varchar(30)" ) {
     print "  Setting callnumber in items table\n" unless $silent;
     my $sti =
-      $dbh->prepare("ALTER TABLE `items` CHANGE `bulk` `itemcallnumber` VARCHAR( 30 ) DEFAULT NULL");
+      $dbh->prepare(
+"ALTER TABLE `items` CHANGE `bulk` `itemcallnumber` VARCHAR( 30 ) DEFAULT NULL"
+      );
     $sti->execute;
-    $sti = $dbh->prepare("update marc_subfield_structure set kohafield=\"items.itemcallnumber\" where kohafield=\"items.bulk\"");
+    $sti =
+      $dbh->prepare(
+"update marc_subfield_structure set kohafield=\"items.itemcallnumber\" where kohafield=\"items.bulk\""
+      );
     $sti->execute;
 }
 
@@ -1588,10 +1830,13 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
     $marc_subfield_structure{$column} = $type;
 }
 
-if ($marc_subfield_structure{thesaurus_category}) {
-    print "  changing thesaurus_category in marc_subfield_structure table\n" unless $silent;
+if ( $marc_subfield_structure{thesaurus_category} ) {
+    print "  changing thesaurus_category in marc_subfield_structure table\n"
+      unless $silent;
     my $sti =
-      $dbh->prepare("ALTER TABLE marc_subfield_structure CHANGE `thesaurus_category` `authtypecode` VARCHAR(10 ) DEFAULT NULL");
+      $dbh->prepare(
+"ALTER TABLE marc_subfield_structure CHANGE `thesaurus_category` `authtypecode` VARCHAR(10 ) DEFAULT NULL"
+      );
     $sti->execute;
 }
 
@@ -1600,23 +1845,40 @@ if ($marc_subfield_structure{thesaurus_category}) {
 #
 $sth = $dbh->prepare("show index from issuingrules");
 $sth->execute;
-my $exists=0;
-while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+my $exists = 0;
+while (
+    my (
+        $table,       $non_unique, $key_name,    $Seq_in_index,
+        $Column_name, $Collation,  $cardinality, $sub_part,
+        $Packed,      $comment
+    )
+    = $sth->fetchrow
+  )
 {
-	if ($key_name eq 'PRIMARY') {
-		$exists=1;
-	}
+    if ( $key_name eq 'PRIMARY' ) {
+        $exists = 1;
+    }
 }
 print "Creating  index on issuing rules\n" unless $exists or $silent;
-$dbh->do('ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )') unless $exists;
+$dbh->do(
+'ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )'
+  )
+  unless $exists;
 
 $dbh->do('ALTER TABLE marc_tag_structure drop primary key');
-$dbh->do('ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( frameworkcode, tagfield )');
+$dbh->do(
+    'ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( frameworkcode, tagfield )'
+);
 
 $dbh->do('ALTER TABLE marc_subfield_structure drop primary key');
-$dbh->do('ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( frameworkcode, tagfield, tagsubfield )');
+$dbh->do(
+'ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( frameworkcode, tagfield, tagsubfield )'
+);
 
-$dbh->do("alter table marc_subfield_table change tagorder tagorder int not null default '1'");
+$dbh->do(
+"alter table marc_subfield_table change tagorder tagorder int not null default '1'"
+);
+
 # Get list of columns from marc_word table
 my %marc_word;
 my %nullenabled;
@@ -1624,69 +1886,96 @@ $sth = $dbh->prepare("show columns from marc_word");
 $sth->execute;
 while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 {
-    $marc_word{$column} = $type;
+    $marc_word{$column}   = $type;
     $nullenabled{$column} = $null;
 }
-if ($marc_word{subfieldid}) {
-	#create field tagsubfield, copy tag+subfieldid, then drop tag and subfieldid
-	print "Modifying marc_word (concat on tag and subfield for better perfs)\n" unless $silent;
-	$dbh->do("ALTER TABLE `marc_word` ADD `tagsubfield` CHAR( 4 ) NOT NULL AFTER `bibid`");
-	$dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
-	$dbh->do("alter table marc_word drop tag");
-	$dbh->do("alter table marc_word drop subfieldid");
-	$dbh->do("create index Search_Marc on marc_word (tagsubfield,word)");
+if ( $marc_word{subfieldid} ) {
+
+    #create field tagsubfield, copy tag+subfieldid, then drop tag and subfieldid
+    print "Modifying marc_word (concat on tag and subfield for better perfs)\n"
+      unless $silent;
+    $dbh->do(
+"ALTER TABLE `marc_word` ADD `tagsubfield` CHAR( 4 ) NOT NULL AFTER `bibid`"
+    );
+    $dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
+    $dbh->do("alter table marc_word drop tag");
+    $dbh->do("alter table marc_word drop subfieldid");
+    $dbh->do("create index Search_Marc on marc_word (tagsubfield,word)");
 }
+
 # Populate tables with required data
 
-
 # synch table and deletedtable.
-foreach my $table (('borrowers','items','biblio','biblioitems')) {
-	my %deletedborrowers;
-	print "synch'ing $table\n";
-	$sth = $dbh->prepare("show columns from deleted$table");
-	$sth->execute;
-	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
-		$deletedborrowers{$column}=1;
-	}
-	$sth = $dbh->prepare("show columns from $table");
-	$sth->execute;
-	my $previous;
-	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
-		unless ($deletedborrowers{$column}) {
-			my $newcol="alter table deleted$table add $column $type";
-			if ($null eq 'YES') {
-				$newcol .= " NULL ";
-			} else {
-				$newcol .= " NOT NULL ";
-			}
-			$newcol .= "default $default" if $default;
-			$newcol .= " after $previous" if $previous;
-			$previous=$column;
-			print "creating column $column\n";
-			$dbh->do($newcol);
-		}
-	}
+foreach my $table ( ( 'borrowers', 'items', 'biblio', 'biblioitems' ) ) {
+    my %deletedborrowers;
+    print "synch'ing $table\n";
+    $sth = $dbh->prepare("show columns from deleted$table");
+    $sth->execute;
+    while ( my ( $column, $type, $null, $key, $default, $extra ) =
+        $sth->fetchrow )
+    {
+        $deletedborrowers{$column} = 1;
+    }
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute;
+    my $previous;
+    while ( my ( $column, $type, $null, $key, $default, $extra ) =
+        $sth->fetchrow )
+    {
+        unless ( $deletedborrowers{$column} ) {
+            my $newcol = "alter table deleted$table add $column $type";
+            if ( $null eq 'YES' ) {
+                $newcol .= " NULL ";
+            }
+            else {
+                $newcol .= " NOT NULL ";
+            }
+            $newcol .= "default $default" if $default;
+            $newcol .= " after $previous" if $previous;
+            $previous = $column;
+            print "creating column $column\n";
+            $dbh->do($newcol);
+        }
+    }
 }
 
 # fill aqbasket if it's empty and aqorder is not
 # => it means it has just been created & must be filled
 $sth = $dbh->prepare("select count(*) from aqbasket");
 $sth->execute;
-if ($sth->fetchrow == 0) {
-	$sth = $dbh->prepare("select count(*) from aqorders");
-	$sth->execute;
-	if ($sth->fetchrow >0) {
-		print "Populating new table aqbasket\n";
-		print "IMPORTANT NOTE: error message \"Duplicate entry 'X' for key 1\" may appear. it should not be a real trouble\n";
-		$sth=$dbh->prepare("select distinct basketno,booksellerid,authorisedby,entrydate,booksellerinvoicenumber from aqorders");
-		$sth->execute;
-		my ($basketno,$booksellerid,$authorisedby,$entrydate,$booksellerinvoicenumber);
-		my $sth2 = $dbh->prepare("insert into aqbasket (basketno,creationdate,booksellerid,authorisedby,booksellerinvoicenumber) values (?,?,?,?,?)");
-		while (($basketno,$booksellerid,$authorisedby,$entrydate,$booksellerinvoicenumber) = $sth->fetchrow) {
-			print "$basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber\n";
-			$sth2->execute($basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber);
-		}
-	}
+if ( $sth->fetchrow == 0 ) {
+    $sth = $dbh->prepare("select count(*) from aqorders");
+    $sth->execute;
+    if ( $sth->fetchrow > 0 ) {
+        print "Populating new table aqbasket\n";
+        print
+"IMPORTANT NOTE: error message \"Duplicate entry 'X' for key 1\" may appear. it should not be a real trouble\n";
+        $sth =
+          $dbh->prepare(
+"select distinct basketno,booksellerid,authorisedby,entrydate,booksellerinvoicenumber from aqorders"
+          );
+        $sth->execute;
+        my ( $basketno, $booksellerid, $authorisedby, $entrydate,
+            $booksellerinvoicenumber );
+        my $sth2 =
+          $dbh->prepare(
+"insert into aqbasket (basketno,creationdate,booksellerid,authorisedby,booksellerinvoicenumber) values (?,?,?,?,?)"
+          );
+        while (
+            (
+                $basketno,     $booksellerid,
+                $authorisedby, $entrydate,
+                $booksellerinvoicenumber
+            )
+            = $sth->fetchrow
+          )
+        {
+            print
+"$basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber\n";
+            $sth2->execute( $basketno, $entrydate, $booksellerid, $authorisedby,
+                $booksellerinvoicenumber );
+        }
+    }
 }
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
@@ -1698,27 +1987,31 @@ foreach my $table ( keys %tabledata ) {
         my $sth                 =
           $dbh->prepare(
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
-        );
+          );
         $sth->execute($uniquevalue);
-	if ($sth->rows) {
-	    foreach my $field (keys %$forceupdate) {
-		if ($forceupdate->{$field}) {
-		    my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
-		    $sth->execute($row->{$field}, $uniquevalue);
-		}
-	    }
-	} else {
+        if ( $sth->rows ) {
+            foreach my $field ( keys %$forceupdate ) {
+                if ( $forceupdate->{$field} ) {
+                    my $sth =
+                      $dbh->prepare(
+"update systempreferences set $field=? where $uniquefieldrequired=?"
+                      );
+                    $sth->execute( $row->{$field}, $uniquevalue );
+                }
+            }
+        }
+        else {
             print "Adding row to $table: " unless $silent;
             my @values;
             my $fieldlist;
             my $placeholders;
             foreach my $field ( keys %$row ) {
                 next if $field eq 'uniquefieldrequired';
-		next if $field eq 'forceupdate';
+                next if $field eq 'forceupdate';
                 my $value = $row->{$field};
                 push @values, $value;
                 print "  $field => $value" unless $silent;
-                $fieldlist .= "$field,";
+                $fieldlist    .= "$field,";
                 $placeholders .= "?,";
             }
             print "\n" unless $silent;
@@ -1734,33 +2027,36 @@ foreach my $table ( keys %tabledata ) {
 
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
-	my @fields = split /,/,$uselessfields{$table};
-	my $fields;
-	my $exists;
-	foreach my $fieldtodrop (@fields) {
-		$fieldtodrop =~ s/\t//g;
-		$fieldtodrop =~ s/\n//g;
-		$exists =0;
-		$sth = $dbh->prepare("show columns from $table");
-		$sth->execute;
-		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-		{
-			$exists =1 if ($column eq $fieldtodrop);
-		}
-		if ($exists) {
-			print "deleting $fieldtodrop field in $table...\n" unless $silent;
-			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
-			$sth->execute;
-		}
-	}
+    my @fields = split /,/, $uselessfields{$table};
+    my $fields;
+    my $exists;
+    foreach my $fieldtodrop (@fields) {
+        $fieldtodrop =~ s/\t//g;
+        $fieldtodrop =~ s/\n//g;
+        $exists = 0;
+        $sth    = $dbh->prepare("show columns from $table");
+        $sth->execute;
+        while ( my ( $column, $type, $null, $key, $default, $extra ) =
+            $sth->fetchrow )
+        {
+            $exists = 1 if ( $column eq $fieldtodrop );
+        }
+        if ($exists) {
+            print "deleting $fieldtodrop field in $table...\n" unless $silent;
+            my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+            $sth->execute;
+        }
+    }
 }    # foreach
-
 
 $sth->finish;
 
 exit;
 
 # $Log$
+# Revision 1.100.2.39  2006/04/17 21:19:52  sushi
+# Added labels, and label_conf tables for spine labels tool.
+#
 # Revision 1.100.2.38  2006/04/05 14:58:04  kados
 # adding TemplateEncoding syspref: allows librarian to specify the
 # encoding to use on templates.
