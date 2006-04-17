@@ -144,6 +144,29 @@ my %requiretables = (
 						`road_type` char(100) NOT NULL,
 						PRIMARY KEY (`roadtypeid`)
 					)",
+
+	labels                     => "(
+				labelid int(11) NOT NULL auto_increment,
+                           	itemnumber varchar(100) NOT NULL default '',
+                           	timestamp timestamp(14) NOT NULL,
+                           	PRIMARY KEY  (labelid),
+                           	)",
+
+	labels_conf                => "(
+				id int(4) NOT NULL auto_increment,
+                           	barcodetype char(100) default '',
+                           	title tinyint(1) default '0',
+                           	isbn tinyint(1) default '0',
+                           	itemtype tinyint(1) default '0',
+                           	barcode tinyint(1) default '0',
+                           	dewey tinyint(1) default '0',
+                           	class tinyint(1) default '0',
+                           	author tinyint(1) default '0',
+                           	papertype char(100) default '',
+                           	startrow int(2) default NULL,
+                           	PRIMARY KEY  (id),
+                           	)",
+
 );
 
 my %requirefields = (
@@ -1505,6 +1528,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.136  2006/04/17 21:55:33  sushi
+# Added 'labels' and 'labels_conf' tables, for spine lable tool.
+#
 # Revision 1.135  2006/04/15 02:37:03  tgarip1957
 # Marc record should be set to UTF-8 in leader.Force it.
 # XML should be with<record> wrappers
