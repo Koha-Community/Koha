@@ -235,7 +235,7 @@ if ($query->param('item_types_selected')) {
 } else {
 	# Here we check that the borrower can actually make reserves Stage 1.
 	my $noreserves = 0;
-	my $maxoutstanding = C4::Context->preference("maxoustanding");
+	my $maxoutstanding = C4::Context->preference("maxoutstanding");
 	$template->param(noreserve => 1) unless $maxoutstanding;
 	if ($borr->{'amountoutstanding'} > $maxoutstanding) {
 		my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
