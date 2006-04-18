@@ -159,6 +159,7 @@ my ($count,$issue)=borrissues($bornum);
 my $today=ParseDate('today');
 my @issuedata;
 my $totalprice = 0;
+my $toggle = 0;
 for (my $i=0;$i<$count;$i++){
 	my $datedue=ParseDate($issue->[$i]{'date_due'});
 	$issue->[$i]{'date_due'} = format_date($issue->[$i]{'date_due'});
@@ -168,6 +169,7 @@ for (my $i=0;$i<$count;$i++){
 	if ($datedue < $today){
 		$row{'red'}=1; #print "<font color=red>";
 	}
+        $row{toggle} = $toggle++%2;
 	#find the charge for an item
 	# FIXME - This is expecting
 	# &C4::Circulation::Renewals2::calc_charges, but it's getting
@@ -202,10 +204,12 @@ for (my $i=0;$i<$count;$i++){
 #
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
 my @reservedata;
+$toggle = 0;
 foreach my $reserveline (@$reserves) {
 	$reserveline->{'reservedate2'} = format_date($reserveline->{'reservedate'});
 	my $restitle;
 	my %row = %$reserveline;
+        $row{toggle} = $toggle++%2;
 	if ($reserveline->{'constrainttype'} eq 'o'){
 		$restitle=getreservetitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'rtimestamp'});
 		%row =  (%row , %$restitle) if $restitle;
