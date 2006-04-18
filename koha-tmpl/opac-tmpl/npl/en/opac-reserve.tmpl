@@ -96,6 +96,9 @@
 <!-- /TMPL_IF -->
 		<tr><th>Pick up From: </th><td><!-- TMPL_VAR NAME="branchname" --><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"></td></tr>
 </table>
+		<!-- TMPL_IF NAME="fee" -->
+			<p>Note there will be a reserve charge of <strong>$<!-- TMPL_VAR NAME="fee" --></strong></p>
+		<!-- /TMPL_IF -->
 </div>
 <p><input type="submit" value="Finish and Place Reservation" class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();"></p>
 
