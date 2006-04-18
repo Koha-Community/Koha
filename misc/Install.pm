@@ -841,6 +841,39 @@ sub checkperlmodules(;$) {
 				push @missing,"You will need PDF::API2 for barcode generator" 
 			}
 	}
+                unless (eval {require PDF::API2::PDF})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need PDF::API2::PDF for spine and barcode printing"
+                                    }
+                    }
+                unless (eval {require PDF::Reuse})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need PDF::Reuse for spine and barcode printing"
+                                    }
+                    }
+                unless (eval {require PDF::Reuse::Barcode})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need PDF::Reuse::Barcode for spine and barcode printing"
+                                    }
+                    }
+                unless (eval {require PDF::Report})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need PDF::Report for spine and barcode printing"
+                                    }
+                    }
+
+                unless (eval {require GD::Barcode})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need GD::Barcode for spine and barcode printing"
+                                    }
+                    }
+
+                unless (eval {require GD::Barcode::UPCE})   {
+                                    if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                            push @missing,"You will need GD::Barcode::UPCE for spine and barcode printing"
+                                    }
+                    }
+
 	unless (eval {require Net::LDAP})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Net::LDAP";
