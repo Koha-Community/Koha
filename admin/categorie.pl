@@ -169,10 +169,10 @@ if ($op eq 'add_form') {
 				enrolmentperiod => $results->[$i]{'enrolmentperiod'},
 				upperagelimit => $results->[$i]{'upperagelimit'},
 				dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
-				enrolmentfee => $results->[$i]{'enrolmentfee'},
+				enrolmentfee => sprintf("%.2f", $results->[$i]{'enrolmentfee'}),
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},
-				reservefee => $results->[$i]{'reservefee'},
+				reservefee => sprintf("%.2f", $results->[$i]{'reservefee'}),
 				toggle => $toggle );	
 		push @loop, \%row;
 		if ( $toggle eq 0 )
