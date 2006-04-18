@@ -65,7 +65,7 @@
 				<h2 class="circulation">
 					Enter borrower card number or partial last name
 				</h2>
-				<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+				<form method="post" name="f" action="/cgi-bin/koha/circ/circulation.pl">
 					<input name="findborrower">
 					<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
 					<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
@@ -81,7 +81,7 @@
 
 <!-- TMPL_IF NAME="borrowernumber" -->
 	<div id="bloc25">
-	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+	<form method="post" name="f" action="/cgi-bin/koha/circ/circulation.pl">
 		<h2 class="circulation">Enter Book Barcode</h2>
 		<p>Item Barcode:<input name="barcode" size="10"> <input type="submit" value="Issue" class="button circulation"></p>
 		<p>

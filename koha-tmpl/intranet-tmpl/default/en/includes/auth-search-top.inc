@@ -20,7 +20,7 @@ function Help() {
 }
 
 function addauthority() {
-	X = document.forms[0].authtype.value;
+	X = document.forms['f'].authtype.value;
 	window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
 }
 </script>

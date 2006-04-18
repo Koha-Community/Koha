@@ -12,7 +12,7 @@ newwin =
 window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
 function focusOnFirst (){
-document.forms[0].elements[0].focus();
+document.forms['f'].elements[0].focus();
 }
 // end hiding -->
 </script>
@@ -40,7 +40,7 @@ a.circulation:hover {
 </style>
 </head>
 
-<body onload="javascript:focusOnFirst()">
+<body onload="focusOnFirst()">
 
 <!-- TMPL_INCLUDE name="menus.inc" -->
 <!-- TMPL_IF NAME="loggedinusername" -->
