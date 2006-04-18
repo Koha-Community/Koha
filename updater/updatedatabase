@@ -149,7 +149,7 @@ my %requiretables = (
 				labelid int(11) NOT NULL auto_increment,
                            	itemnumber varchar(100) NOT NULL default '',
                            	timestamp timestamp(14) NOT NULL,
-                           	PRIMARY KEY  (labelid),
+                           	PRIMARY KEY  (labelid)
                            	)",
 
 	labels_conf                => "(
@@ -164,7 +164,7 @@ my %requiretables = (
                            	author tinyint(1) default '0',
                            	papertype char(100) default '',
                            	startrow int(2) default NULL,
-                           	PRIMARY KEY  (id),
+                           	PRIMARY KEY  (id)
                            	)",
 
 );
@@ -1528,6 +1528,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.137  2006/04/18 09:36:36  plg
+# bug fixed: typo fixed in labels and labels_conf tables creation query.
+#
 # Revision 1.136  2006/04/17 21:55:33  sushi
 # Added 'labels' and 'labels_conf' tables, for spine lable tool.
 #
