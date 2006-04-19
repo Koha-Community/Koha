@@ -292,12 +292,6 @@ sub build_circ_barcode {
     #$DB::single = 1;
 
     if ( $barcodetype eq 'EAN13' ) {
-
-        #testing EAN13 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 12 );
-
         eval {
   	    PDF::Reuse::Barcode::EAN13(
                 x     => ( $x_pos_circ + 32 ),
@@ -334,12 +328,6 @@ sub build_circ_barcode {
 
     elsif ( $barcodetype eq 'Matrix2of5' ) {
 
-        #testing MATRIX25  barcodes hack
-        #    $value = $value.'000000000';
-        $value =~ s/-//;
-
-        #    $value = substr( $value, 0, 12 );
-
         eval {
             PDF::Reuse::Barcode::Matrix2of5(
                 x     => ( $x_pos_circ + 27 ),
@@ -358,11 +346,6 @@ sub build_circ_barcode {
     }
 
     elsif ( $barcodetype eq 'EAN8' ) {
-
-        #testing ean8 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 8 );
 
         eval {
             PDF::Reuse::Barcode::EAN8(
