@@ -122,13 +122,19 @@ if ( !$startrow ) {
 
 #calc-ing number of sheets
 my $number_of_results = scalar @resultsloop;
-my $sheets_needed = ( ( $number_of_results + $startrow ) / 8 );
-$sheets_needed = ceil($sheets_needed);    # rounding up int's
+my $sheets_needed = ( ( --$number_of_results + $startrow ) / 8 );
+        $sheets_needed = ceil($sheets_needed);    # rounding up int's
+
+my $tot_labels = ($sheets_needed * 8);
+my $start_results =  ($number_of_results + $startrow);
+my $labels_remaining = ($tot_labels - $start_results);
 
 $template->param(
     resultsloop             => \@resultsloop,
     startrow                => $startrow,
     sheets                  => $sheets_needed,
+    labels_remaining        => $labels_remaining,
+
     intranetcolorstylesheet =>
       C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
