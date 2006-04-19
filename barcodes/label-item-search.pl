@@ -151,7 +151,7 @@ if ( $op eq "do_search" ) {
             #warn $i;
             #warn Dumper $results->[$i]{'bibid'};
         my $type         = 'intra';
-        my @item_results = &ItemInfo( 0, $results->[$i]{'bibid'}, $type );
+        my @item_results = &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
 
         foreach my $item (@item_results) {
 
