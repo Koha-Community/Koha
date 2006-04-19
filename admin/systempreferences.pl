@@ -78,6 +78,7 @@ $tabsysprefs{maxoutstanding}="Circulation";
 $tabsysprefs{NotifyBorrowerDeparture}="Members";
 $tabsysprefs{opaccolorstylesheet}="OPAC";
 $tabsysprefs{opaccredits}="OPAC";
+$tabsysprefs{opacheader}="OPAC";
 $tabsysprefs{opaclanguagesdisplay}="OPAC";
 $tabsysprefs{opaclanguages}="OPAC";
 $tabsysprefs{opaclargeimage}="OPAC";

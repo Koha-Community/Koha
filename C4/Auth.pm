@@ -201,6 +201,7 @@ sub get_template_and_user {
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				OpacNav => C4::Context->preference("OpacNav"),
+				opacheader	=> C4::Context->preference("opacheader"),
 				opaccredits => C4::Context->preference("opaccredits"),
 				opacsmallimage => C4::Context->preference("opacsmallimage"),
 				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
