@@ -320,23 +320,8 @@ sub build_circ_barcode {
             PDF::Reuse::Barcode::Code39(
                 x     => ( $x_pos_circ + 9 ),
                 y     => ( $y_pos + 15 ),
-
-
                 value => "*$value*",
                 hide_asterisk => 1,
-                #           prolong => 2.96,
-                xSize => .85,
-                ySize => 1.3,
-
-
-
-
-
-
-
-
-                value => $value,
-
                 #           prolong => 2.96,
                 xSize => .85,
                 ySize => 1.3,
