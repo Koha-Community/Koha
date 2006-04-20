@@ -141,8 +141,14 @@ if ($op eq "do_search") {
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
 	if ($total == 1) {
 	 # if only 1 answer, jump directly to the biblio
+	if (C4::Context->preference("IntranetBiblioDefaultView") eq "normal") {
+	     print $query->redirect("/cgi-bin/koha/detail.pl?bib=".@$results[0]->{biblionumber});
+	} elsif (C4::Context->preference("IntranetBiblioDefaultView") eq "marc") {
 	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
-		 exit
+	} else {
+	     print $query->redirect("/cgi-bin/koha/ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
+	}
+	 exit
 	}
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
@@ -195,6 +201,7 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
+	my $defaultview = 'BiblioDefaultView'.C4::Context->preference('IntranetBiblioDefaultView');
 	$template->param(result => $results,
 							startfrom=> $startfrom,
 							displaynext=> $displaynext,
@@ -210,6 +217,7 @@ if ($op eq "do_search") {
 							desc_asc=>$desc_or_asc,
 							orderby=>$orderby,
 							MARC_ON => C4::Context->preference("marc"),
+							$defaultview => 1,
 							);
 
 } elsif ($op eq "AddStatement") {
