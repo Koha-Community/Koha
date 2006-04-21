@@ -18,4 +18,5 @@
 		<a class="card" href="/cgi-bin/koha/opac-user.pl">Log in to access<br /> cardholder features</a>
 	</div>
 <!-- /TMPL_IF -->
+<br class="clear" />
 </div>

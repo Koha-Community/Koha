@@ -20,10 +20,12 @@
 		<li><a href="/cgi-bin/koha/opac-user.pl">My Account</a></li>
 		<li><a class="logout" href="/cgi-bin/koha/opac-logout.pl">Log Out</a></li>
 	</ul>	
+<br class="clear" />
 </div>
 <!-- TMPL_ELSE -->
 	<div id="members">
 		<a class="card" href="/cgi-bin/koha/opac-user.pl">Log in to access<br /> cardholder features</a>
+<br class="clear" />
 	</div>
 <!-- /TMPL_IF -->
 </div>
