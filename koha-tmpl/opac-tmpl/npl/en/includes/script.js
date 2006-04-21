@@ -41,13 +41,13 @@ function ValidateCode()
 
 function CheckAll()
 {
-count = document.mainform.elements.length;
+count = document.myform.elements.length;
     for (i=0; i < count; i++) 
 	{
-	    if(document.mainform.elements[i].checked == 1){
-			document.mainform.elements[i].checked = 0;
+	    if(document.myform.elements[i].checked == 1){
+			document.myform.elements[i].checked = 0;
 		} else {
-			document.mainform.elements[i].checked = 1;
+			document.myform.elements[i].checked = 1;
 		}
 	}
 }

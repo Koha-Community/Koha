@@ -38,10 +38,11 @@
 <input type="submit" class="icon addchecked" value="Add Checked Items to Book Bag" onclick="addMultiple(); return false;"> <input type="reset" value="Clear All" class="icon clearall">
 	<table>
 		<tr>
+			<th><a href="#" onclick="CheckAll(); return false;"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/checkall.gif" height="18" width="18" alt="Check All" title="Check All" border="0" /></a></th>
 			<!-- TMPL_IF NAME="AmazonContent" -->
-			<th colspan="3">Title</th>
-			<!-- TMPL_ELSE -->
 			<th colspan="2">Title</th>
+			<!-- TMPL_ELSE -->
+			<th>Title</th>
 			<!-- /TMPL_IF -->
 			<th>Author</th>
 			<th>Call Number</th>
