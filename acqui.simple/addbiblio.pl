@@ -98,6 +98,44 @@ sub MARCfindbreeding {
 		if (ref($record) eq undef) {
 			return -1;
 		} else {
+			if (C4::Context->preference("z3950NormalizeAuthor") and C4::Context->preference("z3950AuthorAuthFields")){
+				my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author");
+# 				my $summary = C4::Context->preference("z3950authortemplate");
+				my $auth_fields = C4::Context->preference("z3950AuthorAuthFields");
+				my @auth_fields= split /,/,$auth_fields;
+				my $field;
+				warn $record->as_formatted;
+				if ($record->field($tag)){
+					foreach my $tmpfield ($record->field($tag)->subfields){
+#						foreach my $subfieldcode ($tmpfield->subfields){
+						my $subfieldcode=shift @$tmpfield;
+						my $subfieldvalue=shift @$tmpfield;
+						if ($field){
+							$field->add_subfields("$subfieldcode"=>$subfieldvalue) if ($subfieldcode ne $subfield);
+						} else {
+							$field=MARC::Field->new($tag,"","",$subfieldcode=>$subfieldvalue) if ($subfieldcode ne $subfield);
+						}
+					}
+					warn $field->as_formatted;
+#					}
+				}
+				$record->delete_field($record->field($tag));
+				foreach my $fieldtag (@auth_fields){
+					next unless ($record->field($fieldtag));
+					my $lastname = $record->field($fieldtag)->subfield('a');
+					my $firstname= $record->field($fieldtag)->subfield('b');
+					my $title = $record->field($fieldtag)->subfield('c');
+					my $number= $record->field($fieldtag)->subfield('d');
+					if ($title){
+# 						$field->add_subfields("$subfield"=>"[ ".ucfirst($title).ucfirst($firstname)." ".$number." ]");
+						$field->add_subfields("$subfield"=>ucfirst($title)." ".ucfirst($firstname)." ".$number);
+					}else{
+# 						$field->add_subfields("$subfield"=>"[ ".ucfirst($firstname).", ".ucfirst($lastname)." ]");
+						$field->add_subfields("$subfield"=>ucfirst($firstname).", ".ucfirst($lastname));
+					}
+				}
+				$record->insert_fields_ordered($field);
+			}
 			return $record,$encoding;
 		}
 	}

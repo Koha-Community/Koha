@@ -1321,6 +1321,32 @@ my %tabledata = (
 "If set, the MARC editor won't show you tag/subfields description",
             type => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'z3950NormalizeAuthor',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+"If set, Personnal Authorities will replace authors in biblio.author",
+            type => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'z3950AuthorAuthFields',
+            value               => '701,702,700',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+"contains the MARC biblio tags of person authorities to fill biblio.author with when importing biblio",
+            type => 'free',
+        },
     ],
 
 );
@@ -2054,6 +2080,14 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.41  2006/04/21 08:54:55  hdl
+# Adding two new sysprefs :
+# - z3950NormalizeAuthor of type YesNo. Set this to yes if you want author field to be filled with authorities fields when importing biblio in z3950
+# - z3950AuthorAuthfields, free text : type in comma-separated list of fields to search for author names for AuthorNormalization.
+#
+# Adding a feature on a Z3950 import.
+# You can now automatically fill author with person name authority contained in the biblio if sysprefs are filled.
+#
 # Revision 1.100.2.40  2006/04/18 09:34:15  plg
 # bug fixed: typo fixed in labels and labels_conf tables creation query.
 #
