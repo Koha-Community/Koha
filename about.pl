@@ -28,6 +28,7 @@ my $mysqlVersion = `mysql -V`;
 my $apacheVersion =  `httpd -v`;
 $apacheVersion =  `httpd2 -v` unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
+# $apacheVersion =  (`/usr/sbin/apache2 -V`)[0];
 
 $template->param(
 					kohaVersion => $kohaVersion,
@@ -44,8 +45,10 @@ my @component_names =
        Event             Net::LDAP         PDF::API2
        Mail::Sendmail    MARC::Record      Digest::MD5
        HTML::Template    DBD::mysql        Date::Manip
-       DBI               Smart::Comments   ZOOM
+       DBI               Smart::Comments   Net::Z3950::ZOOM
+       Date::Calc
       /;
+
 my @components = ();
 
 foreach my $component (sort @component_names) {

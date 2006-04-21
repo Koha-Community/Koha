@@ -18,21 +18,27 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# pragma
 use strict;
+
+# external modules
+use Date::Calc qw/Today/;
+use CGI;
+use HTML::Template;
+use Date::Manip;
+use Digest::MD5 qw(md5_base64);
+
+# internal modules
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use CGI;
 use C4::Search;
 use C4::Members;
 use C4::Koha;
-use HTML::Template;
-use Date::Manip;
 use C4::Date;
 use C4::Input;
 use C4::Log;
-use Digest::MD5 qw(md5_base64);
 
 my $input = new CGI;
 my %data;
@@ -65,6 +71,8 @@ my $nodouble=$input->param('nodouble');
 my $select_city=$input->param('select_city');
 my $nok=$input->param('nok');
 
+my @errors;
+
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
 my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
@@ -87,7 +95,7 @@ if ($op eq 'add' or $op eq 'modify') {
 		$data{$key}=~ s/\'/\\\'/g;
 		$data{$key}=~ s/\"/\\\"/g;
 	}
-	my @errors;
+
 	#############test for member being unique #############
 	if ($op eq 'add' && $step eq 2){
 		(my $category_type_send=$category_type ) if ($category_type eq 'I'); 
@@ -125,7 +133,29 @@ if ($op eq 'add' or $op eq 'modify') {
 				$data{'email'}=$guarantordata->{'email'};
 				$data{'emailpro'}=$guarantordata->{'emailpro'};
 			}
-		}
+                    }
+                if ($categorycode ne 'I') {
+                    # is the age of the borrower compatible with age limitations of
+                    # the borrower category
+                    my $query = '
+SELECT upperagelimit,
+       dateofbirthrequired
+  FROM categories
+  WHERE categorycode = ?
+';
+                    my $sth=$dbh->prepare($query);
+                    $sth->execute($categorycode);
+                    my $category_info = $sth->fetchrow_hashref;
+
+                    my $age = get_age(format_date_in_iso($data{dateofbirth}));
+
+                    if ($age > $category_info->{upperagelimit}
+                            or $age < $category_info->{dateofbirthrequired}
+                        ) {
+                        push @errors, 'ERROR_age_limitations';
+                        $nok = 1;
+                    }
+                }
 	}
 # STEP 2
 	if ($step eq 2) {
@@ -174,14 +204,6 @@ if ($op eq 'add' or $op eq 'modify') {
 				logaction($loggedinuser,"MEMBERS","add member", $borrowerid, "");
 			}
  		}
-		
-		if ($nok) {
-			foreach my $error (@errors) {
-				$template->param( $error => 1);
-			}
-			$template->param(nok => 1);
-			$step--; # decrease step : go back to step 2, the step++ just before showing the template will go again to 3
-		}
 
 		unless ($nok) {
 			if($destination eq "circ"){
@@ -384,8 +406,18 @@ if ($delete){
 	
  	$data{'opacnotes'} =~ s/\\//g;
 	$data{'borrowernotes'} =~ s/\\//g;
+
 	# increase step to see next page
-	$step++;
+        if ($nok) {
+            foreach my $error (@errors) {
+                $template->param( $error => 1);
+            }
+            $template->param(nok => 1);
+        }
+        else {
+            $step++;
+        }
+
 	warn "CITY".$data{city};
 	$template->param(
 		BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
@@ -462,6 +494,25 @@ if ($delete){
 	#$template->param(Institution => 1) if ($categorycode eq "I");
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
+
+sub get_age {
+    my ($date, $date_ref) = @_;
+
+    if (not defined $date_ref) {
+        $date_ref = sprintf('%04d-%02d-%02d', Today());
+    }
+
+    my ($year1, $month1, $day1) = split /-/, $date;
+    my ($year2, $month2, $day2) = split /-/, $date_ref;
+
+    my $age = $year2 - $year1;
+    if ($month1.$day1 > $month2.$day2) {
+        $age--;
+    }
+
+    return $age;
+}
+
 # Local Variables:
 # tab-width: 8
 # End:
