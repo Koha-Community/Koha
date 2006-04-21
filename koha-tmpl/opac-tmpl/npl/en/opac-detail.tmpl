@@ -76,7 +76,7 @@
 <!-- TMPL_IF NAME="copyrightdate" -->
     <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
 <!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --> : <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="isbn" -->
 	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
 <!-- /TMPL_IF -->
