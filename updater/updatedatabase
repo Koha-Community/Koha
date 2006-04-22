@@ -1295,6 +1295,29 @@ my %tabledata = (
             type    => 'Textarea',
             options => '70|10'
         },
+		
+{
+            uniquefieldrequired => 'variable',
+            variable            => 'opacheader',
+            value               => '',
+            forceupdate         => { 'explanation' => 1,                                                             		
+							'type' => 1},
+            explanation         => 'Enter HTML to be included as a custom header in the OPAC',
+            type                => 'Textarea',
+			options				=> '30|10'
+        },
+
+		{
+            uniquefieldrequired => 'variable',
+            variable            => 'IntranetBiblioDefaultView',
+            value               => 'marc',
+            forceupdate         => { 'explanation' => 1,                                                             
+								'type' => 1},
+            explanation         => 'Define the default view of a biblio in the intranet. Can be either normal, marc, or ISBD',
+            type                => 'Choice',
+			options				=> 'normal|marc|isbd'
+        },
+		
         {
             uniquefieldrequired => 'variable',
             variable            => 'serialsadditems',
@@ -2080,6 +2103,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.42  2006/04/22 13:52:12  oleonard
+# Adding opacheader and IntranetBiblioDefaultView system preferences
+#
 # Revision 1.100.2.41  2006/04/21 08:54:55  hdl
 # Adding two new sysprefs :
 # - z3950NormalizeAuthor of type YesNo. Set this to yes if you want author field to be filled with authorities fields when importing biblio in z3950
