@@ -407,7 +407,7 @@ if (C4::Context->preference("sortbynonfiling")) {
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
 	my $sth_itemCN;
-	if (C4::Context->preference('hidelostitem')) {
+	if (C4::Context->preference('hidelostitems')) {
 		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL) order by homebranch");
 	} else {
 		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? order by homebranch");
