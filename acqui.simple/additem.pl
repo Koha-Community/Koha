@@ -261,12 +261,16 @@ foreach my $tag (sort keys %{$tagslib}) {
 					(C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
 # 		print $input->redirect(".pl?bibid=$bibid") if ($test);
 		# search for itemcallnumber if applicable
+##Lc callnumbers expect 2 subfields like 050ab or 090ab . Modified to accept 2 subfields
 		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
 			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
 			my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
+			my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
 			my $temp = $record->field($CNtag);
 			if ($temp) {
-				$value = $temp->subfield($CNsubfield);
+				$value = ($temp->subfield($CNsubfield)).' '.($temp->subfield($CNsubfield2));
+#remove any trailing space incase one subfield is used
+			$value=~s/^\s+|\s+$//g;
 			}
 		}
 		if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
