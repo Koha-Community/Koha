@@ -2,7 +2,7 @@
 # small script that import an iso2709 file into koha 2.0
 
 use strict;
-use warnings;
+# use warnings;
 
 # Koha modules used
 use MARC::File::USMARC;
@@ -273,7 +273,7 @@ while ( my $record = $batch->next() ) {
 
 
 	if ($verbose) {
-#		warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
+		warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
 	}
 	my @fields = $newRecord->field($tagfield);
 	my @items;
