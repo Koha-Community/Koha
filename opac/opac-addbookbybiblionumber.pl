@@ -65,11 +65,14 @@ if ($shelfnumber) {
 			$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
 	}
 
-	my $CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
+	my $CGIbookshelves;
+	if (@shelvesloop > 0){
+	$CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
 				-values   => \@shelvesloop,
 				-labels   => \%shelvesloop,
 				-size     => 1,
 				-multiple => 0 );
+	 }
 
 $template->param(biblionumber => $biblionumber,
 				title => $biblios[0]->{'title'},
@@ -88,6 +91,9 @@ $template->param(biblionumber => $biblionumber,
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.6  2006/04/27 16:23:34  oleonard
+# Hiding option to add to existing virtual shelves if there are no existing virtual shelves (thanks Chris!)
+#
 # Revision 1.1.2.5  2006/03/01 22:33:25  oleonard
 # Enabling several new system preferences: opacreadinghistory, opaccolorstylesheet, opaclanguagesdisplay, opaclayoutstylesheet, opacsmallimage
 #
