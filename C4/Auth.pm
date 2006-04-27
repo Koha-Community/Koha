@@ -208,6 +208,8 @@ sub get_template_and_user {
 				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
 				TemplateEncoding => C4::Context->preference("TemplateEncoding"),
+				opacuserlogin => C4::Context->preference("opacuserlogin"),
+				opacbookbag => C4::Context->preference("opacbookbag"),
 		);
 	}
 	$template->param(

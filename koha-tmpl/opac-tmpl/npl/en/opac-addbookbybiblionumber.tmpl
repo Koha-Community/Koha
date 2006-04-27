@@ -14,8 +14,8 @@
 <tr><th><label for="newbookshelf">New Shelf Name:</label> </th><td><input type="text" id="newbookshelf" name="newbookshelf" maxlength="40" size="40">
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td></tr>
 <!-- Hide from NPL --><tr><th><label for="category">Shelf Type: </label></th><td><select id="category" name="category">
-			<option value="1">Private</option>
-			<option value="2">Public</option>
+			<!-- TMPL_IF NAME="opacuserlogin" --><option value="1">Private</option>
+			<option value="2">Public</option><!-- /TMPL_IF -->
 			<option value="3">Free</option>
 		</select></td></tr><!-- /Hide from NPL -->
 </table>
