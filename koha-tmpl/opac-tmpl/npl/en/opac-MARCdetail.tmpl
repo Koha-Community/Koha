@@ -21,109 +21,230 @@
 <!-- TMPL_IF name="opacbookbag" -->
 <form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form><!-- /TMPL_IF -->
 
-		<table><!-- TMPL_LOOP name="0XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+<div class="tabbloc">
+	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
+		<!-- TMPL_LOOP name="0XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="1XX" id="1XX" class="tab">
 		<!-- TMPL_LOOP name="1XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="2XX" id="2XX" class="tab">
 		<!-- TMPL_LOOP name="2XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="3XX" id="3XX" class="tab">
 		<!-- TMPL_LOOP name="3XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="4XX" id="4XX" class="tab">
 		<!-- TMPL_LOOP name="4XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="5XX" id="5XX" class="tab">
 		<!-- TMPL_LOOP name="5XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->"></a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="6XX" id="6XX" class="tab">
 		<!-- TMPL_LOOP name="6XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="7XX" id="7XX" class="tab">
 		<!-- TMPL_LOOP name="7XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="8XX" id="8XX" class="tab">
 		<!-- TMPL_LOOP name="8XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+	</div>
 
+	<div name="9XX" id="9XX" class="tab">
 		<!-- TMPL_LOOP name="9XX" -->
-		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP name="subfield" -->
-				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
-					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
-					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
-				</tr>
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->"title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
-	</table>
-<!-- TMPL_IF NAME="item_header_loop" -->
+	</div>
+	
+	<div name="10XX" id="10XX" class="tab">
+		<h2>Items</h2>
 		<table>
-		<caption>Copies</caption>
 				<tr>
 					<!-- TMPL_LOOP name="item_header_loop" -->
 						<th>
@@ -136,10 +257,22 @@
 						<!-- TMPL_VAR name="item_value" -->
 					</tr>
 				<!-- /TMPL_LOOP -->
-		</table><!-- TMPL_ELSE -->
-		<table>
-			<tr><td>No copies available.</td></tr>
 		</table>
-	<!-- /TMPL_IF -->
+	</div>
 </div>
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+	for (i=0; i <= 10 ; i++ ) {
+		ong = i+"XX";
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+</script>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
