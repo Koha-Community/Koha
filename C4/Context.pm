@@ -16,11 +16,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id$
-# Revision History:
-# 2004-08-11 A. Tarallo: Added the function db_escheme2dbi, tested my bugfixes,
-# further  details about them in the code.
-# 2004-11-23 A. Tarallo, E. Silva: Bugfixes for running in a mod_perl environment.
-# Clean up of previous bugfixes, better documentation of what was done. 
 
 package C4::Context;
 use strict;
@@ -80,6 +75,7 @@ environment variable to the pathname of a configuration file to use.
 =over 2
 
 =cut
+
 #'
 # In addition to what is said in the POD above, a Context object is a
 # reference-to-hash with the following fields:
@@ -93,6 +89,8 @@ environment variable to the pathname of a configuration file to use.
 # dbh_stack
 #	Used by &set_dbh and &restore_dbh to hold other database
 #	handles for this context.
+# Zconn
+# 	A connection object for the Zebra server
 
 use constant CONFIG_FNAME => "/etc/koha.conf";
 				# Default config file, if none is specified
@@ -203,6 +201,7 @@ C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
 
 =cut
+
 #'
 # Revision History:
 # 2004-08-10 A. Tarallo: Added check if the conf file is not empty
@@ -230,6 +229,8 @@ sub new
 	return undef if !defined($self->{"config"});
 
 	$self->{"dbh"} = undef;		# Database handle
+	$self->{"Zconn"} = undef;	# Zebra Connection
+	$self->{"Zconnauth"} = undef;	# Zebra Connection for updating
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
 	$self->{"userenv"} = undef;		# User env
@@ -255,6 +256,7 @@ sets the context to C<$context>, which will be used in future
 operations. To restore the previous context, use C<&restore_context>.
 
 =cut
+
 #'
 sub set_context
 {
@@ -293,6 +295,7 @@ sub set_context
 Restores the context set by C<&set_context>.
 
 =cut
+
 #'
 sub restore_context
 {
@@ -325,6 +328,7 @@ method names. If there is a configuration variable called "new", then
 C<C4::Config-E<gt>new> will not return it.
 
 =cut
+
 #'
 sub config
 {
@@ -350,6 +354,7 @@ systempreferences table of the Koha database, and returns it. If the
 variable is not set, or in case of error, returns the undefined value.
 
 =cut
+
 #'
 # FIXME - The preferences aren't likely to change over the lifetime of
 # the script (and things might break if they did change), so perhaps
@@ -397,6 +402,88 @@ sub AUTOLOAD
 	return $self->config($AUTOLOAD);
 }
 
+=item Zconn
+
+$Zconn = C4::Context->Zconn
+
+Returns a connection to the Zebra database for the current
+context. If no connection has yet been made, this method 
+creates one and connects.
+
+=cut
+
+sub Zconn {
+        my $self = shift;
+	my $Zconn;
+       if (defined($context->{"Zconn"})) {
+	    $Zconn = $context->{"Zconn"};
+          	    return $context->{"Zconn"};
+	} else { 
+		$context->{"Zconn"} = &new_Zconn();
+		return $context->{"Zconn"};
+        }
+}
+
+=item Zconnauth
+Returns a connection to the Zebradb with write privileges.Requires setting from etc/koha.conf
+zebradb,zebraport,zebrauser,zebrapass
+
+=cut
+
+sub Zconnauth {
+        my $self = shift;
+	my $Zconnauth;
+	 if (defined($context->{"Zconnauth"})) {
+	    $Zconnauth = $context->{"Zconnauth"};
+          	    return $context->{"Zconnauth"};
+	} else {
+		$context->{"Zconnauth"} = &new_Zconnauth();
+		return $context->{"Zconnauth"};
+	}	
+}
+
+=item new_Zconn
+
+Internal helper function. creates a new database connection from
+the data given in the current context and returns it.
+
+=cut
+
+sub new_Zconn {
+
+my $Zconn;
+
+
+	eval {
+		$Zconn=new ZOOM::Connection($context->{"config"}{"hostname"},$context->{"config"}{"zebraport"},database=>$context->{"config"}{"zebradb"},
+		preferredRecordSyntax => "USmarc",elementSetName=> "F");
+	};
+	if ($@){
+		warn "Error ", $@->code(), ": ", $@->message(), "\n";
+		$Zconn="error";
+		return $Zconn;
+	}
+	
+	return $Zconn;
+}
+## Zebra handler with write permission
+sub new_Zconnauth {
+my $Zconnauth;
+
+eval{
+ $Zconnauth=new ZOOM::Connection($context->{"config"}{"hostname"},$context->{"config"}{"zebraport"},databaseName=>$context->{"config"}{"zebradb"},
+						user=>$context->{"config"}{"zebrauser"},
+						password=>$context->{"config"}{"zebrapass"},preferredRecordSyntax => "USmarc",elementSetName=> "F");
+};
+	if ($@){
+		warn "Error ", $@->code(), ": ", $@->message(), "\n";
+		$Zconnauth="error";
+		return $Zconnauth;
+		}
+	}
+	return $Zconnauth;
+}
+
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
@@ -408,8 +495,12 @@ sub _new_dbh
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
 	my $db_passwd = $context->{"config"}{"pass"};
-	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
+	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
+	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
+	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
+	$dbh->do("set NAMES 'utf8'");
+	return $dbh;
 }
 
 =item dbh
@@ -426,6 +517,7 @@ times. If you need a second database handle, use C<&new_dbh> and
 possibly C<&set_dbh>.
 
 =cut
+
 #'
 sub dbh
 {
@@ -455,6 +547,7 @@ convenience function; the point is that it knows which database to
 connect to so that the caller doesn't have to know.
 
 =cut
+
 #'
 sub new_dbh
 {
@@ -479,6 +572,7 @@ the current database handle to C<$my_dbh>.
 C<$my_dbh> is assumed to be a good database handle.
 
 =cut
+
 #'
 sub set_dbh
 {
@@ -501,6 +595,7 @@ Restores the database handle saved by an earlier call to
 C<C4::Context-E<gt>set_dbh>.
 
 =cut
+
 #'
 sub restore_dbh
 {
@@ -529,6 +624,7 @@ This hash is cached for future use: if you call
 C<C4::Context-E<gt>marcfromkohafield> twice, you will get the same hash without real DB access
 
 =cut
+
 #'
 sub marcfromkohafield
 {
@@ -569,6 +665,7 @@ This hash is cached for future use: if you call
 C<C4::Context-E<gt>stopwords> twice, you will get the same hash without real DB access
 
 =cut
+
 #'
 sub stopwords
 {
@@ -612,6 +709,7 @@ C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB ac
 set_userenv is called in Auth.pm
 
 =cut
+
 #'
 sub userenv
 {
@@ -635,7 +733,7 @@ set_userenv is called in Auth.pm
 =cut
 #'
 sub set_userenv{
-	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userbranchname, $userflags, $emailaddress)= @_;
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress)= @_;
 	my $var=$context->{"activeuser"};
 	my $cell = {
 		"number"     => $usernum,
@@ -645,7 +743,6 @@ sub set_userenv{
 #		"surname"    => $usersurname,
 #possibly a law problem
 		"branch"     => $userbranch,
-		"branchname"     => $userbranchname,
 		"flags"      => $userflags,
 		"emailaddress"	=> $emailaddress,
 	};
@@ -665,6 +762,7 @@ C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB ac
 _new_userenv is called in Auth.pm
 
 =cut
+
 #'
 sub _new_userenv
 {
@@ -714,3 +812,52 @@ DBI(3)
 Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
+# $Log$
+# Revision 1.18.2.5.2.1  2006/05/08 15:02:05  tgarip1957
+# 2 Zebra connection handllers one for read one for write acess
+#
+# Revision 1.35  2006/04/13 08:40:11  plg
+# bug fixed: typo on Zconnauth name
+#
+# Revision 1.34  2006/04/10 21:40:23  tgarip1957
+# A new handler defined for zebra Zconnauth with read/write permission. Zconnauth should only be called in biblio.pm where write operations are. Use of this handler will break things unless koha.conf contains new variables:
+# zebradb=localhost
+# zebraport=<your port>
+# zebrauser=<username>
+# zebrapass=<password>
+#
+# The zebra.cfg file should read:
+# perm.anonymous:r
+# perm.username:rw
+# passw.c:<yourpasswordfile>
+#
+# Password file should be prepared with Apaches htpasswd utility in encrypted mode and should exist in a folder zebra.cfg can read
+#
+# Revision 1.33  2006/03/15 11:21:56  plg
+# bug fixed: utf-8 data where not displayed correctly in screens. Supposing
+# your data are truely utf-8 encoded in your database, they should be
+# correctly displayed. "set names 'UTF8'" on mysql connection (C4/Context.pm)
+# is mandatory and "binmode" to utf8 (C4/Interface/CGI/Output.pm) seemed to
+# converted data twice, so it was removed.
+#
+# Revision 1.32  2006/03/03 17:25:01  hdl
+# Bug fixing : a line missed a comment sign.
+#
+# Revision 1.31  2006/03/03 16:45:36  kados
+# Remove the search that tests the Zconn -- warning, still no fault
+# tollerance
+#
+# Revision 1.30  2006/02/22 00:56:59  kados
+# First go at a connection object for Zebra. You can now get a
+# connection object by doing:
+#
+# my $Zconn = C4::Context->Zconn;
+#
+# My initial tests indicate that as soon as your funcion ends
+# (ie, when you're done doing something) the connection will be
+# closed automatically. There may be some other way to make the
+# connection more stateful, I'm not sure...
+#
+# Local Variables:
+# tab-width: 4
+# End:
