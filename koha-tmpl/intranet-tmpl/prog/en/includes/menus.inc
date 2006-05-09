@@ -16,3 +16,7 @@ function Help() {
 	<a href="/cgi-bin/koha/about.pl">About</a>
 	<a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
 </p>
+
+<div id="librarian_information">
+<p><!-- TMPL_VAR name="loggedinusername" -->, from <!-- TMPL_VAR name="branchname" --></p>
+</div>

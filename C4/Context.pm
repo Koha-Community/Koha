@@ -745,7 +745,7 @@ set_userenv is called in Auth.pm
 =cut
 #'
 sub set_userenv{
-	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress)= @_;
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress)= @_;
 	my $var=$context->{"activeuser"};
 	my $cell = {
 		"number"     => $usernum,
@@ -755,6 +755,7 @@ sub set_userenv{
 #		"surname"    => $usersurname,
 #possibly a law problem
 		"branch"     => $userbranch,
+		"branchname" => $branchname,
 		"flags"      => $userflags,
 		"emailaddress"	=> $emailaddress,
 	};
@@ -825,6 +826,11 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.36  2006/05/09 13:28:08  tipaul
+# adding the branchname and the librarian name in every page :
+# - modified userenv to add branchname
+# - modifier menus.inc to have the librarian name & userenv displayed on every page. they are in a librarian_information div.
+#
 # Revision 1.35  2006/04/13 08:40:11  plg
 # bug fixed: typo on Zconnauth name
 #

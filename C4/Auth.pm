@@ -198,6 +198,7 @@ sub get_template_and_user {
 	}
 	$template->param(
 			     LibraryName => C4::Context->preference("LibraryName"),
+			     branchname => C4::Context->userenv->{'branchname'},
 		);
 	return ($template, $borrowernumber, $cookie);
 }
@@ -303,6 +304,7 @@ sub checkauth {
 					$hash{firstname},
 					$hash{surname},
 					$hash{branch},
+					$hash{branchname},
 					$hash{flags},
 					$hash{emailaddress},
 				);
@@ -389,15 +391,15 @@ sub checkauth {
 					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
-				my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
+				my ($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$emailaddress);
+				my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?");
 				$sth->execute($userid);
-				($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+				($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$emailaddress) = $sth->fetchrow if ($sth->rows);
 # 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				unless ($sth->rows){
-					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
+					my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?");
 					$sth->execute($cardnumber);
-					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					($bornum,$firstname,$surname,$userflags,$branchcode,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 					unless ($sth->rows){
 						$sth->execute($userid);
@@ -412,6 +414,7 @@ sub checkauth {
 					$firstname,
 					$surname,
 					$branchcode,
+					$branchname,
 					$userflags,
 					$emailaddress,
 				);
