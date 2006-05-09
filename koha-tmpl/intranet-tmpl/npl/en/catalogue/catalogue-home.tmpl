@@ -1,48 +1,309 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Advanced Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Simple Search<!-- TMPL_INCLUDE NAME="doc-head-close-cat.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 
-<div id="main">
-<h1>Advanced Catalogue Search</h1>
-<h3>Search by Number</h3>
-<div class="form">
-<form action="/cgi-bin/koha/search.pl" method="post">
-<table>
-<tr><th>Barcode</th><td><input type="text" size="25" name="itemnumber" /></td></tr>
-<tr><th>ISBN</th><td><input type="text" size="25" name="isbn" /></td></tr>
-</table>
-<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
-</form>
-</div>
-<h3>Search by Details</h3>
-<div class="form">
-<form action="/cgi-bin/koha/search.pl" method="post">
-<table><tr><th>Keywords</th><td><input type="text"  size="25"   name="keyword" /></td></tr>
-<tr><th>Title</th><td><input type="text"  size="25" name="title" /></td></tr>
-<tr><th>Author</th><td><input type="text"  size="25"   name="author" /></td></tr>
+<div id="main" style="height:400px;">
 
-<tr><th>Collection</th><td><select name="class" size="1">
-			<option value="">Any</option>
-			<!-- TMPL_VAR name="classlist" -->
-			</select></td></tr>
-<tr><th>Pub Date</th><td>(before) <input type="text" size="8" name="date-before">  (after) <input type="text" size="8" name="date-after" /></td></tr>
-<tr><th>Search Type</th><td><input type="radio" name="ttype" value="normal" checked="checked" />Normal	<input type="radio" name="ttype" value="exact" />Exact</td></tr>
-</table>
-<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
-</form>
-</div>
+	<h1>Catalogue Search</h1>
 
-<h3>Search by Subject</h3>
-<div class="form">
-<form action="/cgi-bin/koha/search.pl" method="post">
-<table>
-<tr><th>Subject</th><td><input type="text"  size="25"   name="subject" /></td></tr>
+
+<table align ="center" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+	<tr>
+	    <td align ="center">
+	       <input id="searchType3" type="button" value="Advanced Search" onclick="changeSearch3()" <!-- TMPL_IF name="loose_search" -->class="searchtypeselected"<!-- TMPL_ELSE -->class="searchtype"<!-- /TMPL_IF -->>
+		</td>
+		
+		<td align ="center">
+	       <input id="searchType1" type="button" value="Simple Search" onclick="changeSearch1()" <!-- TMPL_IF name="keyword_search" -->class="searchtypeselected"<!-- TMPL_ELSE -->class="searchtype"<!-- /TMPL_IF -->>
+	    </td>
+		
+		<td align ="center">
+	       <input id="searchType2" type="button" value="ISBN-Barcode-Biblio no" onclick="changeSearch2()" <!-- TMPL_IF name="precise_search" -->class="searchtypeselected"<!-- TMPL_ELSE -->class="searchtype"<!-- /TMPL_IF -->>
+		</td>
+	</tr>
 </table>
-<input type="hidden" name="type" value="intra" /><input type="submit" value="Search" class="submit" />
+
+<br>
+
+
+<form onSubmit="return checkKeywordSearch()" name="keyword_form" id="keyword_form"  action="/cgi-bin/koha/catalogue-home.pl" method='post'<!-- TMPL_IF name="keyword_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+
+    <input type="hidden" name = "op" value="do_search">
+    <input type="hidden" name = "search_type" value="keyword">
+
+	<table style="border:0" align="center">
+	    <tr>
+	        <td>
+				<table style="border-width:0px">
+<tr><td><b>Search Type</b></td><td>ZOOM<input type="radio" name="zoom" value="1" checked=1>Normal<input type="radio" name="zoom" value="0"></td></tr>
+<tr><td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td>
+<td><b>Number of results to display</b></td><td>10<input type="radio" name="number_to_display" value="10" checked=1>20<input type="radio" name="number_to_display" value="20">50<input type="radio" name="number_to_display" value="50">100<input type="radio" name="number_to_display" value="100"></td></tr>
+
+					<tr>
+						<td>Any field</td>
+						<td colspan="3" align="left"><input type="text"  size="25" name="keyword" value="<!-- TMPL_VAR name="keyword" -->" ></td>
+					</tr>
+					<tr>
+						<td>Library</td>
+					    <td colspan="3" align="left">
+					        <select size="1"  name="branch" >
+					        <option value="">All</option>
+							<!-- TMPL_LOOP name="branches" -->
+				                <option value="<!-- TMPL_VAR name="branchcode" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="branchname" --></option>
+							<!-- /TMPL_LOOP -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Call Number</td>
+						<td colspan="3" align="left"><input type="text"  size="25" name="callno" value="<!-- TMPL_VAR name="callno" -->" ></td>
+					</tr>
+					<tr>
+						<td>Shelving</td>
+					    <td colspan="3" align="left">
+					        <select size="1"  name="stack" style="width:170px" >
+					        <option value="">All</option>
+							<!-- TMPL_LOOP name="stacks" -->
+				                <option value="<!-- TMPL_VAR name="authorised_value" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="lib" --></option>
+							<!-- /TMPL_LOOP -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Type of material</td>
+						<td colspan="3" align="left">
+				 			<select size="1"  name="class" style="width:170px">
+							<option value="">All</option>
+							<!-- TMPL_LOOP name="itemtype" -->
+				                <option value="<!-- TMPL_VAR name="itemtype" -->"><!-- TMPL_VAR name="description" --></option>
+							<!-- /TMPL_LOOP -->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td align="left">
+						    Publication Year from
+						</td>    
+						<td align="left">
+						    <input type="text"  size="10" name="date_from" value='<!-- TMPL_VAR name="date_from" -->'>
+						</td>    
+                        <td align="left">						    
+						    to
+						</td>    
+						<td align="left">
+						    <input type="text"  size="10" name="date_to" value='<!-- TMPL_VAR name="date_to" -->'>
+						</td>						    						
+					</tr>					
+		        </table>
+		    </td>
+		    <td>
+				<input type="radio" name="ttype" value="normal" <!-- TMPL_IF name="normal" -->checked<!-- /TMPL_IF -->>All words-any order allows misspelling<br>
+				<input type="radio" name="ttype" value="exact" <!-- TMPL_IF name="exact" -->checked<!-- /TMPL_IF -->>As a phrase
+			</td>
+		</tr>
+		<tr>
+			<td colspan = "3" align = "center">
+			    <br>
+				<input class = "button" type="submit" value="Start search">
+	         	<input class = "button" type="button" value="Clear fields" onclick="document.location.href = '/cgi-bin/koha/catalogue-home.pl?search_type=keyword'">
+			</td>
+		</tr>
+	</table>
+	
 </form>
+
+<form onSubmit="return checkLooseSearch()" name="loose_form"  id="loose_form" action="/cgi-bin/koha/catalogue-home.pl" method='post' <!-- TMPL_IF name="loose_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+
+    <input type="hidden" name="op" value="do_search">
+    <input type="hidden" name="search_type" value="loose">
+    <input type="hidden" name="startfrom" value="0">
+    
+	<table style="border-width:0px;width:80%" align="center">
+
+	
+<!-- TMPL_LOOP name="search_conditions" -->
+
+			<tr>
+				<td>
+				    <b>Term&nbsp;<!-- TMPL_VAR name="num" -->:&nbsp;</b>
+					<input type="text"  name="field_value<!-- TMPL_VAR name="num" -->" value="<!-- TMPL_VAR name="field_value" -->">
+				</td>
+				<td>
+					<Select type="text"  name="field_name<!-- TMPL_VAR name="num" -->">
+					    <option value="all" <!-- TMPL_IF name="all" -->selected<!-- /TMPL_IF -->>All</option>
+					    <option value="author" <!-- TMPL_IF name="author" -->selected<!-- /TMPL_IF --> >Author</option>
+                        <option value="title" <!-- TMPL_IF name="title" -->selected<!-- /TMPL_IF --> >Title</option>
+                        <option value="subject" <!-- TMPL_IF name="subject" -->selected<!-- /TMPL_IF --> >Subject</option>
+                        <option value="publisher" <!-- TMPL_IF name="publisher" -->selected<!-- /TMPL_IF --> >Publisher</option>
+                        <option value="publicationyear" <!-- TMPL_IF name="publicationyear" -->selected<!-- /TMPL_IF --> >Publication year</option>
+			<option value="callno" <!-- TMPL_IF name="callno" -->selected<!-- /TMPL_IF --> >Call Number</option>
+					
+						</select>
+					<input type="button" class="button" value="Dictionary..." onclick="openDictionary(document.loose_form.field_name<!-- TMPL_VAR name="num" -->.value, document.loose_form.field_value<!-- TMPL_VAR name="num" -->.value, 'opener.document.loose_form.field_value<!-- TMPL_VAR name="num" -->')">
+				</td>
+				<td>
+                    <!-- TMPL_IF name="with_op" -->
+				
+				        <Select type="text"  name="op<!-- TMPL_VAR name="num" -->">
+				            <option value="and" <!-- TMPL_IF name="and" -->selected<!-- /TMPL_IF --> >AND
+							</option>
+							<option value="or" <!-- TMPL_IF name="or" -->selected<!-- /TMPL_IF --> >OR
+							</option>
+							<option value="not" <!-- TMPL_IF name="not" -->selected<!-- /TMPL_IF --> >NOT
+							</option>
+						</select>
+					<!-- /TMPL_IF -->
+				</td>
+			</tr>
+			
+			<tr>
+		    	<td  style="padding-bottom:10px;">
+		    	    <input type="radio" name="ttype<!-- TMPL_VAR name="num" -->" value="exact" <!-- TMPL_IF name="exact" -->checked<!-- /TMPL_IF --> >Full phrase
+				<input type="radio" name="atype<!-- TMPL_VAR name="num" -->" value="start" <!-- TMPL_IF name="start" -->checked<!-- /TMPL_IF --> >Starting with
+					<input type="radio" name="atype<!-- TMPL_VAR name="num" -->" value="wonder" <!-- TMPL_IF name="wonder" -->checked<!-- /TMPL_IF -->>Any where
+				
+				</td>
+			<td colspan="2"> <input type="radio" name="ttype<!-- TMPL_VAR name="num" -->" value="normal" <!-- TMPL_IF name="normal" -->checked<!-- /TMPL_IF -->o>All words(unordered) any place
+				</td>
+			</tr>
+
+		<!-- /TMPL_LOOP -->
+
+		<tr>
+		    <td colspan="3"><b>And..</b>&nbsp;<td>
+		</tr>
+		<tr>
+		    <td>Library</td>
+		    <td colspan="2">
+		        <select size="1"  name="branch" style="width:170px">
+		        <option value="">All</option>
+				<!-- TMPL_LOOP name="branches" -->
+	                <option value="<!-- TMPL_VAR name="branchcode" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+		</tr>
+		<tr>
+						<td>Shelving</td>
+					    <td colspan="3" align="left">
+					        <select size="1"  name="stack" style="width:170px" >
+					        <option value="">All</option>
+							<!-- TMPL_LOOP name="stacks" -->
+				                <option value="<!-- TMPL_VAR name="authorised_value" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="lib" --></option>
+							<!-- /TMPL_LOOP -->
+							</select>
+						</td>
+					</tr>
+	    <tr>
+  		 	<td>Item type</td>
+			<td colspan="2">
+	 			<select size="1"  name="class" style="width:170px">
+				<option value="">All</option>
+				<!-- TMPL_LOOP name="itemtype" -->
+	                <option value="<!-- TMPL_VAR name="itemtype" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="description" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="left">
+				Publication Year from
+			</td>    
+			<td align="left" colspan="2">
+				<input type="text"  size="10" name="date_from" value='<!-- TMPL_VAR name="date_from" -->'>
+				to
+				<input type="text"  size="10" name="date_to" value='<!-- TMPL_VAR name="date_to" -->'>
+			</td>						    						
+		</tr>					
+       <tr>
+		    <td><b>Sort Order</b></td>
+		    <td colspan="2">
+		        <select size="1"  name="order" style="width:170px">
+			<option value="" selected>Ranked</option>
+		        <option value="1=4 i<" >Title</option>
+			 <option value="1=1003 i<" >Author</option>
+			 <option value="1=9 i< 1=16 i<" >LC classification</option>	
+				</select>
+			</td></tr>
+<tr><td><b>Search Type</b></td><td>ZOOM<input type="radio" name="zoom" value="1" checked=1>Normal<input type="radio" name="zoom" value="0"></td></tr>
+<tr><td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td></tr>
+<tr><td><b>Number of results to display</b></td><td>10<input type="radio" name="number_to_display" value="10" checked=1>20<input type="radio" name="number_to_display" value="20">50<input type="radio" name="number_to_display" value="50">100<input type="radio" name="number_to_display" value="100"></td></tr>
+
+		
+		<tr>
+
+		<tr>
+			<td colspan = "3" align = "center">
+				<input class = "button" type="submit" value="Start">
+				<input class = "button" type="button" value="Clear fields" onclick="document.location.href = '/cgi-bin/koha/catalogue-home.pl?search_type=loose'">
+			</td>
+		</tr>
+	</table>
+			
+</form>
+
+<form onSubmit="return checkPreciseSearch()" name="precise_form" id="precise_form" action="/cgi-bin/koha/catalogue-home.pl" method='post' <!-- TMPL_IF name="precise_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+
+    <input type="hidden" name = "op" value="do_search">
+    <input type="hidden" name = "search_type" value="precise">
+
+	<table style="border:0" align="center">
+<tr><td><b>Search Type</b></td><td>ZOOM<input type="radio" name="zoom" value="1" checked=1>Normal<input type="radio" name="zoom" value="0"></td>
+<td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td></tr>
+
+	    <tr>
+			<td>Barcode</td>
+			<td colspan="1"><input type="text"  size="15"   name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->" onchange="if(this.value != '') {this.form.isbn.value = ''; this.form.biblionumber.value = ''}"></td>
+		    <td>ISBN</td>
+			<td colspan="1"><input type="text"  size="15"   name="isbn" value="<!-- TMPL_VAR name="isbn" -->" onchange="if(this.value != '') {this.form.itemnumber.value = ''; this.form.biblionumber.value = ''} "></td>
+		
+			 <td>Biblio Number</td>
+			<td colspan="1"><input type="text"  size="15"   name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" onchange="if(this.value != '') {this.form.itemnumber.value = ''; this.form.isbn.value = ''} "></td>
+		</tr>
+		<tr>
+		    <td>Library</td>
+		    <td colspan="3">
+		        <select size="1"  name="branch" style="width:170px">
+		        <option value="">All</option>
+				<!-- TMPL_LOOP name="branches" -->
+	                <option value="<!-- TMPL_VAR name="branchcode" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+		</tr>
+
+	    <tr>
+			<td colspan = "4" align = "center">
+			    <br>
+				<input class = "button" type="submit" value="Start search">
+	            <input class = "button" type="button" value="Clear fields" onclick="document.location.href = '/cgi-bin/koha/catalogue-home.pl?search_type=precise'">
+			</td>
+		</tr>
+
+	</table>
+</form>
+
+
 </div>
-	</div>
-	</form>
-</div>
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+	
+		if (numlayer=="normal") {
+			
+			document.getElementById("extras").style.visibility="visible";
+			
+			
+		} else {
+			
+			document.getElementById("extras").style.visibility="hidden";
+			
+			
+			
+		}
+	
+}
+</script>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
