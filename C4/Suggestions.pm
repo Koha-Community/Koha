@@ -64,6 +64,7 @@ Suggestions done by other can be seen when not "AVAILABLE"
 				&delsuggestion
 				&countsuggestion
 				&changestatus
+				&connectSuggestionAndBiblio
 				&findsuggestion_from_biblionumber
 			);
 
@@ -149,7 +150,7 @@ sub newsuggestion {
 	my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("insert into suggestions (status,suggestedby,title,author,publishercode,note,copyrightdate,volumedesc,publicationyear,place,isbn,biblionumber) values ('ASKED',?,?,?,?,?,?,?,?,?,?,?)");
-	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);
+	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);	
 }
 
 sub getsuggestion {
@@ -254,6 +255,13 @@ sub findsuggestion_from_biblionumber {
 	return $biblionumber;
 }
 
+# connect a suggestion to an existing biblio
+sub connectSuggestionAndBiblio {
+	my ($suggestionid,$biblionumber) = @_;
+	my $dbh=C4::Context->dbh;
+	my $sth = $dbh->prepare("update suggestions set biblionumber=? where suggestionid=?");
+	$sth->execute($biblionumber,$suggestionid);
+}
 =back
 
 =head1 SEE ALSO

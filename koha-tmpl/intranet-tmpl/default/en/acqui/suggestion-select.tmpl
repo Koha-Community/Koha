@@ -6,6 +6,7 @@
 			<th class="acquisition">Suggestion</th>
 			<th class="acquisition">Suggested by</th>
 			<th class="acquisition">Accepted by</th>
+			<th class="acquisition">Duplicate</th>
 			<th class="acquisition">&nbsp;</th>
 		</tr>
 		<tr>
@@ -15,6 +16,9 @@
 					title: <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->">
 					author: <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->">
 					publisher: <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
+				</th>
+				<th class="acquisition">
+					&nbsp;
 				</th>
 				<th class="acquisition">
 					&nbsp;
@@ -45,6 +49,12 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR NAME="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="duplicateBiblionumber" -->
+						<a href=# onClick="javascript:window.open('/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicateBiblionumber" -->')" class="button acquisition">Duplicate suspected</a>
+						<a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR name="supplierid" -->&basketno=<!-- TMPL_VAR name="basketno"-->&op=connectDuplicate&duplicateNumber=<!-- TMPL_VAR name="duplicateBiblionumber" -->&suggestionid=<!-- TMPL_VAR name="suggestionid" -->" class="button acquisition">Connect</a>
+					<!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_IF name="biblionumber" -->
