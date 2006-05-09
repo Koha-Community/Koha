@@ -1,7 +1,7 @@
 package C4::Search;
 
 # Copyright 2000-2002 Katipo Communications
-#
+# New functions added 22-09-2005 Tumer Garip tgarip@neu.edu.tr
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -22,10 +22,15 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Reserves2;
+use C4::Biblio;
+use Date::Calc;
+use MARC::File::XML;
+use MARC::File::USMARC;
+use MARC::Record;
+
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
 use C4::Date;
-use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -61,11 +66,12 @@ on what is passed to it, it calls the appropriate search function.
 @EXPORT = qw(
 &CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
 &itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
-&borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
+&borrdata2 &borrdata3 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
-&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
-&isbnsearch &getbranchname &getborrowercategory);
+&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2 &FindDuplicate
+&isbnsearch &getbranchname &getborrowercategory &getborrowercategoryinfo &catalogsearch3 &CatSearch3 &catalogsearch4
+&getMARCnotes &getMARCsubjects &getMARCurls);
 # make all your functions, whether exported or not;
 
 
@@ -151,8 +157,8 @@ sub NewBorrowerNumber {
   return($data->{'max(borrowernumber)'});
 }
 
-=item catalogsearch
-
+=item catalogsearch3 & catalogsearch4
+####OBSOLETE replaced with catalogsearch3 & catalogsearch4
   ($count, @results) = &catalogsearch($env, $type, $search, $num, $offset);
 
 This is primarily a front-end to other, more specialized catalog
@@ -191,89 +197,1170 @@ HTML.
 
 =cut
 #'
-sub catalogsearch {
-	my ($env,$type,$search,$num,$offset)=@_;
-	my $dbh = C4::Context->dbh;
-	#  foreach my $key (%$search){
-	#    $search->{$key}=$dbh->quote($search->{$key});
-	#  }
-	my ($count,@results);
-	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
-		print STDERR "Doing a precise search\n";
-		($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
-	} elsif ($search->{'subject'} ne ''){
-		($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
-	} elsif ($search->{'keyword'} ne ''){
-		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
-	} else {
-		($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
 
-	}
-	if ($env->{itemcount} eq '1') {
-		foreach my $data (@results){
-			my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
-			my $subject2=$data->{'subject'};
-			$subject2=~ s/ /%20/g;
-			$data->{'itemcount'}=$counts->{'total'};
-			my $totalitemcounts=0;
-			foreach my $key (keys %$counts){
-				if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
-					#$data->{'location'}.="$key $counts->{$key} ";
-					$totalitemcounts+=$counts->{$key};
-					$data->{'locationhash'}->{$key}=$counts->{$key};
-				}
+sub add_html_bold_fields {
+	my ($type, $data, $search) = @_;
+	
+	my %reference = ('additionalauthors' => 'author',
+					'publishercode' => 'publisher',
+					'subtitle' => 'title'
+					);
+
+	foreach my $key ('title', 'author', 'additionalauthors', 'publishercode', 'publicationyear', 'subject', 'subtitle') {
+		my $new_key; 
+		if ($key eq 'additionalauthors') {
+			$new_key = 'additionalauthors';
+		} else {
+			$new_key = 'bold_' . $key;
+			$data->{$new_key} = $data->{$key};
+		}
+	
+		my $key1;
+		if ($reference{$key}) {
+			$key1 = $reference{$key};
+		} else {
+			$key1 = $key;
+		}
+
+		my @keys;
+		my $i = 1;
+		if ($type eq 'keyword') {
+		my $newkey=$search->{'keyword'};
+		$newkey=~s /\++//g;
+			@keys = split " ", $newkey;
+		} else {
+			while ($search->{"field_value$i"}) {
+				my $newkey=$search->{"field_value$i"};
+				$newkey=~s /\++//g;
+				push @keys, $newkey;
+				$i++;
 			}
-			my $locationtext='';
-			my $locationtextonly='';
-			my $notavailabletext='';
-			foreach (sort keys %{$data->{'locationhash'}}) {
-				if ($_ eq 'notavailable') {
-					$notavailabletext="Not available";
-					my $c=$data->{'locationhash'}->{$_};
-					$data->{'not-available-p'}=$totalitemcounts;
-					if ($totalitemcounts>1) {
-					$notavailabletext.=" ($c)";
-					$data->{'not-available-plural-p'}=1;
+		}
+		my $count = @keys;
+		for ($i = 0; $i < $count ; $i++) {
+			if ($key eq 'additionalauthors') {
+				my $j = 0;
+				foreach (@{$data->{$new_key}}) {
+					if (!$data->{$new_key}->[$j]->{'bold_value'}) {
+						$data->{$new_key}->[$j]->{'bold_value'} = $data->{$new_key}->[$j]->{'value'};
 					}
-				} else {
-					$locationtext.="$_";
-					my $c=$data->{'locationhash'}->{$_};
-					if ($_ eq 'Item Lost') {
-					$data->{'lost-p'}=$totalitemcounts;
-					$data->{'lost-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'Withdrawn') {
-					$data->{'withdrawn-p'}=$totalitemcounts;
-					$data->{'withdrawn-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'On Loan') {
-					$data->{'on-loan-p'}=$totalitemcounts;
-					$data->{'on-loan-plural-p'}=1
-							if $totalitemcounts > 1;
-					} else {
-					$locationtextonly.=$_;
-					$locationtextonly.=" ($c), "
-							if $totalitemcounts>1;
+					if ( ($data->{$new_key}->[$j]->{'value'} =~ /($keys[$i])/i) && (lc($keys[$i]) ne 'b') ) {
+						my $word = $1;
+						$data->{$new_key}->[$j]->{'bold_value'} =~ s/$word/<b>$word<\/b>/;
 					}
-					if ($totalitemcounts>1) {
-					$locationtext.=" ($c), ";
-					}
+					$j++;
 				}
-			}
-			if ($notavailabletext) {
-				$locationtext.=$notavailabletext;
 			} else {
-				$locationtext=~s/, $//;
+				if (($data->{$new_key} =~ /($keys[$i])/i) && (lc($keys[$i]) ne 'b') ) {
+					my $word = $1;
+					$data->{$new_key} =~ s/$word/<b>$word<\/b>/;
+				}
 			}
-			$data->{'location'}=$locationtext;
-			$data->{'location-only'}=$locationtextonly;
-			$data->{'subject2'}=$subject2;
-			$data->{'use-location-flags-p'}=1; # XXX
 		}
 	}
+
+
+}
+
+sub catalogsearch3 {
+	my ($search,$num,$offset) = @_;
+	my $dbh = C4::Context->dbh;
+	my ($count,@results);
+
+	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''|| $search->{'biblionumber'} ne ''){
+		($count,@results) = CatSearch3('precise',$search,$num,$offset);
+	} elsif ($search->{'keyword'} ne ''){
+		($count,@results) = CatSearch3('keyword',$search,$num,$offset);
+	} elsif ($search->{'recently_items'} ne '') {
+		($count,@results) = CatSearch3('recently_items',$search,$num,$offset);
+	} else {
+		($count,@results) = CatSearch3('loose',$search,$num,$offset);
+	}
+
+	
 	return ($count,@results);
 }
 
+sub CatSearch3  {
+
+	my ($type,$search,$num,$offset)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query = '';			#to make the query statement
+	my $count_query = '';	#to count total results
+	my @params = ();		#to collect the params
+	my @results;			#to retrieve the results
+	
+	# 1) do a search by barcode or isbn
+	if ($type eq 'precise') {
+	
+			if ($search->{'itemnumber'} ne ''){
+			$query = "SELECT biblionumber FROM items WHERE (barcode = ?)";
+			push @params, $search->{'itemnumber'};
+			
+			} elsif ($search->{'isbn'} ne '') {
+			$query = "SELECT biblionumber FROM biblioitems WHERE (isbn like ?)";
+			push @params, $search->{'isbn'};
+			}else {
+			$query = "SELECT biblionumber FROM biblioitems WHERE (biblionumber = ?)";
+			push @params, $search->{'biblionumber'};
+			}
+		
+		#add branch condition
+		if ($search->{'branch'} ne '') {
+			$query.= " AND (  holdingbranch like ? ) ";
+			my $keys = $search->{'branch'};
+			push @params, $keys;
+		}
+
+	# 2) do a search by keyword
+	} elsif ($type eq 'keyword') {
+		my $keys = $search->{'keyword'};
+		my @words = split / /, $keys;
+		
+		#parse the keywords
+		my $keyword;
+		if ($search->{'ttype'} eq 'exact') {
+			for (my $i = 0; $i < @words ;$i++) {
+				if ($i + 1 == @words) {
+					$words[$i] = '+' . $words[$i] . '*';
+				} else {
+					$words[$i] = '+' . $words[$i];
+				}
+			}
+		} else {
+			for (my $i = 0; $i < @words ;$i++) {
+				$words[$i] =  $words[$i] . '*';
+			}
+		}	 
+		$keyword = join " ", @words;
+
+		#Builds the SQL
+		$query = "(SELECT DISTINCT B.biblionumber AS biblionumber ,( MATCH (title,seriestitle,unititle,B.author,subject,publishercode,itemcallnumber) AGAINST(? in BOOLEAN MODE) ) as Relevance
+						FROM biblio AS B
+						LEFT JOIN biblioitems AS BI ON (B.biblionumber = BI.biblionumber)
+						LEFT JOIN items AS I ON (BI.biblionumber = I.biblionumber) 
+						LEFT JOIN additionalauthors AA1 ON (B.biblionumber = AA1.biblionumber)	
+						LEFT JOIN bibliosubject AS BS1 ON (B.biblionumber = BS1.biblionumber)
+						LEFT JOIN bibliosubtitle AS BSU1 ON (B.biblionumber = BSU1.biblionumber) 
+					where	MATCH (title,seriestitle,unititle,B.author,subject,publishercode,itemcallnumber) AGAINST (? IN BOOLEAN MODE) ";
+
+		push @params,$keyword;
+		push @params,$keyword;
+		#search by class 
+		if ($search->{'class'} ne '') {
+			$query .= " AND ( itemtype = ? ) ";
+			push @params, $search->{'class'};
+		}
+		#search by branch 
+		if ($search->{'branch'} ne '') {
+			$query .= " AND ( items.holdingbranch like ? ) ";
+			push @params, $search->{'branch'};
+		}
+	if ($search->{'stack'} ne '') {
+			$query .= " AND ( items.stack = ?  ) ";
+			push @params, $search->{'stack'};
+		}
+		#search by publication year 
+		if ($search->{'date_from'} ne '') {
+	        $query .= " AND ( biblioitems.publicationyear >= ?) ";
+			push @params, $search->{'date_from'};
+    		if ($search->{'date_to'} ne '') {
+    			        $query .= " AND ( biblioitems.publicationyear <= ?) ";
+				push @params, $search->{'date_to'};
+			
+			}		
+		}
+		$query .= ")";
+
+	
+		
+
+	# 3) search the items acquired recently (in the last $search->{'range'} days)
+	} elsif ($type eq 'recently_items') {
+		my $keys;
+		if ($search->{'range'}) {
+			$keys = $search->{'range'};
+		} else {
+			$keys = 30;
+		}
+		$query = "SELECT B.biblionumber FROM biblio AS B
+							LEFT JOIN biblioitems AS BI ON (B.biblionumber = BI.biblionumber)
+							
+						WHERE 
+							(TO_DAYS( NOW( ) ) - TO_DAYS( B.timestamp ))<?"; 
+		#search by class
+		push @params, $keys;
+		if ($search->{'class'} ne '') {
+			$query .= " AND ( BI.itemtype = ? ) ";
+			push @params, $search->{'class'};
+		}
+		$query.= " ORDER BY title ";
+
+	# 4) do a loose search
+	} else {
+			
+			my ($condition1, $condition2, $condition3) = ('','','');
+			my $count_params = 0;
+			
+				
+			#search_field 1			
+			if ($search->{'field_name1'} eq 'all') { 
+				$condition1.= " ( MATCH (title,seriestitle,unititle,B.author,subject,publishercode,itemcallnumber) AGAINST(? in BOOLEAN MODE) ) ";
+				
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'author') {
+				$condition1.= " (  MATCH (B.author) AGAINST(? in BOOLEAN MODE)  ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'title') {
+				$condition1.= " (  MATCH (title,seriestitle,unititle) AGAINST(? in BOOLEAN MODE ) ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'subject') {
+				$condition1.= " ( ( MATCH (subject) AGAINST(? in BOOLEAN MODE) ) ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'publisher') {
+				$condition1.= " ( MATCH (publishercode) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'publicationyear') {
+				$condition1.= " ( MATCH (publicationyear) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name1'} eq 'callno') {
+				$condition1.= "  ( MATCH (itemcallnumber) AGAINST(? in BOOLEAN MODE ))  ";
+				$count_params = 1;
+			}
+			
+					if ($search->{'ttype1'}  eq 'exact') {
+					push @params,"\"".$search->{'field_value1'}."\"";
+					push @params, "\"".$search->{'field_value1'}."\"";
+					} else {
+					my $keys = $search->{'field_value1'};
+					my @words = split / /, $keys;
+					#parse the keywords
+					my $keyword;		
+						for (my $i = 0; $i < @words ;$i++) {
+						$words[$i] = '+'. $words[$i] . '*';
+						}
+					$keyword = join " ", @words;	
+					push @params, $keyword;
+					push @params, $keyword;
+
+					}
+
+			$query = " SELECT DISTINCT B.biblionumber AS biblionumber ,$condition1 as Relevance
+						FROM biblio AS B
+						LEFT JOIN biblioitems AS BI ON (B.biblionumber = BI.biblionumber)
+						LEFT JOIN items AS I ON (BI.biblionumber = I.biblionumber) 
+						LEFT JOIN additionalauthors AA1 ON (B.biblionumber = AA1.biblionumber)	
+						LEFT JOIN bibliosubject AS BS1 ON (B.biblionumber = BS1.biblionumber)
+						LEFT JOIN bibliosubtitle AS BSU1 ON (B.biblionumber = BSU1.biblionumber) ";	
+			
+
+			#search_field 2
+			if ( ($search->{'field_value1'}) && ($search->{'field_value2'}) ) {
+			if ($search->{'field_name2'} eq 'all') { 
+				$condition2.= "  MATCH (title,seriestitle,unititle,B.author,subject,publishercode,itemcallnumber) AGAINST( ? in BOOLEAN MODE) ) ";
+				
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'author') {
+				$condition2.= "  MATCH (B.author,AA1.author) AGAINST( ? in BOOLEAN MODE)  ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'title') {
+				$condition2.= "   MATCH (title,seriestitle,unititle) AGAINST( ? in BOOLEAN MODE ) ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'subject') {
+				$condition2.= "   MATCH (subject) AGAINST(? in BOOLEAN MODE) )  ";
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'publisher') {
+				$condition2.= " MATCH (publishercode) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'publicationyear') {
+				$condition2.= "  MATCH (publicationyear) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name2'} eq 'callno') {
+				$condition2.= "   MATCH (itemcallnumber) AGAINST(? in BOOLEAN MODE ))  ";
+				$count_params = 1;
+			}
+					if ($search->{'op1'} eq "not"){
+					$search->{'op1'}="and (not ";
+					}else{
+					$search->{'op1'}.=" (";
+					}
+					
+					if ($search->{'ttype2'}  eq 'exact') {
+					push @params, "\"".$search->{'field_value2'}."\"";
+					} else {
+					my $keys = $search->{'field_value2'};
+					my @words = split / /, $keys;
+					#parse the keywords
+					my $keyword;	
+						for (my $i = 0; $i < @words ;$i++) {
+						$words[$i] = "+". $words[$i] . '*';
+						}
+					$keyword = join " ", @words;	
+					push @params, $keyword;
+					}
+
+			}
+
+			#search_field 3
+			if ( ($search->{'field_value2'}) && ($search->{'field_value3'}) ) {
+			
+				if ($search->{'field_name3'} eq 'all') { 
+				$condition3.= " MATCH (title,seriestitle,unititle,B.author,subject,publishercode,itemcallnumber) AGAINST(? in BOOLEAN MODE ) ) ";
+				
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'author') {
+				$condition3.= "   MATCH (B.author,AA1.author) AGAINST(? in BOOLEAN MODE)  ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'title') {
+				$condition3.= "   MATCH (title,seriestitle,unititle) AGAINST(? in BOOLEAN MODE) ) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'subject') {
+				$condition3.= "  MATCH (subject) AGAINST(? in BOOLEAN MODE ) )  ";
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'publisher') {
+				$condition3.= "  MATCH (publishercode) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'publicationyear') {
+				$condition3.= "  MATCH (publicationyear) AGAINST(? in BOOLEAN MODE )) ";
+				$count_params = 1;
+			} elsif ($search->{'field_name3'} eq 'callno') {
+				$condition3.= "   MATCH (itemcallnumber) AGAINST(? in BOOLEAN MODE ))  ";
+				$count_params = 1;
+			}
+				if ($search->{'op2'} eq "not"){
+					$search->{'op2'}="and (not ";
+					}else{
+					$search->{'op2'}.=" (";
+					}
+					if ($search->{'ttype3'}  eq 'exact') {
+					push @params, "\"".$search->{'field_value3'}."\"";
+				} else {
+					my $keys = $search->{'field_value3'};
+					my @words = split / /, $keys;
+					#parse the keywords
+					my $keyword;	
+						
+						for (my $i = 0; $i < @words ;$i++) {
+						$words[$i] = "+". $words[$i] . '*';
+						}
+					$keyword = join " ", @words;	
+					push @params, $keyword;
+				}
+			}
+
+			$query.= " WHERE ";
+			if (($condition1 ne '') && ($condition2 ne '') && ($condition3 ne '')) {
+				if ($search->{'op1'} eq $search->{'op2'}) {
+					$query.= " ( $condition1 $search->{'op1'} $condition2 $search->{'op2'} $condition3 ) ";
+				} elsif ( $search->{'op1'} eq "and (" ) {
+					$query.= " ( $condition1 $search->{'op1'} ( $condition2 $search->{'op2'} $condition3 ) ) ";
+				} else {
+					$query.= " ( ( $condition1 $search->{'op1'} $condition2 ) $search->{'op2'} $condition3 ) ";
+				}
+			} elsif ( ($condition1 ne '') && ($condition2 ne '') ) {
+				$query.= " ( $condition1 $search->{'op1'} $condition2 ) ";
+			} else {
+				$query.= " ( $condition1 ) ";
+			}
+			
+			#search by class 
+			if ($search->{'class'} ne ''){
+				$query.= " AND ( itemtype = ? ) ";
+				my $keys = $search->{'class'};
+				push @params, $search->{'class'};
+			}
+			#search by branch 
+			if ($search->{'branch'} ne '') {
+				$query.= " AND   I.holdingbranch like ?  ";
+				my $keys = $search->{'branch'};
+				push @params, $keys, $keys;
+			}
+			#search by publication year 
+			if ($search->{'date_from'} ne '') {
+				$query .= " AND ( BI.publicationyear >= ?) ";
+				push @params, $search->{'date_from'};
+				if ($search->{'date_to'} ne '') {
+							$query .= " AND ( BI.publicationyear <= ?) ";
+					push @params, $search->{'date_to'};
+				
+				}		
+			}
+			if ($search->{'order'} eq "1=1003 i<"){
+			$query.= " ORDER BY b.author ";
+			}elsif ($search->{'order'} ge "1=9 i<"){
+			$query.= " ORDER BY lcsort,subclass ";
+			}elsif ($search->{'order'} eq "1=4 i<"){
+			$query.= " ORDER BY title ";
+			}else{
+			$query.=" ORDER BY Relevance DESC";
+			}
+	}
+	
+#warn $query,@params;
+	$count_query = $query;	
+ 	#execute the query and returns just the results between $num and $num + $offset
+	my $limit = $num + $offset;
+	my $startfrom = $offset;
+	my $sth = $dbh->prepare($query);
+	
+	$sth->execute(@params);
+
+    my $i = 0;
+#Build brancnames hash
+#find branchname
+#get branch information.....
+my %branches;
+		my $bsth=$dbh->prepare("SELECT branchcode,branchname FROM branches");
+		$bsth->execute();
+		while (my $bdata=$bsth->fetchrow_hashref){
+			$branches{$bdata->{'branchcode'}}= $bdata->{'branchname'};
+
+		}
+
+#Building shelving hash
+
+
+#search item field code
+        my $sth3 =
+          $dbh->prepare(
+	"select tagfield from marc_subfield_structure where kohafield like 'items.itemnumber'"
+        );
+	 $sth3->execute;
+	 my ($itemtag) = $sth3->fetchrow;
+## find column names of items related to MARC
+	my $sth2=$dbh->prepare("SHOW COLUMNS from items");
+	$sth2->execute;
+	my %subfieldstosearch;
+	while ((my $column)=$sth2->fetchrow){
+	my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.".$column,"");
+	$subfieldstosearch{$column}=$tagsubfield;
+	}
+my $toggle;
+my $even;
+#proccess just the results to show
+	while (my( $data,$rel) = $sth->fetchrow)  {
+
+		if (($i >= $startfrom) && ($i < $limit)) {
+	
+		my $marcrecord=MARCgetbiblio($dbh,$data);
+		my $oldbiblio=MARCmarc2koha($dbh,$marcrecord,'');
+			
+
+			&add_html_bold_fields($type, $oldbiblio, $search);
+if ($i % 2) {
+		$toggle="#ffffcc";
+	} else {
+		$toggle="white";
+	}
+	$oldbiblio->{'toggle'}=$toggle;
+
+       
+       
+ my @fields = $marcrecord->field($itemtag);
+my @items;
+ my $item;
+my %counts;
+$counts{'total'}=0;
+
+#	
+##Loop for each item field
+     foreach my $field (@fields) {
+       foreach my $code ( keys %subfieldstosearch ) {
+
+$item->{$code}=$field->subfield($subfieldstosearch{$code});
+}
+
+my $status;
+
+$item->{'branchname'}=$branches{$item->{'holdingbranch'}};
+
+$status="Lost" if ($item->{'itemlost'}>0);
+$status="Withdrawn" if ($item->{'wthdrawn'}>0) ;
+if ($search->{'from'} eq "intranet"){
+$search->{'avoidquerylog'}=1;
+$status="Due:".format_date($item->{'onloan'}) if ($item->{'onloan'}>0);
+ $status = $item->{'holdingbranch'}."-".$item->{'stack'}."[".$item->{'itemcallnumber'}."]" unless defined $status;
+}else{
+$status="On Loan" if ($item->{'onloan'}>0);
+   $status = $item->{'branchname'} unless defined $status;
+}
+ $counts{$status}++;
+$counts{'total'}++;
+push @items,$item;
+
+	}
+		
+		my $norequests = 1;
+		my $noitems    = 1;
+		if (@items) {
+			$noitems = 0;
+			foreach my $itm (@items) {
+				$norequests = 0 unless $itm->{'itemnotforloan'};
+			}
+		}
+		$oldbiblio->{'noitems'} = $noitems;
+		$oldbiblio->{'norequests'} = $norequests;
+		$oldbiblio->{'even'} = $even = not $even;
+		$oldbiblio->{'itemcount'} = $counts{'total'};
+		
+		my $totalitemcounts = 0;
+		foreach my $key (keys %counts){
+			if ($key ne 'total'){	
+				$totalitemcounts+= $counts{$key};
+				$oldbiblio->{'locationhash'}->{$key}=$counts{$key};
+			}
+		}
+		
+		my ($locationtext, $locationtextonly, $notavailabletext) = ('','','');
+		foreach (sort keys %{$oldbiblio->{'locationhash'}}) {
+			if ($_ eq 'notavailable') {
+				$notavailabletext="Not available";
+				my $c=$oldbiblio->{'locationhash'}->{$_};
+				$oldbiblio->{'not-available-p'}=$c;
+			} else {
+				$locationtext.="$_";
+				my $c=$oldbiblio->{'locationhash'}->{$_};
+				if ($_ eq 'Item Lost') {
+					$oldbiblio->{'lost-p'} = $c;
+				} elsif ($_ eq 'Withdrawn') {
+					$oldbiblio->{'withdrawn-p'} = $c;
+				} elsif ($_ eq 'On Loan') {
+					$oldbiblio->{'on-loan-p'} = $c;
+				} else {
+					$locationtextonly.= $_;
+					$locationtextonly.= " ($c)<br> " if $totalitemcounts > 1;
+				}
+				if ($totalitemcounts>1) {
+					$locationtext.=" ($c)<br> ";
+				}
+			}
+		}
+		if ($notavailabletext) {
+			$locationtext.= $notavailabletext;
+		} else {
+			$locationtext=~s/, $//;
+		}
+		$oldbiblio->{'location'} = $locationtext;
+		$oldbiblio->{'location-only'} = $locationtextonly;
+		$oldbiblio->{'use-location-flags-p'} = 1;
+			push @results, $oldbiblio;
+
+		}
+		$i++;
+	}
+
+	my $count = $i;
+	unless ($search->{'avoidquerylog'}) { 
+		add_query_line($type, $search, $count);}
+	return($count,@results);
+}
+
+sub catalogsearch4 {
+	my ($search,$num,$offset) = @_;
+	my ($count,@results);
+
+	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''|| $search->{'biblionumber'} ne ''|| $search->{'authnumber'} ne ''){
+		($count,@results) = CatSearch4('precise',$search,$num,$offset);
+	} elsif ($search->{'keyword'} ne ''){
+		($count,@results) = CatSearch4('keyword',$search,$num,$offset);
+	} elsif ($search->{'recently_items'} ne '') {
+		($count,@results) = CatSearch4('recently_items',$search,$num,$offset);
+	} else {
+		($count,@results) = CatSearch4('loose',$search,$num,$offset);
+	}
+
+	
+	return ($count,@results);
+}
+
+sub CatSearch4  {
+
+	my ($type,$search,$num,$offset)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query = '';			#to make the query statement
+	my $count_query = '';	#to count total results
+	my @params = ();		#to collect the params
+	my @results;			#to retrieve the results
+	my $attr;
+	my $attr2;
+	my $attr3;
+	my $numresults;
+	my $marcdata;
+	my $toggle;
+	my $even=1;
+	# 1) do a search by barcode or isbn
+	if ($type eq 'precise') {
+
+		if ($search->{'itemnumber'} ne '') {
+			
+			$query = " \@attr 1=1028 ". $search->{'itemnumber'};
+			
+			
+		}elsif ($search->{'isbn'} ne ''){
+			$query = " \@attr 1=7 \@attr 4=1  \@attr 5=1 "."\"".$search->{'isbn'}."\"";
+			
+		}elsif ($search->{'biblionumber'} ne ''){
+			$query = " \@attr 1=1007  ".$search->{'biblionumber'};
+						
+		}elsif ($search->{'authnumber'} ne ''){
+			if ($search->{'authtype'} eq 'AUTH'){
+			$query = " \@attr GILS 1=2068  ".$search->{'authnumber'};
+			}else{	
+
+			## We may have more than 1 authnumber so split
+			my @auths = split /,/, $search->{'authnumber'};
+					
+					my $i;		
+						for ( $i = 0; $i < @auths ;$i++) {
+						$query .= " \@attr GILS 1=2057  ". $auths[$i] ;
+						}
+				$query = "\@or ".$query if ($i>1);
+			}		
+		}
+		#add branch condition
+		if ($search->{'branch'} ne '') {
+		$query= "\@and ".$query;
+			$query .= " \@attr 1=1033 \"".$search->{'branch'}."\"";
+		
+		}
+	# 2) do a search by keyword
+	}elsif ($type eq 'keyword') {
+		 $search->{'keyword'}=~ s/(\\|\|)//g;;
+		
+		#parse the keywords
+		my $keyword;
+
+		if ($search->{'ttype'} eq 'exact') {
+			 $attr="\@attr 4=1  \@attr 5=1 \@attr 2=102 ";
+		} else {
+			 $attr=" \@attr 4=6  \@attr 5=103 \@attr 2=102 ";
+		}	 
+		
+
+		#Builds the query
+		$query = " \@attr 1=1016 ".$attr."\"".$search->{'keyword'}."\"";
+
+		
+		#search by itemtypes 
+		if ($search->{'class'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=4  \"".$search->{'class'}."\"";
+			push @params, $search->{'class'};
+		}
+		#search by callnumber 
+		if ($search->{'callno'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=20 \@attr 4=1  \@attr 5=1 \"".$search->{'callno'}."\"";
+			
+		}
+		#search by branch 
+		if ($search->{'branch'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=1033 \"".$search->{'branch'}."\"";
+
+		}
+		
+		if ($search->{'date_from'} ne '') {
+		$query= "\@and ".$query;
+	        $query .= " \@attr 1=30 \@attr 2=4 \@attr 4=4 ".$search->{'date_from'};
+			push @params, $search->{'date_from'};
+		}
+    		if ($search->{'date_to'} ne '') {
+    			     $query= "\@and ".$query;
+	        $query .= " \@attr 1=30 \@attr 2=2 \@attr 4=4 ".$search->{'date_to'};
+				push @params, $search->{'date_to'};
+			
+			}		
+		
+# 3) search the items acquired recently (in the last $search->{'range'} days)
+	} elsif ($type eq 'recently_items') {
+		my $keys;
+		if ($search->{'range'}) {
+			$keys = $search->{'range'}*(-1);
+		} else {
+			$keys = -30;
+		}
+	my @datearr = localtime();
+	my $dateduef = (1900+$datearr[5])."-".sprintf ("%0.2d", ($datearr[4]+1))."-".$datearr[3];
+	
+
+	my ($year, $month, $day) = split /-/, $dateduef;
+	($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, ($keys - 1));
+	$dateduef = "$year-$month-$day";
+		 $query .= " \@attr 1=32 \@attr 2=4 \@attr 4=5 ".$dateduef; 
+		#search by class
+		push @params, $keys;
+		if ($search->{'class'} ne '') {
+		$query= "\@and ".$query;
+			$query .= " \@attr 1=4 \"".$search->{'class'}."\"";
+			
+		}
+		
+
+	
+
+	# 4) do a loose search
+	} else {
+			
+			my ($condition1, $condition2, $condition3) = ('','','');
+			my $count_params = 0;
+			
+			if ($search->{'ttype1'} eq 'exact') {
+			$attr="\@attr 4=1   ";
+				if ($search->{'atype1'} eq 'start'){
+				$attr.=" \@attr 3=1 \@attr 6=3 \@attr 5=1 \@attr 2=102 ";
+				}else{
+				$attr.=" \@attr 5=1 \@attr 3=3 \@attr 6=1 \@attr 2=102 ";
+				}	
+			} else {
+			 $attr=" \@attr 4=6  \@attr 5=103 ";
+			}	
+				
+			#search_field 1	
+			$search->{'field_value1'}=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\!|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)//g;
+			if ($search->{'field_name1'} eq 'all') { 
+				$condition1.= " \@attr 1=1016 ".$attr." \"".$search->{'field_value1'}."\" ";
+				
+			} elsif ($search->{'field_name1'} eq 'author') {
+				$condition1.=" \@attr 1=1003 ".$attr." \"".$search->{'field_value1'}."\" ";
+				
+			} elsif ($search->{'field_name1'} eq 'title') {
+				$condition1.= " \@attr 1=4 ".$attr." \"".$search->{'field_value1'}."\" ";
+				
+			} elsif ($search->{'field_name1'} eq 'subject') {
+				$condition1.=" \@attr 1=21 ".$attr." \"".$search->{'field_value1'}."\" ";
+			
+			} elsif ($search->{'field_name1'} eq 'publisher') {
+				$condition1.= " \@attr 1=1018 ".$attr." \"".$search->{'field_value1'}."\" ";	
+			} elsif ($search->{'field_name1'} eq 'callno') {
+				$condition1.= " \@attr 1=20 \@attr 3=2 ".$attr." \"".$search->{'field_value1'}."\" ";	
+			}		
+			$query = $condition1;
+			#search_field 2
+			if ($search->{'field_value2'}) {
+			$search->{'field_value2'}=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\!|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)//g;
+			if ($search->{'ttype2'} eq 'exact') {
+
+				$attr2="\@attr 4=1   ";
+				if ($search->{'atype1'} eq 'start'){
+				$attr.=" \@attr 3=1 \@attr 6=3 \@attr 5=1 \@attr 2=102 ";
+				}else{
+				$attr.=" \@attr 5=1 \@attr 3=3 \@attr 6=1 \@attr 2=102 ";
+				}
+			} else {
+				 $attr2=" \@attr 4=6  \@attr 5=103 ";
+			}
+			
+				if ($search->{'field_name2'} eq 'all') {
+					if ($search->{'op1'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition2.= " \@attr 1=1016 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					} elsif ($search->{'op1'} eq 'or')  {
+						$query = " \@or ".$query;
+						$condition2.= " \@attr 1=1016 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition2.= " \@attr 1=1016 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					}
+				} elsif ($search->{'field_name2'} eq 'author') {
+					if ($search->{'op1'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition2.= " \@attr 1=1003 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					} elsif ($search->{'op1'} eq 'or'){
+						$query = " \@or ".$query;
+						$condition2.= " \@attr 1=1003 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition2.= " \@attr 1=1003 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					}
+					
+				} elsif ($search->{'field_name2'} eq 'title') {
+					if ($search->{'op1'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition2.= " \@attr 1=4 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					} elsif ($search->{'op1'} eq 'or'){
+						$query = " \@or ".$query;
+						$condition2.= " \@attr 1=4 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition2.= " \@attr 1=4 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					}
+					
+				} elsif ($search->{'field_name2'} eq 'subject') {
+					if ($search->{'op1'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition2.= " \@attr 1=21 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					} elsif ($search->{'op1'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition2.= " \@attr 1=21 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition2.= " \@attr 1=21 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					}
+				} elsif ($search->{'field_name2'} eq 'callno') {
+					if ($search->{'op1'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition2.= " \@attr 1=20 \@attr 3=2 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					
+					} elsif ($search->{'op1'} eq 'or'){
+						$query = " \@or ".$query;
+						$condition2.= " \@attr 1=20 \@attr 3=2 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition2.= " \@attr 1=20 \@attr 3=2 ".$attr2." \"".$search->{'field_value2'}."\" ";
+					}
+				} elsif ($search->{'field_name2'} eq 'publisher') {
+				$query = " \@and ".$query;
+				$condition2.= " \@attr 1=1018 ".$attr2." \"".$search->{'field_value2'}."\" ";
+				} elsif ($search->{'field_name2'} eq 'publicationyear') {
+				$query = " \@and ".$query;
+				$condition2.= " \@attr 1=30 ".$search->{'field_value2'};
+				} 
+					$query .=$condition2;
+				
+
+			}
+
+			#search_field 3
+			if ($search->{'field_value3'}) {
+			$search->{'field_value3'}=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\!|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)//g;
+			if ($search->{'ttype3'} eq 'exact') {
+			$attr3="\@attr 4=1   ";
+				if ($search->{'atype1'} eq 'start'){
+				$attr.=" \@attr 3=1 \@attr 6=3 \@attr 5=1 \@attr 2=102 ";
+				}else{
+				$attr.=" \@attr 5=1 \@attr 3=3 \@attr 6=1 \@attr 2=102 ";
+				}
+			} else {
+			$attr3=" \@attr 4=6  \@attr 5=103 ";
+			}
+			
+				if ($search->{'field_name3'} eq 'all') {
+					if ($search->{'op2'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition3.= " \@attr 1=1016 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} elsif ($search->{'op2'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition3.= " \@attr 1=1016 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition3.= " \@attr 1=1016 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					}
+				} elsif ($search->{'field_name3'} eq 'author') {
+					if ($search->{'op2'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition3.= " \@attr 1=1003 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} elsif ($search->{'op2'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition3.= " \@attr 1=1003 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition3.= " \@attr 1=1003 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					}
+					
+				} elsif ($search->{'field_name3'} eq 'title') {
+					if ($search->{'op2'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition3.= " \@attr 1=4 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} elsif ($search->{'op2'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition3.= " \@attr 1=4 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition3.= " \@attr 1=4 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					}
+					
+				} elsif ($search->{'field_name3'} eq 'subject') {
+					if ($search->{'op2'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition3.= " \@attr 1=21 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} elsif ($search->{'op2'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition3.= " \@attr 1=21 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					} else {
+						$query = " \@not ".$query;
+						$condition3.= " \@attr 1=21 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					}
+				} elsif ($search->{'field_name3'} eq 'callno') {
+					if ($search->{'op2'} eq 'and') {
+						$query = " \@and ".$query;
+						$condition3.= " \@attr 1=20 \@attr 3=2 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} elsif ($search->{'op2'} eq 'or') {
+						$query = " \@or ".$query;
+						$condition3.= " \@attr 1=20 \@attr 3=2 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					
+					} else {
+						$query = " \@not ".$query;
+						$condition3.= " \@attr 1=20  \@attr 3=2 ".$attr3." \"".$search->{'field_value3'}."\" ";
+					}
+				
+				
+				} elsif ($search->{'field_name3'} eq 'publisher') {
+				$query = " \@and ".$query;
+				$condition3.= " \@attr 1=1018 ".$attr3." \"".$search->{'field_value3'}."\" ";
+				} elsif ($search->{'field_name2'} eq 'publicationyear') {
+				$query = " \@and ".$query;
+				$condition3.= " \@attr 1=30 ".$search->{'field_value3'};
+				}
+					$query .=$condition3;
+				
+
+			}
+
+			
+			
+			#search by class 
+		if ($search->{'class'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=4 \"".$search->{'class'}."\"";
+			push @params, $search->{'class'};
+		}
+		#search by branch 
+		if ($search->{'branch'} ne '') {
+		$query= "\@and ".$query;
+			$query .= " \@attr 1=1033 \"".$search->{'branch'}."\"";
+#			
+		}
+		
+		if ($search->{'date_from'} ne '') {
+		$query= "\@and ".$query;
+	        $query .= " \@attr 1=30 \@attr 2=4 \@attr 4=4 ".$search->{'date_from'};	
+		}
+    		if ($search->{'date_to'} ne '') {
+    			     $query= "\@and ".$query;
+	        $query .= " \@attr 1=30 \@attr 2=2 \@attr 4=4 ".$search->{'date_to'};			
+			
+			}
+
+	}
+	
+
+	$count_query = $query;	
+#warn $query;
+	#execute the query and returns just the results between $num and $num + $offset
+	my $limit = $num + $offset;
+	my $startfrom = $offset;
+
+my $oConnection=C4::Context->Zconn;
+if ($oConnection eq "error"){
+  return("error",undef);
+ }
+#$oConnection->option(preferredRecordSyntax => "XML");
+my $oResult;
+my $newq= new ZOOM::Query::PQF($query);
+my $order=$search->{'order'};
+if ($order){
+$newq->sortby("$order");
+}
+eval {
+$oResult= $oConnection->search($newq);
+};
+if($@){
+   return("error",undef);
+ }
+
+
+
+ $numresults=$oResult->size() if  ($oResult);
+
+    my $i = 0;
+
+	#proccess just the results to show
+	if ($numresults>0)  {
+#Build brancnames hash
+#find branchname
+#get branch information.....
+my %branches;
+		my $bsth=$dbh->prepare("SELECT branchcode,branchname FROM branches");
+		$bsth->execute();
+		while (my $bdata=$bsth->fetchrow_hashref){
+			$branches{$bdata->{'branchcode'}}= $bdata->{'branchname'};
+
+		}
+
+#Building shelving hash
+my %shelves;
+
+#search item field code
+        my $sth =
+          $dbh->prepare(
+"select tagfield from marc_subfield_structure where kohafield like 'items.itemnumber'"
+        );
+ $sth->execute;
+ my ($itemtag) = $sth->fetchrow;
+## find column names of items related to MARC
+my $sth2=$dbh->prepare("SHOW COLUMNS from items");
+	$sth2->execute;
+my %subfieldstosearch;
+while ((my $column)=$sth2->fetchrow){
+my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.".$column,"");
+$subfieldstosearch{$column}=$tagsubfield;
+}
+
+		for ($i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
+	
+			my $rec=$oResult->record($i);
+
+		$marcdata = $rec->raw();
+		my $marcrecord;					
+	$marcrecord = MARC::File::USMARC::decode($marcdata);
+#	$marcrecord=MARC::Record->new_from_xml( $marcdata,'UTF-8' );
+#	$marcrecord->encoding( 'UTF-8' );
+	my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
+			
+	&add_html_bold_fields($type,$oldbiblio,$search);	
+	if ($i % 2) {
+		$toggle="#ffffcc";
+	} else {
+		$toggle="white";
+	}
+	$oldbiblio->{'toggle'}=$toggle;
+
+       
+       
+ my @fields = $marcrecord->field($itemtag);
+my @items;
+ my $item;
+my %counts;
+$counts{'total'}=0;
+
+#	
+##Loop for each item field
+     foreach my $field (@fields) {
+       foreach my $code ( keys %subfieldstosearch ) {
+
+$item->{$code}=$field->subfield($subfieldstosearch{$code});
+}
+
+my $status;
+
+$item->{'branchname'}=$branches{$item->{'holdingbranch'}};
+
+$status="Lost" if ($item->{'itemlost'}>0);
+$status="Withdrawn" if ($item->{'wthdrawn'}>0);
+if ($search->{'from'} eq "intranet"){
+$search->{'avoidquerylog'}=1;
+$status="Due:".format_date($item->{'onloan'}) if ($item->{'onloan'}>0);
+ $status = $item->{'holdingbranch'}."-"."[".$item->{'itemcallnumber'}."]" unless defined $status;
+}else{
+$status="On Loan" if ($item->{'onloan'}>0);
+   $status = $item->{'branchname'}."[".$item->{'shelves'}."]" unless defined $status;
+}
+ $counts{$status}++;
+$counts{'total'}++;
+push @items,$item;
+#$oldbiblio->{'itemcount'}++;
+	}
+		
+		my $norequests = 1;
+		my $noitems    = 1;
+		if (@items) {
+			$noitems = 0;
+			foreach my $itm (@items) {
+				$norequests = 0 unless $itm->{'itemnotforloan'};
+			}
+		}
+		$oldbiblio->{'noitems'} = $noitems;
+		$oldbiblio->{'norequests'} = $norequests;
+		$oldbiblio->{'even'} = $even = not $even;
+		$oldbiblio->{'itemcount'} = $counts{'total'};
+		
+		my $totalitemcounts = 0;
+		foreach my $key (keys %counts){
+			if ($key ne 'total'){	
+				$totalitemcounts+= $counts{$key};
+				$oldbiblio->{'locationhash'}->{$key}=$counts{$key};
+			}
+		}
+		
+		my ($locationtext, $locationtextonly, $notavailabletext) = ('','','');
+		foreach (sort keys %{$oldbiblio->{'locationhash'}}) {
+			if ($_ eq 'notavailable') {
+				$notavailabletext="Not available";
+				my $c=$oldbiblio->{'locationhash'}->{$_};
+				$oldbiblio->{'not-available-p'}=$c;
+			} else {
+				$locationtext.="$_";
+				my $c=$oldbiblio->{'locationhash'}->{$_};
+				if ($_ eq 'Item Lost') {
+					$oldbiblio->{'lost-p'} = $c;
+				} elsif ($_ eq 'Withdrawn') {
+					$oldbiblio->{'withdrawn-p'} = $c;
+				} elsif ($_ eq 'On Loan') {
+					$oldbiblio->{'on-loan-p'} = $c;
+				} else {
+					$locationtextonly.= $_;
+					$locationtextonly.= " ($c)<br> " if $totalitemcounts > 1;
+				}
+				if ($totalitemcounts>1) {
+					$locationtext.=" ($c)<br> ";
+				}
+			}
+		}
+		if ($notavailabletext) {
+			$locationtext.= $notavailabletext;
+		} else {
+			$locationtext=~s/, $//;
+		}
+		$oldbiblio->{'location'} = $locationtext;
+		$oldbiblio->{'location-only'} = $locationtextonly;
+		$oldbiblio->{'use-location-flags-p'} = 1;
+
+	push (@results, $oldbiblio);
+
+		}
+#		$i++;
+	}
+#$oConnection->destroy();
+	my $count = $numresults;
+
+	unless ($search->{'avoidquerylog'}) { 
+		add_query_line($type, $search, $count);}
+	return($count,@results);
+}
+
+
+sub FindDuplicate {
+	my ($record)=@_;
+my $dbh=C4::Context->dbh;
+	my $result = MARCmarc2koha($dbh,$record,'');
+	my $sth;
+	my $query;
+	my $search;
+	my  $type;
+	my ($biblionumber,$bibid,$title);
+	# search duplicate on ISBN, easy and fast..
+$search->{'avoidquerylog'}=1;
+	if ($result->{isbn}) {
+	$type="precise";
+###Temporary fix for ISBN
+my $isbn=$result->{isbn};
+$isbn=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)//g;
+		$search->{'isbn'}=$isbn;
+			}else{
+$result->{title}=~s /\\//g;
+$result->{title}=~s /\"//g;
+	$type="loose";
+	$search->{'field_name1'}="title";
+	$search->{'field_value1'}=$result->{title};
+	$search->{'ttype1'}="exact";
+	$search->{'atype1'}="start";
+	}
+	my ($total,@result)=CatSearch4($type,$search,1,0);
+		return $result[0]->{'biblionumber'}, $result[0]->{'biblionumber'},$result[0]->{'title'} if ($total);
+
+}
 =item KeywordSearch
 
   $search = { "keyword"	=> "One or more keywords",
@@ -743,6 +1830,102 @@ sub KeywordSearch2 {
   return($i,@res2);
 }
 
+
+sub add_query_line {
+
+	my ($type,$search,$results)=@_;
+	my $dbh = C4::Context->dbh;
+	my $searchdesc = '';
+	my $from;
+	my $borrowernumber = $search->{'borrowernumber'};
+	my $remote_IP =	$search->{'remote_IP'};
+	my $remote_URL=	$search->{'remote_URL'};
+	my $searchmode = '';
+	my $searchlinkdesc = '';
+	
+	if ($search->{'from'}) {
+		$from = $search->{'from'};
+	} else {
+		$from = 'opac'
+	}
+
+	if ($type eq 'keyword') {
+		$searchdesc = $search->{'keyword'};		
+		if ($search->{'ttype'} eq 'exact') {
+			$searchmode = 'phrase';
+		} else {
+			$searchmode = 'any word';
+		}
+		$searchlinkdesc.= "search_type=keyword&keyword=$search->{'keyword'}&ttype=$search->{'ttype'}";
+
+	} elsif ($type eq 'precise') {
+		if ($search->{'itemnumber'}) {
+			$searchdesc = "barcode = $search->{'itemnumber'}";
+			$searchlinkdesc.= "search_type=precise&itemnumber=$search->{'itemnumber'}";
+		} else {
+			$searchdesc = "isbn = $search->{'itemnumber'}";
+			$searchlinkdesc.= "search_type=precise&itemnumber=$search->{'isbn'}";
+		}
+
+	} elsif ($type eq 'recently_items') {
+		$searchdesc = "$search->{'range'}";
+		$searchlinkdesc.= "recently_items=1&search=$search->{'range'}";
+	} else {
+		$searchlinkdesc.= "search_type=loose";	
+		if ( ($search->{"field_name1"}) && ($search->{"field_value1"}) ) {
+			if ($search->{"ttype1"} eq 'exact') {
+				$searchmode.= ' starting with ';
+			} else {
+				$searchmode.= ' containing ';
+			}
+			$searchdesc.= " | " . $search->{"field_name1"} . " = " . $search->{"field_value1"} . " | ";
+			$searchlinkdesc.= "&ttype=$search->{'ttype1'}&field_name1=$search->{'field_name1'}&field_value1=$search->{'field_value1'}";	
+		}
+
+		if ( ($search->{"field_name2"}) && ($search->{"field_value2"}) ) {
+			if ($search->{"ttype2"} eq 'exact') {
+				$searchmode.= ' | starting with ';
+			} else {
+				$searchmode.= ' | containing ';
+			}
+			$searchdesc.= uc($search->{"op1"});
+			$searchdesc.= " | " . $search->{"field_name2"} . " = " . $search->{"field_value2"} . " | ";
+			$searchlinkdesc.= "&op1=$search->{'op1'}&ttype=$search->{'ttype2'}&field_name2=$search->{'field_name2'}&field_value2=$search->{'field_value2'}";
+		}
+
+		if ( ($search->{"field_name3"}) && ($search->{"field_value3"}) ) {
+			if ($search->{"ttype3"} eq 'exact') {
+				$searchmode.= ' | starting with ';
+			} else {
+				$searchmode.= ' | containing ';
+			}
+			$searchdesc.= uc($search->{"op2"});
+			$searchdesc.= " | " . $search->{"field_name3"} . " = " . $search->{"field_value3"} . " | ";
+			$searchlinkdesc.= "&op2=$search->{'op2'}&ttype=$search->{'ttype3'}&field_name3=$search->{'field_name3'}&field_value3=$search->{'field_value3'}";
+		}
+	}
+
+	if ($search->{'branch'}) {
+		$searchdesc.= " AND branch = $search->{'branch'}"; 
+		$searchlinkdesc.= "&branch=$search->{'branch'}";
+	}
+	if ($search->{'class'}) {
+		$searchdesc.= " AND itemtype = $search->{'class'}"; 
+		$searchlinkdesc.= "&class=$search->{'class'}";
+	}
+
+#	my $sth = $dbh->prepare("INSERT INTO querys_log (searchtype, searchdesc, searchmode, borrowernumber, number_of_results, date, execute_from, remote_IP, linkdesc) VALUES (?,?,?,?,?,NOW(),?,?,?)");
+#	$sth->execute($type, $searchdesc, $searchmode, $borrowernumber, $results, $from, $remote_IP, $searchlinkdesc);
+#	$sth->finish;
+my $sth = $dbh->prepare("INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip,user,actual) VALUES(?,?,?,?,?)");
+	
+
+$sth->execute($searchdesc,$results,$remote_IP,$borrowernumber,$remote_URL);
+$sth->finish;
+
+}
+
+
 =item CatSearch
 
   ($count, @results) = &CatSearch($env, $type, $search, $num, $offset);
@@ -1023,25 +2206,7 @@ sub CatSearch  {
 					$query.= " and (copyrightdate like ?)";
 					push(@bind,"%$search->{'date-before'}%");
 				}
-			} elsif ($search->{'class'} ne ''){
-				$query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
-				my @temp=split(/\|/,$search->{'class'});
-				my $count=@temp;
-				$query.= " and ( itemtype= ?)";
-				@bind=($temp[0]);
-				for (my $i=1;$i<$count;$i++){
-					$query.=" or itemtype=?";
-					push(@bind,$temp[$i]);
-				}
-				$query.=")";
-				if ($search->{'illustrator'} ne ''){
-					$query.=" and illus like ?";
-					push(@bind,"%".$search->{'illustrator'}."%");
-				}
-				if ($search->{'dewey'} ne ''){
-					$query.=" and biblioitems.dewey like ?";
-					push(@bind,"$search->{'dewey'}%");
-				}
+			
 			} elsif ($search->{'dewey'} ne ''){
 				$query="select * from biblioitems,biblio
 				where biblio.biblionumber=biblioitems.biblionumber
@@ -1062,6 +2227,15 @@ sub CatSearch  {
 			} elsif ($search->{'date-before'} ne ''){
 				$query = "Select * from biblio where copyrightdate like ?";
 				@bind=("%$search->{'date-before'}%");
+			}elsif ($search->{'branch'} ne ''){
+				$query = "Select * from biblio,items  where biblio.biblionumber
+				=items.biblionumber and holdingbranch like ?";
+				@bind=("$search->{'branch'}");
+			}elsif ($search->{'class'} ne ''){
+				$query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
+				
+				$query.= " where itemtype= ?";
+				@bind=("$search->{'class'}");
 			}
 			$query .=" group by biblio.biblionumber";
 		}
@@ -1107,30 +2281,9 @@ sub CatSearch  {
 					# FIXME - .= <<EOT;
 		}
 		if ($search->{'isbn'} ne ''){
-			my $search2=uc $search->{'isbn'};
-			my $sth1=$dbh->prepare("select * from biblioitems where isbn=?");
-			$sth1->execute($search2);
-			my $i2=0;
-			while (my $data=$sth1->fetchrow_hashref) {
-				my $sth=$dbh->prepare("select * from biblioitems,biblio where
-					biblio.biblionumber = ?
-					and biblioitems.biblionumber = biblio.biblionumber");
-				$sth->execute($data->{'biblionumber'});
-				# FIXME - There's already a $data in this scope.
-				my $data=$sth->fetchrow_hashref;
-				my ($dewey, $subclass) = ($data->{'dewey'}, $data->{'subclass'});
-				# FIXME - The following assumes that the Dewey code is a
-				# floating-point number. It isn't: it's a string.
-				$dewey=~s/\.*0*$//;
-				($dewey == 0) && ($dewey='');
-				($dewey) && ($dewey.=" $subclass");
-				$data->{'dewey'}=$dewey;
-				$results[$i2]=$data;
-			#           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
-				$i2++;
-				$sth->finish;
-			}
-			$sth1->finish;
+			$query = "Select * from biblio,biblioitems where biblio.biblionumber
+				=biblioitems.biblionumber and (isbn like ?)";
+				@bind=("$search->{'isbn'}%");
 		}
 	}
 	if ($type ne 'precise' && $type ne 'subject'){
@@ -1306,17 +2459,12 @@ sub ItemInfo {
 					WHERE items.biblionumber = ?
 					AND biblioitems.biblioitemnumber = items.biblioitemnumber
 					AND biblio.biblionumber = items.biblionumber";
-# buggy : opac & librarian interface can show the same info level & itemstatus should not be hardcoded
-# 	if ($type ne 'intra'){
-# 		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-# 		or items.itemlost is NULL)
-# 		and (wthdrawn <> 1 or wthdrawn is NULL)";
-# 	}
-	$query .= " order by items.homebranch, items.dateaccessioned desc";
+	$query .= " order by items.dateaccessioned desc";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($biblionumber);
 	my $i=0;
 	my @results;
+my ($date_due, $count_reserves);
 	while (my $data=$sth->fetchrow_hashref){
 		my $datedue = '';
 		my $isth=$dbh->prepare("Select issues.*,borrowers.cardnumber from issues,borrowers where itemnumber = ? and returndate is null and issues.borrowernumber=borrowers.borrowernumber");
@@ -1326,22 +2474,12 @@ sub ItemInfo {
 		$data->{cardnumber} = $idata->{cardnumber};
 		$datedue = format_date($idata->{'date_due'});
 		}
-# buggy : hardcoded & non-translatable
-# more : why don't you want to show the datedue if it's very very overdue ?
-# 		if ($data->{'itemlost'} eq '2'){
-# 			$datedue='Very Overdue';
-# 		}
-# 		if ($data->{'itemlost'} eq '1'){
-# 			$datedue='Lost';
-# 		}
-# 		if ($data->{'wthdrawn'} eq '1'){
-# 			$datedue="Cancelled";
-# 		}
 		if ($datedue eq ''){
 	#	$datedue="Available";
 			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
 			if ($restype) {
-				$datedue=$restype;
+#				$datedue=$restype;
+				$count_reserves = $restype;
 			}
 		}
 		$isth->finish;
@@ -1354,6 +2492,7 @@ sub ItemInfo {
 		my $date=format_date($data->{'datelastseen'});
 		$data->{'datelastseen'}=$date;
 		$data->{'datedue'}=$datedue;
+		$data->{'count_reserves'} = $count_reserves;
 	# get notforloan complete status if applicable
 		my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
 		$sthnflstatus->execute;
@@ -1362,29 +2501,27 @@ sub ItemInfo {
 			$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
 			$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
 			my ($lib) = $sthnflstatus->fetchrow;
-			$data->{notforloantext} = $lib;
+			$data->{notforloan} = $lib;
+		}
+
+# my stack procedures
+
+		my $stackstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.stack"');
+		$stackstatus->execute;
+		
+		my ($authorised_valuecode) = $stackstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$stackstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+			$stackstatus->execute($authorised_valuecode,$data->{stack});
+			
+			my ($lib) = $stackstatus->fetchrow;
+			$data->{stack} = $lib;
 		}
 		$results[$i]=$data;
 		$i++;
 	}
 	$sth->finish;
-	#FIXME: ordering/indentation here looks wrong
-# buggy : count in $i+1 the info on qty ordered for $i : total shown is real total +1
-# useless : Koha 2.2.2 now automatically show the existing number of items
-# and if there is no items, and at least one is on order, show "on order".
-# 	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-# 	$sth2->execute($biblionumber);
-# 	my $data;
-# 	my $ocount;
-# 	if ($data=$sth2->fetchrow_hashref){
-# 		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-# 		if ($ocount > 0){
-# 		$data->{'ocount'}=$ocount;
-# 		$data->{'order'}="One Order";
-# 		$results[$i]=$data;
-# 		}
-# 	}
-# 	$sth2->finish;
+
 	return(@results);
 }
 
@@ -1418,12 +2555,15 @@ sub GetItems {
    my $i=0;
    my @results;
    while (my $data=$sth->fetchrow_hashref) {
-      #debug_msg($env,$data->{'biblioitemnumber'});
+      print ($env,$data->{'biblioitemnumber'});
       my $dewey = $data->{'dewey'};
       $dewey =~ s/0+$//;
+	my $isbn= $data->{'isbn'};
+	
+	
       my $line = $data->{'biblioitemnumber'}."\t".$data->{'itemtype'};
       $line .= "\t$data->{'classification'}\t$dewey";
-      $line .= "\t$data->{'subclass'}\t$data->{isbn}";
+      $line .= "\t$data->{'subclass'}\t$data->{'isbn'}";
       $line .= "\t$data->{'volume'}\t$data->{number}";
       my $isth= $dbh->prepare("select * from items where biblioitemnumber = ?");
       $isth->execute($data->{'biblioitemnumber'});
@@ -1501,14 +2641,6 @@ sub bibdata {
 	my $data;
 	$data  = $sth->fetchrow_hashref;
 	$sth->finish;
-	# move url to an array, splitting it on every |
-	my @URLS;
-	foreach (split /\|/,$data->{url}) {
-		my %url;
-		$url{url} = $_;
-		push @URLS,\%url;
-	}
-	$data->{URLS} = \@URLS;
 	# handle management of repeated subtitle
 	$sth   = $dbh->prepare("Select * from bibliosubtitle where biblionumber = ?");
 	$sth->execute($bibnum);
@@ -1522,7 +2654,6 @@ sub bibdata {
 	$sth->finish;
 	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
 	$sth->execute($bibnum);
-	# handle subjects : DEPRECATED ?
 	my @subjects;
 	while (my $dat = $sth->fetchrow_hashref){
 		my %line;
@@ -1531,7 +2662,6 @@ sub bibdata {
 	} # while
 	$data->{subjects} = \@subjects;
 	$sth->finish;
-	# handle additional authors
 	$sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
 	$sth->execute($bibnum);
 	while (my $dat = $sth->fetchrow_hashref){
@@ -1540,8 +2670,6 @@ sub bibdata {
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
-	# handle ISBN : reintroduce - if there are none
-	$data->{'isbn'} = DisplayISBN($data->{'isbn'});
 	$sth->finish;
 	return($data);
 } # sub bibdata
@@ -1746,8 +2874,8 @@ and issues.borrowernumber = borrowers.borrowernumber");
 						where itemnumber = ?
 									and issues.borrowernumber = borrowers.borrowernumber
 									and returndate is not NULL
-									order by returndate desc,timestamp desc") || die $dbh->errstr;
-        $sth2->execute($data->{'itemnumber'}) || die $sth2->errstr;
+									order by returndate desc,timestamp desc") ;
+        $sth2->execute($data->{'itemnumber'}) ;
         for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
             if (my $data2 = $sth2->fetchrow_hashref) {
                 $data->{"timestamp$i2"} = $data2->{'timestamp'};
@@ -1826,35 +2954,33 @@ sub BornameSearch  {
 
 	if($type eq "simple")	# simple search for one letter only
 	{
-		$query="Select * from borrowers where surname like ? order by $orderby";
-		@bind=("$searchstring%");
+		$query="Select * from borrowers where surname like '$searchstring%' order by $orderby";
+#		@bind=("$searchstring%");
 	}
 	else	# advanced search looking in surname, firstname and othernames
 	{
-		@data=split(' ',$searchstring);
-		$count=@data;
-		$query="Select * from borrowers
-		where ((surname like ? or surname like ?
-		or firstname  like ? or firstname like ?
-		or othernames like ? or othernames like ?)
-		";
-		@bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
-		for (my $i=1;$i<$count;$i++){
-		        $query=$query." and (".
-		        " surname like ? or surname like ?
-                        or firstname  like ? or firstname like ?
-		        or othernames like ? or othernames like ?)";
-		        push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
-					# FIXME - .= <<EOT;
-		}
-		$query=$query.") or cardnumber like ?
-		order by $orderby";
-		push(@bind,$searchstring);
-					# FIXME - .= <<EOT;
+### Try to determine whether numeric like cardnumber
+	if ($searchstring+1>1) {
+	$query="Select * from borrowers where  cardnumber  like '$searchstring%' ";
+
+	}else{
+	
+	my @words=split / /,$searchstring;
+	foreach my $word(@words){
+	$word="+".$word;
+	
+	}
+	$searchstring=join " ",@words;
+	
+		$query="Select * from borrowers where  MATCH(surname,firstname,othernames) AGAINST('$searchstring'  in boolean mode)";
+
+	}
+		$query=$query." order by $orderby";
 	}
 
 	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
+#	warn "Q $orderby : $query";
+	$sth->execute();
 	my @results;
 	my $cnt=$sth->rows;
 	while (my $data=$sth->fetchrow_hashref){
@@ -1883,6 +3009,7 @@ sub borrdata {
   $cardnumber = uc $cardnumber;
   my $dbh = C4::Context->dbh;
   my $sth;
+if ($bornum eq ''&& $cardnumber eq ''){ return undef; }
   if ($bornum eq ''){
     $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
     $sth->execute($cardnumber);
@@ -2022,6 +3149,40 @@ sub borrdata2 {
 return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'});
 }
 
+sub borrdata3 {
+  my ($env,$bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $query="Select count(*) from  reserveissue as r where r.borrowernumber='$bornum' 
+     and rettime is null";
+    # print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select count(*),timediff(now(),  duetime  ) as elapsed, hour(timediff(now(),  duetime  )) as hours, MINUTE(timediff(now(),  duetime  )) as min from 
+    reserveissue as r where  r.borrowernumber='$bornum' and rettime is null and duetime< now() group by r.borrowernumber");
+  $sth->execute;
+
+  my $data2=$sth->fetchrow_hashref;
+my $resfine;
+my $rescharge=C4::Context->preference('resmaterialcharge');
+if (!$rescharge){
+$rescharge=1;
+}
+if ($data2->{'elapsed'}>0){
+ $resfine=($data2->{'hours'}+$data2->{'min'}/60)*$rescharge;
+$resfine=sprintf  ("%.1f",$resfine);
+}
+  $sth->finish;
+  $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
+    borrowernumber='$bornum'");
+  $sth->execute;
+  my $data3=$sth->fetchrow_hashref;
+  $sth->finish;
+
+
+return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'},$resfine);
+}
 =item getboracctrecord
 
   ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
@@ -2233,7 +3394,6 @@ sub itemcount2 {
   $counts{'total'}=0;
   while (my $data=$sth->fetchrow_hashref){
     $counts{'total'}++;
-
     my $status;
     for my $test (
       [
@@ -2264,8 +3424,23 @@ sub itemcount2 {
 	$sth2->finish;
     last if defined $status;
     }
-    $status = $data->{'branchname'} unless defined $status;
+## find the shelving name from stack
+my $stackstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.stack"');
+		$stackstatus->execute;
+		
+		my ($authorised_valuecode) = $stackstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$stackstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+			$stackstatus->execute($authorised_valuecode,$data->{stack});
+			
+			my ($lib) = $stackstatus->fetchrow;
+			$data->{stack} = $lib;
+		}
+
+	
+    $status = $data->{'branchname'}."[".$data->{'stack'}."]" unless defined $status;
     $counts{$status}++;
+
   }
   my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=? and
   datecancellationprinted is NULL and quantity > quantityreceived");
@@ -2545,7 +3720,130 @@ sub getborrowercategory
 	return $description;
 } # sub getborrowercategory
 
+sub getborrowercategoryinfo
+{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT * FROM categories WHERE categorycode = ?");
+	$sth->execute($catcode);
+	my $category = $sth->fetchrow_hashref;
+	$sth->finish();
+	return $category;
+} # sub getborrowercategoryinfo
 
+sub getMARCnotes {
+        my ($dbh, $bibid, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if ($marcflavour eq "MARC21") {
+	        $mintag = "500";
+		$maxtag = "599";
+	} else {           # assume unimarc if not marc21
+		$mintag = "300";
+		$maxtag = "399";
+	}
+
+
+
+my $record=MARCgetbiblio($dbh,$bibid);
+
+	my @marcnotes;
+	my $note = "";
+	my $tag = "";
+	my $marcnote;
+
+	foreach my $field ($record->field('5..')) {
+		my $value = $field->as_string();
+		if ( $note ne "") {
+	
+		        $marcnote = {marcnote => $note,};
+			push @marcnotes, $marcnote;
+			$note=$value;
+		}
+		if ($note ne $value) {
+		        $note = $note." ".$value;
+		}
+	}
+
+	if ($note) {
+	        $marcnote = {marcnote => $note};
+		push @marcnotes, $marcnote;   #load last tag into array
+	}
+
+
+
+	my $marcnotesarray=\@marcnotes;
+	return $marcnotesarray;
+}  # end getMARCnotes
+
+
+sub getMARCsubjects {
+    my ($dbh, $bibid, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if ($marcflavour eq "MARC21") {
+	        $mintag = "600";
+		$maxtag = "699";
+	} else {           # assume unimarc if not marc21
+		$mintag = "600";
+		$maxtag = "619";
+	}
+#	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
+
+#	$sth->execute($bibid,$mintag,$maxtag);
+
+my $record=MARCgetbiblio($dbh,$bibid);
+	my @marcsubjcts;
+	my $subjct = "";
+	my $subfield = "";
+	my $marcsubjct;
+
+	foreach my $field ($record->field('6..')) {
+   
+ 
+		my $value = $field->subfield('a');
+		
+		        $marcsubjct = {MARCSUBJCT => $value,};
+			push @marcsubjcts, $marcsubjct;
+			$subjct = $value;
+		
+	}
+	my $marcsubjctsarray=\@marcsubjcts;
+        return $marcsubjctsarray;
+}  #end getMARCsubjects
+
+
+sub getMARCurls {
+    my ($dbh, $bibid, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if ($marcflavour eq "MARC21") {
+	        $mintag = "856";
+		$maxtag = "856";
+	} else {           # assume unimarc if not marc21
+		$mintag = "600";
+		$maxtag = "619";
+	}
+
+my $record=MARCgetbiblio($dbh,$bibid);
+	my @marcurls;
+	my $url = "";
+	my $subfil = "";
+	my $marcurl;
+
+	foreach my $field ($record->field('856')) {
+   
+ 
+		my $value = $field->subfield('u');
+#		my $subfil = $data->[1];
+		if ( $value ne $url) {
+		        $marcurl = {MARCURLS => $value,};
+			push @marcurls, $marcurl;
+			$url = $value;
+		}
+	}
+
+
+	my $marcurlsarray=\@marcurls;
+        return $marcurlsarray;
+}  #end getMARCurls
 END { }       # module clean-up code here (global destructor)
 
 1;

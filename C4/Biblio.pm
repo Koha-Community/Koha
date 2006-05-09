@@ -2541,6 +2541,7 @@ my ($dbh,$biblionumber,$op)=@_;
 my $Zconn;
 my $tried=0;
 my $recon=0;
+zebraopfiles($dbh,$biblionumber,$op);
 reconnect:
 $Zconn=C4::Context->Zconnauth;
 if ($Zconn ne "error"){
@@ -2710,6 +2711,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.7  2006/05/09 13:18:34  tgarip1957
+# *** empty log message ***
+#
 # Revision 1.115.2.51.2.6  2006/05/09 12:30:43  tgarip1957
 # *** empty log message ***
 #
