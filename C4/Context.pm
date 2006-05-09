@@ -21,7 +21,7 @@ package C4::Context;
 use strict;
 use DBI;
 use C4::Boolean;
-
+use ZOOM;
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
 	qw(@context_stack);
@@ -812,6 +812,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.18.2.5.2.3  2006/05/09 12:01:02  kados
+# add use Zoom;
+#
 # Revision 1.18.2.5.2.2  2006/05/09 07:41:09  hdl
 # Fixing a bracket
 #
