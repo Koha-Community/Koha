@@ -720,7 +720,7 @@ sub subscriptionrenew {
 	my $sth = $dbh->prepare("select * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber and biblio.biblionumber=?");
 	$sth->execute($subscription->{biblionumber});
 	my $biblio = $sth->fetchrow_hashref;
-	newsuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},,,,,$subscription->{biblionumber});
+	newsuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},'','','','','',$subscription->{biblionumber});
 	# renew subscription
 	$sth=$dbh->prepare("update subscription set startdate=?,numberlength=?,weeklength=?,monthlength=?");
 	$sth->execute(format_date_in_iso($startdate),$numberlength,$weeklength,$monthlength);
