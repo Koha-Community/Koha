@@ -2542,7 +2542,7 @@ my $Zconn;
 my $tried=0;
 my $recon=0;
 reconnect:
-$Zconn=C4::Context->Zconnauth;
+$Zconn=C4::Context->Zconn;
 if ($Zconn ne "error"){
 	my $record = MARCgetbiblio($dbh,$biblionumber);
 my $Zpackage = $Zconn->package();
@@ -2710,6 +2710,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.5  2006/05/09 12:26:36  tgarip1957
+# *** empty log message ***
+#
 # Revision 1.115.2.51.2.4  2006/05/09 08:27:41  tgarip1957
 # koha_dev version with zebrasupport
 #
