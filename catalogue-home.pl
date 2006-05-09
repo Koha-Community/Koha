@@ -207,9 +207,9 @@ if ($zoom eq "1"){
 	$template->param(numbers => $numbers);
 
 	#show the virtual shelves
-	my $results = &GetShelfListOfExt($borrowernumber);
-	$template->param(shelvescount => scalar(@{$results}));
-	$template->param(shelves => $results);
+#	my $results = &GetShelfListOfExt($borrowernumber);
+#	$template->param(shelvescount => scalar(@{$results}));
+#	$template->param(shelves => $results);
 
 ########
 if ($format eq '1') {
