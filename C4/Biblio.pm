@@ -2569,7 +2569,7 @@ $Zpackage->destroy;
 }else{
 zebraopfiles($dbh,$biblionumber,$op);
 }	
-
+}
 =head2 getitemstatus
 
   $itemstatushash = &getitemstatus($fwkcode);
@@ -2708,6 +2708,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.2  2006/05/09 07:47:03  rangi
+# Fixing syntax error
+#
 # Revision 1.115.2.51.2.1  2006/05/09 07:43:21  tgarip1957
 # For chris to debug
 #
