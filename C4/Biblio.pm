@@ -52,7 +52,7 @@ $VERSION = 0.01;
   &MARCfind_oldbiblionumber_from_MARCbibid
   &MARCfind_MARCbibid_from_oldbiblionumber
   &MARCfind_marc_from_kohafield
-#  &MARCfindsubfield
+  &MARCfindsubfield
   &MARCfind_frameworkcode
   &MARCgettagslib
 &MARCmoditemonefield
@@ -63,13 +63,13 @@ $VERSION = 0.01;
 &zebraop
 
   &MARCaddbiblio &MARCadditem
-#  &MARCmodsubfield &MARCaddsubfield
+  &MARCmodsubfield &MARCaddsubfield
   &MARCmodbiblio &MARCmoditem
   &MARCkoha2marcBiblio &MARCmarc2koha
   &MARCkoha2marcItem &MARChtml2marc &MARChtml2xml
   &MARCgetbiblio &MARCgetitem
-#  &MARCaddword &MARCdelword
-#  &MARCdelsubfield
+  &MARCaddword &MARCdelword
+  &MARCdelsubfield
   &char_decode
   
   &FindDuplicate
@@ -2708,6 +2708,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.3  2006/05/09 07:57:15  tgarip1957
+# *** empty log message ***
+#
 # Revision 1.115.2.51.2.2  2006/05/09 07:47:03  rangi
 # Fixing syntax error
 #
