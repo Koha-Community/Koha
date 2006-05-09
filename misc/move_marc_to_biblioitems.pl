@@ -31,7 +31,7 @@ while ( my ( $bibid, $biblionumber ) = $sth->fetchrow ) {
 
     #Force UTF-8 in record leader
     $record->encoding('UTF-8');
-    $sth_update->execute( $record->as_usmarc(), $record->as_xml_record(),
+    $sth_update->execute( $record->as_usmarc(),
         $biblionumber );
     $totaldone++;
     print "\r$totaldone / $totaltodo" unless ( $totaldone % 100 );
