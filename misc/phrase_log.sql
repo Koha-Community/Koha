@@ -18,9 +18,6 @@
 -- Create schema koha
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ koha;
-USE koha;
-
 --
 -- Table structure for table `koha`.`phrase_log`
 --
