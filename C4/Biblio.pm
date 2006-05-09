@@ -693,6 +693,7 @@ sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
 	#use MARC::File::XML;
 	my $xml= MARC::File::XML::header(C4::Context->preference('marcflavour'),C4::Context->preference('TemplateEncoding')); 
+#my $xml= MARC::File::XML::header('UTF-8'); ##Uncommment the line above when new MARC::XML installed
 	#$xml =~ s/UTF-8/ISO-8859-1/;
     my $prevvalue;
     my $prevtag=-1;
@@ -765,6 +766,7 @@ sub MARChtml2marc {
 	my $prevvalue; # if tag <10
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
+	next unless @$rvalues[$i];
 		# rebuild MARC::Record
 # 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
@@ -1126,7 +1128,7 @@ sub NEWnewitem {
     $item->{'biblionumber'}= $biblionumber;
      my $sth =
       $dbh->prepare(
-        "select biblioitemnumber,itemtypes from biblioitems where biblionumber=?");
+        "select biblioitemnumber,itemtype from biblioitems where biblionumber=?");
     $sth->execute( $item->{'biblionumber'} );
  my $itemtype;
     ( $item->{'biblioitemnumber'}, $itemtype ) = $sth->fetchrow;
@@ -2708,6 +2710,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.4  2006/05/09 08:27:41  tgarip1957
+# koha_dev version with zebrasupport
+#
 # Revision 1.115.2.51.2.3  2006/05/09 07:57:15  tgarip1957
 # *** empty log message ***
 #
