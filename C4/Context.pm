@@ -469,7 +469,9 @@ my $Zconn;
 ## Zebra handler with write permission
 sub new_Zconnauth {
 my $Zconnauth;
-
+    warn "zebra user and pass";
+warn $context->{"config"}{"zebrauser"};
+warn $context->{"config"}{"zebrapass"};    
 eval{
  $Zconnauth=new ZOOM::Connection($context->{"config"}{"hostname"},$context->{"config"}{"zebraport"},databaseName=>$context->{"config"}{"zebradb"},
 						user=>$context->{"config"}{"zebrauser"},
@@ -812,6 +814,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.18.2.5.2.4  2006/05/09 12:35:47  rangi
+# debugging
+#
 # Revision 1.18.2.5.2.3  2006/05/09 12:01:02  kados
 # add use Zoom;
 #
