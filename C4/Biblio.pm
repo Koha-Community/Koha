@@ -525,7 +525,7 @@ sub MARCmoditem {
 	my ($dbh,$record,$biblionumber,$itemnumber,$delete)=@_;
 #	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$biblionumber);
 	my $newrec=	&MARCdelitem($dbh,$biblionumber,$itemnumber);
-	&MARCadditem($dbh,$record,$biblionumber);
+	&MARCadditem($dbh,$newrec,$biblionumber);
 }
 
 
@@ -2711,6 +2711,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.8  2006/05/09 14:41:53  tgarip1957
+# *** empty log message ***
+#
 # Revision 1.115.2.51.2.7  2006/05/09 13:18:34  tgarip1957
 # *** empty log message ***
 #
