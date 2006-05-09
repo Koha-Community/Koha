@@ -480,7 +480,6 @@ eval{
 		$Zconnauth="error";
 		return $Zconnauth;
 		}
-	}
 	return $Zconnauth;
 }
 
@@ -813,6 +812,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.18.2.5.2.2  2006/05/09 07:41:09  hdl
+# Fixing a bracket
+#
 # Revision 1.18.2.5.2.1  2006/05/08 15:02:05  tgarip1957
 # 2 Zebra connection handllers one for read one for write acess
 #
