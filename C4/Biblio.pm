@@ -1042,9 +1042,10 @@ sub MARCkoha2marcOnefield {
 }
 sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
-	#use MARC::File::XML;
-	my $xml= MARC::File::XML::header(C4::Context->preference('marcflavour'),C4::Context->preference('TemplateEncoding')); 
+	use MARC::File::XML;
+	my $xml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour')); 
 	#$xml =~ s/UTF-8/ISO-8859-1/;
+	#tell perl that $xml is whatever default encoding is
     my $prevvalue;
     my $prevtag=-1;
     my $first=1;
@@ -3006,6 +3007,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.53  2006/05/11 14:55:24  kados
+# MARC::File::XML switched the API in 0.83, this code updates Koha --
+# it will break your record editing if you don't upgrade MARC::File::XML
+# to 0.83 on CPAN.
+#
 # Revision 1.115.2.52  2006/05/11 14:15:51  rangi
 # Adding version string
 #
