@@ -26,7 +26,8 @@ use MARC::Record;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+                    shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 @ISA = qw(Exporter);
 
@@ -3005,6 +3006,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.52  2006/05/11 14:15:51  rangi
+# Adding version string
+#
 # Revision 1.115.2.51  2006/04/17 13:50:59  tgarip1957
 # Missing semicolon
 #
