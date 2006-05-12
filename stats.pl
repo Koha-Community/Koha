@@ -78,10 +78,10 @@ my $total=0;
 my $oldtime;
 my $totalw=0;
 my @loop;
-my %row;
 my $i=0;
+# parse all lines for today
 while ($i<$count){
-	warn " pay : ".$payments[$i]{'timestamp'};
+# 	warn " pay : ".$payments[$i]{'timestamp'};
 	my $time=$payments[$i]{'datetime'};
 	my $payments=$payments[$i]{'value'};
 	my $charge=0;
@@ -95,13 +95,14 @@ while ($i<$count){
 	my $temptotalren=0;
 	my $temptotalw=0;
 	for (my $i2=0;$i2<$count;$i2++){
+# 	warn "I2 : $i2 i=$i";
 		$charge+=$charges[$i2]->{'amount'};
-		%row = ( name   => $charges[$i2]->{'description'},
-					type   => $charges[$i2]->{'accounttype'},
-					time   => $charges[$i2]->{'timestamp'},
-					amount => $charges[$i2]->{'amount'},
-					branch => $charges[$i2]->{'amountoutstanding'} );
-		push(@loop, \%row);
+# 		%row = ( name   => $charges[$i2]->{'description'},
+# 					type   => $charges[$i2]->{'accounttype'},
+# 					time   => $charges[$i2]->{'timestamp'},
+# 					amount => $charges[$i2]->{'amount'},
+# 					branch => $charges[$i2]->{'amountoutstanding'} );
+# 		push(@loop, \%row);
 		if ($payments[$i]{'accountytpe'} ne 'W'){
 			if ($charges[$i2]->{'accounttype'} eq 'Rent'){
 				$temptotalr+=$charges[$i2]->{'amount'}-$charges[$i2]->{'amountoutstanding'};
@@ -139,10 +140,10 @@ while ($i<$count){
 			$payments[$i]{'amount'}=$payments[$i]{'amount'}*-1;
 			$total+=$payments[$i]{'amount'};
 		}
-
-		%row = ( name   => "<b>".$payments[$i]{'firstname'}.$payments[$i]{'surname'} . "</b>",
+		my %row = ( name   => "<b>".$payments[$i]{'firstname'}.' '.$payments[$i]{'surname'} . "</b>",
 					type   => $payments[$i]{'accounttype'}, time   => $payments[$i]{'date'},
-					amount => $payments[$i]{'amount'}, branch => $branch );
+					amount => $payments[$i]{'amount'}, branch => $branch,
+					description =>  $payments[$i]{'description'});
 		push(@loop, \%row);
 		$oldtype=$payments[$i]{'accounttype'};
 		$oldtime=$payments[$i]{'timestamp'};
