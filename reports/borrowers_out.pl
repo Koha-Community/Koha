@@ -30,7 +30,7 @@ use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 use Date::Manip;
-
+use C4::Members;
 =head1 NAME
 
 plugin that shows a stats on borrowers
