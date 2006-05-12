@@ -110,26 +110,26 @@ sub GetLateIssues {
 sub newsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 		$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-		$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-		$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-		$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+		$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+		$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+		$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 		$numberingmethod, $status, $notes) = @_;
 	my $dbh = C4::Context->dbh;
 	#save subscription
 	my $sth=$dbh->prepare("insert into subscription (librarian,aqbooksellerid,cost,aqbudgetid,biblionumber,
 							startdate,periodicity,dow,numberlength,weeklength,monthlength,
-							add1,every1,whenmorethan1,setto1,lastvalue1,
-							add2,every2,whenmorethan2,setto2,lastvalue2,
-							add3,every3,whenmorethan3,setto3,lastvalue3,
+							add1,every1,whenmorethan1,setto1,lastvalue1,innerloop1,
+							add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
+							add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
 							numberingmethod, status, notes) values 
 							(?,?,?,?,?,?,?,?,?,
 							 ?,?,?,?,?,?,?,?,?,?,
-							 ?,?,?,?,?,?,?,?,?,?)");
+							 ?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					format_date_in_iso($startdate),$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	 				$numberingmethod, $status, $notes);
 	#then create the 1st waited number
 	my $subscriptionid = $dbh->{'mysql_insertid'};
