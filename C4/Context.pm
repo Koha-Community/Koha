@@ -16,12 +16,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id$
-
 package C4::Context;
 use strict;
 use DBI;
 use C4::Boolean;
-
+use XML::Simple;
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
 	qw(@context_stack);
@@ -37,7 +36,7 @@ C4::Context - Maintain and manipulate the context of a Koha script
 
   use C4::Context;
 
-  use C4::Context("/path/to/koha.conf");
+  use C4::Context("/path/to/koha.xml");
 
   $config_value = C4::Context->config("config_variable");
   $db_handle = C4::Context->dbh;
@@ -83,7 +82,7 @@ environment variable to the pathname of a configuration file to use.
 # config
 #	A reference-to-hash whose keys and values are the
 #	configuration variables and values specified in the config
-#	file (/etc/koha.conf).
+#	file (/etc/koha.xml).
 # dbh
 #	A handle to the appropriate database for this context.
 # dbh_stack
@@ -92,7 +91,7 @@ environment variable to the pathname of a configuration file to use.
 # Zconn
 # 	A connection object for the Zebra server
 
-use constant CONFIG_FNAME => "/etc/koha.conf";
+use constant CONFIG_FNAME => "/etc/koha.xml";
 				# Default config file, if none is specified
 
 $context = undef;		# Initially, no context is set
@@ -116,47 +115,13 @@ $context = undef;		# Initially, no context is set
 sub read_config_file
 {
 	my $fname = shift;	# Config file to read
+
 	my $retval = {};	# Return value: ref-to-hash holding the
 				# configuration
 
-	open (CONF, $fname) or return undef;
+my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen']);
 
-	while (<CONF>)
-	{
-		my $var;		# Variable name
-		my $value;		# Variable value
-
-		chomp;
-		s/#.*//;		# Strip comments
-		next if /^\s*$/;	# Ignore blank lines
-
-		# Look for a line of the form
-		#	var = value
-		if (!/^\s*(\w+)\s*=\s*(.*?)\s*$/)
-		{
-			print STDERR 
-				"$_ isn't a variable assignment, skipping it";
-			next;
-		}
-
-		# Found a variable assignment
-		if ( exists $retval->{$1} )
-		{
-			print STDERR "$var was already defined, ignoring\n";
-		}else{
-		# Quick hack for allowing databases name in full text
-			if ( $1 eq "db_scheme" )
-			{
-				$value = db_scheme2dbi($2);
-			}else {
-				$value = $2;
-			}
-                        $retval->{$1} = $value;
-		}
-	}
-	close CONF;
-
-	return $retval;
+	return $koha;
 }
 
 # db_scheme2dbi
@@ -221,10 +186,12 @@ sub new
 		# that. Otherwise, use the built-in default.
 		$conf_fname = $ENV{"KOHA_CONF"} || CONFIG_FNAME;
 	}
+		# Load the desired config file.
+	$self = read_config_file($conf_fname);
 	$self->{"config_file"} = $conf_fname;
 
-	# Load the desired config file.
-	$self->{"config"} = &read_config_file($conf_fname);
+
+	
 	warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
 	return undef if !defined($self->{"config"});
 
@@ -342,7 +309,7 @@ sub config
 			# to check the return value.
 
 	# Return the value of the requested config variable
-	return $context->{"config"}{$var};
+	return $context->{"config"}->{$var};
 }
 
 =item preference
@@ -405,7 +372,7 @@ sub AUTOLOAD
 =item Zconn
 
 $Zconn = C4::Context->Zconn
-
+$Zconnauth = C4::Context->Zconnauth
 Returns a connection to the Zebra database for the current
 context. If no connection has yet been made, this method 
 creates one and connects.
@@ -414,39 +381,31 @@ creates one and connects.
 
 sub Zconn {
         my $self = shift;
-        my $rs;
+my $server=shift;
 	my $Zconn;
-        if (defined($context->{"Zconn"})) {
+      if (defined($context->{"Zconn"})) {
 	    $Zconn = $context->{"Zconn"};
-#  	    $rs=$Zconn->search_pqf('@attr 1=4 mineral');
-#	    if ($Zconn->errcode() != 0) {
-#		$context->{"Zconn"} = &new_Zconn();
-#		return $context->{"Zconn"};
-# 	    }
-	    return $context->{"Zconn"};
+         	    return $context->{"Zconn"};
 	} else { 
-		$context->{"Zconn"} = &new_Zconn();
+		$context->{"Zconn"} = &new_Zconn($server);
 		return $context->{"Zconn"};
         }
 }
 
-=item Zconnauth
-Returns a connection to the Zebradb with write privileges.Requires setting from etc/koha.conf
-zebradb,zebraport,zebrauser,zebrapass
-
-=cut
-
 sub Zconnauth {
         my $self = shift;
+my $server=shift;
 	my $Zconnauth;
 	 if (defined($context->{"Zconnauth"})) {
 	    $Zconnauth = $context->{"Zconnauth"};
           	    return $context->{"Zconnauth"};
 	} else {
-		$context->{"Zconnauth"} = &new_Zconnauth();
+		$context->{"Zconnauth"} = &new_Zconnauth($server);
 		return $context->{"Zconnauth"};
 	}	
 }
+
+
 
 =item new_Zconn
 
@@ -456,57 +415,82 @@ the data given in the current context and returns it.
 =cut
 
 sub new_Zconn {
-	use ZOOM;
-	my $Zconn;
+use ZOOM;
+my $server=shift;
+my $tried==0;
+my $Zconn;
+my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
+
+retry:
 	eval {
-		$Zconn = new ZOOM::Connection(C4::Context->config("zebradb"));
+		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,
+		preferredRecordSyntax => "USmarc",elementSetName=> "F");
 	};
 	if ($@){
+###Uncomment the lines below if you want to automatically restart your zebra if its stop
+###The system call is for Windows it should be changed to unix deamon starting for Unix platforms	
+#		if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
+#		$tried==1;
+#		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
+#		goto "retry";
+#		}else{
 		warn "Error ", $@->code(), ": ", $@->message(), "\n";
-		die "Fatal error, cant connect to z3950 server";
+		$Zconn="error";
+		return $Zconn;
+#		}
 	}
-	$Zconn->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
-	$Zconn->option(preferredRecordSyntax => "xml");
+	
 	return $Zconn;
 }
-
 
 ## Zebra handler with write permission
 sub new_Zconnauth {
 use ZOOM;
+my $server=shift;
+my $tried==0;
 my $Zconnauth;
-my $option1=new ZOOM::Options();
-$option1->option(user=>$context->{"config"}{"zebrauser"});
-my $option2=new ZOOM::Options();
-$option2->option(password=>$context->{"config"}{"zebrapass"});
-my $opts = new ZOOM::Options($option1,$option2);
-
- $Zconnauth=create ZOOM::Connection($opts);
-
-	eval {
-	$Zconnauth->connect($context->{"config"}{"zebradb"},$context->{"config"}{"zebraport"});
-	};
-	if ($@){	
-		warn "Error-auth ", $@->code(), ": ", $@->message(), "\n";
-		die "Fatal error, cant connect to z3950 server";
-		
+my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
+retry:
+eval{
+ $Zconnauth=new ZOOM::Connection($context->config("hostname"),$port,
+						user=>$context->{"config"}->{"zebrauser"},
+						password=>$context->{"config"}->{"zebrapass"},preferredRecordSyntax => "USmarc",elementSetName=> "F");
+};
+	if ($@){
+###Uncomment the lines below if you want to automatically restart your zebra if its stop
+###The system call is for Windows it should be changed to unix deamon starting for Unix platforms	
+#		if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
+#		$tried==1;
+#		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
+#		goto "retry";
+#		}else{
+		warn "Error ", $@->code(), ": ", $@->message(), "\n";
+		$Zconnauth="error";
+		return $Zconnauth;
+#		}
 	}
-	$Zconnauth->option(preferredRecordSyntax => "XML");
-	$Zconnauth->option(elementSetName=> "F");
-	$Zconnauth->option(cqlfile => C4::Context->config("intranetdir")."/zebra/pqf.properties");
 	return $Zconnauth;
 }
+
+
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
 # returns it.
 sub _new_dbh
 {
-	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
-	my $db_name   = $context->{"config"}{"database"};
-	my $db_host   = $context->{"config"}{"hostname"};
-	my $db_user   = $context->{"config"}{"user"};
-	my $db_passwd = $context->{"config"}{"pass"};
+	##correct name for db_schme		
+	my $db_driver;
+	if ($context->config("db_scheme")){
+	$db_driver=db_scheme2dbi($context->config("db_scheme"));
+	}else{
+	$db_driver="mysql";
+	}
+
+	my $db_name   = $context->config("database");
+	my $db_host   = $context->config("hostname");
+	my $db_user   = $context->config("user");
+	my $db_passwd = $context->config("pass");
 	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
 	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
@@ -826,6 +810,12 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.37  2006/05/13 19:51:39  tgarip1957
+# Now reads koha.xml rather than koha.conf.
+# koha.xml contains both the koha configuration and zebraserver configuration.
+# Zebra connection is modified to allow connection to authority zebra as well.
+# It will break head if koha.conf is not replaced with koha.xml
+#
 # Revision 1.36  2006/05/09 13:28:08  tipaul
 # adding the branchname and the librarian name in every page :
 # - modified userenv to add branchname
