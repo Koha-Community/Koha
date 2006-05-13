@@ -1,0 +1,29 @@
+<yazgfs>
+<listen id="biblioserver" >tcp:@:9900</listen>
+<listen id="authorityserver">tcp:@:2100</listen>
+ <server id="biblioserver"  listenref="biblioserver"> 
+    <directory>e:\zebradbnew2</directory>
+     <config>c:\etc\zebra.cfg</config>
+<cql2rpn>c:\etc\pqf.properties</cql2rpn>
+  </server>
+  <server id="authorityserver"  listenref="authorityserver" > 
+    <directory>e:\zebradbnew</directory>
+ <cql2rpn>C:\etc\pqf.properties</cql2rpn>
+    <config>c:\etc\zebra.cfg</config>
+  </server>
+<config>
+<database>koha2</database>
+<hostname>localhost</hostname>
+<user>kohauser</user>
+<pass>kohapass</pass>
+<zebrauser>zebrauser</zebrauser>
+<zebrapass>zebrapass</zebrapass>
+<zebradb>default</zebradb>
+<authoritydb>default</authoritydb>
+<intranetdir>path/to/koha/intranet</intranetdir>
+<opacdir>path/to/koha/opac</opacdir>
+<opachtdocs>path/to/koha/opac/htdocs/opac-tmpl</opachtdocs>
+<intrahtdocs>path/to/koha/intranet/htdocs/intranet-tmpl</intrahtdocs>
+<includes>path/to/koha/intranet/htdocs/intranet-tmpl/default/en/includes/</includes>
+</config>
+ </yazgfs>
