@@ -311,7 +311,22 @@ sub config
 	# Return the value of the requested config variable
 	return $context->{"config"}->{$var};
 }
+=item zebraconfig
+$serverdir=C4::Context->zebraconfig("biblioserver")->{directory};
 
+returns the zebra server specific details for different zebra servers
+similar to C4:Context->config
+=cut
+
+sub zebraconfig
+{
+	my $self = shift;
+	my $var = shift;		# The config variable to return
+
+	return undef if !defined($context->{"server"});
+	# Return the value of the requested config variable
+	return $context->{"server"}->{$var};
+}
 =item preference
 
   $sys_preference = C4::Context->preference("some_variable");
@@ -810,6 +825,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.38  2006/05/14 00:22:31  tgarip1957
+# Adding support for getting details of different zebra servers
+#
 # Revision 1.37  2006/05/13 19:51:39  tgarip1957
 # Now reads koha.xml rather than koha.conf.
 # koha.xml contains both the koha configuration and zebraserver configuration.
