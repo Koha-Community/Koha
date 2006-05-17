@@ -64,10 +64,26 @@ Also deals with stocktaking.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&getpatroninformation
-	&currentissues &getissues &getiteminformation &renewstatus &renewbook
-	&canbookbeissued &issuebook &returnbook &find_reserves &transferbook &decode
-	&calc_charges &listitemsforinventory &itemseen &fixdate);
+@EXPORT = qw(
+                &getpatroninformation
+                &currentissues
+                &getissues
+                &getiteminformation
+                &renewstatus
+                &renewbook
+                &canbookbeissued
+                &issuebook
+                &returnbook
+                &find_reserves
+                &transferbook
+                &decode
+                &calc_charges
+                &listitemsforinventory
+                &itemseen
+                &fixdate
+                get_return_date_of
+                get_transfert_infos
+        );
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
@@ -1914,6 +1930,41 @@ sub fixdate {
     }
     return ($date, $invalidduedate);
 	
+}
+
+sub get_return_date_of {
+    my (@itemnumbers) = @_;
+
+    my $query = '
+SELECT date_due,
+       itemnumber
+  FROM issues
+  WHERE itemnumber IN ('.join(',', @itemnumbers).')
+';
+    return get_infos_of($query, 'itemnumber', 'date_due');
+}
+
+sub get_transfert_infos {
+    my ($itemnumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT datesent,
+       frombranch,
+       tobranch
+  FROM branchtransfers
+  WHERE itemnumber = ?
+    AND datearrived IS NULL
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute($itemnumber);
+
+    my @row = $sth->fetchrow_array();
+
+    $sth->finish;
+
+    return @row;
 }
 
 1;

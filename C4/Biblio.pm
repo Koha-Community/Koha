@@ -23,10 +23,11 @@ use C4::Context;
 use C4::Database;
 use C4::Date;
 use C4::Search;
+use C4::Koha;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
-use Smart::Comments;
+# use Smart::Comments;
 
 use ZOOM;
 use vars qw($VERSION @ISA @EXPORT);
@@ -82,6 +83,9 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &get_item_from_barcode
   &MARCfind_MARCbibid_from_oldbiblionumber
 
+  get_itemnumbers_of
+  get_iteminfos_of
+  get_biblioiteminfos_of
 );
 
 =head1 NAME
@@ -2020,8 +2024,8 @@ create a biblioitem, the parameter is a hash
 =cut
 
 sub newbiblioitem {
-    my ($dbh, $biblioitem) = @_;
-    #my $dbh        = C4::Context->dbh;
+    my ($biblioitem) = @_;
+    my $dbh        = C4::Context->dbh;
 	# add biblio information to the hash
     my $MARCbiblio = MARCkoha2marcBiblio( $dbh, $biblioitem );
 	$biblioitem->{marc} = $MARCbiblio->as_usmarc();
@@ -2504,6 +2508,7 @@ all copies are lost; otherwise, there is at least one copy available.
 #'
 sub bibitems {
     my ($bibnum) = @_;
+
     my $dbh   = C4::Context->dbh;
     my $sth   = $dbh->prepare("SELECT biblioitems.*,
                         itemtypes.*,
@@ -3049,6 +3054,64 @@ sub DisplayISBN {
 	return "$seg1-$seg2-$seg3-$seg4";
 }
 
+=head2 get_itemnumbers_of
+
+  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
+
+Given a list of biblionumbers, return the list of corresponding itemnumbers
+for each biblionumber.
+
+Return a reference on a hash where keys are biblionumbers and values are
+references on array of itemnumbers.
+
+=cut
+sub get_itemnumbers_of {
+    my @biblionumbers = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT itemnumber,
+       biblionumber
+  FROM items
+  WHERE biblionumber IN (?'.(',?' x scalar @biblionumbers - 1).')
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@biblionumbers);
+
+    my %itemnumbers_of;
+
+    while (my ($itemnumber, $biblionumber) = $sth->fetchrow_array) {
+        push @{$itemnumbers_of{$biblionumber}}, $itemnumber;
+    }
+
+    return \%itemnumbers_of;
+}
+
+sub get_iteminfos_of {
+    my @itemnumbers = @_;
+
+    my $query = '
+SELECT *
+  FROM items
+  WHERE itemnumber IN ('.join(',', @itemnumbers).')
+';
+    return get_infos_of($query, 'itemnumber');
+}
+
+sub get_biblioiteminfos_of {
+    my @biblioitemnumbers = @_;
+
+    my $query = '
+SELECT biblioitemnumber,
+       publicationyear,
+       itemtype
+  FROM biblioitems
+  WHERE biblioitemnumber IN ('.join(',', @biblioitemnumbers).')
+';
+
+    return get_infos_of($query, 'biblioitemnumber');
+}
 
 END { }    # module clean-up code here (global destructor)
 
@@ -3064,6 +3127,50 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.171  2006/05/17 16:06:24  plg
+# New feature from SAN Ouest Provence: ability to reserve a specific item in
+# the intranet. The development was made on branch 2.2 by Arnaud Laurin from
+# Ouest Provence and integrated on HEAD by Pierrick Le Gall from INEO media
+# system.
+#
+# New page reserve/request.pl taking a biblionumber as entry point.
+#
+# New functions:
+#
+# - C4::Biblio::get_iteminfos_of retrieves item informations for a list of
+#   itemnumbers
+#
+# - C4::Biblio::get_biblioiteminfos_of retrieves biblioitem informations for a
+#   list of biblioitemnumbers
+#
+# - C4::Biblio::get_itemnumbers_of retrieve the list of itemnumbers related to
+#   each biblionumber given in argument.
+#
+# - C4::Circulation::Circ2::get_return_date_of retrieves return date for a
+#   list of itemnumbers.
+#
+# - C4::Koha::get_itemtypeinfos_of retrieves the informations related to a
+#   list of itemtypes.
+#
+# - C4::Koha::get_branchinfos_of retrieves the informations related to a list
+#   of branchcodes.
+#
+# - C4::Koha::get_notforloan_label_of retrives the list of status/label for
+#   the authorised_values related to notforloan.
+#
+# - C4::Koha::get_infos_of is the generic function used by all get_*infos_of.
+#
+# - C4::Reserves2::GetNumberReservesFromBorrower
+#
+# - C4::Reserves2::GetFirstReserveDateFromItem
+#
+# Modified functions:
+#
+# - C4::Reserves2::FindReserves was simplified to be more readable.
+#
+# The reservation page is reserve/request.pl and is linked from nowhere as
+# long as zebra is not stable yet on HEAD.
+#
 # Revision 1.170  2006/04/15 02:47:47  tgarip1957
 # Change the MARC Leader to UTF-8 incase user did not set it. Important for Zebra.
 # The new M::F::XML is sensitive to leader settings

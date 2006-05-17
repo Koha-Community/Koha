@@ -52,6 +52,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getbranches &getbranch &getbranchdetail
 			&getprinters &getprinter
 			&getitemtypes &getitemtypeinfo
+                        get_itemtypeinfos_of
 			&getframeworks &getframeworkinfo
 			&getauthtypes &getauthtype
 			&getallthemes &getalllanguages
@@ -62,6 +63,9 @@ Koha.pm provides many functions for Koha scripts.
                         getitemtypeimagesrcfromurl
 			&getcities
 			&getroadtypes
+                        get_branchinfos_of
+                        get_notforloan_label_of
+                        get_infos_of
 			$DEBUG);
 
 use vars qw();
@@ -302,6 +306,21 @@ sub getitemtypes {
 			$itemtypes{$IT->{'itemtype'}}=$IT;
 	}
 	return (\%itemtypes);
+}
+
+# FIXME this function is better and should replace getitemtypes everywhere
+sub get_itemtypeinfos_of {
+    my @itemtypes = @_;
+
+    my $query = '
+SELECT itemtype,
+       description,
+       notforloan
+  FROM itemtypes
+  WHERE itemtype IN ('.join(',', map({"'".$_."'"} @itemtypes)).')
+';
+
+    return get_infos_of($query, 'itemtype');
 }
 
 =head2 getauthtypes
@@ -765,6 +784,124 @@ while (my $data=$sth->fetchrow_hashref){
 		unshift (@id ,"");
 		return(\@id,\%roadtype);
 	}
+}
+
+=head2 get_branchinfos_of
+
+  my $branchinfos_of = get_branchinfos_of(@branchcodes);
+
+Associates a list of branchcodes to the information of the branch, taken in
+branches table.
+
+Returns a href where keys are branchcodes and values are href where keys are
+branch information key.
+
+  print 'branchname is ', $branchinfos_of->{$code}->{branchname};
+
+=cut
+sub get_branchinfos_of {
+    my @branchcodes = @_;
+
+    my $query = '
+SELECT branchcode,
+       branchname
+  FROM branches
+  WHERE branchcode IN ('.join(',', map({"'".$_."'"} @branchcodes)).')
+';
+    return get_infos_of($query, 'branchcode');
+}
+
+=head2 get_notforloan_label_of
+
+  my $notforloan_label_of = get_notforloan_label_of();
+
+Each authorised value of notforloan (information available in items and
+itemtypes) is link to a single label.
+
+Returns a href where keys are authorised values and values are corresponding
+labels.
+
+  foreach my $authorised_value (keys %{$notforloan_label_of}) {
+    printf(
+        "authorised_value: %s => %s\n",
+        $authorised_value,
+        $notforloan_label_of->{$authorised_value}
+    );
+  }
+
+=cut
+sub get_notforloan_label_of {
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT authorised_value
+  FROM marc_subfield_structure
+  WHERE kohafield = \'items.notforloan\'
+  LIMIT 0, 1
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my ($statuscode) = $sth->fetchrow_array();
+
+    $query = '
+SELECT lib,
+       authorised_value
+  FROM authorised_values
+  WHERE category = ?
+';
+    $sth = $dbh->prepare($query);
+    $sth->execute($statuscode);
+    my %notforloan_label_of;
+    while (my $row = $sth->fetchrow_hashref) {
+        $notforloan_label_of{ $row->{authorised_value} } = $row->{lib};
+    }
+    $sth->finish;
+
+    return \%notforloan_label_of;
+}
+
+=head2 get_infos_of
+
+Return a href where a key is associated to a href. You give a query, the
+name of the key among the fields returned by the query. If you also give as
+third argument the name of the value, the function returns a href of scalar.
+
+  my $query = '
+SELECT itemnumber,
+       notforloan,
+       barcode
+  FROM items
+';
+
+  # generic href of any information on the item, href of href.
+  my $iteminfos_of = get_infos_of($query, 'itemnumber');
+  print $iteminfos_of->{$itemnumber}{barcode};
+
+  # specific information, href of scalar
+  my $barcode_of_item = get_infos_of($query, 'itemnumber', 'barcode');
+  print $barcode_of_item->{$itemnumber};
+
+=cut
+sub get_infos_of {
+    my ($query, $key_name, $value_name) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+
+    my %infos_of;
+    while (my $row = $sth->fetchrow_hashref) {
+        if (defined $value_name) {
+            $infos_of{ $row->{$key_name} } = $row->{$value_name};
+        }
+        else {
+            $infos_of{ $row->{$key_name} } = $row;
+        }
+    }
+    $sth->finish;
+
+    return \%infos_of;
 }
 
 1;

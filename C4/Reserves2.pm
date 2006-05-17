@@ -66,6 +66,8 @@ FIXME
     &UpdateReserve
     &getreservetitle
     &Findgroupreserve
+    GetFirstReserveDateFromItem
+    GetNumberReservesFromBorrower
 );
 
 # make all your functions, whether exported or not;
@@ -93,79 +95,123 @@ C<&FindReserves> returns a two-element array:
 
 C<$count> is the number of elements in C<$results>.
 
-C<$results> is a reference-to-array; each element is a
-reference-to-hash, whose keys are (I think) all of the fields of the
-reserves, borrowers, and biblio tables of the Koha database.
+C<$results> is a reference to an array of references of hashes. Each hash
+has for keys a list of column from reserves table (see details in function).
 
 =cut
 #'
 sub FindReserves {
-	my ($bib,$bor)=@_;
-	my $dbh = C4::Context->dbh;
-	# Find the desired items in the reserves
-	my $query="SELECT *,reserves.branchcode,biblio.title AS btitle, reserves.timestamp as rtimestamp FROM reserves,borrowers,biblio ";
-	# FIXME - These three bits of SQL seem to contain a fair amount of
-	# redundancy. Wouldn't it be better to have a @clauses array, add
-	# one or two clauses as necessary, then join(" AND ", @clauses) ?
-	# FIXME: not keen on quote() and interpolation either, but it looks safe
-	if ($bib ne ''){
-		$bib = $dbh->quote($bib);
-		if ($bor ne ''){
-			# Both $bib and $bor specified
-			# Find a particular book for a particular patron
-			$bor = $dbh->quote($bor);
-			$query .=  " where reserves.biblionumber   = $bib
-						and borrowers.borrowernumber = $bor
-						and reserves.borrowernumber = borrowers.borrowernumber
-						and biblio.biblionumber     = $bib
-						and cancellationdate is NULL
-						and (found <> 'F' or found is NULL)";
-		} else {
-			# $bib specified, but not $bor
-			# Find a particular book for all patrons
-			$query .= " where reserves.borrowernumber = borrowers.borrowernumber
-					and biblio.biblionumber     = $bib
-					and reserves.biblionumber   = $bib
-					and cancellationdate is NULL
-					and (found <> 'F' or found is NULL)";
-		}
-	} else {
-		# FIXME - Check that $bor was given
-		# No $bib given.
-		# Find all books for the given patron.
-		$query .= " where borrowers.borrowernumber = $bor
-					and reserves.borrowernumber  = borrowers.borrowernumber
-					and reserves.biblionumber    = biblio.biblionumber
-					and cancellationdate is NULL and
-					(found <> 'F' or found is NULL)";
-	}
-	$query.=" order by priority";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-		# FIXME - What is this if-statement doing? How do constraints work?
-		if ($data->{'constrainttype'} eq 'o') {
-			my $csth=$dbh->prepare("SELECT biblioitemnumber FROM reserveconstraints
-							WHERE biblionumber   = ?
-							AND borrowernumber = ?
-							AND reservedate    = ?");
-			$csth->execute($data->{'biblionumber'}, $data->{'borrowernumber'}, $data->{'reservedate'});
-			my ($bibitemno) = $csth->fetchrow_array;
-			$csth->finish;
-			# Look up the book we just found.
-			my $bdata = bibitemdata($bibitemno);
-			# Add the results of this latest search to the current
-			# results.
-			# FIXME - An 'each' would probably be more efficient.
-			foreach my $key (keys %$bdata) {
-				$data->{$key} = $bdata->{$key};
-			}
-		}
-		push @results, $data;
-	}
-	$sth->finish;
-	return($#results+1,\@results);
+    my ($bib, $bor) = @_;
+    my $dbh = C4::Context->dbh;
+    my @bind;
+
+    # Find the desired items in the reserves
+    my $query = '
+SELECT branchcode,
+       timestamp AS rtimestamp,
+       priority,
+       biblionumber,
+       borrowernumber,
+       reservedate,
+       constrainttype,
+       found
+  FROM reserves
+  WHERE cancellationdate IS NULL
+    AND	(found <> \'F\' OR found IS NULL)
+';
+
+    if ($bib ne '') {
+        $query.= '
+    AND biblionumber = ?
+';
+        push @bind, $bib;
+    }
+
+    if ($bor ne '') {
+        $query.= '
+    AND borrowernumber = ?
+';
+        push @bind, $bor;
+    }
+
+    $query.= '
+  ORDER BY priority
+';
+    my $sth=$dbh->prepare($query);
+    $sth->execute(@bind);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref){
+        # FIXME - What is this if-statement doing? How do constraints work?
+        if ($data->{constrainttype} eq 'o') {
+            $query = '
+SELECT biblioitemnumber
+  FROM reserveconstraints
+  WHERE biblionumber   = ?
+    AND borrowernumber = ?
+    AND reservedate    = ?
+';
+            my $csth=$dbh->prepare($query);
+            $csth->execute(
+                $data->{biblionumber},
+                $data->{borrowernumber},
+                $data->{reservedate},
+            );
+            my ($bibitemno) = $csth->fetchrow_array;
+            $csth->finish;
+            # Look up the book we just found.
+            my $bdata = bibitemdata($bibitemno);
+            # Add the results of this latest search to the current
+            # results.
+            # FIXME - An 'each' would probably be more efficient.
+            foreach my $key (keys %$bdata) {
+                $data->{$key} = $bdata->{$key};
+            }
+        }
+        push @results, $data;
+    }
+    $sth->finish;
+
+    return($#results+1,\@results);
+}
+
+sub GetNumberReservesFromBorrower {
+    my ($borrowernumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT COUNT(*) AS counter
+  FROM reserves
+  WHERE borrowernumber = ?
+    AND cancellationdate IS NULL
+    AND (found != \'F\' OR found IS NULL)
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my $row = $sth->fetchrow_hashref;
+    $sth->finish;
+
+    return $row->{counter};
+}
+
+sub GetFirstReserveDateFromItem {
+    my ($itemnumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT reservedate
+  FROM reserves
+  WHERE itemnumber = ?
+    AND cancellationdate IS NULL
+    AND (found != \'F\' OR found IS NULL)
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute($itemnumber);
+    my $row = $sth->fetchrow_hashref;
+    $sth->finish;
+
+    return $row->{reservedate};
 }
 
 =item CheckReserves
