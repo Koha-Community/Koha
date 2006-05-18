@@ -19,6 +19,7 @@
 			<th>Suggestion</th>
 			<th>Suggested by</th>
 			<th>Accepted by</th>
+			<th>Duplicate</th>
 			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
@@ -39,6 +40,12 @@
 				</td>
 				<td>
 					<!-- TMPL_VAR NAME="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="duplicateBiblionumber" -->
+						<a href="#" onclick="window.open('/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicateBiblionumber" -->')">Duplicate suspected</a>
+						<a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR name="supplierid" -->&amp;basketno=<!-- TMPL_VAR name="basketno"-->&amp;op=connectDuplicate&amp;duplicateNumber=<!-- TMPL_VAR name="duplicateBiblionumber" -->&amp;suggestionid=<!-- TMPL_VAR name="suggestionid" -->">Connect</a>
+					<!-- /TMPL_IF -->
 				</td>
 				<td>
 					<!-- TMPL_IF name="biblionumber" -->
