@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
+use C4::Koha;
 # use Net::LDAP;
 # use Net::LDAP qw(:all);
 
@@ -307,6 +308,7 @@ sub checkauth {
 					$hash{branchname},
 					$hash{flags},
 					$hash{emailaddress},
+					$hash{branchprinter}
 				);
 		}
 		my ($ip , $lasttime);
@@ -391,22 +393,40 @@ sub checkauth {
 					C4::Context->_unset_userenv($sessionID);
 			}
 			if ($return == 1){
-				my ($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$emailaddress);
-				my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?");
+				my ($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$branchprinter,$emailaddress);
+				my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?");
 				$sth->execute($userid);
-				($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$emailaddress) = $sth->fetchrow if ($sth->rows);
+				($bornum,$firstname,$surname,$userflags,$branchcode,$branchname,$branchprinter,$emailaddress) = $sth->fetchrow if ($sth->rows);
 # 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				unless ($sth->rows){
-					my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?");
+					my $sth=$dbh->prepare("select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?");
 					$sth->execute($cardnumber);
-					($bornum,$firstname,$surname,$userflags,$branchcode,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+					($bornum,$firstname,$surname,$userflags,$branchcode,$branchcode,$branchprinter, $emailaddress) = $sth->fetchrow if ($sth->rows);
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 					unless ($sth->rows){
 						$sth->execute($userid);
-						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
+						($bornum,$firstname,$surname,$userflags,$branchcode,$branchprinter,$emailaddress) = $sth->fetchrow if ($sth->rows);
 					}
 # 					warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
 				}
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+#  new op dev :
+# launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
+	my $ip = $ENV{'REMOTE_ADDR'};
+	my $branches = getbranches();
+	my @branchesloop;
+	my $branchprinter;
+	foreach my $br (keys %$branches) {
+# 		now we work with the treatment of ip
+		my $domain=$branches->{$br}->{branchip};
+		if ($domain && $ip =~ /^$domain/){
+			$branchcode = $branches->{$br}->{'branchcode'};
+# 			new op dev : add the branchprinter and branchname in the cookie
+			$branchprinter = $branches->{$br}->{'branchprinter'};
+			$branchname = $branches->{$br}->{'branchname'};
+		}
+	}
+
 				my $hash = C4::Context::set_userenv(
 					$bornum,
 					$userid,
@@ -417,8 +437,9 @@ sub checkauth {
 					$branchname,
 					$userflags,
 					$emailaddress,
+					$branchprinter,
 				);
-# 				warn "$cardnumber,$bornum,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+
 				$envcookie=$query->cookie(-name => 'userenv',
 						-value => $hash,
 						-expires => '');

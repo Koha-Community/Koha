@@ -744,7 +744,7 @@ set_userenv is called in Auth.pm
 =cut
 #'
 sub set_userenv{
-	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress)= @_;
+	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress,$branchprinter)= @_;
 	my $var=$context->{"activeuser"};
 	my $cell = {
 		"number"     => $usernum,
@@ -757,6 +757,7 @@ sub set_userenv{
 		"branchname" => $branchname,
 		"flags"      => $userflags,
 		"emailaddress"	=> $emailaddress,
+		"branchprinter" => $branchprinter,
 	};
 	$context->{userenv}->{$var} = $cell;
 	return $cell;
@@ -825,6 +826,14 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.39  2006/05/19 09:52:54  alaurin
+# committing new feature ip and printer management
+# adding two fields in branches table (branchip,branchprinter)
+#
+# branchip : if the library enter an ip or ip range any librarian that connect from computer in this ip range will be temporarly affected to the corresponding branch .
+#
+# branchprinter : the library  can select a default printer for a branch
+#
 # Revision 1.38  2006/05/14 00:22:31  tgarip1957
 # Adding support for getting details of different zebra servers
 #

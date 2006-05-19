@@ -57,6 +57,21 @@
 		<td>E-mail</td>
 		<td><input type="text" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></td>
 	</tr>
+	<tr>
+		<td>Branch IP</td>
+		<td><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /></td>
+	</tr>
+	<tr>
+		<td>Branch Printer</td>
+		<td>	
+			<select id="branchprinter" name="branchprinter">
+				<option value="">None</option>
+			<!-- TMPL_LOOP NAME="printerloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchprinter" --></option>
+				<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
 </table><p><input type="submit" value="Submit" /></p>
 </form>
 <!-- /TMPL_IF -->
@@ -84,6 +99,8 @@
 			<th>Code</th>
 			<th>Address</th>
 			<th>Category</th>
+			<th>Branch IP</th>
+			<th>Branch Printer</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 		</tr>
@@ -117,6 +134,12 @@
 							<!-- TMPL_VAR name="categoryname" --><br />
 						<!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="branchip" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="branchprinter" -->
 				</td>
 				<td>
 					<form action="<!-- TMPL_VAR name=action -->" method="post">

@@ -51,6 +51,7 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Koha;
 
 # Fixed variables
 my $linecolor1='#ffffcc';
@@ -66,7 +67,7 @@ my $input = new CGI;
 my $branchcode=$input->param('branchcode');
 my $branchname=$input->param('branchname');
 my $categorycode = $input->param('categorycode');
-my $op = $input->param('op') || '';
+my $op = $input->param('op');
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/branches.tmpl",
@@ -166,7 +167,7 @@ if ($op eq 'add') {
 # html output functions....
 
 sub default {
-	my ($message) = @_ || "";
+	my ($message) = @_;
 	heading("Branches");
 	$template->param('heading-branches-p' => 1);
 	$template->param("$message" => 1);
@@ -182,11 +183,33 @@ sub heading {
 
 sub editbranchform {
 	# prepares the edit form...
+
+# initiate the scrolling-list to select the printers
+	my %env;
+	my $printers=getprinters(\%env);
+	my @printerloop;
+	my $printercount=0;
+	my $oldprinter;
+	my $CGIprinter;
 	my ($branchcode) = @_;
 	my $data;
+	
 	if ($branchcode) {
 		$data = getbranchinfo($branchcode);
 		$data = $data->[0];
+	# get the old printer of the branch
+		$oldprinter = $data->{'branchprinter'}; 
+# 	printer loop
+		foreach my $thisprinter (keys %$printers) {
+			my $selected = 1 if $oldprinter eq $printers->{$thisprinter}->{'printqueue'};
+			my %row =(value => $thisprinter,
+					selected => $selected,
+					branchprinter => $printers->{$thisprinter}->{'printername'},
+			);
+		push @printerloop, \%row;
+		}
+		
+		$template->param(printerloop => \@printerloop );
 		$template->param(branchcode => $data->{'branchcode'});
 		$template->param(branchname => $data->{'branchname'});
 		$template->param(branchaddress1 => $data->{'branchaddress1'});
@@ -195,7 +218,19 @@ sub editbranchform {
 		$template->param(branchphone => $data->{'branchphone'});
 		$template->param(branchfax => $data->{'branchfax'});
 		$template->param(branchemail => $data->{'branchemail'});
-    }
+		$template->param(branchip => $data->{'branchip'});
+    	}
+	else {
+# on add new branch mode, simple scrolling list
+		$CGIprinter=CGI::scrolling_list( -name     => 'branchprinter',
+		-id => 'branchprinter',
+		-values   => \@printerloop,
+		-size     => 1,
+		-multiple => 0 );	
+
+	}
+#  sending the cgiprinter to the template
+# 		$template->param(printerloop => $CGIprinter);
 
     # make the checkboxs.....
     #
@@ -261,7 +296,7 @@ sub branchinfotable {
 		$branchinfo = getbranchinfo();
 	}
 	my $toggle;
-	my $i=0;
+	my $i;
 	my @loop_data =();
 	foreach my $branch (@$branchinfo) {
 		($i % 2) ? ($toggle = 1) : ($toggle = 0);
@@ -292,7 +327,7 @@ sub branchinfotable {
 		# Handle address fields separately
 		my $address_empty_p = 1;
 		for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
-			'branchphone', 'branchfax', 'branchemail') {
+			'branchphone', 'branchfax', 'branchemail', 'branchip', 'branchprinter') {
 			$row{$field} = $branch->{$field};
 			if ( $branch->{$field} ) {
 				$address_empty_p = 0;
@@ -329,6 +364,8 @@ sub branchinfotable {
 	}
 	my @branchcategories =();
 	my $catinfo = getcategoryinfo();
+	my $toggle;
+	my $i = 0;
 	foreach my $cat (@$catinfo) {
 		($i % 2) ? ($toggle = 1) : ($toggle = 0);
 		push @branchcategories, {
@@ -421,11 +458,11 @@ sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
 	my ($data) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,branchip,branchprinter) values (?,?,?,?,?,?,?,?,?,?)");
 	$sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
 		$data->{'branchaddress1'}, $data->{'branchaddress2'},
 		$data->{'branchaddress3'}, $data->{'branchphone'},
-		$data->{'branchfax'}, $data->{'branchemail'});
+		$data->{'branchfax'}, $data->{'branchemail'}, $data->{'branchip'},$data->{'branchprinter'});
 
 	$sth->finish;
 	# sort out the categories....
