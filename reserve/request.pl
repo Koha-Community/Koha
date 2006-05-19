@@ -56,7 +56,6 @@ my ($template, $borrowernumber, $cookie)
 
 # get biblio information....
 my $bib = $input->param('bib');
-warn '[Debub Pierrick] $bib: ', $bib;
 my $dat = bibdata($bib);
 
 # Select borrowers infos
@@ -263,6 +262,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
         if (defined $reservedate) {
             $item->{backgroundcolor} = 'reserved';
+            $item->{reservedate} = format_date($reservedate);
         }
 
         # Management of the notforloan document

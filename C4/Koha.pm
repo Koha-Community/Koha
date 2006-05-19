@@ -57,6 +57,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getauthtypes &getauthtype
 			&getallthemes &getalllanguages
 			&getallbranches &getletters
+			&getbranchname
                         getnbpages
                         getitemtypeimagedir
                         getitemtypeimagesrc
@@ -149,6 +150,18 @@ sub getbranches {
 	return (\%branches);
 }
 
+sub getbranchname {
+	my ($branchcode)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+   	$sth = $dbh->prepare("Select branchname from branches where branchcode=?");
+	$sth->execute($branchcode);
+	my $branchname = $sth->fetchrow_array;
+	$sth->finish;
+	
+	return($branchname);
+}
+
 =head2 getallbranches
 
   $branches = &getallbranches();
@@ -179,6 +192,7 @@ foreach my $thisbranch (keys %$branches) {
 			</select>
 
 =cut
+
 
 sub getallbranches {
 # returns a reference to a hash of references to ALL branches...

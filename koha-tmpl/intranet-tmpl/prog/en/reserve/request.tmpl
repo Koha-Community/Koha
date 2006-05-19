@@ -3,6 +3,55 @@ Koha -- Circulation
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 
+<script language="JavaScript">
+function check() {
+	var msg = "";
+	var count_reserv = 0;
+	var alreadyreserved = 0;
+
+// check if we have checkitem form
+if (document.form.checkitem){
+	for (i=0;i<document.form.checkitem.length;i++){
+		if (document.form.checkitem[i].checked == true) {
+				count_reserv++ ;
+			}
+	}
+	// for only one item, check the checkitem without consider the loop checkitem
+	if (i==0){
+		if (document.form.checkitem.checked == true) {
+			count_reserv++;
+		}
+	}
+}
+
+if (document.form.request.checked == true){
+		count_reserv++ ;
+}
+
+if (document.form.alreadyreserved.value == "1"){
+		 alreadyreserved++ ;
+}
+
+if (count_reserv == "0"){
+		msg += _("- Please select a document to reserve\n");
+}
+if (count_reserv >= "2"){
+		msg += _("- You can select only one type of document\n by item, or by the first item returned\n");
+}
+
+if (alreadyreserved > "0"){
+		msg += _("- This borrower had already reserved this document\n Please cancel the previous reserve first \n");
+}
+
+	if (msg == "") return(true);
+	else	{
+		alert(msg);
+		return(false);
+	}
+}
+</script>
+
+
 <h1>Request for reserve</h1>
 
 <fieldset>
@@ -28,12 +77,14 @@ Koha -- Circulation
     </table>
 
     <div id="action">
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="bib"-->">
      <input type="submit" value="Search">
     </div>
   <!-- TMPL_ELSE -->
     <!-- TMPL_VAR NAME="CGIselectborrower" -->
 
     <div id="action">
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="bib"-->">
      <input type="submit" value="Select">
     </div>
   <!-- /TMPL_UNLESS -->
@@ -61,19 +112,19 @@ Koha -- Circulation
     <!-- TMPL_IF NAME="diffbranch" -->			
     <p class="problem">
       <label class="label100"><u>Localisation</u></label>
-      Le lecteur n'est pas dans sa bibliothèque d'appartenance
+      The borrower isn't in is own library
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="alreadyreserved" -->			
     <p class="problem">
-      <label class="label100"><u>Opération impossible</u></label>
-      Ce lecteur a déjà fait une demande de réservation pour ce document
+      <label class="label100"><u>Operation can be make</u></label>
+      This borrower had already make a reserv for this document
     </p>
     <!-- /TMPL_IF -->
 
   <!-- TMPL_IF NAME="messageborrower" -->
-    <div class="problem">attention, il n'y a pas de lecteur à ce nom, veuillez en saisir un autre </div> 
+    <div class="problem">Carrefull,there is no borrower with this name, Please, try an other </div> 
   <!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
 
@@ -125,7 +176,7 @@ Koha -- Circulation
 
       <tr>
         <th>
-          <label>Lieu de retrait</label>
+          <label>Place of retreat</label>
         </th>
         <td>
           <!-- TMPL_VAR NAME="CGIbranch" -->
@@ -180,16 +231,16 @@ Koha -- Circulation
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="message" -->
-          Ne peut être sélectionné (Document perdu ou en grand retard)
+          Cant' be selected (lost or long overdue)
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="notforloan" -->
-          Ce document, n'est pas prêtable (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+          This document is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="transfertwhen" -->
-          Document en tranfert du site : <!-- TMPL_VAR NAME="transfertfrom" -->,
-          vers : <!-- TMPL_VAR NAME="transfertto" -->, le : <!-- TMPL_VAR NAME="transfertwhen" -->
+          Document in transfer from the library : <!-- TMPL_VAR NAME="transfertfrom" -->,
+          to : <!-- TMPL_VAR NAME="transfertto" -->, the : <!-- TMPL_VAR NAME="transfertwhen" -->
     <!-- /TMPL_IF -->
         </td>
       </tr>
@@ -236,10 +287,10 @@ Koha -- Circulation
       <tr>
         <td>
           <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-          <input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+          <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
-            <option value="W" selected>En attente</option>
+            <option value="W" selected>Waiting</option>
     <!-- /TMPL_IF -->
               
     <!-- TMPL_LOOP Name="optionloop" -->
@@ -247,17 +298,17 @@ Koha -- Circulation
               <!-- TMPL_VAR NAME="num" -->
             </option>
     <!-- /TMPL_LOOP -->
-            <option value="del">Sup</option>
+            <option value="del">del</option>
           </select>
         </td>
         <td>
-          <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+          <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowernumber" --></a>
         </td>
         <td><!-- TMPL_VAR NAME="notes" --></td>
         <td><!-- TMPL_VAR NAME="date" --></td>
         <td>
     <!-- TMPL_IF Name="wait" -->
-          Exemplaire en attente à <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+          Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
     <!-- TMPL_ELSE -->
           <select name="pickup">
       <!-- TMPL_LOOP Name="branchloop" -->
@@ -279,20 +330,20 @@ Koha -- Circulation
           </a>
     <!-- TMPL_ELSE -->
       <!-- TMPL_IF Name="constrainttypea" -->
-          <i>Suivant Disponible</i>
+          <i>Next available</i>
       <!-- TMPL_ELSE -->
         <!-- TMPL_IF Name="constrainttypeo" -->
-          Uniquement ce type :<b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>
+          only this type :<b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>
         <!-- /TMPL_IF -->
       <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
         </td>
       </tr>
-  <!-- /TMPL_LOOP --> <!-- reserveloop -->
+  <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
       <tr>
         <td colspan="6" align="right">
-          Supprimer une réservation en sélectionnant
-          <input type="image" name="submit" value="Réservation" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2rightarrow.png">
+          Cancel a reserve with select
+          <input type="image" name="submit" value="Reserv" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2rightarrow.png">
         </td>
       </tr>
     </table>

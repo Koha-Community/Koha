@@ -23,10 +23,12 @@
 
 use strict;
 #use DBI;
+use C4::Search;
 use C4::Biblio;
 use CGI;
 use C4::Output;
 use C4::Reserves2;
+use C4::Circulation::Circ2;
 use C4::Members;
 
 my $input = new CGI;
@@ -34,7 +36,7 @@ my $input = new CGI;
 
 my @bibitems=$input->param('biblioitem');
 my @reqbib=$input->param('reqbib');
-my $biblionumber=$input->param('biblionumber');
+my $biblio=$input->param('biblio');
 my $borrower=$input->param('member');
 my $notes=$input->param('notes');
 my $branch=$input->param('pickup');
@@ -42,6 +44,26 @@ my @rank=$input->param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
 my $bornum=borrdata($borrower,'');
+# Nouveau developpement
+my $checkitem=$input->param('checkitem');
+# my $priority;
+my $found;
+
+#new op : if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found .
+if ($checkitem ne ''){
+		$rank[0] = '0';
+		my %env;
+		my $item = $checkitem;
+		$item = getiteminformation(\%env,$item);
+		if ( $item->{'holdingbranch'} eq $branch ){
+		$found = 'W';	
+		}
+
+
+}
+
+# END of new op .
+
 if ($type eq 'str8' && $bornum ne ''){
 	my $count=@bibitems;
 	@bibitems=sort @bibitems;
@@ -59,15 +81,15 @@ if ($type eq 'str8' && $bornum ne ''){
 	my $const;
 	if ($input->param('request') eq 'any'){
 	$const='a';
-	CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblionumber,$const,\@realbi,$rank[0],$notes,$title);
+  CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblio,$const,\@realbi,$rank[0],$notes,$title,$checkitem,$found);
 	} elsif ($reqbib[0] ne ''){
 	$const='o';
-	CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblionumber,$const,\@reqbib,$rank[0],$notes,$title);
+  CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblio,$const,\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
 	} else {
-	CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title);
+  CreateReserve(\$env,$branch,$bornum->{'borrowernumber'},$biblio,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
 	}
 	
-	print $input->redirect("request.pl?biblionumber=$biblionumber");
+print $input->redirect("request.pl?bib=$biblio");
 } elsif ($bornum eq ''){
 	print $input->header();
 	print "Invalid card number please try again";
