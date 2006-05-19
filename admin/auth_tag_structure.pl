@@ -73,7 +73,7 @@ foreach my $thisauthtype (keys %$authtypes) {
 my $sth;
 # check that authtype framework is defined in auth_tag_structure if we are on a default action
 if (!$op or $op eq 'authtype_create_confirm') {
-warn "IN";
+#warn "IN";
 	$sth=$dbh->prepare("select count(*) from auth_tag_structure where authtypecode=?");
 	$sth->execute($authtypecode);
 	my ($authtypeexist) = $sth->fetchrow;
@@ -204,7 +204,7 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	# here, $op can be unset or set to "authtype_create_confirm".
-	warn "authtype : $authtypecode";
+#	warn "authtype : $authtypecode";
 	if  ($searchfield ne '') {
 		 $template->param(searchfield => $searchfield);
 	}
@@ -279,19 +279,19 @@ sub StringSearch  {
 #
 sub duplicate_auth_framework {
 	my ($newauthtype,$oldauthtype) = @_;
-	warn "TO $newauthtype FROM $oldauthtype";
+#	warn "TO $newauthtype FROM $oldauthtype";
 	my $sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where authtypecode=?");
 	$sth->execute($oldauthtype);
-	my $sth_insert = $dbh->prepare("insert into auth_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, authtypecode) values (?,?,?,?,?,?,?)");
+	my $sth_insert = $dbh->prepare("insert into auth_tag_structure  (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, authtypecode) values (?,?,?,?,?,?,?)");
 	while ( my ($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value) = $sth->fetchrow) {
 		$sth_insert->execute($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value,$newauthtype);
 	}
 
-	$sth = $dbh->prepare("select authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,seealso from auth_subfield_structure where authtypecode=?");
+	$sth = $dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,value_builder,seealso,hidden,link from auth_subfield_structure where authtypecode=?");
 	$sth->execute($oldauthtype);
-	$sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?)");
-	while ( my ($authtypecode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $seealso) = $sth->fetchrow) {
-		$sth_insert->execute($newauthtype, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $seealso);
+	$sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,value_builder,seealso,hidden,link) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	while ( my ( $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield,$tab, $authorised_value, $thesaurus_category, $seealso,$hidden,$link) = $sth->fetchrow) {
+		$sth_insert->execute($newauthtype, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory,$kohafield, $tab, $authorised_value, $thesaurus_category, $seealso,$hidden,$link);
 	}
 }
 
