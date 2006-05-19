@@ -1,4 +1,5 @@
 <script language="JavaScript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }

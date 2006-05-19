@@ -83,8 +83,13 @@ Also deals with stocktaking.
                 &fixdate
                 get_return_date_of
                 get_transfert_infos
+		&checktransferts
+		&GetReservesForBranch
+		&GetReservesToBranch
+		&GetTransfersFromBib
+		&getBranchIp
+		&dotranfer
         );
-
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
 =head2 itemseen
@@ -503,11 +508,11 @@ sub transferbook {
 	my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
 	if ($resfound and not $ignoreRs) {
 		$resrec->{'ResFound'} = $resfound;
-		$messages->{'ResFound'} = $resrec;
-		$dotransfer = 0;
+# 		$messages->{'ResFound'} = $resrec;
+		$dotransfer = 1;
 	}
-	#actually do the transfer....
-	if ($dotransfer) {
+
+	if ($dotransfer and not $resfound) {
 		dotransfer($iteminformation->{'itemnumber'}, $fbr, $tbr);
 		$messages->{'WasTransfered'} = 1;
 	}
@@ -524,10 +529,10 @@ sub dotransfer {
 	$fbr = $dbh->quote($fbr);
 	$tbr = $dbh->quote($tbr);
 	#new entry in branchtransfers....
-	$dbh->do("INSERT INTO	branchtransfers (itemnumber, frombranch, datearrived, tobranch)
+	$dbh->do("INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
 					VALUES ($itm, $fbr, now(), $tbr)");
 	#update holdingbranch in items .....
-	$dbh->do("UPDATE items set holdingbranch = $tbr WHERE	items.itemnumber = $itm");
+	$dbh->do("UPDATE items set holdingbranch = $tbr WHERE items.itemnumber = $itm");
 	&itemseen($itm);
 	&domarctransfer($dbh,$itm);
 	return;
@@ -897,7 +902,7 @@ sub issuebook {
     				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
                 }
 			} elsif ($restype eq "Reserved") {
-				warn "Reserved";
+# 				warn "Reserved";
 				# The item is on reserve for someone else.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
@@ -914,7 +919,7 @@ sub issuebook {
 				} else {
 # 					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
 # 					transferbook($tobrcd,$barcode, 1);
-					warn "transferbook";
+# 					warn "transferbook";
 				}
 			}
 		}
@@ -934,8 +939,8 @@ sub issuebook {
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;
 		$iteminformation->{'issues'}++;
-		$sth=$dbh->prepare("update items set issues=? where itemnumber=?");
-		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
+		$sth=$dbh->prepare("update items set issues=?, holdingbranch=? where itemnumber=?");
+		$sth->execute($iteminformation->{'issues'},C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});
 		$sth->finish;
 		&itemseen($iteminformation->{'itemnumber'});
 	        itemborrowed($iteminformation->{'itemnumber'});
@@ -1092,28 +1097,64 @@ sub returnbook {
 		$messages->{'wthdrawn'} = 1;
 		$doreturn = 0;
 	}
+# 	new op dev : if the book returned in an other branch update the holding branch
+	
 	# update issues, thereby returning book (should push this out into another subroutine
 	my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 	if ($doreturn) {
 		my $sth = $dbh->prepare("update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)");
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+
+# 	FIXME the holdingbranch is updated if the document is returned in an other location .		
+		if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'}){
+		my $sth_upd_location = $dbh->prepare("UPDATE items SET holdingbranch=? WHERE itemnumber=?");
+		$sth_upd_location->execute(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});
+		$sth_upd_location->finish;
+		$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+		}
+
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	}
 	itemseen($iteminformation->{'itemnumber'});
 	($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 	# transfer book to the current branch
-	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
-	if ($transfered) {
-		$messages->{'WasTransfered'} = 1; # FIXME is the "= 1" right?
-	}
+
+# FIXME function transfered still always used ????
+# 	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
+# 	if ($transfered) {
+# 		$messages->{'WasTransfered'} = 1; # FIXME is the "= 1" right?
+# 	}
+
 	# fix up the accounts.....
 	if ($iteminformation->{'itemlost'}) {
 		fixaccountforlostandreturned($iteminformation, $borrower);
 		$messages->{'WasLost'} = 1; # FIXME is the "= 1" right?
 	}
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 	check if we have a transfer for this document
+	my $checktransfer = checktransferts($iteminformation->{'itemnumber'});
+# 	if we have a return, we update the line of transfers with the datearrived
+	if ($checktransfer){
+		my $sth = $dbh->prepare("update branchtransfers set datearrived = now() where itemnumber= ? AND datearrived IS NULL");
+		$sth->execute($iteminformation->{'itemnumber'});
+		$sth->finish;
+# 		now we check if there is a reservation with the validate of transfer if we have one, we can 		set it with the status 'W'
+		my $updateWaiting = SetWaitingStatus($iteminformation->{'itemnumber'});
+	}
+#	if we don't have a transfer on run, we check if the document is not in his homebranch and there is not a reservation, we transfer this one to his home branch directly .
+	else {
+	# 	new op dev
+		my $checkreserves = CheckReserves($iteminformation->{'itemnumber'});
+		if (($iteminformation->{'homebranch'} ne $iteminformation->{'holdingbranch'}) and (not $checkreserves)){
+			my $automatictransfer = dotransfer($iteminformation->{'itemnumber'},$iteminformation->{'holdingbranch'},$iteminformation->{'homebranch'});
+			$messages->{'WasTransfered'} = 1;
+		}
+	}
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 	# fix up the overdues in accounts...
 	fixoverduesonreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 	# find reserves.....
+# 	if we don't have a reserve with the status W, we launch the Checkreserves routine
 	my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
 	if ($resfound) {
 	#	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
@@ -1967,6 +2008,87 @@ SELECT datesent,
     return @row;
 }
 
+
+sub DeleteTransfer {
+	my($itemnumber) = @_;
+	my $dbh = C4::Context->dbh;
+    	my $sth=$dbh->prepare("DELETE FROM branchtransfers
+	where itemnumber=?
+	AND datearrived is null ");
+	$sth->execute($itemnumber);
+	$sth->finish;
+}
+
+sub GetTransfersFromBib {
+	my($frombranch,$tobranch) = @_;
+	my $dbh = C4::Context->dbh;
+    	my $sth=$dbh->prepare("SELECT itemnumber,datesent,frombranch FROM
+	 branchtransfers 
+	where frombranch=?
+	AND tobranch=? 
+	AND datearrived is null ");
+	$sth->execute($frombranch,$tobranch);
+	my @gettransfers;
+	my $i=0;
+	while (my $data=$sth->fetchrow_hashref){
+		$gettransfers[$i]=$data;
+		$i++;
+    	}
+    	$sth->finish;
+    	return(@gettransfers);	
+}
+
+sub GetReservesToBranch {
+	my($frombranch,$default) = @_;
+	my $dbh = C4::Context->dbh;
+    	my $sth=$dbh->prepare("SELECT borrowernumber,reservedate,itemnumber,timestamp FROM
+	 reserves 
+	where priority='0' AND cancellationdate is null  
+	AND branchcode=?
+	AND branchcode!=?
+	AND found is null ");
+	$sth->execute($frombranch,$default);
+	my @transreserv;
+	my $i=0;
+	while (my $data=$sth->fetchrow_hashref){
+		$transreserv[$i]=$data;
+		$i++;
+    	}
+    	$sth->finish;
+    	return(@transreserv);	
+}
+
+sub GetReservesForBranch {
+	my($frombranch) = @_;
+	my $dbh = C4::Context->dbh;
+    	my $sth=$dbh->prepare("SELECT borrowernumber,reservedate,itemnumber,waitingdate FROM
+	 reserves 
+	where priority='0' AND cancellationdate is null 
+	AND found='W' 
+	AND branchcode=? order by reservedate");
+	$sth->execute($frombranch);
+	my @transreserv;
+	my $i=0;
+	while (my $data=$sth->fetchrow_hashref){
+		$transreserv[$i]=$data;
+		$i++;
+    	}
+    	$sth->finish;
+    	return(@transreserv);	
+}
+
+sub checktransferts{
+	my($itemnumber) = @_;
+	my $dbh = C4::Context->dbh;
+    	my $sth=$dbh->prepare("SELECT datesent,frombranch,tobranch FROM branchtransfers
+        WHERE itemnumber = ? AND datearrived IS NULL");
+	$sth->execute($itemnumber);
+	my @tranferts = $sth->fetchrow_array;
+	$sth->finish;
+
+	return (@tranferts);
+}
+
 1;
 __END__
 
@@ -1977,3 +2099,4 @@ __END__
 Koha Developement team <info@koha.org>
 
 =cut
+

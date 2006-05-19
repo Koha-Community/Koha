@@ -66,11 +66,153 @@ FIXME
     &UpdateReserve
     &getreservetitle
     &Findgroupreserve
+    &FastFindReserves
+    &SetWaitingStatus
+    &GlobalCancel
+    &MinusPriority
+    &OtherReserves
     GetFirstReserveDateFromItem
     GetNumberReservesFromBorrower
 );
 
 # make all your functions, whether exported or not;
+=item GlobalCancel
+	New op dev for the circulation based on item, global is a function to cancel reserv,check other reserves, and transfer document if it's necessary
+=cut
+#'
+sub GlobalCancel {
+	my $messages;
+	my $nextreservinfo;
+	my ($itemnumber,$borrowernumber)=@_;
+	
+# 	step 1 : cancel the reservation
+	my $CancelReserve = CancelReserve(0,$itemnumber,$borrowernumber);
+
+# 	step 2 launch the subroutine of the others reserves
+	my ($messages,$nextreservinfo) = OtherReserves($itemnumber);
+
+return ($messages,$nextreservinfo);
+}
+
+=item OtherReserves
+	New op dev: check queued list of this document and check if this document must be  transfered
+=cut
+#'
+sub OtherReserves {
+	my ($itemnumber)=@_;
+	my $messages;
+	my $nextreservinfo;
+	my ($restype,$checkreserves) = CheckReserves($itemnumber);
+	if ($checkreserves){
+		my %env;
+		my $iteminfo = C4::Circulation::Circ2::getiteminformation(\%env,$itemnumber);
+		if ($iteminfo->{'holdingbranch'} ne $checkreserves->{'branchcode'}){
+		$messages->{'transfert'} = $checkreserves->{'branchcode'};
+
+# 		minus priorities of others reservs
+		MinusPriority($itemnumber,$checkreserves->{'borrowernumber'},$iteminfo->{'biblionumber'});
+# 		launch the subroutine dotransfer
+		C4::Circulation::Circ2::dotransfer($itemnumber,$iteminfo->{'holdingbranch'},$checkreserves->{'branchcode'}),
+		}
+
+# 	step 2b : case of a reservation on the same branch, set the waiting status
+		else{
+		$messages->{'waiting'} = 1;
+		MinusPriority($itemnumber,$checkreserves->{'borrowernumber'},$iteminfo->{'biblionumber'});
+		SetWaitingStatus($itemnumber);
+		}
+
+		$nextreservinfo = $checkreserves->{'borrowernumber'};
+	}
+
+	return ($messages,$nextreservinfo);	
+}
+
+=item MinusPriority
+	Reduce the values of queuded list 	
+=cut
+#'
+sub MinusPriority{
+	my ($itemnumber,$borrowernumber,$biblionumber)=@_;
+# 	first step update the value of the first person on reserv
+	my $dbh = C4::Context->dbh;
+	my $sth_upd=$dbh->prepare("UPDATE reserves SET priority = 0 , itemnumber = ? 
+	WHERE cancellationdate is NULL 
+	AND borrowernumber=?
+	AND biblionumber=?");
+	$sth_upd->execute($itemnumber,$borrowernumber,$biblionumber);
+	$sth_upd->finish;
+
+# second step update all others reservs
+	my $sth_oth=$dbh->prepare("SELECT priority,borrowernumber,biblionumber,reservedate FROM reserves WHERE priority !='0' AND cancellationdate is NULL");
+	$sth_oth->execute();
+	while (my ($priority,$borrowernumber,$biblionumber,$reservedate)=$sth_oth->fetchrow_array){
+		$priority--;
+		 my $sth_upd_oth = $dbh->prepare("UPDATE reserves SET priority = ?
+                               WHERE biblionumber     = ?
+                                 AND borrowernumber   = ?
+                       	         AND reservedate      = ?");
+		$sth_upd_oth->execute($priority,$biblionumber,$borrowernumber,$reservedate);
+		$sth_upd_oth->finish;
+	}
+	$sth_oth->finish;
+
+}
+
+
+=item GlobalCancel
+	New op dev for the circulation based on item, global is a function to cancel reserv,check other reserves, and transfer document if it's necessary
+=cut
+#'
+# New op dev :
+# we check if we have a reserves with itemnumber (New op system of reserves), if we found one, we update the status of the reservation when we have : 'priority' = 0, and we have an itemnumber 
+sub SetWaitingStatus{
+# 	first : check if we have a reservation for this item .
+	my ($itemnumber)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth_find=$dbh->prepare("SELECT priority,borrowernumber from reserves WHERE itemnumber=? and cancellationdate is NULL and found is NULL and priority='0'");
+	$sth_find->execute($itemnumber);
+	my ($priority,$borrowernumber) = $sth_find->fetchrow_array;
+	$sth_find->finish;
+	if (not $borrowernumber){
+		return();
+	}
+	else{
+# 		step 2 : if we have a borrowernumber, we update the value found to 'W' for notify the borrower
+		my $sth_set=$dbh->prepare("UPDATE reserves SET found='W',waitingdate = now() where borrowernumber=? AND itemnumber=? AND found is null");
+	$sth_set->execute($borrowernumber,$itemnumber);
+	$sth_set->finish;
+	}
+
+}
+
+sub FastFindReserves {
+	my ($itemnumber,$borrowernumber)=@_;
+	if ($itemnumber){
+		my $dbh = C4::Context->dbh;
+		my $sth_res=$dbh->prepare("SELECT reservedate,borrowernumber from reserves WHERE itemnumber=? and cancellationdate is NULL AND (found != 'F' or found is null)");
+		$sth_res->execute($itemnumber);
+		my ($reservedate,$borrowernumber)=$sth_res->fetchrow_array;
+		$sth_res->finish;
+		return($reservedate,$borrowernumber);
+	}
+	if ($borrowernumber){
+		my $dbh = C4::Context->dbh;
+		my $sth_find=$dbh->prepare("SELECT * from reserves WHERE borrowernumber=? and cancellationdate is NULL and (found != 'F' or found is null) order by reservedate");
+		$sth_find->execute($borrowernumber);	
+		my @borrowerreserv;
+		my $i=0;
+		while (my $data=$sth_find->fetchrow_hashref){
+			$borrowerreserv[$i]=$data;
+			$i++;
+    		}
+		$sth_find->finish;
+		return (@borrowerreserv);
+	}
+
+}
+
+
 
 =item FindReserves
 
@@ -551,13 +693,17 @@ sub Findgroupreserve {
 # C4::Reserves. Pick one and stick with it.
 # XXX - POD
 sub CreateReserve {
-  my
-($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title)= @_;
+  my ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)= @_;
   my $fee=CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
   my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);
   my @datearr = localtime(time);
   my $resdate =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+  my $waitingdate;
+# If the reserv had the waiting status, we had the value of the resdate
+  if ($found eq 'W'){
+  $waitingdate = $resdate;
+  }
   #eval {
   # updates take place here
   if ($fee > 0) {
@@ -572,9 +718,9 @@ sub CreateReserve {
   }
   #if ($const eq 'a'){
     my $sth = $dbh->prepare("insert into reserves
-   (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,priority,reservenotes)
-    values (?,?,?,?,?,?,?)");
-    $sth->execute($borrnum,$biblionumber,$resdate,$branch,$const,$priority,$notes);
+   (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,priority,reservenotes,itemnumber,found,waitingdate)
+    values (?,?,?,?,?,?,?,?,?,?)");
+    $sth->execute($borrnum,$biblionumber,$resdate,$branch,$const,$priority,$notes,$checkitem,$found,$waitingdate);
     $sth->finish;
   #}
   if (($const eq "o") || ($const eq "e")) {
