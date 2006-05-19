@@ -174,6 +174,8 @@ my %requirefields = (
 	itemtypes => { 'imageurl' => 'char(200) NULL'},
 	aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
 	aqbudget => { 'branchcode' => 'varchar(4) NULL'},
+	auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
+	auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL UNSIGNED ZEROFILL', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL UNSIGNED', 'isurl' => 'TINYINT(1) UNSIGNED'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -1574,6 +1576,10 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.139  2006/05/19 19:31:29  tgarip1957
+# Added new fields to auth_header and auth_subfield_table to allow ZEBRA use of authorities and new MARC framework like structure.
+# Authority tables are modified to be compatible with new MARC frameworks. This change is part of Authority Linking & Zebra authorities. Requires change in Mysql database. It will break head unless all changes regarding this is implemented. This warning will take place on all commits regarding this
+#
 # Revision 1.138  2006/05/19 16:51:44  alaurin
 # update database for :
 # - new feature ip and printer management
