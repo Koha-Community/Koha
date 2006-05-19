@@ -9,6 +9,7 @@ use C4::Context;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
+use C4::AuthoritiesMarc;
 use Time::HiRes qw(gettimeofday);
 my $timeneeded;
 my $starttime = gettimeofday;
@@ -41,7 +42,12 @@ my $sth2 = $dbh->prepare("UPDATE auth_header  set marc=? where authid=?" );
    
 
 while (my ($authid,$authtypecode)=$sth->fetchrow ){
- my $record = AUTHgetauthority($dbh,$authid);
+ my $record = AUTHgetauthorityold($dbh,$authid);
+##Add authid and authtypecode to record. Old records did not have these fields
+my ($authidfield,$authidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode);
+my ($authidfield,$authtypesubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authtypecode",$authtypecode);
+##Both authid and authtypecode is expected to be in the same field. Modify if other requirements arise
+	$record->add_fields($authfield,'','',$authidsubfield=>$authid,$authtypesubfield=>$authtypecode);
 $sth2->execute($record->as_usmarc,$authid);
 $timeneeded = gettimeofday - $starttime unless ($i % 1000);
 	print "$i in $timeneeded s\n" unless ($i % 1000);
@@ -50,7 +56,7 @@ $timeneeded = gettimeofday - $starttime unless ($i % 1000);
 }
 $dbh->do("UNLOCK TABLES ");
 
-sub AUTHgetauthority {
+sub AUTHgetauthorityold {
 # Returns MARC::Record of the biblio passed in parameter.
     my ($dbh,$authid)=@_;
     my $record = MARC::Record->new();
