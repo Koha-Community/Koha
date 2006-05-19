@@ -397,6 +397,24 @@ my %tabledata = (
             explanation         => 'The relationships between a guarantor & a guarantee (separated by | or ,)',
             type                => 'free',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'ReservesMaxPickUpDelay',
+            value               => '10',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Maximum delay to pick up a reserved document',
+            type                => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'TransfersMaxDaysWarning',
+            value               => '3',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Max delay before considering the transfer has potentialy a problem',
+            type                => 'free',
+        },
     ],
 
 );
@@ -527,6 +545,25 @@ my %fielddefinitions = (
 			after => 'contactfirstname',
 		},
 	],
+	
+	branches =>  [
+		{
+			field	=> 'branchip',
+			type	=> 'varchar(15)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'branchprinter',
+			type	=> 'varchar(100)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
 	categories =>  [
 		{
 			field	=> 'category_type',
@@ -537,7 +574,16 @@ my %fielddefinitions = (
 			extra	=> '',
 		},
 	],
-
+	reserves =>  [
+		{
+			field	=> 'waitingdate',
+			type	=> 'date',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
 );
 
 my %indexes = (
@@ -1528,6 +1574,17 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.138  2006/05/19 16:51:44  alaurin
+# update database for :
+# - new feature ip and printer management
+# adding two fields in branches table (branchip,branchprinter)
+#
+# - waiting date : adding one field in reserves table(waiting date) to calculate the Maximum delay to pick up a reserved document when it's available
+#
+# new system preference :
+# - ReservesMaxPickUpDelay : Maximum delay to pick up a reserved document
+# TransfersMaxDaysWarning : Max delay before considering the transfer as potentialy a problem
+#
 # Revision 1.137  2006/04/18 09:36:36  plg
 # bug fixed: typo fixed in labels and labels_conf tables creation query.
 #
