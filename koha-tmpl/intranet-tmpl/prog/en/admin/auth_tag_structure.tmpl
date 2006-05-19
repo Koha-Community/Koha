@@ -74,7 +74,7 @@
 		<p><label>Repeatable</label><!-- TMPL_VAR NAME="repeatable" --></p>
 		<p><label>Mandatory</label><!-- TMPL_VAR NAME="mandatory" --></p>
 		<p><label>Authorised value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
-		<p><label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" /></p>
+		<p><label>&nbsp;</label><input type="button" value="OK" class="button" onclick="Check(this.form)" /></p>
 	</form>
 <!-- /TMPL_IF -->
 
@@ -94,14 +94,14 @@
 		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
-	<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" /></form></td></tr>
+	<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" class="submit" /></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
 	Data deleted
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-	<input type="submit" value="OK" />
+	<input type="submit" value="OK" class="submit" />
 	</form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="authtype_create" -->
@@ -116,7 +116,7 @@
 			<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="authtypetext" --></option>
 		<!-- /TMPL_LOOP -->
 		</select>
-		<input type="submit" value="OK" />
+		<input type="submit" value="OK" class="submit" />
 	</form>
 <!-- /TMPL_IF -->
 
@@ -134,9 +134,9 @@
 	<!-- /TMPL_LOOP -->
 	</select>
 	<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-	<input type="submit" value="OK" />
+	<input type="submit" value="OK" class="submit" />
 </form>
-
+</div>
 <div id="bloc100">
 	<table>
 	<tr>
@@ -149,13 +149,13 @@
 		<th>Edit</th>
 		<th>Delete</th>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<tr valign="top">
-		<td><!-- TMPL_VAR NAME="tagfield" --></td>
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
 		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
 		<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 		<td><!-- TMPL_IF NAME="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 		<td><!-- TMPL_VAR NAME="authorised_value" --></td>
-		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->">subfields</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">subfields</a></td>
 		<td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
 		<td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
 	</tr>
@@ -165,15 +165,15 @@
 		<input type="hidden" name="op" value="add_form" />
 		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
 		<input type="hidden" name="op" value="add_form" />
-		<input type="submit" value="Add Tag" />
+		<input type="submit" class="submit" value="Add Tag" />
 		<!-- TMPL_IF NAME="isprevpage" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">Previous Page</a>
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Previous Page</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="nextpage" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">Next Page</a>
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page</a>
 		<!-- /TMPL_IF -->
 	</form>
-
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
