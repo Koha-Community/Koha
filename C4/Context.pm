@@ -438,7 +438,7 @@ my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
 
 retry:
 	eval {
-		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,
+		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,databaseName=$context->{"config"}->{$server},
 		preferredRecordSyntax => "USmarc",elementSetName=> "F");
 	};
 	if ($@){
@@ -467,7 +467,7 @@ my $Zconnauth;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
 retry:
 eval{
- $Zconnauth=new ZOOM::Connection($context->config("hostname"),$port,
+ $Zconnauth=new ZOOM::Connection($context->config("hostname"),$port,databaseName=$context->{"config"}->{$server},
 						user=>$context->{"config"}->{"zebrauser"},
 						password=>$context->{"config"}->{"zebrapass"},preferredRecordSyntax => "USmarc",elementSetName=> "F");
 };
@@ -826,6 +826,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.40  2006/05/20 14:28:02  tgarip1957
+# Adding support to read zebra database name from config files
+#
 # Revision 1.39  2006/05/19 09:52:54  alaurin
 # committing new feature ip and printer management
 # adding two fields in branches table (branchip,branchprinter)
