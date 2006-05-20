@@ -506,7 +506,7 @@ retry:
 		return;
 		}
 	}
-$Zpackage->("commit") if (C4::Context->shadow);	
+$Zpackage->("commit") if (C4::Context->authorityservershadow);	
 $Zpackage->destroy;
 }else{
 zebrafiles($dbh,$authid,$op);
@@ -606,8 +606,25 @@ my	$linkid=$field->subfield($linkidsubfield) ;
 #Now rewrite the $record to table with an add
 $authid=AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 
-##Uncomment below and all biblios will get updated with modified authority-- To be used with $merge flag
-#	&merge($dbh,$authid,$record,$authid,$record);
+
+### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
+### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
+### the $merge flag is now depreceated and will be removed at code cleaning
+
+if (C4::Context->preference('dontmerge')){
+# save the file in localfile/modified_authorities
+	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+	unless (opendir(DIR, "$cgidir")) {
+			$cgidir = C4::Context->intranetdir."/";
+	} 
+
+	my $filename = $cgidir."/localfile/modified_authorities/$authid.authid";
+	open AUTH, "> $filename";
+	print AUTH $authid;
+	close AUTH;
+}else{
+	&merge($dbh,$authid,$record,$authid,$record);
+}
 return $authid;
 }
 
@@ -914,6 +931,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.26  2006/05/20 14:32:54  tgarip1957
+# If an authority is modified biblios related to this authority were not updated but a list of modified authorities was written to disk. Now by defult they get modified as well unless a system preference 'dontmerge' is defined. dontmerge=1 will keep the previous behaviour.
+#
+# Authority zebra server may have different shadow settings. Support is added
+#
 # Revision 1.25  2006/05/19 18:09:39  tgarip1957
 # All support for auth_subfield_tables is removed. All search is now with zebra authorities. New authority structure allows multiple linking of authorities of differnet types to one another.
 # Authority tables are modified to be compatible with new MARC frameworks. This change is part of Authority Linking & Zebra authorities. Requires change in Mysql database. It will break head unless all changes regarding this is implemented. This warning will take place on all commits regarding this
