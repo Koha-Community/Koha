@@ -41,7 +41,6 @@ while (( my $cols)=$sthcols->fetchrow){
 $columns{$cols}=1;
 }
 ##Update the database if missing fields;
- $dbh->do("LOCK TABLES auth_header WRITE, auth_subfield_structure WRITE , auth_subfield_table READ");
 unless ($columns{'link'}){
 my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure ADD COLUMN `link` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ");
 $sth->execute();
@@ -58,6 +57,7 @@ unless ($columns{'kohafield'}){
 my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure  ADD COLUMN `kohafield` VARCHAR(45)  NOT NULL  ");
 $sth->execute();
 }
+$dbh->do("UNLOCK TABLES ");
 my $sth=$dbh->prepare("select authid,authtypecode from auth_header  ");
 	$sth->execute();
  
@@ -78,7 +78,7 @@ $timeneeded = gettimeofday - $starttime unless ($i % 1000);
 	print "." unless ($i % 500);
 	$i++;
 }
-$dbh->do("UNLOCK TABLES ");
+
 
 sub AUTHgetauthorityold {
 # Returns MARC::Record of the biblio passed in parameter.
