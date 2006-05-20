@@ -24,7 +24,7 @@ $columns{$cols}=1;
 }
 
 ##Update the database if missing fields;
- $dbh->do("LOCK TABLES auth_header WRITE auth_subfield_table READ");
+ $dbh->do("LOCK TABLES auth_header WRITE, auth_subfield_structure WRITE , auth_subfield_table READ");
 unless ($columns{'linkid'}){
 my $sth=$dbh->prepare("ALTER TABLE auth_header  ADD COLUMN `linkid` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 ");
 $sth->execute();
@@ -33,7 +33,31 @@ unless ($columns{'marc'}){
 my $sth=$dbh->prepare("ALTER TABLE auth_header  ADD COLUMN `marc` BLOB  NOT NULL DEFAULT 0 ");
 $sth->execute();
 }
-
+###Chechk auth_subfield_structure as well. User may have forgotten to update database
+my $sthcols=$dbh->prepare("show columns from auth_subfield_structure");
+$sthcols->execute();
+my %columns;
+while (( my $cols)=$sthcols->fetchrow){
+$columns{$cols}=1;
+}
+##Update the database if missing fields;
+ $dbh->do("LOCK TABLES auth_header WRITE, auth_subfield_structure WRITE , auth_subfield_table READ");
+unless ($columns{'link'}){
+my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure ADD COLUMN `link` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ");
+$sth->execute();
+}
+unless ($columns{'isurl'}){
+my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure ADD COLUMN `isurl` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ");
+$sth->execute();
+}
+unless ($columns{'hidden'}){
+my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure ADD COLUMN `hidden` TINYINT(3) UNSIGNED NOT NULL ZEROFILL DEFAULT 000 ");
+$sth->execute();
+}
+unless ($columns{'kohafield'}){
+my $sth=$dbh->prepare("ALTER TABLE auth_subfield_structure  ADD COLUMN `kohafield` VARCHAR(45)  NOT NULL  ");
+$sth->execute();
+}
 my $sth=$dbh->prepare("select authid,authtypecode from auth_header  ");
 	$sth->execute();
  
