@@ -41,7 +41,7 @@
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
 				<select id="status" name="status" size="1">
 					<!--TMPL_IF name="status1" -->
-						<option value="1" selected>Waited</option>
+						<option value="1" selected>Waiting</option>
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status2" -->
 						<option value="2" selected>Arrived</option>
@@ -182,7 +182,7 @@
 	</table>
 	<input type="submit" value="Save changes" accesskey="w" class="submit" />
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
-		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
+		<p>Subscription has expired. Last waiting issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
 	<!-- /TMPL_IF -->
 	</form></div><br>
 
