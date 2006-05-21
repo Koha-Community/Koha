@@ -74,15 +74,14 @@ my @CGIbranchlooparray;
 foreach my $branch (keys %$branches) {
 	if ($branch) {
 		my %line;
-                $line{branch} = $branches->{$branch}->{'branchname'};
-                $line{value} = $branch;
-                push @CGIbranchlooparray, \%line;
+		$line{branch} = $branches->{$branch}->{'branchname'};
+		$line{value} = $branch;
+		push @CGIbranchlooparray, \%line;
 	}
 }
 @CGIbranchlooparray = sort {$a->{branch} cmp $b->{branch}} @CGIbranchlooparray;
 my $CGIbranchloop = \@CGIbranchlooparray;
 $template->param( CGIbranch => $CGIbranchloop);
-
 
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
@@ -175,9 +174,6 @@ for (my $rownum=0;$rownum<$publictypes[0]->{'count'} ;$rownum++) {
 $template->param(TYPE_ROWS => \@typerows);
 $width = 2*$width -1;
 $template->param(totalwidth => 2*$width-1,
-			     LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 if ($query->param('item_types_selected')) {
@@ -239,7 +235,7 @@ if ($query->param('item_types_selected')) {
 } else {
 	# Here we check that the borrower can actually make reserves Stage 1.
 	my $noreserves = 0;
-	my $maxoutstanding = C4::Context->preference("maxoustanding");
+	my $maxoutstanding = C4::Context->preference("maxoutstanding");
 	$template->param(noreserve => 1) unless $maxoutstanding;
 	if ($borr->{'amountoutstanding'} > $maxoutstanding) {
 		my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};

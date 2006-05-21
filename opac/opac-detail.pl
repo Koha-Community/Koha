@@ -32,7 +32,19 @@ my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
-my @title;
+ #coping with subscriptions
+ my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+ my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
+ my @subs;
+ foreach my $subscription (@subscriptions){
+ 	my %cell;
+ 	$cell{subscriptionid}= $subscription->{subscriptionid};
+ 	$cell{subscriptionnotes}= $subscription->{notes};
+ 	#get the three latest serials.
+ 	$cell{latestserials}=getlatestserials($subscription->{subscriptionid},3);
+ 	push @subs, \%cell;
+ }
+ 
 $dat->{'count'}=@items;
 my @author;
 if ($dat->{'author'}){
@@ -124,38 +136,43 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 			     LibraryName => C4::Context->preference("LibraryName"),
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
-        titlewords => $titlewords,
-        authorwords => $authorwords,
+		        titlewords => $titlewords,
+       			authorwords => $authorwords,
 );
-  ## Amazon.com stuff
-=head
-my $isbn=$dat->{'isbn'};
-my $amazon_details = &get_amazon_details($isbn);
-foreach my $result (@{$amazon_details->{Details}}){
-        $template->param(item_description => $result->{ProductDescription});
-        $template->param(image => $result->{ImageUrlMedium});
-        $template->param(list_price => $result->{ListPrice});
-        $template->param(amazon_url => $result->{url});
-                                }
+## Amazon.com stuff
+#not used unless preference set
+if (C4::Context->preference("AmazonContent")==1) {
+	use C4::Amazon;
+	$dat->{'amazonisbn'}=$dat->{'isbn'};
+	$dat->{'amazonisbn'} =~ s|-||g;
 
-my @products;
-my @reviews;
-for my $details( @{ $amazon_details->{ Details } } ) {
-        next unless $details->{ SimilarProducts };
-        for my $product ( @{ $details->{ SimilarProducts }->{ Product } } ) {
-                push @products, +{ Product => $product };
-        }
-        next unless $details->{ Reviews };
-        for my $product ( @{ $details->{ Reviews }->{ AvgCustomerRating } } ) {
-                $template->param(rating => $product);
-        }
-        for my $reviews ( @{ $details->{ Reviews }->{ CustomerReview } } ) {
-                push @reviews, +{ Summary => $reviews->{ Summary }, Comment => $reviews->{ Comment }, };
-        }
+	$template->param( amazonisbn => $dat->{amazonisbn} );
+
+	my $amazon_details = &get_amazon_details($dat->{amazonisbn});
+
+	foreach my $result (@{$amazon_details->{Details}}){
+        	$template->param(item_description => $result->{ProductDescription});
+        	$template->param(image => $result->{ImageUrlMedium});
+        	$template->param(list_price => $result->{ListPrice});
+        	$template->param(amazon_url => $result->{url});
+	}
+
+	my @products;
+	my @reviews;
+	for my $details( @{ $amazon_details->{ Details } } ) {
+        	next unless $details->{ SimilarProducts };
+        	for my $product ( @{ $details->{ SimilarProducts }->{ Product } } ) {
+                	push @products, +{ Product => $product };
+        	}
+        	next unless $details->{ Reviews };
+        	for my $product ( @{ $details->{ Reviews }->{ AvgCustomerRating } } ) {
+                	$template->param(rating => $product * 20);
+        	}
+        	for my $reviews ( @{ $details->{ Reviews }->{ CustomerReview } } ) {
+                	push @reviews, +{ Summary => $reviews->{ Summary }, Comment => $reviews->{ Comment }, };
+        	}
+	}
+	$template->param( SIMILAR_PRODUCTS => \@products );
+	$template->param( REVIEWS => \@reviews );
 }
-$template->param( SIMILAR_PRODUCTS => \@products );
-$template->param( REVIEWS => \@reviews );
-  ## End of Amazon Stuff
-=cut
 output_html_with_http_headers $query, $cookie, $template->output;
-
