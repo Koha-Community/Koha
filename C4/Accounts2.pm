@@ -18,6 +18,7 @@ package C4::Accounts2; #assumes C4/Accounts2
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
 use strict;
 require Exporter;
 use DBI;
@@ -28,8 +29,7 @@ use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;        # FIXME - Should probably be different from
-                        # the version for C4::Accounts
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
 
 =head1 NAME
 
@@ -344,11 +344,6 @@ sub manualinvoice{
     $amountleft=refund('',$bornum,$amount);
   }
   if ($itemnum ne ''){
-#FIXME to use ? before uncommenting
-#     my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
-#     $sth->execute;
-#     my $data=$sth->fetchrow_hashref;
-#     $sth->finish;
     $desc.=" ".$itemnum;
     my $sth=$dbh->prepare("INSERT INTO  accountlines
                         (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber)
@@ -356,10 +351,9 @@ sub manualinvoice{
 #     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
      $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $itemnum);
   } else {
-    $desc=$dbh->quote($desc);
-    my $sth=$dbh->prepare("INSERT INTO  accountlines
-                        (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding)
-                        VALUES (?, ?, now(), ?, ?, ?, ?)");
+    my $sth=$dbh->prepare("INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding)
+			VALUES (?, ?, now(), ?, ?, ?, ?)");
     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft);
   }
 }
