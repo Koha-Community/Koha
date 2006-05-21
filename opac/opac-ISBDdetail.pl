@@ -71,7 +71,7 @@ my $bibid = $query->param('bibid');
 my $itemtype="";
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
-my $record =get_record($biblionumber);
+my $record =MARCgetbiblio($dbh,$bibid);
 
 #coping with subscriptions
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
@@ -95,9 +95,7 @@ my ($template, $loggedinuser, $cookie)
 			     authnotrequired => 1,
 			     debug => 1,
 			     });
-$template->param(LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
+$template->param(
 				subscriptions => \@subs,
 				subscriptionsnumber => $subscriptionsnumber,
 );
@@ -167,7 +165,7 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchdetail($value)->{branchname};
+       return getbranchname($value);
     }
 
    #---- itemtypes
