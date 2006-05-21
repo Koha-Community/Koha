@@ -17,19 +17,29 @@ my $dbh = C4::Context->dbh;
 my $query="Select itemtype,description from itemtypes order by description";
 my $sth=$dbh->prepare($query);
 $sth->execute;
-my  @itemtype;
+my  @itemtypeloop;
 my %itemtypes;
 while (my ($value,$lib) = $sth->fetchrow_array) {
-	push @itemtype, $value;
-	$itemtypes{$value}=$lib;
+	my %row =(	value => $value,
+				description => $lib,
+			);
+	push @itemtypeloop, \%row;
 }
-
-my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-			-values   => \@itemtype,
-			-labels   => \%itemtypes,
-			-size     => 1,
-			-multiple => 0 );
 $sth->finish;
+
+my @branches;
+my @select_branch;
+my %select_branches;
+my $branches = getallbranches();
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        my %row =(value => $thisbranch,
+                                selected => $selected,
+                                branchname => $branches->{$thisbranch}->{'branchname'},
+                        );
+        push @branchloop, \%row;
+}
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-main.tmpl",
@@ -61,6 +71,16 @@ $template->param(CGIitemtype => $CGIitemtype,
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				textmessaging => $borrower->{textmessaging},
 				opaclargeimage => C4::Context->preference("opaclargeimage"),
-                                kohaversion => $kohaVersion
+				LibraryName => C4::Context->preference("LibraryName"),
+				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
+				opacreadinghistory => C4::Context->preference("opacreadinghistory"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
 );
+
+$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
+
 output_html_with_http_headers $input, $cookie, $template->output;
