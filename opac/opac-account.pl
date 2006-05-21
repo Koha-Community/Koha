@@ -60,10 +60,7 @@ foreach my $row (@$accts) {
 
 
 $template->param( ACCOUNT_LINES => $accts,
-			     LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves")
- );
+);
 
 $template->param( total => sprintf("%.2f",$total) );
 

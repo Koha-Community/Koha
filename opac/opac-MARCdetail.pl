@@ -94,7 +94,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 	my @loop_data =();
 	my @subfields_data;
 	# deal with leader
-	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop  or $tagslib->{'000'}->{'@'}->{hidden}) {
+	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop  or $tagslib->{'000'}->{'@'}->{hidden}>0) {
 		my %subfield_data;
 		$subfield_data{marc_lib}=$tagslib->{'000'}->{'@'}->{lib};
 		$subfield_data{marc_value}=$record->leader();
@@ -113,7 +113,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($fields[$x_i]->tag()<10) {
 			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
-			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{hidden});
+			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{hidden}>0);
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{'@'}->{lib};
 			$subfield_data{marc_value}=$fields[$x_i]->data();
@@ -126,7 +126,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			for my $i (0..$#subf) {
 				$subf[$i][0] = "@" unless $subf[$i][0];
 				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
-				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden});
+				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden}>0);
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
 				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
@@ -149,11 +149,15 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
-	#		if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
-	#			$tag_data{tag}="";
-	#		} else {
-				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
-	#		}
+			if (($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) && (C4::Context->preference('LabelMARCView') eq 'economical')) {
+				$tag_data{tag}="";
+			} else {
+				if (C4::Context->preference('hide_marc')) {
+					$tag_data{tag}=$tagslib->{$fields[$x_i]->tag()}->{lib};
+				} else {
+					$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				}
+			}
 			my @tmp = @subfields_data;
 			$tag_data{subfield} = \@tmp;
 			push (@loop_data, \%tag_data);
@@ -211,9 +215,9 @@ foreach my $subfield_code (keys(%witness)) {
 }
 
 $template->param(item_loop => \@item_value_loop,
-						item_header_loop => \@header_value_loop,
-#						bibid => $bibid,
-						biblionumber => $biblionumber);
+				item_header_loop => \@header_value_loop,
+				biblionumber => $biblionumber
+);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 sub get_authorised_value_desc ($$$$$) {
