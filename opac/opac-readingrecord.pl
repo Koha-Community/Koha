@@ -77,13 +77,10 @@ for (my $i=0;$i<$count;$i++){
 	push(@loop_reading,\%line);
 }
 
-$template->param(count => $count);
-$template->param(READING_RECORD => \@loop_reading,
+$template->param(count => $count,
+				READING_RECORD => \@loop_reading,
 				limit => $limit,
 				showfulllink => ($count > 50),		
-			     LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 
