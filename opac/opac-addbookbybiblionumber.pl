@@ -65,26 +65,47 @@ if ($shelfnumber) {
 			$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
 	}
 
-	my $CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
+	my $CGIbookshelves;
+	if (@shelvesloop > 0){
+	$CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
 				-values   => \@shelvesloop,
 				-labels   => \%shelvesloop,
 				-size     => 1,
 				-multiple => 0 );
+	 }
 
 	$template->param(biblionumber => $biblionumber,
-						title => $biblios[0]->{'title'},
-						author => $biblios[0]->{'author'},
-						CGIbookshelves => $CGIbookshelves,
-						LibraryName => C4::Context->preference("LibraryName"),
-						suggestion => C4::Context->preference("suggestion"),
-						virtualshelves => C4::Context->preference("virtualshelves"),
-						);
+				title => $biblios[0]->{'title'},
+				author => $biblios[0]->{'author'},
+				CGIbookshelves => $CGIbookshelves,
+				LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+				OpacNav => C4::Context->preference("OpacNav"),
+				opaccredits => C4::Context->preference("opaccredits"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+	);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
-# Revision 1.3  2005/08/04 14:19:50  tipaul
-# synch'ing 2.2 and head
+# Revision 1.4  2006/05/21 02:10:32  kados
+# syncing dev-week and HEAD
+#
+# Revision 1.1.2.6  2006/04/27 16:23:34  oleonard
+# Hiding option to add to existing virtual shelves if there are no existing virtual shelves (thanks Chris!)
+#
+# Revision 1.1.2.5  2006/03/01 22:33:25  oleonard
+# Enabling several new system preferences: opacreadinghistory, opaccolorstylesheet, opaclanguagesdisplay, opaclayoutstylesheet, opacsmallimage
+#
+# Revision 1.1.2.4  2006/02/04 16:47:21  kados
+# Adding support for opaccredits to opac scripts
+#
+# Revision 1.1.2.3  2006/02/03 21:03:57  kados
+# Updating script for new system preference: OpacNav
+# ----------------------------------------------------------------------
 #
 # Revision 1.1.2.2  2005/03/25 17:04:27  tipaul
 # adding virtual shelves & suggestions button to the top
