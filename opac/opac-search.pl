@@ -80,12 +80,13 @@ if ($op eq "do_search") {
 	my $orderby = $query->param('orderby');
 	my $desc_or_asc = $query->param('desc_or_asc');
 	my $exactsearch = $query->param('exact');
-
 	for (my $i=0;$i<=$#marclist;$i++) {
 		if ($searchdesc) { # don't put the and_or on the 1st search term
 			$searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
 		} else {
 			$searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
+		if ($marclist[$i] eq "biblioitems.isbn") {
+			$value[$i] =~ s/-//g;
 		}
 	}
   if ($itemtypesstring ne ''){
@@ -374,24 +375,35 @@ $template->param( phraseorterm => $phraseorterm );
 				});
 	
 	
-	$sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
+	my $query="Select itemtype,description from itemtypes order by description";
+	my $sth=$dbh->prepare($query);
 	$sth->execute;
-	my  @itemtype;
+	my  @itemtypeloop;
 	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "";
 	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
+		my %row =(	value => $value,
+					description => $lib,
+				);
+		push @itemtypeloop, \%row;
 	}
-	
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-				-values   => \@itemtype,
-				-labels   => \%itemtypes,
+	$sth->finish;
+
+	my @oldbranches;
+	my @oldselect_branch;
+	my %oldselect_branches;
+	my ($oldcount2,@oldbranches)=branches();
+	push @oldselect_branch, "";
+	$oldselect_branches{''} = "";
+	for (my $i=0;$i<$oldcount2;$i++){
+		push @oldselect_branch, $oldbranches[$i]->{'branchcode'};#
+		$oldselect_branches{$oldbranches[$i]->{'branchcode'}} = $oldbranches[$i]->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+				-values   => \@oldselect_branch,
+				-labels   => \%oldselect_branches,
 				-size     => 1,
 				-multiple => 0 );
 	$sth->finish;
-	
 	my @select_branch;
 	my %select_branches;
 	my $branches=getbranches();
@@ -417,6 +429,13 @@ $template->param( phraseorterm => $phraseorterm );
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),
+					LibraryName => C4::Context->preference("LibraryName"),
+					OpacNav => C4::Context->preference("OpacNav"),
+					opaccredits => C4::Context->preference("opaccredits"),
+					AmazonContent => C4::Context->preference("AmazonContent"),
+				opacsmallimage => C4::Context->preference("opacsmallimage"),
+				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 	);
 }
 # ADDED BY JF
