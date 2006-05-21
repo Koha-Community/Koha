@@ -27,8 +27,6 @@ $template->param(INPUTS => \@inputs);
 
 my $self_url = $query->url(-absolute => 1);
 $template->param(url => $self_url,
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

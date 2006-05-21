@@ -149,12 +149,8 @@ foreach (@$alerts) {
 }
 
 $template->param(waiting_count => $wcount,
-				LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
-				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
 				textmessaging => $borr->{textmessaging},
-				alertloop => $alerts,
+				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -58,8 +58,6 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-					suggestion => C4::Context->preference("suggestion"),
-					virtualshelves => C4::Context->preference("virtualshelves"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -186,6 +184,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.8  2006/05/21 02:30:17  kados
+# syncing dev-week and HEAD
+#
 # Revision 1.7  2005/05/04 09:02:38  tipaul
 # synch'ing 2.2 and head
 #

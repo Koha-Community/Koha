@@ -88,9 +88,6 @@ my @bordat;
 $bordat[0] = $borr;
 
 $template->param(BORROWER_INFO => \@bordat,
-			     LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
