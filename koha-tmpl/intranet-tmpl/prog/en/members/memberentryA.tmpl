@@ -434,6 +434,21 @@
 			<input type="text" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >
 		</p>
 	</fieldset>
+	<!-- TMPL_IF NAME="memberinstution" -->
+	<fieldset id="memberentry_organisation">
+		<legend>Organisations</legend>
+		<p>
+			<!-- TMPL_IF NAME="mandatoryphone" --> 
+			<label style="font-weight:bold">
+			<!--TMPL_ELSE-->
+			<label>
+			<!-- /TMPL_IF-->
+			Organisation(s)</label>
+			<!-- TMPL_VAR NAME="CGIorganisations" -->
+		</p>
+	</fieldset>
+	<!-- /TMPL_IF -->
+
 	<div>
 		<input type="button" class="borrowers_button" name="setp1" value="Previous step" onclick="check_form_borrowers(0);">	
 		<INPUT type="button" class="borrowers_button" name="step3" onclick="check_form_borrowers(2)" value="Next step">
