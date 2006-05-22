@@ -28,7 +28,7 @@ use Digest::MD5 qw(md5_base64);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 =head1 NAME
 
