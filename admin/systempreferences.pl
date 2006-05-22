@@ -48,41 +48,68 @@ use C4::Search;
 use HTML::Template;
 use C4::Context;
 
+
+# Fix me, shouldnt we store this stuff in the systempreferences table? 
+
 my %tabsysprefs;
-$tabsysprefs{acquisitions}="Acquisitions";
-$tabsysprefs{gist}="Acquisitions";
-$tabsysprefs{authoritysep}="Authorities";
-$tabsysprefs{ISBD}="Catalogue";
-$tabsysprefs{marc}="Catalogue";
-$tabsysprefs{autoBarcode}="Catalogue";
-$tabsysprefs{marcflavour}="Catalogue";
-$tabsysprefs{SubscriptionHistory}="OPAC";
-$tabsysprefs{maxoutstanding}="Circulation";
-$tabsysprefs{printcirculationslips}="Circulation";
-$tabsysprefs{ReturnBeforeExpiry}="Circulation";
-$tabsysprefs{suggestion}="OPAC";
-$tabsysprefs{automembernum}="Members";
-$tabsysprefs{noissuescharge}="Circulation";
-$tabsysprefs{opacthemes}="OPAC";
-$tabsysprefs{opaclanguages}="OPAC";
-$tabsysprefs{LibraryName}="OPAC";
-$tabsysprefs{opacstylesheet}="OPAC";
-$tabsysprefs{BiblioDefaultView}="OPAC";
-$tabsysprefs{opaclargeimage}="OPAC";
-$tabsysprefs{opacsmallimage}="OPAC";
-$tabsysprefs{hidelostitems}="OPAC";
-$tabsysprefs{KohaAdmin}="Admin";
-$tabsysprefs{checkdigit}="Members";
-$tabsysprefs{dateformat}="Admin";
-$tabsysprefs{insecure}="Admin";
-$tabsysprefs{ldapinfos}="Admin";
-$tabsysprefs{ldapserver}="Admin";
-$tabsysprefs{itemcallnumber}="Catalogue";
-$tabsysprefs{maxreserves}="Circulation";
-$tabsysprefs{virtualshelves}="OPAC";
-$tabsysprefs{hide_marc}="Catalogue";
-$tabsysprefs{NotifyBorrowerDeparture}="Members";
-$tabsysprefs{OpacPasswordChange}="OPAC";
+# Acquisitions
+	$tabsysprefs{acquisitions}="Acquisitions";
+	$tabsysprefs{gist}="Acquisitions";
+# Admin
+	$tabsysprefs{dateformat}="Admin";
+	$tabsysprefs{insecure}="Admin";
+	$tabsysprefs{KohaAdmin}="Admin";
+# Authorities
+	$tabsysprefs{authoritysep}="Authorities";
+# Catalogue
+	$tabsysprefs{advancedMARCEditor}="Catalogue";
+	$tabsysprefs{autoBarcode}="Catalogue";
+	$tabsysprefs{hide_marc}="Catalogue";
+	$tabsysprefs{IntranetBiblioDefaultView} = "Catalogue";
+	$tabsysprefs{ISBD}="Catalogue";
+	$tabsysprefs{itemcallnumber}="Catalogue";
+	$tabsysprefs{LabelMARCView}="Catalogue";
+	$tabsysprefs{marc}="Catalogue";
+	$tabsysprefs{marcflavour}="Catalogue";
+	$tabsysprefs{serialsadditems}="Catalogue";
+	$tabsysprefs{sortbynonfiling}="Catalogue";
+# Circulation
+	$tabsysprefs{maxoutstanding}="Circulation";
+	$tabsysprefs{maxreserves}="Circulation";
+	$tabsysprefs{noissuescharge}="Circulation";
+	$tabsysprefs{patronimages}="Circulation";
+	$tabsysprefs{printcirculationslips}="Circulation";
+	$tabsysprefs{ReturnBeforeExpiry}="Circulation";
+# Members
+	$tabsysprefs{automembernum}="Members";
+	$tabsysprefs{checkdigit}="Members";
+	$tabsysprefs{NotifyBorrowerDeparture}="Members";
+# OPAC
+	$tabsysprefs{AmazonAssocTag}="OPAC";
+	$tabsysprefs{AmazonContent}="OPAC";
+	$tabsysprefs{AmazonDevKey}="OPAC";
+	$tabsysprefs{AnonSuggestions}="OPAC";
+	$tabsysprefs{BiblioDefaultView}="OPAC";
+	$tabsysprefs{Disable_Dictionary}="OPAC";
+	$tabsysprefs{hidelostitems}="OPAC";
+	$tabsysprefs{LibraryName}="OPAC";
+	$tabsysprefs{opacbookbag}="OPAC";
+	$tabsysprefs{opaccolorstylesheet}="OPAC";
+	$tabsysprefs{opaccredits}="OPAC";
+	$tabsysprefs{opaclanguages}="OPAC";
+	$tabsysprefs{opaclanguagesdisplay}="OPAC";
+	$tabsysprefs{opaclargeimage}="OPAC";
+	$tabsysprefs{opaclayoutstylesheet}="OPAC";
+	$tabsysprefs{OpacNav}="OPAC";
+	$tabsysprefs{OpacPasswordChange}="OPAC";
+	$tabsysprefs{opacreadinghistory}="OPAC";
+	$tabsysprefs{opacsmallimage}="OPAC";
+	$tabsysprefs{opacstylesheet}="OPAC";
+	$tabsysprefs{opacthemes}="OPAC";
+	$tabsysprefs{opacuserlogin}="OPAC";
+	$tabsysprefs{SubscriptionHistory}="OPAC";
+	$tabsysprefs{suggestion}="OPAC";
+	$tabsysprefs{virtualshelves}="OPAC";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -98,6 +125,9 @@ sub StringSearch  {
 				my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
 				$sth->execute($syspref);
 				while (my $data=$sth->fetchrow_hashref){
+					$data->{value} =~ s/</&lt;/g;
+					$data->{value} =~ s/>/&lt;/g;
+					$data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
 					push(@results,$data);
 					$cnt++;
 				}
@@ -111,10 +141,11 @@ sub StringSearch  {
 		}
 		$strsth =~ s/,$/) /;
 		$strsth .= " order by variable";
-		warn $strsth;
+		#warn $strsth;
 		my $sth=$dbh->prepare($strsth);
 		$sth->execute();
 		while (my $data=$sth->fetchrow_hashref){
+			$data->{value}=substr($data->{value},0,100);
 			push(@results,$data);
 			$cnt++;
 		}
@@ -368,5 +399,8 @@ if ($op eq 'add_form') {
 		$template->param("a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
