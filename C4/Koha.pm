@@ -25,7 +25,7 @@ use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 =head1 NAME
 
