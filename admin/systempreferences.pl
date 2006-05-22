@@ -84,6 +84,7 @@ my %tabsysprefs;
 	$tabsysprefs{automembernum}="Members";
 	$tabsysprefs{checkdigit}="Members";
 	$tabsysprefs{NotifyBorrowerDeparture}="Members";
+        $tabsysprefs{memberofinstitution}="Members";
 # OPAC
 	$tabsysprefs{AmazonAssocTag}="OPAC";
 	$tabsysprefs{AmazonContent}="OPAC";
@@ -161,7 +162,7 @@ my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/systempreferences.tmpl",
+    = get_template_and_user({template_name => "parameters/systempreferences.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
