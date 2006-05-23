@@ -204,6 +204,10 @@ SELECT upperagelimit,
 				$nok=1;
 			} else {
 				$borrowerid = &newmember(%data);
+			        if ($data{'organisations'}){
+				    # need to add the members organisations
+				    add_member_orgs($borrowerid,$data{'organisations'});
+				 }
 				logaction($loggedinuser,"MEMBERS","add member", $borrowerid, "");
 			}
  		}
@@ -393,19 +397,21 @@ if ($delete){
        if (C4::Context->preference("memberofinstitution")){
 	   my $organisations=get_institutions();
 	   my @orgs;
-	   my %orgs;
+	   my %org_labels;
 	   foreach my $organisation (keys %$organisations) {
 	       push @orgs,$organisation;
-	       $orgs{$organisation}=$organisations->{$organisation}->{'surname'};
+	       $org_labels{$organisation}=$organisations->{$organisation}->{'surname'};
 	   }
-	       
 	   $member_of_institution=1;
 	   
-	   $CGIorganisations = CGI::scrolling_list( -name=>'organisations',
-	       -values=>\@orgs,
-	       -size=>5,
-	       -multiple=>'true'
-	       -labels=>\%orgs,
+	   $CGIorganisations = CGI::scrolling_list( -id => 'organisations',
+	       -name     => 'organisations',
+	       -labels   => \%org_labels,
+	       -values   => \@orgs,
+	       -size     => 5,
+	       -multiple => 'true'
+
+	       
 	   );
        }
 
@@ -506,6 +512,7 @@ if ($delete){
 		citypopup	=> $citypopup,
 		roadpopup	=> $roadpopup,	
 		contacttype	=> $data{'contacttype'},
+	        organisations   => $data{'organisations'},
 		flagloop	=> \@flagdata,
 # 				"contacttype_".$data{'contacttype'} =>" SELECTED ",
 		dateformat      => display_date_format(),
