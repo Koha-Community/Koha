@@ -168,7 +168,7 @@
 	</table><!-- TMPL_UNLESS NAME="unvalidlibrarian"--><p><input type="submit" class="submit" value="Renew Checked Items" /></p><!-- /TMPL_UNLESS -->
 </form>
 
-<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form class="inline" action="renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR name="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="unvalidlibrarian"--><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR name="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form><!-- /TMPL_UNLESS -->
 
 
 
