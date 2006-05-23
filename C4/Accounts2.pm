@@ -29,7 +29,8 @@ use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; 
+shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 =head1 NAME
 
