@@ -95,7 +95,16 @@
 						<option<!-- TMPL_IF NAME="overduenoticerequired" --> selected="selected"<!-- /TMPL_IF --> value="1">Yes</option>
 					</select></td></tr>
 	<tr><th>Reserve fee</th><td>$ <input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
+	<tr><th>Category type</th><td><SELECT name="category_type" >
+					<option value="" <!-- TMPL_VAR NAME="type_n" -->>Select a Category type</option>
+     					<option value="A" <!-- TMPL_VAR NAME="type_A" -->>Adult</option>
+					<option value="C" <!-- TMPL_VAR NAME="type_C" -->>Children</option>
+					<option value="I" <!-- TMPL_VAR NAME="type_I" -->>Institution</option>
+					<option value="P" <!-- TMPL_VAR NAME="type_P" -->>Professional</option>
+					</SELECT></td>
+	</tr>
 </table>
+
 	<p>				<input type="button" value="<!-- TMPL_IF NAME="categorycode" -->Update Category<!-- TMPL_ELSE -->Add Category<!-- /TMPL_IF -->" onclick="Check(this.form);" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" /></p>
 	</form>
 

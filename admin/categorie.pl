@@ -150,7 +150,7 @@ if ($op eq 'add_form') {
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
                                 reservefee              => $data->{'reservefee'},
-                                category_code           => $data->{'category_code'}
+                                category_type           => $data->{'category_type'}
                                 );
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
