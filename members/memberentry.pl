@@ -59,6 +59,8 @@ my ($template, $loggedinuser, $cookie)
 
 my $borrowerid=$input->param('borrowerid');
 my $guarantorid=$input->param('guarantorid');
+my $borrowernumber=$input->param('borrowernumber');
+my $actionType=$input->param('actionType') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
 my $op=$input->param('op');
@@ -86,6 +88,7 @@ $template->param( "mandatory$_" => 1);
 }	
 
 $template->param( "checked" => 1) if ($nodouble eq 1);
+
 
 # if a add or modify is requested => check validity of data.
 if ($op eq 'add' or $op eq 'modify') {
@@ -228,6 +231,7 @@ SELECT upperagelimit,
 
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowerid");
+	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 } else {  # this else goes down the whole script
 	# retrieve previous values : either in DB or in CGI, in case of errors in values
 	my $data;
@@ -384,6 +388,26 @@ if ($delete){
 					   -override => 1,	
  					   -default => $default,
 					);
+       my $CGIorganisations;
+       my $member_of_institution;
+       if (C4::Context->preference("memberofinstitution")){
+	   my $organisations=get_institutions();
+	   my @orgs;
+	   my %orgs;
+	   foreach my $organisation (keys %$organisations) {
+	       push @orgs,$organisation;
+	       $orgs{$organisation}=$organisations->{$organisation}->{'surname'};
+	   }
+	       
+	   $member_of_institution=1;
+	   
+	   $CGIorganisations = CGI::scrolling_list( -name=>'organisations',
+	       -values=>\@orgs,
+	       -size=>5,
+	       -multiple=>'true'
+	       -labels=>\%orgs,
+	   );
+       }
 
 
 # --------------------------------------------------------------------------------------------------------
@@ -490,6 +514,8 @@ if ($delete){
 # 				city_choice       => $city_choice ,#check if the city was selected
 		nok 		=> $nok,#flag to konw if an error 
 		CGIbranch => $CGIbranch,
+	        memberofinstution => $member_of_institution,
+	        CGIorganisations => $CGIorganisations,
 		);
 	#$template->param(Institution => 1) if ($categorycode eq "I");
 	output_html_with_http_headers $input, $cookie, $template->output;

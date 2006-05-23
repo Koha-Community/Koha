@@ -19,6 +19,8 @@ package C4::Members;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 use strict;
 require Exporter;
 use C4::Context;
@@ -56,7 +58,7 @@ C4::Members - Perl Module containing convenience functions for member handling
 	&getboracctrecord
 	&borrowercategories &getborrowercategory
 	&fixEthnicity
-	&ethnicitycategories
+	&ethnicitycategories get_institutions
     );
 
 
@@ -947,6 +949,27 @@ sub fixEthnicity($) {
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
     return $data->{'name'};
-}
+} # sub fixEthnicity
 
+=head2 get_institutions
+  
+  $insitutions = get_institutions();
+
+Just returns a list of all the borrowers of type I, borrownumber and name
+  
+=cut
+#'
+
+sub get_institutions {
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("SELECT borrowernumber,surname FROM borrowers WHERE categorycode=? ORDER BY surname");
+    $sth->execute('I');
+    my %orgs;
+    while (my $data = $sth->fetchrow_hashref()){
+	$orgs{$data->{'borrowernumber'}}=$data;
+    }
+    $sth->finish();
+    return(\%orgs);
+
+} # sub get_institutions
 1;
