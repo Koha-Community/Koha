@@ -1,0 +1,176 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System administration: cities
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<!-- TMPL_IF NAME="add_form" -->
+	<!-- TMPL_IF NAME="cityid" -->
+		<h1>Modify a city</h1>
+	<!-- TMPL_ELSE -->
+		<h1>Add a city</h1>
+	<!-- /TMPL_IF -->
+
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="checked" value="0">
+	<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->">
+
+	<!-- TMPL_IF NAME="cityid" -->
+		<p class="p_borrowers">
+	
+		<label>City id</label>
+		<label><b><!-- TMPL_VAR NAME="cityid" --></b></label>
+		</p>
+	<!-- /TMPL_IF -->
+	<p>
+	<label>City name</label>
+	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" escape=HTML -->">&nbsp;
+	</p>
+	<p>				
+	<label>City zipcode</label>
+	<input type="text" name="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->">
+	</p>
+	
+	<p>
+	<div >
+		<input class="button" type="button" onclick="Check(this.form)" value="OK">
+	</div>	
+	</p>
+	</form>
+
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->
+	<table>
+		<tr>
+			<td>
+				<b>City id</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="cityid" -->
+			</td>
+		</tr>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed">
+			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->">        
+		<tr>
+			<td>city name</td>
+			<td><!-- TMPL_VAR NAME="city_name" --></td>
+		</tr>
+		<tr>
+			<td>City zipcode</td>
+			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
+		</tr>
+		</tr>
+		<!-- TMPL_IF NAME="totalgtzero" -->
+		<tr>
+			<td colspan="2" align="center" class="problem">This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</td>
+		</tr>
+	<tr>
+			<td colspan="2">
+				</form><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="submit" value="OK">
+				</form>
+			</td>
+		</tr>
+		<!-- TMPL_ELSE -->
+		<tr>
+			<td colspan="2" align="center">confirm deletion</td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="YES"></form></td>
+			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="NO"></form></td>
+		</tr>
+		<!-- /TMPL_IF -->
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+	<h2>Cities management</h2>
+	<!-- TMPL_IF NAME="searchfield" -->
+		Searching: <!-- TMPL_VAR NAME="searchfield" -->
+	<!-- /TMPL_IF -->
+	<form action="<TMPL_VAR NAME="script_name">" method="post">
+		<input type="text" name="city_name" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="submit" name="submit" value="OK" class="button">
+	</form>
+
+	<table>
+		<tr>
+			<th>City id</th>
+			<th>City name</th>
+			<th>City zipcode</th>
+			<th> </th>
+			<th> </th>
+			
+		</tr>
+		<!-- TMPL_LOOP NAME="loop" -->
+		<!-- TMPL_IF NAME="toggle" -->
+		<tr class="hilighted">
+		<!-- TMPL_ELSE -->
+		<tr>
+		<!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="cityid" --></td>
+			<td><!-- TMPL_VAR NAME="city_name" --></td>
+			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
+			
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">edit</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">delete</a></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+
+	</table>
+	<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form">
+		<input type="submit" class="button" value="Add a city"  alt="Add city"><br>
+	</form></p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<script language="javascript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length == 0) {
+		return false;
+			}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull == 0 && v.value =='') {
+			return false;
+		}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
+				_alertString += "\n- " + _("City name & zipcode missing");
+				alert(_alertString);	
+			}
+			else{
+			document.Aform.submit();
+			}
+		}
+</script>
