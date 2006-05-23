@@ -38,15 +38,18 @@ C4::Members - Perl Module containing convenience functions for member handling
 
 =head1 SYNOPSIS
 
+use C4::Members;
 
 =head1 DESCRIPTION
 
+This module contains routines for adding, modifying and deleting members/patrons/borrowers 
 
 =head1 FUNCTIONS
 
 =over 2
 
 =cut
+#'
 
 @ISA = qw(Exporter);
 @EXPORT = qw();
@@ -58,7 +61,7 @@ C4::Members - Perl Module containing convenience functions for member handling
 	&getboracctrecord
 	&borrowercategories &getborrowercategory
 	&fixEthnicity
-	&ethnicitycategories get_institutions
+	&ethnicitycategories get_institutions add_member_orgs
     );
 
 
@@ -600,7 +603,7 @@ sub NewBorrowerNumber {
   return($data->{'max(borrowernumber)'});
 }
 
-=item borrissues
+=head2 borrissues
 
   ($count, $issues) = &borrissues($borrowernumber);
 
@@ -630,7 +633,7 @@ sub borrissues {
   return(scalar(@result), \@result);
 }
 
-=item allissues
+=head2 allissues
 
   ($count, $issues) = &allissues($borrowernumber, $sortkey, $limit);
 
@@ -676,7 +679,7 @@ sub allissues {
   return($i,\@result);
 }
 
-=item getboracctrecord
+=head2 getboracctrecord
 
   ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
 
@@ -788,6 +791,8 @@ check for title,firstname,surname,adress,zip code and city  from guarantor to
 guarantorchild
 
 =cut
+#'
+
 sub getguarantordata{
 	my ($borrowerid)=@_;
 	my $dbh = C4::Context->dbh;
@@ -801,6 +806,7 @@ sub getguarantordata{
 =head2 getdcity (OUEST-PROVENCE)
 recover cityid  with city_name condition
 =cut
+
 sub getidcity {
 	my ($city_name)=@_;
 	my $dbh = C4::Context->dbh;
@@ -882,7 +888,7 @@ sub borrowercategories {
 	return(\@codes,\%labels);
 }
 
-=item getborrowercategory
+=head2 getborrowercategory
 
   $description = &getborrowercategory($categorycode);
 
@@ -972,4 +978,24 @@ sub get_institutions {
     return(\%orgs);
 
 } # sub get_institutions
+
+=head2 add_member_orgs
+
+  add_member_orgs($borrowernumber,$borrowernumbers);
+
+Takes a borrowernumber and a list of other borrowernumbers and inserts them into the borrowers_to_borrowers table
+
+=cut
+#'
+sub add_member_orgs {
+    my ($borrowernumber,$otherborrowers) = @_;
+    my $dbh = C4::Context->dbh();
+    my $query = "INSERT INTO borrowers_to_borrowers (borrower1,borrower2) VALUES (?,?)";
+    my $sth = $dbh->prepare($query);
+    foreach my $bornum (@$otherborrowers){
+	$sth->execute($borrowernumber,$bornum);
+	}
+    $sth->finish();
+    
+} # sub add_member_orgs
 1;
