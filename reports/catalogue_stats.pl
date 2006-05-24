@@ -267,7 +267,7 @@ if ($do_it) {
 # 					CGIToPublicationYear => $CGIpublicationyear,
 #					CGIPublisher => $CGIpublisher,
 					CGIBranch => $CGIbranch,
-					CGILocation => $CGIholdingbranch,
+					CGILocation => $CGIlocation,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice
 					);
@@ -506,11 +506,7 @@ sub calculate {
 	}
 	if (@$filters[11]){
 		@$filters[11]=~ s/\*/%/g;
-		if ($cond){
-			$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
-		} else {
-			$strcalc .= " WHERE items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
-		}
+		$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
 	}
 	
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
