@@ -58,11 +58,11 @@ New in Koha 3.x. This module handles all record-related management functions.
 
 my $marcxml = marc2marcxml($marc,$encoding,$flavour);
 
-returns an XML scalar variable
+returns a MARCXML scalar variable
 
 C<$marc> a MARC::Record object or binary MARC record
 
-C<$encoding> UTF-8 or MARC-8 [UTF-8}
+C<$encoding> UTF-8 or MARC-8 [UTF-8]
 
 C<$flavour> MARC21 or UNIMARC
 
@@ -96,7 +96,7 @@ sub marcxml2marc {
 	unless($encoding) {$encoding = "UTF-8"};
 	unless($flavour) {$flavour = C4::Context->preference("TemplateEncoding")};
 	#FIXME: add error handling
-	my $marc = $marcxml->new_from_xml($record,$encoding,$flavour);
+	my $marc = $marcxml->new_from_xml($marcxml,$encoding,$flavour);
 	return $marc;
 }
 
@@ -319,7 +319,8 @@ __END__
 
 Joshua Ferraro <jmf@liblime.com>
 
-=cut
 =head MODIFICATIONS
+
 # $Id$
+
 =cut
