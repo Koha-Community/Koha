@@ -692,7 +692,7 @@ sub MARCkoha2marcOnefield {
 sub MARChtml2xml {
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
 	#use MARC::File::XML;
-	my $xml= MARC::File::XML::header(C4::Context->preference('marcflavour'),C4::Context->preference('TemplateEncoding')); 
+	my $xml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'));
 #my $xml= MARC::File::XML::header('UTF-8'); ##Uncommment the line above when new MARC::XML installed
 	#$xml =~ s/UTF-8/ISO-8859-1/;
     my $prevvalue;
@@ -2711,6 +2711,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.10  2006/05/25 03:03:30  kados
+# fixing bug in MARChtml2xml routine
+#
 # Revision 1.115.2.51.2.9  2006/05/09 15:02:17  tgarip1957
 # *** empty log message ***
 #
