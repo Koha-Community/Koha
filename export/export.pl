@@ -44,12 +44,12 @@ USAGE: export.pl -[options]
 Exports bibliographic data from Koha to an ISO2709 or MARCXML file.
 
 OPTIONS:
- -format <format>    MARC, MARCXML [MARC]
- -e <encoding>       MARC-8 or UTF-8 [UTF-8]
- -ignoreerrors       Ignore encoding errors 
- -assumeunicode      Assume Unicode when unsure of encoding
- -file <filename>    Filename to store dump [koha.mrc]
- -h                  This file
+ --format <format>     MARC, MARCXML [MARC]
+ --encoding <encoding> MARC-8 or UTF-8 [UTF-8]
+ --ignoreerrors        Ignore encoding errors 
+ --assumeunicode       Assume Unicode when unsure of encoding
+ --file <filename>     Filename to store dump [koha.mrc]
+ --h                   This file
 
 EXAMPLES: 
 \$ ./export.pl --format=MARCXML --encoding=UTF-8 -file=2005-05-23-koha.mrc --ignoreerrors
