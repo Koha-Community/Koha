@@ -65,7 +65,7 @@ GetOptions(
 	'encoding:s'		=> \$encoding,
 	ignoreerrors		=> \$ignoreerrors,
 	assumeunicode		=> \$assumeunicode,
-	'outfile:s'		=> \$outfile,
+	'file:s'		=> \$outfile,
 	h					=> \$help,
 );
 if ($help) {die $USAGE};
