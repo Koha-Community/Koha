@@ -59,22 +59,24 @@ EXAMPLES:
 my $VERSION = '.02';
 
 # get the command-line options
-my ($format,$encoding,$ignoreerrors,$assumeunicode,$outfile,$help) = ('MARC','UTF-8','','','koha.mrc','');
+my ($format,$encoding,$ignoreerrors,$assumeunicode,$outfile,$dumpfile,$help) = ('MARC','UTF-8','','','koha.mrc','dump','');
 GetOptions(
-	'format:s' 		=> \$format,
+	'format:s' 			=> \$format,
 	'encoding:s'		=> \$encoding,
 	ignoreerrors		=> \$ignoreerrors,
 	assumeunicode		=> \$assumeunicode,
-	'file:s'		=> \$outfile,
+	'file:s'			=> \$outfile,
+	'dump:s'			=> \$dumpfile,
 	h					=> \$help,
 );
 if ($help) {die $USAGE};
-
 # open our filehandle, if UTF-8, set the utf8 flag for Perl
 if ((!$encoding) || (lc($encoding) =~ /^utf-?8$/o)) {
-	open (OUT,">utf8",$outfile);
+	open (OUT,">utf8",$outfile) or die $!;
+	open (DUMP,">utf8",$dumpfile) or die $!;
 } else {
 	open(OUT,">$outfile") or die $!;
+	open(DUMP,">$dumpfile") or die $!;
 }
 
 # set the MARC::Charset flags specified by user
@@ -87,21 +89,48 @@ if ($assumeunicode) {
 
 # open a coneection to the db
 my $dbh=C4::Context->dbh;
+my $count = 0;
+my $presth = $dbh->prepare("select count(*) from biblio");
+$presth->execute();
+my $total = $presth->fetchrow;
+print "$total records found\n";
+print "Exporting now\n";
 my $sth=$dbh->prepare("select bibid from marc_biblio order by bibid");
 $sth->execute();
 while (my ($bibid) = $sth->fetchrow) {
+	$count++;
 	my $record = MARCgetbiblio($dbh,$bibid);
 	if ((!$format) || (lc($format) =~ /^marc$/o)) { # plain ole binary MARC
 		if (lc($encoding) =~ /^utf-?8$/o) {
-			my $xml = $record->as_xml_record();
-			my $newrecord = MARC::Record::new_from_xml($xml,$encoding);
-			print OUT $newrecord->as_usmarc();
+			my $xml;
+			eval { 
+				$xml = $record->as_xml_record(); 
+			};
+			if ($@) {
+				warn "problem in as_xml_record() for record #$count:".$@; print DUMP $record->as_usmarc();
+			}
+			my $newrecord;
+			eval {
+				$newrecord = MARC::Record::new_from_xml($xml,$encoding); 
+			};
+			if ($@) { 
+				warn "problem in new_from_xml for record #$count:".$@; 
+				print DUMP $xml;
+			} else { 
+				print OUT $newrecord->as_usmarc();
+			}
 		} else {
-			print OUT $record->as_usmarc();
+				print OUT $record->as_usmarc();
+		}
+		if ( $record->warnings() ) {
+			print join( "\n", $record->warnings(), "" );
 		}
 	} elsif (lc($format) =~ /^marc-?xml$/o) { # MARCXML format
-		my $xml = $record->as_xml_record($encoding);
-		print OUT $xml;
+			my $xml = $record->as_xml_record($encoding);
+			print OUT $xml;
+	}
+	if (($count % 100) <1) {
+		print "$count out of $total finished\n"
 	}
 }
 close(OUT);
