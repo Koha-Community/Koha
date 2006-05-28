@@ -57,7 +57,6 @@ my $dbh=C4::Context->dbh;
 
 my $authid = $query->param('authid');
 my $index = $query->param('index');
-my $tagid = $query->param('tagid');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
@@ -81,20 +80,15 @@ my $tag;
 my @loop_data =();
 if ($authid) {
 	foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
-		my @subfields_data;
-		my @subf=$field->subfields;
+			my @subfields_data;
+			my @subf=$field->subfields;
 		# loop through each subfield
-		my %result;
 		for my $i (0..$#subf) {
 			$subf[$i][0] = "@" unless $subf[$i][0];
-			$result{$subf[$i][0]}.=$subf[$i][1]."|";
-		}
-		foreach (keys %result) {
 			my %subfield_data;
-			chop $result{$_};
-			$subfield_data{marc_value}=$result{$_};
-			$subfield_data{marc_subfield}=$_;
-# 			$subfield_data{marc_tag}=$field->tag();
+			$subfield_data{marc_value}=$subf[$i][1];
+			$subfield_data{marc_subfield}=$subf[$i][0];
+			$subfield_data{marc_tag}=$field->tag();
 			push(@subfields_data, \%subfield_data);
 		}
 		if ($#subfields_data>=0) {
@@ -136,11 +130,6 @@ $template->param("0XX" =>\@loop_data);
 
 $template->param(authid => $authid?$authid:"",
 # 				authtypesloop => \@authtypesloop,
-				index => $index,
-				tagid => $tagid,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-				);
+				index => $index);
 output_html_with_http_headers $query, $cookie, $template->output;
 

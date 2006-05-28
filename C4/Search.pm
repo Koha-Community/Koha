@@ -157,8 +157,8 @@ sub NewBorrowerNumber {
   return($data->{'max(borrowernumber)'});
 }
 
-=item catalogsearch3 & catalogsearch4
-####OBSOLETE replaced with catalogsearch3 & catalogsearch4
+=item catalogsearch
+
   ($count, @results) = &catalogsearch($env, $type, $search, $num, $offset);
 
 This is primarily a front-end to other, more specialized catalog
@@ -197,7 +197,88 @@ HTML.
 
 =cut
 #'
+sub catalogsearch {
+	my ($env,$type,$search,$num,$offset)=@_;
+	my $dbh = C4::Context->dbh;
+	#  foreach my $key (%$search){
+	#    $search->{$key}=$dbh->quote($search->{$key});
+	#  }
+	my ($count,@results);
+	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
+#		print STDERR "Doing a precise search\n";
+		($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+	} elsif ($search->{'subject'} ne ''){
+		($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
+	} elsif ($search->{'keyword'} ne ''){
+		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
+	} else {
+		($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
 
+	}
+	if ($env->{itemcount} eq '1') {
+		foreach my $data (@results){
+			my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+			my $subject2=$data->{'subject'};
+			$subject2=~ s/ /%20/g;
+			$data->{'itemcount'}=$counts->{'total'};
+			my $totalitemcounts=0;
+			foreach my $key (keys %$counts){
+				if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
+					#$data->{'location'}.="$key $counts->{$key} ";
+					$totalitemcounts+=$counts->{$key};
+					$data->{'locationhash'}->{$key}=$counts->{$key};
+				}
+			}
+			my $locationtext='';
+			my $locationtextonly='';
+			my $notavailabletext='';
+			foreach (sort keys %{$data->{'locationhash'}}) {
+				if ($_ eq 'notavailable') {
+					$notavailabletext="Not available";
+					my $c=$data->{'locationhash'}->{$_};
+					$data->{'not-available-p'}=$totalitemcounts;
+					if ($totalitemcounts>1) {
+					$notavailabletext.=" ($c)";
+					$data->{'not-available-plural-p'}=1;
+					}
+				} else {
+					$locationtext.="$_";
+					my $c=$data->{'locationhash'}->{$_};
+					if ($_ eq 'Item Lost') {
+					$data->{'lost-p'}=$totalitemcounts;
+					$data->{'lost-plural-p'}=1
+							if $totalitemcounts > 1;
+					} elsif ($_ eq 'Withdrawn') {
+					$data->{'withdrawn-p'}=$totalitemcounts;
+					$data->{'withdrawn-plural-p'}=1
+							if $totalitemcounts > 1;
+					} elsif ($_ eq 'On Loan') {
+					$data->{'on-loan-p'}=$totalitemcounts;
+					$data->{'on-loan-plural-p'}=1
+							if $totalitemcounts > 1;
+					} else {
+					$locationtextonly.=$_;
+					$locationtextonly.=" ($c), "
+							if $totalitemcounts>1;
+					}
+					if ($totalitemcounts>1) {
+					$locationtext.=" ($c), ";
+					}
+				}
+			}
+			if ($notavailabletext) {
+				$locationtext.=$notavailabletext;
+			} else {
+				$locationtext=~s/, $//;
+			}
+			$data->{'location'}=$locationtext;
+			$data->{'location-only'}=$locationtextonly;
+			$data->{'subject2'}=$subject2;
+			$data->{'use-location-flags-p'}=1; # XXX
+		}
+	}
+	return ($count,@results);
+}
 sub add_html_bold_fields {
 	my ($type, $data, $search) = @_;
 	
@@ -588,7 +669,7 @@ sub CatSearch3  {
 			if ($search->{'order'} eq "1=1003 i<"){
 			$query.= " ORDER BY b.author ";
 			}elsif ($search->{'order'} ge "1=9 i<"){
-			$query.= " ORDER BY lcsort,subclass ";
+			$query.= " ORDER BY lcsort ";
 			}elsif ($search->{'order'} eq "1=4 i<"){
 			$query.= " ORDER BY title ";
 			}else{
@@ -596,7 +677,7 @@ sub CatSearch3  {
 			}
 	}
 	
-#warn $query,@params;
+#warn "$query,@params,";
 	$count_query = $query;	
  	#execute the query and returns just the results between $num and $num + $offset
 	my $limit = $num + $offset;
@@ -618,7 +699,20 @@ my %branches;
 		}
 
 #Building shelving hash
-
+my %shelves;
+#find shelvingname
+my $stackstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.stack"');
+		$stackstatus->execute;
+		
+		my ($authorised_valuecode) = $stackstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$stackstatus = $dbh->prepare("select lib,authorised_value from authorised_values where category=? ");
+			$stackstatus->execute($authorised_valuecode);
+			
+			while (my $lib = $stackstatus->fetchrow_hashref){
+			$shelves{$lib->{'authorised_value'}} = $lib->{'lib'};
+			}
+		}
 
 #search item field code
         my $sth3 =
@@ -639,7 +733,6 @@ my $toggle;
 my $even;
 #proccess just the results to show
 	while (my( $data,$rel) = $sth->fetchrow)  {
-
 		if (($i >= $startfrom) && ($i < $limit)) {
 	
 		my $marcrecord=MARCgetbiblio($dbh,$data);
@@ -673,7 +766,7 @@ $item->{$code}=$field->subfield($subfieldstosearch{$code});
 my $status;
 
 $item->{'branchname'}=$branches{$item->{'holdingbranch'}};
-
+$item->{'shelves'}=$shelves{$item->{stack}};
 $status="Lost" if ($item->{'itemlost'}>0);
 $status="Withdrawn" if ($item->{'wthdrawn'}>0) ;
 if ($search->{'from'} eq "intranet"){
@@ -682,7 +775,7 @@ $status="Due:".format_date($item->{'onloan'}) if ($item->{'onloan'}>0);
  $status = $item->{'holdingbranch'}."-".$item->{'stack'}."[".$item->{'itemcallnumber'}."]" unless defined $status;
 }else{
 $status="On Loan" if ($item->{'onloan'}>0);
-   $status = $item->{'branchname'} unless defined $status;
+   $status = $item->{'branchname'}."[".$item->{'shelves'}."]" unless defined $status;
 }
  $counts{$status}++;
 $counts{'total'}++;
@@ -701,8 +794,7 @@ push @items,$item;
 		$oldbiblio->{'noitems'} = $noitems;
 		$oldbiblio->{'norequests'} = $norequests;
 		$oldbiblio->{'even'} = $even = not $even;
-		$oldbiblio->{'itemcount'} = $counts{'total'};
-		
+		$oldbiblio->{'itemcount'} = $counts{'total'};	
 		my $totalitemcounts = 0;
 		foreach my $key (keys %counts){
 			if ($key ne 'total'){	
@@ -768,8 +860,6 @@ sub catalogsearch4 {
 	} else {
 		($count,@results) = CatSearch4('loose',$search,$num,$offset);
 	}
-
-	
 	return ($count,@results);
 }
 
@@ -803,19 +893,16 @@ sub CatSearch4  {
 			$query = " \@attr 1=1007  ".$search->{'biblionumber'};
 						
 		}elsif ($search->{'authnumber'} ne ''){
-			if ($search->{'authtype'} eq 'AUTH'){
-			$query = " \@attr GILS 1=2068  ".$search->{'authnumber'};
-			}else{	
-
-			## We may have more than 1 authnumber so split
-			my @auths = split /,/, $search->{'authnumber'};
-					
-					my $i;		
-						for ( $i = 0; $i < @auths ;$i++) {
-						$query .= " \@attr GILS 1=2057  ". $auths[$i] ;
-						}
-				$query = "\@or ".$query if ($i>1);
-			}		
+				my $n=0;
+				my @ids=split / /,$search->{'authnumber'} ;
+				foreach my  $id (@ids){
+				$query .= "  \@attr GILS 1=2057  ".$id;
+				$n++;
+				}
+			if ($n>1){
+			 $query= "\@or ".$query;
+			}
+	
 		}
 		#add branch condition
 		if ($search->{'branch'} ne '') {
@@ -859,7 +946,11 @@ sub CatSearch4  {
 			$query .= " \@attr 1=1033 \"".$search->{'branch'}."\"";
 
 		}
-		
+		if ($search->{'stack'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=1019 \"".$search->{'stack'}."\"";
+			push @params, $search->{'stack'};
+		}
 		if ($search->{'date_from'} ne '') {
 		$query= "\@and ".$query;
 	        $query .= " \@attr 1=30 \@attr 2=4 \@attr 4=4 ".$search->{'date_from'};
@@ -1132,7 +1223,11 @@ sub CatSearch4  {
 			$query .= " \@attr 1=1033 \"".$search->{'branch'}."\"";
 #			
 		}
-		
+		if ($search->{'stack'} ne '') {
+			$query= "\@and ".$query;
+			$query .= " \@attr 1=1019 \"".$search->{'stack'}."\"";
+			
+		}
 		if ($search->{'date_from'} ne '') {
 		$query= "\@and ".$query;
 	        $query .= " \@attr 1=30 \@attr 2=4 \@attr 4=4 ".$search->{'date_from'};	
@@ -1151,8 +1246,8 @@ sub CatSearch4  {
 	#execute the query and returns just the results between $num and $num + $offset
 	my $limit = $num + $offset;
 	my $startfrom = $offset;
-
-my $oConnection=C4::Context->Zconn;
+return unless $query; ##Somebody hit the search button with no query. Prevent a system crash
+my $oConnection=C4::Context->Zconn("biblioserver");
 if ($oConnection eq "error"){
   return("error",undef);
  }
@@ -1191,6 +1286,19 @@ my %branches;
 
 #Building shelving hash
 my %shelves;
+#find shelvingname
+my $stackstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.stack"');
+		$stackstatus->execute;
+		
+		my ($authorised_valuecode) = $stackstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$stackstatus = $dbh->prepare("select lib,authorised_value from authorised_values where category=? ");
+			$stackstatus->execute($authorised_valuecode);
+			
+			while (my $lib = $stackstatus->fetchrow_hashref){
+			$shelves{$lib->{'authorised_value'}} = $lib->{'lib'};
+			}
+		}
 
 #search item field code
         my $sth =
@@ -1246,13 +1354,13 @@ $item->{$code}=$field->subfield($subfieldstosearch{$code});
 my $status;
 
 $item->{'branchname'}=$branches{$item->{'holdingbranch'}};
-
+$item->{'shelves'}=$shelves{$item->{stack}};
 $status="Lost" if ($item->{'itemlost'}>0);
 $status="Withdrawn" if ($item->{'wthdrawn'}>0);
 if ($search->{'from'} eq "intranet"){
 $search->{'avoidquerylog'}=1;
 $status="Due:".format_date($item->{'onloan'}) if ($item->{'onloan'}>0);
- $status = $item->{'holdingbranch'}."-"."[".$item->{'itemcallnumber'}."]" unless defined $status;
+ $status = $item->{'holdingbranch'}."-".$item->{'stack'}."[".$item->{'itemcallnumber'}."]" unless defined $status;
 }else{
 $status="On Loan" if ($item->{'onloan'}>0);
    $status = $item->{'branchname'}."[".$item->{'shelves'}."]" unless defined $status;
@@ -3550,7 +3658,7 @@ sub barcodes{
     #called from request.pl
     my ($biblioitemnumber)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("SELECT barcode, itemlost, holdingbranch FROM items
+    my $sth=$dbh->prepare("SELECT barcode, itemlost, holdingbranch,onloan,itemnumber  FROM items
                            WHERE biblioitemnumber = ?
                              AND (wthdrawn <> 1 OR wthdrawn IS NULL)");
     $sth->execute($biblioitemnumber);

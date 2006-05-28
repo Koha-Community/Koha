@@ -148,7 +148,7 @@
 		<th>Edit</th>
 		<th>Delete</th>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
 		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
 		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
 		<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
@@ -166,10 +166,10 @@
 		<input type="hidden" name="op" value="add_form" />
 		<input type="submit" class="submit" value="Add Tag" />
 		<!-- TMPL_IF NAME="isprevpage" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">Previous Page</a>
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">Previous Page</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="nextpage" -->
-			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">Next Page</a>
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">Next Page</a>
 		<!-- /TMPL_IF -->
 	</form>
 </div>

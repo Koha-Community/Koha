@@ -110,7 +110,7 @@ if ($op eq "do_search") {
 my ($count, @results);
 ##Check to see if Zebra is available;
 if ($zoom eq "1"){
-my $zconn=C4::Context->Zconn;
+my $zconn=C4::Context->Zconn("biblioserver");
 if (!$zconn ||$zconn eq "error"){
 $zoom=0;
 }
@@ -207,9 +207,9 @@ if ($zoom eq "1"){
 	$template->param(numbers => $numbers);
 
 	#show the virtual shelves
-#	my $results = &GetShelfListOfExt($borrowernumber);
-#	$template->param(shelvescount => scalar(@{$results}));
-#	$template->param(shelves => $results);
+	my $results = &GetShelfListOfExt($borrowernumber);
+	$template->param(shelvescount => scalar(@{$results}));
+	$template->param(shelves => $results);
 
 ########
 if ($format eq '1') {
@@ -286,7 +286,16 @@ if ( $count == 1){
 	}
 	$template->param(branches => \@branches);
 
-	
+	#show stacks	
+	my $stack = $query->param('stack');
+	my ($stackcount,@stacks)=C4::Biblio::getstacks();
+	foreach my $row (@stacks) {
+		if ($stack eq $row->{'authorised_value'}) {
+			$row->{'sel'} = 1;
+		}
+	}
+	$template->param(stacks => \@stacks);
+		
 }
 show:
 output_html_with_http_headers $query, $cookie, $template->output;

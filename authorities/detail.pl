@@ -49,29 +49,21 @@ use CGI;
 use C4::Search;
 use MARC::Record;
 use C4::Koha;
-# use C4::Biblio;
-# use C4::Catalogue;
 use HTML::Template;
 
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
-
+my $nonav = $query->param('nonav');
 my $authid = $query->param('authid');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
 my $record =AUTHgetauthority($dbh,$authid);
-my $count = AUTHcount_usage($authid);
 
-# find the marc field/subfield used in biblio by this authority
-my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
-$sth->execute($authtypecode);
-my $biblio_fields;
-while (my ($tagfield) = $sth->fetchrow) {
-	$biblio_fields.= $tagfield."9,";
-}
-chop $biblio_fields;
+my ($count) = AUTHcount_usage($authid);
+
+#chop;
 
 # open template
 my ($template, $loggedinuser, $cookie)
@@ -82,6 +74,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {catalogue => 1},
 			     debug => 1,
 			     });
+
 
 # fill arrays
 my @loop_data =();
@@ -95,7 +88,7 @@ foreach my $field (@fields) {
 		my @subfields_data;
 	# if tag <10, there's no subfield, use the "@" trick
 	if ($field->tag()<10) {
-		next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
+		next if (substr($tagslib->{$field->tag()}->{'@'}->{hidden},0,1) gt "0");
 		my %subfield_data;
 		$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
 		$subfield_data{marc_value}=$field->data();
@@ -107,7 +100,7 @@ foreach my $field (@fields) {
 # loop through each subfield
 		for my $i (0..$#subf) {
 			$subf[$i][0] = "@" unless $subf[$i][0];
-			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
+			next if (substr($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden},0,1) gt "0");
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 			if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
@@ -141,13 +134,11 @@ foreach my $thisauthtype (keys %$authtypes) {
 }
 
 $template->param(authid => $authid,
-		count => $count,
-		biblio_fields => $biblio_fields,
-		authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-		authtypesloop => \@authtypesloop,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+				count => $count,
+				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
+				authtypecode => $authtypes->{$authtypecode}{'authtypecode'},
+				authtypesloop => \@authtypesloop);
+$template->param(nonav =>$nonav);
+
 output_html_with_http_headers $query, $cookie, $template->output;
 

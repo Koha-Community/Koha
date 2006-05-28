@@ -4,7 +4,7 @@
 
 #written 8/5/2002 by Finlay
 #script to execute issuing of books
-
+# New functions (renew etc.) added 07-08-2005 Tumer Garip tgarip@neu.edu.tr
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -35,9 +35,9 @@ use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
 use C4::Date;
-use Date::Manip;
+use C4::Context;
+use C4::Members;
 
-#
 # PARAMETERS READING
 #
 my $query=new CGI;
@@ -52,13 +52,15 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
     });
 my $branches = getbranches();
 my $printers = getprinters();
-my $branch = getbranch($query, $branches);
+#my $branch = getbranch($query, $branches);
+my $branch=C4::Context->preference("defaultBranch");
 my $printer = getprinter($query, $printers);
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 $findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrnumber');
+
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
 my $year=$query->param('year');
@@ -67,15 +69,23 @@ my $day=$query->param('day');
 my $stickyduedate=$query->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve = $query->param('cancelreserve');
+my %error;
+my  $errorflag=$query->param('error');
 
-
+if ( $errorflag gt "1"){
+%error=(TOO_EARLY=>{1},) if ($errorflag eq "2");
+%error=(NO_MORE_RENEWALS=>{1},) if ($errorflag eq "3");
+%error=(RESERVE_FOUND=>{1},) if ($errorflag eq "4");
+}elsif ( $errorflag eq "1"){
+%error=(SUCCESFULL_RENEW=>{1},)
+}
 #set up cookie.....
 my $branchcookie;
 my $printercookie;
-if ($query->param('setcookies')) {
-	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
-	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
-}
+#if ($query->param('setcookies')) {
+#	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
+#	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
+#}
 
 my %env; # FIXME env is used as an "environment" variable. Could be dropped probably...
 
@@ -85,7 +95,7 @@ $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
-my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
+my $todaysdate = (1900+$datearr[5])."-".sprintf ("%0.2d", ($datearr[4]+1))."-".sprintf ("%0.2d", ($datearr[3]));
 
 
 # check and see if we should print
@@ -121,43 +131,59 @@ if ($findborrower) {
 
 # get the borrower information.....
 my $borrower;
+my $bornum=$query->param('bornum');
+if ($bornum){
+$borrowernumber=$bornum;
+}
+my $issues;
 if ($borrowernumber) {
 	$borrower = getpatroninformation(\%env,$borrowernumber,0);
 	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
-	#warn $borrower->{'expiry'};
- 	my $warningdate = DateCalc($borrower->{'expiry'},"- ".C4::Context->preference('NotifyBorrowerDeparture')."  days");
-	my $offset = '+ '.$borrower->{'enrolmentperiod'}.' years';
-	my $renewaldate = DateCalc($warningdate, $offset);
-	$renewaldate = UnixDate($renewaldate,'%Y-%m-%d');
-	my $warning=Date_Cmp(ParseDate("today"),$warningdate);
-	if ($warning>0){ 
-		#borrowercard expired
-		$template->param(warndeparture=>$warning,
-				renewaldate=>$renewaldate);
-	}
-	$template->param(overduecount => $od,
-							issuecount => $issue,
-							finetotal => $fines);
-}
+my $warning;
 
+	$template->param(overduecount => $od,
+							issuecount => $issue.$warning,
+							finetotal => $fines);
+$issues=$issue;
+my $picture;
+ my $htdocs = C4::Context->config('opacdir');
+
+$picture =$htdocs. "/htdocs/uploaded-files/users-photo/".$borrower->{'cardnumber'}.".jpg";
+ if (-e $picture)
+{ 
+
+   $template->param(borrowerphoto => "http://library.neu.edu.tr/uploaded-files/users-photo/".$borrower->{'cardnumber'}.".jpg");
+ }else{
+$picture = "http://cc.neu.edu.tr/stdpictures/".$borrower->{'cardnumber'}.".jpg";
+  $template->param(borrowerphoto => $picture);
+}
+}
 
 #
 # STEP 3 : ISSUING
 #
-#
-
+#Try to  issue
 
 
 if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 	if ($issueconfirmed) {
-			issuebook(\%env, $borrower, $barcode, $datedue,$cancelreserve);
+		issuebook(\%env, $borrower, $barcode, $datedue,$cancelreserve);
+		my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
+		my $warning;
+
+	$template->param(overduecount => $od,
+							issuecount => $issue.$warning,
+							finetotal => $fines);	
+
 	} else {
-		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day);
+		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day) unless %error;
+		$error=\%error if %error;
 		my $noerror=1;
 		my $noquestion = 1;
 		foreach my $impossible (keys %$error) {
+
 			$template->param($impossible => $$error{$impossible},
 							IMPOSSIBLE => 1);
 			$noerror = 0;
@@ -172,14 +198,22 @@ if ($barcode) {
 						year => $year);
 		if ($noerror && ($noquestion || $issueconfirmed)) {
 			issuebook(\%env, $borrower, $barcode, $datedue);
+		my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
+		my $warning;
+
+	$template->param(overduecount => $od,
+							issuecount => $issue.$warning,
+							finetotal => $fines);
 		}
 	}
+
 }
 
+
 # reload the borrower info for the sake of reseting the flags.....
-if ($borrowernumber) {
-	$borrower = getpatroninformation(\%env,$borrowernumber,0);
-}
+#if ($borrowernumber) {
+#	$borrower = getpatroninformation(\%env,$borrowernumber,0);
+#}
 
 
 ##################################################################################
@@ -190,8 +224,10 @@ my $todaysissues='';
 my $previssues='';
 my @realtodayissues;
 my @realprevissues;
+#my @renewissues;
 my $allowborrow;
 if ($borrower) {
+
 # get each issue of the borrower & separate them in todayissues & previous issues
 	my @todaysissues;
 	my @previousissues;
@@ -199,13 +235,16 @@ if ($borrower) {
 	# split in 2 arrays for today & previous
 	foreach my $it (keys %$issueslist) {
 		my $issuedate = $issueslist->{$it}->{'timestamp'};
-		$issuedate = substr($issuedate, 0, 8);
-		if ($todaysdate == $issuedate) {
+		$issuedate = substr($issuedate, 0, 10);
+	
+		if ($todaysdate eq $issuedate) {
 			push @todaysissues, $issueslist->{$it};
-		} else {
+		} else { 
 			push @previousissues, $issueslist->{$it};
 		}
     }
+
+
 	my $od; # overdues
 	my $i = 0;
 	my $togglecolor;
@@ -213,57 +252,65 @@ if ($borrower) {
 	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
 		my $dd = $book->{'date_due'};
 		my $datedue = $book->{'date_due'};
+
 		$dd=format_date($dd);
-		$datedue=~s/-//g;
-		if ($datedue < $todaysdate) {
+#		$datedue=~s/-//g;
+		if ($datedue lt $todaysdate) {
 			$od = 1;
 		} else {
 			$od=0;
 		}
-		if ($i%2) {
+		$book->{'od'}=$od;
+		$book->{'dd'}=$dd;
+		$book->{'tcolor'}=$togglecolor;
+		if ($togglecolor) {
 			$togglecolor=0;
 		} else {
 			$togglecolor=1;
 		}
-		$book->{'togglecolor'} = $togglecolor;
-		$book->{'od'}=$od;
-		$book->{'dd'}=$dd;
 		if ($book->{'author'} eq ''){
 			$book->{'author'}=' ';
 		}    
 		push @realtodayissues,$book;
-		$i++;
+	$i++;
 	}
 
+
+
 	# parses previous & build Template array
-	$i = 0;
+	$i=0;
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 		my $dd = $book->{'date_due'};
 		my $datedue = $book->{'date_due'};
 		$dd=format_date($dd);
 		my $pcolor = '';
 		my $od = '';
-		$datedue=~s/-//g;
-		if ($datedue < $todaysdate) {
+#		$datedue=~s/-//g;
+		if ($datedue lt $todaysdate) {
+		
 			$od = 1;
 		} else {
 			$od = 0;
 		}
-		if ($i%2) {
+	
+		if ($togglecolor) {
 			$togglecolor=0;
 		} else {
 			$togglecolor=1;
 		}
-		$book->{'togglecolor'} = $togglecolor;
+	$book->{'tcolor'}=$togglecolor;
 		$book->{'dd'}=$dd; 
 		$book->{'od'}=$od;
+		$book->{'tcolor'}=$pcolor;
 		if ($book->{'author'} eq ''){
 			$book->{'author'}=' ';
 		}    
+
 		push @realprevissues,$book;
-		$i++;
+	$i++;
 	}
-}
+
+}#borrower
 
 
 my @values;
@@ -286,7 +333,7 @@ my ($patrontable, $flaginfotable) = patrontable($borrower);
 my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'};
 my @temp=split(/\$/,$amountold);
 $amountold=$temp[1];
-$template->param(
+$template->param( today=>format_date($todaysdate),
 		findborrower => $findborrower,
 		borrower => $borrower,
 		borrowernumber => $borrowernumber,
@@ -296,8 +343,7 @@ $template->param(
 		printername => $printers->{$printer}->{'printername'},
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
-		expiry => format_date($borrower->{'expiry'}),
-		categorycode => $borrower->{'categorycode'},
+		categorycode => getborrowercategory($borrower->{'categorycode'}),
 		streetaddress => $borrower->{'streetaddress'},
 		emailaddress => $borrower->{'emailaddress'},
 		borrowernotes => $borrower->{'borrowernotes'},
@@ -311,6 +357,7 @@ $template->param(
 		CGIselectborrower => $CGIselectborrower,
 		todayissues => \@realtodayissues,
 		previssues => \@realprevissues,
+		
 	);
 # set return date if stickyduedate
 if ($stickyduedate) {
@@ -328,11 +375,7 @@ if ($stickyduedate) {
 if ($branchcookie) {
     $cookie=[$cookie, $branchcookie, $printercookie];
 }
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		patronimages => C4::Context->preference("patronimages"),
-		);
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
 ####################################################################

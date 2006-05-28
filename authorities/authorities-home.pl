@@ -24,20 +24,19 @@ use CGI;
 use C4::Auth;
 use HTML::Template;
 use C4::Context;
-use C4::Search;
-use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AuthoritiesMarc;
-use C4::SearchMarc;
-use C4::Acquisition;
 use C4::Koha; # XXX subfield_is_koha_internal_p
+use C4::Biblio;
+
 
 my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $dbh = C4::Context->dbh;
-
+my $mergefrom=$query->param('mergefrom');
+my $mergeto=$query->param('mergeto');
 my $startfrom=$query->param('startfrom');
 my $authid=$query->param('authid');
 $startfrom=0 if(!defined $startfrom);
@@ -49,11 +48,21 @@ my @authtypesloop;
 foreach my $thisauthtype (sort { $authtypes->{$a} <=> $authtypes->{$b} } keys %$authtypes) {
 	my $selected = 1 if $thisauthtype eq $authtypecode;
 	my %row =(value => $thisauthtype,
-				selected => $selected,
+				selected => $selected, 
 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
 			);
 	push @authtypesloop, \%row;
 }
+my %row =(value =>"TSUB ESUB",
+				selected => "", 
+				authtypetext => "All Subject Headings",
+			);
+push @authtypesloop, \%row;
+my %row =(value =>"AUTH CORP",
+				selected => "", 
+				authtypetext => "All Name Authorities",
+			);
+push @authtypesloop, \%row;
 
 if ($op eq "do_search") {
 	my @marclist = $query->param('marclist');
@@ -63,16 +72,17 @@ if ($op eq "do_search") {
 	my @value = $query->param('value');
 
 	$resultsperpage= $query->param('resultsperpage');
-	$resultsperpage = 19 if(!defined $resultsperpage);
+	$resultsperpage = 20 if(!defined $resultsperpage);
 	my @tags;
 	my ($results,$total) = authoritysearch($dbh, \@marclist,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
+										$startfrom*$resultsperpage, $resultsperpage,$authtypecode) ;
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/searchresultlist.tmpl",
 				query => $query,
 				type => 'intranet',
 				authnotrequired => 0,
+				authtypecode=> $authtypecode,
 				flagsrequired => {borrowers => 1},
 				flagsrequired => {catalogue => 1},
 				debug => 1,
@@ -104,7 +114,7 @@ if ($op eq "do_search") {
 	{
 		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
 		{
-			if ($i<16)
+			if ($i<31)
 			{
 	    		my $highlight=0;
 	    		($startfrom==($i-1)) && ($highlight=1);
@@ -139,12 +149,11 @@ if ($op eq "do_search") {
 							to=>$to,
 							numbers=>\@numbers,
 							authtypecode=>$authtypecode,
-							isEDITORS => $authtypecode eq 'EDITORS',
 							);
 
 } elsif ($op eq "delete") {
 
-	&AUTHdelauthority($dbh,$authid, 1);
+	&AUTHdelauthority($dbh,$authid, 0);
 
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
@@ -230,8 +239,21 @@ elsif ($op eq "AddStatement") {
 	$template->param("statements" => \@statements,
 						"nbstatements" => $nbstatements);
 
-}
-else {
+}elsif ($op eq "merge") {
+
+
+	my $MARCfrom = AUTHgetauthority($dbh,$mergefrom);
+	my $MARCto = AUTHgetauthority($dbh,$mergeto);
+	merge($dbh,$mergefrom,$MARCfrom,$mergeto,$MARCto);
+	($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
+				query => $query,
+				type => 'intranet',
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});
+}else {
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
 				query => $query,
@@ -243,11 +265,9 @@ else {
 
 }
 
-$template->param(authtypesloop => \@authtypesloop,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+
+
+$template->param(authtypesloop => \@authtypesloop);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

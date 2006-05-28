@@ -56,7 +56,7 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/authtypes.tmpl",
+    = get_template_and_user({template_name => "admin/authtypes.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -84,7 +84,7 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
+#	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
 	$template->param(authtypecode => $authtypecode,
 							authtypetext => $data->{'authtypetext'},
 							auth_tag_to_report => $data->{'auth_tag_to_report'},
@@ -171,10 +171,6 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?offset=".$nextpage);
 	}
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:
