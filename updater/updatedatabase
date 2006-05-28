@@ -12,16 +12,17 @@
 # - Would also be a good idea to offer to do a backup at this time...
 
 # NOTE:  If you do something more than once in here, make it table driven.
-
 use strict;
 
 # CPAN modules
 use DBI;
 use Getopt::Long;
-
 # Koha modules
 use C4::Context;
 
+use MARC::Record;
+use MARC::File::XML ( BinaryEncoding => 'utf8' );
+ 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
@@ -39,441 +40,161 @@ my (
 );
 
 my $silent;
-GetOptions( 's' => \$silent );
+GetOptions(
+	's' =>\$silent
+	);
 my $dbh = C4::Context->dbh;
 print "connected to your DB. Checking & modifying it\n" unless $silent;
+$|=1; # flushes output
 
 #-------------------
 # Defines
 
 # Tables to add if they don't exist
 my %requiretables = (
-    shelfcontents => "( shelfnumber int not null,
-							itemnumber int not null,
-							flags int)",
-    bookshelf => "( shelfnumber int auto_increment primary key,
-						shelfname char(255))",
-    z3950queue => "( id int auto_increment primary key,
-						term text,
-						type char(10),
-						startdate int,
-						enddate int,
-						done smallint,
-						results longblob,
-						numrecords int,
-						servers text,
-						identifier char(30))",
-    z3950results => "( id int auto_increment primary key,
-						queryid int,
-						server char(255),
-						startdate int,
-						enddate int,
-						results longblob,
-						numrecords int,
-						numdownloaded int,
-						highestseen int,
-						active smallint)",
-    branchrelations => "( branchcode varchar(4),
-							categorycode varchar(4))",
-    websites => "( websitenumber int(11) NOT NULL auto_increment,
-						biblionumber int(11) NOT NULL default '0',
-						title text,
-						description text,
-						url varchar(255),
-						PRIMARY KEY (websitenumber) )",
-    marcrecorddone => "( isbn char(40),
-								issn char(40),
-								lccn char(40),
-								controlnumber char(40))",
-    uploadedmarc => "( id int(11) NOT NULL auto_increment PRIMARY KEY,
-							marc longblob,
-							hidden smallint(6) default NULL,
-							name varchar(255) default NULL)",
-    ethnicity => "( code varchar(10) NOT NULL default '',
-					name varchar(255) default NULL,
-					PRIMARY KEY  (code)   )",
-    sessions => "( sessionID varchar(255) NOT NULL default '',
-						userid varchar(255) default NULL,
-						ip varchar(16) default NULL,
-						lasttime int,
-						PRIMARY KEY (sessionID)   )",
-    sessionqueries => "( sessionID varchar(255) NOT NULL default '',
-								userid char(100) NOT NULL default '',
-								ip char(18) NOT NULL default '',
-								url text NOT NULL default ''  )",
-    bibliothesaurus => "( id bigint(20) NOT NULL auto_increment,
-							freelib char(255) NOT NULL default '',
-							stdlib char(255) NOT NULL default '',
-							category char(10) NOT NULL default '',
-							level tinyint(4) NOT NULL default '1',
-							hierarchy char(80) NOT NULL default '',
-							father char(80) NOT NULL default '',
-							PRIMARY KEY  (id),
-							KEY freelib (freelib),
-							KEY stdlib (stdlib),
-							KEY category (category),
-							KEY hierarchy (hierarchy)
-							)",
-    marc_biblio => "(
-						bibid bigint(20) unsigned NOT NULL auto_increment,
-						biblionumber int(11) NOT NULL default '0',
-						datecreated date NOT NULL default '0000-00-00',
-						datemodified date default NULL,
-						origincode char(20) default NULL,
-						PRIMARY KEY  (bibid),
-						KEY origincode (origincode),
-						KEY biblionumber (biblionumber)
-						) ",
-    marc_blob_subfield => "(
-					blobidlink bigint(20) NOT NULL auto_increment,
-					subfieldvalue longtext NOT NULL,
-					PRIMARY KEY  (blobidlink)
-					) ",
-    marc_subfield_structure => "(
-						tagfield char(3) NOT NULL default '',
-						tagsubfield char(1) NOT NULL default '',
-						liblibrarian char(255) NOT NULL default '',
-						libopac char(255) NOT NULL default '',
-						repeatable tinyint(4) NOT NULL default '0',
-						mandatory tinyint(4) NOT NULL default '0',
-						kohafield char(40)  default NULL,
-						tab tinyint(1) default NULL,
-						authorised_value char(10) default NULL,
-						thesaurus_category char(10) default NULL,
-						value_builder char(80) default NULL,
-						PRIMARY KEY  (tagfield,tagsubfield),
-						KEY kohafield (kohafield),
-						KEY tab (tab)
-						)",
-    marc_subfield_table => "(
-						subfieldid bigint(20) unsigned NOT NULL auto_increment,
-						bibid bigint(20) unsigned NOT NULL default '0',
-						tag char(3) NOT NULL default '',
-						tagorder tinyint(4) NOT NULL default '1',
-						tag_indicator char(2) NOT NULL default '',
-						subfieldcode char(1) NOT NULL default '',
-						subfieldorder tinyint(4) NOT NULL default '1',
-						subfieldvalue varchar(255) default NULL,
-						valuebloblink bigint(20) default NULL,
-						PRIMARY KEY  (subfieldid),
-						KEY bibid (bibid),
-						KEY tag (tag),
-						KEY tag_indicator (tag_indicator),
-						KEY subfieldorder (subfieldorder),
-						KEY subfieldcode (subfieldcode),
-						KEY subfieldvalue (subfieldvalue),
-						KEY tagorder (tagorder)
-					)",
-    marc_tag_structure => "(
-					tagfield char(3) NOT NULL default '',
-					liblibrarian char(255) NOT NULL default '',
-					libopac char(255) NOT NULL default '',
-					repeatable tinyint(4) NOT NULL default '0',
-					mandatory tinyint(4) NOT NULL default '0',
- 					authorised_value char(10) default NULL,
-					PRIMARY KEY  (tagfield)
-					)",
-    marc_word => "(
-				bibid bigint(20) NOT NULL default '0',
-				tag char(3) NOT NULL default '',
-				tagorder tinyint(4) NOT NULL default '1',
-				subfieldid char(1) NOT NULL default '',
-				subfieldorder tinyint(4) NOT NULL default '1',
-				word varchar(255) NOT NULL default '',
-				sndx_word varchar(255) NOT NULL default '',
-				KEY bibid (bibid),
-				KEY tag (tag),
-				KEY tagorder (tagorder),
-				KEY subfieldid (subfieldid),
-				KEY subfieldorder (subfieldorder),
-				KEY word (word),
-				KEY sndx_word (sndx_word)
-			)",
-    marc_breeding => "(  id bigint(20) NOT NULL auto_increment,
-				file varchar(80) NOT NULL default '',
-				isbn varchar(10) NOT NULL default '',
-				title varchar(128) default NULL,
-				author varchar(80) default NULL,
-				marc text NOT NULL,
-				encoding varchar(40) default NULL,
-				PRIMARY KEY  (id),
-				KEY title (title),
-				KEY isbn (isbn)
-			)",
-    authorised_values => "(id int(11) NOT NULL auto_increment,
-				category char(10) NOT NULL default '',
-				authorised_value char(80) NOT NULL default '',
-				lib char(80) NULL,
-				PRIMARY KEY  (id),
-				KEY name (category)
-			)",
-    userflags => "( bit int(11) NOT NULL default '0',
-				flag char(30), flagdesc char(255),
-				defaulton int(11)
-			)",
-    auth_types => "(
-					authtypecode char(10) not NULL,
-					authtypetext char(255) not NULL,
-					auth_tag_to_report char(3) not NULL,
-					summary text not NULL,
-					PRIMARY KEY (authtypecode)
-			)",
-    biblio_framework => "(
-					frameworkcode char(4) not NULL,
-					frameworktext char(255) not NULL,
-					PRIMARY KEY (frameworkcode)
-			)",
-    auth_subfield_structure => "(
-					authtypecode char(10) NOT NULL default '',
-					tagfield char(3) NOT NULL default '',
-					tagsubfield char(1) NOT NULL default '',
-					liblibrarian char(255) NOT NULL default '',
-					libopac char(255) NOT NULL default '',
-					repeatable tinyint(4) NOT NULL default '0',
-					mandatory tinyint(4) NOT NULL default '0',
-					tab tinyint(1) default NULL,
-					authorised_value char(10) default NULL,
-					value_builder char(80) default NULL,
-					seealso char(255) default NULL,
-					PRIMARY KEY  (authtypecode,tagfield,tagsubfield),
-					KEY tab (authtypecode,tab)
-					)",
-    auth_tag_structure => "(
-					authtypecode char(10) NOT NULL default '',
-					tagfield char(3) NOT NULL default '',
-					liblibrarian char(255) NOT NULL default '',
-					libopac char(255) NOT NULL default '',
-					repeatable tinyint(4) NOT NULL default '0',
-					mandatory tinyint(4) NOT NULL default '0',
- 					authorised_value char(10) default NULL,
-					PRIMARY KEY  (authtypecode,tagfield)
-					)",
-    auth_header => "(
-						authid bigint(20) unsigned NOT NULL auto_increment,
-						authtypecode char(10) NOT NULL default '',
-						datecreated date NOT NULL default '0000-00-00',
-						datemodified date default NULL,
-						origincode char(20) default NULL,
-						PRIMARY KEY  (authid),
-						KEY origincode (origincode)
-						) ",
-    auth_subfield_table => "(
-						subfieldid bigint(20) unsigned NOT NULL auto_increment,
-						authid bigint(20) unsigned NOT NULL default '0',
-						tag char(3) NOT NULL default '',
-						tagorder tinyint(4) NOT NULL default '1',
-						tag_indicator char(2) NOT NULL default '',
-						subfieldcode char(1) NOT NULL default '',
-						subfieldorder tinyint(4) NOT NULL default '1',
-						subfieldvalue varchar(255) default NULL,
-						PRIMARY KEY  (subfieldid),
-						KEY authid (authid),
-						KEY tag (tag),
-						KEY subfieldcode (subfieldcode),
-						KEY subfieldvalue (subfieldvalue)
-					)",
-    auth_word => "(
-				authid bigint(20) NOT NULL default '0',
-				tagsubfield char(4) NOT NULL default '',
-				tagorder tinyint(4) NOT NULL default '1',
-				subfieldorder tinyint(4) NOT NULL default '1',
-				word varchar(255) NOT NULL default '',
-				sndx_word varchar(255) NOT NULL default '',
-				KEY authid (authid),
-				KEY marc_search (tagsubfield,word),
-				KEY word (word),
-				KEY sndx_word (sndx_word)
-			)",
-    suggestions => "(
-				suggestionid int(8) NOT NULL auto_increment,
-				suggestedby int(11) NOT NULL default '0',
-				managedby int(11) default NULL ,
-				STATUS varchar(10) NOT NULL default '',
-				note text,
-				author varchar(80) default NULL ,
-				title varchar(80) default NULL ,
-				copyrightdate smallint(6) default NULL ,
-				publishercode varchar(255) default NULL ,
-				date timestamp(8) NOT NULL ,
-				volumedesc varchar(255) default NULL ,
-				publicationyear smallint(6) default '0',
-				place varchar(255) default NULL ,
-				isbn varchar(10) default NULL ,
-				mailoverseeing smallint(1) default '0',
-				biblionumber int(11) default NULL ,
-				PRIMARY KEY (suggestionid) ,
-				KEY suggestedby(suggestedby) ,
-				KEY managedby(managedby)
-			)",
-    aqbasket => "(basketno int(11) NOT NULL auto_increment,
-				creationdate date,
-				closedate date,
-				booksellerid varchar(10),
-				authorisedby varchar(10),
-				booksellerinvoicenumber text,
-				PRIMARY KEY (basketno)
-				)",
-    serial => "(serialid int(11) NOT NULL auto_increment,
-				biblionumber varchar(100) NOT NULL default '',
-				subscriptionid varchar(100) NOT NULL default '',
-				serialseq varchar(100) NOT NULL default '',
-				status tinyint(4) NOT NULL default '0',
-				planneddate date NOT NULL default '0000-00-00',
-				PRIMARY KEY  (serialid)
-				)",
-    subscription => "(biblionumber int(11) NOT NULL default '0',
-						subscriptionid int(11) NOT NULL auto_increment,
-						librarian varchar(100) default '',
-						startdate date default '0000-00-00',
-						aqbooksellerid int(11) default '0',
-						cost int(11) default '0',
-						aqbudgetid int(11) default '0',
-						weeklength tinyint(4) default '0',
-						monthlength tinyint(4) default '0',
-						numberlength tinyint(4) default '0',
-						periodicity tinyint(4) default '0',
-						dow varchar(100) default '',
-						numberingmethod varchar(100) default '',
-						notes text,
-						status varchar(100) NOT NULL default '',
-						add1 int(11) default 0,
-						every1 int(11) default 0,
-						whenmorethan1 int(11) default 0,
-						setto1 int(11),
-						lastvalue1 int(11),
-						add2 int(11) default 0,
-						every2 int(11) default 0,
-						whenmorethan2 int(11) default 0,
-						setto2 int(11),
-						lastvalue2 int(11),
-						add3 int(11) default 0,
-						every3 int(11) default 0,
-						innerloop1 int(11) default 0,
-						innerloop2 int(11) default 0,
-						innerloop3 int(11) default 0,
-						whenmorethan3 int(11) default 0,
-						setto3 int(11),
-						lastvalue3 int(11),
-						PRIMARY KEY  (subscriptionid)
-						)",
-    subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
-							subscriptionid int(11) NOT NULL default '0',
-							histstartdate date NOT NULL default '0000-00-00',
-							enddate date default '0000-00-00',
-							missinglist longtext NOT NULL,
-							recievedlist longtext NOT NULL,
-							opacnote varchar(150) NOT NULL default '',
-							librariannote varchar(150) NOT NULL default '',
-							PRIMARY KEY  (subscriptionid),
-							KEY biblionumber (biblionumber)
-				)",
-    labels => "(labelid int(11) NOT NULL auto_increment,
-                            itemnumber varchar(100) NOT NULL default '',
-                            timestamp timestamp(14) NOT NULL,
-                            PRIMARY KEY  (labelid)
+    categorytable       => "(categorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (categorycode)
                             )",
-    labels_conf => "(id int(4) NOT NULL auto_increment,
-                           barcodetype char(100) default '',
-                           title tinyint(1) default '0',
-                           isbn tinyint(1) default '0',
-                           itemtype tinyint(1) default '0',
-                           barcode tinyint(1) default '0',
-                           dewey tinyint(1) default '0',
-                           class tinyint(1) default '0',
-                           author tinyint(1) default '0',
-                           papertype char(100) default '',
-                           startrow int(2) default NULL,
-                           PRIMARY KEY  (id)
-                           )",
+    subcategorytable       => "(subcategorycode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (subcategorycode)
+                            )",
+    mediatypetable       => "(mediatypecode char(5) NOT NULL default '',
+                             description text default '',
+                             itemtypecodes text default '',
+                             PRIMARY KEY (mediatypecode)
+                            )",
+    action_logs 	=> "(
+				    `timestamp` TIMESTAMP NOT NULL ,
+				    `user` INT( 11 ) NOT NULL ,
+				    `module` TEXT default '',
+				    `action` TEXT default '' ,
+				    `object` INT(11) default '' ,
+				    `info` TEXT default '' ,
+				    PRIMARY KEY ( `timestamp` , `user` )
+			    )",
+	letter		=> "(
+					module varchar(20) NOT NULL default '',
+					code varchar(20) NOT NULL default '',
+					name varchar(100) NOT NULL default '',
+					title varchar(200) NOT NULL default '',
+					content text,
+					PRIMARY KEY  (module,code)
+				)",
+	alert		=>"(
+					alertid int(11) NOT NULL auto_increment,
+					borrowernumber int(11) NOT NULL default '0',
+					type varchar(10) NOT NULL default '',
+					externalid varchar(20) NOT NULL default '',
+					PRIMARY KEY  (alertid),
+					KEY borrowernumber (borrowernumber),
+					KEY type (type,externalid)
+				)",
+	opac_news => "(
+				`idnew` int(10) unsigned NOT NULL auto_increment,
+				`title` varchar(250) NOT NULL default '',
+				`new` text NOT NULL,
+				`lang` varchar(4) NOT NULL default '',
+				`timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+				PRIMARY KEY  (`idnew`)
+				)",
+	repeatable_holidays => "(
+				`id` int(11) NOT NULL auto_increment,
+				`branchcode` varchar(4) NOT NULL default '',
+				`weekday` smallint(6) default NULL,
+				`day` smallint(6) default NULL,
+				`month` smallint(6) default NULL,
+				`title` varchar(50) NOT NULL default '',
+				`description` text NOT NULL,
+				PRIMARY KEY  (`id`)
+				)",
+	special_holidays => "(
+				`id` int(11) NOT NULL auto_increment,
+				`branchcode` varchar(4) NOT NULL default '',
+				`day` smallint(6) NOT NULL default '0',
+				`month` smallint(6) NOT NULL default '0',
+				`year` smallint(6) NOT NULL default '0',
+				`isexception` smallint(1) NOT NULL default '1',
+				`title` varchar(50) NOT NULL default '',
+				`description` text NOT NULL,
+				PRIMARY KEY  (`id`)
+				)",
+	overduerules	=>"(`branchcode` varchar(255) NOT NULL default '',
+					`categorycode` char(2) NOT NULL default '',
+					`delay1` int(4) default '0',
+					`letter1` varchar(20) default NULL,
+					`debarred1` char(1) default '0',
+					`delay2` int(4) default '0',
+					`debarred2` char(1) default '0',
+					`letter2` varchar(20) default NULL,
+					`delay3` int(4) default '0',
+					`letter3` varchar(20) default NULL,
+					`debarred3` int(1) default '0',
+					PRIMARY KEY  (`branchcode`,`categorycode`)
+					)",
+	cities			=> "(`cityid` int auto_increment,
+						`city_name` char(100) NOT NULL,
+						`city_zipcode` char(20),
+						PRIMARY KEY (`cityid`)
+					)",
+	roadtype			=> "(`roadtypeid` int auto_increment,
+						`road_type` char(100) NOT NULL,
+						PRIMARY KEY (`roadtypeid`)
+					)",
+
+	labels                     => "(
+				labelid int(11) NOT NULL auto_increment,
+                           	itemnumber varchar(100) NOT NULL default '',
+                           	timestamp timestamp(14) NOT NULL,
+                           	PRIMARY KEY  (labelid)
+                           	)",
+
+	labels_conf                => "(
+				id int(4) NOT NULL auto_increment,
+                           	barcodetype char(100) default '',
+                           	title tinyint(1) default '0',
+                           	isbn tinyint(1) default '0',
+                           	itemtype tinyint(1) default '0',
+                           	barcode tinyint(1) default '0',
+                           	dewey tinyint(1) default '0',
+                           	class tinyint(1) default '0',
+                           	author tinyint(1) default '0',
+                           	papertype char(100) default '',
+                           	startrow int(2) default NULL,
+                           	PRIMARY KEY  (id)
+                           	)",
+
 );
 
 my %requirefields = (
-    biblio        => { 'abstract' => 'text' },
-    deletedbiblio => { 'abstract' => 'text', 'marc' => 'blob' },
-    deleteditems =>
-      { 'marc' => 'blob', 'paidfor' => 'text', 'location' => 'varchar(80)' },
-    biblioitems => {
-        'lccn' => 'char(25)',
-        'url'  => 'varchar(255)',
-        'marc' => 'text'
-    },
-    deletedbiblioitems => {
-        'lccn' => 'char(25)',
-        'url'  => 'varchar(255)',
-        'marc' => 'text'
-    },
-    branchtransfers => { 'datearrived'    => 'datetime' },
-    statistics      => { 'borrowernumber' => 'int(11)' },
-    aqbooksellers   => {
-        'invoicedisc' => 'float(6,4)',
-        'nocalc'      => 'int(11)'
-    },
-    borrowers => {
-        'userid'        => 'char(30)',
-        'password'      => 'char(30)',
-        'flags'         => 'int(11)',
-        'textmessaging' => 'varchar(30)',
-        'zipcode'       => 'varchar(25)',
-        'homezipcode'   => 'varchar(25)',
-        'sort1'         => 'char(80)',
-        'sort2'         => 'char(80)',
-    },
-    aqorders => {
-        'budgetdate' => 'date',
-        'sort1'      => 'char(80)',
-        'sort2'      => 'char(80)',
-    },
-    aqbudget => {
-        'aqbudgetid' => 'tinyint(4) auto_increment primary key',
-        'branchcode' => 'varchar(4)',
-    },
-    aqbookfund => { 'branchcode' => 'varchar(4)', },
-    items      => { 'paidfor'    => 'text', 'location' => 'char(80)' },
-
-    #added so that reference items are not available for reserves...
-    itemtypes         => { 'notforloan' => 'smallint(6)' },
-    systempreferences => {
-        'explanation' => 'char(80)',
-        'type'        => 'char(20)',
-        'options'     => 'text'
-    },
-    z3950servers       => { 'syntax' => 'char(80)' },
-    marc_tag_structure =>
-      { 'frameworkcode' => 'char(4) not NULL default \'\'' },
-    marc_subfield_structure => {
-        'seealso'       => 'char(255)',
-        'frameworkcode' => 'char(4) not NULL default \'\'',
-        'hidden'        => 'tinyint(1)',
-        'isurl'         => 'tinyint(1)',
-        'link'          => 'char(80)',
-    },
-    bookshelf => {
-        'owner'    => 'char(80)',
-        'category' => 'char(1)',
-    },
-    marc_biblio => { 'frameworkcode' => 'char(4) not NULL default \'\'' },
+	subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL'},
+	itemtypes => { 'imageurl' => 'char(200) NULL'},
+	aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
+	aqbudget => { 'branchcode' => 'varchar(4) NULL'},
+	auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'INT(4) NULL'},
+	items => { 'onloan' => 'date NOT NULL default 0000-00-00', 'Cutterextra' => 'VARCHAR(45)'},
+	biblioitems=>{'lcsort'=>'VARCHAR(45)','marc'=>'BLOB NOT NULL'},
+	auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL UNSIGNED ZEROFILL', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL UNSIGNED', 'isurl' => 'TINYINT(1) UNSIGNED'},
+#    tablename        => { 'field' => 'fieldtype' },
 );
 
 my %dropable_table = (
-    classification => 'classification',
-    multipart      => 'multipart',
-    multivolume    => 'multivolume',
-    newitems       => 'newitems',
-    procedures     => 'procedures',
-    publisher      => 'publisher',
-    searchstats    => 'searchstats',
-    serialissues   => 'serialissues',
+	sessionqueries	=> 'sessionqueries',
+	marcrecorddone	=> 'marcrecorddone',
+	users			=> 'users',
+	itemsprices		=> 'itemsprices',
+	biblioanalysis	=> 'biblioanalysis',
+	borexp			=> 'borexp',
+# tablename => 'tablename',
 );
 
 my %uselessfields = (
-    aqorders => "requisitionedby,authorisedby,booksellerid,
-			deliverydays,followupdays,
-			numberfollowupsallowed,numberfollowupssent,
-			dateprinted,sourced,quantityreceiveddamaged,
-			subscriptionfrom,subscriptionto
-			"
-);
-
+# tablename => "field1,field2",
+	borrowers => "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
+	);
 # the other hash contains other actions that can't be done elsewhere. they are done
 # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
 
@@ -486,982 +207,812 @@ my %uselessfields = (
 # values given in the %tabledata hash.
 
 my %tabledata = (
-    userflags => [
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 0,
-            flag                => 'superlibrarian',
-            flagdesc            => 'Access to all librarian functions',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 1,
-            flag                => 'circulate',
-            flagdesc            => 'Circulate books',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 2,
-            flag                => 'catalogue',
-            flagdesc            => 'View Catalogue (Librarian Interface)',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 3,
-            flag                => 'parameters',
-            flagdesc            => 'Set Koha system paramters',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 4,
-            flag                => 'borrowers',
-            flagdesc            => 'Add or modify borrowers',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 5,
-            flag                => 'permissions',
-            flagdesc            => 'Set user permissions',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 6,
-            flag                => 'reserveforothers',
-            flagdesc            => 'Reserve books for patrons',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 7,
-            flag                => 'borrow',
-            flagdesc            => 'Borrow books',
-            defaulton           => 1
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 8,
-            flag                => 'reserveforself',
-            flagdesc            => 'Reserve books for self',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 9,
-            flag                => 'editcatalogue',
-            flagdesc  => 'Edit Catalogue (Modify bibliographic/holdings data)',
-            defaulton => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 10,
-            flag                => 'updatecharges',
-            flagdesc            => 'Update borrower charges',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 11,
-            flag                => 'acquisition',
-            flagdesc            => 'Acquisition and/or suggestion management',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 12,
-            flag                => 'management',
-            flagdesc            => 'Set library management parameters',
-            defaulton           => 0
-        },
-        {
-            uniquefieldrequired => 'bit',
-            bit                 => 13,
-            flag                => 'tools',
-            flagdesc            => 'Use tools (export, import, barcodes)',
-            defaulton           => 0
-        },
-    ],
+# tablename => [
+#	{	uniquefielrequired => 'fieldname', # the primary key in the table
+#		fieldname => fieldvalue,
+#		fieldname2 => fieldvalue2,
+#	},
+# ],
     systempreferences => [
-        {
+		{
             uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            variable => 'LibraryName',
-            value    =>
-'<i><b>Koha<br/>Free Software ILS<br/><br/></b>Koha : a gift, a contribution<br/> in Maori</i>',
-            explanation => 'Library name as shown on main opac page',
-            type        => ''
-
+            variable            => 'Activate_Log',
+            value               => 'On',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Turn Log Actions on DB On an Off',
+	    type		=> 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            variable    => 'autoMemberNum',
-            value       => '1',
-            explanation => 'Member number is auto-calculated',
-            type        => 'YesNo'
-
+            variable            => 'IndependantBranches',
+            value               => 0,
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Turn Branch independancy management On an Off',
+	    type		=> 'YesNo',
         },
-        {
+		{
             uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            variable    => 'acquisitions',
-            value       => 'normal',
-            explanation =>
-'Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions',
-            type    => 'Choice',
-            options => 'simple|normal'
+            variable            => 'ReturnBeforeExpiry',
+            value               => 'Off',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+	    type		=> 'YesNo',
         },
-        {
-            uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            variable    => 'dateformat',
-            value       => 'metric',
-            explanation =>
-              'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
-            type    => 'Choice',
-            options => 'metric|us|iso'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'template',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'default',
-            explanation => 'Preference order for intranet interface templates',
-            type        => 'Themes'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'autoBarcode',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'yes',
-            explanation => 'Barcode is auto-calculated',
-            type        => 'YesNo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'insecure',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'no',
-            explanation =>
-'If YES, no auth at all is needed. Be careful if you set this to yes!',
-            type => 'YesNo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'authoritysep',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            value       => '--',
-            explanation =>
-              'the separator used in authority/thesaurus. Usually --',
-            type    => 'free',
-            options => '10'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclanguages',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'en',
-            explanation =>
-'Set the preferred order for translations.  The top language will be tried first.',
-            type => 'Languages'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opacthemes',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'css',
-            explanation =>
-'Set the preferred order for themes.  The top theme will be tried first.',
-            type => 'Themes'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'timeout',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '1200',
-            explanation =>
-              'Inactivity timeout for cookies authentication (in seconds)',
-            type => 'Integer'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'marc',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'yes',
-            explanation => 'Turn on MARC support',
-            type        => 'YesNo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'sortbynonfiling',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'no',
-            explanation => 'Sort search results by MARC nonfiling characters',
-            type        => 'YesNo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'marcflavour',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            value       => 'MARC21',
-            explanation =>
-'your MARC flavor (MARC21 or UNIMARC) used for character encoding',
-            type    => 'Choice',
-            options => 'MARC21|UNIMARC'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'checkdigit',
-            value               => 'none',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Validity checks on membership number: none or "Katipo" style checks',
-            type    => 'Choice',
-            options => 'none|katipo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'maxoutstanding',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '5',
-            explanation =>
-              'maximum amount withstanding to be able make reserves ',
-            type => 'Integer'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'maxreserves',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '5',
-            explanation => 'maximum number of reserves a member can make',
-            type        => 'Integer'
-
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'noissuescharge',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '5',
-            explanation =>
-              'maximum amount withstanding to be able to check out an item',
-            type => 'Integer'
-
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'KohaAdminEmailAddress',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'your.mail@here',
-            explanation => 'the email address where borrowers modifs are sent',
-            type        => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'gist',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '0.125',
-            explanation =>
-              'the gist rate. NOT in %, but in numeric form (0.12 for 12%)',
-            type => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'printcirculationslips',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '0',
-            explanation =>
-              'if set to 1, print circulation slips. If set to 0, don\'t',
-            type => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'suggestion',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '0',
-            explanation => 'if set to 1, suggestions are activated in OPAC',
-            type        => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'ISBD',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => 'Fill with appropriate value...',
-            explanation => 'ISBD',
-            type        => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'virtualshelves',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '0',
-            explanation => 'Set virtual shelves management ON or OFF',
-            type        => 'YesNo'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'itemcallnumber',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            value       => '676a',
-            explanation =>
-'The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC : 676a for Dewey, 680a for Loc)',
-            type => 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'BiblioDefaultView',
-            value               => 'normal',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Define the default view of a biblio. Can be either normal, marc or isbd',
-            type    => 'Choice',
-            options => 'normal|marc|isbd'
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'LabelMARCView',
-            value               => 'standard',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation => 'Define how a MARC record will display',
-            type        => 'Choice',
-            options     => 'standard|economical'
-        },
-
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacstylesheet',
             value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to use an alternate layout stylesheet in OPAC',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaccolorstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the color stylesheet to use in the OPAC',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclayoutstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the layout stylesheet to use in the OPAC',
-            type => 'free',
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opacreadinghistory',
-            value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Turn on/off display of Patron Reading History in OPAC',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclanguagesdisplay',
-            value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Turn on/off display of Change Language feature on OPAC',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'patronimages',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Turn on/off display of patron images in Intranet and specify a file extension for images',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'intranetstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to use an alternate layout stylesheet in Intranet',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'intranetcolorstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the color stylesheet to use in Intranet',
-            type => 'free',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+	    type		=> 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacsmallimage',
             value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
-            type => 'free',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
+	    type		=> 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclargeimage',
             value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
-            type => 'free',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
+	    type		=> 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'delimiter',
             value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'separator for reports exported to spreadsheet',
-            type        => 'free',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'separator for reports exported to spreadsheet',
+	    type		=> 'free',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'MIME',
             value               => 'OPENOFFICE.ORG',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Define the default application for report exportations into files',
-            type    => 'Choice',
-            options => 'EXCEL|OPENOFFICE.ORG'
+            forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default application for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> 'EXCEL|OPENOFFICE.ORG'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'Delimiter',
             value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Define the default separator character for report exportations into files',
-            type    => 'Choice',
-            options => ';|tabulation|,|/|\|#'
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default separator character for report exportations into files',
+	        type		=> 'Choice',
+	        options		=> ';|tabulation|,|/|\|#'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'SubscriptionHistory',
             value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-              'Define the information level for serials history in OPAC',
-            type    => 'Choice',
-            options => 'simplified|full'
+	        forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the information level for serials history in OPAC',
+	        type		=> 'Choice',
+	        options		=> 'simplified|full'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'hidelostitems',
             value               => 'No',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'show or hide "lost" items in OPAC.',
-            type        => 'YesNo',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'show or hide "lost" items in OPAC.',
+	    type		=> 'YesNo',
         },
-        {
+		 {
             uniquefieldrequired => 'variable',
             variable            => 'IndependantBranches',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'Turn Branch independancy management On an Off',
-            type        => 'YesNo',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Turn Branch independancy management On an Off',
+            type                => 'YesNo',
         },
-        {
+                {
             uniquefieldrequired => 'variable',
             variable            => 'ReturnBeforeExpiry',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'If Yes, Returndate on issuing can\'t be after borrower card expiry',
-            type => 'YesNo',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
+            type                => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'Disable_Dictionary',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'Disables Dictionary buttons if set to yes',
-            type        => 'YesNo',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Disables Dictionary buttons if set to yes',
+            type                => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'hide_marc',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'hide marc specific datas like subfield code & indicators to library',
-            type => 'YesNo',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'hide marc specific datas like subfield code & indicators to library',
+            type                => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'NotifyBorrowerDeparture',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Delay before expiry where a notice is sent when issuing',
-            type => 'Integer',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Delay before expiry where a notice is sent when issuing',
+            type                => 'Integer',
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'OpacPasswordChange',
             value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
-            type => 'YesNo',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
+            type                => 'YesNo',
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'OpacNav',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
-            type    => 'Textarea',
-            options => '70|10'
+            variable            => 'useDaysMode',
+            value               => 'Calendar',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation			=> 'How to calculate return dates : Calendar means holidays will be controled, Days means the return date don\'t depend on holidays',
+	        type		=> 'Choice',
+	        options		=> 'Calendar|Days'
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'IntranetNav',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
-            type    => 'Textarea',
-            options => '70|10'
+            variable            => 'borrowerMandatoryField',
+            value               => 'zipcode|surname',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'List all mandatory fields for borrowers',
+            type                => 'free',
         },
-
         {
             uniquefieldrequired => 'variable',
-            variable            => 'AnonSuggestions',
+            variable            => 'borrowerRelationship',
+            value               => 'father|mother,grand-mother',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'The relationships between a guarantor & a guarantee (separated by | or ,)',
+            type                => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'ReservesMaxPickUpDelay',
+            value               => '10',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Maximum delay to pick up a reserved document',
+            type                => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'TransfersMaxDaysWarning',
+            value               => '3',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Max delay before considering the transfer has potentialy a problem',
+            type                => 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'memberofinstitution',
             value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-              'Set to anonymous borrowernumber to enable Anonymous suggestions',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'MARCOrgCode',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                        type' => 1
-            },
-            explanation =>
-'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonContent',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-'Turn On Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonDevKey',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-'see: aws-portal.amazon.com/gp/aws/developer/registration/index.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonAssocTag',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-              'see: associates.amazon.com/gp/flex/associates/apply-login.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            variable    => 'TemplateEncoding',
-            value       => 'iso-8859-1',
-            explanation => 'Specify the encoding to use in Templates',
-            type        => 'Choice',
-            options     => 'iso-8859-1|utf-8'
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaccredits',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-              'Put any HTML Credits at the bottom of the OPAC page',
-            type    => 'Textarea',
-            options => '70|10'
-        },
-		
-{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacheader',
-            value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             		
-							'type' => 1},
-            explanation         => 'Enter HTML to be included as a custom header in the OPAC',
-            type                => 'Textarea',
-			options				=> '30|10'
-        },
-
-		{
-            uniquefieldrequired => 'variable',
-            variable            => 'IntranetBiblioDefaultView',
-            value               => 'marc',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Define the default view of a biblio in the intranet. Can be either normal, marc, or ISBD',
-            type                => 'Choice',
-			options				=> 'normal|marc|isbd'
-        },
-		
-				{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacbookbag',
-            value               => '1',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Enable or disable display of biblio basket (book bag)',
-            type                => 'YesNo'
-        },
-		
-				{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacuserlogin',
-            value               => '1',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Enable or disable display of user login features',
-            type                => 'YesNo'
-        },
-		
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'serialsadditems',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-'If set, a new item will be automatically added when receiving an issue',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'advancedMARCeditor',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"If set, the MARC editor won't show you tag/subfields description",
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'z3950NormalizeAuthor',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"If set, Personnal Authorities will replace authors in biblio.author",
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'z3950AuthorAuthFields',
-            value               => '701,702,700',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"contains the MARC biblio tags of person authorities to fill biblio.author with when importing biblio",
-            type => 'free',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Are your patrons members of institutions',
+            type                => 'YesNo',
         },
     ],
 
 );
 
 my %fielddefinitions = (
-    printers => [
-        {
-            field   => 'printername',
-            type    => 'char(40)',
-            null    => '',
-            key     => 'PRI',
-            default => ''
-        },
-    ],
-    aqbookfund => [
-        {
-            field   => 'bookfundid',
-            type    => 'varchar(5)',
-            null    => '',
-            key     => 'PRI',
-            default => ''
-        },
-    ],
-    aqbudget => [
-        {
-            field   => 'aqbudgetid',
-            type    => 'tinyint(4)',
-            null    => '',
-            key     => 'PRI',
-            default => '',
-            extra   => 'auto_increment'
-        },
-    ],
-    z3950servers => [
-        {
-            field   => 'id',
-            type    => 'int(11)',
-            null    => '',
-            key     => 'PRI',
-            default => '',
-            extra   => 'auto_increment'
-        },
-    ],
-    marc_breeding => [
-        {
-            field   => 'z3950random',
-            type    => 'varchar(40)',
-            null    => 'NULL',
-            key     => '',
-            default => '',
-            extra   => ''
-        },
-        {
-            field   => 'encoding',
-            type    => 'varchar(40)',
-            null    => 'NOT NULL',
-            key     => '',
-            default => '',
-            extra   => ''
-        },
-    ],
-    serial => [
+# fieldname => [
+#	{		  field => 'fieldname',
+#             type    => 'fieldtype',
+#             null    => '',
+#             key     => '',
+#             default => ''
+#         },
+#     ],
+	serial => [
         {
             field   => 'notes',
-            type    => 'varchar(255)',
+            type    => 'TEXT',
             null    => 'NULL',
             key     => '',
             default => '',
             extra   => ''
         },
     ],
+	aqbasket =>  [
+		{
+			field	=> 'booksellerid',
+			type	=> 'int(11)',
+			null	=> 'NOT NULL',
+			key		=> '',
+			default	=> '1',
+			extra	=> '',
+		},
+	],
+	aqbooksellers =>  [
+		{
+			field	=> 'listprice',
+			type	=> 'varchar(10)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'invoiceprice',
+			type	=> 'varchar(10)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
+	issues =>  [
+		{
+			field	=> 'borrowernumber',
+			type	=> 'int(11)',
+			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'itemnumber',
+			type	=> 'int(11)',
+			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
+	borrowers => [
+		{	field => 'B_email',
+		 	type => 'text',
+		 	null => 'NULL',
+		 	after => 'B_zipcode',
+		 },
+		 {
+			field => 'streetnumber', # street number (hidden if streettable table is empty)
+			type => 'char(10)',
+			null => 'NULL',
+			after => 'initials',
+		},
+		{
+			field => 'streettype', # street table, list builded from a system table
+			type => 'char(50)',
+			null => 'NULL',
+			after => 'streetnumber',
+		},
+		 {
+			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
+			type => 'char(10)',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'B_streettype', # street table, list builded from a system table
+			type => 'char(50)',
+			null => 'NULL',
+			after => 'B_streetnumber',
+		},
+		{
+			field => 'phonepro',
+			type => 'text',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'address2', # complement address
+			type => 'text',
+			null => 'NULL',
+			after => 'address',
+		},
+		{
+			field => 'emailpro',
+			type => 'text',
+			null => 'NULL',
+			after => 'fax',
+		},
+		{
+			field => 'contactfirstname', # contact's firstname
+			type => 'text',
+			null => 'NULL',
+			after => 'contactname',
+		},
+		{
+			field => 'contacttitle', # contact's title
+			type => 'text',
+			null => 'NULL',
+			after => 'contactfirstname',
+		},
+	],
+	
+	branches =>  [
+		{
+			field	=> 'branchip',
+			type	=> 'varchar(15)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
+			field	=> 'branchprinter',
+			type	=> 'varchar(100)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
+	categories =>  [
+		{
+			field	=> 'category_type',
+			type	=> 'char(1)',
+			null	=> 'NOT NULL',
+			key		=> '',
+			default	=> 'A',
+			extra	=> '',
+		},
+	],
+	reserves =>  [
+		{
+			field	=> 'waitingdate',
+			type	=> 'date',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+	],
 );
+
+my %indexes = (
+#	table => [
+# 		{	indexname => 'index detail'
+# 		}
+#	],
+	shelfcontents => [
+		{	indexname => 'shelfnumber',
+			content => 'shelfnumber',
+		},
+		{	indexname => 'itemnumber',
+			content => 'itemnumber',
+		}
+	],
+	bibliosubject => [
+		{	indexname => 'biblionumber',
+			content => 'biblionumber',
+		}
+	],
+	items => [
+		{	indexname => 'homebranch',
+			content => 'homebranch',
+		},
+		{	indexname => 'holdingbranch',
+			content => 'holdingbranch',
+		}
+	],
+	aqbooksellers => [
+		{	indexname => 'PRIMARY',
+			content => 'id',
+			type => 'PRIMARY',
+		}
+	],
+	aqbasket => [
+		{	indexname => 'booksellerid',
+			content => 'booksellerid',
+		},
+	],
+	aqorders => [
+		{	indexname => 'basketno',
+			content => 'basketno',
+		},
+	],
+	aqorderbreakdown => [
+		{	indexname => 'ordernumber',
+			content => 'ordernumber',
+		},
+		{	indexname => 'bookfundid',
+			content => 'bookfundid',
+		},
+	],
+	currency => [
+		{	indexname => 'PRIMARY',
+			content => 'currency',
+			type => 'PRIMARY',
+		}
+	],
+);
+
+my %foreign_keys = (
+#	table => [
+# 		{	key => 'the key in table' (must be indexed)
+#			foreigntable => 'the foreigntable name', # (the parent)
+#			foreignkey => 'the foreign key column(s)' # (in the parent)
+#			onUpdate => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+#			onDelete => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+# 		}
+#	],
+	shelfcontents => [
+		{	key => 'shelfnumber',
+			foreigntable => 'bookshelf',
+			foreignkey => 'shelfnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	# onDelete is RESTRICT on reference tables (branches, itemtype) as we don't want items to be 
+	# easily deleted, but branches/itemtype not too easy to empty...
+	biblioitems => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemtype',
+			foreigntable => 'itemtypes',
+			foreignkey => 'itemtype',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
+		},
+	],
+	items => [
+		{	key => 'biblioitemnumber',
+			foreigntable => 'biblioitems',
+			foreignkey => 'biblioitemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'homebranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
+		},
+		{	key => 'holdingbranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
+		},
+	],
+	additionalauthors => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	bibliosubject => [
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	aqbasket => [
+		{	key => 'booksellerid',
+			foreigntable => 'aqbooksellers',
+			foreignkey => 'id',
+			onUpdate => 'CASCADE',
+			onDelete => 'RESTRICT',
+		},
+	],
+	aqorders => [
+		{	key => 'basketno',
+			foreigntable => 'aqbasket',
+			foreignkey => 'basketno',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	aqbooksellers => [
+		{	key => 'listprice',
+			foreigntable => 'currency',
+			foreignkey => 'currency',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'invoiceprice',
+			foreigntable => 'currency',
+			foreignkey => 'currency',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	aqorderbreakdown => [
+		{	key => 'ordernumber',
+			foreigntable => 'aqorders',
+			foreignkey => 'ordernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'bookfundid',
+			foreigntable => 'aqbookfund',
+			foreignkey => 'bookfundid',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	branchtransfers => [
+		{	key => 'frombranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'tobranch',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	issuingrules => [
+		{	key => 'categorycode',
+			foreigntable => 'categories',
+			foreignkey => 'categorycode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemtype',
+			foreigntable => 'itemtypes',
+			foreignkey => 'itemtype',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	issues => [	# constraint is SET NULL : when a borrower or an item is deleted, we keep the issuing record
+	# for stat purposes
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	reserves => [
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'biblionumber',
+			foreigntable => 'biblio',
+			foreignkey => 'biblionumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'branchcode',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	borrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
+	# but prevent deleting a branch as soon as it has 1 borrower !
+		{	key => 'categorycode',
+			foreigntable => 'categories',
+			foreignkey => 'categorycode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+		{	key => 'branchcode',
+			foreigntable => 'branches',
+			foreignkey => 'branchcode',
+			onUpdate => 'RESTRICT',
+			onDelete => 'RESTRICT',
+		},
+	],
+	accountlines => [
+		{	key => 'borrowernumber',
+			foreigntable => 'borrowers',
+			foreignkey => 'borrowernumber',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+		{	key => 'itemnumber',
+			foreigntable => 'items',
+			foreignkey => 'itemnumber',
+			onUpdate => 'SET NULL',
+			onDelete => 'SET NULL',
+		},
+	],
+	auth_tag_structure => [
+		{	key => 'authtypecode',
+			foreigntable => 'auth_types',
+			foreignkey => 'authtypecode',
+			onUpdate => 'CASCADE',
+			onDelete => 'CASCADE',
+		},
+	],
+	# FIXME : don't constraint auth_*_table and auth_word, as they may be replaced by zebra
+);
+
+
+# column changes
+my %column_change = (
+	# table
+	borrowers => [
+				{
+					from => 'emailaddress',
+					to => 'email',
+					after => 'city',
+				},
+				{
+					from => 'streetaddress',
+					to => 'address',
+					after => 'initials',
+				},
+				{
+					from => 'faxnumber',
+					to => 'fax',
+					after => 'phone',
+				},
+				{
+					from => 'textmessaging',
+					to => 'opacnote',
+					after => 'userid',
+				},
+				{
+					from => 'altnotes',
+					to => 'contactnote',
+					after => 'opacnote',
+				},
+				{
+					from => 'physstreet',
+					to => 'B_address',
+					after => 'fax',
+				},
+				{
+					from => 'streetcity',
+					to => 'B_city',
+					after => 'B_address',
+				},
+				{
+					from => 'phoneday',
+					to => 'mobile',
+					after => 'phone',
+				},
+				{
+					from => 'zipcode',
+					to => 'zipcode',
+					after => 'city',
+				},
+				{
+					from => 'homezipcode',
+					to => 'B_zipcode',
+					after => 'B_city',
+				},
+				{
+					from => 'altphone',
+					to => 'B_phone',
+					after => 'B_zipcode',
+				},
+				{
+					from => 'expiry',
+					to => 'dateexpiry',
+					after => 'dateenrolled',
+				},
+				{
+					from => 'guarantor',
+					to => 'guarantorid',
+					after => 'contactname',
+				},
+				{
+					from => 'textmessaging',
+					to => 'opacnotes',
+					after => 'flags',
+				},
+				{
+					from => 'altnotes',
+					to => 'contactnotes',
+					after => 'opacnotes',
+				},
+				{
+					from => 'altrelationship',
+					to => 'relationship',
+					after => 'borrowernotes',
+				},
+			],
+		);
+		
+foreach my $table (keys %column_change) {
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute();
+	undef %types;
+	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+	{
+		$types{$column}->{type} ="$type";
+		$types{$column}->{null} = "$null";
+		$types{$column}->{key} = "$key";
+		$types{$column}->{default} = "$default";
+		$types{$column}->{extra} = "$extra";
+	}    # while
+	my $tablerows = $column_change{$table};
+	foreach my $row ( @$tablerows ) {
+		if ($types{$row->{from}}->{type}) {
+			print "altering $table $row->{from} to $row->{to}\n";
+			# ALTER TABLE `borrowers` CHANGE `faxnumber` `fax` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+# 			alter table `borrowers` change `faxnumber` `fax` type text  null after phone
+			my $sql = 
+				"alter table `$table` change `$row->{from}` `$row->{to}` $types{$row->{from}}->{type} ".
+				($types{$row->{from}}->{null} eq 'YES'?" NULL":" NOT NULL").
+				($types{$row->{from}}->{default}?" default ".$types{$row->{from}}->{default}:"").
+				"$types{$row->{from}}->{extra} after $row->{after} ";
+# 			print "$sql";
+			$dbh->do($sql);
+		}
+	}
+}
 
 #-------------------
 # Initialize
@@ -1486,10 +1037,11 @@ while ( my ($table) = $sth->fetchrow ) {
     $existingtables{$table} = 1;
 }
 
+
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     unless ( $existingtables{$table} ) {
-        print "Adding $table table...\n" unless $silent;
+	print "Adding $table table...\n" unless $silent;
         my $sth = $dbh->prepare("create table $table $requiretables{$table}");
         $sth->execute;
         if ( $sth->err ) {
@@ -1501,51 +1053,13 @@ foreach $table ( keys %requiretables ) {
 
 # now drop useless tables
 foreach $table ( keys %dropable_table ) {
-    if ( $existingtables{$table} ) {
-        print "Dropping unused table $table\n" if $debug and not $silent;
-        $dbh->do("drop table $table");
-        if ( $dbh->err ) {
-            print "Error : $dbh->errstr \n";
-        }
-    }
-}
-unless ( $existingtables{'z3950servers'} ) {
-
-    #MJR: added syntax entries to close bug 624
-    print "Adding z3950servers table...\n" unless $silent;
-    my $sti = $dbh->prepare(
-        "create table z3950servers (
-										host char(255),
-										port int,
-										db char(255),
-										userid char(255),
-										password char(255),
-										name text,
-										id int,
-										checked smallint,
-										rank int,
-										syntax char(80))"
-    );
-    $sti->execute;
-    $sti = $dbh->prepare(
-        "insert into z3950servers
-								values ('z3950.loc.gov',
-								7090,
-								'voyager',
-								'', '',
-								'Library of Congress',
-								1, 1, 1, 'USMARC')"
-    );
-    $sti->execute;
-}
-unless ( $existingtables{'issuingrules'} ) {
-    $dbh->do("alter table categoryitem rename issuingrules");
-    $dbh->do("ALTER TABLE issuingrules ADD maxissueqty int(4) default NULL");
-    $dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) default NULL");
-    $dbh->do(
-        "ALTER TABLE issuingrules ADD branchcode varchar(4) NOT NULL default ''"
-    );
-    print "renaming categoryitem\n" unless $silent;
+	if ( $existingtables{$table} ) {
+		print "Dropping unused table $table\n" if $debug and not $silent;
+		$dbh->do("drop table $table");
+		if ( $dbh->err ) {
+			print "Error : $dbh->errstr \n";
+		}
+	}
 }
 
 #---------------------------------
@@ -1561,8 +1075,7 @@ foreach $table ( keys %requirefields ) {
         $types{$column} = $type;
     }    # while
     foreach $column ( keys %{ $requirefields{$table} } ) {
-        print "  Check column $column  [$types{$column}]\n"
-          if $debug and not $silent;
+        print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
         if ( !$types{$column} ) {
 
             # column doesn't exist
@@ -1581,471 +1094,100 @@ foreach $table ( keys %requirefields ) {
 }    # foreach table
 
 foreach $table ( keys %fielddefinitions ) {
-    print "Check table $table\n" if $debug;
-    $sth = $dbh->prepare("show columns from $table");
-    $sth->execute();
-    my $definitions;
-    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-    {
-        $definitions->{$column}->{type}    = $type;
-        $definitions->{$column}->{null}    = $null;
-        $definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
-        $definitions->{$column}->{key}     = $key;
-        $definitions->{$column}->{default} = $default;
-        $definitions->{$column}->{extra}   = $extra;
-    }    # while
-    my $fieldrow = $fielddefinitions{$table};
-    foreach my $row (@$fieldrow) {
-        my $field   = $row->{field};
-        my $type    = $row->{type};
-        my $key     = $row->{key};
-        my $default = $row->{default};
-        my $null    = $row->{null};
+	print "Check table $table\n" if $debug;
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute();
+	my $definitions;
+	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+	{
+		$definitions->{$column}->{type}    = $type;
+		$definitions->{$column}->{null}    = $null;
+		$definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
+		$definitions->{$column}->{key}     = $key;
+		$definitions->{$column}->{default} = $default;
+		$definitions->{$column}->{extra}   = $extra;
+	}    # while
+	my $fieldrow = $fielddefinitions{$table};
+	foreach my $row (@$fieldrow) {
+		my $field   = $row->{field};
+		my $type    = $row->{type};
+		my $null    = $row->{null};
+# 		$null    = 'YES' if $row->{null} eq 'NULL';
+		my $key     = $row->{key};
+		my $default = $row->{default};
+		my $null    = $row->{null};
+# 		$default="''" unless $default;
+		my $extra   = $row->{extra};
+		my $def     = $definitions->{$field};
+		my $after	= ($row->{after}?" after ".$row->{after}:"");
 
-        # 		$default="''" unless $default;
-        my $extra = $row->{extra};
-        my $def   = $definitions->{$field};
+		unless ( $type eq $def->{type}
+			&& $null eq $def->{null}
+			&& $key eq $def->{key}
+			&& $extra eq $def->{extra} )
+		{
+			if ( $null eq '' ) {
+				$null = 'NOT NULL';
+			}
+			if ( $key eq 'PRI' ) {
+				$key = 'PRIMARY KEY';
+			}
+			unless ( $extra eq 'auto_increment' ) {
+				$extra = '';
+			}
 
-        unless ( $type eq $def->{type}
-            && $null  eq $def->{null}
-            && $key   eq $def->{key}
-            && $extra eq $def->{extra} )
-        {
-            if ( $null eq '' ) {
-                $null = 'NOT NULL';
-            }
-            if ( $key eq 'PRI' ) {
-                $key = 'PRIMARY KEY';
-            }
-            unless ( $extra eq 'auto_increment' ) {
-                $extra = '';
-            }
-
-            # if it's a new column use "add", if it's an old one, use "change".
-            my $action;
-            if ( $definitions->{$field}->{type} ) {
-                $action = "change $field";
-            }
-            else {
-                $action = "add";
-            }
-
-        # if it's a primary key, drop the previous pk, before altering the table
-            my $sth;
-            if ( $key ne 'PRIMARY KEY' ) {
-                $sth =
-                  $dbh->prepare(
-"alter table $table $action $field $type $null $key $extra default ?"
-                  );
-            }
-            else {
-                $sth =
-                  $dbh->prepare(
-"alter table $table drop primary key, $action $field $type $null $key $extra default ?"
-                  );
-            }
-            $sth->execute($default);
-            print "  Alter $field in $table\n" unless $silent;
-        }
-    }
-}
-
-# Get list of columns from borrowers table
-my %itemtypes;
-my %nullenabled;
-$sth = $dbh->prepare("show columns from borrowers");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $itemtypes{$column}   = $type;
-    $nullenabled{$column} = $null;
-}
-
-unless ( $itemtypes{'cardnumber'} eq 'varchar(20)' ) {
-    $itemtypes{'cardnumber'} =~ /varchar\((\d+)\)/;
-    my $oldlength = $1;
-    if ( $oldlength < 16 ) {
-        print
-"Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n"
-          unless $silent;
-        my $sti =
-          $dbh->prepare(
-            "alter table borrowers change cardnumber cardnumber varchar(16)");
-        $sti->execute;
-        $sti->finish;
-        $sti = $dbh->prepare("alter table borrowers drop index cardnumber");
-        $sti->execute;
-        $sti->finish;
-        $sti = $dbh->prepare("alter table borrowers add unique(cardnumber)");
-        $sti->execute;
-        $sti->finish;
-    }
-}
-
-#
-# Get list of columns from items table
-$sth = $dbh->prepare("show columns from items");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $itemtypes{$column}   = $type;
-    $nullenabled{$column} = $null;
-}
-
-unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
-    $itemtypes{'barcode'} =~ /varchar\((\d+)\)/;
-    my $oldlength = $1;
-    if ( $oldlength < 20 ) {
-        print "Setting maximum barcode length to 20 (was $oldlength).\n"
-          unless $silent;
-        my $sti =
-          $dbh->prepare("alter table items change barcode barcode varchar(20)");
-        $sti->execute;
-    }
-}
-
-#
-# dropping unique barcode index & setting barcode to null allowed.
-#
-$sth = $dbh->prepare("show index from items");
-$sth->execute;
-while (
-    my (
-        $table,       $non_unique, $key_name,    $Seq_in_index,
-        $Column_name, $Collation,  $cardinality, $sub_part,
-        $Packed,      $comment
-    )
-    = $sth->fetchrow
-  )
-{
-    if ( $key_name eq 'barcode' && $non_unique eq 0 ) {
-        print "dropping BARCODE index to enable empty barcodes\n"
-          unless $silent;
-        $dbh->do("ALTER TABLE `items` DROP INDEX `barcode`");
-    }
-}
-$dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )")
-  unless ( $nullenabled{barcode} eq 'YES' );
-
-#
-# creating fulltext index in bibliothesaurus if needed
-#
-$sth = $dbh->prepare("show index from bibliothesaurus");
-$sth->execute;
-my $exists = 0;
-while (
-    my (
-        $table,       $non_unique, $key_name,    $Seq_in_index,
-        $Column_name, $Collation,  $cardinality, $sub_part,
-        $Packed,      $comment
-    )
-    = $sth->fetchrow
-  )
-{
-    if ( $key_name eq 'category_2' ) {
-        $exists = 1;
-    }
-}
-print "Creating fulltext index on bibliothesaurus\n" unless $exists or $silent;
-$dbh->do(
-    'create fulltext index category_2 on bibliothesaurus (category,freelib)')
-  unless $exists;
-
-#
-# creating  index in z3950results if needed
-#
-$sth = $dbh->prepare("show index from z3950results");
-$sth->execute;
-my $exists = 0;
-while (
-    my (
-        $table,       $non_unique, $key_name,    $Seq_in_index,
-        $Column_name, $Collation,  $cardinality, $sub_part,
-        $Packed,      $comment
-    )
-    = $sth->fetchrow
-  )
-{
-    if ( $key_name eq 'query_server' ) {
-        $exists = 1;
-    }
-}
-print "Creating  index on z3950results\n" unless $exists or $silent;
-$dbh->do('create unique index query_server on z3950results (queryid,server)')
-  unless $exists;
-
-# changing z3950daemon field to NULL in marc_breeding
-$dbh->do(
-"ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )"
-);
-
-# making borrowernumber an auto_increment field
-$dbh->do(
-"ALTER TABLE `borrowers` CHANGE `borrowernumber` `borrowernumber` INTEGER auto_increment"
-);
-
-# changing indexes in marc_*_structure to use frameworkcode
-$dbh->do('alter table marc_subfield_structure drop index tab');
-$dbh->do('create index tab on marc_subfield_structure (frameworkcode,tab)');
-$dbh->do('alter table marc_subfield_structure drop index kohafield');
-$dbh->do(
-'create index kohafield on marc_subfield_structure (frameworkcode,kohafield)'
-);
-
-# extending the timestamp in branchtransfers...
-my %branchtransfers;
-
-$sth = $dbh->prepare("show columns from branchtransfers");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $branchtransfers{$column} = $type;
-}
-
-unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
-    print "Setting type of datesent in branchtransfers to datetime.\n"
-      unless $silent;
-    my $sti =
-      $dbh->prepare(
-        "alter table branchtransfers change datesent datesent datetime");
-    $sti->execute;
-}
-
-unless ( $branchtransfers{'datearrived'} eq 'datetime' ) {
-    print "Setting type of datearrived in branchtransfers to datetime.\n"
-      unless $silent;
-    my $sti =
-      $dbh->prepare(
-        "alter table branchtransfers change datearrived datearrived datetime");
-    $sti->execute;
-}
-
-# changing the branchcategories table around...
-my %branchcategories;
-
-$sth = $dbh->prepare("show columns from branchcategories");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $branchcategories{$column} = $type;
-}
-
-unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
-    print
-"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n"
-      unless $silent;
-    my $sti =
-      $dbh->prepare(
-"alter table branchcategories change categorycode categorycode varchar(4) not null"
-      );
-    $sti->execute;
-    $sti =
-      $dbh->prepare(
-        "alter table branchcategories add primary key (categorycode)");
-    $sti->execute;
-}
-
-unless ( $branchcategories{'categoryname'} eq 'text' ) {
-    print "Changing branchcode in branchcategories to categoryname text.\n"
-      unless $silent;
-    my $sth =
-      $dbh->prepare(
-        "alter table branchcategories change branchcode categoryname text");
-    $sth->execute;
-}
-
-unless ( $branchcategories{'codedescription'} eq 'text' ) {
-    print
-      "Replacing branchholding in branchcategories with codedescription text.\n"
-      unless $silent;
-    my $sth =
-      $dbh->prepare(
-        "alter table branchcategories change branchholding codedescription text"
-      );
-    $sth->execute;
-}
-
-# changing the items table around...
-my %items;
-
-$sth = $dbh->prepare("show columns from items");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $items{$column} = $type;
-}
-
-if ( $items{'bulk'} eq "varchar(30)" ) {
-    print "  Setting callnumber in items table\n" unless $silent;
-    my $sti =
-      $dbh->prepare(
-"ALTER TABLE `items` CHANGE `bulk` `itemcallnumber` VARCHAR( 30 ) DEFAULT NULL"
-      );
-    $sti->execute;
-    $sti =
-      $dbh->prepare(
-"update marc_subfield_structure set kohafield=\"items.itemcallnumber\" where kohafield=\"items.bulk\""
-      );
-    $sti->execute;
-}
-
-# changing the marc_subfield_structure table around...
-my %marc_subfield_structure;
-
-$sth = $dbh->prepare("show columns from marc_subfield_structure");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $marc_subfield_structure{$column} = $type;
-}
-
-if ( $marc_subfield_structure{thesaurus_category} ) {
-    print "  changing thesaurus_category in marc_subfield_structure table\n"
-      unless $silent;
-    my $sti =
-      $dbh->prepare(
-"ALTER TABLE marc_subfield_structure CHANGE `thesaurus_category` `authtypecode` VARCHAR(10 ) DEFAULT NULL"
-      );
-    $sti->execute;
-}
-
-#
-# creating  index in issuingrules if needed
-#
-$sth = $dbh->prepare("show index from issuingrules");
-$sth->execute;
-my $exists = 0;
-while (
-    my (
-        $table,       $non_unique, $key_name,    $Seq_in_index,
-        $Column_name, $Collation,  $cardinality, $sub_part,
-        $Packed,      $comment
-    )
-    = $sth->fetchrow
-  )
-{
-    if ( $key_name eq 'PRIMARY' ) {
-        $exists = 1;
-    }
-}
-print "Creating  index on issuing rules\n" unless $exists or $silent;
-$dbh->do(
-'ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )'
-  )
-  unless $exists;
-
-$dbh->do('ALTER TABLE marc_tag_structure drop primary key');
-$dbh->do(
-    'ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( frameworkcode, tagfield )'
-);
-
-$dbh->do('ALTER TABLE marc_subfield_structure drop primary key');
-$dbh->do(
-'ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( frameworkcode, tagfield, tagsubfield )'
-);
-
-$dbh->do(
-"alter table marc_subfield_table change tagorder tagorder int not null default '1'"
-);
-
-# Get list of columns from marc_word table
-my %marc_word;
-my %nullenabled;
-$sth = $dbh->prepare("show columns from marc_word");
-$sth->execute;
-while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-{
-    $marc_word{$column}   = $type;
-    $nullenabled{$column} = $null;
-}
-if ( $marc_word{subfieldid} ) {
-
-    #create field tagsubfield, copy tag+subfieldid, then drop tag and subfieldid
-    print "Modifying marc_word (concat on tag and subfield for better perfs)\n"
-      unless $silent;
-    $dbh->do(
-"ALTER TABLE `marc_word` ADD `tagsubfield` CHAR( 4 ) NOT NULL AFTER `bibid`"
-    );
-    $dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
-    $dbh->do("alter table marc_word drop tag");
-    $dbh->do("alter table marc_word drop subfieldid");
-    $dbh->do("create index Search_Marc on marc_word (tagsubfield,word)");
+			# if it's a new column use "add", if it's an old one, use "change".
+			my $action;
+			if ($definitions->{$field}->{type}) {
+				$action="change $field"
+			} else {
+				$action="add";
+			}
+# if it's a primary key, drop the previous pk, before altering the table
+			my $sth;
+			if ($key ne 'PRIMARY KEY') {
+				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
+			} else {
+				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
+			}
+			$sth->execute($default);
+			print "  alter or create $field in $table\n" unless $silent;
+		}
+	}
 }
 
 # Populate tables with required data
 
+
 # synch table and deletedtable.
-foreach my $table ( ( 'borrowers', 'items', 'biblio', 'biblioitems' ) ) {
-    my %deletedborrowers;
-    print "synch'ing $table\n";
-    $sth = $dbh->prepare("show columns from deleted$table");
-    $sth->execute;
-    while ( my ( $column, $type, $null, $key, $default, $extra ) =
-        $sth->fetchrow )
-    {
-        $deletedborrowers{$column} = 1;
-    }
-    $sth = $dbh->prepare("show columns from $table");
-    $sth->execute;
-    my $previous;
-    while ( my ( $column, $type, $null, $key, $default, $extra ) =
-        $sth->fetchrow )
-    {
-        unless ( $deletedborrowers{$column} ) {
-            my $newcol = "alter table deleted$table add $column $type";
-            if ( $null eq 'YES' ) {
-                $newcol .= " NULL ";
-            }
-            else {
-                $newcol .= " NOT NULL ";
-            }
-            $newcol .= "default $default" if $default;
-            $newcol .= " after $previous" if $previous;
-            $previous = $column;
-            print "creating column $column\n";
-            $dbh->do($newcol);
-        }
-    }
+foreach my $table (('borrowers','items','biblio','biblioitems')) {
+	my %deletedborrowers;
+	print "synch'ing $table\n";
+	$sth = $dbh->prepare("show columns from deleted$table");
+	$sth->execute;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		$deletedborrowers{$column}=1;
+	}
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute;
+	my $previous;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		unless ($deletedborrowers{$column}) {
+			my $newcol="alter table deleted$table add $column $type";
+			if ($null eq 'YES') {
+				$newcol .= " NULL ";
+			} else {
+				$newcol .= " NOT NULL ";
+			}
+			$newcol .= "default $default" if $default;
+			$newcol .= " after $previous" if $previous;
+			$previous=$column;
+			print "creating column $column\n";
+			$dbh->do($newcol);
+		}
+	}
 }
 
-# fill aqbasket if it's empty and aqorder is not
-# => it means it has just been created & must be filled
-$sth = $dbh->prepare("select count(*) from aqbasket");
-$sth->execute;
-if ( $sth->fetchrow == 0 ) {
-    $sth = $dbh->prepare("select count(*) from aqorders");
-    $sth->execute;
-    if ( $sth->fetchrow > 0 ) {
-        print "Populating new table aqbasket\n";
-        print
-"IMPORTANT NOTE: error message \"Duplicate entry 'X' for key 1\" may appear. it should not be a real trouble\n";
-        $sth =
-          $dbh->prepare(
-"select distinct basketno,booksellerid,authorisedby,entrydate,booksellerinvoicenumber from aqorders"
-          );
-        $sth->execute;
-        my ( $basketno, $booksellerid, $authorisedby, $entrydate,
-            $booksellerinvoicenumber );
-        my $sth2 =
-          $dbh->prepare(
-"insert into aqbasket (basketno,creationdate,booksellerid,authorisedby,booksellerinvoicenumber) values (?,?,?,?,?)"
-          );
-        while (
-            (
-                $basketno,     $booksellerid,
-                $authorisedby, $entrydate,
-                $booksellerinvoicenumber
-            )
-            = $sth->fetchrow
-          )
-        {
-            print
-"$basketno,$entrydate,$booksellerid,$authorisedby,$booksellerinvoicenumber\n";
-            $sth2->execute( $basketno, $entrydate, $booksellerid, $authorisedby,
-                $booksellerinvoicenumber );
-        }
-    }
-}
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
@@ -2056,355 +1198,599 @@ foreach my $table ( keys %tabledata ) {
         my $sth                 =
           $dbh->prepare(
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
-          );
+        );
         $sth->execute($uniquevalue);
-        if ( $sth->rows ) {
-            foreach my $field ( keys %$forceupdate ) {
-                if ( $forceupdate->{$field} ) {
-                    my $sth =
-                      $dbh->prepare(
-"update systempreferences set $field=? where $uniquefieldrequired=?"
-                      );
-                    $sth->execute( $row->{$field}, $uniquevalue );
-                }
-            }
-        }
-        else {
-            print "Adding row to $table: " unless $silent;
-            my @values;
-            my $fieldlist;
-            my $placeholders;
-            foreach my $field ( keys %$row ) {
-                next if $field eq 'uniquefieldrequired';
-                next if $field eq 'forceupdate';
-                my $value = $row->{$field};
-                push @values, $value;
-                print "  $field => $value" unless $silent;
-                $fieldlist    .= "$field,";
-                $placeholders .= "?,";
-            }
-            print "\n" unless $silent;
-            $fieldlist    =~ s/,$//;
-            $placeholders =~ s/,$//;
-            my $sth =
-              $dbh->prepare(
-                "insert into $table ($fieldlist) values ($placeholders)");
-            $sth->execute(@values);
-        }
-    }
+		if ($sth->rows) {
+			foreach my $field (keys %$forceupdate) {
+				if ($forceupdate->{$field}) {
+					my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
+					$sth->execute($row->{$field}, $uniquevalue);
+				}
+	    	}
+		} else {
+			print "Adding row to $table: " unless $silent;
+			my @values;
+			my $fieldlist;
+			my $placeholders;
+			foreach my $field ( keys %$row ) {
+				next if $field eq 'uniquefieldrequired';
+				next if $field eq 'forceupdate';
+				my $value = $row->{$field};
+				push @values, $value;
+				print "  $field => $value" unless $silent;
+				$fieldlist .= "$field,";
+				$placeholders .= "?,";
+			}
+			print "\n" unless $silent;
+			$fieldlist    =~ s/,$//;
+			$placeholders =~ s/,$//;
+			my $sth =
+			$dbh->prepare(
+				"insert into $table ($fieldlist) values ($placeholders)");
+			$sth->execute(@values);
+		}
+	}
 }
+
+#
+# check indexes and create them when needed
+#
+print "Checking for index required...\n" unless $silent;
+foreach my $table ( keys %indexes ) {
+	#
+	# read all indexes from $table
+	#
+	$sth = $dbh->prepare("show index from $table");
+	$sth->execute;
+	my %existingindexes;
+	while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow ) {
+		$existingindexes{$key_name} = 1;
+	}
+	# read indexes to check
+	my $tablerows = $indexes{$table};
+	foreach my $row (@$tablerows) {
+		my $key_name=$row->{indexname};
+		if ($existingindexes{$key_name} eq 1) {
+# 			print "$key_name existing";
+		} else {
+			print "\tCreating index $key_name in $table\n";
+			my $sql;
+			if ($row->{indexname} eq 'PRIMARY') {
+				$sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
+			} else {
+				$sql = "alter table $table ADD INDEX $key_name ($row->{content}) $row->{type}";
+			}
+ 			$dbh->do($sql);
+            print "Error $sql : $dbh->err \n" if $dbh->err;
+		}
+	}
+}
+
+#
+# check foreign keys and create them when needed
+#
+print "Checking for foreign keys required...\n" unless $silent;
+foreach my $table ( keys %foreign_keys ) {
+	#
+	# read all indexes from $table
+	#
+	$sth = $dbh->prepare("show table status like '$table'");
+	$sth->execute;
+	my $stat = $sth->fetchrow_hashref;
+	# read indexes to check
+	my $tablerows = $foreign_keys{$table};
+	foreach my $row (@$tablerows) {
+		my $foreign_table=$row->{foreigntable};
+		if ($stat->{'Comment'} =~/$foreign_table/) {
+# 			print "$foreign_table existing\n";
+		} else {
+			print "\tCreating foreign key $foreign_table in $table\n";
+			# first, drop any orphan value in child table
+			if ($row->{onDelete} ne "RESTRICT") {
+				my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
+				$dbh->do($sql);
+				print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
+			}
+			my $sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
+			$sql .= " on update ".$row->{onUpdate} if $row->{onUpdate};
+			$sql .= " on delete ".$row->{onDelete} if $row->{onDelete};
+			$dbh->do($sql);
+			if ($dbh->err) {
+				print "====================
+An error occured during :
+\t$sql
+It probably means there is something wrong in your DB : a row ($table.$row->{key}) refers to a value in $row->{foreigntable}.$row->{foreignkey} that does not exist. solve the problem and run updater again (or just the previous SQL statement).
+You can find those values with select
+\t$table.* from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})
+====================\n
+";
+			}
+		}
+	}
+}
+
+#
+# SPECIFIC STUFF
+#
+#
+# create frameworkcode row in biblio table & fill it with marc_biblio.frameworkcode.
+#
+
+# 1st, get how many biblio we will have to do...
+$sth = $dbh->prepare('select count(*) from marc_biblio');
+$sth->execute;
+my ($totaltodo) = $sth->fetchrow;
+
+$sth = $dbh->prepare("show columns from biblio");
+$sth->execute();
+my $definitions;
+my $bibliofwexist=0;
+while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ){
+	$bibliofwexist=1 if $column eq 'frameworkcode';
+}
+unless ($bibliofwexist) {
+	print "moving biblioframework to biblio table\n";
+	$dbh->do('ALTER TABLE `biblio` ADD `frameworkcode` VARCHAR( 4 ) NOT NULL AFTER `biblionumber`');
+	$sth = $dbh->prepare('select biblionumber,frameworkcode from marc_biblio');
+	$sth->execute;
+	my $sth_update = $dbh->prepare('update biblio set frameworkcode=? where biblionumber=?');
+	my $totaldone=0;
+	while (my ($biblionumber,$frameworkcode) = $sth->fetchrow) {
+		$sth_update->execute($frameworkcode,$biblionumber);
+		$totaldone++;
+		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
+	}
+	print "\rdone\n";
+}
+
+#
+# moving MARC data from marc_subfield_table to biblioitems.marc
+#
+$sth = $dbh->prepare("show columns from biblioitems");
+$sth->execute();
+my $definitions;
+my $marcdone=0;
+while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ){
+	$marcdone=1 if ($type eq 'blob' && $column eq 'marc') ;
+}
+unless ($marcdone) {
+	print "moving MARC record to biblioitems table\n";
+	# changing marc field type
+	$dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` BLOB NULL DEFAULT NULL ');
+	# adding marc xml, just for convenience
+	$dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ');
+	# moving data from marc_subfield_value to biblio
+	$sth = $dbh->prepare('select bibid,biblionumber from marc_biblio');
+	$sth->execute;
+	my $sth_update = $dbh->prepare('update biblioitems set marc=?, marcxml=? where biblionumber=?');
+	my $totaldone=0;
+	while (my ($bibid,$biblionumber) = $sth->fetchrow) {
+		my $record = MARCgetbiblio($dbh,$bibid);
+	#Force UTF-8 in record leader
+		$record->encoding('UTF-8');
+		print $record->as_formatted if ($biblionumber==3902);
+		$sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
+		$totaldone++;
+		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
+	}
+	print "\rdone\n";
+}
+
 
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
-    my @fields = split /,/, $uselessfields{$table};
-    my $fields;
-    my $exists;
-    foreach my $fieldtodrop (@fields) {
-        $fieldtodrop =~ s/\t//g;
-        $fieldtodrop =~ s/\n//g;
-        $exists = 0;
-        $sth    = $dbh->prepare("show columns from $table");
-        $sth->execute;
-        while ( my ( $column, $type, $null, $key, $default, $extra ) =
-            $sth->fetchrow )
-        {
-            $exists = 1 if ( $column eq $fieldtodrop );
-        }
-        if ($exists) {
-            print "deleting $fieldtodrop field in $table...\n" unless $silent;
-            my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
-            $sth->execute;
-        }
-    }
+	my @fields = split /,/,$uselessfields{$table};
+	my $fields;
+	my $exists;
+	foreach my $fieldtodrop (@fields) {
+		$fieldtodrop =~ s/\t//g;
+		$fieldtodrop =~ s/\n//g;
+		$exists =0;
+		$sth = $dbh->prepare("show columns from $table");
+		$sth->execute;
+		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+		{
+			$exists =1 if ($column eq $fieldtodrop);
+		}
+		if ($exists) {
+			print "deleting $fieldtodrop field in $table...\n" unless $silent;
+			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+			$sth->execute;
+		}
+	}
 }    # foreach
 
+
+# MOVE all tables TO UTF-8 and innoDB
+$sth = $dbh->prepare("show table status");
+$sth->execute;
+while ( my $table = $sth->fetchrow_hashref ) {
+# 	if ($table->{Engine} ne 'InnoDB') {
+# 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+# 		print "moving $table->{Name} to InnoDB\n";
+# 	}
+	unless ($table->{Collation} =~ /^utf8/) {
+		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
+		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
+ 		print "moving $table->{Name} to utf8\n";
+	} else {
+	}
+}
+
 $sth->finish;
+
+#
+# those 2 subs are a copy of Biblio.pm, version 2.2.4
+# they are useful only once, for moving from 2.2 to 3.0
+# the MARCgetbiblio & MARCgetitem subs in Biblio.pm
+# are still here, but uses other tables
+# (the ones that are filled by updatedatabase !)
+#
+
+sub MARCgetbiblio {
+
+    # Returns MARC::Record of the biblio passed in parameter.
+    my ( $dbh, $bibid ) = @_;
+    my $record = MARC::Record->new();
+#	warn "". $bidid;
+
+    my $sth =
+      $dbh->prepare(
+"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
+		 		 from marc_subfield_table
+		 		 where bibid=? order by tag,tagorder,subfieldorder
+		 	 "
+    );
+    my $sth2 =
+      $dbh->prepare(
+        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
+    $sth->execute($bibid);
+    my $prevtagorder = 1;
+    my $prevtag      = 'XXX';
+    my $previndicator;
+    my $field;        # for >=10 tags
+    my $prevvalue;    # for <10 tags
+    while ( my $row = $sth->fetchrow_hashref ) {
+
+        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
+            $sth2->execute( $row->{'valuebloblink'} );
+            my $row2 = $sth2->fetchrow_hashref;
+            $sth2->finish;
+            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
+        }
+        if ( $row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag ) {
+            $previndicator .= "  ";
+            if ( $prevtag < 10 ) {
+				if ($prevtag ne '000') {
+                	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
+				} else {
+					$record->leader(sprintf("%24s",$prevvalue));
+				}
+            }
+            else {
+                $record->add_fields($field) unless $prevtag eq "XXX";
+            }
+            undef $field;
+            $prevtagorder  = $row->{tagorder};
+            $prevtag       = $row->{tag};
+            $previndicator = $row->{tag_indicator};
+            if ( $row->{tag} < 10 ) {
+                $prevvalue = $row->{subfieldvalue};
+            }
+            else {
+                $field = MARC::Field->new(
+                    ( sprintf "%03s", $prevtag ),
+                    substr( $row->{tag_indicator} . '  ', 0, 1 ),
+                    substr( $row->{tag_indicator} . '  ', 1, 1 ),
+                    $row->{'subfieldcode'},
+                    $row->{'subfieldvalue'}
+                );
+            }
+        }
+        else {
+            if ( $row->{tag} < 10 ) {
+                $record->add_fields( ( sprintf "%03s", $row->{tag} ),
+                    $row->{'subfieldvalue'} );
+            }
+            else {
+                $field->add_subfields( $row->{'subfieldcode'},
+                    $row->{'subfieldvalue'} );
+            }
+            $prevtag       = $row->{tag};
+            $previndicator = $row->{tag_indicator};
+        }
+    }
+
+    # the last has not been included inside the loop... do it now !
+    if ( $prevtag ne "XXX" )
+    { # check that we have found something. Otherwise, prevtag is still XXX and we
+         # must return an empty record, not make MARC::Record fail because we try to
+         # create a record with XXX as field :-(
+        if ( $prevtag < 10 ) {
+            $record->add_fields( $prevtag, $prevvalue );
+        }
+        else {
+
+            #  		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+            $record->add_fields($field);
+        }
+    }
+    return $record;
+}
+
+sub MARCgetitem {
+
+    # Returns MARC::Record of the biblio passed in parameter.
+    my ( $dbh, $bibid, $itemnumber ) = @_;
+    my $record = MARC::Record->new();
+
+    # search MARC tagorder
+    my $sth2 =
+      $dbh->prepare(
+"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
+    );
+    $sth2->execute( $bibid, $itemnumber );
+    my ($tagorder) = $sth2->fetchrow_array();
+
+    #---- TODO : the leader is missing
+    my $sth =
+      $dbh->prepare(
+"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
+		 		 from marc_subfield_table
+		 		 where bibid=? and tagorder=? order by subfieldcode,subfieldorder
+		 	 "
+    );
+    $sth2 =
+      $dbh->prepare(
+        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
+    $sth->execute( $bibid, $tagorder );
+    while ( my $row = $sth->fetchrow_hashref ) {
+        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
+            $sth2->execute( $row->{'valuebloblink'} );
+            my $row2 = $sth2->fetchrow_hashref;
+            $sth2->finish;
+            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
+        }
+        if ( $record->field( $row->{'tag'} ) ) {
+            my $field;
+
+#--- this test must stay as this, because of strange behaviour of mySQL/Perl DBI with char var containing a number...
+            #--- sometimes, eliminates 0 at beginning, sometimes no ;-\\\
+            if ( length( $row->{'tag'} ) < 3 ) {
+                $row->{'tag'} = "0" . $row->{'tag'};
+            }
+            $field = $record->field( $row->{'tag'} );
+            if ($field) {
+                my $x =
+                  $field->add_subfields( $row->{'subfieldcode'},
+                    $row->{'subfieldvalue'} );
+                $record->delete_field($field);
+                $record->add_fields($field);
+            }
+        }
+        else {
+            if ( length( $row->{'tag'} ) < 3 ) {
+                $row->{'tag'} = "0" . $row->{'tag'};
+            }
+            my $temp =
+              MARC::Field->new( $row->{'tag'}, " ", " ",
+                $row->{'subfieldcode'} => $row->{'subfieldvalue'} );
+            $record->add_fields($temp);
+        }
+
+    }
+    return $record;
+}
+
 
 exit;
 
 # $Log$
-# Revision 1.100.2.43  2006/04/27 18:07:40  oleonard
-# Adding two new system preferences:
+# Revision 1.100.2.43.2.1  2006/05/28 19:20:24  tgarip1957
+# New fields required for authorities and items for zebradb and etc.
 #
-# 1. opacuserlogin shows/hides login-based features like reserves, private shelves, and login forms. On by default.
-# 2. opacbookbag shows/hides the book bag (biblio basket). On by default.
+# Revision 1.140  2006/05/22 22:40:45  rangi
+# Adding new systempreference allowing for the library to add borrowers to institutions (rest homes, parishes, schools, classes etc).
 #
-# Revision 1.100.2.42  2006/04/22 13:52:12  oleonard
-# Adding opacheader and IntranetBiblioDefaultView system preferences
+# Revision 1.139  2006/05/19 19:31:29  tgarip1957
+# Added new fields to auth_header and auth_subfield_table to allow ZEBRA use of authorities and new MARC framework like structure.
+# Authority tables are modified to be compatible with new MARC frameworks. This change is part of Authority Linking & Zebra authorities. Requires change in Mysql database. It will break head unless all changes regarding this is implemented. This warning will take place on all commits regarding this
 #
-# Revision 1.100.2.41  2006/04/21 08:54:55  hdl
-# Adding two new sysprefs :
-# - z3950NormalizeAuthor of type YesNo. Set this to yes if you want author field to be filled with authorities fields when importing biblio in z3950
-# - z3950AuthorAuthfields, free text : type in comma-separated list of fields to search for author names for AuthorNormalization.
+# Revision 1.138  2006/05/19 16:51:44  alaurin
+# update database for :
+# - new feature ip and printer management
+# adding two fields in branches table (branchip,branchprinter)
 #
-# Adding a feature on a Z3950 import.
-# You can now automatically fill author with person name authority contained in the biblio if sysprefs are filled.
+# - waiting date : adding one field in reserves table(waiting date) to calculate the Maximum delay to pick up a reserved document when it's available
 #
-# Revision 1.100.2.40  2006/04/18 09:34:15  plg
+# new system preference :
+# - ReservesMaxPickUpDelay : Maximum delay to pick up a reserved document
+# TransfersMaxDaysWarning : Max delay before considering the transfer as potentialy a problem
+#
+# Revision 1.137  2006/04/18 09:36:36  plg
 # bug fixed: typo fixed in labels and labels_conf tables creation query.
 #
-# Revision 1.100.2.39  2006/04/17 21:19:52  sushi
-# Added labels, and label_conf tables for spine labels tool.
+# Revision 1.136  2006/04/17 21:55:33  sushi
+# Added 'labels' and 'labels_conf' tables, for spine lable tool.
 #
-# Revision 1.100.2.38  2006/04/05 14:58:04  kados
-# adding TemplateEncoding syspref: allows librarian to specify the
-# encoding to use on templates.
+# Revision 1.135  2006/04/15 02:37:03  tgarip1957
+# Marc record should be set to UTF-8 in leader.Force it.
+# XML should be with<record> wrappers
 #
-# Revision 1.100.2.37  2006/04/04 13:54:10  tipaul
-# advancedMARCeditor systempref management
+# Revision 1.134  2006/04/14 09:37:29  tipaul
+# improvements from SAN Ouest Provence :
+# * introducing a category_type into categories. It can be A (adult), C (children), P (Professionnal), I (institution/organisation).
+# * each category_type has it's own forms to create members.
+# * the borrowers table has been heavily modified (many fields changed), to get something more logic & readable
+# * reintroducing guarantor/guanrantee system that is now independant from hardcoded C/A for categories
+# * updating templates to fit template rules
 #
-# Revision 1.100.2.36  2006/03/18 22:55:26  kados
-# add syspref for the MARC Organization Code of the library
+# (see mail feb, 17 on koha-devel "new features for borrowers" for more details)
 #
-# Revision 1.100.2.35  2006/03/08 17:50:55  kados
-# Modifying patronimages: now it can be used to specify the file extension
-# of the images (to avoid hard-codeing in templates).
+# Revision 1.133  2006/04/13 08:36:42  plg
+# new: function C4::Date::get_date_format_string_for_DHTMLcalendar based on
+# the system preference prefered date format.
 #
-# Revision 1.100.2.34  2006/03/08 13:28:23  tipaul
-# changing the size of some new systempref to a bloc (more convenient)
+# improvement: book fund list and budget list screen redesigned. Filters on
+# each field. Columns are not sortable yet. Using DHTML Calendar to fill date
+# fields instead of manual filling. Pagination system. From the book fund
+# list, you can reach the budget list, filtered on a book fund, or not. A
+# budget can be added only from book fund list screen.
+#
+# bug fixed: branchcode was missing in table aqbudget.
 #
-# Revision 1.100.2.33  2006/03/04 06:05:13  kados
-# New syspref: AnonSuggestions to allow an anonymous patron to make a
-# suggestion (requested by NPL). To enable, set to the borrowernumber
-# of the anonymous patron (must be created).
+# bug fixed: when setting a branchcode to a book fund, all associated budgets
+# move to this branchcode.
 #
-# Revision 1.100.2.32  2006/03/03 16:20:23  kados
-# hopefully fixes truncated amazon.com links in syspref
-# ----------------------------------------------------------------------
+# modification: when adding/modifying budget/fund, MySQL specific "REPLACE..."
+# statements replaced by standard SQL compliant statement.
 #
-# Revision 1.100.2.31  2006/03/01 21:44:16  kados
-# Adds 'opacreadinghistory' syspref for turning this on/off for libraries
-# who are scared of their government (ie, in countries where there a
-# patriot act) :-)
+# bug fixed: when adding/modifying a budget, if the book fund is associated to
+# a branch, the branch selection is disabled and set to the book fund branch.
 #
-# Revision 1.100.2.30  2006/03/01 15:52:13  kados
-# Whoops ... should have checked, that name is already used. Changed it to
-# opaclanguagesdisplay.
+# Revision 1.132  2006/04/06 12:37:05  hdl
+# Bugfixing : aqbookfund needed a field.
 #
-# Revision 1.100.2.29  2006/03/01 15:51:28  kados
-# adds opaclanguages syspref, which allows turning on/off the display of
-# the languages pref on OPAC (default is on)
+# Revision 1.131  2006/03/03 17:02:22  tipaul
+# commit for holidays and news management.
+# (some forgotten files)
 #
-# Revision 1.100.2.28  2006/03/01 15:38:53  kados
-# Adding patronimages syspref. Adding opaclayoutstylesheet. Some explainations
-# are in order:
+# Revision 1.130  2006/03/03 16:35:21  tipaul
+# commit for holidays and news management.
 #
-# Right now there are three stylesheet sysprefs:
+# Contrib from Tümer Garip (from Turkey) :
+# * holiday :
+# in /tools/ the holiday.pl script let you define holidays (days where the library is closed), branch by branch. You can define 3 types of holidays :
+# - single day : only this day is closed
+# - repet weekly (like "sunday") : the day is holiday every week
+# - repet yearly (like "July, 4") : this day is closed every year.
 #
-# opacstylesheet - an external stylesheet specified by URL (replaces all other
-# stylesheets)
+# You can also put exception :
+# - sunday is holiday, but "2006 March, 5th" the library will be open
 #
-# opaccolorstylesheet - local stylesheet specified by filename
-# opaclayoutstylesheet - local stylesheet specified by filename
+# The holidays are used for return date calculation : the return date is set to the next date where the library is open. A systempreference (useDaysMode) set ON (Calendar) or OFF (Normal) the calendar calculation.
 #
-# Revision 1.100.2.27  2006/02/27 15:40:32  tipaul
-# setting serialadditems systempreference to 0 by default : no behaviour change when upgrading Koha
+# Revision 1.129  2006/02/27 18:19:33  hdl
+# New table used in overduerules.pl tools page.
 #
-# Revision 1.100.2.26  2006/02/23 03:19:48  kados
-# Adds the 'sortbynonfiling' systempref. With this enabled, Koha will
-# correctly sort title searches according to the nonfiling characters
-# in the MARC records.
+# Revision 1.128  2006/01/25 15:16:06  tipaul
+# updating DB :
+# * removing useless tables
+# * adding useful indexes
+# * altering some columns definitions
+# * The goal being to have updater working fine for foreign keys.
 #
-# Revision 1.100.2.25  2006/02/21 20:00:13  kados
-# setting default value for LabelMARCView to 'standard'
-# ----------------------------------------------------------------------
+# For me it's done, let me know if it works for you. You can see an updated schema of the DB (with constraints) on the wiki
 #
-# Revision 1.100.2.24  2006/02/21 18:40:08  kados
-# Adding LabeledMARCView systempref to choose whether tags are displayed
-# in standard or economical format. Later, this can be used to display
-# 'strict' format with no labels for insane librarians who want that.
+# Revision 1.127  2006/01/24 17:57:17  tipaul
+# DB improvements : adding foreign keys on some tables. partial stuff done.
 #
-# Revision 1.100.2.23  2006/02/07 15:33:35  hdl
-# Adding a new system preference : serialsadditem
+# Revision 1.126  2006/01/06 16:39:42  tipaul
+# synch'ing head and rel_2_2 (from 2.2.5, including npl templates)
+# Seems not to break too many things, but i'm probably wrong here.
+# at least, new features/bugfixes from 2.2.5 are here (tested on some features on my head local copy)
 #
-# Adding two functions in Biblio.pm : getitemlocation and getitemstatus (helpful to get location list and status list, status is supposed to be in relation with items.notforloan)
+# - removing useless directories (koha-html and koha-plucene)
 #
-# Adding a new function in Bull.pm : serialsitemize which take serial id and item information and creates the item
-# Modifying statecollection to add a new line (used for data input)
+# Revision 1.125  2006/01/04 15:54:55  tipaul
+# utf8 is a : go for beta test in HEAD.
+# some explanations :
+# - updater/updatedatabase => will transform all tables in innoDB (not related to utf8, just to warn you) AND collate them in utf8 / utf8_general_ci. The SQL command is : ALTER TABLE tablename DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci.
+# - *-top.inc will show the pages in utf8
+# - THE HARD THING : for me, mysql-client and mysql-server were set up to communicate in iso8859-1, whatever the mysql collation ! Thus, pages were improperly shown, as datas were transmitted in iso8859-1 format ! After a full day of investigation, someone on usenet pointed "set NAMES 'utf8'" to explain that I wanted utf8. I could put this in my.cnf, but if I do that, ALL databases will "speak" in utf8, that's not what we want. Thus, I added a line in Context.pm : everytime a DB handle is opened, the communication is set to utf8.
+# - using marcxml field and no more the iso2709 raw marc biblioitems.marc field.
 #
-# Revision 1.100.2.22  2006/02/05 21:53:54  kados
-# Adds database support for IntranetNav systempref -- used to add HTML
-# tags to left-hand navigation menu on Intranet.
-# ----------------------------------------------------------------------
+# Revision 1.124  2005/10/27 12:09:05  tipaul
+# new features for serial module :
+# - the last 5 issues are now shown, and their status can be changed (but not reverted to "waited", as there can be only one "waited")
+# - the library can create a "distribution list". this paper contains a list of borrowers (selected from the borrower list, or manually entered), and print it for a given issue. once printed, the sheet can be put on the issue and distributed to every reader on the list (one by one).
 #
-# Revision 1.100.2.21  2006/02/04 18:17:00  kados
-# Adds opaccolorstylesheet, intranetstylesheet, intranetcolorstylesheet
-# to systemprefs.
+# Revision 1.123  2005/10/26 09:13:37  tipaul
+# big commit, still breaking things...
 #
-# Revision 1.100.2.20  2006/02/04 05:16:40  kados
-# Allows putting credits at bottom of OPAC page
+# * synch with rel_2_2. Probably the last non manual synch, as rel_2_2 should not be modified deeply.
+# * code cleaning (cleaning warnings from perl -w) continued
 #
-# Revision 1.100.2.19  2006/02/04 01:44:59  kados
-# Adds Fully Preferences-based Amazon.com feature. See mail to koha-devel
-# for details.
+# Revision 1.122  2005/09/02 14:18:38  tipaul
+# new feature : image for itemtypes.
 #
-# Revision 1.100.2.18  2006/02/03 23:12:23  kados
-# Adds system prefs for using Amazon.com content in the OPAC
+# * run updater/updatedatabase to create imageurl field in itemtypes.
+# * go to Koha >> parameters >> itemtypes >> modify (or add) an itemtype. You will see around 20 nice images to choose between (thanks to owen). If you prefer your own image, you also can type a complete url (http://www.myserver.lib/path/to/my/image.gif)
+# * go to OPAC, and search something. In the result list, you now have the picture instead of the text itemtype.
 #
-# Revision 1.100.2.17  2006/02/03 20:55:16  kados
-# Adding a new system preference: OpacNav. Can be used to add HTML
-# navigation links to the left-hand navbar in the OPAC.
+# Revision 1.121  2005/08/24 08:49:03  hdl
+# Adding a note field in serial table.
+# This will allow librarian to mention a note on a peculiar waiting serial number.
 #
-# Revision 1.100.2.16  2005/12/30 11:13:29  tipaul
-# * tool to synchronise TABLE and deletedTABLE structures in updatedatabase
+# Revision 1.120  2005/08/09 14:10:32  tipaul
+# 1st commit to go to zebra.
+# don't update your cvs if you want to have a working head...
 #
-# Revision 1.100.2.15  2005/12/05 09:50:35  tipaul
-# New systempreference : OpacPasswordChange if set to Yes (default) the user can change it's password. If set to No, he can't. Useful for libraries with LDAP auth, where the password is checked in LDAP, not in Koha, thus Koha can't change it
+# this commit contains :
+# * updater/updatedatabase : get rid with marc_* tables, but DON'T remove them. As a lot of things uses them, it would not be a good idea for instance to drop them. If you really want to play, you can rename them to test head without them but being still able to reintroduce them...
+# * Biblio.pm : modify MARCgetbiblio to find the raw marc record in biblioitems.marc field, not from marc_subfield_table, modify MARCfindframeworkcode to find frameworkcode in biblio.frameworkcode, modify some other subs to use biblio.biblionumber & get rid of bibid.
+# * other files : get rid of bibid and use biblionumber instead.
 #
-# Revision 1.100.2.14  2005/12/05 09:41:35  tipaul
-# typo fix : NofifyBorrowerDeparture instead of NotifiyBorrowerDeparture
+# What is broken :
+# * does not do anything on zebra yet.
+# * if you rename marc_subfield_table, you can't search anymore.
+# * you can view a biblio & bibliodetails, go to MARC editor, but NOT save any modif.
+# * don't try to add a biblio, it would add data poorly... (don't try to delete either, it may work, but that would be a surprise ;-) )
 #
-# Revision 1.100.2.13  2005/11/29 14:50:30  hdl
-# Adding a notice before departure of a borrower
+# IMPORTANT NOTE : you need MARC::XML package (http://search.cpan.org/~esummers/MARC-XML-0.7/lib/MARC/File/XML.pm), that requires a recent version of MARC::Record
+# Updatedatabase stores the iso2709 data in biblioitems.marc field & an xml version in biblioitems.marcxml Not sure we will keep it when releasing the stable version, but I think it's a good idea to have something readable in sql, at least for development stage.
 #
-# Revision 1.100.2.12  2005/10/25 12:36:21  tipaul
-# * adding a feature to enable reordering of subfields in MARC editor (can be considered as a bug ? at least one of my libraries think that yes !)
-# * as the MARC editor begins to be really heavy, i've also added a marc_hide systempref. It hides all marc features not requested by libraries that want MARC but not too much. It hides MARC tag & subfield code, reordering buttons as well as indicators. by default, hide_marc is off
+# Revision 1.119  2005/08/04 16:07:58  tipaul
+# Synch really broke this script...
 #
-# Revision 1.100.2.11  2005/10/06 12:16:46  tipaul
-# removing a useless systempreference
+# Revision 1.118  2005/08/04 16:02:55  tipaul
+# oops... error in synch between 2.2 and head
 #
-# Revision 1.100.2.10  2005/09/30 13:56:57  hdl
-# Two new system preferences:
-# SortItemsby and Disable_Dictionary
+# Revision 1.117  2005/08/04 14:24:39  tipaul
+# synch'ing 2.2 and head
 #
-# Revision 1.100.2.9  2005/09/23 11:08:27  tipaul
-# some code cleaning, should not change anything otherwise
+# Revision 1.116  2005/08/04 08:55:54  tipaul
+# Letters / alert system, continuing...
 #
-# Revision 1.100.2.8  2005/09/09 08:19:57  hdl
-# Undoing Logs
+# * adding a package Letters.pm, that manages Letters & alerts.
+# * adding feature : it's now possible to define a "letter" for any subscription created. If a letter is defined, users in OPAC can put an alert on the subscription. When an issue is marked "arrived", all users in the alert will recieve a mail (as defined in the "letter"). This last part (= send the mail) is not yet developped. (Should be done this week)
+# * adding feature : it's now possible to "put to an alert" in OPAC, for any serial subscription. The alert is stored in a new table, called alert. An alert can be put only if the librarian has activated them in subscription (and they activate it just by choosing a "letter" to sent to borrowers on new issues)
+# * adding feature : librarian can see in borrower detail which alerts they have put, and a user can see in opac-detail which alert they have put too.
 #
-# Revision 1.100.2.7  2005/08/26 12:28:57  hdl
-# Adding a test on a temporary value before processing it in Biblio.pm
-# Adding branchcode fields to aqbookfund and aqbasket.
+# Note that the system should be generic enough to manage any type of alert.
+# I plan to extend it soon to virtual shelves : a borrower will be able to put an alert on a virtual shelf, to be warned when something is changed in the virtual shelf (mail being sent once a day by cron, or manually by the shelf owner. Anyway, a mail won't be sent on every change, users would be spammed by Koha ;-) )
 #
-# Revision 1.100.2.6  2005/08/24 09:02:25  hdl
-# Adding a notes field into serial table.
-# Manage a note for a serial number...
-# Will allow a librarian to say "contact with supplier for this serial : Will be received on date...  " or anything else.
+# Revision 1.115  2005/08/02 16:15:34  tipaul
+# adding 2 fields to letter system :
+# * module (acquisition, catalogue...) : it will be usefull to show the librarian only letters he may be interested by.
+# * title, that will be used as mail subject.
 #
-# Revision 1.100.2.5  2005/06/06 15:23:36  tipaul
-# adding a systempref to choose either to show or hide "lost" items. Note that "lost items" can be related to an authorised value list, so does not necessary mean "item definetly lost". Even here, some libraries want to see lost items, and some don't want. This parameter will make everybody happy !
+# Revision 1.114  2005/07/28 15:10:13  tipaul
+# Introducing new "Letters" system : Letters will be used everytime you want to sent something to someone (through mail or paper). For example, sending a mail for overdues use letter that you can put as parameters. Sending a mail to a borrower when a suggestion is validated uses a letter too.
+# the letter table contains 3 fields :
+# * code => the code of the letter
+# * name => the complete name of the letter
+# * content => the complete text. It's a TEXT field type, so has no limits.
 #
-# Revision 1.100.2.4  2005/06/06 14:15:55  tipaul
-# adding 2 systemparameters to define an alternate image as logo in opac (the image on main page & on each top-left page)
+# My next goal now is to work on point 2-I "serial issue alert"
+# With this feature, in serials, a user can subscribe the "issue alert". For every issue arrived/missing, a mail is sent to all subscribers of this list. The mail warns the user that the issue is arrive or missing. Will be in head.
+# (see mail on koha-devel, 2005/04/07)
 #
-# Revision 1.100.2.3  2005/06/02 21:05:34  hdl
-# adding variable SubscriptionHistory
+# The "serial issue alert" will be the 1st to use this letter system that probably needs some tweaking ;-)
 #
-# Revision 1.100.2.2  2005/03/29 15:41:43  tipaul
-# * new permissions : management & tools. You now have 2 new permissions :
-# 	- management : means the user can manage library parameters, but NOT system parameters.
-# 	- parameters : means the user can manage all parameters (including system parameters : marc structure, authorised values, system preferences. Was the only flag previously existing)
-# 	- tools : means the user can import/export datas & edit barcodes.
-# note that for compatibility reasons, a user having "parameters" can access everything.
-# * new permission scheme. In every template new variables are available. They are written CAN_user_permission, with permission being one of the permission flag. templates can now show or hidde menu entries depending on user permissions. For example, a user with just circ permissions should have only the "circulation" button on home page. Templates are NOT updated in this version (except for system parameters, as proof of concept), they will be in the next ones. But the scheme is ready.
+# Once it will be stabilised default letters (in any languages) could be added during installer to help the library begin with this new feature.
 #
-# Revision 1.100.2.1  2005/03/17 17:15:18  tipaul
-# defaulting opacstylesheet to '' instead of 'normal' (that is stupid)
+# Revision 1.113  2005/07/28 08:38:41  tipaul
+# For instance, the return date does not rely on the borrower expiration date. A systempref will be added in Koha, to modify return date calculation schema :
+# * ReturnBeforeExpiry = yes => return date can't be after expiry date
+# * ReturnBeforeExpiry = no  => return date can be after expiry date
 #
-# Revision 1.100  2004/12/10 16:11:32  tipaul
-# Improvement : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
+# Revision 1.112  2005/07/26 08:19:47  hdl
+# Adding IndependantBranches System preference variable in order to manage Branch independancy.
 #
-# Revision 1.99  2004/12/02 17:17:00  tipaul
-# adding acquisition permission
-#
-# Revision 1.98  2004/11/26 20:26:49  tipaul
-# bugfix for auth_header creation
-#
-# Revision 1.97  2004/11/23 09:11:08  tipaul
-# adding itemcallnumber entry
-#
-# Revision 1.96  2004/11/16 13:03:45  tipaul
-# removing ldap systempref, it's now in C4/Auth_with_ldap.pm separate package
-#
-# Revision 1.95  2004/11/08 19:57:32  tipaul
-# bugfix
-#
-# Revision 1.94  2004/09/06 10:00:29  tipaul
-# adding a "location" field to the library.
-# This field is useful when the callnumber contains no information on the room where the item is stored.
-# With this field, we now have 3 levels of informations to find a book :
-# * the branch.
-# * the location.
-# * the callnumber.
-#
-# This should be versatile enough to solve any storing method.
-# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
-#
-# Revision 1.93  2004/08/12 14:50:50  tipaul
-# bugfixes
-#
-# Revision 1.92  2004/08/06 16:38:42  tipaul
-# changing DB structure to calculate next issue number.
-# Seems to work fine.
-#
-# Still misses the date calculation & the test of end of subscription (maybe for monday ?)
-#
-# Revision 1.91  2004/07/15 09:52:28  tipaul
-# Acquisition & Suggestion :
-# * acquisition rewritte : create a aqbasket table to deal with "bookseller order header".
-# * add "close basket" feature : a closed basket can't be modified
-# * suggestion feature : manage suggestions in acquisition (after suggestion filled in OPAC)
-#
-# Revision 1.90  2004/07/06 08:24:18  tipaul
-# adding 2 free fields that can be used for sorting purposes
-#
-# Revision 1.89  2004/07/02 15:55:08  tipaul
-# Adding 2 new fields, called "sort1" and "sort2"
-# They can be used for sorting & statistics reasons by the library.
-#
-# Revision 1.88  2004/06/26 23:34:26  rangi
-# Fixing typo
-#
-# Revision 1.87  2004/06/23 13:03:09  tipaul
-# fixes in DB structure
-#
-# Revision 1.86  2004/06/22 11:30:57  tipaul
-# adding -s (silent) flag, to have a silent install.
-# only updater will be verbose
-#
-# Revision 1.85  2004/06/17 15:19:44  tipaul
-# missing Marc_Search index on marc_word
-#
-# Revision 1.84  2004/06/17 08:25:21  tipaul
-# DB modifs : merging tag & subfield in marc_word table
-#
-# Revision 1.83  2004/06/10 08:32:02  tipaul
-# MARC authority management (continued)
-#
-# Revision 1.82  2004/06/03 12:46:58  tipaul
-# * frameworks and itemtypes are independant
-#
-# WARNING : will work only if applied to a 2.0 base. some modifs have been done since last commit that will NOT be applied if you run updatedatabase again.
-#
-# Revision 1.81  2004/05/28 09:56:21  tipaul
-# bugfix
-#
-# Revision 1.80  2004/05/28 08:32:00  tipaul
-# adding :
-# * MARC authority file
-# * seealso & hidden in MARC biblio structure.
-#
-# Revision 1.79  2004/05/18 09:50:07  tipaul
-# *** empty log message ***
-#
-# Revision 1.78  2004/05/10 09:29:33  tipaul
-# css is now the default theme for OPAC.
-# It will be the theme used for improvements and new things in OPAC.
-#
-# Revision 1.77  2004/05/06 14:56:51  tipaul
-# adding table issuingrules (previously called categoryitem
-#
-# Revision 1.76  2004/05/03 09:32:25  tipaul
-# adding printcirculationsplit parameter (already existed, but was not in systempref by defaul)
-#
-# Revision 1.75  2004/04/14 19:49:00  tipaul
-# seealso field set to 255 chars
-#
-# Revision 1.74  2004/03/11 16:10:16  tipaul
-# *** empty log message ***
-#
-# Revision 1.73  2004/03/06 20:26:13  tipaul
-# adding seealso feature in MARC searches
+# Revision 1.111  2005/07/25 15:35:38  tipaul
+# we have decided that moving to Koha 3.0 requires being already in Koha 2.2.x
+# So, the updatedatabase script can highly be cleaned (90% removed).
+# Let's play with the new Koha DB structure now ;-)
 #
