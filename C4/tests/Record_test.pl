@@ -24,7 +24,7 @@ use strict; use warnings; #FIXME: turn off warnings before release
 
 # specify the number of tests
 use Test::More tests => 23;
-use C4::Context;
+#use C4::Context;
 use C4::Record;
 
 =head1 NAME
