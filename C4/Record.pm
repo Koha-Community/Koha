@@ -23,8 +23,10 @@ package C4::Record;
 use strict; use warnings; #FIXME: turn off warnings before release
 
 # please specify in which methods a given module is used
-use MARC::Record; #marc2marcxml, marcxml2marc, html2marc, changeEncoding
-use MARC::File::XML; #marc2marcxml, marcxml2marc, html2marcxml, changeEncoding
+use MARC::Record; # marc2marcxml, marcxml2marc, html2marc, changeEncoding
+use MARC::File::XML; # marc2marcxml, marcxml2marc, html2marcxml, changeEncoding
+use MARC::Crosswalk::DublinCore; # marc2dcxml
+use Unicode::Normalize; # _entity_encode
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -37,8 +39,12 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
 # only export API methods
 
 @EXPORT = qw(
+  &marc2marc
   &marc2marcxml
   &marcxml2marc
+  &marc2dcxml
+  &marc2modsxml
+
   &html2marcxml
   &html2marc
   &changeEncoding
@@ -46,75 +52,238 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
 
 =head1 NAME
 
-C4::Record - MARC, MARCXML, XML, etc. Record Management Functions and API
+C4::Record - MARC, MARCXML, DC, MODS, XML, etc. Record Management Functions and API
 
 =head1 SYNOPSIS
 
 New in Koha 3.x. This module handles all record-related management functions.
 
-=head1 API
+=head1 API (EXPORTED FUNCTIONS)
 
-=head2 marc2marcxml
+=head2 marc2marc - Convert from one flavour of ISO-2709 to another
 
-my $marcxml = marc2marcxml($marc,$encoding,$flavour);
+=over 4
 
-returns a MARCXML scalar variable
+my ($error,$newmarc) = marc2marc($marc,$to_flavour,$from_flavour,$encoding);
 
-C<$marc> a MARC::Record object or binary MARC record
+Returns an ISO-2709 scalar
 
-C<$encoding> UTF-8 or MARC-8 [UTF-8]
+=back
 
-C<$flavour> MARC21 or UNIMARC
+=cut
+
+sub marc2marc {
+	my ($marc,$to_flavour,$from_flavour,$encoding) = @_;
+	my $error = "Feature not yet implemented\n";
+	return ($error,$marc);
+}
+
+=head2 marc2marcxml - Convert from ISO-2709 to MARCXML
+
+=over 4
+
+my ($error,$marcxml) = marc2marcxml($marc,$encoding,$flavour);
+
+Returns a MARCXML scalar
+
+=over 2
+
+C<$marc> - an ISO-2709 scalar or MARC::Record object
+
+C<$encoding> - UTF-8 or MARC-8 [UTF-8]
+
+C<$flavour> - MARC21 or UNIMARC
+
+C<$dont_entity_encode> - a flag that instructs marc2marcxml not to entity encode the xml before returning (optional)
+
+=back
+
+=back
 
 =cut
 
 sub marc2marcxml {
-	my ($marc,$encoding,$flavour) = @_;
-	unless($encoding) {$encoding = "UTF-8"};
-	unless($flavour) {$flavour = C4::Context->preference("TemplateEncoding")};
-	#FIXME: add error handling
-	my $marcxml = $record->as_xml_record($marc,$encoding,$flavour);
-	return $marcxml;
+	my ($marc,$encoding,$flavour,$dont_entity_encode) = @_;
+	my $error; # the error string
+	my $marcxml; # the final MARCXML scalar
+
+	# test if it's already a MARC::Record object, if not, make it one
+	my $marc_record_obj;
+	if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
+		$marc_record_obj = $marc;
+	} else { # it's not a MARC::Record object, make it one
+		eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+
+		# conversion to MARC::Record object failed, populate $error
+		if ($@) { $error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR };
+	}
+	# only proceed if no errors so far
+	unless ($error) {
+
+		# check the record for warnings
+		my @warnings = $marc_record_obj->warnings();
+		if (@warnings) {
+			warn "\nWarnings encountered while processing ISO-2709 record with title \"".$marc_record_obj->title()."\":\n";
+			foreach my $warn (@warnings) { warn "\t".$warn };
+		}
+		unless($encoding) {$encoding = "UTF-8"}; # set default encoding
+		unless($flavour) {$flavour = C4::Context->preference("marcflavour")}; # set default MARC flavour
+
+		# attempt to convert the record to MARCXML
+		eval { $marcxml = $marc_record_obj->as_xml_record($flavour) }; #handle exceptions
+
+		# record creation failed, populate $error
+		if ($@) {
+			$error .= "Creation of MARCXML failed:".$MARC::File::ERROR;
+			$error .= "Additional information:\n";
+			my @warnings = $@->warnings();
+			foreach my $warn (@warnings) { $error.=$warn."\n" };
+
+		# record creation was successful
+    	} else {
+
+			# check the record for warning flags again (warnings() will be cleared already if there was an error, see above block
+			@warnings = $marc_record_obj->warnings();
+			if (@warnings) {
+				warn "\nWarnings encountered while processing ISO-2709 record with title \"".$marc_record_obj->title()."\":\n";
+				foreach my $warn (@warnings) { warn "\t".$warn };
+			}
+		}
+
+		# only proceed if no errors so far
+		unless ($error) {
+
+			# entity encode the XML unless instructed not to
+    		unless ($dont_entity_encode) {
+        		my ($marcxml_entity_encoded) = _entity_encode($marcxml);
+        		$marcxml = $marcxml_entity_encoded;
+    		}
+		}
+	}
+	# return result to calling program
+	return ($error,$marcxml);
 }
 
-=head2 marcxml2marc 
+=head2 marcxml2marc - Convert from MARCXML to ISO-2709
 
-my $marc = marcxml2marc($marcxml,$encoding,$flavour);
+=over 4
 
-returns a binary MARC scalar variable
+my ($error,$marc) = marcxml2marc($marcxml,$encoding,$flavour);
 
-C<$marcxml> a MARCXML record
+Returns an ISO-2709 scalar
 
-C<$encoding> UTF-8 or MARC-8 [UTF-8]
+=over 2
 
-C<$flavour> MARC21 or UNIMARC
+C<$marcxml> - a MARCXML record
+
+C<$encoding> - UTF-8 or MARC-8 [UTF-8]
+
+C<$flavour> - MARC21 or UNIMARC
+
+=back
+
+=back
 
 =cut
 
 sub marcxml2marc {
     my ($marcxml,$encoding,$flavour) = @_;
-	unless($encoding) {$encoding = "UTF-8"};
-	unless($flavour) {$flavour = C4::Context->preference("TemplateEncoding")};
-	#FIXME: add error handling
-	my $marc = $marcxml->new_from_xml($marcxml,$encoding,$flavour);
-	return $marc;
+	my $error; # the error string
+	my $marc; # the final ISO-2709 scalar
+	unless($encoding) {$encoding = "UTF-8"}; # set the default encoding
+	unless($flavour) {$flavour = C4::Context->preference("marcflavour")}; # set the default MARC flavour
+
+	# attempt to do the conversion
+	eval { $marc = MARC::Record->new_from_xml($marcxml,$encoding,$flavour) }; # handle exceptions
+
+	# record creation failed, populate $error
+	if ($@) {$error .="\nCreation of MARCXML Record failed: ".$@;
+		$error.=$MARC::File::ERROR if ($MARC::File::ERROR);
+		};
+	# return result to calling program
+	return ($error,$marc);
 }
 
+=head2 marc2dcxml - Convert from ISO-2709 to Dublin Core
+
+=over 4
+
+my ($error,$dcxml) = marc2dcxml($marc,$qualified);
+
+Returns a DublinCore::Record object, will eventually return a Dublin Core scalar
+
+FIXME: should return actual XML, not just an object
+
+=over 2
+
+C<$marc> - an ISO-2709 scalar or MARC::Record object
+
+C<$qualified> - specify whether qualified Dublin Core should be used in the input or output [0]
+
+=back
+
+=back
+
+=cut
+
+sub marc2dcxml {
+	my ($marc,$qualified) = @_;
+	my $error;
+    # test if it's already a MARC::Record object, if not, make it one
+    my $marc_record_obj;
+    if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
+        $marc_record_obj = $marc;
+    } else { # it's not a MARC::Record object, make it one
+		eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+
+		# conversion to MARC::Record object failed, populate $error
+		if ($@) {
+			$error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR;
+		}
+	}
+	my $crosswalk = MARC::Crosswalk::DublinCore->new;
+	if ($qualified) {
+		$crosswalk = MARC::Crosswalk::DublinCore->new( qualified => 1 );
+	}
+	my $dcxml = $crosswalk->as_dublincore($marc_record_obj);
+	return ($error,$dcxml);
+}
+=head2 marc2modsxml - Convert from ISO-2709 to MODS
+
+=over 4
+
+my ($error,$modsxml) = marc2modsxml($marc);
+
+Returns a MODS scalar
+
+=back
+
+=cut
+
+sub marc2modsxml {
+	my ($marc) = @_;
+	return ("Feature not yet implemented\n");
+}
 =head2 html2marcxml
 
-my $marcxml = html2marcxml($tags,$subfields,$values,$indicator,$ind_tag);
+=over 4
 
-returns a MARCXML scalar variable
+my ($error,$marcxml) = html2marcxml($tags,$subfields,$values,$indicator,$ind_tag);
+
+Returns a MARCXML scalar
 
 this is used in addbiblio.pl and additem.pl to build the MARCXML record from 
 the form submission.
 
 FIXME: this could use some better code documentation
 
+=back
+
 =cut
 
 sub html2marcxml {
     my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;
+	my $error;
 	# add the header info
     my $marcxml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 
@@ -181,25 +350,30 @@ sub html2marcxml {
 	}
 	$marcxml.= MARC::File::XML::footer();
 	#warn $marcxml;
-	return $marcxml;
+	return ($error,$marcxml);
 }
 
 =head2 html2marc
 
+=over 4
+
 Probably best to avoid using this ... it has some rather striking problems:
 
-* saves blank subfields
-* subfield order is hardcoded to always start  
- with 'a' for repeatable tags (because it is hardcoded in the   
- addfield routine).
-* only possible to specify one set of indicators for each set of 
- tags (ie, one for all the 650s). (because they were stored in a 
- hash with the tag as the key).
-* the underlying routines didn't support subfield
- reordering or subfield repeatability.
+=over 2
 
-I've left it in here because it could be useful if someone took the time to 
-fix it.
+* saves blank subfields
+
+* subfield order is hardcoded to always start with 'a' for repeatable tags (because it is hardcoded in the addfield routine).
+
+* only possible to specify one set of indicators for each set of tags (ie, one for all the 650s). (because they were stored in a hash with the tag as the key).
+
+* the underlying routines didn't support subfield reordering or subfield repeatability.
+
+=back 
+
+I've left it in here because it could be useful if someone took the time to fix it. -- kados
+
+=back
 
 =cut
 
@@ -268,45 +442,96 @@ sub html2marc {
     return $record;
 }
 
-=head2 changeEncoding
+=head2 changeEncoding - Change the encoding of a record
 
-$newrecord = changeEncoding($record,$format,$flavour,$toencoding,$fromencoding);
+=over 4
 
-changes the encoding of a record
+my ($error, $newrecord) = changeEncoding($record,$format,$flavour,$to_encoding,$from_encoding);
 
-<C$record the record itself can be in ISO2709, a MARC::Record object, or MARCXML for now (required)
+Changes the encoding of a record
 
-<C$format MARC or MARCXML (required for now, eventually it will attempt to guess)
+=over 2
 
-<C$flavour MARC21 or UNIMARC, if MARC21, it will change the leader (optional) [defaults to system preference]
+C<$record> - the record itself can be in ISO-2709, a MARC::Record object, or MARCXML for now (required)
 
-<C$toencoding the encoding you want the record to end up in (optional) [UTF-8]
+C<$format> - MARC or MARCXML (required)
 
-<C$fromencoding the encoding the record is currently in (optional, it will probably be able to tell unless there's a problem with the record)
+C<$flavour> - MARC21 or UNIMARC, if MARC21, it will change the leader (optional) [defaults to Koha system preference]
 
-FIXME: the fromencoding doesn't work yet
+C<$to_encoding> - the encoding you want the record to end up in (optional) [UTF-8]
+
+C<$from_encoding> - the encoding the record is currently in (optional, it will probably be able to tell unless there's a problem with the record)
+
+=back 
+
+FIXME: the from_encoding doesn't work yet
+
 FIXME: better handling for UNIMARC, it should allow management of 100 field
-FIXME: shouldn't have to convert to and from xml/marc just to change encoding,
-	someone needs to re-write MARC::Record's 'encoding' method to actually
-	alter the encoding rather than just changing the leader
+
+FIXME: shouldn't have to convert to and from xml/marc just to change encoding someone needs to re-write MARC::Record's 'encoding' method to actually alter the encoding rather than just changing the leader
+
+=back
 
 =cut
 
 sub changeEncoding {
-	my ($record,$format,$flavour,$toencoding,$fromencoding) = @_;
+	my ($record,$format,$flavour,$to_encoding,$from_encoding) = @_;
 	my $newrecord;
+	my $error;
 	unless($flavour) {$flavour = C4::Context->preference("marcflavour")};
-	unless($toencoding) {$toencoding = "UTF-8"};
-	if (lc($format) =~ /^MARC$/o) { # ISO2790 Record
-		my $marcxml = marc2marcxml($record,$encoding,$flavour);
-		$newrecord = marcxml2marc($marcxml,$encoding,$flavour);
-	} elsif (lc($format) =~ /^MARCXML$/o) { # MARCXML Record
-		my $marc = marcxml2marc($record,$encoding,$flavour);
-		$newrecord = marc2marcxml($record,$encoding,$flavour);
+	unless($to_encoding) {$to_encoding = "UTF-8"};
+	
+	# ISO-2709 Record (MARC21 or UNIMARC)
+	if (lc($format) =~ /^marc$/o) {
+		# if we're converting encoding of an ISO2709 file, we need to roundtrip through XML
+		# 	because MARC::Record doesn't directly provide us with an encoding method
+		# 	It's definitely less than idea and should be fixed eventually - kados
+		my $marcxml; # temporary storage of MARCXML scalar
+		($error,$marcxml) = marc2marcxml($record,$to_encoding,$flavour);
+		unless ($error) {
+			($error,$newrecord) = marcxml2marc($marcxml,$to_encoding,$flavour);
+		}
+	
+	# MARCXML Record
+	} elsif (lc($format) =~ /^marcxml$/o) { # MARCXML Record
+		my $marc;
+		($error,$marc) = marcxml2marc($record,$to_encoding,$flavour);
+		unless ($error) {
+			($error,$newrecord) = marc2marcxml($record,$to_encoding,$flavour);
+		}
 	} else {
-	#FIXME: handle other record formats, and finally, handle errors
+		$error.="Unsupported record format:".$format;
 	}
-	return $newrecord;
+	return ($error,$newrecord);
+}
+
+=head1 INTERNAL FUNCTIONS
+
+=head2 _entity_encode - Entity-encode an array of strings
+
+=over 4
+
+my ($entity_encoded_string) = _entity_encode($string);
+
+or
+
+my (@entity_encoded_strings) = _entity_encode(@strings);
+
+Entity-encode an array of strings
+
+=back
+
+=cut
+
+sub _entity_encode {
+	my @strings = @_;
+	my @strings_entity_encoded;
+	foreach my $string (@strings) {
+		my $nfc_string = NFC($string);
+		$nfc_string =~ s/([\x{0080}-\x{fffd}])/sprintf('&#x%X;',ord($1))/sgoe;
+		push @strings_entity_encoded, $nfc_string;
+	}
+	return @strings_entity_encoded;
 }
 
 END { }       # module clean-up code here (global destructor)
@@ -319,7 +544,7 @@ __END__
 
 Joshua Ferraro <jmf@liblime.com>
 
-=head MODIFICATIONS
+=head1 MODIFICATIONS
 
 # $Id$
 
