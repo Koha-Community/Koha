@@ -25,7 +25,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
-use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
+use C4::Search; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 #use Smart::Comments;
