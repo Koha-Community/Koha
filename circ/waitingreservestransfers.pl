@@ -74,6 +74,7 @@ foreach my $br (keys %$branches) {
 			my %getreserv;
 			my %env;
 			my $gettitle = getiteminformation(\%env,$num->{'itemnumber'});
+			my $itemtypeinfo = getitemtypeinfo($gettitle->{'itemtype'});
 			if ($gettitle->{'holdingbranch'} eq $default){
 				my $getborrower = getpatroninformation (\%env,$num->{'borrowernumber'});
 				$getreserv{'reservedate'} = format_date($num->{'reservedate'});
@@ -86,7 +87,7 @@ foreach my $br (keys %$branches) {
 				$getreserv{'biblionumber'} = $gettitle->{'biblionumber'};
 				$getreserv{'itemnumber'} = $gettitle->{'itemnumber'};
 				$getreserv{'barcode'} = $gettitle->{'barcode'};
-# 				$getreserv{'itemtype'} = get_iteminfos_of($gettitle->{'itemtype'}->{'description'});
+				$getreserv{'itemtype'} = $itemtypeinfo->{'description'};
 				$getreserv{'holdingbranch'} = $gettitle->{'holdingbranch'};
 				$getreserv{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
 				$getreserv{'borrowernum'} = $getborrower->{'borrowernumber'};

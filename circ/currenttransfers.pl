@@ -78,12 +78,14 @@ foreach my $br (keys %$branches) {
 				$getransf{'messcompa'} = 1;
 			}
 			my $gettitle = getiteminformation(\%env,$num->{'itemnumber'});
+			my $itemtypeinfo = getitemtypeinfo($gettitle->{'itemtype'});
+			
 				$getransf{'title'} = $gettitle->{'title'};
 				$getransf{'datetransfer'} = format_date($num->{'datesent'});
 				$getransf{'biblionumber'} = $gettitle->{'biblionumber'};
 				$getransf{'itemnumber'} = $gettitle->{'itemnumber'};
 				$getransf{'barcode'} = $gettitle->{'barcode'};
-# 				$getransf{'itemtype'} = ItemType($gettitle->{'itemtype'});
+				$getransf{'itemtype'} = $itemtypeinfo->{'description'};
 				$getransf{'homebranch'} = $gettitle->{'homebranch'};
 				$getransf{'holdingbranch'} = $gettitle->{'holdingbranch'};
 				$getransf{'itemcallnumber'} = $gettitle->{'itemcallnumber'};

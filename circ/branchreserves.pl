@@ -30,6 +30,7 @@ use C4::Circulation::Circ2;
 use Date::Manip;
 use C4::Reserves2;
 use C4::Search;
+use C4::Koha;
 
 my $input = new CGI;
 
@@ -103,6 +104,7 @@ foreach my $num (@getreserves) {
 	my %env;
 	my $gettitle = getiteminformation(\%env,$num->{'itemnumber'});
 	my $getborrower = getpatroninformation (\%env,$num->{'borrowernumber'});
+	my $itemtypeinfo = getitemtypeinfo($gettitle->{'itemtype'});
 	$getreserv{'waitingdate'} = format_date($num->{'waitingdate'});
 	my $calcDate=DateCalc($num->{'waitingdate'},"+".C4::Context->preference('ReservesMaxPickUpDelay')."  days");
 	my $warning=Date_Cmp(ParseDate("today"),$calcDate);
@@ -113,7 +115,7 @@ foreach my $num (@getreserves) {
 	$getreserv{'itemnumber'} = $gettitle->{'itemnumber'};
 	$getreserv{'biblionumber'} = $gettitle->{'biblionumber'};
 	$getreserv{'barcode'} = $gettitle->{'barcode'};
-# 	$getreserv{'itemtype'} = ItemType($gettitle->{'itemtype'});
+	$getreserv{'itemtype'} = $itemtypeinfo->{'description'};
 	$getreserv{'homebranch'} = $gettitle->{'homebranch'};
 	$getreserv{'holdingbranch'} = $gettitle->{'holdingbranch'};
 	if ($gettitle->{'homebranch'} ne $gettitle->{'holdingbranch'}){
