@@ -89,8 +89,18 @@ $template->param( "mandatory$_" => 1);
 
 $template->param( "checked" => 1) if ($nodouble eq 1);
 
-
+my $borrower_data=borrdata('',$borrowernumber);
 # if a add or modify is requested => check validity of data.
+if ($step eq 0){
+    foreach my $column (keys %$borrower_data){
+	$data{$column}=$borrower_data->{$column};
+    }
+    $data{'borrowerid'}=$borrowernumber;
+    if (!$borrowerid){
+	$borrowerid=$borrowernumber;
+    }
+}    
+
 if ($op eq 'add' or $op eq 'modify') {
 	my @names=$input->param;
 	foreach my $key (@names){

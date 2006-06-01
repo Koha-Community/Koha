@@ -304,11 +304,11 @@ sub modmember {
 
     my $query = "UPDATE borrowers SET
   title=?,dateexpiry=?,cardnumber=?,sex=?,ethnotes=?,address=?,fax=?,
-  firstname=?,contactnote=?,dateofbirth=?,contactname=?,emailaddress=?,
-  streetcity=?,altrelationship=?,othernames=?,phoneday=?,categorycode=?,
-  city=?,area=?,phone=?,borrowernotes=?,altphone=?,surname=?,initials=?,
-  physstreet=?,ethnicity=?,gonenoaddress=?,lost=?,debarred=?,textmessaging=?,
-  branchcode=?,zipcode=?,homezipcode=?,sort1=?,sort2=?
+  firstname=?,contactnote=?,dateofbirth=?,contactname=?,email=?,
+  address2=?,relationship=?,othernames=?,phonepro=?,categorycode=?,
+  city=?,phone=?,borrowernotes=?,B_phone=?,surname=?,initials=?,
+  B_address=?,ethnicity=?,gonenoaddress=?,lost=?,debarred=?,opacnote=?,
+  branchcode=?,zipcode=?,B_zipcode=?,sort1=?,sort2=?
   WHERE borrowernumber=?";
 
     my $sth = $dbh->prepare($query);
@@ -318,22 +318,21 @@ sub modmember {
         $data{'ehtnotes'},      $data{'address'},
         $data{'fax'},           $data{'firstname'},
         $data{'contactnote'},   $data{'dateofbirth'},
-        $data{'contactname'},   $data{'emailaddress'},
-        $data{'streetcity'},    $data{'altrelationship'},
-        $data{'othernames'},    $data{'phoneday'},
+        $data{'contactname'},   $data{'email'},
+        $data{'address2'},      $data{'relationship'},
+        $data{'othernames'},    $data{'phonepro'},
         $data{'categorycode'},  $data{'city'},
-        $data{'area'},          $data{'phone'},
-        $data{'borrowernotes'}, $data{'altphone'},
+	$data{'phone'},
+        $data{'borrowernotes'}, $data{'b_phone'},
         $data{'surname'},       $data{'initials'},
-        $data{'physstreet'},    $data{'ethnicity'},
+        $data{'b_address'},     $data{'ethnicity'},
         $data{'gna'},           $data{'lost'},
-        $data{'debarred'},      $data{'textmessaging'},
+        $data{'debarred'},      $data{'opacnotes'},
         $data{'branchcode'},    $data{'zipcode'},
-        $data{'homezipcode'},   $data{'sort1'},
-        $data{'sort2'},         $data{'borrowernumber'}
+        $data{'b_zipcode'},     $data{'sort1'},
+        $data{'sort2'},         $data{'borrowerid'}
     );
     $sth->finish;
-
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
 # of their records, ie addresses and phone numbers
