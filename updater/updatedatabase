@@ -176,6 +176,7 @@ my %requirefields = (
 	aqbudget => { 'branchcode' => 'varchar(4) NULL'},
 	auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
 	auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL UNSIGNED ZEROFILL', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL UNSIGNED', 'isurl' => 'TINYINT(1) UNSIGNED'},
+        statistics => { 'associatedborrower' => 'integer'},
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
@@ -1585,6 +1586,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.141  2006/06/01 03:18:11  rangi
+# Adding a new column to the statistics table
+#
 # Revision 1.140  2006/05/22 22:40:45  rangi
 # Adding new systempreference allowing for the library to add borrowers to institutions (rest homes, parishes, schools, classes etc).
 #
