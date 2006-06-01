@@ -204,9 +204,10 @@ SELECT upperagelimit,
 				$nok=1;
 			} else {
 				$borrowerid = &newmember(%data);
-			        if ($data{'organisations'}){
+			        if ($data{'organisations'}){				    
 				    # need to add the members organisations
-				    add_member_orgs($borrowerid,$data{'organisations'});
+				    my @orgs=split(/\|/,$data{'organisations'});
+				    add_member_orgs($borrowerid,\@orgs);
 				 }
 				logaction($loggedinuser,"MEMBERS","add member", $borrowerid, "");
 			}
