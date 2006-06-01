@@ -2,9 +2,8 @@
 
 # Please use 8-character tabs for this file (indents are every 4 characters)
 
-#written 8/5/2002 by Finlay
-#script to execute issuing of books
-
+# written 8/5/2002 by Finlay
+# script to execute issuing of books
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -40,63 +39,77 @@ use Date::Manip;
 #
 # PARAMETERS READING
 #
-my $query=new CGI;
+my $query = new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user
-    ({
-	template_name	=> 'circ/circulation.tmpl',
-	query		=> $query,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
-    });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => 'circ/circulation.tmpl',
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => 1 },
+    }
+);
 my $branches = getbranches();
 my $printers = getprinters();
-my $branch = getbranch($query, $branches);
-my $printer = getprinter($query, $printers);
+my $branch   = getbranch( $query, $branches );
+my $printer  = getprinter( $query, $printers );
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 $findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrnumber');
-my $print=$query->param('print') || '';
-my $barcode = $query->param('barcode') || '';
-my $year=$query->param('year');
-my $month=$query->param('month');
-my $day=$query->param('day');
-my $stickyduedate=$query->param('stickyduedate');
+my $print          = $query->param('print') || '';
+my $barcode        = $query->param('barcode') || '';
+my $year           = $query->param('year');
+my $month          = $query->param('month');
+my $day            = $query->param('day');
+my $stickyduedate  = $query->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
-my $cancelreserve = $query->param('cancelreserve');
-
+my $cancelreserve  = $query->param('cancelreserve');
+my $organisation   = $query->param('organisations');
 
 #set up cookie.....
 my $branchcookie;
 my $printercookie;
-if ($query->param('setcookies')) {
-	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
-	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
+if ( $query->param('setcookies') ) {
+    $branchcookie = $query->cookie(
+        -name    => 'branch',
+        -value   => "$branch",
+        -expires => '+1y'
+    );
+    $printercookie = $query->cookie(
+        -name    => 'printer',
+        -value   => "$printer",
+        -expires => '+1y'
+    );
 }
 
-my %env; # FIXME env is used as an "environment" variable. Could be dropped probably...
+my %env
+  ; # FIXME env is used as an "environment" variable. Could be dropped probably...
 
-$env{'branchcode'}=$branch;
-$env{'printer'}=$printer;
-$env{'queue'}=$printer;
+$env{'branchcode'} = $branch;
+$env{'printer'}    = $printer;
+$env{'queue'}      = $printer;
+$env{'organisation'} = $organisation;
 
-my @datearr = localtime(time());
+my @datearr = localtime( time() );
+
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
-my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
-
+my $todaysdate =
+    ( 1900 + $datearr[5] )
+  . sprintf( "%0.2d", ( $datearr[4] + 1 ) )
+  . sprintf( "%0.2d", ( $datearr[3] ) );
 
 # check and see if we should print
- if ($barcode eq ''  && $print eq 'maybe'){
- 	$print = 'yes';
- }
- if ($print eq 'yes' && $borrowernumber ne ''){
- 	printslip(\%env,$borrowernumber);
- 	$query->param('borrnumber','');
- 	$borrowernumber='';
- }
+if ( $barcode eq '' && $print eq 'maybe' ) {
+    $print = 'yes';
+}
+if ( $print eq 'yes' && $borrowernumber ne '' ) {
+    printslip( \%env, $borrowernumber );
+    $query->param( 'borrnumber', '' );
+    $borrowernumber = '';
+}
 
 #
 # STEP 2 : FIND BORROWER
@@ -105,233 +118,289 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 my $borrowerslist;
 my $message;
 if ($findborrower) {
-	my ($count,$borrowers)=BornameSearch(\%env,$findborrower,'cardnumber','web');
-	my @borrowers=@$borrowers;
-	if ($#borrowers == -1) {
-		$query->param('findborrower', '');
-		$message =  "'$findborrower'";
-	} elsif ($#borrowers == 0) {
-		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
-		$query->param('barcode','');
-		$borrowernumber=$borrowers[0]->{'borrowernumber'};
-	} else {
-		$borrowerslist = \@borrowers;
-	}
+    my ( $count, $borrowers ) =
+      BornameSearch( \%env, $findborrower, 'cardnumber', 'web' );
+    my @borrowers = @$borrowers;
+    if ( $#borrowers == -1 ) {
+        $query->param( 'findborrower', '' );
+        $message = "'$findborrower'";
+    }
+    elsif ( $#borrowers == 0 ) {
+        $query->param( 'borrnumber', $borrowers[0]->{'borrowernumber'} );
+        $query->param( 'barcode',    '' );
+        $borrowernumber = $borrowers[0]->{'borrowernumber'};
+    }
+    else {
+        $borrowerslist = \@borrowers;
+    }
 }
 
 # get the borrower information.....
 my $borrower;
 my $picture;
 
-
 if ($borrowernumber) {
-	$borrower = getpatroninformation(\%env,$borrowernumber,0);
-	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
-	warn $borrower->{'expiry'};
- 	my $warningdate = DateCalc($borrower->{'expiry'},"- ".C4::Context->preference('NotifyBorrowerDeparture')."  days");
-	my $warning=Date_Cmp(ParseDate("today"),$warningdate);
-	if ($warning>0){ 
-		#borrowercard expired
-		$template->param(warndeparture=>$warning);
-	}
-	$template->param(overduecount => $od,
-							issuecount => $issue,
-							finetotal => $fines);
-							my $htdocs = C4::Context->config('intrahtdocs');
-							$picture = "/borrowerimages/".$borrowernumber.".jpg";
-							if (-e $htdocs."$picture")
-							{ 
-  								$template->param(picture => $picture)
-							};
-}
+    $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
+    my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
+    warn $borrower->{'expiry'};
+    my $warningdate =
+      DateCalc( $borrower->{'expiry'},
+        "- " . C4::Context->preference('NotifyBorrowerDeparture') . "  days" );
+    my $warning = Date_Cmp( ParseDate("today"), $warningdate );
+    if ( $warning > 0 ) {
 
+        #borrowercard expired
+        $template->param( warndeparture => $warning );
+    }
+    $template->param(
+        overduecount => $od,
+        issuecount   => $issue,
+        finetotal    => $fines
+    );
+    my $htdocs = C4::Context->config('intrahtdocs');
+    $picture = "/borrowerimages/" . $borrowernumber . ".jpg";
+    if ( -e $htdocs . "$picture" ) {
+        $template->param( picture => $picture );
+    }
+}
 
 #
 # STEP 3 : ISSUING
 #
 #
 
-
-
 if ($barcode) {
-	$barcode = cuecatbarcodedecode($barcode);
-	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
-	if ($issueconfirmed) {
-			issuebook(\%env, $borrower, $barcode, $datedue,$cancelreserve);
-	} else {
-		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day);
-		my $noerror=1;
-		my $noquestion = 1;
-		foreach my $impossible (keys %$error) {
-			$template->param($impossible => $$error{$impossible},
-							IMPOSSIBLE => 1);
-			$noerror = 0;
-		}
-		foreach my $needsconfirmation (keys %$question) {
-			$template->param($needsconfirmation => $$question{$needsconfirmation},
-							NEEDSCONFIRMATION => 1);
-			$noquestion = 0;
-		}
-		$template->param(day => $day,
-						month => $month,
-						year => $year);
-		if ($noerror && ($noquestion || $issueconfirmed)) {
-			issuebook(\%env, $borrower, $barcode, $datedue);
-		}
-	}
+    $barcode = cuecatbarcodedecode($barcode);
+    my ( $datedue, $invalidduedate ) = fixdate( $year, $month, $day );
+    if ($issueconfirmed) {
+        issuebook( \%env, $borrower, $barcode, $datedue, $cancelreserve );
+    }
+    else {
+        my ( $error, $question ) =
+          canbookbeissued( \%env, $borrower, $barcode, $year, $month, $day );
+        my $noerror    = 1;
+        my $noquestion = 1;
+        foreach my $impossible ( keys %$error ) {
+            $template->param(
+                $impossible => $$error{$impossible},
+                IMPOSSIBLE  => 1
+            );
+            $noerror = 0;
+        }
+        foreach my $needsconfirmation ( keys %$question ) {
+            $template->param(
+                $needsconfirmation => $$question{$needsconfirmation},
+                NEEDSCONFIRMATION  => 1
+            );
+            $noquestion = 0;
+        }
+        $template->param(
+            day   => $day,
+            month => $month,
+            year  => $year
+        );
+        if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
+            issuebook( \%env, $borrower, $barcode, $datedue );
+        }
+    }
 }
 
 # reload the borrower info for the sake of reseting the flags.....
 if ($borrowernumber) {
-	$borrower = getpatroninformation(\%env,$borrowernumber,0);
+    $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
 }
-
 
 ##################################################################################
 # BUILD HTML
 
 # make the issued books table.....
-my $todaysissues='';
-my $previssues='';
+my $todaysissues = '';
+my $previssues   = '';
 my @realtodayissues;
 my @realprevissues;
 my $allowborrow;
 if ($borrower) {
+
 # get each issue of the borrower & separate them in todayissues & previous issues
-	my @todaysissues;
-	my @previousissues;
-	my $issueslist = getissues($borrower);
-	# split in 2 arrays for today & previous
-	foreach my $it (keys %$issueslist) {
-		my $issuedate = $issueslist->{$it}->{'timestamp'};
-		$issuedate =~ s/-//g;
-		$issuedate = substr($issuedate, 0, 8);
-		if ($todaysdate == $issuedate) {
-			push @todaysissues, $issueslist->{$it};
-		} else {
-			push @previousissues, $issueslist->{$it};
-		}
+    my @todaysissues;
+    my @previousissues;
+    my $issueslist = getissues($borrower);
+
+    # split in 2 arrays for today & previous
+    foreach my $it ( keys %$issueslist ) {
+        my $issuedate = $issueslist->{$it}->{'timestamp'};
+        $issuedate =~ s/-//g;
+        $issuedate = substr( $issuedate, 0, 8 );
+        if ( $todaysdate == $issuedate ) {
+            push @todaysissues, $issueslist->{$it};
+        }
+        else {
+            push @previousissues, $issueslist->{$it};
+        }
     }
-	my $od; # overdues
-	my $i = 0;
-	my $togglecolor;
-	# parses today & build Template array
-	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
-		my $dd = $book->{'date_due'};
-		my $datedue = $book->{'date_due'};
-		$dd=format_date($dd);
-		$datedue=~s/-//g;
-		if ($datedue < $todaysdate) {
-			$od = 1;
-		} else {
-			$od=0;
-		}
-		if ($i%2) {
-			$togglecolor=0;
-		} else {
-			$togglecolor=1;
-		}
-		$book->{'togglecolor'} = $togglecolor;
-		$book->{'od'}=$od;
-		$book->{'dd'}=$dd;
-		if ($book->{'author'} eq ''){
-			$book->{'author'}=' ';
-		}    
-		push @realtodayissues,$book;
-		$i++;
-	}
+    my $od;    # overdues
+    my $i = 0;
+    my $togglecolor;
 
-	# parses previous & build Template array
-	$i = 0;
-    foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
-		my $dd = $book->{'date_due'};
-		my $datedue = $book->{'date_due'};
-		$dd=format_date($dd);
-		my $pcolor = '';
-		my $od = '';
-		$datedue=~s/-//g;
-		if ($datedue < $todaysdate) {
-			$od = 1;
-		} else {
-			$od = 0;
-		}
-		if ($i%2) {
-			$togglecolor=0;
-		} else {
-			$togglecolor=1;
-		}
-		$book->{'togglecolor'} = $togglecolor;
-		$book->{'dd'}=$dd; 
-		$book->{'od'}=$od;
-		if ($book->{'author'} eq ''){
-			$book->{'author'}=' ';
-		}    
-		push @realprevissues,$book;
-		$i++;
-	}
+    # parses today & build Template array
+    foreach my $book ( sort { $b->{'timestamp'} <=> $a->{'timestamp'} }
+        @todaysissues )
+    {
+        my $dd      = $book->{'date_due'};
+        my $datedue = $book->{'date_due'};
+        $dd = format_date($dd);
+        $datedue =~ s/-//g;
+        if ( $datedue < $todaysdate ) {
+            $od = 1;
+        }
+        else {
+            $od = 0;
+        }
+        if ( $i % 2 ) {
+            $togglecolor = 0;
+        }
+        else {
+            $togglecolor = 1;
+        }
+        $book->{'togglecolor'} = $togglecolor;
+        $book->{'od'}          = $od;
+        $book->{'dd'}          = $dd;
+        if ( $book->{'author'} eq '' ) {
+            $book->{'author'} = ' ';
+        }
+        push @realtodayissues, $book;
+        $i++;
+    }
+
+    # parses previous & build Template array
+    $i = 0;
+    foreach my $book ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
+        @previousissues )
+    {
+        my $dd      = $book->{'date_due'};
+        my $datedue = $book->{'date_due'};
+        $dd = format_date($dd);
+        my $pcolor = '';
+        my $od     = '';
+        $datedue =~ s/-//g;
+        if ( $datedue < $todaysdate ) {
+            $od = 1;
+        }
+        else {
+            $od = 0;
+        }
+        if ( $i % 2 ) {
+            $togglecolor = 0;
+        }
+        else {
+            $togglecolor = 1;
+        }
+        $book->{'togglecolor'} = $togglecolor;
+        $book->{'dd'}          = $dd;
+        $book->{'od'}          = $od;
+        if ( $book->{'author'} eq '' ) {
+            $book->{'author'} = ' ';
+        }
+        push @realprevissues, $book;
+        $i++;
+    }
 }
-
 
 my @values;
 my %labels;
 my $CGIselectborrower;
 if ($borrowerslist) {
-	foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowerslist){
-		push @values,$_->{'borrowernumber'};
-		$labels{$_->{'borrowernumber'}} ="$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'}) ...  $_->{'streetaddress'} ";
-	}
-	$CGIselectborrower=CGI::scrolling_list( -name     => 'borrnumber',
-				-values   => \@values,
-				-labels   => \%labels,
-				-size     => 7,
-				-multiple => 0 );
+    foreach (
+        sort {
+            $a->{'surname'}
+              . $a->{'firstname'} cmp $b->{'surname'}
+              . $b->{'firstname'}
+        } @$borrowerslist
+      )
+    {
+        push @values, $_->{'borrowernumber'};
+        $labels{ $_->{'borrowernumber'} } =
+"$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'}) ...  $_->{'streetaddress'} ";
+    }
+    $CGIselectborrower = CGI::scrolling_list(
+        -name     => 'borrnumber',
+        -values   => \@values,
+        -labels   => \%labels,
+        -size     => 7,
+        -multiple => 0
+    );
 }
+
 #title
 
-my ($patrontable, $flaginfotable) = patrontable($borrower);
-my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'} || 0;
-my @temp=split(/\$/,$amountold);
-$amountold=$temp[1];
-$template->param(
-		findborrower => $findborrower,
-		borrower => $borrower,
-		borrowernumber => $borrowernumber,
-		branch => $branch,
-		printer => $printer,
-		branchname => $branches->{$branch}->{'branchname'},
-		printername => $printers->{$printer}->{'printername'},
-		firstname => $borrower->{'firstname'},
-		surname => $borrower->{'surname'},
-		categorycode => $borrower->{'categorycode'},
-		streetaddress => $borrower->{'streetaddress'},
-		emailaddress => $borrower->{'emailaddress'},
-		borrowernotes => $borrower->{'borrowernotes'},
-		city => $borrower->{'city'},
-		phone => $borrower->{'phone'},
-		cardnumber => $borrower->{'cardnumber'},
-		amountold => $amountold,
-		barcode => $barcode,
-		stickyduedate => $stickyduedate,
-		message => $message,
-		CGIselectborrower => $CGIselectborrower,
-		todayissues => \@realtodayissues,
-		previssues => \@realprevissues,
-	);
-# set return date if stickyduedate
-if ($stickyduedate) {
-	my $t_year = "year".$year;
-	my $t_month = "month".$month;
-	my $t_day = "day".$day;
-	$template->param(
-		$t_year => 1,
-		$t_month => 1,
-		$t_day => 1,
-	);
+my ( $patrontable, $flaginfotable ) = patrontable($borrower);
+my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
+my @temp = split( /\$/, $amountold );
+
+my $CGIorganisations;
+my $member_of_institution;
+if ( C4::Context->preference("memberofinstitution") ) {
+    my $organisations = get_institutions();
+    my @orgs;
+    my %org_labels;
+    foreach my $organisation ( keys %$organisations ) {
+        push @orgs, $organisation;
+        $org_labels{$organisation} =
+          $organisations->{$organisation}->{'surname'};
+    }
+    $member_of_institution = 1;
+    $CGIorganisations = CGI::popup_menu(
+        -id       => 'organisations',
+        -name     => 'organisations',
+        -labels   => \%org_labels,
+        -values   => \@orgs,
+
+    );
 }
 
+$amountold = $temp[1];
+$template->param(
+    findborrower      => $findborrower,
+    borrower          => $borrower,
+    borrowernumber    => $borrowernumber,
+    branch            => $branch,
+    printer           => $printer,
+    branchname        => $branches->{$branch}->{'branchname'},
+    printername       => $printers->{$printer}->{'printername'},
+    firstname         => $borrower->{'firstname'},
+    surname           => $borrower->{'surname'},
+    categorycode      => $borrower->{'categorycode'},
+    streetaddress     => $borrower->{'streetaddress'},
+    emailaddress      => $borrower->{'emailaddress'},
+    borrowernotes     => $borrower->{'borrowernotes'},
+    city              => $borrower->{'city'},
+    phone             => $borrower->{'phone'},
+    cardnumber        => $borrower->{'cardnumber'},
+    amountold         => $amountold,
+    barcode           => $barcode,
+    stickyduedate     => $stickyduedate,
+    message           => $message,
+    CGIselectborrower => $CGIselectborrower,
+    todayissues       => \@realtodayissues,
+    previssues        => \@realprevissues,
+    memberofinstution => $member_of_institution,                                                                 
+    CGIorganisations => $CGIorganisations, 
+);
+
+# set return date if stickyduedate
+if ($stickyduedate) {
+    my $t_year  = "year" . $year;
+    my $t_month = "month" . $month;
+    my $t_day   = "day" . $day;
+    $template->param(
+        $t_year  => 1,
+        $t_month => 1,
+        $t_day   => 1,
+    );
+}
 
 if ($branchcookie) {
-    $cookie=[$cookie, $branchcookie, $printercookie];
+    $cookie = [ $cookie, $branchcookie, $printercookie ];
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
@@ -340,105 +409,107 @@ output_html_with_http_headers $query, $cookie, $template->output;
 # Extra subroutines,,,
 
 sub patrontable {
-    my ($borrower) = @_;
-    my $flags = $borrower->{'flags'};
-    my $flaginfotable='';
+    my ($borrower)    = @_;
+    my $flags         = $borrower->{'flags'};
+    my $flaginfotable = '';
     my $flaginfotext;
+
     #my $flaginfotext='';
     my $flag;
-    my $color='';
-    foreach $flag (sort keys %$flags) {
-#    	my @itemswaiting='';
-	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
-	if ($flags->{$flag}->{'noissues'}) {
-		$template->param(
-			flagged => 1,
-			noissues => 'true',
-			 );
-		if ($flag eq 'GNA'){
-			$template->param(
-				gna => 'true'
-				);
-			}
-		if ($flag eq 'LOST'){
-			$template->param(
-				lost => 'true'
-			);
-			}
-		if ($flag eq 'DBARRED'){
-			$template->param(
-				dbarred => 'true'
-			);
-			}
-		if ($flag eq 'CHARGES') {
-			$template->param(
-				charges => 'true',
-				chargesmsg => $flags->{'CHARGES'}->{'message'}
-				 );
-		}
-	} else {
-		 if ($flag eq 'CHARGES') {
-			$template->param(
-				charges => 'true',
-				flagged => 1,
-				chargesmsg => $flags->{'CHARGES'}->{'message'}
-			 );
-		}
-	    	if ($flag eq 'WAITING') {
-			my $items=$flags->{$flag}->{'itemlist'};
-		        my @itemswaiting;
-			foreach my $item (@$items) {
-			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
-			push @itemswaiting, $iteminformation;
-			}
-			$template->param(
-				flagged => 1,
-				waiting => 'true',
-				waitingmsg => $flags->{'WAITING'}->{'message'},
-				itemswaiting => \@itemswaiting,
-				 );
-		}
-		if ($flag eq 'ODUES') {
-			$template->param(
-				odues => 'true',
-				flagged => 1,
-				oduesmsg => $flags->{'ODUES'}->{'message'}
-				 );
+    my $color = '';
+    foreach $flag ( sort keys %$flags ) {
 
-			my $items=$flags->{$flag}->{'itemlist'};
-			{
-			    my @itemswaiting;
-			foreach my $item (@$items) {
-				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-				push @itemswaiting, $iteminformation;
-			}
-			}
-			if ($query->param('module') ne 'returns'){
-				$template->param( nonreturns => 'true' );
-			}
-		}
-		if ($flag eq 'NOTES') {
-			$template->param(
-				notes => 'true',
-				flagged => 1,
-				notesmsg => $flags->{'NOTES'}->{'message'}
-				 );
-		}
-	}
+        #    	my @itemswaiting='';
+        $flags->{$flag}->{'message'} =~ s/\n/<br>/g;
+        if ( $flags->{$flag}->{'noissues'} ) {
+            $template->param(
+                flagged  => 1,
+                noissues => 'true',
+            );
+            if ( $flag eq 'GNA' ) {
+                $template->param( gna => 'true' );
+            }
+            if ( $flag eq 'LOST' ) {
+                $template->param( lost => 'true' );
+            }
+            if ( $flag eq 'DBARRED' ) {
+                $template->param( dbarred => 'true' );
+            }
+            if ( $flag eq 'CHARGES' ) {
+                $template->param(
+                    charges    => 'true',
+                    chargesmsg => $flags->{'CHARGES'}->{'message'}
+                );
+            }
+        }
+        else {
+            if ( $flag eq 'CHARGES' ) {
+                $template->param(
+                    charges    => 'true',
+                    flagged    => 1,
+                    chargesmsg => $flags->{'CHARGES'}->{'message'}
+                );
+            }
+            if ( $flag eq 'WAITING' ) {
+                my $items = $flags->{$flag}->{'itemlist'};
+                my @itemswaiting;
+                foreach my $item (@$items) {
+                    my ($iteminformation) =
+                      getiteminformation( \%env, $item->{'itemnumber'}, 0 );
+                    $iteminformation->{'branchname'} =
+                      $branches->{ $iteminformation->{'holdingbranch'} }
+                      ->{'branchname'};
+                    push @itemswaiting, $iteminformation;
+                }
+                $template->param(
+                    flagged      => 1,
+                    waiting      => 'true',
+                    waitingmsg   => $flags->{'WAITING'}->{'message'},
+                    itemswaiting => \@itemswaiting,
+                );
+            }
+            if ( $flag eq 'ODUES' ) {
+                $template->param(
+                    odues    => 'true',
+                    flagged  => 1,
+                    oduesmsg => $flags->{'ODUES'}->{'message'}
+                );
+
+                my $items = $flags->{$flag}->{'itemlist'};
+                {
+                    my @itemswaiting;
+                    foreach my $item (@$items) {
+                        my ($iteminformation) =
+                          getiteminformation( \%env, $item->{'itemnumber'}, 0 );
+                        push @itemswaiting, $iteminformation;
+                    }
+                }
+                if ( $query->param('module') ne 'returns' ) {
+                    $template->param( nonreturns => 'true' );
+                }
+            }
+            if ( $flag eq 'NOTES' ) {
+                $template->param(
+                    notes    => 'true',
+                    flagged  => 1,
+                    notesmsg => $flags->{'NOTES'}->{'message'}
+                );
+            }
+        }
     }
-    return($patrontable, $flaginfotext);
+    return ( $patrontable, $flaginfotext );
 }
 
 sub cuecatbarcodedecode {
     my ($barcode) = @_;
     chomp($barcode);
-    my @fields = split(/\./,$barcode);
-    my @results = map(decode($_), @fields[1..$#fields]);
-    if ($#results == 2){
-  	return $results[2];
-    } else {
-	return $barcode;
+    my @fields = split( /\./, $barcode );
+    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
+    if ( $#results == 2 ) {
+        return $results[2];
+    }
+    else {
+        return $barcode;
     }
 }
 
