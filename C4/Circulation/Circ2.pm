@@ -752,7 +752,7 @@ sub canbookbeissued {
 	if ($borrower->{flags}->{'DBARRED'}) {
 		$issuingimpossible{DEBARRED} = 1;
 	}
-	if (&Date_Cmp(&ParseDate($borrower->{expiry}),&ParseDate("today"))<0) {
+	if (&Date_Cmp(&ParseDate($borrower->{dateexpiry}),&ParseDate("today"))<0) {
 		$issuingimpossible{EXPIRED} = 1;
 	}
 #
