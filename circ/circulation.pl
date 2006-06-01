@@ -25,6 +25,7 @@
 use strict;
 use CGI;
 use C4::Circulation::Circ2;
+use C4::Search;
 use C4::Members;
 use C4::Output;
 use C4::Print;
@@ -35,6 +36,8 @@ use C4::Koha;
 use HTML::Template;
 use C4::Date;
 use Date::Manip;
+use C4::Biblio;
+use C4::Reserves2;
 
 #
 # PARAMETERS READING
@@ -51,50 +54,43 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $branches = getbranches();
-my $printers = getprinters();
-my $branch   = getbranch( $query, $branches );
-my $printer  = getprinter( $query, $printers );
+# my $printers = getprinters();
+# my $printer = getprinter($query, $printers);
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 $findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrnumber');
-my $print          = $query->param('print') || '';
-my $barcode        = $query->param('barcode') || '';
-my $year           = $query->param('year');
-my $month          = $query->param('month');
-my $day            = $query->param('day');
-my $stickyduedate  = $query->param('stickyduedate');
+# new op dev the branch and the printer are now defined by the userenv
+my $branch = C4::Context->userenv->{'branch'};
+my $printer=C4::Context->userenv->{'branchprinter'};
+
+my $barcode = $query->param('barcode') || '';
+my $year=$query->param('year');
+my $month=$query->param('month');
+my $day=$query->param('day');
+my $stickyduedate=$query->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
+my $print = $query->param('print');
 
 #set up cookie.....
-my $branchcookie;
-my $printercookie;
-if ( $query->param('setcookies') ) {
-    $branchcookie = $query->cookie(
-        -name    => 'branch',
-        -value   => "$branch",
-        -expires => '+1y'
-    );
-    $printercookie = $query->cookie(
-        -name    => 'printer',
-        -value   => "$printer",
-        -expires => '+1y'
-    );
-}
+# my $branchcookie;
+# my $printercookie;
+# if ($query->param('setcookies')) {
+# 	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
+# 	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
+# }
 
-my %env
-  ; # FIXME env is used as an "environment" variable. Could be dropped probably...
+my %env; # FIXME env is used as an "environment" variable. Could be dropped probably...
+#
+my $print; 
+$env{'branchcode'}= $branch;
+$env{'printer'}= $printer;
+# $env{'queue'}=$printer;
 
-$env{'branchcode'} = $branch;
-$env{'printer'}    = $printer;
-$env{'queue'}      = $printer;
-$env{'organisation'} = $organisation;
-
-my @datearr = localtime( time() );
-
+my @datearr = localtime(time());
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate =
     ( 1900 + $datearr[5] )
@@ -212,6 +208,70 @@ if ($borrowernumber) {
 
 ##################################################################################
 # BUILD HTML
+# show all reserves of this borrower, and the position of the reservation ....
+if ($borrowernumber) {
+# new op dev
+# now we show the status of the borrower's reservations
+	my @borrowerreserv = FastFindReserves(0,$borrowernumber);
+	my @reservloop;
+	foreach my $num_res (@borrowerreserv) {
+		my %getreserv;
+		my %env;
+		my $getiteminfo = getiteminformation(\%env,$num_res->{'itemnumber'});
+		my $itemtypeinfo = getitemtypeinfo($getiteminfo->{'itemtype'});
+		my ($transfertwhen,$transfertfrom,$transfertto) = checktransferts($num_res->{'itemnumber'});
+
+		$getreserv{waiting} = 0;
+		$getreserv{transfered} = 0;
+		$getreserv{nottransfered} = 0;
+
+		$getreserv{reservedate} = format_date($num_res->{'reservedate'});
+		$getreserv{biblionumber} = $getiteminfo->{'biblionumber'};
+		$getreserv{title} = $getiteminfo->{'title'};
+		$getreserv{itemtype} = $itemtypeinfo->{'description'};
+		$getreserv{author} = $getiteminfo->{'author'};
+		$getreserv{barcodereserv} = $getiteminfo->{'barcode'};
+		$getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
+# 		check if we have a waitin status for reservations
+		if ($num_res->{'found'} eq 'W'){
+			$getreserv{color} = 'reserved';
+			$getreserv{waiting} = 1; 
+		}
+
+# 		check transfers with the itemnumber foud in th reservation loop
+		if ($transfertwhen){
+		$getreserv{color} = 'transfered';
+		$getreserv{transfered} = 1;
+		$getreserv{datesent} = format_date($transfertwhen);
+		$getreserv{frombranch} = getbranchname($transfertfrom);
+		}
+
+		if (($getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'}) and not $transfertwhen){
+		$getreserv{nottransfered} = 1;
+		$getreserv{nottransferedby} = getbranchname($getiteminfo->{'holdingbranch'});
+		}
+
+# 		if we don't have a reserv on item, we put the biblio infos and the waiting position	
+		if ($getiteminfo->{'title'} eq '' ){
+			my $getbibinfo = bibitemdata($num_res->{'biblionumber'});
+			my $getbibtype = getitemtypeinfo($getbibinfo->{'itemtype'});
+			$getreserv{color} = 'inwait';
+			$getreserv{title} = $getbibinfo->{'title'};
+			$getreserv{waitingposition} = $num_res->{'priority'};
+			$getreserv{nottransfered} = 0;
+			$getreserv{itemtype} = $getbibtype->{'description'};
+			$getreserv{author} = $getbibinfo->{'author'};
+			$getreserv{itemcallnumber} = '----------';
+			
+ 		}
+
+		push(@reservloop, \%getreserv);
+	}
+	# return result to the template
+	$template->param(reservloop => \@reservloop);
+
+}
+
 
 # make the issued books table.....
 my $todaysissues = '';
@@ -365,8 +425,7 @@ $template->param(
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     printer           => $printer,
-    branchname        => $branches->{$branch}->{'branchname'},
-    printername       => $printers->{$printer}->{'printername'},
+    printername       => $printer,
     firstname         => $borrower->{'firstname'},
     surname           => $borrower->{'surname'},
     categorycode      => $borrower->{'categorycode'},
@@ -399,9 +458,10 @@ if ($stickyduedate) {
     );
 }
 
-if ($branchcookie) {
-    $cookie = [ $cookie, $branchcookie, $printercookie ];
-}
+
+# if ($branchcookie) {
+#     $cookie=[$cookie, $branchcookie, $printercookie];
+# }
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -450,24 +510,25 @@ sub patrontable {
                     chargesmsg => $flags->{'CHARGES'}->{'message'}
                 );
             }
-            if ( $flag eq 'WAITING' ) {
-                my $items = $flags->{$flag}->{'itemlist'};
-                my @itemswaiting;
-                foreach my $item (@$items) {
-                    my ($iteminformation) =
-                      getiteminformation( \%env, $item->{'itemnumber'}, 0 );
-                    $iteminformation->{'branchname'} =
-                      $branches->{ $iteminformation->{'holdingbranch'} }
-                      ->{'branchname'};
-                    push @itemswaiting, $iteminformation;
-                }
-                $template->param(
-                    flagged      => 1,
-                    waiting      => 'true',
-                    waitingmsg   => $flags->{'WAITING'}->{'message'},
-                    itemswaiting => \@itemswaiting,
-                );
-            }
+# FIXME this part can be removed if we keep new display of reserves "reservloop"
+#             if ( $flag eq 'WAITING' ) {
+#                 my $items = $flags->{$flag}->{'itemlist'};
+#                 my @itemswaiting;
+#                 foreach my $item (@$items) {
+#                     my ($iteminformation) =
+#                       getiteminformation( \%env, $item->{'itemnumber'}, 0 );
+#                     $iteminformation->{'branchname'} =
+#                       $branches->{ $iteminformation->{'holdingbranch'} }
+#                       ->{'branchname'};
+#                     push @itemswaiting, $iteminformation;
+#                 }
+#                 $template->param(
+#                     flagged      => 1,
+#                     waiting      => 'true',
+#                     waitingmsg   => $flags->{'WAITING'}->{'message'},
+#                     itemswaiting => \@itemswaiting,
+#                 );
+#             }
             if ( $flag eq 'ODUES' ) {
                 $template->param(
                     odues    => 'true',

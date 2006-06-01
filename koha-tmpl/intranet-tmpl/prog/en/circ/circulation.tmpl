@@ -241,7 +241,7 @@
     </li>
       <!-- /TMPL_IF -->
   </ul>
-
+<!-- this part must be removed if we keep the new waiting infos display-->
       <!-- TMPL_IF name="waiting" -->
   <ul>
     <li>
@@ -257,6 +257,7 @@
     </li>
   </ul>
       <!-- /TMPL_IF --> <!-- waiting -->
+<!-- end of this part must be removed if we keep the new waiting infos display-->
 
       <!-- TMPL_IF name="notes" -->
   <ul>
@@ -627,6 +628,59 @@
 
   </fieldset>
 </form>
+
+<!-- TMPL_IF NAME="reservloop" -->
+<fieldset id="circ_circulation_issue">
+	<legend>Borrower current reserves</legend>
+	<table>
+		<tr>
+			<th>Reserve date</th>
+			<th>Barcode</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Localisation</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="reservloop" -->
+		<tr class="<!-- TMPL_VAR NAME="color" -->">
+					<td>
+						<!-- TMPL_VAR NAME="reservedate" -->
+					</td>
+					<td>
+						<!-- TMPL_IF name="barcodereserv" -->
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="waitingposition" -->
+						Waiting position for this document :
+						<b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
+						<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
+
+						<!-- TMPL_IF name="waiting" -->
+						<br/>
+						<i>This document is available</i>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="transfered" -->
+						<br/>
+						<i>This document has been transfered from library : 
+						<!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
+						<!-- /TMPL_IF -->
+
+						<!-- TMPL_IF name="nottransfered" -->
+						<br/>
+						<i>This document hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
+						<!-- /TMPL_IF -->
+				
+					</td>
+					<td><!-- TMPL_VAR NAME="author" --></td>
+					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</fieldset>
+<!-- /TMPL_IF -->
+
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
@@ -741,7 +795,6 @@
       <input type="submit" name="renew_checked" value="Renew Checked Items" />
       <input type="submit" name="renew_all" value="Renew All" />
     </div>
-    
   </fieldset>
 </form>
 
