@@ -26,7 +26,8 @@ use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+    shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };;
 
 =head1 NAME
 
@@ -78,11 +79,12 @@ sub UpdateStats {
                 $branch=$env->{'branchcode'};
         }
         my $user = $env->{'usercode'};
+        my $organisation = $env->{'organisation'};
         print $borrowernumber;
         # FIXME - Use $dbh->do() instead
         my $sth=$dbh->prepare("Insert into statistics (datetime,branch,type,usercode,value,
-                                        other,itemnumber,itemtype,borrowernumber,proccode) values (now(),?,?,?,?,?,?,?,?,?)");
-        $sth->execute($branch,$type,$user,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno);
+                                        other,itemnumber,itemtype,borrowernumber,proccode,associatedborrower) values (now(),?,?,?,?,?,?,?,?,?,?)");
+        $sth->execute($branch,$type,$user,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno,$organisation);
         $sth->finish;
 }
 
