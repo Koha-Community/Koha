@@ -1461,6 +1461,16 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
+    biblioitems => [
+        {
+            field   => 'dewey',
+            type    => 'varchar(30)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+    ],
 );
 
 #-------------------
@@ -2123,6 +2133,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.44  2006/06/02 15:21:40  tipaul
+# moving dewey to a varchar
+#
 # Revision 1.100.2.43  2006/04/27 18:07:40  oleonard
 # Adding two new system preferences:
 #
