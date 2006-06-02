@@ -25,6 +25,7 @@ use strict;
 use C4::Context;
 use Date::Manip;
 
+
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -147,19 +148,5 @@ sub format_date_in_iso {
     return $newdate;
 }
 
-#function to return a current date OUEST-PROVENCE
-sub today {
-    my ($adddate) = @_;
-    my ( $j, $m, $a ) = (localtime)[ 3, 4, 5 ];
-    if ( $j < 10 ) {
-        $j = '0' . $j;
-    }
-    $m = $m + 1;
-    if ( $m < 10 ) {
-        $m = '0' . $m;
-    }
-    $a = $a + 1900 + $adddate;
-    return format_date("$a-$m-$j");
-}
 
 1;
