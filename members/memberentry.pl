@@ -159,9 +159,7 @@ SELECT upperagelimit,
                     my $sth=$dbh->prepare($query);
                     $sth->execute($categorycode);
                     my $category_info = $sth->fetchrow_hashref;
-
                     my $age = get_age(format_date_in_iso($data{dateofbirth}));
-
                     if ($age > $category_info->{upperagelimit}
                             or $age < $category_info->{dateofbirthrequired}
                         ) {
@@ -178,14 +176,14 @@ SELECT upperagelimit,
 				$data{'login'}=lc($onefirstnameletter.$fivesurnameletter);
 			}
 			if ($op eq 'add' and $data{'dateenrolled'} eq ''){
-				my $today=today();
+ 				my $today= sprintf('%04d-%02d-%02d', Today());
 				#insert ,in field "dateenrolled" , the current date
 				$data{'dateenrolled'}=$today;
 				#if date expiry is null u must calculate the value only in this case
 				$data{'dateexpiry'} = calcexpirydate($data{'categorycode'},$today);
 			}
 			if ($op eq 'modify' ){
-			my $today=today();
+			my $today= sprintf('%04d-%02d-%02d', Today());
 # 			if date expiry is null u must calculate the value only in this case
 			if ($data{'dateexpiry'} eq ''){
 			$data{'dateexpiry'} = calcexpirydate($data{'categorycode'},$today);
@@ -459,7 +457,7 @@ if ($delete){
             $step++;
         }
 
-	warn "CITY".$data{city};
+
 	$template->param(
 		BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
 		category_type	=> $category_type,#to know the category type of the borrower
@@ -472,7 +470,7 @@ if ($delete){
 		"op$op" 	=> 1,
 # 		op			=> $op,
 		nodouble	=> $nodouble,
-		borrowerid 	=> $borrowerid,#register number
+		borrowernumber 	=> $borrowernumber,#register number
 		cardnumber	=> $data{'cardnumber'},
 		surname         => uc($data{'surname'}),
 		firstname       => ucfirst($data{'firstname'}),
@@ -525,11 +523,11 @@ if ($delete){
 		contacttype	=> $data{'contacttype'},
 	        organisations   => $data{'organisations'},
 		flagloop	=> \@flagdata,
-# 				"contacttype_".$data{'contacttype'} =>" SELECTED ",
+# 		"contacttype_".$data{'contacttype'} =>" SELECTED ",
 		dateformat      => display_date_format(),
 		check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
-			modify          => $modify,
-# 				city_choice       => $city_choice ,#check if the city was selected
+		modify          => $modify,
+# 		city_choice       => $city_choice ,#check if the city was selected
 		nok 		=> $nok,#flag to konw if an error 
 		CGIbranch => $CGIbranch,
 	        memberofinstution => $member_of_institution,
@@ -537,24 +535,6 @@ if ($delete){
 		);
 	#$template->param(Institution => 1) if ($categorycode eq "I");
 	output_html_with_http_headers $input, $cookie, $template->output;
-}
-
-sub get_age {
-    my ($date, $date_ref) = @_;
-
-    if (not defined $date_ref) {
-        $date_ref = sprintf('%04d-%02d-%02d', Today());
-    }
-
-    my ($year1, $month1, $day1) = split /-/, $date;
-    my ($year2, $month2, $day2) = split /-/, $date_ref;
-
-    my $age = $year2 - $year1;
-    if ($month1.$day1 > $month2.$day2) {
-        $age--;
-    }
-
-    return $age;
 }
 
 # Local Variables:

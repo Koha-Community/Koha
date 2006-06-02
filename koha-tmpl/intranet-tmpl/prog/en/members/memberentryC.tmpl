@@ -20,9 +20,9 @@
 	<form name="form_double">
 		<div id="problem">
 			Duplicate suspected 
-			<a href="javascript:Dopop('borrowers_details.pl?borrowerid=<!--TMPL_VAR NAME="check_member"-->');" class="borrowers_button">Details</a>
+			<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" class="borrowers_button">Details</a>
 			Duplicate ?	
-			<a href="/cgi-bin/koha/members/memberentry.pl?borrowerid=<!--TMPL_VAR NAME="check_member"-->&category_type=<!--TMPL_VAR NAME="check_categorytype"-->" class="borrowers_button">Yes</a> 
+			<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&category_type=<!--TMPL_VAR NAME="check_categorytype"-->" class="borrowers_button">Yes</a> 
 			&nbsp;&nbsp;&nbsp; No, it is not
 			<INPUT type="checkbox" <!-- TMPL_IF NAME="checked"--> checked <!--/TMPL_IF--> name="answernodouble" >
 		</div>
@@ -56,7 +56,7 @@
 			<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 			<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
 			<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
-			<input type="hidden" name="borrowerid" value="<!-- TMPL_VAR NAME="borrowerid" -->">
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 			<input type="hidden" name="nodouble" "  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
 	
 			<!-- 		input from form 2 -->
@@ -244,7 +244,7 @@
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
 		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
-		<input type="hidden" name="borrowerid" value="<!-- TMPL_VAR NAME="borrowerid" -->">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble" "  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
 
 <!-- 		input from form 1 		-->
@@ -496,7 +496,7 @@
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
 		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
-		<input type="hidden" name="borrowerid" value="<!-- TMPL_VAR NAME="borrowerid" -->">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble" "  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
 
 <!-- 		input from form 1 		-->
