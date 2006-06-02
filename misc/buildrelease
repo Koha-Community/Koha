@@ -120,7 +120,7 @@ print STDERR "$roothomedir/.kohaautobuild.conf written\n" if $verbose_p;
 #----------------------------------------------------------
 print <<EOM;
 
-Guessing the next release version. You may need to enter your SourceForge password.
+Guessing the next release version. You may need to enter your Savannah password.
 EOM
 chdir $kohadir;
 open (CVSLOG, "cvs log $self_path|");
@@ -277,19 +277,19 @@ if ($cvsroot=$ENV{'CVSROOT'}) {
     $sfuserid=$1;
 } else {
     $ENV{'CVS_RSH'}='ssh';
-    print "\nWhat is your userid at SourceForge: ";
+    print "\nWhat is your userid at Savannah: ";
     chomp($input = <STDIN>);
     if ($input) {
 	$sfuserid=$input;
     }
-    $ENV{'CVSROOT'}="$sfuserid\@cvs.koha.sourceforge.net:/cvsroot/koha";
+    $ENV{'CVSROOT'}="$sfuserid@cvs.savannah.nongnu.org:/sources/koha";
 }
 my $tagname=$releaseversion;
 $tagname=~s/\./-/g;
 
 print qq|
 Updating your checked-out copy of the 'koha' CVS files.
-You may need to enter your SourceForge password.
+You may need to enter your Savannah password.
 Using $kohadir.
 |;
 chdir($kohadir) || die "$kohadir: $!\n";
