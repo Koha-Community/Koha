@@ -177,7 +177,6 @@ sub build_authorized_values_list ($$$$$) {
 			push @authorised_values, $itemtype;
 			$authorised_lib{$itemtype}=$description;
 		}
-		$value=$itemtype unless ($value);
 
 	#---- "true" authorised value
 	} else {
@@ -212,7 +211,7 @@ sub create_input () {
 	my %subfield_data;
 	$subfield_data{tag}=$tag;
 	$subfield_data{subfield}=$subfield;
-	$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+	$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 	$subfield_data{marc_lib_plain}=$tagslib->{$tag}->{$subfield}->{lib};
 	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
@@ -225,7 +224,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}','subfield$tag$i')\">...</a>";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}','subfield$tag$i')\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -241,15 +240,15 @@ sub create_input () {
 		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
 			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
-			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
+			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
 		}
 	}
 	return \%subfield_data;
@@ -486,11 +485,13 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	#warn $xml;
-  	my $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-	#warn $record->as_formatted;
-	#warn "IN ADDBIB";
+	my $record;
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	} else {
+		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
