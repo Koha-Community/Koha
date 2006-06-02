@@ -1056,7 +1056,6 @@ sub MARChtml2xml {
 		@$values[$i] =~ s/>/&gt;/g;
 		@$values[$i] =~ s/"/&quot;/g;
 		@$values[$i] =~ s/'/&apos;/g;
-
 		if ((@$tags[$i] ne $prevtag)){
 			$j++ unless (@$tags[$i] eq "");
 			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
@@ -1158,7 +1157,11 @@ sub MARChtml2marc {
 				$prevvalue=@$rvalues[$i];
 			} else {
 				if (length(@$rvalues[$i])>0) {
-					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+					if ($field) {
+						$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+					} else {
+					$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+					}
 # 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 				}
 			}
@@ -3007,6 +3010,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.54  2006/06/02 15:36:18  tipaul
+# - fixing a small bug in html2marc, when the 1st subfield of a field was empty, the 2nd could not be filled as the MARC::Field had not been created.
+#
 # Revision 1.115.2.53  2006/05/11 14:55:24  kados
 # MARC::File::XML switched the API in 0.83, this code updates Koha --
 # it will break your record editing if you don't upgrade MARC::File::XML
