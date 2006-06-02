@@ -307,6 +307,7 @@ sub modmember {
 	$data{'dateenrolled'}=format_date_in_iso($data{'dateenrolled'});
 	warn "la date:".$data{dateenrolled};
 	my $query;
+	my $sth;
 	$data{'userid'}='' if ($data{'password'}eq '');
 	# test to know if u must update or not the borrower password
 	if ($data{'password'} eq '****'){
@@ -318,8 +319,34 @@ sub modmember {
 		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
 		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
 		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
-		ethnotes = ?,sex = ?,password = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
+		ethnotes = ?,sex = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
 		WHERE borrowernumber=$data{'borrowernumber'}";
+	$sth=$dbh->prepare($query);
+	$sth->execute(
+		$data{'cardnumber'},$data{'surname'},
+		$data{'firstname'},$data{'title'},
+		$data{'othernames'},$data{'initials'},
+		$data{'streetnumber'},$data{'streettype'},
+		$data{'address'},$data{'address2'},
+		$data{'city'},$data{'zipcode'},
+		$data{'email'},$data{'phone'},
+		$data{'mobile'},$data{'fax'},
+		$data{'emailpro'},$data{'phonepro'},
+		$data{'B_streetnumber'},$data{'B_streettype'},
+		$data{'B_address'},$data{'B_city'},
+		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
+		$data{'dateofbirth'},$data{'branchcode'},
+		$data{'categorycode'},$data{'dateenrolled'},
+		$data{'dateexpiry'},$data{'gonenoaddress'},
+		$data{'lost'},$data{'debarred'},
+		$data{'contactname'},$data{'contactfirstname'},
+		$data{'contacttitle'},$data{'guarantorid'},
+		$data{'borrowernotes'},$data{'relationship'},
+		$data{'ethnicity'},$data{'ethnotes'},
+		$data{'sex'},
+		$data{'flags'},$data{'userid'},
+		$data{'opacnote'},$data{'contactnote'},
+		$data{'sort1'},$data{'sort2'});
 	}
 	else{
 		
@@ -333,40 +360,8 @@ sub modmember {
 		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
 		ethnotes = ?,sex = ?,password = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
 		WHERE borrowernumber=$data{'borrowernumber'}";
-	
-	}
-	my $sth=$dbh->prepare($query);
-
-	if ($data{'password'} eq '****'){
-		$sth->execute(
-		$data{'cardnumber'},$data{'surname'},
-		$data{'firstname'},$data{'title'},
-		$data{'othernames'},$data{'initials'},
-		$data{'streetnumber'},$data{'streettype'},
-		$data{'address'},$data{'address2'},
-		$data{'city'},$data{'zipcode'},
-		$data{'email'},$data{'phone'},
-		$data{'mobile'},$data{'fax'},
-		$data{'emailpro'},$data{'phonepro'},
-		$data{'B_streetnumber'},$data{'B_streettype'},
-		$data{'B_address'},$data{'B_city'},
-		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
-		$data{'dateofbirth'},$data{'branchcode'},
-		$data{'categorycode'},$data{'dateenrolled'},
-		$data{'dateexpiry'},$data{'gonenoaddress'},
-		$data{'lost'},$data{'debarred'},
-		$data{'contactname'},$data{'contactfirstname'},
-		$data{'contacttitle'},$data{'guarantorid'},
-		$data{'borrowernotes'},$data{'relationship'},
-		$data{'ethnicity'},$data{'ethnotes'},
-		$data{'sex'},$data{'password'},
-		$data{'flags'},$data{'userid'},
-		$data{'opacnote'},$data{'contactnote'},
-		$data{'sort1'},$data{'sort2'}
-		);
-	
-	}else{
-		$sth->execute(
+	$sth=$dbh->prepare($query);
+	$sth->execute(
 		$data{'cardnumber'},$data{'surname'},
 		$data{'firstname'},$data{'title'},
 		$data{'othernames'},$data{'initials'},
@@ -393,8 +388,6 @@ sub modmember {
 		$data{'sort1'},$data{'sort2'}
 		);
 	}
-
-	$sth->execute;
 	$sth->finish;
 	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 	# so when we update information for an adult we should check for guarantees and update the relevant part
