@@ -27,6 +27,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use Digest::MD5 qw(md5_base64);
+use Date::Calc qw/Today/;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -56,14 +57,16 @@ This module contains routines for adding, modifying and deleting members/patrons
 @EXPORT = qw();
 
 @EXPORT = qw(
-  &BornameSearch &getmember &borrdata &borrdata2 &fixup_cardnumber &findguarantees &findguarantor &GuarantornameSearch &NewBorrowerNumber &modmember &newmember &changepassword &borrissues &allissues
+ &BornameSearch &getmember &borrdata &borrdata2 &fixup_cardnumber &findguarantees &findguarantor &GuarantornameSearch &NewBorrowerNumber   &modmember &newmember &changepassword &borrissues &allissues
   &checkuniquemember &getzipnamecity &getidcity &getguarantordata &getcategorytype
   &calcexpirydate &checkuserpassword
   &getboracctrecord
   &borrowercategories &getborrowercategory
   &fixEthnicity
   &ethnicitycategories get_institutions add_member_orgs
+  &get_age
 );
+
 
 =item BornameSearch
 
@@ -229,7 +232,7 @@ sub borrdata {
         $sth->execute($bornum);
     }
     my $data = $sth->fetchrow_hashref;
-    warn "DATA" . $data->{category_type};
+#     warn "DATA" . $data->{category_type};
     $sth->finish;
     if ($data) {
         return ($data);
@@ -297,50 +300,115 @@ sub borrdata2 {
 }
 
 sub modmember {
-    my (%data) = @_;
-    my $dbh = C4::Context->dbh;
-    $data{'dateofbirth'} = format_date_in_iso( $data{'dateofbirth'} );
-    $data{'expiry'}      = format_date_in_iso( $data{'expiry'} );
+	my (%data) = @_;
+	my $dbh = C4::Context->dbh;
+	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+	$data{'dateexpiry'}=format_date_in_iso($data{'dateexpiry'});
+	$data{'dateenrolled'}=format_date_in_iso($data{'dateenrolled'});
+	warn "la date:".$data{dateenrolled};
+	my $query;
+	$data{'userid'}='' if ($data{'password'}eq '');
+	# test to know if u must update or not the borrower password
+	if ($data{'password'} eq '****'){
+		
+		$query="UPDATE borrowers SET 
+		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
+		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
+		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
+		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
+		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
+		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
+		ethnotes = ?,sex = ?,password = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
+		WHERE borrowernumber=$data{'borrowernumber'}";
+	}
+	else{
+		
+		($data{'password'}=md5_base64($data{'password'})) if ($data{'password'} ne '');
+		$query="UPDATE borrowers SET 
+		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
+		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
+		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
+		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
+		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
+		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
+		ethnotes = ?,sex = ?,password = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
+		WHERE borrowernumber=$data{'borrowernumber'}";
+	
+	}
+	my $sth=$dbh->prepare($query);
 
-    my $query = "UPDATE borrowers SET
-  title=?,dateexpiry=?,cardnumber=?,sex=?,ethnotes=?,address=?,fax=?,
-  firstname=?,contactnote=?,dateofbirth=?,contactname=?,email=?,
-  address2=?,relationship=?,othernames=?,phonepro=?,categorycode=?,
-  city=?,phone=?,borrowernotes=?,B_phone=?,surname=?,initials=?,
-  B_address=?,ethnicity=?,gonenoaddress=?,lost=?,debarred=?,opacnote=?,
-  branchcode=?,zipcode=?,B_zipcode=?,sort1=?,sort2=?
-  WHERE borrowernumber=?";
+	if ($data{'password'} eq '****'){
+		$sth->execute(
+		$data{'cardnumber'},$data{'surname'},
+		$data{'firstname'},$data{'title'},
+		$data{'othernames'},$data{'initials'},
+		$data{'streetnumber'},$data{'streettype'},
+		$data{'address'},$data{'address2'},
+		$data{'city'},$data{'zipcode'},
+		$data{'email'},$data{'phone'},
+		$data{'mobile'},$data{'fax'},
+		$data{'emailpro'},$data{'phonepro'},
+		$data{'B_streetnumber'},$data{'B_streettype'},
+		$data{'B_address'},$data{'B_city'},
+		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
+		$data{'dateofbirth'},$data{'branchcode'},
+		$data{'categorycode'},$data{'dateenrolled'},
+		$data{'dateexpiry'},$data{'gonenoaddress'},
+		$data{'lost'},$data{'debarred'},
+		$data{'contactname'},$data{'contactfirstname'},
+		$data{'contacttitle'},$data{'guarantorid'},
+		$data{'borrowernotes'},$data{'relationship'},
+		$data{'ethnicity'},$data{'ethnotes'},
+		$data{'sex'},$data{'password'},
+		$data{'flags'},$data{'userid'},
+		$data{'opacnote'},$data{'contactnote'},
+		$data{'sort1'},$data{'sort2'}
+		);
+	
+	}else{
+		$sth->execute(
+		$data{'cardnumber'},$data{'surname'},
+		$data{'firstname'},$data{'title'},
+		$data{'othernames'},$data{'initials'},
+		$data{'streetnumber'},$data{'streettype'},
+		$data{'address'},$data{'address2'},
+		$data{'city'},$data{'zipcode'},
+		$data{'email'},$data{'phone'},
+		$data{'mobile'},$data{'fax'},
+		$data{'emailpro'},$data{'phonepro'},
+		$data{'B_streetnumber'},$data{'B_streettype'},
+		$data{'B_address'},$data{'B_city'},
+		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
+		$data{'dateofbirth'},$data{'branchcode'},
+		$data{'categorycode'},$data{'dateenrolled'},
+		$data{'dateexpiry'},$data{'gonenoaddress'},
+		$data{'lost'},$data{'debarred'},
+		$data{'contactname'},$data{'contactfirstname'},
+		$data{'contacttitle'},$data{'guarantorid'},
+		$data{'borrowernotes'},$data{'relationship'},
+		$data{'ethnicity'},$data{'ethnotes'},
+		$data{'sex'},$data{'password'},
+		$data{'flags'},$data{'userid'},
+		$data{'opacnote'},$data{'contactnote'},
+		$data{'sort1'},$data{'sort2'}
+		);
+	}
 
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $data{'title'},         $data{'expiry'},
-        $data{'cardnumber'},    $data{'sex'},
-        $data{'ehtnotes'},      $data{'address'},
-        $data{'fax'},           $data{'firstname'},
-        $data{'contactnote'},   $data{'dateofbirth'},
-        $data{'contactname'},   $data{'email'},
-        $data{'address2'},      $data{'relationship'},
-        $data{'othernames'},    $data{'phonepro'},
-        $data{'categorycode'},  $data{'city'},
-	$data{'phone'},
-        $data{'borrowernotes'}, $data{'b_phone'},
-        $data{'surname'},       $data{'initials'},
-        $data{'b_address'},     $data{'ethnicity'},
-        $data{'gna'},           $data{'lost'},
-        $data{'debarred'},      $data{'opacnotes'},
-        $data{'branchcode'},    $data{'zipcode'},
-        $data{'b_zipcode'},     $data{'sort1'},
-        $data{'sort2'},         $data{'borrowerid'}
-    );
-    $sth->finish;
-# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
-# so when we update information for an adult we should check for guarantees and update the relevant part
-# of their records, ie addresses and phone numbers
-    if ( $data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W' ) {
+	$sth->execute;
+	$sth->finish;
+	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
+	# so when we update information for an adult we should check for guarantees and update the relevant part
+	# of their records, ie addresses and phone numbers
+ 	my ($category_type,undef)=getcategorytype($data{'category_type'});
+	if ($category_type eq 'A' ){
+ 	
+	# is adult check guarantees;
+ 		updateguarantees(%data);
+ 	
+	}	
 
-        # is adult check guarantees;
-        updateguarantees(%data);
-    }
+	
+
 }
 
 sub newmember {
@@ -350,7 +418,7 @@ sub newmember {
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
     $data{'dateofbirth'} = format_date_in_iso( $data{'dateofbirth'} );
     $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} );
-    $data{expiry} = format_date_in_iso( $data{expiry} );
+    $data{'dateexpiry'} = format_date_in_iso( $data{'dateexpiry'} );
     my $query =
         "insert into borrowers set cardnumber="
       . $dbh->quote( $data{'cardnumber'} )
@@ -427,13 +495,30 @@ sub newmember {
       . ",emailpro="
       . $dbh->quote( $data{'emailpro'} )
       . ",contactfirstname="
-      . $dbh->quote( $data{'contactfirstname'} ) . ",sex="
-      . $dbh->quote( $data{'sex'} ) . ",fax="
+      . $dbh->quote( $data{'contactfirstname'} ) 
+      . ",sex="
+      . $dbh->quote( $data{'sex'} ) 
+      . ",fax="
       . $dbh->quote( $data{'fax'} )
       . ",flags="
       . $dbh->quote( $data{'flags'} )
       . ",relationship="
-      . $dbh->quote( $data{'relationship'} );
+      . $dbh->quote( $data{'relationship'} )
+      . ",b_streetnumber="
+      . $dbh->quote( $data{'b_streetnumber'}) 
+      . ",b_streettype="
+      . $dbh->quote( $data{'b_streettype'})
+      . ",gonenoaddress="
+      . $dbh->quote( $data{'gonenoaddress'})	
+      . ",lost="
+      . $dbh->quote( $data{'lost'})	 	 	
+      . ",debarred="
+      . $dbh->quote( $data{'debarred'})
+      . ",ethnicity="
+      . $dbh->quote( $data{'ethnicity'})
+      . ",ethnotes="
+      . $dbh->quote( $data{'ethnotes'});
+
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
@@ -1125,16 +1210,43 @@ sub fixEthnicity($) {
     return $data->{'name'};
 }    # sub fixEthnicity
 
+
+
+=head2 get_age
+
+  $dateofbirth,$date = &get_age($date);
+
+this function return the borrowers age with the value of dateofbirth
+
+=cut
+#'
+sub get_age {
+    my ($date, $date_ref) = @_;
+
+    if (not defined $date_ref) {
+        $date_ref = sprintf('%04d-%02d-%02d', Today());
+    }
+
+    my ($year1, $month1, $day1) = split /-/, $date;
+    my ($year2, $month2, $day2) = split /-/, $date_ref;
+
+    my $age = $year2 - $year1;
+    if ($month1.$day1 > $month2.$day2) {
+        $age--;
+    }
+
+    return $age;
+}# sub get_age
+
+
+
 =head2 get_institutions
-  
   $insitutions = get_institutions();
 
 Just returns a list of all the borrowers of type I, borrownumber and name
-  
 =cut
 
 #'
-
 sub get_institutions {
     my $dbh = C4::Context->dbh();
     my $sth =
