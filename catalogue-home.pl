@@ -22,7 +22,7 @@ my $format=$query->param('MARC');
 my ($template, $borrowernumber, $cookie);
 
 # get all the common search variables, 
-my @fields = ('keyword', 'itemnumber', 'isbn','biblionumber', 'class', 'branch', 'range', 'recently_items', 'ttype',
+my @fields = ('keyword', 'cql', 'itemnumber', 'isbn','biblionumber', 'class', 'branch', 'range', 'recently_items', 'ttype',
 	      'field_name1', 'field_name2', 'field_name3', 'field_value1', 'field_value2', 'field_value3', 
 	      'op1', 'op2', 'ttype1', 'ttype2', 'ttype3', 'atype1','atype2','atype3','date_from', 'date_to','stack','callno','authtype','authnumber','number_to_display','zoom','order','format');
 
@@ -116,7 +116,10 @@ $zoom=0;
 }
 }
 if ($zoom eq "1"){
-
+warn "SEARCH";
+while( my ($k, $v) = each %search ) {
+        warn "key: $k, value: $v.\n";
+	    }
  ($count, @results) =catalogsearch4(\%search,$number_of_results,$startfrom);
 
 }else{

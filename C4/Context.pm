@@ -45,8 +45,8 @@ C4::Context - Maintain and manipulate the context of a Koha script
 =head1 DESCRIPTION
 
 When a Koha script runs, it makes use of a certain number of things:
-configuration settings in F</etc/koha.conf>, a connection to the Koha
-database, and so forth. These things make up the I<context> in which
+configuration settings in F</etc/koha.xml>, a connection to the Koha
+databases, and so forth. These things make up the I<context> in which
 the script runs.
 
 This module takes care of setting up the context for a script:
@@ -66,7 +66,7 @@ different contexts to search both databases. Such scripts should use
 the C<&set_context> and C<&restore_context> functions, below.
 
 By default, C4::Context reads the configuration from
-F</etc/koha.conf>. This may be overridden by setting the C<$KOHA_CONF>
+F</etc/koha.xml>. This may be overridden by setting the C<$KOHA_CONF>
 environment variable to the pathname of a configuration file to use.
 
 =head1 METHODS
@@ -91,7 +91,7 @@ environment variable to the pathname of a configuration file to use.
 # Zconn
 # 	A connection object for the Zebra server
 
-use constant CONFIG_FNAME => "/etc2/koha.xml";
+use constant CONFIG_FNAME => "/etc/koha.xml";
 				# Default config file, if none is specified
 
 $context = undef;		# Initially, no context is set
@@ -156,11 +156,11 @@ sub import
 =item new
 
   $context = new C4::Context;
-  $context = new C4::Context("/path/to/koha.conf");
+  $context = new C4::Context("/path/to/koha.xml");
 
 Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
-environment variable, or F</etc/koha.conf>.
+environment variable, or F</etc/koha.xml>.
 
 C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
@@ -394,26 +394,25 @@ creates one and connects.
 =cut
 
 sub Zconn {
-        my $self = shift;
-my $server=shift;
+	my $self = shift;
+	my $server=shift;
 	my $Zconn;
-      if (defined($context->{"Zconn"})) {
-	    $Zconn = $context->{"Zconn"};
-         	    return $context->{"Zconn"};
+	if (defined($context->{"Zconn"})) {
+		$Zconn = $context->{"Zconn"};
+		return $context->{"Zconn"};
 	} else { 
 		$context->{"Zconn"} = &new_Zconn($server);
 		return $context->{"Zconn"};
-        }
+	}
 }
 
 sub Zconnauth {
-        my $self = shift;
-my $server=shift;
+	my $self = shift;
+	my $server="biblioserver"; #shift;
 	my $Zconnauth;
 ##We destroy each connection made so create a new one	
-		$context->{"Zconnauth"} = &new_Zconnauth($server);
-		return $context->{"Zconnauth"};
-		
+	$context->{"Zconnauth"} = &new_Zconnauth($server);
+	return $context->{"Zconnauth"};
 }
 
 
@@ -431,47 +430,47 @@ my $server=shift;
 my $tried==0;
 my $Zconn;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
-
 retry:
 	eval {
 		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
 		preferredRecordSyntax => "USmarc",elementSetName=> "F");
+		$Zconn->option(cqlfile => "/koha/etc/pqf.properties");
 	};
 	if ($@){
 ###Uncomment the lines below if you want to automatically restart your zebra if its stop
 ###The system call is for Windows it should be changed to unix deamon starting for Unix platforms	
-		if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
-		$tried==1;
-		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
-		goto "retry";
-		}else{
-		warn "Error ", $@->code(), ": ", $@->message(), "\n";
-		$Zconn="error";
-		return $Zconn;
-		}
+	#	if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
+	#	$tried==1;
+	#	my $res=system('sc start "Z39.50 Server" >/koha/log/zebra-error.log');
+	#	goto "retry";
+	#	}else{
+	#	warn "Error ", $@->code(), ": ", $@->message(), "\n";
+	#	$Zconn="error";
+	#	return $Zconn;
+	#	}
 	}
 	return $Zconn;
 }
 
 ## Zebra handler with write permission
 sub new_Zconnauth {
-use ZOOM;
-my $server=shift;
-my $tried==0;
-my $Zconnauth;
-my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
-my $o = new ZOOM::Options();
-$o->option(async => 1);
-$o->option(preferredRecordSyntax => "usmarc");
-$o->option(elementSetName => "F");
-$o->option(user=>$context->{"config"}->{"zebrauser"});
-$o->option(password=>$context->{"config"}->{"zebrapass"});
-$o->option(databaseName=>$context->{"config"}->{$server});
+	use ZOOM;
+	my $server=shift;
+	my $tried==0;
+	my $Zconnauth;
+	my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
+	my $o = new ZOOM::Options();
+	$o->option(async => 1);
+	$o->option(preferredRecordSyntax => "usmarc");
+	$o->option(elementSetName => "F");
+	$o->option(user=>$context->{"config"}->{"zebrauser"});
+	$o->option(password=>$context->{"config"}->{"zebrapass"});
+	$o->option(databaseName=>$context->{"config"}->{$server});
+
 retry:
 
- $Zconnauth=create ZOOM::Connection($o);
-
-	$Zconnauth->connect($context->config("hostname"),$port	);
+	$Zconnauth=create ZOOM::Connection($o);
+	$Zconnauth->connect($context->config("hostname"),$port);
 	return $Zconnauth;
 }
 
@@ -813,6 +812,12 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.18.2.5.2.6  2006/06/02 23:11:24  kados
+# Committing my working dev_week. It's been tested only with
+# searching, and there's quite a lot of config stuff to set up
+# beforehand. As things get closer to a release, we'll be making
+# some scripts to do it for us
+#
 # Revision 1.18.2.5.2.5  2006/05/28 18:49:12  tgarip1957
 # This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
 # Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to

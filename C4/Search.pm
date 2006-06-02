@@ -679,6 +679,7 @@ sub CatSearch3  {
 	
 #warn "$query,@params,";
 	$count_query = $query;	
+	warn "QUERY:".$count_query;
  	#execute the query and returns just the results between $num and $num + $offset
 	my $limit = $num + $offset;
 	my $startfrom = $offset;
@@ -853,6 +854,14 @@ sub catalogsearch4 {
 
 	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''|| $search->{'biblionumber'} ne ''|| $search->{'authnumber'} ne ''){
 		($count,@results) = CatSearch4('precise',$search,$num,$offset);
+	} elsif ($search->{'cql'} ne ''){
+		if ($search->{'rpn'} ne '') {
+				warn "RPN ON";
+		                ($count,@results) = CatSearch4('rpn',$search,$num,$offset);
+		} else {
+			warn "RPN".$search->{'rpn'};
+		($count,@results) = CatSearch4('cql',$search,$num,$offset);
+		}
 	} elsif ($search->{'keyword'} ne ''){
 		($count,@results) = CatSearch4('keyword',$search,$num,$offset);
 	} elsif ($search->{'recently_items'} ne '') {
@@ -878,7 +887,23 @@ sub CatSearch4  {
 	my $marcdata;
 	my $toggle;
 	my $even=1;
+	my $cql;
+	my $rpn;
+	my $cql_query;
 	# 1) do a search by barcode or isbn
+	if ($type eq 'cql') {
+		$cql=1;
+		$cql_query = $search->{'cql'};
+		while( my ($k, $v) = each %$search ) {
+		        warn "key: $k, value: $v.\n";
+			    }
+		warn "QUERY:".$query;
+	}
+	if ($type eq 'rpn') {
+		$rpn=1;
+		$cql=1;
+		$cql_query = $search->{'cql'}; #but it's really a rpn query FIXME
+	}
 	if ($type eq 'precise') {
 
 		if ($search->{'itemnumber'} ne '') {
@@ -931,7 +956,7 @@ sub CatSearch4  {
 		#search by itemtypes 
 		if ($search->{'class'} ne '') {
 			$query= "\@and ".$query;
-			$query .= " \@attr 1=4  \"".$search->{'class'}."\"";
+			$query .= " \@attr 1=1031  \"".$search->{'class'}."\"";
 			push @params, $search->{'class'};
 		}
 		#search by callnumber 
@@ -983,7 +1008,7 @@ sub CatSearch4  {
 		push @params, $keys;
 		if ($search->{'class'} ne '') {
 		$query= "\@and ".$query;
-			$query .= " \@attr 1=4 \"".$search->{'class'}."\"";
+			$query .= " \@attr 1=1031 \"".$search->{'class'}."\"";
 			
 		}
 		
@@ -1020,6 +1045,8 @@ sub CatSearch4  {
 				
 			} elsif ($search->{'field_name1'} eq 'subject') {
 				$condition1.=" \@attr 1=21 ".$attr." \"".$search->{'field_value1'}."\" ";
+			} elsif ($search->{'field_name1'} eq 'series') {
+			                                $condition1.=" \@attr 1=5 ".$attr." \"".$search->{'field_value1'}."\" ";
 			
 			} elsif ($search->{'field_name1'} eq 'publisher') {
 				$condition1.= " \@attr 1=1018 ".$attr." \"".$search->{'field_value1'}."\" ";	
@@ -1094,6 +1121,18 @@ sub CatSearch4  {
 						$query = " \@not ".$query;
 						$condition2.= " \@attr 1=21 ".$attr2." \"".$search->{'field_value2'}."\" ";
 					}
+				} elsif ($search->{'field_name2'} eq 'series') {
+                                        if ($search->{'op1'} eq 'and') {
+                                                $query = " \@and ".$query;
+                                                $condition2.= " \@attr 1=5 ".$attr2." \"".$search->{'field_value2'}."\" ";
+
+                                        } elsif ($search->{'op1'} eq 'or') {
+                                                $query = " \@or ".$query;
+                                                $condition2.= " \@attr 1=5 ".$attr2." \"".$search->{'field_value2'}."\" ";
+                                        } else {
+                                                $query = " \@not ".$query;
+                                                $condition2.= " \@attr 1=5 ".$attr2." \"".$search->{'field_value2'}."\" ";
+                                        }
 				} elsif ($search->{'field_name2'} eq 'callno') {
 					if ($search->{'op1'} eq 'and') {
 						$query = " \@and ".$query;
@@ -1182,6 +1221,18 @@ sub CatSearch4  {
 						$query = " \@not ".$query;
 						$condition3.= " \@attr 1=21 ".$attr3." \"".$search->{'field_value3'}."\" ";
 					}
+				} elsif ($search->{'field_name3'} eq 'series') {
+                                        if ($search->{'op2'} eq 'and') {
+                                                $query = " \@and ".$query;
+                                                $condition3.= " \@attr 1=5 ".$attr3." \"".$search->{'field_value3'}."\" ";
+
+                                        } elsif ($search->{'op2'} eq 'or') {
+                                                $query = " \@or ".$query;
+                                                $condition3.= " \@attr 1=5 ".$attr3." \"".$search->{'field_value3'}."\" ";
+                                        } else {
+                                                $query = " \@not ".$query;
+                                                $condition3.= " \@attr 1=5 ".$attr3." \"".$search->{'field_value3'}."\" ";
+                                        }
 				} elsif ($search->{'field_name3'} eq 'callno') {
 					if ($search->{'op2'} eq 'and') {
 						$query = " \@and ".$query;
@@ -1214,7 +1265,7 @@ sub CatSearch4  {
 			#search by class 
 		if ($search->{'class'} ne '') {
 			$query= "\@and ".$query;
-			$query .= " \@attr 1=4 \"".$search->{'class'}."\"";
+			$query .= " \@attr 1=1031 \"".$search->{'class'}."\"";
 			push @params, $search->{'class'};
 		}
 		#search by branch 
@@ -1240,8 +1291,18 @@ sub CatSearch4  {
 
 	}
 	
-
-	$count_query = $query;	
+	if ($cql) {
+		warn "STILL CQL";
+		$count_query = $cql_query;
+		$query=1;
+	} else {
+		$count_query = $query;	
+	}
+	warn "QUERY_AFTER".$count_query;
+	if ($search->{'order'}) {
+		$query.=" ".$search->{'order'};
+		$query=" \@or \@or ".$query;
+	}
 #warn $query;
 	#execute the query and returns just the results between $num and $num + $offset
 	my $limit = $num + $offset;
@@ -1253,11 +1314,21 @@ if ($oConnection eq "error"){
  }
 #$oConnection->option(preferredRecordSyntax => "XML");
 my $oResult;
-my $newq= new ZOOM::Query::PQF($query);
-my $order=$search->{'order'};
-if ($order){
-$newq->sortby("$order");
+my $newq;
+if ($cql) {
+	warn "CQLISH:".$cql_query;
+	if ($rpn) {
+		$newq= new ZOOM::Query::PQF($cql_query);
+	} else {
+		$newq = new ZOOM::Query::CQL2RPN($cql_query,$oConnection);
+	}
+} else {
+	$newq= new ZOOM::Query::PQF($query);
 }
+#my $order=$search->{'order'};
+#if ($order){
+#$newq->sortby("$order");
+#}
 eval {
 $oResult= $oConnection->search($newq);
 };

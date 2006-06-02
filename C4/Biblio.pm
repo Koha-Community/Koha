@@ -2777,6 +2777,7 @@ if ($record){
 sub zebraop{
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
 my ($dbh,$biblionumber,$op,$server)=@_;
+warn "SERVER:".$server;
 my @Zconnbiblio;
 my $tried=0;
 my $recon=0;
@@ -2915,6 +2916,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.12  2006/06/02 23:11:23  kados
+# Committing my working dev_week. It's been tested only with
+# searching, and there's quite a lot of config stuff to set up
+# beforehand. As things get closer to a release, we'll be making
+# some scripts to do it for us
+#
 # Revision 1.115.2.51.2.11  2006/05/28 18:49:12  tgarip1957
 # This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
 # Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to

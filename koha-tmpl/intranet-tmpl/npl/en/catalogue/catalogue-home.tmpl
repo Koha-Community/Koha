@@ -10,6 +10,10 @@
 
 <table align ="center" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
 	<tr>
+		<td align ="center">
+		           <input id="searchType4" type="button" value="Google-esque" onclick="changeSearch4()" <!-- TMPL_IF name="cql_search" -->class="searchtypeselected"<!-- TMPL_ELSE -->class="searchtype"<!-- /TMPL_IF -->>
+	</td>
+
 	    <td align ="center">
 	       <input id="searchType3" type="button" value="Advanced Search" onclick="changeSearch3()" <!-- TMPL_IF name="loose_search" -->class="searchtypeselected"<!-- TMPL_ELSE -->class="searchtype"<!-- /TMPL_IF -->>
 		</td>
@@ -112,7 +116,14 @@
 	</table>
 	
 </form>
-
+<form name="cql_form" id="cql_form" action="/cgi-bin/koha/catalogue-home.pl" method='bost' <!-- TMPL_IF name="cql_search" -->style="display:inline;"<!-- TMPL_ELSE-->style="display:none;"<!-- /TMPL_IF -->>
+    <input type="hidden" name="op" value="do_search">
+    <input type="hidden" name="search_type" value="cql">
+    <input type="hidden" name="startfrom" value="0">
+	<input type="hidden" name="zoom" value="1">
+	<input type="hidden" name="number_to_display" value="10">
+	<input type="text"  size="25" name="cql" value="<!-- TMPL_VAR name="cql" -->" >
+</form>
 <form onSubmit="return checkLooseSearch()" name="loose_form"  id="loose_form" action="/cgi-bin/koha/catalogue-home.pl" method='post' <!-- TMPL_IF name="loose_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
 
     <input type="hidden" name="op" value="do_search">

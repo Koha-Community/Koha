@@ -114,12 +114,6 @@ div.table {
 	width : 95%;
 }
 
-fieldset {
-	border : 0;
-	padding : 2px;
-	margin : 2px;
-}
-
 form {
 	display : inline;
 	margin : 0;
@@ -386,7 +380,7 @@ div.bookcover {
 .loggedin {
 	font-weight : bold;
 }
-
+/*
 .marctag {
 	font-family : Arial, Geneva, sans-serif;
 	margin : 1px;
@@ -414,7 +408,7 @@ div.bookcover {
 	font-family : Arial, Geneva, sans-serif;
 	font-weight : bold;
 	padding : 3px;
-}
+}*/
 
 .menu {
 	margin-bottom : 5px;
@@ -820,12 +814,17 @@ div.tab p {
 	padding : 3px 0;
 }
 
-.MARCtag { /* style for tag definition (700 - Statement of responsability) */
+div.tab table {
+	width : 100%;
+}
+
+div.tab p.MARCtag { /* style for tag definition (700 - Statement of responsability) */
 	font-weight:bold;
 	clear : both;
 	margin : 0;
-	padding : 2px 0;
+	padding : 2px;
 }
+
 
 .labelsubfield { /* style for each subfield (like : a Publication year), just before the biblio subfield */
 	clear : both;
@@ -833,4 +832,56 @@ div.tab p {
 	float:left;
 	width: 12em;
 	margin-left:30px;
+}
+
+/* Tabs */
+
+ul.link-tabs {
+	list-style-type : none;
+	margin: 10px 10px -2px 0;
+	padding : 0;
+}
+
+ul.link-tabs li {
+	display: inline;
+	padding: 5px;
+}
+
+ul.link-tabs li a {
+	font-size : 95%;
+	font-weight : bold;
+	padding: 2px 4px 2px 4px;
+	text-decoration: none;
+}
+
+ul.link-tabs li.on a {
+}
+
+ul.link-tabs li.off a {
+}
+
+ul.link-tabs li.off a:hover {
+	padding: 2px 3px 2px 4px;
+}
+
+#loose_form label, #keyword_form label, #precise_form label, #cql_form label {
+	font-size: 90%;
+	font-weight : bold;
+	text-align: right;
+}
+
+#loose_form, #keyword_form, #precise_form, #cql_form {
+	margin: 5px;
+	width : 96%;
+}
+
+#search-footer {
+	margin: auto;
+	text-align : center;
+}
+
+#search-footer a {
+	margin: 3px 5px 3px 5px;
+	text-decoration: none;
+	padding: 2px 5px;
 }

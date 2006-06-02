@@ -77,6 +77,12 @@ function hideSearchsTypes() {
 		   // document.getElementById('loose_form').reset();
 		    document.getElementById('loose_form').style.display = 'inline';
 		}
+		function changeSearch4() {
+			resetButtonsColors();
+			document.getElementById('searchType4').style.backgroundColor='yellow';
+			hideSearchsTypes();
+			document.getElementById('cql_form').style.display='inline';
+		}
 		
 		function checkKeywordSearch() {
 		if (document.keyword_form.keyword.value == '') {
