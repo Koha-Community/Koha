@@ -434,7 +434,7 @@ retry:
 	eval {
 		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
 		preferredRecordSyntax => "USmarc",elementSetName=> "F");
-		$Zconn->option(cqlfile => "/koha/etc/pqf.properties");
+		
 	};
 	if ($@){
 ###Uncomment the lines below if you want to automatically restart your zebra if its stop
@@ -445,7 +445,7 @@ retry:
 	#	goto "retry";
 	#	}else{
 	#	warn "Error ", $@->code(), ": ", $@->message(), "\n";
-	#	$Zconn="error";
+		$Zconn="error";
 	#	return $Zconn;
 	#	}
 	}
@@ -812,6 +812,10 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.18.2.5.2.7  2006/06/04 22:50:33  tgarip1957
+# We do not hard code cql2rpn conversion file in context.pm our koha.xml configuration file already describes the path for this file.
+# At cql searching we use method CQL not CQL2RPN as the cql2rpn conversion file is defined at server level
+#
 # Revision 1.18.2.5.2.6  2006/06/02 23:11:24  kados
 # Committing my working dev_week. It's been tested only with
 # searching, and there's quite a lot of config stuff to set up

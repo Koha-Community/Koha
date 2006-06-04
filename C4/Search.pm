@@ -1320,7 +1320,7 @@ if ($cql) {
 	if ($rpn) {
 		$newq= new ZOOM::Query::PQF($cql_query);
 	} else {
-		$newq = new ZOOM::Query::CQL2RPN($cql_query,$oConnection);
+		$newq = new ZOOM::Query::CQL($cql_query,$oConnection);
 	}
 } else {
 	$newq= new ZOOM::Query::PQF($query);
