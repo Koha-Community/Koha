@@ -24,6 +24,7 @@ package Install; #assumes Install.pm
 
 use strict;
 use POSIX;
+
 #MJR: everyone will have these modules, right?
 # They look like part of perl core to me
 #use Term::Cap;
@@ -52,7 +53,8 @@ to perform an actual installation.
 =cut
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+    shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -881,13 +883,13 @@ sub checkperlmodules {
 			push @missing, "Net::Z3950";
 		}
     }
-    unless (eval {require LWP::Simple)       {
+    unless (eval {require LWP::Simple})       {
 		showmessage(getmessage('LWP::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "LWP::Simple";
 		}
     }
-    unless (eval {require XML::Simple)       {
+    unless (eval {require XML::Simple})       {
 		showmessage(getmessage('XML::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "XML::Simple";
