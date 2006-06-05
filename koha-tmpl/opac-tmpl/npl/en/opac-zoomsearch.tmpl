@@ -1,0 +1,447 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Advanced Search
+<!-- TMPL_INCLUDE NAME="doc-head-close-cat-zoom.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<div id="main">
+<ul class="link-tabs">
+
+<li id="cql_formButton" class="off"><a phref="/cgi-bin/koha/opac-zoomsearch.pl?search_type=cql" onclick="changeSearch('cql'); return false;">Simple Search</a>  </li>
+<li id="advanced_formButton" class="off"><a phref="/cgi-bin/koha/opac-zoomsearch.pl?search_type=advanced" onclick="changeSearch('advanced'); return false;">Advanced Search</a>  </li>
+<li id="power_formButton" class="off"><a phref="/cgi-bin/koha/opac-zoomsearch.pl?search_type=power" onclick="changeSearch('power'); return false;">Power Search</a>  </li>
+<li id="proximity_formButton" class="off"><a phref="/cgi-bin/koha/opac-zoomsearch.pl?search_type=proximity" onclick="changeSearch('proximity'); return false;">Proximity Search</a>  </li>
+</ul>
+
+<div id="cql" <!-- TMPL_IF name="cql" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
+<h1>Simple Search</h1>
+<h2>CQL Search</h2>
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+	<input type="hidden" name="query_form" value="cql"/>
+	<input type="hidden" name="op" value="get_results"/>
+	<input type="text" name="cql_query"/>
+	<input type="submit" value="search"/>
+</form>
+<h2>PQF Search</h2>
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+        <input type="hidden" name="query_form" value="pqf"/>
+	<input type="hidden" name="op" value="get_results"/>
+        <input type="text" name="pqf_query"/>
+        <input type="submit" value="search"/>
+</form>
+</div>
+<div id="advanced" <!-- TMPL_IF name="advanced" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
+<h1>Advanced Search</h1>
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+	<input type="hidden" name="query_form" value="advanced"/>
+	<input type="hidden" name="op" value="get_results"/>
+
+	<select name="search_point1">
+		<option selected="selected" value="@attr 4=6 @attr 1=1016">Keyword</option>
+		<option value="@attr 1=4">Title</option>
+		<option value="@attr 4=1 @attr 6=3 @attr 1=4">Exact Title</option>
+		<option value="@attr 1=1003">Author</option>
+		<option value="@attr 1=21">Subject</option>
+		<option value="@attr 1=5">Series</option>
+		<option value="@attr 1=1018">Publisher</option>
+	</select>
+	<input type="text" name="query1"/><br/>
+
+        <select name="search_point2" >
+                <option value="@attr 4=6 @attr 1=1016">Keyword</option>
+                <option selected="selected" value="@attr 1=4">Title</option>
+                <option value="@attr 4=1 @attr 6=3 @attr 1=4">Exact Title</option>
+                <option value="@attr 1=1003">Author</option>
+                <option value="@attr 1=21">Subject</option>
+                <option value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+        </select>
+        <input type="text" name="query2"/>
+	<input type="hidden" name="op2" value="@and"/><br/>
+
+        <select name="search_point3" >
+                <option value="@attr 4=6 @attr 1=1016">Keyword</option>
+                <option value="@attr 1=4">Title</option>
+                <option value="@attr 4=1 @attr 6=3 @attr 1=4">Exact Title</option>
+                <option selected="selected" value="@attr 1=1003">Author</option>
+                <option value="@attr 1=21">Subject</option>
+                <option value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+        </select>
+        <input type="text" name="query3"/>
+        <input type="hidden" name="op3" value="@and"/><br/>
+
+
+        <select name="search_point4" >
+                <option value="@attr 4=6 @attr 1=1016">Keyword</option>
+                <option value="@attr 1=4">Title</option>
+                <option value="@attr 4=1 @attr 6=3 @attr 1=4">Exact Title</option>
+                <option value="@attr 1=1003">Author</option>
+                <option selected="selected" value="@attr 1=21">Subject</option>
+                <option value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+        </select>
+        <input type="text" name="query4"/>
+        <input type="hidden" name="op4" value="@and"/><br/>
+
+
+        <select name="search_point5" >
+                <option value="@attr 4=6 @attr 1=1016">Keyword</option>
+                <option value="@attr 1=4">Title</option>
+                <option value="@attr 4=1 @attr 6=3 @attr 1=4">Exact Title</option>
+                <option value="@attr 1=1003">Author</option>
+                <option value="@attr 1=21">Subject</option>
+                <option selected="selected" value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+        </select>
+        <input type="text" name="query5"/>
+        <input type="hidden" name="op5" value="@and"/>
+
+
+<br/>
+        <label for="query3">Format</label>
+        <input type="hidden" name="op3" value="@and"/>
+        <select name="query3">
+		<option value="">Any</option>
+                <option value="@attr 1=1031 DVD">DVD</option>
+        </select>
+
+        <label for="query4">Location</label>
+        <input type="hidden" name="op4" value="@and"/>
+        <select name="query4">
+		<option value="">Any</option>
+                <option value="@attr 1=1019 APL">APL</option>
+                <option value="@attr 1-1019 PPL">PPL</option>
+        </select>
+
+        <label for="advanced_sort_by">Sort by</label>
+        <select name="sort_by">
+                <option value="">Default</option>
+                <option value="@or @or @attr 7=1 @attr 1=4 0 @attr 7=2 @attr 1=30 1">Title,Date</option>
+        </select>
+        <label for="results_per_page">Results per page</label>
+        <select name="results_per_page">
+                <option>1</option>
+                <option selected="selected">10</option>
+                <option>20</option>
+                <option>30</option>
+                <option>40</option>
+                <option>100</option>
+                </select>
+
+	<input type="submit" value="search"/>
+</form>
+</div>
+
+<div id="power" <!-- TMPL_IF name="cql" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
+<h1>Power Search</h1>
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+	<input type="hidden" name="query_form" value="power"/>
+	<input type="hidden" name="op" value="get_results"/>
+	<label for="use1">Search:</label>
+	<select name="use1">
+		<option value="@attr 1=1016">Any Field</option>
+		<option value="@attr 1=4">Title</option>
+		<option value="@attr 1=1003">Author</option>
+		<option value="@attr 1=21">Subject</option>
+		<option value="@attr 1=5">Series</option>
+		<option value="@attr 1=1018">Publisher</option>
+		<option value="@attr 1=63">Notes</option>
+		<option value="@attr 1=6">Journal Title</option>
+		<option value="@attr 1=7">ISBN</option>
+		<option value="@attr 1=8">ISSN</option>
+	</select>
+	
+	<select name="structure1">
+		<option value="">Structure</option>
+		<option value="@attr 4=3">All</option>
+		<option value="@attr 4=2">Any</option>
+		<option value="@attr 4=1">Phrase</option>
+		<option value="@attr 4=2">Word (Any)</option>
+		<option value="@attr 4=4">Year</option>
+		<option value="@attr 4=5">Date (normalized)</option>
+		<option value="@attr 4=6">Word list</option>
+		<option value="@attr 4=100">Date (un-normalized)</option>
+		<option value="@attr 4=101">Name (normalized</option>
+		<option value="@attr 4=102">Name (un-normalized)</option>
+		<option value="@attr 4=103">Structure</option>
+		<option value="@attr 4=104">urx</option>
+		<option value="@attr 4=105">free-form-text</option>
+		<option value="@attr 4=106">document-text</option>
+		<option value="@attr 4=107">local</option>
+		<option value="@attr 4=108">string</option>
+		<option value="@attr 4=109">numeric</option>
+	</select>
+
+	<select name="relation1">
+		<option value="">Relation</option>
+                <option value="@attr 2=1">&lt;</option>
+                <option value="@attr 2=2">&lt;=</option>
+                <option value="@attr 2=3">=</option>
+                <option value="@attr 2=4">&gt;=</option>
+                <option value="@attr 2=5">&gt;</option>
+                <option value="@attr 2=6">&ne;</option>
+		<option value="@attr 2=100">phonetic</option>
+		<option value="@attr 2=101">stem</option>
+		<option value="@attr 2=102">relevance</option>
+		<option value="@attr 2=103">AlwaysMatch</option>
+	</select>
+	<label for="query1">Term:</label>
+	<input type="text" name="query1" size="35" value=""/>
+
+	<select name="truncation1">
+		<option value="">Truncation</option>
+		<option value="@attr 5=103">Fuzzy</option>
+		<option value="@attr 5=100">None</option>
+		<option value="@attr 5=1">Right-truncation</option>
+		<option value="@attr 5=102">regExpr-1</option>
+		<option value="@attr 5=104">Character Masking</option>
+		<option value="@attr 5=101">Process # in term</option>
+	</select>
+
+	<select name="completeness1">
+		<option value="">Completeness</option>
+		<option value="@attr 6=1">Incomplete subfield</option>
+		<option value="@attr 6=2">Complete subfield</option>
+		<option value="@attr 6=3">Complete field</option>
+	</select>
+<br/><br/>
+	<select id="op2" name="op2">
+		<option value="@and" selected="selected">AND</option>
+		<option value="@or">OR</option>
+		<option value="@not">NOT</option>
+		<option value="@or @not @and">XOR</option>
+	</select>
+        <select name="use2">
+                <option value="@attr 1=1016">Any Field</option>
+                <option value="@attr 1=4">Title</option>
+                <option value="@attr 1=1003">Author</option>
+                <option value="@attr 1=21">Subject</option>
+                <option value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+                <option value="@attr 1=63">Notes</option>
+                <option value="@attr 1=6">Journal Title</option>
+                <option value="@attr 1=7">ISBN</option>
+                <option value="@attr 1=8">ISSN</option>
+        </select>
+
+        <select name="structure2">
+		<option value="">Structure</option>
+                <option value="@attr 4=3">All</option>
+                <option value="@attr 4=2">Any</option>
+                <option value="@attr 4=1">Phrase</option>
+                <option value="@attr 4=2">Word (Any)</option>
+                <option value="@attr 4=4">Year</option>
+                <option value="@attr 4=5">Date (normalized)</option>
+                <option value="@attr 4=6">Word list</option>
+                <option value="@attr 4=100">Date (un-normalized)</option>
+                <option value="@attr 4=101">Name (normalized</option>
+                <option value="@attr 4=102">Name (un-normalized)</option>
+                <option value="@attr 4=103">Structure</option>
+                <option value="@attr 4=104">urx</option>
+                <option value="@attr 4=105">free-form-text</option>
+                <option value="@attr 4=106">document-text</option>
+                <option value="@attr 4=107">local</option>
+                <option value="@attr 4=108">string</option>
+                <option value="@attr 4=109">numeric</option>
+        </select>
+
+        <select name="relation2">
+		<option value="">Relation</option>
+                <option value="@attr 2=1">&lt;</option>
+                <option value="@attr 2=2">&lt;=</option>
+                <option value="@attr 2=3">=</option>
+                <option value="@attr 2=4">&gt;=</option>
+                <option value="@attr 2=5">&gt;</option>
+                <option value="@attr 2=6">&ne;</option>
+                <option value="@attr 2=100">phonetic</option>
+                <option value="@attr 2=101">stem</option>
+                <option value="@attr 2=102">relevance</option>
+                <option value="@attr 2=103">AlwaysMatch</option>
+        </select>
+        <label for="query2">Term:</label>
+        <input type="text" name="query2" size="35" value=""/>
+
+        <select name="truncation2">
+		<option value="">Truncation</option>
+                <option value="@attr 5=103">Fuzzy</option>
+                <option value="@attr 5=100">None</option>
+                <option value="@attr 5=1">Right-truncation</option>
+                <option value="@attr 5=102">regExpr-1</option>
+                <option value="@attr 5=104">Character Masking</option>
+                <option value="@attr 5=101">Process # in term</option>
+        </select>
+
+        <select name="completeness2">
+		<option value="">Completeness</option>
+                <option value="@attr 6=1">Incomplete subfield</option>
+                <option value="@attr 6=2">Complete subfield</option>
+                <option value="@attr 6=3">Complete field</option>
+        </select>
+<br/><br/>
+        <select id="op3" name="op3">
+		<option value="@and" selected="selected">AND</option>
+		<option value="@or">OR</option>
+		<option value="@not">NOT</option>
+		<option value="@or @not @and">XOR</option>
+	</select>
+
+	<select name="use3">
+                <option value="@attr 1=1016">Any Field</option>
+                <option value="@attr 1=4">Title</option>
+                <option value="@attr 1=1003">Author</option>
+                <option value="@attr 1=21">Subject</option>
+                <option value="@attr 1=5">Series</option>
+                <option value="@attr 1=1018">Publisher</option>
+                <option value="@attr 1=63">Notes</option>
+                <option value="@attr 1=6">Journal Title</option>
+                <option value="@attr 1=7">ISBN</option>
+                <option value="@attr 1=8">ISSN</option>
+        </select>
+
+        <select name="structure3">
+                <option value="">Structure</option>
+                <option value="@attr 4=3">All</option>
+                <option value="@attr 4=2">Any</option>
+                <option value="@attr 4=1">Phrase</option>
+                <option value="@attr 4=2">Word (Any)</option>
+                <option value="@attr 4=4">Year</option>
+                <option value="@attr 4=5">Date (normalized)</option>
+                <option value="@attr 4=6">Word list</option>
+                <option value="@attr 4=100">Date (un-normalized)</option>
+                <option value="@attr 4=101">Name (normalized</option>
+                <option value="@attr 4=102">Name (un-normalized)</option>
+                <option value="@attr 4=103">Structure</option>
+                <option value="@attr 4=104">urx</option>
+                <option value="@attr 4=105">free-form-text</option>
+                <option value="@attr 4=106">document-text</option>
+                <option value="@attr 4=107">local</option>
+                <option value="@attr 4=108">string</option>
+                <option value="@attr 4=109">numeric</option>
+        </select>
+
+        <select name="relation3">
+                <option value="">Relation</option>
+                <option value="@attr 2=1">&lt;</option>
+                <option value="@attr 2=2">&lt;=</option>
+                <option value="@attr 2=3">=</option>
+                <option value="@attr 2=4">&gt;=</option>
+                <option value="@attr 2=5">&gt;</option>
+                <option value="@attr 2=6">&ne;</option>
+                <option value="@attr 2=100">phonetic</option>
+                <option value="@attr 2=101">stem</option>
+                <option value="@attr 2=102">relevance</option>
+                <option value="@attr 2=103">AlwaysMatch</option>
+        </select>
+        <label for="query3">Term:</label>
+        <input type="text" name="query3" size="35" value=""/>
+
+        <select name="truncation3">
+                <option value="">Truncation</option>
+                <option value="@attr 5=103">Fuzzy</option>
+                <option value="@attr 5=100">None</option>
+                <option value="@attr 5=1">Right-truncation</option>
+                <option value="@attr 5=102">regExpr-1</option>
+                <option value="@attr 5=104">Character Masking</option>
+                <option value="@attr 5=101">Process # in term</option>
+        </select>
+
+        <select name="completeness3">
+                <option value="">Completeness</option>
+                <option value="@attr 6=1">Incomplete subfield</option>
+                <option value="@attr 6=2">Complete subfield</option>
+                <option value="@attr 6=3">Complete field</option>
+        </select>
+<br/><br/>
+	<label for="query4">Format</label>
+	<input type="hidden" name="op4" value="@and"/>
+	<select name="query4">
+		<option value="">Any</option>
+		<option value="@attr 1=1031 DVD">DVD</option>
+	</select>
+
+	<label for="query5">Location</label>
+        <input type="hidden" name="op5" value="@and"/>
+        <select name="query5">
+		<option value="">Any</option>
+                <option value="@attr 1=1019 APL">APL</option>
+		<option value="@attr 1-1019 PPL">PPL</option>
+        </select>
+
+        <label for="power_sort_by">Sort by</label>
+        <select name="sort_by">
+                <option value="">Default</option>
+                <option value="@or @or @attr 7=1 @attr 1=4 0 @attr 7=2 @attr 1=30 1">Title,Date</option>
+        </select>
+        <label for="results_per_page">Results per page</label>
+        <select name="results_per_page">
+                <option>1</option>
+                <option selected="selected">10</option>
+                <option>20</option>
+                <option>30</option>
+                <option>40</option>
+                <option>100</option>
+                </select>
+	
+	<input type="submit" value="search"/>
+
+</form>
+</div>
+<div id="proximity" <!-- TMPL_IF name="cql" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
+<h1>Proximity Search</h1>
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+
+	<input type="hidden" name="query_form" value="proximity"/>
+	<input type="hidden" name="op" value="get_results"/>
+	<input type="hidden" name="prox_op2" value="@prox"/>
+	<label for="prox_search_point">Find: </label>
+	<select name="prox_search_point1">
+		<option value="@attr 1=1016">Any Fields</option>
+		<option value="@attr 1=4">Titles</option>
+		<option value="@attr 1=1003">Authors</option>
+		<option value="@attr 1=21">Subjects</option>
+		<option value="@attr 1=5">Series</option>
+		<option value="@attr 1=1018">Publishers</option>
+		<option value="@attr 1=63">Notes</option>
+		<option value="@attr 1=6">Journal Titles</option>
+	</select>
+	<label for="query1">that contain the word</label>
+	<input type="text" name="query1"/>
+	<label for="query2">and the word</label>
+	<input type="text" name="query2"/> 
+	
+	<input type="hidden" name="prox_exclusion2" value="0"/>
+	<label for="prox_distance2">
+	<select name="prox_relation2">
+		<option value="1">&lt;</option>
+		<option value="2">&lt;=</option>
+		<option value="3">=</option>
+		<option value="4">&gt;=</option>
+		<option value="5">&gt;</option>
+		<option value="6">&ne;</option>
+	</select></label>
+	<input type="text" name="prox_distance2" size="2"/>
+	<input type="hidden" name="prox_which-code2" value="k"/>
+	<label for="prox_unit-code2">word(s) apart from each other</label>
+	<input type="hidden" name="prox_unit-code2" value ="2"/>
+<br/>
+	<label for="prox_ordered2">Words must be in sequence</label>
+	<input type="checkbox" name="prox_ordered2" value="1" />
+<br/>
+	<label for="prox_sort_by">Sort by</label>
+	<select name="sort_by">
+		<option value="">Default</option>
+		<option value="@or @or @attr 7=1 @attr 1=4 0 @attr 7=2 @attr 1=30 1">Title,Date</option>
+	</select>
+	<label for="results_per_page">Results per page</label>
+	<select name="results_per_page">
+		<option>1</option>
+		<option selected="selected">10</option>
+		<option>20</option>
+		<option>30</option>
+		<option>40</option>
+		<option>100</option>
+		</select>
+	<input type="submit" value="search"/>
+</form>
+</div>
+</div><!-- /main -->
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
