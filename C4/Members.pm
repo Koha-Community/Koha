@@ -305,7 +305,7 @@ sub modmember {
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
 	$data{'dateexpiry'}=format_date_in_iso($data{'dateexpiry'});
 	$data{'dateenrolled'}=format_date_in_iso($data{'dateenrolled'});
-	warn "la date:".$data{dateenrolled};
+#  	warn "num user".$data{'borrowernumber'};
 	my $query;
 	my $sth;
 	$data{'userid'}='' if ($data{'password'}eq '');
@@ -1088,14 +1088,14 @@ return the number of record
 =cut
 
 sub checkuserpassword {
-    my ( $borrowerid, $userid, $password ) = @_;
+    my ( $borrowernumber, $userid, $password ) = @_;
     $password = md5_base64($password);
     my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
 "Select count(*) from borrowers where borrowernumber !=? and userid =? and password=? "
       );
-    $sth->execute( $borrowerid, $userid, $password );
+    $sth->execute( $borrowernumber, $userid, $password );
     my $number_rows = $sth->fetchrow;
     return $number_rows;
 
