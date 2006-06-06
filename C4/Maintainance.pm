@@ -185,15 +185,16 @@ sub undeletebib{
     $sth->finish;
     # FIXME - Doesn't this keep the same biblionumber? Isn't this
     # forbidden by the definition of 'biblio'? Or doesn't it matter?
-    my $query="Insert into biblio values (";
-    $query .= ("?," x $#data);
+    my $query="INSERT INTO biblio VALUES (";
+   my $count = @data;
+    $query .= ("?," x $count);
     $query=~ s/\,$/\)/;
     #   print $query;
     $sth=$dbh->prepare($query);
     $sth->execute(@data);
     $sth->finish;
   }
-  $sth=$dbh->prepare("Delete from deletedbiblio where biblionumber=?");
+  $sth=$dbh->prepare("DELETE FROM deletedbiblio WHERE biblionumber=?");
   $sth->execute($bib);
   $sth->finish;
 }
