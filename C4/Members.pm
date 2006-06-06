@@ -869,6 +869,7 @@ sub allissues {
 
     #FIXME: sanity-check order and limit
     my $dbh   = C4::Context->dbh;
+    my $count=0;
     my $query = "Select * from issues,biblio,items,biblioitems
   where borrowernumber=? and
   items.biblioitemnumber=biblioitems.biblioitemnumber and
@@ -886,8 +887,35 @@ sub allissues {
     while ( my $data = $sth->fetchrow_hashref ) {
         $result[$i] = $data;
         $i++;
+	$count++;
+    }
+
+    # get all issued items for bornum from oldissues table
+    # large chunk of older issues data put into table oldissues
+    # to speed up db calls for issuing items
+    if(C4::Context->preference("ReadingHistory")){
+          my $query2="SELECT * FROM oldissues,biblio,items,biblioitems
+                      WHERE borrowernumber=? 
+                      AND items.biblioitemnumber=biblioitems.biblioitemnumber
+                      AND items.itemnumber=oldissues.itemnumber
+                      AND items.biblionumber=biblio.biblionumber
+                      ORDER BY $order";
+          if ($limit !=0){
+                $limit=$limit-$count;
+                $query2.=" limit $limit";
+          }
+
+          my $sth2=$dbh->prepare($query2);
+          $sth2->execute($bornum);
+
+          while (my $data2=$sth2->fetchrow_hashref){
+                $result[$i]=$data2;
+                $i++;
+          }
+          $sth2->finish;
     }
     $sth->finish;
+
     return ( $i, \@result );
 }
 
