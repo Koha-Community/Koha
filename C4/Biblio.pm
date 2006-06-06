@@ -2263,7 +2263,9 @@ sub bibdata {
 	} # while
 	$data->{subtitles} = \@subtitles;
 	$sth->finish;
-	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
+	$sth   = $dbh->prepare("SELECT * FROM bibliosubject 
+                                WHERE subject != ''
+                                AND biblionumber = ?");
 	$sth->execute($bibnum);
 	my @subjects;
 	while (my $dat = $sth->fetchrow_hashref){
@@ -3127,6 +3129,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.172  2006/06/06 23:13:14  bob_lyon
+# Merging katipo changes...
+#
+# altering subject search to stop returning blank rows
+#
 # Revision 1.171  2006/05/17 16:06:24  plg
 # New feature from SAN Ouest Provence: ability to reserve a specific item in
 # the intranet. The development was made on branch 2.2 by Arnaud Laurin from
