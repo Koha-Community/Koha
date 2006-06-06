@@ -427,6 +427,15 @@ my %tabledata = (
             explanation         => 'Are your patrons members of institutions',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'ReadingHistory',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Allow reading record info retrievable from issues and oldissues tables',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1586,6 +1595,13 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.142  2006/06/06 23:42:46  bob_lyon
+# Merging Katipo changes...
+#
+# Adding new system pref where one can still retrieve a correct reading
+# record history if one has moved older data from issues to oldissues table
+# to speed up issues speed
+#
 # Revision 1.141  2006/06/01 03:18:11  rangi
 # Adding a new column to the statistics table
 #
