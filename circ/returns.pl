@@ -59,8 +59,8 @@ my $linecolor2            = 'white';
 my $branches = getbranches();
 my $printers = getprinters( \%env );
 
-my $branch  = getbranch( $query,  $branches );
-my $printer = getprinter( $query, $printers );
+my $branch  = C4::Context->userenv->{'branch'};
+my $printer = C4::Context->userenv->{'branchprinter'};
 
 #
 # Some code to handle the error if there is no branch or printer setting.....
@@ -111,16 +111,22 @@ if ( $query->param('resbarcode') ) {
 
     # set to waiting....
     my $iteminfo = getiteminformation( \%env, $item );
-    my $tobranchcd = ReserveWaiting( $item, $borrnum );
-    my $branchname = $branches->{$tobranchcd}->{'branchname'};
-    my ($borr) = getpatroninformation( \%env, $borrnum, 0 );
+#     if($iteminfo->{'holdingbranch'} ne $branch){
+# 	UpdateHoldingbranch($branch,$item);
+# 	}
+#   check if we have other reservs for this document, if we have a return send the message of transfer
+    my ($messages,$nextreservinfo) = OtherReserves($item);
+    my $branchname = getbranchname($messages->{'transfert'});
+    my ($borr) = getpatroninformation( \%env, $nextreservinfo, 0 );
     my $borcnum = $borr->{'cardnumber'};
     my $name    =
       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
     my $slip = $query->param('resslip');
 #    printslip( \%env, $slip ); #removed by paul
 
-    if ( $tobranchcd ne $branch ) {
+    if ( $messages->{'transfert'} ) {
+# 	add the transfer routine
+# 	C4::Circulation::Circ2::dotransfer($item,$iteminfo->{'holdingbranch'},$tobranchcd);
         $template->param(
             itemtitle  => $iteminfo->{'title'},
             iteminfo   => $iteminfo->{'author'},
@@ -128,6 +134,8 @@ if ( $query->param('resbarcode') ) {
             name       => $name,
             bornum     => $borrnum,
             borcnum    => $borcnum,
+	    borfirstname  => $borr->{'firstname'},
+            borsurname    => $borr->{'surname'},
             diffbranch => 1
         );
     }
@@ -141,7 +149,6 @@ my $barcode = $query->param('barcode');
 
 # actually return book and prepare item table.....
 if ($barcode) {
-
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     ( $returned, $messages, $iteminformation, $borrower ) =
@@ -192,6 +199,32 @@ $template->param( inputloop => \@inputloop );
 my $found    = 0;
 my $waiting  = 0;
 my $reserved = 0;
+
+# new op dev : we check if the document must be returned to his homebranch directly,
+#  if the document is transfered, we have warning message .
+
+if ( $messages->{'WasTransfered'} ) {
+#     my $res        = $messages->{'ResFound'};
+#     my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
+#     my ($borr) = getpatroninformation( \%env, $res->{'borrowernumber'}, 0 );
+#     my $name =
+#       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
+    my ($iteminfo) = getiteminformation( \%env, 0, $barcode );
+
+#     if ( $res->{'ResFound'} eq "Waiting" ) {
+# 		if($branch eq $res->{'branchcode'}){
+# 			$template->param(intransit => 0);
+# 		} else {
+# 			$template->param(intransit => 1);
+# 		}
+	
+        $template->param(
+            	found         => 1,
+             	transfer     => 1,
+		itemhomebranch => $branches->{$iteminfo->{'homebranch'} }->{'branchname'}
+        );
+
+    }
 
 if ( $messages->{'ResFound'} ) {
     my $res        = $messages->{'ResFound'};
