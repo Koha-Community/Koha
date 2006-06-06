@@ -27,8 +27,8 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Biblio;
-
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+my $library_name = C4::Context->preference("LibraryName");
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -73,6 +73,8 @@ FIXME
     &OtherReserves
     GetFirstReserveDateFromItem
     GetNumberReservesFromBorrower
+
+    # fixpriority is used only used internally, and by reorder_reserve.pl
 );
 
 # make all your functions, whether exported or not;
@@ -694,7 +696,12 @@ sub Findgroupreserve {
 # XXX - POD
 sub CreateReserve {
   my ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)= @_;
-  my $fee=CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
+  my $fee;
+  if($library_name =~ /Horowhenua/){
+      $fee = CalcHLTReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
+  } else {
+      $fee = CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
+  }
   my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);
   my @datearr = localtime(time);
@@ -823,6 +830,50 @@ sub CalcReserveFee {
 #  print "fee $fee";
   return $fee;
 }
+
+# The following are junior and young adult item types that should not incur a
+# reserve charge.
+#
+# Juniors: BJC, BJCN, BJF, BJK, BJM, BJN, BJP, BJSF, BJSN, DJ, DJP, FJ, JVID,
+#  VJ, VJP, PJ, TJ, TJP, VJ, VJP.
+#
+# Young adults: BYF, BYN, BYP, DY, DYP, PY, PYP, TY, TYP, VY, VYP.
+#
+# All other item types should incur a reserve charge.
+sub CalcHLTReserveFee {
+    my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM borrowers,categories
+                  WHERE (borrowernumber = ?)
+                    AND (borrowers.categorycode = categories.categorycode)");
+    $sth->execute($borrnum);
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish();
+    my $fee = $data->{'reservefee'};
+
+    my $matchno;
+    my @nocharge = qw/BJC BJCN BJF BJK BJM BJN BJP BJSF BJSN DJ DJP FJ NJ CJ VJ VJP PJ TJ TJP BYF BYN BYP DY DYP PY PYP TY TYP VY VYP/;
+    my $sth = $dbh->prepare("SELECT * FROM biblio,biblioitems
+                     WHERE (biblio.biblionumber = ?)
+                       AND (biblio.biblionumber = biblioitems.biblionumber)");
+    $sth->execute($biblionumber);
+    my $data=$sth->fetchrow_hashref;
+    my $itemtype = $data->{'itemtype'};
+    for (my $i = 0; $i < @nocharge; $i++) {
+        if ($itemtype eq $nocharge[$i]) {
+            $matchno++;
+            last;
+        }
+    }
+
+    if($matchno>0){
+        $fee = 0;
+    }
+  warn "BOB DEBUG: Fee is $fee";
+  return $fee;
+}
+
+
 
 # XXX - Internal use
 sub getnextacctno {
