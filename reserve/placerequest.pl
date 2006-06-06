@@ -44,7 +44,6 @@ my @rank=$input->param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
 my $bornum=borrdata($borrower,'');
-# Nouveau developpement
 my $checkitem=$input->param('checkitem');
 # my $priority;
 my $found;

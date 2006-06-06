@@ -138,7 +138,6 @@ my $picture;
 if ($borrowernumber) {
     $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
-    warn $borrower->{'expiry'};
     my $warningdate =
       DateCalc( $borrower->{'expiry'},
         "- " . C4::Context->preference('NotifyBorrowerDeparture') . "  days" );

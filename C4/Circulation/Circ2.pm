@@ -1980,7 +1980,7 @@ sub get_return_date_of {
 SELECT date_due,
        itemnumber
   FROM issues
-  WHERE itemnumber IN ('.join(',', @itemnumbers).')
+  WHERE itemnumber IN ('.join(',', @itemnumbers).') AND returndate IS NULL
 ';
     return get_infos_of($query, 'itemnumber', 'date_due');
 }

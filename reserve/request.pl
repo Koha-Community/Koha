@@ -105,7 +105,7 @@ if ($cardnumber) {
         }
 
 # we check the date expiricy of the borrower
-	my $warning=Date_Cmp(ParseDate("today"),format_date($borrowerinfo->{'expiry'}));
+	my $warning=Date_Cmp(ParseDate("today"),format_date($borrowerinfo->{'dateexpiry'}));
 	if ( $warning > 0) {
 			$expiry = 1;
 	}
@@ -253,7 +253,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
         if (defined $return_date_of->{$itemnumber}) {
             $date_due = format_date($return_date_of->{$itemnumber});
-
+	    $item->{date_due} = $date_due;
             $item->{backgroundcolor} = 'onloan';
         }
 
