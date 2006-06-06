@@ -85,6 +85,7 @@ my %tabsysprefs;
 	$tabsysprefs{checkdigit}="Members";
 	$tabsysprefs{NotifyBorrowerDeparture}="Members";
         $tabsysprefs{memberofinstitution}="Members";
+        $tabsysprefs{ReadingHistory}="Members";
 # OPAC
 	$tabsysprefs{AmazonAssocTag}="OPAC";
 	$tabsysprefs{AmazonContent}="OPAC";
