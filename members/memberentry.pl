@@ -113,7 +113,7 @@ if ($op eq 'add' or $op eq 'modify') {
 	if ($op eq 'add' && $step eq 2){
 		(my $category_type_send=$category_type ) if ($category_type eq 'I'); 
  		my $check_category; # recover the category code of the doublon suspect borrowers
-	   ($check_member,$check_category)= checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
+	   ($check_member,$check_category)=checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
 # 	recover the category type if the borrowers is a duplicate
 	($check_categorytype,undef)=getcategorytype($check_category);
 	}
@@ -170,10 +170,10 @@ SELECT upperagelimit,
 	}
 # STEP 2
 	if ($step eq 2) {
-			if ( ($data{'login'} eq '')){
+			if ( ($data{'userid'} eq '')){
 				my $onefirstnameletter=substr($data{'firstname'},0,1);
 				my $fivesurnameletter=substr($data{'surname'},0,5);
-				$data{'login'}=lc($onefirstnameletter.$fivesurnameletter);
+				$data{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
 			}
 			if ($op eq 'add' and $data{'dateenrolled'} eq ''){
  				my $today= sprintf('%04d-%02d-%02d', Today());
@@ -193,13 +193,13 @@ SELECT upperagelimit,
 # STEP 3
 	if ($step eq 3) {
 		# this value show if the login and password are been used
-		my $loginexist=checkuserpassword($borrowerid,$data{'login'},$data{'password'});
+		my $loginexist=checkuserpassword($borrowernumber,$data{'userid'},$data{'password'});
 		# test to know if u must save or create the borrowers
 		if ($op eq 'modify'){
 			# test to know if another user have the same password and same login		
 			if ($loginexist eq 0) {
 				&modmember(%data);		
-				logaction($loggedinuser,"MEMBERS","modify member", $borrowerid, "");
+				logaction($loggedinuser,"MEMBERS","modify member", $borrowernumber, "");
 			}
 			else {
 				push @errors, "ERROR_login_exist";
@@ -226,7 +226,7 @@ SELECT upperagelimit,
 				print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
 			} else {
 				if ($loginexist == 0) {
-				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowerid");
+				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
 				}
 			}
 		}
@@ -243,7 +243,6 @@ SELECT upperagelimit,
 }
 
 if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowerid");
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 } else {  # this else goes down the whole script
 	# retrieve previous values : either in DB or in CGI, in case of errors in values
