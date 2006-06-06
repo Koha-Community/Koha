@@ -78,7 +78,7 @@ foreach my $br (keys %$branches) {
 			if ($gettitle->{'holdingbranch'} eq $default){
 				my $getborrower = getpatroninformation (\%env,$num->{'borrowernumber'});
 				$getreserv{'reservedate'} = format_date($num->{'reservedate'});
-				my $calcDate=DateCalc($num->{'reservedate'},"+".C4::Context->preference('MaxDaysRecoveryReserves')."  days");
+				my $calcDate=DateCalc($num->{'reservedate'},"+".C4::Context->preference('TransfersMaxDaysWarning')."  days");
 				my $warning=Date_Cmp(ParseDate("today"),$calcDate);
 				if ($warning>0){
 					$getreserv{'messcompa'} = 1;

@@ -6,10 +6,10 @@
 <h1>Circulation: Branch Reserves</h1>
 
 <div id="mainbloc">
-	<h1 class="circulation">Reservs of your library the : <!-- TMPL_VAR NAME="show_date" --></h1>
+	<h1 class="circulation">Reserves of your library the : <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF NAME="messagetransfert" -->
 		<div>
-				<h2>Reserv find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
+				<h2>Reserve find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
 			<p>This documen is reserved by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please put this document in transfer .
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
@@ -21,7 +21,7 @@
 		<div id="bloc25">
 				<h2 class="circulation">This document is in Waiting status</h2>
 			<p>This document (<!-- TMPL_VAR NAME="nextreservtitle" -->) is reserved by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
-			Please keep this document for the next reserv .
+			Please keep this document for the next reserve .
 			</p>
 			<form name="cancelReservewithwaiting" action="branchreserves.pl" method="post">
 				<input type="submit">
@@ -32,7 +32,7 @@
 	<div id="resultlist">
 		<table>
 		<tr>
-			<th class="circulation" colspan="5">Reservs of your library</th>
+			<th class="circulation" colspan="5">Reserves of your library</th>
 		</tr>
 		<tr>
 			<th class="circulation">Available since</th>
@@ -43,7 +43,7 @@
 		</tr>
 			<!-- TMPL_LOOP NAME="reserveloop" -->
 				<tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
-					<td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserv Over <!-- /TMPL_IF --></td>
+					<td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve Over <!-- /TMPL_IF --></td>
 					<td>
 						<p>
 							<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
@@ -66,9 +66,9 @@
 							<input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->">
 							<input type="submit" 
 								<!-- TMPL_IF NAME="dotransfer" -->
-							value="Cancel reserv and return this document" 
+							value="Cancel reserve and return this document" 
 							<!-- TMPL_ELSE -->
-							value="Cancel reserv" 
+							value="Cancel reserve" 
 						<!-- /TMPL_IF -->
 						>
 						</form>

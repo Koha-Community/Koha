@@ -8,7 +8,7 @@
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 
-<h1>Circulation: Transfers in wait</h1>
+<h1>Circulation: Transfers To do</h1>
 
 <div id="mainbloc">
 	<h1>Transfers to do <!-- TMPL_VAR NAME="show_date" --></h1>
@@ -17,10 +17,10 @@
 		<!-- TMPL_IF NAME="branchcode" -->
 		<table>
 		<tr>
-			<th class="circulation" colspan="5">Reservs in wait to the library : <!-- TMPL_VAR NAME="branchname" --> </th>
+			<th class="circulation" colspan="5">Reserves in wait to the library : <!-- TMPL_VAR NAME="branchname" --> </th>
 		</tr>
 		<tr>
-			<th class="circulation">Date of reserv</th>
+			<th class="circulation">Date of reserve</th>
 			<th class="circulation">Title</th>
 			<th class="circulation">Borrower</th>
 			<th class="circulation">Localisation</th>
@@ -28,7 +28,7 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="reserv" -->
 			<tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
-				<td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserv over <!-- /TMPL_IF --></td>
+				<td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve over <!-- /TMPL_IF --></td>
 				<td>
 					<p>
 						<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
