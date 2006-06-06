@@ -86,7 +86,7 @@
 	<tr><th>Category code</th><td><input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)" /></td></tr>
 	<!-- /TMPL_IF -->
 	<tr><th>Description</th><td>&nbsp; <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME=description -->" /></td></tr>
-	<tr><th>Enrolment period</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> years</td></tr>
+	<tr><th>Enrolment period</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> months</td></tr>
 	<tr><th>Upperage limit</th><td>&nbsp; <input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /> years</td></tr>
 	<tr><th>Age Required</th><td>&nbsp; <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /> years</td></tr>
 	<tr><th>Enrollment fee</th><td>$ <input type="text" name="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
@@ -126,7 +126,7 @@
 	<div class="compact"><table>
 	<tr><th>Category code</th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th>Description</th><td><!-- TMPL_VAR NAME="description" --></td></tr>
-	<tr><th>Enrolment period</th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td></tr>
+	<tr><th>Enrolment period</th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
 	<tr><th>Upperage limit</th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
 	<tr><th>Age Required</th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
 	<tr><th>Enrolment fee</th><td>$<!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
@@ -175,7 +175,7 @@
 		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPl_IF -->
                         <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="description" --></a></td><td><!-- TMPL_VAR NAME="categorycode" --></td>
                         
-                        <td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td>
+                        <td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td>
                         <td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
