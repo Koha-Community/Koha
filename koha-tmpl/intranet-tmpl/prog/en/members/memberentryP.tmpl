@@ -53,7 +53,7 @@
 		<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
 		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
-		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
+		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" >
 		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
@@ -83,7 +83,7 @@
 <!-- 		from form 3 -->
 		<input type="hidden" name="dateenrolled"  value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		<input type="hidden" name="dateexpiry"  value="<!-- TMPL_VAR NAME="dateexpiry" -->">
-		<textarea  style="display:none;" name="opacnotes" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnotes"--></textarea>
+		<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 		<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		<input type="hidden" name="login"   value="<!-- TMPL_VAR NAME="login" -->">
 		<input type="hidden" name="password"   value="<!-- TMPL_VAR NAME="password" -->">	
@@ -263,7 +263,7 @@
 <!-- 		from form 3 -->
 		<input type="hidden" name="dateenrolled"  value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		<input type="hidden" name="dateexpiry"  value="<!-- TMPL_VAR NAME="dateexpiry" -->">
-		<textarea  style="display:none;" name="opacnotes" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnotes"--></textarea>
+		<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 		<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		<input type="hidden" name="login"   value="<!-- TMPL_VAR NAME="login" -->">
 		<input type="hidden" name="password"   value="<!-- TMPL_VAR NAME="password" -->">	
@@ -580,13 +580,13 @@
 							onblur="CheckDate(document.form.dateexpiry.value);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
 		</p>
 		<p>
-			<!-- TMPL_IF NAME="mandatoryopacnotes" -->
+			<!-- TMPL_IF NAME="mandatoryopacnote" -->
 				<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 				<label>
 			<!-- /TMPL_IF-->	
 			OPAC note</label>
-			<textarea  name="opacnotes" cols="70" rows="2"   ><!-- TMPL_VAR NAME="opacnotes" --></textarea>
+			<textarea  name="opacnote" cols="70" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryborrowernotes" -->	
