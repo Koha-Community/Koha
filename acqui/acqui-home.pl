@@ -34,14 +34,23 @@ my $totcomtd=0;
 my $totavail=0;
 my @loop_budget = ();
 for (my $i=0;$i<$count;$i++){
+
+    if ( $toggle eq 0 ) {
+        $toggle = 1;
+    }
+    else {
+        $toggle = 0;
+    }
 	my ($spent,$comtd)=bookfundbreakdown($results[$i]->{'bookfundid'});
 	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
 	my %line;
+
 	$line{bookfundname} = $results[$i]->{'bookfundname'};
 	$line{budgetamount} = $results[$i]->{'budgetamount'};
 	$line{spent} = sprintf  ("%.2f", $spent);
 	$line{comtd} = sprintf  ("%.2f",$comtd);
 	$line{avail}  = sprintf  ("%.2f",$avail);
+        $line{'toggle'}     = $toggle;
 	push @loop_budget, \%line;
 	$total+=$results[$i]->{'budgetamount'};
 	$totspent+=$spent;
