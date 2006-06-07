@@ -47,8 +47,9 @@ overdue items. It is primarily used by the 'misc/fines2.pl' script.
 
 =cut
 
-@ISA = qw(Exporter);
-@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine &ReplacementCost);
+@ISA    = qw(Exporter);
+@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine &ReplacementCost
+  GetFine, ReplacementCost2);
 
 =item Getoverdues
 
@@ -63,23 +64,28 @@ reference-to-hash whose keys are the fields of the issues table in the
 Koha database.
 
 =cut
+
 #'
-sub Getoverdues{
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from issues where date_due < now() and returndate is
-  NULL order by borrowernumber");
-  $sth->execute;
-  # FIXME - Use push @results
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-#  print @results;
-  # FIXME - Bogus API.
-  return($i,\@results);
+sub Getoverdues {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        "Select * from issues where date_due < now() and returndate is
+  NULL order by borrowernumber"
+    );
+    $sth->execute;
+
+    # FIXME - Use push @results
+    my $i = 0;
+    my @results;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $results[$i] = $data;
+        $i++;
+    }
+    $sth->finish;
+
+    #  print @results;
+    # FIXME - Bogus API.
+    return ( $i, \@results );
 }
 
 =item CalcFine
@@ -129,74 +135,82 @@ C<$message> is a text message, either "First Notice", "Second Notice",
 or "Final Notice".
 
 =cut
+
 #'
 sub CalcFine {
-  my ($itemnumber,$bortype,$difference)=@_;
-  my $dbh = C4::Context->dbh;
+    my ( $itemnumber, $bortype, $difference ) = @_;
+    my $dbh = C4::Context->dbh;
 
-  # Look up the categoryitem record for this book's item type and the
-  # given borrwer type.
-  # The reason this query is so messy is that it's a messy question:
-  # given the barcode, we can find the book's items record. This gives
-  # us the biblioitems record, which gives us a set of categoryitem
-  # records. Then we select the one that corresponds to the desired
-  # borrower type.
+    # Look up the categoryitem record for this book's item type and the
+    # given borrwer type.
+    # The reason this query is so messy is that it's a messy question:
+    # given the barcode, we can find the book's items record. This gives
+    # us the biblioitems record, which gives us a set of categoryitem
+    # records. Then we select the one that corresponds to the desired
+    # borrower type.
 
-  # FIXME - Is it really necessary to get absolutely everything from
-  # all four tables? It looks as if this code only wants
-  # firstremind, chargeperiod, accountsent, and chargename from the
-  # categoryitem table.
+    # FIXME - Is it really necessary to get absolutely everything from
+    # all four tables? It looks as if this code only wants
+    # firstremind, chargeperiod, accountsent, and chargename from the
+    # categoryitem table.
 
-  my $sth=$dbh->prepare("Select * from items,biblioitems,itemtypes,issuingrules where items.itemnumber=?
+    my $sth = $dbh->prepare(
+"Select * from items,biblioitems,itemtypes,issuingrules where items.itemnumber=?
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode=? and (items.itemlost <> 1 or items.itemlost is NULL)");
-#  print $query;
-  $sth->execute($itemnumber,$bortype);
-  my $data=$sth->fetchrow_hashref;
-	# FIXME - Error-checking: the item might be lost, or there
-	# might not be an entry in 'categoryitem' for this item type
-	# or borrower type.
-  $sth->finish;
-  my $amount=0;
-  my $printout;
+  categoryitem.categorycode=? and (items.itemlost <> 1 or items.itemlost is NULL)"
+    );
 
-  # Is it time to send out the first reminder?
-  # FIXME - I'm not sure the "=="s are correct here. Let's say that
-  # $data->{firstremind} is today, but 'fines2.pl' doesn't run for
-  # some reason (the cron daemon died, the server crashed, the
-  # sysadmin had the machine down for maintenance, or whatever).
-  #
-  # Then the next day, the book is $data->{firstremind}+1 days
-  # overdue. But this function returns $amount == 0, $printout ==
-  # undef, on the assumption that 'fines2.pl' ran the previous day. So
-  # the first thing the patron gets is a second notice, but that's a
-  # week after the server crash, so people may not connect the two
-  # events.
-  if ($difference == $data->{'firstremind'}){
-    # Yes. Set the fine as listed.
-    $amount=$data->{'fine'};
-    $printout="First Notice";
-  }
+    #  print $query;
+    $sth->execute( $itemnumber, $bortype );
+    my $data = $sth->fetchrow_hashref;
 
-  # Is it time to send out a second reminder?
-  my $second=$data->{'firstremind'}+$data->{'chargeperiod'};
-  if ($difference == $second){
-    # Yes. The fine is double.
-    $amount=$data->{'fine'}*2;
-    $printout="Second Notice";
-  }
+    # FIXME - Error-checking: the item might be lost, or there
+    # might not be an entry in 'categoryitem' for this item type
+    # or borrower type.
+    $sth->finish;
+    my $amount = 0;
+    my $printout;
 
-  # Is it time to send the account to a collection agency?
-  # FIXME - At least, I *think* that's what this code is doing.
-  if ($difference == $data->{'accountsent'} && $data->{'fine'} > 0){
-    # Yes. Set the fine at 5 local monetary units.
-    # FIXME - This '5' shouldn't be hard-wired.
-    $amount=5;
-    $printout="Final Notice";
-  }
-  return($amount,$data->{'chargename'},$printout);
+    # Is it time to send out the first reminder?
+    # FIXME - I'm not sure the "=="s are correct here. Let's say that
+    # $data->{firstremind} is today, but 'fines2.pl' doesn't run for
+    # some reason (the cron daemon died, the server crashed, the
+    # sysadmin had the machine down for maintenance, or whatever).
+    #
+    # Then the next day, the book is $data->{firstremind}+1 days
+    # overdue. But this function returns $amount == 0, $printout ==
+    # undef, on the assumption that 'fines2.pl' ran the previous day. So
+    # the first thing the patron gets is a second notice, but that's a
+    # week after the server crash, so people may not connect the two
+    # events.
+    if ( $difference == $data->{'firstremind'} ) {
+
+        # Yes. Set the fine as listed.
+        $amount   = $data->{'fine'};
+        $printout = "First Notice";
+    }
+
+    # Is it time to send out a second reminder?
+    my $second = $data->{'firstremind'} + $data->{'chargeperiod'};
+    if ( $difference == $second ) {
+
+        # Yes. The fine is double.
+        $amount   = $data->{'fine'} * 2;
+        $printout = "Second Notice";
+    }
+
+    # Is it time to send the account to a collection agency?
+    # FIXME - At least, I *think* that's what this code is doing.
+    if ( $difference == $data->{'accountsent'} && $data->{'fine'} > 0 ) {
+
+        # Yes. Set the fine at 5 local monetary units.
+        # FIXME - This '5' shouldn't be hard-wired.
+        $amount   = 5;
+        $printout = "Final Notice";
+    }
+    return ( $amount, $data->{'chargename'}, $printout );
 }
 
 =item UpdateFine
@@ -224,66 +238,86 @@ and sets it to C<$amount>, creating, if necessary, a new entry in the
 accountlines table of the Koha database.
 
 =cut
+
 #'
 # FIXME - This API doesn't look right: why should the caller have to
 # specify both the item number and the borrower number? A book can't
 # be on loan to two different people, so the item number should be
 # sufficient.
 sub UpdateFine {
-  my ($itemnum,$bornum,$amount,$type,$due)=@_;
-  my $dbh = C4::Context->dbh;
-  # FIXME - What exactly is this query supposed to do? It looks up an
-  # entry in accountlines that matches the given item and borrower
-  # numbers, where the description contains $due, and where the
-  # account type has one of several values, but what does this _mean_?
-  # Does it look up existing fines for this item?
-  # FIXME - What are these various account types? ("FU", "O", "F", "M")
-  my $sth=$dbh->prepare("Select * from accountlines where itemnumber=? and
+    my ( $itemnum, $bornum, $amount, $type, $due ) = @_;
+    my $dbh = C4::Context->dbh;
+
+    # FIXME - What exactly is this query supposed to do? It looks up an
+    # entry in accountlines that matches the given item and borrower
+    # numbers, where the description contains $due, and where the
+    # account type has one of several values, but what does this _mean_?
+    # Does it look up existing fines for this item?
+    # FIXME - What are these various account types? ("FU", "O", "F", "M")
+    my $sth = $dbh->prepare(
+        "Select * from accountlines where itemnumber=? and
   borrowernumber=? and (accounttype='FU' or accounttype='O' or
-  accounttype='F' or accounttype='M') and description like ?");
-  $sth->execute($itemnum,$bornum,"%$due%");
+  accounttype='F' or accounttype='M') and description like ?"
+    );
+    $sth->execute( $itemnum, $bornum, "%$due%" );
 
-  if (my $data=$sth->fetchrow_hashref){
-    # I think this if-clause deals with the case where we're updating
-    # an existing fine.
-#    print "in accounts ...";
-    if ($data->{'amount'} != $amount){
+    if ( my $data = $sth->fetchrow_hashref ) {
 
-#      print "updating";
-      my $diff=$amount - $data->{'amount'};
-      my $out=$data->{'amountoutstanding'}+$diff;
-      my $sth2=$dbh->prepare("update accountlines set date=now(), amount=?,
+        # I think this if-clause deals with the case where we're updating
+        # an existing fine.
+        #    print "in accounts ...";
+        if ( $data->{'amount'} != $amount ) {
+
+            #      print "updating";
+            my $diff = $amount - $data->{'amount'};
+            my $out  = $data->{'amountoutstanding'} + $diff;
+            my $sth2 = $dbh->prepare(
+                "update accountlines set date=now(), amount=?,
       amountoutstanding=?,accounttype='FU' where
       borrowernumber=? and itemnumber=?
-      and (accounttype='FU' or accounttype='O') and description like ?");
-      $sth2->execute($amount,$out,$data->{'borrowernumber'},$data->{'itemnumber'},"%$due%");
-      $sth2->finish;
-    } else {
-#      print "no update needed $data->{'amount'}"
+      and (accounttype='FU' or accounttype='O') and description like ?"
+            );
+            $sth2->execute( $amount, $out, $data->{'borrowernumber'},
+                $data->{'itemnumber'}, "%$due%" );
+            $sth2->finish;
+        }
+        else {
+
+            #      print "no update needed $data->{'amount'}"
+        }
     }
-  } else {
-    # I think this else-clause deals with the case where we're adding
-    # a new fine.
-    my $sth4=$dbh->prepare("select title from biblio,items where items.itemnumber=?
-    and biblio.biblionumber=items.biblionumber");
-    $sth4->execute($itemnum);
-    my $title=$sth4->fetchrow_hashref;
-    $sth4->finish;
- #   print "not in account";
-    my $sth3=$dbh->prepare("Select max(accountno) from accountlines");
-    $sth3->execute;
-    # FIXME - Make $accountno a scalar.
-    my @accountno=$sth3->fetchrow_array;
-    $sth3->finish;
-    $accountno[0]++;
-    my $sth2=$dbh->prepare("Insert into accountlines
+    else {
+
+        # I think this else-clause deals with the case where we're adding
+        # a new fine.
+        my $sth4 = $dbh->prepare(
+            "select title from biblio,items where items.itemnumber=?
+    and biblio.biblionumber=items.biblionumber"
+        );
+        $sth4->execute($itemnum);
+        my $title = $sth4->fetchrow_hashref;
+        $sth4->finish;
+
+        #   print "not in account";
+        my $sth3 = $dbh->prepare("Select max(accountno) from accountlines");
+        $sth3->execute;
+
+        # FIXME - Make $accountno a scalar.
+        my @accountno = $sth3->fetchrow_array;
+        $sth3->finish;
+        $accountno[0]++;
+        my $sth2 = $dbh->prepare(
+            "Insert into accountlines
     (borrowernumber,itemnumber,date,amount,
     description,accounttype,amountoutstanding,accountno) values
-    (?,?,now(),?,?,'FU',?,?)");
-    $sth2->execute($bornum,$itemnum,$amount,"$type $title->{'title'} $due",$amount,$accountno[0]);
-    $sth2->finish;
-  }
-  $sth->finish;
+    (?,?,now(),?,?,'FU',?,?)"
+        );
+        $sth2->execute( $bornum, $itemnum, $amount,
+            "$type $title->{'title'} $due",
+            $amount, $accountno[0] );
+        $sth2->finish;
+    }
+    $sth->finish;
 }
 
 =item BorType
@@ -298,17 +332,20 @@ C<$borrower> contains all information about both the borrower and
 category he or she belongs to.
 
 =cut
+
 #'
 sub BorType {
-  my ($borrowernumber)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from borrowers,categories where
+    my ($borrowernumber) = @_;
+    my $dbh              = C4::Context->dbh;
+    my $sth              = $dbh->prepare(
+        "Select * from borrowers,categories where
   borrowernumber=? and
-borrowers.categorycode=categories.categorycode");
-  $sth->execute($borrowernumber);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
+borrowers.categorycode=categories.categorycode"
+    );
+    $sth->execute($borrowernumber);
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    return ($data);
 }
 
 =item ReplacementCost
@@ -318,18 +355,48 @@ borrowers.categorycode=categories.categorycode");
 Returns the replacement cost of the item with the given item number.
 
 =cut
+
 #'
-sub ReplacementCost{
-  my ($itemnum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select replacementprice from items where itemnumber=?");
-  $sth->execute($itemnum);
-  # FIXME - Use fetchrow_array or something.
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data->{'replacementprice'});
+sub ReplacementCost {
+    my ($itemnum) = @_;
+    my $dbh       = C4::Context->dbh;
+    my $sth       =
+      $dbh->prepare("Select replacementprice from items where itemnumber=?");
+    $sth->execute($itemnum);
+
+    # FIXME - Use fetchrow_array or something.
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    return ( $data->{'replacementprice'} );
 }
 
+sub GetFine {
+    my ( $itemnum, $bornum ) = @_;
+    my $dbh   = C4::Context->dbh();
+    my $query = "SELECT sum(amountoutstanding) FROM accountlines 
+    where accounttype like 'F%'  
+  AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $itemnum, $bornum );
+    my $data = $sth->fetchrow_hashref();
+    $sth->finish();
+    $dbh->disconnect();
+    return ( $data->{'sum(amountoutstanding)'} );
+}
+
+sub ReplacementCost2 {
+    my ( $itemnum, $bornum ) = @_;
+    my $dbh   = C4::Context->dbh();
+    my $query = "SELECT amountoutstanding FROM accountlines
+    where accounttype like 'L'  AND amountoutstanding > 0 AND
+  itemnumber = ? AND borrowernumber= ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $itemnum, $bornum );
+    my $data = $sth->fetchrow_hashref();
+    $sth->finish();
+    $dbh->disconnect();
+    return ( $data->{'amountoutstanding'} );
+}
 1;
 __END__
 
