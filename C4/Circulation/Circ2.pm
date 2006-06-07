@@ -951,9 +951,12 @@ sub issuebook {
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-                if ($cancelreserve){
-    				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-                }
+                                if ($cancelreserve){
+    				    CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+                                } else {
+				    # set waiting reserve to first in reserve queue as book isn't waiting now
+				    UpdateReserve(1, $res->{'biblionumber'}, $res->{'borrowernumber'}, $res->{'branchcode'});
+				}
 			} elsif ($restype eq "Reserved") {
 # 				warn "Reserved";
 				# The item is on reserve for someone else.
@@ -1663,7 +1666,7 @@ sub getissues {
 			AND items.biblioitemnumber = biblioitems.biblioitemnumber
 			AND itemtypes.itemtype     = biblioitems.itemtype
 			AND issues.returndate      IS NULL
-			ORDER BY issues.date_due";
+			ORDER BY issues.date_due DESC";
 	#    print $select;
 	my $sth=$dbh->prepare($select);
 	$sth->execute($borrowernumber);
@@ -1759,7 +1762,7 @@ sub renewstatus {
 		# because it's a bit messy: given the item number, we need to find
 		# the biblioitem, which gives us the itemtype, which tells us
 		# whether it may be renewed.
-		my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+		my $sth2 = $dbh->prepare("SELECT renewalsallowed from items,biblioitems,itemtypes
 		where (items.itemnumber = ?)
 		and (items.biblioitemnumber = biblioitems.biblioitemnumber)
 		and (biblioitems.itemtype = itemtypes.itemtype)");
@@ -1890,9 +1893,26 @@ sub calc_charges {
 								and (biblioitems.biblioitemnumber = items.biblioitemnumber)
 								and (biblioitems.itemtype = itemtypes.itemtype)");
 	$sth1->execute($itemno);
-	my $data1=$sth1->fetchrow_hashref;
-	$item_type = $data1->{'itemtype'};
-	$charge = $data1->{'rentalcharge'};
+        if (my $data1=$sth1->fetchrow_hashref) {
+	    $item_type = $data1->{'itemtype'};
+	    $charge = $data1->{'rentalcharge'};
+	    my $q2 = "select rentaldiscount from issuingrules,borrowers
+              where (borrowers.borrowernumber = ?)
+              and (borrowers.categorycode = issuingrules.categorycode)
+              and (issuingrules.itemtype = ?)";
+            my $sth2=$dbh->prepare($q2);
+            $sth2->execute($bornum,$item_type);
+            if (my $data2=$sth2->fetchrow_hashref) {
+		my $discount = $data2->{'rentaldiscount'};
+		if ($discount eq 'NULL') {
+		    $discount=0;
+		}
+		$charge = ($charge *(100 - $discount)) / 100;
+		#               warn "discount is $discount";
+	    }
+        $sth2->finish;
+        }
+
 	$sth1->finish;
 	return ($charge,$item_type);
 }
