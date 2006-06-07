@@ -1,9 +1,7 @@
 #!/usr/bin/perl
 
-#written 27/01/2000
-#script to display borrowers reading record
-
-
+# written 27/01/2000
+# script to display borrowers reading record
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -42,9 +40,13 @@ if ($order2 eq ''){
   $order2="date_due desc";
 }
 my $limit=$input->param('limit');
-if ($limit eq 'full' || $limit eq 0){
-  $limit=0;
-} else {
+
+if ($limit){
+    if ($limit eq 'full'){
+	$limit=0;
+    }
+} 
+else {
   $limit=50;
 }
 my ($count,$issues)=allissues($bornum,$order2,$limit);
