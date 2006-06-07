@@ -765,7 +765,7 @@ sub TooMany ($$){
 
 
 sub canbookbeissued {
-	my ($env,$borrower,$barcode,$year,$month,$day) = @_;
+	my ($env,$borrower,$barcode,$year,$month,$day,$inprocess) = @_;
 	my %needsconfirmation; # filled with problems that needs confirmations
 	my %issuingimpossible; # filled with problems that causes the issue to be IMPOSSIBLE
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -797,10 +797,18 @@ sub canbookbeissued {
 
 # DEBTS
 	my $amount = checkaccount($env,$borrower->{'borrowernumber'}, $dbh,$duedate);
-	if ($amount >0) {
+        if($C4::Context->preference("IssuingInProcess")){
+	    my $amountlimit = $C4::Context->preference("maxoutstanding");
+	    if ($amount > $amountlimit && !$inprocess) {
+		$issuingimpossible{DEBT} = sprintf("%.2f",$amount);
+	    } elsif ($amount <= $amountlimit && !$inprocess) {
+		$needsconfirmation{DEBT} = sprintf("%.2f",$amount);
+	    }
+        } else {
+	    if ($amount >0) {
 		$needsconfirmation{DEBT} = $amount;
+	    }
 	}
-
 
 #
 # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
