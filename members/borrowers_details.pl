@@ -63,7 +63,7 @@ my $category_type=$input->param('category_type');
  		$data=borrdata('',$borrowernumber);
  		%data=%$data;
  	}
- my ($category_type,$description) = checkcategorytype($data{'categorycode'});	
+ my ($category_type,$description) = getcategorytype($data{'categorycode'});	
 
 $template->param(		borrowernumber  => $borrowernumber,#register number
 				#transform value  in capital or capital for first letter of the word

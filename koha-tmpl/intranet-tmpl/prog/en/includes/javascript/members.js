@@ -157,12 +157,12 @@ if (nav< document.form.step.value) {
 }
 function Dopop(link) {
 // // 	var searchstring=document.form.value[i].value;
-	newin=window.open(link,"popup",'width=500,height=250,resizable=no,toolbar=false,scrollbars=no,top');
+	newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=no,top');
 }
 
 function Dopopguarantor(link) {
 
-	newin=window.open(link,"popup",'width=600,height=400,resizable=no,toolbar=false,scrollbars=no,top');
+	newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=no,top');
 }
 
 </script>
