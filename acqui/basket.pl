@@ -5,7 +5,6 @@
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -34,117 +33,121 @@ use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
 
-my $query =new CGI;
-my $basketno = $query->param('basket');
+my $query        = new CGI;
+my $basketno     = $query->param('basket');
 my $booksellerid = $query->param('supplierid');
-my $order = $query->param('order');
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/basket.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
-			     debug => 1,
-			     });
-my ($count,@results);
-
+my $order        = $query->param('order');
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/basket.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 1 },
+        debug           => 1,
+    }
+);
+my ( $count, @results );
 
 my $basket = getbasket($basketno);
+
 # FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my ($count2,@booksellers)=bookseller($booksellerid);
+my ( $count2, @booksellers ) = bookseller($booksellerid);
 
 # get librarian branch...
-if (C4::Context->preference("IndependantBranches")) {
-	my $userenv = C4::Context->userenv;
-	unless ($userenv->{flags} == 1){
-		my $validtest = ($basket->{creationdate} eq '') 
-					|| ($basket->{branch} eq '')
-					|| ($userenv->{branch} eq $basket->{branch})
-					|| ($userenv->{branch} eq '')
-					|| ($basket->{branch} eq '');
-		unless ($validtest) {
-			print $query->redirect("../mainpage.pl");
-			exit 1;
-		}
-	}
+if ( C4::Context->preference("IndependantBranches") ) {
+    my $userenv = C4::Context->userenv;
+    unless ( $userenv->{flags} == 1 ) {
+        my $validtest = ( $basket->{creationdate} eq '' )
+          || ( $basket->{branch}  eq '' )
+          || ( $userenv->{branch} eq $basket->{branch} )
+          || ( $userenv->{branch} eq '' )
+          || ( $basket->{branch}  eq '' );
+        unless ($validtest) {
+            print $query->redirect("../mainpage.pl");
+            exit 1;
+        }
+    }
 }
 
 # if new basket, pre-fill infos
-$basket->{creationdate} = "" unless ($basket->{creationdate});
-$basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});
-($count,@results)=getbasketcontent($basketno,'',$order);
+$basket->{creationdate} = ""            unless ( $basket->{creationdate} );
+$basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
+( $count, @results ) = getbasketcontent( $basketno, '', $order );
 
-my $line_total; # total of each line
-my $sub_total; # total of line totals
-my $gist;      # GST
-my $grand_total; # $subttotal + $gist
+my $line_total;     # total of each line
+my $sub_total;      # total of line totals
+my $gist;           # GST
+my $grand_total;    # $subttotal + $gist
 
 # my $line_total_est; # total of each line
-my $sub_total_est; # total of line totals
-my $gist_est;      # GST
-my $grand_total_est; # $subttotal + $gist
+my $sub_total_est;      # total of line totals
+my $gist_est;           # GST
+my $grand_total_est;    # $subttotal + $gist
 
 my $qty_total;
 
 my @books_loop;
-for (my $i=0;$i<$count;$i++){
-	my $rrp=$results[$i]->{'listprice'};
-	$rrp=curconvert($results[$i]->{'currency'},$rrp);
+for ( my $i = 0 ; $i < $count ; $i++ ) {
+    my $rrp = $results[$i]->{'listprice'};
+    $rrp = curconvert( $results[$i]->{'currency'}, $rrp );
 
-	$sub_total_est+=$results[$i]->{'quantity'}*$results[$i]->{'rrp'};
-	$line_total=$results[$i]->{'quantity'}*$results[$i]->{'ecost'};
-	$sub_total+=$line_total;
-	$qty_total += $results[$i]->{'quantity'};
-	my %line;
-	$line{ordernumber} = $results[$i]->{'ordernumber'};
-	$line{publishercode} = $results[$i]->{'publishercode'};
-	$line{isbn} = $results[$i]->{'isbn'};
-	$line{booksellerid} = $results[$i]->{'booksellerid'};
-	$line{basketno}=$basketno;
-	$line{title} = $results[$i]->{'title'};
-	$line{notes} = $results[$i]->{'notes'};
-	$line{author} = $results[$i]->{'author'};
-	$line{i} = $i;
-	$line{rrp} = sprintf("%.2f",$results[$i]->{'rrp'});
-	$line{ecost} = sprintf("%.2f",$results[$i]->{'ecost'});
-	$line{quantity} = $results[$i]->{'quantity'};
-	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
-	$line{line_total} = sprintf("%.2f",$line_total);
-	$line{biblionumber} = $results[$i]->{'biblionumber'};
-	$line{bookfundid} = $results[$i]->{'bookfundid'};
-	$line{odd} = $i %2;
-	push @books_loop, \%line;
+    $sub_total_est += $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
+    $line_total = $results[$i]->{'quantity'} * $results[$i]->{'ecost'};
+    $sub_total += $line_total;
+    $qty_total += $results[$i]->{'quantity'};
+    my %line;
+    $line{ordernumber}      = $results[$i]->{'ordernumber'};
+    $line{publishercode}    = $results[$i]->{'publishercode'};
+    $line{isbn}             = $results[$i]->{'isbn'};
+    $line{booksellerid}     = $results[$i]->{'booksellerid'};
+    $line{basketno}         = $basketno;
+    $line{title}            = $results[$i]->{'title'};
+    $line{notes}            = $results[$i]->{'notes'};
+    $line{author}           = $results[$i]->{'author'};
+    $line{i}                = $i;
+    $line{rrp}              = sprintf( "%.2f", $results[$i]->{'rrp'} );
+    $line{ecost}            = sprintf( "%.2f", $results[$i]->{'ecost'} );
+    $line{quantity}         = $results[$i]->{'quantity'};
+    $line{quantityrecieved} = $results[$i]->{'quantityreceived'};
+    $line{line_total}       = sprintf( "%.2f", $line_total );
+    $line{biblionumber}     = $results[$i]->{'biblionumber'};
+    $line{bookfundid}       = $results[$i]->{'bookfundid'};
+    $line{odd}              = $i % 2;
+    push @books_loop, \%line;
 }
-my $prefgist =C4::Context->preference("gist");
-$gist=sprintf("%.2f",$sub_total*$prefgist);
-$grand_total=$sub_total+$gist;
-$grand_total_est = $sub_total_est+sprintf("%.2f",$sub_total_est*$prefgist);
-$gist_est = sprintf("%.2f",$sub_total_est*$prefgist);
-$template->param(basketno => $basketno,
-				creationdate => format_date($basket->{creationdate}),
-				authorisedby => $basket->{authorisedby},
-				authorisedbyname => $basket->{authorisedbyname},
-				closedate => format_date($basket->{closedate}),
-				active => $booksellers[0]->{'active'},
-				booksellerid=> $booksellers[0]->{'id'},
-				name => $booksellers[0]->{'name'},
-				address1 => $booksellers[0]->{'address1'},
-				address2 => $booksellers[0]->{'address2'},
-				address3 => $booksellers[0]->{'address3'},
-				address4 => $booksellers[0]->{'address4'},
-				entrydate => format_date($results[0]->{'entrydate'}),
-				books_loop => \@books_loop,
-				count =>$count,
-				sub_total => $sub_total,
-				gist => $gist,
-				grand_total =>$grand_total,
-				sub_total_est => $sub_total_est,
-				gist_est => $gist_est,
-				grand_total_est =>$grand_total_est,
-				currency => $booksellers[0]->{'listprice'},
-				qty_total => $qty_total,
-				);
+my $prefgist = C4::Context->preference("gist");
+$gist            = sprintf( "%.2f", $sub_total * $prefgist );
+$grand_total     = $sub_total + $gist;
+$grand_total_est =
+  $sub_total_est + sprintf( "%.2f", $sub_total_est * $prefgist );
+$gist_est = sprintf( "%.2f", $sub_total_est * $prefgist );
+$template->param(
+    basketno         => $basketno,
+    creationdate     => format_date( $basket->{creationdate} ),
+    authorisedby     => $basket->{authorisedby},
+    authorisedbyname => $basket->{authorisedbyname},
+    closedate        => format_date( $basket->{closedate} ),
+    active           => $booksellers[0]->{'active'},
+    booksellerid     => $booksellers[0]->{'id'},
+    name             => $booksellers[0]->{'name'},
+    address1         => $booksellers[0]->{'address1'},
+    address2         => $booksellers[0]->{'address2'},
+    address3         => $booksellers[0]->{'address3'},
+    address4         => $booksellers[0]->{'address4'},
+    entrydate        => format_date( $results[0]->{'entrydate'} ),
+    books_loop       => \@books_loop,
+    count            => $count,
+    sub_total        => $sub_total,
+    gist             => $gist,
+    grand_total      => $grand_total,
+    sub_total_est    => $sub_total_est,
+    gist_est         => $gist_est,
+    grand_total_est  => $grand_total_est,
+    currency         => $booksellers[0]->{'listprice'},
+    qty_total        => $qty_total,
+);
 output_html_with_http_headers $query, $cookie, $template->output;
