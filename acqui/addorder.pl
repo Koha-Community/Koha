@@ -32,6 +32,7 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
 
+#use Data::Dumper;
 #use Date::Manip;
 
 my $input = new CGI;
@@ -61,10 +62,11 @@ my $isbn          = $input->param('ISBN');
 my $itemtype      = $input->param('format');
 my $quantity      = $input->param('quantity');
 my $listprice     = $input->param('list_price');
+my $branch        = $input->param('branch');
 if ( $listprice eq '' ) {
     $listprice = 0;
 }
-my $series = $input->param('Series');
+my $series = $input->param('series');
 
 # my $supplier=$input->param('supplier');
 my $notes         = $input->param('notes');
@@ -80,6 +82,12 @@ my $sub           = $input->param('sub');
 my $invoice       = $input->param('invoice');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
+my $donation      = $input->param('donation');
+my $user          = $input->remote_user;
+
+#warn "CREATEBIBITEM =  $input->param('createbibitem')";
+#warn Dumper $input->param('createbibitem');
+my $createbibitem = $input->param('createbibitem');
 
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
@@ -115,10 +123,64 @@ if ( $quantity ne '0' ) {
             changestatus( $suggestionid, 'ORDERED', '', $bibnum );
         }
     }
-    else {
+
+    elsif ( $createbibitem eq 'YES' ) {
         $bibnum     = $input->param('biblio');
         $bibitemnum = $input->param('bibitemnum');
+        $bibitemnum = &newbiblioitem(
+            {
+                biblionumber  => $bibnum,
+                itemtype      => $itemtype ? $itemtype : "",
+                isbn          => $isbn ? $isbn : "",
+                publishercode => $publishercode ? $publishercode : "",
+            }
+        );
+        &modbiblio(
+            {
+                biblionumber  => $bibnum,
+                title         => $title ? $title : "",
+                author        => $author ? $author : "",
+                copyrightdate => $copyrightdate ? $copyrightdate : "",
+                series        => $series ? $series : ""
+            }
+        );
+    }
+
+    # then attach it to an existing bib
+
+    else {
+        warn "attaching to an existing bibitem";
+
+        $bibnum = $input->param('biblio');
+
+        # if we are moddig the bibitem, not creating it createbib wont be set,
+        #
+        if ($createbibitem) {
+            $bibitemnum = $createbibitem;
+        }
+        else {
+            $bibitemnum = $input->param('bibitemnum');
+        }
+
         my $oldtype = $input->param('oldtype');
+        &modbibitem(
+            {
+                biblioitemnumber => $bibitemnum,
+                isbn             => $isbn,
+                publishercode    => $publishercode,
+                itemtype         =>
+                  $itemtype,    # added itemtype, not prev. being changed.
+            }
+        );
+        &modbiblio(
+            {
+                biblionumber  => $bibnum,
+                title         => $title ? $title : "",
+                author        => $author ? $author : "",
+                copyrightdate => $copyrightdate ? $copyrightdate : "",
+                series        => $series ? $series : ""
+            },
+        );
     }
     if ($ordnum) {
 
@@ -132,14 +194,32 @@ if ( $quantity ne '0' ) {
         );
     }
     else {
-
-        # 	warn "new order : ";
-        $basketno = neworder(
+        ( $basketno, $ordnum ) = neworder(
             $basketno,  $bibnum,       $title,        $quantity,
             $listprice, $booksellerid, $loggedinuser, $notes,
             $bookfund,  $bibitemnum,   $rrp,          $ecost,
             $gst,       $budget,       $cost,         $sub,
             $invoice,   $sort1,        $sort2
+        );
+    }
+    if ($donation) {
+        my $barcode  = $input->param('barcode');
+        my @barcodes = split( /\,| |\|/, $barcode );
+        my ($error)  = newitems(
+            {
+                biblioitemnumber => $bibitemnum,
+                biblionumber     => $bibnum,
+                replacementprice => $rrp,
+                price            => $cost,
+                booksellerid     => $booksellerid,
+                homebranch       => $branch,
+                loan             => 0
+            },
+            @barcodes
+        );
+        receiveorder(
+            $bibnum,  $ordnum, $quantity, $user, $cost,
+            $invoice, 0,       $bookfund, $rrp
         );
     }
 }
