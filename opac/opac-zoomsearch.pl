@@ -11,6 +11,7 @@ use CGI;
 my $query=new CGI;
 my $op = $query->param('op'); #show the search form or execute the search
 my $query_form = $query->param('query_form'); # which query form was submitted
+my $cql_query = $query->param('cql_query');
 my @newresults;
 my ($template,$borrowernumber,$cookie);
 my @forminputs;		#this is for the links to navigate among the results when they are more than the maximum number of results per page
@@ -23,36 +24,33 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
                                          type => "opac",
                                          authnotrequired => 1,});
 
-my $number_of_results = $query->param('results_per_page');
-$number_of_results = 20 unless ($number_of_results); #this could be a parameter with 20 50 or 100 results per page
-my $startfrom = $query->param('startfrom');
+	my $number_of_results = $query->param('results_per_page');
+	$number_of_results = 20 unless ($number_of_results); #this could be a parameter with 20 50 or 100 results per page
+	my $startfrom = $query->param('startfrom');
 	($startfrom) || ($startfrom=0);
-# push @forminputs, {field => "results_per_page", value => $number_of_results};	    
-## OK, We're searching
-# STEP 1. We're a CGI script,so first thing to do is get the
-# query into PQF format so we can use the Koha API properly
-my $cql_query = $query->param('cql_query');
-my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query) = cgi2pqf($query);
-warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
-push @forminputs, { field => "cql_query" , value => $cql_query} ;
-push @forminputs, {field => 'pqf_sort_by', value => $pqf_sort_by} ;
-push @forminputs, {field => 'pqf_prox_ops', value => $pqf_prox_ops};
-push @forminputs, { field => 'pqf_bool_ops' , value => $pqf_bool_ops};
-push @forminputs, { field => 'pqf_query' , value => $pqf_query };
-$searchdesc=$cql_query.$pqf_query;
-# STEP 2. OK, now we have PQF, so we can pass off the query to
-# the API
-my $reorder=$query->param('reorder_query');
-my ($count, @results);
-if ($query->param('cql_query')) {
-	($count,@results) = searchZOOM('cql',$cql_query,$reorder,$number_of_results,$startfrom);
-} else {
-	($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$reorder,$number_of_results,$startfrom);
-}
+	# push @forminputs, {field => "results_per_page", value => $number_of_results};	    
 
-
-
-@newresults=searchResults( $number_of_results,@results) ;
+	## OK, We're searching
+	# STEP 1. We're a CGI script,so first thing to do is get the
+	# query into PQF format so we can use the Koha API properly
+	my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query) = cgi2pqf($query);
+	warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
+	push @forminputs, { field => "cql_query" , value => $cql_query} ;
+	push @forminputs, {field => 'pqf_sort_by', value => $pqf_sort_by} ;
+	push @forminputs, {field => 'pqf_prox_ops', value => $pqf_prox_ops};
+	push @forminputs, { field => 'pqf_bool_ops' , value => $pqf_bool_ops};
+	push @forminputs, { field => 'pqf_query' , value => $pqf_query };
+	$searchdesc=$cql_query.$pqf_query;
+	# STEP 2. OK, now we have PQF, so we can pass off the query to
+	# the API
+	my $reorder=$query->param('reorder_query');
+	my ($count, @results);
+	if ($query->param('cql_query')) {
+		($count,@results) = searchZOOM('cql',$cql_query,$reorder,$number_of_results,$startfrom);
+	} else {
+		($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$reorder,$number_of_results,$startfrom);
+	}
+	@newresults=searchResults( $number_of_results,@results) ;
 	my $num = scalar(@newresults);
 	# sorting out which results to display.
 	# the result number to start to show
@@ -135,13 +133,50 @@ if ($query->param('cql_query')) {
 
 } else {
 
-($template, $borrowernumber, $cookie)
+	($template, $borrowernumber, $cookie)
         = get_template_and_user({template_name => "opac-zoomsearch.tmpl",
                     query => $query,
                     type => "opac",
                     authnotrequired => 1,
                 });
 
+	use C4::Koha;
+	my $dbh = C4::Context->dbh;
+##Itemtypes (Collection Codes)
+	my $itemtypequery="Select itemtype,description from itemtypes order by description";
+	my $sth=$dbh->prepare($itemtypequery);
+	$sth->execute;
+	my  @itemtypeloop;
+	my %itemtypes;
+	while (my ($value,$lib) = $sth->fetchrow_array) {
+		my %row =(      
+			value => $value,
+			description => $lib,
+			);
+		push @itemtypeloop, \%row;
+       
+	}
+	$sth->finish;
+
+##Branches
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches = getallbranches();
+	my @branchloop;
+	#push @branchloop, (value => "", selected => 1,branchname =>"");
+	foreach my $thisbranch (keys %$branches) {
+        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        my %row =(	value => $thisbranch,
+				selected => $selected,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+                        );        
+		push @branchloop, \%row;
+	}
+	$template->param(
+			branchloop=>\@branchloop,
+			itemtypeloop=>\@itemtypeloop,
+	);
 
 }
 output_html_with_http_headers $query, $cookie, $template->output;
@@ -168,7 +203,7 @@ warn ($type,$query,$reorder,$num,$startfrom) ;
 	}
 	};
 	if ($@) {
-		return("error with search",undef); #FIXME: better error handling
+		return("error with search: $@",undef); #FIXME: better error handling
     }	
 	# PERFORM THE SEARCH
 	my $result;
@@ -177,7 +212,7 @@ warn ($type,$query,$reorder,$num,$startfrom) ;
 	};
 
 	if ($@) {
-		return("error with search",undef); #FIXME: better error handling
+		return("error with search: $@",undef); #FIXME: better error handling
 	}
 if ($reorder){
 warn $reorder;
@@ -199,7 +234,7 @@ warn "sort did not work";
 # build a valid PQF query from the CGI form
 sub cgi2pqf {
 	my ($query) = @_;
-warn "CGI 2 PQF conversion";	
+	warn "CGI 2 PQF conversion";	
 	my @default_attributes = ('sort_by');
 	# attributes specific to the advanced search - a search_point is actually a combination of
 	#  several bib1 attributes
@@ -214,10 +249,13 @@ warn "CGI 2 PQF conversion";
 	my $query_form = $query->param('query_form');
 
 	# bunch of places to store the various queries we're working with
-	my ($cql_query,$pqf_query,$pqf_sort_by,$original_pqf_query,$original_sort_by) = ($query->param('cql_query'),$query->param('pqf_query'),$query->param('pqf_sort_by'),$query->param('original_pqf_query'),$query->param('original_sort_by'));
+	my $cql_query = $query->param('cql_query');
+	my $pqf_query = $query->param('pqf_query');
+	my $pqf_sort_by = $query->param('pqf_sort_by');
+	my $pqf_prox_ops = $query->param('pqf_prox_ops');
+	my $pqf_bool_ops = $query->param('pqf_bool_ops');
 
 	# operators:
-	my $pqf_ops; my $pqf_prox_ops; my $pqf_bool_ops;
 
 	# ADVANCED SEARCH
 	if (($query_form) eq 'advanced') {
@@ -229,8 +267,7 @@ warn "CGI 2 PQF conversion";
 	} elsif (($query_form) eq 'proximity') {
 		@specific_attributes = @proximity_attributes;
 	}
-
-    my $zoom_query;
+	
 
 	# load the default attributes, set once per query
 	foreach my $def_attr (@default_attributes) {
@@ -240,7 +277,7 @@ warn "CGI 2 PQF conversion";
 	# First, process the 'operators' and put them in a separate variable
 	# proximity and boolean
 	foreach my $spec_attr (@specific_attributes) {
-		for (my $i=1;$i<5;$i++) {
+		for (my $i=1;$i<10;$i++) {
 			if ($query->param("query$i")) { # make sure this set should be used
 				if ($spec_attr =~ /^op/) { # process the operators separately
 					$pqf_bool_ops .= " ".$query->param("$spec_attr$i");
@@ -259,12 +296,10 @@ warn "CGI 2 PQF conversion";
 			}
 		}
 	}
-	# by now, we have two variables: $pqf_bool_ops (boolean) and $pqf_prox_ops (proximity), join them
-	$pqf_ops.= $pqf_prox_ops if $pqf_prox_ops;
-	$pqf_ops = $pqf_bool_ops." ".$pqf_ops if $pqf_bool_ops;
+	# by now, we have two variables: $pqf_bool_ops (boolean) and $pqf_prox_ops (proximity)
 
 	# Now, process the attributes
-	for (my $i=1;$i<5;$i++) {
+	for (my $i=1;$i<10;$i++) {
 		foreach my $spec_attr (@specific_attributes) {
 			if ($query->param("query$i")) {
 				if ($spec_attr =~ /^query/) {
