@@ -82,6 +82,8 @@ my $line_total;     # total of each line
 my $sub_total;      # total of line totals
 my $gist;           # GST
 my $grand_total;    # $subttotal + $gist
+my $toggle = 0;
+
 
 # my $line_total_est; # total of each line
 my $sub_total_est;      # total of line totals
@@ -100,6 +102,14 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $sub_total += $line_total;
     $qty_total += $results[$i]->{'quantity'};
     my %line;
+   if ( $toggle == 0 ) {
+        $line{color} = '#EEEEEE';
+        $toggle = 1;
+    }
+    else {
+        $line{color} = 'white';
+        $toggle = 0;
+    }
     $line{ordernumber}      = $results[$i]->{'ordernumber'};
     $line{publishercode}    = $results[$i]->{'publishercode'};
     $line{isbn}             = $results[$i]->{'isbn'};
