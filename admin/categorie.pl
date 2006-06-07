@@ -102,10 +102,10 @@ if ($op eq 'add_form') {
 				enrolmentperiod         => $data->{'enrolmentperiod'},
 				upperagelimit           => $data->{'upperagelimit'},
 				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-				enrolmentfee            => $data->{'enrolmentfee'},
+				enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'}),
 				overduenoticerequired   => $data->{'overduenoticerequired'},
 				issuelimit              => $data->{'issuelimit'},
-				reservefee              => $data->{'reservefee'},
+				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
 				category_type           => $data->{'category_type'},
 				"type_".$data->{'category_type'} => " SELECTED ",
 				);
@@ -146,10 +146,10 @@ if ($op eq 'add_form') {
                                 enrolmentperiod         => $data->{'enrolmentperiod'},
                                 upperagelimit           => $data->{'upperagelimit'},
                                 dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                enrolmentfee            => $data->{'enrolmentfee'},
+                                enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'}),
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
-                                reservefee              => $data->{'reservefee'},
+                                reservefee              =>  sprintf("%.2f",$data->{'reservefee'}),
                                 category_type           => $data->{'category_type'}
                                 );
 													# END $OP eq DELETE_CONFIRM
@@ -178,10 +178,10 @@ if ($op eq 'add_form') {
 				enrolmentperiod => $results->[$i]{'enrolmentperiod'},
 				upperagelimit => $results->[$i]{'upperagelimit'},
 				dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
-				enrolmentfee => $results->[$i]{'enrolmentfee'},
+				enrolmentfee => sprintf("%.2f",$results->[$i]{'enrolmentfee'}),
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},
-				reservefee => $results->[$i]{'reservefee'},
+				reservefee => sprintf("%.2f",$results->[$i]{'reservefee'}),
 				category_type => $results->[$i]{'category_type'},
 				toggle => $toggle );	
 		push @loop, \%row;
