@@ -798,7 +798,7 @@ sub canbookbeissued {
 # DEBTS
 	my $amount = checkaccount($env,$borrower->{'borrowernumber'}, $dbh,$duedate);
         if($C4::Context->preference("IssuingInProcess")){
-	    my $amountlimit = $C4::Context->preference("maxoutstanding");
+	    my $amountlimit = $C4::Context->preference("noissuescharge");
 	    if ($amount > $amountlimit && !$inprocess) {
 		$issuingimpossible{DEBT} = sprintf("%.2f",$amount);
 	    } elsif ($amount <= $amountlimit && !$inprocess) {
