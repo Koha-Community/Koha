@@ -46,6 +46,7 @@ my $ordnum       = $input->param('ordnum');
 my $biblio       = $input->param('biblio');
 my $basketno     = $input->param('basketno');
 my $suggestionid = $input->param('suggestionid');
+my $donation = $input->param('donation');
 my $close        = $input->param('close');
 my $data;
 my $new;
@@ -78,7 +79,12 @@ if ( $ordnum eq '' ) {    # create order
 else {    #modify order
     $data   = getsingleorder($ordnum);
     $biblio = $data->{'biblionumber'};
+    #get basketno and suppleirno. too!
+    my $data2 = getbasket( $data->{'basketno'} );
+    $basketno     = $data2->{'basketno'};
+    $booksellerid = $data2->{'booksellerid'};
 }
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "acqui/newbiblio.tmpl",
@@ -182,6 +188,29 @@ else {
     $template->param( sort2 => $data->{'sort2'} );
 }
 
+my $bibitemsexists;
+
+#do a biblioitems lookup on bib
+( my $bibitemscount, my @bibitems ) = getbiblioitembybiblionumber($biblio);
+if ( $bibitemscount > 0 ) {
+    # warn "NEWBIBLIO: bibitems for $biblio exists\n";
+    # warn Dumper $bibitemscount, @bibitems;
+    $bibitemsexists = 1;
+
+    my @bibitemloop;
+    for ( my $i = 0 ; $i < $bibitemscount ; $i++ ) {
+        my %line;
+        $line{biblioitemnumber} = $bibitems[$i]->{'biblioitemnumber'};
+        $line{isbn}             = $bibitems[$i]->{'isbn'};
+        $line{itemtype}         = $bibitems[$i]->{'itemtype'};
+        $line{volumeddesc}      = $bibitems[$i]->{'volumeddesc'};
+        push( @bibitemloop, \%line );
+
+        $template->param( bibitemloop => \@bibitemloop );
+    }
+    $template->param( bibitemexists => "1" );
+}
+
 # fill template
 $template->param(
     close        => $close,
@@ -225,7 +254,8 @@ $template->param(
     invoice          => $data->{'booksellerinvoicenumber'},
     ecost            => $data->{'ecost'},
     notes            => $data->{'notes'},
-    publishercode    => $data->{'publishercode'}
+    publishercode    => $data->{'publishercode'},
+    donation         => $donation
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
