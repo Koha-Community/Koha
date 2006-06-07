@@ -38,6 +38,7 @@ use C4::Date;
 use Date::Manip;
 use C4::Biblio;
 use C4::Reserves2;
+use C4::Circulation::Date;
 
 #
 # PARAMETERS READING
@@ -101,6 +102,19 @@ my $todaysdate =
 if ( $barcode eq '' && $print eq 'maybe' ) {
     $print = 'yes';
 }
+
+my $inprocess = $query->param('inprocess');
+if ($barcode eq ''){
+        $inprocess='';
+}
+else {
+}
+
+if ($barcode eq '' && $query->param('charges') eq 'yes'){
+        $template->param( PAYCHARGES=>'yes',
+        bornum=>$borrowernumber);
+   }
+
 if ( $print eq 'yes' && $borrowernumber ne '' ) {
     printslip( \%env, $borrowernumber );
     $query->param( 'borrnumber', '' );
@@ -134,7 +148,7 @@ if ($findborrower) {
 # get the borrower information.....
 my $borrower;
 my $picture;
-
+my @lines;
 if ($borrowernumber) {
     $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
@@ -147,10 +161,20 @@ if ($borrowernumber) {
         #borrowercard expired
         $template->param( warndeparture => $warning );
     }
+    my ($reserved_num,$reserved_waiting) = CheckWaiting($borrowernumber);
+    if ($reserved_num > 0) {
+           for (my $i = 0; $i < $reserved_num; $i++) {
+                     my ($count,$line) = getbiblio($reserved_waiting->[$i]->{'biblionumber'});
+                     push(@lines, $line);
+           }
+          # warn Dumper(@lines);
+    }
+    
     $template->param(
         overduecount => $od,
         issuecount   => $issue,
-        finetotal    => $fines
+        finetotal    => $fines,
+	returned_reserve => \@lines,
     );
     my $htdocs = C4::Context->config('intrahtdocs');
     $picture = "/borrowerimages/" . $borrowernumber . ".jpg";
@@ -169,10 +193,11 @@ if ($barcode) {
     my ( $datedue, $invalidduedate ) = fixdate( $year, $month, $day );
     if ($issueconfirmed) {
         issuebook( \%env, $borrower, $barcode, $datedue, $cancelreserve );
+	$inprocess=1;
     }
     else {
         my ( $error, $question ) =
-          canbookbeissued( \%env, $borrower, $barcode, $year, $month, $day );
+          canbookbeissued( \%env, $borrower, $barcode, $year, $month, $day, $inprocess );
         my $noerror    = 1;
         my $noquestion = 1;
         foreach my $impossible ( keys %$error ) {
@@ -196,6 +221,7 @@ if ($barcode) {
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
             issuebook( \%env, $borrower, $barcode, $datedue );
+	    $inprocess=1;
         }
     }
 }
@@ -286,15 +312,30 @@ if ($borrower) {
     my $issueslist = getissues($borrower);
 
     # split in 2 arrays for today & previous
+    my $dbh = C4::Context->dbh;
     foreach my $it ( keys %$issueslist ) {
         my $issuedate = $issueslist->{$it}->{'timestamp'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
         if ( $todaysdate == $issuedate ) {
-            push @todaysissues, $issueslist->{$it};
+	        ($issueslist->{$it}->{'charge'}, $issueslist->{$it}->{'itemtype_charge'})=calc_charges($dbh,$issueslist->{$it}->{'itemnumber'},$borrower->{'borrowernumber'});
+	        $issueslist->{$it}->{'charge'} = sprintf("%.2f",$issueslist->{$it}->{'charge'});
+	        ($issueslist->{$it}->{'can_renew'}, $issueslist->{$it}->{'can_renew_error'}) =renewstatus(\%env,$borrower->{'borrowernumber'}, $issueslist->{$it}->{'itemnumber'});
+		my ($restype,$reserves)=CheckReserves($issueslist->{$it}->{'itemnumber'});
+		if ($restype){
+		    $issueslist->{$it}->{'can_renew'}=0;
+		}
+		push @todaysissues, $issueslist->{$it};
         }
         else {
-            push @previousissues, $issueslist->{$it};
+                ($issueslist->{$it}->{'charge'}, $issueslist->{$it}->{'itemtype_charge'})=calc_charges($dbh,$issueslist->{$it}->{'itemnumber'},$borrower->{'borrowernumber'});
+	        $issueslist->{$it}->{'charge'} = sprintf("%.2f",$issueslist->{$it}->{'charge'});
+	        ($issueslist->{$it}->{'can_renew'}, $issueslist->{$it}->{'can_renew_error'}) =renewstatus(\%env,$borrower->{'borrowernumber'}, $issueslist->{$it}->{'itemnumber'});
+	        my ($restype,$reserves)=CheckReserves($issueslist->{$it}->{'itemnumber'});
+	        if ($restype){
+		    $issueslist->{$it}->{'can_renew'}=0;
+		}
+	        push @previousissues, $issueslist->{$it};
         }
     }
     my $od;    # overdues
@@ -441,6 +482,7 @@ $template->param(
     CGIselectborrower => $CGIselectborrower,
     todayissues       => \@realtodayissues,
     previssues        => \@realprevissues,
+    inprocess         => $inprocess,
     memberofinstution => $member_of_institution,                                                                 
     CGIorganisations => $CGIorganisations, 
 );
@@ -500,6 +542,12 @@ sub patrontable {
                     chargesmsg => $flags->{'CHARGES'}->{'message'}
                 );
             }
+	    if ($flag eq 'CREDITS') {
+		$template->param(
+		    credits => 'true',
+	            creditsmsg => $flags->{'CREDITS'}->{'message'}
+		);
+	    }
         }
         else {
             if ( $flag eq 'CHARGES' ) {
@@ -509,6 +557,13 @@ sub patrontable {
                     chargesmsg => $flags->{'CHARGES'}->{'message'}
                 );
             }
+            if ($flag eq 'CREDITS') {
+		$template->param(
+		    credits => 'true',
+		    creditsmsg => $flags->{'CREDITS'}->{'message'}
+                );
+            }
+
 # FIXME this part can be removed if we keep new display of reserves "reservloop"
 #             if ( $flag eq 'WAITING' ) {
 #                 my $items = $flags->{$flag}->{'itemlist'};
