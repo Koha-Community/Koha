@@ -10,12 +10,13 @@ use HTML::Template;
 use CGI;
 my $query=new CGI;
 my $op = $query->param('op'); #show the search form or execute the search
-my $query_form = $query->param('query_form'); # which query form was submitted
 my $cql_query = $query->param('cql_query');
 my @newresults;
 my ($template,$borrowernumber,$cookie);
 my @forminputs;		#this is for the links to navigate among the results when they are more than the maximum number of results per page
 my $searchdesc;
+my $search_type = $query->param('search_type');
+
 ## Check if we're searching
 if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	($template, $borrowernumber, $cookie)
@@ -173,9 +174,22 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
                         );        
 		push @branchloop, \%row;
 	}
+
+	# set the default tab, etc.
+	my $search_type = $query->param('query_form');
+	if ((!$search_type) || ($search_type eq 'cql'))  {
+		$template->param(cql_search => 1);
+	} elsif ($search_type eq 'advanced') {
+		$template->param(advanced_search => 1);
+	} elsif ($search_type eq 'power') {
+		$template->param(power_search => 1);
+	} elsif ($search_type eq 'proximity') {
+		$template->param(proximity_search => 1);
+	}
+
 	$template->param(
-			branchloop=>\@branchloop,
-			itemtypeloop=>\@itemtypeloop,
+		branchloop=>\@branchloop,
+		itemtypeloop=>\@itemtypeloop,
 	);
 
 }
@@ -188,12 +202,12 @@ sub searchZOOM {
 	my ($type,$query,$reorder,$num,$startfrom) = @_;
 	my $dbh = C4::Context->dbh;
 	my $zconn=C4::Context->Zconn("biblioserver");
-warn ($type,$query,$reorder,$num,$startfrom) ;
+
+	warn ($type,$query,$reorder,$num,$startfrom) ;
 	if ($zconn eq "error") {
 		return("error with connection",undef); #FIXME: better error handling
 	}
 	
-
 	my $zoom_query_obj;
 	eval {
 	if ($type eq 'cql') {
@@ -205,6 +219,7 @@ warn ($type,$query,$reorder,$num,$startfrom) ;
 	if ($@) {
 		return("error with search: $@",undef); #FIXME: better error handling
     }	
+
 	# PERFORM THE SEARCH
 	my $result;
 	eval {
@@ -214,12 +229,13 @@ warn ($type,$query,$reorder,$num,$startfrom) ;
 	if ($@) {
 		return("error with search: $@",undef); #FIXME: better error handling
 	}
-if ($reorder){
-warn $reorder;
-if($result->sort("yaz","$reorder")<0){
-warn "sort did not work";
-}
-}
+
+#	if ($reorder){
+#		warn $reorder;
+#		if($result->sort("yaz","$reorder")<0){
+#			warn "sort did not work";
+#		}
+#	}
 	my $i;
 	my $numresults = $result->size() if  ($result);
 	my @results;
