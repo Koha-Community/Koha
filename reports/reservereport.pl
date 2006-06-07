@@ -20,6 +20,9 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# script now takes a branchcode arg
+# eg: http://koha.rangitikei.katipo.co.nz/cgi-bin/koha/reports/reservereport.pl?branch=BL
+
 use strict;
 use C4::Stats;
 use C4::Date;
@@ -28,9 +31,17 @@ use C4::Output;
 use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::Koha;
+
 
 my $input = new CGI;
 my $time  = $input->param('time');
+my $branch = $input->param('branch');
+if (!$branch) {
+    $branch = "ALL";
+}
+
+my $branches=getbranches();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -43,7 +54,21 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my ( $count, $data ) = unfilledreserves();
+# building up branches dropdown box
+
+my %branchall;
+my $branchcount=0;
+my @branchloop;
+
+foreach my $br (keys %$branches) {
+        $branchcount++;
+            my %branch1;
+            $branch1{name}=$branches->{$br}->{'branchname'};
+            $branch1{value}=$br;
+        push(@branchloop,\%branch1);
+    }  
+
+my ( $count, $data ) = unfilledreserves($branch);
 
 my @dataloop;
 my $toggle;
@@ -53,12 +78,13 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	$line{'borrowernumber'} = $data->[$i]->{'borrowernumber'};
 	$line{'surname'} = $data->[$i]->{'surname'};
 	$line{'firstname'} = $data->[$i]->{'firstname'};
-    $line{'reservedate'}    = format_date($data->[$i]->{'reservedate'});
+        $line{'reservedate'}    = format_date($data->[$i]->{'reservedate'});
 	$line{'biblionumber'} = $data->[$i]->{'biblionumber'};
 	$line{'title'} = $data->[$i]->{'title'};
 	$line{'classification'} = $data->[$i]->{'classification'};
 	$line{'dewey'} = $data->[$i]->{'dewey'};
-    $line{'status'} = $data->[$i]->{'found'};
+        $line{'status'} = $data->[$i]->{'found'};
+        $line{'branchcode'} = $data->[$i]->{'branchcode'};
 	$line{'toggle'} = $toggle;
 
     push( @dataloop, \%line );
@@ -67,7 +93,10 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
 $template->param(
     count    => $count,
-    dataloop => \@dataloop
+    dataloop => \@dataloop,
+    branchcode => $branch,
+    branchloop => \@branchloop
+    
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
