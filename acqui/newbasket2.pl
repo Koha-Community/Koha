@@ -2,7 +2,6 @@
 #origninally script to provide intranet (librarian) advanced search facility
 #now script to do searching for acquisitions
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -30,222 +29,281 @@ use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
+#use Data::Dumper;
+
 my $env;
 my $input = new CGI;
 
 #print $input->header;
 
 #whether it is called from the opac of the intranet
-my $type=$input->param('type');
-if ($type eq ''){
-  $type = 'intra';
+my $type = $input->param('type');
+if ( $type eq '' ) {
+    $type = 'intra';
 }
 
 #print $input->dump;
 my $blah;
 my %search;
+
 #build hash of users input
-my $title=$input->param('search');
-$search{'title'}=$title;
-my $keyword=$input->param('d');
-$search{'keyword'}=$keyword;
-my $author=$input->param('author');
-$search{'author'}=$author;
+my $title = $input->param('search');
+$search{'title'} = $title;
+my $keyword = $input->param('d');
+$search{'keyword'} = $keyword;
+my $author = $input->param('author');
+$search{'author'} = $author;
 
 my @results;
-my $offset=$input->param('offset');
-if ($offset eq ''){
-  $offset=0;
+my $offset = $input->param('offset');
+if ( $offset eq '' ) {
+    $offset = 0;
 }
-my $num=$input->param('num');
-if ($num eq ''){
-  $num=10;
+my $num = $input->param('num');
+if ( $num eq '' ) {
+    $num = 10;
 }
-my $booksellerid=$input->param('booksellerid');
-my $basketno=$input->param('basketno');
-my $sub=$input->param('sub');
+my $donation;
+my $booksellerid = $input->param('booksellerid');
+if ( $booksellerid == 72 ) {
+    $donation = 'yes';
+}
+my $basketno = $input->param('basketno');
+my $sub      = $input->param('sub');
+
 #print $sub;
-my ($count,@booksellers)=bookseller($booksellerid);
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/newbasket2.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
-			     debug => 1,
-			     });
+my ( $count, @booksellers ) = bookseller($booksellerid);
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/newbasket2.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { order => 1 },
+        debug           => 1,
+    }
+);
 
 #my $template = gettemplate("acqui/newbasket2.tmpl");
 #print startpage();
 #print startmenu('acquisitions');
+my $invalidsearch;
 
-if ($keyword ne ''){
-	($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
-} elsif ($search{'front'} ne '') {
-	($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
-}else {
-	($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
+if ( $keyword ne '' ) {
+    ( $count, @results ) =
+      KeywordSearch( undef, 'intra', \%search, $num, $offset );
+}
+elsif ( $search{'front'} ne '' ) {
+    ( $count, @results ) =
+      FrontSearch( undef, 'intra', \%search, $num, $offset );
+}
+elsif ( $search{'author'} || $search{'title'} ) {
+    ( $count, @results ) = CatSearch( undef, 'loose', \%search, $num, $offset );
+}
+else {
+    $invalidsearch = 1;
 }
 
 my @loopsearch;
 
-while ( my ($key, $value) = each %search) {
-	if ($value ne ''){
-		my %linesearch;
-		$value=~ s/\\//g;
-		$linesearch{key}=$key;
-		$linesearch{value}=$value;
-		push(@loopsearch,\%linesearch);
-	}
+while ( my ( $key, $value ) = each %search ) {
+    if ( $value ne '' ) {
+        my %linesearch;
+        $value =~ s/\\//g;
+        $linesearch{key}   = $key;
+        $linesearch{value} = $value;
+        push( @loopsearch, \%linesearch );
+    }
 }
 
-my $offset2=$num+$offset;
-my $dispnum=$offset+1;
-if ($offset2>$count) {
-	$offset2=$count
+my $offset2 = $num + $offset;
+my $dispnum = $offset + 1;
+if ( $offset2 > $count ) {
+    $offset2 = $count;
 }
 
-
-my $count2=@results;
-if ($keyword ne '' && $offset > 0){
-	$count2=$count-$offset;
-	if ($count2 > 10){
-		$count2=10;
-	}
+my $count2 = @results;
+if ( $keyword ne '' && $offset > 0 ) {
+    $count2 = $count - $offset;
+    if ( $count2 > 10 ) {
+        $count2 = 10;
+    }
 }
-my $i=0;
-my $colour=0;
+my $i      = 0;
+my $colour = 0;
 
 my @loopresult;
 
-while ($i < $count2){
-		my %lineres;
-		my $toggle;
+while ( $i < $count2 ) {
+    my %lineres;
+    my $toggle;
 
-	my $result=$results[$i];
-	$result->{'title'}=~ s/\`/\\\'/g;
-	my $title2=$result->{'title'};
-	my $author2=$result->{'author'};
-	$author2=~ s/ /%20/g;
-	$title2=~ s/ /%20/g;
-	$title2=~ s/\#/\&\#x23;/g;
-	$title2=~ s/\"/\&quot\;/g;
+    my $result = $results[$i];
+    $result->{'title'} =~ s/\`/\\\'/g;
+    my $title2  = $result->{'title'};
+    my $author2 = $result->{'author'};
+    $author2 =~ s/ /%20/g;
+    $title2  =~ s/ /%20/g;
+    $title2  =~ s/\#/\&\#x23;/g;
+    $title2  =~ s/\"/\&quot\;/g;
 
-		my $itemcount;
-	my $location='';
-	my $location_only='';
-	my $word=$result->{'author'};
-	$word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
-	$word=~ s/  //g;
-	$word=~ s/ /%20/g;
-	$word=~ s/\,/\,%20/g;
-	$word=~ s/\n//g;
-	$lineres{word}=$word;
-	$lineres{type}=$type;
+    my $itemcount;
+    my $location      = '';
+    my $location_only = '';
+    my $word          = $result->{'author'};
+    $word =~ s/([a-z]) +([a-z])/$1%20$2/ig;
+    $word =~ s/  //g;
+    $word =~ s/ /%20/g;
+    $word =~ s/\,/\,%20/g;
+    $word =~ s/\n//g;
+    $lineres{word} = $word;
+    $lineres{type} = $type;
 
-	my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
-	if ($nacount > 0){
-		$location .= "On Loan";
-		if ($nacount >1 ){
-			$location .= " ($nacount)";
-		}
-		$location.=" ";
-		$lineres{'on-loan-p'}=1;
-	}
-	if ($lcount > 0){
-		$location .= "Levin";
-		$location_only .= "Levin";
-		if ($lcount >1 ){
-			$location .= " ($lcount)";
-			$location_only .= " ($lcount)";
-		}
-		$location.=" ";
-		$location_only.=" ";
-	}
-	if ($fcount > 0){
-		$location .= "Foxton";
-		$location_only .= "Foxton";
-		if ($fcount >1 ){
-			$location .= " ($fcount)";
-			$location_only .= " ($fcount)";
-		}
-		$location.=" ";
-		$location_only.=" ";
-	}
-	if ($scount > 0){
-		$location .= "Shannon";
-		$location_only .= "Shannon";
-		if ($scount >1 ){
-			$location .= " ($scount)";
-			$location_only .= " ($scount)";
-		}
-		$location.=" ";
-		$location_only.=" ";
-	}
-	if ($lostcount > 0){
-		$location .= "Lost";
-		if ($lostcount >1 ){
-			$location .= " ($lostcount)";
-		}
-		$location.=" ";
-		$lineres{'lost-p'}=1;
-	}
-	if ($mending > 0){
-		$location .= "Mending";
-		if ($mending >1 ){
-			$location .= " ($mending)";
-		}
-		$location.=" ";
-		$lineres{'mending-p'}=1;
-	}
-	if ($transit > 0){
-		$location .= "In Transit";
-		if ($transit >1 ){
-			$location .= " ($transit)";
-		}
-		$location.=" ";
-		$lineres{'in-transit-p'}=1;
-	}
-	if ($colour == 1){
-		$toggle='#ffffcc';
-		$colour = 0;
-	} else{
-		$colour = 1;
-		$toggle='white';
-	}
-	$lineres{author2}=$author2;
-	$lineres{title2}=$title2;
-	$lineres{copyright}=$result->{'copyrightdate'};
-	$lineres{booksellerid}=$booksellerid;
-	$lineres{basketno}=$basketno;
-	$lineres{sub}=$sub;
-	$lineres{biblionumber}=$result->{biblionumber};
-	$lineres{title}=$result->{title};
-	$lineres{author}=$result->{author};
-	$lineres{toggle}=$toggle;
-	$lineres{itemcount}=$count;
-	$lineres{location}=$location;
-	$lineres{'location-only'}=$location_only;
-	push(@loopresult,\%lineres);
-	$i++;
+    my ( $counts, $branchcounts ) =
+      C4::Search::itemcount( $env, $result->{'biblionumber'}, $type );
+
+    if ( $counts->{'nacount'} > 0 ) {
+        $location .= "On Loan";
+        if ( $counts->{'nacount'} > 1 ) {
+            $location .= "=($counts->{'nacount'})";
+        }
+        $location .= " ";
+        $lineres{'on-loan-p'} = 1;
+    }
+    foreach my $key ( keys %$branchcounts ) {
+        if ( $branchcounts->{$key} > 0 ) {
+            $location      .= $key;
+            $location_only .= $key;
+
+            if ( $branchcounts->{$key} > 1 ) {
+                $location      .= "=$branchcounts->{$key}";
+                $location_only .= "=$branchcounts->{$key}";
+            }
+            $location      .= " ";
+            $location_only .= " ";
+        }
+    }
+    if ( $counts->{'lostcount'} > 0 ) {
+        $location .= "Lost";
+        if ( $counts->{'lostcount'} > 1 ) {
+            $location .= "=($counts->{'lostcount'})";
+        }
+        $location .= " ";
+        $lineres{'lost-p'} = 1;
+    }
+    if ( $counts->{'mending'} > 0 ) {
+        $location .= "Mending";
+        if ( $counts->{'mending'} > 1 ) {
+            $location .= "=($counts->{'mending'})";
+        }
+        $location .= " ";
+        $lineres{'mending-p'} = 1;
+    }
+    if ( $counts->{'transit'} > 0 ) {
+        $location .= "In Transit";
+        if ( $counts->{'transit'} > 1 ) {
+            $location .= "=($counts->{'transit'})";
+        }
+        $location .= " ";
+        $lineres{'in-transit-p'} = 1;
+    }
+    if ( $colour eq 0 ) {
+        $toggle = 1;
+        $colour = 1;
+    }
+    else {
+        $colour = 0;
+        $toggle = 0;
+    }
+    $lineres{author2}         = $author2;
+    $lineres{title2}          = $title2;
+    $lineres{copyright}       = $result->{'copyrightdate'};
+    $lineres{booksellerid}    = $booksellerid;
+    $lineres{basketno}        = $basketno;
+    $lineres{sub}             = $sub;
+    $lineres{biblionumber}    = $result->{biblionumber};
+    $lineres{title}           = $result->{title};
+    $lineres{author}          = $result->{author};
+    $lineres{toggle}          = $toggle;
+    $lineres{itemcount}       = $counts->{'count'};
+    $lineres{location}        = $location;
+    $lineres{'location-only'} = $location_only;
+
+    # lets get a list on existing orders for all bibitems.
+    ( my $count1, my @bibitems ) =
+      getbiblioitembybiblionumber( $result->{biblionumber} );
+
+    my $order, my $ordernumber;
+
+    my $i1 = 0;
+
+    my @ordernumbers;
+    foreach my $bibitem (@bibitems) {
+
+        ( $order, $ordernumber ) =
+          &getorder( $bibitem->{biblioitemnumber}, $result->{biblionumber} );
+
+        #only show order if its current;
+        my %order;
+        $order{'number'} = $ordernumber;
+        if (   ( !$order->{cancelledby} )
+            && ( $order->{quantityreceived} < $order->{quantity} ) )
+        {
+            push @ordernumbers, \%order;
+        }
+    }
+    $lineres{existingorder} = \@ordernumbers;
+    push( @loopresult, \%lineres );
+    $i++;
 }
 
-$offset=$num+$offset;
-$template->param(	bookselname => $booksellers[0]->{'name'},
-								booksellerid => $booksellerid,
-								basketno => $basketno,
-								parsub => $sub,
-								count => $count,
-								offset2 =>$offset2,
-								dispnum => $dispnum,
-								offsetover => ($offset < $count ),
-								num => $num,
-								offset => $offset,
-								type =>  $type,
-								title => $title,
-								author => $author,
-								loopsearch =>\@loopsearch,
-								loopresult =>\@loopresult,
-								'use-location-flags-p' => 1);
+my $prevoffset = $offset - $num;
+my $offsetprev = 1;
+if ( $prevoffset < 0 ) {
+    $offsetprev = 0;
+}
+
+$offset = $num + $offset;
+
+my @numbers = ();
+if ( $count > 10 ) {
+    for ( my $i = 0 ; $i < ( $count / $num ) ; $i++ ) {
+        my $highlight    = 0;
+        my $numberoffset = $i * $num;
+        if ( ( $numberoffset + $num ) == $offset ) { $highlight = 1 }
+
+     #       warn "I $i | N $num | O $offset | NO $numberoffset | H $highlight";
+        push @numbers,
+          {
+            number       => ( $i + 1 ),
+            highlight    => $highlight,
+            numberoffset => $numberoffset
+          };
+    }
+}
+
+$template->param(
+    bookselname            => $booksellers[0]->{'name'},
+    booksellerid           => $booksellerid,
+    basketno               => $basketno,
+    parsub                 => $sub,
+    count                  => $count,
+    offset2                => $offset2,
+    dispnum                => $dispnum,
+    offsetover             => ( $offset < $count ),
+    num                    => $num,
+    offset                 => $prevoffset,
+    offsetprev             => $offsetprev,
+    type                   => $type,
+    title                  => $title,
+    author                 => $author,
+    donation               => $donation,
+    loopsearch             => \@loopsearch,
+    loopresult             => \@loopresult,
+    numbers                => \@numbers,
+    invalidsearch          => $invalidsearch,
+    'use-location-flags-p' => 1
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
