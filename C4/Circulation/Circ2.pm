@@ -797,8 +797,8 @@ sub canbookbeissued {
 
 # DEBTS
 	my $amount = checkaccount($env,$borrower->{'borrowernumber'}, $dbh,$duedate);
-        if($C4::Context->preference("IssuingInProcess")){
-	    my $amountlimit = $C4::Context->preference("noissuescharge");
+        if(C4::Context->preference("IssuingInProcess")){
+	    my $amountlimit = C4::Context->preference("noissuescharge");
 	    if ($amount > $amountlimit && !$inprocess) {
 		$issuingimpossible{DEBT} = sprintf("%.2f",$amount);
 	    } elsif ($amount <= $amountlimit && !$inprocess) {
@@ -848,7 +848,7 @@ sub canbookbeissued {
 		if ($renewstatus == 0) { # no more renewals allowed
 			$issuingimpossible{NO_MORE_RENEWALS} = 1;
 		} else {
-			$needsconfirmation{RENEW_ISSUE} = 1;
+	#		$needsconfirmation{RENEW_ISSUE} = 1;
 		}
 	} elsif ($currentborrower) {
 # issued to someone else
@@ -876,7 +876,16 @@ sub canbookbeissued {
 			$needsconfirmation{RESERVED} = "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
 		}
 	}
-	return(\%issuingimpossible,\%needsconfirmation);
+        if(C4::Context->preference("LibraryName") eq "Horowhenua Library Trust"){
+	    if ($borrower->{'categorycode'} eq 'W'){
+		        my %issuingimpossible;
+		        return(\%issuingimpossible,\%needsconfirmation);
+	    } else {
+		return(\%issuingimpossible,\%needsconfirmation);
+	    }
+	} else {
+	    return(\%issuingimpossible,\%needsconfirmation);
+	}
 }
 
 =head2 issuebook
