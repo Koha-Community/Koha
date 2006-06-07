@@ -7,24 +7,22 @@
 <!-- TMPL_IF NAME="searchdesc" -->
     <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span></h3>
 <!-- TMPL_ELSE -->
-    <!-- TMPL_IF name="searchnew" -->
-		<h3><span class="ex"><!-- TMPL_VAR name="itemtype" --></span> items acquired in the last <span class="ex"><!-- TMPL_VAR name="duration" --></span> days</h3>
-	<!-- TMPL_ELSE -->
-		<h3>You did not specify any search criteria</h3>
-	<!-- /TMPL_IF -->
+    		<h3>You did not specify any search criteria</h3>
 <!-- /TMPL_IF -->
 <form action='/cgi-bin/koha/opac-zoomsearch.pl' method='get'>
         <input type='hidden' name='query_form' value='pqf'/>
         <input type='hidden' name='op' value='get_results'/>
 		
 <!-- TMPL_LOOP NAME="FORMINPUTS" -->
-<input type='hidden' name=<!-- TMPL_VAR NAME="field" --> value=<!-- TMPL_VAR NAME="value" ESCAPE="URL"-->>
-<!-- /TMPL_LOOP --><select name='pqf_query'>
+<input type='hidden' name=<!-- TMPL_VAR NAME="field" --> value=<!-- TMPL_VAR NAME="value" -->>
+<!-- /TMPL_LOOP -->
+		<select name='reorder_query'>
 			<option value='' selected>Relevance</option>
-			<option value='\@or \@or \@attr 7=1 \@attr 1=4 0 \@attr 7=2 \@attr 1=30 1 $pqf_prox_ops $pqf_bool_ops $pqf_query'>Title Ascending, Date Descending</option>
-			<option value='\@or \@or \@attr 7=1 \@attr 1=1003 0 \@attr 7=2 \@attr 1=30 1 $pqf_prox_ops $pqf_bool_ops $pqf_query'>Author Ascending, Date Descending</option>
-			<option value='\@or \@or \@attr 7=2 \@attr 1=32 0 \@attr 7=2 \@attr 1=30 1 $pqf_prox_ops $pqf_bool_ops $pqf_query'>Date of Acquisition, Relevance</option>
-			<option value='\@or \@or \@attr 7=2 \@attr 1=30 0 \@attr 7=2 \@attr 1=4 1 $pqf_prox_ops $pqf_bool_ops $pqf_query'>Date of Publication, Relevance</option>
+			<option value="1=4 i< ">Title Ascending</option>
+			<option value="1=4 i< 1=30 i>">Title Ascending, Date Descending</option>
+			<option value=" 1=1003 i< 1=30 i>">Author Ascending, Date Descending</option>
+			<option value="1=32 i> ">Date of Acquisition, Relevance</option>
+			<option value="1=30 i>">Date of Publication, Relevance</option>
 				
 		</select>
 
@@ -42,15 +40,10 @@
 	        </span>
 		<!-- TMPL_ELSE -->
 		  <span class="pages">
-	        <a class="pages"  href="/cgi-bin/koha/opac-zoomsearch.pl?op=get_results&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL"--><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->"><!-- TMPL_VAR NAME=number --></a>
+	        <a class="pages"  href="/cgi-bin/koha/opac-zoomsearch.pl?op=get_results&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->&amp;reorder_query=<!-- TMPL_VAR NAME="reorder" -->"><!-- TMPL_VAR NAME=number --></a>
 	        </span>
 		<!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->	    
-  <span class="pages">
-	        <a class="pages"  href="/cgi-bin/koha/opac-zoomsearch.pl?op=get_results&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL"--><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->"><!-- TMPL_VAR NAME=number --></a>
-	        </span>
-		
-    
+    <!-- /TMPL_LOOP -->	    		
 </div>
 			<div id="results"><!-- TMPL_IF name=total -->
 		Results <b><!-- TMPL_VAR NAME="starting" --></b> - <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="total" --></b> records.
@@ -109,37 +102,29 @@
 	        </span>
 		<!-- TMPL_ELSE -->
 		    <span class="pages">
-	      <a class="pages"  href="/cgi-bin/koha/opac-zoomsearch.pl?op=get_results&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" --><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->"><!-- TMPL_VAR NAME=number --></a>
+	      <a class="pages"  href="/cgi-bin/koha/opac-zoomsearch.pl?op=get_results&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" --><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->&amp;reorder_query=<!-- TMPL_VAR NAME="reorder" -->"><!-- TMPL_VAR NAME=number --></a>
 	           </span>
 		<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     
 </div>
 
-<!-- Display for NPL <div class="note">Not finding what you're looking for?<br />  Make a <a href="http://www.athenscounty.lib.oh.us/ipage.html">
-purchase suggestion</a><a href="http://www.athenscounty.lib.oh.us/ipage.html">purchase suggestion</a></div> /Display for NPL -->
 
-<!-- Hide from NPL -->
-<!-- TMPL_IF name="suggestion" -->
-<div class="note">Not finding what you're looking for?<br />  Make a <a href="opac-suggestions.pl?op=add">purchase suggestion</a></div>
-<!-- /TMPL_IF -->
-<!-- /Hide from NPL -->
 
-</div> 
+
+
 
 
 
 <!-- TMPL_ELSE -->
 Sorry, there were no results.
-<!-- Display for NPL <div class="note">Not finding what you're looking for?<br />  Make a <a href="http://www.athenscounty.lib.oh.us/ipage.html">
-purchase suggestion</a><a href="http://www.athenscounty.lib.oh.us/ipage.html">purchase suggestion</a></div> /Display for NPL -->
 
+
+<!-- /TMPL_IF -->
 <!-- Hide from NPL -->
 <!-- TMPL_IF name="suggestion" -->
 <div class="note">Not finding what you're looking for?<br />  Make a <a href="opac-suggestions.pl?op=add">purchase suggestion</a></div>
 <!-- /TMPL_IF -->
 <!-- /Hide from NPL -->
-
-<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
