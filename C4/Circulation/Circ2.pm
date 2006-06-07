@@ -662,67 +662,103 @@ sub TooMany ($$){
 	$sth->execute($cat_borrower, $type, $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
 #	warn "==>".$result->{maxissueqty};
-	if (defined($result)) {
+    
+       # Currently, using defined($result) ie on an entire hash reports whether memory
+       # for that aggregate has ever been allocated. As $result is used all over the place
+       # it would rarely return as undefined.
+        if (defined($result->{maxissueqty})) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("a $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	    if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("a $alreadyissued / ".($result->{maxissueqty}+0));
+	    } else {
+	        return;
+	    }
 	}
 	# check for branch=*
 	$sth->execute($cat_borrower, $type, "");
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("b $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	     if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("b $alreadyissued / ".($result->{maxissueqty}+0));
+	     } else {
+	        return;
+	     }
 	}
 	# check for itemtype=*
 	$sth->execute($cat_borrower, "*", $branch_borrower);
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my ($alreadyissued) = $sth3->fetchrow;
-		warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
-		return ("c $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	     if ($result->{'maxissueqty'} <= $alreadyissued){
+#		warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
+		return ("c $alreadyissued / ".($result->{maxissueqty}+0));
+	     } else {
+		return;
+	     }
 	}
-	#check for borrowertype=*
+	# check for borrowertype=*
 	$sth->execute("*", $type, $branch_borrower);
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {    
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("d $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	    if ($result->{'maxissueqty'} <= $alreadyissued){	    
+		return ("d $alreadyissued / ".($result->{maxissueqty}+0));
+	    } else {
+		return;
+	    }
 	}
 
 	$sth->execute("*", "*", $branch_borrower);
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {    
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
-		return ("e $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	    if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("e $alreadyissued / ".($result->{maxissueqty}+0));
+	    } else {
+		return;
+	    }
 	}
 
 	$sth->execute("*", $type, "");
 	$result = $sth->fetchrow_hashref;
-	if (defined($result) && $result->{maxissueqty}>=0) {
+	if (defined($result->{maxissueqty}) && $result->{maxissueqty}>=0) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("f $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	     if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("f $alreadyissued / ".($result->{maxissueqty}+0));
+	     } else {
+		return;
+	     }
 	}
 
 	$sth->execute($cat_borrower, "*", "");
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {    
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("g $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	     if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("g $alreadyissued / ".($result->{maxissueqty}+0));
+	     } else {
+		return;
+	     }
 	}
 
 	$sth->execute("*", "*", "");
 	$result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+        if (defined($result->{maxissueqty})) {    
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
-		return ("h $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	     if ($result->{'maxissueqty'} <= $alreadyissued){
+		return ("h $alreadyissued / ".($result->{maxissueqty}+0));
+	     } else {
+		return;
+	     }
 	}
 	return;
 }
