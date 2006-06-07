@@ -283,6 +283,7 @@ SELECT branchcode,
     my $sth=$dbh->prepare($query);
     $sth->execute(@bind);
     my @results;
+    my $i = 0;
     while (my $data = $sth->fetchrow_hashref){
         # FIXME - What is this if-statement doing? How do constraints work?
         if ($data->{constrainttype} eq 'o') {
@@ -299,16 +300,31 @@ SELECT biblioitemnumber
                 $data->{borrowernumber},
                 $data->{reservedate},
             );
-            my ($bibitemno) = $csth->fetchrow_array;
-            $csth->finish;
-            # Look up the book we just found.
-            my $bdata = bibitemdata($bibitemno);
-            # Add the results of this latest search to the current
-            # results.
-            # FIXME - An 'each' would probably be more efficient.
-            foreach my $key (keys %$bdata) {
-                $data->{$key} = $bdata->{$key};
-            }
+
+  	   my @bibitemno;
+           while (my $bibitemnos = $csth->fetchrow_array){
+           	push (@bibitemno,$bibitemnos);
+	   }
+           my $count = @bibitemno;
+
+           # if we have two or more different specific itemtypes
+           # reserved by same person on same day
+           my $bdata;
+           if($count > 1){
+    	        warn "bibitemno $bibitemno[$i]";
+    	        $bdata = C4::Search::bibitemdata($bibitemno[$i]);
+    	        $i++;
+	   } else {
+                # Look up the book we just found.
+                $bdata = C4::Search::bibitemdata($bibitemno[0]);
+	   }
+           $csth->finish;
+           # Add the results of this latest search to the current
+           # results.
+           # FIXME - An 'each' would probably be more efficient.
+           foreach my $key (keys %$bdata) {
+               $data->{$key} = $bdata->{$key};
+           }
         }
         push @results, $data;
     }
