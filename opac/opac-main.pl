@@ -66,6 +66,32 @@ my $languages_count = @options;
 if($languages_count > 1){
 		$template->param(languages => \@options);
 }
+
+my $branchinfo = getbranchinfo();
+my @loop_data =();
+foreach my $branch (@$branchinfo) {
+        my %row =();
+        $row{'branch_name'} = $branch->{'branchname'};
+        $row{'branch_hours'} = $branch->{'branchhours'};
+        $row{'branch_hours'} =~ s^\n^<br />^g;
+        push (@loop_data, \%row);
+    }
+
+sub getbranchinfo {
+        my $dbh = C4::Context->dbh;
+        my $sth;
+        $sth = $dbh->prepare("Select * from branches order by branchcode");
+        $sth->execute();
+    
+        my @results;
+        while(my $data = $sth->fetchrow_hashref) {
+	            push(@results, $data);
+	        }
+        $sth->finish;
+        return \@results;
+}
+
+
 $template->param(CGIitemtype => $CGIitemtype,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
@@ -79,6 +105,7 @@ $template->param(CGIitemtype => $CGIitemtype,
 				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
 				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
+                                branches => \@loop_data,
 );
 
 $template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
