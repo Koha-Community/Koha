@@ -119,17 +119,17 @@ my %transfereditems;
 my %frbranchcds;
 my %tobranchcds;
 my $color=$linecolor2;
-
+my $transfered;
 my $barcode = $query->param('barcode');
 if ($barcode) {
-	my $transfered;
+
 	my $iteminformation;
 	($transfered, $messages, $iteminformation)
 			= transferbook($tobranchcd, $barcode, $ignoreRs);
 	$found = $messages->{'ResFound'};
 	if ($transfered) {
 		my %item;
-		my $frbranchcd = $iteminformation->{'holdingbranch'};
+		my $frbranchcd = $iteminformation->{'frbranchcd'};
 		if (not ($found)) {
 			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 			$item{'color'}=$color;
