@@ -73,8 +73,7 @@ FIXME
     &OtherReserves
     GetFirstReserveDateFromItem
     GetNumberReservesFromBorrower
-
-    # fixpriority is used only used internally, and by reorder_reserve.pl
+    &fixpriority 
 );
 
 # make all your functions, whether exported or not;
@@ -570,22 +569,68 @@ sub FillReserve {
     }
 }
 
-# Only used internally
-# Decrements (makes more important) the reserves for all of the
-# entries waiting on the given book, if their priority is > $priority.
+# Only used internally + reorder_reserve.pl
+# Changed how this functions works #
+# Now just gets an array of reserves in the rank order and updates them with
+# the array index (+1 as array starts from 0)
+# and if $rank is supplied will splice item from the array and splice it back in again
+# in new priority rank
 sub fixpriority {
-    my ($priority, $biblio) =  @_;
+    my ($biblio,$borrowernumber,$rank) =  @_;
     my $dbh = C4::Context->dbh;
-    my ($count, $reserves) = FindReserves($biblio);
-    foreach my $rec (@$reserves) {
-	if ($rec->{'priority'} > $priority) {
-	    my $sth = $dbh->prepare("UPDATE reserves SET priority = ?
-                               WHERE biblionumber     = ?
-                                 AND borrowernumber   = ?
-                                 AND reservedate      = ?");
-	    $sth->execute($rec->{'priority'},$rec->{'biblionumber'},$rec->{'borrowernumber'},$rec->{'reservedate'});
-	    $sth->finish;
-	}
+
+    warn "BIB: $biblio, BORR: $borrowernumber, RANK: $rank";
+    if($rank eq "del"){
+        warn "Cancel";
+        CancelReserve($biblio,undef,$borrowernumber);
+    }
+    if($rank eq "W" || $rank eq "0"){
+        # make sure priority for waiting items is 0
+        my $sth=$dbh->prepare("UPDATE reserves SET priority = 0
+                         WHERE biblionumber = ?
+                         AND borrowernumber = ?
+                         AND cancellationdate is NULL
+                         AND found ='W'");
+    $sth->execute($biblio,$borrowernumber);
+    }
+    my @priority;
+    my @reservedates;
+    # get whats left
+    my $sth=$dbh->prepare("SELECT borrowernumber, reservedate, constrainttype FROM reserves
+                         WHERE biblionumber   = ?
+                         AND cancellationdate is NULL
+                         AND ((found <> 'F' and found <> 'W') or found is NULL) ORDER BY priority ASC");
+    $sth->execute($biblio);
+    while(my $line = $sth->fetchrow_hashref){
+         push(@reservedates,$line);
+         push(@priority,$line);
+    }
+    # To find the matching index
+    my $i;
+    my $key = -1; # to allow for 0 to be a valid result
+    for ($i = 0; $i < @priority; $i++) {
+           if ($borrowernumber == $priority[$i]->{'borrowernumber'}) {
+               $key = $i; # save the index
+               last;
+            }
+    }
+    warn "key: $key";
+    # if index exists in array then move it to new position
+    if($key>-1 && $rank ne 'del' && $rank > 0){
+          my $new_rank = $rank-1; # $new_rank is what you want the new index to be in the array
+          my $moving_item = splice(@priority, $key, 1);
+          splice(@priority, $new_rank, 0, $moving_item);
+    }
+    # now fix the priority on those that are left....
+    for(my $j=0;$j<@priority;$j++){
+ # warn "update reserves set priority = ".($j+1)." where biblionumber = $biblio and borrowernumber = $priority[$j]->{'borrowernumber'} ";
+ # warn "and reservedate =$priority[$j]->{'reservedate'}";
+         my $sth = $dbh->prepare("UPDATE reserves SET priority = " . ($j+1 ) . "
+                           WHERE biblionumber     = ?
+                           AND borrowernumber   = ?
+                           AND reservedate = ? and found is null");
+        $sth->execute($biblio,$priority[$j]->{'borrowernumber'},$priority[$j]->{'reservedate'});
+        $sth->finish;
     }
 }
 
