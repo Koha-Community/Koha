@@ -1,11 +1,9 @@
 #!/usr/bin/perl
-# WARNING: Not enough context to figure out the correct tabstop size
-# WARNING: Assume that this file uses 4-character tabs
 
 # $Id$
 
-#written 11/1/2000 by chris@katipo.oc.nz
-#part of the koha library system, script to facilitate paying off fines
+# written 11/1/2000 by chris@katipo.oc.nz
+# part of the koha library system, script to facilitate paying off fines
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -33,6 +31,7 @@ use CGI;
 use C4::Members;
 use C4::Accounts2;
 use C4::Stats;
+use C4::Koha;
 use HTML::Template;
 
 my $input=new CGI;
@@ -42,14 +41,16 @@ my $bornum=$input->param('bornum');
 if ($bornum eq ''){
 	$bornum=$input->param('bornum0');
 }
-#get borrower details
+# get borrower details
 my $data=borrdata('',$bornum);
 my $user=$input->remote_user;
 
-#get account details
+# get account details
 my %bor;
 $bor{'borrowernumber'}=$bornum;
-
+my $branches = getbranches();
+my $printers = getprinters();
+my $branch = getbranch($input, $branches);
 
 my @names=$input->param;
 my %inp;
@@ -61,23 +62,24 @@ for (my $i=0;$i<@names;$i++){
 		$check=1;
 	}
 	if ($temp eq 'yes'){
-		$user=~ s/Levin/C/i;
+	        # For HLT
+		$user=~ s/Levin/L/i;
 		$user=~ s/Foxton/F/i;
 		$user=~ s/Shannon/S/i;
 		# FIXME : using array +4, +5, +6 is dirty. Should use arrays for each accountline
 		my $amount=$input->param($names[$i+4]);
 		my $bornum=$input->param($names[$i+5]);
 		my $accountno=$input->param($names[$i+6]);
-		makepayment($bornum,$accountno,$amount,$user);
+		makepayment($bornum,$accountno,$amount,$user,$branch);
 		$check=2;
 	}
 }
 my %env;
-    $user=~ s/Levin/C/i;
+    $user=~ s/Levin/L/i;
     $user=~ s/Foxton/F/i;
     $user=~ s/Shannon/S/i;
 
-$env{'branchcode'}=$user;
+$env{'branchcode'}=$branch;
 my $total=$input->param('total');
 if ($check ==0){
 	my($template, $loggedinuser, $cookie)
@@ -138,12 +140,7 @@ if ($check ==0){
 		$bornum=$input->param("bornum$value");
 		my $itemno=$input->param("itemnumber$value");
 		my $amount=$input->param("amount$value");
-		if ($accounttype eq 'Res'){
-			my $accountno=$input->param("accountno$value");
-			writeoff($bornum,$accountno,$itemno,$accounttype,$amount);
-		} else {
-			writeoff($bornum,'',$itemno,$accounttype,$amount);
-		}
+	        writeoff($bornum,$accountno,$itemno,$accounttype,$amount);
 	}
 	$bornum=$input->param('bornum');
 	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
@@ -153,20 +150,11 @@ if ($check ==0){
 sub writeoff{
 	my ($bornum,$accountnum,$itemnum,$accounttype,$amount)=@_;
 	my $user=$input->remote_user;
-	$user=~ s/Levin/C/;
-	$user=~ s/Foxton/F/;
-	$user=~ s/Shannon/S/;
 	my $dbh = C4::Context->dbh;
 	my $env;
-	my $sth;
-	if ($accounttype eq 'Res'){
-		$sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype='Res' and accountno=? and borrowernumber=?");
-		$sth->execute($accountnum,$bornum);
-	} else {
-		$sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype=? and itemnumber=? and borrowernumber=?");
-		$sth->execute($accounttype,$itemnum,$bornum);
-	}
-	$sth->finish;
+	my $sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype='Res' and accountno=? and borrowernumber=?");
+        $sth->execute($accountnum,$bornum);
+      	$sth->finish;
 	$sth=$dbh->prepare("select max(accountno) from accountlines");
 	$sth->execute;
 	my $account=$sth->fetchrow_hashref;
@@ -176,7 +164,7 @@ sub writeoff{
 						values (?,?,?,now(),?,'Writeoff','W')");
 	$sth->execute($bornum,$account->{'max(accountno)'},$itemnum,$amount);
 	$sth->finish;
-	UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);
+	UpdateStats($env,$branch,'writeoff',$amount,'','','',$bornum);
 }
 
 # Local Variables:
