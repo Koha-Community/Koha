@@ -35,6 +35,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Koha;
+use C4::Context;
 
 my $query = new CGI;
 
@@ -111,19 +112,22 @@ if ( $query->param('resbarcode') ) {
 
     # set to waiting....
     my $iteminfo = getiteminformation( \%env, $item );
+    my $tobranchcd = ReserveWaiting( $item, $borrnum );
 #     if($iteminfo->{'holdingbranch'} ne $branch){
 # 	UpdateHoldingbranch($branch,$item);
 # 	}
 #   check if we have other reservs for this document, if we have a return send the message of transfer
     my ($messages,$nextreservinfo) = OtherReserves($item);
+    # my $branchname = $branches->{$tobranchcd}->{'branchname'}; - not sure if this line + $tobranchcd line do the same thing
+    # as the $messages{'transfert'} code
     my $branchname = getbranchname($messages->{'transfert'});
     my ($borr) = getpatroninformation( \%env, $nextreservinfo, 0 );
     my $borcnum = $borr->{'cardnumber'};
     my $name    =
-      $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
+      $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     my $slip = $query->param('resslip');
-#    printslip( \%env, $slip ); #removed by paul
-
+    printreserve( \%env, $branchname, $borr, $iteminfo );
+#   if ( $tobranchcd ne $branch ) { - not sure if line below is doing the same
     if ( $messages->{'transfert'} ) {
 # 	add the transfer routine
 # 	C4::Circulation::Circ2::dotransfer($item,$iteminfo->{'holdingbranch'},$tobranchcd);
@@ -138,6 +142,7 @@ if ( $query->param('resbarcode') ) {
             borsurname    => $borr->{'surname'},
             diffbranch => 1
         );
+	set_transit($item);
     }
 }
 
@@ -164,6 +169,11 @@ if ($barcode) {
         $input{duedate} = $riduedate{0};
         $input{bornum}  = $riborrowernumber{0};
         push ( @inputloop, \%input );
+        # check if the branch is the same as homebranch
+	# if not, we want to put a message
+	if ($iteminformation->{'homebranch'} ne $branch){
+	     $template->param( homebranch =>$iteminformation->{'homebranch'});
+	}
     }
     elsif ( !$messages->{'BadBarcode'} ) {
         my %input;
@@ -284,6 +294,7 @@ if ( $messages->{'ResFound'} ) {
         $template->param(
             found       => 1,
 		currentbranch => $branches->{ $branch }->{'branchname'},
+	    name        => $name,
             branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             reserved    => 1,
             today       => $todaysdate,
@@ -515,6 +526,26 @@ sub cuecatbarcodedecode {
         return $barcode;
     }
 }
+
+
+sub set_transit {
+        my ($itemnumber) = @_;
+        my $dbh=C4::Context->dbh();
+        my $query = "UPDATE items SET holdingbranch='TRA' WHERE itemnumber = ?";
+        my $sth=$dbh->prepare($query);
+        $sth->execute($itemnumber);
+        $sth->finish();
+    }
+
+sub set_transit {
+        my ($itemnumber) = @_;
+        my $dbh=C4::Context->dbh();
+        my $query = "UPDATE items SET holdingbranch='TRA' WHERE itemnumber = ?";
+        my $sth=$dbh->prepare($query);
+        $sth->execute($itemnumber);
+        $sth->finish();
+}
+
 
 # Local Variables:
 # tab-width: 4
