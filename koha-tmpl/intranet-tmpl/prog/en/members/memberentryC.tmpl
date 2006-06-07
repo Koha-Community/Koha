@@ -85,7 +85,7 @@
 			<input type="hidden" name="dateexpiry"  value="<!-- TMPL_VAR NAME="dateexpiry" -->">
 			<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 			<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
-			<input type="hidden" name="login"  value="<!-- TMPL_VAR NAME="login" -->">
+			<input type="hidden" name="userid"  value="<!-- TMPL_VAR NAME="userid" -->">
 			<input type="hidden" name="password"  value="<!-- TMPL_VAR NAME="password" -->">	
 			<input type="hidden" name="debarred"  value="<!-- TMPL_VAR NAME="debarred" -->" />
 			<input type="hidden" name="lost"  value="<!-- TMPL_VAR NAME="lost" -->" />
@@ -265,7 +265,7 @@
 		<input type="hidden" name="dateexpiry" size="20" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
 		<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 		<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
-		<input type="hidden" name="login" size="20"  value="<!-- TMPL_VAR NAME="login" -->">
+		<input type="hidden" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->">
 		<input type="hidden" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->">	
 		<input type="hidden" name="debarred"  value="<!-- TMPL_VAR NAME="debarred" -->" />
 		<input type="hidden" name="lost"  value="<!-- TMPL_VAR NAME="lost" -->" />
@@ -586,16 +586,16 @@
 			<textarea name="borrowernotes" cols="70" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		</p>
 	</fieldset>
-	<fieldset id="memberentry_login">
+	<fieldset id="memberentry_userid">
 		<legend>OPAC login</legend>
 		<p>
-			<!-- TMPL_IF NAME="mandatorylogin" -->
+			<!-- TMPL_IF NAME="mandatoryuserid" -->
 			<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 			<label>
 			<!-- /TMPL_IF-->
 			OPAC Login</label>
-			<input type="text" name="login" size="20"  value="<!-- TMPL_VAR NAME="login" -->">
+			<input type="text" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorypassword" -->
