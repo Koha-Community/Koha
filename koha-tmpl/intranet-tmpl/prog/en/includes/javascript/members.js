@@ -11,17 +11,21 @@ function CheckDate(d) {
       var m=(d.substring(3,5));
       var a=(d.substring(6));
       var ok=1;
+	var msg; 
       if ( ((isNaN(j))||(j<1)||(j>31)) && (ok==1) ) {
-         alert("Le jour n'est pas correct."); ok=0;
+        msg = _("day not correct."); 
+	alert(msg); ok=0;
       }
       if ( ((isNaN(m))||(m<1)||(m>12)) && (ok==1) ) {
-         alert("Le mois n'est pas correct."); ok=0;
+        msg = _("month not correct.");
+	 alert(msg); ok=0;
       }
       if ( ((isNaN(a))||(a<amin)||(a>amax)) && (ok==1) ) {
-         alert("L'année n'est pas correcte."); ok=0;
+         msg = _("years not correct."); 
+	alert(msg); ok=0;
       }
       if ( ((d.substring(2,3)!=separateur)||(d.substring(5,6)!=separateur)) && (ok==1) ) {
-         alert("Les séparateurs doivent être des "+separateur); ok=0;
+         alert("Separator must be "+separateur); ok=0;
       }
       return ok;
    }
@@ -32,15 +36,19 @@ function CheckDate(d) {
 
 //function test if member is unique and if it's right the member is registred
 function unique() {
+var msg1;
+var msg2;
 if (  document.form.check_member.value==1){
-	if (document.form.categorycode.value!="I"){
+	if (document.form.categorycode.value != "I"){
 		
-		alert("ATTENTION !!!! Ce Lecteur  existe déja");
+		msg1 += _("Warning  !!!! Duplicate borrower!!!!");
+		alert(msg1);
 	check_form_borrowers(0);
 	document.form.submit();
 	
 	}else{
-		alert("ATTENTION !!!! Cette Collectivité  existe déja");
+		msg2 += _("Warning !!!! Duplicate organisation!!!!");
+		alert(msg2);
 	check_form_borrowers(0);
 	}
 }
@@ -60,7 +68,8 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 	if ((myDate1[2]>myDate2[2])||(myDate1[2]==myDate2[2] && myDate1[1]>myDate2[1])||(myDate1[2]==myDate2[2] && myDate1[1]>=myDate2[1] && myDate1[0]>=myDate2[0]))
 	
 		{ 
-		alert("ATTENTION !!! Vérifiez la saisie de la date d'éxpiration qui ne doit pas être antérieure ou égale a la date d'inscription");
+		var msg = _("Warning !!! check date expiry  > date enrolment");
+		alert(msg);
 		document.form.dateexpiry.value="";
 		document.form.dateexpiry.setfocus;
 		}
@@ -134,7 +143,7 @@ if (nav< document.form.step.value) {
 			if (!(document.form_double.answernodouble.checked)){
 					
 				message ="";
-					message_champ="Vous devez confirmez que la suspicion de doublon est fausse !!! ";
+					message_champ+=_("Please confirm suspicious duplicate borrower !!! ");
 					statut=1;
 					document.form.nodouble.value=0;
 			}

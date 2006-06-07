@@ -109,16 +109,17 @@ if ($op eq 'add' or $op eq 'modify') {
 		$data{$key}=~ s/\"/\\\"/g;
 	}
 
+	# WARN : some tests must be done whatever the step, because the librarian can click on any tab.
 	#############test for member being unique #############
-	if ($op eq 'add' && $step eq 2){
+	if ($op eq 'add'){
 		(my $category_type_send=$category_type ) if ($category_type eq 'I'); 
  		my $check_category; # recover the category code of the doublon suspect borrowers
-	   ($check_member,$check_category)=checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
-# 	recover the category type if the borrowers is a duplicate
+	   ($check_member,$check_category)= checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
+	
+# 	recover the category type if the borrowers is a doublon	
 	($check_categorytype,undef)=getcategorytype($check_category);
 	}
-
-# CHECKS step by step
+	# CHECKS step by step
 # STEP 1
 	if ($step eq 1) {
 		###############test to take the right zipcode and city name ##############
@@ -211,13 +212,13 @@ SELECT upperagelimit,
 				push @errors, "ERROR_login_exist";
 				$nok=1;
 			} else {
-				$borrowerid = &newmember(%data);
+				$borrowernumber = &newmember(%data);
 			        if ($data{'organisations'}){				    
 				    # need to add the members organisations
 				    my @orgs=split(/\|/,$data{'organisations'});
 				    add_member_orgs($borrowerid,\@orgs);
 				 }
-				logaction($loggedinuser,"MEMBERS","add member", $borrowerid, "");
+				logaction($loggedinuser,"MEMBERS","add member", $borrowernumber, "");
 			}
  		}
 
@@ -249,7 +250,7 @@ if ($delete){
 	my $data;
 # test to now if u add or modify a borrower (modify =>to take all carateristic of the borrowers)
 	if (!$op and !$data{'surname'}) {
-		$data=borrdata('',$borrowerid);
+		$data=borrdata('',$borrowernumber);
 		%data=%$data;
 	}
 	if (C4::Context->preference("IndependantBranches")) {
@@ -510,9 +511,9 @@ if ($delete){
 		guarantorid	=> $guarantorid,
 		ethcatpopup	=> $ethcatpopup,
 		sex		=> $data{'sex'},
-		login 		=> $data{'login'},	
+		userid 		=> $data{'userid'},	
 		password 	=> $data{'password'},	
-		opacnotes   	=> $data{'opacnotes'},	
+		opacnote   	=> $data{'opacnote'},	
 		contactnotes	=> $data{'contactnotes'},
 		borrowernotes	=> $data{'borrowernotes'},
 		relshiploop	=> \@relshipdata,

@@ -465,15 +465,15 @@ sub newmember {
       . $dbh->quote( $data{'dateexpiry'} )
       . ",contactnote="
       . $dbh->quote( $data{'contactnote'} )
-      . ",b_address="
+      . ",B_address="
       . $dbh->quote( $data{'b_address'} )
-      . ",b_zipcode="
+      . ",B_zipcode="
       . $dbh->quote( $data{'b_zipcode'} )
-      . ",b_city="
+      . ",B_city="
       . $dbh->quote( $data{'b_city'} )
-      . ",b_phone="
+      . ",B_phone="
       . $dbh->quote( $data{'b_phone'} )
-      . ",b_email="
+      . ",B_email="
       . $dbh->quote( $data{'b_email'}, )
       . ",password="
       . $dbh->quote( $data{'password'} )
@@ -497,9 +497,9 @@ sub newmember {
       . $dbh->quote( $data{'flags'} )
       . ",relationship="
       . $dbh->quote( $data{'relationship'} )
-      . ",b_streetnumber="
+      . ",B_streetnumber="
       . $dbh->quote( $data{'b_streetnumber'}) 
-      . ",b_streettype="
+      . ",B_streettype="
       . $dbh->quote( $data{'b_streettype'})
       . ",gonenoaddress="
       . $dbh->quote( $data{'gonenoaddress'})	
@@ -515,8 +515,8 @@ sub newmember {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
-    $data{'borrowerid'} = $dbh->{'mysql_insertid'};
-    return $data{'borrowerid'};
+    $data{'borrowernumber'} = $dbh->{'mysql_insertid'};
+    return $data{'borrowernumber'};
 }
 
 sub changepassword {
