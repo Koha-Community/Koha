@@ -5,7 +5,6 @@
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -34,59 +33,65 @@ use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
 
-my $query=new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/order.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
-			     debug => 1,
-			     });
+my $query = new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/order.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 1 },
+        debug           => 1,
+    }
+);
 
-my $supplier=$query->param('supplier');
-my ($count,@suppliers)=bookseller($supplier);
+my $supplier = $query->param('supplier');
+my ( $count, @suppliers ) = bookseller($supplier);
 
 # check if we have to "close" a basket before building page
-my $op = $query->param('op');
+my $op     = $query->param('op');
 my $basket = $query->param('basket');
-if ($op eq 'close') {
-	closebasket($basket);
+if ( $op eq 'close' ) {
+    closebasket($basket);
 }
 
 #build result page
-my $toggle=0;
+my $toggle = 0;
 my @loop_suppliers;
-for (my $i=0; $i<$count; $i++) {
-	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
-	my %line;
-	if ($toggle==0){
-		$line{even}=1;
-		$toggle=1;
-	} else {
-		$line{even}=0;
-		$toggle=0;
-	}
-	$line{supplierid} =$suppliers[$i]->{'id'};
-	$line{name} = $suppliers[$i]->{'name'};
-	$line{active} = $suppliers[$i]->{'active'};
-	my @loop_basket;
-	for (my $i2=0;$i2<$ordcount;$i2++){
-		my %inner_line;
-		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
-		$inner_line{total} =$orders->[$i2]->{'count(*)'};
-		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-		$inner_line{surname} = $orders->[$i2]->{'firstname'};
-		$inner_line{firstname} = $orders->[$i2]->{'surname'};
-		$inner_line{creationdate} = format_date($orders->[$i2]->{'creationdate'});
-		$inner_line{closedate} = format_date($orders->[$i2]->{'closedate'});
-		push @loop_basket, \%inner_line;
-	}
-	$line{loop_basket} = \@loop_basket;
-	push @loop_suppliers, \%line;
+for ( my $i = 0 ; $i < $count ; $i++ ) {
+    my ( $ordcount, $orders ) = getorders( $suppliers[$i]->{'id'} );
+    my %line;
+    if ( $toggle == 0 ) {
+        $line{even} = 1;
+        $toggle = 1;
+    }
+    else {
+        $line{even} = 0;
+        $toggle = 0;
+    }
+    $line{supplierid} = $suppliers[$i]->{'id'};
+    $line{name}       = $suppliers[$i]->{'name'};
+    $line{active}     = $suppliers[$i]->{'active'};
+    my @loop_basket;
+    for ( my $i2 = 0 ; $i2 < $ordcount ; $i2++ ) {
+        my %inner_line;
+        $inner_line{basketno}     = $orders->[$i2]->{'basketno'};
+        $inner_line{total}        = $orders->[$i2]->{'count(*)'};
+        $inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
+        $inner_line{surname}      = $orders->[$i2]->{'firstname'};
+        $inner_line{firstname}    = $orders->[$i2]->{'surname'};
+        $inner_line{creationdate} =
+          format_date( $orders->[$i2]->{'creationdate'} );
+        $inner_line{closedate} = format_date( $orders->[$i2]->{'closedate'} );
+        push @loop_basket, \%inner_line;
+    }
+    $line{loop_basket} = \@loop_basket;
+    push @loop_suppliers, \%line;
 }
-$template->param(loop_suppliers => \@loop_suppliers,
-						supplier => $supplier,
-						count => $count);
+$template->param(
+    loop_suppliers => \@loop_suppliers,
+    supplier       => $supplier,
+    count          => $count
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
