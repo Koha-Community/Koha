@@ -46,11 +46,15 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $toggle = 0;
     }
     my ( $spent, $comtd ) = bookfundbreakdown( $results[$i]->{'bookfundid'} );
+
     my $avail = $results[$i]->{'budgetamount'} - ( $spent + $comtd );
     my %line;
-
     $line{bookfundname} = $results[$i]->{'bookfundname'};
     $line{budgetamount} = $results[$i]->{'budgetamount'};
+    $line{bookfundid}   = $results[$i]->{'bookfundid'};
+    $line{sdate}        = $results[$i]->{'startdate'};
+    $line{edate}        = $results[$i]->{'enddate'};
+    $line{aqbudgetid}   = $results[$i]->{'aqbudgetid'};
     $line{spent}        = sprintf( "%.2f", $spent );
     $line{comtd}        = sprintf( "%.2f", $comtd );
     $line{avail}        = sprintf( "%.2f", $avail );
@@ -74,18 +78,22 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 }
 
 # suggestions ?
-my $suggestion = countsuggestion("ASKED");
+my $status           = $query->param('status') || "ASKED";
+my $suggestion       = countsuggestion($status);
+my $suggestions_loop = &searchsuggestion( '', '', '', '', $status, '' );
+
 $template->param(
-    classlist     => $classlist,
-    type          => 'intranet',
-    loop_budget   => \@loop_budget,
-    loop_currency => \@loop_currency,
-    total         => sprintf( "%.2f", $total ),
-    suggestion    => $suggestion,
-    totspent      => sprintf( "%.2f", $totspent ),
-    totcomtd      => sprintf( "%.2f", $totcomtd ),
-    totavail      => sprintf( "%.2f", $totavail ),
-    nobudget      => $#results == -1 ? 1 : 0
+    classlist        => $classlist,
+    type             => 'intranet',
+    loop_budget      => \@loop_budget,
+    loop_currency    => \@loop_currency,
+    total            => sprintf( "%.2f", $total ),
+    suggestion       => $suggestion,
+    suggestions_loop => $suggestions_loop,
+    totspent         => sprintf( "%.2f", $totspent ),
+    totcomtd         => sprintf( "%.2f", $totcomtd ),
+    totavail         => sprintf( "%.2f", $totavail ),
+    nobudget         => $#results == -1 ? 1 : 0
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
