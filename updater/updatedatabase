@@ -436,6 +436,15 @@ my %tabledata = (
             explanation         => 'Allow reading record info retrievable from issues and oldissues tables',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'IssuingInProcess',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Allow no debt alert if the patron is issuing item that accumulate debt',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1595,6 +1604,11 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.143  2006/06/07 02:02:47  bob_lyon
+# merging katipo changes...
+#
+# adding new preference IssuingInProcess
+#
 # Revision 1.142  2006/06/06 23:42:46  bob_lyon
 # Merging Katipo changes...
 #
