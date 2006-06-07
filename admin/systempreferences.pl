@@ -77,6 +77,7 @@ my %tabsysprefs;
 	$tabsysprefs{maxoutstanding}="Circulation";
 	$tabsysprefs{maxreserves}="Circulation";
 	$tabsysprefs{noissuescharge}="Circulation";
+	$tabsysprefs{IssuingInProcess}="Circulation";
 	$tabsysprefs{patronimages}="Circulation";
 	$tabsysprefs{printcirculationslips}="Circulation";
 	$tabsysprefs{ReturnBeforeExpiry}="Circulation";
