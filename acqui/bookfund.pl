@@ -40,17 +40,38 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $query =
-"Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived                                      
-as qrev,subscription,title,itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,                                 
-quantity-quantityreceived as tleft,aqorders.ordernumber                                                                                                        
-as ordnum,entrydate,budgetdate,booksellerid,aqbasket.basketno                                                               
-from aqorders,aqorderbreakdown,aqbasket                                                                                     
-left join biblioitems on  biblioitems.biblioitemnumber=aqorders.biblioitemnumber
-where bookfundid=? and aqorders.ordernumber=aqorderbreakdown.ordernumber and
-aqorders.basketno=aqbasket.basketno and (budgetdate >= ? and budgetdate < ?)
-and (datecancellationprinted is NULL or datecancellationprinted='0000-00-00')
-";
+my $query = '
+SELECT quantity,
+       datereceived,
+       freight,
+       unitprice,
+       listprice,
+       ecost,
+       quantityreceived AS qrev,
+       subscription,
+       title,
+       itemtype,
+       aqorders.biblionumber,
+       aqorders.booksellerinvoicenumber,
+       quantity-quantityreceived AS tleft,
+       aqorders.ordernumber AS ordnum,
+       entrydate,
+       budgetdate,
+       booksellerid,
+       aqbasket.basketno
+  FROM aqorders
+    INNER JOIN aqorderbreakdown
+      ON aqorderbreakdown.ordernumber = aqorders.ordernumber
+    INNER JOIN aqbasket
+      ON aqbasket.basketno = aqorders.basketno
+    LEFT JOIN biblioitems
+      ON biblioitems.biblioitemnumber = aqorders.biblioitemnumber
+  WHERE bookfundid = ?
+    AND budgetdate >= ?
+    AND budgetdate < ?
+    AND (datecancellationprinted IS NULL
+         OR datecancellationprinted = \'0000-00-00\')
+';
 warn $query;
 my $sth = $dbh->prepare($query);
 $sth->execute( $bookfund, $start, $end );
