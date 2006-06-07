@@ -1051,18 +1051,18 @@ sub bookfunds {
     my $branch   = $userenv->{branch};
     my $strsth;
 
-    if ( !( $branch eq '' ) ) {
-        $strsth = "Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid and startdate<now() and enddate>now() and (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
-      group by aqbookfund.bookfundid order by bookfundname";
+    if ( $branch ne '' ) {
+        $strsth = "SELECT * FROM aqbookfund,aqbudget WHERE aqbookfund.bookfundid
+      =aqbudget.bookfundid AND startdate<now() AND enddate>now() AND (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
+      GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
     }
     else {
-        $strsth = "Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-      =aqbudget.bookfundid and startdate<now() and enddate>now()
-      group by aqbookfund.bookfundid order by bookfundname";
+        $strsth = "SELECT * FROM aqbookfund,aqbudget WHERE aqbookfund.bookfundid
+      =aqbudget.bookfundid AND startdate<now() AND enddate>now()
+      GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
     }
     my $sth = $dbh->prepare($strsth);
-    if ( !( $branch eq '' ) ) {
+    if ( $branch ne '' ) {
         $sth->execute($branch);
     }
     else {
@@ -1088,21 +1088,31 @@ sub bookfundbreakdown {
     my ( $id, $year ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-"SELECT startdate, enddate, quantity, datereceived, freight, unitprice, listprice, ecost, quantityreceived, subscription
-FROM aqorders, aqorderbreakdown, aqbudget, aqbasket
-WHERE aqorderbreakdown.bookfundid = ?
-AND aqorders.ordernumber = aqorderbreakdown.ordernumber
-AND (
-datecancellationprinted IS NULL
-OR datecancellationprinted = '0000-00-00'
-)
-AND aqbudget.bookfundid = aqorderbreakdown.bookfundid
-AND aqbasket.basketno = aqorders.basketno
-AND aqbasket.creationdate >= startdate
-AND enddate >= aqbasket.creationdate
-and startdate<=now() and enddate>=now()"
+        "SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
+  quantityreceived,subscription
+  FROM aqorders,aqorderbreakdown WHERE bookfundid=? AND
+  aqorders.ordernumber=aqorderbreakdown.ordernumber
+  AND (datecancellationprinted is NULL OR
+      datecancellationprinted='0000-00-00')"
     );
-    $sth->execute($id);
+    if ($start) {
+        $sth = $dbh->prepare(
+            "SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
+  quantityreceived,subscription
+  FROM aqorders,aqorderbreakdown
+  WHERE bookfundid=? AND
+  aqorders.ordernumber=aqorderbreakdown.ordernumber
+  AND (datecancellationprinted is NULL OR
+     datecancellationprinted='0000-00-00')
+  AND ((datereceived >= ? AND datereceived < ?) OR
+ (budgetdate >= ? AND budgetdate < ?))"
+        );
+        $sth->execute( $id, $start, $end, $start, $end );
+    }
+    else {
+        $sth->execute($id);
+    }
+
     my $comtd = 0;
     my $spent = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
