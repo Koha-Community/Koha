@@ -14,7 +14,7 @@ my $query_form = $query->param('query_form'); # which query form was submitted
 my @newresults;
 my ($template,$borrowernumber,$cookie);
 my @forminputs;		#this is for the links to navigate among the results when they are more than the maximum number of results per page
-my @searchdesc;
+my $searchdesc;
 ## Check if we're searching
 if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	($template, $borrowernumber, $cookie)
@@ -39,19 +39,20 @@ push @forminputs, {field => 'pqf_sort_by', value => $pqf_sort_by} ;
 push @forminputs, {field => 'pqf_prox_ops', value => $pqf_prox_ops};
 push @forminputs, { field => 'pqf_bool_ops' , value => $pqf_bool_ops};
 push @forminputs, { field => 'pqf_query' , value => $pqf_query };
-
+$searchdesc=$cql_query.$pqf_query;
 # STEP 2. OK, now we have PQF, so we can pass off the query to
 # the API
+my $reorder=$query->param('reorder_query');
 my ($count, @results);
 if ($query->param('cql_query')) {
-	($count,@results) = searchZOOM('cql',$cql_query);
+	($count,@results) = searchZOOM('cql',$cql_query,$reorder,$number_of_results,$startfrom);
 } else {
-	($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query");
+	($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$reorder,$number_of_results,$startfrom);
 }
 
 
 
-@newresults=searchResults( $number_of_results,$count,$startfrom,@results) ;
+@newresults=searchResults( $number_of_results,@results) ;
 	my $num = scalar(@newresults);
 	# sorting out which results to display.
 	# the result number to start to show
@@ -62,8 +63,8 @@ if ($query->param('cql_query')) {
 	# the total results searched
 	$template->param(total => $count);
 	$template->param(FORMINPUTS => \@forminputs);
-#	$template->param(searchdesc => \@searchdesc );
-	
+	$template->param(searchdesc => $searchdesc );
+	$template->param(reorder => $reorder );
 	$template->param(results_per_page =>  $number_of_results );
 	$template->param(SEARCH_RESULTS => \@newresults);
 
@@ -145,13 +146,14 @@ if ($query->param('cql_query')) {
 }
 output_html_with_http_headers $query, $cookie, $template->output;
 
+
 ###Move these subs to a proper Search.pm
 sub searchZOOM {
 	use C4::Biblio;
-	my ($type,$query) = @_;
+	my ($type,$query,$reorder,$num,$startfrom) = @_;
 	my $dbh = C4::Context->dbh;
 	my $zconn=C4::Context->Zconn("biblioserver");
-
+warn ($type,$query,$reorder,$num,$startfrom) ;
 	if ($zconn eq "error") {
 		return("error with connection",undef); #FIXME: better error handling
 	}
@@ -177,9 +179,17 @@ sub searchZOOM {
 	if ($@) {
 		return("error with search",undef); #FIXME: better error handling
 	}
+if ($reorder){
+warn $reorder;
+if($result->sort("yaz","$reorder")<0){
+warn "sort did not work";
+}
+}
+	my $i;
 	my $numresults = $result->size() if  ($result);
 	my @results;
-	for (my $i=0; $i<$numresults;$i++) {
+	for ( $i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
+	
 		my $rec = $result->record($i);
 		push(@results,$rec->raw()) if $rec;
 	}
@@ -282,7 +292,7 @@ warn "CGI 2 PQF conversion";
 
 
 sub searchResults {
-my ($num,$numresults,$startfrom,@marcresults)=@_;	
+my ($num,@marcresults)=@_;	
 use C4::Date;
 
 my $dbh= C4::Context->dbh;
@@ -318,7 +328,7 @@ my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.".$colum
 $subfieldstosearch{$column}=$tagsubfield;
 }
 
-		for ( my $i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
+		for ( my $i=0; $i<$num ; $i++){
 	
 		my $marcrecord;					
 	$marcrecord = MARC::File::USMARC::decode($marcresults[$i]);
