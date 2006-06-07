@@ -37,6 +37,8 @@ use C4::Koha;
 my $input = new CGI;
 my $time  = $input->param('time');
 my $branch = $input->param('branch');
+my $sort = $input->param('sort');
+
 if (!$branch) {
     $branch = "ALL";
 }
@@ -78,6 +80,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	$line{'borrowernumber'} = $data->[$i]->{'borrowernumber'};
 	$line{'surname'} = $data->[$i]->{'surname'};
 	$line{'firstname'} = $data->[$i]->{'firstname'};
+        $line{'sortdate'}       = $data->[$i]->{'reservedate'};
         $line{'reservedate'}    = format_date($data->[$i]->{'reservedate'});
 	$line{'biblionumber'} = $data->[$i]->{'biblionumber'};
 	$line{'title'} = $data->[$i]->{'title'};
@@ -86,9 +89,54 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{'status'} = $data->[$i]->{'found'};
         $line{'branchcode'} = $data->[$i]->{'branchcode'};
 	$line{'toggle'} = $toggle;
-
+     if ( $line{'status'} ne 'W' ) {
+	 
+	 # its not waiting, we need to find if its on issue, or on the shelf
+	 # FIXME still need to shift the text to the template so its translateable
+	 if ( $data->[$i]) {
+	     # find if its on issue
+	     my @items = &ItemInfo( undef, $line{'biblionumber'}, 'intra' );
+	     my $onissue = 0;
+	     foreach my $item (@items) {
+		 if ( $item->{'datedue'} eq 'Reserved' ) {
+		     $onissue = 0;
+		     if ($item->{'branchname'} eq ''){
+			 $line{'status'}='In Transit';
+		     }
+		     else {			 
+			 $line{'status'} = "On shelf at $item->{'branchname'}";
+		     }
+		     
+		 }
+		 
+		 else {
+		     $onissue = 1;
+		 }
+	     }		 
+	     if ($onissue) {
+		 $line{'status'} = 'On Issue';
+	     }
+	 }
+	 else {
+	     $line{'status'}="Waiting for pickup";
+	     
+	 }
+     }
     push( @dataloop, \%line );
 }
+
+if ($sort eq 'name'){ 
+    @dataloop = sort {$a->{'surname'} cmp $b->{'surname'}} @dataloop;                                                                                         
+}                                                                                                                                                             
+elsif ($sort eq 'date'){                                                                                                                                      
+    @dataloop = sort {$a->{'sortdate'} cmp $b->{'sortdate'}} @dataloop;                                                                                       
+}                                                                                                                                                             
+elsif ($sort eq 'title'){                                                                                                                                     
+    @dataloop = sort {$a->{'title'} cmp $b->{'title'}} @dataloop;                                                                                             
+}                                                                                                                                                             
+else {                                                                                                                                                        
+    @dataloop = sort {$a->{'status'} cmp $b->{'status'}} @dataloop;                                                                                           
+}                                                                                                                                                             
 
 
 $template->param(
