@@ -120,6 +120,7 @@ sub getbranches {
 # returns a reference to a hash of references to branches...
         my ($type) = @_;
 	my %branches;
+	my $branch;
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
@@ -131,7 +132,7 @@ sub getbranches {
     	$sth = $dbh->prepare("Select * from branches order by branchname");
 	}
 	$sth->execute;
-	while (my $branch=$sth->fetchrow_hashref) {
+	while ($branch=$sth->fetchrow_hashref) {
 		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
 	        if ($type){
 		    $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? and categorycode = ?");
@@ -158,7 +159,7 @@ sub getbranches {
                 if (!$type){
 		    $branches{$branch->{'branchcode'}}=$branch;
 		}
-	}
+
 	return (\%branches);
 }
 
