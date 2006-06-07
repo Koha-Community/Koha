@@ -224,7 +224,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
 my $itemtypeinfos_of = get_itemtypeinfos_of(@itemtypes);
 
-my $return_date_of = get_return_date_of(@itemnumbers);
+my $return_date_of = get_current_return_date_of(@itemnumbers);
 
 my @bibitemloop;
 

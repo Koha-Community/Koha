@@ -81,7 +81,7 @@ Also deals with stocktaking.
                 &listitemsforinventory
                 &itemseen
                 &fixdate
-                get_return_date_of
+                get_current_return_date_of
                 get_transfert_infos
 		&checktransferts
 		&GetReservesForBranch
@@ -2046,7 +2046,7 @@ sub fixdate {
 	
 }
 
-sub get_return_date_of {
+sub get_current_return_date_of {
     my (@itemnumbers) = @_;
 
     my $query = '
