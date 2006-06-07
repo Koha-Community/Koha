@@ -397,6 +397,17 @@ sub receiveorder {
     $sth->execute( $quantrec, $invoiceno, $cost, $freight, $rrp, $biblio,
         $ordnum );
     $sth->finish;
+
+    # Allows libraries to change their bookfund during receiving orders
+    # allows them to adjust budgets
+    if ( C4::Context->preferene("LooseBudgets") ) {
+        my $sth = $dbh->prepare(
+"UPDATE aqorderbreakdown SET bookfundid=?                                                                                                         
+                           WHERE ordernumber=?"
+        );
+        $sth->execute( $bookfund, $ordnum );
+        $sth->finish;
+    }
 }
 
 =item updaterecorder
@@ -858,37 +869,55 @@ following keys:
 #'
 sub ordersearch {
     my ( $search, $id, $biblio, $catview ) = @_;
-    my $dbh         = C4::Context->dbh;
-    my @data        = split( ' ', $search );
-    my @searchterms = ($id);
+    my $dbh = C4::Context->dbh;
+    my @data = split( ' ', $search );
+    my @searchterms;
+    if ($id) {
+        @searchterms = ($id);
+    }
     map { push( @searchterms, "$_%", "% $_%" ) } @data;
     push( @searchterms, $search, $search, $biblio );
-    my $sth = $dbh->prepare(
-"Select biblio.*,biblioitems.*,aqorders.*,aqbasket.*,biblio.title from aqorders,biblioitems,biblio,aqbasket
-		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber and
-		aqorders.basketno = aqbasket.basketno
-		and aqbasket.booksellerid = ?
-		and biblio.biblionumber=aqorders.biblionumber
-		and ((datecancellationprinted is NULL)
-		or (datecancellationprinted = '0000-00-00'))
-		and (("
+    my $query;
+    if ($id) {
+        $query =
+          "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
+  WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
+  aqorders.basketno = aqbasket.basketno
+  AND aqbasket.booksellerid = ?
+  AND biblio.biblionumber=aqorders.biblionumber
+  AND ((datecancellationprinted is NULL)
+      OR (datecancellationprinted = '0000-00-00'))
+  AND (("
           . (
-            join( " and ",
+            join( " AND ",
                 map { "(biblio.title like ? or biblio.title like ?)" } @data )
           )
-          . ") or biblioitems.isbn=? or (aqorders.ordernumber=? and aqorders.biblionumber=?)) "
+          . ") OR biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
+
+    }
+    else {
+        $query =
+          "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
+  WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
+  aqorders.basketno = aqbasket.basketno
+  AND biblio.biblionumber=aqorders.biblionumber
+  AND ((datecancellationprinted is NULL)
+      OR (datecancellationprinted = '0000-00-00'))
+  AND (aqorders.quantityreceived < aqorders.quantity OR aqorders.quantityreceived is NULL)
+  AND (("
           . (
-            ( $catview ne 'yes' )
-            ? " and (quantityreceived < quantity or quantityreceived is NULL)"
-            : ""
+            join( " AND ",
+                map { "(biblio.title like ? OR biblio.title like ?)" } @data )
           )
-          . " group by aqorders.ordernumber"
-    );
+          . ") or biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
+    }
+    $query .= " GROUP BY aqorders.ordernumber";
+    my $sth = $dbh->prepare($query);
     $sth->execute(@searchterms);
     my @results = ();
-    my $sth2    = $dbh->prepare("Select * from biblio where biblionumber=?");
+    my $sth2    = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber=?");
     my $sth3    =
-      $dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
+      $dbh->prepare("SELECT * FROM aqorderbreakdown WHERE ordernumber=?");
     while ( my $data = $sth->fetchrow_hashref ) {
         $sth2->execute( $data->{'biblionumber'} );
         my $data2 = $sth2->fetchrow_hashref;
