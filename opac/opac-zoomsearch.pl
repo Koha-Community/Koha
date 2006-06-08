@@ -36,20 +36,24 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	# query into PQF format so we can use the Koha API properly
 	my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query) = cgi2pqf($query);
 	warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
+
+	# lets store the query details in an array for later
 	push @forminputs, { field => "cql_query" , value => $cql_query} ;
-	push @forminputs, {field => 'pqf_sort_by', value => $pqf_sort_by} ;
-	push @forminputs, {field => 'pqf_prox_ops', value => $pqf_prox_ops};
+	push @forminputs, { field => 'pqf_sort_by', value => $pqf_sort_by} ;
+	push @forminputs, { field => 'pqf_prox_ops', value => $pqf_prox_ops};
 	push @forminputs, { field => 'pqf_bool_ops' , value => $pqf_bool_ops};
 	push @forminputs, { field => 'pqf_query' , value => $pqf_query };
-	$searchdesc=$cql_query.$pqf_query;
+	$searchdesc=$cql_query.$pqf_query; # FIXME: this should be a more use-friendly string
+
 	# STEP 2. OK, now we have PQF, so we can pass off the query to
 	# the API
-	my $reorder=$query->param('reorder_query');
 	my ($count, @results);
+
+	# CQL queries are handled differently, so alert our API and pass in the variables
 	if ($query->param('cql_query')) {
-		($count,@results) = searchZOOM('cql',$cql_query,$reorder,$number_of_results,$startfrom);
+		($count,@results) = searchZOOM('cql',$cql_query,$number_of_results,$startfrom);
 	} else {
-		($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$reorder,$number_of_results,$startfrom);
+		($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
 	}
 	@newresults=searchResults( $number_of_results,@results) ;
 	my $num = scalar(@newresults);
@@ -63,7 +67,6 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	$template->param(total => $count);
 	$template->param(FORMINPUTS => \@forminputs);
 	$template->param(searchdesc => $searchdesc );
-	$template->param(reorder => $reorder );
 	$template->param(results_per_page =>  $number_of_results );
 	$template->param(SEARCH_RESULTS => \@newresults);
 
@@ -93,7 +96,7 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	}
 	my $current_ten = $pg / 10;
 	if ($current_ten == 0) {
-		 $current_ten = 0.1;           # In case it´s in ten = 0
+		 $current_ten = 0.1;           # In case it's in ten = 0
 	} 
 	my $from = $current_ten * 10; # Calculate the initial page
 	my $end_ten = $from + 9;
@@ -199,11 +202,11 @@ output_html_with_http_headers $query, $cookie, $template->output;
 ###Move these subs to a proper Search.pm
 sub searchZOOM {
 	use C4::Biblio;
-	my ($type,$query,$reorder,$num,$startfrom) = @_;
+	my ($type,$query,$num,$startfrom) = @_;
 	my $dbh = C4::Context->dbh;
 	my $zconn=C4::Context->Zconn("biblioserver");
 
-	warn ($type,$query,$reorder,$num,$startfrom) ;
+	warn ($type,$query,$num,$startfrom) ;
 	if ($zconn eq "error") {
 		return("error with connection",undef); #FIXME: better error handling
 	}
@@ -229,13 +232,6 @@ sub searchZOOM {
 	if ($@) {
 		return("error with search: $@",undef); #FIXME: better error handling
 	}
-
-#	if ($reorder){
-#		warn $reorder;
-#		if($result->sort("yaz","$reorder")<0){
-#			warn "sort did not work";
-#		}
-#	}
 	my $i;
 	my $numresults = $result->size() if  ($result);
 	my @results;
@@ -266,10 +262,18 @@ sub cgi2pqf {
 
 	# bunch of places to store the various queries we're working with
 	my $cql_query = $query->param('cql_query');
+
 	my $pqf_query = $query->param('pqf_query');
-	my $pqf_sort_by = $query->param('pqf_sort_by');
+	my @pqf_query_array;
+	my @counting_pqf_query_array;
+	
 	my $pqf_prox_ops = $query->param('pqf_prox_ops');
+	my @pqf_prox_ops_array;
+	
 	my $pqf_bool_ops = $query->param('pqf_bool_ops');
+	my @pqf_bool_ops_array;
+
+	my $pqf_sort_by = $query->param('pqf_sort_by');
 
 	# operators:
 
@@ -293,18 +297,18 @@ sub cgi2pqf {
 	# First, process the 'operators' and put them in a separate variable
 	# proximity and boolean
 	foreach my $spec_attr (@specific_attributes) {
-		for (my $i=1;$i<10;$i++) {
+		for (my $i=1;$i<15;$i++) {
 			if ($query->param("query$i")) { # make sure this set should be used
 				if ($spec_attr =~ /^op/) { # process the operators separately
-					$pqf_bool_ops .= " ".$query->param("$spec_attr$i");
+					push @pqf_bool_ops_array, $query->param("$spec_attr$i");
 				} elsif ($spec_attr =~ /^prox/) { # process the proximity operators separately
 					if ($query->param("$spec_attr$i")) {
 						warn "PQF:".$query->param("$spec_attr$i");
-						$pqf_prox_ops .= " ".$query->param("$spec_attr$i");
+						push @pqf_prox_ops_array,$query->param("$spec_attr$i");
 					} else {
 						if (($spec_attr =~ /^prox_exclusion/) || ($spec_attr =~ /^prox_ordered/)) { # this is an exception, sloppy way to handle it
 							if ($i==2) {
-								$pqf_prox_ops .=" 0";
+								push @pqf_prox_ops_array,0;
 							}
 						}
 					}
@@ -315,22 +319,41 @@ sub cgi2pqf {
 	# by now, we have two variables: $pqf_bool_ops (boolean) and $pqf_prox_ops (proximity)
 
 	# Now, process the attributes
-	for (my $i=1;$i<10;$i++) {
+	for (my $i=1;$i<15;$i++) {
 		foreach my $spec_attr (@specific_attributes) {
 			if ($query->param("query$i")) {
 				if ($spec_attr =~ /^query/) {
-					if ($query->param("$spec_attr$i") =~ /@/) { # don't wrap in quotes if the query is PQF
-						$pqf_query .= " ".$query->param("$spec_attr$i");
-					} else {
-						$pqf_query .= " \"".$query->param("$spec_attr$i")."\"";
-					}
+					push @counting_pqf_query_array,$query->param("$spec_attr$i") if $query->param("$spec_attr$i");
+					push @pqf_query_array,$query->param("$spec_attr$i") if $query->param("$spec_attr$i")
 				} elsif ($spec_attr =~ /^op/) { # don't process the operators again
 				} elsif ($spec_attr =~ /^prox/) { 
 				} else {
-					$pqf_query .= " ".$query->param("$spec_attr$i");
+					push @pqf_query_array,$query->param("$spec_attr$i") if $query->param("$spec_attr$i");
 				}
 			}
 		}
+	}
+
+	my $count_pqf_query = @counting_pqf_query_array;
+	my $count_pqf_bool_ops = @pqf_bool_ops_array;
+
+	if ($count_pqf_bool_ops == $count_pqf_query-1) {
+		for (my $i=$count_pqf_query;$i>=0;$i--) {
+			$pqf_bool_ops.=" ".$pqf_bool_ops_array[$i];
+		}
+		foreach my $que(@pqf_query_array) {
+			$pqf_query .=" ".$que;
+		}
+	} else {
+		warn "problem example:".$count_pqf_bool_ops." ".$count_pqf_query;
+		
+		for (my $i=$count_pqf_query;$i>=1;$i--) {
+			$pqf_bool_ops.=" ".$pqf_bool_ops_array[$i];
+                }
+                foreach my $que(@pqf_query_array) {
+                	$pqf_query .=" ".$que;
+		}
+
 	}
 	warn "Boolean Operators: ".$pqf_bool_ops if $pqf_bool_ops;
 	warn "Proximigy Operators: ".$pqf_prox_ops if $pqf_prox_ops;
