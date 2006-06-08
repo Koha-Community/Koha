@@ -511,8 +511,8 @@ sub transferbook {
 # 		$messages->{'ResFound'} = $resrec;
 		$dotransfer = 1;
 	}
-
-	if ($dotransfer and not $resfound) {
+	
+	if ($dotransfer) {
 		dotransfer($iteminformation->{'itemnumber'}, $fbr, $tbr);
 		$messages->{'WasTransfered'} = 1;
 	}
@@ -534,7 +534,7 @@ sub dotransfer {
 	#update holdingbranch in items .....
 	$dbh->do("UPDATE items set holdingbranch = $tbr WHERE items.itemnumber = $itm");
 	&itemseen($itm);
-	&domarctransfer($dbh,$itm);
+ 	&domarctransfer($dbh,$itm);
 	return;
 }
 
@@ -1197,13 +1197,12 @@ sub returnbook {
 # 		now we check if there is a reservation with the validate of transfer if we have one, we can 		set it with the status 'W'
 		my $updateWaiting = SetWaitingStatus($iteminformation->{'itemnumber'});
 	}
-#	if we don't have a transfer on run, we check if the document is not in his homebranch and there is not a reservation, we transfer this one to his home branch directly .
+#	if we don't have a transfer on run, we check if the document is not in his homebranch and there is not a reservation, we transfer this one to his home branch directly if system preference Automaticreturn is turn on .
 	else {
-	# 	new op dev
 		my $checkreserves = CheckReserves($iteminformation->{'itemnumber'});
-		if (($iteminformation->{'homebranch'} ne $iteminformation->{'holdingbranch'}) and (not $checkreserves)){
-			my $automatictransfer = dotransfer($iteminformation->{'itemnumber'},$iteminformation->{'holdingbranch'},$iteminformation->{'homebranch'});
-			$messages->{'WasTransfered'} = 1;
+		if (($iteminformation->{'homebranch'} ne $iteminformation->{'holdingbranch'}) and (not $checkreserves) and (C4::Context->preference("AutomaticItemReturn") == 1)){
+				my $automatictransfer = dotransfer($iteminformation->{'itemnumber'},$iteminformation->{'holdingbranch'},$iteminformation->{'homebranch'});
+				$messages->{'WasTransfered'} = 1;
 		}
 	}
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 

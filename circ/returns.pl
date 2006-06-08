@@ -57,7 +57,7 @@ my $headerbackgroundcolor = '#99cc33';
 my $linecolor1            = '#ffffcc';
 my $linecolor2            = 'white';
 
-my $branches = getbranches();
+my $branches = getbranches('IS');
 my $printers = getprinters( \%env );
 
 my $branch  = C4::Context->userenv->{'branch'};

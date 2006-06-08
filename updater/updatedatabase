@@ -445,6 +445,15 @@ my %tabledata = (
             explanation         => 'Allow no debt alert if the patron is issuing item that accumulate debt',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'AutomaticItemReturn',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'This Variable allow or not to return automaticly to his homebranch',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1604,6 +1613,18 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.144  2006/06/08 15:36:31  alaurin
+# Add a new system preference 'AutomaticItemReturn' :
+#
+# if this prefence is switched on: the document returned in another library than homebranch, the system automaticly transfer the document to his homebranch (with notification for librarian in returns.tmpl) .
+#
+# switch off : the document stay in the holdingbranch ...
+#
+# correcting bugs :
+# - comment C4::acquisition (not using in request.pl).
+# - correcting date in request.pl
+# -add the new call of function getbranches in request.pl
+#
 # Revision 1.143  2006/06/07 02:02:47  bob_lyon
 # merging katipo changes...
 #

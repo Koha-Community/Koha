@@ -29,6 +29,7 @@ use CGI;
 use Date::Manip;
 use List::MoreUtils qw/uniq/;
 use Data::Dumper;
+use Date::Calc qw/Today/;
 
 use C4::Search;
 use C4::Output;
@@ -38,7 +39,8 @@ use C4::Reserves2;
 use C4::Biblio;
 use C4::Koha;
 use C4::Circulation::Circ2;
-use C4::Acquisition;
+# FIXME Is there utility to use Acquisition.pm ???? 
+# use C4::Acquisition;
 use C4::Date;
 use C4::Members;
 
@@ -66,7 +68,8 @@ my %env;
 my $borrowerslist;
 my $messageborrower;
 
-my $date = today();
+# my $date = today();
+my $date= sprintf('%04d-%02d-%02d', Today());
 
 if ($findborrower) {
     my ($count,$borrowers) =  BornameSearch(\%env, $findborrower, 'cardnumber', 'web');
@@ -318,7 +321,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
 # existingreserves building
 my @reserveloop;
-my $branches = getbranches();
+my $branches = getbranches('RE');
 foreach my $res (sort {$a->{found} cmp $b->{found}} @$reserves){
     my %reserve;
     my @optionloop;
@@ -381,7 +384,6 @@ foreach my $branchcode (keys %{$branches}) {
     push @values, $branchcode;
     $label_of{$branchcode} = $branches->{$branchcode}->{branchname};
 }
-
 my $CGIbranch = CGI::scrolling_list(
     -name     => 'pickup',
     -values   => \@values,
