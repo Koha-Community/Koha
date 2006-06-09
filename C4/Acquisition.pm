@@ -382,7 +382,7 @@ Also updates the book fund ID in the aqorderbreakdown table.
 
 #'
 sub receiveorder {
-    my ( $biblio, $ordnum, $quantrec, $user, $cost, $invoiceno, $freight, $rrp $bookfund)
+    my ( $biblio, $ordnum, $quantrec, $user, $cost, $invoiceno, $freight, $rrp, $bookfund)
       = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
