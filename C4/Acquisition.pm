@@ -382,7 +382,7 @@ Also updates the book fund ID in the aqorderbreakdown table.
 
 #'
 sub receiveorder {
-    my ( $biblio, $ordnum, $quantrec, $user, $cost, $invoiceno, $freight, $rrp )
+    my ( $biblio, $ordnum, $quantrec, $user, $cost, $invoiceno, $freight, $rrp $bookfund)
       = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
@@ -402,7 +402,7 @@ sub receiveorder {
     # allows them to adjust budgets
     if ( C4::Context->preferene("LooseBudgets") ) {
         my $sth = $dbh->prepare(
-"UPDATE aqorderbreakdown SET bookfundid=?                                                                                                         
+"UPDATE aqorderbreakdown SET bookfundid=?
                            WHERE ordernumber=?"
         );
         $sth->execute( $bookfund, $ordnum );
