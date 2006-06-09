@@ -219,6 +219,7 @@ function Check(f) {
 	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
 	var alertString2;
 	if (total_errors!=0) {
+        document.body.style.cursor ="default";
 		alertString2  = _("Form not submitted because of the following problem(s)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
 		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
