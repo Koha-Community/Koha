@@ -56,7 +56,6 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
-
 my $borrowerid=$input->param('borrowerid');
 my $guarantorid=$input->param('guarantorid');
 my $borrowernumber=$input->param('borrowernumber');
@@ -123,12 +122,12 @@ if ($op eq 'add' or $op eq 'modify') {
 # STEP 1
 	if ($step eq 1) {
 		###############test to take the right zipcode and city name ##############
-		if ($category_type ne 'I' and $guarantorid){
+		if ($category_type ne 'I' and $guarantorid eq ''){
 			my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
 			$data{'city'}= $borrower_city;
 			$data{'zipcode'}=$borrower_zipcode;
 		}
-		if ($category_type eq 'C' and $guarantorid){
+		if ($category_type eq 'C' and $guarantorid ne ''){
 			my $guarantordata=getguarantordata($guarantorid);
 			if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
 				$data{'contactfirstname'}=$guarantordata->{'firstname'};	
@@ -364,42 +363,39 @@ if ($delete){
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches();
+	my $branches=getbranches('IS');
 	my $default;
 	# -----------------------------------------------------
 	#  the value of ip from the branches hash table
-		my $select_ip;
+# 		my $select_ip;
 	# $ip is the ip of user when is connect to koha 
-		my $ip = $ENV{'REMOTE_ADDR'};
+# 		my $ip = $ENV{'REMOTE_ADDR'};
+	
 	# -----------------------------------------------------
 	foreach my $branch (keys %$branches) {
 		if ((not C4::Context->preference("IndependantBranches")) || (C4::Context->userenv->{'flags'} == 1)) {
 			push @select_branch, $branch;
 			$select_branches{$branch} = $branches->{$branch}->{'branchname'};
-# 		 take the ip number from branches "op"
-			$select_ip = $branches->{$branch}->{'branchip'} || '';
-				
-# 		test $select_ip equal $ip to attribute the default value for the scrolling list
-			if ($select_ip eq $ip)  {
-						$default = $branches->{$branch}->{'branchcode'};
-						}
-			} else {
-				push @select_branch, $branch if ($branch eq C4::Context->userenv->{'branch'});
+ 			$default = $branches->{$branch}->{'branchcode'};
+ 			} else {
+				push @select_branch,$branch if ($branch eq C4::Context->userenv->{'branch'});
 				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
-					
- 				$default = C4::Context->userenv->{'branch'};
+				$default = C4::Context->userenv->{'branch'};
 					
 				}
 	}
 # --------------------------------------------------------------------------------------------------------
- 	my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
+ 	#in modify mod :default value from $CGIbranch comes from borrowers table
+	#in add mod: default value come from branches table (ip correspendence)
+	$default=$data{'branchcode'}  if ($op eq 'modify');
+	
+	my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
 					   -name   => 'branchcode',
 					   -values => \@select_branch,
 					   -labels => \%select_branches,
 					   -size   => 1,
 				           -multiple =>0,
-					   -override => 1,	
- 					   -default => $default,
+					   -default => $default,
 					);
        my $CGIorganisations;
        my $member_of_institution;
