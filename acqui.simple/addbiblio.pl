@@ -264,6 +264,10 @@ sub build_tabs ($$$$) {
 		from authorised_values
 		where category=? order by lib");
 
+    # in this array, we will push all the 10 tabs
+    # to avoid having 10 tabs in the template : they will all be in the same BIG_LOOP
+    my @BIG_LOOP;
+    
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		my @loop_data = ();
@@ -368,8 +372,15 @@ sub build_tabs ($$$$) {
 				}
 			}
 		}
-		$template->param($tabloop."XX" =>\@loop_data);
+		if ($#loop_data >=0) {
+            my %big_loop_line;
+            $big_loop_line{number}=$tabloop;
+            $big_loop_line{innerloop}=\@loop_data;
+            push @BIG_LOOP,\%big_loop_line;
+        }
+# 		$template->param($tabloop."XX" =>\@loop_data);
 	}
+	$template->param(BIG_LOOP => \@BIG_LOOP);
 }
 
 
@@ -482,6 +493,8 @@ if ($op eq "addbiblio") {
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
+	use Data::Dumper;
+	warn "DUMP : ".Dumper(@values);
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
