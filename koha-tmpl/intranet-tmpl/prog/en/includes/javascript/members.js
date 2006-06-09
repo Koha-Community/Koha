@@ -82,12 +82,12 @@ var myDate2=document.form.dateexpiry.value.split ('/');
  function check_form_borrowers(nav){
 
 var statut=0;
-if (nav< document.form.step.value) {
+if (nav < document.form.step.value) {
 	document.form.step.value=nav;
 	if ((document.form.step.value==0) && document.form.check_member.value == 1 )
 	{
- 		
- 		if (document.form_double.answernodouble)	{
+ 	
+		if (document.form_double.answernodouble)	{
 			if( (!(document.form_double.answernodouble.checked))){
 				document.form.nodouble.value=0;
 			}
