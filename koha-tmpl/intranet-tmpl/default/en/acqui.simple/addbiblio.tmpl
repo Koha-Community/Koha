@@ -43,6 +43,7 @@
         <!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
     <!-- TMPL_LOOP NAME="innerloop" -->
+		<div style=";" id="tag<!-- TMPL_VAR name="tag"-->">
         <!-- TMPL_IF name="tag" -->
         <p class="MARCtag">
             <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->">
@@ -55,10 +56,9 @@
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="javascript:cloneTag('tag<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
-        <div>
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!-- TMPL_IF NAME="visibility" -->
                 <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
@@ -290,6 +290,15 @@ function AddField(field) {
 	document.forms['f'].op.value = "addfield";
 	document.forms['f'].addfield_field.value=field;
 	document.f.submit();
+}
+
+function cloneTag(index) {
+ var original = document.getElementById(index);
+ var clone = original.cloneNode(true);
+ clone.setAttribute("id", index + index);
+ // OK, now rename the id of the 
+ original.parentNode.insertBefore( clone, original.nextSibling);
+
 }
 
 function cloneSubfield(index) {
