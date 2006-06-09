@@ -224,7 +224,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}','subfield$tag$i')\">...</a>";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=# style=\"cursor: help;\" onClick=\"openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}',this.parentNode.parentNode)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one

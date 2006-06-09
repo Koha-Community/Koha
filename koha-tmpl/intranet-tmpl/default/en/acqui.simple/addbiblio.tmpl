@@ -286,11 +286,14 @@ function Changefwk(FwkList) {
   window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
 }
 
-function AddField(field) {
-	document.forms['f'].op.value = "addfield";
-	document.forms['f'].addfield_field.value=field;
-	document.f.submit();
+function openAuth(tagid,authtype,X) {
+// 	defaultid=document.getElementById(subfieldid);
+//     alert("X"+X);
+    Y=X.parentNode.getAttribute("id");
+//     alert("tagid"+Y);
+	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
+
 
 function cloneTag(index) {
  var original = document.getElementById(index);
