@@ -30,7 +30,6 @@ use strict;
 my $query=new CGI;
 my $op = $query->param('op'); #show the search form or execute the search
 my $cql_query = $query->param('cql_query');
-my @pqf_query_history = $query->param('pqf_query_history');
 my @newresults;
 my ($template,$borrowernumber,$cookie);
 my @forminputs;		# this is for the links to navigate among the results when they are more than the maximum number of results per page
@@ -56,7 +55,6 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query) = cgi2pqf($query);
 	warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
 	# implement a query history
-	push @pqf_query_history, { field => 'pqf_query', value => $pqf_query};
 
 	# lets store the query details in an array for later
 	push @forminputs, { field => "cql_query" , value => $cql_query} ;
@@ -72,11 +70,22 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 
 	# CQL queries are handled differently, so alert our API and pass in the variables
 	if ($query->param('cql_query')) {
-		($count,@results) = searchZOOM('cql',$cql_query,$number_of_results,$startfrom);
+		if ($query->param('scan')) {
+			($count,@results) = searchZOOM('scan','cql',$cql_query,$number_of_results,$startfrom);
+			$template->param(scan => 1);
+		} else {
+			($count,@results) = searchZOOM('search','cql',$cql_query,$number_of_results,$startfrom);
+		}
 	} else {
-		($count,@results) = searchZOOM('pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
+		if ($query->param('scan')) {
+			$template->param(scan => 1);
+			($count,@results) = searchZOOM('scan','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
+		} else {
+			($count,@results) = searchZOOM('search','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
+		}
 	}
-	@newresults=searchResults( $number_of_results,@results) ;
+
+	@newresults=searchResults( $number_of_results,$count,@results) ;
 	my $num = scalar(@newresults);
 	# sorting out which results to display.
 	# the result number to start to show
@@ -87,7 +96,8 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	# the total results searched
 	$template->param(total => $count);
 	$template->param(FORMINPUTS => \@forminputs);
-	$template->param(PQF_QUERY_HISTORY => \@pqf_query_history);
+	$template->param(pqf_query => $pqf_query);
+	warn "PQF QUERIE".$pqf_query;
 	$template->param(searchdesc => $searchdesc );
 	$template->param(results_per_page =>  $number_of_results );
 	$template->param(SEARCH_RESULTS => \@newresults);
@@ -107,14 +117,17 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	my $url;
 	if ($pg > 1) {
 		 $url = $pg - 1;
-		push @$numbers, { number => "&lt;&lt;", 
-					      highlight => 0 , 
-					      startfrom => 0, 
-					      pg => '1' };
-		push @$numbers, { number => "&lt;", 
-						  highlight => 0 , 
-						  startfrom => ($url-1)*$number_of_results, 
-						  pg => $url };
+		push @$numbers, { 		
+				number => "&lt;&lt;", 
+				highlight => 0 , 
+				startfrom => 0, 
+				pg => '1' };
+
+		push @$numbers, { 		
+				number => "&lt;", 
+				highlight => 0 , 
+				startfrom => ($url-1)*$number_of_results, 
+				pg => $url };
 	}
 	my $current_ten = $pg / 10;
 	if ($current_ten == 0) {
@@ -132,46 +145,49 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 		if ($i == $pg) {   
 			if ($count > $number_of_results) {
 				push @$numbers, { number => $i, 
-								  highlight => 1 , 
-								  startfrom => ($i-1)*$number_of_results , 
-								  pg => $i };
+						highlight => 1 , 
+						startfrom => ($i-1)*$number_of_results , 
+						pg => $i };
 			}
 		} else {
-			push @$numbers, { number => $i, 
-							  highlight => 0 , 
-							  startfrom => ($i-1)*$number_of_results , 
-							  pg => $i };
+			push @$numbers, { 	number => $i, 
+						highlight => 0 , 
+						startfrom => ($i-1)*$number_of_results , 
+						pg => $i };
 		}
 	}	        					
 	if ($pg < $pages) {
 		 $url = $pg + 1;
-		push @$numbers, { number => "&gt;", 
-						  highlight => 0 , 
-						  startfrom => ($url-1)*$number_of_results, 
-						  pg => $url };
-		push @$numbers, { number => "&gt;&gt;", 
-						  highlight => 0 , 
-						  startfrom => ($total_pages-1)*$number_of_results, 
-						  pg => $total_pages};
+		push @$numbers, {		number => "&gt;", 
+						highlight => 0 , 
+						startfrom => ($url-1)*$number_of_results, 
+						pg => $url };
+
+		push @$numbers, { 		number => "&gt;&gt;", 
+						highlight => 0 , 
+						startfrom => ($total_pages-1)*$number_of_results, 
+						pg => $total_pages};
 	}
 
-	$template->param(	pqf_sort_by => $pqf_sort_by,
+	$template->param(			pqf_sort_by => $pqf_sort_by,
 						pqf_query => "$pqf_prox_ops $pqf_bool_ops $pqf_query",
 						numbers => $numbers);
 
 
     $template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
+    my $scan_use = $query->param('use1');
     $template->param(
 					#classlist => $classlist,
-                    suggestion => C4::Context->preference("suggestion"),
-                    virtualshelves => C4::Context->preference("virtualshelves"),
-                    LibraryName => C4::Context->preference("LibraryName"),
-                    OpacNav => C4::Context->preference("OpacNav"),
-                    opaccredits => C4::Context->preference("opaccredits"),
-                    AmazonContent => C4::Context->preference("AmazonContent"),
-                opacsmallimage => C4::Context->preference("opacsmallimage"),
-                opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-                opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+		    	suggestion => C4::Context->preference("suggestion"),
+		    	virtualshelves => C4::Context->preference("virtualshelves"),
+		    	LibraryName => C4::Context->preference("LibraryName"),
+		    	OpacNav => C4::Context->preference("OpacNav"),
+		    	opaccredits => C4::Context->preference("opaccredits"),
+		    	AmazonContent => C4::Context->preference("AmazonContent"),
+			opacsmallimage => C4::Context->preference("opacsmallimage"),
+			opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+			opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+			scan_use => $scan_use,
     );
 ## OK, we're not searching, load the search template
 } else {
@@ -184,7 +200,6 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
                 });
 
 	# pass on the query history
-	$template->param(PQF_QUERY_HISTORY => \@pqf_query_history);
 	use C4::Koha;
 	my $dbh = C4::Context->dbh;
 ##Itemtypes (Collection Codes)
@@ -211,11 +226,12 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	my @branchloop;
 	#push @branchloop, (value => "", selected => 1,branchname =>"");
 	foreach my $thisbranch (keys %$branches) {
-        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
-        my %row =(	value => $thisbranch,
-				selected => $selected,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-                        );        
+        	my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        	my %row =(		
+			value => $thisbranch,
+			selected => $selected,
+			branchname => $branches->{$thisbranch}->{'branchname'},
+		);        
 		push @branchloop, \%row;
 	}
 
@@ -239,11 +255,12 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 }
 output_html_with_http_headers $query, $cookie, $template->output;
 
-
+=head2 searchZOOM
+=cut
 ###Move these subs to a proper Search.pm
 sub searchZOOM {
 	use C4::Biblio;
-	my ($type,$query,$num,$startfrom) = @_;
+	my ($search_or_scan,$type,$query,$num,$startfrom) = @_;
 	my $dbh = C4::Context->dbh;
 	my $zconn=C4::Context->Zconn("biblioserver");
 
@@ -253,37 +270,69 @@ sub searchZOOM {
 	}
 	
 	my $zoom_query_obj;
-	eval {
 	if ($type eq 'cql') {
-		$zoom_query_obj = new ZOOM::Query::CQL2RPN($query,$zconn);
+		eval {
+			$zoom_query_obj = new ZOOM::Query::CQL2RPN($query,$zconn);
+		};
+		if ($@) {
+			$query = "\"".$query."\"";
+			$zoom_query_obj = new ZOOM::Query::PQF($query);
+		}
 	} else {
-		$zoom_query_obj = new ZOOM::Query::PQF($query);
-	}
-	};
-	if ($@) {
-		return("error with search: $@",undef); #FIXME: better error handling
-    }	
+		eval {
+			$zoom_query_obj = new ZOOM::Query::PQF($query);
+		};
+		if ($@) {
+			return("error with search: $@",undef); #FIXME: better error handling
+		}
+    	}	
 
 	# PERFORM THE SEARCH
 	my $result;
-	eval {
-		$result = $zconn->search($zoom_query_obj);
-	};
-
-	if ($@) {
-		return("error with search: $@",undef); #FIXME: better error handling
-	}
-	my $i;
-	my $numresults = $result->size() if  ($result);
 	my @results;
-	for ( $i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
-	
-		my $rec = $result->record($i);
-		push(@results,$rec->raw()) if $rec;
+	my $numresults;
+	if ($search_or_scan =~ /scan/) {
+		eval {
+			$result = $zconn->scan($zoom_query_obj);
+		};
+		if ($@) {
+			return ("error with scan: $@",undef);
+		}
+	} else {
+		eval {
+			$result = $zconn->search($zoom_query_obj);
+		};
+		if ($@) {
+			return("error with search: $@",undef); #FIXME: better error handling
+		}
+	}
+
+	# build our results
+	$numresults = 0 | $result->size() if  ($result);
+	for ( my $i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
+		if  ($search_or_scan =~ /scan/) { # this is an index scan
+			my ($term,$occ) = $result->term($i);
+			# here we create a minimal MARC record and hand it off to the
+			# template just like a normal result ... perhaps not ideal, but 
+			# it works for now FIXME: distinguish between MARC21 and UNIMARC
+			use MARC::Record;
+			my $tmprecord = MARC::Record->new();
+			$tmprecord->encoding('UTF-8');
+			my $tmptitle = MARC::Field->new( '245',' ',' ',
+						a => $term,
+						b => $occ);
+						$tmprecord->append_fields($tmptitle);
+			push @results, $tmprecord->as_usmarc();
+		} else { # this is a real search
+			my $rec = $result->record($i);
+			push(@results,$rec->raw()) if $rec; #FIXME: sometimes this fails
+		}
 	}
 	return($numresults,@results);
 }
 
+=head2 cgi2pdf
+=cut
 # build a valid PQF query from the CGI form
 sub cgi2pqf {
 	my ($query) = @_;
@@ -392,7 +441,12 @@ sub cgi2pqf {
 		}
 	}
 	foreach my $que(@pqf_query_array) {
-		$pqf_query .=" ".$que;
+		if ($que =~ /@/) {
+			$pqf_query .=" ".$que;
+		} else {
+			$que =~ s/(\"|\'|\.)//g;
+			$pqf_query .=" \"".$que."\"";
+		}
 	}
 	foreach my $prox(@pqf_prox_ops_array) {
 		$pqf_prox_ops.=" ".$prox;
@@ -409,7 +463,7 @@ sub cgi2pqf {
 
 
 sub searchResults {
-	my ($num,@marcresults)=@_;	
+	my ($num,$count,@marcresults)=@_;	
 	use C4::Date;
 
 	my $dbh= C4::Context->dbh;
@@ -442,7 +496,9 @@ sub searchResults {
 		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.".$column,"");
 		$subfieldstosearch{$column}=$tagsubfield;
 	}
-	
+	if ($num>$count) {
+			$num = $count;
+	}
 	for ( my $i=0; $i<$num ; $i++){
 		my $marcrecord;					
 		$marcrecord = MARC::File::USMARC::decode($marcresults[$i]);
