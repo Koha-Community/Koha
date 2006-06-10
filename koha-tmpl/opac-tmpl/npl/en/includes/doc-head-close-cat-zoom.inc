@@ -5,10 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- /TMPL_IF -->
 <meta http-equiv="Content-Language" content="en-us" />
-<link rel="shortcut icon" href="<TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
     <!-- TMPL_IF name="opacstylesheet" -->
 <style type="text/css">
-    @import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);
+    @import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="opacstylesheet" -->);
 </style>
     <!-- TMPL_ELSE -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
