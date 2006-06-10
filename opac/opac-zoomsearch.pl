@@ -1,5 +1,22 @@
 #!/usr/bin/perl
-use strict; 
+
+# Copyright 2006 Liblime
+#
+# This file is part of Koha.
+# 
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details. 
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 # load our Koha modules
 use C4::Context;
 use C4::Interface::CGI::Output;
@@ -8,13 +25,15 @@ use POSIX qw(ceil floor);
 # load other modules
 use HTML::Template;
 use CGI;
+use strict; 
+
 my $query=new CGI;
 my $op = $query->param('op'); #show the search form or execute the search
 my $cql_query = $query->param('cql_query');
 my @pqf_query_history = $query->param('pqf_query_history');
 my @newresults;
 my ($template,$borrowernumber,$cookie);
-my @forminputs;		#this is for the links to navigate among the results when they are more than the maximum number of results per page
+my @forminputs;		# this is for the links to navigate among the results when they are more than the maximum number of results per page
 my $searchdesc;
 my $search_type = $query->param('search_type');
 
