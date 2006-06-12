@@ -87,7 +87,7 @@
                     <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
                 <!-- /TMPL_IF -->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->"/>
-                <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1"/>
+                <input type="hidden" name="firstsubfield" value="<!-- TMPL_VAR NAME="firstsubfield" -->" size="2" maxlength="1"/>
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"/>
                 <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->"/>
                 <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->"/>
@@ -289,9 +289,7 @@ function Changefwk(FwkList) {
 
 function openAuth(tagid,authtype,X) {
 // 	defaultid=document.getElementById(subfieldid);
-//     alert("X"+X);
     Y=X.parentNode.getAttribute("id");
-//     alert("tagid"+Y);
 	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
 
@@ -299,10 +297,9 @@ function openAuth(tagid,authtype,X) {
 function cloneTag(index) {
  var original = document.getElementById(index);
  var clone = original.cloneNode(true);
- clone.setAttribute("id", index + index);
  // OK, now rename the id of the 
+ clone.setAttribute("id", index + index);
  original.parentNode.insertBefore( clone, original.nextSibling);
-
 }
 
 function cloneSubfield(index) {

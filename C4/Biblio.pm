@@ -1041,7 +1041,7 @@ sub MARCkoha2marcOnefield {
     return $record;
 }
 sub MARChtml2xml {
-	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
+	my ($tags,$subfields,$values,$firstsubfields,$indicator,$ind_tag) = @_;        
 	use MARC::File::XML;
 	my $xml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour')); 
 	#$xml =~ s/UTF-8/ISO-8859-1/;
@@ -1056,7 +1056,7 @@ sub MARChtml2xml {
 		@$values[$i] =~ s/>/&gt;/g;
 		@$values[$i] =~ s/"/&quot;/g;
 		@$values[$i] =~ s/'/&apos;/g;
-		if ((@$tags[$i] ne $prevtag)){
+		if (@$firstsubfields[$i]){
 			$j++ unless (@$tags[$i] eq "");
 			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 			if (!$first){
@@ -1094,7 +1094,7 @@ sub MARChtml2xml {
                 }
                 else {
 					if ($first){
-						my $ind1 = substr(@$indicator[$j],0,1);                        
+						my $ind1 = substr(@$indicator[$j],0,1);
 						my $ind2 = substr(@$indicator[$j],1,1);
 						$xml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
 						$first=0;
@@ -1108,17 +1108,25 @@ sub MARChtml2xml {
 	#warn $xml;
 	return $xml;
 }
+
 sub MARChtml2marc {
-	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
+	my ($dbh,$rtags,$rsubfields,$rvalues,$rfirstsubfields,%indicators) = @_;
+# rtag : a reference to the list of tags (same for every subfield of a given tag
+# rsubfields : a reference to the list of subfield codes
+# rvalues : a reference to the list of subfield values
+# rfirstsubfields : a reference to a list, each entry containing 0 or 1. 0 means that the corresponding subfield it NOT the 1st of the tag, 1 meaning it is.
+# this last list is useful to detect a new repeated tag.
+
 	my $prevtag = -1;
 	my $record = MARC::Record->new();
 # 	my %subfieldlist=();
 	my $prevvalue; # if tag <10
 	my $field; # if tag >=10
+	# parses each entry of the list
 	for (my $i=0; $i< @$rtags; $i++) {
-		# rebuild MARC::Record
-# 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
-		if (@$rtags[$i] ne $prevtag) {
+	# if it is the 1st subfield of a field, save the previous field
+		if (@$rfirstsubfields[$i]) {
+		      # if it is <10, just create the value
 			if ($prevtag < 10) {
 				if ($prevvalue) {
 					if (($prevtag ne '000') && ($prevvalue ne "")) {
@@ -1127,14 +1135,16 @@ sub MARChtml2marc {
 						$record->leader($prevvalue);
 					}
 				}
+			# if it is >=10, create the complete MARC field
 			} else {
 				if (($field) && ($field ne "")) {
 					$record->add_fields($field);
 				}
 			}
+			# now undefine the previous field to create a new blank one.
 			$indicators{@$rtags[$i]}.='  ';
-		        # skip blank tags, I hope this works 
-		        if (@$rtags[$i] eq ''){
+		    # skip blank tags, I hope this works 
+		    if (@$rtags[$i] eq ''){
 			    $prevtag = @$rtags[$i];
 			    undef $field;
 			    next;
@@ -1145,14 +1155,14 @@ sub MARChtml2marc {
 			} else {
 				undef $prevvalue;
 				if (@$rvalues[$i] eq "") {
-				undef $field;
+					undef $field;
 				} else {
-				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+					$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
 				}
 # 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
 			$prevtag = @$rtags[$i];
-		} else {
+		} else { # it is not the 1st subfield, store the value or append the subfield
 			if (@$rtags[$i] <10) {
 				$prevvalue=@$rvalues[$i];
 			} else {
@@ -1170,10 +1180,7 @@ sub MARChtml2marc {
 	}
 	#}
 	# the last has not been included inside the loop... do it now !
-	#use Data::Dumper;
-	#warn Dumper($field->{_subfields});
 	$record->add_fields($field) if (($field) && $field ne "");
- 	#warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
 
@@ -2838,6 +2845,7 @@ sub FindDuplicate {
 
 sub DisplayISBN {
 	my ($isbn)=@_;
+	return "" unless $isbn;
 	my $seg1;
 	if(substr($isbn, 0, 1) <=7) {
 		$seg1 = substr($isbn, 0, 1);
@@ -3010,6 +3018,17 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.55  2006/06/12 10:33:54  tipaul
+# [IMPORTANT]
+#
+# when cloning a tag, there was a problem to detect the tag change when rebuilding the XML/MARC record :
+# the test was done on an empty field.
+# with the new CloneTag sub, this empty field was quite tricky to create on the fly.
+# so i've added on each subfield a <input name="firstsubfield"> saying wether the subfield is the 1st or not.
+# Thus, when a tag is cloned, it is cloned properly.
+#
+# HTML2marc and well as HTML2xml have been modified, but PLEASE DOUBLE CHECK my work
+#
 # Revision 1.115.2.54  2006/06/02 15:36:18  tipaul
 # - fixing a small bug in html2marc, when the 1st subfield of a field was empty, the 2nd could not be filled as the MARC::Field had not been created.
 #

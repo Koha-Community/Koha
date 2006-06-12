@@ -202,7 +202,7 @@ sub build_authorized_values_list ($$$$$) {
  builds the <input ...> entry for a subfield.
 =cut
 sub create_input () {
-	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth,$firstsubfield) = @_;
 	# must be encoded as utf-8 before it reaches the editor
         #use Encode;
         #$value = encode('utf-8', $value);
@@ -218,6 +218,7 @@ sub create_input () {
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
+	$subfield_data{firstsubfield} = $firstsubfield;
 	$subfield_data{visibility} = "display:none" unless (($tagslib->{$tag}->{$subfield}->{hidden}%2==0) or $value ne ''); #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
@@ -271,6 +272,7 @@ sub build_tabs ($$$$) {
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		my @loop_data = ();
+# loop through each tag
 		foreach my $tag (sort(keys (%{$tagslib}))) {
 			my $indicator;
 	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
@@ -295,7 +297,7 @@ sub build_tabs ($$$$) {
 						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
-						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
 						$i++;
 					} else {
 						my @subfields=$field->subfields();
@@ -304,7 +306,7 @@ sub build_tabs ($$$$) {
 							my $value=$subfields[$subfieldcount][1];
 							next if (length $subfield !=1);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth),$#subfields_data>=0?0:1);
 							$i++;
 						}
 					}
@@ -315,7 +317,7 @@ sub build_tabs ($$$$) {
 						next if ($tag<10);
 						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-4) or ($tagslib->{$tag}->{$subfield}->{hidden}>=5) ); #check for visibility flag
 						next if (defined($field->subfield($subfield)));
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
+						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>0?0:1));
 						$i++;
 					}
 					if ($#subfields_data >= 0) {
@@ -335,7 +337,7 @@ sub build_tabs ($$$$) {
 					if ($#fields >=1 && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
 						my @subfields_data;
 						my %tag_data;
-						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
+						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth),$#subfields_data>=0?0:1);
 						$tag_data{tag} = '';
 						$tag_data{tag_lib} = '';
 						$tag_data{indicator} = '';
@@ -354,7 +356,7 @@ sub build_tabs ($$$$) {
 					next if (length $subfield !=1);
 					next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=4) ); #check for visibility flag
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
+					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
 					$i++;
 				}
 				if ($#subfields_data >= 0) {
@@ -493,14 +495,15 @@ if ($op eq "addbiblio") {
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
-	use Data::Dumper;
-	warn "DUMP : ".Dumper(@values);
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
+	my @firstsubfields = $input->param('firstsubfield');
+	use Data::Dumper;
+	warn "DUMP PL : ".Dumper(@tags);
 	my $record;
 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
-		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@firstsubfields,\@indicator,\@ind_tag);
 	} else {
 		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
