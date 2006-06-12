@@ -1174,12 +1174,14 @@ sub getborrowercategory {
     my $dbh       = C4::Context->dbh;
     my $sth       =
       $dbh->prepare(
-        "SELECT description FROM categories WHERE categorycode = ?");
+        "SELECT description,dateofbirthrequired,upperagelimit FROM categories WHERE categorycode = ?");
     $sth->execute($catcode);
-    my $description = $sth->fetchrow();
+    my ($description,$dateofbirthrequired,$upperagelimit) = $sth->fetchrow();
     $sth->finish();
-    return $description;
+    return ($description,$dateofbirthrequired,$upperagelimit);
 }    # sub getborrowercategory
+
+
 
 =head2 ethnicitycategories
 
@@ -1305,4 +1307,7 @@ sub add_member_orgs {
     $sth->finish();
 
 }    # sub add_member_orgs
+
+END { }       # module clean-up code here (global destructor)
+
 1;

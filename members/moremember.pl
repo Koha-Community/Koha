@@ -147,7 +147,7 @@ if (C4::Context->preference("IndependantBranches")) {
 $data->{'branchname'} = &getbranchdetail($data->{'branchcode'});
 
 # Converts the categorycode to the description
-$data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
+($data->{'categorycode'},undef,undef) = &getborrowercategory($data->{'categorycode'});
 
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 

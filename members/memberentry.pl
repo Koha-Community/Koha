@@ -148,21 +148,11 @@ if ($op eq 'add' or $op eq 'modify') {
 			}
                     }
                 if ($categorycode ne 'I') {
-                    # is the age of the borrower compatible with age limitations of
-                    # the borrower category
-                    my $query = '
-SELECT upperagelimit,
-       dateofbirthrequired
-  FROM categories
-  WHERE categorycode = ?
-';
-                    my $sth=$dbh->prepare($query);
-                    $sth->execute($categorycode);
-                    my $category_info = $sth->fetchrow_hashref;
-                    my $age = get_age(format_date_in_iso($data{dateofbirth}));
-                    if ($age > $category_info->{upperagelimit}
-                            or $age < $category_info->{dateofbirthrequired}
-                        ) {
+                my $age = get_age(format_date_in_iso($data{dateofbirth}));
+                my (undef,$agelimitmin,$agelimitmax)=getborrowercategory($data{'categorycode'});   
+		if ($age > $agelimitmax
+                            or $age < $agelimitmin
+                   ) {
                         push @errors, 'ERROR_age_limitations';
                         $nok = 1;
                     }
