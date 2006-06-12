@@ -73,7 +73,7 @@ my $select_city=$input->param('select_city');
 my $nok=$input->param('nok');
 
 my @errors;
-
+my $default_city;
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
 my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
@@ -118,16 +118,10 @@ if ($op eq 'add' or $op eq 'modify') {
 # 	recover the category type if the borrowers is a doublon	
 	($check_categorytype,undef)=getcategorytype($check_category);
 	}
-	# CHECKS step by step
-# STEP 1
-	if ($step eq 1) {
-		###############test to take the right zipcode and city name ##############
-		if ($category_type ne 'I' and $guarantorid eq ''){
-			my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
-			$data{'city'}= $borrower_city;
-			$data{'zipcode'}=$borrower_zipcode;
-		}
-		if ($category_type eq 'C' and $guarantorid ne ''){
+
+
+#recover all data from guarantor address phone ,fax... 
+if ($category_type eq 'C' and $guarantorid ne '' and $data{'contactname'} eq ''){
 			my $guarantordata=getguarantordata($guarantorid);
 			if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
 				$data{'contactfirstname'}=$guarantordata->{'firstname'};	
@@ -145,8 +139,19 @@ if ($op eq 'add' or $op eq 'modify') {
 				$data{'fax'}=$guarantordata->{'fax'};
 				$data{'email'}=$guarantordata->{'email'};
 				$data{'emailpro'}=$guarantordata->{'emailpro'};
+			$default_city=getidcity($data{'city'});
 			}
                     }
+
+	# CHECKS step by step
+# STEP 1
+	if ($step eq 1) {
+		###############test to take the right zipcode and city name ##############
+		if ($category_type ne 'I' and $guarantorid eq ''){
+			my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
+			$data{'city'}= $borrower_city;
+			$data{'zipcode'}=$borrower_zipcode;
+		}
                 if ($categorycode ne 'I') {
                 my $age = get_age(format_date_in_iso($data{dateofbirth}));
                 my (undef,$agelimitmin,$agelimitmax)=getborrowercategory($data{'categorycode'});   
@@ -284,7 +289,7 @@ if ($delete){
   					-default=>$default_category,
  					-labels=>$labels);
 	#test in city
-	my $default_city;
+	
  	if ($op eq ''){
 	(my $selectcity=&getidcity($data{'city'})) if ($select_city eq '');
 	$default_city=$selectcity;

@@ -1054,7 +1054,7 @@ sub getguarantordata {
     my $dbh          = C4::Context->dbh;
     my $sth          =
       $dbh->prepare(
-"Select title,firstname,surname,streetnumber,address,streettype,address2,zipcode,city,phone,phonepro,mobile,email,emailpro  from borrowers where borrowernumber =? "
+"Select title,firstname,surname,streetnumber,address,streettype,address2,zipcode,city,phone,phonepro,mobile,email,emailpro,fax  from borrowers where borrowernumber =? "
       );
     $sth->execute($borrowerid);
     my $guarantor_data = $sth->fetchrow_hashref;
