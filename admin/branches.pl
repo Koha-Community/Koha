@@ -204,14 +204,14 @@ sub editbranchform {
 			my $selected = 1 if $oldprinter eq $printers->{$thisprinter}->{'printqueue'};
 			my %row =(value => $thisprinter,
 					selected => $selected,
-					branchprinter => $printers->{$thisprinter}->{'printername'},
+					branchprinter => $printers->{$thisprinter}->{'printqueue'},
 			);
 		push @printerloop, \%row;
 		}
 		
 		$template->param(printerloop => \@printerloop );
 		$template->param(branchcode => $data->{'branchcode'});
-		$template->param(branchname => $data->{'branchname'});
+		$template->param(branch_name => $data->{'branchname'});
 		$template->param(branchaddress1 => $data->{'branchaddress1'});
 		$template->param(branchaddress2 => $data->{'branchaddress2'});
 		$template->param(branchaddress3 => $data->{'branchaddress3'});
@@ -220,17 +220,15 @@ sub editbranchform {
 		$template->param(branchemail => $data->{'branchemail'});
 		$template->param(branchip => $data->{'branchip'});
     	}
-	else {
-# on add new branch mode, simple scrolling list
-		$CGIprinter=CGI::scrolling_list( -name     => 'branchprinter',
-		-id => 'branchprinter',
-		-values   => \@printerloop,
-		-size     => 1,
-		-multiple => 0 );	
-
+	else { #case of an add branch select printer
+		foreach my $thisprinter (keys %$printers) {
+			my %row =(value => $thisprinter,
+				branchprinter => $printers->{$thisprinter}->{'printqueue'},
+			);
+		push @printerloop, \%row;
+		}
+	$template->param(printerloop => \@printerloop );	
 	}
-#  sending the cgiprinter to the template
-# 		$template->param(printerloop => $CGIprinter);
 
     # make the checkboxs.....
     #
