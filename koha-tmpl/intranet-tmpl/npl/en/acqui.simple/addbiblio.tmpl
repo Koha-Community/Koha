@@ -352,10 +352,10 @@ function cloneSubfield(index) {
 	image = clone.getElementsByTagName('img')[0];
 	image.setAttribute("onclick","upSubfield('" + index + index + "')");
  <!-- /TMPL_IF -->
- trigger = original.getElementsByTagName('a')[0];
- if (trigger) {
- 	trigger.parentNode.removeChild(trigger);
- }
+// trigger = original.getElementsByTagName('a')[0];
+// if (trigger) {
+// 	trigger.parentNode.removeChild(trigger);
+// }
  clonetrigger = clone.getElementsByTagName('a')[0];
  clonetrigger.setAttribute("onclick","cloneSubfield('" + index + index + "')");
  clone.setAttribute("tabindex","1");
