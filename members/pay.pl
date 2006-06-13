@@ -140,7 +140,8 @@ if ($check ==0){
 		$bornum=$input->param("bornum$value");
 		my $itemno=$input->param("itemnumber$value");
 		my $amount=$input->param("amount$value");
-	        writeoff($bornum,$accountno,$itemno,$accounttype,$amount);
+	        my $accountno=$input->param("accountno$value");
+		writeoff($bornum,$accountno,$itemno,$accounttype,$amount);
 	}
 	$bornum=$input->param('bornum');
 	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");

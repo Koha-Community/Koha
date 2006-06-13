@@ -4,8 +4,10 @@
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
 <h1>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1>
-<form action="/cgi-bin/koha/pay.pl" method="post">
+<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">Back to borrower</a> 
+<form action="/cgi-bin/koha/members/pay.pl" method="post">
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" />
+
 <table>
 <tr>
 	<th>Fines &amp; Charges</th>
@@ -41,5 +43,4 @@
 </tr>
 </table>
 <input type="submit" name="submit"  value="Make Payment" class="submit" /></form>
-
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

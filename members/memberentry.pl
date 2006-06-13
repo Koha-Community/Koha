@@ -56,7 +56,6 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
-my $borrowerid=$input->param('borrowerid');
 my $guarantorid=$input->param('guarantorid');
 my $borrowernumber=$input->param('borrowernumber');
 my $actionType=$input->param('actionType') || '';
@@ -94,11 +93,7 @@ if ($step eq 0){
     foreach my $column (keys %$borrower_data){
 	$data{$column}=$borrower_data->{$column};
     }
-    $data{'borrowerid'}=$borrowernumber;
-    if (!$borrowerid){
-	$borrowerid=$borrowernumber;
-    }
-}    
+   }    
 
 if ($op eq 'add' or $op eq 'modify') {
 	my @names=$input->param;
@@ -210,7 +205,7 @@ if ($category_type eq 'C' and $guarantorid ne '' and $data{'contactname'} eq '')
 			        if ($data{'organisations'}){				    
 				    # need to add the members organisations
 				    my @orgs=split(/\|/,$data{'organisations'});
-				    add_member_orgs($borrowerid,\@orgs);
+				    add_member_orgs($borrowernumber,\@orgs);
 				 }
 				logaction($loggedinuser,"MEMBERS","add member", $borrowernumber, "");
 			}
