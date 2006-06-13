@@ -1085,7 +1085,7 @@ sub bookfunds {
 #'
 
 sub bookfundbreakdown {
-    my ( $id, $year ) = @_;
+    my ( $id, $year ,$start, $end) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
