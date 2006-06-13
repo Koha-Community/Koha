@@ -26,6 +26,7 @@ my $librariannote = $query->param('librariannote');
 my @serialids = $query->param('serialid');
 my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
+my @publisheddates = $query->param('publisheddate');
 my @status = $query->param('status');
 my @notes = $query->param('notes');
 my @barcodes = $query->param('barcode');
@@ -48,7 +49,7 @@ if ($op eq 'serialchangestatus') {
 		
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
-			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($publisheddates[$i]),($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso(localtime(time()))),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
 			if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
 				my %info;
 				$info{branch}=$homebranches[$i];
@@ -62,7 +63,7 @@ if ($op eq 'serialchangestatus') {
 		} else {
 			# add a special issue
 			if ($serialseqs[$i]) {
-				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i],format_date_in_iso($publisheddates[$i]),($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso(localtime(time()))));
 			}
 			if (($status[$i]==2) && C4::Context->preference("serialsadditems") && !hassubscriptionexpired($subscriptionid)){
 				my %info;

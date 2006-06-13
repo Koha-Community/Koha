@@ -319,6 +319,7 @@ my %requiretables = (
 				serialseq varchar(100) NOT NULL default '',
 				status tinyint(4) NOT NULL default '0',
 				planneddate date NOT NULL default '0000-00-00',
+				publishedddate date NOT NULL default '0000-00-00',
 				PRIMARY KEY  (serialid)
 				)",
     subscription => "(biblionumber int(11) NOT NULL default '0',
@@ -2133,6 +2134,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.45  2006/06/13 12:34:15  hdl
+# Adding publication date to issues arrival. So that two dates can be used.
+#
 # Revision 1.100.2.44  2006/06/02 15:21:40  tipaul
 # moving dewey to a varchar
 #
