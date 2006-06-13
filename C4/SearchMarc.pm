@@ -407,12 +407,24 @@ if (C4::Context->preference("sortbynonfiling")) {
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
 	my $sth_itemCN;
-	if (C4::Context->preference('hidelostitems')) {
-		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? and (itemlost = 0 or itemlost is NULL) order by homebranch");
+	if (C4::Context->preference('hidelostitem')) {
+		$sth_itemCN = $dbh->prepare("
+  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt 
+  FROM items 
+  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL) 
+  ORDER BY homebranch");
 	} else {
-		$sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=? order by homebranch");
+		$sth_itemCN = $dbh->prepare("
+  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
+  FROM items 
+  WHERE biblionumber=? 
+  GROUP BY items.holdingbranch, items.location, items.itemcallnumber 
+  ORDER BY homebranch");
 	}
-	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
+	my $sth_issue = $dbh->prepare("
+  SELECT date_due,returndate 
+  FROM issues 
+  WHERE itemnumber=?");
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
 		# search & parse all items & note itemcallnumber
@@ -440,24 +452,27 @@ if (C4::Context->preference("sortbynonfiling")) {
 			# then all other fields in the main array
 			
 			# search if item is on loan
-			my $date_due;
-			$sth_issue->execute($item->{itemnumber});
-			while (my $loan = $sth_issue->fetchrow_hashref) {
-				if ($loan->{date_due} and !$loan->{returndate}) {
-					$date_due = $loan->{date_due};
-				}
-			}
 			# store this item
 			my %lineCN;
 			$lineCN{holdingbranch} = $item->{holdingbranch};
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
-			$lineCN{date_due} = format_date($date_due);
-			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan}); # setting not forloan if itemtype is not for loan
-			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
-			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
+			$lineCN{cnt} = $item->{cnt} unless ($item->{cnt}==1);
+            if ($item->{cnt}==1){
+              my $date_due;
+              $sth_issue->execute($item->{itemnumber});
+              while (my $loan = $sth_issue->fetchrow_hashref) {
+                  if ($loan->{date_due} and !$loan->{returndate}) {
+                      $date_due = $loan->{date_due};
+                  }
+              }
+              $lineCN{date_due} = format_date($date_due) ;
+              $lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
+              $notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
+            }
+			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan} and not $lineCN{notforloan}); # setting not forloan if itemtype is not for loan
 			push @CNresults,\%lineCN;
-			$totalitems++;
+			$totalitems+=$item->{cnt};
 		}
 		# save the biblio in the final array, with item and item issue status
 		my %newline;
@@ -489,6 +504,7 @@ if (C4::Context->preference("sortbynonfiling")) {
 	my $nbresults = $#result+1;
 	return (\@finalresult, $nbresults);
 }
+
 
 # Creates the SQL Request
 
