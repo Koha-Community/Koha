@@ -116,7 +116,7 @@ if ($op eq 'add' or $op eq 'modify') {
 
 
 #recover all data from guarantor address phone ,fax... 
-if ($category_type eq 'C' and $guarantorid ne '' and $data{'contactname'} eq ''){
+if ($category_type eq 'C' and $guarantorid ne '' ){
 			my $guarantordata=getguarantordata($guarantorid);
 			if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
 				$data{'contactfirstname'}=$guarantordata->{'firstname'};	
@@ -134,7 +134,8 @@ if ($category_type eq 'C' and $guarantorid ne '' and $data{'contactname'} eq '')
 				$data{'fax'}=$guarantordata->{'fax'};
 				$data{'email'}=$guarantordata->{'email'};
 				$data{'emailpro'}=$guarantordata->{'emailpro'};
-			$default_city=getidcity($data{'city'});
+				
+				$default_city=getidcity($data{'city'});
 			}
                     }
 
@@ -284,9 +285,8 @@ if ($delete){
   					-default=>$default_category,
  					-labels=>$labels);
 	#test in city
-	
- 	if ($op eq ''){
-	(my $selectcity=&getidcity($data{'city'})) if ($select_city eq '');
+	if ($op eq 'modify' and  $select_city eq '' ){
+	my $selectcity=&getidcity($data{'city'});
 	$default_city=$selectcity;
 	}
 	my($cityid,$name_city)=getcities();

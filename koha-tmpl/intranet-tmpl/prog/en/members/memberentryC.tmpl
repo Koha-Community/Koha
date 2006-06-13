@@ -5,7 +5,7 @@
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 <!-- TMPL_INCLUDE NAME="javascript/members.js" -->
 
-	<!-- TMPL_IF NAME="opadd" -->
+	<!-- TMPL_IF NAME="add" -->
 	<h1>
 		Add children member (step <!-- TMPL_VAR NAME="step" -->)
 	</h1>
@@ -179,8 +179,11 @@
 			Other name</label>
 			<input style="text-transform:uppercase;" type="text" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
 		</p>
-		<p><a href="javascript:Dopopguarantor('guarantor_search.pl');">Find guarantor</a>
-		</p>
+	
+		<!-- TMPL_UNLESS name="guarantorid"-->	
+	<p><a href="javascript:Dopopguarantor('guarantor_search.pl');">Find guarantor</a></p>
+		<!-- /TMPL_UNLESS -->
+	
 	</fieldset>
 	<fieldset id="memberentry_identity">
 		<legend>Borrower type</legend>
