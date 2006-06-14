@@ -70,6 +70,9 @@ my %tabsysprefs;
 	$tabsysprefs{marcflavour}="Catalogue";
 	$tabsysprefs{serialsadditems}="Catalogue";
 	$tabsysprefs{sortbynonfiling}="Catalogue";
+	$tabsysprefs{MARCOrgCode}="Catalogue";
+	$tabsysprefs{z3950AuthorAuthFields}="Catalogue";
+	$tabsysprefs{z3950NormalizeAuthor}="Catalogue";
 # Circulation
 	$tabsysprefs{maxoutstanding}="Circulation";
 	$tabsysprefs{maxreserves}="Circulation";
@@ -77,6 +80,12 @@ my %tabsysprefs;
 	$tabsysprefs{patronimages}="Circulation";
 	$tabsysprefs{printcirculationslips}="Circulation";
 	$tabsysprefs{ReturnBeforeExpiry}="Circulation";
+# Intranet
+	$tabsysprefs{TemplateEncoding}="Intranet";
+	$tabsysprefs{template}="Intranet";
+	$tabsysprefs{intranetstylesheet}="Intranet";
+	$tabsysprefs{IntranetNav}="Intranet";
+	$tabsysprefs{intranetcolorstylesheet}="Intranet";
 # Members
 	$tabsysprefs{automembernum}="Members";
 	$tabsysprefs{checkdigit}="Members";
@@ -107,6 +116,7 @@ my %tabsysprefs;
 	$tabsysprefs{SubscriptionHistory}="OPAC";
 	$tabsysprefs{suggestion}="OPAC";
 	$tabsysprefs{virtualshelves}="OPAC";
+	$tabsysprefs{opacheader}="OPAC";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
