@@ -180,10 +180,14 @@
 			<input style="text-transform:uppercase;" type="text" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
 		</p>
 	
-		<!-- TMPL_UNLESS name="guarantorid"-->	
+	<!-- TMPL_UNLESS NAME="add"-->	
+	<p><a href="javascript:Dopopguarantor('guarantor_search.pl');">Modify guarantor</a></p>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF NAME="add" -->
+	<!-- TMPL_UNLESS NAME="guarantorid"-->	
 	<p><a href="javascript:Dopopguarantor('guarantor_search.pl');">Find guarantor</a></p>
-		<!-- /TMPL_UNLESS -->
-	
+	<!-- /TMPL_UNLESS -->
+	<!-- /TMPL_IF -->
 	</fieldset>
 	<fieldset id="memberentry_identity">
 		<legend>Borrower type</legend>

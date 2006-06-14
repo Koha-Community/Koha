@@ -85,6 +85,7 @@ foreach (@field_check) {
 $template->param( "mandatory$_" => 1);		
 }	
 
+$template->param("add"=>1) if ($op eq 'add');
 $template->param( "checked" => 1) if ($nodouble eq 1);
 
 my $borrower_data=borrdata('',$borrowernumber);
@@ -94,7 +95,6 @@ if ($step eq 0){
 	$data{$column}=$borrower_data->{$column};
     }
    }    
-
 if ($op eq 'add' or $op eq 'modify') {
 	my @names=$input->param;
 	foreach my $key (@names){
@@ -134,10 +134,8 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 				$data{'fax'}=$guarantordata->{'fax'};
 				$data{'email'}=$guarantordata->{'email'};
 				$data{'emailpro'}=$guarantordata->{'emailpro'};
-				
-				$default_city=getidcity($data{'city'});
 			}
-                    }
+}
 
 	# CHECKS step by step
 # STEP 1
@@ -158,6 +156,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
                         $nok = 1;
                     }
                 }
+	
 	}
 # STEP 2
 	if ($step eq 2) {
@@ -285,10 +284,12 @@ if ($delete){
   					-default=>$default_category,
  					-labels=>$labels);
 	#test in city
-	if ($op eq 'modify' and  $select_city eq '' ){
-	my $selectcity=&getidcity($data{'city'});
-	$default_city=$selectcity;
-	}
+	$select_city=getidcity($data{'city'}) if ($guarantorid ne '');
+	($default_city=$select_city) if ($step eq 0);
+ 	if ($select_city eq '' ){
+ 	my $selectcity=&getidcity($data{'city'});
+ 	$default_city=$selectcity;
+ 	}
 	my($cityid,$name_city)=getcities();
 	$template->param( city_cgipopup => 1) if ($cityid );
 	my $citypopup = CGI::popup_menu(-name=>'select_city',
