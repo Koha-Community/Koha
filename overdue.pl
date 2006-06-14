@@ -121,7 +121,7 @@ my $dbh = C4::Context->dbh;
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
-my $strsth="select date_due,concat(surname,' ', firstname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author from issues
+my $strsth="select date_due,concat(surname,' ', firstname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author,borrowers.borrowernumber from issues
 LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber 
 LEFT JOIN items ON issues.itemnumber=items.itemnumber
 LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
@@ -159,7 +159,7 @@ while (my $data=$sth->fetchrow_hashref) {
   $title=$data->{'title'};
   $author=$data->{'author'};
   push (@overduedata, {	duedate      => $duedate,
-			bornum       => $bornum,
+			bornum       => $data->{borrowernumber},
 			itemnum      => $itemnum,
 			name         => $name,
 			phone        => $phone,
