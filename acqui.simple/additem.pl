@@ -75,12 +75,19 @@ if ($op eq "additem") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
+	my @firstsubfields = $input->param('firstsubfields');
 	#my %indicators;
 	#for (my $i=0;$i<=$#ind_tag;$i++) {
 	#	$indicators{$ind_tag[$i]} = $indicator[$i];
 	#}
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@firstsubfields,\@indicator,\@ind_tag);
+	} else {
+		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
+# 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+#         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
 	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	# if autoBarcode is ON, calculate barcode...
 	if (C4::Context->preference('autoBarcode')) {
@@ -140,13 +147,18 @@ if ($op eq "additem") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
+	my @firstsubfields = $input->param('firstsubfields');
 #	my $itemnum = $input->param('itemnum');
 	#my %indicators;
 	#for (my $i=0;$i<=$#ind_tag;$i++) {
 	#	$indicators{$ind_tag[$i]} = $indicator[$i];
 	#}
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@firstsubfields,\@indicator,\@ind_tag);
+	} else {
+		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
 	#my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
@@ -188,7 +200,16 @@ foreach my $field (@fields) {
 	for my $i (0..$#subf) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10 && ($field->tag() ne $itemtagfield && $subf[$i][0] ne $itemtagsubfield));
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
-		$this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+# 		$this_row{$subf[$i][0]} =$subf[$i][1] 
+		if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10) {
+            if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
+                $this_row{$subf[$i][0]}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+            } elsif ($tagslib->{$field->tag()}->{$subf[$i][0]}->{kohafield} eq "biblioitems.isbn") {
+                $this_row{$subf[$i][0]}=DisplayISBN($subf[$i][1]);
+            } else {
+                $this_row{$subf[$i][0]}=get_authorised_value_desc($field->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
+            }
+        }		
 		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
 			#verifying rights
 			my $userenv = C4::Context->userenv;
@@ -360,3 +381,30 @@ foreach my $error (@errors) {
 	$template->param($error => 1);
 }
 output_html_with_http_headers $input, $cookie, $template->output;
+
+
+sub get_authorised_value_desc ($$$$$) {
+   my($tag, $subfield, $value, $framework, $dbh) = @_;
+
+   #---- branch
+    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+       return getbranchname($value);
+    }
+
+   #---- itemtypes
+   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+       return ItemType($value);
+    }
+
+   #---- "true" authorized value
+   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
+   if ($category ne "") {
+       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
+       $sth->execute($category, $value);
+       my $data = $sth->fetchrow_hashref;
+       return $data->{'lib'};
+   } else {
+       return $value; # if nothing is found return the original value
+   }
+}

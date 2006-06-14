@@ -218,7 +218,7 @@ sub create_input () {
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
-	$subfield_data{firstsubfield} = $firstsubfield;
+	$subfield_data{firstsubfield} = $firstsubfield?1:0;
 	$subfield_data{visibility} = "display:none" unless (($tagslib->{$tag}->{$subfield}->{hidden}%2==0) or $value ne ''); #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
@@ -306,7 +306,7 @@ sub build_tabs ($$$$) {
 							my $value=$subfields[$subfieldcount][1];
 							next if (length $subfield !=1);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth),$#subfields_data>=0?0:1);
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
 							$i++;
 						}
 					}
@@ -317,7 +317,7 @@ sub build_tabs ($$$$) {
 						next if ($tag<10);
 						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-4) or ($tagslib->{$tag}->{$subfield}->{hidden}>=5) ); #check for visibility flag
 						next if (defined($field->subfield($subfield)));
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>0?0:1));
+						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
 						$i++;
 					}
 					if ($#subfields_data >= 0) {
@@ -382,6 +382,8 @@ sub build_tabs ($$$$) {
         }
 # 		$template->param($tabloop."XX" =>\@loop_data);
 	}
+# 	use Data::Dumper;
+# 	warn "DUMP : ".Dumper(@BIG_LOOP);
 	$template->param(BIG_LOOP => \@BIG_LOOP);
 }
 
@@ -499,8 +501,8 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my @firstsubfields = $input->param('firstsubfield');
-	use Data::Dumper;
-	warn "DUMP PL : ".Dumper(@tags);
+# 	use Data::Dumper;
+# 	warn "DUMP PL : ".Dumper(@tags);
 	my $record;
 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
 		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@firstsubfields,\@indicator,\@ind_tag);
@@ -584,6 +586,7 @@ if ($op eq "addbiblio") {
 		$bibid = "";
 		$oldbiblionumber= "";
 	}
+# 	warn "REC : ".$record->as_formatted;
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
