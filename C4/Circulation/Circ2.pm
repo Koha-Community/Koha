@@ -666,7 +666,7 @@ sub TooMany ($$){
 
 	$sth->execute("*", $type, "");
 	my $result = $sth->fetchrow_hashref;
-	if (defined($result) && $result->{maxissueqty}>=0) {
+	if (defined($result) && $result->{maxissueqty} ge 0) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
 		return ("f $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
