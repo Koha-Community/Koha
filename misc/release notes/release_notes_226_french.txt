@@ -1,0 +1,116 @@
+NOTES DE VERSION
+================
+
+L'équipe internationale qui développe Koha continue à innover et vous propose une nouvelle version du SIGB sous licence libre. Cette nouvelle version est le fruit de plusieurs mois de travail rassemblant bibliothécaires et informaticiens du monde entier.
+
+Elle est numérotée 2.4.0 (et non plus 2.2.x) car elle contient de nombreuses nouveautés parmi lesquelles :
+* une interface publique (OPAC) repensée, avec de nombreux paramètres locaux pour plus de souplesse.
+* l'exemplarisation à la volée des bulletins dans le module bulletinage, pratique pour les bibliothèques qui prètent les périodiques.
+* des options fort utiles dans l'éditeur MARC pour les bibliothèques qui ont des grilles de catalogage importantes.
+* des nouveautés dans le module acquisition (réception de commandes) pour plus de confort.
+
+Il était prévu que la version 2.2.5 de janvier dernier soit la dernière avec des nouvelles fonctionnalités, avant la version 3.0. Mais les demandes pertinentes des bibliothèques nous ont convaincu de l'intérêt de faire l'effort de diffuser cette version.
+
+bonne découverte et comme d'habitude : LISEZ ces notes de version attentivement !!!
+
+============================
+AVERTISSEMENT
+============================
+* Des nouveaux paquetages sont IMPERATIVEMENT à installer :
+- MARC::File::xml (0.83),
+- MARC::Charset (0.95),
+- Class::Accessor (0.22),
+- LWP::Simple 
+- XML::Simple
+Attention : certains de ces paquetages doivent être dans une version très récente. donc partez du principe que vous devez les installer !
+
+* L'interface bibliothécaire est testée seulement avec Mozilla-firefox. L'OPAC devrait fonctionner correctement avec n'importe quel navigateur. 
+
+PROBLEMES CONNUS
+******
+Critiques/bloquants : aucun
+Voir bugs.koha.org pour plus d'information
+
+============================
+Différences 2.2.5 => 2.4.0
+============================
+
+Modifications Base de Données :
+*******************************
+structure BD : le champ dewey a été transformé en char(30)
+Contenu BD : de nombreuses préférences systèmes ont été ajoutées (voir plus bas).
+Feuilles de style OPAC : aucune modification dans la structure, La feuille de style par défaut est maintenant violette/blanche. L'ancienne (verte) est toujours disponible (voir plus bas)
+
+============================
+BUGS CORRIGES
+============================
+=== CATALOGAGE ===
+	* La gestion des pages était incorrecte lorsque l'on cherchait une notice avant de faire un ajout.
+	* les champs vides ne sont plus enregistrés dans la base
+	* le | ne duplique plus les champs codés 
+	* Un document en prêt ne peut plus être supprimé de la base
+
+=== CIRCULATION ===
+	* Ajout d'un 0 devant les mois et les jours du mois pour que les comparaisons de date fonctionnent correctement
+
+=== PARAMETERS ===
+	* Ajout d'une gestion de la pagination dans les crédits.
+	
+	
+============================
+AMELIORATIONS
+============================
+Cette version a été numérotée 2.4.0 car elle propose de nombreuses améliorations. Il n'y a presque aucun changement dans la base de données, donc la stabilité devrait être bonne. Mais vous êtes prévenu que quelques rares bugs pourraient apparaître.
+SVP, LISEZ ces notes de version. Tout est compatible avec les versions précédentes, donc si vous installez Koha "en l'état", vous devriez avoir le même fonctionnement qu'auparavant. Mais vous allez manquer des nouveautés intéressantes !
+
+=== ACQUISITION ===
+	* ajout d'un script (périodique/crontab : check_suggestion.pl) : il envoie un mail au bibliothécaire lorsqu'il y a une suggestion en attente. Intéressant pour les bibs qui on rarement des suggestions.
+	* *AMELIORATIONS MAJEURES*
+		- L'aide en ligne a été ajoutée
+		- La page order.pl ne montre plus les paniers fermés depuis plus de 6 mois.
+		- En réception de commande, vous verrez maintenant une liste des "cartons de réception". Le "code réception" était appelé, avant cette version "information facture fournisseur". Maintenant, si vous allez sur la page de réception, vous verrez toutes les réceptions précédentes, et vous pouvez créer un "nouveau carton", comme précedemment. Cela ne change rien au comportement interne de Koha, mais nous espérons que vous trouverez cela plus clair.
+		- en réception de commande, vous voyez maintenant toutes les commandes en attente de réception. Vous pouvez toujours entrer un ISBN/titre, ou bien cliquer sur un titre dans la liste pour le réceptionner.
+	Nous avons travaillé dur sur ces nouveaux écrans, nous espérons que vous trouverez le mécanisme plus facile à utiliser que précédemment.
+
+=== AUTORITES ===
+	* Si la bibliothèque ne définit pas de résumé pour une autorité, un résumé standard est construit automatiquement.
+	* dans le "sommaire" de l'autorité, si vous saisissez * comme sous champ, Koha va afficher tous les sous-champ les uns à la suite des autres, sans séparateur, mais en respectant l'ordre d'affichage. Intéressant pour les autorités construites et réordonnées.
+
+=== CIRCULATION===
+	* ajout d'un script (périodique/crontab : overduenoticesSelect.pl), qui peut être utilise en remplacement du script overduenotice précédent. Il a beaucoup plus d'opotions, y compris la possibilité de limiter le courrier à 1 site, et l'utilisation d'une "lettre" extérieure (pour éviter d'avoir à modifier le script à chaque mise à jour)
+	* fusion des 2 listes des prêts en cours & prêts du jour + ajour d'un bouton pour renouveller le prêt, et faire des retours en 1 clic.
+	
+=== CATALOGUE ===
+	* Nouvelle préférence système "sortbynonfiling". Si vous cataloguez en MARC21, avec les indicateurs, vous pouvez positionner cette préférence (Yes). Les caractères non utiles seront ignorés dans les tris et "le roi Henri IV" apparaîtra à R et pas à L. Cette préférence système est inutile en UNIMARC (l'UNIMARC ne gère pas cela au travers d'un indicateur)
+
+=== CATALOGAGE ===
+	* Ajout d'un script (périodique/crontab : delete_authority.pl) qui supprime une autorité dans toutes les notices biblio l'utilisant.
+	* *AMELIORATIONS MAJEURES* dans l'éditeur MARC :
+		- la duplication d'un champ (+ sur le champ) ne nécessite plur un appel au serveur : c'est NETTEMENT plus rapide.
+		- la duplication d'un sous-champ n'est plus faite au travers du pipe (|), mais en cliquant sur le + en face du sous-champ.
+		- la propriété "hidden" (caché) des grilles de catalogage a dorénavant 19 valeurs possibles. Regardez l'aide en ligne pour comprendre ce qu'ils permettent. La valeur la plus immédiatement utile est le -1 : le sous-champ est minimisé dans l'éditeur MARC par défaut, vous devez cliquer dessus pour le faire apparaitre. Les sous-champs peu utilisés n'encombrent plus l'écran et sont plus faciles à gérer.
+		- une préférence système "advancedMARCeditor" a été ajoutée. Si elle est positionnée les libellés des champs et sous-champs n'apparaissent plus (sauf au survol de la souris sur le champ ou le sous-champ). Cette préférence système donne un écran encore plus dépouillé, mais plaira uniquement aux "adorateurs du MARC" (catégorie de bibliothécaires peu fréquente mais exigeante)
+	* de nombreux plugins ont été ajoutés pour le MARC21. Il y a maintenant presque autant de plugins pour les champs codés en MARC21 qu'en UNIMARC (pour mémoire : les plugins permettent de saisir confortablement les champs/sous champs codés dans l'éditeur MARC)
+	
+=== LECTEURS ===
+	* Gestion des images : une préférence système a été ajoutée (patronimages, dans la section lecteurs). Si elle est positionnée (elle doit contenir une extension d'image : jpg par exemple), l'image du lecteur apparaitra sur le détail de sa fiche et lorsqu'il empruntera des documents. L'image doit être stockée dans KOHADIR/htdocs/intranet-tmpl/patronimages.
+	elle doit être nommée <borrowernumber>.<patronimagessystempref> (1.jpg par exemple, pour le lecteur #1)
+
+=== OPAC ===
+	De nombreuses préférences ont été ajoutées dans l'OPAC. Lisez attentivement, vous pourrez modifier largement le comportement et le look de votre OPAC.
+	* nouvelle feuille de style pour l'OPAC (violet sur blanc). Cette contribution (de liblime.com / joshua ferraro) a été ajoutée pour mettre en évidence les modifications dans l'OPAC. Si vous voulez conserver l'ancienne feuille de style (verte) : Koha >> Paramètres >> Préférences système >> OPAC >> opacstylesheet > modifier > /opac-tmpl/default/opac_old.css
+	* Pages de couvertures de livres : si la préférence système AmazonContent est activée ET AmazonDevKey/AmazoneDevTag sont saisies (à demander sur www.amazon.com) ET le package XML::Simple est installé, l'OPAC affichera les pages de couvertures des documents lorsqu'ils sont disponibles. Notez que cette fonctionnalité n'est pas légale dans tous les pays (en particulier en France : il faudrait demander la permission à tous les éditeurs)
+	* Nouvelle préférence système : opaccredit : Si quelque chose (y compris du HTML) est saisi ici, le pied de la page d'accueil contiendra ce que vous saisissez (à la place de "bibliothèque sous Koha...)
+	* nouvelle préférence système : opacnav. Dans cette préférence système, vous pouvez saisir n'importe quel code HTML qui sera ajouté au début des menus (par exemple, pour ajouter un bouton pour accéder au site de koha : <a class="menu" href="http://www.koha-fr.org" title="Site de Koha">Koha</a>
+	* recherche autorités : un menu a été ajouté : l'utilisateur peut chercher dans les autorités (comme dans l'interface professionnelle)
+	* nouvelle préférence système : opaclanguagesdisplay. si elle est positionnée, le lecteur ne peut pas choisir sa langue, Koha reste dans le langage par défaut seulement.
+	* nouvelle préférence système : opacreadinghistory. Si elle est positionnée à Yes (valeur par défaut), les lecteurs ont accès à leur historique de lecteur  l'OPAC (uniquement lorsqu'ils sont identifiés). Si elle est mise à No, cette option n'apparait pas.
+	* Acquisitions récentes : une page a été ajoutée pour filtrer les acquisitions récentes sur un site donné.
+	* lorsqu'il y a plusieurs exemplaires avec un même site/localisation/cote, ils sont tous affichés en résumé, au lieu de prendre 1 ligne chacun, dans la liste des résultats.
+	
+=== BILANS ===
+	* Inventaire/récolement : vous pouvez scanner les code-barres de tous vos documents dans un fichier texte, sur un ordinateur portable. Ensuite, vous pouvez télécharger ce fichier dans Koha. Tous les documents seront marqués. Lorsque vous aurez terminé, vous pourrez visualiser les livres non scannés, et obtenir ainsi les documents "perdus".
+
+=== PERIODIQUES ===
+	* AMELIORATIONS MAJEURES : Ajout d'une option pour exemplariser les bulletins : si vous activez la préférence système (section catalogue) serialsadditems, sous l'écran de réception d'un bulletin, vous aurez un formulaire pour créer un exemplaire à la volée. L'exemplaire contient la cote, le site, le code barre et la localisation (si c'est pertinent). Après avoir marqué un bulletin "arrivé", un exemplaire est automatiquement créé dans le catalogue. Si vous laissez la préférence sur Off, le fonctionnement est inchangé.
+	* Les 5 derniers bulletins arrivés sont affichés lorsque l'on bulletine.

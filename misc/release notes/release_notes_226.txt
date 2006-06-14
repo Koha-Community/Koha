@@ -14,7 +14,7 @@ WARNINGS
 ========
 * The librarian interface is tested only with Mozilla/Firefox. Should work (partially) with IE. OPAC should work fine with any browser.
 * In this release, french & english are uptodate. Other language po files are provided in the package. If you update/complete one of them, please send it at paul.poulain @ free.fr, it will be included in a 2.2.4b release !
-* NEW PACKAGES REQUIRED : MARC::File::xml (0.82), MARC::Charset (0.95), Class::Accessor (0.22), LWP::Simple and XML::Simple
+* NEW PACKAGES REQUIRED : MARC::File::xml (0.83), MARC::Charset (0.95), Class::Accessor (0.22), LWP::Simple and XML::Simple
 
 
 KNOWN BUGS
@@ -33,8 +33,8 @@ Changes 2.2.4 => 2.2.5
 DB CHANGES
 **********
 
-DB structure : none
-DB content : none
+DB structure : dewey field has been moved to a char(30)
+DB content : many many new systempreferences
 Koha opac stylesheets : none
 
 BUGFIXES
@@ -79,11 +79,16 @@ Please READ the release notes. Everything is compatible with previous versions, 
 	We worked hard on those new acquisition screens, and hope that you'll find it easier to use than before.
 	=== AUTHORITIES ===
 	* if the library doesn't define a summary for an authority, a standard/default one will be built automatically.
+	* if the librarian set * as subfield, all subfields will be shown, without any separator, but respecting the order. Previously, you had to define every subfield, causing problems in case of reordered subfields.
+	
 	=== CIRCULATION===
 	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for the overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
+	* merged today & previous issues list during issuing. Added a button to renew issues & return issues in 1 click
 
 	=== CATALOGUE ===
+	* highly improved MARC21 default framework
 	* new systempref "sortbynonfiling". If you catalogate with complete MARC (including indicators), you can set this pref to Yes. It will remove non filling chars and order "The King Henry IV" to letter "K". This systempref is USELESS for UNIMARC (as UNIMARC doesn't manage non-filing chars in an indicator, unlike MARC21)
+
 	=== CATALOGUING ===
 	* added a (crontab) script : delete_authority.pl, that deletes all entries of an authority in a biblio.
 	* *MAJOR IMPROVEMENT* in MARC editing :
@@ -95,6 +100,7 @@ Please READ the release notes. Everything is compatible with previous versions, 
 
 	=== MEMBERS ===
 	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages. The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
+	
 	=== OPAC ===
 	Many preferences have been added to OPAC. Read them carefully, as you will be able to modify highly the look and behaviour of your OPAC!
 	* new default stylesheet for css (purple on white). A new stylesheet (contributed by liblime.com) has been added to show everybody the changes in OPAC. If you want to stay with the old one (dark/light green), just reach Koha >> Parameters >> Systempreferences >> OPAC >> opacstylesheet > modify > /opac-tmpl/default/opac_old.css
@@ -106,6 +112,7 @@ Please READ the release notes. Everything is compatible with previous versions, 
 	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
 	* Recent Acquisition : added a new page to filter recent acquisitions on a given branch.
 	* if you use npl templates, you can have an alternate stylesheet (to set it, go to librarian interface >> Parameters > Systempreferences > OPAC > opacstylesheet > modify > /opac-tmpl/npl/en/includes/opac.liblime.css)
+	* when there are more than 1 item at a given location (branch/callnumber/location), the list shows the number of items, not 1 line for each (same) value.
 
 	=== REPORTS ===
 	* Inventory : you can now scan in a text file, on an unconnected laptop, with every book in your library. Then, just upload the file in Koha. It will "mark as seen" all books. Once you've scanned everything in your library, just query for all books not seen since the beginning of the inventory, and you'll get "lost" books.
