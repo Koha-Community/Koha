@@ -23,14 +23,15 @@
 
 <! -- RESET PAGINATION -->
 <!-- TMPL_LOOP name="BIG_LOOP" -->
-<!-- hide every tab except the 1st -->
-<!-- TMPL_IF name="number" -->
-    <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:hidden">
-<!-- TMPL_ELSE -->
-    <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:visible">
-<!-- /TMPL_IF -->
-<!-- TMPL_UNLESS name="number" -->
-    <!-- show duplicate warning on tab 0 only -->
+    <!-- hide every tab except the 1st -->
+    <!-- TMPL_IF name="number" -->
+        <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:hidden">
+    <!-- TMPL_ELSE -->
+        <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:visible">
+    <!-- /TMPL_IF -->
+    
+    <!-- TMPL_UNLESS name="number" -->
+        <!-- show duplicate warning on tab 0 only -->
         <!-- TMPL_IF name="duplicatebiblionumber" -->
                     <div class="error">
                         <p>Is this a duplicate of <a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
@@ -42,6 +43,7 @@
                     </div>
         <!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
+    
     <!-- TMPL_LOOP NAME="innerloop" -->
 		<div style=";" id="tag<!-- TMPL_VAR name="tag"-->">
         <!-- TMPL_IF name="tag" -->
@@ -59,6 +61,7 @@
             <!-- TMPL_IF name="repeatable" --><a href="javascript:cloneTag('tag<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
+        
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!-- TMPL_IF NAME="visibility" -->
                 <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">

@@ -1170,7 +1170,7 @@ sub MARChtml2marc {
 					if ($field) {
 						$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
 					} else {
-					$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+					$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1)." ",substr($indicators{@$rtags[$i]},1,1)."  ", @$rsubfields[$i] => @$rvalues[$i]);
 					}
 # 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 				}
@@ -3018,6 +3018,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.56  2006/06/14 15:39:46  tipaul
+# just reindenting
+#
 # Revision 1.115.2.55  2006/06/12 10:33:54  tipaul
 # [IMPORTANT]
 #
