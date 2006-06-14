@@ -10,6 +10,20 @@
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
+	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+	</script>
+	<script type="text/javascript" language="javascript">
+	var MSG_BASKET_EMPTY = _("Basket is empty");
+	var MSG_RECORD_IN_BASKET = _("This biblio is already in the basket");
+	var MSG_RECORD_ADDED = _("Biblio added to the basket");
+	var MSG_NRECORDS_ADDED = _(" Biblio(s) added");
+	var MSG_NRECORDS_IN_BASKET = _("already in the basket");
+	var MSG_NO_RECORD_SELECTED = _("No biblio selected");
+	var MSG_NO_RECORD_ADDED = _("No biblio added");
+	</script>
 </head>
 
 <body>
@@ -43,7 +57,6 @@
 		<form action="/cgi-bin/koha/opac-search.pl">
 			<p>
 				<select name="value">
-					<option value="">Any item type</option>
 						<!-- TMPL_LOOP name="itemtypeloop" -->
 								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
 								</option>
