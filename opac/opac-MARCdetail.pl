@@ -176,7 +176,13 @@ foreach my $field (@fields) {
 	for my $i (0..$#subf) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-		$this_row{$subf[$i][0]} =$subf[$i][1];
+        if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
+            $this_row{$subf[$i][0]}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+        } elsif ($tagslib->{$field->tag()}->{$subf[$i][0]}->{kohafield} eq "biblioitems.isbn") {
+            $this_row{$subf[$i][0]}=DisplayISBN($subf[$i][1]);
+        } else {
+            $this_row{$subf[$i][0]}=get_authorised_value_desc($field->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
+        }
 	}
 	if (%this_row) {
 		push(@big_array, \%this_row);
