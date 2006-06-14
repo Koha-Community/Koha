@@ -141,16 +141,22 @@ function active(numlayer)
 		link = "link"+i;
 		if (numlayer==i) {
 			with(document){
-			document.getElementById(ong).style.visibility="visible";
-			document.getElementById(link).style.color="#000066";
-			document.getElementById(link).style.backgroundColor="#FFFFCC";
+			if (document.getElementById(ong)){
+				document.getElementById(ong).style.visibility="visible";
+			}
+			if(document.getElementById(link)){
+				document.getElementById(link).style.color="#000066";
+				document.getElementById(link).style.backgroundColor="#FFFFCC";
+			}
 			}
 		} else {
 			with(document){
-			document.getElementById(ong).style.visibility="hidden";
+			if (document.getElementById(ong)){
+				document.getElementById(ong).style.visibility="hidden";
+			}
 			if (document.getElementById(link)) {
-			document.getElementById(link).style.color="#669999";
-			document.getElementById(link).style.backgroundColor="#D8DEB8";
+				document.getElementById(link).style.color="#669999";
+				document.getElementById(link).style.backgroundColor="#D8DEB8";
 			}
 			}
 		}
