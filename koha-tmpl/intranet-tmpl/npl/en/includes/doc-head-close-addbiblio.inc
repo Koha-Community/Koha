@@ -8,7 +8,6 @@
 <style type="text/css">
         <!-- TMPL_IF NAME="intranetstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetstylesheet" -->);<!-- TMPL_ELSE -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
-        @import url(<!-- TMPL_VAR NAME='themelang' -->/includes/marc-editor.css);
 </style>
 <!-- TMPL_INCLUDE NAME="common.js.inc" -->
 </head>
