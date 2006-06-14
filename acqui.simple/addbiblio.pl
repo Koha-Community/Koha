@@ -225,7 +225,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=# style=\"cursor: help;\" onClick=\"openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}',this.parentNode.parentNode)\">...</a>";
+		$subfield_data{marc_value}="<input onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=# style=\"cursor: help;\" onClick=\"openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}',this.parentNode.parentNode)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -238,18 +238,18 @@ sub create_input () {
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" onfocus=\"Focus$function_name($i)\" onblur=\"Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
+		$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
+		$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
 			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
-			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#DDDDDD'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
+			$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
 		}
 	}
 	return \%subfield_data;
