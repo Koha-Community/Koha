@@ -412,7 +412,7 @@ sub newmember {
     $data{'dateofbirth'} = format_date_in_iso( $data{'dateofbirth'} );
     $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} );
     $data{'dateexpiry'} = format_date_in_iso( $data{'dateexpiry'} );
-    my $query =
+ 	my $query =
         "insert into borrowers set cardnumber="
       . $dbh->quote( $data{'cardnumber'} )
       . ",surname="
@@ -1162,10 +1162,10 @@ sub borrowercategories {
 
 =head2 getborrowercategory
 
-  $description = &getborrowercategory($categorycode);
+  $description,$dateofbirthrequired,$upperagelimit,$category_type = &getborrowercategory($categorycode);
 
 Given the borrower's category code, the function returns the corresponding
-description for a comprehensive information display.
+description , dateofbirthrequired , upperagelimit and category type for a comprehensive information display.
 
 =cut
 
@@ -1174,11 +1174,11 @@ sub getborrowercategory {
     my $dbh       = C4::Context->dbh;
     my $sth       =
       $dbh->prepare(
-        "SELECT description,dateofbirthrequired,upperagelimit FROM categories WHERE categorycode = ?");
+        "SELECT description,dateofbirthrequired,upperagelimit,category_type FROM categories WHERE categorycode = ?");
     $sth->execute($catcode);
-    my ($description,$dateofbirthrequired,$upperagelimit) = $sth->fetchrow();
+    my ($description,$dateofbirthrequired,$upperagelimit,$category_type) = $sth->fetchrow();
     $sth->finish();
-    return ($description,$dateofbirthrequired,$upperagelimit);
+    return ($description,$dateofbirthrequired,$upperagelimit,$category_type);
 }    # sub getborrowercategory
 
 

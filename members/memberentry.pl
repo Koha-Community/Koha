@@ -114,7 +114,6 @@ if ($op eq 'add' or $op eq 'modify') {
 	($check_categorytype,undef)=getcategorytype($check_category);
 	}
 
-
 #recover all data from guarantor address phone ,fax... 
 if ($category_type eq 'C' and $guarantorid ne '' ){
 			my $guarantordata=getguarantordata($guarantorid);
@@ -148,7 +147,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 		}
                 if ($categorycode ne 'I') {
                 my $age = get_age(format_date_in_iso($data{dateofbirth}));
-                my (undef,$agelimitmin,$agelimitmax)=getborrowercategory($data{'categorycode'});   
+                my (undef,$agelimitmin,$agelimitmax,undef)=getborrowercategory($data{'categorycode'});   
 		if ($age > $agelimitmax
                             or $age < $agelimitmin
                    ) {
@@ -284,7 +283,7 @@ if ($delete){
   					-default=>$default_category,
  					-labels=>$labels);
 	#test in city
-	$select_city=getidcity($data{'city'}) if ($guarantorid ne '');
+	$select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
 	($default_city=$select_city) if ($step eq 0);
  	if ($select_city eq '' ){
  	my $selectcity=&getidcity($data{'city'});
@@ -467,7 +466,7 @@ if ($delete){
 		initials	=> $data{'initials'},
 		streetnumber	=> $data{'streetnumber'},
 		streettype	=>$data{'streettype'},
-		address  	 => $data{'address'},
+		address  	=> $data{'address'},
 		address2 	=> $data{'address2'},	
 		city	 	=> $data{'city'},
 		zipcode 	=> $data{'zipcode'},
@@ -487,7 +486,7 @@ if ($delete){
 		catcodepopup	=> $catcodepopup,
 		categorycode 	=> $data{'categorycode'},
 		dateenrolled 	=> format_date($data{'dateenrolled'}),
-		dateexpiry		=> format_date($data{'dateexpiry'}),
+		dateexpiry	=> format_date($data{'dateexpiry'}),
 		debarred        => $data{'debarred'},
 		gonenoaddress 	=> $data{'gonenoaddress'}, 
 		lost 	=> $data{'lost'},

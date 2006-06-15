@@ -6,13 +6,11 @@
 <h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
 
 <ul>
-	<!-- TMPL_UNLESS name="guarantorborrowernumber" -->
+	<!-- TMPL_IF name="adultborrower" -->
 	<a href="/cgi-bin/koha/members/memberentry.pl?op=add&guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&category_type=C">Add child</a> 
-	<!-- /TMPL_UNLESS -->
-	<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="bornum" -->&category_type=<!-- TMPL_VAR NAME="category_type"-->">
-
-		Edit this Record
-	</a> 
+	<!-- /TMPL_IF -->
+	
+	<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="bornum" -->&category_type=<!-- TMPL_VAR NAME="category_type"-->">Edit this Record</a> 
 	<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME=bornum -->">
 		Change Member's Password
 	</a> 

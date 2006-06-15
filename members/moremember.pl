@@ -70,13 +70,11 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $bornum=$input->param('bornum');
-
 #start the page and read in includes
-
 my $data=borrdata('',$bornum);
 
+my (undef,undef,undef,$category_type)=getborrowercategory($data->{'categorycode'});
 $template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I"> => instutitional (A for Adult & C for children)
-
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
 $data->{'dateexpiry'} = format_date($data->{'dateexpiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
@@ -90,7 +88,7 @@ $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 
-if ($data->{'categorycode'} eq 'C'){
+if ($category_type eq 'C' and $data->{'guarantorid'} ne '0' ){
 	my $data2=borrdata('',$data->{'guarantorid'});
 	$data->{'address'}=$data2->{'address'};
 	$data->{'city'}=$data2->{'city'};
@@ -101,12 +99,10 @@ if ($data->{'categorycode'} eq 'C'){
 	$data->{'zipcode'} = $data2->{'zipcode'};
 }
 
-
 if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
 	$template->param(printethnicityline => 1);
 }
-
-if ($data->{'category_type'} ne 'C'){
+if ($category_type ne 'C'){
 	$template->param(isguarantee => 1);
 	# FIXME
 	# It looks like the $i is only being returned to handle walking through
@@ -118,9 +114,10 @@ if ($data->{'category_type'} ne 'C'){
 		push (@guaranteedata, {borrowernumber => $guarantees->[$i]->{'borrowernumber'},
 					cardnumber => $guarantees->[$i]->{'cardnumber'},
 					name => $guarantees->[$i]->{'firstname'} . " " . $guarantees->[$i]->{'surname'}});
+	warn"le type de categorie ".$category_type."voila ";
 	}
 	$template->param(guaranteeloop => \@guaranteedata);
-
+	($template->param(adultborrower=>1)) if ($category_type eq 'A');
 } else {
 	my ($guarantorid)=findguarantor($data->{guarantorid});
 	if ($guarantorid->{'borrowernumber'}){
