@@ -32,6 +32,10 @@
 		<th scope="row"><label for="serialseq">Numbered: </label></th><td>
 		 <input type="text" id="serialseq" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="30" maxlength="100" />
 			</td></tr>
+	<tr>
+		<th scope="row"><label for="publisheddate">Published On: </label></th><td><input type="text" name="publisheddate" id="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
+			</td>
+	</tr>
 			<tr>
 		<th scope="row"><label for="planneddate">Expected On:</label> </th><td>
 				<input type="text" id="planneddate" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
@@ -79,10 +83,9 @@
 	
 
 		<!--TMPL_IF Name="serialadditems" -->
+				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td></tr>
 		<tr>
-			
 				<th><label for="itemcallnumber">Callnumber: </label></th> <td><input type="text" id="itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
-				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td>
 		<tr><th><label for="branch">Branch:</label> </th>
 				<td><select  id="branch" name="branch" size="1">
 			<!-- TMPL_LOOP name="branchloop" -->
@@ -127,6 +130,10 @@
 				 <input type="text" id="manual-serialseq" name="serialseq" size="30" maxlength="100" />
 			</td>
 			</tr>
+	<tr>
+		<th scope="row"><label for="publisheddate2">Published On: </label></th><td><input type="text" name="publisheddate" id="publisheddate2" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
+			</td>
+	</tr>
 			<tr><th scope="row"><label for="manual-planneddate">Expected On: </label></th>
 			<td>
 				<input type="text" id="manual-planneddate" name="planneddate" size="10" maxlength="15" />
