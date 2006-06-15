@@ -1115,17 +1115,17 @@ sub updatesup {
    contemail=?,contnotes=?,active=?,
    listprice=?, invoiceprice=?,gstreg=?, listincgst=?,
    invoiceincgst=?, specialty=?,discount=?,invoicedisc=?,
-   nocalc=?
+   nocalc=?, notes=?
    where id=?");
    $sth->execute($data->{'name'},$data->{'address1'},$data->{'address2'},
    $data->{'address3'},$data->{'address4'},$data->{'postal'},$data->{'phone'},
    $data->{'fax'},$data->{'url'},$data->{'contact'},$data->{'contpos'},
    $data->{'contphone'},$data->{'contfax'},$data->{'contaltphone'},
    $data->{'contemail'},
-   $data->{'contnote'},$data->{'active'},$data->{'listprice'},
+   $data->{'contnotes'},$data->{'active'},$data->{'listprice'},
    $data->{'invoiceprice'},$data->{'gstreg'},$data->{'listincgst'},
    $data->{'invoiceincgst'},$data->{'specialty'},$data->{'discount'},
-   $data->{'invoicedisc'},$data->{'nocalc'},$data->{'id'});
+   $data->{'invoicedisc'},$data->{'nocalc'},$data->{'notes'},$data->{'id'});
    $sth->finish;
 }
 
