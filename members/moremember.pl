@@ -114,7 +114,6 @@ if ($category_type ne 'C'){
 		push (@guaranteedata, {borrowernumber => $guarantees->[$i]->{'borrowernumber'},
 					cardnumber => $guarantees->[$i]->{'cardnumber'},
 					name => $guarantees->[$i]->{'firstname'} . " " . $guarantees->[$i]->{'surname'}});
-	warn"le type de categorie ".$category_type."voila ";
 	}
 	$template->param(guaranteeloop => \@guaranteedata);
 	($template->param(adultborrower=>1)) if ($category_type eq 'A');
