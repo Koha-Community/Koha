@@ -46,7 +46,6 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 #print $input->header;
 my $member=$input->param('member');
 my %env;
-warn "user num".$member;
 $env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
