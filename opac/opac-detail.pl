@@ -11,6 +11,7 @@ use C4::SearchMarc;
 use C4::Amazon;
 use C4::Review;
 
+
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name => "opac-detail.tmpl",
@@ -58,7 +59,7 @@ if ($dat->{'additional'}){
 	$authorpush{author} =$addauthor->[0]->{'author'};
 	push @author, \%authorpush
 }
-
+my @title;
 foreach my $word (split(" ", $dat->{'title'})){
         unless (length($word) == 4){
                 $word =~s/\%//g
@@ -138,6 +139,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				virtualshelves => C4::Context->preference("virtualshelves"),
 		        titlewords => $titlewords,
        			authorwords => $authorwords,
+                        reviewson => C4::Context->preference("marc"),
 );
 ## Amazon.com stuff
 #not used unless preference set
