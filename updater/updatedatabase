@@ -167,11 +167,13 @@ my %requiretables = (
                            	PRIMARY KEY  (id)
                            	)",
        reviews                  => "(
+	                        reviewid integer NOT NULL auto_increment,
 	                        borrowernumber integer,
 	                        biblionumber integer,
 	                        review text,
 	                        approved tinyint,
-	                        datereviewed datetime
+	                        datereviewed datetime,
+	                        PRIMARY KEY (reviewid)
 	                        )",
 
 );
@@ -1791,6 +1793,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.148  2006/06/17 22:12:01  rangi
+# Adding id field to reviews table
+#
 # Revision 1.147  2006/06/17 03:36:41  rangi
 # Table definition for the reviews table
 #
