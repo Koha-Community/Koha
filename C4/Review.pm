@@ -140,6 +140,27 @@ sub getallreviews {
     $sth->finish();
     return(\@results);
 }    
+
+=head2 approvereview
+
+  approvereview($biblionumber,$borrowernumber);
+
+Takes a borrowernumber and a biblionumber and marks that review approved
+
+
+=cut
+
+sub approvereview {
+    my ($biblionumber,$borrowernumber)=@_;
+    my $dbh=C4::Context->dbh();
+    my $query="UPDATE reviews
+               SET approved=?
+               WHERE biblionumber=? AND borrowernumber=?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute(1,$biblionumber,$borrowernumber);
+    $sth->finish();
+}
+
 1;
 __END__
 
