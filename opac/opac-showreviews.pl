@@ -10,6 +10,7 @@ use C4::Interface::CGI::Output;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Review;
+use C4::Biblio;
 
 my $query = new CGI;
 my $biblionumber = $query->param('biblionumber');
