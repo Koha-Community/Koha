@@ -455,6 +455,15 @@ my %tabledata = (
             explanation         => 'This Variable allow or not to return automaticly to his homebranch',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'reviewson',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Allows patrons to submit reviews from the opac',
+            type                => 'YesNo',
+        },
     ],
 
 );
@@ -1775,6 +1784,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.146  2006/06/17 03:29:41  rangi
+# Variable to allow librarians to switch reviews on or off
+#
 # Revision 1.145  2006/06/16 09:45:02  btoumi
 # updatedatabase.pl: add change of borrowers table to deletedborrowers table
 # deletemem.pl: delete use of warn function
