@@ -1046,9 +1046,9 @@ sub MARChtml2xml {
 	my $xml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour')); 
 	#$xml =~ s/UTF-8/ISO-8859-1/;
 	#tell perl that $xml is whatever default encoding is
-    my $prevvalue;
-    my $prevtag=-1;
-    my $first=1;
+	my $prevvalue;
+	my $prevtag=-1;
+	my $first=1;
 	my $j = -1;
     for (my $i=0;$i<=@$tags;$i++){
 		@$values[$i] =~ s/&/&amp;/g;
@@ -1057,7 +1057,7 @@ sub MARChtml2xml {
 		@$values[$i] =~ s/"/&quot;/g;
 		@$values[$i] =~ s/'/&apos;/g;
 		if (@$firstsubfields[$i]){
-			$j++ unless (@$tags[$i] eq "");
+			$j++ unless (@$firstsubfields[$i]); #@$tags[$i] eq "");
 			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 			if (!$first){
 		    	$xml.="</datafield>\n";
@@ -3018,6 +3018,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.57  2006/06/17 16:26:32  kados
+# possible fix for a bug introduced in the latest series of commits:
+# the new firstsubfield setting was causing MARChtml2xml to completely
+# mangle the record (as in, no data ended up in the XML). More testing
+# will reveal whether this is actually a fix for that or not ...
+#
 # Revision 1.115.2.56  2006/06/14 15:39:46  tipaul
 # just reindenting
 #
