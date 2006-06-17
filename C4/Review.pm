@@ -51,9 +51,9 @@ Review.pm provides many routines for manipulating reviews.
 
 =cut
 
-@ISA = qw(Exporter);
+@ISA    = qw(Exporter);
 @EXPORT = qw(getreview savereview updatereview numberofreviews
-    getreviews getallreviews			);
+  getreviews getallreviews approvereview deletereview);
 
 use vars qw();
 
@@ -69,95 +69,118 @@ Takes a borrowernumber and a biblionumber and returns the review of that biblio
 =cut
 
 sub getreview {
-    my ($biblionumber,$borrowernumber) = @_;
-    my $dbh=C4::Context->dbh;
-    my $query="SELECT * FROM reviews WHERE biblionumber=? and borrowernumber=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($biblionumber,$borrowernumber);
+    my ( $biblionumber, $borrowernumber ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query =
+      "SELECT * FROM reviews WHERE biblionumber=? and borrowernumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $biblionumber, $borrowernumber );
     my $review = $sth->fetchrow_hashref();
     $sth->finish();
     return $review;
-    }
+}
 
 sub savereview {
-    my ($biblionumber,$borrowernumber,$review) = @_;
-    my $dbh=C4::Context->dbh;
-    my $query="INSERT INTO reviews (borrowernumber,biblionumber,
+    my ( $biblionumber, $borrowernumber, $review ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = "INSERT INTO reviews (borrowernumber,biblionumber,
 	review,approved,datereviewed) VALUES 
   (?,?,?,?,now())";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($borrowernumber,$biblionumber,$review,0);
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $borrowernumber, $biblionumber, $review, 0 );
     $sth->finish();
-    }
+}
 
 sub updatereview {
-    my ($biblionumber,$borrowernumber,$review) = @_;
-    my $dbh=C4::Context->dbh;
-    my $query="UPDATE reviews SET review=?,datereviewed=now(),approved=?
+    my ( $biblionumber, $borrowernumber, $review ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = "UPDATE reviews SET review=?,datereviewed=now(),approved=?
   WHERE borrowernumber=? and biblionumber=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($review,0,$borrowernumber,$biblionumber);
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $review, 0, $borrowernumber, $biblionumber );
     $sth->finish();
-    
-    }
+
+}
 
 sub numberofreviews {
-    my ($biblionumber)=@_;
-    my $dbh=C4::Context->dbh;
-    my $query="SELECT count(*) FROM reviews WHERE biblionumber=? and approved=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($biblionumber,1);
-    my $count=$sth->fetchrow_hashref;
-    
+    my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          =
+      "SELECT count(*) FROM reviews WHERE biblionumber=? and approved=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $biblionumber, 1 );
+    my $count = $sth->fetchrow_hashref;
+
     $sth->finish();
-    return ($count->{'count(*)'});
+    return ( $count->{'count(*)'} );
 }
 
 sub getreviews {
-    my ($biblionumber,$approved)=@_;
-    my $dbh=C4::Context->dbh;
-    my $query="SELECT * FROM reviews WHERE biblionumber=? and approved=? order by datereviewed desc";
-    my $sth=$dbh->prepare($query) || warn $dbh->err_str;
-    $sth->execute($biblionumber,$approved);
+    my ( $biblionumber, $approved ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query =
+"SELECT * FROM reviews WHERE biblionumber=? and approved=? order by datereviewed desc";
+    my $sth = $dbh->prepare($query) || warn $dbh->err_str;
+    $sth->execute( $biblionumber, $approved );
     my @results;
-    while (my $data=$sth->fetchrow_hashref()){
-	push @results,$data;
-	}
+    while ( my $data = $sth->fetchrow_hashref() ) {
+        push @results, $data;
+    }
     $sth->finish();
-    return(\@results);
+    return ( \@results );
 }
 
 sub getallreviews {
-    my ($status) =@_;
-    my $dbh=C4::Context->dbh;
-    my $query="SELECT * FROM reviews WHERE approved=? order by datereviewed desc";
-    my $sth=$dbh->prepare($query);
+    my ($status) = @_;
+    my $dbh      = C4::Context->dbh;
+    my $query    =
+      "SELECT * FROM reviews WHERE approved=? order by datereviewed desc";
+    my $sth = $dbh->prepare($query);
     $sth->execute($status);
     my @results;
-    while (my $data=$sth->fetchrow_hashref()){
-	push @results,$data;
-	}
+    while ( my $data = $sth->fetchrow_hashref() ) {
+        push @results, $data;
+    }
     $sth->finish();
-    return(\@results);
-}    
+    return ( \@results );
+}
 
 =head2 approvereview
 
-  approvereview($biblionumber,$borrowernumber);
+  approvereview($reviewid);
 
-Takes a borrowernumber and a biblionumber and marks that review approved
+Takes a reviewid and marks that review approved
 
 
 =cut
 
 sub approvereview {
-    my ($biblionumber,$borrowernumber)=@_;
-    my $dbh=C4::Context->dbh();
-    my $query="UPDATE reviews
+    my ($reviewid) = @_;
+    my $dbh        = C4::Context->dbh();
+    my $query      = "UPDATE reviews
                SET approved=?
-               WHERE biblionumber=? AND borrowernumber=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute(1,$biblionumber,$borrowernumber);
+               WHERE reviewid=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( 1, $reviewid );
+    $sth->finish();
+}
+
+=head2 deletereview
+
+  deletereview($reviewid);
+
+Takes a reviewid and deletes it
+
+
+=cut
+
+sub deletereview {
+    my ($reviewid) = @_;
+    my $dbh        = C4::Context->dbh();
+    my $query      = "DELETE FROM reviews
+               WHERE reviewid=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($reviewid);
     $sth->finish();
 }
 
