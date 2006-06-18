@@ -26,6 +26,7 @@ use strict; use warnings; #FIXME: turn off warnings before release
 use MARC::Record; # marc2marcxml, marcxml2marc, html2marc, changeEncoding
 use MARC::File::XML; # marc2marcxml, marcxml2marc, html2marcxml, changeEncoding
 use MARC::Crosswalk::DublinCore; # marc2dcxml
+#use MODS::Record; # marc2modsxml
 use Unicode::Normalize; # _entity_encode
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -261,8 +262,31 @@ Returns a MODS scalar
 =cut
 
 sub marc2modsxml {
+	use XML::XSLT;
+	#use XML::LibXSLT;
 	my ($marc) = @_;
-	return ("Feature not yet implemented\n");
+	my $error;
+	my $marcxml;
+
+	# open some files for testing
+	open MARCBIG21MARC21SLIM,"/home/koha/head/koha/C4/MARC21slim2MODS3-1.xsl" or die $!;
+	my $marcbig2marc21_slim; # = scalar (MARC21MARC8);
+	foreach my $line (<MARCBIG21MARC21SLIM>) {
+    	$marcbig2marc21_slim .= $line;
+	}
+
+	# set some defailts
+	my $to_encoding = "UTF-8";
+	my $flavour = "MARC21";
+	
+	# first convert our ISO-2709 to MARCXML
+	($error,$marcxml) = marc2marcxml($marc,$to_encoding,$flavour);	
+	my $xslt_obj = XML::XSLT->new ($marcbig2marc21_slim, warnings => 1);
+	$xslt_obj->transform ($marcxml);
+	my $xslt_string = $xslt_obj->toString;
+	$xslt_obj->dispose();
+	warn $xslt_string;
+	return ($error,$xslt_string);
 }
 =head2 html2marcxml
 
