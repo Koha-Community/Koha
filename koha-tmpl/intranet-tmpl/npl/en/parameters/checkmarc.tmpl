@@ -66,6 +66,20 @@
 	</tr>
 <!-- /TMPL_IF -->
 <!-- -->
+<!-- TMPL_IF name="itemtypes_empty" -->
+        <tr>
+                <td>itemtypes are empty</td>
+                <td>the itemtypes MUST<br />
+                        <ul><li>be filled</li>
+        </tr>
+<!-- TMPL_ELSE -->
+        <tr>
+                <td>OK</td>
+                <td>itemtypes defined</td>
+        </tr>
+<!-- /TMPL_IF -->
+<!-- -->
+
 <!-- TMPL_IF name="branch" -->
 	<tr>
 		<td>homebranch NOT mapped</td>
