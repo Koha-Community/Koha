@@ -177,6 +177,7 @@ sub build_authorized_values_list ($$$$$) {
 			push @authorised_values, $itemtype;
 			$authorised_lib{$itemtype}=$description;
 		}
+		$value=$itemtype unless ($value);
 
 	#---- "true" authorised value
 	} else {
@@ -202,7 +203,7 @@ sub build_authorized_values_list ($$$$$) {
  builds the <input ...> entry for a subfield.
 =cut
 sub create_input () {
-	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth,$firstsubfield) = @_;
+	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
 	# must be encoded as utf-8 before it reaches the editor
         #use Encode;
         #$value = encode('utf-8', $value);
@@ -211,21 +212,20 @@ sub create_input () {
 	my %subfield_data;
 	$subfield_data{tag}=$tag;
 	$subfield_data{subfield}=$subfield;
-	$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
+	$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 	$subfield_data{marc_lib_plain}=$tagslib->{$tag}->{$subfield}->{lib};
 	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
-	$subfield_data{firstsubfield} = $firstsubfield?1:0;
 	$subfield_data{visibility} = "display:none" unless (($tagslib->{$tag}->{$subfield}->{hidden}%2==0) or $value ne ''); #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a href=# style=\"cursor: help;\" onClick=\"openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}',this.parentNode.parentNode)\">...</a>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"67\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -238,18 +238,18 @@ sub create_input () {
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" onfocus=\"Focus$function_name($i)\" onblur=\"Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"70\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  ($tagslib->{$tag}->{$subfield}->{'hidden'}) {
-		$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
 			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
-			$subfield_data{marc_value}="<input class=\"addbiblioInput\" onblur=\"this.className='addbiblioInput';\" onfocus=\"this.className='addbiblioInputFocus';\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
+			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\">"; #"
 		}
 	}
 	return \%subfield_data;
@@ -264,15 +264,14 @@ sub build_tabs ($$$$) {
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
 		where category=? order by lib");
-
+    
     # in this array, we will push all the 10 tabs
     # to avoid having 10 tabs in the template : they will all be in the same BIG_LOOP
     my @BIG_LOOP;
-    
+
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		my @loop_data = ();
-# loop through each tag
 		foreach my $tag (sort(keys (%{$tagslib}))) {
 			my $indicator;
 	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
@@ -297,7 +296,7 @@ sub build_tabs ($$$$) {
 						}
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'biblio.biblionumber');
-						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {
 						my @subfields=$field->subfields();
@@ -306,7 +305,7 @@ sub build_tabs ($$$$) {
 							my $value=$subfields[$subfieldcount][1];
 							next if (length $subfield !=1);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
 							$i++;
 						}
 					}
@@ -317,7 +316,7 @@ sub build_tabs ($$$$) {
 						next if ($tag<10);
 						next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-4) or ($tagslib->{$tag}->{$subfield}->{hidden}>=5) ); #check for visibility flag
 						next if (defined($field->subfield($subfield)));
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
+						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					}
 					if ($#subfields_data >= 0) {
@@ -337,7 +336,7 @@ sub build_tabs ($$$$) {
 					if ($#fields >=1 && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
 						my @subfields_data;
 						my %tag_data;
-						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth),$#subfields_data>=0?0:1);
+						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
 						$tag_data{tag} = '';
 						$tag_data{tag_lib} = '';
 						$tag_data{indicator} = '';
@@ -356,7 +355,7 @@ sub build_tabs ($$$$) {
 					next if (length $subfield !=1);
 					next if (($tagslib->{$tag}->{$subfield}->{hidden}<=-5) or ($tagslib->{$tag}->{$subfield}->{hidden}>=4) ); #check for visibility flag
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth,$#subfields_data>=0?0:1));
+					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
 				}
 				if ($#subfields_data >= 0) {
@@ -500,16 +499,14 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my @firstsubfields = $input->param('firstsubfield');
-# 	use Data::Dumper;
-# 	warn "DUMP PL : ".Dumper(@tags);
-	my $record;
 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
-		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@firstsubfields,\@indicator,\@ind_tag);
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 	} else {
 		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 	}
+	#warn $record->as_formatted;
+	#warn "IN ADDBIB";
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
@@ -586,7 +583,6 @@ if ($op eq "addbiblio") {
 		$bibid = "";
 		$oldbiblionumber= "";
 	}
-# 	warn "REC : ".$record->as_formatted;
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
