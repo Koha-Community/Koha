@@ -24,7 +24,7 @@
 		<!-- TMPL_ELSE -->
 			<input type="button" value="Add Bibliographic Record and go to Items" onclick="Check(this.form);" accesskey="w" class="submit" />
 		<!-- /TMPL_IF -->
-	<input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" / ></div>
+	<input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" /></div>
 
 
 	<div class="tabs">
@@ -37,7 +37,7 @@
         <!--  /TMPL_LOOP -->
 	</div>
 
-<! -- RESET PAGINATION -->	
+<! -- RESET PAGINATION -->
 <!-- TMPL_LOOP name="BIG_LOOP" -->
 <!-- hide every tab except the 1st -->
 <!-- TMPL_IF name="number" -->
@@ -59,24 +59,22 @@
         <!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
     <!-- TMPL_LOOP NAME="innerloop" -->
-		<div id="tag<!-- TMPL_VAR name="tag"-->">
+		<div style=";" id="tag<!-- TMPL_VAR name="tag"-->">
         <!-- TMPL_IF name="tag" -->
         <p class="MARCtag">
             <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->" />
             <!-- TMPL_UNLESS name="hide_marc" -->
-                <label for="indicator<!-- TMPL_VAR NAME="tag" -->" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></label>
-                <input tabindex="1" id="indicator<!-- TMPL_VAR NAME="tag" -->" onblur="this.className='indicator';" onfocus="this.className='indicatorFocus';" type="text"<!-- TMPL_IF NAME="fixedfield" --> style="display:none;"<!-- /TMPL_IF --> name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat" /> -
+                <a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
+                <input tabindex="1" onblur="this.className='addbiblioInput';" onfocus="this.className='addbiblioInputFocus';'" type="text" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat" /> -
             <!-- TMPL_ELSE -->
                 <input tabindex="1" type="hidden" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->" />
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="#" onclick="cloneTag('tag<!-- TMPL_VAR NAME="tag" -->');">+</a><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
         </p>
-		
         <!-- /TMPL_IF -->
-
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!-- TMPL_IF NAME="visibility" -->
                 <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
@@ -86,11 +84,11 @@
             <div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
                 <p>
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <label<!-- TMPL_IF NAME="fixedfield" --> style="display:none;"<!-- /TMPL_IF --> class="labelsubfield">
+                    <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield">
                 <!-- /TMPL_UNLESS -->
                 <!-- TMPL_UNLESS name="hide_marc" -->
                     <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
-                        <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" DISABLE READONLY tabindex="-1" />
+                        <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" disabled="disabled" readonly="readonly" tabindex="-1" />
                 <!-- TMPL_ELSE -->
                     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <!-- /TMPL_UNLESS -->
@@ -105,7 +103,7 @@
                     <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
                 <!-- /TMPL_IF -->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-                <input type="hidden" name="firstsubfield" value="<!-- TMPL_VAR NAME="firstsubfield" -->" size="2" maxlength="1" />
+                <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1" />
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
                 <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
                 <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
@@ -131,7 +129,7 @@
 			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->" />
 			<input type="hidden" name="mandatory" value="0" />
 			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldbiblioitemnumtagfield" -->" />
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldbiblioitemnumtagfield" -->" /> 
 			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldbiblioitemnumtagsubfield" -->" />
 			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="oldbiblioitemnumber" -->" />
 			<input type="hidden" name="mandatory" value="0" />
@@ -304,6 +302,11 @@ function PopupZ3950() {
 	}
 }
 
+function Changefwk(FwkList) {
+  var fwk = FwkList.options[FwkList.selectedIndex].value;
+  window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
+}
+
 function openAuth(tagid,authtype,X) {
 // 	defaultid=document.getElementById(subfieldid);
     Y=X.parentNode.getAttribute("id");
@@ -315,12 +318,10 @@ function Changefwk(FwkList) {
   window.location = "addbiblio.pl?oldbiblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&frameworkcode="+fwk;
 }
 
-function cloneTag(index) {
- var original = document.getElementById(index);
- var clone = original.cloneNode(true);
- // OK, now rename the id of the 
- clone.setAttribute("id", index + index);
- original.parentNode.insertBefore( clone, original.nextSibling);
+function AddField(field) {
+	document.forms['f'].op.value = "addfield";
+	document.forms['f'].addfield_field.value=field;
+	document.f.submit();
 }
 
 function cloneSubfield(index) {
@@ -336,10 +337,10 @@ function cloneSubfield(index) {
 	image = clone.getElementsByTagName('img')[0];
 	image.setAttribute("onclick","upSubfield('" + index + index + "')");
  <!-- /TMPL_IF -->
-// trigger = original.getElementsByTagName('a')[0];
-// if (trigger) {
-// 	trigger.parentNode.removeChild(trigger);
-// }
+ trigger = original.getElementsByTagName('a')[0];
+ if (trigger) {
+ 	trigger.parentNode.removeChild(trigger);
+ }
  clonetrigger = clone.getElementsByTagName('a')[0];
  clonetrigger.setAttribute("onclick","cloneSubfield('" + index + index + "')");
  clone.setAttribute("tabindex","1");
