@@ -33,12 +33,15 @@ WriteMakefile(
         'DBD::MySQL' => 1,
         'HTML::Template' => 1,
         'Digest::MD5' => 1,
-        'MARC::Record' => 1,
+        'MARC::Record' => 2.0,
+        'MARC::Charset' => 0.95,
+        'MARC::File::XML' => 0.83,
         'Mail::Sendmail' => 1,
         'PDF::API2' => 1,
         'Net::LDAP' => 1,
         'Event' => 1,
-        'Net::Z3950' => 1
+        'Net::Z3950' => 1,
+	'XML::SAX::LibXML' => 1
         },
    CONFIGURE => sub {
      # Figure out options here?
