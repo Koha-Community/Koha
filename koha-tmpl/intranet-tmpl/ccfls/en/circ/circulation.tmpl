@@ -153,7 +153,7 @@
 		<li><!-- TMPL_VAR NAME="phone" --></li>
 		<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 		<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-		<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornumr=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
+		<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ">edit</a>)</li>
 		</ul>
 		</div>
 		<h3<!--TMPL_IF Name="warndeparture"--> class="error"<!--/TMPL_IF-->><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!--TMPL_IF Name="warndeparture"--><br /> Borrower's Card will Expire Soon.<!--/TMPL_IF--></h3>
