@@ -340,6 +340,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 																		-default=>"$value",
 																		-labels => \%authorised_lib,
 																		-size=>1,
+ 																		-tabindex=>'',
 																		-multiple=>0,
 																		);
 		} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
