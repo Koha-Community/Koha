@@ -78,6 +78,7 @@ if ($count == 1){
 # 				-default  => $results[0]->{'itemtype'},
 # 				-labels   => \%itemtypes,
 # 				-size     => 1,
+# 				-tabindex=>'',
 # 				-multiple => 0 );
 # 	$sth->finish;
 
@@ -94,6 +95,7 @@ if ($count == 1){
 				-default  => $results[0]->{'branchcode'},
 				-labels   => \%select_branches,
 				-size     => 1,
+ 				-tabindex=>'',
 				-multiple => 0 );
 
 	my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
@@ -121,6 +123,7 @@ if ($count == 1){
 # 				-default  => $results[0]->{'bookfundid'},
 # 				-labels   => \%select_bookfunds,
 # 				-size     => 1,
+#				-tabindex=>'',
 # 				-multiple => 0 );
 
 	if ($results[0]->{'quantityreceived'} == 0){

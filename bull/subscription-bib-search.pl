@@ -172,6 +172,7 @@ if ($op eq "do_search") {
 				-values   => \@itemtype,
  				-labels   => \%itemtypes,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	$sth->finish;
 

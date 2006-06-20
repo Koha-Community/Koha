@@ -71,6 +71,7 @@ if ($shelfnumber) {
 				-values   => \@shelvesloop,
 				-labels   => \%shelvesloop,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	 }
 
@@ -91,6 +92,9 @@ $template->param(biblionumber => $biblionumber,
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.7  2006/06/20 16:21:43  oleonard
+# Adding "tabindex=''" to CGI:scrolling_lists to prevent incorrect tabbing. See Bug 1098
+#
 # Revision 1.1.2.6  2006/04/27 16:23:34  oleonard
 # Hiding option to add to existing virtual shelves if there are no existing virtual shelves (thanks Chris!)
 #

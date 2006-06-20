@@ -153,6 +153,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {
@@ -201,6 +202,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {

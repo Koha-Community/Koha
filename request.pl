@@ -180,6 +180,7 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
 			-values   => \@select_branch,
 			-labels   => \%select_branches,
 			-size     => 1,
+ 			-tabindex=>'',
 			-multiple => 0 );
 
 #get the time for the form name...

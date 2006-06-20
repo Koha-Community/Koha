@@ -309,6 +309,7 @@ else {
 	my $marclist = CGI::scrolling_list(-name=>"marclist",
 					-values=> $marcarray,
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					-onChange => "sql_update()",
 					);
@@ -335,6 +336,7 @@ else {
 				-values   => \@itemtype,
  				-labels   => \%itemtypes,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	$sth->finish;
 
@@ -353,6 +355,7 @@ else {
 				-values   => \@select_branch,
 				-labels   => \%select_branches,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	$sth->finish;
 

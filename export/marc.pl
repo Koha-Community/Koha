@@ -82,6 +82,7 @@ if ($op eq "export") {
 							-default  => '',
 							-labels   => \%itemtypes,
 							-size     => 1,
+				 			-tabindex=>'',
 							-multiple => 0 );
 	$sth->finish;
 	

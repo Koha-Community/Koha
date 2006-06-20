@@ -157,6 +157,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$searchfield) {

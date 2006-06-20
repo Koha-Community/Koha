@@ -278,6 +278,7 @@ if ($borrowerslist) {
 				-values   => \@values,
 				-labels   => \%labels,
 				-size     => 7,
+	 			-tabindex=>'',
 				-multiple => 0 );
 }
 #title

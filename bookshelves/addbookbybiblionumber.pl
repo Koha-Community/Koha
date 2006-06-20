@@ -70,6 +70,7 @@ if ($shelfnumber) {
 				-values   => \@shelvesloop,
 				-labels   => \%shelvesloop,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 
 	$template->param(biblionumber => $biblionumber,
@@ -84,6 +85,9 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.3.2.4  2006/06/20 16:21:42  oleonard
+# Adding "tabindex=''" to CGI:scrolling_lists to prevent incorrect tabbing. See Bug 1098
+#
 # Revision 1.3.2.3  2006/02/05 21:59:21  kados
 # Adds script support for IntranetNav ... see mail to koha-devel for
 # details

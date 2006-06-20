@@ -222,6 +222,7 @@ while ($i < $count2){
 	$lineres{biblionumber}=$result->{biblionumber};
 	$lineres{title}=$result->{title};
 	$lineres{author}=$result->{author};
+	$lineres{colour}=$colour;
 	$lineres{toggle}=$toggle;
 	$lineres{itemcount}=$count;
 	$lineres{location}=$location;
@@ -246,6 +247,8 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								author => $author,
 								loopsearch =>\@loopsearch,
 								loopresult =>\@loopresult,
+								intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+								intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 								'use-location-flags-p' => 1);
 
 output_html_with_http_headers $input, $cookie, $template->output;

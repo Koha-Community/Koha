@@ -124,9 +124,10 @@ if ($op eq 'add_form') {
 									},
 					-default=>$data->{'tab'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
+		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" />";
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
@@ -134,12 +135,14 @@ if ($op eq 'add_form') {
 					-values=> \@authorised_values,
 					-default=>$data->{'authorised_value'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
 					-values=> \@value_builder,
 					-default=>$data->{'value_builder'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
@@ -157,9 +160,10 @@ if ($op eq 'add_form') {
 									},
 					-default=>"",
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"3\" maxlength=\"1\">";
+		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"3\" maxlength=\"1\" />";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
@@ -168,6 +172,7 @@ if ($op eq 'add_form') {
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
 					-values=> \@authorised_values,
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{bgcolor} = $toggle;
@@ -176,7 +181,7 @@ if ($op eq 'add_form') {
 	$template->param('use-heading-flags-p' => 1);
 	$template->param('heading-edit-subfields-p' => 1);
 	$template->param(action => "Edit subfields",
-							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\">$tagfield",
+							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />$tagfield",
 							loop => \@loop_data,
 							more_subfields => $more_subfields,
 							more_tag => $tagfield);

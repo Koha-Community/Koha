@@ -191,6 +191,7 @@ elsif ($op eq "AddStatement") {
 		my $marclist = create_scrolling_list({name=>"marclist",
 					values=> $marcarray,
 					size=> 1,
+		 			-tabindex=>'',
 					default=>$marcfields[$i],
 					onChange => "sql_update()"}
 					);
@@ -224,6 +225,7 @@ elsif ($op eq "AddStatement") {
 	my $marclist = create_scrolling_list({name=>"marclist",
 				values=> $marcarray,
 				size=>1,
+	 			-tabindex=>'',
 				onChange => "sql_update()"});
 	push @statements, {"marclist" => $marclist };
 

@@ -122,6 +122,7 @@ sub build_authorized_values_list ($$$$$) {
 				-default  => $value,
 				-labels   => \%authorised_lib,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 }
 

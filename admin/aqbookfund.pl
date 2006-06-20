@@ -127,6 +127,7 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
 			-values   => \@select_branch,
 			-labels   => \%select_branches,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 $template->param(CGIbranch => $CGIbranch);
 

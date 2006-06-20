@@ -97,6 +97,7 @@ if ($search_string) {
 			-values=> \@freelib,
 			-default=> "",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			-labels=> \%stdlib
 			);
@@ -110,6 +111,7 @@ my $dig_list= CGI::scrolling_list( -name=>'search_string',
 		-values=> \@x,
 		-default=> "",
 		-size=>1,
+		-tabindex=>'',
 		-multiple=>0,
 		);
 

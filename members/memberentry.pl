@@ -186,6 +186,7 @@ if ($delete){
 	if ($ethnicitycategoriescount>=0) {
 		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
 					-id => 'ethnicity',
+		 			-tabindex=>'',
 					-values=>$categories,
 					-default=>$data->{'ethnicity'},
 					-labels=>$labels);
@@ -195,6 +196,7 @@ if ($delete){
 	($categories,$labels)=borrowercategories();
 	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
 					-id => 'categorycode',
+ 					-tabindex=>'',
 					-values=>$categories,
 					-default=>$data->{'categorycode'},
 					-labels=>$labels);
@@ -262,6 +264,7 @@ if ($delete){
 				-default  => $data->{'branchcode'},
 				-labels   => \%select_branches,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	
 	my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data->{'sort1'});

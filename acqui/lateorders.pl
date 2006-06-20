@@ -39,6 +39,7 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 
 $template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
@@ -57,6 +58,7 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 				-values   => \@select_branches,
 				-labels   => \%select_branches,
 				-size     => 1,
+ 				-tabindex=>'',
 				-multiple => 0 );
 
 my ($count, @lateorders) = getlateorders($delay,$supplierid,$branch);

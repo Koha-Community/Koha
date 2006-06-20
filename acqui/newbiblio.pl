@@ -106,6 +106,7 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
 			-default  => $data->{'itemtype'},
 			-labels   => \%itemtypes,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 $sth->finish;
 
@@ -123,6 +124,7 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-default  => $data->{'branchcode'},
 			-labels   => \%select_branches,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 
 # build bookfund list
@@ -139,6 +141,7 @@ my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
 			-default  => $data->{'bookfundid'},
 			-labels   => \%select_bookfunds,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 my $bookfundname;
 my $bookfundid;

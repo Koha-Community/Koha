@@ -27,6 +27,7 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
+ 			-tabindex=>'',
 			-multiple => 0 );
 
 my @lateissues;
