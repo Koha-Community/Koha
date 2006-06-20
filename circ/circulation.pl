@@ -89,6 +89,7 @@ my %env; # FIXME env is used as an "environment" variable. Could be dropped prob
 my $print; 
 $env{'branchcode'}= $branch;
 $env{'printer'}= $printer;
+$env{'organisation'} = $organisation;
 # $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
