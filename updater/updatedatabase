@@ -547,6 +547,10 @@ my %fielddefinitions = (
 		},
 	],
 	borrowers => [
+		{	field => 'firstname',
+		 	type => 'text',
+		 	null => 'NULL',
+		 },
 		{	field => 'B_email',
 		 	type => 'text',
 		 	null => 'NULL',
@@ -1797,6 +1801,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.150  2006/06/22 10:30:57  btoumi
+# modify firstname field caracteristic from borrowers table
+#
 # Revision 1.149  2006/06/20 22:35:47  rangi
 # Code to allow the associated borrowers to work
 #
