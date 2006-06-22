@@ -145,7 +145,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 			$data{'city'}= $borrower_city;
 			$data{'zipcode'}=$borrower_zipcode;
 		}
-                if ($categorycode ne 'I') {
+                if ($category_type ne 'I') {
                 my $age = get_age(format_date_in_iso($data{dateofbirth}));
                 my (undef,$agelimitmin,$agelimitmax,undef)=getborrowercategory($data{'categorycode'});   
 		if ($age > $agelimitmax
@@ -324,9 +324,9 @@ if ($delete){
 		}
 		push(@relshipdata, \%row);
 	}
-	my %flags = ( 'gonenoaddress' => ['gonenoaddress', 'Adresse érronée'],
-		      'lost'          => ['lost', 'Carte Perdue'],
-		      'debarred'      => ['debarred', 'Lecteur exclu']);
+	my %flags = ( 'gonenoaddress' => ['gonenoaddress', 'Gone no address '],
+		      'lost'          => ['lost', 'Lost'],
+		      'debarred'      => ['debarred', 'Debarred']);
 
 	my @flagdata;
 	foreach (keys(%flags)) {
@@ -437,7 +437,7 @@ if ($delete){
             foreach my $error (@errors) {
                 $template->param( $error => 1);
             }
-            $template->param(nok => 1);
+            	$template->param(nok => 1);
         }
         else {
             $step++;
@@ -476,11 +476,11 @@ if ($delete){
 		fax		=> $data{'fax'},
 		phonepro        => $data{'phonepro'},
 		emailpro	=> $data{'emailpro'},
-		b_address   	=> $data{'b_address'},
-		b_city     	=> $data{'b_city'},
-		b_zipcode 	=> $data{'b_zipcode'},
-		b_email		=> $data{'b_email'},
-		b_phone        => $data{'b_phone'},
+		B_address   	=> $data{'B_address'},
+		B_city     	=> $data{'B_city'},
+		B_zipcode 	=> $data{'B_zipcode'},
+		B_email		=> $data{'B_email'},
+		B_phone        => $data{'B_phone'},
 		dateofbirth	=> $data{'dateofbirth'},
 		branchcode      => $data{'branchcode'},
 		catcodepopup	=> $catcodepopup,

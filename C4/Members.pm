@@ -466,15 +466,15 @@ sub newmember {
       . ",contactnote="
       . $dbh->quote( $data{'contactnote'} )
       . ",B_address="
-      . $dbh->quote( $data{'b_address'} )
+      . $dbh->quote( $data{'B_address'} )
       . ",B_zipcode="
-      . $dbh->quote( $data{'b_zipcode'} )
+      . $dbh->quote( $data{'B_zipcode'} )
       . ",B_city="
-      . $dbh->quote( $data{'b_city'} )
+      . $dbh->quote( $data{'B_city'} )
       . ",B_phone="
-      . $dbh->quote( $data{'b_phone'} )
+      . $dbh->quote( $data{'B_phone'} )
       . ",B_email="
-      . $dbh->quote( $data{'b_email'}, )
+      . $dbh->quote( $data{'B_email'}, )
       . ",password="
       . $dbh->quote( $data{'password'} )
       . ",userid="
@@ -498,9 +498,9 @@ sub newmember {
       . ",relationship="
       . $dbh->quote( $data{'relationship'} )
       . ",B_streetnumber="
-      . $dbh->quote( $data{'b_streetnumber'}) 
+      . $dbh->quote( $data{'B_streetnumber'}) 
       . ",B_streettype="
-      . $dbh->quote( $data{'b_streettype'})
+      . $dbh->quote( $data{'B_streettype'})
       . ",gonenoaddress="
       . $dbh->quote( $data{'gonenoaddress'})	
       . ",lost="
