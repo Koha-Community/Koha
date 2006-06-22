@@ -220,6 +220,7 @@ sub neworder {
       )
       = @_;
     my $sth;
+    my $dbh;
     if ( !$budget || $budget eq 'now' ) {
         $sth = $dbh->prepare(
             "INSERT INTO aqorders
