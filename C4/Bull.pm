@@ -226,12 +226,8 @@ sub get_full_subscription_list_from_biblionumber {
 	my $first;
 	my $previousnote="";
 	while (my $subs = $sth->fetchrow_hashref) {
-# 		my $sth2 = $dbh->prepare('select * from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
-# 		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
-# 		while (my $issues = $sth2->fetchrow_hashref){
-# 				warn "planneddate ".$issues->{'planneddate'};
-# 				warn "serialseq".$issues->{'serialseq'};
-# 		}
+### BUG To FIX: When there is no published date, will create many null ids!!!
+
 		if ($year and ($year==$subs->{year})){
 			if ($first eq 1){$first=0;}
 			my $temp=$res[scalar(@res)-1]->{'serials'};
@@ -745,7 +741,7 @@ sub subscriptionrenew {
 	my $biblio = $sth->fetchrow_hashref;
 	newsuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},'','','','','',$subscription->{biblionumber});
 	# renew subscription
-	$sth=$dbh->prepare("update subscription set startdate=?,numberlength=?,weeklength=?,monthlength=?");
-	$sth->execute(format_date_in_iso($startdate),$numberlength,$weeklength,$monthlength);
+	$sth=$dbh->prepare("update subscription set startdate=?,numberlength=?,weeklength=?,monthlength=? where subscriptionid=?");
+	$sth->execute(format_date_in_iso($startdate),$numberlength,$weeklength,$monthlength, $subscriptionid);
 }
 END { }       # module clean-up code here (global destructor)
