@@ -37,10 +37,15 @@
 <dd>
 
 <div id="main">
-<!-- TMPL_IF NAME="searchdesc" -->
-    <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span></h3>
+<!-- TMPL_IF NAME="searchdata" -->
+    <h3>
+      Results for Search: 
+        <span class="ex">
+          <!-- TMPL_VAR NAME="searchdesc" -->
+        </span>
+     </h3>
 <!-- TMPL_ELSE -->
-  		<h3>You did not specify any search criteria</h3>
+  <h3>You did not specify any search criteria</h3>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="total" --><div id="pages">
