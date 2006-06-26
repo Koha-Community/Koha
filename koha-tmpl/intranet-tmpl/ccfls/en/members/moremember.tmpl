@@ -139,10 +139,19 @@
 </table>
 </div><div class="data">
 <table>
-	<caption>Fines &amp; Charges</caption>
-		
-		<tr>
-			<!-- TMPL_IF name="totaldue" --><th>Total Due:</th><td id="totalDue">$<!-- TMPL_VAR name="totaldue" --></td></tr><!-- TMPL_ELSE --><td>No Outstanding Charges</td><!-- /TMPL_IF --></table>
+  <caption>Fines &amp; Charges</caption>
+  <tr>
+    <!-- TMPL_IF name="totaldue" -->
+      <th>Total Due:</th>
+      <td id="">
+        $<!-- TMPL_VAR name="totaldue" -->
+      </td>
+    <!-- TMPL_ELSE -->
+      <td>No Outstanding Charges</td>
+    <!-- /TMPL_IF -->
+  </tr>
+</table>
+
 <!-- TMPL_UNLESS NAME="unvalidlibrarian"--><p><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><input type="submit" value="View Account" class="submit" /></form>
 
 	<form class="inline" action="/cgi-bin/koha/pay.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" /><input type="submit" value="Pay Fines" class="submit" /></form>
