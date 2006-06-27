@@ -140,7 +140,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 # STEP 1
 	if ($step eq 1) {
 		###############test to take the right zipcode and city name ##############
-		if ($category_type ne 'I' and $guarantorid eq ''){
+		if ( $guarantorid eq ''){
 			my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
 			$data{'city'}= $borrower_city;
 			$data{'zipcode'}=$borrower_zipcode;
