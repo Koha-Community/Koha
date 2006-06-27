@@ -551,6 +551,10 @@ my %fielddefinitions = (
 		 	type => 'text',
 		 	null => 'NULL',
 		 },
+		{	field => 'initials',
+		 	type => 'text',
+		 	null => 'NULL',
+		 },
 		{	field => 'B_email',
 		 	type => 'text',
 		 	null => 'NULL',
@@ -568,7 +572,11 @@ my %fielddefinitions = (
 			null => 'NULL',
 			after => 'streetnumber',
 		},
-		 {
+		{	field => 'phone',
+		 	type => 'text',
+		 	null => 'NULL',
+		 },				
+		{
 			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
 			type => 'char(10)',
 			null => 'NULL',
@@ -617,6 +625,10 @@ my %fielddefinitions = (
 		 	type => 'text',
 		 	null => 'NULL',
 		 },
+		{	field => 'initials',
+		 	type => 'text',
+		 	null => 'NULL',
+		 },
 		{	field => 'B_email',
 		 	type => 'text',
 		 	null => 'NULL',
@@ -634,6 +646,10 @@ my %fielddefinitions = (
 			null => 'NULL',
 			after => 'streetnumber',
 		},
+		{	field => 'phone',
+		 	type => 'text',
+		 	null => 'NULL',
+		 },		
 		 {
 			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
 			type => 'char(10)',
@@ -1805,6 +1821,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.152  2006/06/27 09:26:37  btoumi
+# modify (initials,phone ) fields property in borrowers and deletedborrowers table
+#
 # Revision 1.151  2006/06/22 10:33:14  btoumi
 # sorry i forget deletedborrowers table
 # modify firstname field from deletedborrowers table
