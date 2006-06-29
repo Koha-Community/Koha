@@ -84,9 +84,9 @@ my @breeding_loop = ();
 for (my $i=0; $i <= $#results; $i++) {
 	my %row_data;
 	if ($i % 2) {
-		$toggle="#ffffcc";
+		$toggle=1;
 	} else {
-		$toggle="white";
+		$toggle=0;
 	}
 	$row_data{toggle} = $toggle;
 	$row_data{id} = $results[$i]->{'id'};
