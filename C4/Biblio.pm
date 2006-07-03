@@ -2827,7 +2827,7 @@ while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
 		return;
 	}
 	 if (C4::Context->$shadow){
-	$Zpackage->("commit");
+	$Zpackage->send('commit');
 	while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
 	#waiting zebra to finish;
 	}	
@@ -2916,6 +2916,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.51.2.13  2006/07/03 16:05:26  kados
+# fix shadow call to ZOOM
+#
 # Revision 1.115.2.51.2.12  2006/06/02 23:11:23  kados
 # Committing my working dev_week. It's been tested only with
 # searching, and there's quite a lot of config stuff to set up
