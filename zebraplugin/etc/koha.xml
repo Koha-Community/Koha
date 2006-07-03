@@ -1,0 +1,31 @@
+<yazgfs>
+<listen id="biblioserver" >tcp:@:9900</listen>
+<listen id="authorityserver">tcp:@:2100</listen>
+<server id="biblioserver"  listenref="biblioserver"> 
+    <directory>/koha/zebradb/biblios</directory>
+    <config>/koha/etc/zebra-biblios.cfg</config>
+    <cql2rpn>/koha/etc/pqf.properties</cql2rpn>
+</server>
+<server id="authorityserver"  listenref="authorityserver" > 
+    <directory>/koha/zebradb/authorities</directory>
+    <cql2rpn>/koha/etc/pqf.properties</cql2rpn>
+    <config>/koha/etc/zebra-authorities.cfg</config>
+</server>
+<config>
+ <database>zoomkoha</database>
+ <hostname>localhost</hostname>
+ <user>kohaadmin</user>
+ <pass>K0h4R0ck$</pass>
+ <zebrauser>kohaadmin</zebrauser>
+ <zebrapass>K0h4R0ck$</zebrapass>
+ <biblioserver>biblios</biblioserver>
+ <biblioservershadow>1</biblioservershadow>
+ <authorityserver>authorities</authorityserver>
+ <authorityservershadow>1</authorityservershadow>
+ <intranetdir>/koha/intranet</intranetdir>
+ <opacdir>/koha/opac</opacdir>
+ <opachtdocs>/koha/opac/htdocs/opac-tmpl</opachtdocs>
+ <intrahtdocs>/koha/intranet/htdocs/intranet-tmpl</intrahtdocs>
+ <includes>/koha/intranet/htdocs/intranet-tmpl/default/en/includes/</includes>
+</config>
+</yazgfs>

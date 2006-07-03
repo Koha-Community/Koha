@@ -1,0 +1,33 @@
+# Define the basic value-set. *Beware* of changing this without re-indexing
+# your databases.
+encoding utf-8
+lowercase {0-9}aâbcçdefgğhıiîjklmnoöpqrsştuüvwxyz
+uppercase {0-9}AÂBCÇDEFGĞHIİÎJKLMNOÖPQRSŞTUÜVWXYZ
+
+# Breaking characters
+
+space {\001-\040}!"#$%&\(),-/:;<=>?@\[\\]_`\{|}~
+
+# Characters to be considered equivalent for searching purposes.
+
+equivalent uü
+equivalent oö
+equivalent sş
+equivalent cç
+equivalent iı
+equivalent gğ
+equivalent GĞ
+equivalent SŞ
+equivalent CÇ
+equivalent OÖ
+equivalent UÜ
+equivalent aâ
+equivalent AÂ
+ # Supplemental mappings
+
+map (^The\s)	@
+map (^the\s)	@
+map (^a\s)      @
+map (^A\s)	@
+map (^An\s)	@
+map (^an\s)	@
