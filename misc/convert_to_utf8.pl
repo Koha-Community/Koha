@@ -13,7 +13,7 @@ my $sth=$dbh->prepare($query);
 $sth->execute();
 while (my @table=$sth->fetchrow_array()){
     print "Altering table $table[0]\n";
-    my $alter_query="ALTER TABLE $table[0] CHARACTER SET UTF8";
+    my $alter_query="ALTER TABLE $table[0] CHARACTER SET UTF8 collate utf8_general_ci";
     my $sth2=$dbh->prepare($alter_query);
     $sth2->execute();
     $sth2->finish();
