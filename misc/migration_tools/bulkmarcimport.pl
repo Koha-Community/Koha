@@ -2,14 +2,21 @@
 # small script that import an iso2709 file into koha 2.0
 
 use strict;
+# use warnings;
 
 # Koha modules used
 use MARC::File::USMARC;
+# Uncomment the line below and use MARC::File::XML again when it works better.
+# -- thd
+# use MARC::File::XML;
 use MARC::Record;
 use MARC::Batch;
+use MARC::Charset;
 use C4::Context;
 use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
+use Getopt::Long;
+binmode(STDOUT, ":utf8");
 
 use Getopt::Long;
 
@@ -27,6 +34,110 @@ GetOptions(
     'v:s' => \$verbose,
 );
 
+# FIXME:  Management of error conditions needed for record parsing problems
+# and MARC8 character sets with mappings to Unicode not yet included in 
+# MARC::Charset.  The real world rarity of these problems is not fully tested.
+# Unmapped character sets will throw a warning currently and processing will 
+# continue with the error condition.  A fairly trivial correction should 
+# address some record parsing and unmapped character set problems but I need 
+# time to implement a test and correction for undef subfields and revert to 
+# MARC8 if mappings are missing. -- thd
+sub fMARC8ToUTF8($$) {
+	my ($record) = shift;
+	my ($verbose) = shift;
+	if ($verbose) {
+		if ($verbose >= 2) {
+			my $leader = $record->leader();
+			$leader =~ s/ /#/g;
+			print "\n000 " . $leader;
+		}
+	}
+	foreach my $field ($record->fields()) {
+		if ($field->is_control_field()) {
+			if ($verbose) {
+				if ($verbose >= 2) {
+					my $fieldName = $field->tag();
+					my $fieldValue = $field->data();
+					$fieldValue =~ s/ /#/g;
+					print "\n" . $fieldName;
+					print ' ' . $fieldValue;
+				}
+			}
+		} else {
+			my @subfieldsArray;
+			my $fieldName = $field->tag();
+			my $indicator1Value = $field->indicator(1);
+			my $indicator2Value = $field->indicator(2);
+			if ($verbose) {
+				if ($verbose >= 2) {
+					$indicator1Value =~ s/ /#/;
+					$indicator2Value =~ s/ /#/;
+					print "\n" . $fieldName . ' ' . 
+							$indicator1Value . 
+					$indicator2Value;
+				}
+			}
+			foreach my $subfield ($field->subfields()) {
+				my $subfieldName = $subfield->[0];
+				my $subfieldValue = $subfield->[1];
+				$subfieldValue = MARC::Charset::marc8_to_utf8($subfieldValue);
+				
+				# Alas, MARC::Field::update() does not work correctly.
+				## push (@subfieldsArray, $subfieldName, $subfieldValue);
+				
+				push @subfieldsArray, [$subfieldName, $subfieldValue];
+				if ($verbose) {
+					if ($verbose >= 2) {
+						print " \$" . $subfieldName . ' ' . $subfieldValue;
+					}
+				}
+			}
+			
+			# Alas, MARC::Field::update() does not work correctly.
+			# 
+			# The first instance in the field of a of a repeated subfield 
+			# overwrites the content from later instances with the content 
+			# from the first instance.
+			## $field->update(@subfieldsArray);
+			
+			foreach my $subfieldRow(@subfieldsArray) {
+				my $subfieldName = $subfieldRow->[0];
+				$field->delete_subfields($subfieldName);
+			}
+			foreach my $subfieldRow(@subfieldsArray) {
+				$field->add_subfields(@$subfieldRow);
+			}
+			
+			if ($verbose) {
+				if ($verbose >= 2) {
+					# Reading the indicator values again is not necessary.  
+					# They were not converted.
+					# $indicator1Value = $field->indicator(1);
+					# $indicator2Value = $field->indicator(2);
+					# $indicator1Value =~ s/ /#/;
+					# $indicator2Value =~ s/ /#/;
+					print "\nCONVERTED TO UTF-8:\n" . $fieldName . ' ' . 
+							$indicator1Value . 
+					$indicator2Value;
+					foreach my $subfield ($field->subfields()) {
+						my $subfieldName = $subfield->[0];
+						my $subfieldValue = $subfield->[1];
+						print " \$" . $subfieldName . ' ' . $subfieldValue;
+					}
+				}
+			}
+			if ($verbose) {
+				if ($verbose >= 2) {
+					print "\n" if $verbose;
+				}
+			}
+		}
+	}
+	$record->encoding('UTF-8');
+	return $record;
+}
+
+
 if ($version || ($input_marc_file eq '')) {
 	print <<EOF
 small script to import an iso2709 file into Koha.
@@ -37,7 +148,8 @@ parameters :
 \tn : the number of records to import. If missing, all the file is imported
 \tcommit : the number of records to wait before performing a 'commit' operation
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
-\tc : the char encoding. At the moment, only MARC21 and UNIMARC supported. MARC21 by default.
+\tc : the characteristic MARC flavour. At the moment, only MARC21 and UNIMARC 
+\tsupported. MARC21 by default.
 \td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
 \t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
@@ -72,8 +184,8 @@ if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 
-$char_encoding = 'MARC21' unless ($char_encoding);
-print "CHAR : $char_encoding\n" if $verbose;
+$marcFlavour = 'MARC21' unless ($marcFlavour);
+print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
@@ -110,17 +222,22 @@ warn "NUM:".$number;
 	}
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
-    ## create an empty record object to populate
-    my $newRecord = MARC::Record->new();
+	## create an empty record object to populate
+	my $newRecord = MARC::Record->new();
 	$newRecord->leader($record->leader());
 
-    # go through each field in the existing record
-    foreach my $oldField ( $record->fields() ) {
+	# go through each field in the existing record
+	foreach my $oldField ( $record->fields() ) {
 
 	# just reproduce tags < 010 in our new record
-	if ( $oldField->tag() < 10 ) {
-	    $newRecord->append_fields( $oldField );
-	    next();
+	# 
+	# Fields are not necessarily only numeric in the actual world of records 
+	# nor in what I would recommend for additonal safe non-interfering local
+	# use fields.  The following regular expression match is much safer than 
+	# a numeric evaluation. -- thd
+	if ( $oldField->tag() =~ m/^00/ ) {
+		$newRecord->append_fields( $oldField );
+		next();
 	}
 
 	# store our new subfield data in this list
@@ -135,15 +252,15 @@ warn "NUM:".$number;
 
 	# add the new field to our new record
 	my $newField = MARC::Field->new(
-	    $oldField->tag(),
-	    $oldField->indicator(1),
-	    $oldField->indicator(2),
-	    @newSubfields
+		$oldField->tag(),
+		$oldField->indicator(1),
+		$oldField->indicator(2),
+		@newSubfields
 	);
 
 	$newRecord->append_fields( $newField );
 
-    }
+	}
 
 	warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
 	my @fields = $newRecord->field($tagfield);
