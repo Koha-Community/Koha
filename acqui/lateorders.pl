@@ -40,6 +40,7 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
+			-tabindex=>'',
 			-multiple => 0 );
 
 $template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
@@ -52,6 +53,12 @@ foreach my $thisbranch (sort keys %$branches) {
 			);
 	push @branchloop, \%row;
 }
+my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+				-values   => \@select_branches,
+				-labels   => \%select_branches,
+				-size     => 1,
+ 				-tabindex=>'',
+				-multiple => 0 );
 
 my ($count, @lateorders) = getlateorders($delay,$supplierid,$branch);
 my $total;
@@ -64,5 +71,6 @@ $template->param(
 	CGIsupplier => $CGIsupplier,
 	lateorders => \@lateorders,
 	total=>$total,
+	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 	);
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -37,33 +37,20 @@ my $totspent    = 0;
 my $totcomtd    = 0;
 my $totavail    = 0;
 my @loop_budget = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-
-    if ( $toggle eq 0 ) {
-        $toggle = 1;
-    }
-    else {
-        $toggle = 0;
-    }
-    my ( $spent, $comtd ) = bookfundbreakdown( $results[$i]->{'bookfundid'} );
-
-    my $avail = $results[$i]->{'budgetamount'} - ( $spent + $comtd );
-    my %line;
-    $line{bookfundname} = $results[$i]->{'bookfundname'};
-    $line{budgetamount} = $results[$i]->{'budgetamount'};
-    $line{bookfundid}   = $results[$i]->{'bookfundid'};
-    $line{sdate}        = $results[$i]->{'startdate'};
-    $line{edate}        = $results[$i]->{'enddate'};
-    $line{aqbudgetid}   = $results[$i]->{'aqbudgetid'};
-    $line{spent}        = sprintf( "%.2f", $spent );
-    $line{comtd}        = sprintf( "%.2f", $comtd );
-    $line{avail}        = sprintf( "%.2f", $avail );
-    $line{'toggle'}     = $toggle;
-    push @loop_budget, \%line;
-    $total    += $results[$i]->{'budgetamount'};
-    $totspent += $spent;
-    $totcomtd += $comtd;
-    $totavail += $avail;
+for (my $i=0;$i<$count;$i++){
+	my ($spent,$comtd)=bookfundbreakdown($results[$i]->{'bookfundid'});
+	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
+	my %line;
+	$line{bookfundname} = $results[$i]->{'bookfundname'};
+	$line{budgetamount} = $results[$i]->{'budgetamount'};
+	$line{spent} = sprintf  ("%.2f", $spent);
+	$line{comtd} = sprintf  ("%.2f",$comtd);
+	$line{avail}  = sprintf  ("%.2f",$avail);
+	push @loop_budget, \%line;
+	$total+=$results[$i]->{'budgetamount'};
+	$totspent+=$spent;
+	$totcomtd+=$comtd;
+	$totavail+=$avail;
 }
 
 #currencies

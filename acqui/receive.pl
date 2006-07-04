@@ -36,10 +36,11 @@ use strict;
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
 my ($count,@booksellers)=bookseller($supplierid);
-my $invoice=$input->param('invoice');
+my $invoice=$input->param('code') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
-my $date=localtime(time);
+my $date=$input->param('datereceived');
+my $code=$input->param('code');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/recieve.tmpl",
@@ -50,21 +51,17 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my @results;
-($count,@results)=invoice($invoice);
-if ($invoice eq ''){
-	($count,@results)=getallorders($supplierid);
-}
+my ($countlines,@parcelitems)=getparcelinformation($supplierid,$invoice,$date);
 my $totalprice=0;
 my $totalfreight=0;
 my $totalquantity=0;
 my $total;
 my $tototal;
 my $toggle;
-my @loop_orders = ();
-for (my$i=0;$i<$count;$i++){
-	$total=($results[$i]->{'unitprice'} + $results[$i]->{'freight'}) * $results[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
-	$results[$i]->{'unitprice'}+=0;
+my @loop_received = ();
+for (my $i=0;$i<$countlines;$i++){
+	$total=($parcelitems[$i]->{'unitprice'} + $parcelitems[$i]->{'freight'}) * $parcelitems[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
+	$parcelitems[$i]->{'unitprice'}+=0;
 	my %line;
 	if ($toggle==0){
 		$line{color}='#EEEEEE';
@@ -73,23 +70,52 @@ for (my$i=0;$i<$count;$i++){
 		$line{color}='white';
 		$toggle=0;
 	}
-	$line{basketno} = $results[$i]->{'basketno'};
-	$line{isbn} = $results[$i]->{'isbn'};
-	$line{ordernumber} = $results[$i]->{'ordernumber'};
-	$line{biblionumber} = $results[$i]->{'biblionumber'};
+	$line{basketno} = $parcelitems[$i]->{'basketno'};
+	$line{isbn} = $parcelitems[$i]->{'isbn'};
+	$line{ordernumber} = $parcelitems[$i]->{'ordernumber'};
+	$line{biblionumber} = $parcelitems[$i]->{'biblionumber'};
 	$line{invoice} = $invoice;
 	$line{gst} = $gst;
-	$line{title} = ($results[$i]->{'truetitle'}?$results[$i]->{'truetitle'}:$results[$i]->{'suggestedtitle'});
-	$line{author} = $results[$i]->{'author'};
-	$line{unitprice} = $results[$i]->{'unitprice'};
-	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
+	$line{title} = $parcelitems[$i]->{'title'};
+	$line{author} = $parcelitems[$i]->{'author'};
+	$line{unitprice} = $parcelitems[$i]->{'unitprice'};
+	$line{ecost} = $parcelitems[$i]->{'ecost'};
+	$line{quantityrecieved} = $parcelitems[$i]->{'quantityreceived'};
+	$line{quantity} = $parcelitems[$i]->{'quantity'};
+	$line{total} = $total;
+	$line{supplierid} = $supplierid;
+	push @loop_received, \%line;
+	$totalprice+=$parcelitems[$i]->{'unitprice'};
+	$totalfreight+=$parcelitems[$i]->{'freight'};
+	$totalquantity+=$parcelitems[$i]->{'quantityreceived'};
+	$tototal+=$total;
+}
+my ($countpendings,@pendingorders)=getallorders($supplierid);
+my @loop_orders = ();
+for (my $i=0;$i<$countpendings;$i++){
+	my %line;
+	if ($toggle==0){
+		$line{color}='#EEEEEE';
+		$toggle=1;
+	} else {
+		$line{color}='white';
+		$toggle=0;
+	}
+	$line{basketno} = $pendingorders[$i]->{'basketno'};
+	$line{isbn} = $pendingorders[$i]->{'isbn'};
+	$line{ordernumber} = $pendingorders[$i]->{'ordernumber'};
+	$line{biblionumber} = $pendingorders[$i]->{'biblionumber'};
+	$line{invoice} = $invoice;
+	$line{gst} = $gst;
+	$line{title} = $pendingorders[$i]->{'title'};
+	$line{author} = $pendingorders[$i]->{'author'};
+	$line{unitprice} = $pendingorders[$i]->{'unitprice'};
+	$line{ecost} = $pendingorders[$i]->{'ecost'};
+	$line{quantityrecieved} = $pendingorders[$i]->{'quantityreceived'};
+	$line{quantity} = $pendingorders[$i]->{'quantity'};
 	$line{total} = $total;
 	$line{supplierid} = $supplierid;
 	push @loop_orders, \%line;
-	$totalprice+=$results[$i]->{'unitprice'};
-	$totalfreight+=$results[$i]->{'freight'};
-	$totalquantity+=$results[$i]->{'quantityreceived'};
-	$tototal+=$total;
 }
 
 $totalfreight=$freight;
@@ -102,7 +128,9 @@ $template->param(invoice => $invoice,
 						gst => $gst,
 						freight => $freight,
 						invoice => $invoice,
-						count => $count,
+						countreceived => $countlines,
+						loop_received => \@loop_received,
+						countpending => $countpendings,
 						loop_orders => \@loop_orders,
 						totalprice => $totalprice,
 						totalfreight => $totalfreight,
@@ -110,5 +138,8 @@ $template->param(invoice => $invoice,
 						tototal => $tototal,
 						gst => $gst,
 						grandtot => $tototal+$gst,
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 						);
 output_html_with_http_headers $input, $cookie, $template->output;
