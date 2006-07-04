@@ -35,6 +35,7 @@ use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts2;
+use C4::Biblio;
 use Date::Manip;
 use C4::Biblio;
 
@@ -273,6 +274,12 @@ sub getpatroninformation {
 	$sth->finish;
 	$borrower->{'flags'}=$flags;
 	$borrower->{'authflags'} = $accessflagshash;
+
+	# find out how long the membership lasts
+	my $sth=$dbh->prepare("select enrolmentperiod from categories where categorycode = ?");
+	$sth->execute($borrower->{'categorycode'});
+	my $enrolment = $sth->fetchrow;
+	$borrower->{'enrolmentperiod'} = $enrolment;
 	return ($borrower); #, $flags, $accessflagshash);
 }
 
@@ -514,6 +521,14 @@ sub transferbook {
 	
 	if ($dotransfer) {
 		dotransfer($iteminformation->{'itemnumber'}, $fbr, $tbr);
+		my $dbh= C4::Context->dbh;
+		my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"items.holdingbranch");
+		my $bibid = MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $iteminformation->{'biblionumber'} );
+		my $marcitem = MARCgetitem($dbh, $bibid, $iteminformation->{'itemnumber'});
+		if ($marcitem->field($tagfield)){
+			$marcitem->field($tagfield)->update($tagsubfield=> $tbr);
+			MARCmoditem($dbh,$marcitem,$bibid,$iteminformation->{'itemnumber'});
+		}
 		$messages->{'WasTransfered'} = 1;
 	}
 	return ($dotransfer, $messages, $iteminformation);
@@ -834,6 +849,13 @@ sub canbookbeissued {
 	if ($iteminformation->{'restricted'} && $iteminformation->{'restricted'} == 1) {
 		$issuingimpossible{RESTRICTED} = 1;
 	}
+	if (C4::Context->preference("IndependantBranches")){
+		my $userenv = C4::Context->userenv;
+		if (($userenv)&&($userenv->{flags} != 1)){
+			$issuingimpossible{NOTSAMEBRANCH} = 1 if ($iteminformation->{'holdingbranch'} ne $userenv->{branch} ) ;
+		}
+	}
+
 
 
 
