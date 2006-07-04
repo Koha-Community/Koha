@@ -229,10 +229,15 @@ if (-e $htdocs."$picture")
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
-		 totalprice =>$totalprice,
-		 totaldue =>$total,
+		 totalprice =>sprintf("%.2f",$totalprice),
+		 totaldue => sprintf("%.2f",$total),
 		 issueloop       => \@issuedata,
 		 unvalidlibrarian => $unvalidlibrarian,
-		 reserveloop     => \@reservedata);
+		 reserveloop     => \@reservedata,
+		 intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		patronimages => C4::Context->preference("patronimages"),
+		 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

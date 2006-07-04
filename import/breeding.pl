@@ -30,7 +30,7 @@
 use strict;
 
 # standard or CPAN modules used
-use CGI;
+use CGI qw(:standard);
 use DBI;
 
 # Koha modules used
@@ -94,7 +94,10 @@ if ($uploadmarc && length($uploadmarc)>0) {
 							);
 
 }
-
+$template-param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 my $menu;
 my $file;
@@ -103,6 +106,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.5  2006/07/04 14:36:52  toins
+# Head & rel_2_2 merged
+#
 # Revision 1.4  2005/05/04 08:52:13  tipaul
 # synch'ing 2.2 and head
 #
@@ -312,6 +318,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.5  2006/07/04 14:36:52  toins
+# Head & rel_2_2 merged
+#
 # Revision 1.4  2005/05/04 08:52:13  tipaul
 # synch'ing 2.2 and head
 #

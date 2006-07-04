@@ -100,6 +100,10 @@ if ($type eq 'allsub'){
 
 $template->param(type => 'intranet',
                 "$type-p" => 1,
-                 %params);
+                 %params,
+		 intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

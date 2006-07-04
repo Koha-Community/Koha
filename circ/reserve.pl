@@ -71,7 +71,7 @@ my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.s
 
 my $dbh = C4::Context->dbh;
 my $strsth="select reservedate,reserves.borrowernumber as bornum, concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,reserves.biblionumber, reserves.branchcode as branch, items.holdingbranch, items.itemcallnumber, items.itemnumber, notes, notificationdate, reminderdate, priority, reserves.found, biblio.title, biblio.author from reserves left join items on items.itemnumber=reserves.itemnumber, borrowers,biblio where isnull(cancellationdate) && reserves.borrowernumber=borrowers.borrowernumber && reserves.biblionumber=biblio.biblionumber order by reservedate, borrower ";
-$strsth="select reservedate,reserves.borrowernumber as bornum,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,reserves.biblionumber, reserves.branchcode as branch, items.holdingbranch, items.itemcallnumber, items.itemnumber, notes, notificationdate, reminderdate, priority, reserves.found, biblio.title, biblio.author from reserves left join items on  items.itemnumber=reserves.itemnumber , borrowers,biblio where isnull(cancellationdate) && reserves.borrowernumber=borrowers.borrowernumber && reserves.biblionumber=biblio.biblionumberorder by borrower,reservedate " if ($order eq "borrower");
+$strsth="select reservedate,reserves.borrowernumber as bornum,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,reserves.biblionumber, reserves.branchcode as branch, items.holdingbranch, items.itemcallnumber, items.itemnumber, notes, notificationdate, reminderdate, priority, reserves.found, biblio.title, biblio.author from reserves left join items on  items.itemnumber=reserves.itemnumber , borrowers,biblio where isnull(cancellationdate) && reserves.borrowernumber=borrowers.borrowernumber && reserves.biblionumber=biblio.biblionumber order by borrower,reservedate " if ($order eq "borrower");
 $strsth="select reservedate,reserves.borrowernumber as bornum,concat(firstname,' ',surname) as borrower, borrowers.phone, borrowers.emailaddress,reserves.biblionumber, reserves.branchcode as branch, items.holdingbranch, items.itemcallnumber, items.itemnumber, notes, notificationdate, reminderdate, priority, reserves.found, biblio.title, biblio.author from reserves left join items on items.itemnumber=reserves.itemnumber, borrowers,biblio where isnull(cancellationdate) && reserves.borrowernumber=borrowers.borrowernumber && reserves.biblionumber=biblio.biblionumber order by biblio.title, priority,reservedate " if ($order eq "biblio");
 my $sth=$dbh->prepare($strsth);
 warn "".$strsth;
@@ -107,7 +107,11 @@ while (my $data=$sth->fetchrow_hashref) {
 
 $sth->finish;
 
-$template->param(		todaysdate        => format_date($todaysdate),
-		reserveloop       => \@reservedata );
+$template->param(todaysdate        => format_date($todaysdate),
+		reserveloop       => \@reservedata,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 
 print "Content-Type: text/html\n\n", $template->output;

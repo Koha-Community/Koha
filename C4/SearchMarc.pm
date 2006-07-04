@@ -327,24 +327,27 @@ sub catalogsearch {
 			# then all other fields in the main array
 			
 			# search if item is on loan
-			my $date_due;
-			$sth_issue->execute($item->{itemnumber});
-			while (my $loan = $sth_issue->fetchrow_hashref) {
-				if ($loan->{date_due} and !$loan->{returndate}) {
-					$date_due = $loan->{date_due};
-				}
-			}
 			# store this item
 			my %lineCN;
 			$lineCN{holdingbranch} = $item->{holdingbranch};
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
-			$lineCN{date_due} = format_date($date_due);
-			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan}); # setting not forloan if itemtype is not for loan
-			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
-			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
+			$lineCN{cnt} = $item->{cnt} unless ($item->{cnt}==1);
+            if ($item->{cnt}==1){
+              my $date_due;
+              $sth_issue->execute($item->{itemnumber});
+              while (my $loan = $sth_issue->fetchrow_hashref) {
+                  if ($loan->{date_due} and !$loan->{returndate}) {
+                      $date_due = $loan->{date_due};
+                  }
+              }
+              $lineCN{date_due} = format_date($date_due) ;
+              $lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
+              $notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
+            }
+			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan} and not $lineCN{notforloan}); # setting not forloan if itemtype is not for loan
 			push @CNresults,\%lineCN;
-			$totalitems++;
+			$totalitems+=$item->{cnt};
 		}
 		# save the biblio in the final array, with item and item issue status
 		my %newline;
@@ -443,7 +446,7 @@ sub getMARCsubjects {
     my ($dbh, $bibid, $marcflavour) = @_;
 	my ($mintag, $maxtag);
 	if ($marcflavour eq "MARC21") {
-	        $mintag = "600";
+        $mintag = "600";
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
 		$mintag = "600";
@@ -476,11 +479,12 @@ sub getMARCsubjects {
 	my $lasttag;
 	my ($subfieldvalue,$subfieldcode,$tagorder,$tag);
 	while (($subfieldvalue,$subfieldcode,$tagorder,$tag)=$sth->fetchrow) {
-		$lasttag=$tag if $tag;
+	#warn "IN MARCSUBJECTS $subfieldvalue $subfieldcode $tagorder $tag\n";
 		if ($activetagorder && $tagorder != $activetagorder) {
+	#	warn "ACTIVETAGORDER".$activetagorder;
 			$subject=~ s/ -- $//;
 			$marcsubjct = {MARCSUBJCT => $subject,
-							link => $tag."9",
+							link => $lasttag."9",
 							linkvalue => $field9,
 							};
 			push @marcsubjcts, $marcsubjct;
@@ -496,6 +500,7 @@ sub getMARCsubjects {
 			$subject .= $subfieldvalue . " -- ";
 		}
 		$activetagorder=$tagorder;
+		$lasttag=$tag if $tag;
 	}
 	$subject=~ s/ -- $//;
 	$marcsubjct = {MARCSUBJCT => $subject,
@@ -507,7 +512,7 @@ sub getMARCsubjects {
 	$sth->finish;
 
 	my $marcsubjctsarray=\@marcsubjcts;
-        return $marcsubjctsarray;
+	return $marcsubjctsarray;
 }  #end getMARCsubjects
 
 END { }       # module clean-up code here (global destructor)

@@ -172,6 +172,7 @@ if ($op eq 'add_form') {
 									},
 					-default=>$data->{'tab'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\">";
@@ -183,6 +184,7 @@ if ($op eq 'add_form') {
 					-values=> \@kohafields,
 					-default=> "$data->{'kohafield'}",
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
@@ -190,6 +192,7 @@ if ($op eq 'add_form') {
 					-values=> \@authorised_values,
 					-default=>$data->{'authorised_value'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
@@ -197,6 +200,7 @@ if ($op eq 'add_form') {
 					-values=> \@value_builder,
 					-default=>$data->{'value_builder'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
@@ -204,27 +208,27 @@ if ($op eq 'add_form') {
 					-values=> \@authtypes,
 					-default=>$data->{'authtypecode'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{repeatable} = CGI::checkbox(-name=>"repeatable$i",
 	-checked => $data->{'repeatable'}?'checked':'',
 	-value => 1,
+	-tabindex=>'',
 	-label => '',
 	-id => "repeatable$i");
 		$row_data{mandatory} = CGI::checkbox(-name => "mandatory$i",
 	-checked => $data->{'mandatory'}?'checked':'',
 	-value => 1,
+	-tabindex=>'',
 	-label => '',
 	-id => "mandatory$i");
-		$row_data{hidden} = CGI::checkbox( -name=>"hidden$i",
-			-id => "hidden$i",
-			-checked => $data->{'hidden'}?'checked':'',
-			-value => 1,
-			-label => '');
+		$row_data{hidden} = CGI::escapeHTML($data->{hidden});
 		$row_data{isurl} = CGI::checkbox( -name => "isurl$i",
 			-id => "isurl$i",
 			-checked => $data->{'isurl'}?'checked':'',
 			-value => 1,
+ 			-tabindex=>'',
 			-label => '');
 		$row_data{row} = $i;
 		$row_data{toggle} = $toggle;
@@ -245,49 +249,52 @@ if ($op eq 'add_form') {
 									},
 					-default=>"",
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\">";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
+		$row_data{hidden} = "";
 		$row_data{repeatable} = CGI::checkbox( -name=> 'repeatable',
 				-id => "repeatable$i",
 				-checked => '',
 				-value => 1,
+	 			-tabindex=>'',
 				-label => '');
 		$row_data{mandatory} = CGI::checkbox( -name=> 'mandatory',
 			-id => "mandatory$i",
 			-checked => '',
 			-value => 1,
-			-label => '');
-		$row_data{hidden} = CGI::checkbox( -name => 'hidden',
-			-id => "hidden$i",
-			-checked=> '',
-			-value => 1,
+ 			-tabindex=>'',
 			-label => '');
 		$row_data{isurl} = CGI::checkbox(-name => 'isurl',
 			-id => "isurl$i",
 			-checked => '',
 			-value => 1,
+ 			-tabindex=>'',
 			-label => '');
 		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
 					-id => "kohafield$i",
 					-values=> \@kohafields,
 					-default=> "",
 					-size=>1,
+ 					-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
 					-id => 'authorised_value',
 					-values=> \@authorised_values,
 					-size=>1,
+ 					-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
 					-id => 'authtypecode',
 					-values=> \@authtypes,
 					-size=>1,
+ 					-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{link} = CGI::escapeHTML($data->{'link'});
@@ -317,6 +324,7 @@ if ($op eq 'add_form') {
 	my @kohafield		= $input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
+	my @hidden		= $input->param('hidden');
 	my @authorised_values	= $input->param('authorised_value');
 	my @authtypecodes	= $input->param('authtypecode');
 	my @value_builder	=$input->param('value_builder');
@@ -335,7 +343,7 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $authtypecode		=$authtypecodes[$i];
 		my $value_builder=$value_builder[$i];
-		my $hidden = $input->param("hidden$i")?1:0;
+		my $hidden = $hidden[$i]; #input->param("hidden$i");
 		my $isurl = $input->param("isurl$i")?1:0;
 		my $link = $link[$i];
 		if ($liblibrarian) {
@@ -444,5 +452,8 @@ if ($op eq 'add_form') {
 		$template->param(next => "<a href=\"$script_name?offset=$nextpage\">");
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

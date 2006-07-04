@@ -432,7 +432,7 @@ the data given in the current context and returns it.
 sub new_Zconn {
 use ZOOM;
 my $server=shift;
-my $tried==0;
+my $tried=0;
 my $Zconn;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
 
@@ -462,7 +462,7 @@ retry:
 sub new_Zconnauth {
 use ZOOM;
 my $server=shift;
-my $tried==0;
+my $tried=0;
 my $Zconnauth;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
 retry:
@@ -826,6 +826,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.42  2006/07/04 14:36:51  toins
+# Head & rel_2_2 merged
+#
 # Revision 1.41  2006/05/20 14:36:09  tgarip1957
 # Typo error. Missing '>'
 #

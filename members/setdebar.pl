@@ -35,7 +35,6 @@ my $flagsrequired;
 $flagsrequired->{borrower}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
-
 my $destination = $input->param("destination");
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber=$input->param('borrowernumber');

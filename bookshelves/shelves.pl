@@ -108,7 +108,11 @@ foreach my $element (sort keys %$shelflist) {
 ;
 		push (@shelvesloop, \%line);
 		}
-$template->param(shelvesloop => \@shelvesloop);
+$template->param(shelvesloop => \@shelvesloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -190,8 +194,18 @@ sub viewshelf {
 
 #
 # $Log$
-# Revision 1.8  2005/08/04 13:19:54  tipaul
-# synch'ing 2.2 and head
+# Revision 1.9  2006/07/04 14:36:51  toins
+# Head & rel_2_2 merged
+#
+# Revision 1.5.2.5  2006/02/05 21:59:21  kados
+# Adds script support for IntranetNav ... see mail to koha-devel for
+# details
+#
+# Revision 1.5.2.4  2006/02/05 21:45:25  kados
+# Adds support for intranetstylesheet system pref in Koha scripts
+#
+# Revision 1.5.2.3  2006/02/04 21:26:47  kados
+# Adds support for intranetcolorstylesheet
 #
 # Revision 1.5.2.2  2005/04/27 18:15:27  oleonard
 # Left out some instances in the previous update

@@ -134,7 +134,7 @@ if ( $query->param('resbarcode') ) {
         $template->param(
             itemtitle  => $iteminfo->{'title'},
             iteminfo   => $iteminfo->{'author'},
-            branchname => $branchname,
+            tobranchname => $branchname,
             name       => $name,
             bornum     => $borrnum,
             borcnum    => $borcnum,
@@ -267,7 +267,7 @@ if ( $messages->{'ResFound'} ) {
 			debarred => $borr->{'debarred'},
 			gonenoaddress => $borr->{'gonenoaddress'},
 			currentbranch => $branches->{ $branch }->{'branchname'},
-            branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
+            tobranchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             waiting     => 1,
             itemnumber  => $res->{'itemnumber'},
             itemtitle   => $iteminfo->{'title'},
@@ -506,9 +506,12 @@ $template->param( riloop => \@riloop );
 $template->param(
     genbrname  => $branches->{$branch}->{'branchname'},
     genprname  => $printers->{$printer}->{'printername'},
-    branch     => $branch,
+    branchname     => $branches->{$branch}->{'branchname'},
     printer    => $printer,
-    errmsgloop => \@errmsgloop
+    errmsgloop => \@errmsgloop,
+    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 );
 
 # actually print the page!

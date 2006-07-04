@@ -68,7 +68,11 @@ my ($template, $borrowernumber, $cookie)
 				flagsrequired => {editcatalogue => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($line, $column, $podsp, $type, $daysel, $monthsel, $calc, \@filters);

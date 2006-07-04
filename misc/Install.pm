@@ -890,6 +890,18 @@ sub checkperlmodules(;$) {
 			push @missing, "Net::Z3950";
 		}
     }
+    unless (eval {require LWP::Simple)       {
+		showmessage(getmessage('LWP::Simple'), 'PressEnter', '', 1);
+		if ($#missing>=0) { # see above note
+			push @missing, "LWP::Simple";
+		}
+    }
+    unless (eval {require XML::Simple)       {
+		showmessage(getmessage('XML::Simple'), 'PressEnter', '', 1);
+		if ($#missing>=0) { # see above note
+			push @missing, "XML::Simple";
+		}
+    }
 
 #
 # Print out a list of any missing modules

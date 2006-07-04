@@ -23,14 +23,29 @@ my $suggestedbyme = $input->param('suggestedbyme');
 my $op = $input->param('op');
 $op = 'else' unless $op;
 
+my ($template, $borrowernumber, $cookie);
+
 my $dbh = C4::Context->dbh;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-suggestions.tmpl",
-			     type => "opac",
-			     query => $input,
-			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+
+if (C4::Context->preference("AnonSuggestions")) {
+	($template, $borrowernumber, $cookie)
+		= get_template_and_user({template_name => "opac-suggestions.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
+							});
+if (!$borrowernumber) {
+	$borrowernumber = C4::Context->preference("AnonSuggestions");
+}
+} else {
+	($template, $borrowernumber, $cookie)
+		= get_template_and_user({template_name => "opac-suggestions.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
 			 });
+}
+
 if ($op eq "add_confirm") {
 	&newsuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,'');
 	# empty fields, to avoid filter in "searchsuggestion"
@@ -61,7 +76,5 @@ $template->param(suggestions_loop => $suggestions_loop,
 				status => $status,
 				suggestedbyme => $suggestedbyme,
 				"op_$op" => 1,
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

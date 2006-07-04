@@ -150,17 +150,14 @@ if ($op eq "do_search") {
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
 	if ($total == 1) {
 	 # if only 1 answer, jump directly to the biblio
-	    # here we need to check if MARC searching is turned on or off.
-	    # if on, go to MARCdetail.pl else go to
-	    # detail.pl
-	    my $marc_bool = C4::Context->boolean_preference("MARC") || 0;
-	    if ($marc_bool eq "1") {                              
-		print $query->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=".@$results[0]->{biblionumber});
-	    }
-	    else {
-		print $query->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=".@$results[0]->{biblionumber});
-	    }
-		 exit
+	if (C4::Context->preference("IntranetBiblioDefaultView") eq "normal") {
+	     print $query->redirect("/cgi-bin/koha/detail.pl?bib=".@$results[0]->{biblionumber});
+	} elsif (C4::Context->preference("IntranetBiblioDefaultView") eq "marc") {
+	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	} else {
+	     print $query->redirect("/cgi-bin/koha/ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
+	}
+	 exit
 	}
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
@@ -213,6 +210,7 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
+	my $defaultview = 'BiblioDefaultView'.C4::Context->preference('IntranetBiblioDefaultView');
 	$template->param(result => $results,
 							startfrom=> $startfrom,
 							displaynext=> $displaynext,
@@ -226,11 +224,13 @@ if ($op eq "do_search") {
 							to=>$to,
 							numbers=>\@numbers,
 							searchdesc=> $searchdesc,
+							desc_asc=>$desc_or_asc,
+							orderby=>$orderby,
 							MARC_ON => C4::Context->preference("marc"),
+							$defaultview => 1,
 							);
 
 } elsif ($op eq "AddStatement") {
-
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/search.tmpl",
 				query => $query,
@@ -319,6 +319,7 @@ else {
 	my $marclist = CGI::scrolling_list(-name=>"marclist",
 					-values=> $marcarray,
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					-onChange => "sql_update()",
 					);
@@ -345,6 +346,7 @@ else {
 				-values   => \@itemtype,
  				-labels   => \%itemtypes,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	$sth->finish;
 
@@ -374,6 +376,10 @@ else {
 
 
 # Print the page
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:

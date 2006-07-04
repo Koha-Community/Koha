@@ -72,7 +72,7 @@ sub plugin {
 	my $query = new CGI;
 	my $op = $query->param('op');
 	my $type=$query->param('type');
-	warn "operation  ".$op;
+# 	warn "operation  ".$op;
 	my $startfrom=$query->param('startfrom');
 	$startfrom=0 if(!defined $startfrom);
 	my ($template, $loggedinuser, $cookie);
@@ -112,7 +112,7 @@ sub plugin {
 			$subfield_value_a.=" (".$marcrecord->field('700')->subfield("c")." - " if ($marcrecord->field('700')->subfield("c"));
 			$subfield_value_a.=" (" if (($marcrecord->field('700')->subfield("f")) and not( $marcrecord->field('700')->subfield("c")));
 			$subfield_value_a.=$marcrecord->field('700')->subfield("f") if ($marcrecord->field('700')->subfield("f"));
-			$subfield_value_a.=")" if ($marcrecord->field('701')->subfield("f")) or ($marcrecord->field('701')->subfield("c"));
+			$subfield_value_a.=")" if ($marcrecord->field('700')->subfield("f")) or ($marcrecord->field('700')->subfield("c"));
 		} elsif ($marcrecord->field('702')){
 			$subfield_value_a=$marcrecord->field('702')->subfield("a");
 			$subfield_value_a.=", ".$marcrecord->field('702')->subfield("b") if ($marcrecord->field('702')->subfield("b"));

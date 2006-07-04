@@ -62,7 +62,6 @@ foreach my $language (getalllanguages()) {
 	$counter++;
 }
 my $languages_count = @options;
-
 if($languages_count > 1){
 		$template->param(languages => \@options);
 }
@@ -92,8 +91,7 @@ sub getbranchinfo {
 }
 
 
-$template->param(CGIitemtype => $CGIitemtype,
-				suggestion => C4::Context->preference("suggestion"),
+$template->param(		suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				textmessaging => $borrower->{textmessaging},
 				opaclargeimage => C4::Context->preference("opaclargeimage"),

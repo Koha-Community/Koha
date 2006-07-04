@@ -128,6 +128,7 @@ sub build_authorized_values_list ($$$$$) {
 				-labels   => \%authorised_lib,
 				-override => 1,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 }
 
@@ -488,5 +489,9 @@ foreach my $thisauthtype (keys %$authtypes) {
 
 $template->param(authtypesloop => \@authtypesloop,
 				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-				nonav=>$nonav,);
+				hide_marc => C4::Context->preference('hide_marc'),
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+				);
 output_html_with_http_headers $input, $cookie, $template->output;

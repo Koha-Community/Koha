@@ -85,8 +85,9 @@ if ($op eq "do_search") {
 			$searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
 		} else {
 			$searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"*").$operator[$i].$value[$i] if ($value[$i]);
-		if ($marclist[$i] eq "biblioitems.isbn") {
-			$value[$i] =~ s/-//g;
+			if ($marclist[$i] eq "biblioitems.isbn") {
+				$value[$i] =~ s/-//g;
+			}
 		}
 	}
   if ($itemtypesstring ne ''){
@@ -391,7 +392,7 @@ $template->param( phraseorterm => $phraseorterm );
 	my @oldbranches;
 	my @oldselect_branch;
 	my %oldselect_branches;
-	my ($oldcount2,@oldbranches)=branches();
+ 	my ($oldcount2,@oldbranches)=branches();
 	push @oldselect_branch, "";
 	$oldselect_branches{''} = "";
 	for (my $i=0;$i<$oldcount2;$i++){
@@ -425,7 +426,6 @@ $template->param( phraseorterm => $phraseorterm );
 	    
 # CHRIS : Whats this? 	    
 #	    classlist => $classlist,
-					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),

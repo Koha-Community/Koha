@@ -153,6 +153,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {
@@ -201,6 +202,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {
@@ -263,5 +265,8 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

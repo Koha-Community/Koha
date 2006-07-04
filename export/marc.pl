@@ -15,7 +15,8 @@ my $op=$query->param("op");
 my $dbh=C4::Context->dbh;
 
 if ($op eq "export") {
-	print $query->header('Content-Type: text/marc');
+	print $query->header(	-type => 'application/octet-stream',
+				-attachment=>'koha.mrc');
 	my $start_bib = $query->param("start_bib");
 	my $end_bib = $query->param("end_bib");
 	my $format = $query->param("format");
@@ -81,6 +82,7 @@ if ($op eq "export") {
 							-default  => '',
 							-labels   => \%itemtypes,
 							-size     => 1,
+				 			-tabindex=>'',
 							-multiple => 0 );
 	$sth->finish;
 	
@@ -103,7 +105,12 @@ if ($op eq "export") {
 					flagsrequired => {parameters => 1, management => 1, tools => 1},
 					debug => 1,
 					});
-	$template->param(branchloop=>\@branchloop,CGIitemtype=>$CGIitemtype);
+	$template->param(branchloop=>\@branchloop,
+			CGIitemtype=>$CGIitemtype,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+			);
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 

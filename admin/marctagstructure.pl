@@ -119,6 +119,7 @@ if ($op eq 'add_form') {
 	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
 			-values=> \@authorised_values,
 			-size=>1,
+ 			-tabindex=>'',
 			-id=>"authorised_value",
 			-multiple=>0,
 			-default => $data->{'authorised_value'},
@@ -138,11 +139,13 @@ if ($op eq 'add_form') {
 			repeatable => CGI::checkbox(-name=>'repeatable',
 						-checked=> $data->{'repeatable'}?'checked':'',
 						-value=> 1,
+ 						-tabindex=>'',
 						-label => '',
 						-id=> 'repeatable'),
 			mandatory => CGI::checkbox(-name => 'mandatory',
 						-checked => $data->{'mandatory'}?'checked':'',
 						-value => 1,
+ 						-tabindex=>'',
 						-label => '',
 						-id => 'mandatory'),
 			authorised_value => $authorised_value,
@@ -332,7 +335,11 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-$template->param(loggeninuser => $loggedinuser);
+$template->param(loggeninuser => $loggedinuser,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

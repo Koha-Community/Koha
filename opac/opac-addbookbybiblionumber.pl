@@ -71,6 +71,7 @@ if ($shelfnumber) {
 				-values   => \@shelvesloop,
 				-labels   => \%shelvesloop,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 	 }
 
@@ -91,6 +92,9 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.5  2006/07/04 14:36:52  toins
+# Head & rel_2_2 merged
+#
 # Revision 1.4  2006/05/21 02:10:32  kados
 # syncing dev-week and HEAD
 #

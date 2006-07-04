@@ -17,4 +17,8 @@ my ($template, $loggedinuser, $cookie)
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;

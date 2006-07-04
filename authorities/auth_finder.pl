@@ -37,7 +37,7 @@ my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $index = $query->param('index');
-# my $category = $query->param('category');
+my $tagid=$query->param('tagid');
 my $resultstring = $query->param('result');
 my $dbh = C4::Context->dbh;
 
@@ -133,6 +133,7 @@ if ($op eq "do_search") {
 							startfromnext => $startfrom+1,
 							startfromprev => $startfrom-1,
 					        index => $index,
+					        tagid => $tagid,
 							searchdata=>\@field_data,
 							total=>$total,
 							from=>$from,
@@ -152,12 +153,17 @@ if ($op eq "do_search") {
 				});
 
 	$template->param(index=>$query->param('index')."",
+					tagid => $tagid,
 					resultstring => $resultstring,
 					);
 }
 
 $template->param(authtypesloop => \@authtypesloop,
-				authtypecode => $authtypecode);
+		authtypecode => $authtypecode,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -179,6 +179,10 @@ foreach my $thisauthtype (keys %$authtypes) {
 }
 
 $template->param(authid => $authid,
-				authtypesloop => \@authtypesloop, index => $index);
+		authtypesloop => \@authtypesloop, index => $index,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;
 

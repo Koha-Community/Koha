@@ -193,6 +193,7 @@ elsif ($op eq "AddStatement") {
 		my $marclist = create_scrolling_list({name=>"marclist",
 					values=> $marcarray,
 					size=> 1,
+		 			-tabindex=>'',
 					default=>$marcfields[$i],
 					onChange => "sql_update()"}
 					);
@@ -226,6 +227,7 @@ elsif ($op eq "AddStatement") {
 	my $marclist = create_scrolling_list({name=>"marclist",
 				values=> $marcarray,
 				size=>1,
+	 			-tabindex=>'',
 				onChange => "sql_update()"});
 	push @statements, {"marclist" => $marclist };
 
@@ -245,7 +247,11 @@ else {
 
 }
 
-$template->param(authtypesloop => \@authtypesloop);
+$template->param(authtypesloop => \@authtypesloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

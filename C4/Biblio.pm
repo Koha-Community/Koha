@@ -1796,6 +1796,7 @@ where biblioitemnumber = ?"
         my $query = "Insert into deleteditems set ";
         my @bind  = ();
         foreach my $temp ( keys %$data ) {
+			next if ($temp =~/itemcallnumber/);
             $query .= "$temp = ?,";
             push ( @bind, $data->{$temp} );
         }
@@ -2949,6 +2950,17 @@ sub FindDuplicate {
 # 			warn "for title, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
 	}
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for title, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
 	# ... and on biblio.author
 	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author","");
 	if ($record->field($tag)) {
@@ -3129,6 +3141,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.173  2006/07/04 14:36:51  toins
+# Head & rel_2_2 merged
+#
 # Revision 1.172  2006/06/06 23:13:14  bob_lyon
 # Merging katipo changes...
 #

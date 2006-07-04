@@ -73,6 +73,10 @@ if ( $query->param('Oldkey') && $query->param('Newkey') && $query->param('Confir
 # Called Empty, Ask for data.
 	$template->param('Ask_data' => '1');
 }
+
+$template->param(LibraryName => C4::Context->preference("LibraryName"),
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
 

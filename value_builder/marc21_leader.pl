@@ -43,6 +43,13 @@ my $function_name= "100".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
+    for (i=0 ; i<document.f.field_value.length ; i++) {
+		if (document.f.tag[i].value == '000') {
+			if (!document.f.field_value[i].value) {
+				document.f.field_value[i].value = '     nam a22     7a 4500';
+			}
+		}
+	}
 return 1;
 }
 
@@ -51,7 +58,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms[0].field_value[i].value;
+	defaultvalue=document.forms['f'].field_value[i].value;
 	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
@@ -88,7 +95,7 @@ my ($template, $loggedinuser, $cookie)
 	my $f17 = substr($result,17,1);
 	my $f18 = substr($result,18,1);
 	my $f19 = substr($result,19,1);
-
+	my $f2023 = substr($result,20,4);
 	$template->param(index => $index,
 							"f5$f5" => 1,
 							"f6$f6" => 1,
@@ -98,6 +105,7 @@ my ($template, $loggedinuser, $cookie)
 							"f17$f17" => 1,
 							"f18$f18" => 1,
 							"f19$f19" => 1,
+							"f2023" => $f2023,
 					);
 	print $input->header(-cookie => $cookie),$template->output;
 }

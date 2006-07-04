@@ -98,6 +98,8 @@ for (my $i=0; $i < $count; $i++){
         streetaddress => $results->[$i]{'streetaddress'},
         city => $results->[$i]{'city'},
         branchcode => $results->[$i]{'branchcode'},
+		overdues => $od,
+		issues => $issue,
         odissue => "$od/$issue",
         fines =>  sprintf("%.2f",$fines),
         borrowernotes => $results->[$i]{'borrowernotes'},
@@ -111,6 +113,10 @@ for (my $i=0; $i < $count; $i++){
 $template->param( 
 			member          => $member,
 			numresults		=> $count,
-			resultsloop     => \@resultsdata );
+			resultsloop     => \@resultsdata,
+			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+			);
 
 output_html_with_http_headers $input, $cookie, $template->output;

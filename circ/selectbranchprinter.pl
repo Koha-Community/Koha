@@ -129,7 +129,10 @@ $template->param(headerbackgroundcolor => $headerbackgroundcolor,
 							printername => $printername,
 							branchname => $branchname,
 							printerloop => \@printerloop,
-							branchloop => \@branchloop
+							branchloop => \@branchloop,
+							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 							);
 
 my $branchcookie=$query->cookie(-name => 'branch', -value => "$branch", -expires => '+1y');

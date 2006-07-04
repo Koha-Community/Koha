@@ -301,7 +301,7 @@ sub calculate {
 	$strsth2 .= "select distinctrow $colfield from borrowers where $column is not null";
 	if ( $colfilter ) {
 		$strsth2 .= " and $colfield LIKE ? ";
-	} 
+	}
 	$strsth2 .= " and $status='1' " if ($status);
 	$strsth2 .= " order by $colfield";
 #	warn "". $strsth2;
@@ -408,4 +408,3 @@ sub calculate {
 	return \@mainloop;
 }
 
-1;

@@ -57,6 +57,7 @@ my $dbh=C4::Context->dbh;
 
 my $authid = $query->param('authid');
 my $index = $query->param('index');
+my $tagid = $query->param('tagid');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
@@ -135,6 +136,11 @@ $template->param("0XX" =>\@loop_data);
 
 $template->param(authid => $authid?$authid:"",
 # 				authtypesloop => \@authtypesloop,
-				index => $index);
+				index => $index,
+				tagid => $tagid,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+				);
 output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -265,6 +265,7 @@ if ($delete){
 	if ($ethnicitycategoriescount>=0) {
 		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
 					-id => 'ethnicity',
+		 			-tabindex=>'',
 					-values=>$categories,
 					-default=>$data{'ethnicity'},
 					-labels=>$labels);

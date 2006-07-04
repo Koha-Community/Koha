@@ -191,7 +191,7 @@ sub buildCGIsort {
     use strict;
 	my ($name,$input_name,$data) = @_;
 	my $dbh=C4::Context->dbh;
-	my $query=qq{SELECT * FROM authorised_values WHERE category=?};
+	my $query=qq{SELECT * FROM authorised_values WHERE category=? order by lib};
 	my $sth=$dbh->prepare($query);
 	$sth->execute($name);
 	my $CGISort;

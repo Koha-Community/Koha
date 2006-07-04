@@ -398,9 +398,8 @@ sub modmember {
 	# is adult check guarantees;
  		updateguarantees(%data);
  	
-	}	
+	}
 
-	
 
 }
 

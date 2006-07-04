@@ -22,7 +22,8 @@ use strict;
 use C4::Date;
 use Date::Manip;
 use C4::Suggestions;
-use C4::Letters;
+use C4::Biblio;
+use C4::Search;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -48,7 +49,7 @@ Give all XYZ functions
 @EXPORT = qw(&newsubscription &modsubscription &delsubscription &getsubscriptions &getsubscription 
 			&getsubscriptionfrombiblionumber &get_subscription_list_from_biblionumber
 			&get_full_subscription_list_from_biblionumber 
-			&modsubscriptionhistory &newissue
+			&modsubscriptionhistory &newissue &serialsitemize
 			&getserials &getlatestserials &serialchangestatus
 			&Find_Next_Date &Get_Next_Seq
 			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
@@ -110,33 +111,33 @@ sub GetLateIssues {
 sub newsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 		$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-		$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-		$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-		$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-		$numberingmethod, $status, $notes,$letter) = @_;
+		$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+		$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+		$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
+		$numberingmethod, $status, $notes) = @_;
 	my $dbh = C4::Context->dbh;
 	#save subscription
 	my $sth=$dbh->prepare("insert into subscription (librarian,aqbooksellerid,cost,aqbudgetid,biblionumber,
 							startdate,periodicity,dow,numberlength,weeklength,monthlength,
-							add1,every1,whenmorethan1,setto1,lastvalue1,
-							add2,every2,whenmorethan2,setto2,lastvalue2,
-							add3,every3,whenmorethan3,setto3,lastvalue3,
-							numberingmethod, status, notes, letter) values 
+							add1,every1,whenmorethan1,setto1,lastvalue1,innerloop1,
+							add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
+							add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
+							numberingmethod, status, notes) values 
 							(?,?,?,?,?,?,?,?,?,
 							 ?,?,?,?,?,?,?,?,?,?,
-							 ?,?,?,?,?,?,?,?,?,?,?)");
+							 ?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					format_date_in_iso($startdate),$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-	 				$numberingmethod, $status, $notes,$letter);
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
+	 				$numberingmethod, $status, $notes);
 	#then create the 1st waited number
 	my $subscriptionid = $dbh->{'mysql_insertid'};
 	$sth = $dbh->prepare("insert into subscriptionhistory (biblionumber, subscriptionid, histstartdate, enddate, missinglist, recievedlist, opacnote, librariannote) values (?,?,?,?,?,?,?,?)");
 	$sth->execute($biblionumber, $subscriptionid, format_date_in_iso($startdate), 0, "", "", "", $notes);
 	# reread subscription to get a hash (for calculation of the 1st issue number)
-	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+	$sth = $dbh->prepare("SELECT * from subscription where subscriptionid = ? ");
 	$sth->execute($subscriptionid);
 	my $val = $sth->fetchrow_hashref;
 
@@ -150,7 +151,7 @@ sub newsubscription {
 sub getsubscription {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select subscription.*,subscriptionhistory.*,aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('SELECT subscription.*,subscriptionhistory.*,aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
 							from subscription 
 							left join subscriptionhistory on subscription.subscriptionid=subscriptionhistory.subscriptionid
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
@@ -165,7 +166,7 @@ sub getsubscription {
 sub getsubscriptionfrombiblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select count(*) from subscription where biblionumber=?');
+	my $sth = $dbh->prepare('SELECT count(*) from subscription where biblionumber=?');
 	$sth->execute($biblionumber);
 	my $subscriptionsnumber = $sth->fetchrow;
 	return $subscriptionsnumber;
@@ -174,7 +175,7 @@ sub getsubscriptionfrombiblionumber {
 sub get_subscription_list_from_biblionumber {
 	my ($biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select subscription.*,subscriptionhistory.*,  aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('SELECT subscription.*,subscriptionhistory.*,  aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
 							from subscription 
 							left join subscriptionhistory on subscription.subscriptionid=subscriptionhistory.subscriptionid
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
@@ -202,14 +203,20 @@ sub get_subscription_list_from_biblionumber {
 }
 
 sub get_full_subscription_list_from_biblionumber {
-	my ($biblionumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('select serial.serialseq, serial.planneddate, serial.status, serial.notes, year(serial.planneddate) as year, aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
-							from serial left join subscription on (serial.subscriptionid=subscription.subscriptionid and subscription.biblionumber=serial.biblionumber)
-							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
-							left join aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
-							left join biblio on biblio.biblionumber=subscription.biblionumber 
-							where subscription.biblionumber = ? order by year,serial.subscriptionid,serial.planneddate');
+  my ($biblionumber) = @_;
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare('
+  SELECT serial.serialseq,serial.planneddate, serial.publisheddate, serial.status, serial.notes,
+    year(serial.publisheddate) as year,
+    aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle
+  FROM serial 
+        LEFT JOIN subscription ON 
+          (serial.subscriptionid=subscription.subscriptionid AND subscription.biblionumber=serial.biblionumber)
+        LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid 
+        LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
+        LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
+  WHERE subscription.biblionumber = ? 
+  ORDER BY year,serial.publisheddate,serial.subscriptionid,serial.planneddate');
 	$sth->execute($biblionumber);
 	my @res;
 	my $year;
@@ -220,21 +227,18 @@ sub get_full_subscription_list_from_biblionumber {
 	my $first;
 	my $previousnote="";
 	while (my $subs = $sth->fetchrow_hashref) {
-# 		my $sth2 = $dbh->prepare('select * from serial where serial.biblionumber = ? and serial.subscriptionid=? order by serial.planneddate');
-# 		$sth2->execute($biblionumber,$subs->{'subscriptionid'});
-# 		while (my $issues = $sth2->fetchrow_hashref){
-# 				warn "planneddate ".$issues->{'planneddate'};
-# 				warn "serialseq".$issues->{'serialseq'};
-# 		}
+### BUG To FIX: When there is no published date, will create many null ids!!!
+
 		if ($year and ($year==$subs->{year})){
 			if ($first eq 1){$first=0;}
 			my $temp=$res[scalar(@res)-1]->{'serials'};
 			push @$temp,
-				{'planneddate' => format_date($subs->{'planneddate'}), 
-				'serialseq' => $subs->{'serialseq'},
-				"status".$subs->{'status'} => 1,
-				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
-				};
+                {'publisheddate' =>format_date($subs->{'publisheddate'}),
+                'planneddate' => format_date($subs->{'planneddate'}), 
+                'serialseq' => $subs->{'serialseq'},
+                "status".$subs->{'status'} => 1,
+                'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
+                };
 		}else {
 			$first=1 if (not $year);
 			$year= $subs->{'year'};
@@ -243,7 +247,8 @@ sub get_full_subscription_list_from_biblionumber {
 			$bibliotitle= $subs->{'bibliotitle'};
 			my @temp;
 			push @temp,
-				{'planneddate' => format_date($subs->{'planneddate'}), 
+				{'publisheddate' =>format_date($subs->{'publisheddate'}),
+                'planneddate' => format_date($subs->{'planneddate'}), 
 				'serialseq' => $subs->{'serialseq'},
 				"status".$subs->{'status'} => 1,
 				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
@@ -302,24 +307,24 @@ sub getsubscriptions {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($biblionumber) {
-		$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=? order by title");
+		$sth = $dbh->prepare("SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblio.biblionumber=? order by title");
 		$sth->execute($biblionumber);
 	} else {
 		if ($ISSN and $title)
 		{
-			$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? order by title )");
+			$sth = $dbh->prepare("SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? order by title )");
 			$sth->execute("%$title%",$ISSN);
 		}
 		else
 		{
 			if ($ISSN)
 			{
-				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ? order by title");
+				$sth = $dbh->prepare("SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and biblioitems.issn = ? order by title");
 				$sth->execute($ISSN);
 			}
 			else
 			{
-				$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
+				$sth = $dbh->prepare("SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,biblio.biblionumber from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and
  biblio.biblionumber=subscription.biblionumber and biblio.title like ?  order by title");
 				$sth->execute("%$title%");
 			}
@@ -346,7 +351,10 @@ sub getsubscriptions {
 sub modsubscriptionhistory {
 	my ($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth = $dbh->prepare("update subscriptionhistory set histstartdate=?,enddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=? where subscriptionid=?");
+	my $sth = $dbh->prepare("
+  UPDATE subscriptionhistory 
+  SET histstartdate=?,enddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=? 
+  WHERE subscriptionid=?");
 	$recievedlist =~ s/^,//g;
 	$missinglist =~ s/^,//g;
 	$opacnote =~ s/^,//g;
@@ -372,14 +380,18 @@ sub getserials {
 	}
 	
 	# status = 2 is "arrived"
-	$sth=$dbh->prepare("select serialid,serialseq, status, planneddate,notes from serial where subscriptionid = ? and status <>2 and status <>4 and status <>5");
+	my $sth=$dbh->prepare("
+  SELECT serialid,serialseq, status, publisheddate, planneddate,notes 
+  FROM serial 
+  WHERE subscriptionid = ? AND status NOT IN (2,4,5)");
 	$sth->execute($subscriptionid);
 	while(my $line = $sth->fetchrow_hashref) {
 		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
+		$line->{"publisheddate"} = format_date($line->{"publisheddate"});
 		$line->{"planneddate"} = format_date($line->{"planneddate"});
 		push @serials,$line;
 	}
-	$sth=$dbh->prepare("select count(*) from serial where subscriptionid=?");
+	$sth=$dbh->prepare("SELECT count(*) FROM serial WHERE subscriptionid=?");
 	$sth->execute($subscriptionid);
 	my ($totalissues) = $sth->fetchrow;
 	return ($totalissues,@serials);
@@ -390,7 +402,7 @@ sub getlatestserials{
 	my ($subscriptionid,$limit) =@_;
 	my $dbh = C4::Context->dbh;
 	# status = 2 is "arrived"
-	my $strsth="select serialid,serialseq, status, planneddate from serial where subscriptionid = ? and (status =2 or status=4) order by planneddate DESC LIMIT 0,$limit";
+	my $strsth="SELECT serialid,serialseq, status, planneddate FROM serial WHERE subscriptionid = ? AND (status =2 or status=4) ORDER BY planneddate DESC LIMIT 0,$limit";
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute($subscriptionid);
 	my @serials;
@@ -399,27 +411,27 @@ sub getlatestserials{
 		$line->{"planneddate"} = format_date($line->{"planneddate"});
 		push @serials,$line;
 	}
-	$sth=$dbh->prepare("select count(*) from serial where subscriptionid=?");
+	$sth=$dbh->prepare("SELECT count(*) from serial where subscriptionid=?");
 	$sth->execute($subscriptionid);
 	my ($totalissues) = $sth->fetchrow;
 	return \@serials;
 }
 
 sub serialchangestatus {
-	my ($serialid,$serialseq,$planneddate,$status,$notes)=@_;
+	my ($serialid,$serialseq, $publisheddate,$planneddate,$status,$notes)=@_;
 # 	warn "($serialid,$serialseq,$planneddate,$status)";
 	# 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
+	my $sth = $dbh->prepare("SELECT subscriptionid,status from serial where serialid=?");
 	$sth->execute($serialid);
 	my ($subscriptionid,$oldstatus) = $sth->fetchrow;
 	# change status & update subscriptionhistory
 	if ($status eq 6){
 		delissue($serialseq, $subscriptionid) 
 	}else{
-		$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?,notes=? where serialid = ?");
-		$sth->execute($serialseq,$planneddate,$status,$notes,$serialid);
-		$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+		$sth = $dbh->prepare("update serial set serialseq=?,publisheddate=?,planneddate=?,status=?,notes=? where serialid = ?");
+		$sth->execute($serialseq,$publisheddate,$planneddate,$status,$notes,$serialid);
+		$sth = $dbh->prepare("SELECT missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 		$sth->execute($subscriptionid);
 		my ($missinglist,$recievedlist) = $sth->fetchrow;
 		if ($status eq 2) {
@@ -432,14 +444,14 @@ sub serialchangestatus {
 	}
 	# create new waited entry if needed (ie : was a "waited" and has changed)
 	if ($oldstatus eq 1 && $status ne 1) {
-		$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+		$sth = $dbh->prepare("SELECT * from subscription where subscriptionid = ? ");
 		$sth->execute($subscriptionid);
 		my $val = $sth->fetchrow_hashref;
 		# next issue number
 		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
 		# next date (calculated from actual date & frequency parameters)
-		my $nextplanneddate = Get_Next_Date($planneddate,$val);
-		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
+		my $nextpublisheddate = Get_Next_Date($publisheddate,$val);
+		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpublisheddate,0);
 		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
 														innerloop1=?,innerloop2=?,innerloop3=?
 														where subscriptionid = ?");
@@ -448,11 +460,14 @@ sub serialchangestatus {
 }
 
 sub newissue {
-	my ($serialseq,$subscriptionid,$biblionumber,$status, $planneddate) = @_;
+	my ($serialseq,$subscriptionid,$biblionumber,$status, $publisheddate, $planneddate) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
-	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status, $planneddate);
-	$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+	my $sth = $dbh->prepare("
+  INSERT INTO serial 
+    (serialseq,subscriptionid,biblionumber,status,publisheddate,planneddate) 
+  VALUES (?,?,?,?,?,?)");
+	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status,$publisheddate, $planneddate);
+	$sth = $dbh->prepare("SELECT missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 	$sth->execute($subscriptionid);
 	my ($missinglist,$recievedlist) = $sth->fetchrow;
 	if ($status eq 2) {
@@ -465,12 +480,124 @@ sub newissue {
 	$sth->execute($recievedlist,$missinglist,$subscriptionid);
 }
 
+=head2 serialsitemize
+
+  serialitemize($serialid, $info);
+  $info is a hashref containing  barcode branch, itemcallnumber, status, location
+  $serialid the serialid
+=cut
+sub serialsitemize {
+	my ($serialid, $info) =@_;
+
+	my $dbh= C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * from serial WHERE serialid=?");
+	$sth->execute($serialid);
+	my $data=$sth->fetchrow_hashref;
+	my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$data->{biblionumber});
+	my $fwk=MARCfind_frameworkcode($dbh,$bibid);
+	if ($info->{barcode}){
+		my @errors;
+		my $exists = itemdata($info->{'barcode'});
+		push @errors,"barcode_not_unique" if($exists);
+		unless ($exists){
+			my $marcrecord = MARC::Record->new();
+			my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.barcode",$fwk);
+# 			warn "items.barcode : $tag , $subfield";
+			my $newField = MARC::Field->new(
+				"$tag",'','',
+				"$subfield" => $info->{barcode}
+			);
+			$marcrecord->insert_fields_ordered($newField);
+			if ($info->{branch}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.homebranch",$fwk);
+# 				warn "items.homebranch : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{branch}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$fwk);
+# 				warn "items.holdingbranch : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{branch})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{branch}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{itemcallnumber}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.itemcallnumber",$fwk);
+# 				warn "items.itemcallnumber : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{itemcallnumber})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{itemcallnumber}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{notes}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.itemnotes",$fwk);
+# 				warn "items.itemnotes : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{notes})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{notes}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{location}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.location",$fwk);
+# 				warn "items.location : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{location})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{location}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			if ($info->{status}){
+				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.notforloan",$fwk);
+# 				warn "items.notforloan : $tag , $subfield";
+				if ($marcrecord->field($tag)) {
+					$marcrecord->field($tag)->add_subfields("$subfield" => $info->{status})
+				}else {
+					my $newField = MARC::Field->new(
+						"$tag",'','',
+						"$subfield" => $info->{status}
+					);
+					$marcrecord->insert_fields_ordered($newField);
+				}
+			}
+			NEWnewitem($dbh,$marcrecord,$bibid);
+			return 1;
+		}
+		return (0,@errors);
+	}
+}
+
 sub delissue {
 	my ($serialseq,$subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("delete from serial where serialseq= ? and subscriptionid= ? ");
 	$sth->execute($serialseq,$subscriptionid);
 }
+
 
 sub Get_Next_Date(@) {
 	my ($planneddate,$subscription) = @_;
@@ -561,7 +688,7 @@ sub hassubscriptionexpired {
 	my $subscription = getsubscription($subscriptionid);
 	# we don't do the same test if the subscription is based on X numbers or on X weeks/months
 	if ($subscription->{numberlength}) {
-		my $sth = $dbh->prepare("select count(*) from serial where subscriptionid=?  and planneddate>=?");
+		my $sth = $dbh->prepare("SELECT count(*) from serial where subscriptionid=?  and planneddate>=?");
 		$sth->execute($subscriptionid,$subscription->{startdate});
 		my $res = $sth->fetchrow;
 		if ($subscription->{numberlength}>=$res) {
@@ -571,7 +698,7 @@ sub hassubscriptionexpired {
 		}
 	} else {
 		#a little bit more tricky if based on X weeks/months : search if the latest issue waited is not after subscription startdate + duration
-		my $sth = $dbh->prepare("select max(planneddate) from serial where subscriptionid=?");
+		my $sth = $dbh->prepare("SELECT max(planneddate) from serial where subscriptionid=?");
 		$sth->execute($subscriptionid);
 		my $res = ParseDate(format_date_in_iso($sth->fetchrow));
 		my $endofsubscriptiondate;
@@ -606,12 +733,12 @@ sub subscriptionrenew {
 	my ($subscriptionid,$user,$startdate,$numberlength,$weeklength,$monthlength,$note) = @_;
 	my $dbh = C4::Context->dbh;
 	my $subscription = getsubscription($subscriptionid);
-	my $sth = $dbh->prepare("select * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber and biblio.biblionumber=?");
+	my $sth = $dbh->prepare("SELECT * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber and biblio.biblionumber=?");
 	$sth->execute($subscription->{biblionumber});
 	my $biblio = $sth->fetchrow_hashref;
-	newsuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},,,,,$subscription->{biblionumber});
+	newsuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},'','','','','',$subscription->{biblionumber});
 	# renew subscription
-	$sth=$dbh->prepare("update subscription set startdate=?,numberlength=?,weeklength=?,monthlength=?");
-	$sth->execute(format_date_in_iso($startdate),$numberlength,$weeklength,$monthlength);
+	$sth=$dbh->prepare("update subscription set startdate=?,numberlength=?,weeklength=?,monthlength=? where subscriptionid=?");
+	$sth->execute(format_date_in_iso($startdate),$numberlength,$weeklength,$monthlength, $subscriptionid);
 }
 END { }       # module clean-up code here (global destructor)

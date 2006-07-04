@@ -74,6 +74,7 @@ if ($op eq 'add_form') {
 						-values=> \@marcarray,
 						-default=>"$defaulttagfield $defaulttagsubfield - $defaultliblibrarian",
 						-size=>1,
+			 			-tabindex=>'',
 						-multiple=>0,
 						);
 		$template->param("marclist$i" => $marclist);
@@ -129,11 +130,15 @@ if ($op eq 'add_form') {
 	$template->param(loop => \@loop_data,
 							tablename => CGI::scrolling_list(-name=>'tablename',
 																	-values=>['biblio','biblioitems','items','bibliosubject','bibliosubtitle','additionalauthors'],
-																	-default=>$tablename,
-																	-size=>1,
-																	-multiple=>0
-																	)
-							);
+						-default=>$tablename,
+						-size=>1,
+			 			-tabindex=>'',
+						-multiple=>0
+						)
+				);
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
