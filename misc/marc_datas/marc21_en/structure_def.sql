@@ -1,8 +1,8 @@
 -- *******************************************************
 --  KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK 
 --                                                        
---                  PRETEST VERSION 0.0.9                 
---                       2006-04-27                       
+--                  PRETEST VERSION 0.1.0                 
+--                       2006-07-06                       
 --                                                        
 --  original default requiring greater user customisation 
 --               created by a few Koha Hands              
@@ -857,17 +857,17 @@ INSERT INTO `marc_subfield_structure` VALUES ('088', 'a', 'Report number', 'Repo
 INSERT INTO `marc_subfield_structure` VALUES ('088', 'z', 'Canceled/invalid report number', 'Canceled/invalid report number', 1, 0, NULL, 0, NULL, NULL, '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('09o', 'a', 'Classification number (OCLC) (R) ; Classification number, CALL (RLIN) (NR)', 'Classification number (OCLC) (R) ; Classification number, CALL (RLIN) (NR)', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('09o', 'b', 'Local cutter number (OCLC) ; Book number/undivided call number, CALL (RLIN)', 'Local cutter number (OCLC) ; Book number/undivided call number, CALL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'e', 'Feature heading (OCLC)', 'Feature heading (OCLC)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'f', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'h', 'Output transaction history, HST (RLIN)', 'Output transaction history, HST (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'i', 'Output transaction instruction, INS (RLIN)', 'Output transaction instruction, INS (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'l', 'Extra card control statement, EXT (RLIN)', 'Extra card control statement, EXT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'n', 'Additional local notes, ANT (RLIN)', 'Additional local notes, ANT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'p', 'Pathfinder code, PTH (RLIN)', 'Pathfinder code, PTH (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 't', 'Field suppresion, FSP (RLIN)', 'Field suppresion, FSP (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'v', 'Volumes, VOL (RLIN)', 'Volumes, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'y', 'Date, VOL (RLIN)', 'Date, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('09o', 'z', 'Retention, VOL (RLIN)', 'Retention, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'e', 'Feature heading (OCLC)', 'Feature heading (OCLC)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'f', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'h', 'Output transaction history, HST (RLIN)', 'Output transaction history, HST (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'i', 'Output transaction instruction, INS (RLIN)', 'Output transaction instruction, INS (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'l', 'Extra card control statement, EXT (RLIN)', 'Extra card control statement, EXT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'n', 'Additional local notes, ANT (RLIN)', 'Additional local notes, ANT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'p', 'Pathfinder code, PTH (RLIN)', 'Pathfinder code, PTH (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 't', 'Field suppresion, FSP (RLIN)', 'Field suppresion, FSP (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'v', 'Volumes, VOL (RLIN)', 'Volumes, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'y', 'Date, VOL (RLIN)', 'Date, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('09o', 'z', 'Retention, VOL (RLIN)', 'Retention, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('091', 'a', 'Microfilm shelf location', 'Microfilm shelf location', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('092', '2', 'Edition number', 'Edition number', 0, 0, '', 0, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('092', 'a', 'Classification number', 'Classification number', 0, 0, '', 0, '', '', '', NULL, -6, '', '', '');
@@ -2946,7 +2946,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('855', 'w', 'Frequency', 'Frequenc
 INSERT INTO `marc_subfield_structure` VALUES ('855', 'x', 'Calendar change', 'Calendar change', 0, 0, '', 8, '', '', '', NULL, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('855', 'y', 'Regularity pattern', 'Regularity pattern', 1, 0, '', 8, '', '', '', NULL, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('855', 'z', 'Numbering scheme', 'Numbering scheme', 1, 0, '', 8, '', '', '', NULL, 5, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('856', '2', 'Access method', 'Access method', 0, 0, '', 8, '', '', '', 0, 0, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('856', '2', 'Access method', 'Access method', 0, 0, '', 8, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('856', '3', 'Materials specified', 'Materials specified', 0, 0, '', 8, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('856', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('856', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 8, '', '', '', 0, -6, '', '', '');
@@ -4089,17 +4089,17 @@ INSERT INTO `marc_subfield_structure` VALUES ('998', 't', 'RTYP (RLIN)', 'RTYP (
 INSERT INTO `marc_subfield_structure` VALUES ('998', 'w', 'PLINK (RLIN)', 'PLINK (RLIN)', 0, 0, '', 9, '', '', '', 0, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('999', 'a', 'Classification number (OCLC) (R) ; Classification number, CALL (RLIN) (NR)', 'Classification number (OCLC) (R) ; Classification number, CALL (RLIN) (NR)', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('999', 'b', 'Local cutter number (OCLC) ; Book number/undivided call number, CALL (RLIN)', 'Local cutter number (OCLC) ; Book number/undivided call number, CALL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'e', 'Feature heading (OCLC)', 'Feature heading (OCLC)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'f', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'h', 'Output transaction history, HST (RLIN)', 'Output transaction history, HST (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'i', 'Output transaction instruction, INS (RLIN)', 'Output transaction instruction, INS (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'l', 'Extra card control statement, EXT (RLIN)', 'Extra card control statement, EXT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'n', 'Additional local notes, ANT (RLIN)', 'Additional local notes, ANT (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'p', 'Pathfinder code, PTH (RLIN)', 'Pathfinder code, PTH (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 't', 'Field suppresion, FSP (RLIN)', 'Field suppresion, FSP (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'v', 'Volumes, VOL (RLIN)', 'Volumes, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'y', 'Date, VOL (RLIN)', 'Date, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('999', 'z', 'Retention, VOL (RLIN)', 'Retention, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'e', 'Feature heading (OCLC)', 'Feature heading (OCLC)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'f', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 'Filing suffix (OCLC); Footnote, FNT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'h', 'Output transaction history, HST (RLIN)', 'Output transaction history, HST (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'i', 'Output transaction instruction, INS (RLIN)', 'Output transaction instruction, INS (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'l', 'Extra card control statement, EXT (RLIN)', 'Extra card control statement, EXT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'n', 'Additional local notes, ANT (RLIN)', 'Additional local notes, ANT (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'p', 'Pathfinder code, PTH (RLIN)', 'Pathfinder code, PTH (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 't', 'Field suppresion, FSP (RLIN)', 'Field suppresion, FSP (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'v', 'Volumes, VOL (RLIN)', 'Volumes, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'y', 'Date, VOL (RLIN)', 'Date, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('999', 'z', 'Retention, VOL (RLIN)', 'Retention, VOL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('u01', 'a', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('u01', 'd', 'UAD (RLIN)', 'UAD (RLIN)', 0, 0, '', 9, '', '', '', 0, 5, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('u01', 'f', 'FPST (RLIN)', 'FPST (RLIN)', 0, 0, '', 9, '', '', '', 0, 5, '', '', '');
