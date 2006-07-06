@@ -159,7 +159,7 @@ prEnd();
 use PDF::Table;
 use Acme::Comment;
 
-$file = '/usr/local/opus-dev/intranet/htdocs/intranet-tmpl/barcodes/new.pdf';
+$file = "$htdocs_path/barcodes/new.pdf";
 use PDF::Report;
 
 my $pdf = new PDF::Report( File => $file );
