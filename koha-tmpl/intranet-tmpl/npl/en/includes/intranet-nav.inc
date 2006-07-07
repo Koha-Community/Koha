@@ -19,13 +19,8 @@
 	<input type="submit" value="Search" class="submit" />
 
 	</form></li></ul></li>
-
-	<li><a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a></li>
-<ul>
-<li><form name="f" method="post" action="/cgi-bin/koha/catalogue-home.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="search_type" value="precise" /><input type="hidden" name="zoom" value="0" /><input type="hidden" name="number_to_display" value="10" /><label><span class="accesskey">Barcode Search:</span></label><input type="text" id="itemnumber" name="itemnumber" size="10"  /><input type="submit" value="Search" class="submit"></form></li>
-<li><form name="f" method="post" action="/cgi-bin/koha/catalogue-home.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="order" value="1=4 i<" /><input type="hidden" name="search_type" value="keyword" /><input type="hidden" name="zoom" value="1" /><input type="hidden" name="MARC" value="0" /><input type="hidden" name="number_to_display" value="20" /><label><span class="accesskey">Keyword Search:</span></label><input type="text" id="keyword" name="keyword" size="10"  /><input type="submit" value="Search" class="submit"></form></li>
-</ul>
-
+				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="navkeyword"><span class="accesskey">Q</span>uick Search:</label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="navkeyword" name="value" size="10" accesskey="q" /><input type="submit" value="Start search" class="submit" /></form></li>
+</ul></li>
 <li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul>
 <li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li>
 <li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
