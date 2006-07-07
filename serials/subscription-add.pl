@@ -7,12 +7,11 @@ use C4::Koha;
 use C4::Auth;
 use C4::Date;
 use C4::Output;
-use C4::Bull;
+use C4::Serials;
 use C4::Acquisition;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
-use C4::Bull;
 use C4::Letters;
 
 my $query = new CGI;
@@ -46,7 +45,7 @@ my ($flags, $homebranch)=$sthtemp->fetchrow;
 
 if ($op eq 'mod') {
 	my $subscriptionid = $query->param('subscriptionid');
-	my $subs = &getsubscription($subscriptionid);
+	my $subs = &GetSubscription($subscriptionid);
 	$auser = $subs->{'user'};
 	$librarian = $subs->{'librarian'};
 	$cost = $subs->{'cost'};
@@ -180,7 +179,7 @@ if ($op eq 'addsubscription') {
 	my $biblionumber = $query->param('biblionumber');
 	my $notes = $query->param('notes');
 	my $letter = $query->param('letter');
-	my $subscriptionid = newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+	my $subscriptionid = NewSubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,

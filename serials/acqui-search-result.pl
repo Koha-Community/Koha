@@ -1,10 +1,7 @@
 #!/usr/bin/perl
 
-# $Id$
-
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -22,6 +19,8 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+# $Id$
 
 use strict;
 use C4::Auth;
