@@ -11,7 +11,7 @@ function Help() {
 	<a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 	<a href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-	<a href="/cgi-bin/koha/reports-home.pl">Reports</a>
+	<a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
 	<a href="/cgi-bin/koha/admin/admin-home.pl">Parameters</a>
 	<a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
 	<a href="/cgi-bin/koha/about.pl">About</a>
