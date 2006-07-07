@@ -391,9 +391,9 @@ sub receiveorder {
 											unitprice=?,freight=?,rrp=?
 							where biblionumber=? and ordernumber=?"
     );
-    my $suggestionid = findsuggestion_from_biblionumber( $dbh, $biblio );
+    my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblio );
     if ($suggestionid) {
-        changestatus( $suggestionid, 'AVAILABLE', '', $biblio );
+        ModStatus( $suggestionid, 'AVAILABLE', '', $biblio );
     }
     $sth->execute( $quantrec, $invoiceno, $cost, $freight, $rrp, $biblio,
         $ordnum );
