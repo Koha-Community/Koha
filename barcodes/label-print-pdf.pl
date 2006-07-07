@@ -171,8 +171,18 @@ $pdf->openpage($pagenumber);
 
 ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
 my $y_pos = ( $y_pos_initial_startrow + 90 );
+
+# this left aligns the spine label text, centering would be better, 
+# but word-wrapping breaks with centering on. :(
 $pdf->setAlign('left');
+
+# this sets the font size for the spine label text.
+# if your text strings are extending past the right label border
+# and arnt getting wrapped properly, reduce the font size some
+# fyi: PDF::Report wont wrap continuious strings with no spaces in them, correctly
+
 $pdf->setSize(9);
+
 
 my $page_break_count = $startrow;
 
