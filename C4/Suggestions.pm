@@ -1,7 +1,5 @@
 package C4::Suggestions;
 
-# $Id$
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,25 +17,27 @@ package C4::Suggestions;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 use strict;
 require Exporter;
 use DBI;
 use C4::Context;
 use C4::Output;
 use Mail::Sendmail;
-# use C4::Interface::CGI::Output;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+  shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 =head1 NAME
 
-C4::Accounts - Functions for dealing with Koha authorities
+C4::Suggestions - Some useful functions for dealings with suggestions.
 
 =head1 SYNOPSIS
 
-  use C4::Suggestions;
+use C4::Suggestions;
 
 =head1 DESCRIPTION
 
@@ -58,21 +58,22 @@ Suggestions done by other can be seen when not "AVAILABLE"
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(	&newsuggestion
-				&searchsuggestion
-				&getsuggestion
-				&delsuggestion
-				&countsuggestion
-				&changestatus
-				&connectSuggestionAndBiblio
-				&findsuggestion_from_biblionumber
-			);
+@EXPORT = qw(
+    &NewSuggestion
+    &SearchSuggestion
+    &GetSuggestion
+    &DelSuggestion
+    &CountSuggestion
+    &ModStatus
+    &ConnectSuggestionAndBiblio
+    &GetSuggestionFromBiblionumber
+ );
 
 =item SearchSuggestion
 
-  (\@array) = &SearchSuggestion($user)
+(\@array) = &SearchSuggestion($user)
 
-  searches for a suggestion
+searches for a suggestion
 
 C<$user> is the user code (used as suggestor filter)
 
@@ -83,184 +84,319 @@ Note the status is stored twice :
 * as parameter ( for example ASKED => 1, or REJECTED => 1) . This is for template & translation purposes.
 
 =cut
-sub searchsuggestion  {
-	my ($user,$author,$title,$publishercode,$status,$suggestedbyme)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="Select suggestions.*,
-						U1.surname as surnamesuggestedby,U1.firstname as firstnamesuggestedby,
-						U2.surname as surnamemanagedby,U2.firstname as firstnamemanagedby 
-						from suggestions
-						left join borrowers as U1 on suggestedby=U1.borrowernumber
-						left join borrowers as U2  on managedby=U2.borrowernumber
-						where 1=1";
-	my @sql_params;
-	if ($author) {
-		push @sql_params,"%".$author."%";
-		$query .= " and author like ?";
-	}
-	if ($title) {
-		push @sql_params,"%".$title."%";
-		$query .= " and suggestions.title like ?";
-	}
-	if ($publishercode) {
-		push @sql_params,"%".$publishercode."%";
-		$query .= " and publishercode like ?";
-	}
-	if ($status) {
-		push @sql_params,$status;
-		$query .= " and status=?";
-	}
-	
-	if (C4::Context->preference("IndependantBranches")) {
-		my $userenv = C4::Context->userenv;
-		if ($userenv) {
-		  unless ($userenv->{flags} == 1){
-			push @sql_params,$userenv->{branch};
-			$query .= " and (U1.branchcode = ? or U1.branchcode ='')";
-		  }
-		}
-	}
-	if ($suggestedbyme) {
-		if ($suggestedbyme eq -1) {
-		} else {
-			push @sql_params,$user;
-			$query .= " and suggestedby=?";
-		}
-	} else {
-		$query .= " and managedby is NULL";
-	}
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@sql_params);
-	my @results;
-	my $even=1; # the even variable is used to set even / odd lines, for highlighting
-	while (my $data=$sth->fetchrow_hashref){
-			$data->{$data->{STATUS}} = 1;
-			if ($even) {
-				$even=0;
-				$data->{even}=1;
-			} else {
-				$even=1;
-			}
-			push(@results,$data);
-	}
-	return (\@results);
+sub SearchSuggestion  {
+    my ($user,$author,$title,$publishercode,$status,$suggestedbyme)=@_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|
+    SELECT suggestions.*,
+        U1.surname   AS surnamesuggestedby,
+        U1.firstname AS firstnamesuggestedby,
+        U2.surname   AS surnamemanagedby,
+        U2.firstname AS firstnamemanagedby
+    FROM suggestions
+    LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
+    LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
+    WHERE 1=1 |;
+
+    my @sql_params;
+    if ($author) {
+       push @sql_params,"%".$author."%";
+       $query .= " and author like ?";
+    }
+    if ($title) {
+        push @sql_params,"%".$title."%";
+        $query .= " and suggestions.title like ?";
+    }
+    if ($publishercode) {
+        push @sql_params,"%".$publishercode."%";
+        $query .= " and publishercode like ?";
+    }
+    if ($status) {
+        push @sql_params,$status;
+        $query .= " and status=?";
+    }
+
+    if (C4::Context->preference("IndependantBranches")) {
+        my $userenv = C4::Context->userenv;
+        if ($userenv) {
+            unless ($userenv->{flags} == 1){
+                push @sql_params,$userenv->{branch};
+                $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
+            }
+        }
+    }
+    if ($suggestedbyme) {
+        if ($suggestedbyme eq -1) {        # FIXME ! what's this strange code ?
+        } else {
+            push @sql_params,$user;
+            $query .= " and suggestedby=?";
+        }
+    } else {
+        $query .= " and managedby is NULL";
+    }
+    my $sth=$dbh->prepare($query);
+    $sth->execute(@sql_params);
+    my @results;
+    my $even=1; # the even variable is used to set even / odd lines, for highlighting
+    while (my $data=$sth->fetchrow_hashref){
+        $data->{$data->{STATUS}} = 1;
+        if ($even) {
+            $even=0;
+            $data->{even}=1;
+        } else {
+            $even=1;
+        }
+        push(@results,$data);
+    }
+    return (\@results);
 }
 
-sub newsuggestion {
-	my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("insert into suggestions (status,suggestedby,title,author,publishercode,note,copyrightdate,volumedesc,publicationyear,place,isbn,biblionumber) values ('ASKED',?,?,?,?,?,?,?,?,?,?,?)");
-	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);	
+=item NewSuggestion
+
+&NewSuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber)
+
+Insert a new suggestion on database with value given on input arg.
+
+=cut
+sub NewSuggestion {
+    my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq |
+        INSERT INTO suggestions
+            (status,suggestedby,title,author,publishercode,note,copyrightdate,
+            volumedesc,publicationyear,place,isbn,biblionumber)
+        VALUES ('ASKED',?,?,?,?,?,?,?,?,?,?,?)
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);
 }
 
-sub getsuggestion {
-	my ($suggestionid) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select * from suggestions where suggestionid=?");
-	$sth->execute($suggestionid);
-	return($sth->fetchrow_hashref);
+=item GetSuggestion
+
+\%sth = &GetSuggestion($suggestionid)
+
+this function get a suggestion from $suggestionid given on input arg.
+
+return :
+    the result of the SQL query as a hash : $sth->fetchrow_hashref.
+=cut
+sub GetSuggestion {
+    my ($suggestionid) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|
+        SELECT *
+        FROM   suggestions
+        WHERE  suggestionid=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($suggestionid);
+    return($sth->fetchrow_hashref);
 }
 
-sub delsuggestion {
-	my ($borrowernumber,$suggestionid) = @_;
-	my $dbh = C4::Context->dbh;
-	# check that the suggestion comes from the suggestor
-	my $sth = $dbh->prepare("select suggestedby from suggestions where suggestionid=?");
-	$sth->execute($suggestionid);
-	my ($suggestedby) = $sth->fetchrow;
-	if ($suggestedby eq $borrowernumber) {
-		$sth = $dbh->prepare("delete from suggestions where suggestionid=?");
-		$sth->execute($suggestionid);
-	}
+=item DelSuggestion
+
+&DelSuggestion($borrowernumber,$suggestionid)
+
+Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
+
+=cut
+sub DelSuggestion {
+    my ($borrowernumber,$suggestionid) = @_;
+    my $dbh = C4::Context->dbh;
+    # check that the suggestion comes from the suggestor
+    my $query = qq |
+        SELECT suggestedby
+        FROM   suggestions
+        WHERE  suggestionid=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($suggestionid);
+    my ($suggestedby) = $sth->fetchrow;
+    if ($suggestedby eq $borrowernumber) {
+        my $queryDelete = qq|
+            DELETE FROM suggestions
+            WHERE suggestionid=?
+        |;
+        $sth = $dbh->prepare($queryDelete);
+        $sth->execute($suggestionid);
+    }
+}
+=item CountSuggestion
+
+&CountSuggestion($status)
+
+Count the number of suggestions with the status given on input argument.
+
+return :
+the number of suggestion with this status.
+
+=cut
+sub CountSuggestion {
+    my ($status) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+    if (C4::Context->preference("IndependantBranches")){
+        my $userenv = C4::Context->userenv;
+        if ($userenv->{flags} == 1){
+            my $query = qq |
+                SELECT count(*)
+                FROM   suggestions
+                WHERE  status=?
+            |;
+            $sth = $dbh->prepare($query);
+            $sth->execute($status);
+        }
+        else {
+            my $query = qq |
+                SELECT count(*)
+                FROM suggestions,borrowers
+                WHERE status=?
+                AND borrowers.borrowernumber=suggestions.suggestedby
+                AND (borrowers.branchcode='' OR borrowers.branchcode =?)
+            |;
+            $sth = $dbh->prepare($query);
+            $sth->execute($status,$userenv->{branch});
+        }
+    }
+    else {
+        my $query = qq |
+            SELECT count(*)
+            FROM suggestions
+            WHERE status=?
+        |;
+         $sth = $dbh->prepare($query);
+        $sth->execute($status);
+    }
+    my ($result) = $sth->fetchrow;
+    return $result;
 }
 
-sub countsuggestion {
-	my ($status) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	if (C4::Context->preference("IndependantBranches")){
-		my $userenv = C4::Context->userenv;
-		if ($userenv->{flags} == 1){
-			$sth = $dbh->prepare("select count(*) from suggestions where status=?");
-			$sth->execute($status);
-		} else {
-			$sth = $dbh->prepare("select count(*) from suggestions,borrowers where status=? and borrowers.borrowernumber=suggestions.suggestedby and (borrowers.branchcode='' or borrowers.branchcode =?)");
-			$sth->execute($status,$userenv->{branch});
-		}
-	} else {
-		$sth = $dbh->prepare("select count(*) from suggestions where status=?");
-		$sth->execute($status);
-	}
-	my ($result) = $sth->fetchrow;
-	return $result;
+=item ModStatus
+
+&ModStatus($suggestionid,$status,$managedby,$biblionumber)
+
+Modify the status (status can be 'ASKED', 'ACCEPTED', 'REJECTED'...)
+and send a mail to notify the librarian.
+=cut
+sub ModStatus {
+    my ($suggestionid,$status,$managedby,$biblionumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+    if ($managedby>0) {
+        if ($biblionumber) {
+        my $query = qq|
+            UPDATE suggestions
+            SET    status=?,managedby=?,biblionumber=?
+            WHERE  suggestionid=?
+        |;
+        $sth = $dbh->prepare($query);
+        $sth->execute($status,$managedby,$biblionumber,$suggestionid);
+        } else {
+            my $query = qq|
+                UPDATE suggestions
+                SET    status=?,managedby=?
+                WHERE  suggestionid=?
+            |;
+            $sth = $dbh->prepare($query);
+            $sth->execute($status,$managedby,$suggestionid);
+        }
+   } else {
+        if ($biblionumber) {
+            my $query = qq|
+                UPDATE suggestions
+                SET    status=?,biblionumber=?
+                WHERE  suggestionid=?
+            |;
+            $sth = $dbh->prepare($query);
+            $sth->execute($status,$biblionumber,$suggestionid);
+        }
+        else {
+            my $query = qq|
+                UPDATE suggestions
+                SET    status=?
+                WHERE  suggestionid=?
+            |;
+            $sth = $dbh->prepare($query);
+            $sth->execute($status,$suggestionid);
+        }
+    }
+    # check mail sending.
+    my $queryMail = qq|
+        SELECT suggestions.*,
+            boby.surname AS bysurname,
+            boby.firstname AS byfirstname,
+            boby.emailaddress AS byemail,
+            lib.surname AS libsurname,
+            lib.firstname AS libfirstname,
+            lib.emailaddress AS libemail
+        FROM suggestions
+            LEFT JOIN borrowers AS boby ON boby.borrowernumber=suggestedby
+            LEFT JOIN borrowers AS lib ON lib.borrowernumber=managedby
+        WHERE suggestionid=?
+    |;
+    $sth = $dbh->prepare($queryMail);
+    $sth->execute($suggestionid);
+    my $emailinfo = $sth->fetchrow_hashref;
+    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
+
+    $template->param(
+        byemail => $emailinfo->{byemail},
+        libemail => $emailinfo->{libemail},
+        status => $emailinfo->{status},
+        title => $emailinfo->{title},
+        author =>$emailinfo->{author},
+        libsurname => $emailinfo->{libsurname},
+        libfirstname => $emailinfo->{libfirstname},
+        byfirstname => $emailinfo->{byfirstname},
+        bysurname => $emailinfo->{bysurname},
+    );
+    my %mail = (
+        To => $emailinfo->{byemail},
+        From => $emailinfo->{libemail},
+        Subject => 'Koha suggestion',
+        Message => "".$template->output
+    );
+    sendmail(%mail);
 }
+=item GetSuggestionFromBiblionumber
 
-sub changestatus {
-	my ($suggestionid,$status,$managedby,$biblionumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	if ($managedby>0) {
-		if ($biblionumber) {
-			$sth = $dbh->prepare("update suggestions set status=?,managedby=?,biblionumber=? where suggestionid=?");
-			$sth->execute($status,$managedby,$biblionumber,$suggestionid);
-		} else {
-			$sth = $dbh->prepare("update suggestions set status=?,managedby=? where suggestionid=?");
-			$sth->execute($status,$managedby,$suggestionid);
-		}
-	} else {
-		if ($biblionumber) {
-			$sth = $dbh->prepare("update suggestions set status=?,biblionumber=? where suggestionid=?");
-			$sth->execute($status,$biblionumber,$suggestionid);
-		} else {
-			$sth = $dbh->prepare("update suggestions set status=? where suggestionid=?");
-			$sth->execute($status,$suggestionid);
-		}
+$suggestionid = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
 
-	}
-	# check mail sending.
-	$sth = $dbh->prepare("select suggestions.*,
-							boby.surname as bysurname, boby.firstname as byfirstname, boby.emailaddress as byemail,
-							lib.surname as libsurname,lib.firstname as libfirstname,lib.emailaddress as libemail
-						from suggestions left join borrowers as boby on boby.borrowernumber=suggestedby left join borrowers as lib on lib.borrowernumber=managedby where suggestionid=?");
-	$sth->execute($suggestionid);
-	my $emailinfo = $sth->fetchrow_hashref;
-	my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
-# 				 query =>'',
-# 			     authnotrequired => 1,
-# 			 });
-	$template->param(byemail => $emailinfo->{byemail},
-					libemail => $emailinfo->{libemail},
-					status => $emailinfo->{status},
-					title => $emailinfo->{title},
-					author =>$emailinfo->{author},
-					libsurname => $emailinfo->{libsurname},
-					libfirstname => $emailinfo->{libfirstname},
-					byfirstname => $emailinfo->{byfirstname},
-					bysurname => $emailinfo->{bysurname},
-					);
-	my %mail = ( To => $emailinfo->{byemail},
-				 From => $emailinfo->{libemail},
-				 Subject => 'Koha suggestion',
-				 Message => "".$template->output
-				 );
-sendmail(%mail);
-# 	warn "sending email to $emailinfo->{byemail} from $emailinfo->{libemail} to notice new status $emailinfo->{status} for $emailinfo->{title} / $emailinfo->{author}";
+Get a suggestion from the biblionumber.
+
+return :
+ the id of the suggestion which has the biblionumber given on input args.
+
+=cut
+sub GetSuggestionFromBiblionumber {
+    my ($dbh,$biblionumber) = @_;
+    my $query = qq|
+        SELECT suggestionid
+        FROM   suggestions
+        WHERE  biblionumber=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my ($suggestionid) = $sth->fetchrow;
+    return $suggestionid;
 }
+=item ConnectSuggestionAndBiblio
 
-sub findsuggestion_from_biblionumber {
-	my ($dbh,$biblionumber) = @_;
-	my $sth = $dbh->prepare("select suggestionid from suggestions where biblionumber=?");
-	$sth->execute($biblionumber);
-	my ($suggestionid) = $sth->fetchrow;
-	return $suggestionid;
-}
+&ConnectSuggestionAndBiblio($suggestionid,$biblionumber)
 
-# connect a suggestion to an existing biblio
-sub connectSuggestionAndBiblio {
-	my ($suggestionid,$biblionumber) = @_;
-	my $dbh=C4::Context->dbh;
-	my $sth = $dbh->prepare("update suggestions set biblionumber=? where suggestionid=?");
-	$sth->execute($biblionumber,$suggestionid);
+ connect a suggestion to an existing biblio
+
+=cut
+sub ConnectSuggestionAndBiblio {
+    my ($suggestionid,$biblionumber) = @_;
+    my $dbh=C4::Context->dbh;
+    my $query = qq |
+        UPDATE suggestions
+        SET    biblionumber=?
+        WHERE  suggestionid=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber,$suggestionid);
 }
 =back
 
