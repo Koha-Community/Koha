@@ -1704,7 +1704,7 @@ sub itemissues {
     # gotten, the user might get a blank page. It would be much better
     # to at least print an error message. The easiest way to do this
     # is to set $SIG{__DIE__}.
-    my $sth   = $dbh->prepare("Select * from items where
+    my $sth   = $dbh->prepare("Select *,items.notforloan as itemnotforloan from items where
 items.biblioitemnumber = ?")
       || die $dbh->errstr;
     my $i     = 0;
@@ -1721,7 +1721,7 @@ items.biblioitemnumber = ?")
         # fetchrow_hashref() can fail for any number of reasons (e.g.,
         # database server crash), not just because no items match the
         # search criteria.
-        my $sth2   = $dbh->prepare("select * from issues,borrowers
+        my $sth2   = $dbh->prepare("select *, items.notforloan as itemnotforloan from items,issues,borrowers
 where itemnumber = ?
 and returndate is NULL
 and issues.borrowernumber = borrowers.borrowernumber");
@@ -1757,6 +1757,17 @@ and issues.borrowernumber = borrowers.borrowernumber");
         } # for
 
         $sth2->finish;
+	# get notforloan complete status if applicable
+	my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+	$sthnflstatus->execute;
+	my ($authorised_valuecode) = $sthnflstatus->fetchrow;
+	if ($authorised_valuecode) {
+		$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+		$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
+		my ($lib) = $sthnflstatus->fetchrow;
+		$data->{notforloantext} = $lib;
+		warn "NOT FOR LOAN".$lib.$data->{itemnotforloan};
+	}
         $results[$i] = $data;
         $i++;
     }
