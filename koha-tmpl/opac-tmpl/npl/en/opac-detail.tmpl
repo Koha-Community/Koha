@@ -134,7 +134,11 @@
 						<!-- TMPL_IF name="notforloantext" -->
 							<!-- TMPL_VAR name="notforloantext" -->
 						<!-- TMPL_ELSE -->
-							Available
+							<!-- TMPL_IF name="itemlost"-->
+								Item Lost
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
