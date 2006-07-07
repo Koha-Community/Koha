@@ -120,7 +120,7 @@ if ( $quantity ne '0' ) {
 
         # change suggestion status if applicable
         if ($suggestionid) {
-            changestatus( $suggestionid, 'ORDERED', '', $bibnum );
+            ModStatus( $suggestionid, 'ORDERED', '', $bibnum );
         }
     }
 

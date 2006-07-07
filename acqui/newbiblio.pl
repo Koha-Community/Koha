@@ -67,7 +67,7 @@ if ( $ordnum eq '' ) {    # create order
             $data = bibdata($biblio);
         }
         else {
-            $data = getsuggestion($suggestionid);
+            $data = GetSuggestion($suggestionid);
         }
     }
     if ( $data->{'title'} eq '' ) {

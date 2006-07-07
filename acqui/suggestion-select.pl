@@ -42,9 +42,9 @@ my ($template, $borrowernumber, $cookie)
 			 });
 
 if ($op eq 'connectDuplicate') {
-	connectSuggestionAndBiblio($suggestionid,$duplicateNumber);
+	ConnectSuggestionAndBiblio($suggestionid,$duplicateNumber);
 }
-my $suggestions_loop= &searchsuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
+my $suggestions_loop= &SearchSuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
 foreach (@$suggestions_loop) {
 	unless ($_->{biblionumber}) {
 		my (@tags, @and_or, @excluding, @operator, @value, $offset,$length);
