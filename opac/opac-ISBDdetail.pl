@@ -17,6 +17,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 =head1 NAME
 
 MARCdetail.pl : script to show a biblio in MARC format
@@ -56,7 +58,7 @@ use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::Bull; #uses getsubscriptionfrom biblionumber
+use C4::Serials; #uses getsubscriptionfrom biblionumber
 use HTML::Template;
 
 my $query=new CGI;
@@ -74,16 +76,16 @@ my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record =MARCgetbiblio($dbh,$bibid);
 
 #coping with subscriptions
-my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
 my $dat = MARCmarc2koha($dbh,$record);
-my @subscriptions = getsubscriptions($dat->{title},$dat->{issn},$biblionumber);
+my @subscriptions = GetSubscriptions($dat->{title},$dat->{issn},$biblionumber);
 my @subs;
 foreach my $subscription (@subscriptions){
 	my %cell;
 	$cell{subscriptionid}= $subscription->{subscriptionid};
 	$cell{subscriptionnotes}= $subscription->{notes};
 	#get the three latest serials.
-	$cell{latestserials}=getlatestserials($subscription->{subscriptionid},3);
+	$cell{latestserials}=GetLatestSerials($subscription->{subscriptionid},3);
 	push @subs, \%cell;
 }
 

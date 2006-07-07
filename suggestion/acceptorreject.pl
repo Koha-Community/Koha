@@ -1,9 +1,28 @@
 #!/usr/bin/perl
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+# $Id$
+
 use strict;
 require Exporter;
 use CGI;
 use HTML::Template;
-
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Suggestions;
@@ -38,7 +57,7 @@ if ($op eq "aorr_confirm") {
 			my ($newstatus,$suggestionid) = ($1,$2);
 			$newstatus="REJECTED" if $newstatus eq "R";
 			$newstatus="ACCEPTED" if $newstatus eq "A";
-			changestatus($suggestionid,$newstatus,$loggedinuser);
+			ModStatus($suggestionid,$newstatus,$loggedinuser);
 		}
 	}
 	$op="else";
@@ -47,12 +66,12 @@ if ($op eq "aorr_confirm") {
 if ($op eq "delete_confirm") {
 	my @delete_field = $input->param("delete_field");
 	foreach my $delete_field (@delete_field) {
-		&delsuggestion($loggedinuser,$delete_field);
+		&DelSuggestion($loggedinuser,$delete_field);
 	}
 	$op='else';
 }
 
-my $suggestions_loop= &searchsuggestion("","","","",'ASKED',"");
+my $suggestions_loop= &SearchSuggestion("","","","",'ASKED',"");
 $template->param(suggestions_loop => $suggestions_loop,
 		"op_$op" => 1,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),

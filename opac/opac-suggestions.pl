@@ -47,8 +47,8 @@ if (!$borrowernumber) {
 }
 
 if ($op eq "add_confirm") {
-	&newsuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,'');
-	# empty fields, to avoid filter in "searchsuggestion"
+	&NewSuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,'');
+	# empty fields, to avoid filter in "SearchSuggestion"
 	$title='';
 	$author='';
 	$publishercode='';
@@ -63,12 +63,12 @@ if ($op eq "add_confirm") {
 if ($op eq "delete_confirm") {
 	my @delete_field = $input->param("delete_field");
 	foreach my $delete_field (@delete_field) {
-		&delsuggestion($borrowernumber,$delete_field);
+		&DelSuggestion($borrowernumber,$delete_field);
 	}
 	$op='else';
 }
 
-my $suggestions_loop= &searchsuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
+my $suggestions_loop= &SearchSuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
 $template->param(suggestions_loop => $suggestions_loop,
 				title => $title,
 				author => $author,
