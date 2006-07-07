@@ -9,6 +9,7 @@ use C4::Context;
 use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
+use PDF::Report;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
@@ -156,11 +157,8 @@ prEnd();
 
 #----------------------------------------------------------------------------
 
-use PDF::Table;
-use Acme::Comment;
 
 $file = "$htdocs_path/barcodes/new.pdf";
-use PDF::Report;
 
 my $pdf = new PDF::Report( File => $file );
 
