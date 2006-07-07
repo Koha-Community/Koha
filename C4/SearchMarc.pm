@@ -176,10 +176,6 @@ sub catalogsearch {
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
 	#		where m1.bibid=m2.bibid and
 	#		(m1.subfieldvalue like "Des%" and m2.subfieldvalue like "27%")
-
-	# last minute stripping out of stuff
-	# doesn't work @$value =~ s/\'/ /;
-	# @$value = map { $_ =~ s/\'/ /g } @$value;
 	
 	# "Normal" statements
 	my @normal_tags = ();
@@ -194,16 +190,10 @@ sub catalogsearch {
 	my $any_not = 0;
 	$orderby = "biblio.title" unless $orderby;
 	$desc_or_asc = "ASC" unless $desc_or_asc;
-	#last minute stripping out of ' and ,
-# paul : quoting, it's done a few lines lated.
-# 	foreach $_ (@$value) {
-# 		$_=~ s/\'/ /g;
-# 		$_=~ s/\,/ /g;
-# 	}
 
-# the item.notforloan contains an integer. Every value <>0 means "book unavailable for loan".
-# but each library can have it's own table of meaning for each value. Get them
-# 1st search if there is a list of authorised values connected to items.notforloan
+	# the item.notforloan contains an integer. Every value <>0 means "book unavailable for loan".
+	# but each library can have it's own table of meaning for each value. Get them
+	# 1st search if there is a list of authorised values connected to items.notforloan
 	my $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
 	$sth->execute;
 	my %notforloanstatus;
@@ -215,13 +205,12 @@ sub catalogsearch {
 			$notforloanstatus{$authorised_value} = $lib?$lib:$authorised_value;
 		}
 	}
-	for(my $i = 0 ; $i <= $#{$value} ; $i++)
-	{
+	for(my $i = 0 ; $i <= $#{$value} ; $i++) {
 		# replace * by %
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/|--)/ /g if @$operator[$i] eq "contains";
+		@$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/|--)/ /g if @$operator[$i] eq "contains";
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
@@ -346,10 +335,6 @@ if (C4::Context->preference("sortbynonfiling")) {
 # sort by it ...
 # or maybe you just quer marc_subfield_table in the origiinal query.
 #
-#
-#
-#
-#
         if ($orderby eq "biblio.title") {    #don't sort by title if another orderby is specified
         		my ($tag,$subfieldcode) = MARCfind_marc_from_kohafield($dbh,'biblio.title','');
                 my $tsth = $dbh->prepare("SELECT title, tag_indicator FROM marc_biblio, marc_subfield_table, biblio
@@ -407,11 +392,12 @@ if (C4::Context->preference("sortbynonfiling")) {
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
 	my $sth_itemCN;
-	if (C4::Context->preference('hidelostitem')) {
+	if (C4::Context->preference('hidelostitems')) {
 		$sth_itemCN = $dbh->prepare("
-  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt 
+  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
   FROM items 
-  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL) 
+  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL) AND (notforloan = 0 OR notforloan IS NULL)
+  GROUP BY items.holdingbranch, items.location, items.itemcallnumber
   ORDER BY homebranch");
 	} else {
 		$sth_itemCN = $dbh->prepare("
