@@ -56,7 +56,7 @@ use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::Bull; #uses getsubscriptionsfrombiblionumber
+use C4::Serials; #uses getsubscriptionsfrombiblionumber
 use HTML::Template;
 use C4::Search;
 
@@ -226,7 +226,7 @@ foreach my $subfield_code (keys(%witness)) {
 	push(@header_value_loop, \%header_value);
 }
 
-my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
+my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
