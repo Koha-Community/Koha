@@ -1,8 +1,23 @@
 #!/usr/bin/perl
 
+#----------------------------------------------------------------------
+# this script is really divided into 2 differenvt section,
+
+# the first section creates, and defines the new PDF file the barcodes 
+# using PDF::Reuse::Barcode, then saves the file to disk.
+
+# the second section then opens the pdf file off disk, and places the spline label 
+# text in the left-most column of the page. then save the file again.
+
+# the reason for this goofyness, is that i couldnt find a single perl PDF package that handled both barcodes and decent text placement. 
+
+#use lib '/usr/local/opus-dev/intranet/modules';
+#use C4::Context("/etc/koha-opus-dev.conf");
+
 #use strict;
 use CGI;
 use C4::Auth;
+use C4::Bull;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -10,13 +25,14 @@ use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use PDF::Report;
+#use Acme::Comment;
+#use Data::Dumper;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
 
 my $spine_text = "";
 
-#--------------------------------------------------------
 # get the printing settings
 
 my $dbh    = C4::Context->dbh;
@@ -30,9 +46,9 @@ my $conf_data = $sth->fetchrow_hashref;
 my $barcodetype = $conf_data->{'barcodetype'};
 my $startrow    = $conf_data->{'startrow'};
 
+#warn Dumper $conf_data;
+#warn Dumper $barcodetype;
 $sth->finish;
-
-#------------------
 
 # get the actual items to be printed.
 my @data;
@@ -46,7 +62,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
 
     # lets get some summary info from each item
     my $query1 =
-      " select *from biblio, biblioitems, items where itemnumber = ? and
+      " select * from biblio, biblioitems, items where itemnumber = ? and
                                 items.biblioitemnumber=biblioitems.biblioitemnumber and
                                 biblioitems.biblionumber=biblio.biblionumber";
 
@@ -92,11 +108,16 @@ my $x_pos_circ2 = 369;
 
 my $pageheight = 792;
 
+#warn "STARTROW = $startrow\n";
+
 my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
   ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
 
 my $y_pos_initial = ( ( 792 - 36 ) - 90 );
+
+#warn "Y POS INITAL : $y_pos_initial";
+warn "Y START ROW = $y_pos_initial_startrow";
 
 my $y_pos = $y_pos_initial_startrow;
 
@@ -119,16 +140,25 @@ $str .= "Q\n";                  # save the graphic state
 prAdd($str);
 my $item;
 
+# for loop
+
 my $i2 = 1;
 foreach $item (@resultsloop) {
     if ( $i2 == 1 ) {
-
-        #draw_boxes();
+#        draw_boxes();
     }
+
+    #warn Dumper $item->{'itemtype'};
+    #warn "COUNT = $cnt1";
 
     #building up spine text
     my $line        = 75;
     my $line_spacer = 16;
+
+    $DB::single = 1;
+
+    #warn
+    "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
 
     build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
         $conf_data->{'barcodetype'} );
@@ -145,6 +175,7 @@ foreach $item (@resultsloop) {
     if ( $page_break_count == 8 ) {
         prPage();
 
+        #warn "############# PAGEBREAK ###########";
         $page_break_count = 0;
         $i2               = 0;
         $y_pos            = $y_pos_initial;
@@ -152,13 +183,15 @@ foreach $item (@resultsloop) {
     $page_break_count++;
     $i2++;
 }
+############## end of loop
 
 prEnd();
 
 #----------------------------------------------------------------------------
+# this second section of the script uses a diff perl class than the previous section
+# it opens the 'new.pdf' file that the previous section has just saved
 
-
-$file = "$htdocs_path/barcodes/new.pdf";
+$file = '/usr/local/opus-dev/intranet/htdocs/intranet-tmpl/barcodes/new.pdf';
 
 my $pdf = new PDF::Report( File => $file );
 
@@ -170,80 +203,55 @@ my $pagenumber = 1;
 $pdf->openpage($pagenumber);
 
 ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
+warn "PAGE DIM = $pagewidth, $pageheight";
+warn "Y START ROW = $y_pos_initial_startrow";
 my $y_pos = ( $y_pos_initial_startrow + 90 );
-
-# this left aligns the spine label text, centering would be better, 
-# but word-wrapping breaks with centering on. :(
+warn "Y POS = $y_pos";
 $pdf->setAlign('left');
-
-# this sets the font size for the spine label text.
-# if your text strings are extending past the right label border
-# and arnt getting wrapped properly, reduce the font size some
-# fyi: PDF::Report wont wrap continuious strings with no spaces in them, correctly
-
-$pdf->setSize(9);
-
+$pdf->setSize(11);
 
 my $page_break_count = $startrow;
+warn "INIT PAGEBREAK COUNT = $page_break_count";
+
+warn "#----------------------------------\n";
+warn "INIT VPOS = $vPos, hPos = $hPos";
+
+my $vPosSpacer     = 15;
+my $start_text_pos = 39;    # ( 36 - 5 = 31 ) 5 is an inside border for text.
+my $spine_label_text_with = 67;
 
 foreach $item (@resultsloop) {
 
+    #warn Dumper $item;
+    warn "START Y_POS=$y_pos";
     my $firstrow = 0;
 
-    $pdf->setAddTextPos( 36, ( $y_pos - 15 ) );    # INIT START POS
-    ( $hPos, $vPos )  = $pdf->getAddTextPos();
-    ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+    $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) );    # INIT START POS
+    ( $hPos, $vPos ) = $pdf->getAddTextPos();
 
+    my $hPosEnd = ( $hPos + $spine_label_text_with );           # 72
     if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
-
         ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $pdf->addText( $item->{'dewey'}, 10, 72, 90 );
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $firstrow = 1;
+        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'dewey'} );
+        $vPos = $vPos - $vPosSpacer;
     }
 
     if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
-        if ( $vPos1 == $vPos && $firstrow != 0 ) {
-            $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-        }
-        else {
-            $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-        }
-
-        ( $hPos, $vPos ) = $pdf->getAddTextPos();
-        $pdf->addText( $item->{'isbn'}, 10, 72, 90 );
         ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $firstrow = 1;
+        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'isbn'} );
+        $vPos = $vPos - $vPosSpacer;
     }
 
     if ( $conf_data->{'class'} && $item->{'classification'} ) {
-
-        if ( $vPos1 == $vPos && $firstrow != 0 ) {
-            $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-        }
-        else {
-            $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-        }
-
-        ( $hPos, $vPos ) = $pdf->getAddTextPos();
-        $pdf->addText( $item->{'classification'}, 10, 72, 90 );
         ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $firstrow = 1;
+        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'classification'} );
+        $vPos = $vPos - $vPosSpacer;
     }
 
     if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
-
-        if ( $vPos1 == $vPos && $firstrow != 0 ) {
-            $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-        }
-        else {
-            $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-        }
-
-        ( $hPos, $vPos ) = $pdf->getAddTextPos();
-        $pdf->addText( $item->{'itemtype'}, 10, 72, 90 );
         ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $firstrow = 1;
+        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'itemtype'} );
+        $vPos = $vPos - $vPosSpacer;
     }
 
     #$pdf->drawRect(
@@ -253,10 +261,14 @@ foreach $item (@resultsloop) {
     #);
 
     $y_pos = ( $y_pos - $label_height );
+
+    #warn "END LOOP Y_POS =$y_pos";
+    #    warn "PAGECOUNT END LOOP=$page_break_count";
     if ( $page_break_count == 8 ) {
         $pagenumber++;
         $pdf->openpage($pagenumber);
 
+        #warn "############# PAGEBREAK ###########";
         $page_break_count = 0;
         $i2               = 0;
         $y_pos            = ( $y_pos_initial + 90 );
@@ -264,6 +276,7 @@ foreach $item (@resultsloop) {
 
     $page_break_count++;
     $i2++;
+    warn "#----------------------------------\n";
 
 }
 $DB::single = 1;
@@ -276,6 +289,7 @@ print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
 # draw boxes------------------
 sub draw_boxes {
 
+    #    warn "IN DRAW_BOXES\in";
     my $y_pos_initial = ( ( 792 - 36 ) - 90 );
     my $y_pos         = $y_pos_initial;
     my $i             = 1;
@@ -284,6 +298,7 @@ sub draw_boxes {
 
         &drawbox( $x_pos_spine, $y_pos, ($spine_width), ($label_height) );
 
+   #warn "OLD BOXES  x=$x_pos_spine, y=$y_pos, w=$spine_width, h=$label_height";
         &drawbox( $x_pos_circ1, $y_pos, ($circ_width), ($label_height) );
         &drawbox( $x_pos_circ2, $y_pos, ($circ_width), ($label_height) );
 
@@ -294,26 +309,47 @@ sub draw_boxes {
 
 # draw boxes------------------
 
+#-----------------------------
+
+# this is pretty ugly too.
+
 sub build_circ_barcode {
     my ( $x_pos_circ, $y_pos, $value, $barcodetype ) = @_;
+
+    #warn "value = $value\n";
 
     #$DB::single = 1;
 
     if ( $barcodetype eq 'EAN13' ) {
+
+        #testing EAN13 barcodes hack
+        $value = $value . '000000000';
+        $value =~ s/-//;
+        $value = substr( $value, 0, 12 );
+
+        #warn $value;
         eval {
-  	    PDF::Reuse::Barcode::EAN13(
-                x     => ( $x_pos_circ + 32 ),
-                y     => ( $y_pos + 18 ),
+            PDF::Reuse::Barcode::EAN13(
+                x     => ( $x_pos_circ + 27 ),
+                y     => ( $y_pos + 15 ),
                 value => $value,
 
                 #            prolong => 2.96,
-                xSize   => 1.5,
-                ySize   => 1.2,
+                #            xSize   => 1.5,
+
+                # ySize   => 1.2,
+
+# added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
+# i think its embedding extra fonts in the pdf file.
+#  mode => 'graphic',
             );
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "EAN13BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'Code39' ) {
@@ -322,19 +358,32 @@ sub build_circ_barcode {
             PDF::Reuse::Barcode::Code39(
                 x     => ( $x_pos_circ + 9 ),
                 y     => ( $y_pos + 15 ),
-                value => "*$value*",
-                hide_asterisk => 1,
+                value => $value,
+
                 #           prolong => 2.96,
                 xSize => .85,
+
                 ySize => 1.3,
             );
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "CODE39BARCODE $value FAILED:$@";
         }
+
+        #warn $barcodetype;
+
     }
 
     elsif ( $barcodetype eq 'Matrix2of5' ) {
+        warn "MATRIX ELSE:";
+
+        #testing MATRIX25  barcodes hack
+        #    $value = $value.'000000000';
+        $value =~ s/-//;
+
+        #    $value = substr( $value, 0, 12 );
+        #warn $value;
 
         eval {
             PDF::Reuse::Barcode::Matrix2of5(
@@ -350,11 +399,23 @@ sub build_circ_barcode {
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
 
     elsif ( $barcodetype eq 'EAN8' ) {
 
+        #testing ean8 barcodes hack
+        $value = $value . '000000000';
+        $value =~ s/-//;
+        $value = substr( $value, 0, 8 );
+
+        #warn $value;
+
+        warn "EAN8 ELSEIF";
         eval {
             PDF::Reuse::Barcode::EAN8(
                 x       => ( $x_pos_circ + 42 ),
@@ -369,7 +430,10 @@ sub build_circ_barcode {
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
 
     }
 
@@ -388,7 +452,11 @@ sub build_circ_barcode {
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
     elsif ( $barcodetype eq 'NW7' ) {
         eval {
@@ -405,7 +473,11 @@ sub build_circ_barcode {
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
     elsif ( $barcodetype eq 'ITF' ) {
         eval {
@@ -422,7 +494,11 @@ sub build_circ_barcode {
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
     elsif ( $barcodetype eq 'Industrial2of5' ) {
         eval {
@@ -438,7 +514,11 @@ sub build_circ_barcode {
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
     elsif ( $barcodetype eq 'IATA2of5' ) {
         eval {
@@ -454,7 +534,10 @@ sub build_circ_barcode {
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
 
     }
 
@@ -472,7 +555,11 @@ sub build_circ_barcode {
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
     elsif ( $barcodetype eq 'UPC-A' ) {
 
@@ -489,8 +576,13 @@ sub build_circ_barcode {
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
+            warn "BARCODE FAILED:$@";
         }
+
+        warn $barcodetype;
+
     }
+
 }
 
 #-----------------------------
