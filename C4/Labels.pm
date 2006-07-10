@@ -39,8 +39,8 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-  	&get_label_options, &get_label_items
-  	&build_circ_barcode, &draw_boundaries,
+  	&get_label_options &get_label_items
+  	&build_circ_barcode &draw_boundaries
 	&draw_box
 );
 
