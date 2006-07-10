@@ -3,19 +3,20 @@
 #----------------------------------------------------------------------
 # this script is really divided into 2 differenvt section,
 
-# the first section creates, and defines the new PDF file the barcodes 
+# the first section creates, and defines the new PDF file the barcodes
 # using PDF::Reuse::Barcode, then saves the file to disk.
 
-# the second section then opens the pdf file off disk, and places the spline label 
+# the second section then opens the pdf file off disk, and places the spline label
 # text in the left-most column of the page. then save the file again.
 
-# the reason for this goofyness, is that i couldnt find a single perl PDF package that handled both barcodes and decent text placement. 
+# the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
 
-#use lib '/usr/local/opus-dev/intranet/modules';
-#use C4::Context("/etc/koha-opus-dev.conf");
+use lib '/usr/local/opus-dev/intranet/modules';
+use C4::Context("/etc/koha-opus-dev.conf");
 
 #use strict;
 use CGI;
+use C4::Labels;
 use C4::Auth;
 use C4::Bull;
 use C4::Output;
@@ -25,8 +26,9 @@ use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use PDF::Report;
+
 #use Acme::Comment;
-#use Data::Dumper;
+use Data::Dumper;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
@@ -35,47 +37,13 @@ my $spine_text = "";
 
 # get the printing settings
 
-my $dbh    = C4::Context->dbh;
-my $query2 = " SELECT * FROM labels_conf LIMIT 1 ";
-my $sth    = $dbh->prepare($query2);
-$sth->execute();
+my $conf_data   = get_label_options();
+my @resultsloop = get_label_items();
 
-my $conf_data = $sth->fetchrow_hashref;
-
-# get barcode type from $conf_data
 my $barcodetype = $conf_data->{'barcodetype'};
 my $startrow    = $conf_data->{'startrow'};
 
-#warn Dumper $conf_data;
-#warn Dumper $barcodetype;
-$sth->finish;
-
-# get the actual items to be printed.
-my @data;
-my $query3 = " Select * from labels ";
-my $sth    = $dbh->prepare($query3);
-$sth->execute();
-my @resultsloop;
-my $cnt = $sth->rows;
-my $i1  = 1;
-while ( my $data = $sth->fetchrow_hashref ) {
-
-    # lets get some summary info from each item
-    my $query1 =
-      " select * from biblio, biblioitems, items where itemnumber = ? and
-                                items.biblioitemnumber=biblioitems.biblioitemnumber and
-                                biblioitems.biblionumber=biblio.biblionumber";
-
-    my $sth1 = $dbh->prepare($query1);
-    $sth1->execute( $data->{'itemnumber'} );
-    my $data1 = $sth1->fetchrow_hashref();
-
-    push( @resultsloop, $data1 );
-    $sth1->finish;
-
-    $i1++;
-}
-$sth->finish;
+#warn Dumper @resultsloop;
 
 # dimensions of gaylord paper
 my $lowerLeftX  = 0;
@@ -108,20 +76,19 @@ my $x_pos_circ2 = 369;
 
 my $pageheight = 792;
 
-#warn "STARTROW = $startrow\n";
+warn "STARTROW = $startrow\n";
 
 my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
   ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
 
 my $y_pos_initial = ( ( 792 - 36 ) - 90 );
+my $y_pos         = $y_pos_initial_startrow;
 
-#warn "Y POS INITAL : $y_pos_initial";
+warn "Y POS INITAL : $y_pos_initial";
+warn "Y POS : $y_pos";
 warn "Y START ROW = $y_pos_initial_startrow";
 
-my $y_pos = $y_pos_initial_startrow;
-
-#my $y_pos            = $y_pos_initial;
 my $rowspace         = 36;
 my $page_break_count = $startrow;
 my $codetype         = 'Code39';
@@ -145,7 +112,10 @@ my $item;
 my $i2 = 1;
 foreach $item (@resultsloop) {
     if ( $i2 == 1 ) {
-#        draw_boxes();
+        draw_boundaries(
+            $x_pos_spine, $x_pos_circ1,  $x_pos_circ2, $y_pos,
+            $spine_width, $label_height, $circ_width
+        );
     }
 
     #warn Dumper $item->{'itemtype'};
@@ -157,13 +127,13 @@ foreach $item (@resultsloop) {
 
     $DB::single = 1;
 
-    #warn
-    "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
+    warn
+"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
 
     build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'} );
+        $conf_data->{'barcodetype'}, \$item );
     build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'} );
+        $conf_data->{'barcodetype'}, \$item );
 
 # added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
 # i think its embedding extra fonts in the pdf file.
@@ -206,6 +176,8 @@ $pdf->openpage($pagenumber);
 warn "PAGE DIM = $pagewidth, $pageheight";
 warn "Y START ROW = $y_pos_initial_startrow";
 my $y_pos = ( $y_pos_initial_startrow + 90 );
+
+#my $y_pos = ( $y_pos_initial_startrow  );
 warn "Y POS = $y_pos";
 $pdf->setAlign('left');
 $pdf->setSize(11);
@@ -285,319 +257,4 @@ $pdf->saveAs($file);
 #------------------------------------------------
 
 print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
-
-# draw boxes------------------
-sub draw_boxes {
-
-    #    warn "IN DRAW_BOXES\in";
-    my $y_pos_initial = ( ( 792 - 36 ) - 90 );
-    my $y_pos         = $y_pos_initial;
-    my $i             = 1;
-
-    for ( $i = 1 ; $i <= 8 ; $i++ ) {
-
-        &drawbox( $x_pos_spine, $y_pos, ($spine_width), ($label_height) );
-
-   #warn "OLD BOXES  x=$x_pos_spine, y=$y_pos, w=$spine_width, h=$label_height";
-        &drawbox( $x_pos_circ1, $y_pos, ($circ_width), ($label_height) );
-        &drawbox( $x_pos_circ2, $y_pos, ($circ_width), ($label_height) );
-
-        $y_pos = ( $y_pos - $label_height );
-
-    }
-}
-
-# draw boxes------------------
-
-#-----------------------------
-
-# this is pretty ugly too.
-
-sub build_circ_barcode {
-    my ( $x_pos_circ, $y_pos, $value, $barcodetype ) = @_;
-
-    #warn "value = $value\n";
-
-    #$DB::single = 1;
-
-    if ( $barcodetype eq 'EAN13' ) {
-
-        #testing EAN13 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 12 );
-
-        #warn $value;
-        eval {
-            PDF::Reuse::Barcode::EAN13(
-                x     => ( $x_pos_circ + 27 ),
-                y     => ( $y_pos + 15 ),
-                value => $value,
-
-                #            prolong => 2.96,
-                #            xSize   => 1.5,
-
-                # ySize   => 1.2,
-
-# added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
-# i think its embedding extra fonts in the pdf file.
-#  mode => 'graphic',
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "EAN13BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'Code39' ) {
-
-        eval {
-            PDF::Reuse::Barcode::Code39(
-                x     => ( $x_pos_circ + 9 ),
-                y     => ( $y_pos + 15 ),
-                value => $value,
-
-                #           prolong => 2.96,
-                xSize => .85,
-
-                ySize => 1.3,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "CODE39BARCODE $value FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
-    }
-
-    elsif ( $barcodetype eq 'Matrix2of5' ) {
-        warn "MATRIX ELSE:";
-
-        #testing MATRIX25  barcodes hack
-        #    $value = $value.'000000000';
-        $value =~ s/-//;
-
-        #    $value = substr( $value, 0, 12 );
-        #warn $value;
-
-        eval {
-            PDF::Reuse::Barcode::Matrix2of5(
-                x     => ( $x_pos_circ + 27 ),
-                y     => ( $y_pos + 15 ),
-                value => $value,
-
-                #        prolong => 2.96,
-                #       xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-
-    elsif ( $barcodetype eq 'EAN8' ) {
-
-        #testing ean8 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 8 );
-
-        #warn $value;
-
-        warn "EAN8 ELSEIF";
-        eval {
-            PDF::Reuse::Barcode::EAN8(
-                x       => ( $x_pos_circ + 42 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-
-    elsif ( $barcodetype eq 'UPC-E' ) {
-        eval {
-            PDF::Reuse::Barcode::UPCE(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'NW7' ) {
-        eval {
-            PDF::Reuse::Barcode::NW7(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'ITF' ) {
-        eval {
-            PDF::Reuse::Barcode::ITF(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'Industrial2of5' ) {
-        eval {
-            PDF::Reuse::Barcode::Industrial2of5(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'IATA2of5' ) {
-        eval {
-            PDF::Reuse::Barcode::IATA2of5(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-
-    elsif ( $barcodetype eq 'COOP2of5' ) {
-        eval {
-            PDF::Reuse::Barcode::COOP2of5(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-    elsif ( $barcodetype eq 'UPC-A' ) {
-
-        eval {
-            PDF::Reuse::Barcode::UPCA(
-                x       => ( $x_pos_circ + 27 ),
-                y       => ( $y_pos + 15 ),
-                value   => $value,
-                prolong => 2.96,
-                xSize   => 1.5,
-
-                # ySize   => 1.2,
-            );
-        };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
-        }
-
-        warn $barcodetype;
-
-    }
-
-}
-
-#-----------------------------
-
-sub drawbox {
-    my ( $llx, $lly, $urx, $ury ) = @_;
-
-    my $str = "q\n";    # save the graphic state
-    $str .= "1.0 0.0 0.0  RG\n";           # border color red
-    $str .= "1 1 1  rg\n";                 # fill color blue
-    $str .= "$llx $lly $urx $ury re\n";    # a rectangle
-    $str .= "B\n";                         # fill (and a little more)
-    $str .= "Q\n";                         # save the graphic state
-
-    prAdd($str);
-
-}
 
