@@ -21,7 +21,7 @@ use strict;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT);
-use Data::Dumper;
+#use Data::Dumper;
 use PDF::Reuse;
 
 
@@ -39,9 +39,9 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-  &get_label_options, &get_label_items
-
-  &build_circ_barcode, &draw_boxes &draw_box
+  	&get_label_options, &get_label_items
+  	&build_circ_barcode, &draw_boundaries,
+	&draw_box
 );
 
 =item get_label_options;
@@ -116,7 +116,7 @@ $item is the result of a previous call to get_label_items();
 sub build_circ_barcode {
     my ( $x_pos_circ, $y_pos, $value, $barcodetype, $item ) = @_;
 
-warn Dumper \$item;
+#warn Dumper \$item;
 
     #warn "value = $value\n";
 
@@ -148,10 +148,10 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "EAN13BARCODE FAILED:$@";
+            #warn "EAN13BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'Code39' ) {
@@ -170,7 +170,7 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "CODE39BARCODE $value FAILED:$@";
+            #warn "CODE39BARCODE $value FAILED:$@";
         }
 
         #warn $barcodetype;
@@ -202,7 +202,7 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
         #warn $barcodetype;
@@ -218,7 +218,7 @@ warn Dumper \$item;
 
         #warn $value;
 
-        warn "EAN8 ELSEIF";
+        #warn "EAN8 ELSEIF";
         eval {
             PDF::Reuse::Barcode::EAN8(
                 x       => ( $x_pos_circ + 42 ),
@@ -233,10 +233,10 @@ warn Dumper \$item;
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
 
@@ -255,10 +255,10 @@ warn Dumper \$item;
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'NW7' ) {
@@ -276,10 +276,10 @@ warn Dumper \$item;
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'ITF' ) {
@@ -297,10 +297,10 @@ warn Dumper \$item;
 
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'Industrial2of5' ) {
@@ -317,10 +317,10 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'IATA2of5' ) {
@@ -337,10 +337,10 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
 
@@ -358,10 +358,10 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
     elsif ( $barcodetype eq 'UPC-A' ) {
@@ -379,10 +379,10 @@ warn Dumper \$item;
         };
         if ($@) {
             $item->{'barcodeerror'} = 1;
-            warn "BARCODE FAILED:$@";
+            #warn "BARCODE FAILED:$@";
         }
 
-        warn $barcodetype;
+        #warn $barcodetype;
 
     }
 
