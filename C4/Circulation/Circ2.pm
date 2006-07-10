@@ -35,9 +35,9 @@ use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts;
-#use Date::Manip;
+use Date::Manip;
 use C4::Biblio;
-use C4::Calendar::Calendar;
+#use C4::Calendar::Calendar;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -1039,15 +1039,10 @@ my $error;
 	my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
 my @datearr;
 my $dateduef;
-my $daysMode = C4::Context->preference('useDaysMode');
-	
-		 @datearr = localtime();
-		$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
-		my ($yeardue, $monthdue, $daydue) = split /-/, $dateduef;
-		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
-		$dateduef = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
-	
+my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		my $datedue=time+($loanlength)*86400;
+		my @datearr = localtime($datedue);
+		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 #warn "issue : ".$borrower->{borrowernumber}." / I : ".$iteminformation->{'itemnumber'};
 
 		if ($date) {
@@ -1905,22 +1900,17 @@ my @nowarr = localtime(time);
 	if ($issuedata<=$now){
 		
 	
-		
-		$datedue=$issuedata;
-		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
-		my ($yeardue, $monthdue, $daydue) = split /-/, $datedue;
-		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
-		$datedue = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
-		
+	my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		my $datedue=time+($loanlength)*86400;
+		my @datearr = localtime($datedue);
+		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 		
 	}else{
 		
-		my  @datearr = localtime();
-		$datedue = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
-		my ($yeardue, $monthdue, $daydue) = split /-/, $datedue;
-		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
-		$datedue = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
+		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		my $datedue=time+($loanlength)*86400;
+		my @datearr = localtime($datedue);
+		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 		
 	}
 
