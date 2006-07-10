@@ -2,8 +2,8 @@
 --  KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK 
 --                 POST-INSTALLATION SCRIPT               
 --                                                        
---                  PRETEST VERSION 0.1.0                 
---                       2006-07-06                       
+--                  PRETEST VERSION 0.1.1                 
+--                       2006-07-10                       
 --                                                        
 --  original default requiring greater user customisation 
 --               created by a few Koha Hands              
@@ -56,7 +56,7 @@
 -- needed if applying this script for a database held on a remote       
 -- server.                                                              
 --                                                                      
--- mysqldump --allow-keywords --singletransacton                        
+-- mysqldump --allow-keywords --single-transaction                      
 -- [-h YourMySQLServername] -u YourKohaMySQLUsername -p                 
 -- YourKohaDatabasename > KohaBackup.sql                                
 --                                                                      
@@ -243,7 +243,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('942', 'l', 'Classification subcla
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'o', 'Call number (similar to 852 $k $h $i $m combined)', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '');
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'p', 'Piece designation (barcode) (similar to 852, 876-8 $p)', 'Piece designation (barcode)', 0, 1, 'items.barcode', 10, '', '', '', 0, 0, '', '', '');
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'q', 'Piece physical condition (similar to 562 $a, 852 $q)', 'Piece physical condition', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '');
--- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'r', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', '', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '');
+-- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'r', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', 'Invalid or canceled piece designation (canceled barcode)', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '');
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 's', 'Copyright article-fee code (similar to 018 $a, 852 $s)', 'Copyright article-fee code', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '');
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 't', 'Copy number (similar to 852, 876-8 $t)', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '');
 -- INSERT INTO `marc_subfield_structure` VALUES ('95k', 'u', 'Cost, normal purchase price (similar to 541 $h, 876-8 $c)', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '');
@@ -268,7 +268,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('952', '4', 'Use restrictions (sim
 INSERT INTO `marc_subfield_structure` VALUES ('952', '6', 'Linkage (similar to 852, 876-8 $6)', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('952', '8', 'Sequence number (similar to 852, 876-8 $8)', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('952', '9', 'Cost, normal purchase price (similar to 541 $h, 876-8 $c)', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('952', 'a', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', '', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('952', 'a', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', 'Invalid or canceled piece designation (canceled barcode)', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('952', 'b', 'Location (homebranch) (similar to 852 $a)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('952', 'c', 'Shelving location (similar to 852 $c, 876-8 $l)', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('952', 'd', 'Sublocation or collection (holdingbranch) (similar to 852 $b)', 'Sublocation or collection (holdingbranch)', 0, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '''952b''', '');
