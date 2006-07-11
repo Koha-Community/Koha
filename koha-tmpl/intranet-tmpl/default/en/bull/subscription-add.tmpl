@@ -162,19 +162,21 @@
 				<td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
 			</tr>
 			<tr>
+				<!-- TMPL_IF name="mod" -->
+					<td class="bull">The loop is for instance</td>
+				<!-- TMPL_ELSE -->
+					<td class="bull">Starting period</td>
+				<!-- /TMPL_IF -->
+				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
+				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
+				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+			</tr>
+			<tr>
 				<td class="bull">When more than</td>
 				<td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
 				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
 				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
 			</tr>
-			<!-- TMPL_IF name="mod" -->
-			<tr>
-				<td class="bull">The loop is for instance</td>
-				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
-				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
-				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
-			</tr>
-			<!-- /TMPL_IF -->
 			<tr>
 				<td class="bull">Set back to</td>
 				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>

@@ -6,19 +6,19 @@
 	<!-- TMPL_IF NAME="refresh" -->
 		<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->" />
 	<!-- /TMPL_IF -->
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
 <link rel="shortcut icon" href="/intranet-tmpl/npl/en/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
-	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
+	<!-- TMPL_IF NAME="intranetstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetstylesheet" -->);<!-- TMPL_ELSE -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
 </style>
-<link href="<!-- TMPL_VAR NAME="themelang" -->/includes/colors-bw.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
 <div id="main-compact">
 	<h2>Z3950 Search Results</h2>
-	
+	<!-- TMPL_IF NAME="numberpending" --><h3>Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h3><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="breeding_loop" -->
 		<table>
 			<tr>
@@ -27,10 +27,9 @@
 				<th>ISBN</th>
 				<th>coming from</th>
 				<th>&nbsp;</th>
-				<th>&nbsp;</th>
 			</tr>
 				<!-- TMPL_LOOP NAME="breeding_loop" -->
-					<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+					<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 						<td><!-- TMPL_VAR NAME="title" --></td>
 						<td><!-- TMPL_VAR NAME="author" --></td>
 						<td><!-- TMPL_VAR NAME="isbn" --></td>
@@ -42,7 +41,7 @@
 	<!-- TMPL_ELSE -->
 				<p>Nothing found</p>
 	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="numberpending" --><h1>Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h1><!-- /TMPL_IF -->
+	
 	<script language="javascript" type="text/javascript">
 		function Import(GetThisOne) {
 			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;

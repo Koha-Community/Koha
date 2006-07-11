@@ -118,13 +118,16 @@
 				<td><!-- TMPL_VAR name="every3" --></td>
 			</tr>
 			<tr>
+				<td class="bull">Starting period</td>
+				<td><!-- TMPL_IF name="innerloop1" --><!-- TMPL_VAR name="innerloop1" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF name="innerloop2" --><!-- TMPL_VAR name="innerloop2" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF name="innerloop3" --><!-- TMPL_VAR name="innerloop3" --><!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
 				<td class="bull">When more than</td>
-				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
-					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
-				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
-					<i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
-				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
-					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --></td>
 			</tr>
 			<tr>
 				<td class="bull">Set back to</td>

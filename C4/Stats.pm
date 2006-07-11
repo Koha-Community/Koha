@@ -91,7 +91,7 @@ sub TotalPaid {
 	my ($time,$time2)=@_;
 	$time2=$time unless $time2;
 	my $dbh = C4::Context->dbh;
-	my $query="Select * from accountlines,borrowers where (accounttype = 'Pay' or accounttype ='W')
+	my $query="Select * from accountlines,borrowers where (accounttype = 'Pay' or accounttype ='W' or accounttype='C')
 					and accountlines.borrowernumber = borrowers.borrowernumber";
 	my @bind = ();
 	if ($time eq 'today'){
@@ -109,14 +109,12 @@ sub TotalPaid {
 	#    $query.=" and datetime > '$time'";
 	#  }
 	$query.=" order by timestamp";
-	#  print $query;
+	  warn $query;
 	my $sth=$dbh->prepare($query);
 	$sth->execute(@bind);
 	my @results;
-	my $i=0;
 	while (my $data=$sth->fetchrow_hashref){
-		$results[$i]=$data;
-		$i++;
+		push @results,$data;
 	}
 	$sth->finish;
 	#  print $query;
