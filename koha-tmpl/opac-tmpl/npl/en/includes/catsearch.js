@@ -1,12 +1,12 @@
 function hideSearchsTypes() {
-	  document.getElementById('cql').style.display = 'none';
+	  document.getElementById('simple').style.display = 'none';
             document.getElementById('advanced').style.display = 'none';
             document.getElementById('power').style.display = 'none';
             document.getElementById('proximity').style.display = 'none';
 		}
 
 		function resetButtonsColors() {
-			document.getElementById('cql_formButton').className = 'off';
+			document.getElementById('simple_formButton').className = 'off';
 			document.getElementById('advanced_formButton').className = 'off';
 			document.getElementById('power_formButton').className = 'off';
 			document.getElementById('proximity_formButton').className = 'off';

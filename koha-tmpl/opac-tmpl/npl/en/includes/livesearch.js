@@ -118,11 +118,11 @@ function liveSearchDoSearch() {
 	if (typeof liveSearchParams == "undefined") {
 		liveSearchParams = "";
 	}
-	if (liveSearchLast != document.forms.searchform.cql_query.value) {
+	if (liveSearchLast != document.forms.searchform.ccl_query.value) {
 	if (liveSearchReq && liveSearchReq.readyState < 4) {
 		liveSearchReq.abort();
 	}
-	if ( document.forms.searchform.cql_query.value == "") {
+	if ( document.forms.searchform.ccl_query.value == "") {
 		liveSearchHide();
 		return false;
 	}
@@ -132,8 +132,8 @@ function liveSearchDoSearch() {
 		liveSearchReq = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	liveSearchReq.onreadystatechange= liveSearchProcessReqChange;
-	liveSearchReq.open("GET", liveSearchRoot + "/cgi-bin/koha/livesearch.pl?cql_query=" + document.forms.searchform.cql_query.value + liveSearchParams);
-	liveSearchLast = document.forms.searchform.cql_query.value;
+	liveSearchReq.open("GET", liveSearchRoot + "/cgi-bin/koha/livesearch.pl?ccl_query=" + document.forms.searchform.ccl_query.value + liveSearchParams);
+	liveSearchLast = document.forms.searchform.ccl_query.value;
 	liveSearchReq.send(null);
 	}
 }

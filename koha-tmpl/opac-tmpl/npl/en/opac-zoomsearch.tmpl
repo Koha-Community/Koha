@@ -11,14 +11,14 @@
 <div id="main">
 <ul class="link-tabs">
 
-<li id="cql_formButton"<!-- TMPL_IF name="cql_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=cql" onclick="changeSearch('cql'); return false;">Simple Search</a>  </li>
+<li id="simple_formButton"<!-- TMPL_IF name="simple_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=simple" onclick="changeSearch('simple'); return false;">Simple Search</a>  </li>
 <li id="advanced_formButton"<!-- TMPL_IF name="advanced_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=advanced" onclick="changeSearch('advanced'); return false;">Advanced Search</a>  </li>
-<li id="power_formButton"<!-- TMPL_IF name="power_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=power" onclick="changeSearch('power'); return false;">Power Search</a>  </li>
-<li id="proximity_formButton"<!-- TMPL_IF name="proximity_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=proximity" onclick="changeSearch('proximity'); return false;">Proximity Search</a>  </li>
+<li id="power_formButton"<!-- TMPL_IF name="power_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=power" onclick="changeSearch('power'); return false;">Power</a>  </li>
+<li id="proximity_formButton"<!-- TMPL_IF name="proximity_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-zoomsearch.pl?query_form=proximity" onclick="changeSearch('proximity'); return false;">Proximity</a>  </li>
 </ul>
-<!-- SIMPLE (cql) SEARCH -->
+<!-- SIMPLE SEARCH -->
 
-<div class="content-block"  id="cql" <!-- TMPL_IF name="cql_search" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
+<div class="content-block"  id="simple" <!-- TMPL_IF name="simple_search" --> style="display:block;"<!-- TMPL_ELSE -->style="display:none"<!-- /TMPL_IF -->>
 
 <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" -->
 <!-- TMPL_ELSE --><div id="sidebar">
@@ -40,14 +40,19 @@
 
 <p style="text-align:center;"><input type="submit" value="Catalog Search" class="submit" /></p>
 </form> -->
-
-<!-- LIVESEARCh -->
+<form name="searchform" method="get" action="/cgi-bin/koha/opac-zoomsearch.pl" id="simple_search_form">
+<input type="hidden" name="query_form" value="ccl" />
+<input type="hidden" name="op" value="get_results" />
+<input name="ccl_query" type="text" autocomplete="off" id="ccl_search" size="55" /><a href="#" class="help" onclick="window.open('http://indexdata.dk/yaz/doc/tools.tkl#id2548157','CCL Query Syntax','width=600,top=50,left=50,resizable,scrollbars,height=650'); return false;">[ ? ]</a>
+<p style="text-align:center;"><input type="submit" value="Catalog Search" class="submit" /></p></form>
+<!--
+<!-- LIVESEARCH -->
 <form style="margin:0px;" name="searchform" method="get" action="/cgi-bin/koha/opac-zoomsearch.pl" id="searchform">
-<input type="hidden" name="query_form" value="cql" />
+<input type="hidden" name="query_form" value="ccl" />
 <input type="hidden" name="op" value="get_results" />
 
 <div>
-<input name="cql_query" type="text" autocomplete="off" id="keyword" size="15" onkeypress="liveSearchStart()" />
+<input name="ccl_query" type="text" autocomplete="off" id="keyword" size="15" onkeypress="liveSearchStart()" /><a href="#" class="help" onclick="window.open('http://indexdata.dk/yaz/doc/tools.tkl#id2548157','CCL Query Syntax','width=600,top=50,left=50,resizable,scrollbars,height=650'); return false;">[ ? ]</a>
 	<div id="LSResult" style="display: none;">
 	<ul id="LSShadow">
 		<li> </li>
@@ -58,7 +63,7 @@
 </form>
 
 <!-- /LIVESEARCH -->
-	
+-->	
 	<p>Find the latest additions: <br /><a href="/cgi-bin/koha/opac-zoomsearch.pl" onclick="showForm(); return false;">Search by Format and Date</a></p>
 <script>	
 	function showForm() {
@@ -89,11 +94,12 @@
         </select>
 <br/>
 <input type="hidden" name="op3" value="@and" />
-    <input type="hidden" name="search_point3" value="@attr 1=8803 @attr 2=4 @attr 4=109" />
+    <input type="hidden" name="search_point3" value="@attr 1=8802 @attr 2=4 @attr 4=109" />
     <label for="power_year">Limit by Copyright Date</label>
     <input name="query3" type="text"/>
 
 <input type="submit" value="Search" class="submit" />
+
 </form>
 </div>
 
@@ -101,6 +107,7 @@
 	<p><em class="new">New!</em> You can now <strong>renew items online</strong>!  <a href="http://www.athenscounty.lib.oh.us/online-renewals.html">Find out more</a> or <a href="/cgi-bin/koha/opac-user.pl">log in to your account</a> to try it now.</p>
 	
 </form>
+<br/><br/><br/>
 
 <!--
 <h2>PQF Search</h2>
@@ -111,7 +118,6 @@
         <input type="submit" value="Search" class="submit" />
 </form>
 -->
-
 </div>
 
 <!-- ADVANCED SEARCH  -->
@@ -134,7 +140,7 @@
 		<option value="@attr 1=5">Series</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=8001">Acquisition Date</option>
-		<option value="@attr 1=894k">Call Number</option>
+		<option value="@attr 1=9">Call Number</option>
 	</select>
 	<input type="text" name="query1" />
         <tr><td colspan="2"><select name="search_point2" id="search_point2">
@@ -146,7 +152,7 @@
 		<option value="@attr 1=5">Series</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=8001">Acquisition Date</option>
-		<option value="@attr 1=8006">Call Number</option>
+		<option value="@attr 1=9">Call Number</option>
         </select>
         <input type="text" name="query2" />
 	<input type="hidden" name="op2" value="@and" /> </td></tr>
@@ -160,7 +166,7 @@
 		<option value="@attr 1=5">Series</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=8001">Acquisition Date</option>
-		<option value="@attr 1=8006">Call Number</option>
+		<option value="@attr 1=9">Call Number</option>
         </select>
         <input type="text" name="query3" />
         <input type="hidden" name="op3" value="@and" /></td></tr>
@@ -175,7 +181,7 @@
 		<option value="@attr 1=5">Series</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=8001">Acquisition Date</option>
-		<option value="@attr 1=8006">Call Number</option>
+		<option value="@attr 1=9">Call Number</option>
         </select>
         <input type="text" name="query4" />
         <input type="hidden" name="op4" value="@and" /></td></tr>
@@ -190,14 +196,10 @@
 		<option value="@attr 1=5">Series</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=8001">Acquisition Date</option>
-		<option value="@attr 1=8006">Call Number</option>
+		<option value="@attr 1=9">Call Number</option>
         </select>
         <input type="text" name="query5" />
         <input type="hidden" name="op5" value="@and" />
-</td></tr>
-<tr><td>
-	Turn on Smart Search<input type="checkbox" name="scan" value="1" />
-
 </td></tr>
 </table>
 
@@ -250,15 +252,13 @@
 	<label for="query10">Format: </label></td><td>
 	<select name="query10" id="query10">
 		<option value="">Any</option>
-		<optgroup label="Video and DVD">
-			<option value="@and @attr 1=8701 @attr 1=8702 ">All Videos and DVDs</option>
-			<option value="@and @attr 1=8701 @attr 1=8702">DVD</option>
-			<option value="@and @attr 1=8701 @attr 1=8702">Video</option>
-		</optgroup>
-		</optgroup>
-		<option value="d">Large Print</option>
-		<option value="f">Braille</option>
-		<option value="">Electronic</option></td></tr>
+        <option value="@and @attr 1=8700 t @attr 1=8701 a">Regular Print</option>
+        <option value="@and @attr 1=8700 t @attr 1=8701 b">Large Print</option>
+        <option value="@and @attr 1=8700 v @attr 1=8701 f">Videocassette (VHS)</option>
+        <option value="@and @attr 1=8700 v @attr 1=8701 d">Videodisk (DVD)</option>
+        <option value="@and @attr 1=8700 s @attr 1=8701 d">CD (Music or Book)</option>
+        <option value="@and @attr 1=8700 c @attr 1=8701 o">CD-ROM (Computer)</option>
+
 </table>
 </div>
 
@@ -266,9 +266,11 @@
 <div class="sidebar-box">
 <h4>Results:</h4>
 <p><label for="advanced_sort_by">Sort by</label></td><td>
-		<select name="sort_by" id="advanced_sort_by">
+		<select name="then_sort_by" id="advanced_sort_by">
 		<option value="">Default</option>
-		<option value="@or @or @attr 7=1 @attr 1=4 0 @attr 7=2 @attr 1=30 1">Title,Date</option>
+		<option value="1=4 <i 1=8802 >i">Title, Date</option>
+		<option value="1=1003 <i 1=8802 >i">Author, Date </option>  
+		                
 		</select></p>
 <p><label for="adv-results_per_page">Results per page</label></td><td>
 		<select name="results_per_page" id="adv-results_per_page">
@@ -301,6 +303,7 @@
 		<option value="@attr 1=1003">Author</option>
 		<option value="@attr 1=21">Subject</option>
 		<option value="@attr 1=5">Series</option>
+		<option value="@attr 1=9">Call Number</option>
 		<option value="@attr 1=1018">Publisher</option>
 		<option value="@attr 1=63">Notes</option>
 		<option value="@attr 1=6">Journal Title</option>
@@ -512,14 +515,14 @@
 
 <tr><td>
 	<input type="hidden" name="op4" value="@and" />
-	<input type="hidden" name="use4" value="@attr 1=8803"/>
+	<input type="hidden" name="use4" value="@attr 1=8802"/>
 	<input type="hidden" name="relation4" value="@attr 2=4"/>
 	<input type="hidden" name="structure4" value="@attr 4=109"/>
 	<label for="power_year">Published between: </label>
 	<input name="query4" id="power_year" type="text"/> <label for="power_year2">and</label> 
 
 	 <input type="hidden" name="op5" value="@and" /> 
-	<input type="hidden" name="use5" value="@attr 1=8803"/>
+	<input type="hidden" name="use5" value="@attr 1=8802"/>
 	<input type="hidden" name="relation5" value="@attr 2=2"/>
 	<input type="hidden" name="structure5" value="@attr 4=109"/>
 	<input name="query5" id="power_year2" /> <span class="ex">(format: yyyy)</span>
@@ -606,6 +609,30 @@
 	<p><input type="submit" value="Search" class="submit" /></p>
 
 </form>
+
+<h1>CQL Search</h1>
+
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+        <input type="hidden" name="query_form" value="cql" />
+        <input type="hidden" name="op" value="get_results" />
+        <p><input size="55" type="text" name="cql_query" />
+        <a href="#" class="help"  onclick="window.open('http://www.loc.gov/standards/sru/cql/#sample','CQL Help','width=350,top=50,left=50,resizable,scrollbars,height=650');  return false;">[ ? ]</a></p>
+
+<p style="text-align:center;"><input type="submit" value="Catalog Search" class="submit" /></p>
+</form>
+
+<h1>PQF/RPN Search</h1>
+
+<form action="/cgi-bin/koha/opac-zoomsearch.pl" method="get">
+        <input type="hidden" name="query_form" value="pqf" />
+        <input type="hidden" name="op" value="get_results" />
+        <p><input size="55" type="text" name="pqf_query" />
+        <a href="#" class="help"  onclick="window.open('http://indexdata.dk/yaz/doc/tools.tkl#PQF','PQF/RPN Help','width=350,top=50,left=50,resizable,scrollbars,height=650');  return false;">[ ? ]</a></p>
+
+<p style="text-align:center;"><input type="submit" value="Catalog Search" class="submit" /></p>
+</form>
+
+
 </div>
 
 <!-- PROXIMITY SEARCH -->

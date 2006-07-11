@@ -1,0 +1,226 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Advanced Search
+<!-- TMPL_INCLUDE NAME="doc-head-close-cat.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+	<h1>Catalogue Search</h1>
+
+<ul class="link-tabs">
+<li id="cql_formButton"<!-- TMPL_IF name="cql_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-catalogue-home.pl?search_type=cql" onclick="changeSearch('cql_form'); return false;">Simple Search</a>	</li>
+
+<li id="keyword_formButton"<!-- TMPL_IF name="keyword_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-catalogue-home.pl?search_type=keyword" onclick="changeSearch('keyword_form'); return false;">Advanced Search</a>	</li>
+
+	<li id="loose_formButton"<!-- TMPL_IF name="loose_search" --> class="on"<!-- TMPL_ELSE --> class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-catalogue-home.pl?search_type=loose" onclick="changeSearch('loose_form'); return false;">Power Search</a> </li>
+	
+	<li id="precise_formButton"<!-- TMPL_IF name="precise_search" -->class="on"<!-- TMPL_ELSE -->class="off"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-catalogue-home.pl?search_type=precise" onclick="changeSearch('precise_form'); return false;">Number Search</a></li>
+</ul>
+
+<!-- SIMPLE SEARCH -->
+
+<div class="content-block" id="cql_form"<!-- TMPL_IF name="cql_search" --> style="display:block;"<!-- TMPL_ELSE --> style="display:none;"<!-- /TMPL_IF -->>
+<form name="cql_form" action="/cgi-bin/koha/opac-catalogue-home.pl" method="post">
+    <input type="hidden" name="op" value="do_search" />
+    <input type="hidden" name="search_type" value="cql" />
+    <input type="hidden" name="startfrom" value="0" />
+	<input type="hidden" name="zoom" value="1" />
+	<input type="hidden" name="number_to_display" value="20" />
+<p><input type="text"  size="60" name="cql" value="<!-- TMPL_VAR name="cql" -->" /></p>
+rpn <input type="checkbox" name="rpn"/>
+<p><input class="submit" type="submit" value="Search" /></p>
+</form>
+</div>
+
+<!-- ADVANCED SEARCH -->
+
+<div class="content-block" id="keyword_form"<!-- TMPL_IF name="keyword_search" --> style="display:block;"<!-- TMPL_ELSE --> style="display:none;"<!-- /TMPL_IF -->>
+<form onsubmit="return checkKeywordSearch()" name="keyword_form"  action="/cgi-bin/koha/opac-catalogue-home.pl" method="post">
+<input type="hidden" name ="op" value="do_search" />
+<input type="hidden" name ="search_type" value="keyword" />
+<input type="hidden" name="zoom" value="1" />
+<table>
+		<tr><td><label for="keyword">Keyword(s):</label></td>
+						<td colspan="3"><input type="text"  size="25" id="keyword"  name="keyword" value="<!-- TMPL_VAR name="keyword" -->" /></td></tr>
+
+<tr><td><label for="branch">Library Branch:</label></td>
+						<td colspan="3">					        <select name="branch" id="branch">
+					        <option value="">Any Branch</option>
+							<!-- TMPL_LOOP name="branches" -->
+				                <option value="<!-- TMPL_VAR name="branchcode" -->"<!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+							<!-- /TMPL_LOOP -->
+							</select></td></tr>
+
+<tr><td><label for="callno">Call Number:</label></td>
+						<td colspan="3">						<input type="text"  size="25" id="callno" name="callno" value="<!-- TMPL_VAR name="callno" -->" ></td></tr>
+
+<!-- TMPL_IF NAME="stacks" --><tr><td><label for="stack">Shelving:</label></td>
+						<td colspan="3">
+					        <select id="stack" name="stack">
+					        <option value="">All</option>
+							<!-- TMPL_LOOP name="stacks" -->
+				                <option value="<!-- TMPL_VAR name="authorised_value" -->" <!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="lib" --></option>
+							<!-- /TMPL_LOOP -->
+							</select></td></tr><!-- /TMPL_IF -->
+							
+<tr><td><label for="class">Format:</label></td>
+						<td colspan="3">				 			<select  name="class" id="class">
+							<option value="">All</option>
+							<!-- TMPL_LOOP name="itemtype" -->
+				                <option value="<!-- TMPL_VAR name="itemtype" -->"><!-- TMPL_VAR name="description" --></option>
+							<!-- /TMPL_LOOP -->
+							</select></td></tr>
+
+<tr><td><label for="date_from">Publication Year from:</label></td>
+						<td colspan="3"> <input type="text"  size="10" id="date_from" name="date_from" value="<!-- TMPL_VAR name="date_from" -->" />
+						   <label for="date_to"> to:</label>
+						    <input type="text"  size="10" id="date_to" name="date_to" value="<!-- TMPL_VAR name="date_to" -->" /></td></tr>
+
+<tr><td><label for="anywords">All words, any order<br> (Allows for misspelling)</label></td>
+						<td><input type="radio" id="anywords" name="ttype" value="normal"<!-- TMPL_IF name="normal" --> checked="checked"<!-- /TMPL_IF --> /></td><td><label for="exact">As a phrase</label></td>
+						<td><input type="radio" id="exact" name="ttype" value="exact"<!-- TMPL_IF name="exact" --> checked="checked"<!-- /TMPL_IF --> /></td></tr>
+
+
+<tr><td><label for="number_to_display">Results per page: </label></td>
+						<td colspan="3"><select name="number_to_display" id="number_to_display">
+				<option value="10">10</option>
+				<option value="20" selected="selected">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select></td></tr>
+</table>
+
+	<p><input class="submit" type="submit" value="Search" /></p>
+	
+</form>
+</div>
+
+<!-- "POWER SEARCH" -->
+<div class="content-block" id="loose_form"<!-- TMPL_IF name="loose_search" --> style="display:block;"<!-- TMPL_ELSE --> style="display:none;"<!-- /TMPL_IF -->>
+<form onsubmit="return checkLooseSearch();" name="loose_form" action="/cgi-bin/koha/opac-catalogue-home.pl" method="post">
+	<input type="hidden" name="zoom" value="1" />
+    <input name="op" value="do_search" type="hidden">
+    <input name="search_type" value="loose" type="hidden">
+    <input name="startfrom" value="0" type="hidden">
+<table>
+<!-- TMPL_LOOP name="search_conditions" -->
+<tr>
+	<td><select type="text" id="field_name<!-- TMPL_VAR name="num" -->" name="field_name<!-- TMPL_VAR name="num" -->">
+					    <option value="all"<!-- TMPL_IF name="all" --> selected="selected"<!-- /TMPL_IF -->>Anywhere</option>
+                        <option value="title"<!-- TMPL_IF name="title" --> selected="selected"<!-- /TMPL_IF -->>Title</option>
+					    <option value="author"<!-- TMPL_IF name="author" --> selected="selected"<!-- /TMPL_IF -->>Author</option>
+                        <option value="subject"<!-- TMPL_IF name="subject" --> selected="selected"<!-- /TMPL_IF -->>Subject</option>
+			<option value="series"<!-- TMPL_IF name="series" --> selected="selected"<!-- /TMPL_IF -->>Series Title</option>
+                        <option value="publisher"<!-- TMPL_IF name="publisher" --> selected="selected"<!-- /TMPL_IF -->>Publisher</option>
+                        <option value="publicationyear"<!-- TMPL_IF name="publicationyear" --> selected="selected"<!-- /TMPL_IF --> >Publication year</option>
+			<option value="callno" <!-- TMPL_IF name="callno" --> selected="selected"<!-- /TMPL_IF -->>Call Number</option>
+					</select> <label for="field_value<!-- TMPL_VAR name="num" -->">for</label> <input name="field_value<!-- TMPL_VAR name="num" -->" id="field_value<!-- TMPL_VAR name="num" -->" type="text" /><a href="#" title="Dictionary Search" onclick="openDictionary(document.loose_form.field_name<!-- TMPL_VAR name="num" -->.value, document.loose_form.field_value<!-- TMPL_VAR name="num" -->.value, 'opener.document.loose_form.field_value<!-- TMPL_VAR name="num" -->')); return false;"><strong>...</strong></a> 
+</td>
+<td>
+<select name="ttype<!-- TMPL_VAR name="num" -->">
+	<option value="exact"<!-- TMPL_IF name="exact" --> selected="selected"<!-- /TMPL_IF -->>exact</option>
+	<option value="normal"<!-- TMPL_IF name="normal" --> selected="selected"<!-- /TMPL_IF -->>fuzzy</option>
+</select>
+
+<select name="atype<!-- TMPL_VAR name="num" -->">
+<option value="start"<!-- TMPL_IF name="start" --> selected="selected"<!-- /TMPL_IF -->>phrase</option>        
+<option value="wonder"<!-- TMPL_IF name="wonder" --> selected="selected"<!-- /TMPL_IF -->>natural</option></select>
+
+</td>
+<td><!-- TMPL_IF name="with_op" -->
+				      <select id="op<!-- TMPL_VAR name="num" -->" name="op<!-- TMPL_VAR name="num" -->">
+				            <option value="and"<!-- TMPL_IF name="and" --> selected="selected"<!-- /TMPL_IF -->>AND
+							</option>
+							<option value="or"<!-- TMPL_IF name="or" --> selected="selected"<!-- /TMPL_IF -->>OR
+							</option>
+							<option value="not"<!-- TMPL_IF name="not" --> selected="selected"<!-- /TMPL_IF -->>NOT
+							</option>
+						</select><!-- TMPL_ELSE -->&nbsp;
+					<!-- /TMPL_IF --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+
+<tr>
+	<td><label for="branch">Library<br> Branch: </label></td><td colspan="2"><select id="branch" name="branch">
+		        <option value="">All</option>
+<!-- TMPL_LOOP name="branches" -->
+<option value="<!-- TMPL_VAR name="branchcode" -->"<!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select></td></tr>
+				
+<!-- TMPL_IF NAME="stacks" --><tr><td><label for="stack">Shelving</label></td>
+			<td><select  name="stack" id="stack">
+			<option value="">All</option>
+							<!-- TMPL_LOOP name="stacks" -->
+				                <option value="<!-- TMPL_VAR name="authorised_value" -->"<!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="lib" --></option>
+							<!-- /TMPL_LOOP -->
+							</select></td></tr><!-- /TMPL_IF -->
+				
+<tr>
+	<td><label for="class">Format: </label></td><td colspan="2"><select name="class" id="class">
+				<option value="">All</option>
+<!-- TMPL_LOOP name="itemtype" -->
+	<option value="<!-- TMPL_VAR name="itemtype" -->"<!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+				<!-- /TMPL_LOOP -->
+				</select></td></tr>
+				
+<tr>
+	<td><label for="date_from">Publication <br />Year From: </label></td><td colspan="2"><input size="10" id="date_from" name="date_from" type="text">
+				<label for="date_to">To:</label>
+				<input size="10" id="date_to" name="date_to" type="text"></td></tr></table>
+<table>
+<tr><td><label for="number_to_display">Results per page:</label> <select name="number_to_display" id="number_to_display">
+				<option value="10">10</option>
+				<option value="20" selected="selected">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select></td><td colspan="2"><label for="order">Ordered by:</label> 
+			<select id="order" name="order">
+			<option value="" selected>Relevance</option>
+			<option value="@attr 7=1 @attr 1=4 0 @attr 7=2 @attr 1=30 1 " >Title Ascending, Date Descending</option>
+			<option value="@attr 7=1 @attr 1=1003 0 @attr 7=2 @attr 1=30 1 ">Author Ascending, Date Descending</option>
+			<option value="@attr 7=2 @attr 1=32 0 @attr 7=2 @attr 1=30 1 ">Date of Acquisition, Relevance</option>
+			<option value="@attr 7=2 @attr 1=30 0 @attr 7=2 @attr 1=4 1 ">Date of Publication, Relevance</option>
+				</select></td></tr>
+</table>
+	<p>
+			<input class="submit" value="Search" type="submit" /></p>
+			
+
+	</form>	
+</div>
+
+<!-- NUMBER SEARCH -->
+<div class="content-block" id="precise_form"<!-- TMPL_IF name="precise_search" --> style="display:block;"<!-- TMPL_ELSE --> style="display:none;"<!-- /TMPL_IF -->>
+<form onsubmit="return checkPreciseSearch();" name="precise_form" action="/cgi-bin/koha/opac-catalogue-home.pl" method="post">
+
+    <input type="hidden" name = "op" value="do_search" />
+    <input type="hidden" name = "search_type" value="precise" />
+	<input type="hidden" name="zoom" value="1" />
+    <table>
+			<tr><td><label for="barcode">Barcode:</label></td>
+			<td><input type="text"  size="15" id="barcode" name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->" onchange="if(this.value != '') {this.form.isbn.value = ''; this.form.biblionumber.value = ''}" /> </td></tr>
+
+		    <tr><td><label for="isbn">ISBN:</label></td>
+			<td><input type="text"  size="15" id="isbn" name="isbn" value="<!-- TMPL_VAR name="isbn" -->" onchange="if(this.value != '') {this.form.itemnumber.value = ''; this.form.biblionumber.value = ''} " /></td></tr>
+		
+		<tr>	 <td><label for="biblionumber">Biblio Number:</label></td>
+			<td><input type="text"  size="15" id="biblionumber" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" onchange="if(this.value != '') {this.form.itemnumber.value = ''; this.form.isbn.value = ''} " /></td></tr>
+		
+		
+		<tr><td>   <label for="branch">Library Branch:</label></td>
+		        <td><select id="branch" name="branch">
+		        <option value="">Any Branch</option>
+				<!-- TMPL_LOOP name="branches" -->
+	                <option value="<!-- TMPL_VAR name="branchcode" -->" <!-- TMPL_IF name="sel" --> selected="selected"<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+
+	</td></tr>
+	</table>
+	
+			<p>	<input class="submit" type="submit" value="Search" /></p>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

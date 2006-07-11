@@ -280,7 +280,7 @@ td:last-child {
 }
 
 .content-block {
-	margin : 15px;
+	margin : 5px;
 	padding : 5px;
 	width : 90%;
 }
@@ -708,11 +708,16 @@ input.edit, a.edit {
 }
 
 #search-sidebar {
-	width : 33%;
+	width : 30%;
 	margin : 10px;
 	padding : 3px;
 	float : right;
 	font-size : 80%;
+}
+
+.search-main {
+	width : 65%;
+	float: left;
 }
 
 .sidebar-box {
@@ -727,8 +732,9 @@ div.sidebar-box+div.sidebar-box {
 	margin-left : 10px;
 }
 
-.sidebar-box label {
+#search-sidebar .sidebar-box label {
 	display : block;
+	text-align : left;
 }
 
 .sidebar-box p {
@@ -838,13 +844,13 @@ div.tab p.MARCtag { /* style for tag definition (700 - Statement of responsabili
 
 ul.link-tabs {
 	list-style-type : none;
-	margin: 10px 10px -2px 0;
+	margin: 9px 0 -2px 5px;
 	padding : 0;
 }
 
 ul.link-tabs li {
 	display: inline;
-	padding: 5px;
+	padding: 0px;
 }
 
 ul.link-tabs li a {
@@ -864,13 +870,13 @@ ul.link-tabs li.off a:hover {
 	padding: 2px 3px 2px 4px;
 }
 
-#loose_form label, #keyword_form label, #precise_form label, #cql_form label {
+#loose_form label, #keyword_form label, #precise_form label, #cql_form label, #advanced label, #cql label, #power label, #proximity label {
 	font-size: 90%;
 	font-weight : bold;
 	text-align: right;
 }
 
-#loose_form, #keyword_form, #precise_form, #cql_form {
+#loose_form, #keyword_form, #precise_form, #cql_form, #advanced, #cql, #power, #proximity {
 	margin: 5px;
 	width : 96%;
 }
@@ -884,4 +890,30 @@ ul.link-tabs li.off a:hover {
 	margin: 3px 5px 3px 5px;
 	text-decoration: none;
 	padding: 2px 5px;
+}
+
+td.search-options select {
+	font-size : 80%;
+}
+
+#sort {
+	margin : .3em;
+}
+
+#sort, #sort select, #sort input {
+	font-size: 80%;
+}
+
+a.help {
+	font-size : 80%;
+	padding : 3px;
+	text-decoration : none;
+}
+
+#power_formButton, #proximity_formButton {
+	font-size : 75%;
+}
+
+ul.link-tabs li#power_formButton a, ul.link-tabs li#proximity_formButton a {
+	padding: 2px 4px 3px 4px;
 }

@@ -5,5 +5,6 @@ window.onload=kohajs;
 // check to see if functions exist before loading them
 function kohajs() {
   if ( typeof window.verify_images == "function" ) verify_images();
+//  if ( typeof window.liveSearchInit == "function" ) liveSearchInit();
+  if ( typeof window.runLSPrep == "function" ) runLSPrep();
 }
-

@@ -1,14 +1,15 @@
 <div id="masthead">
 <h1><!-- TMPL_IF NAME="opacsmallimage" --><img alt="<!-- TMPL_VAR NAME="LibraryName" -->" src="<!-- TMPL_VAR NAME="opacsmallimage" -->" /><!-- /TMPL_IF -->Library Catalog Search</h1>
-<div class="menu"><form action="/cgi-bin/koha/opac-search.pl" method="post">
-<p><a href="/cgi-bin/koha/opac-main.pl">Search Home</a> <!-- TMPL_IF NAME="opacbookbag" -->| <a href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF --></p> <p><label for="value">Search the Catalog</label>
-  <input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="marclist" value="" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="text" size="12" name="value" id="value" />&nbsp;<input type="submit"  class="submit" name="Go" value="Search" /></form></p></div>
+<div class="menu">
+
+<form style="margin:0px;" name="searchform" method="get" action="/cgi-bin/koha/opac-zoomsearch.pl" id="searchform">
+<input type="hidden" name="op" value="get_results" />
+<input name="ccl_query" type="text"/>
+<input type="submit" value="Search" class="submit" />
+</form>
+
+<p><a href="/cgi-bin/koha/opac-zoomsearch.pl">Search Home</a> <!-- TMPL_IF NAME="opacbookbag" -->| <a href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF --></p> <p><label for="value">Search the Catalog</label></p>
+
 
 <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><div id="members">
 	<ul>
