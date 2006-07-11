@@ -8,7 +8,7 @@
 	<div class="tabsubs">
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
-			<a  class="tabsubs" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+			<a  class="tabsubs" href="javascript:showlayer(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	<a class="tabsubs" href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>
@@ -20,6 +20,8 @@
 			<tr>
 				<th>Date
 				</th>
+				<th>Date received
+				</th>
 				<th>Number
 				</th>
 				<th>Status
@@ -27,6 +29,9 @@
 			</tr>
 			<!-- TMPL_LOOP Name="serials" -->
 			<tr>
+				<td>
+					<!-- TMPL_VAR Name="publisheddate" -->
+				</td>
 				<td>
 					<!-- TMPL_VAR Name="planneddate" -->
 				</td>
@@ -46,17 +51,18 @@
 	</div>
 	<!--/TMPL_LOOP -->
 <script language="JavaScript" type="text/javascript">
-active(<!-- TMPL_VAR name="yearmin" -->);
-function active(numlayer)
+showlayer(<!-- TMPL_VAR name="yearmin" -->);
+function showlayer(numlayer)
 {
 	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
-		ong = i;
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
-		} else {
-			document.getElementById(ong).style.visibility="hidden";
-		}
+        var children=document.getElementsByName(i)
+        for(j=0;j<children.length;j++){
+          if ((children[j].style.visibility == "hidden") && (numlayer==i)){
+            children[j].style.visibility="visible";
+          } else {
+            children[j].style.visibility="hidden";
+          }
+        }
 	}
 }
 

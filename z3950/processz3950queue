@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 # $Id$
-
+use MARC::Record;
 use C4::Context;
 use DBI;
 use strict;
 use C4::Biblio;
 use C4::Output;
 use C4::Breeding;
-use Net::Z3950;
+use ZOOM;
 
 =head1 NAME
 
@@ -208,7 +208,7 @@ while (1) {
 							} elsif ($type eq 'keyword') {
 								$attr='1=1016';
 							}
-							my $query="\@attr $attr \"$term\"";
+							my $query = "\@attr $attr \"$term\"";
 							print "$$/$id : Processing $type=$term at $name $server $database $syntax (".($forkcounter+1)." forks)\n";
 # try to connect
 							my $conn;
@@ -216,9 +216,9 @@ while (1) {
 							my $error=0;
 # the z3950 query is builded. Launch it.
 							if ($user) {
-								$conn= new Net::Z3950::Connection($servername, $port, databaseName => $database, user => $user, password => $password) || ($noconnection=1);
+								$conn= new ZOOM::Connection($servername, $port, databaseName => $database, user => $user, password => $password) || ($noconnection=1);
 							} else {
-								$conn= new Net::Z3950::Connection($servername, $port, databaseName => $database) || ($noconnection=1);
+								$conn= new ZOOM::Connection($servername, $port, databaseName => $database) || ($noconnection=1);
 							}
 							if ($noconnection || $error) {
 # if connection impossible, don't go further !
@@ -256,16 +256,17 @@ while (1) {
 								$stj->execute($resultsid);
 #######
 								print "$$/$id : connected to $globalname\n";
+								print "Global Syntax =>".$globalsyntax."<=";
  								eval {$conn->option(elementSetName => 'F')};
-								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "MARC21");
- 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::UNIMARC);} if ($globalsyntax eq "UNIMARC");
+								eval { $conn->option(preferredRecordSyntax => 'USMARC');} if ($globalsyntax eq "USMARC");
+ 								eval { $conn->option(preferredRecordSyntax => 'UNIMARC');} if ($globalsyntax eq "UNIMARC");
  								if ($@) {
  									print "$$/$id : $globalname ERROR: $@ for $resultsid\n";
 	# in case pb during connexion, set result to "empty" to avoid everlasting loops
 									my $stj=$dbi->prepare("update z3950results set numrecords=?,numdownloaded=?,highestseen=0,results='',enddate=? where id=?");
 									$stj->execute(0,0,$now,$resultsid);
  								} else {
-									my $rs=$conn->search($query);
+									my $rs=$conn->search_pqf($query) or warn "Connection Problem:".$conn->errmsg();
  									pe();
 	# we have an answer for a query => get results & store them in marc_breeding table
 									my $numresults=$rs->size();
@@ -279,8 +280,10 @@ while (1) {
 									my $result='';
 									my $scantimerstart=time();
 									for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
-										my $rec=$rs->record($i);
- 										my $marcdata = $rec->rawdata();
+										my $rec=$rs->record($i-1);
+ 										my $marcdata = $rec->raw();
+										#my $marcrecord = MARC::Record->new_from_usmarc($marcdata);
+										#warn $marcrecord->as_formatted(); 
 										$globalencoding = ref($rec);
  										$result.=$marcdata;
 									}

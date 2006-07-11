@@ -166,6 +166,15 @@
 				<!--/TMPL_IF-->
 			</td>
 			<td>
+				<!--TMPL_IF Name="Librarian"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet" class="button">Intranet
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet">Intranet
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
 				<!--TMPL_IF Name="Catalogue"-->
 					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="button">Catalogue
 					</a>

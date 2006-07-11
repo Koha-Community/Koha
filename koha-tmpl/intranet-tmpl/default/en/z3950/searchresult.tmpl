@@ -34,7 +34,7 @@
 				<th class="catalogue">&nbsp;</th>
 			</tr>
 				<!-- TMPL_LOOP NAME="breeding_loop" -->
-					<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+					<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 						<td><!-- TMPL_VAR NAME="title" --></td>
 						<td><!-- TMPL_VAR NAME="author" --></td>
 						<td><!-- TMPL_VAR NAME="isbn" --></td>

@@ -36,21 +36,21 @@
 		<th class="reports">Due Date </th>
 		<th class="reports">Patron </th>
 		<th class="reports">Phone</th>
-		<th class="reports">Title</th>
-		<th class="reports">Author</th>
+		<th class="reports">Title / Author</th>
 	</tr>
 	
 	<!-- TMPL_LOOP NAME="overdueloop" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="duedate" --></td>
 			<!-- TMPL_IF NAME="email" -->
-			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+			<td><a href="members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->"><!-- TMPL_VAR NAME="name" --></a>
+			<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><i>(email)</i></a>
+			</td>
 			<!-- TMPL_ELSE -->
 			<td><!-- TMPL_VAR NAME="name" --></td>
 			<!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="phone" --></td>
-			<td><!-- TMPL_VAR NAME="title" --></td>
-			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><p><b><!-- TMPL_VAR NAME="title" --></b>, <!-- TMPL_VAR NAME="author" --></p></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>

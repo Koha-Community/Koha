@@ -151,6 +151,9 @@
 	<!-- /TMPL_IF -->
 	<script language="JavaScript" type="text/javascript">
 	function SelectEntry(myentry, myindex, wclose){
+		re = /<.*?>/
+		myentry=myentry.replace(/<.*?>/g,"");
+		myentry=myentry.replace(/<\/.*?>/,"");
 		if (opener.document.f.value[myindex].value!=""){ 
 			opener.document.f.value[myindex].value=opener.document.f.value[myindex].value+" "+myentry
 		} else {

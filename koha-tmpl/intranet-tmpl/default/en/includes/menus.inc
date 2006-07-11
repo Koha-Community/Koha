@@ -66,6 +66,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 	<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Branch transfers</a>
 	<hr />
 	<a href="/cgi-bin/koha/circ/reserve.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Reserves pending</a>
+	<a href="/cgi-bin/koha/overdue.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Overdue items</a>
 </div>
 <!-- MEMBERS -->
 <div id="Subm4"> 

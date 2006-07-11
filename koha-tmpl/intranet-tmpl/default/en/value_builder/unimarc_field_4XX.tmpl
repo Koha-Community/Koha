@@ -5,132 +5,86 @@
 		<script language="JavaScript" type="text/javascript">
 		
 			function go() {
-			var index_start = <!-- TMPL_VAR NAME="index" -->;
-			var whichfield = opener.opener.document.f.tag[index_start].value;
-			i=index_start
-			// go forward, until reaching the end of the field.
-			while (i<opener.opener.document.f.field_value.length) {
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_9" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '0') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_0" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'a') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_a" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'c') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_c" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'd') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_d" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'e') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_e" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'h') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_h" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'i') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_i" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'p') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_p" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 't') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_t" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'u') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_u" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'v') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_v" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'x') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_x" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'y') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_y" -->";
-				}
-				if (opener.opener.document.f.tag[i].value != whichfield) {
-					i=opener.opener.document.f.field_value.length;
-				}
-				i++;
-			}
-			// go backward until the beginning of the field
-			i=index_start
-			while (i>=0) {
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '0') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_0">";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_9">";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'a') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_a" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'c') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_c" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'd') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_d" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'e') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_e" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'h') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_h" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'i') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_i" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'p') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_p" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 't') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_t" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'u') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_u" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'v') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_v" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'x') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_x" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'y') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_y" -->";
-				}
-				if (opener.opener.document.f.tag[i].value != whichfield) {
-					i=0;
-				}
-				i--;
-			}
+                var index_start = <!-- TMPL_VAR NAME="index" -->;
+                var whichfield = opener.opener.document.f.tag[index_start].value;
+                var parentField = opener.opener.document.f.tag[index_start].parentNode.parentNode.parentNode;
+//                 alert("PARENT "+parentField);
+                // go forward, until reaching the end of the field.
+                var subfieldcode='';
+                var whichsubfields=parentField.getElementsByTagName("div");
+                for(var i=0; i<whichsubfields.length;i++) {
+                    // get every <input>
+                    change_value=whichsubfields[i].getElementsByTagName("input");
+                    for(j=0;j<change_value.length;j++) {
+//                         change_value=whichsubfields[j].getElementsByTagName("input");
+                        // if this <input> if the subfield code, store if for future use !
+                        if (change_value[j].getAttribute("name") == 'subfield') {
+                            subfieldcode=subfield_value=change_value[j].value;
+            //				alert("subfieldcode ="+subfieldcode);
+                        }
+                        // if this <input> is for field_value => replace it by the correct value
+                        if (change_value[j].getAttribute("name") == 'field_value') {
+/*alert("subfieldcode="+subfieldcode);*/
+                            if (subfieldcode == '9') {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_9" -->";
+                            }
+                            if (subfieldcode == '9') {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_9" -->";
+                            }
+                            if (subfieldcode == '0') {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_0" -->";
+                            }
+                            if (subfieldcode == 'a') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_a" -->";
+                            }
+                            if (subfieldcode == 'c') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_c" -->";
+                            }
+                            if (subfieldcode == 'd') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_d" -->";
+                            }
+                            if (subfieldcode == 'e') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_e" -->";
+                            }
+                            if (subfieldcode == 'h') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_h" -->";
+                            }
+                            if (subfieldcode == 'i') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_i" -->";
+                            }
+                            if (subfieldcode == 'p') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_p" -->";
+                            }
+                            if (subfieldcode == 't') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_t" -->";
+                            }
+                            if (subfieldcode == 'u') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_u" -->";
+                            }
+                            if (subfieldcode == 'v') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_v" -->";
+                            }
+                            if (subfieldcode == 'x') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_x" -->";
+                            }
+                            if (subfieldcode == 'y') 
+                            {
+                                change_value[j].value = "<!-- TMPL_VAR NAME="subfield_value_y" -->";
+                            }
+                        }
+        			}
+                }
 				return false;
 			}
 		</script>
