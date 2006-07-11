@@ -22,14 +22,16 @@ use C4::Context;
 use C4::Interface::CGI::Output;
 use C4::Auth;
 use POSIX qw(ceil floor);
+
 # load other modules
 use HTML::Template;
 use CGI;
 use strict; 
 
 my $query=new CGI;
-my $op = $query->param('op'); #show the search form or execute the search
+my $op = $query->param('op'); # show the search form or execute the search
 my $cql_query = $query->param('cql_query');
+my $ccl_query = $query->param('ccl_query');
 my @newresults;
 my ($template,$borrowernumber,$cookie);
 my @forminputs;		# this is for the links to navigate among the results when they are more than the maximum number of results per page
@@ -52,39 +54,49 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	## OK, We're searching
 	# STEP 1. We're a CGI script,so first thing to do is get the
 	# query into PQF format so we can use the Koha API properly
-	my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query) = cgi2pqf($query);
-	warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
+	my ($error,$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query, $nice_query) = cgi2pqf($query);
+	my $then_sort_by = $query->param('then_sort_by');
+	#warn "AFTER CGI: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
 	# implement a query history
 
 	# lets store the query details in an array for later
 	push @forminputs, { field => "cql_query" , value => $cql_query} ;
+	push @forminputs, { field => "ccl_query" , value => $ccl_query} ;
 	push @forminputs, { field => 'pqf_sort_by', value => $pqf_sort_by} ;
 	push @forminputs, { field => 'pqf_prox_ops', value => $pqf_prox_ops};
 	push @forminputs, { field => 'pqf_bool_ops' , value => $pqf_bool_ops};
 	push @forminputs, { field => 'pqf_query' , value => $pqf_query };
-	$searchdesc=$cql_query.$pqf_prox_ops.$pqf_bool_ops.$pqf_query; # FIXME: this should be a more use-friendly string
+	$searchdesc=$cql_query.$ccl_query.$nice_query; # FIXME: this should be a more use-friendly string
+	my @bold_terms = split (/ /, $searchdesc);
 
 	# STEP 2. OK, now we have PQF, so we can pass off the query to
 	# the API
-	my ($count, @results);
+	my ($count, @results, $facets);
 
-	# CQL queries are handled differently, so alert our API and pass in the variables
-	if ($query->param('cql_query')) {
+	# queries are handled differently, so alert our API and pass in the variables
+	if ($query->param('ccl_query')) { # CCL
+        	if ($query->param('scan')) {
+            		($error,$count,$facets, @results) = searchZOOM('scan','ccl',$ccl_query,$number_of_results,$startfrom,$then_sort_by);
+            		$template->param(scan => 1);
+        	} else {
+            		($error,$count,$facets,@results) = searchZOOM('search','ccl',$ccl_query,$number_of_results,$startfrom,$then_sort_by);
+        	}
+	} elsif ($query->param('cql_query')) { # CQL
 		if ($query->param('scan')) {
-			($count,@results) = searchZOOM('scan','cql',$cql_query,$number_of_results,$startfrom);
+			($error,$count,$facets, @results) = searchZOOM('scan','cql',$cql_query,$number_of_results,$startfrom,$then_sort_by);
 			$template->param(scan => 1);
 		} else {
-			($count,@results) = searchZOOM('search','cql',$cql_query,$number_of_results,$startfrom);
+			($error,$count,$facets, @results) = searchZOOM('search','cql',$cql_query,$number_of_results,$startfrom,$then_sort_by);
 		}
-	} else {
+	} else { # we're in PQF territory now
 		if ($query->param('scan')) {
 			$template->param(scan => 1);
-			($count,@results) = searchZOOM('scan','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
+			($error,$count,$facets, @results) = searchZOOM('scan','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom,$then_sort_by);
 		} else {
-			($count,@results) = searchZOOM('search','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom);
+			($error,$count,$facets, @results) = searchZOOM('search','pqf',"$pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query",$number_of_results,$startfrom,$then_sort_by);
 		}
 	}
-
+	$template->param(FACETS => $facets) if $facets;
 	@newresults=searchResults( $number_of_results,$count,@results) ;
 	my $num = scalar(@newresults);
 	# sorting out which results to display.
@@ -96,8 +108,8 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 	# the total results searched
 	$template->param(total => $count);
 	$template->param(FORMINPUTS => \@forminputs);
-	$template->param(pqf_query => $pqf_query);
-	warn "PQF QUERIE".$pqf_query;
+	#$template->param(pqf_query => $pqf_query);
+	$template->param(ccl_query => $ccl_query);
 	$template->param(searchdesc => $searchdesc );
 	$template->param(results_per_page =>  $number_of_results );
 	$template->param(SEARCH_RESULTS => \@newresults);
@@ -178,16 +190,17 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
     my $scan_use = $query->param('use1');
     $template->param(
 					#classlist => $classlist,
-		    	suggestion => C4::Context->preference("suggestion"),
-		    	virtualshelves => C4::Context->preference("virtualshelves"),
-		    	LibraryName => C4::Context->preference("LibraryName"),
-		    	OpacNav => C4::Context->preference("OpacNav"),
-		    	opaccredits => C4::Context->preference("opaccredits"),
-		    	AmazonContent => C4::Context->preference("AmazonContent"),
+			suggestion => C4::Context->preference("suggestion"),
+			virtualshelves => C4::Context->preference("virtualshelves"),
+			LibraryName => C4::Context->preference("LibraryName"),
+			OpacNav => C4::Context->preference("OpacNav"),
+			opaccredits => C4::Context->preference("opaccredits"),
+			AmazonContent => C4::Context->preference("AmazonContent"),
 			opacsmallimage => C4::Context->preference("opacsmallimage"),
 			opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
 			opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
 			scan_use => $scan_use,
+			search_error => $error,
     );
 ## OK, we're not searching, load the search template
 } else {
@@ -237,11 +250,15 @@ if ($op eq 'get_results') { # Yea, we're searching, load the results template
 
 	# set the default tab, etc.
 	my $search_type = $query->param('query_form');
-	if ((!$search_type) || ($search_type eq 'cql'))  {
-		$template->param(cql_search => 1);
+	if ((!$search_type) || ($search_type eq 'ccl'))  {
+		$template->param(simple_search => 1);
 	} elsif ($search_type eq 'advanced') {
 		$template->param(advanced_search => 1);
 	} elsif ($search_type eq 'power') {
+		$template->param(power_search => 1);
+	} elsif ($search_type eq 'cql') {
+		$template->param(power_search => 1);
+	} elsif ($search_type eq 'pqf') {
 		$template->param(power_search => 1);
 	} elsif ($search_type eq 'proximity') {
 		$template->param(proximity_search => 1);
@@ -260,7 +277,7 @@ output_html_with_http_headers $query, $cookie, $template->output;
 ###Move these subs to a proper Search.pm
 sub searchZOOM {
 	use C4::Biblio;
-	my ($search_or_scan,$type,$query,$num,$startfrom) = @_;
+	my ($search_or_scan,$type,$query,$num,$startfrom,$then_sort_by) = @_;
 	my $dbh = C4::Context->dbh;
 	my $zconn=C4::Context->Zconn("biblioserver");
 
@@ -270,13 +287,15 @@ sub searchZOOM {
 	}
 	
 	my $zoom_query_obj;
-	if ($type eq 'cql') {
+
+	if ($type eq 'ccl') {
+		$zoom_query_obj = new ZOOM::Query::CCL2RPN($query,$zconn);
+	} elsif ($type eq 'cql') {
 		eval {
 			$zoom_query_obj = new ZOOM::Query::CQL2RPN($query,$zconn);
 		};
 		if ($@) {
-			$query = "\"".$query."\"";
-			$zoom_query_obj = new ZOOM::Query::PQF($query);
+			return ("error: Sorry, there was a problem with your query: $@",undef); #FIXME: better error handling
 		}
 	} else {
 		eval {
@@ -285,7 +304,7 @@ sub searchZOOM {
 		if ($@) {
 			return("error with search: $@",undef); #FIXME: better error handling
 		}
-    	}	
+	}	
 
 	# PERFORM THE SEARCH
 	my $result;
@@ -307,7 +326,12 @@ sub searchZOOM {
 		}
 	}
 
-	# build our results
+	# RESORT RESULT SET
+	if ($then_sort_by) {
+		$result->sort("yaz", "$then_sort_by")
+	}
+	# build our results and faceted searching
+	my @facets; my %facets_counter; my %facets_counter_subs; my @facets_counter_subs_array;
 	$numresults = 0 | $result->size() if  ($result);
 	for ( my $i=$startfrom; $i<(($startfrom+$num<=$numresults) ? ($startfrom+$num):$numresults) ; $i++){
 		if  ($search_or_scan =~ /scan/) { # this is an index scan
@@ -326,9 +350,60 @@ sub searchZOOM {
 		} else { # this is a real search
 			my $rec = $result->record($i);
 			push(@results,$rec->raw()) if $rec; #FIXME: sometimes this fails
+
+			##### build facets ####
+			my $tmprecord = MARC::Record->new_from_usmarc($rec->raw());
+			my @subfields = $tmprecord->field('650');	#subject facets
+			my @authfields = $tmprecord->field('100');	#author facets
+			my @serfields = $tmprecord->field('440');	#series facets
+			my $subject_added_entry;
+			foreach my $subjectfield (@subfields) {
+				my @fields = $subjectfield->subfields();
+				foreach my $subfield (@fields) {				
+					my ($code,$data) = @$subfield;
+					if ($code eq 'a') {
+						$facets_counter{$data}++;
+						$subject_added_entry = $data;
+					}
+				}
+				my $fieldstring = $subjectfield->as_string();
+				$facets_counter_subs{$subject_added_entry} = $fieldstring;
+			}
+
 		}
 	}
-	return($numresults,@results);
+	#foreach my $value (keys %facets_counter_subs) {
+	#	my %facets_row = (
+	#		'facetsubjectsub' => $value,
+	#	);	
+	#	push @facets_counter_subs_array, \%facets_row; #facets_counter_subs{$subject_added_entry};
+	#}#
+	foreach my $value (sort { $facets_counter{$b} <=> $facets_counter{$a} } keys %facets_counter) {
+
+		#foreach my $subvalue (keys %facets_counter_subs) {
+		#	my %facets_row = (
+		#		'facetsubjectsub' => $facets_counter_subs{$subvalue}, #$subvalue{$value},
+		#	);
+		#	push @facets_counter_subs_array, \%facets_row;
+		#}#
+		
+
+		my %facets_row = (
+                'facetsubject' => $value,
+                'facetcount' => $facets_counter{$value},
+				'facetcountersubs' => \@facets_counter_subs_array, #%facets_counter_subs->{$value},
+                );      
+		push @facets,\%facets_row;
+
+	}
+	#while( my ($k, $v) = each %$facets_counter ) {
+	 #       my %facets_row = (
+	#	'facetsubject' => $k,
+	#	'facetcount' => $v,
+	#	);
+	#	push @facets,\%facets_row;
+	#}#
+	return(undef,$numresults,\@facets,@results);
 }
 
 =head2 cgi2pdf
@@ -336,6 +411,7 @@ sub searchZOOM {
 # build a valid PQF query from the CGI form
 sub cgi2pqf {
 	my ($query) = @_;
+	my $nice_query; # just a string storing a nicely formatted query
 	my @default_attributes = ('sort_by');
 	# attributes specific to the advanced search - a search_point is actually a combination of
 	#  several bib1 attributes
@@ -391,9 +467,12 @@ sub cgi2pqf {
 			if ($query->param("query$i")) { # make sure this set should be used
 				if ($spec_attr =~ /^op/) { # process the operators separately
 					push @pqf_bool_ops_array, $query->param("$spec_attr$i");
+					$nice_query .=" ".$query->param("$spec_attr$i")." ".$query->param("query$i");
+					$nice_query =~ s/\@and/AND/g;
+					$nice_query =~ s/\@or/OR/g;
 				} elsif ($spec_attr =~ /^prox/) { # process the proximity operators separately
 					if ($query->param("$spec_attr$i")) {
-						warn "PQF:".$query->param("$spec_attr$i");
+						#warn "PQF:".$query->param("$spec_attr$i");
 						push @pqf_prox_ops_array,$query->param("$spec_attr$i");
 					} else {
 						if (($spec_attr =~ /^prox_exclusion/) || ($spec_attr =~ /^prox_ordered/)) { # this is an exception, sloppy way to handle it
@@ -457,7 +536,8 @@ sub cgi2pqf {
 	warn "Sort by: ".$pqf_sort_by;
 	warn "PQF:".$pqf_query;	
 	warn "Full PQF: $pqf_sort_by $pqf_prox_ops $pqf_bool_ops $pqf_query";
-	return ('',$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query);
+	warn "NICE: $nice_query";
+	return ('',$pqf_sort_by, $pqf_prox_ops, $pqf_bool_ops, $pqf_query, $nice_query);
 }
 
 
@@ -524,11 +604,12 @@ sub searchResults {
 		}
 
 		my $status;
-		$item->{'branchname'}=$branches{$item->{'holdingbranch'}};
+		$item->{'branchname'}=$branches{$item->{'homebranch'}};
 		$item->{'date_due'}=$item->{onloan};
 		$status="Lost" if ($item->{itemlost});
 		$status="Withdrawn" if ($item->{wthdrawn});
-		$status="Due:".format_date($item->{onloan}) if ($item->{onloan}>0 );
+		$status =" On loan" if ($item->{onloan});
+		#$status="Due:".format_date($item->{onloan}) if ($item->{onloan}>0 );
 		# $status="On Loan" if ($item->{onloan} );
 		if ($item->{'location'}){
 			$status = $item->{'branchname'}."[".$item->{'location'}."]" unless defined $status;
@@ -575,10 +656,10 @@ sub searchResults {
 				$oldbiblio->{'on-loan-p'} = $c;
 			} else {
 				$locationtextonly.= $_;
-				$locationtextonly.= " ($c)<br> " if $totalitemcounts > 1;
+				$locationtextonly.= " ($c)<br/> " if $totalitemcounts > 1;
 			}
 			if ($totalitemcounts>1) {
-				$locationtext.=" ($c)<br> ";
+				$locationtext.=" ($c)<br/> ";
 			}
 		}
 	}
