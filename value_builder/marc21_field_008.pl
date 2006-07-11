@@ -38,14 +38,14 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 $year +=1900; $mon +=1;
 my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+	return "";
 }
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "100".(int(rand(100000))+1);
-my $res="
+	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+	my $function_name= "100".(int(rand(100000))+1);
+	my $res="
 <script>
 function Focus$function_name(subfield_managed) {
     for (i=0 ; i<document.f.field_value.length ; i++) {
@@ -70,10 +70,10 @@ function Clic$function_name(i) {
 </script>
 ";
 
-return ($function_name,$res);
+	return ($function_name,$res);
 }
 sub plugin {
-my ($input) = @_;
+	my ($input) = @_;
 	my %env;
 
 #	my $input = new CGI;
@@ -83,7 +83,7 @@ my ($input) = @_;
 
 	my $dbh = C4::Context->dbh;
 
-my ($template, $loggedinuser, $cookie)
+	my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "value_builder/marc21_field_008.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -112,8 +112,8 @@ my ($template, $loggedinuser, $cookie)
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
 
-if (!$f1){
-	$f1=$dateentered
+if ((!$f1) ||($f1 =~ m/ /)){
+	$f1=$dateentered;
 }
 
 	$template->param(				index => $index,
