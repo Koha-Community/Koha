@@ -2,7 +2,7 @@
 --  KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK 
 --                 POST-INSTALLATION SCRIPT               
 --                                                        
---                  PRETEST VERSION 0.1.1                 
+--                  PRETEST VERSION 0.1.2                 
 --                       2006-07-10                       
 --                                                        
 --  original default requiring greater user customisation 
@@ -686,7 +686,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('000', '@', 'fixed length control 
 INSERT INTO `marc_subfield_structure` VALUES ('001', '@', 'control field', 'control field', 0, 1, '', 0, '', '', '', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('003', '@', 'control field', 'control field', 0, 1, '', 0, '', '', 'marc21_field_003.pl', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('005', '@', 'control field', 'control field', 0, 1, '', 0, '', '', 'marc21_field_005.pl', 0, 0, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, 9, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('008', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_field_008.pl', 0, 0, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('009', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
