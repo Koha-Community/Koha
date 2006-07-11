@@ -37,7 +37,6 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 
 $year +=1900; $mon +=1;
 my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
-
 sub plugin_parameters {
 	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 	return "";
@@ -73,7 +72,6 @@ function Clic$function_name(i) {
 
 	return ($function_name,$res);
 }
-
 sub plugin {
 	my ($input) = @_;
 	my %env;
@@ -114,13 +112,11 @@ sub plugin {
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
 
-	if (!$f1){
-		$f1=$dateentered
-	}
+if ((!$f1) ||($f1 =~ m/ /)){
+	$f1=$dateentered;
+}
 
-	$template->param(				
-							
-							index => $index,
+	$template->param(				index => $index,
 							f1 => $f1,
 							f6 => $f6,
 							"f6$f6" => $f6,
@@ -131,21 +127,21 @@ sub plugin {
 							f22 => $f22,
 							"f22$f22" => $f22,
 							f23 => $f23,
-							"f23$f23" => $f23,
+                                                        "f23$f23" => $f23,
 							f2427 => $f2427,
 							"f24$f2427" => $f2427,
 							f28 => $f28,
-							"f28$f28" => $f28,
+                                                        "f28$f28" => $f28,
 							f29 => $f29,
-							"f29$f29" => $f29,
+                                                        "f29$f29" => $f29,
 							f30 => $f30,
-							"f230$f30" => $f30,
+                                                        "f230$f30" => $f30,
 							f31 => $f31,
-							"f31$f31" => $f31,
+                                                        "f31$f31" => $f31,
 							f33 => $f33,
-							"f33$f33" => $f33,
+                                                        "f33$f33" => $f33,
 							f34 => $f34,
-							"f34$f34" => $f34,
+                                                        "f34$f34" => $f34,
 							f3537 => $f3537,
 							f38 => $f38,
 							"f38$f38" => $f38,
