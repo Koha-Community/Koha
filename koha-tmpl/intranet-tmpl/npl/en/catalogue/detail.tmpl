@@ -62,6 +62,7 @@
 		<th>Item Type</th>
 		<th>Call Number</th>
 		<th>Location</th>
+		<th>Status</th>
 		<th>Date Due</th>
 		<th>Last Seen</th>
 		<th>Barcode</th>
@@ -72,6 +73,19 @@
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td><!-- TMPL_IF NAME="classification" --><!-- <a href="/cgi-bin/koha/search.pl?class=<!-- TMPL_VAR NAME="class" ESCAPE=URL -->"> --><!-- TMPL_VAR NAME="classification" --><!-- </a> --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="branchname" --></td>
+			<td>					<!-- TMPL_IF name="datedue" -->
+						On issue to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+						    <!-- TMPL_IF name="itemlost"-->
+						        Item Lost
+						    <!-- TMPL_ELSE -->
+							<!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+						    <!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="datedue" --></td>
 			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#<!-- TMPL_VAR NAME="barcode" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
