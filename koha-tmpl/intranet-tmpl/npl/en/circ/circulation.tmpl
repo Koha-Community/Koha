@@ -283,6 +283,7 @@
 			<th>Call No</th>
 			<th>Barcode</th>
 			<th>Renew?</th>
+			<th>Return?</th>
 		</tr>
 	<!-- TMPL_IF NAME="todayissues" -->
 		<!-- TMPL_LOOP NAME="todayissues" -->
@@ -293,12 +294,13 @@
 			<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="barcode" --></td>
 			<td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
+			<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->">Return</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="previssues" -->
-		<tr><th colspan="6"><a name="previous" id="previous">Previous Issues</a></th></tr>
+		<tr><th colspan="7"><a name="previous" id="previous">Previous Issues</a></th></tr>
 		<!-- TMPL_LOOP NAME="previssues" -->
 			<!-- TMPL_IF NAME="togglecolor" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 			<td><!-- TMPL_IF NAME="od" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></span><!-- /TMPL_IF --></td>
@@ -306,7 +308,8 @@
 			<td><!-- TMPL_VAR NAME="author" --></td>
 			<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="barcode" --></td>
-			<td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td></tr>
+			<td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
+			<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->">Return</a></td></tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	

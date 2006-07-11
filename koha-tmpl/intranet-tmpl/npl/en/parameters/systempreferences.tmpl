@@ -198,6 +198,11 @@
 					</a>
 				<!--/TMPL_IF-->
 			</li>
+	<!--TMPL_IF Name="Librarian"-->
+			<li><a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet" class="here">Intranet</a></li>
+	<!--TMPL_ELSE-->
+			<li><a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet">Intranet</a></li>
+	<!--/TMPL_IF-->
 			<li>
 				<!--TMPL_IF Name="Members"-->
 					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="here">Members

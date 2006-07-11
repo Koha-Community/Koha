@@ -145,7 +145,13 @@
 	</tr>
 	<tr>
 		<th><label for="discount">Discount</label></th>
-		<td><input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR name="discount" -->" /> %
+		<td><input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR name="discount" -->" /> %</td>
+	</tr>
+	<tr>
+		<th>
+			<label for="notes">Notes</label></th><td>
+			<textarea cols="40" rows="4" name="notes" id="notes"><!-- TMPL_VAR NAME="notes" --></textarea>
+</td>
 	</tr>
 </table>
 </div>
@@ -259,6 +265,11 @@
 			Discount: </th><td>
 			<!-- TMPL_VAR NAME="discount" --> %
 		</td></tr>
+	<tr>
+		<th>Notes: </th><td>
+		<!-- TMPL_VAR NAME="notes" -->
+</td>
+	</tr>
 	</table>
 </div>
 <!--/TMPL_IF-->

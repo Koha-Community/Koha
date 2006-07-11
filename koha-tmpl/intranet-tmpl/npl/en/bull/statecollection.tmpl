@@ -32,6 +32,10 @@
 		<th scope="row"><label for="serialseq">Numbered: </label></th><td>
 		 <input type="text" id="serialseq" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="30" maxlength="100" />
 			</td></tr>
+	<tr>
+		<th scope="row"><label for="publisheddate">Published On: </label></th><td><input type="text" name="publisheddate" id="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
+			</td>
+	</tr>
 			<tr>
 		<th scope="row"><label for="planneddate">Expected On:</label> </th><td>
 				<input type="text" id="planneddate" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
@@ -41,7 +45,7 @@
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
 				<select id="status" name="status" size="1">
 					<!--TMPL_IF name="status1" -->
-						<option value="1" selected>Waited</option>
+						<option value="1" selected>Waiting</option>
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status2" -->
 						<option value="2" selected>Arrived</option>
@@ -79,10 +83,9 @@
 	
 
 		<!--TMPL_IF Name="serialadditems" -->
+				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td></tr>
 		<tr>
-			
 				<th><label for="itemcallnumber">Callnumber: </label></th> <td><input type="text" id="itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
-				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td>
 		<tr><th><label for="branch">Branch:</label> </th>
 				<td><select  id="branch" name="branch" size="1">
 			<!-- TMPL_LOOP name="branchloop" -->
@@ -127,6 +130,10 @@
 				 <input type="text" id="manual-serialseq" name="serialseq" size="30" maxlength="100" />
 			</td>
 			</tr>
+	<tr>
+		<th scope="row"><label for="publisheddate2">Published On: </label></th><td><input type="text" name="publisheddate" id="publisheddate2" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
+			</td>
+	</tr>
 			<tr><th scope="row"><label for="manual-planneddate">Expected On: </label></th>
 			<td>
 				<input type="text" id="manual-planneddate" name="planneddate" size="10" maxlength="15" />
@@ -182,7 +189,7 @@
 	</table>
 	<input type="submit" value="Save changes" accesskey="w" class="submit" />
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
-		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
+		<p>Subscription has expired. Last waiting issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
 	<!-- /TMPL_IF -->
 	</form></div><br>
 
@@ -196,7 +203,7 @@
 		<tr><th scope="row"><label>Librarian: </label></th><td><!-- TMPL_VAR name="user" --></td></tr>
 		<tr><th scope="row"><label for="histstartdate">Beginnning date (*): </label></th><td><input id="histstartdate" type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /></td></tr>
 		<tr><th scope="row"><label for="enddate">End date: </label></th><td><input type="text" id="enddate" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" /></td></tr>
-		<tr><th scope="row"><label for="recievedlist">Recieved issues</label></th><td><textarea id="recievedlist" name="recievedlist" cols="30" rows="2"><!-- TMPL_VAR name="recievedlist" --></textarea></td></tr>
+		<tr><th scope="row"><label for="recievedlist">Received issues</label></th><td><textarea id="recievedlist" name="recievedlist" cols="30" rows="2"><!-- TMPL_VAR name="recievedlist" --></textarea></td></tr>
 		<tr><th scope="row"><label for="missinglist">Missing issues</label></th><td><textarea id="missinglist" name="missinglist" cols="30" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></td></tr>
 		<tr><th scope="row"><label for="opacnote">Opac note</label></th><td><textarea id="opacnote" name="opacnote" cols="30" rows="2"><!-- TMPL_VAR name="opacnote" --></textarea></td></tr>
 	</table>

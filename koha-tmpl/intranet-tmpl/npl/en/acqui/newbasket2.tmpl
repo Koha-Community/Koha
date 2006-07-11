@@ -3,17 +3,16 @@
 <!-- TMPL_INCLUDE name="intranet-nav.inc" -->
 
 <div id="main">
- <h1>Shopping Basket For: <!-- TMPL_VAR name="bookselname" --></h1>
+ <h1>Shopping Basket <!-- TMPL_VAR name="basketno" --> For: <!-- TMPL_VAR name="bookselname" --></h1>
 
-<!-- TMPL_IF name ="testdonation" -->
-	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
-<!-- TMPL_ELSE -->
-	<a href="newdonation.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
-<!-- /TMPL_IF --> | <a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">View Basket</a> | 
+<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;sub=<!-- TMPL_VAR NAME="parsub" -->">Add New Biblio</a> | 
+	<a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">View Basket</a> | 
+	
 <form class="inline" action="/cgi-bin/koha/acqui/newbasket2.pl">
-<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
-<input type="hidden" name="basket" value="<!-- TMPL_VAR name="basket" -->" />
-New Search: <input type="text"  size="25" name="search" /></form>
+<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
+<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
+<label for="acquisearch">New Search:</label> <input type="text"  size="25" id="acquisearch" name="search" />
+<input type="submit" value="Search" class="submit" /></form>
 
 
 <h3>You searched for <span class="ex">
@@ -36,15 +35,9 @@ New Search: <input type="text"  size="25" name="search" /></form>
 <!-- TMPL_LOOP name="loopresult" -->
 	<tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
 		<td>
-			<!-- TMPL_IF name="testdonation" -->
-				<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR name="sub" -->&amp;author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
-				<!-- TMPL_VAR name="title" -->
-				</a>
-			<!-- TMPL_ELSE -->
-				<a href="/cgi-bin/koha/acqui/newdonation.pl?author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
-				<!-- TMPL_VAR name="title" -->
-				</a>
-			<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR NAME="sub" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+					<!-- TMPL_VAR NAME="title" -->
+					</a>
 		</td>
 		<td>
 			<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR name="word" -->&amp;type=<!-- TMPL_VAR name="type" -->">
@@ -55,11 +48,19 @@ New Search: <input type="text"  size="25" name="search" /></form>
 			<!-- TMPL_VAR name="copyright" -->
 		</td>
 		<td>
-			<!-- TMPL_VAR name="itemcount" -->
-		</td>
-		<td>
-			<!-- TMPL_VAR name="location" -->
-		</td>
+				<!-- TMPL_VAR NAME="itemcount" -->
+			</td>
+			<td>
+				<!-- TMPL_IF name="use-location-flags-p" -->
+				<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR NAME="location-only" --><br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="on-loan-p" -->On Loan<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="lost-p" -->Lost<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="mending-p" -->Mending<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="in-transit-p" -->In Transit<br><!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_VAR NAME="location" -->
+				<!-- /TMPL_IF -->
+			</td>
 	</tr>
 
 <!-- /TMPL_LOOP -->
