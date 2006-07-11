@@ -25,7 +25,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
-use C4::Search; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
+use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
+use C4::Search;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 #use Smart::Comments;
@@ -487,9 +488,10 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	#warn $xml;
-  	my $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-	#warn $record->as_formatted;
+	$xml =~ s/collection/record/g;
+	warn "BEFORE".$xml;
+  	my $record=MARC::Record->new_from_xml($xml, 'UTF-8'); #,'UNIMARC'); #C4::Context->preference('TemplateEncoding'), C4::Context->preference('marcflavour'));
+	warn $record->as_formatted;
 	#warn "IN ADDBIB";
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
@@ -537,7 +539,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	my $record=MARC::Record->new_from_xml($xml, C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	my $record=MARC::Record->new_from_xml($xml, 'UTF-8'); #C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);

@@ -98,57 +98,27 @@
 </div>
 <div name="1XX" id="1XX" class="tab">
 <!-- TMPL_LOOP NAME="1XX" -->
-	<!-- TMPL_IF name="tag" -->
-	<p class="MARCtag">
-		<input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->">
-		<!-- TMPL_UNLESS name="hide_marc" -->
-			<a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
-			<input tabindex="1" onblur="this.style.backgroundColor='#ffffff';" onfocus="this.style.backgroundColor='#ffff00;'" type="text" name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat"> -
-		<!-- TMPL_ELSE -->
-			<input tabindex="1" type="hidden" name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->">
-		<!-- /TMPL_UNLESS -->
-		<!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_VAR NAME="tag_lib" --><!-- /TMPL_UNLESS -->
-		<!-- TMPL_IF name="repeatable" --><a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
-	</p>
-	<!-- /TMPL_IF -->
-	<div>
-	<!-- TMPL_LOOP NAME="subfield_loop" -->
-		<!-- TMPL_IF NAME="visibility" -->
-			<a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
-				<!-- TMPL_VAR NAME="subfield" -->
-			</a>
-		<!-- /TMPL_IF -->
-		<div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
-			<!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-				<label class="labelsubfield">
-			<!-- /TMPL_UNLESS -->
-			<!-- TMPL_UNLESS name="hide_marc" -->
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')"/>
-				<input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" DISABLE READONLY tabindex=-1 />
-			<!-- TMPL_ELSE -->
-				<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->"/>
-			<!-- /TMPL_UNLESS -->
-			<!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-				<!-- TMPL_IF name="mandatory" -->
-					<b>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_VAR NAME="marc_lib" -->
-				<!-- TMPL_IF name="mandatory" -->
-					*</b>
-				<!-- /TMPL_IF -->
-				</label>
-			<!-- /TMPL_UNLESS -->
-			<!-- TMPL_VAR NAME="marc_value" -->
-			<!-- TMPL_IF NAME="repeatable" -->
-				<a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
-			<!-- /TMPL_IF -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->"/>
-			<input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1"/>
-			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"/>
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->"/>
-			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->"/>
-		</div>
-	<!-- /TMPL_LOOP --></div>
+<!-- TMPL_IF name="tag" -->
+<p class="MARCtag">
+    <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->">
+    <!-- TMPL_UNLESS name="hide_marc" --><a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
+    <input tabindex="1" onblur="this.style.backgroundColor='#ffffff';" onfocus="this.style.backgroundColor='#ffff00;'" type="text" name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat"> -
+<!-- TMPL_ELSE -->
+<input tabindex="1" type="hidden" name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->"><!-- /TMPL_UNLESS -->
+    <!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_VAR NAME="tag_lib" --><!-- /TMPL_UNLESS -->
+    <!-- TMPL_IF name="repeatable" --><a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
+</p>
+<!-- /TMPL_IF -->
+<div><!-- TMPL_LOOP NAME="subfield_loop" --><!-- TMPL_IF NAME="visibility" --><a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')"><!-- TMPL_VAR NAME="subfield" --></a><!-- /TMPL_IF --><div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->"><!-- TMPL_UNLESS NAME="advancedMARCEditor" --><label class="labelsubfield"> <!-- /TMPL_UNLESS --><!-- TMPL_UNLESS name="hide_marc" --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')"/><input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" DISABLE READONLY tabindex=-1 />
+<!-- TMPL_ELSE --><input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->"/><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label><!-- /TMPL_UNLESS -->
+<!-- TMPL_VAR NAME="marc_value" --><!-- TMPL_IF NAME="repeatable" --><a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a><!-- /TMPL_IF -->
+<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->"/>
+<input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1"/>
+<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"/>
+<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->"/>
+<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->"/>
+</div><!-- /TMPL_LOOP --></div>
 <!-- /TMPL_LOOP -->
 </div>
 <div name="2XX" id="2XX" class="tab">
@@ -408,7 +378,10 @@ function active(numlayer)
 }
 active(0);
 function Check(f) {
-	document.body.style.cursor ="wait";
+document.forms['f'].submit();
+}
+function Check2(f) {
+	document.body.style.cursor ='wait';
 	// Scan for nonempty fields
 	var field_is_nonempty_p = new Array();
 	for (i=0 ; i<f.field_value.length ; i++) {
@@ -429,21 +402,25 @@ function Check(f) {
 		    // mandatory, or if something else in the tag is entered
 
 		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
-			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+		if(eval(document.getElementById("error"+i).style.backgroundColor="#FF0000"));
 			total_missing_mandatory_subfields++;
-			if (document.getElementById("error"+i).parentNode.tagName == "B")
+			if(eval(document.getElementById("error"+i).parentNode.tagName == "B"))
 			{
 				missing_mandatory_subfields.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.parentNode.id.substr(0,1) + ")");
 			}
 			else
 			{
+				if (eval(document.getElementById("error"+i))) {
 				missing_mandatory_subfields.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.id.substr(0,1) + ")");
+				}
 			}
 
 			}
 		} else {
 // 			alert("I = "+i);
+			if (eval(document.getElementById("error"+i))) {
 			document.getElementById("error"+i).style.backgroundColor="#FFFFCC";
+			}
 		}
 	}
 
@@ -548,25 +525,22 @@ function AddField(field) {
 
 function cloneSubfield(index) {
  var original = document.getElementById(index);
+// alert(index);
  var clone = original.cloneNode(true);
  clone.setAttribute("id", index + index); 
-// orginput : the value of the original field (in [0] if hide_marc=1, otherwise in [1]
-// image : the up button. don't exist is hide_marc=1
- <!-- TMPL_IF name="hide_marc" -->
-	var orginput = original.getElementsByTagName('input')[0];
- <!-- TMPL_ELSE -->
- 	var orginput = original.getElementsByTagName('input')[1];
-	image = clone.getElementsByTagName('img')[0];
-	image.setAttribute("onclick","upSubfield('" + index + index + "')");
- <!-- /TMPL_IF -->
+ image = clone.getElementsByTagName('img')[0];
+ image.setAttribute("onclick","upSubfield('" + index + index + "')");
  trigger = original.getElementsByTagName('a')[0];
  if (trigger) {
  	trigger.parentNode.removeChild(trigger);
  }
+ clonespan = clone.getElementsByTagName('span')[0];
+ clonespan.setAttribute("id", "error"+index);
  clonetrigger = clone.getElementsByTagName('a')[0];
  clonetrigger.setAttribute("onclick","cloneSubfield('" + index + index + "')");
  clone.setAttribute("tabindex","1");
- orginput.value = '';
+ var orginput = original.getElementsByTagName('input')[0];
+// orginput.value = '';
  original.parentNode.insertBefore( clone, original.nextSibling); 
 }
 
