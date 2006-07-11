@@ -960,9 +960,9 @@ C<$date> contains the max date of return. calculated if empty.
 #
 sub issuebook {
 	my ($env,$borrower,$barcode,$date,$cancelreserve) = @_;
-my	 $dbh = C4::Context->dbh;
-#warn "tring to issue";
-my $error;
+	my	 $dbh = C4::Context->dbh;
+	#warn "tring to issue";
+	my $error;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
 #		warn "B : ".$borrower->{borrowernumber}." / I : ".$iteminformation->{'itemnumber'};
@@ -1036,10 +1036,10 @@ my $error;
 		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode,issue_date) values (?,?,?,?,NOW())");
 		my @datearr = localtime();
 #	my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
-my @datearr;
-my $dateduef;
-my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		my @datearr;
+		my $dateduef;
+		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
 		my $datedue=time+($loanlength)*86400;
 		my @datearr = localtime($datedue);
 		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
