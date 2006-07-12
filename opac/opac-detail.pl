@@ -51,10 +51,10 @@ my $dat = &bibdata($biblionumber);
 my ( $authorcount,        $addauthor )      = &getaddauthor($biblionumber);
 my ( $webbiblioitemcount, @webbiblioitems ) = &getwebbiblioitems($biblionumber);
 my ( $websitecount,       @websites )       = &getwebsites($biblionumber);
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 
 #coping with subscriptions
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       =
   GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;
@@ -144,7 +144,7 @@ my $titlewords   = \@title;
 my $authorwords  = \@author;
 
 #coping with subscriptions
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       =
   GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;

@@ -76,7 +76,7 @@ my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record =MARCgetbiblio($dbh,$bibid);
 
 #coping with subscriptions
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dat = MARCmarc2koha($dbh,$record);
 my @subscriptions = GetSubscriptions($dat->{title},$dat->{issn},$biblionumber);
 my @subs;

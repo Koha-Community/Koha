@@ -226,7 +226,7 @@ foreach my $subfield_code (keys(%witness)) {
 	push(@header_value_loop, \%header_value);
 }
 
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,

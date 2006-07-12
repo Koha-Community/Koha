@@ -31,7 +31,7 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &getaddauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionsnumber = GetSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
