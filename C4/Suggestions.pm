@@ -41,19 +41,24 @@ use C4::Suggestions;
 
 =head1 DESCRIPTION
 
-The functions in this module deal with the suggestions :
-* in OPAC
-* in librarian interface
+=over 4
+
+The functions in this module deal with the suggestions in OPAC and in librarian interface
 
 A suggestion is done in the OPAC. It has the status "ASKED"
-When a librarian manages the suggestion, he can set the status to "REJECTED" or "ORDERED".
+
+When a librarian manages the suggestion, he can set the status to "REJECTED" or "ACCEPTED".
+
+When the book is ordered, the suggestion status becomes "ORDERED"
+
 When a book is ordered and arrived in the library, the status becomes "AVAILABLE"
-All suggestions of a borrower by the borrower itself.
-Suggestions done by other can be seen when not "AVAILABLE"
+
+All suggestions of a borrower can be seen by the borrower itself.
+Suggestions done by other borrowers can be seen when not "AVAILABLE"
+
+=back
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
@@ -69,13 +74,13 @@ Suggestions done by other can be seen when not "AVAILABLE"
     &GetSuggestionFromBiblionumber
  );
 
-=item SearchSuggestion
+=head2 SearchSuggestion
 
-(\@array) = &SearchSuggestion($user)
+=over 4
+
+(\@array) = &SearchSuggestion($user,$author,$title,$publishercode,$status,$suggestedbyme)
 
 searches for a suggestion
-
-C<$user> is the user code (used as suggestor filter)
 
 return :
 C<\@array> : the suggestions found. Array of hash.
@@ -83,7 +88,10 @@ Note the status is stored twice :
 * in the status field
 * as parameter ( for example ASKED => 1, or REJECTED => 1) . This is for template & translation purposes.
 
+=back
+
 =cut
+
 sub SearchSuggestion  {
     my ($user,$author,$title,$publishercode,$status,$suggestedbyme)=@_;
     my $dbh = C4::Context->dbh;
@@ -126,8 +134,7 @@ sub SearchSuggestion  {
         }
     }
     if ($suggestedbyme) {
-        if ($suggestedbyme eq -1) {        # FIXME ! what's this strange code ?
-        } else {
+        unless ($suggestedbyme eq -1) {
             push @sql_params,$user;
             $query .= " and suggestedby=?";
         }
@@ -151,34 +158,19 @@ sub SearchSuggestion  {
     return (\@results);
 }
 
-=item NewSuggestion
+=head2 GetSuggestion
 
-&NewSuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber)
-
-Insert a new suggestion on database with value given on input arg.
-
-=cut
-sub NewSuggestion {
-    my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = qq |
-        INSERT INTO suggestions
-            (status,suggestedby,title,author,publishercode,note,copyrightdate,
-            volumedesc,publicationyear,place,isbn,biblionumber)
-        VALUES ('ASKED',?,?,?,?,?,?,?,?,?,?,?)
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);
-}
-
-=item GetSuggestion
+=over 4
 
 \%sth = &GetSuggestion($suggestionid)
 
-this function get a suggestion from $suggestionid given on input arg.
+this function get the detail of the suggestion $suggestionid (input arg)
 
 return :
     the result of the SQL query as a hash : $sth->fetchrow_hashref.
+
+=back
+
 =cut
 sub GetSuggestion {
     my ($suggestionid) = @_;
@@ -193,42 +185,63 @@ sub GetSuggestion {
     return($sth->fetchrow_hashref);
 }
 
-=item DelSuggestion
+=head2 GetSuggestionFromBiblionumber
 
-&DelSuggestion($borrowernumber,$suggestionid)
+=over 4
 
-Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
+$suggestionid = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
+
+Get a suggestion from it's biblionumber.
+
+return :
+the id of the suggestion which is related to the biblionumber given on input args.
+
+=back
 
 =cut
-sub DelSuggestion {
-    my ($borrowernumber,$suggestionid) = @_;
-    my $dbh = C4::Context->dbh;
-    # check that the suggestion comes from the suggestor
-    my $query = qq |
-        SELECT suggestedby
+sub GetSuggestionFromBiblionumber {
+    my ($dbh,$biblionumber) = @_;
+    my $query = qq|
+        SELECT suggestionid
         FROM   suggestions
-        WHERE  suggestionid=?
+        WHERE  biblionumber=?
     |;
     my $sth = $dbh->prepare($query);
-    $sth->execute($suggestionid);
-    my ($suggestedby) = $sth->fetchrow;
-    if ($suggestedby eq $borrowernumber) {
-        my $queryDelete = qq|
-            DELETE FROM suggestions
-            WHERE suggestionid=?
-        |;
-        $sth = $dbh->prepare($queryDelete);
-        $sth->execute($suggestionid);
-    }
+    $sth->execute($biblionumber);
+    my ($suggestionid) = $sth->fetchrow;
+    return $suggestionid;
 }
-=item CountSuggestion
+
+
+=head2 CountSuggestion
+
+=over 4
 
 &CountSuggestion($status)
 
 Count the number of suggestions with the status given on input argument.
+the arg status can be :
+
+=over
+
+=over
+
+=item * ASKED : asked by the user, not dealed by the librarian
+
+=item * ACCEPTED : accepted by the librarian, but not yet ordered
+
+=item * REJECTED : rejected by the librarian (definitive status)
+
+=item * ORDERED : ordered by the librarian (acquisition module)
+
+=back
+
+=back
 
 return :
 the number of suggestion with this status.
+
+=back
 
 =cut
 sub CountSuggestion {
@@ -271,12 +284,44 @@ sub CountSuggestion {
     return $result;
 }
 
-=item ModStatus
+=head2 NewSuggestion
+
+
+=over 4
+
+&NewSuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber)
+
+Insert a new suggestion on database with value given on input arg.
+
+=back
+
+=cut
+sub NewSuggestion {
+    my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq |
+        INSERT INTO suggestions
+            (status,suggestedby,title,author,publishercode,note,copyrightdate,
+            volumedesc,publicationyear,place,isbn,biblionumber)
+        VALUES ('ASKED',?,?,?,?,?,?,?,?,?,?,?)
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);
+}
+
+=head2 ModStatus
+
+=over 4
 
 &ModStatus($suggestionid,$status,$managedby,$biblionumber)
 
-Modify the status (status can be 'ASKED', 'ACCEPTED', 'REJECTED'...)
-and send a mail to notify the librarian.
+Modify the status (status can be 'ASKED', 'ACCEPTED', 'REJECTED', 'ORDERED')
+and send a mail to notify the user that did the suggestion.
+
+Note that there is no function to modify a suggestion : only the status can be modified, thus the name of the function.
+
+=back
+
 =cut
 sub ModStatus {
     my ($suggestionid,$status,$managedby,$biblionumber) = @_;
@@ -358,33 +403,15 @@ sub ModStatus {
     );
     sendmail(%mail);
 }
-=item GetSuggestionFromBiblionumber
 
-$suggestionid = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
+=head2 ConnectSuggestionAndBiblio
 
-Get a suggestion from the biblionumber.
-
-return :
- the id of the suggestion which has the biblionumber given on input args.
-
-=cut
-sub GetSuggestionFromBiblionumber {
-    my ($dbh,$biblionumber) = @_;
-    my $query = qq|
-        SELECT suggestionid
-        FROM   suggestions
-        WHERE  biblionumber=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my ($suggestionid) = $sth->fetchrow;
-    return $suggestionid;
-}
-=item ConnectSuggestionAndBiblio
-
+=over 4
 &ConnectSuggestionAndBiblio($suggestionid,$biblionumber)
 
- connect a suggestion to an existing biblio
+connect a suggestion to an existing biblio
+
+=back
 
 =cut
 sub ConnectSuggestionAndBiblio {
@@ -398,8 +425,37 @@ sub ConnectSuggestionAndBiblio {
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber,$suggestionid);
 }
+
+=head2 DelSuggestion
+
+=over 4
+
+&DelSuggestion($borrowernumber,$suggestionid)
+
+Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
+
 =back
 
-=head1 SEE ALSO
-
 =cut
+
+sub DelSuggestion {
+    my ($borrowernumber,$suggestionid) = @_;
+    my $dbh = C4::Context->dbh;
+    # check that the suggestion comes from the suggestor
+    my $query = qq |
+        SELECT suggestedby
+        FROM   suggestions
+        WHERE  suggestionid=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($suggestionid);
+    my ($suggestedby) = $sth->fetchrow;
+    if ($suggestedby eq $borrowernumber) {
+        my $queryDelete = qq|
+            DELETE FROM suggestions
+            WHERE suggestionid=?
+        |;
+        $sth = $dbh->prepare($queryDelete);
+        $sth->execute($suggestionid);
+    }
+}
