@@ -155,11 +155,12 @@ sub CalcFine {
     # categoryitem table.
 
     my $sth = $dbh->prepare(
-"Select * from items,biblioitems,itemtypes,issuingrules where items.itemnumber=?
-  and items.biblioitemnumber=biblioitems.biblioitemnumber and
-  biblioitems.itemtype=itemtypes.itemtype and
-  categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode=? and (items.itemlost <> 1 or items.itemlost is NULL)"
+"SELECT * FROM items,biblioitems,itemtypes,issuingrules
+  WHERE items.itemnumber=?
+  AND items.biblioitemnumber=biblioitems.biblioitemnumber 
+  AND biblioitems.itemtype=itemtypes.itemtype 
+  AND issuingrules.itemtype=itemtypes.itemtype 
+  AND issuingrules.categorycode=? AND  (items.itemlost <> 1 OR items.itemlost is NULL)"
     );
 
     #  print $query;
