@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Date;
 use MARC::Record;
 use C4::Suggestions;
+use Time::localtime;
 
 # use C4::Biblio;
 
@@ -211,7 +212,7 @@ C<$subscription> may be either "yes", or anything else for "no".
 
 #'
 sub neworder {
-    my (
+   my (
         $basketno,  $bibnum,       $title,        $quantity,
         $listprice, $booksellerid, $authorisedby, $notes,
         $bookfund,  $bibitemnum,   $rrp,          $ecost,
@@ -219,49 +220,61 @@ sub neworder {
         $invoice,   $sort1,        $sort2
       )
       = @_;
-    my $sth;
-    my $dbh;
+
+    my $year  = localtime->year() + 1900;
+    my $month = localtime->mon() + 1;       # months starts at 0, add 1
+
     if ( !$budget || $budget eq 'now' ) {
-        $sth = $dbh->prepare(
-            "INSERT INTO aqorders
-  (biblionumber,title,basketno,quantity,listprice,notes,
-      biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
-  VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now() )"
-        );
-        $sth->execute(
-            $bibnum, $title,      $basketno, $quantity, $listprice,
-            $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
-            $cost,   $sub,        $sort1,    $sort2
-        );
+        $budget = "now()";
+    }
+
+    # if month is july or more, budget start is 1 jul, next year.
+    elsif ( $month >= '7' ) {
+        ++$year;                            # add 1 to year , coz its next year
+        $budget = "'$year-07-01'";
     }
     else {
 
-        ##FIXME HARDCODED DATE.
-        $budget = "'2006-07-01'";
-        $sth    = $dbh->prepare(
-            "INSERT INTO aqorders
-  (biblionumber,title,basketno,quantity,listprice,notes,
-      biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
-  VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now() )"
-        );
-        $sth->execute(
-            $bibnum, $title,      $basketno, $quantity, $listprice,
-            $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
-            $cost,   $sub,        $sort1,    $sort2,    $budget
-        );
-
+        # START OF NEW BUDGET, 1ST OF JULY, THIS YEAR
+        $budget = "'$year-07-01'";
     }
+
+    if ( $sub eq 'yes' ) {
+        $sub = 1;
+    }
+    else {
+        $sub = 0;
+    }
+
+    # if $basket empty, it's also a new basket, create it
+    unless ($basketno) {
+        $basketno = newbasket( $booksellerid, $authorisedby );
+    }
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        "insert into aqorders
+           ( biblionumber,title,basketno,quantity,listprice,notes,
+           biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
+           values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )"
+    );
+
+    $sth->execute(
+        $bibnum, $title,      $basketno, $quantity, $listprice,
+        $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
+        $cost,   $sub,        $sort1,    $sort2
+    );
     $sth->finish;
 
     #get ordnum MYSQL dependant, but $dbh->last_insert_id returns null
     my $ordnum = $dbh->{'mysql_insertid'};
     $sth = $dbh->prepare(
-        "INSERT INTO aqorderbreakdown (ordernumber,bookfundid) VALUES
+        "insert into aqorderbreakdown (ordernumber,bookfundid) values
 	(?,?)"
     );
     $sth->execute( $ordnum, $bookfund );
     $sth->finish;
-    return $basketno;
+    return ( $basketno, $ordnum );
 }
 
 =item delorder
