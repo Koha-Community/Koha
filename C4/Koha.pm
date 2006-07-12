@@ -48,26 +48,26 @@ Koha.pm provides many functions for Koha scripts.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-			&subfield_is_koha_internal_p
-			&getbranches &getbranch &getbranchdetail
-			&getprinters &getprinter
-			&getitemtypes &getitemtypeinfo
+            &subfield_is_koha_internal_p
+            &getbranches &getbranch &getbranchdetail
+            &getprinters &getprinter
+            &GetItemTypes &getitemtypeinfo
                         get_itemtypeinfos_of
-			&getframeworks &getframeworkinfo
-			&getauthtypes &getauthtype
-			&getallthemes &getalllanguages
-			&getallbranches &getletters
-			&getbranchname
+            &getframeworks &getframeworkinfo
+            &getauthtypes &getauthtype
+            &getallthemes &getalllanguages
+            &getallbranches &getletters
+            &getbranchname
                         getnbpages
                         getitemtypeimagedir
                         getitemtypeimagesrc
                         getitemtypeimagesrcfromurl
-			&getcities
-			&getroadtypes
+            &getcities
+            &getroadtypes
                         get_branchinfos_of
                         get_notforloan_label_of
                         get_infos_of
-			$DEBUG);
+            $DEBUG);
 
 use vars qw();
 
@@ -97,82 +97,82 @@ sub subfield_is_koha_internal_p ($) {
 my $branches = getbranches;
 my @branchloop;
 foreach my $thisbranch (sort keys %$branches) {
-	my $selected = 1 if $thisbranch eq $branch;
-	my %row =(value => $thisbranch,
-				selected => $selected,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-			);
-	push @branchloop, \%row;
+    my $selected = 1 if $thisbranch eq $branch;
+    my %row =(value => $thisbranch,
+                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
 }
 
 
 =head3 in TEMPLATE  
-			<select name="branch">
-				<option value="">Default</option>
-			<!-- TMPL_LOOP name="branchloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
-			<!-- /TMPL_LOOP -->
-			</select>
+            <select name="branch">
+                <option value="">Default</option>
+            <!-- TMPL_LOOP name="branchloop" -->
+                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
 
 =cut
 
 sub getbranches {
 # returns a reference to a hash of references to branches...
         my ($type) = @_;
-	my %branches;
-	my $branch;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
-		my $strsth ="Select * from branches ";
-		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
-		$strsth.= " order by branchname";
-		$sth=$dbh->prepare($strsth);
-	} else {
-    	$sth = $dbh->prepare("Select * from branches order by branchname");
-	}
-	$sth->execute;
-	while ($branch=$sth->fetchrow_hashref) {
-		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
-	        if ($type){
-		    $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? and categorycode = ?");
-		    $nsth->execute($branch->{'branchcode'},$type);
-		} else {
-		    $nsth->execute($branch->{'branchcode'});
-		}
-		while (my ($cat) = $nsth->fetchrow_array) {
-			# FIXME - This seems wrong. It ought to be
-			# $branch->{categorycodes}{$cat} = 1;
-			# otherwise, there's a namespace collision if there's a
-			# category with the same name as a field in the 'branches'
-			# table (i.e., don't create a category called "issuing").
-			# In addition, the current structure doesn't really allow
-			# you to list the categories that a branch belongs to:
-			# you'd have to list keys %$branch, and remove those keys
-			# that aren't fields in the "branches" table.
-			$branch->{$cat} = 1;
-			}
+    my %branches;
+    my $branch;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+    if (C4::Context->preference("IndependantBranches") && (C4::Context->userenv->{flags}!=1)){
+        my $strsth ="Select * from branches ";
+        $strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
+        $strsth.= " order by branchname";
+        $sth=$dbh->prepare($strsth);
+    } else {
+        $sth = $dbh->prepare("Select * from branches order by branchname");
+    }
+    $sth->execute;
+    while ($branch=$sth->fetchrow_hashref) {
+        my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
+            if ($type){
+            $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? and categorycode = ?");
+            $nsth->execute($branch->{'branchcode'},$type);
+        } else {
+            $nsth->execute($branch->{'branchcode'});
+        }
+        while (my ($cat) = $nsth->fetchrow_array) {
+            # FIXME - This seems wrong. It ought to be
+            # $branch->{categorycodes}{$cat} = 1;
+            # otherwise, there's a namespace collision if there's a
+            # category with the same name as a field in the 'branches'
+            # table (i.e., don't create a category called "issuing").
+            # In addition, the current structure doesn't really allow
+            # you to list the categories that a branch belongs to:
+            # you'd have to list keys %$branch, and remove those keys
+            # that aren't fields in the "branches" table.
+            $branch->{$cat} = 1;
+            }
                         if ($type) {
-			    $branches{$branch->{'branchcode'}}=$branch;
-			}
-	        }
+                $branches{$branch->{'branchcode'}}=$branch;
+            }
+            }
                 if (!$type){
-		    $branches{$branch->{'branchcode'}}=$branch;
-		}
+            $branches{$branch->{'branchcode'}}=$branch;
+        }
 
-	return (\%branches);
+    return (\%branches);
 }
 
 sub getbranchname {
-	my ($branchcode)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-   	$sth = $dbh->prepare("Select branchname from branches where branchcode=?");
-	$sth->execute($branchcode);
-	my $branchname = $sth->fetchrow_array;
-	$sth->finish;
-	
-	return($branchname);
+    my ($branchcode)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+       $sth = $dbh->prepare("Select branchname from branches where branchcode=?");
+    $sth->execute($branchcode);
+    my $branchname = $sth->fetchrow_array;
+    $sth->finish;
+    
+    return($branchname);
 }
 
 =head2 getallbranches
@@ -187,51 +187,51 @@ sub getbranchname {
 my $branches = getallbranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
-	my $selected = 1 if $thisbranch eq $branch;
-	my %row =(value => $thisbranch,
-				selected => $selected,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-			);
-	push @branchloop, \%row;
+    my $selected = 1 if $thisbranch eq $branch;
+    my %row =(value => $thisbranch,
+                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
 }
 
 
 =head3 in TEMPLATE  
-			<select name="branch">
-				<option value="">Default</option>
-			<!-- TMPL_LOOP name="branchloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
-			<!-- /TMPL_LOOP -->
-			</select>
+            <select name="branch">
+                <option value="">Default</option>
+            <!-- TMPL_LOOP name="branchloop" -->
+                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
 
 =cut
 
 
 sub getallbranches {
 # returns a reference to a hash of references to ALL branches...
-	my %branches;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-   	$sth = $dbh->prepare("Select * from branches order by branchname");
-	$sth->execute;
-	while (my $branch=$sth->fetchrow_hashref) {
-		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
-		$nsth->execute($branch->{'branchcode'});
-		while (my ($cat) = $nsth->fetchrow_array) {
-			# FIXME - This seems wrong. It ought to be
-			# $branch->{categorycodes}{$cat} = 1;
-			# otherwise, there's a namespace collision if there's a
-			# category with the same name as a field in the 'branches'
-			# table (i.e., don't create a category called "issuing").
-			# In addition, the current structure doesn't really allow
-			# you to list the categories that a branch belongs to:
-			# you'd have to list keys %$branch, and remove those keys
-			# that aren't fields in the "branches" table.
-			$branch->{$cat} = 1;
-			}
-			$branches{$branch->{'branchcode'}}=$branch;
-	}
-	return (\%branches);
+    my %branches;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+       $sth = $dbh->prepare("Select * from branches order by branchname");
+    $sth->execute;
+    while (my $branch=$sth->fetchrow_hashref) {
+        my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
+        $nsth->execute($branch->{'branchcode'});
+        while (my ($cat) = $nsth->fetchrow_array) {
+            # FIXME - This seems wrong. It ought to be
+            # $branch->{categorycodes}{$cat} = 1;
+            # otherwise, there's a namespace collision if there's a
+            # category with the same name as a field in the 'branches'
+            # table (i.e., don't create a category called "issuing").
+            # In addition, the current structure doesn't really allow
+            # you to list the categories that a branch belongs to:
+            # you'd have to list keys %$branch, and remove those keys
+            # that aren't fields in the "branches" table.
+            $branch->{$cat} = 1;
+            }
+            $branches{$branch->{'branchcode'}}=$branch;
+    }
+    return (\%branches);
 }
 
 =head2 getletters
@@ -246,48 +246,48 @@ sub getallbranches {
 my $letters = getletters($cat);
 my @letterloop;
 foreach my $thisletter (keys %$letters) {
-	my $selected = 1 if $thisletter eq $letter;
-	my %row =(value => $thisletter,
-				selected => $selected,
-				lettername => $letters->{$thisletter},
-			);
-	push @letterloop, \%row;
+    my $selected = 1 if $thisletter eq $letter;
+    my %row =(value => $thisletter,
+                selected => $selected,
+                lettername => $letters->{$thisletter},
+            );
+    push @letterloop, \%row;
 }
 
 
 =head3 in TEMPLATE  
-			<select name="letter">
-				<option value="">Default</option>
-			<!-- TMPL_LOOP name="letterloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
-			<!-- /TMPL_LOOP -->
-			</select>
+            <select name="letter">
+                <option value="">Default</option>
+            <!-- TMPL_LOOP name="letterloop" -->
+                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
 
 =cut
 
 sub getletters {
 # returns a reference to a hash of references to ALL letters...
-	my $cat =@_;
-	my %letters;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-   	if ($cat ne ""){
-		$sth = $dbh->prepare("Select * from letter where module = \'".$cat."\' order by name");
-	} else {
-		$sth = $dbh->prepare("Select * from letter order by name");
-	}
-	$sth->execute;
-	my $count;
-	while (my $letter=$sth->fetchrow_hashref) {
-			$letters{$letter->{'code'}}=$letter->{'name'};
-			$count++;
-	}
-	return ($count,\%letters);
+    my $cat =@_;
+    my %letters;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+       if ($cat ne ""){
+        $sth = $dbh->prepare("Select * from letter where module = \'".$cat."\' order by name");
+    } else {
+        $sth = $dbh->prepare("Select * from letter order by name");
+    }
+    $sth->execute;
+    my $count;
+    while (my $letter=$sth->fetchrow_hashref) {
+            $letters{$letter->{'code'}}=$letter->{'name'};
+            $count++;
+    }
+    return ($count,\%letters);
 }
 
-=head2 getitemtypes
+=head2 GetItemTypes
 
-  $itemtypes = &getitemtypes();
+  $itemtypes = &GetItemTypes();
 
 Returns information about existing itemtypes.
 
@@ -295,47 +295,51 @@ build a HTML select with the following code :
 
 =head3 in PERL SCRIPT
 
-my $itemtypes = getitemtypes;
+my $itemtypes = GetItemTypes;
 my @itemtypesloop;
 foreach my $thisitemtype (sort keys %$itemtypes) {
-	my $selected = 1 if $thisitemtype eq $itemtype;
-	my %row =(value => $thisitemtype,
-				selected => $selected,
-				description => $itemtypes->{$thisitemtype}->{'description'},
-			);
-	push @itemtypesloop, \%row;
+    my $selected = 1 if $thisitemtype eq $itemtype;
+    my %row =(value => $thisitemtype,
+                selected => $selected,
+                description => $itemtypes->{$thisitemtype}->{'description'},
+            );
+    push @itemtypesloop, \%row;
 }
 $template->param(itemtypeloop => \@itemtypesloop);
 
 =head3 in TEMPLATE
 
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<select name="itemtype">
-		<option value="">Default</option>
-	<!-- TMPL_LOOP name="itemtypeloop" -->
-		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
-	<!-- /TMPL_LOOP -->
-	</select>
-	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
-	<input type="submit" value="OK" class="button">
+    <select name="itemtype">
+        <option value="">Default</option>
+    <!-- TMPL_LOOP name="itemtypeloop" -->
+        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+    <!-- /TMPL_LOOP -->
+    </select>
+    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+    <input type="submit" value="OK" class="button">
 </form>
 
 
 =cut
 
-sub getitemtypes {
+sub GetItemTypes {
 # returns a reference to a hash of references to branches...
-	my %itemtypes;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from itemtypes");
-	$sth->execute;
-	while (my $IT=$sth->fetchrow_hashref) {
-			$itemtypes{$IT->{'itemtype'}}=$IT;
-	}
-	return (\%itemtypes);
+    my %itemtypes;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|
+        SELECT *
+        FROM   itemtypes
+    |;
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    while (my $IT=$sth->fetchrow_hashref) {
+            $itemtypes{$IT->{'itemtype'}}=$IT;
+    }
+    return (\%itemtypes);
 }
 
-# FIXME this function is better and should replace getitemtypes everywhere
+# FIXME this function is better and should replace GetItemTypes everywhere
 sub get_itemtypeinfos_of {
     my @itemtypes = @_;
 
@@ -363,25 +367,25 @@ build a HTML select with the following code :
 my $authtypes = getauthtypes;
 my @authtypesloop;
 foreach my $thisauthtype (keys %$authtypes) {
-	my $selected = 1 if $thisauthtype eq $authtype;
-	my %row =(value => $thisauthtype,
-				selected => $selected,
-				authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
-			);
-	push @authtypesloop, \%row;
+    my $selected = 1 if $thisauthtype eq $authtype;
+    my %row =(value => $thisauthtype,
+                selected => $selected,
+                authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
+            );
+    push @authtypesloop, \%row;
 }
 $template->param(itemtypeloop => \@itemtypesloop);
 
 =head3 in TEMPLATE
 
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<select name="authtype">
-	<!-- TMPL_LOOP name="authtypeloop" -->
-		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option>
-	<!-- /TMPL_LOOP -->
-	</select>
-	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
-	<input type="submit" value="OK" class="button">
+    <select name="authtype">
+    <!-- TMPL_LOOP name="authtypeloop" -->
+        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option>
+    <!-- /TMPL_LOOP -->
+    </select>
+    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+    <input type="submit" value="OK" class="button">
 </form>
 
 
@@ -389,25 +393,25 @@ $template->param(itemtypeloop => \@itemtypesloop);
 
 sub getauthtypes {
 # returns a reference to a hash of references to authtypes...
-	my %authtypes;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from auth_types order by authtypetext");
-	$sth->execute;
-	while (my $IT=$sth->fetchrow_hashref) {
-			$authtypes{$IT->{'authtypecode'}}=$IT;
-	}
-	return (\%authtypes);
+    my %authtypes;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from auth_types order by authtypetext");
+    $sth->execute;
+    while (my $IT=$sth->fetchrow_hashref) {
+            $authtypes{$IT->{'authtypecode'}}=$IT;
+    }
+    return (\%authtypes);
 }
 
 sub getauthtype {
-	my ($authtypecode) = @_;
+    my ($authtypecode) = @_;
 # returns a reference to a hash of references to authtypes...
-	my %authtypes;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
-	my $res=$sth->fetchrow_hashref;
-	return $res;
+    my %authtypes;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
+    $sth->execute($authtypecode);
+    my $res=$sth->fetchrow_hashref;
+    return $res;
 }
 
 =head2 getframework
@@ -423,26 +427,26 @@ build a HTML select with the following code :
 my $frameworks = frameworks();
 my @frameworkloop;
 foreach my $thisframework (keys %$frameworks) {
-	my $selected = 1 if $thisframework eq $frameworkcode;
-	my %row =(value => $thisframework,
-				selected => $selected,
-				description => $frameworks->{$thisframework}->{'frameworktext'},
-			);
-	push @frameworksloop, \%row;
+    my $selected = 1 if $thisframework eq $frameworkcode;
+    my %row =(value => $thisframework,
+                selected => $selected,
+                description => $frameworks->{$thisframework}->{'frameworktext'},
+            );
+    push @frameworksloop, \%row;
 }
 $template->param(frameworkloop => \@frameworksloop);
 
 =head3 in TEMPLATE
 
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<select name="frameworkcode">
-		<option value="">Default</option>
-	<!-- TMPL_LOOP name="frameworkloop" -->
-		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
-	<!-- /TMPL_LOOP -->
-	</select>
-	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
-	<input type="submit" value="OK" class="button">
+    <select name="frameworkcode">
+        <option value="">Default</option>
+    <!-- TMPL_LOOP name="frameworkloop" -->
+        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
+    <!-- /TMPL_LOOP -->
+    </select>
+    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+    <input type="submit" value="OK" class="button">
 </form>
 
 
@@ -450,14 +454,14 @@ $template->param(frameworkloop => \@frameworksloop);
 
 sub getframeworks {
 # returns a reference to a hash of references to branches...
-	my %itemtypes;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from biblio_framework");
-	$sth->execute;
-	while (my $IT=$sth->fetchrow_hashref) {
-			$itemtypes{$IT->{'frameworkcode'}}=$IT;
-	}
-	return (\%itemtypes);
+    my %itemtypes;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from biblio_framework");
+    $sth->execute;
+    while (my $IT=$sth->fetchrow_hashref) {
+            $itemtypes{$IT->{'frameworkcode'}}=$IT;
+    }
+    return (\%itemtypes);
 }
 =head2 getframeworkinfo
 
@@ -468,12 +472,12 @@ Returns information about an frameworkcode.
 =cut
 
 sub getframeworkinfo {
-	my ($frameworkcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
-	$sth->execute($frameworkcode);
-	my $res = $sth->fetchrow_hashref;
-	return $res;
+    my ($frameworkcode) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+    $sth->execute($frameworkcode);
+    my $res = $sth->fetchrow_hashref;
+    return $res;
 }
 
 
@@ -486,15 +490,15 @@ Returns information about an itemtype.
 =cut
 
 sub getitemtypeinfo {
-	my ($itemtype) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
-	$sth->execute($itemtype);
-	my $res = $sth->fetchrow_hashref;
+    my ($itemtype) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
+    $sth->execute($itemtype);
+    my $res = $sth->fetchrow_hashref;
 
         $res->{imageurl} = getitemtypeimagesrcfromurl($res->{imageurl});
 
-	return $res;
+    return $res;
 }
 
 sub getitemtypeimagesrcfromurl {
@@ -548,7 +552,7 @@ sub getprinters {
     my $sth=$dbh->prepare("select * from printers");
     $sth->execute;
     while (my $printer=$sth->fetchrow_hashref) {
-	$printers{$printer->{'printqueue'}}=$printer;
+    $printers{$printer->{'printqueue'}}=$printer;
     }
     return (\%printers);
 }
@@ -572,13 +576,13 @@ branch name for a comprehensive information display
 
 sub getbranchdetail
 {
-	my ($branchcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
-	$sth->execute($branchcode);
-	my $branchname = $sth->fetchrow_hashref();
-	$sth->finish();
-	return $branchname;
+    my ($branchcode) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
+    $sth->execute($branchcode);
+    my $branchname = $sth->fetchrow_hashref();
+    $sth->finish();
+    return $branchname;
 } # sub getbranchname
 
 
@@ -600,102 +604,102 @@ Returns an array of all available languages.
 =cut
 
 sub getalllanguages {
-	my $type=shift;
-	my $theme=shift;
-	my $htdocs;
-	my @languages;
-	if ($type eq 'opac') {
-		$htdocs=C4::Context->config('opachtdocs');
-		if ($theme and -d "$htdocs/$theme") {
-			opendir D, "$htdocs/$theme";
-			foreach my $language (readdir D) {
-				next if $language=~/^\./;
-				next if $language eq 'all';
-				next if $language=~ /png$/;
-				next if $language=~ /css$/;
-				next if $language=~ /CVS$/;
-				next if $language=~ /itemtypeimg$/;
-				push @languages, $language;
-			}
-			return sort @languages;
-		} else {
-			my $lang;
-			foreach my $theme (getallthemes('opac')) {
-				opendir D, "$htdocs/$theme";
-				foreach my $language (readdir D) {
-					next if $language=~/^\./;
-					next if $language eq 'all';
-					next if $language=~ /png$/;
-					next if $language=~ /css$/;
-					next if $language=~ /CVS$/;
-					next if $language=~ /itemtypeimg$/;
-					$lang->{$language}=1;
-				}
-			}
-			@languages=keys %$lang;
-			return sort @languages;
-		}
-	} elsif ($type eq 'intranet') {
-		$htdocs=C4::Context->config('intrahtdocs');
-		if ($theme and -d "$htdocs/$theme") {
-			opendir D, "$htdocs/$theme";
-			foreach my $language (readdir D) {
-				next if $language=~/^\./;
-				next if $language eq 'all';
-				next if $language=~ /png$/;
-				next if $language=~ /css$/;
-				next if $language=~ /CVS$/;
-				next if $language=~ /itemtypeimg$/;
-				push @languages, $language;
-			}
-			return sort @languages;
-		} else {
-			my $lang;
-			foreach my $theme (getallthemes('opac')) {
-				opendir D, "$htdocs/$theme";
-				foreach my $language (readdir D) {
-					next if $language=~/^\./;
-					next if $language eq 'all';
-					next if $language=~ /png$/;
-					next if $language=~ /css$/;
-					next if $language=~ /CVS$/;
-					next if $language=~ /itemtypeimg$/;
-					$lang->{$language}=1;
-				}
-			}
-			@languages=keys %$lang;
-			return sort @languages;
-		}
+    my $type=shift;
+    my $theme=shift;
+    my $htdocs;
+    my @languages;
+    if ($type eq 'opac') {
+        $htdocs=C4::Context->config('opachtdocs');
+        if ($theme and -d "$htdocs/$theme") {
+            opendir D, "$htdocs/$theme";
+            foreach my $language (readdir D) {
+                next if $language=~/^\./;
+                next if $language eq 'all';
+                next if $language=~ /png$/;
+                next if $language=~ /css$/;
+                next if $language=~ /CVS$/;
+                next if $language=~ /itemtypeimg$/;
+                push @languages, $language;
+            }
+            return sort @languages;
+        } else {
+            my $lang;
+            foreach my $theme (getallthemes('opac')) {
+                opendir D, "$htdocs/$theme";
+                foreach my $language (readdir D) {
+                    next if $language=~/^\./;
+                    next if $language eq 'all';
+                    next if $language=~ /png$/;
+                    next if $language=~ /css$/;
+                    next if $language=~ /CVS$/;
+                    next if $language=~ /itemtypeimg$/;
+                    $lang->{$language}=1;
+                }
+            }
+            @languages=keys %$lang;
+            return sort @languages;
+        }
+    } elsif ($type eq 'intranet') {
+        $htdocs=C4::Context->config('intrahtdocs');
+        if ($theme and -d "$htdocs/$theme") {
+            opendir D, "$htdocs/$theme";
+            foreach my $language (readdir D) {
+                next if $language=~/^\./;
+                next if $language eq 'all';
+                next if $language=~ /png$/;
+                next if $language=~ /css$/;
+                next if $language=~ /CVS$/;
+                next if $language=~ /itemtypeimg$/;
+                push @languages, $language;
+            }
+            return sort @languages;
+        } else {
+            my $lang;
+            foreach my $theme (getallthemes('opac')) {
+                opendir D, "$htdocs/$theme";
+                foreach my $language (readdir D) {
+                    next if $language=~/^\./;
+                    next if $language eq 'all';
+                    next if $language=~ /png$/;
+                    next if $language=~ /css$/;
+                    next if $language=~ /CVS$/;
+                    next if $language=~ /itemtypeimg$/;
+                    $lang->{$language}=1;
+                }
+            }
+            @languages=keys %$lang;
+            return sort @languages;
+        }
     } else {
-		my $lang;
-		my $htdocs=C4::Context->config('intrahtdocs');
-		foreach my $theme (getallthemes('intranet')) {
-			opendir D, "$htdocs/$theme";
-			foreach my $language (readdir D) {
-				next if $language=~/^\./;
-				next if $language eq 'all';
-				next if $language=~ /png$/;
-				next if $language=~ /css$/;
-				next if $language=~ /CVS$/;
-				next if $language=~ /itemtypeimg$/;
-				$lang->{$language}=1;
-			}
-		}
-		$htdocs=C4::Context->config('opachtdocs');
-		foreach my $theme (getallthemes('opac')) {
-		opendir D, "$htdocs/$theme";
-		foreach my $language (readdir D) {
-			next if $language=~/^\./;
-			next if $language eq 'all';
-			next if $language=~ /png$/;
-			next if $language=~ /css$/;
-			next if $language=~ /CVS$/;
-			next if $language=~ /itemtypeimg$/;
-			$lang->{$language}=1;
-			}
-		}
-		@languages=keys %$lang;
-		return sort @languages;
+        my $lang;
+        my $htdocs=C4::Context->config('intrahtdocs');
+        foreach my $theme (getallthemes('intranet')) {
+            opendir D, "$htdocs/$theme";
+            foreach my $language (readdir D) {
+                next if $language=~/^\./;
+                next if $language eq 'all';
+                next if $language=~ /png$/;
+                next if $language=~ /css$/;
+                next if $language=~ /CVS$/;
+                next if $language=~ /itemtypeimg$/;
+                $lang->{$language}=1;
+            }
+        }
+        $htdocs=C4::Context->config('opachtdocs');
+        foreach my $theme (getallthemes('opac')) {
+        opendir D, "$htdocs/$theme";
+        foreach my $language (readdir D) {
+            next if $language=~/^\./;
+            next if $language eq 'all';
+            next if $language=~ /png$/;
+            next if $language=~ /css$/;
+            next if $language=~ /CVS$/;
+            next if $language=~ /itemtypeimg$/;
+            $lang->{$language}=1;
+            }
+        }
+        @languages=keys %$lang;
+        return sort @languages;
     }
 }
 
@@ -713,14 +717,14 @@ sub getallthemes {
     my $htdocs;
     my @themes;
     if ($type eq 'intranet') {
-	$htdocs=C4::Context->config('intrahtdocs');
+    $htdocs=C4::Context->config('intrahtdocs');
     } else {
-	$htdocs=C4::Context->config('opachtdocs');
+    $htdocs=C4::Context->config('opachtdocs');
     }
     opendir D, "$htdocs";
     my @dirlist=readdir D;
     foreach my $directory (@dirlist) {
-	-d "$htdocs/$directory/en" and push @themes, $directory;
+    -d "$htdocs/$directory/en" and push @themes, $directory;
     }
     return @themes;
 }
@@ -758,24 +762,24 @@ sub getcities {
     my %city;
     my @id;
 #    insert empty value to create a empty choice in cgi popup 
-	 
+    
 while (my $data=$sth->fetchrow_hashref){
       
-	push @id,$data->{'cityid'};
+    push @id,$data->{'cityid'};
       $city{$data->{'cityid'}}=$data->{'city_name'};
     }
-	
-	#test to know if the table contain some records if no the function return nothing
-	my $id=@id;
-	$sth->finish;
-	if ($id eq 0)
-	{
-	return();
-	}
-	else{
-	unshift (@id ,"");
-	return(\@id,\%city);
-	}
+    
+    #test to know if the table contain some records if no the function return nothing
+    my $id=@id;
+    $sth->finish;
+    if ($id eq 0)
+    {
+    return();
+    }
+    else{
+    unshift (@id ,"");
+    return(\@id,\%city);
+    }
 }
 
 
@@ -797,20 +801,20 @@ sub getroadtypes {
     my @id;
 #    insert empty value to create a empty choice in cgi popup 
 while (my $data=$sth->fetchrow_hashref){
-	push @id,$data->{'roadtypeid'};
+    push @id,$data->{'roadtypeid'};
       $roadtype{$data->{'roadtypeid'}}=$data->{'road_type'};
     }
-	#test to know if the table contain some records if no the function return nothing
-	my $id=@id;
-	$sth->finish;
-	if ($id eq 0)
-	{
-	return();
-	}
-	else{
-		unshift (@id ,"");
-		return(\@id,\%roadtype);
-	}
+    #test to know if the table contain some records if no the function return nothing
+    my $id=@id;
+    $sth->finish;
+    if ($id eq 0)
+    {
+    return();
+    }
+    else{
+        unshift (@id ,"");
+        return(\@id,\%roadtype);
+    }
 }
 
 =head2 get_branchinfos_of
