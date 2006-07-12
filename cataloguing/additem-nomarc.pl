@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.2  2006/07/12 17:17:12  toins
+# getitemtypes renamed to GetItemTypes
+#
 # Revision 1.1  2006/01/17 16:40:54  tipaul
 # moving acqui.simple directory to cataloguing, as acqui.simple contains cataloguing scripts...
 #
@@ -97,7 +100,7 @@ else {
 					);
 			push @branchloop, \%row;
 		}
-		my $itemtypes = &getitemtypes;
+		my $itemtypes = &GetItemTypes;
 		my @itemtypeloop;
 		foreach my $thisitemtype (sort keys %$itemtypes) {
 			my %row =(value => $thisitemtype,
@@ -145,7 +148,7 @@ else {
         ( $biblioitemcount, @biblioitems ) =
           &getbiblioitembybiblionumber($biblionumber);
         ( $branchcount,   @branches )  = &branches;
-        ( $itemtypecount, @itemtypes ) = &getitemtypes;
+        ( $itemtypecount, @itemtypes ) = &GetItemTypes;
 
         for ( my $i = 0 ; $i < $itemtypecount ; $i++ ) {
             $itemtypedescriptions{ $itemtypes[$i]->{'itemtype'} } =

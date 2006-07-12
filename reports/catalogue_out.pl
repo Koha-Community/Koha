@@ -137,7 +137,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	#doctype
-	my $itemtypes = getitemtypes;
+	my $itemtypes = GetItemTypes;
 	my @itemtypeloop;
 	foreach my $thisitemtype (keys %$itemtypes) {
 # 			my $selected = 1 if $thisbranch eq $branch;
