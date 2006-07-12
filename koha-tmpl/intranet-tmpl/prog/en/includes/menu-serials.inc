@@ -6,6 +6,5 @@
         <a href="/cgi-bin/koha/serials/subscription-bib-search.pl">Search subscription</a>
         <a href="/cgi-bin/koha/serials/lateissues.pl">Late issue</a>
         <a href="/cgi-bin/koha/serials/subscription-add.pl">Add a subscription</a>
-        <a href="/cgi-bin/koha/serials/subscription-renew.pl">Renew a subscription</a>
         <a href="/cgi-bin/koha/serials/viewalerts.pl">View alerts</a>
     </p>
