@@ -32,6 +32,7 @@ use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Circulation::Fines;
 use Date::Manip;
+use C4::Biblio;
 
 open (FILE,'>/tmp/fines') || die;
 # FIXME

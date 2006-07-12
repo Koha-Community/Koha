@@ -56,6 +56,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &getsubject &getaddauthor &getsubtitle
   &getwebbiblioitems &getwebsites
   &getbiblioitembybiblionumber
+  &getbibliofromitemnumber	
   &getbiblioitem &getitemsbybiblioitem
 
   &MARCfind_marc_from_kohafield
@@ -3141,6 +3142,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.174  2006/07/12 13:43:42  btoumi
+# bug fixing:
+# Biblio.pm: add in export line  getbibliofromitemnumber function
+# fines2.pl:call to biblio.pm for use of getbibliofromitemnumber function
+#
 # Revision 1.173  2006/07/04 14:36:51  toins
 # Head & rel_2_2 merged
 #
