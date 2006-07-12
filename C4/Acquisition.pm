@@ -383,7 +383,10 @@ Also updates the book fund ID in the aqorderbreakdown table.
 
 #'
 sub receiveorder {
-    my ( $biblio, $ordnum, $quantrec, $user, $cost, $invoiceno, $freight, $rrp, $bookfund)
+    my (
+        $biblio,    $ordnum,  $quantrec, $user, $cost,
+        $invoiceno, $freight, $rrp,      $bookfund
+      )
       = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
@@ -403,7 +406,7 @@ sub receiveorder {
     # allows them to adjust budgets
     if ( C4::Context->preferene("LooseBudgets") ) {
         my $sth = $dbh->prepare(
-"UPDATE aqorderbreakdown SET bookfundid=?
+            "UPDATE aqorderbreakdown SET bookfundid=?
                            WHERE ordernumber=?"
         );
         $sth->execute( $bookfund, $ordnum );
@@ -670,6 +673,7 @@ sub getparcelinformation {
 
     return ( scalar(@results), @results );
 }
+
 =item getparcelinformation
 
   ($count, @results) = &getparcelinformation($booksellerid, $code, $date);
@@ -684,34 +688,42 @@ the aqorders, biblio, and biblioitems tables of the Koha database.
 C<@results> is sorted alphabetically by book title.
 
 =cut
+
 #'
 sub getparcelinformation {
-  #gets all orders from a certain supplier, orders them alphabetically
-  my ($supplierid,$code, $datereceived)=@_;
-  my $dbh = C4::Context->dbh;
-  my @results = ();
-  $code .='%' if $code; # add % if we search on a given code (otherwise, let him empty)
-	my $strsth ="Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code\" and aqorders.datereceived= \'$datereceived\'";
-		
-	if (C4::Context->preference("IndependantBranches")) {
-		my $userenv = C4::Context->userenv;
-		if (($userenv) &&($userenv->{flags} != 1)){
-			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
-		}
-	}
-	$strsth.=" order by aqbasket.basketno";
-	### parcelinformation : $strsth
-	my $sth=$dbh->prepare($strsth);
-  $sth->execute($supplierid);
-  while (my $data=$sth->fetchrow_hashref){
-    push(@results,$data);
-  }
-  my $count =scalar(@results);
-  ### countparcelbiblio: $count
-  $sth->finish;
-  
-  return(scalar(@results),@results);
+
+    #gets all orders from a certain supplier, orders them alphabetically
+    my ( $supplierid, $code, $datereceived ) = @_;
+    my $dbh     = C4::Context->dbh;
+    my @results = ();
+    $code .= '%'
+      if $code;  # add % if we search on a given code (otherwise, let him empty)
+    my $strsth =
+"Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code\" and aqorders.datereceived= \'$datereceived\'";
+
+    if ( C4::Context->preference("IndependantBranches") ) {
+        my $userenv = C4::Context->userenv;
+        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+            $strsth .=
+                " and (borrowers.branchcode = '"
+              . $userenv->{branch}
+              . "' or borrowers.branchcode ='')";
+        }
+    }
+    $strsth .= " order by aqbasket.basketno";
+    ### parcelinformation : $strsth
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute($supplierid);
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    my $count = scalar(@results);
+    ### countparcelbiblio: $count
+    $sth->finish;
+
+    return ( scalar(@results), @results );
 }
+
 =item getsupplierlistwithlateorders
 
   %results = &getsupplierlistwithlateorders;
@@ -1127,50 +1139,83 @@ sub bookfunds {
 #'
 
 sub bookfundbreakdown {
-    my ( $id, $year ,$start, $end) = @_;
+    my ( $id, $year, $start, $end ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
-  quantityreceived,subscription
-  FROM aqorders,aqorderbreakdown WHERE bookfundid=? AND
-  aqorders.ordernumber=aqorderbreakdown.ordernumber
-  AND (datecancellationprinted is NULL OR
-      datecancellationprinted='0000-00-00')"
-    );
-    if ($start) {
-        $sth = $dbh->prepare(
-            "SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
-  quantityreceived,subscription
-  FROM aqorders,aqorderbreakdown
-  WHERE bookfundid=? AND
-  aqorders.ordernumber=aqorderbreakdown.ordernumber
-  AND (datecancellationprinted is NULL OR
-     datecancellationprinted='0000-00-00')
-  AND ((datereceived >= ? AND datereceived < ?) OR
- (budgetdate >= ? AND budgetdate < ?))"
-        );
-        $sth->execute( $id, $start, $end, $start, $end );
-    }
-    else {
-        $sth->execute($id);
+
+    # if no start/end dates given defaut to everything
+    if ( !$start ) {
+        $start = '0000-00-00';
+        $end   = 'now()';
     }
 
-    my $comtd = 0;
+    # do a query for spent totals.
+    my $sth = $dbh->prepare(
+        "Select quantity,datereceived,freight,unitprice,listprice,ecost,
+                quantityreceived,subscription
+         from aqorders left join aqorderbreakdown on
+                aqorders.ordernumber=aqorderbreakdown.ordernumber
+         where bookfundid=? and (datecancellationprinted is NULL or
+                datecancellationprinted='0000-00-00') and
+                ((datereceived >= ? and datereceived < ?) or
+                (budgetdate >= ? and budgetdate < ?))"
+    );
+    $sth->execute( $id, $start, $end, $start, $end );
+
     my $spent = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-
         if ( $data->{'subscription'} == 1 ) {
             $spent += $data->{'quantity'} * $data->{'unitprice'};
         }
         else {
+
             my $leftover = $data->{'quantity'} - $data->{'quantityreceived'};
-            $comtd += ( $data->{'ecost'} ) * $leftover;
             $spent += ( $data->{'unitprice'} ) * $data->{'quantityreceived'};
+
         }
     }
+
+    # then do a seperate query for commited totals, (pervious single query was
+    # returning incorrect comitted results.
+
+    my $query = "Select quantity,datereceived,freight,unitprice,
+                listprice,ecost,quantityreceived as qrev,
+                subscription,title,itemtype,aqorders.biblionumber,
+                aqorders.booksellerinvoicenumber,
+                quantity-quantityreceived as tleft,
+                aqorders.ordernumber as ordnum,entrydate,budgetdate,
+                booksellerid,aqbasket.basketno
+        from aqorderbreakdown,aqbasket,aqorders
+                left join biblioitems on
+                biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+        where bookfundid=? and aqorders.ordernumber=aqorderbreakdown.ordernumber and
+                aqorders.basketno=aqbasket.basketno and
+                (budgetdate >= ? and budgetdate < ?) and
+                (datecancellationprinted is NULL or datecancellationprinted='0000-00-00')";
+    #warn $query;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $id, $start, $end );
+
+    my $comtd;
+
+    my $total = 0;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        my $left = $data->{'tleft'};
+        if ( !$left || $left eq '' ) {
+            $left = $data->{'quantity'};
+        }
+        if ( $left && $left > 0 ) {
+            my $subtotal = $left * $data->{'ecost'};
+            $data->{subtotal} = $subtotal;
+            $data->{'left'} = $left;
+            $comtd += $subtotal;
+        }
+    }
+
+    #warn " spent=$spent, comtd=$comtd\n";
     $sth->finish;
     return ( $spent, $comtd );
 }
+
 
 =item curconvert
 
@@ -1370,17 +1415,25 @@ sub updatesup {
    listprice=?, invoiceprice=?,gstreg=?, listincgst=?,
    invoiceincgst=?, specialty=?,discount=?,invoicedisc=?,
    nocalc=?, notes=?
-   where id=?");
-   $sth->execute($data->{'name'},$data->{'address1'},$data->{'address2'},
-   $data->{'address3'},$data->{'address4'},$data->{'postal'},$data->{'phone'},
-   $data->{'fax'},$data->{'url'},$data->{'contact'},$data->{'contpos'},
-   $data->{'contphone'},$data->{'contfax'},$data->{'contaltphone'},
-   $data->{'contemail'},
-   $data->{'contnotes'},$data->{'active'},$data->{'listprice'},
-   $data->{'invoiceprice'},$data->{'gstreg'},$data->{'listincgst'},
-   $data->{'invoiceincgst'},$data->{'specialty'},$data->{'discount'},
-   $data->{'invoicedisc'},$data->{'nocalc'},$data->{'notes'},$data->{'id'});
-   $sth->finish;
+   where id=?"
+    );
+    $sth->execute(
+        $data->{'name'},         $data->{'address1'},
+        $data->{'address2'},     $data->{'address3'},
+        $data->{'address4'},     $data->{'postal'},
+        $data->{'phone'},        $data->{'fax'},
+        $data->{'url'},          $data->{'contact'},
+        $data->{'contpos'},      $data->{'contphone'},
+        $data->{'contfax'},      $data->{'contaltphone'},
+        $data->{'contemail'},    $data->{'contnotes'},
+        $data->{'active'},       $data->{'listprice'},
+        $data->{'invoiceprice'}, $data->{'gstreg'},
+        $data->{'listincgst'},   $data->{'invoiceincgst'},
+        $data->{'specialty'},    $data->{'discount'},
+        $data->{'invoicedisc'},  $data->{'nocalc'},
+        $data->{'notes'},        $data->{'id'}
+    );
+    $sth->finish;
 }
 
 =item insertsup
@@ -1466,30 +1519,35 @@ Returns the count of parcels returned and a pointer on a hash list containing pa
 		
 
 =cut
+
 #'
 sub getparcels {
-  my ($bookseller, $order, $code,$datefrom,$dateto, $limit)=@_;
-	my $dbh = C4::Context->dbh;
-	my $strsth = "SELECT aqorders.booksellerinvoicenumber, datereceived, count(DISTINCT biblionumber) as biblio, sum(quantity) as itemsexpected, sum(quantityreceived) as itemsreceived from aqorders, aqbasket where aqbasket.basketno = aqorders.basketno and aqbasket.booksellerid = $bookseller and datereceived is not null ";
-	$strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" " if ($code);
-	$strsth .= "and datereceived >=".$dbh->quote($datefrom)." " if ($datefrom);
-	$strsth .= "and datereceived <=".$dbh->quote($dateto)." " if ($dateto);
-	$strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
-	$strsth .= "order by $order " if ($order);
-	$strsth .= " LIMIT 0,$limit" if ($limit);
-	my $sth=$dbh->prepare($strsth);
+    my ( $bookseller, $order, $code, $datefrom, $dateto, $limit ) = @_;
+    my $dbh    = C4::Context->dbh;
+    my $strsth =
+"SELECT aqorders.booksellerinvoicenumber, datereceived, count(DISTINCT biblionumber) as biblio, sum(quantity) as itemsexpected, sum(quantityreceived) as itemsreceived from aqorders, aqbasket where aqbasket.basketno = aqorders.basketno and aqbasket.booksellerid = $bookseller and datereceived is not null ";
+    $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" "
+      if ($code);
+    $strsth .= "and datereceived >=" . $dbh->quote($datefrom) . " "
+      if ($datefrom);
+    $strsth .= "and datereceived <=" . $dbh->quote($dateto) . " " if ($dateto);
+    $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
+    $strsth .= "order by $order " if ($order);
+    $strsth .= " LIMIT 0,$limit" if ($limit);
+    my $sth = $dbh->prepare($strsth);
 ###	getparcels:  $strsth
-	$sth->execute;
-	my @results;
-	while (my $data2=$sth->fetchrow_hashref) {
-		push @results, $data2;
-	}
-	
-   $sth->finish;
-   return(scalar(@results), @results);
+    $sth->execute;
+    my @results;
+
+    while ( my $data2 = $sth->fetchrow_hashref ) {
+        push @results, $data2;
+    }
+
+    $sth->finish;
+    return ( scalar(@results), @results );
 }
 
-END { }       # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 
 1;
 __END__
