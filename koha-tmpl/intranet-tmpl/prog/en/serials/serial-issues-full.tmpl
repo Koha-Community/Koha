@@ -1,29 +1,29 @@
-<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
-
+<!-- TMPL_INCLUDE NAME="serials-top.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
 <!-- TMPL_UNLESS name="popup" -->
-	<h1 class="bull">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
+	<h1 class="serial">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Back to biblio</a>
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button serial">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
-			<a  class="button bull" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+			<a  class="button serial" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
-	<a class=" button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>
+	<a class=" button serial" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>
 	</p>
 	<!-- TMPL_LOOP NAME="years" -->
 	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
-				<th class="bull">Information
+				<th class="serial">Information
 				</th>
-				<th class="bull">Date
+				<th class="serial">Date
 				</th>
-				<th class="bull">Number
+				<th class="serial">Number
 				</th>
-				<th class="bull">Status
+				<th class="serial">Status
 				</th>
 			</tr>
 			<!-- TMPL_LOOP Name="serials" -->
