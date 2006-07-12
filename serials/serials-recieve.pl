@@ -19,6 +19,50 @@
 
 # $Id$
 
+=head1 NAME
+
+serials-recieve.pl
+
+=head1 Parameters
+
+=over 4
+
+=item op
+ op can be :
+    * modsubscriptionhistory :to modify the subscription history 
+    * serialchangestatus     :to modify the status of this subscription
+
+=item subscriptionid
+
+=item user
+
+=item histstartdate
+
+=item enddate
+
+=item recievedlist
+
+=item missinglist
+
+=item opacnote
+
+=item librariannote
+
+=item serialid
+
+=item serialseq
+
+=item planneddate
+
+=item notes
+
+=item status
+
+=back
+
+=cut
+
+
 use strict;
 use CGI;
 use C4::Auth;
@@ -45,11 +89,13 @@ my $librariannote = $query->param('librariannote');
 my @serialids = $query->param('serialid');
 my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
-my @publisheddates = $query->param('publisheddate');
+my @notes = $query->param('notes');
 my @status = $query->param('status');
+# my @publisheddates = $query->param('publisheddates');
+
 
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/statecollection.tmpl",
+= get_template_and_user({template_name => "serials/serials-recieve.tmpl",
                 query => $query,
                 type => "intranet",
                 authnotrequired => 0,
@@ -65,47 +111,26 @@ if ($op eq 'modsubscriptionhistory') {
     ModSubscriptionHistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 }
 # change status except, if subscription has expired, for the "waited" issue.
-if ($op eq 'modserialstatus') {
-    my $sth = GetSerialStatusFromSerialId();
-    for (my $i=0;$i<=$#serialids;$i++) {
-        $sth->execute($serialids[$i]);
-
-        my ($oldstatus) = $sth->fetchrow;
-        if ($serialids[$i]) {
-            ModSerialStatus($serialids[$i],$serialseqs[$i],format_date_in_iso($publisheddates[$i]),($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso(localtime(time()))),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
-            if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
-                my %info;
-                $info{branch}=$homebranches[$i];
-#               $info{barcode}=$barcodes[$i];
-                $info{itemcallnumber}=$itemcallnumbers[$i];
-                $info{location}=$locations[$i];
-                $info{status}=$itemstatus[$i];
-                $info{notes}=$serialseqs[$i];
-                my ($status, @errors)= ItemizeSerials($serialids[$i],\%info);
-            }
-        } else {
-            # add a special issue
-            if ($serialseqs[$i]) {
-                my $subscription=GetSubscription($subscriptionid);
-                NewIssue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
-            }
-            if (($status[$i]==2) && C4::Context->preference("serialsadditems") && !HasSubscriptionExpired($subscriptionid)){
-                my %info;
-                $info{branch}=$homebranches[$i];
-#                 $info{barcode}=$barcodes[$i];
-                $info{itemcallnumber}=$itemcallnumbers[$i];
-                $info{location}=$locations[$i];
-                $info{status}=$itemstatus[$i];
-                $info{notes}=$serialseqs[$i];
-                my ($status, @errors)= ItemizeSerials($serialids[$i],\%info);
-            }
-        }
-    }
+if ($op eq 'serialchangestatus') {
+	my $sth = $dbh->prepare("select status from serial where serialid=?");
+	for (my $i=0;$i<=$#serialids;$i++) {
+		$sth->execute($serialids[$i]);
+		my ($oldstatus) = $sth->fetchrow;
+		if ($serialids[$i]) {
+			ModSerialStatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+		} else {
+			# add a special issue
+			if ($serialseqs[$i]) {
+				my $subscription=getsubscription($subscriptionid);
+				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+			}
+		}
+	}
 }
 my $subs = &GetSubscription($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid,10);
 
-my $sth= GetSubscriptionHistoryFromSubscriptionId();
+my $sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
 
 $sth->execute($subscriptionid);
 my $solhistory = $sth->fetchrow_hashref;
@@ -159,7 +184,7 @@ if (C4::Context->preference("serialsadditems")){
     $template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
 }
 
-my $sth= GetSubscriptionHistoryFromSubscriptionId();
+my $sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
 $sth->execute($subscriptionid);
 my $solhistory = $sth->fetchrow_hashref;
 

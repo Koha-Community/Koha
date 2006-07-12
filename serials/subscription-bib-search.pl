@@ -18,6 +18,35 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+
+=head1 NAME
+
+subscription-bib-search.pl
+
+=head1 DESCRIPTION
+
+this script search among all existing subscriptions.
+
+=head1 PARAMETERS
+
+=over 4
+
+=item op
+op use to know the operation to do on this template.
+ * do_search : to search the subscription.
+
+Note that if op = do_search there are some others params specific to the search :
+    marclist,and_or,excluding,operator,value
+
+=item startfrom
+to multipage gestion.
+
+
+=back
+
+=cut
+
+
 use strict;
 require Exporter;
 use CGI;
@@ -30,146 +59,139 @@ use C4::Interface::CGI::Output;
 use C4::SearchMarc;
 
 my $query=new CGI;
-my $type=$query->param('type');
+# my $type=$query->param('type');
 my $op = $query->param('op');
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
-$startfrom=0 if(!defined $startfrom);
+$startfrom=0 unless $startfrom;
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
 
 if ($op eq "do_search") {
-	my @marclist = $query->param('marclist');
-	my @and_or = $query->param('and_or');
-	my @excluding = $query->param('excluding');
-	my @operator = $query->param('operator');
-	my @value = $query->param('value');
+    my @marclist = $query->param('marclist');
+    my @and_or = $query->param('and_or');
+    my @excluding = $query->param('excluding');
+    my @operator = $query->param('operator');
+    my @value = $query->param('value');
 
-	$resultsperpage= $query->param('resultsperpage');
-	$resultsperpage = 19 if(!defined $resultsperpage);
-	my $orderby = $query->param('orderby');
+    $resultsperpage= $query->param('resultsperpage');
+    $resultsperpage = 19 if(!defined $resultsperpage);
+    my $orderby = $query->param('orderby');
 
-	# builds tag and subfield arrays
-	my @tags;
+    # builds tag and subfield arrays
+    my @tags;
 
-	foreach my $marc (@marclist) {
-		if ($marc) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
-			if ($tag) {
-				push @tags,$dbh->quote("$tag$subfield");
-			} else {
-				push @tags, $dbh->quote(substr($marc,0,4));
-			}
-		} else {
-			push @tags, "";
-		}
-	}
-	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
- 										\@excluding, \@operator, \@value,
- 										$startfrom*$resultsperpage, $resultsperpage,$orderby);
+    foreach my $marc (@marclist) {
+        if ($marc) {
+            my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
+            if ($tag) {
+                push @tags,$dbh->quote("$tag$subfield");
+            } else {
+                push @tags, $dbh->quote(substr($marc,0,4));
+            }
+        } else {
+            push @tags, "";
+        }
+    }
+    my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
+                               \@excluding, \@operator, \@value,
+                               $startfrom*$resultsperpage, $resultsperpage,$orderby);
 
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "serials/result.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/result.tmpl",
+                query => $query,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {borrowers => 1},
+                flagsrequired => {catalogue => 1},
+                debug => 1,
+                });
 
-	# multi page display gestion
-	my $displaynext=0;
-	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
-		$displaynext = 1;
-	}
+    # multi page display gestion
+    my $displaynext=0;
+    my $displayprev=$startfrom;
+    if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
+        $displaynext = 1;
+    }
 
-	my @field_data = ();
+    my @field_data = ();
 
 
-	for(my $i = 0 ; $i <= $#marclist ; $i++)
-	{
-		push @field_data, { term => "marclist", val=>$marclist[$i] };
-		push @field_data, { term => "and_or", val=>$and_or[$i] };
-		push @field_data, { term => "excluding", val=>$excluding[$i] };
-		push @field_data, { term => "operator", val=>$operator[$i] };
-		push @field_data, { term => "value", val=>$value[$i] };
-	}
+    for(my $i = 0 ; $i <= $#marclist ; $i++)
+    {
+        push @field_data, { term => "marclist", val=>$marclist[$i] };
+        push @field_data, { term => "and_or", val=>$and_or[$i] };
+        push @field_data, { term => "excluding", val=>$excluding[$i] };
+        push @field_data, { term => "operator", val=>$operator[$i] };
+        push @field_data, { term => "value", val=>$value[$i] };
+    }
 
-	my @numbers = ();
+    my @numbers = ();
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
-	    		my $highlight=0;
-	    		($startfrom==($i-1)) && ($highlight=1);
-	    		push @numbers, { number => $i,
-					highlight => $highlight ,
-					searchdata=> \@field_data,
-					startfrom => ($i-1)};
-			}
-    	}
-	}
+    if ($total>$resultsperpage)
+    {
+        for (my $i=1; $i<$total/$resultsperpage+1; $i++)
+        {
+            if ($i<16)
+            {
+                my $highlight=0;
+                ($startfrom==($i-1)) && ($highlight=1);
+                push @numbers, { number => $i,
+                    highlight => $highlight ,
+                    searchdata=> \@field_data,
+                    startfrom => ($i-1)};
+            }
+        }
+    }
 
-	my $from = $startfrom*$resultsperpage+1;
-	my $to;
+    my $from = $startfrom*$resultsperpage+1;
+    my $to;
 
- 	if($total < (($startfrom+1)*$resultsperpage))
-	{
-		$to = $total;
-	} else {
-		$to = (($startfrom+1)*$resultsperpage);
-	}
-	$template->param(result => $results,
-							startfrom=> $startfrom,
-							displaynext=> $displaynext,
-							displayprev=> $displayprev,
-							resultsperpage => $resultsperpage,
-							startfromnext => $startfrom+1,
-							startfromprev => $startfrom-1,
-							searchdata=>\@field_data,
-							total=>$total,
-							from=>$from,
-							to=>$to,
-							numbers=>\@numbers,
-							);
+    if($total < (($startfrom+1)*$resultsperpage))
+    {
+        $to = $total;
+    } else {
+        $to = (($startfrom+1)*$resultsperpage);
+    }
+    $template->param(result => $results,
+                            startfrom=> $startfrom,
+                            displaynext=> $displaynext,
+                            displayprev=> $displayprev,
+                            resultsperpage => $resultsperpage,
+                            startfromnext => $startfrom+1,
+                            startfromprev => $startfrom-1,
+                            searchdata=>\@field_data,
+                            total=>$total,
+                            from=>$from,
+                            to=>$to,
+                            numbers=>\@numbers,
+                            );
 } else {
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
-	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
-	$sth->execute;
-	my  @itemtype;
-	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "";
-	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
-	}
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
+                query => $query,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {catalogue => 1},
+                debug => 1,
+                });
 
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-				-values   => \@itemtype,
- 				-labels   => \%itemtypes,
-				-size     => 1,
-				-multiple => 0 );
-	$sth->finish;
+    my  %itemtypes = GetItemTypes();
+    my @values = values %itemtypes;
+    my @labels = keys %itemtypes;
+    my $CGIitemtype=CGI::scrolling_list(
+            -name     => 'value',
+            -values   => \@values,
+            -labels   => \@labels,
+            -size     => 1,
+            -multiple => 0
+    );
 
-	$template->param(
-			CGIitemtype => $CGIitemtype,
-			);
+    $template->param(
+            CGIitemtype => $CGIitemtype,
+    );
 }
-
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

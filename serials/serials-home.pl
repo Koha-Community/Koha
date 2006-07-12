@@ -19,6 +19,29 @@
 
 # $Id$
 
+=head1 NAME
+
+serials-home.pl
+
+=head1 DESCRIPTION
+
+this script is the main page for serials/
+
+=head1 PARAMETERS
+
+=over 4
+
+=item title
+
+=item ISSN
+
+=item biblionumber
+
+=back
+
+=cut
+
+
 use strict;
 use CGI;
 use C4::Auth;

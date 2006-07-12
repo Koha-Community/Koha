@@ -19,6 +19,25 @@
 
 # $Id$
 
+=head1 NAME
+
+lateissues
+
+=head1 DESCRIPTION
+
+this script display late issue by types.
+
+=head1 PARAMETERS
+
+=over 4
+
+=item supplierid
+the id of the supplier this script has to search late issues.
+
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
@@ -35,18 +54,19 @@ my $query = new CGI;
 # my @subscriptions = GetSubscriptions($title,$ISSN);
 
 my $supplierid = $query->param('supplierid');
-my %supplierlist = GetSupplierListWithLateIssues;
+my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 push @select_supplier,"";
 foreach my $supplierid (keys %supplierlist){
-	push @select_supplier, $supplierid
+    push @select_supplier, $supplierid
 }
-my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
-			-values   => \@select_supplier,
-			-default  => $supplierid,
-			-labels   => \%supplierlist,
-			-size     => 1,
-			-multiple => 0 );
+my $CGIsupplier=CGI::scrolling_list(
+            -name     => 'supplierid',
+            -values   => \@select_supplier,
+            -default  => $supplierid,
+            -labels   => \%supplierlist,
+            -size     => 1,
+            -multiple => 0 );
 
 my @lateissues;
 @lateissues = GetLateIssues($supplierid) if $supplierid;
@@ -56,18 +76,18 @@ my $nothing;
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/lateissues.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
+                query => $query,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {catalogue => 1},
+                debug => 1,
+                });
 
 $template->param(
-	CGIsupplier => $CGIsupplier,
-	lateissues => \@lateissues,
-	phone => $supplierinfo[0]->{phone},
-	booksellerfax => $supplierinfo[0]->{booksellerfax},
-	bookselleremail => $supplierinfo[0]->{bookselleremail},
-	);
+    CGIsupplier => $CGIsupplier,
+    lateissues => \@lateissues,
+    phone => $supplierinfo[0]->{phone},
+    booksellerfax => $supplierinfo[0]->{booksellerfax},
+    bookselleremail => $supplierinfo[0]->{bookselleremail},
+    );
 output_html_with_http_headers $query, $cookie, $template->output;
