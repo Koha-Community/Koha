@@ -54,7 +54,6 @@ This module contains routines for adding, modifying and deleting members/patrons
 #'
 
 @ISA    = qw(Exporter);
-@EXPORT = qw();
 
 @EXPORT = qw(
  &BornameSearch &getmember &borrdata &borrdata2 &fixup_cardnumber &findguarantees &findguarantor &GuarantornameSearch &NewBorrowerNumber   &modmember &newmember &changepassword &borrissues &allissues
@@ -64,7 +63,7 @@ This module contains routines for adding, modifying and deleting members/patrons
   &borrowercategories &getborrowercategory
   &fixEthnicity
   &ethnicitycategories get_institutions add_member_orgs
-  &get_age
+  &get_age &GetBorrowersFromSurname &GetBranchCodeFromBorrowers
 );
 
 
@@ -1307,6 +1306,65 @@ sub add_member_orgs {
 
 }    # sub add_member_orgs
 
+=head2 GetBorrowersFromSurname
+
+=over 4
+
+\@resutlts = GetBorrowersFromSurname($surname)
+this function get the list of borrower names like $surname.
+return :
+the table of results in @results
+
+=back
+
+=cut
+sub GetBorrowersFromSurname  {
+    my ($searchstring)=@_;
+    my $dbh = C4::Context->dbh;
+    $searchstring=~ s/\'/\\\'/g;
+    my @data=split(' ',$searchstring);
+    my $count=@data;
+    my $query = qq|
+        SELECT   surname,firstname
+        FROM     borrowers
+        WHERE    (surname like ?)
+        ORDER BY surname
+    |;
+    my $sth=$dbh->prepare($query);
+    $sth->execute("$data[0]%");
+    my @results;
+    my $count = 0;
+    while (my $data=$sth->fetchrow_hashref){
+         push(@results,$data);
+         $count++;
+    }
+     $sth->finish;
+     return ($count,\@results);
+}
+
+=head2 GetBranchCodeFromBorrowers
+
+=over 4
+
+$sth = GetBranchCodeFromBorrowers();
+
+this function just prepare the SQL request.
+After this function, don't forget to execute it by using $sth->execute($borrowernumber)
+return :
+$sth = $dbh->prepare($query).
+
+=back
+
+=cut
+sub GetBranchCodeFromBorrowers {
+    my $dbh = C4::Context->dbh;
+    my $query = qq|
+        SELECT flags, branchcode
+        FROM   borrowers
+        WHERE  borrowernumber = ?
+    |;
+    return $dbh->prepare($query);
+}
 END { }       # module clean-up code here (global destructor)
 
 1;
