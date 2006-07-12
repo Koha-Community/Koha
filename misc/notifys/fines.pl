@@ -12,6 +12,7 @@ use Data::Dumper;
 use HTML::Template;
 use Mail::Sendmail;
 use Mail::RFC822::Address;
+use C4::Biblio;
 use strict;
 
 

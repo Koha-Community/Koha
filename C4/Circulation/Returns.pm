@@ -40,6 +40,7 @@ use C4::Scan;
 use C4::Stats;
 use C4::Members;
 use C4::Print;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
 
