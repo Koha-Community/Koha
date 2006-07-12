@@ -42,7 +42,7 @@ my $sth;
 my ($template, $loggedinuser, $cookie);
 my $biblionumber = $query->param('biblionumber');
 if ($selectview eq "full"){
-	my $subscriptions = GetFullSubscriptionListFromBiblionumber($biblionumber);
+	my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
 	
 	my $title = $subscriptions->[0]{bibliotitle};
 	my $yearmin=$subscriptions->[0]{year};
@@ -70,7 +70,7 @@ if ($selectview eq "full"){
 		);
 
 } else {
-	my $subscriptions = GetSubscriptionListFromBiblionumber($biblionumber);
+	my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
 	
 	($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "opac-serial-issues.tmpl",
