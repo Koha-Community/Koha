@@ -8,12 +8,10 @@
 		You must define a budget in parameters
 	<!-- TMPL_ELSE -->
 		<form action="/cgi-bin/koha/acqui/order.pl" method="post">
-			<h2>Start, Recieve, or Modify Any Order</h2>
-			<p><label for="supplier">Supplier ID or Name</label><input type="text" size="25" name="supplier" id="supplier" /></p>
+			<h2>Start, recieve, or modify any order</h2>
+			<p><label for="supplier">Supplier ID or name</label><input type="text" size="25" name="supplier" id="supplier" />
 			<input type="submit" value="Search" />
-		</form>
-		<form action="histsearch.pl" method="get">
-			<input type="submit" value="Search Order History" />
+			</p>
 		</form>
 	<!-- /TMPL_IF -->
 </div>
@@ -21,7 +19,7 @@
 
 <div id="acqui_acqui_home_currency">
 <!-- TMPL_IF NAME="loop_currency" -->
-	<h2>Exchange Rates</h2>
+	<h2>Exchange rates</h2>
 	<form action="/cgi-bin/koha/currency.pl">
 	<table>
 		<tr>
@@ -52,7 +50,7 @@
 <div id="acqui_acqui_home_suggestions">
 	<h2>Pending Suggestions</h2>
 		<!-- TMPL_IF name="suggestion" -->
-			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage Suggestions</a>
+			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage suggestions</a>
 		<!-- TMPL_ELSE -->
 			<p>No suggestions waiting</p>
 		<!-- /TMPL_IF -->
@@ -62,7 +60,7 @@
 	<!-- TMPL_IF name="nobudget" -->
 		<p>You must define a budget in parameters</p>
 	<!-- TMPL_ELSE -->
-	<h2>Budgets and Bookfunds</h2>
+	<h2>Budgets and bookfunds</h2>
 	<table>
 		<tr>
 			<th>Budgets</th>
