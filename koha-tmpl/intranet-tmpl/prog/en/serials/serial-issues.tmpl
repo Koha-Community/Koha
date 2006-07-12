@@ -97,15 +97,15 @@
 <!-- /TMPL_LOOP -->
 </div>
 <div id="action">
-	<form action="/cgi-bin/koha/serials-home.pl">
+	<form action="/cgi-bin/koha/serials/serials-home.pl">
 		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
 		<input type="submit" value="Subscriptions" />
 	</form>
-	<form action="/cgi-bin/koha/MARCdetail.pl />
+	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" >
 		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
 		<input type="submit" value="Back to biblio" />
 	</form>
-	<form action="serial-issues.pl">
+	<form action="/cgi-bin/koha/serials/serial-issues.pl">
 		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->">
 		<input type="hidden" name="selectview" value="full">
 		<input type="submit" value="Complete view">
