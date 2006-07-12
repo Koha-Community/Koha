@@ -19,6 +19,51 @@
 
 # $Id$
 
+=head1 NAME
+
+acceptorreject.pl
+
+=head1 DESCRIPTION
+
+this script modify the status of a subscription to ACCEPTED or to REJECTED
+
+=head1 PARAMETERS
+
+=over 4
+
+=item title
+
+=item author
+
+=item note
+
+=item copyrightdate
+
+=item publishercode
+
+=item volumedesc
+
+=item publicationyear
+
+=item place
+
+=item isbn
+
+=item status
+
+=item suggestedbyme
+
+=item op
+op can be :
+ * aorr_confirm : to confirm accept or reject
+ * delete_confirm : to confirm the deletion
+
+=back
+
+
+=cut
+
+
 use strict;
 require Exporter;
 use CGI;
