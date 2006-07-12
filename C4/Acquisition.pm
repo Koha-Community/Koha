@@ -1013,7 +1013,7 @@ sub histsearch {
     if ( $title || $author || $name || $from_placed_on || $to_placed_on ) {
         my $dbh   = C4::Context->dbh;
         my $query =
-"select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.quantityreceived, aqorders.ecost from aqorders,aqbasket,aqbooksellers,biblio";
+"select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.quantityreceived, aqorders.ecost, aqorders.ordernumber from aqorders,aqbasket,aqbooksellers,biblio";
         $query .= ",borrowers "
           if ( C4::Context->preference("IndependantBranches") );
         $query .=
