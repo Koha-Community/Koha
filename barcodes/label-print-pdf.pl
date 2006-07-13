@@ -28,7 +28,7 @@ use PDF::Reuse::Barcode;
 use PDF::Report;
 
 #use Acme::Comment;
-use Data::Dumper;
+#use Data::Dumper;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
@@ -76,7 +76,7 @@ my $x_pos_circ2 = 369;
 
 my $pageheight = 792;
 
-warn "STARTROW = $startrow\n";
+#warn "STARTROW = $startrow\n";
 
 my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
@@ -85,9 +85,9 @@ my $y_pos_initial_startrow =
 my $y_pos_initial = ( ( 792 - 36 ) - 90 );
 my $y_pos         = $y_pos_initial_startrow;
 
-warn "Y POS INITAL : $y_pos_initial";
-warn "Y POS : $y_pos";
-warn "Y START ROW = $y_pos_initial_startrow";
+#warn "Y POS INITAL : $y_pos_initial";
+#warn "Y POS : $y_pos";
+#warn "Y START ROW = $y_pos_initial_startrow";
 
 my $rowspace         = 36;
 my $page_break_count = $startrow;
@@ -127,8 +127,7 @@ foreach $item (@resultsloop) {
 
     $DB::single = 1;
 
-    warn
-"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
+    #warn "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
 
     build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
         $conf_data->{'barcodetype'}, \$item );
@@ -173,20 +172,20 @@ my $pagenumber = 1;
 $pdf->openpage($pagenumber);
 
 ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
-warn "PAGE DIM = $pagewidth, $pageheight";
-warn "Y START ROW = $y_pos_initial_startrow";
+#warn "PAGE DIM = $pagewidth, $pageheight";
+#warn "Y START ROW = $y_pos_initial_startrow";
 my $y_pos = ( $y_pos_initial_startrow + 90 );
 
 #my $y_pos = ( $y_pos_initial_startrow  );
-warn "Y POS = $y_pos";
+#warn "Y POS = $y_pos";
 $pdf->setAlign('left');
 $pdf->setSize(11);
 
 my $page_break_count = $startrow;
-warn "INIT PAGEBREAK COUNT = $page_break_count";
+#warn "INIT PAGEBREAK COUNT = $page_break_count";
 
-warn "#----------------------------------\n";
-warn "INIT VPOS = $vPos, hPos = $hPos";
+#warn "#----------------------------------\n";
+#warn "INIT VPOS = $vPos, hPos = $hPos";
 
 my $vPosSpacer     = 15;
 my $start_text_pos = 39;    # ( 36 - 5 = 31 ) 5 is an inside border for text.
@@ -195,7 +194,7 @@ my $spine_label_text_with = 67;
 foreach $item (@resultsloop) {
 
     #warn Dumper $item;
-    warn "START Y_POS=$y_pos";
+    #warn "START Y_POS=$y_pos";
     my $firstrow = 0;
 
     $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) );    # INIT START POS
@@ -248,7 +247,7 @@ foreach $item (@resultsloop) {
 
     $page_break_count++;
     $i2++;
-    warn "#----------------------------------\n";
+    #warn "#----------------------------------\n";
 
 }
 $DB::single = 1;
