@@ -196,7 +196,16 @@ sub get_template_and_user {
 			$template->param(CAN_user_tools => 1); }
 		
 	}
-	unless ($in->{'type'} eq "intranet") {
+	if  ($in->{'type'} eq "intranet") {
+        $template->param(
+                        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),  
+                        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+                        IntranetNav => C4::Context->preference("IntranetNav"),
+
+        );
+
+	}
+        else {
 	$template->param(
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
