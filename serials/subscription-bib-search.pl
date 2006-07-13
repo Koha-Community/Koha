@@ -179,11 +179,10 @@ if ($op eq "do_search") {
 
     my  %itemtypes = GetItemTypes();
     my @values = values %itemtypes;
-    my @labels = keys %itemtypes;
     my $CGIitemtype=CGI::scrolling_list(
             -name     => 'value',
             -values   => \@values,
-            -labels   => \@labels,
+            -labels   => \%itemtypes,
             -size     => 1,
             -multiple => 0
     );
