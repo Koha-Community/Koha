@@ -35,8 +35,6 @@ use strict;
 
 my $query=new CGI;
 my $id=$query->param('supplierid');
-my $op=$query->param('op');
-
 my ($count,@booksellers)=bookseller($id);
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/supplier.tmpl",
@@ -86,58 +84,7 @@ $template->param(id => $id,
 					listincgst => $booksellers[0]->{'listincgst'},
 					invoiceincgst => $booksellers[0]->{'invoiceincgst'},
 					discount => $booksellers[0]->{'discount'},
-					invoiceprice=>$booksellers[0]->{'invoiceprice'},
-					listprice=>$booksellers[0]->{'listprice'},
-					intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-					intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-					IntranetNav => C4::Context->preference("IntranetNav"),
-					);
-}else{
-	my  ($count, $currencies) = &getcurrencies();
-	my @loop_pricescurrency;
-	my @loop_invoicecurrency;
-	for (my $i=0;$i<$count;$i++) {
-		if ($booksellers[0]->{'listprice'} eq $currencies->[$i]->{'currency'}) {
-			push @loop_pricescurrency, { currency => "<option selected value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>" };
-		} else {
-			push @loop_pricescurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
-		}
-		if ($booksellers[0]->{'invoiceprice'} eq $currencies->[$i]->{'currency'}) {
-			push @loop_invoicecurrency, { currency => "<option selected value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
-		} else {
-			push @loop_invoicecurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
-		}
-	}
-	$template->param(id => $id,
-						name => $booksellers[0]->{'name'},
-						postal =>$booksellers[0]->{'postal'},
-						address1 => $booksellers[0]->{'address1'},
-						address2 => $booksellers[0]->{'address2'},
-						address3 => $booksellers[0]->{'address3'},
-						address4 => $booksellers[0]->{'address4'},
-						phone =>$booksellers[0]->{'phone'},
-						fax => $booksellers[0]->{'fax'},
-						url => $booksellers[0]->{'url'},
-						contact => $booksellers[0]->{'contact'},
-						contpos => $booksellers[0]->{'contpos'},
-						contphone => $booksellers[0]->{'contphone'},
-						contaltphone => $booksellers[0]->{'contaltphone'},
-						contfax => $booksellers[0]->{'contfax'},
-						contemail => $booksellers[0]->{'contemail'},
-						notes => $booksellers[0]->{'notes'},
-						contnotes => $booksellers[0]->{'contnotes'},
-						active => $booksellers[0]->{'active'},
-						specialty => $booksellers[0]->{'specialty'},
-						gstreg => $booksellers[0]->{'gstreg'},
-						listincgst => $booksellers[0]->{'listincgst'},
-						invoiceincgst => $booksellers[0]->{'invoiceincgst'},
-						discount => $booksellers[0]->{'discount'},
-						loop_pricescurrency => \@loop_pricescurrency,
-						loop_invoicecurrency => \@loop_invoicecurrency,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-			IntranetNav => C4::Context->preference("IntranetNav"),
-			enter=>1,
-						);
-}
+					loop_pricescurrency => \@loop_pricescurrency,
+					loop_invoicecurrency => \@loop_invoicecurrency,);
+
 output_html_with_http_headers $query, $cookie, $template->output;
