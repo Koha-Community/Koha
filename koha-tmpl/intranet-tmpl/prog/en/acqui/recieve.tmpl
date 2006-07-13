@@ -33,7 +33,7 @@
 			<tr>
 				<td><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><a href="orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
 				<td><!-- TMPL_VAR NAME="unitprice" --></td>
 				<td></td>
@@ -68,7 +68,7 @@
 </div>
 <div id="acqui_recieve_search">
 	<h2>Add a book to the receipt</h2>
-	<form action="/cgi-bin/koha/acqui/acquire.pl">
+	<form action="/cgi-bin/koha/acqui/orderreceive.pl">
 		<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
 		<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
 		<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
