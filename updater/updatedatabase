@@ -1182,7 +1182,7 @@ my %tabledata = (
             value               => '',
             forceupdate         => {
                 'explanation' => 1,
-                'type'        => 1
+                'type'        => 'Textarea',
             },
             explanation =>
 'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
@@ -2134,6 +2134,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.47  2006/07/15 18:53:24  kados
+# OpacNav should be a textarea, now it is.
+#
 # Revision 1.100.2.46  2006/06/20 18:02:23  oleonard
 # Fixing two minor typos
 #
