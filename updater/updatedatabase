@@ -849,15 +849,23 @@ my %fielddefinitions = (
 		},
 	],
 	aqbooksellers =>  [
-		{
-			field	=> 'listprice',
-			type	=> 'varchar(10)',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-		{
+{
+            field   => 'id',
+            type    => 'int(11)',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '',
+            extra   => 'auto_increment',
+},
+{
+            field   => 'listprice',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => '',
+},
+{
 			field	=> 'invoiceprice',
 			type	=> 'varchar(10)',
 			null	=> 'NULL',
@@ -1716,13 +1724,14 @@ foreach $table ( keys %fielddefinitions ) {
 				$action="add";
 			}
 # if it's a primary key, drop the previous pk, before altering the table
-			my $sth;
-			if ($key ne 'PRIMARY KEY') {
-				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
-			} else {
-				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
-			}
-			$sth->execute($default);
+# 			my $sth;
+   my $request = "alter table $table ";
+    $request.=" drop primary key" if $key eq 'PRIMARY KEY';
+    $request.= " $action $field $type $null $key $extra ";
+    $request.= "default ".$dbh->quote($default) if $default;
+    $request.= " $after";
+#    print "REQ : $request";
+			$dbh->do($request);
 			print "  alter or create $field in $table\n" unless $silent;
 		}
 	}
@@ -2164,8 +2173,8 @@ sub MARCgetitem {
 exit;
 
 # $Log$
-# Revision 1.154  2006/07/17 12:28:45  toins
-# sync with rel_2_2
+# Revision 1.155  2006/07/17 12:51:48  toins
+# auto_increment id in aqbooksellers
 #
 # Revision 1.153  2006/07/04 14:36:52  toins
 # Head & rel_2_2 merged
