@@ -38,8 +38,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
   &display_date_format
   &format_date
   &format_date_in_iso
-  &today
-  get_date_format_string_for_DHTMLcalendar
+  &get_date_format_string_for_DHTMLcalendar
 );
 
 sub get_date_format {
