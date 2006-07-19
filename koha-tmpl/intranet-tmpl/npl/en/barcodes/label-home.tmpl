@@ -1,181 +1,201 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Barcodes and Labels<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Labels<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="label-topmenu.inc" -->
 <!-- TMPL_INCLUDE name="intranet-nav.inc" -->
 
 <div id="main">
-<form name="input" action="barcodes/label-manager.pl" method="get">
+<form name="input" action="/cgi-bin/koha/barcodes/label-manager.pl" method="get">
 
-<h3>Choose Fields to Print</h3>
-<table summary="Fields to Print">
+<h3>
+        Choose Fields to Print
+</h3>
+<table summary="fields to print">
 <tr>
         <td>
+                <input type="checkbox" name="itemtype" value=1 
                 <!-- TMPL_IF NAME="itemtype"-->
-                    <input type="checkbox" id="itemtype" name="itemtype" value="1" checked="checked" />
-		<!-- TMPL_ELSE -->
-                    <input type="checkbox" id="itemtype" name="itemtype" value="1" />
-		<!-- /TMPL_IF --> 
+                     checked
+                <!-- /TMPL_IF --> 
                 <label for="itemtype">Item Type</label>
         </td>
 
         <td>
+                <input type="checkbox" name="isbn" value=1 
                 <!-- TMPL_IF NAME="isbn" -->
-                    <input type="checkbox" id="isbn" name="isbn" value="1" checked="checked" />
-		<!-- TMPL_ELSE -->
-                    <input type="checkbox" id="isbn" name="isbn" value="1" />
-		<!-- /TMPL_IF --> 
+                     checked
+                <!-- /TMPL_IF --> 
                 <label for="isbn">ISBN</label>
         </td>
 
 </tr>
 <tr>
         <td>
+                <input type="checkbox" name="dcn" value=1 
                 <!-- TMPL_IF NAME="dewey" -->
-                     <input type="checkbox" id="dcn" name="dcn" value="1" checked="checked" />
-		<!-- TMPL_ELSE -->
-                     <input type="checkbox" id="dcn" name="dcn" value="1" />
-		<!-- /TMPL_IF -->
+                     checked
+                <!-- /TMPL_IF -->
                 <label for="dcn">Dewey / Call Number</label>
         </td>
         <td>
+                <input type="checkbox" name="classif" value=1  
                 <!-- TMPL_IF NAME="class" -->
-                     <input type="checkbox" id="classif" name="classif" value="1" checked="checked" />
-		<!-- TMPL_ELSE -->
-                     <input type="checkbox" id="classif" name="classif" value="1" />
-		<!-- /TMPL_IF -->
+                     checked
+                <!-- /TMPL_IF -->
                 <label for="classif">Classification</label>
         </td>
 </tr>
 </table>
+<p>
 
-<p><label for="papertype">Confirm Label Type</label>
-        <select id="papertype" name="papertype">
+
+<h3>
+        Confirm Label Type
+</h3>
+<!-- FIXME: these paper types need to be pulled from a DB table :) -->
+        <select name="papertype">
                 <option value="Gaylord8511">Gaylord-8511</option>
-        </select></p>
-
-<p><label for="barcodetype">Confirm Barcode Type</label>
- <select id="barcodetype" name="barcodetype">
-		<!-- TMPL_IF NAME="COOP2of5_checked" -->
-		    <option value="COOP2of5" selected="selected">COOP2of5</option>
-		<!-- TMPL_ELSE -->
-		    <option value="COOP2of5">COOP2of5</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="Code39_checked" -->
-		    <option value="Code39" selected="selected">Code39</option>
-		<!-- TMPL_ELSE -->
-		    <option value="Code39">Code39</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="EAN13_checked" -->
-		    <option value="EAN13" selected="selected">EAN13(JAN13)</option>
-		<!-- TMPL_ELSE -->
-		    <option value="EAN13">EAN13(JAN13)</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="EAN8_checked" -->
-		     <option value="EAN8" selected="selected">EAN8(JAN8)</option>
-							 <!-- TMPL_ELSE -->
-		     <option value="EAN8">EAN8(JAN8)</option>
-							 <!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ITF_checked" -->
-		    <option value="ITF" selected="selected">ITF(Interleaved2of5)</option>
-		<!-- TMPL_ELSE -->
-		    <option value="ITF">ITF(Interleaved2of5)</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="Industrial2of5_checked" -->
-		    <option value="Industrial2of5" selected="selected">Industrial2of5</option>
-		<!-- TMPL_ELSE -->
-		    <option value="Industrial2of5">Industrial2of5</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="Matrix2of5_checked" -->
-		    <option value="Matrix2of5" selected="selected">Matrix2of5</option>
-		<!-- TMPL_ELSE -->
-		    <option value="Matrix2of5">Matrix2of5</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="NW7_checked" -->
-		    <option value="NW7" selected="selected">NW7</option>
-		<!-- TMPL_ELSE -->
-		    <option value="NW7">NW7</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="QRcode_checked" -->
-		    <option value="QRcode" selected="selected">QRcode</option>
-		<!-- TMPL_ELSE -->
-		    <option value="QRcode">QRcode</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="UPC-A_checked" -->
-		    <option value="UPC-A" selected="selected">UPC-A</option>
-		<!-- TMPL_ELSE -->
-		    <option value="UPC-A">UPC-A</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="UPC-E_checked" -->
-		    <option value="UPC-E" selected="selected">UPC-E</option>
-		<!-- TMPL_ELSE -->
-		    <option value="UPC-E">UPC-E</option>
-		<!-- /TMPL_IF -->
-		
+                <option value="OPUS">OPUS-Dot Matrix</option>
         </select>
-</p>
 
-<p>
-<label for="startrow">Start printing from Row number:</label>
-	<select id="startrow" name="startrow">
-              
+
+<h3>
+        Confirm Barcode Type
+</h3>
+
+
+
+ <select name="barcodetype">
+                <option value="COOP2of5"
+                        <!-- TMPL_IF NAME="COOP2of5_checked" -->
+                             selected
+                        <!--/TMPL_IF -->
+                        >COOP2of5</option>
+                <option value="Code39"
+                        <!-- TMPL_IF NAME="Code39_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >Code39</option>
+                <option value="EAN13"
+                        <!-- TMPL_IF NAME="EAN13_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >EAN13(JAN13)</option>
+                <option value="EAN8"
+                        <!-- TMPL_IF NAME="EAN8_checked" -->
+                             selected<!-- /TMPL_IF -->
+                        >EAN8(JAN8)</option>
+                <option value="ITF"
+                        <!-- TMPL_IF NAME="ITF_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >ITF(Interleaved2of5)</option>
+                <option value="Industrial2of5"
+                        <!-- TMPL_IF NAME="Industrial2of5_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >Industrial2of5</option>
+                <option value="Matrix2of5"
+                        <!-- TMPL_IF NAME="Matrix2of5_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >Matrix2of5</option>
+                <option value="NW7"
+                        <!-- TMPL_IF NAME="NW7_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >NW7</option>
+                <option value="QRcode"
+                        <!-- TMPL_IF NAME="QRcode_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >QRcode</option>
+                <option value="UPC-A"
+                        <!-- TMPL_IF NAME="UPC-A_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >UPC-A</option>
+                <option value="UPC-E"
+                        <!-- TMPL_IF NAME="UPC-E_checked" -->
+                             selected
+                        <!-- /TMPL_IF -->
+                        >UPC-E</option>
+        </select>
+</h3>
+
+
+<h3>
+        Confirm Printing Type
+</h3>
+
+<input type="radio" name="printingtype" value="spine"
+        <!-- TMPL_IF NAME="printingtype_spine" -->
+                checked
+        <!--/TMPL_IF -->
+	>Spine Labels
+<input type="radio" name="printingtype" value="barcode"
+        <!-- TMPL_IF NAME="printingtype_barcode" -->
+                checked
+        <!--/TMPL_IF -->
+	>Barcode Labels
+<input type="radio" name="printingtype" value="both"  
+	<!-- TMPL_IF NAME="printingtype_both" -->
+		checked       
+	<!--/TMPL_IF -->
+	>Both Labels
+
+
+<h3>
+        Start printing from Row number:<select name="startrow">
+              <option value="1"
                       <!-- TMPL_IF NAME="startrow1_checked" -->
-		  <option value="1" selected="selected">1</option>
-		<!-- TMPL_ELSE -->
-		  <option value="1">1</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>1</option>
+              <option value="2"
                       <!-- TMPL_IF NAME="startrow2_checked" -->
-		  <option value="2" selected="selected">2</option>
-		<!-- TMPL_ELSE -->
-		  <option value="2">2</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>2</option>
+              <option value="3"
                       <!-- TMPL_IF NAME="startrow3_checked" -->
-		  <option value="3" selected="selected">3</option>
-		<!-- TMPL_ELSE -->
-		  <option value="3">3</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>3</option>
+              <option value="4"
                       <!-- TMPL_IF NAME="startrow4_checked" -->
-		 <option value="4" selected="selected">4</option>
-		<!-- TMPL_ELSE -->
-		 <option value="4">4</option>
-		<!-- /TMPL_IF -->
-              
+                          selected
+                      <!-- /TMPL_IF -->>4</option>
+              <option value="5"
                       <!-- TMPL_IF NAME="startrow5_checked" -->
-		  <option value="5" selected="selected">5</option>
-		<!-- TMPL_ELSE -->
-		  <option value="5">5</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>5</option>
+              <option value="6"
                       <!-- TMPL_IF NAME="startrow6_checked" -->
-		  <option value="6" selected="selected">6</option>
-		<!-- TMPL_ELSE -->
-		  <option value="6">6</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>6</option>
+              <option value="7"
                       <!-- TMPL_IF NAME="startrow7_checked" -->
-		  <option value="7" selected="selected">7</option>
-		<!-- TMPL_ELSE -->
-		  <option value="7">7</option>
-		<!-- /TMPL_IF -->
-              
+                           selected
+                      <!-- /TMPL_IF -->>7</option>
+              <option value="8"
                       <!-- TMPL_IF NAME="startrow8_checked" -->
-		  <option value="8" selected="selected">8</option>
-		<!-- TMPL_ELSE -->
-		  <option value="8">8</option>
-		<!-- /TMPL_IF -->
+                           selected
+                      <!-- /TMPL_IF -->>8</option>
         </select>
-</p>
-<p>
-        <input type="submit" value="Submit" class="submit" />
-        <input type="hidden" name=op value="save_conf" />
+</h3>
 
+<p>
+<p>
+ <input type="checkbox" name="guidebox" value=1
+                <!-- TMPL_IF NAME="guidebox"-->
+                     checked
+                <!-- /TMPL_IF -->
+                <label for="guidebox">Draw Guide Boxes</label>
+<p>
+<p>
+<p>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+        <input type="hidden" name=op value="save_conf">
 </p>
 </form>
-
-
-
 </div>
- <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
