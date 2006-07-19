@@ -357,7 +357,7 @@ sub plugin {
 		my @branchloop;
 		my @select_branch;
 		my %select_branches;
-		my $branches=getbranches;
+		my $branches=GetBranches;
 		push @select_branch, "";
 		$select_branches{''} = "";
 		foreach my $thisbranch (keys %$branches){

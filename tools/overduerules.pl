@@ -121,7 +121,7 @@ if ($op eq 'save') {
 	}
 	unless ($err) {$template->param(datasaved=>1);}
 }
-my $branches = getbranches;
+my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;

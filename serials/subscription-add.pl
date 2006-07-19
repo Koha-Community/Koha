@@ -173,8 +173,9 @@ if ($op eq 'mod') {
         "dow$dow" => 1,
         );
 }
-##FIXME : Looks like never used.
-(my $temp,@budgets) = bookfunds($homebranch);
+@budgets = GetBookFunds($homebranch);
+my $temp = scalar(@budgets);
+
 # find default value & set it for the template
 for (my $i=0;$i<$#budgets;$i++) {
     if ($budgets[$i]->{'aqbudgetid'} eq $aqbudgetid) {

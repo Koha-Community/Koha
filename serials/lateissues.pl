@@ -72,7 +72,7 @@ my @lateissues;
 @lateissues = GetLateIssues($supplierid) if $supplierid;
 my @supplierinfo;
 my $nothing;
-($nothing,@supplierinfo)=bookseller($supplierid) if $supplierid;
+($nothing,@supplierinfo)=GetBookSeller($supplierid) if $supplierid;
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/lateissues.tmpl",

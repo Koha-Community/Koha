@@ -142,7 +142,7 @@ if (C4::Context->preference("serialsadditems")){
     my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$subscription->{biblionumber});
     my $fwk=MARCfind_frameworkcode($dbh,$bibid);
 
-    my $branches = getbranches;
+    my $branches = GetBranches;
     my @branchloop;
     foreach my $thisbranch (keys %$branches) {
         my %row =(value => $thisbranch,
