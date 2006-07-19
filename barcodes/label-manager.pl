@@ -8,21 +8,25 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use POSIX;
 
-my $dbh         = C4::Context->dbh;
-my $query       = new CGI;
-my $op          = $query->param('op');
-my $barcodetype = $query->param('barcodetype');
-my $title       = $query->param('title');
-my $isbn        = $query->param('isbn');
-my $itemtype    = $query->param('itemtype');
-my $bcn         = $query->param('bcn');
-my $dcn         = $query->param('dcn');
-my $classif     = $query->param('classif');
-my $author      = $query->param('author');
-my $papertype   = $query->param('papertype');
-my $itemnumber  = $query->param('itemnumber');
-my $summary     = $query->param('summary');
-my $startrow    = $query->param('startrow');
+my $dbh          = C4::Context->dbh;
+my $query        = new CGI;
+my $op           = $query->param('op');
+my $barcodetype  = $query->param('barcodetype');
+my $title        = $query->param('title');
+my $isbn         = $query->param('isbn');
+my $itemtype     = $query->param('itemtype');
+my $bcn          = $query->param('bcn');
+my $dcn          = $query->param('dcn');
+my $classif      = $query->param('classif');
+my $author       = $query->param('author');
+my $papertype    = $query->param('papertype');
+my $itemnumber   = $query->param('itemnumber');
+my $summary      = $query->param('summary');
+my $startrow     = $query->param('startrow');
+my $printingtype = $query->param('printingtype');
+my $guidebox     = $query->param('guidebox');
+
+warn $printingtype;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -42,12 +46,14 @@ if ( $op eq 'save_conf' ) {
     $sth2->finish;
     my $query2 = "INSERT INTO labels_conf 
 			( barcodetype, title, isbn, itemtype, barcode, 	
-			  dewey, class, author, papertype, startrow)
-			   values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+			  dewey, class, author, papertype, printingtype, 
+				guidebox, startrow)
+			   values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
     my $sth2 = $dbh->prepare($query2);
     $sth2->execute(
-        $barcodetype, $title,   $isbn,   $itemtype,  $bcn,
-        $dcn,         $classif, $author, $papertype, $startrow
+        $barcodetype, $title,        $isbn,     $itemtype,
+        $bcn,         $dcn,          $classif,  $author,
+        $papertype,   $printingtype, $guidebox, $startrow
     );
     $sth2->finish;
 
@@ -65,6 +71,7 @@ elsif ( $op eq 'deleteall' ) {
     $sth2->finish;
 }
 elsif ( $op eq 'delete' ) {
+    warn "MASON, deleting label..";
     my $query2 = "DELETE FROM labels where itemnumber = ?";
     my $sth2   = $dbh->prepare($query2);
     $sth2->execute($itemnumber);
@@ -123,17 +130,17 @@ if ( !$startrow ) {
 #calc-ing number of sheets
 my $number_of_results = scalar @resultsloop;
 my $sheets_needed = ( ( --$number_of_results + $startrow ) / 8 );
-        $sheets_needed = ceil($sheets_needed);    # rounding up int's
+$sheets_needed = ceil($sheets_needed);    # rounding up int's
 
-my $tot_labels = ($sheets_needed * 8);
-my $start_results =  ($number_of_results + $startrow);
-my $labels_remaining = ($tot_labels - $start_results);
+my $tot_labels       = ( $sheets_needed * 8 );
+my $start_results    = ( $number_of_results + $startrow );
+my $labels_remaining = ( $tot_labels - $start_results );
 
 $template->param(
-    resultsloop             => \@resultsloop,
-    startrow                => $startrow,
-    sheets                  => $sheets_needed,
-    labels_remaining        => $labels_remaining,
+    resultsloop      => \@resultsloop,
+    startrow         => $startrow,
+    sheets           => $sheets_needed,
+    labels_remaining => $labels_remaining,
 
     intranetcolorstylesheet =>
       C4::Context->preference("intranetcolorstylesheet"),

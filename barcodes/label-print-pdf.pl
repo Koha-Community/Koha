@@ -11,8 +11,8 @@
 
 # the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
 
-use lib '/usr/local/opus-dev/intranet/modules';
-use C4::Context("/etc/koha-opus-dev.conf");
+#use lib '/usr/local/hlt/intranet/modules';
+#use C4::Context("/etc/koha-hlt.conf");
 
 #use strict;
 use CGI;
@@ -26,6 +26,7 @@ use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use PDF::Report;
+use Data::Dumper;
 
 #use Acme::Comment;
 #use Data::Dumper;
@@ -40,8 +41,21 @@ my $spine_text = "";
 my $conf_data   = get_label_options();
 my @resultsloop = get_label_items();
 
-my $barcodetype = $conf_data->{'barcodetype'};
-my $startrow    = $conf_data->{'startrow'};
+warn Dumper $conf_data;
+
+
+my $barcodetype  = $conf_data->{'barcodetype'};
+my $printingtype = $conf_data->{'printingtype'};
+my $guidebox  = $conf_data->{'guidebox'};
+my $startrow     = $conf_data->{'startrow'};
+
+if (!$printingtype) {
+	$printingtype = 'both';
+}
+
+warn $printingtype;
+warn $guidebox;
+
 
 #warn Dumper @resultsloop;
 
@@ -53,6 +67,9 @@ my $upperRightY = 792;
 
 #----------------------------------
 # setting up the pdf doc
+
+#remove the file before write, for testing
+unlink "$htdocs_path/barcodes/new.pdf";
 
 prFile("$htdocs_path/barcodes/new.pdf");
 prLogDir("$htdocs_path/barcodes");
@@ -76,18 +93,18 @@ my $x_pos_circ2 = 369;
 
 my $pageheight = 792;
 
-#warn "STARTROW = $startrow\n";
+warn "STARTROW = $startrow\n";
 
+#my $y_pos_initial = ( ( 792 - 36 ) - 90 );
 my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
   ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
 
-my $y_pos_initial = ( ( 792 - 36 ) - 90 );
-my $y_pos         = $y_pos_initial_startrow;
+my $y_pos = $y_pos_initial_startrow;
 
-#warn "Y POS INITAL : $y_pos_initial";
-#warn "Y POS : $y_pos";
-#warn "Y START ROW = $y_pos_initial_startrow";
+warn "Y POS INITAL : $y_pos_initial";
+warn "Y POS : $y_pos";
+warn "Y START ROW = $y_pos_initial_startrow";
 
 my $rowspace         = 36;
 my $page_break_count = $startrow;
@@ -111,7 +128,7 @@ my $item;
 
 my $i2 = 1;
 foreach $item (@resultsloop) {
-    if ( $i2 == 1 ) {
+    if ( $i2 == 1  && $guidebox  == 1) {
         draw_boundaries(
             $x_pos_spine, $x_pos_circ1,  $x_pos_circ2, $y_pos,
             $spine_width, $label_height, $circ_width
@@ -127,13 +144,14 @@ foreach $item (@resultsloop) {
 
     $DB::single = 1;
 
-    #warn "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
-
+    warn
+"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
+ if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
     build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
         $conf_data->{'barcodetype'}, \$item );
     build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
         $conf_data->{'barcodetype'}, \$item );
-
+}
 # added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
 # i think its embedding extra fonts in the pdf file.
 #	mode => 'graphic',
@@ -154,106 +172,118 @@ foreach $item (@resultsloop) {
 }
 ############## end of loop
 
+
 prEnd();
 
 #----------------------------------------------------------------------------
 # this second section of the script uses a diff perl class than the previous section
 # it opens the 'new.pdf' file that the previous section has just saved
 
-$file = '/usr/local/opus-dev/intranet/htdocs/intranet-tmpl/barcodes/new.pdf';
+if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
 
-my $pdf = new PDF::Report( File => $file );
+    $file = "$htdocs_path/barcodes/new.pdf";
 
-# my $pdf = new PDF::Report(PageSize => "letter",
-#                                  PageOrientation => "Landscape");
+    my $pdf = new PDF::Report( File => $file );
 
-#$pdf->newpage($nopage);
-my $pagenumber = 1;
-$pdf->openpage($pagenumber);
+    # my $pdf = new PDF::Report(PageSize => "letter",
+    #                                  PageOrientation => "Landscape");
 
-( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
-#warn "PAGE DIM = $pagewidth, $pageheight";
-#warn "Y START ROW = $y_pos_initial_startrow";
-my $y_pos = ( $y_pos_initial_startrow + 90 );
+    #$pdf->newpage($nopage);
+    my $pagenumber = 1;
+    $pdf->openpage($pagenumber);
 
-#my $y_pos = ( $y_pos_initial_startrow  );
-#warn "Y POS = $y_pos";
-$pdf->setAlign('left');
-$pdf->setSize(11);
+    ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
 
-my $page_break_count = $startrow;
-#warn "INIT PAGEBREAK COUNT = $page_break_count";
+    #warn "PAGE DIM = $pagewidth, $pageheight";
+    #warn "Y START ROW = $y_pos_initial_startrow";
+    my $y_pos = ( $y_pos_initial_startrow + 90 );
 
-#warn "#----------------------------------\n";
-#warn "INIT VPOS = $vPos, hPos = $hPos";
+    #my $y_pos = ( $y_pos_initial_startrow  );
+    #warn "Y POS = $y_pos";
 
-my $vPosSpacer     = 15;
-my $start_text_pos = 39;    # ( 36 - 5 = 31 ) 5 is an inside border for text.
-my $spine_label_text_with = 67;
+    # now needed now we are using centerString().
+    #$pdf->setAlign('left');
+    
+    # SET THE FONT SIZE
+    $pdf->setSize(9);
 
-foreach $item (@resultsloop) {
+    my $page_break_count = $startrow;
 
-    #warn Dumper $item;
-    #warn "START Y_POS=$y_pos";
-    my $firstrow = 0;
+    #warn "INIT PAGEBREAK COUNT = $page_break_count";
 
-    $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) );    # INIT START POS
-    ( $hPos, $vPos ) = $pdf->getAddTextPos();
-
-    my $hPosEnd = ( $hPos + $spine_label_text_with );           # 72
-    if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'dewey'} );
-        $vPos = $vPos - $vPosSpacer;
-    }
-
-    if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'isbn'} );
-        $vPos = $vPos - $vPosSpacer;
-    }
-
-    if ( $conf_data->{'class'} && $item->{'classification'} ) {
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'classification'} );
-        $vPos = $vPos - $vPosSpacer;
-    }
-
-    if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-        $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'itemtype'} );
-        $vPos = $vPos - $vPosSpacer;
-    }
-
-    #$pdf->drawRect(
-    #    $x_pos_spine, $y_pos,
-    #    ( $x_pos_spine + $spine_width ),
-    #    ( $y_pos - $label_height )
-    #);
-
-    $y_pos = ( $y_pos - $label_height );
-
-    #warn "END LOOP Y_POS =$y_pos";
-    #    warn "PAGECOUNT END LOOP=$page_break_count";
-    if ( $page_break_count == 8 ) {
-        $pagenumber++;
-        $pdf->openpage($pagenumber);
-
-        #warn "############# PAGEBREAK ###########";
-        $page_break_count = 0;
-        $i2               = 0;
-        $y_pos            = ( $y_pos_initial + 90 );
-    }
-
-    $page_break_count++;
-    $i2++;
     #warn "#----------------------------------\n";
+    #warn "INIT VPOS = $vPos, hPos = $hPos";
 
+    my $vPosSpacer     = 15;
+    my $start_text_pos = 39;   # ( 36 - 5 = 31 ) 5 is an inside border for text.
+    my $spine_label_text_with = 67;
+
+    foreach $item (@resultsloop) {
+
+        #warn Dumper $item;
+        #warn "START Y_POS=$y_pos";
+        my $firstrow = 0;
+
+        $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) )
+          ;                    # INIT START POS
+        ( $hPos, $vPos ) = $pdf->getAddTextPos();
+
+        my $hPosEnd = ( $hPos + $spine_label_text_with );    # 72
+        if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'dewey'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+
+        if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'isbn'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+
+        if ( $conf_data->{'class'} && $item->{'classification'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos,
+                $item->{'classification'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+
+        if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'itemtype'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+
+        #$pdf->drawRect(
+        #    $x_pos_spine, $y_pos,
+        #    ( $x_pos_spine + $spine_width ),
+        #    ( $y_pos - $label_height )
+        #);
+
+        $y_pos = ( $y_pos - $label_height );
+
+        #warn "END LOOP Y_POS =$y_pos";
+        #    warn "PAGECOUNT END LOOP=$page_break_count";
+        if ( $page_break_count == 8 ) {
+            $pagenumber++;
+            $pdf->openpage($pagenumber);
+
+            #warn "############# PAGEBREAK ###########";
+            $page_break_count = 0;
+            $i2               = 0;
+            $y_pos            = ( $y_pos_initial + 90 );
+        }
+
+        $page_break_count++;
+        $i2++;
+
+        #warn "#----------------------------------\n";
+
+    }
+    $DB::single = 1;
+    $pdf->saveAs($file);
 }
-$DB::single = 1;
-$pdf->saveAs($file);
 
 #------------------------------------------------
 
 print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
-
