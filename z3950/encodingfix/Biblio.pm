@@ -1609,65 +1609,6 @@ sub itemcount{
   return($data->{'count(*)'});
 }
 
-=item getorder
-
-  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
-
-Looks up the order with the given biblionumber and biblioitemnumber.
-
-Returns a two-element array. C<$ordernumber> is the order number.
-C<$order> is a reference-to-hash describing the order; its keys are
-fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
-tables of the Koha database.
-
-=cut
-#'
-# FIXME - This is effectively identical to &C4::Catalogue::getorder.
-# Pick one and stick with it.
-sub getorder{
-  my ($bi,$bib)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select ordernumber
-     from aqorders
-     where biblionumber=? and biblioitemnumber=?");
-  $sth->execute($bib,$bi);
-  # FIXME - Use fetchrow_array(), since we're only interested in the one
-  # value.
-  my $ordnum=$sth->fetchrow_hashref;
-  $sth->finish;
-  my $order=getsingleorder($ordnum->{'ordernumber'});
-  return ($order,$ordnum->{'ordernumber'});
-}
-
-=item getsingleorder
-
-  $order = &getsingleorder($ordernumber);
-
-Looks up an order by order number.
-
-Returns a reference-to-hash describing the order. The keys of
-C<$order> are fields from the biblio, biblioitems, aqorders, and
-aqorderbreakdown tables of the Koha database.
-
-=cut
-#'
-# FIXME - This is effectively identical to
-# &C4::Catalogue::getsingleorder.
-# Pick one and stick with it.
-sub getsingleorder {
-  my ($ordnum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
-  on aqorders.ordernumber=aqorderbreakdown.ordernumber
-  where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber
-  and biblioitems.biblioitemnumber=aqorders.biblioitemnumber");
-  $sth->execute($ordnum);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
-
 sub newbiblio {
     my ($biblio) = @_;
     my $dbh    = C4::Context->dbh;
@@ -2152,6 +2093,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.4  2006/07/19 08:56:36  toins
+# function getsingleorder deleted. It was already writed on C4::Catalogue.
+#
 # Revision 1.3  2006/07/12 17:23:48  toins
 # getitemtypes renamed to GetItemTypes
 #
