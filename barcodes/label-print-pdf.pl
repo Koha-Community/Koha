@@ -247,6 +247,19 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
                 $item->{'classification'} );
             $vPos = $vPos - $vPosSpacer;
         }
+		if ( $conf_data->{'subclass'} && $item->{'subclass'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos,
+                $item->{'subclass'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+		if ( $conf_data->{'itemcallnumber'} && $item->{'itemcallnumber'} ) {
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            $pdf->centerString( $hPos, $hPosEnd, $vPos,
+                $item->{'itemcallnumber'} );
+            $vPos = $vPos - $vPosSpacer;
+        }
+
 
         if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
             ( $hPos, $vPos1 ) = $pdf->getAddTextPos();

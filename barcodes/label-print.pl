@@ -126,9 +126,6 @@ $template->param(
 		  subclass_opt => $conf_data->{'subclass'},
 		  itemcallnumber_opt => $conf_data->{'itemcallnumber'},
 
-
-
-
     intranetcolorstylesheet =>
       C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
