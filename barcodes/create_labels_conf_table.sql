@@ -18,6 +18,8 @@ CREATE TABLE `labels_conf` (
   `barcode` tinyint(1) default '0',
   `dewey` tinyint(1) default '0',
   `class` tinyint(1) default '0',
+  `subclass` tinyint(1) default '0',
+  `itemcallnumber` tinyint(1) default '0',
   `author` tinyint(1) default '0',
   `papertype` char(100) default '',
   `startrow` int(2) default NULL,
