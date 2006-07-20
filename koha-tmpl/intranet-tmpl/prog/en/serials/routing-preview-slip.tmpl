@@ -1,0 +1,23 @@
+<!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+
+<div id="slip-block">
+<table cellspacing="0" cellpadding="0" border="0" class="collapse routingslip">
+<tr><td class="cell" colspan="3"><h3>Opus International Consultants - Information Centre</h3></td></tr>
+<tr><td class="cell" colspan="3"><b>Title:</b> <!-- TMPL_VAR NAME="title" --><br />
+<!-- TMPL_VAR NAME="issue" --></td></tr>
+<tr><td class="cell"><b>Name/Location</b></td>
+    <td class="cell"><b>Date Due</b></td></tr>
+<!-- TMPL_LOOP NAME="memberloop" -->
+        <tr><td class="name"><b><!-- TMPL_VAR NAME="name" --></b> <!-- TMPL_VAR NAME="location" --></td>
+            <td class="date">&nbsp;</td></tr>
+<!-- /TMPL_LOOP -->
+</table>
+<p><b>Notes:</b> Please return this journal
+promptly as others are waiting.
+<br /><!-- TMPL_VAR NAME="routingnotes" --></p>
+   <div id="slip-block-links">
+   <a class="button" href="javascript:window.print();self.close()">Print</a> &nbsp; <a class="button" href="javascript:self.close()">Close</a>
+   </div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
