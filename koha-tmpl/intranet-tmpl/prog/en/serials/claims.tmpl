@@ -1,5 +1,9 @@
 <!-- TMPL_UNLESS NAME="preview" -->
-<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!--
+TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 <div id="mainbloc">
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
@@ -7,13 +11,13 @@
 <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_UNLESS NAME="preview" -->
-	<h1 class="bull">Claims</h1>
+	<h1>Claims</h1>
 
 	<p>
 	<form action="claims.pl" method="post">
 	<input type="hidden" name="claimletter" value="<!-- TMPL_VAR NAME="claimletter"-->">
 	<!-- TMPL_VAR name="CGIsupplier" -->
-	<input type="submit" value="Filter by Supplier" class="button bull">
+	<input type="submit" value="Filter by Supplier" class="button">
 	</form>
 	</p>
 <!--
@@ -21,7 +25,7 @@
 	<form action="claims.pl" method="post">
 	<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid"-->">
 	<!-- TMPL_VAR name="CGIletter" -->
-	<input type="submit" value="Choose Claim Form" class="button bull">
+	<input type="submit" value="Choose Claim Form" class="button">
 	</form>
 	</p> -->
 
@@ -29,7 +33,7 @@
 <input type="hidden" name="op" value="claims" />
 
 		<!-- TMPL_IF NAME="missingissues" -->
-		<h3 class="bull">Missing Issues</h3>
+		<h3>Missing Issues</h3>
 		<table cellpadding="0" cellspacing="0" border="0" class="collapse">
 			<tr>
 				<th class="cell-header">&nbsp;</th>
@@ -61,7 +65,7 @@
 					<!-- TMPL_VAR name="claimdate" -->
 					</td>
 					<td class="cell">
-					<a href="lateissues-excel.pl?supplierid=<!--TMPL_VAR NAME="supplierid"-->&amp;serialid=<!-- TMPL_VAR name="serialid" -->&amp;op=claims" class="button bull">Export Item Data</a>
+					<a href="lateissues-excel.pl?supplierid=<!--TMPL_VAR NAME="supplierid"-->&amp;serialid=<!-- TMPL_VAR name="serialid" -->&amp;op=claims" class="button">Export Item Data</a>
 					<!--
 					<a href="claims.pl?serialid=<!-- TMPL_VAR name="serialid" -->&amp;supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,<!-- TMPL_VAR name="serialid" -->); return false">Claim Letter</a> -->
 					</td>
@@ -76,10 +80,12 @@
 <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
 
 		<!--
-		<a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="bull button">Supplier Group Claim Letter</a></p> -->
+		<a href="claims.pl?supplierid=<!-- TMPL_VAR
+name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR
+name="supplierid" -->,''); return false" class="button">Supplier Group Claim Letter</a></p> -->
 	<!-- /TMPL_IF -->
 <p><br/>
-		<input type="submit" name="submit" class="button bull" value="Export Selected Data" />
+		<input type="submit" name="submit" class="button" value="Export Selected Data" />
 
 </form>
 <!-- TMPL_ELSE -->
@@ -112,7 +118,7 @@
 		<!-- /TMPL_LOOP -->
 	<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="missingissues" -->
-		<h3 class="bull">Missing Issues</h3>
+		<h3>Missing Issues</h3>
 		<table cellpadding="0" cellspacing="4" border="0" width="550" class="collapse">
 			<tr>
 				<td class="cell"><b>Supplier<b></td>
@@ -152,7 +158,7 @@ function popup(supplierid,serialid){
 //-->
 </script>
 <!-- TMPL_UNLESS NAME="preview" -->
-<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
 <!-- /TMPL_UNLESS -->
