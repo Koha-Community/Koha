@@ -1,0 +1,122 @@
+#!/usr/bin/perl
+
+# Routing Preview.pl script used to view a routing list after creation
+# lets one print out routing slip and create (in this instance) the heirarchy
+# of reserves for the serial
+use strict;
+use CGI;
+use C4::Koha;
+use C4::Auth;
+use C4::Date;
+use C4::Output;
+use C4::Acquisition;
+use C4::Reserves2;
+use C4::Circulation::Circ2;
+use C4::Interface::CGI::Output;
+use C4::Context;
+use HTML::Template;
+use C4::Search;
+use C4::Serials;
+
+my $query = new CGI;
+my $subscriptionid = $query->param('subscriptionid');
+my $issue = $query->param('issue');
+my $routingid;
+my $ok = $query->param('ok');
+my $edit = $query->param('edit');
+my $delete = $query->param('delete');
+my $dbh = C4::Context->dbh;
+
+if($delete){
+    delroutingmember($routingid,$subscriptionid);
+    my $sth = $dbh->prepare("UPDATE serial SET routingnotes = NULL WHERE subscriptionid = ?");
+    $sth->execute($subscriptionid);    
+    print $query->redirect("routing.pl?subscriptionid=$subscriptionid&op=new");    
+}
+
+if($edit){
+    print $query->redirect("routing.pl?subscriptionid=$subscriptionid");
+}
+    
+my ($routing, @routinglist) = getroutinglist($subscriptionid);
+my $subs = GetSubscription($subscriptionid);
+my ($count,@serials) = GetSerials($subscriptionid);
+my ($template, $loggedinuser, $cookie);
+
+if($ok){
+    my $env;
+    # get biblio information....
+    my $biblio = $subs->{'biblionumber'};
+    
+    # get existing reserves .....
+    my ($count,$reserves) = FindReserves($biblio);
+    my $totalcount = $count;
+    foreach my $res (@$reserves) {
+        if ($res->{'found'} eq 'W') {
+	    $count--;
+        }
+    }
+    my ($count2,@bibitems) = bibitems($biblio);
+    my @itemresults = ItemInfo($env, $subs->{'biblionumber'}, 'intra');    
+    my $branch = $itemresults[0]->{'holdingbranch'};
+    my $const = 'o';
+    my $notes;
+    my $title = $subs->{'bibliotitle'};
+    for(my $i=0;$i<$routing;$i++){
+	my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ? 
+                                 AND cancellationdate is NULL AND (found <> 'F' or found is NULL)");
+        $sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
+        my $data = $sth->fetchrow_hashref;
+#	warn Dumper($data);
+#       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
+	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
+	    UpdateReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
+        } else {
+            CreateReserve(\$env,$branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
+	}
+    }
+    
+    
+    ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "serials/routing-preview-slip.tmpl",
+				query => $query,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});    
+} else {
+    ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "serials/routing-preview.tmpl",
+				query => $query,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {catalogue => 1},
+				debug => 1,
+				});
+}    
+
+# my $firstdate = "$serials[0]->{'serialseq'} ($serials[0]->{'planneddate'})";
+my @results;
+my $data;
+for(my $i=0;$i<$routing;$i++){
+    $data=borrdata('',$routinglist[$i]->{'borrowernumber'});
+    $data->{'location'}=$data->{'streetaddress'};
+    $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
+    $data->{'routingid'}=$routinglist[$i]->{'routingid'};
+    $data->{'subscriptionid'}=$subscriptionid;
+    push(@results, $data);
+}
+
+my $routingnotes = $serials[0]->{'routingnotes'};
+$routingnotes =~ s/\n/\<br \/\>/g;
+  
+$template->param(
+    title => $subs->{'bibliotitle'},
+    issue => $issue,
+    subscriptionid => $subscriptionid,
+    memberloop => \@results,    
+    routingnotes => $routingnotes,
+    );
+
+        output_html_with_http_headers $query, $cookie, $template->output;

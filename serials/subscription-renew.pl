@@ -65,7 +65,7 @@ my $dbh = C4::Context->dbh;
 
 my $op = $query->param('op');
 my $subscriptionid = $query->param('subscriptionid');
-
+my $done = 0; # for after form has been submitted
 my ($template, $loggedinuser, $cookie)
         = get_template_and_user({template_name => "serials/subscription-renew.tmpl",
                 query => $query,
@@ -76,6 +76,7 @@ my ($template, $loggedinuser, $cookie)
                 });
 if ($op eq "renew") {
     ReNewSubscription($subscriptionid,$loggedinuser,$query->param('startdate'),$query->param('numberlength'),$query->param('weeklength'),$query->param('monthlength'),$query->param('note'));
+    $done = 1;
 }
 
 my $subscription= GetSubscription($subscriptionid);
@@ -87,6 +88,7 @@ $template->param(startdate => format_date(GetSubscriptionExpirationDate($subscri
                 subscriptionid => $subscriptionid,
                 bibliotitle => $subscription->{bibliotitle},
                 $op => 1,
+                done => $done,
                 intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
                 intranetstylesheet => C4::Context->preference("intranetstylesheet"),
                 IntranetNav => C4::Context->preference("IntranetNav"),
