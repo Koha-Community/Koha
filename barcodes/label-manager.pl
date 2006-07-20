@@ -18,6 +18,8 @@ my $itemtype     = $query->param('itemtype');
 my $bcn          = $query->param('bcn');
 my $dcn          = $query->param('dcn');
 my $classif      = $query->param('classif');
+my $itemcallnumber   = $query->param('itemcallnumber');
+my $subclass	 = $query->param('subclass');
 my $author       = $query->param('author');
 my $papertype    = $query->param('papertype');
 my $itemnumber   = $query->param('itemnumber');
@@ -46,14 +48,15 @@ if ( $op eq 'save_conf' ) {
     $sth2->finish;
     my $query2 = "INSERT INTO labels_conf 
 			( barcodetype, title, isbn, itemtype, barcode, 	
-			  dewey, class, author, papertype, printingtype, 
+			  dewey, class, subclass, itemcallnumber, author, papertype, printingtype, 
 				guidebox, startrow)
-			   values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+			   values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
     my $sth2 = $dbh->prepare($query2);
     $sth2->execute(
         $barcodetype, $title,        $isbn,     $itemtype,
-        $bcn,         $dcn,          $classif,  $author,
-        $papertype,   $printingtype, $guidebox, $startrow
+        $bcn,         $dcn,          $classif,  $subclass,
+		$itemcallnumber,    $author, $papertype,$printingtype,
+		$guidebox, $startrow
     );
     $sth2->finish;
 

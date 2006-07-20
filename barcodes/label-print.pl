@@ -113,8 +113,7 @@ $template->param(
 
     resultsloop             => \@resultsloop,
 
-
- 	  itemtype_opt => $conf_data->{'itemtype'},
+ 	      itemtype_opt => $conf_data->{'itemtype'},
           papertype_opt => $conf_data->{'papertype'},
           author_opt => $conf_data->{'author'},
           barcode_opt => $conf_data->{'barcode'},
@@ -124,6 +123,8 @@ $template->param(
           isbn_opt => $conf_data->{'isbn'},
           dewey_opt => $conf_data->{'dewey'},
           class_opt => $conf_data->{'class'},
+		  subclass_opt => $conf_data->{'subclass'},
+		  itemcallnumber_opt => $conf_data->{'itemcallnumber'},
 
 
 

@@ -48,6 +48,8 @@ $template->param(
     isbn        => $data->{'isbn'},
     dewey       => $data->{'dewey'},
     class       => $data->{'class'},
+	subclass	=> $data->{'subclass'},
+	itemcallnumber => $data->{'itemcallnumber'},
     startrow    => $data->{'startrow'},
 
     intranetcolorstylesheet =>
