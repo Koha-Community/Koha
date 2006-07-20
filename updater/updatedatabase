@@ -178,6 +178,14 @@ my %requiretables = (
 	                        borrower1 integer,
 	                        borrower2 integer
 	                        )",
+       subscriptionroutinglist => "(
+	                        routingid int(11) NOT NULL auto_increment,
+	                        subscriptionid int(11) NOT NULL default '0',
+	                        borrowernumber int(11) NOT NULL default '0',
+	                        ranking int(11) NOT NULL default '0',
+	                        numberpattern varchar(100) NULL,
+	                        PRIMARY KEY  (routingid)
+	                        )",
 
 );
 
@@ -685,6 +693,21 @@ my %tabledata = (
 'If set, a new item will be automatically added when receiving an issue',
             type => 'YesNo',
         },
+
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'RoutingSerials',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+'If set, will use alternate serials and routing lists functionality',
+            type => 'YesNo',
+        },
+           
         {
             uniquefieldrequired => 'variable',
             variable            => 'advancedMARCeditor',
@@ -837,7 +860,67 @@ my %fielddefinitions = (
             default => '',
             extra   => ''
         },
+	{
+	    field   => 'routingnotes',
+	    type    => 'TEXT',
+	    null    => 'NULL',
+	    key     => '',
+	    default => '',
+	    extra   => ''
+	},
+	{
+	    field   => 'claimdate',
+	    type    => 'DATE',
+	    null    => 'NULL',
+	    key     => '',
+	    default => '',
+	    extra   => ''
+	},	    
     ],
+
+ subscription => [
+           {    
+	         field => 'firstacquidate',
+                 type    => 'DATE',
+                 null    => 'NULL',
+                 key     => '',
+                 default => '0000-00-00',
+ 	         extra   => ''		 
+           },
+           {     
+	         field => 'numberpattern',
+                 type    => 'int(4)',
+                 null    => 'NULL',
+                 key     => '',
+                 default => '0',
+ 	         extra   => ''		 		 
+           },
+           {     
+	         field => 'irregularity',
+                 type    => 'varchar(255)',
+                 null    => 'NULL',
+                 key     => '',
+                 default => '',
+ 	         extra   => ''		 		 
+           },
+           {     
+	         field => 'hemisphere',
+                 type    => 'int(1)',
+                 null    => '',
+                 key     => '',
+                 default => '1',
+ 	         extra   => ''		 		 
+           },
+           {     
+	         field => 'callnumber',
+                 type    => 'varchar(100)',
+                 null    => 'NULL',
+                 key     => '',
+                 default => '',
+ 	         extra   => ''		 		 
+           },     
+         ],
+    
 	aqbasket =>  [
 		{
 			field	=> 'booksellerid',
@@ -2173,6 +2256,9 @@ sub MARCgetitem {
 exit;
 
 # $Log$
+# Revision 1.156  2006/07/20 04:36:01  bob_lyon
+# Merging back in some katipo changes to serials
+#
 # Revision 1.155  2006/07/17 12:51:48  toins
 # auto_increment id in aqbooksellers
 #
