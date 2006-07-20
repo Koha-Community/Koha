@@ -57,6 +57,10 @@ my $ISSN = $query->param('ISSN');
 my $routing = $query->param('routing');
 my $searched = $query->param('searched');
 my $biblionumber = $query->param('biblionumber');
+my $alt_links = 0;
+if(C4::Context->preference("RoutingSerials")){
+    $alt_links = 0;
+}
 my @subscriptions = GetSubscriptions($title,$ISSN,$biblionumber);
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/serials-home.tmpl",
@@ -82,5 +86,6 @@ $template->param(
 	ISSN => $ISSN,
         done_searched => $searched,
         routing => $routing,
+        alt_links => $alt_links,
 	);
 output_html_with_http_headers $query, $cookie, $template->output;
