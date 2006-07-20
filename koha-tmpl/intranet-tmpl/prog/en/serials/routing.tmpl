@@ -1,0 +1,78 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+
+<script language="javascript" type="text/javascript">
+<!--
+
+function reorder_item(sid,rid,rank){
+    var mylocation = 'reorder_members.pl?subscriptionid='+sid+'&routingid='+rid+'&rank='+rank;
+    window.location.href=mylocation; 
+}
+//-->
+</script>
+
+<div id="mainbloc">
+<!-- TMPL_IF NAME="op" -->
+<h1 class="bull">Create Routing List</h1>
+<!-- TMPL_ELSE -->
+<h1 class="bull">Edit Routing List</h1>
+<!-- /TMPL_IF -->
+
+<form method="post" action="routing.pl">
+<input type="hidden" name="op" value="save" />
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
+<p><b>Serial Title:</b> <!-- TMPL_VAR NAME="title" --></p>
+<p><b>Issue:</b> 
+
+<select name="date_selected">
+<!-- TMPL_LOOP NAME="dates" -->
+<option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" <!-- TMPL_IF NAME="selected" --> selected="SELECTED" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option>
+<!-- /TMPL_LOOP -->
+</select>
+
+
+<!-- TMPL_VAR NAME="issue" --></p>
+
+<!-- TMPL_IF NAME="memberloop" -->
+<table border="0" cellspacing="0" cellpadding="0">
+<tr valign="top"><td style="padding-top:5px;"><b>List Member:</b>&nbsp;</td>
+    <td><table cellspacing="0" cellpadding="0" border="0" class="collapse">
+        <tr><td class="cell-header">Name</td>
+            <td class="cell-header">Location</td>
+            <td class="cell-header">Rank</td>
+            <td class="cell-header">Delete</td></tr>
+<!-- TMPL_LOOP NAME="memberloop" -->
+        <tr><td class="cell"><!-- TMPL_VAR NAME="name" --></td>
+            <td class="cell"><!-- TMPL_VAR NAME="location" --></td>
+            <td class="cell"><!-- TMPL_VAR NAME="routingbox" --></td>
+            <td class="cell"><a href="/cgi-bin/koha/serials/routing.pl?routingid=<!-- TMPL_VAR NAME="routingid" -->&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete">Delete</a></td></tr>
+<!-- /TMPL_LOOP -->
+        <tr><td colspan="4"><br /><a onclick="search_member(<!-- TMPL_VAR
+NAME="subscriptionid" -->); return false"
+href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR
+NAME="subscriptionid" -->" class="button bull">Add List Member</a> &nbsp; <a
+href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button bull">Delete All</a></td></tr>
+        </table></td></tr>
+
+<!-- TMPL_ELSE -->
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><td><b>List Member:&nbsp;</b></td>
+    <td><p><a onclick="search_member(<!-- TMPL_VAR NAME="subscriptionid"
+-->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button bull">Add List Member</a></p></td></tr>
+<!-- /TMPL_IF -->
+<tr><td valign="top" colspan="2">&nbsp;</td></tr>
+<tr><td valign="top"><b>Notes:</b></td>
+    <td><textarea name="notes" rows="3" cols="50"><!-- TMPL_VAR NAME="routingnotes" --></textarea></td></tr>
+<tr><td></td>
+    <td><input type="submit" name="submit" class="button" value="Save" /></td></tr>
+</table>
+</form>
+</div>
+<script type="text/javascript">
+<!--
+
+function search_member(subscriptionid){
+    var myurl = 'member-search.pl?subscriptionid='+subscriptionid; window.open(myurl,'FindAMember','width=500,height=400,toolbar=no,scrollbars=yes');
+}
+//-->
+</script>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
