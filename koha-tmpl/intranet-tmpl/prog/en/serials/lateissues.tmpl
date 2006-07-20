@@ -13,6 +13,8 @@
 		<input type="submit" value="filter">
 	</form>
 </p>
+        <!-- TMPL_IF NAME="lateissues" -->
+	
 <table>
 	<tr>
 		<th>Title</th>
@@ -36,11 +38,52 @@
 				<td><!-- TMPL_VAR name="planneddate" --></td>
 				<td>
 					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a>
-					<a href="serials-recieve.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Recieve</a>
+					<a
+href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a>
 				</td>
 			<!-- /TMPL_IF -->
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
+        <!-- TMPL_ELSE -->
+               <p>There are currently no outstanding issues.</p>
+	<!-- /TMPL_IF -->
+	
+        <!-- TMPL_IF NAME="missingissues" -->
+	        <h1 class="bull">Missing Issues</h1>
+		<table cellpadding="0" cellspacing="0" border="0" class="collapse">
+		<tr>
+		<th class="cell-header">Supplier</th>
+		<th class="cell-header">Title</th>
+		<th class="cell-header">Issue number</th>
+		<th class="cell-header">Missing since</th>
+		<th class="cell-header">&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP name="missingissues" -->
+		<tr>
+		<td class="cell">
+		<!-- TMPL_VAR name="name" -->
+		</td>
+		<td class="cell">
+		<!-- TMPL_VAR name="Title" -->
+		</td>
+		<td class="cell">
+		<!--TMPL_VAR name="serialseq" -->
+		</td>
+		<td class="cell">
+		<!-- TMPL_VAR name="planneddate" -->
+		</td>
+		<td class="cell">
+		<a
+href="statecollection.pl?op=found&amp;planneddate=<!-- TMPL_VAR
+name="planneddate" -->&amp;missingissue=<!-- TMPL_VAR name="serialseq" -->&amp;subscriptionid=<!-- TMPL_VAR
+name="subscriptionid" -->">Receive</a>
+                </td>
+		</tr>
+		<!--/TMPL_LOOP -->
+		</table>
+	<!-- /TMPL_IF -->
+		
+		       
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
