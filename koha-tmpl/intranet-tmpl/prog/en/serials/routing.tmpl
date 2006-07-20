@@ -1,4 +1,8 @@
-<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!--
+TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
 <script language="javascript" type="text/javascript">
 <!--
@@ -12,9 +16,9 @@ function reorder_item(sid,rid,rank){
 
 <div id="mainbloc">
 <!-- TMPL_IF NAME="op" -->
-<h1 class="bull">Create Routing List</h1>
+<h1>Create Routing List</h1>
 <!-- TMPL_ELSE -->
-<h1 class="bull">Edit Routing List</h1>
+<h1>Edit Routing List</h1>
 <!-- /TMPL_IF -->
 
 <form method="post" action="routing.pl">
@@ -49,15 +53,15 @@ function reorder_item(sid,rid,rank){
         <tr><td colspan="4"><br /><a onclick="search_member(<!-- TMPL_VAR
 NAME="subscriptionid" -->); return false"
 href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR
-NAME="subscriptionid" -->" class="button bull">Add List Member</a> &nbsp; <a
-href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button bull">Delete All</a></td></tr>
+NAME="subscriptionid" -->" class="button">Add List Member</a> &nbsp; <a
+href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button">Delete All</a></td></tr>
         </table></td></tr>
 
 <!-- TMPL_ELSE -->
 <table border="0" cellspacing="0" cellpadding="0">
 <tr><td><b>List Member:&nbsp;</b></td>
     <td><p><a onclick="search_member(<!-- TMPL_VAR NAME="subscriptionid"
--->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button bull">Add List Member</a></p></td></tr>
+-->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button">Add List Member</a></p></td></tr>
 <!-- /TMPL_IF -->
 <tr><td valign="top" colspan="2">&nbsp;</td></tr>
 <tr><td valign="top"><b>Notes:</b></td>
@@ -75,4 +79,4 @@ function search_member(subscriptionid){
 }
 //-->
 </script>
-<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
