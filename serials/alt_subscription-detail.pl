@@ -102,7 +102,7 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
 # the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/subscription-detail.tmpl",
+= get_template_and_user({template_name => "serials/alt_subscription-detail.tmpl",
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
