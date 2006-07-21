@@ -18,7 +18,7 @@
 use CGI;
 use C4::Labels;
 use C4::Auth;
-use C4::Bull;
+use C4::Serials;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
