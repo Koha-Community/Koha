@@ -321,7 +321,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
 # existingreserves building
 my @reserveloop;
-my $branches = getbranches('RE');
+my $branches = GetBranches('RE');
 foreach my $res (sort {$a->{found} cmp $b->{found}} @$reserves){
     my %reserve;
     my @optionloop;
