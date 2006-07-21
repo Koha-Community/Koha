@@ -45,7 +45,9 @@ my $dbh = C4::Context->dbh;
 my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
 $sthtemp->execute($loggedinuser);
 my ($flags, $homebranch)=$sthtemp->fetchrow;
-my ($count,@results)=bookfunds($homebranch);
+my @results=GetBookFunds($homebranch);
+my $count = scalar(@results);
+
 my $classlist='';
 my $total=0;
 my $totspent=0;
@@ -53,7 +55,7 @@ my $totcomtd=0;
 my $totavail=0;
 my @loop_budget = ();
 for (my $i=0;$i<$count;$i++){
-	my ($spent,$comtd)=bookfundbreakdown($results[$i]->{'bookfundid'});
+	my ($spent,$comtd)=GetBookFundBreakdown($results[$i]->{'bookfundid'});
 	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
 	my %line;
 	$line{bookfundname} = $results[$i]->{'bookfundname'};
@@ -68,7 +70,9 @@ for (my $i=0;$i<$count;$i++){
 	$totavail+=$avail;
 }
 #currencies
-my ($count,$rates)=getcurrencies();
+my $rates=GetCurrencies();
+my $count = scalar @$rates;
+
 my @loop_currency = ();
 for (my $i=0;$i<$count;$i++){
 	my %line;

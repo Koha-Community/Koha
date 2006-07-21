@@ -353,7 +353,7 @@ else {
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches();
+	my $branches=GetBranches();
 	my @branchloop;
 	foreach my $thisbranch (sort keys %$branches) {
 # 		my $selected = 1 if $thisbranch eq $branch;
