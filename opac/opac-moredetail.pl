@@ -38,7 +38,7 @@ my $bi=$input->param('bi');
 my $data=bibitemdata($bi);
 
 my (@items)=itemissues($bi);
-my ($order,$ordernum)=getorder($bi,$bib);
+my ($order,$ordernum)=GetOrder($bi,$bib);
 #print @items;
 my $count=@items;
 
@@ -164,7 +164,7 @@ print <<printend
 <b>Paid for:</b> $items[$i]->{'paidfor'}<br>
 <b>Notes:</b> $items[$i]->{'itemnotes'}<br>
 <b>Renewals:</b> $items[$i]->{'renewals'}<br>
-<b><a href=/cgi-bin/koha/acqui/acquire.pl?recieve=$ordernum&biblio=$bib&invoice=$order->{'booksellerinvoicenumber'}&catview=yes>Accession</a> Date: $items[$i]->{'dateaccessioned'}<br>
+<b><a href=/cgi-bin/koha/acqui/orderreceive.pl?recieve=$ordernum&biblio=$bib&invoice=$order->{'booksellerinvoicenumber'}&catview=yes>Accession</a> Date: $items[$i]->{'dateaccessioned'}<br>
 printend
 ;
 if ($items[$i]->{'wthdrawn'} eq '1'){
