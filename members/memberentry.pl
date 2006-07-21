@@ -354,7 +354,7 @@ if ($delete){
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches('IS');
+	my $branches=GetBranches('IS');
 	my $default;
 	# -----------------------------------------------------
 	#  the value of ip from the branches hash table

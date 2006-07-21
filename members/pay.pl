@@ -48,7 +48,7 @@ my $user=$input->remote_user;
 # get account details
 my %bor;
 $bor{'borrowernumber'}=$bornum;
-my $branches = getbranches();
+my $branches = GetBranches();
 my $printers = getprinters();
 my $branch = getbranch($input, $branches);
 
