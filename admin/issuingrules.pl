@@ -100,7 +100,7 @@ if ($op eq 'save') {
 	}
 
 }
-my $branches = getbranches;
+my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;

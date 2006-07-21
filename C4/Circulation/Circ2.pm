@@ -91,7 +91,7 @@ Also deals with stocktaking.
 		&getBranchIp
 		&dotranfer
         );
-# &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
+# &GetBranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
 =head2 itemseen
 
@@ -483,7 +483,7 @@ sub transferbook {
 	my $messages;
 	my %env;
 	my $dotransfer = 1;
-	my $branches = getbranches();
+	my $branches = GetBranches();
 	my $iteminformation = getiteminformation(\%env, 0, $barcode);
 	# bad barcode..
 	if (not $iteminformation) {
@@ -886,14 +886,14 @@ sub canbookbeissued {
 			# The item is on reserve and waiting, but has been
 			# reserved by some other patron.
 			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-			my $branches = getbranches();
+			my $branches = GetBranches();
 			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 			$needsconfirmation{RESERVE_WAITING} = "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
 			# CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'}); Doesn't belong in a checking subroutine.
 		} elsif ($restype eq "Reserved") {
 			# The item is on reserve for someone else.
 			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-			my $branches = getbranches();
+			my $branches = GetBranches();
 			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 			$needsconfirmation{RESERVED} = "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
 		}
@@ -971,7 +971,7 @@ sub issuebook {
 				# The item is on reserve and waiting, but has been
 				# reserved by some other patron.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-				my $branches = getbranches();
+				my $branches = GetBranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
                                 if ($cancelreserve){
     				    CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
@@ -983,7 +983,7 @@ sub issuebook {
 # 				warn "Reserved";
 				# The item is on reserve for someone else.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-				my $branches = getbranches();
+				my $branches = GetBranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 				if ($cancelreserve) {
 					# cancel reserves on this item
@@ -1166,7 +1166,7 @@ sub returnbook {
 	}
 	# check if the book is in a permanent collection....
 	my $hbr = $iteminformation->{'homebranch'};
-	my $branches = getbranches();
+	my $branches = GetBranches();
 	if ($hbr && $branches->{$hbr}->{'PE'}) {
 		$messages->{'IsPermanent'} = $hbr;
 	}
