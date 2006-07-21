@@ -1,5 +1,44 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+# $Id$
+
+
+=head1 NAME
+
+acqui-home.pl
+
+=head1 DESCRIPTION
+
+this script is the main page for acqui/
+It presents the budget's dashboard, another table about differents currency with 
+their rates and the pending suggestions.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item $status
+C<$status> is the status a suggestion could has. Default value is 'ASKED'.
+thus, it can be REJECTED, ACCEPTED, ORDERED, ASKED, AVAIBLE
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
@@ -9,6 +48,7 @@ use C4::Database;
 use C4::Suggestions;
 use HTML::Template;
 use C4::Acquisition;
+use C4::Members;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -23,22 +63,20 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # budget
-my $dbh     = C4::Context->dbh;
-my $sthtemp =
-  $dbh->prepare(
-    "Select flags, branchcode from borrowers where borrowernumber = ?");
-$sthtemp->execute($loggedinuser);
-my ( $flags, $homebranch ) = $sthtemp->fetchrow;
+my ( $flags, $homebranch ) = GetFlagsAndBranchFromBorrower($loggedinuser);
 
-my ( $count, @results ) = bookfunds($homebranch);
+my @results = GetBookFunds($homebranch);
+my $count = scalar @results;
+
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
 my $totcomtd    = 0;
 my $totavail    = 0;
 my @loop_budget = ();
-for (my $i=0;$i<$count;$i++){
-	my ($spent,$comtd)=bookfundbreakdown($results[$i]->{'bookfundid'});
+
+for (my $i=0; $i<$count; $i++){
+	my ($spent,$comtd)=GetBookFundBreakdown($results[$i]->{'bookfundid'});
 	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
 	my %line;
 	$line{bookfundname} = $results[$i]->{'bookfundname'};
@@ -53,18 +91,19 @@ for (my $i=0;$i<$count;$i++){
 	$totavail+=$avail;
 }
 
-#currencies
-my $rates;
-( $count, $rates ) = getcurrencies();
+# currencies
+my @rates = GetCurrencies();
+my $count = scalar @rates;
+
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    $line{currency} = $rates->[$i]->{'currency'};
-    $line{rate}     = $rates->[$i]->{'rate'};
+    $line{currency} = @rates[$i]->{'currency'};
+    $line{rate}     = @rates[$i]->{'rate'};
     push @loop_currency, \%line;
 }
 
-# suggestions ?
+# suggestions
 my $status           = $query->param('status') || "ASKED";
 my $suggestion       = CountSuggestion($status);
 my $suggestions_loop = &SearchSuggestion( '', '', '', '', $status, '' );
