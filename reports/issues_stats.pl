@@ -165,7 +165,7 @@ if ($do_it) {
 		$hassort1 =1 if ($value);
 		push @select, $value;
 	}
-	my $branches=getbranches();
+	my $branches=GetBranches();
 	my @select_branch;
 	my %select_branches;
 	push @select_branch,"";

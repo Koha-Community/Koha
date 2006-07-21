@@ -202,7 +202,7 @@ if ($do_it) {
 
 	undef @select;
 	push @select,"";
-	my $branches=getbranches();
+	my $branches=GetBranches();
 	my %select_branches;
 	$select_branches{""} = "";
 	foreach my $branch (keys %$branches) {

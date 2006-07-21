@@ -43,7 +43,7 @@ if (!$branch) {
     $branch = "ALL";
 }
 
-my $branches=getbranches();
+my $branches=GetBranches();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
