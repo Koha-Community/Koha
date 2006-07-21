@@ -1138,6 +1138,18 @@ sub NewIssue {
     $sth->execute($recievedlist,$missinglist,$subscriptionid);
 }
 
+=head2 serialchangestatus
+
+=over 4
+
+serialchangestatus($serialid,$serialseq,$planneddate,$status,$notes)
+
+Change the status of a serial issue.
+Note: this was the older subroutine
+
+=back
+
+=cut
 sub serialchangestatus {
     my ($serialid,$serialseq,$planneddate,$status,$notes)=@_;
     # 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
@@ -1172,7 +1184,7 @@ sub serialchangestatus {
 	# next issue number
 	my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3) = New_Get_Next_Seq($val);
 	my $nextplanneddate = Get_Next_Date($planneddate,$val);
-	newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
+	NewIssue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
 	$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=? where subscriptionid = ?");
 	$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$subscriptionid);
     }
@@ -1455,6 +1467,22 @@ sub DelIssue {
     $sth->execute($serialseq,$subscriptionid);
 }
 
+=head2 GetMissingIssues
+
+=over 4
+
+($count,@issuelist) = &GetMissingIssues($supplierid,$serialid)
+
+this function select missing issues on database - where serial.status = 4
+
+return :
+a count of the number of missing issues
+the issuelist into a table. Each line of this table containts a ref to a hash which it containts
+name,title,planneddate,serialseq,serial.subscriptionid from tables : subscription, serial & biblio
+
+=back
+
+=cut
 sub GetMissingIssues {
     my ($supplierid,$serialid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1498,6 +1526,20 @@ sub GetMissingIssues {
     return $count,@issuelist;
 }
 
+=head2 removeMissingIssue
+
+=over 4
+
+removeMissingIssue($subscriptionid)
+
+this function removes an issue from being part of the missing string in 
+subscriptionlist.missinglist column
+
+called when a missing issue is found from the statecollection.pl file
+
+=back
+
+=cut
 sub removeMissingIssue {
     my ($sequence,$subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1520,6 +1562,19 @@ sub removeMissingIssue {
     }
 }
 
+=head2 updateClaim
+
+=over 4
+
+&updateClaim($serialid)
+
+this function updates the time when a claim is issued for late/missing items
+
+called from claims.pl file
+
+=back
+
+=cut
 sub updateClaim {
     my ($serialid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1529,6 +1584,20 @@ sub updateClaim {
     $sth->execute($serialid);
 }
 
+=head2 getsupplierbyserialid
+
+=over 4
+
+($result) = &getsupplierbyserialid($serialid)
+
+this function is used to find the supplier id given a serial id
+
+return :
+hashref containing serialid, subscriptionid, and aqbooksellerid
+
+=back
+
+=cut
 sub getsupplierbyserialid {
     my ($serialid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1543,6 +1612,17 @@ sub getsupplierbyserialid {
     return $result;
 }
 
+=head2 check_routing
+
+=over 4
+
+($result) = &check_routing($subscriptionid)
+
+this function checks to see if a serial has a routing list and returns the count of routingid
+used to show either an 'add' or 'edit' link
+=back
+
+=cut
 sub check_routing {
     my ($subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1556,6 +1636,19 @@ sub check_routing {
     return $result;
 }
 
+=head2 addroutingmember
+
+=over 4
+
+&addroutingmember($bornum,$subscriptionid)
+
+this function takes a borrowernumber and subscriptionid and add the member to the
+routing list for that serial subscription and gives them a rank on the list
+of either 1 or highest current rank + 1
+
+=back
+
+=cut
 sub addroutingmember {
     my ($bornum,$subscriptionid) = @_;
     my $rank;
@@ -1573,6 +1666,23 @@ sub addroutingmember {
     $sth->execute($subscriptionid,$bornum,$rank);
 }
 
+=head2 reorder_members
+
+=over 4
+
+&reorder_members($subscriptionid,$routingid,$rank)
+
+this function is used to reorder the routing list
+
+it takes the routingid of the member one wants to re-rank and the rank it is to move to
+- it gets all members on list puts their routingid's into an array
+- removes the one in the array that is $routingid
+- then reinjects $routingid at point indicated by $rank
+- then update the database with the routingids in the new order
+
+=back
+
+=cut
 sub reorder_members {
     my ($subscriptionid,$routingid,$rank) = @_;
     my $dbh = C4::Context->dbh;
@@ -1603,6 +1713,18 @@ sub reorder_members {
     }
 }
 
+=head2 delroutingmember
+
+=over 4
+
+&delroutingmember($routingid,$subscriptionid)
+
+this function either deletes one member from routing list if $routingid exists otherwise
+deletes all members from the routing list
+
+=back
+
+=cut
 sub delroutingmember {
     # if $routingid exists then deletes that row otherwise deletes all with $subscriptionid
     my ($routingid,$subscriptionid) = @_;
@@ -1617,6 +1739,22 @@ sub delroutingmember {
     }
 }
 
+=head2 getroutinglist
+
+=over 4
+
+($count,@routinglist) = &getroutinglist($subscriptionid)
+
+this gets the info from the subscriptionroutinglist for $subscriptionid
+
+return :
+a count of the number of members on routinglist
+the routinglist into a table. Each line of this table containts a ref to a hash which containts
+routingid - a unique id, borrowernumber, ranking, and biblionumber of subscription
+
+=back
+
+=cut
 sub getroutinglist {
     my ($subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1635,7 +1773,21 @@ sub getroutinglist {
     return ($count,@routinglist);
 }
 
-# is the subscription about to expire? - check if penultimate issue.
+=head2 abouttoexpire
+
+=over 4
+
+$result = &abouttoexpire($subscriptionid)
+
+this function alerts you to the penultimate issue for a serial subscription
+
+returns 1 - if this is the penultimate issue
+returns 0 - if not
+
+=back
+
+=cut
+
 sub abouttoexpire { 
     my ($subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
@@ -1645,7 +1797,7 @@ sub abouttoexpire {
 	my $sth = $dbh->prepare("select count(*) from serial where subscriptionid=?  and planneddate>=?");
 	$sth->execute($subscriptionid,$subscription->{startdate});
 	my $res = $sth->fetchrow;
-	warn "length: ".$subscription->{numberlength}." vs count: ".$res;
+	# warn "length: ".$subscription->{numberlength}." vs count: ".$res;
 	if ($subscription->{numberlength}==$res) {
 	    return 1;
 	} else {
@@ -1659,7 +1811,7 @@ sub abouttoexpire {
 	my $endofsubscriptiondate;
 	$endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{monthlength}." months") if ($subscription->{monthlength});
 	$endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{weeklength}." weeks") if ($subscription->{weeklength});
-	warn "last: ".$endofsubscriptiondate." vs currentdate: ".$res;
+	# warn "last: ".$endofsubscriptiondate." vs currentdate: ".$res;
 	my $per = $subscription->{'periodicity'};
 	my $x = 0;
 	if ($per == 1) { $x = '1 day'; }
@@ -1673,12 +1825,39 @@ sub abouttoexpire {
 	if ($per == 10) { $x = '1 year'; }
 	if ($per == 11) { $x = '2 years'; }
 	my $datebeforeend = DateCalc($endofsubscriptiondate,"- ".$x); # if ($subscription->{weeklength});
-	warn "DATE BEFORE END: $datebeforeend";
+	# warn "DATE BEFORE END: $datebeforeend";
 	return 1 if ($res >= $datebeforeend && $res < $endofsubscriptiondate);
 	return 0;
     }
 }
 
+=head2 old_newsubscription
+
+=over 4
+
+($subscriptionid) = &old_newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+		                $startdate,$periodicity,$firstacquidate,$dow,$irregularity,$numberpattern,$numberlength,$weeklength,$monthlength,
+		                $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+		                $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+		                $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+		                $numberingmethod, $status, $callnumber, $notes, $hemisphere)
+
+this function is similar to the NewSubscription subroutine but has a few different
+values passed in 
+$firstacquidate - date of first serial issue to arrive
+$irregularity - the issues not expected separated by a '|'
+- eg. monthly issue but not expecting issue for june and july would have $irregularity of '6|7'
+$numberpattern - the number for an array of labels to reconstruct the javascript correctly in the 
+   alt_subscription-add.tmpl file
+$callnumber - display the callnumber of the serial
+$hemisphere - either 2 = southern hemisphere or 1 = northern hemisphere - used for quarterly serials
+
+return :
+the $subscriptionid number of the new subscription
+
+=back
+
+=cut
 sub old_newsubscription {
             my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 		                $startdate,$periodicity,$firstacquidate,$dow,$irregularity,$numberpattern,$numberlength,$weeklength,$monthlength,
@@ -1721,6 +1900,30 @@ sub old_newsubscription {
         return $subscriptionid;
 }
 
+=head2 old_modsubscription
+
+=over 4
+
+($subscriptionid) = &old_modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+		                $startdate,$periodicity,$firstacquidate,$dow,$irregularity,$numberpattern,$numberlength,$weeklength,$monthlength,
+		                $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+		                $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+		                $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+		                $numberingmethod, $status, $callnumber, $notes, $hemisphere, $subscriptionid)
+
+this function is similar to the ModSubscription subroutine but has a few different
+values passed in 
+$firstacquidate - date of first serial issue to arrive
+$irregularity - the issues not expected separated by a '|'
+- eg. monthly issue but not expecting issue for june and july would have $irregularity of '6|7'
+$numberpattern - the number for an array of labels to reconstruct the javascript correctly in the 
+   alt_subscription-add.tmpl file
+$callnumber - display the callnumber of the serial
+$hemisphere - either 2 = southern hemisphere or 1 = northern hemisphere - used for quarterly serials
+
+=back
+
+=cut
 sub old_modsubscription {
             my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 		                                        $periodicity,$firstacquidate,$dow,$irregularity,$numberpattern,$numberlength,$weeklength,$monthlength,
@@ -1758,6 +1961,22 @@ sub old_modsubscription {
         $sth->execute(format_date_in_iso($enddate));
 }
 
+=head2 old_getserials
+
+=over 4
+
+($totalissues,@serials) = &old_getserials($subscriptionid)
+
+this function get a hashref of serials and the total count of them
+
+return :
+$totalissues - number of serial lines
+the serials into a table. Each line of this table containts a ref to a hash which it containts
+serialid, serialseq, status,planneddate,notes,routingnotes  from tables : serial where status is not 2, 4, or 5
+
+=back
+
+=cut
 sub old_getserials {
             my ($subscriptionid) = @_;
             my $dbh = C4::Context->dbh;
@@ -1779,6 +1998,25 @@ sub old_getserials {
         return ($totalissues,@serials);
 }
 
+=head2 Get_Next_Date
+
+=over 4
+
+($resultdate) = &Get_Next_Date($planneddate,$subscription)
+
+this function is an extension of GetNextDate which allows for checking for irregularity
+
+it takes the planneddate and will return the next issue's date and will skip dates if there
+exists an irregularity
+- eg if periodicity is monthly and $planneddate is 2007-02-10 but if March and April is to be 
+skipped then the returned date will be 2007-05-10
+
+return :
+$resultdate - then next date in the sequence
+
+=back
+
+=cut
 sub Get_Next_Date(@) {
     my ($planneddate,$subscription) = @_;
     my @irreg = split(/\|/,$subscription->{irregularity});
