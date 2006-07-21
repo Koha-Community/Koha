@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use C4::Bull; #uses getsubscriptionfrom biblionumber
+use C4::Serials; #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Biblio;
