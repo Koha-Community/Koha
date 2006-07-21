@@ -64,6 +64,7 @@ This module contains routines for adding, modifying and deleting members/patrons
   &fixEthnicity
   &ethnicitycategories get_institutions add_member_orgs
   &get_age &GetBorrowersFromSurname &GetBranchCodeFromBorrowers
+  &GetFlagsAndBranchFromBorrower
 );
 
 
@@ -164,6 +165,37 @@ C<&getmember> returns a reference-to-hash whose keys are the fields of
 the C<borrowers> table in the Koha database.
 
 =cut
+
+=head3
+
+=over 4
+
+($flags, $homebranch) = GetFlagsAndBranchFromBorrower($loggedinuser);
+
+this function read on the database to get flags and homebranch for a user
+given on input arg.
+
+return : 
+it returns the $flags & the homebranch in scalar context.
+
+=back
+
+=cut
+
+sub GetFlagsAndBranchFromBorrower {
+    my $loggedinuser = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+       SELECT flags, branchcode
+       FROM   borrowers
+       WHERE  borrowernumber = ? 
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($loggedinuser);
+
+    return $sth->fetchrow;
+}
+
 
 #'
 sub getmember {
