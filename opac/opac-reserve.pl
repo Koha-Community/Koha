@@ -56,7 +56,7 @@ $template->param(rank => $rank);
 my $branch = $query->param('branch');
 $template->param(branch => $branch);
 
-my $branches = getbranches();
+my $branches = GetBranches();
 # make sure it's a real branch
 if (!$branches->{$branch}) {
 $branch='';

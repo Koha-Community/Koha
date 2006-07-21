@@ -407,7 +407,7 @@ $template->param( phraseorterm => $phraseorterm );
 	$sth->finish;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches();
+	my $branches=GetBranches();
 	push @select_branch, "";
 	$select_branches{''} = "";
         foreach my $branch ( keys %$branches ){

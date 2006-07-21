@@ -109,7 +109,7 @@ $template->param(issues_count => $count);
 $template->param(OVERDUES => \@overdues);
 $template->param(overdues_count => $overdues_count);
 
-my $branches = getbranches();
+my $branches = GetBranches();
 
 # now the reserved items....
 my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
