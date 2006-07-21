@@ -39,7 +39,7 @@ my %env;
 my $linecolor1= 0;
 my $linecolor2= 1;
 
-my $branches = getbranches();
+my $branches = GetBranches();
 my $printers = getprinters(\%env);
 
 

@@ -270,7 +270,7 @@ SELECT bookfundid, bookfundname
     $sth->finish;
 
     # filters
-    my $branches = getbranches();
+    my $branches = GetBranches();
     my @branchloop;
     foreach my $branchcode (sort keys %{$branches}) {
         my $row = {

@@ -71,7 +71,7 @@ my @results;
 my (@items)=itemissues($bi);
 my $count=@items;
 $data->{'count'}=$count;
-my ($order,$ordernum)=getorder($bi,$biblionumber);
+my ($order,$ordernum)=GetOrder($bi,$biblionumber);
 
 my $env;
 $env->{itemcount}=1;

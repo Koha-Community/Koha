@@ -54,7 +54,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { circulate => 1 },
     }
 );
-my $branches = getbranches();
+my $branches = GetBranches();
 # my $printers = getprinters();
 # my $printer = getprinter($query, $printers);
 

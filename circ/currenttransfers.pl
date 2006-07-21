@@ -59,7 +59,7 @@ my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
 # get the all the branches for reference
-my $branches = getbranches();
+my $branches = GetBranches();
 my @branchesloop;
 foreach my $br (keys %$branches) {
 	my @transferloop;

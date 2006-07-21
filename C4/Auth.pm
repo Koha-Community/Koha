@@ -490,7 +490,7 @@ sub checkauth {
 #  new op dev :
 # launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
                 my $ip       = $ENV{'REMOTE_ADDR'};
-                my $branches = getbranches('IS');
+                my $branches = GetBranches('IS');
                 my @branchesloop;
                 my $branchprinter;
                 foreach my $br ( keys %$branches ) {

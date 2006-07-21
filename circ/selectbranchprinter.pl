@@ -46,7 +46,7 @@ my $backgroundimage="/images/background-mem.gif";
 # try to get the branch and printer settings from the http....
 my %env;
 my $query=new CGI;
-my $branches=getbranches('IS');
+my $branches=GetBranches('IS');
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');
 my $printer=$query->param('printer');

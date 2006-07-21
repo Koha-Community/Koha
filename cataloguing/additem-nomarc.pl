@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.3  2006/07/21 10:12:00  toins
+# subs renamed according to coding guidelines.
+#
 # Revision 1.2  2006/07/12 17:17:12  toins
 # getitemtypes renamed to GetItemTypes
 #
@@ -64,7 +67,6 @@ my $bibliocount;
 my @biblios;
 my $biblioitemcount;
 my @biblioitems;
-my $branchcount;
 # my @branches;
 # my %branchnames;
 my $itemcount;
@@ -92,7 +94,7 @@ else {
 	}
 	else {
 		( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($biblionumber);
-		my $branches = getbranches;
+		my $branches = GetBranches;
 		my @branchloop;
 		foreach my $thisbranch (sort keys %$branches) {
 			my %row =(value => $thisbranch,
@@ -147,7 +149,7 @@ else {
 
         ( $biblioitemcount, @biblioitems ) =
           &getbiblioitembybiblionumber($biblionumber);
-        ( $branchcount,   @branches )  = &branches;
+        @branches   = &GetBranches;
         ( $itemtypecount, @itemtypes ) = &GetItemTypes;
 
         for ( my $i = 0 ; $i < $itemtypecount ; $i++ ) {
@@ -155,7 +157,7 @@ else {
               $itemtypes[$i]->{'description'};
         }    # for
 
-        for ( my $i = 0 ; $i < $branchcount ; $i++ ) {
+        for ( my $i = 0 ; $i < $#branches ; $i++ ) {
             $branchnames{ $branches[$i]->{'branchcode'} } =
               $branches[$i]->{'branchname'};
         }    # for

@@ -61,7 +61,7 @@ if ($item){
 }
 
 # get the all the branches for reference
-my $branches = getbranches();
+my $branches = GetBranches();
 my @branchesloop;
 foreach my $br (keys %$branches) {
 	my @reservloop;

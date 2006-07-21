@@ -85,7 +85,7 @@ $template->param(action => $script_name);
 # my @select_branch;
 # my %select_branches;
 
-my $branches = getbranches;
+my $branches = GetBranches;
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record

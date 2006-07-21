@@ -49,7 +49,7 @@ Koha.pm provides many functions for Koha scripts.
 @ISA = qw(Exporter);
 @EXPORT = qw(
             &subfield_is_koha_internal_p
-            &getbranches &getbranch &getbranchdetail
+            &GetBranches &getbranch &getbranchdetail
             &getprinters &getprinter
             &GetItemTypes &getitemtypeinfo
                         get_itemtypeinfos_of
@@ -84,9 +84,9 @@ sub subfield_is_koha_internal_p ($) {
     return length $subfield != 1;
 }
 
-=head2 getbranches
+=head2 GetBranches
 
-  $branches = &getbranches();
+  $branches = &GetBranches();
   returns informations about branches.
   Create a branch selector with the following code
   Is branchIndependant sensitive
@@ -94,7 +94,7 @@ sub subfield_is_koha_internal_p ($) {
   
 =head3 in PERL SCRIPT
 
-my $branches = getbranches;
+my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch (sort keys %$branches) {
     my $selected = 1 if $thisbranch eq $branch;
@@ -116,9 +116,9 @@ foreach my $thisbranch (sort keys %$branches) {
 
 =cut
 
-sub getbranches {
+sub GetBranches {
 # returns a reference to a hash of references to branches...
-        my ($type) = @_;
+    my ($type) = @_;
     my %branches;
     my $branch;
     my $dbh = C4::Context->dbh;
