@@ -142,6 +142,17 @@ $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount,
 				textmessaging => $borr->{textmessaging},
 				OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
+				opaclargeimage => C4::Context->preference("opaclargeimage"),
+                LibraryName => C4::Context->preference("LibraryName"),
+                OpacNav => C4::Context->preference("OpacNav"),
+                opaccredits => C4::Context->preference("opaccredits"),
+                opacreadinghistory => C4::Context->preference("opacreadinghistory"),
+                opacsmallimage => C4::Context->preference("opacsmallimage"),
+                opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+                opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
+                opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
+				opacbookbag => C4::Context->preference("opacbookbag"),
+
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
