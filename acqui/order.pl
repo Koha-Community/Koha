@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
-
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
@@ -21,6 +19,34 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+# $Id$
+
+=head1 NAME
+
+order.pl
+
+=head1 DESCRIPTION
+
+this script displays the list of suppliers & orders like C<$supplier> given on input arg.
+thus, this page brings differents features like to display supplier's details,
+to add an order for a specific supplier or to just add a new supplier.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item supplier
+C<$supplier> is the suplier we have to search order.
+=back
+
+=item op
+C<OP> can be equals to 'close' if we have to close a basket before building the page.
+    
+=item basket
+the C<basket> we have to close if op is equal to 'close'.
+
+=cut
 
 use strict;
 use C4::Auth;
@@ -45,21 +71,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+#parameters
 my $supplier = $query->param('supplier');
-my ( $count, @suppliers ) = bookseller($supplier);
+
+my @suppliers = GetBookSeller($supplier);
+my $count = scalar @suppliers;
 
 # check if we have to "close" a basket before building page
 my $op     = $query->param('op');
 my $basket = $query->param('basket');
 if ( $op eq 'close' ) {
-    closebasket($basket);
+    CloseBasket($basket);
 }
 
 #build result page
 my $toggle = 0;
 my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my ( $ordcount, $orders ) = getorders( $suppliers[$i]->{'id'} );
+    my $orders  = GetOrders( $suppliers[$i]->{'id'} );
+    my $ordcount = scalar @$orders;
+    
     my %line;
     if ( $toggle == 0 ) {
         $line{even} = 1;
@@ -93,7 +124,7 @@ $template->param(
     supplier                => $supplier,
     count                   => $count,
     intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
+    C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
     IntranetNav        => C4::Context->preference("IntranetNav"),
 );
