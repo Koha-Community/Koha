@@ -41,6 +41,7 @@ my $dbh = C4::Context->dbh;
 
 my $search=$input->param('recieve');
 my $invoice=$input->param('invoice');
+my $datereceived=$input->param('datereceived');
 my $freight=$input->param('freight');
 my $biblio=$input->param('biblio');
 my $catview=$input->param('catview');
@@ -140,7 +141,7 @@ if ($count == 1){
 		supplierid => $results[0]->{'booksellerid'},
 		freight => $freight,
 		gst => $gst,
-		catview => ($catview ne 'yes'?1:0),
+		catview => ($catview eq 'yes'?1:0),
 		name => $booksellers[0]->{'name'},
 		date => format_date($date),
 		title => $results[0]->{'title'},
@@ -157,7 +158,8 @@ if ($count == 1){
 		rrp => $results[0]->{'rrp'},
 		ecost => $results[0]->{'ecost'},
 		unitprice => $results[0]->{'unitprice'},
-		invoice => $invoice,
+        invoice => $invoice,
+        datereceived => $datereceived,
 		notes => $results[0]->{'notes'},
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
@@ -173,7 +175,8 @@ if ($count == 1){
 		$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 		$line{ordernumber} = $results[$i]->{'ordernumber'};
 		$line{biblionumber} = $results[$i]->{'biblionumber'};
-		$line{invoice} = $invoice;
+        $line{invoice} = $invoice;
+        $line{datereceived} = $datereceived;
 		$line{freight} = $freight;
 		$line{gst} = $gst;
 		$line{title} = $results[$i]->{'title'};
@@ -186,9 +189,10 @@ if ($count == 1){
 						name => $booksellers[0]->{'name'},
 						supplierid => $supplierid,
 						invoice => $invoice,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+                        datereceived => $datereceived,
+                        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+                        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+                        IntranetNav => C4::Context->preference("IntranetNav"),
 );
 
 }

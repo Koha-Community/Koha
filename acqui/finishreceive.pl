@@ -38,6 +38,7 @@ my $quantrec=$input->param('quantityrec');
 my $quantity=$input->param('quantity');
 my $cost=$input->param('cost');
 my $invoiceno=$input->param('invoice');
+my $datereceived=$input->param('datereceived');
 my $replacement=$input->param('rrp');
 my $gst=$input->param('gst');
 my $freight=$input->param('freight');
@@ -49,22 +50,22 @@ my $branch=$input->param('branch');
 # }
 
 if ($quantity != 0) {
-	# save the quantity recieved.
-	receiveorder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$freight,$replacement);
-	# create items if the user has entered barcodes
-	my $barcode=$input->param('barcode');
-	my @barcodes=split(/\,| |\|/,$barcode);
-	my ($error) = newitems({ biblioitemnumber => $bibitemno,
-					biblionumber     => $biblionumber,
-					replacementprice => $replacement,
-					price            => $cost,
-					booksellerid     => $supplierid,
-					homebranch       => $branch,
-					loan             => 0 },
-				@barcodes);
-	print $input->redirect("/cgi-bin/koha/acqui/receive.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst");
+    # save the quantity recieved.
+    $datereceived = receiveorder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$datereceived,$freight,$replacement);
+    # create items if the user has entered barcodes
+    my $barcode=$input->param('barcode');
+    my @barcodes=split(/\,| |\|/,$barcode);
+    my ($error) = newitems({ biblioitemnumber => $bibitemno,
+                    biblionumber     => $biblionumber,
+                    replacementprice => $replacement,
+                    price            => $cost,
+                    booksellerid     => $supplierid,
+                    homebranch       => $branch,
+                    loan             => 0 },
+                @barcodes);
+    print $input->redirect("/cgi-bin/koha/acqui/receive.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");
 } else {
-	print $input->header;
-	delorder($biblionumber,$ordnum);
-	print $input->redirect("/acquisitions/");
+    print $input->header;
+    delorder($biblionumber,$ordnum);
+    print $input->redirect("/acquisitions/");
 }

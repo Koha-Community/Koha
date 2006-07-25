@@ -7,8 +7,7 @@
 	
 	<div id="bloc25">
 		Invoice: <!-- TMPL_VAR NAME="invoice" --><br>
-		Received By: <!-- TMPL_VAR NAME="user" --><br>
-		<!-- TMPL_VAR NAME="date" -->
+        <!-- TMPL_VAR name="datereceived"-->
 	</div>
 	
 	<div id="bloc25">
@@ -30,7 +29,7 @@
 		<!-- TMPL_LOOP NAME="loop_received" -->
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="ecost" --></td>
 				<td><!-- TMPL_VAR NAME="quantity" --></td>
 				<td></td>
@@ -88,7 +87,7 @@
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="title" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->" class="button acquisition">Recieve</td>
+                <td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&catview=yes" class="button acquisition">Recieve</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

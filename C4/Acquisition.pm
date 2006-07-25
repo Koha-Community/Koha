@@ -24,6 +24,7 @@ use C4::Date;
 use MARC::Record;
 use C4::Suggestions;
 # use C4::Biblio;
+use Date::Calc qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -317,17 +318,23 @@ Also updates the book fund ID in the aqorderbreakdown table.
 =cut
 #'
 sub receiveorder {
-	my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$freight,$rrp)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
+	my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$datereceived,$freight,$rrp)=@_;
+    my $dbh = C4::Context->dbh;
+    unless ($datereceived) {
+        # if datereceived is not set, calculate today date
+        my ($year,$month,$day) = Today();
+        $datereceived = "$year-$month-$day";
+    }
+	my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?,
 											unitprice=?,freight=?,rrp=?
 							where biblionumber=? and ordernumber=?");
 	my $suggestionid = findsuggestion_from_biblionumber($dbh,$biblio);
 	if ($suggestionid) {
 		changestatus($suggestionid,'AVAILABLE','',$biblio);
 	}
-	$sth->execute($quantrec,$invoiceno,$cost,$freight,$rrp,$biblio,$ordnum);
-	$sth->finish;
+	$sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblio,$ordnum);
+    $sth->finish;
+    return $datereceived;
 }
 
 =item updaterecorder
@@ -549,7 +556,7 @@ sub getparcelinformation {
 		}
 	}
 	$strsth.=" order by aqbasket.basketno";
-	### parcelinformation : $strsth
+    ### parcelinformation : $strsth
 	my $sth=$dbh->prepare($strsth);
   $sth->execute($supplierid);
   while (my $data=$sth->fetchrow_hashref){
@@ -660,7 +667,6 @@ sub getlateorders {
 		$strsth .= " AND borrowers.branchcode like \'".C4::Context->userenv->{branch}."\'" if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags}!=1);
 		$strsth .= " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
 	}
-	warn "C4::Acquisition : getlateorders SQL:".$strsth;
 	my $sth = $dbh->prepare($strsth);
 	$sth->execute;
 	my @results;
@@ -740,11 +746,11 @@ sub ordersearch {
 	my @searchterms = ($id);
 	map { push(@searchterms,"$_%","% $_%") } @data;
 	push(@searchterms,$search,$search,$biblio);
-	my $sth=$dbh->prepare("Select biblio.*,biblioitems.*,aqorders.*,aqbasket.*,biblio.title from aqorders,biblioitems,biblio,aqbasket
-		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber and
-		aqorders.basketno = aqbasket.basketno
-		and aqbasket.booksellerid = ?
-		and biblio.biblionumber=aqorders.biblionumber
+    my $sth=$dbh->prepare("SELECT biblio.*,biblioitems.*,aqorders.*,aqbasket.*,biblio.title from aqorders
+        LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+        LEFT JOIN biblioitems ON aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
+		where aqbasket.booksellerid = ?
 		and ((datecancellationprinted is NULL)
 		or (datecancellationprinted = '0000-00-00'))
 		and (("
@@ -799,7 +805,6 @@ sub histsearch {
 			}
 		}
 		$query .=" order by booksellerid";
-		warn "query histearch: ".$query;
 		my $sth = $dbh->prepare($query);
 		$sth->execute;
 		my $cnt=1;
@@ -1075,7 +1080,6 @@ sub branches {
 		my $strsth ="Select * from branches ";
 		$strsth.= " WHERE branchcode = ".$dbh->quote(C4::Context->userenv->{branch});
 		$strsth.= " order by branchname";
-		warn "C4::Acquisition->branches : ".$strsth;
 		$sth=$dbh->prepare($strsth);
 	} else {
     	$sth = $dbh->prepare("Select * from branches order by branchname");

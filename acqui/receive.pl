@@ -36,7 +36,7 @@ use strict;
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
 my ($count,@booksellers)=bookseller($supplierid);
-my $invoice=$input->param('code') || '';
+my $invoice=$input->param('code') || $input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
 my $date=$input->param('datereceived');
@@ -122,7 +122,7 @@ $totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
-						date => $date,
+						datereceived => $date,
 						name => $booksellers[0]->{'name'},
 						supplierid => $supplierid,
 						gst => $gst,
