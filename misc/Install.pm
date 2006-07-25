@@ -859,6 +859,8 @@ sub checkperlmodules {
 	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
 	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
+	unless (eval {require MARC::Charset})   { push @missing,"MARC::Charset" };
+	unless (eval {require MARC::File::XML})   { push @missing,"MARC::File::XML" };
 # The following modules are not mandatory, depends on how the library want to use Koha
 	unless (eval {require PDF::API2})   { 
 			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
@@ -881,13 +883,13 @@ sub checkperlmodules {
 			push @missing, "Net::Z3950";
 		}
     }
-    unless (eval {require LWP::Simple)       {
+    unless (eval {require LWP::Simple})       {
 		showmessage(getmessage('LWP::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "LWP::Simple";
 		}
     }
-    unless (eval {require XML::Simple)       {
+    unless (eval {require XML::Simple})       {
 		showmessage(getmessage('XML::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "XML::Simple";
