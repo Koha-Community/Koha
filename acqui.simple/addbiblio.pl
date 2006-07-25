@@ -26,7 +26,6 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::SearchMarc; # also includes Biblio.pm, SearchMarc is used to FindDuplicate
-use C4::Search;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 #use Smart::Comments;
@@ -226,7 +225,7 @@ sub create_input () {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
 	# it's a thesaurus / authority field
 	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffff00;'\"\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"70\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:openAuth('tag$tag','$tagslib->{$tag}->{$subfield}->{authtypecode}','subfield$tag$i')\">...</a>";
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"67\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 	# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
@@ -265,6 +264,10 @@ sub build_tabs ($$$$) {
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
 		where category=? order by lib");
+    
+    # in this array, we will push all the 10 tabs
+    # to avoid having 10 tabs in the template : they will all be in the same BIG_LOOP
+    my @BIG_LOOP;
 
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
@@ -370,8 +373,17 @@ sub build_tabs ($$$$) {
 				}
 			}
 		}
-		$template->param($tabloop."XX" =>\@loop_data);
+		if ($#loop_data >=0) {
+            my %big_loop_line;
+            $big_loop_line{number}=$tabloop;
+            $big_loop_line{innerloop}=\@loop_data;
+            push @BIG_LOOP,\%big_loop_line;
+        }
+# 		$template->param($tabloop."XX" =>\@loop_data);
 	}
+# 	use Data::Dumper;
+# 	warn "DUMP : ".Dumper(@BIG_LOOP);
+	$template->param(BIG_LOOP => \@BIG_LOOP);
 }
 
 
@@ -488,11 +500,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
-		my %indicators;
-        for (my $i=0;$i<=$#ind_tag;$i++) {
-            $indicators{$ind_tag[$i]} = $indicator[$i];
-        }
-		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 	} else {
 		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
@@ -545,7 +553,7 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	my $record=MARC::Record->new_from_xml($xml, 'UTF-8'); #C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	my $record=MARC::Record->new_from_xml($xml, C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 	# adding an empty field
 	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
 	$record->append_fields($field);
