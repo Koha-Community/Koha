@@ -487,11 +487,17 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	$xml =~ s/collection/record/g;
-	warn "BEFORE".$xml;
-  	my $record=MARC::Record->new_from_xml($xml, 'UTF-8'); #,'UNIMARC'); #C4::Context->preference('TemplateEncoding'), C4::Context->preference('marcflavour'));
-	warn $record->as_formatted;
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+		my %indicators;
+        for (my $i=0;$i<=$#ind_tag;$i++) {
+            $indicators{$ind_tag[$i]} = $indicator[$i];
+        }
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	} else {
+		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
+	#warn $record->as_formatted;
 	#warn "IN ADDBIB";
 	# check for a duplicate
 	my ($duplicatebiblionumber,$duplicatebibid,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
