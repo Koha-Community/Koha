@@ -10,8 +10,7 @@
 	
 <ul>
 <li>Invoice: <!-- TMPL_VAR name="invoice" --></li>
-<li>Received By: <!-- TMPL_VAR name="user" --></li>
-<li>Date: <!-- TMPL_VAR name="date" --></li>
+<li>Date: <!-- TMPL_VAR name="datereceived"--></li>
 </ul>
 	
 	<h2> Items in parcel</h2>
@@ -35,7 +34,7 @@
 			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 				<td><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&amp;datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
 				<td><!-- TMPL_VAR NAME="ecost" --></td>
 				<td><!-- TMPL_VAR NAME="quantity" --></td>
@@ -95,7 +94,7 @@
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&amp;catview=yes""><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
