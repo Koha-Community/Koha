@@ -454,8 +454,8 @@ if (C4::Context->preference("sortbynonfiling")) {
               }
               $lineCN{date_due} = format_date($date_due) ;
               $lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
-              $notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
             }
+            $notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan} and not $lineCN{notforloan}); # setting not forloan if itemtype is not for loan
 			push @CNresults,\%lineCN;
 			$totalitems+=$item->{cnt};
@@ -514,6 +514,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
+                        @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 						$sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
@@ -521,6 +522,7 @@ sub create_request {
 					$sql_tables .= "marc_word as m$nb_table,";
 					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
+                        @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
 					$sql_where1.=")";
@@ -528,6 +530,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
+                        @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 						 $sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
@@ -538,6 +541,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
+                        @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
@@ -548,6 +552,7 @@ sub create_request {
 						$sql_tables .= "marc_word as m$nb_table,";
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
+                            @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
 						}
 						$sql_where1.=")";
@@ -555,6 +560,7 @@ sub create_request {
 					} else {
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
+                            @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 							$sql_where1 .="  and m$nb_table.tagsubfield in (@$tags[$i])";
 						}
 						$sql_where1.=")";
@@ -565,6 +571,7 @@ sub create_request {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] ".$dbh->quote(@$value[$i]);
 					if (@$tags[$i]) {
+                        @$tags[$i] = $dbh->quote(@$tags[$i]) unless @$tags[$i]=~ /^'/;
 					 	$sql_where1 .="  and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
