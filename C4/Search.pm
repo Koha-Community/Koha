@@ -1541,7 +1541,7 @@ sub bibdata {
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
 	# handle ISBN : reintroduce - if there are none
-	$data->{'isbn'} = DisplayISBN($data->{'isbn'});
+	$data->{'isbn'} = DisplayISBN($data->{'isbn'}) if $data->{isbn};
 	$sth->finish;
 	return($data);
 } # sub bibdata
