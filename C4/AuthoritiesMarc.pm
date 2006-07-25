@@ -151,6 +151,10 @@ sub authoritysearch {
 		my $authref = getauthtype($authtypecode);
 		my $authtype =$authref->{authtypetext};
 		my $summary = $authref->{summary};
+        my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
+        my $sth = $dbh->prepare($query_auth_tag);
+        $sth->execute($authtypecode);
+        my $auth_tag_to_report = $sth->fetchrow;
 		# find biblio MARC field using this authtypecode (to jump to biblio)
 		my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
 		$sth->execute($authtypecode);
@@ -160,14 +164,20 @@ sub authoritysearch {
 			$tags_using_authtype.= $tagfield."9,";
 		}
 		chop $tags_using_authtype;
+		my $reported_tag;
 		# if the library has a summary defined, use it. Otherwise, build a standard one
 		if ($summary) {
 			my @fields = $record->fields();
+            $reported_tag = '$9'.$result[$counter];
 			foreach my $field (@fields) {
 				my $tag = $field->tag();
 				my $tagvalue = $field->as_string();
 				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
 				if ($tag<10) {
+                    if ($tag eq '001') {
+                        $reported_tag.='$3'.$field->data();
+                    }
+
 				} else {
 					my @subf = $field->subfields;
 					for my $i (0..$#subf) {
@@ -175,6 +185,10 @@ sub authoritysearch {
 						my $subfieldvalue = $subf[$i][1];
 						my $tagsubf = $tag.$subfieldcode;
 						$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+                        if ($tag eq $auth_tag_to_report) {
+                            $reported_tag.='$'.$subfieldcode.$subfieldvalue;
+                        }
+
 					}
 				}
 			}
@@ -256,6 +270,7 @@ sub authoritysearch {
 		my %newline;
 		$newline{summary} = $summary;
 		$newline{authtype} = $authtype;
+		$newline{reported_tag} = $reported_tag;
 		$newline{authid} = $result[$counter];
 		$newline{used} = &AUTHcount_usage($result[$counter]);
 		$newline{biblio_fields} = $tags_using_authtype;
@@ -1079,6 +1094,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.18  2006/07/25 12:30:51  tipaul
+# adding some informations to the array that is passed as result to an authority search : mainly, the tag_to_report & the $3 information (unimarc specific)
+#
 # Revision 1.9.2.17  2006/04/10 20:06:15  kados
 # Adding support for bulkauthimport of records where authid already exists.
 # This commit should be tested with other uses of AUTHaddauthority to ensure
