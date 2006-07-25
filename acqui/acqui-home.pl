@@ -48,6 +48,7 @@ use C4::Database;
 use C4::Suggestions;
 use HTML::Template;
 use C4::Acquisition;
+use C4::Bookfund;
 use C4::Members;
 
 my $query = new CGI;
