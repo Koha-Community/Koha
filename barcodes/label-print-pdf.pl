@@ -11,8 +11,8 @@
 
 # the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
 
-#use lib '/usr/local/hlt/intranet/modules';
-#use C4::Context("/etc/koha-hlt.conf");
+use lib '/usr/local/opus-import/intranet/modules';
+use C4::Context("/etc/koha-opus-import.conf");
 
 #use strict;
 use CGI;
@@ -43,19 +43,17 @@ my @resultsloop = get_label_items();
 
 warn Dumper $conf_data;
 
-
 my $barcodetype  = $conf_data->{'barcodetype'};
 my $printingtype = $conf_data->{'printingtype'};
-my $guidebox  = $conf_data->{'guidebox'};
+my $guidebox     = $conf_data->{'guidebox'};
 my $startrow     = $conf_data->{'startrow'};
 
-if (!$printingtype) {
-	$printingtype = 'both';
+if ( !$printingtype ) {
+    $printingtype = 'both';
 }
 
 warn $printingtype;
 warn $guidebox;
-
 
 #warn Dumper @resultsloop;
 
@@ -128,7 +126,7 @@ my $item;
 
 my $i2 = 1;
 foreach $item (@resultsloop) {
-    if ( $i2 == 1  && $guidebox  == 1) {
+    if ( $i2 == 1 && $guidebox == 1 ) {
         draw_boundaries(
             $x_pos_spine, $x_pos_circ1,  $x_pos_circ2, $y_pos,
             $spine_width, $label_height, $circ_width
@@ -146,12 +144,13 @@ foreach $item (@resultsloop) {
 
     warn
 "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
- if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
-    build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'}, \$item );
-    build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'}, \$item );
-}
+    if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
+        build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
+            $conf_data->{'barcodetype'}, \$item );
+        build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
+            $conf_data->{'barcodetype'}, \$item );
+    }
+
 # added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
 # i think its embedding extra fonts in the pdf file.
 #	mode => 'graphic',
@@ -172,7 +171,6 @@ foreach $item (@resultsloop) {
 }
 ############## end of loop
 
-
 prEnd();
 
 #----------------------------------------------------------------------------
@@ -180,6 +178,9 @@ prEnd();
 # it opens the 'new.pdf' file that the previous section has just saved
 
 if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
+
+    my $font        = 'Courier';
+    my $text_height = 90;
 
     $file = "$htdocs_path/barcodes/new.pdf";
 
@@ -201,11 +202,14 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
     #my $y_pos = ( $y_pos_initial_startrow  );
     #warn "Y POS = $y_pos";
 
-    # now needed now we are using centerString().
-    #$pdf->setAlign('left');
-    
-    # SET THE FONT SIZE
+    $pdf->setAlign('left');
+
+    # SET THE FONT SIZE AND TYPE
+    $pdf->setFont($font);
     $pdf->setSize(9);
+    $fontname = $pdf->getFont();
+    my $fontsize = $pdf->getSize();
+    warn "fontname $fontname $fontsize";
 
     my $page_break_count = $startrow;
 
@@ -220,51 +224,75 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
 
     foreach $item (@resultsloop) {
 
-        #warn Dumper $item;
-        #warn "START Y_POS=$y_pos";
+        warn "START Y_POS=$y_pos";
+
         my $firstrow = 0;
 
-        $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) )
-          ;                    # INIT START POS
-        ( $hPos, $vPos ) = $pdf->getAddTextPos();
+        $pdf->setAddTextPos( 36, ( $y_pos - 15 ) );    # INIT START POS
+        ( $hPos, $vPos )  = $pdf->getAddTextPos();
+        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
 
-        my $hPosEnd = ( $hPos + $spine_label_text_with );    # 72
         if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
+
             ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'dewey'} );
-            $vPos = $vPos - $vPosSpacer;
+            warn "DEWEY1: x=$hPos,up=$vPos $item->{'dewey'}\n";
+            $pdf->addText( $item->{'dewey'}, 10, 72, 90 );
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            warn "DEWEY2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
         }
 
         if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
+            if ( $vPos1 == $vPos && $firstrow != 0 ) {
+                warn "VPOS -10";
+                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
+            }
+            else {
+                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
+            }
+
+            ( $hPos, $vPos ) = $pdf->getAddTextPos();
+            warn "ISBN1: x=$hPos,up=$vPos $item->{'isbn'}\n";
+            $pdf->addText( $item->{'isbn'}, 10, 72, 90 );
             ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'isbn'} );
-            $vPos = $vPos - $vPosSpacer;
+            warn "ISBN2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
         }
 
         if ( $conf_data->{'class'} && $item->{'classification'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos,
-                $item->{'classification'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-		if ( $conf_data->{'subclass'} && $item->{'subclass'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos,
-                $item->{'subclass'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-		if ( $conf_data->{'itemcallnumber'} && $item->{'itemcallnumber'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos,
-                $item->{'itemcallnumber'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
 
+            if ( $vPos1 == $vPos && $firstrow != 0 ) {
+                warn "VPOS -10";
+                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
+            }
+            else {
+                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
+            }
+
+            ( $hPos, $vPos ) = $pdf->getAddTextPos();
+            warn "CLASS1: x=$hPos,up=$vPos1 $item->{'classification'}\n";
+            $pdf->addText( $item->{'classification'}, 10, 72, 90 );
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            warn "CLASS2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
+        }
 
         if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
+
+            if ( $vPos1 == $vPos && $firstrow != 0 ) {
+                warn "VPOS -10";
+                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
+            }
+            else {
+                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
+            }
+
+            ( $hPos, $vPos ) = $pdf->getAddTextPos();
+            warn "ITYPE1: x=$hPos,up=$vPos $item->{'itemtype'}\n";
+            $pdf->addText( $item->{'itemtype'}, 10, 72, 90 );
             ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'itemtype'} );
-            $vPos = $vPos - $vPosSpacer;
+            warn "ITYPE2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
         }
 
         #$pdf->drawRect(
@@ -274,9 +302,8 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
         #);
 
         $y_pos = ( $y_pos - $label_height );
-
-        #warn "END LOOP Y_POS =$y_pos";
-        #    warn "PAGECOUNT END LOOP=$page_break_count";
+        warn "END LOOP Y_POS =$y_pos";
+        warn "PAGECOUNT END LOOP=$page_break_count";
         if ( $page_break_count == 8 ) {
             $pagenumber++;
             $pdf->openpage($pagenumber);
@@ -289,8 +316,7 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
 
         $page_break_count++;
         $i2++;
-
-        #warn "#----------------------------------\n";
+        warn "#----------------------------------\n";
 
     }
     $DB::single = 1;
