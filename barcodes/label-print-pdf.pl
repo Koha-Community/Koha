@@ -188,31 +188,34 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
         my $hPos = 36;
         foreach my $field (@fields) {
 
-            #warn "START Y_POS=$y_pos, vPos:$vPos";
+            # if the display option for this field is selected in the DB,
+            # and the item record has some values for this field, display it.
             if ( $conf_data->{"$field"} && $item->{"$field"} ) {
+
+                # chop the string up into 12 char's per line
                 $str = $item->{"$field"};
                 my $strlen    = length($str);
                 my $num_lines = ceil( $strlen / 12 );
                 my $start_pos = 0;
                 my $len       = 12;
+
+                # then loop for each string line
                 for ( 1 .. $num_lines ) {
                     $pdf->setAddTextPos( $hPos, $vPos - 10 );
                     my $chop_str = substr( $str, $start_pos, $len );
                     my ( $h, $v ) = $pdf->getAddTextPos();
 
-                    #warn "$field 1 x=$h, up=$v $chop_str\n";
+                    # using '1000' width, so that addText wont use it's
+                    # own internal wordwrap, (as it doesnt work so well)
                     $pdf->addText( $chop_str, 10, 1000, 90 );
-                    my ( $h, $v ) = $pdf->getAddTextPos();
+
                     $start_pos = $start_pos + $len;
                     $vPos      = $vPos - 10;
-                    warn "$field 2 x=$h, up=$v $chop_str\n";
                 }
             }    # if field is valid
         }    #foreach feild
         $y_pos = ( $y_pos - $label_height );
 
-        #warn "END LOOP Y_POS =$y_pos";
-        #warn "PAGECOUNT END LOOP=$page_break_count";
         if ( $page_break_count == 8 ) {
             $pagenumber++;
             $pdf->openpage($pagenumber);
