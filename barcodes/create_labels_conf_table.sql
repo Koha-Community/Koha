@@ -32,7 +32,7 @@ CREATE TABLE `labels_conf` (
 -- Dumping data for table `labels_conf`
 --
 
-INSERT INTO `labels_conf` VALUES (3,'Code39',NULL,1,1,NULL,1,1,NULL,'Gaylord8511',1,'both',NULL);
+INSERT INTO `labels_conf` VALUES (3,'Code39',NULL,1,1,NULL,1,1,NULL,1,1,'Gaylord8511',1,'both',NULL);
 
 
 --
