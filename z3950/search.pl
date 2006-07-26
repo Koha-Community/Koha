@@ -77,9 +77,11 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
+#MJR: check for pending then search results, else servers with fast 
+# z3950 links may miss results if the search completes between them
+my $numberpending= &checkz3950searchdone($random);
 # fill with books in breeding farm
 ($count, @results) = BreedingSearch($title,$isbn,$random);
-my $numberpending= &checkz3950searchdone($random);
 my @breeding_loop = ();
 for (my $i=0; $i <= $#results; $i++) {
 	my %row_data;
