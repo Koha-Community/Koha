@@ -60,27 +60,24 @@
                 <label for="subclass">Sub-Class</label>
         </td>
 </tr>
-
 </table>
 <p>
 
-
-<h3>
-        Confirm Label Type
-</h3>
-<!-- FIXME: these paper types need to be pulled from a DB table :) -->
-        <select name="papertype">
-                <option value="Gaylord8511">Gaylord-8511</option>
-                <option value="OPUS">OPUS-Dot Matrix</option>
+<h3>Confirm Label Type</h3>
+<select name="papertype">
+                <option value="gaylord-8511"
+                        <!-- TMPL_IF NAME="papertype_gaylord-8511" -->
+                             selected
+                        <!--/TMPL_IF -->
+                >Gaylord-8511</option>
+                <option value="opus-dot-matrix"
+                        <!-- TMPL_IF NAME="papertype_opus-dot-matrix" -->
+                             selected
+                        <!--/TMPL_IF -->
+                 >OPUS Dot-Matrix</option>
         </select>
 
-
-<h3>
-        Confirm Barcode Type
-</h3>
-
-
-
+<h3>Confirm Barcode Type</h3>
  <select name="barcodetype">
                 <option value="COOP2of5"
                         <!-- TMPL_IF NAME="COOP2of5_checked" -->
@@ -140,9 +137,7 @@
 </h3>
 
 
-<h3>
-        Confirm Printing Type
-</h3>
+<h3>Confirm Printing Type</h3>
 
 <input type="radio" name="printingtype" value="spine"
         <!-- TMPL_IF NAME="printingtype_spine" -->
