@@ -11,10 +11,10 @@
 
 # the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
 
-use lib '/usr/local/opus-import/intranet/modules';
-use C4::Context("/etc/koha-opus-import.conf");
+#use lib '/usr/local/opus-import/intranet/modules';
+#use C4::Context("/etc/koha-opus-import.conf");
 
-#use strict;
+use strict;
 use CGI;
 use C4::Labels;
 use C4::Auth;
@@ -26,36 +26,27 @@ use HTML::Template;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use PDF::Report;
-use Data::Dumper;
+use POSIX;
 
-#use Acme::Comment;
 #use Data::Dumper;
+#use Acme::Comment;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
-
-my $spine_text = "";
+my $spine_text  = "";
 
 # get the printing settings
-
-my $conf_data   = get_label_options();
-my @resultsloop = get_label_items();
-
-warn Dumper $conf_data;
-
+my $conf_data    = get_label_options();
+my @resultsloop  = get_label_items();
 my $barcodetype  = $conf_data->{'barcodetype'};
 my $printingtype = $conf_data->{'printingtype'};
 my $guidebox     = $conf_data->{'guidebox'};
 my $startrow     = $conf_data->{'startrow'};
 
+# if none selected, then choose 'both'
 if ( !$printingtype ) {
     $printingtype = 'both';
 }
-
-warn $printingtype;
-warn $guidebox;
-
-#warn Dumper @resultsloop;
 
 # dimensions of gaylord paper
 my $lowerLeftX  = 0;
@@ -63,46 +54,35 @@ my $lowerLeftY  = 0;
 my $upperRightX = 612;
 my $upperRightY = 792;
 
-#----------------------------------
 # setting up the pdf doc
-
 #remove the file before write, for testing
 unlink "$htdocs_path/barcodes/new.pdf";
-
 prFile("$htdocs_path/barcodes/new.pdf");
 prLogDir("$htdocs_path/barcodes");
-
-#prMbox ( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
-prMbox( 0, 0, 612, 792 );
-
+prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 prFont('Times-Roman');    # Just setting a font
 prFontSize(10);
 
-my $margin = 36;
-
+my $margin       = 36;
 my $label_height = 90;
 my $spine_width  = 72;
 my $circ_width   = 207;
 my $colspace     = 27;
+my $x_pos_spine  = 36;
+my $x_pos_circ1  = 135;
+my $x_pos_circ2  = 369;
+my $pageheight   = 792;
 
-my $x_pos_spine = 36;
-my $x_pos_circ1 = 135;
-my $x_pos_circ2 = 369;
+#warn "STARTROW = $startrow\n";
 
-my $pageheight = 792;
-
-warn "STARTROW = $startrow\n";
-
-#my $y_pos_initial = ( ( 792 - 36 ) - 90 );
 my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
 my $y_pos_initial_startrow =
   ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
-
 my $y_pos = $y_pos_initial_startrow;
 
-warn "Y POS INITAL : $y_pos_initial";
-warn "Y POS : $y_pos";
-warn "Y START ROW = $y_pos_initial_startrow";
+#warn "Y POS INITAL : $y_pos_initial";
+#warn "Y POS : $y_pos";
+#warn "Y START ROW = $y_pos_initial_startrow";
 
 my $rowspace         = 36;
 my $page_break_count = $startrow;
@@ -123,7 +103,6 @@ prAdd($str);
 my $item;
 
 # for loop
-
 my $i2 = 1;
 foreach $item (@resultsloop) {
     if ( $i2 == 1 && $guidebox == 1 ) {
@@ -140,10 +119,8 @@ foreach $item (@resultsloop) {
     my $line        = 75;
     my $line_spacer = 16;
 
-    $DB::single = 1;
-
-    warn
-"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
+    #warn
+    "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
     if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
         build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
             $conf_data->{'barcodetype'}, \$item );
@@ -160,8 +137,6 @@ foreach $item (@resultsloop) {
     # the gaylord labels have 8 rows per sheet, this pagebreaks after 8 rows
     if ( $page_break_count == 8 ) {
         prPage();
-
-        #warn "############# PAGEBREAK ###########";
         $page_break_count = 0;
         $i2               = 0;
         $y_pos            = $y_pos_initial;
@@ -170,7 +145,6 @@ foreach $item (@resultsloop) {
     $i2++;
 }
 ############## end of loop
-
 prEnd();
 
 #----------------------------------------------------------------------------
@@ -178,189 +152,77 @@ prEnd();
 # it opens the 'new.pdf' file that the previous section has just saved
 
 if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
-
     my $font        = 'Courier';
     my $text_height = 90;
-
-    $file = "$htdocs_path/barcodes/new.pdf";
-
-    my $pdf = new PDF::Report( File => $file );
-
-    # my $pdf = new PDF::Report(PageSize => "letter",
-    #                                  PageOrientation => "Landscape");
+    my $file        = "$htdocs_path/barcodes/new.pdf";
+    my $pdf         = new PDF::Report( File => $file );
 
     #$pdf->newpage($nopage);
     my $pagenumber = 1;
     $pdf->openpage($pagenumber);
-
-    ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
+    my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
 
     #warn "PAGE DIM = $pagewidth, $pageheight";
     #warn "Y START ROW = $y_pos_initial_startrow";
-    my $y_pos = ( $y_pos_initial_startrow + 90 );
-
-    #my $y_pos = ( $y_pos_initial_startrow  );
-    #warn "Y POS = $y_pos";
-
     $pdf->setAlign('left');
-
-    # SET THE FONT SIZE AND TYPE
     $pdf->setFont($font);
     $pdf->setSize(9);
-    $fontname = $pdf->getFont();
-    my $fontsize = $pdf->getSize();
-    warn "fontname $fontname $fontsize";
-
+    my $fontname         = $pdf->getFont();
+    my $fontsize         = $pdf->getSize();
     my $page_break_count = $startrow;
 
     #warn "INIT PAGEBREAK COUNT = $page_break_count";
-
-    #warn "#----------------------------------\n";
     #warn "INIT VPOS = $vPos, hPos = $hPos";
-
-    my $vPosSpacer     = 15;
+    my $vPosSpacer     = 10;
     my $start_text_pos = 39;   # ( 36 - 5 = 31 ) 5 is an inside border for text.
     my $spine_label_text_with = 67;
+    my $y_pos                 = ( $y_pos_initial_startrow + 90 );
 
+    #warn "Y POS = $y_pos";
     foreach $item (@resultsloop) {
 
-        warn "START Y_POS=$y_pos";
+        # add your printable fields manually in here
+        my @fields =
+          qw (dewey isbn classification itemtype subclass itemcallnumber);
+        my $vPos = $y_pos;
+        my $hPos = 36;
+        foreach my $field (@fields) {
 
-        my $firstrow = 0;
+            #warn "START Y_POS=$y_pos, vPos:$vPos";
+            if ( $conf_data->{"$field"} && $item->{"$field"} ) {
+                $str = $item->{"$field"};
+                my $strlen    = length($str);
+                my $num_lines = ceil( $strlen / 12 );
+                my $start_pos = 0;
+                my $len       = 12;
+                for ( 1 .. $num_lines ) {
+                    $pdf->setAddTextPos( $hPos, $vPos - 10 );
+                    my $chop_str = substr( $str, $start_pos, $len );
+                    my ( $h, $v ) = $pdf->getAddTextPos();
 
-        $pdf->setAddTextPos( 36, ( $y_pos - 15 ) );    # INIT START POS
-        ( $hPos, $vPos )  = $pdf->getAddTextPos();
-        ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-
-        if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
-
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "DEWEY1: x=$hPos,up=$vPos $item->{'dewey'}\n";
-            $pdf->addText( $item->{'dewey'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "DEWEY2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-        if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
-            if ( $vPos1 == $vPos && $firstrow != 0 ) {
-                warn "VPOS -10";
-                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-            }
-            else {
-                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-            }
-
-            ( $hPos, $vPos ) = $pdf->getAddTextPos();
-            warn "ISBN1: x=$hPos,up=$vPos $item->{'isbn'}\n";
-            $pdf->addText( $item->{'isbn'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "ISBN2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-        if ( $conf_data->{'class'} && $item->{'classification'} ) {
-
-            if ( $vPos1 == $vPos && $firstrow != 0 ) {
-                warn "VPOS -10";
-                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-            }
-            else {
-                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-            }
-
-            ( $hPos, $vPos ) = $pdf->getAddTextPos();
-            warn "CLASS1: x=$hPos,up=$vPos1 $item->{'classification'}\n";
-            $pdf->addText( $item->{'classification'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "CLASS2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-     if ( $conf_data->{'subclass'} && $item->{'subclass'} ) {
-
-            if ( $vPos1 == $vPos && $firstrow != 0 ) {
-                warn "VPOS -10";
-                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-            }
-            else {
-                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-            }
-
-            ( $hPos, $vPos ) = $pdf->getAddTextPos();
-            warn "SUBCLASS: x=$hPos,up=$vPos $item->{'subclass'}\n";
-            $pdf->addText( $item->{'subclass'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "SUBCLASS2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-
-     if ( $conf_data->{'itemcallnumber'} && $item->{'itemcallnumber'} ) {
-
-            if ( $vPos1 == $vPos && $firstrow != 0 ) {
-                warn "VPOS -10";
-                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-            }
-            else {
-                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-            }
-
-            ( $hPos, $vPos ) = $pdf->getAddTextPos();
-            warn "ITYPE1: x=$hPos,up=$vPos $item->{'itemcallnumber'}\n";
-            $pdf->addText( $item->{'itemcallnumber'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "ITYPE2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-        if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
-
-            if ( $vPos1 == $vPos && $firstrow != 0 ) {
-                warn "VPOS -10";
-                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
-            }
-            else {
-                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
-            }
-
-            ( $hPos, $vPos ) = $pdf->getAddTextPos();
-            warn "ITYPE1: x=$hPos,up=$vPos $item->{'itemtype'}\n";
-            $pdf->addText( $item->{'itemtype'}, 10, 72, 90 );
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            warn "ITYPE2: x=$hPos,up=$vPos1\n";
-            $firstrow = 1;
-        }
-
-
-        #$pdf->drawRect(
-        #    $x_pos_spine, $y_pos,
-        #    ( $x_pos_spine + $spine_width ),
-        #    ( $y_pos - $label_height )
-        #);
-
+                    #warn "$field 1 x=$h, up=$v $chop_str\n";
+                    $pdf->addText( $chop_str, 10, 1000, 90 );
+                    my ( $h, $v ) = $pdf->getAddTextPos();
+                    $start_pos = $start_pos + $len;
+                    $vPos      = $vPos - 10;
+                    warn "$field 2 x=$h, up=$v $chop_str\n";
+                }
+            }    # if field is valid
+        }    #foreach feild
         $y_pos = ( $y_pos - $label_height );
-        warn "END LOOP Y_POS =$y_pos";
-        warn "PAGECOUNT END LOOP=$page_break_count";
+
+        #warn "END LOOP Y_POS =$y_pos";
+        #warn "PAGECOUNT END LOOP=$page_break_count";
         if ( $page_break_count == 8 ) {
             $pagenumber++;
             $pdf->openpage($pagenumber);
-
-            #warn "############# PAGEBREAK ###########";
             $page_break_count = 0;
             $i2               = 0;
             $y_pos            = ( $y_pos_initial + 90 );
-        }
-
+        }    # end if
         $page_break_count++;
         $i2++;
-        warn "#----------------------------------\n";
-
-    }
-    $DB::single = 1;
+    }    # end of foreach result loop
     $pdf->saveAs($file);
 }
-
-#------------------------------------------------
-
 print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
