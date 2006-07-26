@@ -277,6 +277,43 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
             $firstrow = 1;
         }
 
+     if ( $conf_data->{'subclass'} && $item->{'subclass'} ) {
+
+            if ( $vPos1 == $vPos && $firstrow != 0 ) {
+                warn "VPOS -10";
+                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
+            }
+            else {
+                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
+            }
+
+            ( $hPos, $vPos ) = $pdf->getAddTextPos();
+            warn "SUBCLASS: x=$hPos,up=$vPos $item->{'subclass'}\n";
+            $pdf->addText( $item->{'subclass'}, 10, 72, 90 );
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            warn "SUBCLASS2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
+        }
+
+
+     if ( $conf_data->{'itemcallnumber'} && $item->{'itemcallnumber'} ) {
+
+            if ( $vPos1 == $vPos && $firstrow != 0 ) {
+                warn "VPOS -10";
+                $pdf->setAddTextPos( 36, ( $vPos - 15 ) );
+            }
+            else {
+                $pdf->setAddTextPos( 36, $vPos1 - 5 );    #add a space
+            }
+
+            ( $hPos, $vPos ) = $pdf->getAddTextPos();
+            warn "ITYPE1: x=$hPos,up=$vPos $item->{'itemcallnumber'}\n";
+            $pdf->addText( $item->{'itemcallnumber'}, 10, 72, 90 );
+            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
+            warn "ITYPE2: x=$hPos,up=$vPos1\n";
+            $firstrow = 1;
+        }
+
         if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
 
             if ( $vPos1 == $vPos && $firstrow != 0 ) {
@@ -294,6 +331,7 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
             warn "ITYPE2: x=$hPos,up=$vPos1\n";
             $firstrow = 1;
         }
+
 
         #$pdf->drawRect(
         #    $x_pos_spine, $y_pos,
