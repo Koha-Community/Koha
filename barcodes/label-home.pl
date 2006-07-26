@@ -34,6 +34,7 @@ $template->param( guidebox => 1 ) if ( $data->{'guidebox'} );
 
 $data->{'printingtype'} = 'both' if ( !$data->{'printingtype'} );
 $template->param( "printingtype_$data->{'printingtype'}" => 1 );
+$template->param( "papertype_$data->{'papertype'}"       => 1 );
 
 $template->param( "$data->{'barcodetype'}_checked"              => 1 );
 $template->param( "startrow" . $data->{'startrow'} . "_checked" => 1 );
