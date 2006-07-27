@@ -21,7 +21,30 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Acquisition;
+=head1 NAME
+updatesupplier.pl
+
+=head1 DESCRIPTION
+this script allow to update or create (if id == 0)
+a supplier. This script is called from acqui/supplier.pl.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+All informations regarding this supplier are listed on input parameter.
+Here is the list :
+supplier, id, company, company_postal, physical, company_phone,
+physical, company_phone, company_fax, website, company_contact_name,
+company_contact_position, contact_phone, contact_phone_2, contact_fax,
+company_email, contact_notes, notes, status, publishers_imprints,
+list_currency, gst, list_gst, invoice_gst, discount.
+
+=back
+
+=cut
+
+use C4::Bookseller;
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -52,7 +75,7 @@ $data{'contaltphone'}=$input->param('contact_phone_2');
 $data{'contfax'}=$input->param('contact_fax');
 $data{'contemail'}=$input->param('company_email');
 $data{'contnotes'}=$input->param('contact_notes');
-warn "".$data{'contnotes'};
+# warn "".$data{'contnotes'};
 $data{'notes'}=$input->param('notes');
 $data{'active'}=$input->param('status');
 $data{'specialty'}=$input->param('publishers_imprints');
@@ -64,18 +87,10 @@ $data{'invoiceincgst'}=$input->param('invoice_gst');
 $data{'discount'}=$input->param('discount');
 my $id=$input->param('id');
 if ($data{'id'} != 0){
-  updatesup(\%data);
+  ModBookseller(\%data);
 } else {
-  $id=insertsup(\%data);
+  $id=AddBookseller(\%data);
 }
-#print startmenu('acquisitions');
-#my ($count,@suppliers)=bookseller($supplier);
 
-#print $input->dump;
-
-
-#print endmenu('acquisitions');
-
-#print endpage;
-
+#redirect to order.pl
 print $input->redirect("order.pl?supplier=$id");

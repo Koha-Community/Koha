@@ -5,7 +5,6 @@
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -23,6 +22,26 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+=head1 NAME
+
+supplier.pl
+
+=head1 DESCRIPTION
+this script shows the details for a bookseller given on input arg.
+It allows to edit & save information about this bookseller.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item supplierid
+To know the bookseller this script has to display details.
+
+=back
+
+=cut
+
+use strict;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Biblio;
@@ -31,11 +50,14 @@ use CGI;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
-use strict;
+use C4::Bookseller;
+use C4::Bookfund;
 
 my $query=new CGI;
 my $id=$query->param('supplierid');
-my ($count,@booksellers)=bookseller($id);
+my @booksellers = GetBookSeller($id);
+my $count = scalar @booksellers;
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/supplier.tmpl",
 			     query => $query,
@@ -44,20 +66,23 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
+
 #build array for currencies
-my  ($count, $currencies) = &getcurrencies();
+my @currencies = GetCurrencies();
+my $count = scalar @currencies;
+
 my @loop_pricescurrency;
 my @loop_invoicecurrency;
 for (my $i=0;$i<$count;$i++) {
-	if ($booksellers[0]->{'listprice'} eq $currencies->[$i]->{'currency'}) {
-		push @loop_pricescurrency, { currency => "<option selected=\"selected\" value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>" };
+	if ($booksellers[0]->{'listprice'} eq $currencies[$i]->{'currency'}) {
+		push @loop_pricescurrency, { currency => "<option selected=\"selected\" value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>" };
 	} else {
-		push @loop_pricescurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
+		push @loop_pricescurrency, { currency => "<option value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>"};
 	}
-	if ($booksellers[0]->{'invoiceprice'} eq $currencies->[$i]->{'currency'}) {
-		push @loop_invoicecurrency, { currency => "<option selected=\"selected\" value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
+	if ($booksellers[0]->{'invoiceprice'} eq $currencies[$i]->{'currency'}) {
+		push @loop_invoicecurrency, { currency => "<option selected=\"selected\" value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>"};
 	} else {
-		push @loop_invoicecurrency, { currency => "<option value=\"$currencies->[$i]->{'currency'}\">$currencies->[$i]->{'currency'}</option>"};
+		push @loop_invoicecurrency, { currency => "<option value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>"};
 	}
 }
 $template->param(id => $id,
