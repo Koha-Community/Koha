@@ -26,8 +26,9 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
-use C4::Acquisition;
+use C4::Bookfund;
 my $query = new CGI;
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "serials/acqui-search.tmpl",
 			     query => $query,
@@ -70,8 +71,8 @@ for (my $i=0;$i<$count;$i++){
 	$totavail+=$avail;
 }
 #currencies
-my $rates=GetCurrencies();
-my $count = scalar @$rates;
+my @rates=GetCurrencies();
+my $count = scalar @rates;
 
 my @loop_currency = ();
 for (my $i=0;$i<$count;$i++){
