@@ -47,6 +47,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
+use C4::Bookseller;
 
 my $query = new CGI;
 # my $title = $query->param('title');
@@ -70,9 +71,8 @@ my $CGIsupplier=CGI::scrolling_list(
 
 my @lateissues;
 @lateissues = GetLateIssues($supplierid) if $supplierid;
-my @supplierinfo;
-my $nothing;
-($nothing,@supplierinfo)=GetBookSeller($supplierid) if $supplierid;
+
+my @supplierinfo=GetBookSeller($supplierid) if $supplierid;
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/lateissues.tmpl",

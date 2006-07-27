@@ -50,6 +50,7 @@ use C4::Database;
 use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
+use C4::Bookseller;
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -69,7 +70,7 @@ my $count = scalar @suppliers;
 my $toggle=0;
 my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {
-    my $orders = GetOrders($suppliers[$i]->{'id'});
+    my $orders = GetPendingOrders($suppliers[$i]->{'id'});
     my $ordcount = scalar @$orders;
     
     my %line;
