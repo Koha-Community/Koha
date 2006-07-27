@@ -20,12 +20,56 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+
+=head1 NAME
+
+newbiblio.pl
+
+=head1 DESCRIPTION
+this script allows to create a new record to order it. This record shouldn't exist
+on database.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item booksellerid
+the bookseller the librarian has to buy a new book.
+
+=item title
+the title of this new record.
+
+=item author
+the author of this new record.
+
+=item copyright
+the copyright of this new record.
+
+=item ordnum
+the number of this order.
+
+=item biblio
+
+=item basketno
+the basket number for this new order.
+
+=item suggestionid
+if this order comes from a suggestion.
+
+=item close
+
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Context;
 use C4::Input;
 use C4::Database;
 use C4::Auth;
+use C4::Bookfund;
+use C4::Bookseller;
 use C4::Acquisition;
 use C4::Suggestions;
 use C4::Biblio;
@@ -35,18 +79,20 @@ use C4::Input;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Members;
 
 my $input        = new CGI;
 my $booksellerid = $input->param('booksellerid');
 my $title        = $input->param('title');
 my $author       = $input->param('author');
 my $copyright    = $input->param('copyright');
-my ( $count, @booksellers ) = bookseller($booksellerid);
+my @booksellers  = GetBookSeller($booksellerid);
+my $count        = scalar @booksellers;
 my $ordnum       = $input->param('ordnum');
 my $biblio       = $input->param('biblio');
 my $basketno     = $input->param('basketno');
 my $suggestionid = $input->param('suggestionid');
-my $donation = $input->param('donation');
+# my $donation     = $input->param('donation');
 my $close        = $input->param('close');
 my $data;
 my $new;
@@ -77,10 +123,10 @@ if ( $ordnum eq '' ) {    # create order
     }
 }
 else {    #modify order
-    $data   = getsingleorder($ordnum);
+    $data   = GetSingleOrder($ordnum);
     $biblio = $data->{'biblionumber'};
     #get basketno and suppleirno. too!
-    my $data2 = getbasket( $data->{'basketno'} );
+    my $data2 = GetBasket( $data->{'basketno'} );
     $basketno     = $data2->{'basketno'};
     $booksellerid = $data2->{'booksellerid'};
 }
@@ -96,43 +142,45 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-# get currencies (for change rates calcs if needed
-my ( $count, $rates ) = getcurrencies();
+# get currencies (for change rates calcs if needed)
+my @rates = GetCurrencies();
+my $count = scalar @rates;
+
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    $line{currency} = $rates->[$i]->{'currency'};
-    $line{rate}     = $rates->[$i]->{'rate'};
+    $line{currency} = $rates[$i]->{'currency'};
+    $line{rate}     = $rates[$i]->{'rate'};
     push @loop_currency, \%line;
 }
 
 # build itemtype list
-my $sth =
-  $dbh->prepare(
-    "Select itemtype,description from itemtypes order by description");
-$sth->execute;
-my @itemtype;
-my %itemtypes;
-while ( my ( $value, $lib ) = $sth->fetchrow_array ) {
-    push @itemtype, $value;
-    $itemtypes{$value} = $lib;
+my $itemtypes = GetItemTypes;
+
+my @itemtypesloop;
+my %itemtypesloop;
+foreach my $thisitemtype (sort keys %$itemtypes) {
+    push @itemtypesloop, $itemtypes->{$thisitemtype}->{'itemtype'};
+    $itemtypesloop{$itemtypes->{$thisitemtype}->{'itemtype'}} =        $itemtypes->{$thisitemtype}->{'description'};
 }
+
 my $CGIitemtype = CGI::scrolling_list(
     -name     => 'format',
-    -values   => \@itemtype,
+    -values   => \@itemtypesloop,
     -default  => $data->{'itemtype'},
-    -labels   => \%itemtypes,
+    -labels   => \%itemtypesloop,
     -size     => 1,
     -multiple => 0
 );
-$sth->finish;
 
 # build branches list
-my $branches = getbranches;
+my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch ( sort keys %$branches ) {
-    my %row = (
+     my $selected = 1 if $thisbranch eq $branch;
+     my %row = (
         value      => $thisbranch,
+        selected => $selected,
         branchname => $branches->{$thisbranch}->{'branchname'},
     );
     push @branchloop, \%row;
@@ -140,17 +188,16 @@ foreach my $thisbranch ( sort keys %$branches ) {
 $template->param( branchloop => \@branchloop );
 
 # build bookfund list
-my $sthtemp =
-  $dbh->prepare(
-    "Select flags, branchcode from borrowers where borrowernumber = ?");
-$sthtemp->execute($loggedinuser);
-my ( $flags, $homebranch ) = $sthtemp->fetchrow;
+my ($flags, $homebranch) = GetFlagsAndBranchFromBorrower($loggedinuser);
 
 my $count2;
 my @bookfund;
 my @select_bookfund;
 my %select_bookfunds;
-( $count2, @bookfund ) = bookfunds($homebranch);
+
+@bookfund = GetBookFunds($homebranch);
+$count2 = scalar @bookfund;
+
 for ( my $i = 0 ; $i < $count2 ; $i++ ) {
     push @select_bookfund, $bookfund[$i]->{'bookfundid'};
     $select_bookfunds{ $bookfund[$i]->{'bookfundid'} } =
@@ -164,6 +211,7 @@ my $CGIbookfund = CGI::scrolling_list(
     -size     => 1,
     -multiple => 0
 );
+
 my $bookfundname;
 my $bookfundid;
 if ($close) {
@@ -191,7 +239,9 @@ else {
 my $bibitemsexists;
 
 #do a biblioitems lookup on bib
-( my $bibitemscount, my @bibitems ) = getbiblioitembybiblionumber($biblio);
+my @bibitems = GetBiblioItemByBiblioNumber($biblio);
+my $bibitemscount = scalar @bibitems;
+
 if ( $bibitemscount > 0 ) {
     # warn "NEWBIBLIO: bibitems for $biblio exists\n";
     # warn Dumper $bibitemscount, @bibitems;
@@ -255,7 +305,7 @@ $template->param(
     ecost            => $data->{'ecost'},
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
-    donation         => $donation
+#     donation         => $donation
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
