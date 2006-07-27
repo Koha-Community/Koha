@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.4  2006/07/27 13:52:49  toins
+# 1 sub renamed and cleaned.
+#
 # Revision 1.3  2006/07/21 10:12:00  toins
 # subs renamed according to coding guidelines.
 #
@@ -93,7 +96,8 @@ else {
 		print $input->redirect('addbooks.pl');
 	}
 	else {
-		( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($biblionumber);
+		@biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
+        $biblioitemcount = scalar @biblioitems;
 		my $branches = GetBranches;
 		my @branchloop;
 		foreach my $thisbranch (sort keys %$branches) {
@@ -147,8 +151,8 @@ else {
     }
     else {
 
-        ( $biblioitemcount, @biblioitems ) =
-          &getbiblioitembybiblionumber($biblionumber);
+        @biblioitems =&GetBiblioItemByBiblioNumber($biblionumber);
+        $biblioitemcount = scalar @biblioitems;
         @branches   = &GetBranches;
         ( $itemtypecount, @itemtypes ) = &GetItemTypes;
 
