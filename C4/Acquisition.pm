@@ -17,6 +17,8 @@ package C4::Acquisition;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 use strict;
 require Exporter;
 use C4::Context;
@@ -25,14 +27,12 @@ use MARC::Record;
 use C4::Suggestions;
 use Time::localtime;
 
-# use C4::Biblio;
-
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
-# used in reciveorder subroutine
+# used in receiveorder subroutine
 # to provide library specific handling
 my $library_name = C4::Context->preference("LibraryName");
 
@@ -42,12 +42,12 @@ C4::Acquisition - Koha functions for dealing with orders and acquisitions
 
 =head1 SYNOPSIS
 
-  use C4::Acquisition;
+use C4::Acquisition;
 
 =head1 DESCRIPTION
 
 The functions in this module deal with acquisitions, managing book
-orders, converting money to different currencies, and so forth.
+orders, basket and parcels.
 
 =head1 FUNCTIONS
 
@@ -57,142 +57,384 @@ orders, converting money to different currencies, and so forth.
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-  &getbasket &getbasketcontent &newbasket &closebasket
-
-  &getorders &getallorders &getrecorders
-  &getorder &neworder &delorder
-  &ordersearch &histsearch
-  &modorder &getsingleorder &invoice &receiveorder
-  &updaterecorder &newordernum
-  &getsupplierlistwithlateorders
-  &getlateorders
-  &getparcels &getparcelinformation
-  &bookfunds &curconvert &getcurrencies &bookfundbreakdown
-  &updatecurrencies &getcurrency
-  &updatesup &insertsup
-  &bookseller &breakdown
+  &GetBasket &GetBasketContent &NewBasket &CloseBasket
+  &GetPendingOrders &GetAllOrders
+  &GetOrder &GetLateOrders &NewOrder &DelOrder
+  &SearchOrder &GetHistory
+  &ModOrder &GetSingleOrder &ModReceiveOrder
+  &GetParcels &GetParcel
 );
 
-#
-#
-#
-# BASKETS
-#
-#
-#
+=head2 FUNCTIONS ABOUT BASKETS
 
-=item getbasket
+=over 2
 
-  $aqbasket = &getbasket($basketnumber);
+=cut 
+
+#------------------------------------------------------------#
+
+=head3 GetBasket
+
+=over 4
+
+$aqbasket = &GetBasket($basketnumber);
 
 get all basket informations in aqbasket for a given basket
+
+return :
+informations for a given basket returned as a hashref.
+
+=back
+
+=back
+
 =cut
 
-sub getbasket {
+sub GetBasket {
     my ($basketno) = @_;
     my $dbh        = C4::Context->dbh;
-    my $sth        =
-      $dbh->prepare(
-"select aqbasket.*,borrowers.firstname+' '+borrowers.surname as authorisedbyname, borrowers.branchcode as branch from aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where basketno=?"
-      );
+    my $query = "
+        SELECT  aqbasket.*,
+                borrowers.firstname+' '+borrowers.surname AS authorisedbyname,
+                borrowers.branchcode AS branch
+        FROM    aqbasket
+        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
+        WHERE basketno=?
+    ";
+    my $sth=$dbh->prepare($query);
     $sth->execute($basketno);
     return ( $sth->fetchrow_hashref );
-    $sth->finish();
 }
 
-=item getbasketcontent
+#------------------------------------------------------------#
 
-  ($count, @orders) = &getbasketcontent($basketnumber, $booksellerID);
+=head3 GetBasketContent
+
+=over 4
+
+@orders = &GetBasketContent($basketnumber, $orderby);
 
 Looks up the pending (non-cancelled) orders with the given basket
 number. If C<$booksellerID> is non-empty, only orders from that seller
 are returned.
 
+return :
 C<&basket> returns a two-element array. C<@orders> is an array of
 references-to-hash, whose keys are the fields from the aqorders,
-biblio, and biblioitems tables in the Koha database. C<$count> is the
-number of elements in C<@orders>.
+biblio, and biblioitems tables in the Koha database.
+
+=back
 
 =cut
 
-#'
-sub getbasketcontent {
-    my ( $basketno, $supplier, $orderby ) = @_;
+sub GetBasketContent {
+    my ( $basketno, $orderby ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query =
-"SELECT aqorderbreakdown.*,biblio.*,biblioitems.*,aqorders.*,biblio.title FROM aqorders,biblio,biblioitems
-	LEFT JOIN aqorderbreakdown ON aqorderbreakdown.ordernumber=aqorders.ordernumber
-	where basketno=?
-	AND biblio.biblionumber=aqorders.biblionumber AND biblioitems.biblioitemnumber
-	=aqorders.biblioitemnumber
-	AND (datecancellationprinted IS NULL OR datecancellationprinted =
-	'0000-00-00')";
-    if ( $supplier ne '' ) {
-        $query .= " AND aqorders.booksellerid=?";
-    }
+    my $query ="
+        SELECT  aqorderbreakdown.*,
+                biblio.*,biblioitems.*,
+                aqorders.*,
+                biblio.title
+        FROM    aqorders,biblio,biblioitems
+        LEFT JOIN aqorderbreakdown ON
+                    aqorders.ordernumber=aqorderbreakdown.ordernumber
+        WHERE   basketno=?
+            AND biblio.biblionumber=aqorders.biblionumber
+            AND biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+    ";
 
     $orderby = "biblioitems.publishercode" unless $orderby;
     $query .= " ORDER BY $orderby";
     my $sth = $dbh->prepare($query);
-    if ( $supplier ne '' ) {
-        $sth->execute( $basketno, $supplier );
-    }
-    else {
-        $sth->execute($basketno);
-    }
+    $sth->execute($basketno);
     my @results;
 
+    my $i=0;
     #  print $query;
-    my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$i] = $data;
-        $i++;
+        $results[$i++] = $data;
     }
     $sth->finish;
-    return ( $i, @results );
+    return @results;
 }
 
-=item newbasket
+#------------------------------------------------------------#
 
-  $basket = &newbasket();
+=head3 NewBasket
+
+=over 4
+
+$basket = &NewBasket();
 
 Create a new basket in aqbasket table
+
+=back
+
 =cut
 
-sub newbasket {
+# FIXME : this function seems to be unused.
+
+sub NewBasket {
     my ( $booksellerid, $authorisedby ) = @_;
     my $dbh = C4::Context->dbh;
+    my $query = "
+        INSERT INTO aqbasket
+                (creationdate,booksellerid,authorisedby)
+        VALUES  (now(),'$booksellerid','$authorisedby')
+    ";
     my $sth =
-      $dbh->do(
-"insert into aqbasket (creationdate,booksellerid,authorisedby) values(now(),'$booksellerid','$authorisedby')"
-      );
+      $dbh->do($query);
 
 #find & return basketno MYSQL dependant, but $dbh->last_insert_id always returns null :-(
     my $basket = $dbh->{'mysql_insertid'};
-    return ($basket);
+    return $basket;
 }
 
-=item closebasket
+#------------------------------------------------------------#
 
-  &newbasket($basketno);
+=head3 CloseBasket
 
-close a basket (becomes unmodifiable,except for recieves
+=over 4
+
+&CloseBasket($basketno);
+
+close a basket (becomes unmodifiable,except for recieves)
+
+=back
+
 =cut
 
-sub closebasket {
+sub CloseBasket {
     my ($basketno) = @_;
     my $dbh        = C4::Context->dbh;
-    my $sth        =
-      $dbh->prepare("update aqbasket set closedate=now() where basketno=?");
+    my $query = "
+        UPDATE aqbasket
+        SET    closedate=now()
+        WHERE  basketno=?
+    ";
+    my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
 }
 
-=item neworder
+#------------------------------------------------------------#
 
-  &neworder($basket, $biblionumber, $title, $quantity, $listprice,
-	$booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
-	$ecost, $gst, $budget, $unitprice, $subscription,
-	$booksellerinvoicenumber);
+=back
+
+=head2 FUNCTIONS ABOUT ORDERS
+
+=over 2
+
+=cut
+
+#------------------------------------------------------------#
+
+=head3 GetPendingOrders
+
+=over 4
+
+$orders = &GetPendingOrders($booksellerid);
+
+Finds pending orders from the bookseller with the given ID. Ignores
+completed and cancelled orders.
+
+C<$orders> is a reference-to-array; each element is a
+reference-to-hash with the following fields:
+
+=over 2
+
+=item C<authorizedby>
+
+=item C<entrydate>
+
+=item C<basketno>
+
+These give the value of the corresponding field in the aqorders table
+of the Koha database.
+
+=back
+
+=back
+
+Results are ordered from most to least recent.
+
+=cut
+
+sub GetPendingOrders {
+    my $supplierid = @_;
+    my $dbh = C4::Context->dbh;
+    my $strsth = "
+        SELECT    count(*),authorisedby,creationdate,aqbasket.basketno,
+                  closedate,surname,firstname,aqorders.title 
+        FROM      aqorders
+        LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
+        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
+        WHERE booksellerid=?
+        AND (quantity > quantityreceived OR quantityreceived is NULL)
+        AND datecancellationprinted IS NULL
+        AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
+    ";
+    if ( C4::Context->preference("IndependantBranches") ) {
+        my $userenv = C4::Context->userenv;
+        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+            $strsth .=
+                " and (borrowers.branchcode = '"
+              . $userenv->{branch}
+              . "' or borrowers.branchcode ='')";
+        }
+    }
+    $strsth .= " group by basketno order by aqbasket.basketno";
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute($supplierid);
+    my @results = ();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    $sth->finish;
+    return \@results;
+}
+
+#------------------------------------------------------------#
+
+=head3 GetOrder
+
+=over 4
+
+($order, $ordernumber) = &GetOrder($biblioitemnumber, $biblionumber);
+
+Looks up the order with the given biblionumber and biblioitemnumber.
+
+Returns a two-element array. C<$ordernumber> is the order number.
+C<$order> is a reference-to-hash describing the order; its keys are
+fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
+tables of the Koha database.
+
+=back
+
+=cut
+# @_ = biblioitemnumber, biblionumber.
+sub GetOrder {
+    my ( $bi, $bib ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        SELECT ordernumber
+        FROM   aqorders
+        WHERE  biblionumber=?
+        AND    biblioitemnumber=?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $bib, $bi );
+
+    # FIXME - Use fetchrow_array(), since we're only interested in the one
+    # value.
+    my $ordnum = $sth->fetchrow_hashref;
+    $sth->finish;
+    my $order = GetSingleOrder( $ordnum->{'ordernumber'} );
+    return ( $order, $ordnum->{'ordernumber'} );
+}
+
+#------------------------------------------------------------#
+
+=head3 GetSingleOrder
+
+=over 4
+
+$order = &GetSingleOrder($ordernumber);
+
+Looks up an order by order number.
+
+Returns a reference-to-hash describing the order. The keys of
+C<$order> are fields from the biblio, biblioitems, aqorders, and
+aqorderbreakdown tables of the Koha database.
+
+=back
+
+=cut
+
+sub GetSingleOrder {
+    my ($ordnum) = @_;
+    my $dbh      = C4::Context->dbh;
+    my $query = "
+        SELECT *
+        FROM   biblio,biblioitems,aqorders
+        LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
+        WHERE aqorders.ordernumber=?
+        AND   biblio.biblionumber=aqorders.biblionumber
+        AND   biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+    ";
+    my $sth= $dbh->prepare($query);
+    $sth->execute($ordnum);
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $data;
+}
+
+#------------------------------------------------------------#
+
+=head3 GetAllOrders
+
+=over 4
+
+@results = &GetAllOrders($booksellerid);
+
+Looks up all of the pending orders from the supplier with the given
+bookseller ID. Ignores cancelled and completed orders.
+
+C<@results> is an array of references-to-hash. The keys of each element are fields from
+the aqorders, biblio, and biblioitems tables of the Koha database.
+
+C<@results> is sorted alphabetically by book title.
+
+=back
+
+=cut
+
+sub GetAllOrders {
+
+    #gets all orders from a certain supplier, orders them alphabetically
+    my ($supplierid) = @_;
+    my $dbh          = C4::Context->dbh;
+    my @results      = ();
+    my $strsth = "
+        SELECT  count(*),authorisedby,creationdate,aqbasket.basketno,
+                closedate,surname,firstname,aqorders.biblionumber,aqorders.title, aqorders.ordernumber 
+        FROM    aqorders
+        LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
+        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
+        WHERE   booksellerid=?
+            AND (quantity > quantityreceived OR quantityreceived IS NULL)
+            AND datecancellationprinted IS NULL
+    ";
+
+    if ( C4::Context->preference("IndependantBranches") ) {
+        my $userenv = C4::Context->userenv;
+        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+            $strsth .=
+                " and (borrowers.branchcode = '"
+              . $userenv->{branch}
+              . "' or borrowers.branchcode ='')";
+        }
+    }
+    $strsth .= " group by basketno order by aqbasket.basketno";
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute($supplierid);
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    $sth->finish;
+    return @results;
+}
+
+#------------------------------------------------------------#
+
+=head3 NewOrder
+
+=over 4
+
+  &NewOrder($basket, $biblionumber, $title, $quantity, $listprice,
+    $booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
+    $ecost, $gst, $budget, $unitprice, $subscription,
+    $booksellerinvoicenumber);
 
 Adds a new order to the database. Any argument that isn't described
 below is the new value of the field with the same name in the aqorders
@@ -208,10 +450,11 @@ C<$budget> is effectively ignored.
 
 C<$subscription> may be either "yes", or anything else for "no".
 
+=back
+
 =cut
 
-#'
-sub neworder {
+sub NewOrder {
    my (
         $basketno,  $bibnum,       $title,        $quantity,
         $listprice, $booksellerid, $authorisedby, $notes,
@@ -248,16 +491,17 @@ sub neworder {
 
     # if $basket empty, it's also a new basket, create it
     unless ($basketno) {
-        $basketno = newbasket( $booksellerid, $authorisedby );
+        $basketno = NewBasket( $booksellerid, $authorisedby );
     }
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "insert into aqorders
+    my $query = "
+        INSERT INTO aqorders
            ( biblionumber,title,basketno,quantity,listprice,notes,
            biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
-           values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )"
-    );
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )
+    ";
+    my $sth = $dbh->prepare($query);
 
     $sth->execute(
         $bibnum, $title,      $basketno, $quantity, $listprice,
@@ -268,43 +512,26 @@ sub neworder {
 
     #get ordnum MYSQL dependant, but $dbh->last_insert_id returns null
     my $ordnum = $dbh->{'mysql_insertid'};
-    $sth = $dbh->prepare(
-        "insert into aqorderbreakdown (ordernumber,bookfundid) values
-	(?,?)"
-    );
+    my $query = "
+        INSERT INTO aqorderbreakdown (ordernumber,bookfundid)
+        VALUES (?,?)
+    ";
+    $sth = $dbh->prepare($query);
     $sth->execute( $ordnum, $bookfund );
     $sth->finish;
     return ( $basketno, $ordnum );
 }
 
-=item delorder
+#------------------------------------------------------------#
 
-  &delorder($biblionumber, $ordernumber);
+=head3 ModOrder
 
-Cancel the order with the given order and biblio numbers. It does not
-delete any entries in the aqorders table, it merely marks them as
-cancelled.
+=over 4
 
-=cut
-
-#'
-sub delorder {
-    my ( $bibnum, $ordnum ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "update aqorders set datecancellationprinted=now()
-  where biblionumber=? and ordernumber=?"
-    );
-    $sth->execute( $bibnum, $ordnum );
-    $sth->finish;
-}
-
-=item modorder
-
-  &modorder($title, $ordernumber, $quantity, $listprice,
-	$biblionumber, $basketno, $supplier, $who, $notes,
-	$bookfundid, $bibitemnum, $rrp, $ecost, $gst, $budget,
-	$unitprice, $booksellerinvoicenumber);
+&ModOrder($title, $ordernumber, $quantity, $listprice,
+    $biblionumber, $basketno, $supplier, $who, $notes,
+    $bookfundid, $bibitemnum, $rrp, $ecost, $gst, $budget,
+    $unitprice, $booksellerinvoicenumber);
 
 Modifies an existing order. Updates the order with order number
 C<$ordernumber> and biblionumber C<$biblionumber>. All other arguments
@@ -314,10 +541,11 @@ database.
 Entries with order number C<$ordernumber> in the aqorderbreakdown
 table are also updated to the new book fund ID.
 
+=back
+
 =cut
 
-#'
-sub modorder {
+sub ModOrder {
     my (
         $title,      $ordnum,   $quantity, $listprice, $bibnum,
         $basketno,   $supplier, $who,      $notes,     $bookfund,
@@ -326,62 +554,50 @@ sub modorder {
       )
       = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "update aqorders set title=?,
-  quantity=?,listprice=?,basketno=?,
-  rrp=?,ecost=?,unitprice=?,booksellerinvoicenumber=?,
-  notes=?,sort1=?, sort2=?
-  where
-  ordernumber=? and biblionumber=?"
-    );
+    my $query = "
+        UPDATE aqorders
+        SET    title=?,
+               quantity=?,listprice=?,basketno=?,
+               rrp=?,ecost=?,unitprice=?,booksellerinvoicenumber=?,
+               notes=?,sort1=?, sort2=?
+        WHERE  ordernumber=? AND biblionumber=?
+    ";
+    my $sth = $dbh->prepare($query);
     $sth->execute(
         $title, $quantity, $listprice, $basketno, $rrp,
         $ecost, $cost,     $invoice,   $notes,    $sort1,
         $sort2, $ordnum,   $bibnum
     );
     $sth->finish;
-    $sth = $dbh->prepare(
-        "update aqorderbreakdown set bookfundid=? where
-  ordernumber=?"
-    );
+    my $query = "
+        UPDATE aqorderbreakdown
+        SET    bookfundid=?
+        WHERE  ordernumber=?
+    ";
+    $sth = $dbh->prepare($query);
 
     unless ( $sth->execute( $bookfund, $ordnum ) )
     {    # zero rows affected [Bug 734]
-        my $query =
-          "insert into aqorderbreakdown (ordernumber,bookfundid) values (?,?)";
+        my $query ="
+            INSERT INTO aqorderbreakdown
+                     (ordernumber,bookfundid)
+            VALUES   (?,?)
+        ";
         $sth = $dbh->prepare($query);
         $sth->execute( $ordnum, $bookfund );
     }
     $sth->finish;
 }
 
-=item newordernum
+#------------------------------------------------------------#
 
-  $order = &newordernum();
+=head3 ModReceiveOrder
 
-Finds the next unused order number in the aqorders table of the Koha
-database, and returns it.
+=over 4
 
-=cut
-
-#'
-# FIXME - Race condition
-sub newordernum {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select max(ordernumber) from aqorders");
-    $sth->execute;
-    my $data   = $sth->fetchrow_arrayref;
-    my $ordnum = $$data[0];
-    $ordnum++;
-    $sth->finish;
-    return ($ordnum);
-}
-
-=item receiveorder
-
-  &receiveorder($biblionumber, $ordernumber, $quantityreceived, $user,
-	$unitprice, $booksellerinvoicenumber, $biblioitemnumber,
-	$freight, $bookfund, $rrp);
+&ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
+    $unitprice, $booksellerinvoicenumber, $biblioitemnumber,
+    $freight, $bookfund, $rrp);
 
 Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the
@@ -392,21 +608,25 @@ C<$ordernumber>.
 
 Also updates the book fund ID in the aqorderbreakdown table.
 
+=back
+
 =cut
 
-#'
-sub receiveorder {
+
+sub ModReceiveOrder {
     my (
         $biblio,    $ordnum,  $quantrec, $user, $cost,
         $invoiceno, $freight, $rrp,      $bookfund
       )
       = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-"update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
-											unitprice=?,freight=?,rrp=?
-							where biblionumber=? and ordernumber=?"
-    );
+    my $query = "
+        UPDATE aqorders
+        SET    quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
+               unitprice=?,freight=?,rrp=?
+        WHERE biblionumber=? AND ordernumber=?
+    ";
+    my $sth = $dbh->prepare($query);
     my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblio );
     if ($suggestionid) {
         ModStatus( $suggestionid, 'AVAILABLE', '', $biblio );
@@ -418,489 +638,22 @@ sub receiveorder {
     # Allows libraries to change their bookfund during receiving orders
     # allows them to adjust budgets
     if ( C4::Context->preferene("LooseBudgets") ) {
-        my $sth = $dbh->prepare(
-            "UPDATE aqorderbreakdown SET bookfundid=?
-                           WHERE ordernumber=?"
-        );
+        my $query = "
+            UPDATE aqorderbreakdown
+            SET    bookfundid=?
+            WHERE  ordernumber=?
+        ";
+        my $sth = $dbh->prepare($query);
         $sth->execute( $bookfund, $ordnum );
         $sth->finish;
     }
 }
 
-=item updaterecorder
+#------------------------------------------------------------#
 
-  &updaterecorder($biblionumber, $ordernumber, $user, $unitprice,
-	$bookfundid, $rrp);
+=head3 SearchOrder
 
-Updates the order with biblionumber C<$biblionumber> and order number
-C<$ordernumber>. C<$bookfundid> is the new value for the book fund ID
-in the aqorderbreakdown table of the Koha database. All other
-arguments update the fields with the same name in the aqorders table.
-
-C<$user> is ignored.
-
-=cut
-
-#'
-sub updaterecorder {
-    my ( $biblio, $ordnum, $user, $cost, $bookfund, $rrp ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "update aqorders set
-  unitprice=?, rrp=?
-  where biblionumber=? and ordernumber=?
-  "
-    );
-    $sth->execute( $cost, $rrp, $biblio, $ordnum );
-    $sth->finish;
-    $sth =
-      $dbh->prepare(
-        "update aqorderbreakdown set bookfundid=? where ordernumber=?");
-    $sth->execute( $bookfund, $ordnum );
-    $sth->finish;
-}
-
-#
-#
-# ORDERS
-#
-#
-
-=item getorders
-
-  ($count, $orders) = &getorders($booksellerid);
-
-Finds pending orders from the bookseller with the given ID. Ignores
-completed and cancelled orders.
-
-C<$count> is the number of elements in C<@{$orders}>.
-
-C<$orders> is a reference-to-array; each element is a
-reference-to-hash with the following fields:
-
-=over 4
-
-=item C<count(*)>
-
-Gives the number of orders in with this basket number.
-
-=item C<authorizedby>
-
-=item C<entrydate>
-
-=item C<basketno>
-
-These give the value of the corresponding field in the aqorders table
-of the Koha database.
-
-=back
-
-Results are ordered from most to least recent.
-
-=cut
-
-#'
-sub getorders {
-    my ($supplierid) = @_;
-    my $dbh = C4::Context->dbh;
-    my $strsth = "Select count(*),authorisedby,creationdate,aqbasket.basketno,
-closedate,surname,firstname,aqorders.title 
-from aqorders 
-left join aqbasket on aqbasket.basketno=aqorders.basketno 
-left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
-where booksellerid=? and (quantity > quantityreceived or
-quantityreceived is NULL) and datecancellationprinted is NULL and (to_days(now())-to_days(closedate) < 180 or closedate is null)";
-    if ( C4::Context->preference("IndependantBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " and (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
-        }
-    }
-    $strsth .= " group by basketno order by aqbasket.basketno";
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
-    my @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), \@results );
-}
-
-=item getorder
-
-  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
-
-Looks up the order with the given biblionumber and biblioitemnumber.
-
-Returns a two-element array. C<$ordernumber> is the order number.
-C<$order> is a reference-to-hash describing the order; its keys are
-fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
-tables of the Koha database.
-
-=cut
-
-sub getorder {
-    my ( $bi, $bib ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"Select ordernumber from aqorders where biblionumber=? and biblioitemnumber=?"
-      );
-    $sth->execute( $bib, $bi );
-
-    # FIXME - Use fetchrow_array(), since we're only interested in the one
-    # value.
-    my $ordnum = $sth->fetchrow_hashref;
-    $sth->finish;
-    my $order = getsingleorder( $ordnum->{'ordernumber'} );
-    return ( $order, $ordnum->{'ordernumber'} );
-}
-
-=item getsingleorder
-
-  $order = &getsingleorder($ordernumber);
-
-Looks up an order by order number.
-
-Returns a reference-to-hash describing the order. The keys of
-C<$order> are fields from the biblio, biblioitems, aqorders, and
-aqorderbreakdown tables of the Koha database.
-
-=cut
-
-sub getsingleorder {
-    my ($ordnum) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $sth      = $dbh->prepare(
-        "Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
-  on aqorders.ordernumber=aqorderbreakdown.ordernumber
-  where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber and
-  biblioitems.biblioitemnumber=aqorders.biblioitemnumber"
-    );
-    $sth->execute($ordnum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
-}
-
-=item getallorders
-
-  ($count, @results) = &getallorders($booksellerid);
-
-Looks up all of the pending orders from the supplier with the given
-bookseller ID. Ignores cancelled and completed orders.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
-
-C<@results> is sorted alphabetically by book title.
-
-=cut
-
-#'
-sub getallorders {
-
-    #gets all orders from a certain supplier, orders them alphabetically
-    my ($supplierid) = @_;
-    my $dbh          = C4::Context->dbh;
-    my @results      = ();
-    my $strsth = "Select count(*),authorisedby,creationdate,aqbasket.basketno,
-closedate,surname,firstname,aqorders.biblionumber,aqorders.title, aqorders.ordernumber 
-from aqorders 
-left join aqbasket on aqbasket.basketno=aqorders.basketno 
-left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
-where booksellerid=? and (quantity > quantityreceived or
-quantityreceived is NULL) and datecancellationprinted is NULL ";
-
-    if ( C4::Context->preference("IndependantBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " and (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
-        }
-    }
-    $strsth .= " group by basketno order by aqbasket.basketno";
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item getparcelinformation
-
-  ($count, @results) = &getparcelinformation($booksellerid, $code, $date);
-
-Looks up all of the received items from the supplier with the given
-bookseller ID at the given date, for the given code. Ignores cancelled and completed orders.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
-
-C<@results> is sorted alphabetically by book title.
-
-=cut
-
-#'
-sub getparcelinformation {
-
-    #gets all orders from a certain supplier, orders them alphabetically
-    my ( $supplierid, $code, $datereceived ) = @_;
-    my $dbh     = C4::Context->dbh;
-    my @results = ();
-    $code .= '%'
-      if $code;  # add % if we search on a given code (otherwise, let him empty)
-    my $strsth =
-"Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code\" and aqorders.datereceived= \'$datereceived\'";
-
-    if ( C4::Context->preference("IndependantBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " and (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
-        }
-    }
-    $strsth .= " order by aqbasket.basketno";
-    ### parcelinformation : $strsth
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    my $count = scalar(@results);
-    ### countparcelbiblio: $count
-    $sth->finish;
-
-    return ( scalar(@results), @results );
-}
-
-=item getparcelinformation
-
-  ($count, @results) = &getparcelinformation($booksellerid, $code, $date);
-
-Looks up all of the received items from the supplier with the given
-bookseller ID at the given date, for the given code. Ignores cancelled and completed orders.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
-
-C<@results> is sorted alphabetically by book title.
-
-=cut
-
-#'
-sub getparcelinformation {
-
-    #gets all orders from a certain supplier, orders them alphabetically
-    my ( $supplierid, $code, $datereceived ) = @_;
-    my $dbh     = C4::Context->dbh;
-    my @results = ();
-    $code .= '%'
-      if $code;  # add % if we search on a given code (otherwise, let him empty)
-    my $strsth =
-"Select authorisedby,creationdate,aqbasket.basketno,closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.ordernumber, aqorders.quantity, aqorders.quantityreceived, aqorders.unitprice, aqorders.listprice, aqorders.rrp, aqorders.ecost from aqorders,aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where aqbasket.basketno=aqorders.basketno and aqbasket.booksellerid=? and aqorders.booksellerinvoicenumber like  \"$code\" and aqorders.datereceived= \'$datereceived\'";
-
-    if ( C4::Context->preference("IndependantBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " and (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
-        }
-    }
-    $strsth .= " order by aqbasket.basketno";
-    ### parcelinformation : $strsth
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    my $count = scalar(@results);
-    ### countparcelbiblio: $count
-    $sth->finish;
-
-    return ( scalar(@results), @results );
-}
-
-=item getsupplierlistwithlateorders
-
-  %results = &getsupplierlistwithlateorders;
-
-Searches for suppliers with late orders.
-
-=cut
-
-#'
-sub getsupplierlistwithlateorders {
-    my $delay = shift;
-    my $dbh   = C4::Context->dbh;
-
-#FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
-#should be tested with other DBMs
-
-    my $strsth;
-    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
-    if ( $dbdriver eq "mysql" ) {
-        $strsth = "SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-					FROM aqorders, aqbasket
-					LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-					WHERE aqorders.basketno = aqbasket.basketno AND
-					(closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY) AND (datereceived = '' or datereceived is null))
-					";
-    }
-    else {
-        $strsth = "SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-			FROM aqorders, aqbasket
-			LEFT JOIN aqbooksellers ON aqbasket.aqbooksellerid = aqbooksellers.id
-			WHERE aqorders.basketno = aqbasket.basketno AND
-			(closedate < (CURDATE( )-(INTERVAL $delay DAY))) AND (datereceived = '' or datereceived is null))
-			";
-    }
-
-    #	warn "C4::Acquisition getsupplierlistwithlateorders : ".$strsth;
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute;
-    my %supplierlist;
-    while ( my ( $id, $name ) = $sth->fetchrow ) {
-        $supplierlist{$id} = $name;
-    }
-    return %supplierlist;
-}
-
-=item getlateorders
-
-  %results = &getlateorders;
-
-Searches for suppliers with late orders.
-
-=cut
-
-#'
-sub getlateorders {
-    my $delay      = shift;
-    my $supplierid = shift;
-    my $branch     = shift;
-
-    my $dbh = C4::Context->dbh;
-
-    #BEWARE, order of parenthesis and LEFT JOIN is important for speed
-    my $strsth;
-    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
-
-    #	warn " $dbdriver";
-    if ( $dbdriver eq "mysql" ) {
-        $strsth = "SELECT aqbasket.basketno,
-					DATE(aqbasket.closedate) as orderdate, aqorders.quantity - IFNULL(aqorders.quantityreceived,0) as quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib,
-					(aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp as subtotal, aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
-					aqbooksellers.name as supplier,
-					aqorders.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
-					DATEDIFF(CURDATE( ),closedate) AS latesince
-					FROM 
-						((	(
-								(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber
-							)  LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber
-						) LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid
-						),(aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-					WHERE aqorders.basketno = aqbasket.basketno AND (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)) 
-					AND ((datereceived = '' OR datereceived is null) OR (aqorders.quantityreceived < aqorders.quantity) ) ";
-        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
-        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'"
-          if ($branch);
-        $strsth .=
-          " AND borrowers.branchcode like \'"
-          . C4::Context->userenv->{branch} . "\'"
-          if ( C4::Context->preference("IndependantBranches")
-            && C4::Context->userenv
-            && C4::Context->userenv->{flags} != 1 );
-        $strsth .=
-" HAVING quantity<>0 AND unitpricesupplier<>0 AND unitpricelib<>0 ORDER BY latesince,basketno,borrowers.branchcode, supplier ";
-    }
-    else {
-        $strsth = "SELECT aqbasket.basketno,
-					DATE(aqbasket.closedate) as orderdate, 
-					aqorders.quantity, aqorders.rrp as unitpricesupplier,aqorders.ecost as unitpricelib, aqorders.quantity * aqorders.rrp as subtotal
-					aqbookfund.bookfundname as budget, borrowers.branchcode as branch,
-					aqbooksellers.name as supplier,
-					biblio.title, biblio.author, biblioitems.publishercode as publisher, biblioitems.publicationyear,
-					(CURDATE -  closedate) AS latesince
-					FROM 
-						((	(
-								(aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber) LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber
-							)  LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber
-						) LEFT JOIN aqbookfund on aqorderbreakdown.bookfundid = aqbookfund.bookfundid
-						),(aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-					WHERE aqorders.basketno = aqbasket.basketno AND (closedate < (CURDATE -(INTERVAL $delay DAY)) 
-					AND ((datereceived = '' OR datereceived is null) OR (aqorders.quantityreceived < aqorders.quantity) ) ";
-        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
-        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'"
-          if ($branch);
-        $strsth .=
-          " AND borrowers.branchcode like \'"
-          . C4::Context->userenv->{branch} . "\'"
-          if ( C4::Context->preference("IndependantBranches")
-            && C4::Context->userenv->{flags} != 1 );
-        $strsth .=
-          " ORDER BY latesince,basketno,borrowers.branchcode, supplier";
-    }
-    warn "C4::Acquisition : getlateorders SQL:" . $strsth;
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute;
-    my @results;
-    my $hilighted = 1;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $data->{hilighted} = $hilighted if ( $hilighted > 0 );
-        $data->{orderdate} = format_date( $data->{orderdate} );
-        push @results, $data;
-        $hilighted = -$hilighted;
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-# FIXME - Never used
-sub getrecorders {
-
-    #gets all orders from a certain supplier, orders them alphabetically
-    my ($supid) = @_;
-    my $dbh     = C4::Context->dbh;
-    my @results = ();
-    my $sth     = $dbh->prepare(
-        "Select * from aqorders,biblio,biblioitems where booksellerid=?
-  and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber and
-  aqorders.quantityreceived>0
-  and aqorders.datereceived >=now()
-  group by aqorders.biblioitemnumber
-  order by
-  biblio.title"
-    );
-    $sth->execute($supid);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item ordersearch
-
-  ($count, @results) = &ordersearch($search, $biblionumber, $complete);
+@results = &SearchOrder($search, $biblionumber, $complete);
 
 Searches for orders.
 
@@ -915,8 +668,7 @@ words).
 If C<$complete> is C<yes>, the results will include only completed
 orders. In any case, C<&ordersearch> ignores cancelled orders.
 
-C<&ordersearch> returns an array. C<$count> is the number of elements
-in C<@results>. C<@results> is an array of references-to-hash with the
+C<&ordersearch> returns an array. C<@results> is an array of references-to-hash with the
 following keys:
 
 =over 4
@@ -933,8 +685,7 @@ following keys:
 
 =cut
 
-#'
-sub ordersearch {
+sub SearchOrder {
     my ( $search, $id, $biblio, $catview ) = @_;
     my $dbh = C4::Context->dbh;
     my @data = split( ' ', $search );
@@ -948,13 +699,13 @@ sub ordersearch {
     if ($id) {
         $query =
           "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
-  WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
-  aqorders.basketno = aqbasket.basketno
-  AND aqbasket.booksellerid = ?
-  AND biblio.biblionumber=aqorders.biblionumber
-  AND ((datecancellationprinted is NULL)
-      OR (datecancellationprinted = '0000-00-00'))
-  AND (("
+            WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
+            aqorders.basketno = aqbasket.basketno
+            AND aqbasket.booksellerid = ?
+            AND biblio.biblionumber=aqorders.biblionumber
+            AND ((datecancellationprinted is NULL)
+            OR (datecancellationprinted = '0000-00-00'))
+            AND (("
           . (
             join( " AND ",
                 map { "(biblio.title like ? or biblio.title like ?)" } @data )
@@ -964,14 +715,15 @@ sub ordersearch {
     }
     else {
         $query =
-          "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
-  WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
-  aqorders.basketno = aqbasket.basketno
-  AND biblio.biblionumber=aqorders.biblionumber
-  AND ((datecancellationprinted is NULL)
-      OR (datecancellationprinted = '0000-00-00'))
-  AND (aqorders.quantityreceived < aqorders.quantity OR aqorders.quantityreceived is NULL)
-  AND (("
+          " SELECT *,biblio.title
+            FROM   aqorders,biblioitems,biblio,aqbasket
+            WHERE  aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+            AND    aqorders.basketno = aqbasket.basketno
+            AND    biblio.biblionumber=aqorders.biblionumber
+            AND    ((datecancellationprinted is NULL)
+            OR     (datecancellationprinted = '0000-00-00'))
+            AND    (aqorders.quantityreceived < aqorders.quantity OR aqorders.quantityreceived is NULL)
+            AND (("
           . (
             join( " AND ",
                 map { "(biblio.title like ? OR biblio.title like ?)" } @data )
@@ -982,9 +734,19 @@ sub ordersearch {
     my $sth = $dbh->prepare($query);
     $sth->execute(@searchterms);
     my @results = ();
-    my $sth2    = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber=?");
-    my $sth3    =
-      $dbh->prepare("SELECT * FROM aqorderbreakdown WHERE ordernumber=?");
+    my $query2 = "
+        SELECT *
+        FROM   biblio
+        WHERE  biblionumber=?
+    ";
+    my $sth2 = $dbh->prepare($query2);
+    my $query3 = "
+        SELECT *
+        FROM   aqorderbreakdown
+        WHERE  ordernumber=?
+    ";
+    my $sth3 = $dbh->prepare($query3);
+
     while ( my $data = $sth->fetchrow_hashref ) {
         $sth2->execute( $data->{'biblionumber'} );
         my $data2 = $sth2->fetchrow_hashref;
@@ -999,49 +761,366 @@ sub ordersearch {
     $sth->finish;
     $sth2->finish;
     $sth3->finish;
-    return ( scalar(@results), @results );
+    return @results;
 }
 
-sub histsearch {
+#------------------------------------------------------------#
+
+=head3 DelOrder
+
+=over 4
+
+&DelOrder($biblionumber, $ordernumber);
+
+Cancel the order with the given order and biblio numbers. It does not
+delete any entries in the aqorders table, it merely marks them as
+cancelled.
+
+=back
+
+=cut
+
+sub DelOrder {
+    my ( $bibnum, $ordnum ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        UPDATE aqorders
+        SET    datecancellationprinted=now()
+        WHERE  biblionumber=? AND ordernumber=?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $bibnum, $ordnum );
+    $sth->finish;
+}
+
+
+=back
+
+=back
+
+=head2 FUNCTIONS ABOUT PARCELS
+
+=over 2
+
+=cut
+
+#------------------------------------------------------------#
+
+=head3 GetParcel
+
+=over 4
+
+@results = &GetParcel($booksellerid, $code, $date);
+
+Looks up all of the received items from the supplier with the given
+bookseller ID at the given date, for the given code. Ignores cancelled and completed orders.
+
+C<@results> is an array of references-to-hash. The keys of each element are fields from
+the aqorders, biblio, and biblioitems tables of the Koha database.
+
+C<@results> is sorted alphabetically by book title.
+
+=back
+
+=cut
+
+sub GetParcel {
+
+    #gets all orders from a certain supplier, orders them alphabetically
+    my ( $supplierid, $code, $datereceived ) = @_;
+    my $dbh     = C4::Context->dbh;
+    my @results = ();
+    $code .= '%'
+      if $code;  # add % if we search on a given code (otherwise, let him empty)
+    my $strsth ="
+        SELECT  authorisedby,
+                creationdate,
+                aqbasket.basketno,
+                closedate,surname,
+                firstname,
+                aqorders.biblionumber,
+                aqorders.title,
+                aqorders.ordernumber,
+                aqorders.quantity,
+                aqorders.quantityreceived,
+                aqorders.unitprice,
+                aqorders.listprice,
+                aqorders.rrp,
+                aqorders.ecost
+        FROM aqorders,aqbasket
+        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
+        WHERE aqbasket.basketno=aqorders.basketno
+            AND aqbasket.booksellerid=?
+            AND aqorders.booksellerinvoicenumber LIKE  \"$code\"
+            AND aqorders.datereceived= \'$datereceived\'";
+
+    if ( C4::Context->preference("IndependantBranches") ) {
+        my $userenv = C4::Context->userenv;
+        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+            $strsth .=
+                " and (borrowers.branchcode = '"
+              . $userenv->{branch}
+              . "' or borrowers.branchcode ='')";
+        }
+    }
+    $strsth .= " order by aqbasket.basketno";
+    ### parcelinformation : $strsth
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute($supplierid);
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    ### countparcelbiblio: $count
+    $sth->finish;
+
+    return @results;
+}
+
+#------------------------------------------------------------#
+
+=head3 GetParcels
+
+=over 4
+
+$results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto, $limit);
+
+get a lists of parcels
+Returns a pointer on a hash list containing parcel informations as such :
+        Creation date
+        Last operation
+        Number of biblio
+        Number of items
+
+=back
+
+=cut
+
+sub GetParcels {
+    my ($bookseller,$order, $code, $datefrom, $dateto) = @_;
+    my $dbh    = C4::Context->dbh;
+    my $strsth ="
+        SELECT  aqorders.booksellerinvoicenumber,
+                datereceived,
+                count(DISTINCT biblionumber) AS biblio,
+                sum(quantity) AS itemsexpected,
+                sum(quantityreceived) AS itemsreceived
+        FROM   aqorders, aqbasket
+        WHERE  aqbasket.basketno = aqorders.basketno
+             AND aqbasket.booksellerid = $bookseller and datereceived IS NOT NULL
+    ";
+
+    $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" " if ($code);
+
+    $strsth .= "and datereceived >=" . $dbh->quote($datefrom) . " " if ($datefrom);
+
+    $strsth .= "and datereceived <=" . $dbh->quote($dateto) . " " if ($dateto);
+
+    $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
+    $strsth .= "order by $order " if ($order);
+    my $sth = $dbh->prepare($strsth);
+
+    $sth->execute;
+    my @results;
+
+    while ( my $data2 = $sth->fetchrow_hashref ) {
+        push @results, $data2;
+    }
+
+    $sth->finish;
+    return @results;
+}
+
+#------------------------------------------------------------#
+
+=head3 GetLateOrders
+
+=over 4
+
+@results = &GetLateOrders;
+
+Searches for suppliers with late orders.
+
+return:
+the table of supplier with late issues. This table is full of hashref.
+
+=back
+
+=cut
+
+sub GetLateOrders {
+    my $delay      = shift;
+    my $supplierid = shift;
+    my $branch     = shift;
+
+    my $dbh = C4::Context->dbh;
+
+    #BEWARE, order of parenthesis and LEFT JOIN is important for speed
+    my $strsth;
+    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
+
+    #    warn " $dbdriver";
+    if ( $dbdriver eq "mysql" ) {
+        $strsth = "
+            SELECT aqbasket.basketno,
+                DATE(aqbasket.closedate) AS orderdate,
+                aqorders.quantity - IFNULL(aqorders.quantityreceived,0) AS quantity,
+                aqorders.rrp AS unitpricesupplier,
+                aqorders.ecost AS unitpricelib,
+                (aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
+                aqbookfund.bookfundname AS budget,
+                borrowers.branchcode AS branch,
+                aqbooksellers.name AS supplier,
+                aqorders.title,
+                biblio.author,
+                biblioitems.publishercode AS publisher,
+                biblioitems.publicationyear,
+                DATEDIFF(CURDATE( ),closedate) AS latesince
+            FROM  (((
+                (aqorders LEFT JOIN biblio ON biblio.biblionumber = aqorders.biblionumber)
+            LEFT JOIN biblioitems ON  biblioitems.biblionumber=biblio.biblionumber)
+            LEFT JOIN aqorderbreakdown ON aqorders.ordernumber = aqorderbreakdown.ordernumber)
+            LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
+            (aqbasket LEFT JOIN borrowers ON aqbasket.authorisedby = borrowers.borrowernumber)
+            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+            WHERE aqorders.basketno = aqbasket.basketno
+            AND (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY))
+            AND ((datereceived = '' OR datereceived is null)
+            OR (aqorders.quantityreceived < aqorders.quantity) )
+        ";
+        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
+        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'"
+          if ($branch);
+        $strsth .=
+          " AND borrowers.branchcode like \'"
+          . C4::Context->userenv->{branch} . "\'"
+          if ( C4::Context->preference("IndependantBranches")
+            && C4::Context->userenv
+            && C4::Context->userenv->{flags} != 1 );
+        $strsth .=" HAVING quantity<>0
+                    AND unitpricesupplier<>0
+                    AND unitpricelib<>0
+                    ORDER BY latesince,basketno,borrowers.branchcode, supplier
+        ";
+    }
+    else {
+        $strsth = "
+            SELECT aqbasket.basketno,
+                   DATE(aqbasket.closedate) AS orderdate,
+                    aqorders.quantity, aqorders.rrp AS unitpricesupplier,
+                    aqorders.ecost as unitpricelib,
+                    aqorders.quantity * aqorders.rrp AS subtotal
+                    aqbookfund.bookfundname AS budget,
+                    borrowers.branchcode AS branch,
+                    aqbooksellers.name AS supplier,
+                    biblio.title,
+                    biblio.author,
+                    biblioitems.publishercode AS publisher,
+                    biblioitems.publicationyear,
+                    (CURDATE -  closedate) AS latesince
+                    FROM(( (
+                        (aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber)
+                        LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber)
+                        LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber)
+                        LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
+                        (aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+                    WHERE aqorders.basketno = aqbasket.basketno
+                    AND (closedate < (CURDATE -(INTERVAL $delay DAY))
+                    AND ((datereceived = '' OR datereceived is null)
+                    OR (aqorders.quantityreceived < aqorders.quantity) ) ";
+        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
+
+        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'" if ($branch);
+        $strsth .=" AND borrowers.branchcode like \'". C4::Context->userenv->{branch} . "\'"
+            if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags} != 1 );
+        $strsth .=" ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+    }
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute;
+    my @results;
+    my $hilighted = 1;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $data->{hilighted} = $hilighted if ( $hilighted > 0 );
+        $data->{orderdate} = format_date( $data->{orderdate} );
+        push @results, $data;
+        $hilighted = -$hilighted;
+    }
+    $sth->finish;
+    return @results;
+}
+
+#------------------------------------------------------------#
+
+=head3 GetHistory
+
+=over 4
+
+(\@order_loop, $total_qty, $total_price, $total_qtyreceived)=&GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on )
+
+this function get the search history.
+
+=back
+
+=cut
+
+sub GetHistory {
     my ( $title, $author, $name, $from_placed_on, $to_placed_on ) = @_;
     my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
     my $total_price       = 0;
 
-# don't run the query if there are no parameters (list would be too long for sure !
+# don't run the query if there are no parameters (list would be too long for sure !)
     if ( $title || $author || $name || $from_placed_on || $to_placed_on ) {
         my $dbh   = C4::Context->dbh;
-        my $query =
-"select biblio.title,biblio.author,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.quantityreceived, aqorders.ecost, aqorders.ordernumber from aqorders,aqbasket,aqbooksellers,biblio";
+        my $query ="
+            SELECT
+                biblio.title,
+                biblio.author,
+                aqorders.basketno,
+                name,aqbasket.creationdate,
+                aqorders.datereceived,
+                aqorders.quantity,
+                aqorders.quantityreceived,
+                aqorders.ecost,
+                aqorders.ordernumber
+            FROM aqorders,aqbasket,aqbooksellers,biblio";
+
         $query .= ",borrowers "
           if ( C4::Context->preference("IndependantBranches") );
-        $query .=
-" where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and biblio.biblionumber=aqorders.biblionumber ";
-        $query .= " and aqbasket.authorisedby=borrowers.borrowernumber"
+
+        $query .="
+            WHERE aqorders.basketno=aqbasket.basketno
+            AND   aqbasket.booksellerid=aqbooksellers.id
+            AND   biblio.biblionumber=aqorders.biblionumber ";
+
+        $query .= " AND aqbasket.authorisedby=borrowers.borrowernumber"
           if ( C4::Context->preference("IndependantBranches") );
-        $query .= " and biblio.title like " . $dbh->quote( "%" . $title . "%" )
+
+        $query .= " AND biblio.title LIKE " . $dbh->quote( "%" . $title . "%" )
           if $title;
+
         $query .=
-          " and biblio.author like " . $dbh->quote( "%" . $author . "%" )
+          " AND biblio.author LIKE " . $dbh->quote( "%" . $author . "%" )
           if $author;
-        $query .= " and name like " . $dbh->quote( "%" . $name . "%" ) if $name;
-        $query .= " and creationdate >" . $dbh->quote($from_placed_on)
+
+        $query .= " AND name LIKE " . $dbh->quote( "%" . $name . "%" ) if $name;
+
+        $query .= " AND creationdate >" . $dbh->quote($from_placed_on)
           if $from_placed_on;
-        $query .= " and creationdate<" . $dbh->quote($to_placed_on)
+
+        $query .= " AND creationdate<" . $dbh->quote($to_placed_on)
           if $to_placed_on;
 
         if ( C4::Context->preference("IndependantBranches") ) {
             my $userenv = C4::Context->userenv;
             if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
                 $query .=
-                    " and (borrowers.branchcode = '"
+                    " AND (borrowers.branchcode = '"
                   . $userenv->{branch}
-                  . "' or borrowers.branchcode ='')";
+                  . "' OR borrowers.branchcode ='')";
             }
         }
-        $query .= " order by booksellerid";
-        warn "query histearch: " . $query;
+        $query .= " ORDER BY booksellerid";
         my $sth = $dbh->prepare($query);
         $sth->execute;
         my $cnt = 1;
@@ -1059,510 +1138,10 @@ sub histsearch {
     return \@order_loop, $total_qty, $total_price, $total_qtyreceived;
 }
 
-#
-#
-# MONEY
-#
-#
-
-=item invoice
-
-  ($count, @results) = &invoice($booksellerinvoicenumber);
-
-Looks up orders by invoice number.
-
-Returns an array. C<$count> is the number of elements in C<@results>.
-C<@results> is an array of references-to-hash; the keys of each
-elements are fields from the aqorders, biblio, and biblioitems tables
-of the Koha database.
-
-=cut
-
-#'
-sub invoice {
-    my ($invoice) = @_;
-    my $dbh       = C4::Context->dbh;
-    my @results   = ();
-    my $sth       = $dbh->prepare(
-        "Select * from aqorders,biblio,biblioitems where
-  booksellerinvoicenumber=?
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber group by aqorders.ordernumber,aqorders.biblioitemnumber"
-    );
-    $sth->execute($invoice);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item bookfunds
-
-  ($count, @results) = &bookfunds();
-
-Returns a list of all book funds.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash, whose keys are fields from the aqbookfund
-and aqbudget tables of the Koha database. Results are ordered
-alphabetically by book fund name.
-
-=cut
-
-#'
-sub bookfunds {
-    my ($branch) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $userenv  = C4::Context->userenv;
-    my $branch   = $userenv->{branch};
-    my $strsth;
-
-    if ( $branch ne '' ) {
-        $strsth = "SELECT * FROM aqbookfund,aqbudget WHERE aqbookfund.bookfundid
-      =aqbudget.bookfundid AND startdate<now() AND enddate>now() AND (aqbookfund.branchcode is null or aqbookfund.branchcode='' or aqbookfund.branchcode= ? )
-      GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
-    }
-    else {
-        $strsth = "SELECT * FROM aqbookfund,aqbudget WHERE aqbookfund.bookfundid
-      =aqbudget.bookfundid AND startdate<now() AND enddate>now()
-      GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
-    }
-    my $sth = $dbh->prepare($strsth);
-    if ( $branch ne '' ) {
-        $sth->execute($branch);
-    }
-    else {
-        $sth->execute;
-    }
-    my @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item bookfundbreakdown
-
-	returns the total comtd & spent for a given bookfund, and a given year
-	used in acqui-home.pl
-=cut
-
-#'
-
-sub bookfundbreakdown {
-    my ( $id, $year, $start, $end ) = @_;
-    my $dbh = C4::Context->dbh;
-
-    # if no start/end dates given defaut to everything
-    if ( !$start ) {
-        $start = '0000-00-00';
-        $end   = 'now()';
-    }
-
-    # do a query for spent totals.
-    my $sth = $dbh->prepare(
-        "Select quantity,datereceived,freight,unitprice,listprice,ecost,
-                quantityreceived,subscription
-         from aqorders left join aqorderbreakdown on
-                aqorders.ordernumber=aqorderbreakdown.ordernumber
-         where bookfundid=? and (datecancellationprinted is NULL or
-                datecancellationprinted='0000-00-00') and
-                ((datereceived >= ? and datereceived < ?) or
-                (budgetdate >= ? and budgetdate < ?))"
-    );
-    $sth->execute( $id, $start, $end, $start, $end );
-
-    my $spent = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{'subscription'} == 1 ) {
-            $spent += $data->{'quantity'} * $data->{'unitprice'};
-        }
-        else {
-
-            my $leftover = $data->{'quantity'} - $data->{'quantityreceived'};
-            $spent += ( $data->{'unitprice'} ) * $data->{'quantityreceived'};
-
-        }
-    }
-
-    # then do a seperate query for commited totals, (pervious single query was
-    # returning incorrect comitted results.
-
-    my $query = "Select quantity,datereceived,freight,unitprice,
-                listprice,ecost,quantityreceived as qrev,
-                subscription,title,itemtype,aqorders.biblionumber,
-                aqorders.booksellerinvoicenumber,
-                quantity-quantityreceived as tleft,
-                aqorders.ordernumber as ordnum,entrydate,budgetdate,
-                booksellerid,aqbasket.basketno
-        from aqorderbreakdown,aqbasket,aqorders
-                left join biblioitems on
-                biblioitems.biblioitemnumber=aqorders.biblioitemnumber
-        where bookfundid=? and aqorders.ordernumber=aqorderbreakdown.ordernumber and
-                aqorders.basketno=aqbasket.basketno and
-                (budgetdate >= ? and budgetdate < ?) and
-                (datecancellationprinted is NULL or datecancellationprinted='0000-00-00')";
-    #warn $query;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $id, $start, $end );
-
-    my $comtd;
-
-    my $total = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        my $left = $data->{'tleft'};
-        if ( !$left || $left eq '' ) {
-            $left = $data->{'quantity'};
-        }
-        if ( $left && $left > 0 ) {
-            my $subtotal = $left * $data->{'ecost'};
-            $data->{subtotal} = $subtotal;
-            $data->{'left'} = $left;
-            $comtd += $subtotal;
-        }
-    }
-
-    #warn " spent=$spent, comtd=$comtd\n";
-    $sth->finish;
-    return ( $spent, $comtd );
-}
-
-
-=item curconvert
-
-  $foreignprice = &curconvert($currency, $localprice);
-
-Converts the price C<$localprice> to foreign currency C<$currency> by
-dividing by the exchange rate, and returns the result.
-
-If no exchange rate is found, C<&curconvert> assumes the rate is one
-to one.
-
-=cut
-
-#'
-sub curconvert {
-    my ( $currency, $price ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select rate from currency where currency=?");
-    $sth->execute($currency);
-    my $cur = ( $sth->fetchrow_array() )[0];
-    $sth->finish;
-    if ( $cur == 0 ) {
-        $cur = 1;
-    }
-    return ( $price / $cur );
-}
-
-=item getcurrencies
-
-  ($count, $currencies) = &getcurrencies();
-
-Returns the list of all known currencies.
-
-C<$count> is the number of elements in C<$currencies>. C<$currencies>
-is a reference-to-array; its elements are references-to-hash, whose
-keys are the fields from the currency table in the Koha database.
-
-=cut
-
-#'
-sub getcurrencies {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * from currency");
-    $sth->execute;
-    my @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), \@results );
-}
-
-=item updatecurrencies
-
-  &updatecurrencies($currency, $newrate);
-
-Sets the exchange rate for C<$currency> to be C<$newrate>.
-
-=cut
-
-#'
-sub updatecurrencies {
-    my ( $currency, $rate ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("update currency set rate=? where currency=?");
-    $sth->execute( $rate, $currency );
-    $sth->finish;
-}
-
-#
-#
-# OTHERS
-#
-#
-
-=item bookseller
-
-  ($count, @results) = &bookseller($searchstring);
-
-Looks up a book seller. C<$searchstring> may be either a book seller
-ID, or a string to look for in the book seller's name.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash, whose keys are the fields of of the
-aqbooksellers table in the Koha database.
-
-=cut
-
-#'
-sub bookseller {
-    my ($searchstring) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            =
-      $dbh->prepare("Select * from aqbooksellers where name like ? or id = ?");
-    $sth->execute( "$searchstring%", $searchstring );
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item breakdown
-
-  ($count, $results) = &breakdown($ordernumber);
-
-Looks up an order by order ID, and returns its breakdown.
-
-C<$count> is the number of elements in C<$results>. C<$results> is a
-reference-to-array; its elements are references-to-hash, whose keys
-are the fields of the aqorderbreakdown table in the Koha database.
-
-=cut
-
-#'
-sub breakdown {
-    my ($id) = @_;
-    my $dbh  = C4::Context->dbh;
-    my $sth  =
-      $dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
-    $sth->execute($id);
-    my @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return ( scalar(@results), \@results );
-}
-
-=item branches
-
-  ($count, @results) = &branches();
-
-Returns a list of all library branches.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash, whose keys are the fields of the branches
-table of the Koha database.
-
-=cut
-
-#'
-sub branches {
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if (   C4::Context->preference("IndependantBranches")
-        && ( C4::Context->userenv )
-        && ( C4::Context->userenv->{flags} != 1 ) )
-    {
-        my $strsth = "Select * from branches ";
-        $strsth .=
-          " WHERE branchcode = "
-          . $dbh->quote( C4::Context->userenv->{branch} );
-        $strsth .= " order by branchname";
-        warn "C4::Acquisition->branches : " . $strsth;
-        $sth = $dbh->prepare($strsth);
-    }
-    else {
-        $sth = $dbh->prepare("Select * from branches order by branchname");
-    }
-    my @results = ();
-
-    $sth->execute();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }    # while
-
-    $sth->finish;
-    return ( scalar(@results), @results );
-}    # sub branches
-
-=item updatesup
-
-  &updatesup($bookseller);
-
-Updates the information for a given bookseller. C<$bookseller> is a
-reference-to-hash whose keys are the fields of the aqbooksellers table
-in the Koha database. It must contain entries for all of the fields.
-The entry to modify is determined by C<$bookseller-E<gt>{id}>.
-
-The easiest way to get all of the necessary fields is to look up a
-book seller with C<&booksellers>, modify what's necessary, then call
-C<&updatesup> with the result.
-
-=cut
-
-#'
-sub updatesup {
-    my ($data) = @_;
-    my $dbh    = C4::Context->dbh;
-    my $sth    = $dbh->prepare(
-        "Update aqbooksellers set
-   name=?,address1=?,address2=?,address3=?,address4=?,postal=?,
-   phone=?,fax=?,url=?,contact=?,contpos=?,contphone=?,contfax=?,contaltphone=?,
-   contemail=?,contnotes=?,active=?,
-   listprice=?, invoiceprice=?,gstreg=?, listincgst=?,
-   invoiceincgst=?, specialty=?,discount=?,invoicedisc=?,
-   nocalc=?, notes=?
-   where id=?"
-    );
-    $sth->execute(
-        $data->{'name'},         $data->{'address1'},
-        $data->{'address2'},     $data->{'address3'},
-        $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'fax'},
-        $data->{'url'},          $data->{'contact'},
-        $data->{'contpos'},      $data->{'contphone'},
-        $data->{'contfax'},      $data->{'contaltphone'},
-        $data->{'contemail'},    $data->{'contnotes'},
-        $data->{'active'},       $data->{'listprice'},
-        $data->{'invoiceprice'}, $data->{'gstreg'},
-        $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'specialty'},    $data->{'discount'},
-        $data->{'invoicedisc'},  $data->{'nocalc'},
-        $data->{'notes'},        $data->{'id'}
-    );
-    $sth->finish;
-}
-
-=item insertsup
-
-  $id = &insertsup($bookseller);
-
-Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
-keys are the fields of the aqbooksellers table in the Koha database.
-All fields must be present.
-
-Returns the ID of the newly-created bookseller.
-
-=cut
-
-#'
-sub insertsup {
-    my ($data) = @_;
-    my $dbh    = C4::Context->dbh;
-    my $sth    = $dbh->prepare("Select max(id) from aqbooksellers");
-    $sth->execute;
-    my $data2 = $sth->fetchrow_hashref;
-    $sth->finish;
-    $data2->{'max(id)'}++;
-    $sth = $dbh->prepare("Insert into aqbooksellers (id) values (?)");
-    $sth->execute( $data2->{'max(id)'} );
-    $sth->finish;
-    $data->{'id'} = $data2->{'max(id)'};
-    updatesup($data);
-    return ( $data->{'id'} );
-}
-
-=item getparcels
-
-  ($count, $results) = &getparcels($dbh, $bookseller, $order, $limit);
-
-get a lists of parcels
-Returns the count of parcels returned and a pointer on a hash list containing parcel informations as such :
-		Creation date
-		Last operation
-		Number of biblio
-		Number of items
-		
-
-=cut
-
-#'
-sub getparcels {
-    my ( $bookseller, $order, $code, $datefrom, $dateto, $limit ) = @_;
-    my $dbh    = C4::Context->dbh;
-    my $strsth =
-"SELECT aqorders.booksellerinvoicenumber, datereceived, count(DISTINCT biblionumber) as biblio, sum(quantity) as itemsexpected, sum(quantityreceived) as itemsreceived from aqorders, aqbasket where aqbasket.basketno = aqorders.basketno and aqbasket.booksellerid = $bookseller and datereceived is not null ";
-    $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" "
-      if ($code);
-    $strsth .= "and datereceived >=" . $dbh->quote($datefrom) . " "
-      if ($datefrom);
-    $strsth .= "and datereceived <=" . $dbh->quote($dateto) . " " if ($dateto);
-    $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
-    $strsth .= "order by $order " if ($order);
-    $strsth .= " LIMIT 0,$limit" if ($limit);
-    my $sth = $dbh->prepare($strsth);
-###	getparcels:  $strsth
-    $sth->execute;
-    my @results;
-
-    while ( my $data2 = $sth->fetchrow_hashref ) {
-        push @results, $data2;
-    }
-
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
-=item getparcels
-
-  ($count, $results) = &getparcels($dbh, $bookseller, $order, $limit);
-
-get a lists of parcels
-Returns the count of parcels returned and a pointer on a hash list containing parcel informations as such :
-		Creation date
-		Last operation
-		Number of biblio
-		Number of items
-		
-
-=cut
-
-#'
-sub getparcels {
-    my ( $bookseller, $order, $code, $datefrom, $dateto, $limit ) = @_;
-    my $dbh    = C4::Context->dbh;
-    my $strsth =
-"SELECT aqorders.booksellerinvoicenumber, datereceived, count(DISTINCT biblionumber) as biblio, sum(quantity) as itemsexpected, sum(quantityreceived) as itemsreceived from aqorders, aqbasket where aqbasket.basketno = aqorders.basketno and aqbasket.booksellerid = $bookseller and datereceived is not null ";
-    $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" "
-      if ($code);
-    $strsth .= "and datereceived >=" . $dbh->quote($datefrom) . " "
-      if ($datefrom);
-    $strsth .= "and datereceived <=" . $dbh->quote($dateto) . " " if ($dateto);
-    $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
-    $strsth .= "order by $order " if ($order);
-    $strsth .= " LIMIT 0,$limit" if ($limit);
-    my $sth = $dbh->prepare($strsth);
-###	getparcels:  $strsth
-    $sth->execute;
-    my @results;
-
-    while ( my $data2 = $sth->fetchrow_hashref ) {
-        push @results, $data2;
-    }
-
-    $sth->finish;
-    return ( scalar(@results), @results );
-}
-
 END { }    # module clean-up code here (global destructor)
 
 1;
+
 __END__
 
 =back
