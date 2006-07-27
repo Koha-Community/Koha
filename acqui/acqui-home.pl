@@ -99,8 +99,8 @@ my $count = scalar @rates;
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    $line{currency} = @rates[$i]->{'currency'};
-    $line{rate}     = @rates[$i]->{'rate'};
+    $line{currency} = $rates[$i]->{'currency'};
+    $line{rate}     = $rates[$i]->{'rate'};
     push @loop_currency, \%line;
 }
 
