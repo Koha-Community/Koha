@@ -27,6 +27,7 @@
 use CGI;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Bookfund;
 
 my $input=new CGI;
 
@@ -35,7 +36,7 @@ foreach my $param (@params){
 	if ($param ne 'type' && $param !~ /submit/){
 		my $data=$input->param($param);
 		warn "$data / $param";
-		updatecurrencies($param,$data);
+		ModCurrencies($param,$data);
 }
 }
 print $input->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
