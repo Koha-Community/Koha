@@ -55,7 +55,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
   &barcodes &ItemInfo &itemdata &itemissues &itemcount 
   &getsubject &getaddauthor &getsubtitle
   &getwebbiblioitems &getwebsites
-  &getbiblioitembybiblionumber
+  &GetBiblioItemByBiblioNumber
   &getbibliofromitemnumber	
   &getbiblioitem &getitemsbybiblioitem
 
@@ -2323,9 +2323,9 @@ biblioitemnumber = ?"
     return ( $count, @results );
 }    # sub getbiblioitem
 
-=head2 getbiblioitembybiblionumber
+=head2 GetBiblioItemByBiblioNumber
 
-($count,@results) = getbiblioitembybiblionumber($biblionumber);
+@results= GetBiblioItemByBiblioNumber($biblionumber);
 
 =over 4
 
@@ -2335,7 +2335,7 @@ return an array with hash of biblioitems for the given biblionumber.
 
 =cut
 
-sub getbiblioitembybiblionumber {
+sub GetBiblioItemByBiblioNumber {
     my ($biblionumber) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("Select * from biblioitems where biblionumber = ?");
@@ -2345,12 +2345,11 @@ sub getbiblioitembybiblionumber {
     $sth->execute($biblionumber);
 
     while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
-    }    # while
+        push @results, $data;
+    }
 
     $sth->finish;
-    return ( $count, @results );
+    return @results;
 }    # sub
 
 =head2 getitemsbybiblioitem
@@ -3142,6 +3141,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.175  2006/07/27 13:46:30  toins
+# 1 Sub renamed.
+#
 # Revision 1.174  2006/07/12 13:43:42  btoumi
 # bug fixing:
 # Biblio.pm: add in export line  getbibliofromitemnumber function
