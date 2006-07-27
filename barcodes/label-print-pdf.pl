@@ -27,6 +27,7 @@ use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use PDF::Report;
 use POSIX;
+use Text::Wrap;
 
 #use Data::Dumper;
 #use Acme::Comment;
@@ -178,6 +179,10 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
     my $spine_label_text_with = 67;
     my $y_pos                 = ( $y_pos_initial_startrow + 90 );
 
+    # set the column lenght for textwrap, and the seperator.
+    $Text::Wrap::columns   = 13;
+    $Text::Wrap::separator = "\n";
+
     #warn "Y POS = $y_pos";
     foreach $item (@resultsloop) {
 
@@ -192,25 +197,33 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
             # and the item record has some values for this field, display it.
             if ( $conf_data->{"$field"} && $item->{"$field"} ) {
 
-                # chop the string up into 12 char's per line
+                # get the string
                 $str = $item->{"$field"};
-                my $strlen    = length($str);
-                my $num_lines = ceil( $strlen / 12 );
-                my $start_pos = 0;
-                my $len       = 12;
+
+                # strip out naughty existing nl/cr's
+                $str =~ s/\n//g;
+                $str =~ s/\r//g;
+
+                # chop the string up into _upto_ 12 chunks
+                # and seperate the chunks with newlines
+
+                $str = wrap( "", "", "$str" );
+
+                # split the chunks between newline's, into an array
+                my @strings = split /\n/, $str;
+
+                #		warn Dumper @strings;
 
                 # then loop for each string line
-                for ( 1 .. $num_lines ) {
+                foreach my $str (@strings) {
                     $pdf->setAddTextPos( $hPos, $vPos - 10 );
-                    my $chop_str = substr( $str, $start_pos, $len );
                     my ( $h, $v ) = $pdf->getAddTextPos();
 
                     # using '1000' width, so that addText wont use it's
                     # own internal wordwrap, (as it doesnt work so well)
-                    $pdf->addText( $chop_str, 10, 1000, 90 );
+                    $pdf->addText( $str, 10, 1000, 90 );
 
-                    $start_pos = $start_pos + $len;
-                    $vPos      = $vPos - 10;
+                    $vPos = $vPos - 10;
                 }
             }    # if field is valid
         }    #foreach feild
