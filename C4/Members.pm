@@ -166,7 +166,7 @@ the C<borrowers> table in the Koha database.
 
 =cut
 
-=head3
+=head3 GetFlagsAndBranchFromBorrower
 
 =over 4
 
@@ -1374,29 +1374,6 @@ sub GetBorrowersFromSurname  {
      return ($count,\@results);
 }
 
-=head2 GetBranchCodeFromBorrowers
-
-=over 4
-
-$sth = GetBranchCodeFromBorrowers();
-
-this function just prepare the SQL request.
-After this function, don't forget to execute it by using $sth->execute($borrowernumber)
-return :
-$sth = $dbh->prepare($query).
-
-=back
-
-=cut
-sub GetBranchCodeFromBorrowers {
-    my $dbh = C4::Context->dbh;
-    my $query = qq|
-        SELECT flags, branchcode
-        FROM   borrowers
-        WHERE  borrowernumber = ?
-    |;
-    return $dbh->prepare($query);
-}
 END { }       # module clean-up code here (global destructor)
 
 1;
