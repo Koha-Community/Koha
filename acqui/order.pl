@@ -37,14 +37,19 @@ to add an order for a specific supplier or to just add a new supplier.
 =over 4
 
 =item supplier
+
 C<$supplier> is the suplier we have to search order.
 =back
 
 =item op
+
 C<OP> can be equals to 'close' if we have to close a basket before building the page.
-    
+
 =item basket
+
 the C<basket> we have to close if op is equal to 'close'.
+
+=back
 
 =cut
 
@@ -58,6 +63,7 @@ use C4::Database;
 use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
+use C4::Bookseller;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -88,7 +94,7 @@ if ( $op eq 'close' ) {
 my $toggle = 0;
 my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my $orders  = GetOrders( $suppliers[$i]->{'id'} );
+    my $orders  = GetPendingOrders( $suppliers[$i]->{'id'} );
     my $ordcount = scalar @$orders;
     
     my %line;
