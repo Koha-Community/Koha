@@ -871,7 +871,12 @@ sub checkperlmodules {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Net::LDAP";
 			}
-    }
+        }
+        unless (eval {require Text::Wrap})       {
+                if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+                                push @missing, "Text::Wrap";
+                        }
+        }
 	unless (eval {require Event})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Event";
