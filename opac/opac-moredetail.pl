@@ -38,7 +38,7 @@ my $bi=$input->param('bi');
 my $data=bibitemdata($bi);
 
 my (@items)=itemissues($bi);
-my ($order,$ordernum)=GetOrder($bi,$bib);
+my ($order,$ordernum)=GetOrder($bib,$bi);
 #print @items;
 my $count=@items;
 
