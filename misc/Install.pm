@@ -864,7 +864,7 @@ sub checkperlmodules {
 # The following modules are not mandatory, depends on how the library want to use Koha
 	unless (eval {require PDF::API2})   { 
 			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-				push @missing,"You will need PDF::API2 for barcode generator" 
+				push @missing,"You will need PDF::API2 for barcode generator";
 			}
 	}
 	unless (eval {require Net::LDAP})       {
@@ -874,7 +874,7 @@ sub checkperlmodules {
         }
         unless (eval {require Text::Wrap})       {
                 if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-                                push @missing, "Text::Wrap";
+                                push @missing, "You will need Text::Wrap if you want to use Spine-label printing";
                         }
         }
 	unless (eval {require Event})       {
