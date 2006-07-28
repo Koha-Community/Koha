@@ -381,9 +381,13 @@ my %requiretables = (
                            barcode tinyint(1) default '0',
                            dewey tinyint(1) default '0',
                            class tinyint(1) default '0',
+			   subclass tinyint(1) default '0',
+   			   itemcallnumber tinyint(1) default '0',
                            author tinyint(1) default '0',
                            papertype char(100) default '',
+		 	   printingtype char(10) default NULL,
                            startrow int(2) default NULL,
+			   guidebox tinyint(1) default NULL,
                            PRIMARY KEY  (id)
                            )",
 );
@@ -2134,6 +2138,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.48  2006/07/28 01:13:41  sushi
+# updated 'labels_conf' table.
+#
 # Revision 1.100.2.47  2006/07/15 18:53:24  kados
 # OpacNav should be a textarea, now it is.
 #
