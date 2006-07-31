@@ -35,6 +35,7 @@ their rates and the pending suggestions.
 =item $status
 C<$status> is the status a suggestion could has. Default value is 'ASKED'.
 thus, it can be REJECTED, ACCEPTED, ORDERED, ASKED, AVAIBLE
+
 =back
 
 =cut
