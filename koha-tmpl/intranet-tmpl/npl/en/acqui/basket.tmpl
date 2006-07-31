@@ -11,7 +11,7 @@
 			<tr><th>Basket Number:</th><td><!-- TMPL_VAR NAME="basketno" --></td></tr>
 			<tr><th>Managed By:</th><td><!-- TMPL_VAR NAME="authorisedbyname" --></td></tr>
 			<tr><th>Open On:</th><td><!-- TMPL_VAR NAME="creationdate" --></td></tr>
-			<tr><th>For:</th><td>Supplier Id <!-- TMPL_VAR NAME="booksellerid" --></td></tr>
+			<tr><th>For</th><td><!-- TMPL_VAR NAME="name" --></td></tr>
 			<tr><th>Invoice Number:</th><td><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></td></tr>
 			<!-- TMPL_IF name="closedate" --><tr><th>Closed On:</th><td> <!-- TMPL_VAR name="closedate" --></td></tr><!-- /TMPL_IF -->
 			</table><!-- TMPL_UNLESS name="closedate" --><form action="/cgi-bin/koha/acqui/order.pl" method="get"><input type="hidden" name="op" value="close" /><input type="hidden" name="basket" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="supplier" value="<!-- TMPL_VAR name="booksellerid" -->" /><input type="submit" class="submit" value="Close this Basket" /></form><!-- /TMPL_UNLESS -->
