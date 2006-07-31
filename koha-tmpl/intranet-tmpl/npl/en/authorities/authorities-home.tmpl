@@ -6,44 +6,63 @@
 
 <h1>Authority search</h1>
 
-<form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
-	<input type="hidden" name="op" value="do_search">
-	<input type="hidden" name="type" value="intranet">
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+<form name="f" action="/cgi-bin/koha/authorities/auth_finder.pl" method="post">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="type" value="intranet" />
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 	<div class="details">
-		<h2>Search on
+		<h2>Search For: 
 			<select name="authtypecode">
 			<!-- TMPL_LOOP NAME="authtypesloop" -->
-			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
-			<!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="authtypetext" --></option>
-			<!-- /TMPL_IF -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected="selected"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="authtypetext" -->
+				</option>
 			<!-- /TMPL_LOOP -->
 			</select>
 		</h2>
 		<p>
-			<label for="mainentry">Main entry</label>
-			<input type="hidden" name="marclist" value="mainentry">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<select name="operator">
+			<label for="authtypecode">Authority type</label>
+			<!-- TMPL_VAR NAME="authtypecode" -->
+			<input type="hidden" id="authtypecode" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		</p>
+		<p>
+			<label for="mainentryaoperator">Main entry ($a only)</label>
+			<select name="operator" id="mainentryaoperator">
 				<option value="contains">contains</option>
 				<option value="start">start by</option>
 			</select>
-			<input type="text" id="mainentry" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+			<input type="hidden" name="marclist" value="$a" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
 		</p>
 		<p>
-			<label for="anywhere">Anywhere</label>
-			<input type="hidden" name="marclist" value="">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<select name="operator">
+			<label for="mainentryoperator">Main entry</label>
+			<select name="operator" id="mainentryoperator">
 				<option value="contains">contains</option>
 				<option value="start">start by</option>
 			</select>
-			<input type="text" id="anywhere" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+			<input type="hidden" name="marclist" value="mainentry" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
 		</p>
 		<p>
-			<input type="submit" value="Start search" class="submit">
+			<label for="anywhereoperator">Anywhere</label>
+			<select name="operator" id="">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" name="value">
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
+			<input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->" />
+		</p>
+        <p>(add % at the end of your word if you want to use right-truncation : theor% will find theory &amp; theories)</p>
+		<p>
+			<input type="submit" value="Start search" class="submit" />
 		</p>
 	</div>
 </form>
