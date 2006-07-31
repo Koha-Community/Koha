@@ -87,7 +87,7 @@ get all basket informations in aqbasket for a given basket
 sub getbasket {
 	my ($basketno)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("select aqbasket.*,borrowers.firstname+' '+borrowers.surname as authorisedbyname from aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where basketno=?");
+	my $sth=$dbh->prepare("select aqbasket.*,concat(borrowers.firstname,' ',borrowers.surname) as authorisedbyname from aqbasket left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber where basketno=?");
 	$sth->execute($basketno);
 	return($sth->fetchrow_hashref);
 }

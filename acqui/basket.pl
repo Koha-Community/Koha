@@ -73,7 +73,7 @@ if (C4::Context->preference("IndependantBranches")) {
 
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});
-$basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});
+$basket->{authorisedbyname} = $loggedinuser unless ($basket->{authorisedbyname});
 ($count,@results)=getbasketcontent($basketno,'',$order);
 
 my $line_total; # total of each line
@@ -123,8 +123,7 @@ $grand_total=$sub_total+$gist;
 $grand_total_est = $sub_total_est+sprintf("%.2f",$sub_total_est*$prefgist);
 $gist_est = sprintf("%.2f",$sub_total_est*$prefgist);
 $template->param(basketno => $basketno,
-				creationdate => $basket->{creationdate},
-				authorisedby => $basket->{authorisedby},
+				creationdate => format_date($basket->{creationdate}),
 				authorisedbyname => $basket->{authorisedbyname},
 				closedate => format_date($basket->{closedate}),
 				active => $booksellers[0]->{'active'},
