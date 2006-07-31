@@ -35,7 +35,6 @@ my %data;
 $data{'id'}=$input->param('id');
 
 $data{'name'}=$input->param('company');
-$data{'name'}=~ s/\'/\\\'/g;
 $data{'postal'}=$input->param('company_postal');
 my $address=$input->param('physical');
 my @addresses=split('\n',$address);
@@ -53,7 +52,6 @@ $data{'contaltphone'}=$input->param('contact_phone_2');
 $data{'contfax'}=$input->param('contact_fax');
 $data{'contemail'}=$input->param('company_email');
 $data{'contnotes'}=$input->param('contact_notes');
-warn "".$data{'contnotes'};
 $data{'notes'}=$input->param('notes');
 $data{'active'}=$input->param('status');
 $data{'specialty'}=$input->param('publishers_imprints');
