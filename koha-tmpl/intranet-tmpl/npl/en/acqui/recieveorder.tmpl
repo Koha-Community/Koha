@@ -28,7 +28,12 @@
 <form method="post" action="recieveorder.pl">
 	<table>
 		<tr>
-	<th>Number</th><th>Code</th><th>Date Received</th><th>Item Count</th><th>Biblio count</th><th>Items expected</th>
+			<th>Number</th>
+			<th>Code</th>
+			<th>Date Received</th>
+			<th>Item Count</th>
+			<th>Biblio count</th>
+			<th>Items expected</th>
 </tr>
 		<tr>
 <th>&nbsp;<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></th><th><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" /></th>
@@ -58,7 +63,9 @@ Results per page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resul
 			<td>
 				<!--TMPL_IF Name="code"--><!--TMPL_VAR Name="code" --><!--/TMPL_IF-->
 			</td>
-		<td> <!-- TMPL_VAR NAME="datereceived" --> </td>
+		<td><a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="raw_datereceived" ESCAPE=URL --><!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="code" ESCAPE=URL --><!--/TMPL_IF-->">
+				<!-- TMPL_VAR NAME="datereceived" -->
+			</a></td>
 		<td> <!-- TMPL_VAR NAME="reccount" --> </td>
 		<td><!-- TMPL_VAR NAME="bibcount" -->
 		</td>
