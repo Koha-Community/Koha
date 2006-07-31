@@ -9,6 +9,7 @@ use C4::Database;
 use C4::Suggestions;
 use HTML::Template;
 use C4::Acquisition;
+use C4::Date;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -37,6 +38,8 @@ for (my $i=0;$i<$count;$i++){
 	$line{spent} = sprintf  ("%.2f", $spent);
 	$line{comtd} = sprintf  ("%.2f",$comtd);
 	$line{avail}  = sprintf  ("%.2f",$avail);
+	$line{startdate} = format_date($results[$i]->{'startdate'});
+	$line{enddate} = format_date($results[$i]->{'enddate'});
 	push @loop_budget, \%line;
 	$total+=$results[$i]->{'budgetamount'};
 	$totspent+=$spent;
