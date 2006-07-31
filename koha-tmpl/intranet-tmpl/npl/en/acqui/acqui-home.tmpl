@@ -65,6 +65,8 @@
 		<caption>Budgets and Bookfunds</caption>
 			<tr>
 				<th>Budgets</th>
+				<th>From</th>
+				<th>To</th>
 				<th>Total</th>
 				<th>Spent</th>
 				<th>Comtd</th>
@@ -73,6 +75,8 @@
 			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
 					<td><!-- TMPL_VAR name="bookfundname" --></td>
+					<td><!-- TMPL_VAR name="startdate" --></td>
+					<td><!-- TMPL_VAR name="enddate" --></td>
 					<td><!-- TMPL_VAR name="budgetamount" --></td>
 					<td><!-- TMPL_VAR name="spent" --></td>
 					<td><!-- TMPL_VAR name="comtd" --></td>
@@ -81,7 +85,7 @@
 			<!-- /TMPL_LOOP -->
 			<tr>
 				<tfoot>
-				<td>Total</td>
+				<th colspan="3">Total</th>
 				<td><!-- TMPL_VAR name="total" --></td>
 				<td><!-- TMPL_VAR name="totspent" --></td>
 				<td><!-- TMPL_VAR name="totcomtd" --></td>
