@@ -69,7 +69,7 @@ orders, basket and parcels.
 
 =over 2
 
-=cut 
+=cut
 
 #------------------------------------------------------------#
 
@@ -304,17 +304,19 @@ sub GetPendingOrders {
 
 Looks up the order with the given biblionumber and biblioitemnumber.
 
-Returns a two-element array. C<$ordernumber> is the order number.
-C<$order> is a reference-to-hash describing the order; its keys are
-fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
+Returns a two-element array.
+
+=item C<$ordernumber> is the order number.
+
+=item C<$order> is a reference-to-hash describing the order;
+its keys are fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
 tables of the Koha database.
 
 =back
 
 =cut
-# @_ = biblioitemnumber, biblionumber.
 sub GetOrder {
-    my ( $bi, $bib ) = @_;
+    my ( $biblionumber,$biblioitemnumber ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT ordernumber
@@ -323,7 +325,7 @@ sub GetOrder {
         AND    biblioitemnumber=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $bib, $bi );
+    $sth->execute( $biblionumber, $biblioitemnumber );
 
     # FIXME - Use fetchrow_array(), since we're only interested in the one
     # value.
@@ -668,8 +670,8 @@ words).
 If C<$complete> is C<yes>, the results will include only completed
 orders. In any case, C<&ordersearch> ignores cancelled orders.
 
-C<&ordersearch> returns an array. C<@results> is an array of references-to-hash with the
-following keys:
+C<&ordersearch> returns an array.
+C<@results> is an array of references-to-hash with the following keys:
 
 =over 4
 
@@ -813,7 +815,7 @@ sub DelOrder {
 @results = &GetParcel($booksellerid, $code, $date);
 
 Looks up all of the received items from the supplier with the given
-bookseller ID at the given date, for the given code. Ignores cancelled and completed orders.
+bookseller ID at the given date, for the given code (bookseller Invoice number). Ignores cancelled and completed orders.
 
 C<@results> is an array of references-to-hash. The keys of each element are fields from
 the aqorders, biblio, and biblioitems tables of the Koha database.
@@ -882,14 +884,33 @@ sub GetParcel {
 
 =over 4
 
-$results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto, $limit);
+$results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto);
+get a lists of parcels.
 
-get a lists of parcels
-Returns a pointer on a hash list containing parcel informations as such :
-        Creation date
-        Last operation
-        Number of biblio
-        Number of items
+* Input arg :
+
+=item $bookseller
+is the bookseller this function has to get parcels.
+
+=item $order
+To know on what criteria the results list has to be ordered.
+
+=item $code
+is the booksellerinvoicenumber.
+
+=item $datefrom & $dateto
+to know on what date this function has to filter its search.
+
+* return:
+a pointer on a hash list containing parcel informations as such :
+
+=item Creation date
+
+=item Last operation
+
+=item Number of biblio
+
+=item Number of items
 
 =back
 
@@ -938,7 +959,7 @@ sub GetParcels {
 
 @results = &GetLateOrders;
 
-Searches for suppliers with late orders.
+Searches for bookseller with late orders.
 
 return:
 the table of supplier with late issues. This table is full of hashref.
