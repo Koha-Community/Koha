@@ -46,9 +46,11 @@ They allow to get and/or set some informations for a specific budget or currency
 @ISA    = qw(Exporter);
 @EXPORT = qw(
     &GetBookFund &GetBookFunds &GetBookFundBreakdown &GetCurrencies
+    &NewBookFund
     &ModBookFund &ModCurrencies
     &Countbookfund
     &ConvertCurrency
+    &DelBookFund
 );
 
 =head1 FUNCTIONS
@@ -280,6 +282,33 @@ sub GetBookFundBreakdown {
     return ( $spent, $comtd );
 }
 
+=head3 NewBookFund
+
+=over 4
+
+&NewBookFund(bookfundid, bookfundname, branchcode);
+
+this function create a new bookfund into the database.
+
+=back
+
+=cut 
+
+sub NewBookFund{
+    my ($bookfundid, $bookfundname, $branchcode) = @_;
+    $branchcode = undef unless $branchcode;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        INSERT
+        INTO aqbookfund
+            (bookfundid, bookfundname, branchcode)
+        VALUES
+            (?, ?, ?)
+    ";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($bookfundid,$bookfundname,$branchcode);
+}
+
 #-------------------------------------------------------------#
 
 =head3 ModBookFund
@@ -315,6 +344,64 @@ sub ModBookFund {
         $sth=$dbh->prepare($query);
         $sth->execute($branchcode);
     }
+}
+
+#-------------------------------------------------------------#
+
+=head3 SearchBookFund
+
+=over 4
+@results = SearchBookFund(
+        $bookfundid,$filter,$filter_bookfundid,
+        $filter_bookfundname,$filter_branchcode);
+
+this function searchs among the bookfunds corresponding to our filtering rules.
+
+=back
+
+=cut
+
+sub SearchBookFund {
+    my $dbh = C4::Context->dbh;
+    my ($filter,
+        $filter_bookfundid,
+        $filter_bookfundname,
+        $filter_branchcode
+       ) = @_;
+
+    my @bindings;
+
+    my $query = "
+        SELECT  bookfundid,
+                bookfundname,
+                bookfundgroup,
+                branchcode
+        FROM aqbookfund
+        WHERE 1 = 1";
+
+    if ($filter) {
+        if ($filter_bookfundid) {
+            $query.= "AND bookfundid = ?";
+            push @bindings, $filter_bookfundid;
+        }
+        if ($filter_bookfundname) {
+            $query.= "AND bookfundname like ?";
+            push @bindings, '%'.$filter_bookfundname.'%';
+        }
+        if ($filter_branchcode) {
+            $query.= "AND branchcode = ?";
+            push @bindings, $filter_branchcode;
+        }
+    }
+    $query.= "ORDER BY bookfundid";
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bindings);
+    my @results;
+    while (my $row = $sth->fetchrow_hashref) {
+        push @results, $row;
+    }
+    return @results;
 }
 
 #-------------------------------------------------------------#
@@ -408,6 +495,36 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
+#-------------------------------------------------------------#
+
+=head3 DelBookFund
+
+=over 4
+
+&DelBookFund($bookfundid);
+this function delete a bookfund which has $bokfundid as parameter on aqbookfund table and delete the approriate budget.
+
+=back
+
+=cut
+
+sub DelBookFund {
+    my $bookfundid = shift;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        DELETE FROM aqbookfund
+        WHERE bookfundid=?
+    ";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($bookfundid);
+    $sth->finish;
+    $query = "
+        DELETE FROM aqbudget where bookfundid=?
+    ";
+    $sth=$dbh->prepare($query);
+    $sth->execute($bookfundid);
+    $sth->finish;
+}
 
 END { }    # module clean-up code here (global destructor)
 
