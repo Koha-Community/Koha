@@ -96,7 +96,8 @@ my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $orders  = GetPendingOrders( $suppliers[$i]->{'id'} );
     my $ordcount = scalar @$orders;
-    
+# FIXME : $ordcount seems to be equals to 0 each times...
+
     my %line;
     if ( $toggle == 0 ) {
         $line{even} = 1;
