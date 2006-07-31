@@ -137,7 +137,6 @@ var ns7 = (document.getElementById) ? 1:0;*/
 		<a href="/cgi-bin/koha/export/marc.pl" title="Exporting in MARC format" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">MARC biblio export</a>
 		<a href="/cgi-bin/koha/import/breeding.pl" title="The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Upload MARC records in reservoir</a>
 		<a href="/cgi-bin/koha/barcodes/barcodes.pl" title="the barcode generator deals with generating barcodes for items you acquire" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Generate barcodes</a>
-		<a href="/cgi-bin/koha/admin/letter.pl" title="Letters to use in Koha" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Letters</a>
 </TMPL_IF>
 
 </div>
