@@ -19,7 +19,6 @@ package C4::Bookfund;
 
 # $Id$
 
-
 use strict;
 
 
@@ -45,10 +44,11 @@ They allow to get and/or set some informations for a specific budget or currency
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-    &GetBookFund &GetBookFunds &GetBookFundBreakdown &GetCurrencies
+    &GetBookFund &GetBookFunds &GetBookFundsId &GetBookFundBreakdown &GetCurrencies
     &NewBookFund
     &ModBookFund &ModCurrencies
-    &Countbookfund
+    &SearchBookFund
+    &Countbookfund 
     &ConvertCurrency
     &DelBookFund
 );
@@ -91,6 +91,36 @@ sub GetBookFund {
     ";
     my $sth=$dbh->prepare($query);
     return $sth->fetchrow_hashref;
+}
+
+
+=head3 GetBookFundsId
+
+=over 4
+
+$sth = &GetBookFundsId
+Read on aqbookfund table and execute a simple SQL query.
+
+return:
+$sth->execute. Don't forget to fetch row from the database after using
+this function by using, for example, $sth->fetchrow_hashref;
+
+C<@results> is an array of id existing on the database.
+
+=back
+
+=cut
+
+sub GetBookFundsId {
+    my @bookfundids_loop;
+    my $dbh= C4::Context->dbh;
+    my $query = "
+        SELECT bookfundid
+        FROM aqbookfund
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    return $sth;
 }
 
 #-------------------------------------------------------------#
@@ -377,7 +407,7 @@ sub SearchBookFund {
                 bookfundgroup,
                 branchcode
         FROM aqbookfund
-        WHERE 1 = 1";
+        WHERE 1 = 1 ";
 
     if ($filter) {
         if ($filter_bookfundid) {
@@ -436,18 +466,18 @@ sub ModCurrencies {
 
 =over 4
 
-$data = Countbookfund($bookfundid);
+$number = Countbookfund($bookfundid);
 
 this function count the number of bookfund with id given on input arg.
 return :
-the result of the SQL query as an hashref.
+the result of the SQL query as a number.
 
 =back
 
 =cut
 
 sub Countbookfund {
-    my $bookfundid = @_;
+    my $bookfundid = shift;
     my $dbh = C4::Context->dbh;
     my $query ="
         SELECT COUNT(*)
@@ -456,7 +486,7 @@ sub Countbookfund {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute($bookfundid);
-    return $sth->fetchrow_hashref;
+    return $sth->fetchrow;
 }
 
 
