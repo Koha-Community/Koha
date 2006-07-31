@@ -457,6 +457,7 @@ my %requirefields = (
         'category' => 'char(1)',
     },
     marc_biblio => { 'frameworkcode' => 'char(4) not NULL default \'\'' },
+    serial => { 'publisheddate' => 'date NULL default '},
 );
 
 my %dropable_table = (
@@ -2166,6 +2167,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.50  2006/07/31 13:10:39  hdl
+# adding publisheddate column to serial table.
+#
 # Revision 1.100.2.49  2006/07/31 10:15:42  hdl
 # BugFixing : MARCdetail : displayin field values with ESCAPE=HTML  (in order to manage  '<''>' characters)
 #
