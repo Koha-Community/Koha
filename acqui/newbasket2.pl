@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 #origninally script to provide intranet (librarian) advanced search facility
 #now script to do searching for acquisitions
 
@@ -19,15 +20,57 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+=head1 NAME
+
+newbasket2.pl
+
+=head1 DESCRIPTION
+this script allows to perform a new order from an existing record.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item search
+the title the librarian has typed to search an existing record.
+
+=item type
+To know if this script is called from intranet or from the opac.
+
+=item d
+the keyword the librarian has typed to search an existing record.
+
+=item author
+the author of the new record.
+
+=item offset
+
+=item num
+
+=item booksellerid
+the id of the bookseller this script has to add an order.
+
+=item basketno
+the basket number to know on which basket this script have to add a new order.
+
+=item sub
+FIXME : is this param still used ?
+
+=back
+
+=cut
+
+
 use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Acquisition;
+use C4::Bookseller;
 use C4::Biblio;
 use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+
 
 #use Data::Dumper;
 
@@ -56,13 +99,15 @@ $search{'author'} = $author;
 
 my @results;
 my $offset = $input->param('offset');
-if ( $offset eq '' ) {
-    $offset = 0;
-}
+
+#default value for offset
+my $offset = 0 unless $offset;
+
 my $num = $input->param('num');
-if ( $num eq '' ) {
-    $num = 10;
-}
+
+#default value for num
+my $num = 10 unless $num;
+
 my $donation;
 my $booksellerid = $input->param('booksellerid');
 if ( $booksellerid == 72 ) {
@@ -72,7 +117,9 @@ my $basketno = $input->param('basketno');
 my $sub      = $input->param('sub');
 
 #print $sub;
-my ( $count, @booksellers ) = bookseller($booksellerid);
+my @booksellers = GetBookSeller($booksellerid);
+my $count = scalar @booksellers;
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "acqui/newbasket2.tmpl",
@@ -230,9 +277,8 @@ while ( $i < $count2 ) {
     $lineres{'location-only'} = $location_only;
 
     # lets get a list on existing orders for all bibitems.
-    ( my $count1, my @bibitems ) =
-      getbiblioitembybiblionumber( $result->{biblionumber} );
-
+    my @bibitems = GetBiblioItemByBiblioNumber( $result->{biblionumber} );
+    my $count1 = scalar @bibitems; 
     my $order, my $ordernumber;
 
     my $i1 = 0;
@@ -241,7 +287,7 @@ while ( $i < $count2 ) {
     foreach my $bibitem (@bibitems) {
 
         ( $order, $ordernumber ) =
-          &getorder( $bibitem->{biblioitemnumber}, $result->{biblionumber} );
+          &GetOrder($result->{biblionumber},$bibitem->{biblioitemnumber} );
 
         #only show order if its current;
         my %order;
