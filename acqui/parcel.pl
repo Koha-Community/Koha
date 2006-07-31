@@ -1,4 +1,3 @@
- 
 #!/usr/bin/perl
 
 # $Id$
@@ -24,8 +23,41 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+
+=head1 NAME
+
+parcel.pl
+
+=head1 DESCRIPTION
+This script shows all orders receipt or pending for a given supplier.
+It allows to write an order as 'received' when he arrives.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item supplierid
+To know the supplier this script has to show orders.
+
+=item code
+is the bookseller invoice number.
+
+=item freight
+
+
+=item gst
+
+
+=item datereceived
+To filter the results list on this given date.
+
+=back
+
+=cut
+
 use C4::Auth;
 use C4::Acquisition;
+use C4::Bookseller;
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -36,7 +68,9 @@ use strict;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
-my ($count,@booksellers)=bookseller($supplierid);
+my @booksellers=GetBookSeller($supplierid);
+my $count = scalar @booksellers;
+
 my $invoice=$input->param('code') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
@@ -52,7 +86,9 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
 });
 
-my ($countlines,@parcelitems)=getparcelinformation($supplierid,$invoice,$date);
+my @parcelitems=GetParcel($supplierid,$invoice,$date);
+my $countlines = scalar @parcelitems;
+
 my $totalprice=0;
 my $totalfreight=0;
 my $totalquantity=0;
@@ -91,7 +127,9 @@ for (my $i=0;$i<$countlines;$i++){
     $totalquantity+=$parcelitems[$i]->{'quantityreceived'};
     $tototal+=$total;
 }
-my ($countpendings,@pendingorders)=getallorders($supplierid);
+my @pendingorders = GetAllOrders($supplierid);
+my $countpendings = scalar @pendingorders;
+
 my @loop_orders = ();
 for (my $i=0;$i<$countpendings;$i++){
     my %line;
