@@ -68,7 +68,8 @@ prFont('courier');    # Just setting a font
 prFontSize(9);
 
 my $margin       = 36;
-my $text_margin  = 10;
+my $top_text_margin  = 10;
+my $left_text_margin  = 3;
 my $label_height = 90;
 my $spine_width  = 72;
 my $circ_width   = 207;
@@ -78,6 +79,7 @@ my $x_pos_circ1  = 135;
 my $x_pos_circ2  = 369;
 my $pageheight   = 792;
 my $line_spacer  = 10;
+my $label_rows = 8;
 
 my $str;
 
@@ -96,7 +98,7 @@ my $rowspace         = 36;
 my $page_break_count = $startrow;
 my $codetype         = 'Code39';
 
-DrawBorder( 0, 0, 612, 792, );
+DrawBorder ( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
 my $item;
 
@@ -129,13 +131,15 @@ foreach $item (@resultsloop) {
         # add your printable fields manually in here
         my @fields =
           qw (dewey isbn classification itemtype subclass itemcallnumber);
-        my $vPos = ( $y_pos + ( $label_height - $text_margin ) );
-        my $hPos = ( 36 + 3 );
+        my $vPos = ( $y_pos + ( $label_height - $top_text_margin ) );
+        my $hPos = ( $x_pos_spine + $left_text_margin );
         foreach my $field (@fields) {
 
             # if the display option for this field is selected in the DB,
             # and the item record has some values for this field, display it.
             if ( $conf_data->{"$field"} && $item->{"$field"} ) {
+
+warn "CONF_TYPE = $field";
 
                 # get the string
                 $str = $item->{"$field"};
@@ -168,7 +172,7 @@ foreach $item (@resultsloop) {
     #-----------------draw spine text
 
     # the gaylord labels have 8 rows per sheet, this pagebreaks after 8 rows
-    if ( $page_break_count == 8 ) {
+    if ( $page_break_count == $label_rows ) {
         prPage();
         $page_break_count = 0;
         $i2               = 0;
