@@ -11,8 +11,8 @@
 
 # the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
 
-#use lib '/usr/local/opus-import/intranet/modules';
-#use C4::Context("/etc/koha-opus-import.conf");
+use lib '/usr/local/opus-import/intranet/modules';
+use C4::Context("/etc/koha-opus-import.conf");
 
 use strict;
 use CGI;
@@ -31,6 +31,9 @@ use Text::Wrap;
 
 #use Data::Dumper;
 #use Acme::Comment;
+
+$Text::Wrap::columns   = 15;
+$Text::Wrap::separator = "\n";
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
@@ -61,10 +64,11 @@ unlink "$htdocs_path/barcodes/new.pdf";
 prFile("$htdocs_path/barcodes/new.pdf");
 prLogDir("$htdocs_path/barcodes");
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
-prFont('Times-Roman');    # Just setting a font
-prFontSize(10);
+prFont('courier');    # Just setting a font
+prFontSize(9);
 
 my $margin       = 36;
+my $text_margin  = 10;
 my $label_height = 90;
 my $spine_width  = 72;
 my $circ_width   = 207;
@@ -73,6 +77,9 @@ my $x_pos_spine  = 36;
 my $x_pos_circ1  = 135;
 my $x_pos_circ2  = 369;
 my $pageheight   = 792;
+my $line_spacer  = 10;
+
+my $str;
 
 #warn "STARTROW = $startrow\n";
 
@@ -89,22 +96,13 @@ my $rowspace         = 36;
 my $page_break_count = $startrow;
 my $codetype         = 'Code39';
 
-# do border---------------
-my $str = "q\n";    # save the graphic state
-$str .= "4 w\n";                # border color red
-$str .= "0.0 0.0 0.0  RG\n";    # border color red
-$str .= "1 1 1 rg\n";           # fill color blue
-$str .= "0 0 612 792 re\n";     # a rectangle
-$str .= "B\n";                  # fill (and a little more)
-$str .= "Q\n";                  # save the graphic state
+DrawBorder( 0, 0, 612, 792, );
 
-# do border---------------
-
-prAdd($str);
 my $item;
 
 # for loop
 my $i2 = 1;
+
 foreach $item (@resultsloop) {
     if ( $i2 == 1 && $guidebox == 1 ) {
         draw_boundaries(
@@ -112,85 +110,27 @@ foreach $item (@resultsloop) {
             $spine_width, $label_height, $circ_width
         );
     }
-
-    #warn Dumper $item->{'itemtype'};
-    #warn "COUNT = $cnt1";
-
-    #building up spine text
-    my $line        = 75;
-    my $line_spacer = 16;
-
-    #warn
-    "COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
     if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
+
+        warn
+"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
+
         build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
-            $conf_data->{'barcodetype'}, \$item );
+            $conf_data->{'barcodetype'} );
         build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
-            $conf_data->{'barcodetype'}, \$item );
+            $conf_data->{'barcodetype'} );
+
     }
 
-# added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
-# i think its embedding extra fonts in the pdf file.
-#	mode => 'graphic',
-
-    $y_pos = ( $y_pos - $label_height );
-
-    # the gaylord labels have 8 rows per sheet, this pagebreaks after 8 rows
-    if ( $page_break_count == 8 ) {
-        prPage();
-        $page_break_count = 0;
-        $i2               = 0;
-        $y_pos            = $y_pos_initial;
-    }
-    $page_break_count++;
-    $i2++;
-}
-############## end of loop
-prEnd();
-
-#----------------------------------------------------------------------------
-# this second section of the script uses a diff perl class than the previous section
-# it opens the 'new.pdf' file that the previous section has just saved
-
-if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
-    my $font        = 'Courier';
-    my $text_height = 90;
-    my $file        = "$htdocs_path/barcodes/new.pdf";
-    my $pdf         = new PDF::Report( File => $file );
-
-    #$pdf->newpage($nopage);
-    my $pagenumber = 1;
-    $pdf->openpage($pagenumber);
-    my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
-
-    #warn "PAGE DIM = $pagewidth, $pageheight";
-    #warn "Y START ROW = $y_pos_initial_startrow";
-    $pdf->setAlign('left');
-    $pdf->setFont($font);
-    $pdf->setSize(9);
-    my $fontname         = $pdf->getFont();
-    my $fontsize         = $pdf->getSize();
-    my $page_break_count = $startrow;
-
-    #warn "INIT PAGEBREAK COUNT = $page_break_count";
-    #warn "INIT VPOS = $vPos, hPos = $hPos";
-    my $vPosSpacer     = 10;
-    my $start_text_pos = 39;   # ( 36 - 5 = 31 ) 5 is an inside border for text.
-    my $spine_label_text_with = 67;
-    my $y_pos                 = ( $y_pos_initial_startrow + 90 );
-
-    # set the column lenght for textwrap, and the seperator.
-    $Text::Wrap::columns   = 13;
-    $Text::Wrap::separator = "\n";
-
-    #warn "Y POS = $y_pos";
-    foreach $item (@resultsloop) {
+    #-----------------draw spine text
+    if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
+        warn "PRINTTYPE = $printingtype";
 
         # add your printable fields manually in here
         my @fields =
           qw (dewey isbn classification itemtype subclass itemcallnumber);
-        my $vPos = $y_pos;
-        my $hPos = 36;
+        my $vPos = ( $y_pos + ( $label_height - $text_margin ) );
+        my $hPos = ( 36 + 3 );
         foreach my $field (@fields) {
 
             # if the display option for this field is selected in the DB,
@@ -208,37 +148,49 @@ if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
                 # and seperate the chunks with newlines
 
                 $str = wrap( "", "", "$str" );
+                $str = wrap( "", "", "$str" );
 
                 # split the chunks between newline's, into an array
                 my @strings = split /\n/, $str;
 
-                #		warn Dumper @strings;
-
                 # then loop for each string line
                 foreach my $str (@strings) {
-                    $pdf->setAddTextPos( $hPos, $vPos - 10 );
-                    my ( $h, $v ) = $pdf->getAddTextPos();
 
-                    # using '1000' width, so that addText wont use it's
-                    # own internal wordwrap, (as it doesnt work so well)
-                    $pdf->addText( $str, 10, 1000, 90 );
-
-                    $vPos = $vPos - 10;
+                    warn "HPOS ,  VPOS $hPos, $vPos ";
+                    prText( $hPos, $vPos, $str );
+                    $vPos = $vPos - $line_spacer;
                 }
             }    # if field is valid
         }    #foreach feild
+    }
         $y_pos = ( $y_pos - $label_height );
 
-        if ( $page_break_count == 8 ) {
-            $pagenumber++;
-            $pdf->openpage($pagenumber);
-            $page_break_count = 0;
-            $i2               = 0;
-            $y_pos            = ( $y_pos_initial + 90 );
-        }    # end if
-        $page_break_count++;
-        $i2++;
-    }    # end of foreach result loop
-    $pdf->saveAs($file);
+    #-----------------draw spine text
+
+    # the gaylord labels have 8 rows per sheet, this pagebreaks after 8 rows
+    if ( $page_break_count == 8 ) {
+        prPage();
+        $page_break_count = 0;
+        $i2               = 0;
+        $y_pos            = $y_pos_initial;
+    }
+    $page_break_count++;
+    $i2++;
 }
+prEnd();
+
 print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
+
+sub DrawBorder {
+    my ( $llx, $lly, $urx, $ury ) = @_;
+    $str = "q\n";    # save the graphic state
+    $str .= "4 w\n";                       # border color red
+    $str .= "0.0 0.0 0.0  RG\n";           # border color red
+    $str .= "1 1 1 rg\n";                  # fill color blue
+    $str .= "$llx $lly $urx $ury re\n";    # a rectangle
+    $str .= "B\n";                         # fill (and a little more)
+    $str .= "Q\n";                         # save the graphic state
+    prAdd($str);
+
+}
+
