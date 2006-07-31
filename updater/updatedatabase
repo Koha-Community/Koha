@@ -457,7 +457,7 @@ my %requirefields = (
         'category' => 'char(1)',
     },
     marc_biblio => { 'frameworkcode' => 'char(4) not NULL default \'\'' },
-    serial => { 'publisheddate' => 'date NULL default '},
+    serial => { 'publisheddate' => 'date'},
 );
 
 my %dropable_table = (
@@ -2167,6 +2167,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.52  2006/07/31 13:31:27  kados
+# slight bug fix for adding publisheddate field to serial table
+#
 # Revision 1.100.2.51  2006/07/31 13:25:47  kados
 # labels_conf section changed itemcallno to itemcallnumber to be
 # consistent.
