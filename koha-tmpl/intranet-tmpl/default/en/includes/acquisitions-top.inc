@@ -27,12 +27,12 @@ function Help() {
 	background-color: #ffdf61;
 	color:#000000;
 	background-image:none;
-	text-decoration: normal;
+	text-decoration: none;
 	}
 a.acquisition:hover {
 	background-color: #ffdf61;
 	color: #000000;
-	text-decoration: normal;
+	text-decoration: none;
 	}
 </style>
 </head>
