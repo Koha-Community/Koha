@@ -53,8 +53,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $ordnum       = $input->param('ordnum');
 my $basketno     = $input->param('basketno');
 my $booksellerid = $input->param('booksellerid');
-my $existing     =
-  $input->param('existing');    # existing biblio, (not basket or order)
+my $existing     = $input->param('existing');    # existing biblio, (not basket or order)
 my $title         = $input->param('title');
 my $author        = $input->param('author');
 my $copyrightdate = $input->param('copyrightdate');
@@ -67,8 +66,6 @@ if ( $listprice eq '' ) {
     $listprice = 0;
 }
 my $series = $input->param('series');
-
-# my $supplier=$input->param('supplier');
 my $notes         = $input->param('notes');
 my $bookfund      = $input->param('bookfund');
 my $sort1         = $input->param('sort1');
@@ -185,7 +182,7 @@ if ( $quantity ne '0' ) {
     if ($ordnum) {
 
         # 		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
-        modorder(
+        ModOrder(
             $title,   $ordnum,   $quantity,     $listprice,
             $bibnum,  $basketno, $booksellerid, $loggedinuser,
             $notes,   $bookfund, $bibitemnum,   $rrp,
@@ -194,7 +191,7 @@ if ( $quantity ne '0' ) {
         );
     }
     else {
-        ( $basketno, $ordnum ) = neworder(
+        ( $basketno, $ordnum ) = NewOrder(
             $basketno,  $bibnum,       $title,        $quantity,
             $listprice, $booksellerid, $loggedinuser, $notes,
             $bookfund,  $bibitemnum,   $rrp,          $ecost,
@@ -217,7 +214,7 @@ if ( $quantity ne '0' ) {
             },
             @barcodes
         );
-        receiveorder(
+        ModReceiveOrder(
             $bibnum,  $ordnum, $quantity, $user, $cost,
             $invoice, 0,       $bookfund, $rrp
         );
@@ -225,6 +222,6 @@ if ( $quantity ne '0' ) {
 }
 else {
     $bibnum = $input->param('biblio');
-    delorder( $bibnum, $ordnum );
+    DelOrder( $bibnum, $ordnum );
 }
 print $input->redirect("basket.pl?basket=$basketno");
