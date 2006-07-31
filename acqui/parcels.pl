@@ -1,4 +1,3 @@
- 
 #!/usr/bin/perl
 
 # $Id$
@@ -23,6 +22,45 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+=head1 NAME
+
+parcels.pl
+
+=head1 DESCRIPTION
+This script shows all orders/parcels receipt or pending for a given supplier.
+It allows to write an order/parcels as 'received' when he arrives.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item supplierid
+To know the supplier this script has to show orders.
+
+=item orderby
+sort list of order by 'orderby'.
+Orderby can be equals to
+    * datereceived desc (default value)
+    * aqorders.booksellerinvoicenumber
+    * datereceived
+    * aqorders.booksellerinvoicenumber desc
+
+=item filter
+
+=item datefrom
+To filter on date
+
+=item dateto
+To filter on date
+
+=item resultsperpage
+To know how many results have to be display / page.
+
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
@@ -32,6 +70,7 @@ use C4::Database;
 use C4::Date;
 use HTML::Template;
 use C4::Acquisition;
+use C4::Bookseller;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
@@ -42,7 +81,8 @@ my $datefrom=$input->param('datefrom');
 my $dateto=$input->param('dateto');
 my $resultsperpage = $input->param('resultsperpage');
 
-my ($count,@booksellers)=bookseller($supplierid);
+my @booksellers=GetBookSeller($supplierid);
+my $count = scalar @booksellers;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcels.tmpl",
@@ -55,7 +95,8 @@ my ($template, $loggedinuser, $cookie)
 
 
 $resultsperpage = 20 unless ($resultsperpage);
-my ($count,@results)=getparcels($supplierid, $order, $code,$datefrom,$dateto);
+my @results =GetParcels($supplierid, $order, $code,$datefrom,$dateto);
+my $count = scalar @results;
 
 # multi page display gestion
 $startfrom=0 unless ($startfrom);
@@ -64,8 +105,8 @@ if ($count>$resultsperpage){
     my $displayprev=$startfrom;
     if(($count - ($startfrom+$resultsperpage)) > 0 ) {
         $displaynext = 1;
-}
-    
+    }
+
     my @numbers = ();
     if ($count>$resultsperpage) {
         for (my $i=1; $i<$count/$resultsperpage+1; $i++) {
@@ -76,19 +117,17 @@ if ($count>$resultsperpage){
                     highlight => $highlight ,
 #                   searchdata=> "test",
                     startfrom => ($i-1)*$resultsperpage};
-}
-}
-}
-    
+            }
+        }
+    }
+
     my $from = $startfrom*$resultsperpage+1;
     my $to;
-    
-    if($count < (($startfrom+1)*$resultsperpage))
-{
+    if($count < (($startfrom+1)*$resultsperpage)){
         $to = $count;
-} else {
+    } else {
         $to = (($startfrom+1)*$resultsperpage);
-}
+    }
     $template->param(numbers=>\@numbers, 
                      displaynext=>$displaynext,
                      displayprev=>$displayprev,
