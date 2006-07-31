@@ -81,19 +81,26 @@ sub authoritysearch {
     }
 	my ($tag_to_report) = $sth->fetchrow;
 	$mainentrytag = $tag_to_report;
-	for (my $i=0;$i<$#{$tags};$i++) {
-		if (@$tags[$i] eq "mainentry") {
-			@$tags[$i] = $tag_to_report."a";
-		}
-	}
-
-	# "Normal" statements
 	# quote marc fields/subfields
 	for (my $i=0;$i<=$#{$tags};$i++) {
 		if (@$tags[$i]) {
 			@$tags[$i] = $dbh->quote(@$tags[$i]);
 		}
 	}
+	for (my $i=0;$i<$#{$tags};$i++) {
+		if (@$tags[$i] eq "'mainentry'") {
+            @$tags[$i]="'";
+            foreach ('a'..'z') {
+                @$tags[$i] .= $tag_to_report.$_."','";
+            }
+            chop @$tags[$i];
+            chop @$tags[$i];
+		}
+		if (@$tags[$i] eq '\'$a\'') {
+			@$tags[$i] = "'".$tag_to_report.'a\'';
+		}
+	}
+
 	my @normal_tags = ();
 	my @normal_and_or = ();
 	my @normal_operator = ();
@@ -330,14 +337,14 @@ sub create_request {
 			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
 					$sql_tables .= "auth_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 						$sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {	
 				$sql_tables .= "auth_word as m$nb_table,";
-					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
@@ -355,7 +362,7 @@ sub create_request {
 				if (@$operator[$i] eq "start") {
 					$nb_table++;
 					$sql_tables .= "auth_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
@@ -365,14 +372,14 @@ sub create_request {
 					if (@$and_or[$i] eq 'and') {
 						$nb_table++;
 						$sql_tables .= "auth_word as m$nb_table,";
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
 							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.authid=m$nb_table.authid and ";
 					} else {
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
 							$sql_where1 .="  and concat(m$nb_table.tag,m$nb_table.subfieldid) in (@$tags[$i])";
 						}
@@ -1305,6 +1312,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.20  2006/07/31 13:29:14  tipaul
+# - adding a 3rd option to authority search (search on $a of on all subfields of main entry)
+# - removing automatic % add at the end of a search & adding a warning for the user
+#
 # Revision 1.9.2.19  2006/07/31 10:15:42  hdl
 # BugFixing : MARCdetail : displayin field values with ESCAPE=HTML  (in order to manage  '<''>' characters)
 #

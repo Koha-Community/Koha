@@ -15,29 +15,41 @@
 			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
 		</p>
 		<p>
-			<label class="label100">Main entry</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
+			<label class="label100">Main entry ($a only)</label>
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="$a">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+		</p>
+		<p>
+			<label class="label100">Main entry</label>
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
 			<input type="hidden" name="marclist" value="mainentry">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<select name="operator">
-				<option value="start">start by</option>
-				<option value="contains">contains</option>
-			</select>
-			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
-			<input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->">
 		</p>
 		<p>
-			<label class="label100">Anywhere</label><input type="text" name="value">
+			<label class="label100">Anywhere</label>
+			<select name="operator">
+				<option value="contains">contains</option>
+				<option value="start">start by</option>
+			</select>
+			<input type="text" name="value">
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<select name="operator">
-				<option value="contains">contains</option>
-				<option value="start">start by</option>
-			</select>
 			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 			<input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->">
 		</p>
+        <p>(add % at the end of your word if you want to use right-truncation : theor% will find theory &amp; theories)</p>
 		<p>
 			<input type="submit" value="Start search" class="button authority">
 		</p>
