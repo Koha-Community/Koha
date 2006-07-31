@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
-
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -22,6 +20,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
 use strict;
 use C4::Auth;
 use C4::Koha;
@@ -31,10 +31,42 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
 use C4::Acquisition;
+use C4::Bookfund;
+use C4::Bookseller;
 use C4::Date;
 
+=head1 NAME
+
+basket.pl
+
+=head1 DESCRIPTION
+
+ This script display all informations about basket for the supplier given
+ on input arg. Moreover, it allow to add a new order for this supplier from
+ an existing record, a suggestion or from a new record.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item $basketno
+
+this parameter seems to be unused.
+
+=item supplierid
+
+the supplier this script have to display the basket.
+
+=item order
+
+
+
+=back
+
+=cut
+
 my $query        = new CGI;
-my $basketno     = $query->param('basket');
+my $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('supplierid');
 my $order        = $query->param('order');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -47,15 +79,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-my ( $count, @results );
 
-my $basket = getbasket($basketno);
+my $basket = GetBasket($basketno);
 
 # FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my ( $count2, @booksellers ) = bookseller($booksellerid);
+my @booksellers = GetBookSeller($booksellerid);
+my $count2 = scalar @booksellers;
 
 # get librarian branch...
 if ( C4::Context->preference("IndependantBranches") ) {
@@ -76,7 +108,10 @@ if ( C4::Context->preference("IndependantBranches") ) {
 # if new basket, pre-fill infos
 $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
 $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
-( $count, @results ) = getbasketcontent( $basketno, '', $order );
+
+my ( $count, @results );
+@results  = GetBasketContent( $basketno, $order );
+$count = scalar @results;
 
 my $line_total;     # total of each line
 my $sub_total;      # total of line totals
@@ -95,7 +130,7 @@ my $qty_total;
 my @books_loop;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $rrp = $results[$i]->{'listprice'};
-    $rrp = curconvert( $results[$i]->{'currency'}, $rrp );
+    $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
 
     $sub_total_est += $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
     $line_total = $results[$i]->{'quantity'} * $results[$i]->{'ecost'};
