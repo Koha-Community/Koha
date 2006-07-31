@@ -259,8 +259,6 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Due Date</th>
 			<th class="circulation">Bar Code</th>
 			<th class="circulation">Title</th>
-			<th class="circulation">Author</th>
-			<th class="circulation">Call number</th>
 			<th class="circulation">Renew?</th>
 			<th class="circulation">Return?</th>
 		</tr>
@@ -271,11 +269,10 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
 			</td>
 			<td>
-				<!-- TMPL_VAR NAME="title" --><br/>
-				<i><!-- TMPL_VAR name="itemnotes" --></i>
+				<p><!-- TMPL_VAR NAME="title" --></p>
+				<p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+				<p><i><!-- TMPL_VAR name="itemnotes" --></i></p>
 			</td>
-			<td><!-- TMPL_VAR NAME="author" --></td>
-			<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 			<td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
 			<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->">Return</a></td>
 		</tr>
@@ -290,9 +287,10 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 					<td class="problem">
 						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
 					</td>
-					<td class="problem"><!-- TMPL_VAR NAME="title" --></td>
-					<td class="problem"><!-- TMPL_VAR NAME="author" --></td>
-					<td class="problem"><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+					<td class="problem">
+					   <p><!-- TMPL_VAR NAME="title" --></p>
+					   <p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+					</td>
                     <td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
                     <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->" class="button circulation">Return</a></td>
 				<!-- TMPL_ELSE -->
@@ -303,19 +301,23 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
 					</td>
 					<td>
-						<!-- TMPL_VAR NAME="title" --><br/>
-						<i><!-- TMPL_VAR name="itemnotes" --></i>
+					   <p><!-- TMPL_VAR NAME="title" --></p>
+					   <p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
 					</td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                     <td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
                     <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->" class="button circulation">Return</a></td>
 				<!-- /TMPL_IF -->
 			</tr>
 		<!-- /TMPL_LOOP -->
-
+	
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="submit" value="Renew" class="button circulation"/></td>
+        <td>
+        </tr>
 	</table>
-	<p><input type="submit" value="Renew Checked Items" class="button circulation"/></p>
     </form>
 </div>
 
