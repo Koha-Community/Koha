@@ -1,24 +1,6 @@
 #!/usr/bin/perl
 
-#script to administer the aqbudget table
 #written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
-
-# ALGO :
-# this script use an $op to know what to do.
-# if $op is empty or none of the above values,
-#	- the default screen is build (with all records, or filtered datas).
-#	- the   user can clic on add, modify or delete record.
-# if $op=add_form
-#	- if primkey exists, this is a modification,so we read the $primkey record
-#	- builds the add/modify form
-# if $op=add_validate
-#	- the user has just send datas, so we create/modify the record
-# if $op=delete_form
-#	- we show the record having primkey=$primkey and ask for deletion validation form
-# if $op=delete_confirm
-#	- we delete the record having primkey=$primkey
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -37,15 +19,45 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+
+=head1 NAME
+
+aqbookfund.pl
+
+=head1 DESCRIPTION
+
+script to administer the aqbudget table.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item op
+this script use an C<$op> to know what to do.
+C<op> can be equal to:
+* empty or none of the above values, then
+    - the default screen is build (with all records, or filtered datas).
+	- the   user can clic on add, modify or delete record.
+* add_form, then
+	- if primkey exists, this is a modification,so we read the $primkey record
+	- builds the add/modify form
+* add_validate, then
+	- the user has just send datas, so we create/modify the record
+* delete_form, then
+	- we show the record having primkey=$primkey and ask for deletion validation form
+* delete_confirm, then
+    - we delete the record having primkey=$primkey
+
+=cut
+
 use strict;
 use CGI;
 use HTML::Template;
 use List::Util qw/min/;
-
 use C4::Auth;
 use C4::Koha;
 use C4::Context;
-use C4::Acquisition;
+use C4::Bookfund;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
@@ -66,7 +78,7 @@ my ($template, $borrowernumber, $cookie)
          authnotrequired => 0,
          flagsrequired => {parameters => 1, management => 1},
          debug => 1,
-     }
+        }
     );
 
 if ($op) {
@@ -81,10 +93,6 @@ else {
 }
 $template->param(action => $script_name);
 
-# my @branches;
-# my @select_branch;
-# my %select_branches;
-
 my $branches = GetBranches;
 
 ################## ADD_FORM ##################################
@@ -94,19 +102,8 @@ if ($op eq 'add_form') {
 	my $dataaqbookfund;
 	my $header;
 	if ($bookfundid) {
-                my $query = '
-SELECT bookfundid,
-       bookfundname,
-       bookfundgroup,
-       branchcode
-  FROM aqbookfund
-  WHERE bookfundid = ?
-';
-		my $sth=$dbh->prepare($query);
-		$sth->execute($bookfundid);
-		$dataaqbookfund = $sth->fetchrow_hashref;
-		$sth->finish;
-	    }
+    	$dataaqbookfund = GetBookFund($bookfundid);
+	}
 	if ($bookfundid) {
 	    $header = "Modify book fund";
 	    $template->param('header-is-modify-p' => 1);
@@ -149,88 +146,46 @@ SELECT bookfundid,
 elsif ($op eq 'add_validate') {
 	my $bookfundid = uc $input->param('bookfundid');
 
-        my ($query, $sth);
+    my $number = Countbookfund($bookfundid);
 
-        $query = '
-SELECT COUNT(*) AS counter
-  FROM aqbookfund
-  WHERE bookfundid = ?
-';
-        $sth=$dbh->prepare($query);
-	$sth->execute($bookfundid);
-        my $data = $sth->fetchrow_hashref;
-	$sth->finish;
-        my $bookfund_already_exists = $data->{counter} > 0 ? 1 : 0;
+    my $bookfund_already_exists = $number > 0 ? 1 : 0;
 
-        if ($bookfund_already_exists) {
-            $query = '
-UPDATE aqbookfund
-  SET bookfundname = ?,
-      branchcode = ?
-  WHERE bookfundid = ?
-';
-            $sth=$dbh->prepare($query);
-            $sth->execute(
-                $input->param('bookfundname'),
-                $input->param('branchcode') || undef,
-                $bookfundid,
-            );
-            $sth->finish;
+    if ($bookfund_already_exists) {
+        my $bookfundname = $input->param('bookfundname');
+        my $branchcode = $input->param('branchcode') || undef;
 
-            # budgets depending on a bookfund must have the same branchcode
-            # if the bookfund branchcode is set
-            if (defined $input->param('branchcode')) {
-                $query = '
-UPDATE aqbudget
-  SET branchcode = ?
-';
-                $sth=$dbh->prepare($query);
-                $sth->execute($input->param('branchcode'));
-                $sth->finish;
-            }
-        }
-        else {
-            $query = '
-INSERT
-  INTO aqbookfund
-  (bookfundid, bookfundname, branchcode)
-  VALUES
-  (?, ?, ?)
-';
-            $sth=$dbh->prepare($query);
-            $sth->execute(
-                $bookfundid,
-                $input->param('bookfundname'),
-                $input->param('branchcode') || undef,
-            );
-            $sth->finish;
-        }
-
-        $input->redirect('aqbookfund.pl');
-										# END $OP eq ADD_VALIDATE
+        ModBookFund($bookfundname,$branchcode,$bookfundid);
+    }
+    else {
+        NewBookFund(
+            $bookfundid,
+            $input->param('bookfundname'),
+            $input->param('branchcode')
+        );
+    }
+    $input->redirect('aqbookfund.pl');
+# END $OP eq ADD_VALIDATE
+}
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
-	$sth->execute($bookfundid);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
+
+elsif ($op eq 'delete_confirm') {
+    my $data = GetBookFund($bookfundid);
 	$template->param(bookfundid => $bookfundid);
 	$template->param(bookfundname => $data->{'bookfundname'});
-													# END $OP eq DELETE_CONFIRM
+} # END $OP eq DELETE_CONFIRM
+
+
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-	my $bookfundid=uc($input->param('bookfundid'));
-	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid=?");
-	$sth->execute($bookfundid);
-	$sth->finish;
-	$sth=$dbh->prepare("delete from aqbudget where bookfundid=?");
-	$sth->execute($bookfundid);
-	$sth->finish;
-													# END $OP eq DELETE_CONFIRMED
+elsif ($op eq 'delete_confirmed') {
+    DelBookFund(uc($input->param('bookfundid')));
+
+}# END $OP eq DELETE_CONFIRMED
+
+
 ################## DEFAULT ##################################
-} else { # DEFAULT
+else { # DEFAULT
     my ($query, $sth);
 
     $template->param(scriptname => $script_name);
@@ -252,21 +207,14 @@ INSERT
     }
 
     my @bookfundids_loop;
-    $query = '
-SELECT bookfundid
-  FROM aqbookfund
-';
-    $sth = $dbh->prepare($query);
-    $sth->execute();
+    my $sth = GetBookFundsId();
+
     while (my $row = $sth->fetchrow_hashref) {
-        if (defined $input->param('filter_bookfundid')
-            and $input->param('filter_bookfundid') eq $row->{bookfundid}) {
+        if (defined $input->param('filter_bookfundid') and $input->param('filter_bookfundid') eq $row->{bookfundid}){
             $row->{selected} = 1;
         }
-
-        push @bookfundids_loop, $row;
-    }
-    $sth->finish;
+         push @bookfundids_loop, $row;
+     }
 
     $template->param(
         filter_bookfundids => \@bookfundids_loop,
@@ -275,58 +223,24 @@ SELECT bookfundid
     );
 
     # searching the bookfunds corresponding to our filtering rules
-    my @bindings;
-
-    $query = '
-SELECT bookfundid,
-       bookfundname,
-       bookfundgroup,
-       branchcode
-  FROM aqbookfund
-  WHERE 1 = 1';
-    if ($input->param('filter')) {
-        if ($input->param('filter_bookfundid')) {
-            $query.= '
-    AND bookfundid = ?
-';
-            push @bindings, $input->param('filter_bookfundid');
-        }
-        if ($input->param('filter_bookfundname')) {
-            $query.= '
-    AND bookfundname like ?
-';
-            push @bindings, '%'.$input->param('filter_bookfundname').'%';
-        }
-        if ($input->param('filter_branchcode')) {
-            $query.= '
-    AND branchcode = ?
-';
-            push @bindings, $input->param('filter_branchcode');
-        }
-    }
-    $query.= '
-  ORDER BY bookfundid
-';
-
-    $sth = $dbh->prepare($query);
-    $sth->execute(@bindings);
-    my @results;
-    while (my $row = $sth->fetchrow_hashref) {
-        push @results, $row;
-    }
+    my @results = SearchBookFund(
+        $input->param('filter'),
+        $input->param('filter_bookfundid'),
+        $input->param('filter_bookfundname'),
+        $input->param('filter_branchcode'),
+    );
 
     # does the book funds have budgets?
-    $query = '
-SELECT bookfundid,
-       COUNT(*) AS counter
-  FROM aqbudget
-  GROUP BY bookfundid
-';
-    $sth = $dbh->prepare($query);
-    $sth->execute();
-    my %nb_budgets_of;
-    while (my $row = $sth->fetchrow_hashref) {
-        $nb_budgets_of{ $row->{bookfundid} } = $row->{counter};
+    my @loop_id;
+    my $sth = GetBookFundsId();
+    while (my $row = $sth->fetchrow){
+        push @loop_id, $row;
+    }
+
+    my ($id,%nb_budgets_of);
+    foreach $id (@loop_id){
+        my $number = Countbookfund($id);
+        $nb_budgets_of{$id} = $number;
     }
 
     # pagination informations
@@ -357,17 +271,19 @@ SELECT bookfundid,
     }
 
     $template->param(
-        bookfund => \@loop,
-        pagination_bar => pagination_bar(
-            $script_name,
-            getnbpages(scalar @results, $pagesize),
-            $page,
-            'page'
-        )
-    );
+            bookfund => \@loop,
+            pagination_bar => pagination_bar(
+                        $script_name,
+                        getnbpages(scalar @results, $pagesize),
+                        $page,
+                        'page'
+            )
+        );
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+$template->param(
+    intranetcolorstylesheet =>C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav => C4::Context->preference("IntranetNav"),
+    );
+
 output_html_with_http_headers $input, $cookie, $template->output;
