@@ -205,7 +205,7 @@ if ($do_it) {
 	my $branches=getbranches();
 	my %select_branches;
 	$select_branches{""} = "";
-	foreach my $branch (keys %$branches) {
+	foreach my $branch (sort keys %$branches) {
 		push @select, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
@@ -220,9 +220,16 @@ if ($do_it) {
 	$req->execute;
 	undef @select;
 	push @select,"";
+	my %select_location;
+	$select_location{""} = "";
+	while (my $items =$req->fetchrow_hashref) {
+		push @select, $items->{"holdingbranch"};
+		$select_location{$items->{'holdingbranch'}} = $branches->{$items->{'holdingbranch'}}->{'branchname'};
+	}
 	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'holdingbranch',
 				-values   => \@select,
+				-labels   => \%select_location,
 				-size     => 1,
 				-multiple => 0 );
 	
