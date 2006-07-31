@@ -21,6 +21,40 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+=head1 NAME
+
+orderreceive.pl
+
+=head1 DESCRIPTION
+This script shows all order already receive and all pendings orders.
+It permit to write a new order as 'received'.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item supplierid
+to know on what supplier this script has to display receive order.
+
+=item recieve
+
+=item invoice
+the number of this invoice.
+
+=item freight
+
+=item biblio
+The biblionumber of this order.
+
+=item catview
+
+=item gst
+
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Context;
@@ -29,6 +63,8 @@ use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
+use C4::Bookseller;
+use C4::Members;
 
 my $input      = new CGI;
 my $supplierid = $input->param('supplierid');
@@ -40,11 +76,12 @@ my $freight = $input->param('freight');
 my $biblio  = $input->param('biblio');
 my $catview = $input->param('catview');
 my $gst     = $input->param('gst');
-my ( $count, @results ) =
-  ordersearch( $search, $supplierid, $biblio, $catview );
+my @results = SearchOrder( $search, $supplierid, $biblio, $catview );
+my $count = scalar @results;
 
 # warn "C:$count for ordersearch($search,$supplierid,$biblio,$catview);";
-my ( $count2, @booksellers ) = bookseller( $results[0]->{'booksellerid'} );
+my @booksellers = GetBookSeller( $results[0]->{'booksellerid'} );
+
 my $date = $results[0]->{'entrydate'};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -58,16 +95,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 }
 );
 $template->param($count);
-my $sthtemp =
-  $dbh->prepare(
-    "Select flags, branchcode from borrowers where borrowernumber = ?");
-$sthtemp->execute($loggedinuser);
-my ( $flags, $homebranch ) = $sthtemp->fetchrow;
+my ($flags, $homebranch) = GetFlagsAndBranchFromBorrower($loggedinuser);
 
 if ( $count == 1 ) {
     my $sth;
 
-    my $branches = getbranches;
+    my $branches = GetBranches;
     my @branchloop;
     foreach my $thisbranch ( sort keys %$branches ) {
         my %row = (
@@ -153,4 +186,4 @@ else {
 
 }
 output_html_with_http_headers $input, $cookie, $template->output;
- 
+
