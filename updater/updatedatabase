@@ -871,7 +871,9 @@ my %tabledata = (
             },
             value       => 'Fill with appropriate value...',
             explanation => 'ISBD',
-            type        => 'free'
+            type        => 'Textarea',
+            options => '150|50'
+
         },
         {
             uniquefieldrequired => 'variable',
@@ -1395,6 +1397,21 @@ my %tabledata = (
 "contains the MARC biblio tags of person authorities to fill biblio.author with when importing biblio",
             type => 'free',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'AuthDisplayHierarchy',
+            value               => '1',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+"Display hierarchies in details for Authorities.",
+            type => 'YesNo',
+            value =>0,
+        },
+
     ],
 
 );
@@ -1476,6 +1493,17 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
+    auth_header =>[
+        {
+            field => 'authtrees',
+            type  => 'text',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+     ],
+
 );
 
 #-------------------
@@ -2138,6 +2166,17 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.49  2006/07/31 10:15:42  hdl
+# BugFixing : MARCdetail : displayin field values with ESCAPE=HTML  (in order to manage  '<''>' characters)
+#
+# Adding  Hierarchy display for authorities.
+# Please Note That it relies on the fact that authorities id are stored in $3 of authorities notice.
+# And Broader terms is supposed to be indicated by a g for 550$5 subfield, narrower term : an h for the same subfield.
+#
+# It CAN SURELY be generalised but only with a bunch of sytem preferences.
+#
+# I added the ability to do a search on ANY authtypecode.
+#
 # Revision 1.100.2.48  2006/07/28 01:13:41  sushi
 # updated 'labels_conf' table.
 #

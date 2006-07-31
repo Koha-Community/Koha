@@ -52,6 +52,11 @@ $VERSION = 0.01;
 	&MARCaddword &MARCdelword
 	&char_decode
 	&FindDuplicate
+	&BuildSummary
+	&BuildUnimarcHierarchies
+	&BuildUnimarcHierarchy
+    &AUTHsavetrees
+    &AUTHgetheader
  );
 
 sub authoritysearch {
@@ -66,8 +71,14 @@ sub authoritysearch {
 	# the authtypecode. Then, search on $a of this tag_to_report
 	# also store main entry MARC tag, to extract it at end of search
 	my $mainentrytag;
-	my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
+	my $sth;
+    if ($authtypecode){
+      $sth= $dbh->prepare('select auth_tag_to_report from auth_types where authtypecode=?');
+      $sth->execute($authtypecode);
+    }else{
+      $sth= $dbh->prepare('select auth_tag_to_report from auth_types');
+      $sth->execute;
+    }
 	my ($tag_to_report) = $sth->fetchrow;
 	$mainentrytag = $tag_to_report;
 	for (my $i=0;$i<$#{$tags};$i++) {
@@ -123,14 +134,25 @@ sub authoritysearch {
 
 	my $sth;
 
-	if ($sql_where2) {
-		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)");
-		warn "Q2 : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)";
-	} else {
-		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1");
-		warn "Q : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1";
-	}
-	$sth->execute($authtypecode);
+	if ($authtypecode){
+      if ($sql_where2) {
+          $sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)");
+          warn "Q2 : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)";
+      } else {
+          $sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1");
+          warn "Q : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1";
+      }
+      $sth->execute("$authtypecode");
+    } else {
+      if ($sql_where2) {
+          $sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and $sql_where2 and ($sql_where1)");
+          warn "Q2 : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid  and $sql_where2 and ($sql_where1)";
+      } else {
+          $sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and $sql_where1");
+          warn "Q : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and $sql_where1";
+      }
+      $sth->execute;
+    }
 	my @result = ();
 	while (my ($authid) = $sth->fetchrow) {
 			push @result,$authid;
@@ -1079,6 +1101,195 @@ sub FindDuplicate {
 	return;
 }
 
+sub BuildSummary{
+	my $record = shift @_;
+	my $summary = shift @_;
+    ##TODO : use langages from authorised_values
+    ## AND Thesaurii from auth_types
+	my %language;
+	$language{'fre'}="Français";
+	$language{'eng'}="Anglais";
+	$language{'ger'}="Allemand";
+	$language{'ita'}="Italien";
+	$language{'spa'}="Espagnol";
+	my %thesaurus;
+	$thesaurus{'1'}="Peuples";
+	$thesaurus{'2'}="Anthroponymes";
+	$thesaurus{'3'}="Oeuvres";
+	$thesaurus{'4'}="Chronologie";
+	$thesaurus{'5'}="Lieux";
+	$thesaurus{'6'}="Sujets";
+	#thesaurus a remplir
+	if ($summary) {
+		my @fields = $record->fields();
+		foreach my $field (@fields) {
+			my $tag = $field->tag();
+			my $tagvalue = $field->as_string();
+			$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
+			if ($tag<10) {
+			} else {
+				my @subf = $field->subfields;
+				for my $i (0..$#subf) {
+					my $subfieldcode = $subf[$i][0];
+					my $subfieldvalue = $subf[$i][1];
+					my $tagsubf = $tag.$subfieldcode;
+					$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+				}
+			}
+		}
+		$summary =~ s/\[(.*?)]//g;
+		$summary =~ s/\n/<br>/g;
+	} else {
+		my $heading; 
+		my $authid; 
+		my $altheading;
+		my $seealso;
+		my $broaderterms;
+		my $narrowerterms;
+		my $see;
+		my $seeheading;
+        my $notes;
+		my @fields = $record->fields();
+		if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+		# construct UNIMARC summary, that is quite different from MARC21 one
+			# accepted form
+			foreach my $field ($record->field('2..')) {
+				$heading.= $field->subfield('a');
+                $authid=$field->subfield('3');
+			}
+			# rejected form(s)
+			foreach my $field ($record->field('3..')) {
+			  $notes.= '<span class="note">'.$field->subfield('a')."</span>\n";
+			}
+			foreach my $field ($record->field('4..')) {
+			  my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : " if ($field->subfield('2'));
+			  $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+			}
+			# see :
+			foreach my $field ($record->field('5..')) {
+		        
+				if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
+				  $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				} elsif (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'h')){
+				  $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				} elsif ($field->subfield('a')) {
+				  $seealso.= '<span class="RT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				}
+			}
+			# // form
+			foreach my $field ($record->field('7..')) {
+				my $lang = substr($field->subfield('8'),3,3);
+				$seeheading.= '<span class="langue"> En '.$language{$lang}.' : </span><span class="OT"> '.$field->subfield('a')."</span><br />\n";	
+			}
+            $broaderterms =~s/-- \n$//;
+            $narrowerterms =~s/-- \n$//;
+            $seealso =~s/-- \n$//;
+            $see =~s/-- \n$//;
+			$summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+			$summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
+			$summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
+			$summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
+			$summary.= '<p><div class="label">EP : '.$see.'</div></p>' if ($see);
+			$summary.= '<p><div class="label">'.$seeheading.'</div></p>' if ($seeheading);
+		}
+	}
+	return $summary;
+}
+
+sub BuildUnimarcHierarchies{
+  my $authid = shift @_;
+#   warn "authid : $authid";
+  my $force = shift @_;
+  my @globalresult;
+  my $dbh=C4::Context->dbh;
+  my $hierarchies;
+  my $data = AUTHgetheader($dbh,$authid);
+  
+  if ($data->{'authtrees'} and not $force){
+    return $data->{'authtrees'};
+  } elsif ($data->{'authtrees'}){
+    $hierarchies=$data->{'authtrees'};
+  } else {
+    my $record = AUTHgetauthority($dbh,$authid);
+    my $found;
+    my ($result,$total)=authoritysearch($dbh,['5503'],['and'],'',['='],[$authid],0,100);
+    if ($total){
+      foreach my $parentauthid (map { $_->{'authid'} } @$result){
+        my $parentrecord = AUTHgetauthority($dbh,$parentauthid);
+        #checking results
+        foreach my $field ($parentrecord->field('550')){
+          if (($field->subfield('3')) && ($field->subfield('3') eq $authid) && ($field->subfield('5')) && ($field->subfield('5') eq 'h')) {
+            my $localresult=$hierarchies;
+            my $trees;
+            $trees = BuildUnimarcHierarchies($parentauthid);
+            my @trees;
+            if ($trees=~/;/){
+              @trees = split(/;/,$trees);
+            } else {
+              push @trees, $trees;
+            }
+            foreach (@trees){
+              $_.= ",$authid";
+            }
+            @globalresult = (@globalresult,@trees);
+          }
+          $found=1;
+        }
+      }
+      $hierarchies=join(";",@globalresult);
+    }
+    #Unless there is no ancestor, I am alone.
+    $hierarchies="$authid" unless ($hierarchies);
+  }
+  AUTHsavetrees($authid,$hierarchies);
+  return $hierarchies;
+}
+
+sub BuildUnimarcHierarchy{
+	my $record = shift @_;
+    my $class = shift @_;
+	my $authid=$record->subfield('250','3');
+    my %cell;
+	my $parents=""; my $children="";
+    my (@loopparents,@loopchildren);
+	foreach my $field ($record->field('550')){
+		if ($field->subfield('5') && $field->subfield('a')){
+		  if ($field->subfield('5') eq 'h'){
+            push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
+		  }elsif ($field->subfield('5') eq 'g'){
+            push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
+		  }
+		# brothers could get in there with an else
+		}
+	}
+    $cell{"ifparents"}=1 if (scalar(@loopparents)>0);
+    $cell{"ifchildren"}=1 if (scalar(@loopchildren)>0);
+    $cell{"loopparents"}=\@loopparents if (scalar(@loopparents)>0);
+    $cell{"loopchildren"}=\@loopchildren if (scalar(@loopchildren)>0);
+    $cell{"class"}=$class;
+    $cell{"authid"}=$authid;
+    $cell{"value"}=$record->subfield('250',"a");
+	return \%cell;
+}
+
+sub AUTHgetheader{
+	my $authid = shift @_;
+	my $sql= "SELECT * from auth_header WHERE authid = ?";
+	my $dbh=C4::Context->dbh;
+	my $rq= $dbh->prepare($sql);
+    $rq->execute($authid);
+	my $data= $rq->fetchrow_hashref;
+	return $data;
+}
+
+sub AUTHsavetrees{
+	my $authid = shift @_;
+	my $trees = shift @_;
+	my $sql= "UPDATE IGNORE auth_header set authtrees=? WHERE authid = ?";
+	my $dbh=C4::Context->dbh;
+	my $rq= $dbh->prepare($sql);
+    $rq->execute($trees,$authid);
+}
 
 END { }       # module clean-up code here (global destructor)
 
@@ -1094,6 +1305,17 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.19  2006/07/31 10:15:42  hdl
+# BugFixing : MARCdetail : displayin field values with ESCAPE=HTML  (in order to manage  '<''>' characters)
+#
+# Adding  Hierarchy display for authorities.
+# Please Note That it relies on the fact that authorities id are stored in $3 of authorities notice.
+# And Broader terms is supposed to be indicated by a g for 550$5 subfield, narrower term : an h for the same subfield.
+#
+# It CAN SURELY be generalised but only with a bunch of sytem preferences.
+#
+# I added the ability to do a search on ANY authtypecode.
+#
 # Revision 1.9.2.18  2006/07/25 12:30:51  tipaul
 # adding some informations to the array that is passed as result to an authority search : mainly, the tag_to_report & the $3 information (unimarc specific)
 #
