@@ -24,7 +24,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Catalogue;
 use C4::Auth;
 use C4::Biblio;
 use C4::Output;
@@ -32,9 +31,10 @@ use CGI;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
-use C4::Catalogue;
+# use C4::Catalogue;
 use C4::Context;
 use C4::Date;
+use C4::Acquisition;
 
 my $query=new CGI;
 my $dbh = C4::Context->dbh;
@@ -48,14 +48,12 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $supplier=$query->param('id');
-my ($count,@suppliers)=bookseller($supplier);
-
-
+my @suppliers=GetBookSeller($supplier);
+my $count = scalar @suppliers;
 
 my $sth = $dbh->prepare("select s.serialseq from serial s, subscription u where s.subscriptionid = u.subscriptionid and u.aqbooksellerid = ? and s.status = 2");
 
-
- $sth->execute($supplier);
+$sth->execute($supplier);
 my  @final;
 while (my $sol = $sth->fetchrow_hashref)
 {
@@ -68,7 +66,9 @@ my $colour='#EEEEEE';
 my $toggle=0;
 my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {
-	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
+	my $orders = GetPendingOrders($suppliers[$i]->{'id'});
+    my $ordcount = scalar @$orders;
+    
 	my %line;
 	if ($toggle==0){
 		$line{color}='#EEEEEE';
