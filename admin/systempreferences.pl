@@ -58,6 +58,7 @@ my %tabsysprefs;
 	$tabsysprefs{KohaAdmin}="Admin";
 # Authorities
 	$tabsysprefs{authoritysep}="Authorities";
+	$tabsysprefs{AuthDisplayHierarchy}="Authorities";
 # Catalogue
 	$tabsysprefs{advancedMARCEditor}="Catalogue";
 	$tabsysprefs{autoBarcode}="Catalogue";

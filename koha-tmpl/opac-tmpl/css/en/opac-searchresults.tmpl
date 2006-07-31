@@ -37,8 +37,10 @@
 	</div>
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
+<!-- TMPL_IF name="opacbookbag" -->
 <form action="opac-searchresults.pl" method="get" name="myform">
 <input type="submit" class="button" value="Add Checked Items to Biblio Basket" onclick="addMultiple(); return false;"> <input type="reset" value="Clear All" class="button">
+<!-- /TMPL_IF -->
 	<table>
 		<tr>
 			<!-- TMPL_IF NAME="AmazonContent" -->
@@ -54,7 +56,11 @@
 		<!-- Actual Search Results -->
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr>
-			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+			 <!-- TMPL_IF name="opacbookbag" -->
+			     <input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+            <!-- /TMPL_IF -->
+            </td>
 			<!-- TMPL_IF NAME="AmazonContent" -->
 			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
 				<a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="Book Cover Image" class="thumbnail" /><!--<img class="large"  src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01._PE_SCLZZZZZZZ_.jpg" title="Enlarged view of image" alt="Enlarged view of image" />
