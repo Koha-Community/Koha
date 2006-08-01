@@ -24,7 +24,7 @@
 
 =head1 NAME
 
-order.pl
+booksellers.pl
 
 =head1 DESCRIPTION
 
@@ -68,7 +68,7 @@ use C4::Bookseller;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/order.tmpl",
+        template_name   => "acqui/suppliers.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
