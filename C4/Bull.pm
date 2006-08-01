@@ -387,7 +387,6 @@ sub getserials {
   FROM serial 
   WHERE subscriptionid = ? AND status NOT IN (2,4,5)");
 	$sth->execute($subscriptionid);
-	my @serials;
 	while(my $line = $sth->fetchrow_hashref) {
 		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
 		$line->{"publisheddate"} = format_date($line->{"publisheddate"});
