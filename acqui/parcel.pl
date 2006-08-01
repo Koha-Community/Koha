@@ -127,8 +127,8 @@ for (my $i=0;$i<$countlines;$i++){
     $totalquantity+=$parcelitems[$i]->{'quantityreceived'};
     $tototal+=$total;
 }
-my @pendingorders = GetAllOrders($supplierid);
-my $countpendings = scalar @pendingorders;
+my $pendingorders = GetPendingOrders($supplierid);
+my $countpendings = scalar @$pendingorders;
 
 my @loop_orders = ();
 for (my $i=0;$i<$countpendings;$i++){
@@ -140,18 +140,18 @@ for (my $i=0;$i<$countpendings;$i++){
         $line{color}='white';
         $toggle=0;
 }
-    $line{basketno} = $pendingorders[$i]->{'basketno'};
-    $line{isbn} = $pendingorders[$i]->{'isbn'};
-    $line{ordernumber} = $pendingorders[$i]->{'ordernumber'};
-    $line{biblionumber} = $pendingorders[$i]->{'biblionumber'};
+    $line{basketno} = $pendingorders->[$i]->{'basketno'};
+    $line{isbn} = $pendingorders->[$i]->{'isbn'};
+    $line{ordernumber} = $pendingorders->[$i]->{'ordernumber'};
+    $line{biblionumber} = $pendingorders->[$i]->{'biblionumber'};
     $line{invoice} = $invoice;
     $line{gst} = $gst;
-    $line{title} = $pendingorders[$i]->{'title'};
-    $line{author} = $pendingorders[$i]->{'author'};
-    $line{unitprice} = $pendingorders[$i]->{'unitprice'};
-    $line{ecost} = $pendingorders[$i]->{'ecost'};
-    $line{quantityrecieved} = $pendingorders[$i]->{'quantityreceived'};
-    $line{quantity} = $pendingorders[$i]->{'quantity'};
+    $line{title} = $pendingorders->[$i]->{'title'};
+    $line{author} = $pendingorders->[$i]->{'author'};
+    $line{unitprice} = $pendingorders->[$i]->{'unitprice'};
+    $line{ecost} = $pendingorders->[$i]->{'ecost'};
+    $line{quantityrecieved} = $pendingorders->[$i]->{'quantityreceived'};
+    $line{quantity} = $pendingorders->[$i]->{'quantity'};
     $line{total} = $total;
     $line{supplierid} = $supplierid;
     push @loop_orders, \%line;
