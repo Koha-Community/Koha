@@ -30,7 +30,7 @@ use Text::Wrap;
 #use Data::Dumper;
 #use Acme::Comment;
 
-$Text::Wrap::columns   = 15;
+$Text::Wrap::columns   = 14;
 $Text::Wrap::separator = "\n";
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
