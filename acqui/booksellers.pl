@@ -68,7 +68,7 @@ use C4::Bookseller;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/suppliers.tmpl",
+        template_name   => "acqui/booksellers.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

@@ -132,7 +132,7 @@ my $input = new CGI;
 # get_template_and_user used only to check auth & get user id
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/order.tmpl",
+        template_name   => "acqui/booksellers.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
