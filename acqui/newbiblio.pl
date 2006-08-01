@@ -177,10 +177,8 @@ my $CGIitemtype = CGI::scrolling_list(
 my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch ( sort keys %$branches ) {
-     my $selected = 1 if $thisbranch eq $branch;
      my %row = (
         value      => $thisbranch,
-        selected => $selected,
         branchname => $branches->{$thisbranch}->{'branchname'},
     );
     push @branchloop, \%row;
