@@ -285,9 +285,8 @@ while ( $i < $count2 ) {
 
     my @ordernumbers;
     foreach my $bibitem (@bibitems) {
-
-        ( $order, $ordernumber ) =
-          &GetOrder($result->{biblionumber},$bibitem->{biblioitemnumber} );
+        my $ordernumber = GetOrderNumber($result->{biblionumber},$bibitem->{biblioitemnumber});
+        $order = &GetOrder($ordernumber);
 
         #only show order if its current;
         my %order;
