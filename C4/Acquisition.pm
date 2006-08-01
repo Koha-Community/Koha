@@ -61,7 +61,7 @@ orders, basket and parcels.
   &GetPendingOrders &GetOrder &GetOrders
   &GetOrderNumber &GetLateOrders &NewOrder &DelOrder
   &SearchOrder &GetHistory
-  &ModOrder &ModReceiveOrder
+  &ModOrder &ModReceiveOrder &ModOrderBiblioNumber
   &GetParcels &GetParcel
 );
 
@@ -523,6 +523,33 @@ sub ModOrder {
         $sth->execute( $ordnum, $bookfund );
     }
     $sth->finish;
+}
+
+#------------------------------------------------------------#
+
+=head3 ModOrderBiblioNumber
+
+=over 4
+
+&ModOrderBiblioNumber($biblioitemnumber,$ordnum, $biblionumber);
+
+Modifies the biblioitemnumber for an existing order.
+Updates the order with order number C<$ordernum> and biblionumber C<$biblionumber>.
+
+=back
+
+=cut
+
+sub ModOrderBiblioNumber {
+    my ($biblioitemnumber,$ordnum, $biblionumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+      UPDATE aqorders
+      SET    biblioitemnumber = ?
+      WHERE  ordernumber = ?
+      AND biblionumber =  ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $biblioitemnumber, $ordnum, $biblionumber );
 }
 
 #------------------------------------------------------------#
