@@ -41,7 +41,7 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 @EXPORT = qw(
   	&get_label_options &get_label_items
   	&build_circ_barcode &draw_boundaries
-	&draw_box
+	&drawbox
 );
 
 =item get_label_options;
