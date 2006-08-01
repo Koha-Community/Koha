@@ -22,6 +22,24 @@
 
 # this script makes the items, addorder.pl has already made the biblio and biblioitem records: MASON
 
+
+=head1 NAME
+
+finishreceive.pl
+
+=head1 DESCRIPTION
+TODO
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+TODO
+
+=back
+
+=cut
+
 use strict;
 use C4::Output;
 use C4::Acquisition;
@@ -87,8 +105,9 @@ my $createbibitem =
 
 #get additional info on bib and bibitem from dbase for additional needed fields before modbiblio.
 ( my $bibliocount,     my @biblios )     = &getbiblio($biblionumber);
-( my $biblioitemcount, my @biblioitems ) =
-  &getbiblioitembybiblionumber($biblionumber);
+my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
+my $biblioitemcount = scalar @biblioitems;
+
 ( my $itemscount, my @items ) = &getitemsbybiblioitem($biblioitemnumber);
 
 my $bibliohash = {
@@ -145,12 +164,12 @@ my $itemhash = {
     replacement    => $replacement
 };
 
-# check if barcode exists, if so redirect back to acquire.pl and give message
+# check if barcode exists, if so redirect back to orderreceive.pl and give message
 my $error = &checkitems( 1, $barcode );
 #warn "barcode check for $barcode result = $error";
 if ($error) {
     print $input->redirect(
-		"/cgi-bin/koha/acqui/acquire.pl?recieve=$ordnum&biblio=$biblionumber&invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&barcodeexists=$barcode"
+		"/cgi-bin/koha/acqui/orderreceive.pl?recieve=$ordnum&biblio=$biblionumber&invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&barcodeexists=$barcode"
     );
 }
 # or if barcode is blank
@@ -205,10 +224,10 @@ else {
         );
 
         if ($error)
-        { #if  newitems failes then display error, and send them back to acquire.pl????
+        { #if  newitems failes then display error, and send them back to orderreceive.pl????
 
             print $input->redirect(
-			"/cgi-bin/koha/acqui/acquire.pl?recieve=$ordnum&biblio=$biblionumber&invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&newitemfailed=1"
+			"/cgi-bin/koha/acqui/orderreceive.pl?recieve=$ordnum&biblio=$biblionumber&invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&newitemfailed=1"
             );
         }
 
@@ -255,7 +274,7 @@ else {
     else {
 
         #        print $input->header;
-        delorder( $biblionumber, $ordnum );
+        DelOrder( $biblionumber, $ordnum );
         print $input->redirect("/acquisitions/");
     }
 }
