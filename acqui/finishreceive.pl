@@ -181,15 +181,8 @@ else {
 
 #lets do a lookup on aqorders, with ordnum, then insert biblioitem fiels with new biblioitem number
 
-        my $query =
-          "UPDATE aqorders SET biblioitemnumber = ? where ordernumber = ? 
-		and biblionumber =  ?";
-        my $sth = $dbh->prepare($query);
-        my $error = $sth->execute( $biblioitemnumber, $ordnum, $biblionumber );
-        #warn Dumper $error;
-        $sth->fetchrow_hashref;
-        $sth->finish;
-    }
+    &ModOrderBiblioNumber($biblioitemnumber,$ordnum, $biblionumber);
+    
     else {
         &modbiblio($bibliohash);
         &modbibitem($biblioitemhash);
