@@ -20,6 +20,98 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+
+=head1 NAME
+
+addorder.pl
+
+=head1 DESCRIPTION
+
+this script allows to add an order.
+It is called by :
+
+=item newbasket2.pl to add an order from nothing.
+
+=item newbiblio.pl to add an order from an existing biblio.
+
+=item suggestion-select.pl to add an order from an existing suggestion.
+
+=head1 CGI PARAMETERS
+
+All of the cgi parameters below are related to the new order.
+
+=over 4
+
+=item C<ordnum>
+the number of this new order.
+
+=item C<basketno>
+the number of this new basket
+
+=item C<booksellerid>
+the bookseller the librarian has to pay.
+
+=item C<existing>
+
+=item C<title>
+the title of the record ordered.
+
+=item C<author>
+the author of the record ordered.
+
+=item C<copyrightdate>
+the copyrightdate of the record ordered.
+
+=item C<ISBN>
+the ISBN of the record ordered.
+
+=item C<format>
+
+=item C<quantity>
+the quantity to order.
+
+=item C<list_price>
+the price of this order.
+
+=item C<branch>
+the branch where this order will be received.
+
+=item C<series>
+
+=item C<notes>
+Notes on this basket.
+
+=item C<bookfund>
+bookfund use to pay this order.
+
+=item C<sort1> & C<sort2>
+
+=item C<rrp>
+
+=item C<ecost>
+
+=item C<GST>
+
+=item C<budget>
+
+=item C<cost>
+
+=item C<sub>
+
+=item C<invoice>
+the number of the invoice for this order.
+
+=item C<publishercode>
+
+=item C<suggestionid>
+if it is an order from an existing suggestion : the id of this suggestion.
+
+=item C<donation>
+
+=back
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
