@@ -92,5 +92,5 @@ if ($data{'id'} != 0){
   $id=AddBookseller(\%data);
 }
 
-#redirect to order.pl
-print $input->redirect("order.pl?supplier=$id");
+#redirect to booksellers.pl
+print $input->redirect("booksellers.pl?supplier=$id");
