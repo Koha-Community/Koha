@@ -110,7 +110,7 @@ $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
 $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
 
 my ( $count, @results );
-@results  = GetBasketContent( $basketno, $order );
+@results  = GetOrders( $basketno, $order );
 $count = scalar @results;
 
 my $line_total;     # total of each line
