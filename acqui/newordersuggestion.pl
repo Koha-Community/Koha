@@ -18,7 +18,7 @@
 # $Id$
 
 =head1 NAME
-suggestion-select.pl
+newordersuggestion.pl
 
 =head1 DESCRIPTION
 this script allow to add an order from a existing suggestion.
