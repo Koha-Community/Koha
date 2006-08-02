@@ -39,10 +39,10 @@ function showChildren(mynumber) {
     <!-- TMPL_IF name="current_value" -->
         <!--TMPL_VAR Name="value" -->
     <!-- TMPL_ELSE -->
-        <a href="opac-authoritiesdetail.pl?authid=<!--TMPL_VAR Name="loopauthid" -->" title="Term"><!--TMPL_VAR Name="value" --></a>
+        <a href="opac-authoritiesdetail.pl?authid=<!--TMPL_VAR Name="loopauthid" -->" title="Reach this authority"><!--TMPL_VAR Name="value" --></a>
     <!-- /TMPL_IF -->
     <!--TMPL_IF Name="ifchildren" -->
-      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('<!--TMPL_VAR Name="loopauthid" -->');">+</a></sub><br/>
+      <sub><a class="parents" title="See narrower terms" href="JavaScript:showChildren('<!--TMPL_VAR Name="loopauthid" -->');">+</a></sub><br/>
       <!--TMPL_LOOP Name="loopchildren" -->
         <div name="<!--TMPL_VAR Name="loopauthid" -->c" class="child"> <a href="opac-authoritiesdetail.pl?authid=<!--TMPL_VAR Name="childauthid" -->"><!--TMPL_VAR Name="childvalue" --></a></div>
       <!--/TMPL_LOOP-->
