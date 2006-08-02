@@ -89,7 +89,7 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
       my %cell;
       my $elementdata = AUTHgetauthority($dbh,$element);
       $record= $elementdata if ($authid==$element);
-      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt);
+      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
       $cnt++;
     }
     push @loophierarchies, { 'loopelement' =>\@loophierarchy};

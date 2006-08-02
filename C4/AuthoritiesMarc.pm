@@ -1255,6 +1255,7 @@ sub BuildUnimarcHierarchies{
 sub BuildUnimarcHierarchy{
 	my $record = shift @_;
     my $class = shift @_;
+    my $authid_constructed = shift @_;
 	my $authid=$record->subfield('250','3');
     my %cell;
 	my $parents=""; my $children="";
@@ -1274,7 +1275,8 @@ sub BuildUnimarcHierarchy{
     $cell{"loopparents"}=\@loopparents if (scalar(@loopparents)>0);
     $cell{"loopchildren"}=\@loopchildren if (scalar(@loopchildren)>0);
     $cell{"class"}=$class;
-    $cell{"authid"}=$authid;
+    $cell{"loopauthid"}=$authid;
+    $cell{"current_value"} =1 if $authid eq $authid_constructed;
     $cell{"value"}=$record->subfield('250',"a");
 	return \%cell;
 }
@@ -1312,6 +1314,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.21  2006/08/02 10:17:09  tipaul
+# some improvements in buildHerarchies (unimarc hierarchies)
+#
 # Revision 1.9.2.20  2006/07/31 13:29:14  tipaul
 # - adding a 3rd option to authority search (search on $a of on all subfields of main entry)
 # - removing automatic % add at the end of a search & adding a warning for the user

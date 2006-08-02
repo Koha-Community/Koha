@@ -21,7 +21,7 @@ function showChildren(mynumber) {
     } else {
       children[i].style.display = "none";
     }
-  } 
+  }
 }
 </script>
 
@@ -29,18 +29,21 @@ function showChildren(mynumber) {
 <!--TMPL_LOOP Name="loophierarchies" -->
   <div class="hierarchy">
   <!--TMPL_LOOP Name="loopelement" -->
-    <div id="<!--TMPL_VAR Name="authid" -->" class="<!--TMPL_VAR Name="class" -->">
+    <div id="<!--TMPL_VAR Name="loopauthid" -->" class="<!--TMPL_VAR Name="class" -->">
     <!--TMPL_IF Name="ifparents" -->
       <!--TMPL_LOOP Name="loopparents" -->
-        <div name="<!--TMPL_VAR Name="authid" -->p" class="parent"> <a href="detail.pl?authid=<!--TMPL_VAR Name="parentauthid" -->"><!--TMPL_VAR Name="parentvalue" --></a></div>     
+        <div name="<!--TMPL_VAR Name="loopauthid" -->p" class="parent"> <a href="detail.pl?authid=<!--TMPL_VAR Name="parentauthid" -->"><!--TMPL_VAR Name="parentvalue" --></a></div>
       <!--/TMPL_LOOP-->
-      <sup><a class="parents" href="JavaScript:showParents('<!--TMPL_VAR Name="authid" -->');">+</a></sup>
     <!--/TMPL_IF -->
-    <a href="detail.pl?authid=<!--TMPL_VAR Name="authid" -->"><!--TMPL_VAR Name="value" --></a>
+    <!-- TMPL_IF name="current_value" -->
+        <!--TMPL_VAR Name="value" -->
+    <!-- TMPL_ELSE -->
+        <a href="detail.pl?authid=<!--TMPL_VAR Name="loopauthid" -->" title="Term"><!--TMPL_VAR Name="value" --></a>
+    <!-- /TMPL_IF -->
     <!--TMPL_IF Name="ifchildren" -->
-      <sub><a class="parents" href="JavaScript:showChildren('<!--TMPL_VAR Name="authid" -->');">+</a></sub><br/>
+      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('<!--TMPL_VAR Name="loopauthid" -->');">+</a></sub><br/>
       <!--TMPL_LOOP Name="loopchildren" -->
-        <div name="<!--TMPL_VAR Name="authid" -->c" class="child"> <a href="detail.pl?authid=<!--TMPL_VAR Name="childauthid" -->"><!--TMPL_VAR Name="childvalue" --></a></div>
+        <div name="<!--TMPL_VAR Name="loopauthid" -->c" class="child"> <a href="detail.pl?authid=<!--TMPL_VAR Name="childauthid" -->"><!--TMPL_VAR Name="childvalue" --></a></div>
       <!--/TMPL_LOOP-->
     <!-- /TMPL_IF -->
     </div>
