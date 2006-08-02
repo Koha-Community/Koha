@@ -22,7 +22,7 @@
 
 =head1 NAME
 
-newbasket2.pl
+neworderbiblio.pl
 
 =head1 DESCRIPTION
 this script allows to perform a new order from an existing record.
@@ -122,7 +122,7 @@ my $count = scalar @booksellers;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/newbasket2.tmpl",
+        template_name   => "acqui/neworderbiblio.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -131,7 +131,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-#my $template = gettemplate("acqui/newbasket2.tmpl");
+#my $template = gettemplate("acqui/neworderbiblio.tmpl");
 #print startpage();
 #print startmenu('acquisitions');
 my $invalidsearch;
