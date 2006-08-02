@@ -6,7 +6,7 @@
 <h1>Shopping Basket For: <!-- TMPL_VAR name="bookselname" --></h1>
 
 <div id="acqui_newbasket2_add">
-	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
+	<a href="neworderempty.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
 	| <a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">View Basket</a> | 
 	<form class="inline" action="/cgi-bin/koha/acqui/neworderbiblio.pl">
 	<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
@@ -34,7 +34,7 @@
 	<!-- TMPL_LOOP name="loopresult" -->
 		<tr>
 			<td>
-				<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR name="sub" -->&amp;author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
+				<a href="/cgi-bin/koha/acqui/neworderempty.pl?sub=<!-- TMPL_VAR name="sub" -->&amp;author=<!-- TMPL_VAR name="author2" -->&amp;copyright=<!-- TMPL_VAR name="copyright" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->&amp;title=<!-- TMPL_VAR name="title2" -->">
 					<!-- TMPL_VAR name="title" -->
 				</a>
 			</td>

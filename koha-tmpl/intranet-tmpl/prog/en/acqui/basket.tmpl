@@ -57,7 +57,7 @@
 					<!-- TMPL_ELSE -->
 						<td>
 							<p>
-							<a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><br/>
+							<a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><br/>
 								<!-- TMPL_VAR NAME="author" -->
 								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
 								<!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -120,13 +120,13 @@
 	</div>
 	<div id="acqui_basket_add">
 		<h2>Add To Order</h2>
-		<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
+		<form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
 			<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
 			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
 			<ul><li>From an existing record: <input type="text"  size="25"   name="search" />
 			<input type="submit" value="Search" /></li>
 			<li><a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a Suggestion</a></li>
-			<li><a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">New Record</a></li>
+			<li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">New Record</a></li>
 			</ul>
 		</form>
 	</div>
