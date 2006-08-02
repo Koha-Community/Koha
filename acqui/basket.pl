@@ -54,6 +54,7 @@ my $basket = getbasket($basketno);
 # warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
+$booksellers[0]->{'postal'} =~ s/\n/<br\/>/g;
 
 # get librarian branch...
 if (C4::Context->preference("IndependantBranches")) {
@@ -129,10 +130,7 @@ $template->param(basketno => $basketno,
 				active => $booksellers[0]->{'active'},
 				booksellerid=> $booksellers[0]->{'id'},
 				name => $booksellers[0]->{'name'},
-				address1 => $booksellers[0]->{'address1'},
-				address2 => $booksellers[0]->{'address2'},
-				address3 => $booksellers[0]->{'address3'},
-				address4 => $booksellers[0]->{'address4'},
+				postal => $booksellers[0]->{'postal'},
 				entrydate => format_date($results[0]->{'entrydate'}),
 				books_loop => \@books_loop,
 				count =>$count,

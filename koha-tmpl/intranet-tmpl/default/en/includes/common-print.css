@@ -1,5 +1,6 @@
 div,
 .user,
+h2,h1,
 .doNotPrint
 {
     /* Hides all the elements irrelevant for printing */
@@ -28,11 +29,25 @@ tr {
 	border:1px solid #000000;
 }
 
+/* cells that are numbers => aligned right */
+td.number {
+	border-left:0px;
+	text-align:right;
+}
 
-div#mainbloc, 
-div#bloc100
+
+div#bloc100,
+div#mainbloc
 {
 	display: block;
+}
+
+div#bloc25
+{
+	display: block;
+/*	border:1px solid #000000;*/
+	margin-bottom:10px;
+	padding-bottom:0px;
 }
 
 

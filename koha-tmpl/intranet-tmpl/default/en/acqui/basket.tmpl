@@ -3,23 +3,23 @@
 <div id="mainbloc">
 	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->shopping Basket <b><!-- TMPL_VAR NAME="basketno" --> </b>for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
 	<!-- TMPL_UNLESS name="closedate" -->
+	<!-- TMPL_IF name="basketno" -->
 		<div id="bloc25">
 			<h2 class="acquisition">Basket info</h2>
-			<p><label class="label100">Basket number<label> <!-- TMPL_VAR NAME="basketno" --></p>
 			<p><label class="label100">Managed by<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
+			<p><label class="label100">Basket number<label> <!-- TMPL_VAR NAME="basketno" --></p>
 			<p><label class="label100">open on<label> <!-- TMPL_VAR NAME="creationdate" --></p>
-			<p><label class="label100">for<label> <!-- TMPL_VAR NAME="name" --></p>
-			<p><label class="label100">Invoice number </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
 			<!-- TMPL_IF name="closedate" -->
 				Closed on <!-- TMPL_VAR name="closedate" -->
 			<!-- TMPL_ELSE -->
-				<a href="/cgi-bin/koha/acqui/order.pl?op=close&amp;basket=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->" class="button acquisition">Close</a>
+			<p><a href="/cgi-bin/koha/acqui/order.pl?op=close&amp;basket=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->" class="button acquisition">Close basket</a></p>
 			<!-- /TMPL_IF -->
 		</div>
+    <!-- /TMPL_IF -->
 	<!-- /TMPL_UNLESS -->
-	<div id="bloc25" style="align:right">
+	<div id="bloc25">
 		<p><!-- TMPL_VAR name="name" --></p>
-		<p><!-- TMPL_VAR name="address1" --></p>
+		<p><!-- TMPL_VAR name="postal" --></p>
 		<p><!-- TMPL_VAR name="address2" --></p>
 		<p><!-- TMPL_VAR name="address3" --></p>
 		<p><!-- TMPL_VAR name="address4" --></p>
@@ -30,7 +30,7 @@
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
 				<th class="acquisition doNotPrint">Order</th>
-				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[order]</a></th>
+				<th class="acquisition">Publisher<span class="doNotPrint"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[order]</a></span></th>
 				<th class="acquisition">Title</th>
 				<th class="acquisition doNotPrint">rrp</th>
 				<th class="acquisition">est</th>
@@ -87,7 +87,10 @@
 			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
 			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
 			<tr>
-				<td colspan="2" class="acquisition">
+				<td class="acquisition doNotPrint">
+					&nbsp;
+				</td>
+				<td class="acquisition">
 					&nbsp;
 				</td>
 				<td class="acquisition number">
@@ -100,7 +103,7 @@
 					<p><!-- TMPL_VAR NAME="gist_est" --></p>
 					<p><!-- TMPL_VAR NAME="grand_total_est" --></p>
 				</td>
-				<td class="acquisition">
+				<td class="acquisition doNotPrint">
 					<p>&nbsp;</p>
 					<p>&nbsp;</p>
 					<p>&nbsp;</p>
