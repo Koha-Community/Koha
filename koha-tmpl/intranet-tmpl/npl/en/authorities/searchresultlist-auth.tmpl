@@ -85,9 +85,9 @@
 		<div id="resultlist">
 			<table>
 				<tr>
-					<th>Summary</th>
-					<th>Used</th>
-					<th>Get It!</th>
+					<th width="80%">Authorized Headings</th>
+					<th width="10%"># of Records</th>
+					<th width="10%">Full Authorized Heading</th>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -97,10 +97,14 @@
 					</td>
 				<!-- TMPL_LOOP NAME="result" -->
 					<tr>
+						<!-- TMPL_IF NAME="used" -->
+						<td><a href="/cgi-bin/koha/blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->&amp;tagid=<!-- TMPL_VAR NAME="tagid" -->"><!-- TMPL_VAR NAME="summary" --></a></td>
+						<!-- TMPL_ELSE -->
 						<td><!-- TMPL_VAR NAME="summary" --></td>
-						<td><!-- TMPL_VAR NAME="used" --> times</td>
+						<!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="used" --></td>
 						<td>
-							<a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->&amp;tagid=<!-- TMPL_VAR NAME="tagid" -->')">Choose</a>
+						<a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR NAME=authid -->">View Full Heading</a>
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
