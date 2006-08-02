@@ -11,7 +11,7 @@
 <ul>
 <li>Invoice: <!-- TMPL_VAR name="invoice" --></li>
 <li>Received by: <!-- TMPL_VAR name="user" --></li>
-<li>Date: <!-- TMPL_VAR name="datereceived"--></li>
+<li>Date: <!-- TMPL_VAR name="formatteddatereceived"--></li>
 </ul>
 	
 	<h2> Items in parcel</h2>
@@ -64,6 +64,10 @@
 			</td>
 			<td colspan="2" scope="row">GST</td>
 			<td><!-- TMPL_VAR NAME="gst" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" scope="row">FREIGHT</td>
+			<td><!-- TMPL_VAR NAME="freight" --></td>
 		</tr>
 		<tr>
 			<td colspan="2" scope="row">TOTAL</td>
