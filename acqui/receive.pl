@@ -31,6 +31,7 @@ use CGI;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
+use C4::Date;
 use strict;
 
 my $input=new CGI;
@@ -123,6 +124,7 @@ $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
 						datereceived => $date,
+						formatteddatereceived => format_date($date),
 						name => $booksellers[0]->{'name'},
 						supplierid => $supplierid,
 						gst => $gst,

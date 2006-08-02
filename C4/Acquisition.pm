@@ -503,8 +503,8 @@ sub getallorders {
   my ($supplierid)=@_;
   my $dbh = C4::Context->dbh;
   my @results = ();
-	my $strsth ="Select count(*),authorisedby,creationdate,aqbasket.basketno,
-closedate,surname,firstname,aqorders.biblionumber,aqorders.title, aqorders.ordernumber 
+	my $strsth ="Select authorisedby,creationdate,aqbasket.basketno,
+closedate,surname,firstname,aqorders.biblionumber,aqorders.title,aqorders.author,aqorders.isbn, aqorders.ordernumber, quantity, quantityreceived
 from aqorders 
 left join aqbasket on aqbasket.basketno=aqorders.basketno 
 left join borrowers on aqbasket.authorisedby=borrowers.borrowernumber
@@ -517,7 +517,7 @@ quantityreceived is NULL) and datecancellationprinted is NULL ";
 			$strsth .= " and (borrowers.branchcode = '".$userenv->{branch}."' or borrowers.branchcode ='')";
 		}
 	}
-	$strsth.=" group by basketno order by aqbasket.basketno";
+	$strsth.=" order by aqbasket.basketno";
 	my $sth=$dbh->prepare($strsth);
   $sth->execute($supplierid);
   while (my $data=$sth->fetchrow_hashref){

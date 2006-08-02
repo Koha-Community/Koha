@@ -2,12 +2,12 @@
 
 <div id="mainbloc">
 	<h1 class="acquisition">
-			Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> Invoice <i><!-- TMPL_VAR NAME="invoice" --></i>
+			Receipt parcel for <i><!-- TMPL_VAR NAME="name" --></i>
 	</h1>
 	
 	<div id="bloc25">
-		Invoice: <!-- TMPL_VAR NAME="invoice" --><br>
-        <!-- TMPL_VAR name="datereceived"-->
+		<p><label>Invoice</label><!-- TMPL_VAR NAME="invoice" --></p>
+        <p><label>Date</label> <!-- TMPL_VAR name="formatteddatereceived"--></p>
 	</div>
 	
 	<div id="bloc25">
@@ -30,35 +30,29 @@
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-				<td><!-- TMPL_VAR NAME="ecost" --></td>
-				<td><!-- TMPL_VAR NAME="quantity" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
 				<td></td>
-				<td><!-- TMPL_VAR NAME="unitprice" --></td>
-				<td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
-				<td><!-- TMPL_VAR NAME="total" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="unitprice" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="total" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
-		<tr bgcolor="white">
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"></th>
-			<th class="acquisition"><!-- TMPL_VAR NAME="tototal" --></th>
-		</tr>
 		<tr>
-			<td colspan="5" rowspan=2  bgcolor="#ffdf61">
+			<td colspan="5" rowspan=3  bgcolor="#ffdf61">
 			<b>HELP</b>
 				<p>The total at the bottom of the page should be within a few cents of the total for the invoice.</p>
 			</td>
-			<td colspan="2" align="right"><b>GST</b></td>
-			<td><!-- TMPL_VAR NAME="gst" --></td>
+			<td colspan="2"  class="acquisition number"><b>GST</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="gst" --></td>
 		</tr>
-		<tr bgcolor="white">
-			<td colspan="2" align="right" ><b>TOTAL</b></td>
-			<td><!-- TMPL_VAR NAME="grandtot" --></td>
+		<tr>
+			<td colspan="2" class="acquisition number"><b>FREIGHT</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="freight" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="acquisition number"><b>TOTAL</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="grandtot" --></td>
 		</tr>
 	</table>
 	</div>
@@ -80,13 +74,17 @@
 		<tr>
 			<th class="acquisition">Basket</th>
 			<th class="acquisition">Title</th>
+			<th class="acquisition">Ordered</th>
+			<th class="acquisition">Received</th>
 			<th class="acquisition"></th>
 		</tr>
-		<!-- TMPL_VAR NAME="countpending" -->
+		<!-- TMPL_VAR NAME="countpending" --> lines
 		<!-- TMPL_LOOP NAME="loop_orders" -->
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="title" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
                 <td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&catview=yes" class="button acquisition">Recieve</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
