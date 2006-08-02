@@ -89,7 +89,7 @@ sub run_query {		## Run the query and store the biblionumbers:
        	my $sth_get = $dbh->prepare("$sql_query");
 
        	## Send the query to the database:
-       	$sth_get->execute($query);
+       	$sth_get->execute($args->{RPN}->{query}->{term});
 	my $count = 0;
 	while(my ($data)=$sth_get->fetchrow_array) {
 		
@@ -103,14 +103,14 @@ sub run_query {		## Run the query and store the biblionumbers:
        	print "got search: ", $args->{RPN}->{query}->render(), "\n";
 }
 
-sub search_handler {		
+sub search_handler {
     	my($args) = @_;
 	## Place the user's query into a variable 
 	my $query = $args->{QUERY};
 	
 	## The actual Term
 	my $term = $args->{term};
-	$term =~ s| |\%|g;
+	$term =~ s| |\%|g if $term;
         $term .= "\%";         ## Add the wildcard to search term
 
 	$_ = "$query";
@@ -236,7 +236,7 @@ sub search_handler {
 		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.subject LIKE ?";
                 &run_query($sql_query, $query, $args);
         }
-	elsif (/1=1016/) {       ## any 
+    else {
                 $query =~ s|\@attrset 1.2.840.10003.3.1 \@attr 1=1016 ||g;
                 $query  =~ s|"||g;
                 $query  =~ s| |%|g;
@@ -258,8 +258,8 @@ sub search_handler {
 		$query =~ s|5=1||g;     ## truncation
 		
 		$query .= "\%";         ## Add the wildcard to search term
-                print "$query\n";
-		my $sql_query = "SELECT bibid FROM marc_word WHERE word LIKE?";
+                print "Querying : $query\n";
+		my $sql_query = "SELECT bibid FROM marc_word WHERE word LIKE ?";
                 &run_query($sql_query, $query, $args);
         }
 }
