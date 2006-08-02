@@ -106,11 +106,11 @@ if ($op eq "do_search") {
 	}
 	$listtags =~s/,$/)/;
 	$strsth .= $listtags." and marc_word.tagsubfield=concat(marc_subfield_table.tag,marc_subfield_table.subfieldcode) group by subfieldvalue ";
-# 	warn "search in biblio : ".$strsth;
+	warn "search in biblio : ".$strsth;
 	my $value = uc($search[0]);
 	$value=~s/\*/%/g;
-	$value.= "%" if not($value=~m/%/);
-# 	warn " texte : ".$value;
+# 	$value.= "%" if not($value=~m/%/);
+	warn " texte : ".$value;
 
 	$sth=$dbh->prepare($strsth);
 	$sth->execute($value);
@@ -146,10 +146,12 @@ if ($op eq "do_search") {
 	my @authresults;
 	my $authnbresults;
 	while ((my $authtypecode) = $sth->fetchrow) {
+	warn "AUTH search $authtypecode";
 		my ($curauthresults,$nbresults) = authoritysearch($dbh,[''],[''],[''],['contains'],
 														\@search,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
 		push @authresults, @$curauthresults;
 		$authnbresults+=$nbresults;
+		warn "AUTH SEARCH DONE";
 #		warn "auth : $authtypecode nbauthresults : $nbresults";
 	}
 	

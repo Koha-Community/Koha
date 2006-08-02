@@ -61,7 +61,46 @@ my $authid = $query->param('authid');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
-my $record =AUTHgetauthority($dbh,$authid);
+# open template
+my ($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "opac-authoritiesdetail.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     debug => 1,
+			     });
+
+my $record;
+if (C4::Context->preference("AuthDisplayHierarchy")){
+  my $trees=BuildUnimarcHierarchies($authid);
+#   warn "trees :$trees";
+  my @trees = split /;/,$trees ;
+  push @trees,$trees unless (@trees);
+  my @loophierarchies;
+  foreach my $tree (@trees){
+#     warn "tree :$tree";
+
+    my @tree=split /,/,$tree;
+    push @tree,$tree unless (@tree);
+    my $cnt=0;
+    my @loophierarchy;
+    foreach my $element (@tree){
+#       warn "tree :$element";
+      my %cell;
+      my $elementdata = AUTHgetauthority($dbh,$element);
+      $record= $elementdata if ($authid==$element);
+      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
+      $cnt++;
+    }
+    push @loophierarchies, { 'loopelement' =>\@loophierarchy};
+    $template->param(
+      'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
+      'loophierarchies' =>\@loophierarchies,
+    );
+  }
+} else {
+  $record=AUTHgetauthority($dbh,$authid);
+}
 my $count = AUTHcount_usage($authid);
 
 # find the marc field/subfield used in biblio by this authority
@@ -72,15 +111,6 @@ while (my ($tagfield) = $sth->fetchrow) {
 	$biblio_fields.= $tagfield."9,";
 }
 chop $biblio_fields;
-
-# open template
-my ($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "opac-authoritiesdetail.tmpl",
-			     query => $query,
-			     type => "opac",
-			     authnotrequired => 1,
-			     debug => 1,
-			     });
 
 # fill arrays
 my @loop_data =();
