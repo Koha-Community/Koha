@@ -104,7 +104,7 @@ sub MARCfindbreeding {
 				my $auth_fields = C4::Context->preference("z3950AuthorAuthFields");
 				my @auth_fields= split /,/,$auth_fields;
 				my $field;
-				warn $record->as_formatted;
+				#warn $record->as_formatted;
 				if ($record->field($tag)){
 					foreach my $tmpfield ($record->field($tag)->subfields){
 #						foreach my $subfieldcode ($tmpfield->subfields){
@@ -116,7 +116,7 @@ sub MARCfindbreeding {
 							$field=MARC::Field->new($tag,"","",$subfieldcode=>$subfieldvalue) if ($subfieldcode ne $subfield);
 						}
 					}
-					warn $field->as_formatted;
+					#warn $field->as_formatted;
 #					}
 				}
 				$record->delete_field($record->field($tag));
