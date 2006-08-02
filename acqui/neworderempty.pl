@@ -23,7 +23,7 @@
 
 =head1 NAME
 
-newbiblio.pl
+neworderempty.pl
 
 =head1 DESCRIPTION
 this script allows to create a new record to order it. This record shouldn't exist
@@ -133,7 +133,7 @@ else {    #modify order
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/newbiblio.tmpl",
+        template_name   => "acqui/neworderempty.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
