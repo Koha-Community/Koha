@@ -180,10 +180,10 @@ sub authoritysearch {
 		my $authref = getauthtype($authtypecode);
 		my $authtype =$authref->{authtypetext};
 		my $summary = $authref->{summary};
-        my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
-        my $sth = $dbh->prepare($query_auth_tag);
-        $sth->execute($authtypecode);
-        my $auth_tag_to_report = $sth->fetchrow;
+		my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
+		my $sth = $dbh->prepare($query_auth_tag);
+		$sth->execute($authtypecode);
+		my $auth_tag_to_report = $sth->fetchrow;
 		# find biblio MARC field using this authtypecode (to jump to biblio)
 		my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
 		$sth->execute($authtypecode);
@@ -197,16 +197,15 @@ sub authoritysearch {
 		# if the library has a summary defined, use it. Otherwise, build a standard one
 		if ($summary) {
 			my @fields = $record->fields();
-            $reported_tag = '$9'.$result[$counter];
+            		$reported_tag = '$9'.$result[$counter];
 			foreach my $field (@fields) {
 				my $tag = $field->tag();
 				my $tagvalue = $field->as_string();
 				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
 				if ($tag<10) {
-                    if ($tag eq '001') {
-                        $reported_tag.='$3'.$field->data();
-                    }
-
+					if ($tag eq '001') {
+					$reported_tag.='$3'.$field->data();
+					}
 				} else {
 					my @subf = $field->subfields;
 					for my $i (0..$#subf) {
@@ -214,9 +213,9 @@ sub authoritysearch {
 						my $subfieldvalue = $subf[$i][1];
 						my $tagsubf = $tag.$subfieldcode;
 						$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
-                        if ($tag eq $auth_tag_to_report) {
-                            $reported_tag.='$'.$subfieldcode.$subfieldvalue;
-                        }
+						if ($tag eq $auth_tag_to_report) {
+			    				$reported_tag.='$'.$subfieldcode.$subfieldvalue;
+						}
 
 					}
 				}
@@ -224,7 +223,7 @@ sub authoritysearch {
 			$summary =~ s/\[(.*?)]//g;
 			$summary =~ s/\n/<br>/g;
 		} else {
-			my $heading; # = $authref->{summary};
+			my $heading; 
 			my $altheading;
 			my $seeheading;
 			my $see;
@@ -266,7 +265,7 @@ sub authoritysearch {
 					} elsif ($record->field('148')) {
 	                                        $heading.= $field->as_string('abvxyz68');
 					} elsif ($record->field('150')) {
-											$heading.= $field->as_string('abvxyz68');	
+						$heading.= $field->as_string('abvxyz68');	
 					} elsif ($record->field('151')) {
 	                                        $heading.= $field->as_string('avxyz68');
 					} elsif ($record->field('155')) {
@@ -285,14 +284,15 @@ sub authoritysearch {
 				} #See From
 				foreach my $field ($record->field('4..')) {
 					$seeheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$seeheading."<br />";	
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
 				} #See Also
 				foreach my $field ($record->field('5..')) {
 					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
 					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$altheading."<br />";
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
 				}
-				$summary.=$heading.$seeheading.$altheading;
+				#$summary.=$heading.$seeheading.$altheading;
+				$summary = "<b><a href='/cgi-bin/koha/search.marc/search.pl?type=intranet&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br>".$seeheading.$altheading.$summary;	
 			}
 		}
 		# then add a line for the template loop
@@ -1314,6 +1314,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.22  2006/08/02 23:43:51  kados
+# partial fix to MARC21 authorities headings display
+#
 # Revision 1.9.2.21  2006/08/02 10:17:09  tipaul
 # some improvements in buildHerarchies (unimarc hierarchies)
 #
