@@ -8,7 +8,7 @@
 <div id="acqui_newbasket2_add">
 	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;sub=<!-- TMPL_VAR name="parsub" -->">Add New Biblio</a>
 	| <a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">View Basket</a> | 
-	<form class="inline" action="/cgi-bin/koha/acqui/newbasket2.pl">
+	<form class="inline" action="/cgi-bin/koha/acqui/neworderbiblio.pl">
 	<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
 	<input type="hidden" name="basket" value="<!-- TMPL_VAR name="basket" -->" />
 	New Search: <input type="text"  size="25" name="search" /></form>
@@ -59,7 +59,7 @@
 	</table>
 
 	<!-- TMPL_IF name="offsetover" -->
-		<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">
+		<a href="/cgi-bin/koha/acqui/neworderbiblio.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">
 			Next
 		</a>
 	<!-- /TMPL_IF -->
