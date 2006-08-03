@@ -51,7 +51,7 @@
 		<p>
 			<label class="labelsubfield">
 				<!-- TMPL_UNLESS name="hide_marc" -->
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/prev.gif" onClick="javascript:upSubfield('<!-- TMPL_VAR name="index" -->')">
+					<a href="#" onclick=" onclick="upSubfield('<!-- TMPL_VAR name="index" -->')"; return false;"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" border="0" /></a>
 						<input type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1">
 				<!-- TMPL_ELSE -->
 						<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
