@@ -84,7 +84,7 @@ if ($wthdrawn == 0 && $override ne 'yes'){
 	     notes        => $notes,
 	     homebranch   => $homebranch,
 	     lost         => $lost,
-	     wthdranw     => $wthdrawn
+	     wthdrawn     => $wthdrawn
 	     });
   if ($lost ==1){
     my $dbh = C4::Context->dbh;
