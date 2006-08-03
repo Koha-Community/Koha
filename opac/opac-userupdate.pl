@@ -29,7 +29,7 @@ my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 # handle the new information....
 # collect the form values and send an email.
-my @fields = ('title', 'surname', 'firstname', 'phone', 'faxnumber', 'streetaddress', 'emailaddress', 'city');
+my @fields = ('title', 'surname', 'firstname', 'phone', 'faxnumber', 'physstreet', 'streetaddress', 'emailaddress', 'city');
 my $update;
 my $updateemailaddress= C4::Context->preference('KohaAdminEmailAddress');
 if ($updateemailaddress eq '') {
