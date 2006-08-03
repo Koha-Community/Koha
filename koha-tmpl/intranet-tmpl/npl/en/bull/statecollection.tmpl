@@ -26,7 +26,7 @@
 	
 	<h2>Awaited or Late Subscription Issues</h2>
 	<table>
-	<caption>Next Expected Issue:</caption>
+	<caption>Recent and Upcoming Issues:</caption>
 	<!-- TMPL_LOOP name="serialslist" -->
 	<tr>
 		<th scope="row"><label for="serialseq">Numbered: </label></th><td>
@@ -85,7 +85,7 @@
 		<!--TMPL_IF Name="serialadditems" -->
 				<tr><th><label for="barcode">Barcode: </label></th><td><input type="text" id="barcode" name="barcode" value="" size="20" maxlength="20" /></td></tr>
 		<tr>
-				<th><label for="itemcallnumber">Item Callnumber: </label></th> <td><input type="text" id="itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
+				<th><label for="itemcallnumber">Item Callnumber: </label></th> <td><input type="text" id="itemcallnumber" name="itemcallnumber" value="" size="10" /></td></tr>
 		<tr><th><label for="branch">Branch:</label> </th>
 				<td><select  id="branch" name="branch" size="1">
 			<!-- TMPL_LOOP name="branchloop" -->
@@ -149,8 +149,8 @@
 			</td>
 		</tr>
 		<!--TMPL_IF name="serialadditems" -->
-			<tr><th scope="row"><label for="manual-itemcallnumber">Callnumber: </label></th><td>
-				 <input type="text" id="manual-itemcallnumber" name="itemcallnumber" value="" size="10" maxlength="15" /></td></tr>
+			<tr><th scope="row"><label for="manual-itemcallnumber">Item Callnumber: </label></th><td>
+				 <input type="text" id="manual-itemcallnumber" name="itemcallnumber" value="" size="10" /></td></tr>
 			
 				<tr><th scope="row"><label for="manual-barcode">Barcode: </label></th><td> <input type="text" id="manual-barcode" name="barcode" value="" size="20" maxlength="20" />
 			</td></tr>
