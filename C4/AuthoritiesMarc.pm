@@ -283,16 +283,15 @@ sub authoritysearch {
 					}
 				} #See From
 				foreach my $field ($record->field('4..')) {
-					$seeheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
+					$summary.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br />";	
 				} #See Also
 				foreach my $field ($record->field('5..')) {
-					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
-					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+					$altheading.= "&nbsp;&nbsp;&nbsp;<b>".$field->as_string()."</b><br />";
 					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
 				}
-				#$summary.=$heading.$seeheading.$altheading;
-				$summary = "<b><a href='/cgi-bin/koha/search.marc/search.pl?type=intranet&op=do_search&marclist=$tags_using_authtype&operator==&value=$result[$counter]&and_or=and&excluding='>".$heading."</a></b><br>".$seeheading.$altheading.$summary;	
+				$summary = "<b>".$heading."</b>".$seeheading.$altheading.$summary;
 			}
 		}
 		# then add a line for the template loop
@@ -1314,6 +1313,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.23  2006/08/03 00:50:34  kados
+# fix to bug 1130: Summary display broken for MARC21 Authorities
+#
 # Revision 1.9.2.22  2006/08/02 23:43:51  kados
 # partial fix to MARC21 authorities headings display
 #
