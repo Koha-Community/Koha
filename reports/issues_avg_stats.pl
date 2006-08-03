@@ -524,16 +524,19 @@ sub calculate {
 		$emptycol=1 if ($col eq undef);
 		$col = "zzEMPTY" if ($col eq undef);
 		$row = "zzEMPTY" if ($row eq undef);
-#		warn "506 row :".$row." column :".$col;
+# 		warn "506 row :".$row." column :".$col;
 		my @result =split /:/,DateCalc($returndate,$issuedate) ;
 #  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
 #  and seconds between the two
+#         warn " dateretour $returndate , date pret $issuedate";
+#         warn " retour de DateCalc :".DateCalc($returndate,$issuedate);
 		$loanlength = $result[2]*7+$result[3];
-#		warn "512 Same row and col DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
-#		warn "513 row :".$row." column :".$col;
+# 		warn "512 Same row and col DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
+# 		warn "513 row :".$row." column :".$col;
 		$table{$row}->{$col}+=$weight*$loanlength;
-#		$table{$row}->{totalrow}+=$weight*$loanlength;
-		$cnttable{$row}->{$col}= 1;
+# 		warn "".$table{$row}->{$col};
+		$table{$row}->{totalrow}+=$weight*$loanlength;
+# 		$cnttable{$row}->{$col}= 1;
 		$wgttable{$row}->{$col}+=$weight;
 	}
 	
@@ -545,12 +548,16 @@ sub calculate {
 	# and the number matches the number of columns
 		my $colcount=0;
 		foreach my $col ( @loopcol ) {
-			my $value =$table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} / $wgttable{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} if ($table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}});
+            my $tmpcol = ((($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle});
+#             warn "row : $row col:$tmpcol  TABLE : ".$table{$row}->{$tmpcol}." POIDS : ".$wgttable{$row}->{$tmpcol};
+            my $value = $table{$row}->{$tmpcol} / $wgttable{$row}->{$tmpcol} if ($table{$row}->{$tmpcol});
 
-			$table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} = $value;
+			$table{$row}->{$tmpcol} = $value;
 			$table{$row}->{totalrow}+=$value;
-			#warn "row : $row col:$col  $cnttable{$row}->{(($col->{coltitle} eq \"NULL\")or ($col->{coltitle} eq \"\"))?\"zzEMPTY\":$col->{coltitle}}";
-			$colcount+=$cnttable{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}};
+			
+#             warn "row : $row col:$tmpcol  TABLE : ".$table{$row}->{$tmpcol}." POIDS : ".$wgttable{$row}->{$tmpcol};
+            
+			$colcount+=$cnttable{$row}->{$tmpcol};
 			push @loopcell, {value => ($value)?sprintf("%.2f",$value):0  } ;
 		}
 		#warn "row : $row colcount:$colcount";
