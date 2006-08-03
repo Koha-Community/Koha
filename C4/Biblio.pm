@@ -710,6 +710,8 @@ sub MARCdelitem {
       $dbh->prepare(
         "delete from marc_subfield_table where bibid=? and tagorder=?");
     $sth->execute( $bibid, $tagorder );
+    $sth = $dbh->prepare("delete from marc_word where bibid=? and tagorder=?");
+    $sth->execute( $bibid, $tagorder );
 }
 
 sub MARCmoditem {
@@ -3010,6 +3012,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.59  2006/08/03 16:10:53  tipaul
+# fix for 1052 : Major Bug in MARC tables Sync
+#
 # Revision 1.115.2.58  2006/06/19 13:18:17  tipaul
 # reverting cloneTag bugs (see joshua mail on koha-devel) :
 # * going back to a previous version, with server call to clone a Tag
