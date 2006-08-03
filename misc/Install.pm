@@ -1764,7 +1764,7 @@ $messages->{'MysqlRootPassword'}->{en} =
 To create the koha database, please enter your
 mysql server's root user password:
 
-Password: |;	#'
+Password: |;
 
 $messages->{'CreatingDatabase'}->{en} = heading('CREATING DATABASE') . qq|
 Creating the MySQL database for Koha...
@@ -1828,12 +1828,10 @@ sub databasesetup {
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
 	startsysout();
-	print system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\" mysql\;");
-	system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\" mysql");
-	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
+	my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "create", "$database");
+	system("$mysqldir/bin/mysql -u$mysqluser -e \"GRANT ALL PRIVILEGES on ".$database.".* to '$user' IDENTIFIED BY '$pass' \" mysql");
 	# Change to admin user login
 	setmysqlclipass($pass);
-	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "create", "$database");
 	if ($result) {
 		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
 	} else {
