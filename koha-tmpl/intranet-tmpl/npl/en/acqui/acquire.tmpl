@@ -80,11 +80,7 @@
 				<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
 				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
 				<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
-				<!-- TMPL_IF name="catview" -->
 					<input type="submit" class="submit"  name="submit" value="Save" />
-				<!-- TMPL_ELSE -->
-					<a href="/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;id=<!-- TMPL_VAR NAME="booksellerid" -->">Edit</a>
-				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 	</table>
