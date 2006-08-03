@@ -1,15 +1,10 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: <!-- TMPL_IF NAME="searchdesc" -->Search results for <!-- TMPL_VAR NAME="searchdesc" --><!-- TMPL_ELSE -->You did not specify any seach criteria<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Search Results<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <!-- Search Results Table -->
 <div id="main">
-<h3><!-- TMPL_IF NAME="searchdesc" -->
-	You searched for <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span>
-<!-- TMPL_ELSE -->
-	You did not specify any search criteria
-<!-- /TMPL_IF -->
-</h3>
+<h3>Search Results</h3>
 <!-- TMPL_IF NAME="numrecords" -->
 <div id="pages"><!-- TMPL_IF NAME="displayprev" -->
 	<a class="pages" href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">&lt;&lt;Prev</a>
