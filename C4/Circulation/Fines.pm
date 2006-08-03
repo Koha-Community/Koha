@@ -238,6 +238,24 @@ sub UpdateFine {
   # account type has one of several values, but what does this _mean_?
   # Does it look up existing fines for this item?
   # FIXME - What are these various account types? ("FU", "O", "F", "M")
+  # +   #  L    : Lost Item
+  # +   #  LR   : Lost and Replaced ?
+  # +   #  F    : Fine
+  # +   #  FU   : Fine Updated
+  # +   #  FN   : 
+  # +   #  O    : Overdue ?
+  # +   #  A    : Account Management Fee
+  # +   #  N    : New Card
+  # +   #  M    : Sundry
+  # +   #  REF  : Cash Refund
+  # +   #  Rep  : Replaced ?
+  # +   #  Res  : 
+  # +   #  Rent : Rental
+  # +   #  C    : Credit
+  # +   #  CR   : Credit for Returned book ?
+  # +   #  F    : Forgiven
+  # +   #  Pay  : Payment
+  # +   #  W    : Write Off
   my $sth=$dbh->prepare("Select * from accountlines where itemnumber=? and
   borrowernumber=? and (accounttype='FU' or accounttype='O' or
   accounttype='F' or accounttype='M') and description like ?");
