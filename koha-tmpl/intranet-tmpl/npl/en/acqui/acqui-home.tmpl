@@ -7,7 +7,7 @@
 
 <h1>Acquisitions</h1>
 	<!-- TMPL_IF name="nobudget" -->
-		<div class="error">You must define a budget in parameters</div>
+		<div class="error">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a></div>
 	<!-- TMPL_ELSE -->
 <div class="details">
 <form action="/cgi-bin/koha/acqui/order.pl" method="post"><table>
@@ -59,7 +59,7 @@
 
 <!-- showbudget-->
 	<!-- TMPL_IF name="nobudget" -->
-		<div class="error">You must define a budget in parameters</div>
+		<div class="error">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a></div>
 	<!-- TMPL_ELSE -->
 	<table>
 		<caption>Budgets and Bookfunds</caption>
