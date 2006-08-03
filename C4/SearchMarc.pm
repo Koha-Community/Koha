@@ -396,7 +396,7 @@ if (C4::Context->preference("sortbynonfiling")) {
 		$sth_itemCN = $dbh->prepare("
   SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
   FROM items 
-  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL) AND (notforloan < 1 OR notforloan IS NULL)
+  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL)
   GROUP BY items.holdingbranch, items.location, items.itemcallnumber
   ORDER BY homebranch");
 	} else {

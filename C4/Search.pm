@@ -1306,12 +1306,10 @@ sub ItemInfo {
 					WHERE items.biblionumber = ?
 					AND biblioitems.biblioitemnumber = items.biblioitemnumber
 					AND biblio.biblionumber = items.biblionumber";
-# buggy : opac & librarian interface can show the same info level & itemstatus should not be hardcoded
-# 	if ($type ne 'intra'){
-# 		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-# 		or items.itemlost is NULL)
-# 		and (wthdrawn <> 1 or wthdrawn is NULL)";
-# 	}
+	if ($type ne 'intra' && C4::Context->preference('hidelostitems')) {
+		$query .= " and (items.itemlost<1 or items.itemlost is NULL)
+		and (wthdrawn <> 1 or wthdrawn is NULL)";
+	}
 	$query .= " order by items.homebranch, items.dateaccessioned desc";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($biblionumber);
