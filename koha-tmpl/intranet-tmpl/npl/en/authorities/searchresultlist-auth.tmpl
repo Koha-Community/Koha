@@ -86,8 +86,8 @@
 			<table>
 				<tr>
 					<th width="80%">Authorized Headings</th>
-					<th width="10%"># of Records</th>
-					<th width="10%">Full Authorized Heading</th>
+					<th width="10%">Used</th>
+					<th width="10%">Get It!</th>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -100,7 +100,7 @@
 						<td><!-- TMPL_VAR NAME="summary" --></td>
 						<td><!-- TMPL_VAR NAME="used" --></td>
 						<td>
-						<a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR NAME=authid -->">View Full Heading</a>
+						<a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->')">Choose</a>
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
