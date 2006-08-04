@@ -4,17 +4,20 @@
 <!-- TMPL_UNLESS name="popup" -->
 	<h1 class="bull">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Back to biblio</a>
+	<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Back to subscriptions</a>
+	<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
-		<!-- TMPL_IF NAME="year" -->
+		<!-- TMPL_IF NAME="Nodate" -->
+			<a  class="button bull" href="javascript:active(1900)">No Publication Date</a>
+		<!-- TMPL_ELSE-->
 			<a  class="button bull" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	<a class=" button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>
 	</p>
 	<!-- TMPL_LOOP NAME="years" -->
-	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
+	<div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
 				<th class="bull">Information
@@ -57,13 +60,13 @@
 active(<!-- TMPL_VAR name="yearmin" -->);
 function active(numlayer)
 {
-	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
-		ong = i;
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
+	var yeardata=document.getElementsByName("yeardata");
+    for (i=0; i<=yeardata.length; i++ ) {
+		ong=yeardata[i].getAttribute('id');
+        if (numlayer==ong) {
+			yeardata[i].style.visibility="visible";
 		} else {
-			document.getElementById(ong).style.visibility="hidden";
+			yeardata[i].style.visibility="hidden";
 		}
 	}
 }

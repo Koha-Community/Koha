@@ -218,6 +218,7 @@ sub get_full_subscription_list_from_biblionumber {
   ORDER BY year,serial.publisheddate,serial.subscriptionid,serial.planneddate');
 	$sth->execute($biblionumber);
 	my @res;
+    my %tmpresults;
 	my $year;
 	my $startdate;
 	my $aqbooksellername;
@@ -227,43 +228,47 @@ sub get_full_subscription_list_from_biblionumber {
 	my $previousnote="";
 	while (my $subs = $sth->fetchrow_hashref) {
 ### BUG To FIX: When there is no published date, will create many null ids!!!
-
-		if ($year and ($year==$subs->{year})){
-			if ($first eq 1){$first=0;}
-			my $temp=$res[scalar(@res)-1]->{'serials'};
-			push @$temp,
-                {'publisheddate' =>format_date($subs->{'publisheddate'}),
-                'planneddate' => format_date($subs->{'planneddate'}), 
-                'serialseq' => $subs->{'serialseq'},
-                "status".$subs->{'status'} => 1,
-                'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
-                };
+        if ($subs->{'year'} && $subs->{'year'} ne ""){
+          $year=$subs->{'year'};
+        } else {
+          $year="1900"
+        }
+		if ($tmpresults{$year}){
+          my $temp=$tmpresults{$year}->{'serials'};
+          push @$temp,
+              {'publisheddate' =>($subs->{'publisheddate'}?format_date($subs->{'publisheddate'}):"XXX"),
+              'planneddate' => format_date($subs->{'planneddate'}), 
+              'serialseq' => $subs->{'serialseq'},
+              "status".$subs->{'status'} => 1,
+              'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
+              };
 		}else {
-			$first=1 if (not $year);
-			$year= $subs->{'year'};
-			$startdate= format_date($subs->{'startdate'});
-			$aqbooksellername= $subs->{'aqbooksellername'};
-			$bibliotitle= $subs->{'bibliotitle'};
-			my @temp;
-			push @temp,
-				{'publisheddate' =>format_date($subs->{'publisheddate'}),
-                'planneddate' => format_date($subs->{'planneddate'}), 
-				'serialseq' => $subs->{'serialseq'},
-				"status".$subs->{'status'} => 1,
-				'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
-				};
-			
-			push @res,{
-				'year'=>$year,
-				'startdate'=>$startdate,
-				'aqbooksellername'=>$aqbooksellername,
-				'bibliotitle'=>$bibliotitle,
-				'serials'=>\@temp,
-				'first'=>$first 
-			};
-		}
+          $startdate= format_date($subs->{'startdate'});
+          $aqbooksellername= $subs->{'aqbooksellername'};
+          $bibliotitle= $subs->{'bibliotitle'};
+          my @temp;
+          push @temp,
+              {'publisheddate' =>($subs->{'publisheddate'}?format_date($subs->{'publisheddate'}):"XXX"),
+              'planneddate' => format_date($subs->{'planneddate'}), 
+              'serialseq' => $subs->{'serialseq'},
+              "status".$subs->{'status'} => 1,
+              'notes' => $subs->{'notes'} eq $previousnote?"":$subs->{notes},
+              };
+          $tmpresults{$year}={
+              'year'=>$year,
+              'nodate'=>($year eq "1900"),
+              'startdate'=>$startdate,
+              'aqbooksellername'=>$aqbooksellername,
+              'bibliotitle'=>$bibliotitle,
+              'serials'=>\@temp,
+              'first'=>$first 
+          };
+        } 
 		$previousnote=$subs->{notes};
 	}
+    foreach my $key (keys %tmpresults){
+       push @res,$tmpresults{$key};
+    }
 	return \@res;
 }
 
@@ -366,8 +371,8 @@ sub getserials {
 	my $dbh = C4::Context->dbh;
 	# OK, now add the last 5 issues arrives/missing
 	my $sth=$dbh->prepare("
-  SELECT serialid,serialseq, status, publisheddate,planneddate,notes 
-  FROM serial 
+  SELECT serialid, serialseq, status, publisheddate, planneddate, notes
+  FROM serial
   WHERE subscriptionid = ? AND (status IN (2,4,5)) 
   ORDER BY serialid DESC");
 	$sth->execute($subscriptionid);
