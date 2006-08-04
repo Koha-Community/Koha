@@ -2840,6 +2840,10 @@ sub FindDuplicate {
 
 sub DisplayISBN {
 	my ($isbn)=@_;
+	if ($isbn =~ /-/) {
+		return $isbn;
+	}
+	else {
 	my $seg1;
 	if(substr($isbn, 0, 1) <=7) {
 		$seg1 = substr($isbn, 0, 1);
@@ -2872,6 +2876,7 @@ sub DisplayISBN {
 	$seg3=substr($seg3,0,length($seg3)-1) ;
 	my $seg4 = substr($x, -1, 1);
 	return "$seg1-$seg2-$seg3-$seg4";
+	}
 }
 
 =head2 getitemstatus
@@ -3012,6 +3017,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.60  2006/08/04 15:00:50  kados
+# fix for bug 1139: ISBN search fails with double dashes
+#
+# In fact, ISBNs shouldn't have dashes inserted if they already exist
+# in the ISBN field.
+#
 # Revision 1.115.2.59  2006/08/03 16:10:53  tipaul
 # fix for 1052 : Major Bug in MARC tables Sync
 #
