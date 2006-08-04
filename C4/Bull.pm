@@ -227,7 +227,6 @@ sub get_full_subscription_list_from_biblionumber {
 	my $first;
 	my $previousnote="";
 	while (my $subs = $sth->fetchrow_hashref) {
-### BUG To FIX: When there is no published date, will create many null ids!!!
         if ($subs->{'year'} && $subs->{'year'} ne ""){
           $year=$subs->{'year'};
         } else {
