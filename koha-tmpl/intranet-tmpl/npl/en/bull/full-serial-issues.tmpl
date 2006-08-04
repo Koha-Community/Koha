@@ -6,35 +6,34 @@
 <div id="main">
 <!-- TMPL_UNLESS name="popup" -->
 	<h1>Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
-	<div class="tabbed">
-			<form class="inline" action="/cgi-bin/koha/detail.pl" method="get">
-		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="submit" class="submit" value="Back to biblio" />
-	</form>
+	<p>
+	<a class="button" href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Back to subscriptions</a>
+	<a class="button"  href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">View in Catalogue</a>
 <!-- /TMPL_UNLESS -->
-	
+	<a class=" button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=small">Compact view</a></p>
+<p>
 	<!-- TMPL_LOOP NAME="years" -->
-		<!-- TMPL_IF NAME="year" --><form class="inline" action="" method="get">
-		<input type="submit" onclick="active(<!-- TMPL_VAR NAME="year" -->); return false;" class="submit" value="<!-- TMPL_VAR NAME="year" -->" />
-	</form>		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="Nodate" -->
+			<a class="button" href="javascript:active(1900)">No Publication Date</a>
+		<!-- TMPL_ELSE-->
+			<a class="button" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
-	
-	<form class="inline" action="serial-issues.pl" method="get">
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="hidden" name="selectview" value="small" />
-		<input type="submit" class="submit" value="Compact view" />
-	</form>
-	</div>
-	
+	</p>
 	<!-- TMPL_LOOP NAME="years" -->
-	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
+	<div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
-				<th>Information</th>
-				<th>Publication Date</th>
-				<th>Receive Date</th>
-				<th>Number</th>
-				<th>Status</th>
+				<th>Information
+				</th>
+				<th>Publication Date
+				</th>
+				<th>Reception Date
+				</th>
+				<th>Number
+				</th>
+				<th>Status
+				</th>
 			</tr>
 			<!-- TMPL_LOOP Name="serials" -->
 			<tr>
@@ -61,18 +60,17 @@
 		</table>
 	</div>
 	<!--/TMPL_LOOP -->
-	</div>
 <script language="JavaScript" type="text/javascript">
 active(<!-- TMPL_VAR name="yearmin" -->);
 function active(numlayer)
 {
-	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
-		ong = i;
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
+	var yeardata=document.getElementsByName("yeardata");
+    for (i=0; i<=yeardata.length; i++ ) {
+		ong=yeardata[i].getAttribute('id');
+        if (numlayer==ong) {
+			yeardata[i].style.visibility="visible";
 		} else {
-			document.getElementById(ong).style.visibility="hidden";
+			yeardata[i].style.visibility="hidden";
 		}
 	}
 }
