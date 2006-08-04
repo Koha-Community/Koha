@@ -25,9 +25,9 @@
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->" />
 	
 	<h2>Awaited or Late Subscription Issues</h2>
-	<table>
-	<caption>Recent and Upcoming Issues:</caption>
-	<!-- TMPL_LOOP name="serialslist" -->
+
+	<!-- TMPL_LOOP name="serialslist" -->	<table>
+	<caption><!-- TMPL_VAR name="serialseq" --></caption>
 	<tr>
 		<th scope="row"><label for="serialseq">Numbered: </label></th><td>
 		 <input type="text" id="serialseq" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="30" maxlength="100" />
@@ -118,9 +118,9 @@
 				<!--/TMPL_IF-->
 			</td>
 		</tr>
-		<!--/TMPL_IF-->
+		<!--/TMPL_IF--></table>
 	<!-- /TMPL_LOOP -->
-	</table>
+	
 	
 	<table>
 	<caption>Enter Manual Issue: </caption>
