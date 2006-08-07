@@ -30,11 +30,11 @@ addorder.pl
 this script allows to add an order.
 It is called by :
 
-=item newbasket2.pl to add an order from nothing.
+=item neworderbiblio.pl to add an order from nothing.
 
-=item newbiblio.pl to add an order from an existing biblio.
+=item neworderempty.pl to add an order from an existing biblio.
 
-=item suggestion-select.pl to add an order from an existing suggestion.
+=item newordersuggestion.pl to add an order from an existing suggestion.
 
 =head1 CGI PARAMETERS
 
