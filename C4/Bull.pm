@@ -206,7 +206,7 @@ sub get_full_subscription_list_from_biblionumber {
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare('
   SELECT serial.serialseq,serial.planneddate, serial.publisheddate, serial.status, serial.notes,
-    year(serial.publisheddate) as year,
+    year(IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate)) as year,
     aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle
   FROM serial 
         LEFT JOIN subscription ON 
@@ -215,7 +215,7 @@ sub get_full_subscription_list_from_biblionumber {
         LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
         LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
   WHERE subscription.biblionumber = ? 
-  ORDER BY year,serial.publisheddate,serial.subscriptionid,serial.planneddate');
+  ORDER BY year,IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate),serial.subscriptionid');
 	$sth->execute($biblionumber);
 	my @res;
     my %tmpresults;
@@ -440,11 +440,11 @@ sub serialchangestatus {
 		$sth = $dbh->prepare("SELECT missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 		$sth->execute($subscriptionid);
 		my ($missinglist,$recievedlist) = $sth->fetchrow;
-		if ($status eq 2) {
+		if ($status eq 2 && ($serialseq!~/\(/ && $recievedlist!~/$serialseq/)) {
 			$recievedlist .= ",$serialseq";
 		}
-		$missinglist .= ",$serialseq" if ($status eq 4) ;
-		$missinglist .= ",not issued $serialseq" if ($status eq 5);
+		$missinglist .= ",$serialseq" if ($status eq 4 && ($serialseq!~/\(/ && $missinglist!~/$serialseq/)) ;
+		$missinglist .= ",not issued $serialseq" if ($status eq 5 && ($serialseq!~/\(/ && $missinglist!~/$serialseq/));
 		$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
 		$sth->execute($recievedlist,$missinglist,$subscriptionid);
 	}

@@ -49,7 +49,8 @@ if ($op eq 'serialchangestatus') {
 		
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
-			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($publisheddates[$i]),($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso(localtime(time()))),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso("today")) if ($status[$i]==2);
+			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($publisheddates[$i]),$planneddate,$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
 			if (($status[$i]==2) && C4::Context->preference("serialsadditems")){
 				my %info;
 				$info{branch}=$homebranches[$i];
