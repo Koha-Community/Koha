@@ -150,7 +150,7 @@ sub newsubscription {
 sub getsubscription {
 	my ($subscriptionid) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare('SELECT subscription.*,subscriptionhistory.*,aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle 
+	my $sth = $dbh->prepare('SELECT subscription.*,subscriptionhistory.*,aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,biblio.title as bibliotitle, biblio.biblionumber as bibnum 
 							from subscription 
 							left join subscriptionhistory on subscription.subscriptionid=subscriptionhistory.subscriptionid
 							left join aqbudget on subscription.aqbudgetid=aqbudget.aqbudgetid 
@@ -373,7 +373,7 @@ sub getserials {
   SELECT serialid, serialseq, status, publisheddate, planneddate, notes
   FROM serial
   WHERE subscriptionid = ? AND (status IN (2,4,5)) 
-  ORDER BY serialid DESC");
+  ORDER BY IF(serial.publisheddate=\"00-00-0000\",serial.planneddate,serial.publisheddate) DESC");
 	$sth->execute($subscriptionid);
 	my $counter=0;
 	my @serials;
@@ -408,13 +408,14 @@ sub getlatestserials{
 	my ($subscriptionid,$limit) =@_;
 	my $dbh = C4::Context->dbh;
 	# status = 2 is "arrived"
-	my $strsth="SELECT serialid,serialseq, status, planneddate FROM serial WHERE subscriptionid = ? AND (status =2 or status=4) ORDER BY planneddate DESC LIMIT 0,$limit";
+	my $strsth="SELECT serialid,serialseq, status, publisheddate, planneddate FROM serial WHERE subscriptionid = ? AND (status =2 or status=4) ORDER BY IF(serial.publisheddate=\"00-00-0000\",serial.planneddate,serial.publisheddate) DESC LIMIT 0,$limit";
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute($subscriptionid);
 	my @serials;
 	while(my $line = $sth->fetchrow_hashref) {
 		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
 		$line->{"planneddate"} = format_date($line->{"planneddate"});
+		$line->{"publisheddate"} = format_date($line->{"publisheddate"});
 		push @serials,$line;
 	}
 	$sth=$dbh->prepare("SELECT count(*) from serial where subscriptionid=?");
@@ -468,12 +469,7 @@ sub serialchangestatus {
 sub newissue {
 	my ($serialseq,$subscriptionid,$biblionumber,$status, $publisheddate, $planneddate) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("
-  INSERT INTO serial 
-    (serialseq,subscriptionid,biblionumber,status,publisheddate,planneddate) 
-  VALUES (?,?,?,?,?,?)");
-	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status,$publisheddate, $planneddate);
-	$sth = $dbh->prepare("SELECT missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+	my $sth = $dbh->prepare("SELECT missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
 	$sth->execute($subscriptionid);
 	my ($missinglist,$recievedlist) = $sth->fetchrow;
 	if ($status eq 2) {
@@ -484,6 +480,11 @@ sub newissue {
 	}
 	$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
 	$sth->execute($recievedlist,$missinglist,$subscriptionid);
+	$sth = $dbh->prepare("
+  INSERT INTO serial 
+    (serialseq,subscriptionid,biblionumber,status,publisheddate,planneddate) 
+  VALUES (?,?,?,?,?,?)");
+	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status,$publisheddate, $planneddate);
 }
 
 =head2 serialsitemize
@@ -499,6 +500,7 @@ sub serialsitemize {
 	my $sth=$dbh->prepare("SELECT * from serial WHERE serialid=?");
 	$sth->execute($serialid);
 	my $data=$sth->fetchrow_hashref;
+#     warn "biblionumber : ".$data->{biblionumber};
 	my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$data->{biblionumber});
 	my $fwk=MARCfind_frameworkcode($dbh,$bibid);
 	if ($info->{barcode}){

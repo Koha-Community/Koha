@@ -63,18 +63,23 @@ if ($op eq 'serialchangestatus') {
 			}
 		} else {
 			# add a special issue
+            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso("today")) if ($status[$i]==2);
 			if ($serialseqs[$i]) {
-				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i],format_date_in_iso($publisheddates[$i]),($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso(localtime(time()))));
-			}
-			if (($status[$i]==2) && C4::Context->preference("serialsadditems") && !hassubscriptionexpired($subscriptionid)){
-				my %info;
-				$info{branch}=$homebranches[$i];
-				$info{barcode}=$barcodes[$i];
-				$info{itemcallnumber}=$itemcallnumbers[$i];
-				$info{location}=$locations[$i];
-				$info{status}=$itemstatus[$i];
-				$info{notes}=$serialseqs[$i];
-				my ($status, @errors)= serialsitemize($serialids[$i],\%info);
+              newissue($serialseqs[$i],$subscriptionid,$subscription->{bibnum},$status[$i],format_date_in_iso($publisheddates[$i]),$planneddate);
+              my $rq=$dbh->prepare("SELECT LAST_INSERT_ID()");
+              $rq->execute;
+              my $newserialid=$rq->fetchrow;
+#               warn "serialid =".$newserialid;
+              if (($status[$i]==2) && C4::Context->preference("serialsadditems") && !hassubscriptionexpired($subscriptionid)){
+                  my %info;
+                  $info{branch}=$homebranches[$i];
+                  $info{barcode}=$barcodes[$i];
+                  $info{itemcallnumber}=$itemcallnumbers[$i];
+                  $info{location}=$locations[$i];
+                  $info{status}=$itemstatus[$i];
+                  $info{notes}=$serialseqs[$i];
+                  my ($status, @errors)= serialsitemize($newserialid,\%info);
+              }
 			}
 
 		}
