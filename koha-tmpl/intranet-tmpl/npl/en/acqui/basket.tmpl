@@ -4,9 +4,9 @@
 
 <div id="main">
 	<h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <b><!-- TMPL_VAR NAME="basketno" --> </b>for <a href="supplier.pl?id=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
-	<!-- TMPL_UNLESS name="closedate" -->
+	<div class="data"><!-- TMPL_UNLESS name="closedate" -->
 	<!-- TMPL_IF name="basketno" -->
-		<div class="data">
+		
 			<table>
 			<caption>Basket Details</caption>
 			<tr><th>Managed By:</th><td><!-- TMPL_VAR NAME="authorisedbyname" --></td></tr>
