@@ -376,8 +376,9 @@ sub getserials {
   ORDER BY IF(serial.publisheddate=\"00-00-0000\",serial.planneddate,serial.publisheddate) DESC");
 	$sth->execute($subscriptionid);
 	my $counter=0;
+	my $syspref_counter = C4::Context->preference('ReceiveBackIssues') | 5;
 	my @serials;
-	while((my $line = $sth->fetchrow_hashref) && $counter <5) {
+	while((my $line = $sth->fetchrow_hashref) && $counter <$syspref_counter) {
 		$counter++;
 		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
 		$line->{"publisheddate"} = format_date($line->{"publisheddate"});
