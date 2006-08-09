@@ -1236,6 +1236,20 @@ my %tabledata = (
 'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
             type => 'free',
         },
+        {   
+            uniquefieldrequired => 'variable',
+            variable            => 'ReceiveBackIssues',
+            value               => '5',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                        type' => 1
+            },
+            explanation =>
+'How many previous serials to display when receiving serials',
+            type => 'free',
+        },
+
         {
             uniquefieldrequired => 'variable',
             variable            => 'AmazonContent',
@@ -2167,6 +2181,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.53  2006/08/09 16:28:30  kados
+# adds ReceiveBackIssues systempref with default set to 5
+#
 # Revision 1.100.2.52  2006/07/31 13:31:27  kados
 # slight bug fix for adding publisheddate field to serial table
 #
