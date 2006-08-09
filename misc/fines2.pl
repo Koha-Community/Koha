@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 
-#  This script loops through each overdue item, determines the fine,
-#  and updates the total amount of fines due by each user.  It relies on
-#  the existence of /tmp/fines, which is created by ???
-# Doesnt really rely on it, it relys on being able to write to /tmp/
-# It creates the fines file
+# This script loops through each overdue item, determines the fine,
+# and updates the total amount of fines due by each user.  It relies on
+# being able to write to /tmp/, where it creates the fines file
 #
-#  This script is meant to be run nightly out of cron.
+# This script is meant to be run nightly out of cron.
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -59,7 +57,9 @@ my $bornum;
 # $total isn't used anywhere else in the file,
 # can we delete it?
 #
-my $total=0;
+# Commented out August 9, 2006
+#
+# my $total=0;
 
 # FIXME
 # this probably ought to be a global variable or constant
