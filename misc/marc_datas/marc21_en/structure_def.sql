@@ -1,8 +1,8 @@
 -- *******************************************************
 --  KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK 
 --                                                        
---                  PRETEST VERSION 0.1.3                 
---                       2006-08-07                       
+--                  PRETEST VERSION 0.1.4                 
+--                       2006-08-09                       
 --                                                        
 --  original default requiring greater user customisation 
 --               created by a few Koha Hands              
@@ -700,12 +700,12 @@ INSERT INTO `marc_subfield_structure` VALUES ('036', 'a', 'Original study number
 INSERT INTO `marc_subfield_structure` VALUES ('036', 'b', 'Source (agency assigning number)', 'Source (agency assigning number)', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('037', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('037', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'a', 'Stock number', 'Stock number', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'b', 'Source of stock number/acquisition', 'Source of stock number/acquisition', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'c', 'Terms of availability', 'Terms of availability', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'f', 'Form of issue', 'Form of issue', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'g', 'Additional format characteristics', 'Additional format characteristics', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('037', 'n', 'Note', 'Note', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'a', 'Stock number', 'Stock number', 0, 0, '', 0, '', '', '', 0, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'b', 'Source of stock number/acquisition', 'Source of stock number/acquisition', 0, 0, '', 0, '', '', '', 0, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'c', 'Terms of availability', 'Terms of availability', 1, 0, '', 0, '', '', '', 0, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'f', 'Form of issue', 'Form of issue', 1, 0, '', 0, '', '', '', 0, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'g', 'Additional format characteristics', 'Additional format characteristics', 1, 0, '', 0, '', '', '', 0, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('037', 'n', 'Note', 'Note', 1, 0, '', 0, '', '', '', 0, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('038', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('038', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('038', 'a', 'Record content licensor', 'Record content licensor', 0, 0, '', 0, '', '', '', 0, -6, '', '', '');
@@ -890,7 +890,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('100', '4', 'Relator code', 'Relat
 INSERT INTO `marc_subfield_structure` VALUES ('100', '6', 'Linkage', 'Linkage', 0, 0, '', 1, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('100', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 1, '', '', '', 0, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('100', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('100', 'a', 'Personal name', 'Personal name', 0, 0, 'biblio.author', 1, '', '', '', 0, 0, '', '''100b'',''100c'',''100q'',''100d'',''100e'',''110a'',''110b'',''110c'',''110d'',''110e'',''700a'',''700b'',''700c'',''700q'',''700d'',''700e'',''710a'',''710b'',''710c'',''710d'',''710e'',''900a''', '');
+INSERT INTO `marc_subfield_structure` VALUES ('100', 'a', 'Personal name', 'Personal name', 0, 0, 'biblio.author', 1, '', '', '', 0, 0, '', '''100b'',''100c'',''100q'',''100d'',''100e'',''110a'',''110b'',''110c'',''110d'',''110e'',''700a'',''700b'',''700c'',''700q'',''700d'',''700e'',''710a'',''710b'',''710c'',''710d'',''710e'',''720a'',''720e'',''900a''', '');
 INSERT INTO `marc_subfield_structure` VALUES ('100', 'b', 'Numeration', 'Numeration', 0, 0, '', 1, '', '', '', 0, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('100', 'c', 'Titles and other words associated with a name', 'Titles and other words associated with a name', 1, 0, '', 1, '', '', '', 0, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('100', 'd', 'Dates associated with a name', 'Dates associated with a name', 0, 0, '', 1, '', '', '', 0, 0, '', '', '');
@@ -1419,14 +1419,14 @@ INSERT INTO `marc_subfield_structure` VALUES ('506', 'b', 'Jurisdiction', 'Juris
 INSERT INTO `marc_subfield_structure` VALUES ('506', 'c', 'Physical access provisions', 'Physical access provisions', 1, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('506', 'd', 'Authorized users', 'Authorized users', 1, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('506', 'e', 'Authorization', 'Authorization', 1, 0, '', 5, '', '', '', NULL, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('506', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, '', 0, '', '', '', 1, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('506', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, '', 5, '', '', '', 1, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('507', '6', 'Linkage', 'Linkage', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('507', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('507', 'a', 'Representative fraction of scale note', 'Representative fraction of scale note', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('507', 'b', 'Remainder of scale note', 'Remainder of scale note', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('508', '6', 'Linkage', 'Linkage', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('508', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, NULL, 5, NULL, NULL, '', NULL, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('508', 'a', 'Creation/production credits note', 'Creation/production credits note', 0, 0, NULL, 5, NULL, NULL, '', NULL, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('508', 'a', 'Creation/production credits note', 'Creation/production credits note', 0, 0, NULL, 5, NULL, NULL, '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('509', 'a', 'Informal Notes', 'Informal Notes', 0, 0, NULL, 5, NULL, NULL, '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('510', '3', 'Materials specified', 'Materials specified', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('510', '6', 'Linkage', 'Linkage', 0, 0, '', 5, '', '', '', NULL, -6, '', '', '');
@@ -2107,10 +2107,10 @@ INSERT INTO `marc_subfield_structure` VALUES ('700', '5', 'Institution to which 
 INSERT INTO `marc_subfield_structure` VALUES ('700', '6', 'Linkage', 'Linkage', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 7, '', '', '', 0, -5, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('700', 'a', 'Personal name', 'Personal name', 0, 0, 'additionalauthors.author', 7, '', '', '', NULL, 0, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('700', 'a', 'Personal name', 'Personal name', 0, 0, 'additionalauthors.author', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', 'b', 'Numeration', 'Numeration', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', 'c', 'Titles and other words associated with a name', 'Titles and other words associated with a name', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('700', 'd', 'Dates associated with a name', 'Dates associated with a name', 0, 0, '', 7, '', '', '', NULL, 0, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('700', 'd', 'Dates associated with a name', 'Dates associated with a name', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', 'e', 'Relator term', 'Relator term', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('700', 'g', 'Miscellaneous information', 'Miscellaneous information', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
@@ -2151,8 +2151,8 @@ INSERT INTO `marc_subfield_structure` VALUES ('710', '5', 'Institution to which 
 INSERT INTO `marc_subfield_structure` VALUES ('710', '6', 'Linkage', 'Linkage', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('710', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('710', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 7, '', '', '', 0, -5, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('710', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 7, '', '', '', NULL, 0, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('710', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 7, '', '', '', NULL, 0, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('710', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('710', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('710', 'c', 'Location of meeting', 'Location of meeting', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('710', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('710', 'e', 'Relator term', 'Relator term', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '');
@@ -2211,8 +2211,8 @@ INSERT INTO `marc_subfield_structure` VALUES ('715', 'u', 'Nonprinting informati
 INSERT INTO `marc_subfield_structure` VALUES ('720', '4', 'Relator code', 'Relator code', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('720', '6', 'Linkage', 'Linkage', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('720', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('720', 'a', 'Name', 'Name', 0, 0, '', 7, NULL, NULL, '', NULL, 0, '', '', '');
-INSERT INTO `marc_subfield_structure` VALUES ('720', 'e', 'Relator term', 'Relator term', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('720', 'a', 'Name', 'Name', 0, 0, '', 7, NULL, NULL, '', NULL, -1, '', '', '');
+INSERT INTO `marc_subfield_structure` VALUES ('720', 'e', 'Relator term', 'Relator term', 1, 0, NULL, 7, NULL, NULL, '', NULL, -1, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('730', '3', 'Materials specified', 'Materials specified', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('730', '5', 'Institution to which field applies', 'Institution to which field applies', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
 INSERT INTO `marc_subfield_structure` VALUES ('730', '6', 'Linkage', 'Linkage', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '');
