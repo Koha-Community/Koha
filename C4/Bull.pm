@@ -376,7 +376,8 @@ sub getserials {
   ORDER BY IF(serial.publisheddate=\"00-00-0000\",serial.planneddate,serial.publisheddate) DESC");
 	$sth->execute($subscriptionid);
 	my $counter=0;
-	my $syspref_counter = C4::Context->preference('ReceiveBackIssues') | 5;
+	my $syspref_counter = 0;
+	$syspref_counter = C4::Context->preference('ReceiveBackIssues') if C4::Context->preference('ReceiveBackIssues');
 	my @serials;
 	while((my $line = $sth->fetchrow_hashref) && $counter <$syspref_counter) {
 		$counter++;
