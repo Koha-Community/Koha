@@ -28,13 +28,15 @@ my $chdir_needed_p = 1 unless -d('po');
 # more than two; e.g., if we want ['default', 'opac'] too we can put it in
 for my $spec (
       ['css',     'opac'    ],
-      ['default', 'intranet']
+      ['default', 'intranet'],
+      ['npl', 'intranet'],
+      ['npl', 'opac'],
   ) {
     my($theme, $module) = @$spec;
     if ($lang ne 'ALL') {
             build_lang($theme,$module,$lang);
         } else {
-            foreach my $lang (('fr_FR', 'es_ES','it_IT','pl_PL','ta_MY','uk_UA','zh_TW','hu_HU')) {
+            foreach my $lang (('fr_FR', 'es_ES','it_IT','pl_PL','ta_MY','uk_UA','zh_TW','hu_HU', 'es_AR', )) {
                 build_lang($theme,$module,$lang);
             }
         }
