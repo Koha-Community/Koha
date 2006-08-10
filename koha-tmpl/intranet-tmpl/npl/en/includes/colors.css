@@ -97,6 +97,10 @@ div.compact th {
 	border-top : 0px;
 }
 
+div.controls {
+	border-top : 1px solid #D9D9D9;
+}
+
 div.data table col, div.data-main table col {
 	background-color : #CCCCCC;
 }
@@ -472,20 +476,32 @@ div.tab {
 	border-top : 1px solid #EEEEEE;
 }
 
-/* style for tag definition (e.g. 700 - Statement of responsibility) */
-.MARCtag { 
+div.displaytab {
+	background-color:transparent;
+}
+
+div.displaytab p {
+	border-top: 1px solid #D8DEB8;
+	border-bottom: 1px solid White;
+}
+
+.MARCtag { /* style for tag definition (700 - Statement of responsability) */
 	color : #000000;
 	background-color : #EEEEEE;
 	border-top : 7px solid #EEEEEE;
 	border-bottom : thin solid #CCCCCC;
 }
 
-div.tab p {
-}	
+div.displaytab .MARCtag {
+	color : #000066;
+}
 
-/* style for each subfield (e.g.: Publication year), just before the biblio subfield */
-.labelsubfield { 
+.labelsubfield { /* style for each subfield (like : a Publication year), just before the biblio subfield */
 	background-color : #F0F0F0;
+}
+
+div.displaytab .labelsubfield {
+	background-color : #FFFFFF;
 }
 
 #loading {

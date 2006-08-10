@@ -98,16 +98,13 @@ caption {
 	text-align: left;
 }
 
-div#controls {
-	float: right;
-	margin-left: .7em;
-	width: 15%;
-}
-
-div#controls form {
-	font-size: 80%;
-	margin: .3em 0;
-	padding: .3em;
+div.controls {
+	display : block;
+	font-size: 70%;
+	font-weight: bold;
+	margin-top: .4em;
+	margin-bottom : .4em;
+	padding-top : .4em;
 }
 
 div#help {
@@ -372,7 +369,7 @@ div.tabitem {
 	display: inline;
 }
 
-div.tabitem form {
+div.tabitem form, div.controls form {
 	display: inline;
 	white-space: nowrap;
 }
@@ -1007,20 +1004,34 @@ div.tab {
 	/*margin-top:110px;*/
 }
 
-/* style for tag definition (e.g. 700 - Statement of responsibility) */
-.MARCtag { 
+div.tab p {
+	margin : 3px;
+}	
+
+div.displaytab {
+	display: block;
+	float:left;
+	font-size: .8em;
+	width : 100%;
+}
+
+div.displaytab p {
+	margin : 0;
+	padding : 3px 0;
+}
+
+.MARCtag { /* style for tag definition (700 - Statement of responsability) */
 	clear : left;
 	font-weight : bold;
 	font-size : .8em;
 	margin-top : 5px;
 }
 
-div.tab p {
-	margin : 3px;
-}	
+div.displaytab .MARCtag {
+	font-size : 1em;
+}
 
-/* style for each subfield (e.g.: Publication year), just before the biblio subfield */
-.labelsubfield {
+.labelsubfield { /* style for each subfield (like : a Publication year), just before the biblio subfield */
 	clear : left;
 	float : left;
 	font-size : .8em;
@@ -1028,6 +1039,11 @@ div.tab p {
 	width : 12em;
 	margin-left : 30px;
 	display : inline;
+}
+
+div.displaytab .labelsubfield {
+	font-size : 1em;
+	font-weight: bold;
 }
 
 #loading {
