@@ -31,7 +31,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::SearchMarc;
+#use C4::SearchMarc;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
 # Creates a scrolling list with the associated default value.

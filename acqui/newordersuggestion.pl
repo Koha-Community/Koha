@@ -82,7 +82,7 @@ use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Suggestions;
 use C4::Biblio;
-use C4::SearchMarc;
+use C4::Search;
 
 my $input = new CGI;
 
@@ -100,7 +100,7 @@ my $isbn = $input->param('isbn');
 my $duplicateNumber = $input->param('duplicateNumber');
 my $suggestionid = $input->param('suggestionid');
 
-my $status = 'ACCEPTED';
+my $status = 'ACCEPTED'; # the suggestion had to be accepeted before to order it.
 my $suggestedbyme = -1; # search ALL suggestors
 my $op = $input->param('op');
 $op = 'else' unless $op;
@@ -157,11 +157,12 @@ foreach (@$suggestions_loop) {
 			push @value, $_->{publishercode};
 		}
 	
-		my ($finalresult,$nbresult) = C4::SearchMarc::catalogsearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10);
+		my ($finalresult,$nbresult) = catalogsearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10);
+
 		# there is at least 1 result => return the 1st one
 		if ($nbresult) {
-	# 		warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
-# 			warn "DUPLICATE ==>".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
+	 		#warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
+ 			#warn "DUPLICATE ==>".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
 			$_->{duplicateBiblionumber} = @$finalresult[0]->{biblionumber};
 		}
 	}
