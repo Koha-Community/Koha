@@ -798,7 +798,6 @@ sub AUTHhtml2xml {
 
             if ((@$tags[$i] ne $prevtag)){
                 $j++ unless (@$tags[$i] eq "");
-                warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 
                 if (!$first){
                     $xml.="</datafield>\n";
@@ -841,7 +840,7 @@ sub AUTHhtml2xml {
             $prevtag = @$tags[$i];
         }
         $xml.= MARC::File::XML::footer();
-        warn $xml;
+#         warn $xml;
         return $xml
 }
 sub AUTHhtml2marc {
@@ -853,23 +852,39 @@ sub AUTHhtml2marc {
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
 		# rebuild MARC::Record
+# 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
-					$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					if (($prevtag ne '000') && ($prevvalue ne "")) {
+						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+					} elsif ($prevvalue ne ""){
+						$record->leader($prevvalue);
+					}
 				}
 			} else {
-				if ($field) {
+				if (($field) && ($field ne "")) {
 					$record->add_fields($field);
 				}
 			}
 			$indicators{@$rtags[$i]}.='  ';
+		        # skip blank tags, I hope this works 
+		        if (@$rtags[$i] eq ''){
+			    $prevtag = @$rtags[$i];
+			    undef $field;
+			    next;
+			}
 			if (@$rtags[$i] <10) {
 				$prevvalue= @$rvalues[$i];
 				undef $field;
 			} else {
 				undef $prevvalue;
+				if (@$rvalues[$i] eq "") {
+				undef $field;
+				} else {
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+				}
+# 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
 			$prevtag = @$rtags[$i];
 		} else {
@@ -877,14 +892,21 @@ sub AUTHhtml2marc {
 				$prevvalue=@$rvalues[$i];
 			} else {
 				if (length(@$rvalues[$i])>0) {
-					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+					if ($field) {
+						$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+					} else {
+					$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+					}
+# 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 				}
 			}
 			$prevtag= @$rtags[$i];
 		}
 	}
+	#}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field) if $field;
+	$record->add_fields($field) if (($field) && $field ne "");
+ 	#warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
 
@@ -1059,7 +1081,7 @@ sub nsb_clean {
 
 sub FindDuplicate {
 	my ($record,$authtypecode)=@_;
-	warn "IN for ".$record->as_formatted;
+# 	warn "IN for ".$record->as_formatted;
 	my $dbh = C4::Context->dbh;
 
 #	warn "".$record->as_formatted;
@@ -1075,7 +1097,7 @@ sub FindDuplicate {
 	my @subfield = split /\[/,  $taglist;
 	my $max = @subfield;
 	for (my $i=1; $i<$max;$i++){
-		warn " ".$subfield[$i];
+# 		warn " ".$subfield[$i];
 		$subfield[$i]=substr($subfield[$i],3,1);
 # 		warn " ".$subfield[$i];
 	}
@@ -1086,7 +1108,7 @@ sub FindDuplicate {
 #		warn " field $auth_tag_to_report exists";
 		while (my ($tag,$subfield) = $sth->fetchrow){
 			if ($record->field($tag)->subfield($subfield)) {
-				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
+# 				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
 				push @tags, $tag.$subfield;
 #				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
 				push @and_or, "and";
@@ -1100,7 +1122,7 @@ sub FindDuplicate {
 	my ($finalresult,$nbresult) = authoritysearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10,$authtypecode);
 	# there is at least 1 result => return the 1st one
 	if ($nbresult) {
-		warn "XXXXX $nbresult => ".@$finalresult[0]->{authid},@$finalresult[0]->{summary};
+# 		warn "XXXXX $nbresult => ".@$finalresult[0]->{authid},@$finalresult[0]->{summary};
 		return @$finalresult[0]->{authid},@$finalresult[0]->{summary};
 	}
 	# no result, returns nothing
@@ -1313,6 +1335,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.24  2006/08/10 12:42:33  tipaul
+# warn commenting + some bugfixes I forgot to commit (for authorities editing)
+#
 # Revision 1.9.2.23  2006/08/03 00:50:34  kados
 # fix to bug 1130: Summary display broken for MARC21 Authorities
 #
