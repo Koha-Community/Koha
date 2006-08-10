@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default_intranet_fr_FR\n"
-"POT-Creation-Date: 2006-06-15 10:49+0200\n"
-"PO-Revision-Date: 2006-06-15 12:13+0200\n"
+"POT-Creation-Date: 2006-08-10 16:11+0200\n"
+"PO-Revision-Date: 2006-08-02 14:50+0200\n"
 "Last-Translator: POULAIN <paul@koha-fr.org>\n"
 "Language-Team: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 #
 #. For the first occurrence,
 #. SCRIPT
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:350
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:346
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:132
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:205
 msgid " mandatory fields empty (see bold subfields)"
@@ -32,7 +32,7 @@ msgstr "champs obligatoires non renseignés (voir les champs en caractère gras)"
 #
 #. For the first occurrence,
 #. SCRIPT
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:350
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:346
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:205
 msgid " mandatory tags empty"
 msgstr "Champ(s) obligatoire(s) non renseigné(s)"
@@ -156,7 +156,7 @@ msgid "$itemtypeselect"
 msgstr "$sélection du type de document"
 
 #. %1$S: type=text name=seealso
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:28
 #, c-format
 msgid "%S (example for 200a : '200c','200d','200e')"
 msgstr "%S (exemple pour 200a : '200c','200d','200e')"
@@ -217,6 +217,13 @@ msgstr "%S Si ce champ est vide, l'auteur et le titre seront mis à la place"
 #, c-format
 msgid "%S days"
 msgstr "%S jours"
+
+#. %1$S: type=text name=liblibrarian
+#. %2$S: type=text name=libopac
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:36
+#, c-format
+msgid "%S for OPAC %S"
+msgstr "%S pour l'OPAC %S"
 
 #. %1$S: type=text name=liblibrarian
 #. %2$S: type=text name=libopac
@@ -414,7 +421,7 @@ msgid "%pYes %pNo"
 msgstr "%pOui %pNon"
 
 #. %1$s: TMPL_VAR name=discount
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:232
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:236
 #, c-format
 msgid "%s %%"
 msgstr "%s %%"
@@ -594,30 +601,45 @@ msgstr "%s ="
 msgid "%s GROUP - %s"
 msgstr "%s GROUPE - %s"
 
+#. %1$s: TMPL_VAR name=count
+#. %2$s: TMPL_VAR name=source
+#. %3$s: TMPL_VAR name=dest
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:13
+#, c-format
+msgid "%s Images moved from %s to %s"
+msgstr ""
+
 #. %1$s: TMPL_VAR name=issuecount
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:52
 #, c-format
 msgid "%s Issues"
 msgstr "%s Sorties"
 
-#. %1$s: TMPL_VAR name=isurl
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:39
+#. %1$s: TMPL_VAR name=total
+#. %2$s: TMPL_VAR name=handled
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:10
 #, c-format
-msgid "%s URL (if checked, it means that the subfield is an URL and can be clicked"
+msgid "%s Scanned %s Processed"
 msgstr ""
-" %s URL (si coché, indique que le champ est une URL valide et peut-être "
-"cliquée"
+
+#. %1$s: TMPL_VAR name=source
+#. %2$s: TMPL_VAR name=dest
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:15
+#, fuzzy, c-format
+msgid "%s To %s"
+msgstr "%s - %s"
 
 #. %1$s: TMPL_VAR name=isurl
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:41
 #, c-format
-msgid "%s URL (if checked, it means that the subfield is an URL and can be clicked)"
+msgid ""
+"%s URL (if checked, it means that the subfield is an URL and can be clicked)"
 msgstr ""
 "%s URL (si coché, indique que le champ est une URL valide et peut-être "
 "cliquée"
 
 #. %1$s: TMPL_VAR name=countreceived
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:17
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:16
 #, c-format
 msgid "%s biblio received"
 msgstr "%s documents reçus"
@@ -631,21 +653,17 @@ msgstr "%s documents reçus"
 msgid "%s biblio(s)"
 msgstr "%s notices"
 
+#. %1$s: TMPL_VAR name=count
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:66
+#, fuzzy, c-format
+msgid "%s biblios"
+msgstr "%s notices"
+
 #. %1$s: TMPL_VAR name=errorfile
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:34
 #, c-format
 msgid "%s can't be opened"
 msgstr "%s ne peut pas être ouvert"
-
-#. %1$s: TMPL_VAR name=hidden
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:38
-#, c-format
-msgid ""
-"%s hidden (subfield is managed, but hidden. -should be filled by a plugin or "
-"thesaurus-)"
-msgstr ""
-"%s caché (champ géré, mais caché. - devrait être rempli par un module "
-"d'extension ou un type d'autorité-)"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=imported
@@ -660,7 +678,8 @@ msgstr "%s enregistrements importés"
 #. %3$s: TMPL_VAR name=biblioitemnumber
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptBiblioitem.tmpl:15
 #, c-format
-msgid "%s is already in the database with biblionumber %s and biblioitemnumber %s"
+msgid ""
+"%s is already in the database with biblionumber %s and biblioitemnumber %s"
 msgstr "%s est déjà dans la base de données avec le numéro de notice %s / %s"
 
 #. %1$s: TMPL_VAR name=numberlength
@@ -682,7 +701,15 @@ msgstr "%s documents"
 msgid "%s items modified : datelastseen set to %s"
 msgstr "%s documents modifiés : date dernier mouvement positionné à %s"
 
+#. %1$s: TMPL_VAR name=countpending
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:81
+#, c-format
+msgid "%s lines"
+msgstr "%s lignes"
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=mandatory
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:25
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:23
 #, c-format
 msgid "%s mandatory"
@@ -761,18 +788,13 @@ msgstr "%s colis trouvés"
 msgid "%s records parsed"
 msgstr "%s enregistrements traités"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=repeatable
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:22
 #, c-format
 msgid "%s repeatable"
 msgstr "%s répétable"
-
-#. %1$s: TMPL_VAR name=repeatable
-#. %2$s: TMPL_VAR name=mandatory
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:21
-#, c-format
-msgid "%s repeatable %s mandatory"
-msgstr "%s répétable %s obligatoire"
 
 #. %1$s: TMPL_VAR name=type
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports.tmpl:3
@@ -847,6 +869,9 @@ msgstr "%s,"
 #. %1$s: TMPL_VAR name=branchname
 #. %2$s: TMPL_VAR name=itemcallnumber
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detailprint.tmpl:39
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:273
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:292
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:305
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-print.tmpl:8
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:24
 #, c-format
@@ -891,7 +916,8 @@ msgstr "%sLien"
 msgid ""
 "%shas been entered into the database with biblionumber %s and "
 "biblioitemnumber %s"
-msgstr "%s a été saisi dans la base de données avec le numéro de notice %s / %s"
+msgstr ""
+"%s a été saisi dans la base de données avec le numéro de notice %s / %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:31
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:50
@@ -966,7 +992,8 @@ msgstr "Pas de réponse"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:20
 msgid "( ! means 'not visible' or in the case of Collapsed 'not Collapsed')"
-msgstr "(! signifie 'invisible' ou, dans le cas de 'minimisé' : 'non minimisé')"
+msgstr ""
+"(! signifie 'invisible' ou, dans le cas de 'minimisé' : 'non minimisé')"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=note
@@ -976,7 +1003,7 @@ msgstr "(! signifie 'invisible' ou, dans le cas de 'minimisé' : 'non minimisé')"
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:64
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:66
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:188
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:189
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:233
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:58
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:65
@@ -1040,13 +1067,29 @@ msgstr ""
 "tâches (crontab), après minuit, pour que les amendes soient calculées chaque "
 "nuit"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:53
+msgid ""
+"(add % at the end of your word if you want to use right-truncation : <b>theor"
+"%</b> will find theory &amp; theories)"
+msgstr ""
+"(ajouter % à la fin des mots si vous voulez une troncature : <b>théor%</b> "
+"trouvera théorie et théorèmes)"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:52
+msgid ""
+"(add % at the end of your word if you want to use right-truncation : theor% "
+"will find theory &amp; theories)"
+msgstr ""
+"(ajouter % à la fin des mots si vous voulez une troncature : <b>théor%</b> "
+"trouvera théorie et théorèmes)"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/marc21_leader.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/marc21_leader.tmpl:197
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/marc21_leader.tmpl:303
 msgid "(auto-filled)"
 msgstr "(auto-rempli)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:84
 msgid "(default framework)"
 msgstr "(grille par défaut)"
 
@@ -1057,7 +1100,7 @@ msgid "(defined from suggestion #%s)"
 msgstr "spécifié à partir de la suggestion #%s"
 
 #. %1$s: TMPL_VAR name=authtypecode
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:84
 #, c-format
 msgid "(framework %s)"
 msgstr "(grille %s)"
@@ -1098,7 +1141,7 @@ msgstr "(mot de passe défini)"
 msgid "(that all costs are for 1 item)"
 msgstr "(tous les prix sont pour 1 exemplaire)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:85
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:82
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:58
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:58
 msgid "*"
@@ -1491,7 +1534,8 @@ msgstr ": code-barre non trouvé"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:39
 msgid ": item was on loan. It was returned before marked as seen"
-msgstr ": le document était en prêt : il a été retourné avant d'être mis à jour"
+msgstr ""
+": le document était en prêt : il a été retourné avant d'être mis à jour"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:40
 msgid ": item was on loan. couldn't be returned."
@@ -1535,9 +1579,10 @@ msgstr "<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com"
 msgid "<a1> %s </a> %s(%s)"
 msgstr "<a1> %s </a> %s(%s)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:130
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:134
 #, c-format
-msgid "<a1> Edit Supplier </a> <a2> Manage Orders </a> <a3> Receive Parcel </a>"
+msgid ""
+"<a1> Edit Supplier </a> <a2> Manage Orders </a> <a3> Receive Parcel </a>"
 msgstr "<a1>Accueil</a> <a2>Commandes</a> <a3>Colis (réception)</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/ISBDdetail.tmpl:6
@@ -1556,27 +1601,22 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:8
 #, c-format
 msgid "<a1> Edit biblio </a> <a2> MARC </a> <a3> Normal </a> <a4> ISBD </a>"
-msgstr "<a1> Editer notice </a><a2> Complète </a> <a3> Normal </a> <a4> ISBD </a>"
+msgstr ""
+"<a1> Editer notice </a><a2> Complète </a> <a3> Normal </a> <a4> ISBD </a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:138
 #, c-format
 msgid "<a1> Next Borrower</a> <a2> Returns</a>"
 msgstr "<a1>Lecteur suivant</a> <a2> Retours</a>"
 
-#. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:13
-#, c-format
-msgid "<a1> Print </a> <a2>%s biblios</a>"
-msgstr "<a1> Imprimer </a> <a2>%s Notices</a>"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:105
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:106
 #, c-format
 msgid "<a1> View Account </a> <a2> Pay Fines </a>"
 msgstr "<a1> Visualiser le compte </a> <a2> Régler des amendes </a>"
 
 #. %1$s: TMPL_VAR name=tag
 #. %2$S: type=text name=indicator
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:53
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:51
 #, c-format
 msgid "<a1>%s</a> %S -"
 msgstr "<a1>%s</a> %S -"
@@ -1608,8 +1648,10 @@ msgstr "<a1></a> \" %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:83
 #, c-format
-msgid "<a1>Acquisitions</a> <a2>Borrowers</a> <a3>Catalogue</a> <a4>Circulation</a>"
-msgstr "<a1>Acquisitions</a> <a2>Lecteurs</a> <a3>Catalogue</a><a4>Circulation</ a>"
+msgid ""
+"<a1>Acquisitions</a> <a2>Borrowers</a> <a3>Catalogue</a> <a4>Circulation</a>"
+msgstr ""
+"<a1>Acquisitions</a> <a2>Lecteurs</a> <a3>Catalogue</a><a4>Circulation</ a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/error-top.inc:44
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:147
@@ -1623,10 +1665,18 @@ msgstr ""
 "a> <a5>Autorités</a> <a6>Bilans</a> <a7>Paramètres</a> <a8>A propos</a> "
 "<a9>Aide</a>"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:7
+#, fuzzy, c-format
+msgid "<a1>Back to subscriptions</a> <a2>Back to biblio</a>"
+msgstr ""
+"<a1>Retour aux abonnements</a> <a2>Retour à la notice</a><a3>Vue complète</a>"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/serial-issues.tmpl:5
 #, c-format
-msgid "<a1>Back to subscriptions</a> <a2>Back to biblio</a> <a3>Complete view</a>"
-msgstr "<a1>Retour aux abonnements</a> <a2>Retour à la notice</a><a3>Vue complète</a>"
+msgid ""
+"<a1>Back to subscriptions</a> <a2>Back to biblio</a> <a3>Complete view</a>"
+msgstr ""
+"<a1>Retour aux abonnements</a> <a2>Retour à la notice</a><a3>Vue complète</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:107
 #, c-format
@@ -1702,6 +1752,14 @@ msgstr ""
 "<a5>Prêts/Retours</a> <a6>Autorités</a> <a7>Rapports</a> <a8>Paramètres</a> "
 "<a9>A propos</a> <a10>Aide</a>"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:137
+#, fuzzy, c-format
+msgid ""
+"<a1>Import members pictures in pictures directory</a> <a2>MARC biblio "
+"export</a> <a3>Upload MARC records in reservoir</a> <a4>Generate barcodes</a>"
+msgstr ""
+"<a1>Export notices</a> <a2>Import réservoir</a> <a3>Générer code-barres</a>"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:64
 #, c-format
 msgid "<a1>Issues</a> <a2>Returns</a> <a3>Branch transfers</a>"
@@ -1726,17 +1784,11 @@ msgstr "<a1>Sorties</a> <a2>Retours</a> <a3>Transferts</a>"
 msgid "<a1>Log In</a> to Koha"
 msgstr "<a1>Connectez-vous</a> à Koha"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:137
-#, c-format
-msgid ""
-"<a1>MARC biblio export</a> <a2>Upload MARC records in reservoir</a> "
-"<a3>Generate barcodes</a> <a4>Letters</a>"
-msgstr "<a1>Export notices</a> <a2>Import réservoir</a> <a3>Generer code-barres</a>"
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:47
 #, c-format
 msgid "<a1>Main page</a> <a2>Late orders</a> <a3>History search</a>"
-msgstr "<a1>Accueil</a> <a2>Commandes en retard</a> <a3>Recherche historique</a>"
+msgstr ""
+"<a1>Accueil</a> <a2>Commandes en retard</a> <a3>Recherche historique</a>"
 
 #. %1$s: TMPL_VAR name=surname
 #. %2$s: TMPL_VAR name=firstname
@@ -1783,7 +1835,8 @@ msgstr "<a1>Chercher</a> <a2>Ajout notice</a>"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/menus.inc:73
 #, c-format
 msgid "<a1>Search</a> <a2>Add member</a> <a3>Add organisation</a>"
-msgstr "<a1>Recherche lecteurs</a> <a2>Ajout lecteur</a><a3>Ajout collectivité</a>"
+msgstr ""
+"<a1>Recherche lecteurs</a> <a2>Ajout lecteur</a><a3>Ajout collectivité</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/dictionary.tmpl:154
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/labs_theses.tmpl:81
@@ -2018,7 +2071,8 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:109
 msgid "<b>Enter Item Barcode:</b> Item Barcode:"
-msgstr "<b>Entrez le Code à Barres du document :</b> Code à Barres du document:"
+msgstr ""
+"<b>Entrez le Code à Barres du document :</b> Code à Barres du document:"
 
 #. %1$s: TMPL_VAR name=biblioitemnumber
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:68
@@ -2260,7 +2314,7 @@ msgid "<b>Replacement Price:</b> %s"
 msgstr "<b>Prix de remplacement :</b> %s"
 
 #. %1$S: type=text name=recieve
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:75
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:68
 #, c-format
 msgid "<b>Search ISBN or Title:</b> %S"
 msgstr "<b>Cherche ISBN ou Titre :</b> %S"
@@ -2597,7 +2651,7 @@ msgid "<i>Published by:</i> %s"
 msgstr "<i>Edité par :</i> %s"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:52
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:53
 msgid ""
 "A \"value builder\": values builders are perl programs that help you select "
 "the value of the field. They are MARC-flavor dependant and sometimes fill "
@@ -2611,13 +2665,17 @@ msgstr ""
 msgid ""
 "A <b>basket</b> is a group of orders that are sent all at once to a given "
 "supplier. Basket is used when acquiring book."
-msgstr "Un <b>panier</b> est un groupe de lignes de commandes qui sont envoyés en même temps à un fournisseur. Le panier est utilisé pour acheter des documents"
+msgstr ""
+"Un <b>panier</b> est un groupe de lignes de commandes qui sont envoyés en "
+"même temps à un fournisseur. Le panier est utilisé pour acheter des documents"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/acqui-home.tmpl:13
 msgid ""
 "A <b>parcel</b> is a group of acquired books that are in the same parcel. "
 "Parcel is used when receiving books."
-msgstr "Un <b>Colis</b> est un groupe de document acquis qui sont dans un même carton de livraison. Le colis est utilisé pour réceptionner les commandes."
+msgstr ""
+"Un <b>Colis</b> est un groupe de document acquis qui sont dans un même "
+"carton de livraison. Le colis est utilisé pour réceptionner les commandes."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/search.marc/search.tmpl:20
 msgid "A biblio is selected if it's field <b>contains</b> the term you entered"
@@ -2643,7 +2701,8 @@ msgid "A free can be managed by any user."
 msgstr "Une étagère libre peut-être gérée par tous les utilisateurs."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/members/moremember.tmpl:5
-msgid "A patron's annual membership fee payment status also shows on this screen."
+msgid ""
+"A patron's annual membership fee payment status also shows on this screen."
 msgstr ""
 " Un état de paiement de la cotisation annuelle de lecteur est aussi affiché "
 "sur cette page."
@@ -2685,7 +2744,7 @@ msgstr "MONTANT"
 msgid "AMOUNT OWING"
 msgstr "Montant restant dû"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:106
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:101
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:30
 msgid "AUTHOR"
 msgstr "AUTEUR"
@@ -2789,11 +2848,11 @@ msgstr "Liste des fournisseurs"
 msgid "Acquisitions"
 msgstr "Acquisitions"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:201
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:205
 msgid "Active"
 msgstr "Actif"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:25
 msgid "Actual"
 msgstr "Effectif"
 
@@ -2814,7 +2873,7 @@ msgstr "Adam Thick"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:21
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:58
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:70
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-add.tmpl:147
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-detail.tmpl:103
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:6
@@ -3005,7 +3064,7 @@ msgstr "Ajouter une Valeur autorisée"
 msgid "Add authorised value"
 msgstr "Ajouter une valeur autorisée"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:48
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:19
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:30
 msgid "Add authority"
@@ -3093,7 +3152,7 @@ msgstr "Ajouter ou supprimer des étagères virtuelles"
 msgid "Add order"
 msgstr "Ajouter une commande"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:132
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:135
 msgid "Add order line"
 msgstr "Ajouter une ligne de commande"
 
@@ -3232,7 +3291,8 @@ msgstr "Tous les bilans du système"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:58
 msgid "Allow library staff to see my reading record"
-msgstr "Autoriser l'équipe de la bibliothèque à consulter la liste de mes emprunts"
+msgstr ""
+"Autoriser l'équipe de la bibliothèque à consulter la liste de mes emprunts"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:107
 msgid "Allowed"
@@ -3243,7 +3303,7 @@ msgid "Alt title:"
 msgstr "Autre titre"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:54
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:180
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:184
 msgid "Alternative phone"
 msgstr "Autre téléphone"
 
@@ -3271,7 +3331,7 @@ msgid "Amount"
 msgstr "Montant"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:51
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:52
 msgid ""
 "An \"authorised value\": it refers to a list of authorised values for this "
 "subfield. See the corresponding admin table."
@@ -3359,8 +3419,8 @@ msgstr ""
 msgid "Any word"
 msgstr "Tous les mots"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:30
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:32
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:40
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:29
 msgid "Anywhere"
 msgstr "Partout"
@@ -3395,7 +3455,7 @@ msgstr "Etes vous sur de vouloir supprimer cet abonnement ?"
 msgid "Area"
 msgstr "Quartier"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:41
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:49
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:53
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:55
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:141
@@ -3451,11 +3511,14 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/order.tmpl:10
 msgid "At the end of the page, you have a button to create a new supplier"
-msgstr "A la fin de la page, vous trouverez un bouton pour créer un nouveau fournisseur"
+msgstr ""
+"A la fin de la page, vous trouverez un bouton pour créer un nouveau "
+"fournisseur"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/recieveorder.tmpl:18
 msgid "At the end of the page, you have a tool to create a new parcel"
-msgstr "A la fin de la page, vous trouverez un bouton pour créer un nouveau colis"
+msgstr ""
+"A la fin de la page, vous trouverez un bouton pour créer un nouveau colis"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:131
 msgid "Aug"
@@ -3496,7 +3559,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=authorised_value
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:111
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:112
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:133
 #, c-format
 msgid "Auth value :%s,"
@@ -3519,7 +3582,6 @@ msgstr "Valeur Autorisée :"
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/cmsdsearchresults.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:42
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:123
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:262
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:187
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/search.marc/search.tmpl:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
@@ -3586,7 +3648,7 @@ msgstr "Autorité"
 
 #. %1$s: TMPL_VAR name=authid
 #. %2$s: TMPL_VAR name=authtypetext
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:4
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:57
 #, c-format
 msgid "Authority #%s (%s)"
 msgstr "Autorité  #%s (%s)"
@@ -3598,10 +3660,11 @@ msgid "Authority :%s,"
 msgstr "Autorité :%s,"
 
 #. %1$s: TMPL_VAR name=tagfield
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:84
 #, c-format
 msgid "Authority MARC subfield structure admin for tag %s"
-msgstr "Gestion de la structure des sous-champs Marc autorités pour le champ %s"
+msgstr ""
+"Gestion de la structure des sous-champs Marc autorités pour le champ %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:50
 msgid "Authority lib"
@@ -3657,7 +3720,7 @@ msgid "Authority structure definition for %s (%s)"
 msgstr "Définition de la structure d'autorité pour %s (%s)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:13
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:62
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:12
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:68
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:70
@@ -3673,7 +3736,7 @@ msgstr "Type d'autorité : code absent"
 msgid "Authority types"
 msgstr "Types d'autorité"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:54
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:56
 msgid "Avail"
 msgstr "Dispo"
 
@@ -3727,10 +3790,6 @@ msgstr "Retour à la Maintenance du Catalogue"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/marcimport.tmpl:18
 msgid "Back to acquisition"
 msgstr "Retour aux acquisitions"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:7
-msgid "Back to biblio"
-msgstr "Retour notice"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:260
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:185
@@ -3795,22 +3854,22 @@ msgstr "Générateur de code à barres"
 msgid "Barcodes generator"
 msgstr "Générateur de code à barres"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:103
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:98
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:29
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:21
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:82
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:20
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:75
 msgid "Basket"
 msgstr "Panier"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:126
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:129
 msgid "Basket empty"
 msgstr "Panier vide"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:7
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:8
 msgid "Basket info"
 msgstr "Information Panier"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:8
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:10
 msgid "Basket number"
 msgstr "Numéro de Panier"
 
@@ -4215,11 +4274,13 @@ msgstr "Catégories de Site"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/borrowers_stats.tmpl:33
 msgid "Branches and categorycodes are chosen in a select list."
-msgstr "Les sites et les catégories de lecteurs sont sélectionnées dans une liste"
+msgstr ""
+"Les sites et les catégories de lecteurs sont sélectionnées dans une liste"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:34
 msgid "Branches itemtypes and borrowers category are chosen in a select list."
-msgstr "Les sites, types de document et de lecteur sont sélectionnés dans une liste."
+msgstr ""
+"Les sites, types de document et de lecteur sont sélectionnés dans une liste."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:88
@@ -4313,13 +4374,13 @@ msgid "CHILD %s"
 msgstr "ENFANT %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:15
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:140
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:144
 msgid "COMPANY DETAILS"
 msgstr "DETAILS SOCIETE"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:175
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:163
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:71
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:72
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:93
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:98
@@ -4346,7 +4407,7 @@ msgid "CONFIRM DELETION of this entry"
 msgstr "CONFIRMEZ LA SUPPRESSION de cette saisie"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:40
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:166
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:170
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:63
 msgid "CONTACT DETAILS"
 msgstr "COORDONNEES DU CONTACT"
@@ -4356,7 +4417,7 @@ msgid "COUNT"
 msgstr "TOTAL"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:71
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:197
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:201
 msgid "CURRENT STATUS"
 msgstr "ETAT ACTUEL"
 
@@ -4365,7 +4426,6 @@ msgstr "ETAT ACTUEL"
 msgid "Call Number"
 msgstr "Cote"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:263
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/search.marc/search.tmpl:12
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:54
 msgid "Call number"
@@ -4423,7 +4483,8 @@ msgstr "Ne peut être sélectionné"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:95
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:104
-msgid "Cannot change branch record: You must specify a Branchname and a Branchcode"
+msgid ""
+"Cannot change branch record: You must specify a Branchname and a Branchcode"
 msgstr "Impossible de modifier le site. Vous devez spécifier un nom et un code"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member-quicksearch-results.tmpl:12
@@ -4589,7 +4650,7 @@ msgstr "Codage des caractères (MARC21 ou UNIMARC)"
 msgid "Character encoding (MARC21 or UNIMARC)"
 msgstr "Codage des caractères (MARC21 ou UNIMARC)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:179
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:180
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:135
 msgid "Charge"
 msgstr "Frais"
@@ -4711,7 +4772,6 @@ msgstr "Prêt : Transferts"
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:33
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport.tmpl:5
-#: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport_old.tmpl:5
 msgid "Class"
 msgstr "classification"
 
@@ -4745,16 +4805,16 @@ msgstr "Effacer tous les champs"
 msgid "Click submit to force the subject"
 msgstr "Cliquer sur valider pour forcer le sujet"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:16
-msgid "Close"
-msgstr "Fermer"
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:15
+msgid "Close basket"
+msgstr "Fermer le panier d'achat"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/help-bottom.inc:2
 msgid "Close online help"
 msgstr "Fermer l'aide en ligne"
 
 #. %1$s: TMPL_VAR name=closedate
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:14
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:13
 #, c-format
 msgid "Closed on %s"
 msgstr "fermé le %s"
@@ -4794,12 +4854,12 @@ msgstr "Colonnes"
 msgid "Compact Disc"
 msgstr "CD"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:14
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:17
 msgid "Compact view"
 msgstr "Vue compacte"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:17
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:142
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:146
 msgid "Company Name"
 msgstr "Nom de Société"
 
@@ -4807,13 +4867,14 @@ msgstr "Nom de Société"
 msgid "Complete MARC search"
 msgstr "Recherche MARC"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:53
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:55
 msgid "Comtd"
 msgstr "Engagé"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:154
 msgid "Configuration OK, you don't have errors in your MARC parameters table"
-msgstr "Configuration OK, il n'y pas d'erreurs dans votre table de paramètres MARC"
+msgstr ""
+"Configuration OK, il n'y pas d'erreurs dans votre table de paramètres MARC"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member-password.tmpl:13
@@ -4842,7 +4903,7 @@ msgstr "Confirmer la suppression de %s (%s) ?"
 msgid "Confirm issue"
 msgstr "Confirmer le prêt"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:41
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:40
 msgid "Confirm it's not a duplicate"
 msgstr "Confirmer que ce n'est pas un doublon"
 
@@ -4851,13 +4912,13 @@ msgstr "Confirmer que ce n'est pas un doublon"
 msgid "Consider the formula <b>N°{X}/{Y}</b>. The following XYZ settings :"
 msgstr "Etudier la formule <b>N°{X}/{Y}</b>."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:90
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:91
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:110
 msgid "Constraints"
 msgstr "Restrictions"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:42
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:168
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:172
 msgid "Contact Name"
 msgstr "Nom du contact"
 
@@ -5023,9 +5084,9 @@ msgid "Database"
 msgstr "Base de données"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:32
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:26
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:83
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:22
 msgid "Date"
 msgstr "Date"
 
@@ -5109,7 +5170,8 @@ msgstr "Jour de la semaine"
 #: ../../koha-tmpl/intranet-tmpl/default/en/suggestion/mail_suggestion_REJECTED.tmpl:1
 #, c-format
 msgid "Dear %s user, You have suggested that the library acquire %s"
-msgstr "Cher lecteur %s, vous avez fait à la bibliothèque la suggestion d'achat de %s"
+msgstr ""
+"Cher lecteur %s, vous avez fait à la bibliothèque la suggestion d'achat de %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:55
 msgid "Debarred:"
@@ -5223,7 +5285,8 @@ msgstr "Définissez la taille de la page pour le PDF"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/z3950servers.tmpl:3
 msgid "Defines the Z39.50 servers you want Koha to search."
-msgstr "Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche."
+msgstr ""
+"Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche."
 
 #. %1$s: TMPL_VAR name=branch
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/issuingrules.tmpl:3
@@ -5248,7 +5311,7 @@ msgstr "Sup"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:29
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:61
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:91
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:92
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:147
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:59
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:123
@@ -5307,6 +5370,7 @@ msgstr "Décroissant"
 #: ../../koha-tmpl/intranet-tmpl/default/en/modwebsites.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/modwebsites.tmpl:39
 #: ../../koha-tmpl/intranet-tmpl/default/en/stats.tmpl:7
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:33
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:73
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:118
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/biblio_framework.tmpl:73
@@ -5384,7 +5448,7 @@ msgid "Directly add a biblio in the library catalogue"
 msgstr "Ajouter directement une notice au catalogue de la bibliothèque"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:120
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:231
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:235
 msgid "Discount"
 msgstr "Remise"
 
@@ -5441,7 +5505,7 @@ msgstr "Dorian Meid (traduxtion allemande)"
 msgid "Dr"
 msgstr "Dr"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:177
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:178
 msgid "Due"
 msgstr "Retour"
 
@@ -5464,7 +5528,7 @@ msgid "Duplicate suspected with <a1>%s</a>"
 msgstr "Doublon suspecté avec <a1>%s</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:62
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:188
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:192
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:105
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:157
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:61
@@ -5575,7 +5639,6 @@ msgstr "Lecteur débutant"
 msgid "Ed Summers (Some code and Perl packages like MARC::Record)"
 msgstr "Ed Summers (Codes et paquetages Perl tels que Enregistrement::MARC)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:94
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:42
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:81
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:16
@@ -5631,7 +5694,7 @@ msgstr ""
 "prend beaucoup de temps, mais c'est aussi très important ; soyez sûr de "
 "cliquer sur le sous-champ lié à chaque champ de votre structure MARC"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:28
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:31
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:34
 msgid "Editor constaints"
 msgstr "Editeur des restrictions"
@@ -5750,7 +5813,10 @@ msgid ""
 "Enter the quantity you want to acquire, the supplier price and the budget. "
 "When you enter the supplier price, all other values are calculated, "
 "depending on supplier VAT rules, VAT rate, supplier discount..."
-msgstr "Saisissez la quantité que vous souhaitez acquérir, le prix fournisseur et la ligne budgétaire. Lorsque vous saisissez le prix fournisseur, les autres valeurs sont recalculées, en fonction des éléments de TVA, des remises..."
+msgstr ""
+"Saisissez la quantité que vous souhaitez acquérir, le prix fournisseur et la "
+"ligne budgétaire. Lorsque vous saisissez le prix fournisseur, les autres "
+"valeurs sont recalculées, en fonction des éléments de TVA, des remises..."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/401.tmpl:5
 msgid "Error 401"
@@ -5779,7 +5845,7 @@ msgstr "Erreur : %s"
 msgid "Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 msgstr "Esiee (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:23
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:22
 msgid "Est. cost"
 msgstr "Cout net"
 
@@ -5813,7 +5879,9 @@ msgstr ""
 msgid ""
 "Example : a parcel contain 3 items of the same book. It is related to an "
 "order of 5 items. The list will show :"
-msgstr "Exemple : un colis contenant 3 exemplaires du même document. Si la ligne concerne une commande de 5 exemplaires, la liste affichera :"
+msgstr ""
+"Exemple : un colis contenant 3 exemplaires du même document. Si la ligne "
+"concerne une commande de 5 exemplaires, la liste affichera :"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:24
 msgid "Existing items"
@@ -5861,10 +5929,14 @@ msgstr "Avertissement"
 msgid "FLAGS for %s, %s"
 msgstr "Habilitations pour %s, %s"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:50
+msgid "FREIGHT"
+msgstr "PORT"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:33
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:58
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:158
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:184
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:162
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:188
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:189
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:97
@@ -5984,7 +6056,7 @@ msgstr "Amende"
 msgid "Fine type"
 msgstr "Type d'amende"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:97
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:98
 msgid "Fines &amp; charges"
 msgstr "Dettes & amendes"
 
@@ -6065,7 +6137,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:350
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:346
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:132
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:205
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:129
@@ -6159,6 +6231,7 @@ msgstr "Fréquence (*) :"
 msgid "Friday"
 msgstr "Vendredi"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:51
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/histsearch.tmpl:31
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:123
 msgid "From"
@@ -6226,14 +6299,14 @@ msgstr "Rempli"
 msgid "Fund <a1>[order]</a>"
 msgstr "Budget <a1>[Trier]</a>"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:95
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:57
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:98
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieveorder.tmpl:112
 msgid "GST"
 msgstr "TVA"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:105
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:219
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:223
 msgid "GST Registered"
 msgstr "TVA enregistrée"
 
@@ -6340,14 +6413,16 @@ msgid "Guarantor:"
 msgstr "Garant"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:31
-msgid "Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine"
-msgstr "Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine"
+msgid ""
+"Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine"
+msgstr ""
+"Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:54
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:43
 msgid "HELP"
 msgstr "AIDE"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:80
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:84
 msgid "HELP Ordering"
 msgstr "AIDE Commande"
 
@@ -6535,7 +6610,7 @@ msgid "INSTITUTION DETAILS"
 msgstr "COORDONNEES COLLECTIVITE"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:30
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:104
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:99
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:137
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:24
@@ -6609,18 +6684,22 @@ msgstr ""
 "Si un ISBN existe déjà dans le réservoir, vous pouvez choisir soit d'ignorer "
 "le nouveau soit d'écraser l'ancien."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:40
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:39
 #, c-format
-msgid "If it <em>is</em> a duplicate, <a1>Edit Items</a> of the existing record."
-msgstr "S'il s'agit d'un <em>doublon</em> <a1>Editer exemplaires</a> de la notice existante"
+msgid ""
+"If it <em>is</em> a duplicate, <a1>Edit Items</a> of the existing record."
+msgstr ""
+"S'il s'agit d'un <em>doublon</em> <a1>Editer exemplaires</a> de la notice "
+"existante"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:41
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:40
 msgid "If not, click to"
 msgstr "Sinon, cliquer pour"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/issuingrules.tmpl:22
 msgid "If nothing is set, default is 21,5 (hardcoded)"
-msgstr "Si rien n'est défini, la valeur par defaut est 21,5 (figé dans le code)"
+msgstr ""
+"Si rien n'est défini, la valeur par defaut est 21,5 (figé dans le code)"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:52
@@ -6819,17 +6898,23 @@ msgid ""
 "If you selected a suggestion or want to order a new item from an existing "
 "biblio, it will be filled automatically. Otherwise, it will be empty. Title "
 "and item type are the only mandatory fields."
-msgstr "Si vous sélectionnez une suggestion ou souhaitez commander un nouvel exemplaire d'une notice existante, la zone sera pré-remplie. Sinon, elle sera vide : le titre et le type du document sont les seuls champs obligatoires."
+msgstr ""
+"Si vous sélectionnez une suggestion ou souhaitez commander un nouvel "
+"exemplaire d'une notice existante, la zone sera pré-remplie. Sinon, elle "
+"sera vide : le titre et le type du document sont les seuls champs "
+"obligatoires."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:16
 msgid ""
 "If you validate your search, you'll get a list of items. Go to the shelves, "
 "search them, and, if you see them, click on them"
-msgstr "Si vous validez votre recherche, vous aurez une liste de documents. Allez sur les étagères, recherchez les et, si vous les trouvez, cliquez"
+msgstr ""
+"Si vous validez votre recherche, vous aurez une liste de documents. Allez "
+"sur les étagères, recherchez les et, si vous les trouvez, cliquez"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull-home.tmpl:5
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/bull-home.tmpl:4
-msgid "If you want to create a new subscription, clic on"
+msgid "If you want to create a new subscription, click on"
 msgstr "Si vous voulez créer un nouvel abonnement, cliquez sur"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/circ/circulation.tmpl:7
@@ -6930,7 +7015,8 @@ msgstr "Importer cette notice"
 #
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/500.tmpl:8
-msgid "In Koha this typically means that the Koha team is working on new features"
+msgid ""
+"In Koha this typically means that the Koha team is working on new features"
 msgstr ""
 " Dans Koha, ceci signifie normalement, que l'équipe de Koha travaille à de "
 "nouvelles options"
@@ -6978,17 +7064,22 @@ msgid ""
 "In the suggestion box, you can see how many suggestions you have to check "
 "(accept or refuse). Of course, if you haven't activated suggestions (in "
 "parameters >> systempreferences), you won't have anything in this box."
-msgstr "Dans le bloc des suggestions, vous pouvez voir combien de suggestions vous avez à traiter (accepter ou rejeter). Bien sûr, si vous n'avez pas activé les suggestions (dans paramètres >> préférences systèmes), vous n'avez rien dans cette zone."
+msgstr ""
+"Dans le bloc des suggestions, vous pouvez voir combien de suggestions vous "
+"avez à traiter (accepter ou rejeter). Bien sûr, si vous n'avez pas activé "
+"les suggestions (dans paramètres >> préférences systèmes), vous n'avez rien "
+"dans cette zone."
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:3
-msgid "In this screen, you can see subscription detail, and modify it if you need."
+msgid ""
+"In this screen, you can see subscription detail, and modify it if you need."
 msgstr ""
 " Sur cet écran, vous pouvez voir le détail de l'abonnement, et le modifier "
 "si nécessaire."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:19
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:203
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:207
 msgid "Inactive"
 msgstr "Inactif"
 
@@ -6996,12 +7087,12 @@ msgstr "Inactif"
 msgid "Including Basket"
 msgstr "Panier"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:20
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:23
 msgid "Information"
 msgstr "Information"
 
 #. %1$s: TMPL_VAR name=name
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:129
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:133
 #, c-format
 msgid "Information for : %s"
 msgstr "Information pour : %s"
@@ -7057,8 +7148,12 @@ msgstr "aide inventaire/récollement"
 msgid "Inventory/Stocktaking"
 msgstr "Inventaire/récolement"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:9
+msgid "Invoice"
+msgstr "Facture/BL"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:115
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:227
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:231
 msgid "Invoice Item Price Includes GST"
 msgstr "Le prix facturé comprend la TVA"
 
@@ -7067,19 +7162,9 @@ msgid "Invoice Number"
 msgstr "Numéro Facture/BL"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:97
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:216
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:220
 msgid "Invoice Prices are"
 msgstr "Les Prix Facturés sont"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:12
-msgid "Invoice number"
-msgstr "Numéro facture/BL"
-
-#. %1$s: TMPL_VAR name=invoice
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:9
-#, c-format
-msgid "Invoice: %s"
-msgstr "Facture/BL : %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:130
 msgid "Is equal to"
@@ -7102,7 +7187,7 @@ msgid "Is lower than"
 msgstr "Est inférieur à"
 
 #. %1$s: TMPL_VAR name=duplicatetitle
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:36
 #, c-format
 msgid "Is this a duplicate of <a1>%s</a>?"
 msgstr "Est-ce un doublon de <a1>%s</a>?"
@@ -7200,7 +7285,8 @@ msgstr "Règles de prêt"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/itemtypes.tmpl:16
-msgid "Issuing rules are set for item types (and for borrower types / branches)"
+msgid ""
+"Issuing rules are set for item types (and for borrower types / branches)"
 msgstr ""
 " Les règles de prêt sont établies par types de document (et par types de "
 "lecteur / sites)"
@@ -7250,7 +7336,8 @@ msgstr "Exemplaire"
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:15
 #, c-format
 msgid "Item %s (%s) is marked waiting at <b>%s</b> for %s (<a1>%s</a>)."
-msgstr "Le document %s (%s) est noté en attente à <b>%s</b> pour %s (<a1>%s</a>)."
+msgstr ""
+"Le document %s (%s) est noté en attente à <b>%s</b> pour %s (<a1>%s</a>)."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:43
 msgid "Item Barcode *"
@@ -7452,7 +7539,8 @@ msgstr "Exemplaire(s)"
 #. %6$s: TMPL_VAR name=tobranchname
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:52
 #, c-format
-msgid "Item: %s (%s) <a1> %s </a> for %s (<a2>%s</a>) to be collected at <b>%s</b>."
+msgid ""
+"Item: %s (%s) <a1> %s </a> for %s (<a2>%s</a>) to be collected at <b>%s</b>."
 msgstr ""
 " Exemplaire : %s (%s) <a1> %s </a> pour %s (<a2>%s</a>) peut être retiré à "
 "<b> %s</b>."
@@ -7502,7 +7590,7 @@ msgstr "Documents en retard au %s"
 msgid "Items Reserved as of %s"
 msgstr "Documents réservé le %s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:169
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:170
 msgid "Items currently on issue"
 msgstr "Documents actuellement en prêt"
 
@@ -7511,7 +7599,7 @@ msgid "Items expected"
 msgstr "Documetns attendus"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:15
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:14
 msgid "Items in parcel"
 msgstr "Documents dans le colis"
 
@@ -7524,12 +7612,12 @@ msgstr "Documents non empruntés"
 msgid "Items on Reserve"
 msgstr "Réservation"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:115
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:116
 msgid "Items requested"
 msgstr "Documents réservés"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/search.tmpl:21
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:178
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:179
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/bor_issues_top.tmpl:82
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/borrowers_out.tmpl:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/cat_issues_top.tmpl:82
@@ -8008,7 +8096,7 @@ msgstr ""
 "Dernière valeur/commence avec : la dernière valeur calculée ou la 1ère "
 "(quand on ajoute un abonnement)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:43
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:51
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:58
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:142
@@ -8123,12 +8211,12 @@ msgid "Links Koha - MARC DB"
 msgstr "Liens Koha - Base de Données MARC"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:110
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:223
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:227
 msgid "List Item Price Includes GST"
 msgstr "Liste des prix des documents incluant la TVA"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:89
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:213
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:217
 msgid "List Prices are"
 msgstr "La Liste des Prix est"
 
@@ -8319,11 +8407,16 @@ msgstr "Bibliothèque Principale"
 msgid "Main Menu"
 msgstr "Menu Général"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:18
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:21
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:29
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:32
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:17
 msgid "Main entry"
 msgstr "Vedette"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:18
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:21
+msgid "Main entry ($a only)"
+msgstr "Vedette ($a seulement)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:99
 msgid "Male"
@@ -8334,7 +8427,7 @@ msgstr "Homme"
 msgid "Manage serial subscriptions and issues"
 msgstr "Gestion des abonnements et des périodiques"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:39
 msgid "Managed"
 msgstr "Géré"
 
@@ -8356,7 +8449,7 @@ msgstr ""
 "c'est plus logique, deuxièment, Koha ne saurait plus trop répéter des champs "
 "répétables autrement!!!"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:106
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:107
 msgid "Managed,"
 msgstr "Géré"
 
@@ -8378,7 +8471,7 @@ msgstr ""
 "Obligatoire : si le champ est obligatoire ou non. S'il l'est, le catalogueur "
 "ne peut valider une notice si ce champ est vide."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:107
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:108
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:129
 msgid "Mandatory,"
 msgstr "Obligatoire,"
@@ -8588,7 +8681,7 @@ msgstr "Mike Mylonas"
 msgid "Miss"
 msgstr "Melle"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:44
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:52
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:63
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:143
@@ -8814,7 +8907,7 @@ msgstr "NOUVEAU LECTEUR"
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:176
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:166
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:76
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:94
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:40
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:106
@@ -8836,7 +8929,7 @@ msgstr "NON"
 
 #. IMG
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:41
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:165
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:166
 msgid "NO IMAGE"
 msgstr "PAS d'IMAGE"
 
@@ -8876,7 +8969,6 @@ msgstr "NOTES :"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:251
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/printers.tmpl:143
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport.tmpl:5
-#: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport_old.tmpl:5
 msgid "Name"
 msgstr "Nom"
 
@@ -8901,6 +8993,11 @@ msgstr "Nommer cet ensemble d'enregistrements MARC :"
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:78
 msgid "Name:"
 msgstr "Nom :"
+
+#. A
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:44
+msgid "Narrower terms"
+msgstr "Termes spécifiques"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:4
 msgid "New"
@@ -8987,12 +9084,12 @@ msgstr "Nicholas Rosasco,(rédacteur de la documentation)"
 msgid "Nicolas Morin (French Translation in 2.0)"
 msgstr "Nicolas Morin, (traduction française 2.0)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:220
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:224
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:228
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:232
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:64
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:136
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:137
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:152
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:153
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:126
@@ -9010,6 +9107,11 @@ msgstr "Non"
 msgid "No Item with barcode: %s"
 msgstr "Pas d'exemplaire avec code à barres : %s"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:12
+#, fuzzy
+msgid "No Publication Date"
+msgstr "Année de Publication"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/jmemberentry.tmpl:37
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:77
 msgid "No Title"
@@ -9021,7 +9123,7 @@ msgstr "Pas de Titre"
 msgid "No borrower matched %s"
 msgstr "Pas de lecteurs correspondant %s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:101
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:102
 msgid "No debts"
 msgstr "Pas de dettes"
 
@@ -9083,8 +9185,8 @@ msgstr "non-ISBD"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:137
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-add.tmpl:88
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:156
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:214
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:157
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:215
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:129
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:205
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/bor_issues_top.tmpl:79
@@ -9138,7 +9240,7 @@ msgstr "Pas un prêt, mais un renouvellement"
 msgid "Not for loan"
 msgstr "Exclu du prêt"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:107
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:108
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:129
 msgid "Not mandatory,"
 msgstr "Facultatif"
@@ -9152,7 +9254,7 @@ msgstr "Pas en prêt"
 msgid "Not published"
 msgstr "Non publié"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:106
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:128
 msgid "Not repeatable,"
 msgstr "Non répétable"
@@ -9176,13 +9278,17 @@ msgstr "Remarque : les exemplaires NE SONT PAS exportés par cet outil"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-renew.tmpl:15
 msgid "Note for the librarian that will manage your renewal request"
-msgstr "Remarque pour le bibliothécaire qui va gérer votre demande de renouvellement"
+msgstr ""
+"Remarque pour le bibliothécaire qui va gérer votre demande de renouvellement"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:22
 msgid ""
 "Note that inventory is calculated on a \"date last seen\" flag. This flag is "
 "automatically set every time a book circulate"
-msgstr "Notez que l'inventaire/récollement est calculé à partir de la \"date de dernier mouvement\". Cette date est positionnée automatiquement à chaque circulation du document."
+msgstr ""
+"Notez que l'inventaire/récollement est calculé à partir de la \"date de "
+"dernier mouvement\". Cette date est positionnée automatiquement à chaque "
+"circulation du document."
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/statecollection.tmpl:24
@@ -9207,14 +9313,16 @@ msgstr ""
 "imprimante connectée à votre poste de travail en utilisant simplement la "
 "fonction d'impression de votre navigateur internet."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:51
 msgid "Note: in the last column, you can choose:"
 msgstr "Remarque : dans la dernière colonne, vous pouvez choisir :"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:80
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:81
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:211
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:66
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:192
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:124
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:196
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:239
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:52
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:25
@@ -9316,7 +9424,7 @@ msgstr ""
 msgid "Num/Borrowers"
 msgstr "Numéro/Lecteurs"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:24
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:29
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:22
 msgid "Number"
 msgstr "Nombre"
@@ -9435,7 +9543,7 @@ msgstr "Retards/Prêts"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:128
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:136
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:174
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:49
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:74
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:101
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:116
@@ -9530,7 +9638,7 @@ msgid "OR Add to a new Group:"
 msgstr "OU Ajouter à un nouveau Groupe"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:82
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:206
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:210
 msgid "ORDERING INFORMATION"
 msgstr "INFORMATION POUR LES COMMANDES"
 
@@ -9569,7 +9677,7 @@ msgstr "En Prêt"
 msgid "On Loan until %s"
 msgstr "En Prêt jusqu'à %s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:199
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:200
 msgid "On Request - no renewals"
 msgstr "Réservé-pas de renouvellement"
 
@@ -9596,7 +9704,7 @@ msgstr "Sur cette page, vous pouvez ajouter des commandes dans le panier."
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/biblio_framework.tmpl:5
 msgid ""
-"Once a framework type is created, you can clic on \"MARC structure\" to "
+"Once a framework type is created, you can click on \"MARC structure\" to "
 "define the exact MARC structure. The first time, Koha will ask you to select "
 "an existing framework to copy into the new one. Thus, you don't have to "
 "define all the MARC structure"
@@ -9611,7 +9719,11 @@ msgid ""
 "Once you have a long barcode list, reach the second bloc on inventory.pl, "
 "and upload the file : all items you have scanned will automatically be "
 "modified to have datelastseen set to whatever you wan"
-msgstr "Lorsque vous avez une longue liste de code-barres, regardez dans le second bloc de la page, et téléchargez le fichier : tous les documents que vous avez scanné sont automatiquement modifiés pour avoir la \"date de dernier mouvement\" mise à jour à la valeur que vous souhaitez"
+msgstr ""
+"Lorsque vous avez une longue liste de code-barres, regardez dans le second "
+"bloc de la page, et téléchargez le fichier : tous les documents que vous "
+"avez scanné sont automatiquement modifiés pour avoir la \"date de dernier "
+"mouvement\" mise à jour à la valeur que vous souhaitez"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/checkmarc.tmpl:2
 msgid ""
@@ -9654,7 +9766,10 @@ msgstr ""
 msgid ""
 "Once you're done with your library, you can look at missing books by "
 "querying the 1st bloc for books unseen since the beginning of your inventory"
-msgstr "Lorsque vous avez inventorié toute votre bibliothèque, vous pouvez visualiser les documents manquants en recherchant les documents n'ayant pas été marqués depuis le début de votre inventaire."
+msgstr ""
+"Lorsque vous avez inventorié toute votre bibliothèque, vous pouvez "
+"visualiser les documents manquants en recherchant les documents n'ayant pas "
+"été marqués depuis le début de votre inventaire."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:17
 msgid "One Author per line"
@@ -9698,7 +9813,8 @@ msgstr "Date de la commande"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:125
 msgid "Order items, receive orders, set budgets..."
-msgstr "Commander des documents, receptionner des commandes, gérer des budgets..."
+msgstr ""
+"Commander des documents, receptionner des commandes, gérer des budgets..."
 
 #. %1$s: TMPL_VAR name=date
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:10
@@ -9710,6 +9826,10 @@ msgstr "Commande faite : %s"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/histsearch.tmpl:3
 msgid "Order search"
 msgstr "Recherche sur les commandes"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:77
+msgid "Ordered"
+msgstr "Commandé"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/search.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:152
@@ -9820,7 +9940,7 @@ msgstr "Retards"
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:25
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:24
 msgid "P&amp;P"
 msgstr "P&P"
 
@@ -9907,6 +10027,10 @@ msgstr "Lecteur"
 msgid "Patron <a1>Sort</a>"
 msgstr "Lecteur <a1>Trier</a>"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:4
+msgid "Patron Pictures Import System"
+msgstr ""
+
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:55
 msgid "Patron is debarred"
@@ -9932,7 +10056,7 @@ msgstr "Payer les Amendes pour %s %s"
 msgid "Payment"
 msgstr "Paiement"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:68
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:61
 msgid "Pending orders"
 msgstr "Commandes en attente"
 
@@ -9952,8 +10076,8 @@ msgstr "version PERL :"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:29
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:50
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:154
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:176
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:158
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:180
 #: ../../koha-tmpl/intranet-tmpl/default/en/overdue.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:219
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:134
@@ -10008,7 +10132,7 @@ msgid "Phone: %s"
 msgstr "Téléphone : %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:25
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:150
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:154
 msgid "Physical Address"
 msgstr "Adresse Physique"
 
@@ -10097,7 +10221,7 @@ msgstr "Merci de retourner à %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=value_builder
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:112
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:113
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:135
 #, c-format
 msgid "Plugin :%s,"
@@ -10114,12 +10238,12 @@ msgid "Port"
 msgstr "Port"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:46
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:172
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:176
 msgid "Position"
 msgstr "Position"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:21
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:146
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:150
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:112
 msgid "Postal Address"
@@ -10145,13 +10269,13 @@ msgstr "Rue de l'adresse"
 msgid "Postal city"
 msgstr "Ville (Code Postal)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:70
-msgid "Prefered Name"
-msgstr "Nom usuel"
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:46
 msgid "Preferred Branch"
 msgstr "Site préférentiel"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:70
+msgid "Preferred Name"
+msgstr "Nom usuel"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/default.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/cmsdsearchresults.tmpl:18
@@ -10219,6 +10343,10 @@ msgstr "Date de publication"
 msgid "Public"
 msgstr "Publique"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:25
+msgid "Publication Date"
+msgstr "Année de Publication"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:44
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/search.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/catalogue_stats.tmpl:25
@@ -10243,6 +10371,7 @@ msgstr "édité par :"
 msgid "Published on"
 msgstr "édité le"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:33
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:117
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:37
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/search.tmpl:44
@@ -10258,24 +10387,19 @@ msgstr "Editeur"
 msgid "Publisher:"
 msgstr "Editeur :"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:33
-#, c-format
-msgid "Publisher<a1>[order]</a>"
-msgstr "Editeur<a1>[Trier]</a>"
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:85
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:209
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:213
 msgid "Publishers and Imprints"
 msgstr "Editeurs et adresses bibliographiques"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:107
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:102
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:37
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:27
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:26
 msgid "Qty"
 msgstr "QTé"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:24
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:23
 msgid "Qty ordered"
 msgstr "Qté Commandée"
 
@@ -10346,16 +10470,9 @@ msgstr "Taux"
 msgid "Rate missing"
 msgstr "Taux manquant"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:161
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:162
 msgid "Reading Record"
 msgstr "Liste des lectures"
-
-#. %1$s: TMPL_VAR name=name
-#. %2$s: TMPL_VAR name=invoice
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:5
-#, c-format
-msgid "Receipt Summary for <i>%s</i> Invoice <i>%s</i>"
-msgstr "Récapitulatif de réception pour <i>%s</i> Facture/BL <i>%s</i>"
 
 #. %1$s: TMPL_VAR name=name
 #. %2$s: TMPL_VAR name=invoice
@@ -10363,6 +10480,12 @@ msgstr "Récapitulatif de réception pour <i>%s</i> Facture/BL <i>%s</i>"
 #, c-format
 msgid "Receipt Summary for: <i>%s</i> Invoice <i>%s</i>"
 msgstr "Résumé de réception pour <i>%s</i> Facture/BL <i>%s</i>"
+
+#. %1$s: TMPL_VAR name=name
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:5
+#, c-format
+msgid "Receipt parcel for <i>%s</i>"
+msgstr "Réception colis pour <i>%s</i>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:8
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/bull-home.tmpl:71
@@ -10379,21 +10502,20 @@ msgstr "Réceptionner un nouveau colis"
 msgid "Receive parcel from supplier <a1>%s</a>"
 msgstr "Réception de colis pour le fournisseur <a1>%s</a>"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:108
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:103
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:78
 msgid "Received"
 msgstr "Reçu"
-
-#. %1$s: TMPL_VAR name=user
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:10
-#, c-format
-msgid "Received By: %s"
-msgstr "Reçu Par : %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:139
 msgid "Received On"
 msgstr "Reçue en"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:91
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:27
+msgid "Reception Date"
+msgstr "Date réception"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:88
 msgid "Recieve"
 msgstr "Réception"
 
@@ -10466,7 +10588,7 @@ msgid "Relationship:"
 msgstr "Relation"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:41
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:122
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:123
 msgid "Remove"
 msgstr "Retirer"
 
@@ -10482,17 +10604,14 @@ msgstr "Retirer les Documents Sélectionnés"
 msgid "Remove from basket"
 msgstr "Supprimer du panier"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:181
+#. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:317
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:182
 msgid "Renew"
 msgstr "Renouvellement"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:318
-msgid "Renew Checked Items"
-msgstr "Renouveler documents"
-
-#. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:210
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:211
 msgid "Renew Items"
 msgstr "Renouveler documents"
 
@@ -10505,7 +10624,7 @@ msgstr ""
 "Prolonger des prêts, visualiser,ajouter, modifier, supprimer des "
 "enregistrements,tout cela en commençant par cette recherche"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:264
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:262
 msgid "Renew?"
 msgstr "Renouvellement?"
 
@@ -10547,7 +10666,7 @@ msgstr "Le prix de location n'est pas un nombre"
 msgid "Repeatable"
 msgstr "Répétable"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:106
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:128
 msgid "Repeatable,"
 msgstr "Répétable,"
@@ -10603,7 +10722,7 @@ msgid "Request a renewal"
 msgstr "Demander un renouvellement"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-print.tmpl:44
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:121
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:122
 msgid "Requested"
 msgstr "Réservés"
 
@@ -10628,7 +10747,6 @@ msgid "Reserve Cancelled"
 msgstr "Echec de la réservation"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport.tmpl:5
-#: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport_old.tmpl:5
 msgid "Reserve Date"
 msgstr "Date réservation"
 
@@ -10652,10 +10770,6 @@ msgstr "Droits de réservation"
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:51
 msgid "Reserve found"
 msgstr "Réservation trouvée"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport_old.tmpl:3
-msgid "Reserve report"
-msgstr "Bilan réserve"
 
 #. %1$s: TMPL_VAR name=RESERVE_WAITING
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:209
@@ -10757,9 +10871,9 @@ msgstr "Prix unitaire catalogue"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:221
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:280
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:297
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:312
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:277
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:295
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:308
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/issues_stats.tmpl:129
 msgid "Return"
 msgstr "Date du retour"
@@ -10773,7 +10887,7 @@ msgid "Return to Member Record"
 msgstr "Retour à la fiche lecteur"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:265
+#: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:263
 msgid "Return?"
 msgstr "Retourner ?"
 
@@ -10896,7 +11010,9 @@ msgstr "Scanner tous les document et signaler à Koha que vous les avez vus"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:7
 msgid "Scan all books which will tell Koha they have been 'seen'"
-msgstr "Scanner tous les documents, ce qui permettra à Koha de les marquer comme \"vus\""
+msgstr ""
+"Scanner tous les documents, ce qui permettra à Koha de les marquer comme "
+"\"vus\""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/jmemberentry.tmpl:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:75
@@ -10904,7 +11020,7 @@ msgid "School"
 msgstr "Ecole"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:136
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:139
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:200
@@ -10937,7 +11053,7 @@ msgstr ""
 "Rechercher une notice.Quand ce document est trouvé, vous pouvez vérifier son "
 "état, faire une réservation, ou bien voir où il se trouve"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:28
 msgid "Search also"
 msgstr "Rechercher aussi"
 
@@ -11084,7 +11200,8 @@ msgstr "Sélectionner un lecteur"
 #. %1$S: type=text name=value
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/issues_by_borrower_category.tmpl:42
 #, c-format
-msgid "Select a borrower category (or don't if you want to see global status) %S"
+msgid ""
+"Select a borrower category (or don't if you want to see global status) %S"
 msgstr ""
 " Sélectionner une catégorie de lecteur (ou rien si vous souhaitez visualiser "
 "l'état global) %S"
@@ -11116,6 +11233,12 @@ msgid ""
 msgstr ""
 "Sélectionner un fichier à importer dans le réservoir.Il sera analysé, et "
 "pour chaque ISBN trouvé, une nouvelle copie sera créé dans le réservoir."
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:40
+msgid ""
+"Select a file to unpack on the server. Each .jpg file contained therein will "
+"be copied to the appropriate place on the server for patron pictures."
+msgstr ""
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/barcodes.tmpl:51
@@ -11157,6 +11280,11 @@ msgid "Select one if budget is branch specific, otherwise, leave it blank."
 msgstr ""
 "Sélectionner une branche si le budget lui est spécifique. Sinon, laisser "
 "blanc"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:46
+#, fuzzy
+msgid "Select the .zip file to unpack:"
+msgstr "Sélectionnez le fichier à importer :"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/marcimport.tmpl:30
 #: ../../koha-tmpl/intranet-tmpl/default/en/import/breeding.tmpl:22
@@ -11496,7 +11624,7 @@ msgstr "Un merci particulier aux financeurs suivants"
 msgid "Spelling suggestion"
 msgstr "Suggestion orthographique"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:52
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:54
 msgid "Spent"
 msgstr "Dépensé"
 
@@ -11522,8 +11650,8 @@ msgid "Start date <i>(%s)</i>"
 msgstr "Date de début <i>(%s)</i>"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:42
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:43
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:54
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:55
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/search.tmpl:48
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-bib-search.tmpl:27
@@ -11560,7 +11688,7 @@ msgstr "Etat de collection"
 msgid "Stats"
 msgstr "Bilan"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:31
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:29
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:133
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-print.tmpl:20
@@ -11611,7 +11739,7 @@ msgstr "Gestion des mots vides"
 msgid "Street Address if different"
 msgstr "Autre adresse"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:94
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:97
 msgid "Sub total"
 msgstr "Sous-Total"
 
@@ -11619,7 +11747,7 @@ msgstr "Sous-Total"
 msgid "Subclass"
 msgstr "sous-classification"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:88
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:89
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:171
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:64
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:108
@@ -11628,7 +11756,7 @@ msgstr "Sous-champ"
 
 #. %1$s: TMPL_VAR name=tagsubfield
 #. %2$s: TMPL_VAR name=liblibrarian
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:62
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:63
 #, c-format
 msgid "Subfield %s %s"
 msgstr "Sous-champ %s %s"
@@ -11867,7 +11995,7 @@ msgid "Supplier Search Results"
 msgstr "Résultat de Recherche Fournisseur"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:73
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:199
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:203
 msgid "Supplier is"
 msgstr "Le Fournisseur est"
 
@@ -11933,12 +12061,12 @@ msgstr "Gestion des préférences système"
 msgid "System preferences."
 msgstr "Préférences Système."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:105
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:100
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:29
 msgid "TITLE"
 msgstr "TITRE"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:61
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:54
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:148
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:20
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:39
@@ -11957,7 +12085,7 @@ msgid "TOTAL"
 msgstr "TOTAL"
 
 #. %1$s: TMPL_VAR name=currency
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:96
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:99
 #, c-format
 msgid "TOTAL (%s)"
 msgstr "TOTAL (%s)"
@@ -12001,21 +12129,22 @@ msgstr "Champ reporté"
 msgid "Teacher Reference"
 msgstr "Référence du professeur"
 
+#. A
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/detail.tmpl:41
+msgid "Term"
+msgstr "Terme"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:7
 msgid "Test"
 msgstr "Test"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:89
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:90
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:30
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:109
 msgid "Text"
 msgstr "Texte"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:35
-msgid "Text for OPAC"
-msgstr "Texte pour l'OPAC"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:16
@@ -12025,10 +12154,6 @@ msgid ""
 msgstr ""
 "Texte pour l'OPAC : c'est ce qui apparaît avant le champ à l'OPAC.S'il est "
 "vide, c'est le texte pour les bibliothécaires qui est utilisé  à la place"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:30
-msgid "Text for librarian"
-msgstr "Texte pour le bibliothécaire"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:15
@@ -12079,7 +12204,10 @@ msgstr ""
 msgid ""
 "The 1st box contain the basket header : the librarian that started it, the "
 "date... It can be closed. A closed basket can't be modified anymore"
-msgstr "Le 1er bloc contient les en-têtes de panier : le bibliothécaire qui l'a créé, la date... Le panier peut être fermé. Un panier fermé ne peut plus être modifié."
+msgstr ""
+"Le 1er bloc contient les en-têtes de panier : le bibliothécaire qui l'a "
+"créé, la date... Le panier peut être fermé. Un panier fermé ne peut plus "
+"être modifié."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/recieve.tmpl:4
 msgid "The 1st box contain the list of already recieved items"
@@ -12105,7 +12233,10 @@ msgid ""
 "The 2nd box contain the list of orders from this supplier still incompletly "
 "recieved. You can add an item in the parcel by selecting in this list, or "
 "search it through isbn/title"
-msgstr "Le 2eme bloc contient la liste des commandes de ce fournisseur toujours en attente de réception. Vous pouvez remplir un colis à partir de cette liste, ou en recherchant dans l'isbn/titre."
+msgstr ""
+"Le 2eme bloc contient la liste des commandes de ce fournisseur toujours en "
+"attente de réception. Vous pouvez remplir un colis à partir de cette liste, "
+"ou en recherchant dans l'isbn/titre."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/basket.tmpl:5
 msgid "The 2nd box contain the order lines"
@@ -12113,13 +12244,16 @@ msgstr "Le 2eme bloc contient les lignes de commande"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/newbiblio.tmpl:6
 msgid "The 2nd box is related to quantity and accounting for this line."
-msgstr "Le 2eme bloc contient les quantités et éléments budgétaires pour cette ligne."
+msgstr ""
+"Le 2eme bloc contient les quantités et éléments budgétaires pour cette ligne."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/basket.tmpl:6
 msgid ""
 "The 3rd box let you choose how to add a new order line. Each order line can "
 "come from :"
-msgstr "Le 3eme bloc vous permet d'ajouter une ligne de commande. Chaque ligne peut provenir de : "
+msgstr ""
+"Le 3eme bloc vous permet d'ajouter une ligne de commande. Chaque ligne peut "
+"provenir de : "
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/issuingrules.tmpl:12
 msgid ""
@@ -12243,7 +12377,9 @@ msgstr "La date de retour est invalide"
 msgid ""
 "The exchange rate for all currencies. You can change them if needed. "
 "Remember that Koha don't get them automatically"
-msgstr "Le taux de change pour chaque devise. Vous pouvez les changer si nécessaire. N'oubliez pas que Koha ne le fera pas automatiquement"
+msgstr ""
+"Le taux de change pour chaque devise. Vous pouvez les changer si nécessaire. "
+"N'oubliez pas que Koha ne le fera pas automatiquement"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:14
 msgid "The field itemnum MUST be mapped"
@@ -12281,7 +12417,8 @@ msgstr ""
 msgid ""
 "The following fields were entered incorrectly. Please go back and correct "
 "them."
-msgstr "Les champs suivants sont incorrects. Cliquez sur \"retour\" et corrigez les."
+msgstr ""
+"Les champs suivants sont incorrects. Cliquez sur \"retour\" et corrigez les."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/itemtypes.tmpl:5
 msgid ""
@@ -12316,7 +12453,11 @@ msgid ""
 "appear on this page an entry must be active on today date. So, is a bookfund "
 "disappear, go in parameters >> bookfunds and check that your budget isn't "
 "closed by date"
-msgstr "Le dernier bloc, \"budgets\", affiche le résumé de la situation budgétaire. Seuls les budgets actifs à la date du jour sont affichés. Donc si une ligne budgétaire disparait, allez dans Paramètres >> budgets, et vérifiez si le budget n'a pas disparu à cause de la date !"
+msgstr ""
+"Le dernier bloc, \"budgets\", affiche le résumé de la situation budgétaire. "
+"Seuls les budgets actifs à la date du jour sont affichés. Donc si une ligne "
+"budgétaire disparait, allez dans Paramètres >> budgets, et vérifiez si le "
+"budget n'a pas disparu à cause de la date !"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/statecollection.tmpl:11
 msgid "The left part"
@@ -12339,23 +12480,32 @@ msgid ""
 "The list of all basket orders to this supplier. You can view or add lines on "
 "each basket, depending on it's status (closed or not). Basket closed since "
 "more than 6 months are not shown."
-msgstr "La liste de tous les paniers pour ce fournisseur. Vous pouvez visualiser ou ajouter des lignes sur chaque panier, s'il n'est pas fermé. Les paniers fermés depuis plus de 6 mois ne sont pas affichés."
+msgstr ""
+"La liste de tous les paniers pour ce fournisseur. Vous pouvez visualiser ou "
+"ajouter des lignes sur chaque panier, s'il n'est pas fermé. Les paniers "
+"fermés depuis plus de 6 mois ne sont pas affichés."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-add.tmpl:166
 msgid "The loop is for instance"
 msgstr "Le compteur est actuellement"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/order.tmpl:5
-msgid "The name of the supplier. You can see all details by clicking on it's name"
-msgstr "Le nom du fournisseur. Vous pouvez simplement voir les détails en cliquant sur son nom"
+msgid ""
+"The name of the supplier. You can see all details by clicking on it's name"
+msgstr ""
+"Le nom du fournisseur. Vous pouvez simplement voir les détails en cliquant "
+"sur son nom"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/recieveorder.tmpl:8
 msgid "The number of different biblios (order lines) in the parcel"
 msgstr "Le nombre de lignes de commandes différentes dans le colis"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/recieveorder.tmpl:9
-msgid "The number of expected items. This number is calculated from ordered biblios"
-msgstr "Le nombre de documents attendus. Ce nombre est calculé à partir des notices commandées"
+msgid ""
+"The number of expected items. This number is calculated from ordered biblios"
+msgstr ""
+"Le nombre de documents attendus. Ce nombre est calculé à partir des notices "
+"commandées"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/recieveorder.tmpl:7
 msgid "The number of items already entered in the parcel (physical items)"
@@ -12470,7 +12620,7 @@ msgstr ""
 "l'éditeur MARC."
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:55
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:44
 msgid ""
 "The total at the bottom of the page should be within a few cents of the "
 "total for the invoice."
@@ -12478,12 +12628,22 @@ msgstr ""
 "Le total en bas de la page devra être proche de quelques centimes du total "
 "de la facture."
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:33
+msgid "The upload file appears to be empty."
+msgstr ""
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:24
+msgid ""
+"The upload file does not appear to be a zip file. The extention is not '."
+"zip'."
+msgstr ""
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/search.marc/search.tmpl:5
 msgid "The usual fields are in the top part of the screen. They contains :"
 msgstr "Les champs courants sont en haut de l'écran.Ils comprennent :"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:87
 msgid ""
 "Then select a previous shopping basket or create a new one. Note the basket "
 "will be attached to the user you've logged to"
@@ -12500,7 +12660,16 @@ msgstr "Il y a 2 manières de faire ceci :"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:41
 #, c-format
 msgid "There is more than 1 MARC tag related to items tab (10) : %s"
-msgstr "Il y a plus d'un champ MARC relié à l'onglet des exemplaires (onglet 10) : %s"
+msgstr ""
+"Il y a plus d'un champ MARC relié à l'onglet des exemplaires (onglet 10) : %s"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:42
+msgid ""
+"There should be a DATALINK.TXT or IDLINK.TXT file for each picture pack that "
+"has the cardnumber of the patron and the file containing that patrons "
+"picture. One patron per line seperated by either ,'s or tabs. Quotes around "
+"the fields are ignored."
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:56
 msgid "Thesaurus Structure"
@@ -12537,12 +12706,15 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/403.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/404.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/405.tmpl:7
-msgid "This error means that the link was broken and that the page doesn't exist"
-msgstr "Cette erreur signifie que le lien a été rompu et que la page n'existe plus"
+msgid ""
+"This error means that the link was broken and that the page doesn't exist"
+msgstr ""
+"Cette erreur signifie que le lien a été rompu et que la page n'existe plus"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/401.tmpl:7
 msgid "This error means that you aren't authorized to view this page"
-msgstr "Cette erreur signifie que vous n'êtes pas autorisé à visualiser cette page"
+msgstr ""
+"Cette erreur signifie que vous n'êtes pas autorisé à visualiser cette page"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:18
 msgid ""
@@ -12550,7 +12722,11 @@ msgid ""
 "shelves (with a barcode reader and a laptop) and store them in a text file "
 "(from notepad or any text-only editor <b>This does NOT include MS-word or "
 "OpenOffice.org</b>)"
-msgstr "Cette fonctionnalité est nouvelle dans Koha 2.2.6 : vous pouvez scanner TOUS les documents dans vos étagères (avec un lecteur de code-barres et un ordinateur portable), et les sauvegarder dans un fichier texte (bloc-note ou tout autre éditeur de texte <b>Ceci exclut MS-word ou OpenOffice.org</b>)"
+msgstr ""
+"Cette fonctionnalité est nouvelle dans Koha 2.2.6 : vous pouvez scanner TOUS "
+"les documents dans vos étagères (avec un lecteur de code-barres et un "
+"ordinateur portable), et les sauvegarder dans un fichier texte (bloc-note ou "
+"tout autre éditeur de texte <b>Ceci exclut MS-word ou OpenOffice.org</b>)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/koha2marclinks.tmpl:9
 msgid ""
@@ -12577,7 +12753,8 @@ msgstr ""
 msgid ""
 "This is one of the screens you will see frequently if you are starting from "
 "scratch."
-msgstr "C'est un des écrans que vous verrez fréquemment si vous partez de zéro."
+msgstr ""
+"C'est un des écrans que vous verrez fréquemment si vous partez de zéro."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/members/members-home.tmpl:3
 msgid "This is the Members portion of Koha."
@@ -12647,7 +12824,9 @@ msgstr ""
 msgid ""
 "This page let you create or modify a basket. A basket contains as many order "
 "lines as you want."
-msgstr "Cette pas vous permet de créer ou modifier un panier. Un panier contient autant de lignes de commandes que vous le souhaitez."
+msgstr ""
+"Cette pas vous permet de créer ou modifier un panier. Un panier contient "
+"autant de lignes de commandes que vous le souhaitez."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/koha2marclinks.tmpl:3
 msgid ""
@@ -12668,7 +12847,9 @@ msgstr "Cette page affiche le contenu d'un colis"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/acqui/order.tmpl:3
 msgid "This page shows the list of suppliers. For each supplier, you'll get :"
-msgstr "Cette page affiche la liste des fournisseurs. Pour chaque fournisseur, vous aurez :"
+msgstr ""
+"Cette page affiche la liste des fournisseurs. Pour chaque fournisseur, vous "
+"aurez :"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=total
@@ -12696,14 +12877,16 @@ msgstr "Cet écran est divisé en 2 parties"
 msgid ""
 "This screen show the parcels of the supplier. You can filter on parcel code "
 "and recieve date"
-msgstr "Cette page affiche les colis du fournisseur. Vous pouvez filter sur un code colis et sur une date de réception"
+msgstr ""
+"Cette page affiche les colis du fournisseur. Vous pouvez filter sur un code "
+"colis et sur une date de réception"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/members/moremember.tmpl:3
 msgid "This screen shows the information associated with a given patron."
 msgstr "Cet écran affiche l'information concernant un lecteur donné."
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:84
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:85
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:103
 msgid ""
 "This screen shows the subfields associated with the selected tag. You can "
@@ -12711,6 +12894,16 @@ msgid ""
 msgstr ""
 "Cette page montre les sous-champs associés au champ sélectionné.Vous pouvez "
 "éditer les sous-champs ou en ajouter de nouveaux en cliquant sur editer."
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:27
+msgid ""
+"This script is not able to create/write to the necessary temporary directory."
+msgstr ""
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:30
+msgid ""
+"This script is not able to write to the patronpictures holding directory."
+msgstr ""
 
 #. %1$s: TMPL_VAR name=enddate
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/serial-issues.tmpl:76
@@ -12762,8 +12955,8 @@ msgstr "Pointez TOUS les codes-barres auquels les changements s'appliquent."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:34
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:22
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:21
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:76
 #: ../../koha-tmpl/intranet-tmpl/default/en/default.tmpl:5
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/modwebsites.tmpl:13
@@ -12788,8 +12981,8 @@ msgstr "Pointez TOUS les codes-barres auquels les changements s'appliquent."
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-print.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-receipt.tmpl:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember-receipt.tmpl:29
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:120
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:176
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:121
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:177
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/readingrec.tmpl:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/acquisitions_stats.tmpl:55
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/borrowers_stats.tmpl:55
@@ -12798,7 +12991,6 @@ msgstr "Pointez TOUS les codes-barres auquels les changements s'appliquent."
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/issues_avg_stats.tmpl:53
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/issues_stats.tmpl:55
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport.tmpl:5
-#: ../../koha-tmpl/intranet-tmpl/default/en/reports/reservereport_old.tmpl:5
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:26
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:154
 #: ../../koha-tmpl/intranet-tmpl/default/en/z3950/searchresult.tmpl:29
@@ -12843,6 +13035,7 @@ msgstr "Titre : *"
 msgid "Titre/auteur"
 msgstr "traducteur"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:52
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/histsearch.tmpl:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:123
 msgid "To"
@@ -12906,7 +13099,7 @@ msgstr ""
 "Koha)."
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:85
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:89
 msgid ""
 "To close off a shopping basket click on \"view shopping baskets\" or search "
 "above, and then click on \"confirm basket\"."
@@ -12915,7 +13108,7 @@ msgstr ""
 "\"ou cherchez au dessus, et cliquez alors sur \"valider le panier\"."
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:84
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:88
 msgid ""
 "To order an item you need to establish whether a biblio already exists for "
 "it, and either add an item, or set up a new biblio then add the item."
@@ -12937,7 +13130,7 @@ msgstr ""
 "l'administrateur</a>"
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:82
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:86
 msgid ""
 "To start an acquisition, whether an order, local purchase or donation first "
 "search on the supplier, Add a new one if needed."
@@ -12965,10 +13158,10 @@ msgstr "Outils"
 msgid "Top Lists"
 msgstr "Les plus"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:51
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:66
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:53
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:70
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:38
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:28
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:27
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/lateorders.tmpl:88
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/borrowers_stats.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:17
@@ -12992,7 +13185,7 @@ msgid "Total cost"
 msgstr "Total coût"
 
 #. %1$s: TMPL_VAR name=totaldue
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:99
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:100
 #, c-format
 msgid "Total due %s"
 msgstr "Total dû %s"
@@ -13090,7 +13283,8 @@ msgstr "URL"
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:19
 msgid "URL : if checked, the subfield is an URL, and can be clicked"
-msgstr "URL si coché, indique que le champ est une URL valide et peut-être cliquée"
+msgstr ""
+"URL si coché, indique que le champ est une URL valide et peut-être cliquée"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:23
@@ -13135,8 +13329,18 @@ msgstr ""
 "exemple, définir une grille  pour les monographies, une pour les "
 "périodiques, une pour les URL..."
 
+#. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:52
+#, fuzzy
+msgid "Unpack"
+msgstr "Retour"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:8
+msgid "Unpacking completed"
+msgstr ""
+
 #. INPUT type=submit name=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:148
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:149
 msgid "Update"
 msgstr "Mettre à Jour"
 
@@ -13227,10 +13431,11 @@ msgstr "Utiliser un fichier de code-barre"
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/405.tmpl:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/errors/500.tmpl:10
 msgid "Use top menu bar to navigate to another part of Koha."
-msgstr "Utilisez la barre de menu principale pour naviguer à nouveau dans Koha."
+msgstr ""
+"Utilisez la barre de menu principale pour naviguer à nouveau dans Koha."
 
 #
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:74
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:78
 msgid ""
 "Use your reload button to get the most recent figures. Committed figures are "
 "approximate only, as exchange rates will affect the amount actually paid."
@@ -13308,7 +13513,8 @@ msgstr ""
 #. %1$S: type=text name=preftype
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:100
 #, c-format
-msgid "Variable type: %S (Choice, YesNo,Integer,Textarea,Float,Themes,Languages)"
+msgid ""
+"Variable type: %S (Choice, YesNo,Integer,Textarea,Float,Themes,Languages)"
 msgstr ""
 " Type de variable : %S  (Choice, YesNo,Integer,Textarea,Float,Themes, "
 "Languages)"
@@ -13387,7 +13593,8 @@ msgstr "Volume :"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:236
 msgid "WARNING : you must have a categorycode = C for children"
-msgstr "ATTENTION : pour les enfants vous devez utiliser le code de catégorie = C"
+msgstr ""
+"ATTENTION : pour les enfants vous devez utiliser le code de catégorie = C"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:241
 msgid "WARNING : you must have a categorycode = I for Institutions"
@@ -13416,7 +13623,7 @@ msgstr ""
 "Attendez que la maintenance soit terminée, ou <a1>envoyez un mail à "
 "l'administrateur Koha</a>."
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:42
+#: ../../koha-tmpl/intranet-tmpl/default/en/bull/full-serial-issues.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/statecollection.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-detail.tmpl:167
 msgid "Waited"
@@ -13437,8 +13644,14 @@ msgstr ""
 "Attention : l'option \"contient\" NE FONCTIONNE PAS si vous n'indiquez pas "
 "au moins 3 caractères."
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:38
+msgid ""
+"Warning, this feature is experimental. It's possible that it won't work for "
+"you"
+msgstr ""
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:37
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:162
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:166
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:58
 msgid "Website"
 msgstr "Site Web"
@@ -13499,7 +13712,8 @@ msgstr "grille %s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:3
 msgid "With this utility you can take invetory of your collection"
-msgstr "Avec cet utilitaire, vous pouvez faire l'inventaire/récolement de votre fonds"
+msgstr ""
+"Avec cet utilitaire, vous pouvez faire l'inventaire/récolement de votre fonds"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:65
@@ -13541,7 +13755,7 @@ msgstr "pertes et profits"
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:176
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:166
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:72
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:73
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:94
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:39
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:103
@@ -13579,13 +13793,13 @@ msgstr "Année"
 msgid "Year :"
 msgstr "Année"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:220
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:224
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:228
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:232
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:64
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:90
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:137
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:138
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:152
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:153
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:127
@@ -13623,7 +13837,8 @@ msgstr ""
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/subscription-add.tmpl:24
-msgid "You also must have selected a supplier if you want to ask for late issues"
+msgid ""
+"You also must have selected a supplier if you want to ask for late issues"
 msgstr ""
 " Vous devez sélectionner un fournisseur si vous souhaitez réclamer les "
 "numéros en retard"
@@ -13665,7 +13880,9 @@ msgstr "Codage des caractères (MARC21 ou UNIMARC)"
 msgid ""
 "You can also enter the parcel number if you enter an order that is already "
 "in you library"
-msgstr "Vous pouvez également saisir un code colis si vous saisissez une commande qui est dans votre bibliothèque"
+msgstr ""
+"Vous pouvez également saisir un code colis si vous saisissez une commande "
+"qui est dans votre bibliothèque"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/members/memberentry.tmpl:20
 msgid ""
@@ -13679,7 +13896,8 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:23
 msgid "You can choose Branch, itemtype or borrower category."
-msgstr "Vous pouvez choisir le site, le type de document ou la catégorie de lecteur."
+msgstr ""
+"Vous pouvez choisir le site, le type de document ou la catégorie de lecteur."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/borrowers_stats.tmpl:24
 msgid "You can choose Branch, zipcode or categorycode."
@@ -13709,7 +13927,8 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:32
 msgid "You can choose to see only One day on the period, or one month."
-msgstr "Vous pouvez choisir de voir seulement 1 jour sur la période, ou un mois."
+msgstr ""
+"Vous pouvez choisir de voir seulement 1 jour sur la période, ou un mois."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/authtypes.tmpl:3
 msgid "You can define as many Authority types as you want."
@@ -13741,7 +13960,8 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:33
 msgid "You can filter on itemtypes, branch or borrowers category."
-msgstr "Vous pouvez filter sur le type de document, le site, la catégorie de lecteur."
+msgstr ""
+"Vous pouvez filter sur le type de document, le site, la catégorie de lecteur."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/borrowers_stats.tmpl:31
 msgid "You can filter on sort1 sort2 if filled."
@@ -13749,7 +13969,8 @@ msgstr "Vous pouvez filtrer sur sort1 ou sort2 si ces zones sont remplies."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/borrowers_stats.tmpl:32
 msgid "You can filter on zipcode, branch or categorycode."
-msgstr "Vous pouvez filtrer sur le code barre, le site ou la catégorie de lecteur."
+msgstr ""
+"Vous pouvez filtrer sur le code barre, le site ou la catégorie de lecteur."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:31
 msgid "You can filter period in a From/to calendar."
@@ -13766,6 +13987,12 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:25
 msgid "You can group results by day, by Month, by year."
 msgstr "Vous pouvez regrouper les résultats par jour, mois, année."
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/import/picture-upload.tmpl:41
+msgid ""
+"You can include multiple picture packs in the .zip file in seperate "
+"directories."
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/catalogue_stats.tmpl:36
 msgid "You can select one branch as Home Branch"
@@ -13808,7 +14035,8 @@ msgstr ""
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member-password.tmpl:9
-msgid "You have entered a UserID that already exists. Please choose another one."
+msgid ""
+"You have entered a UserID that already exists. Please choose another one."
 msgstr ""
 " Vous avez saisi un nom d'utilisateur qui existe déjà. Merci de choisir un "
 "autre nom."
@@ -13836,7 +14064,7 @@ msgstr "Vous devez créer un nouveau groupe pour y ajouter votre exemplaire"
 msgid "You must define a budget in parameters"
 msgstr "Vous devez définir un budget (module paramètres)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:38
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:37
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities.tmpl:28
 msgid "You must either :"
 msgstr "Vous devez soit :"
@@ -13903,7 +14131,12 @@ msgid ""
 "you want to create an order, or recieve books, you must enter the supplier "
 "name or code. If you want to create a new supplier, enter it's name anyway, "
 "you'll be able to create it on the next screen"
-msgstr "Vous êtes sur la page d'accueil du module acquisitions. Tout débute par le fournisseur. Si vous souhaitez créer une commande ou réceptionner un document, vous devez saisir le nom du fournisseur ou son code. Si vous voulez créer un nouveau fournisseur, saisissez son nom, vous pourrez le créer dans l'écran suivant"
+msgstr ""
+"Vous êtes sur la page d'accueil du module acquisitions. Tout débute par le "
+"fournisseur. Si vous souhaitez créer une commande ou réceptionner un "
+"document, vous devez saisir le nom du fournisseur ou son code. Si vous "
+"voulez créer un nouveau fournisseur, saisissez son nom, vous pourrez le "
+"créer dans l'écran suivant"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-class-list.inc:10
 msgid "Young Adult Fiction"
@@ -13968,6 +14201,10 @@ msgstr ""
 msgid "[Viewing %s to %s of %s records] %s"
 msgstr "[Visualisation de %s à %s de %s enregistrements] %s"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:33
+msgid "[order]"
+msgstr "Trier"
+
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/authtypes.tmpl:9
 msgid ""
@@ -13978,8 +14215,11 @@ msgstr ""
 "de champ, S le code du sous champ, YYY pour 3 caractères APRES le champ."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:14
-msgid "a date last seen: to see only books which have been unseen for a long time"
-msgstr "Une \"date de dernier mouvement\" : pour voir seulement les documents qui n'ont pas circulé depuis longtemps"
+msgid ""
+"a date last seen: to see only books which have been unseen for a long time"
+msgstr ""
+"Une \"date de dernier mouvement\" : pour voir seulement les documents qui "
+"n'ont pas circulé depuis longtemps"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:13
 msgid "a itemcallnumber range: to limit the list to a small physical shelf"
@@ -14221,7 +14461,8 @@ msgstr "contrôlé doit être à 0 ou 1"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/issues_stats.tmpl:43
 msgid "circulation rate (rate items issued out of total number of items)"
-msgstr "Taux de circulation (nombre de documents prétés / nombre total de documents)"
+msgstr ""
+"Taux de circulation (nombre de documents prétés / nombre total de documents)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:103
 msgid "classification:"
@@ -14262,10 +14503,12 @@ msgstr "venant de"
 msgid "confirm it's not a duplicate (and click on"
 msgstr "Confirmer que ce n'est pas un doublon (et cliquer sur"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:24
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:35
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:27
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:38
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:20
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:31
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:42
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:23
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:34
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:45
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:23
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:34
 msgid "contains"
@@ -14395,11 +14638,13 @@ msgstr "Ouvrir"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/charges.tmpl:7
 msgid "eg 1,7,7 = $1 fine, after 7 days, every 7 days."
-msgstr "par exemple 1,7,7 signifie 1EUR d'amende, après 7 jours, tous les 7 jours."
+msgstr ""
+"par exemple 1,7,7 signifie 1EUR d'amende, après 7 jours, tous les 7 jours."
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/issuingrules.tmpl:10
 msgid "eg 1,7,7 = 1USD,EUR,etc fine, after 7 days, every 7 days"
-msgstr "par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours"
+msgstr ""
+"par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-add.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:22
@@ -14431,7 +14676,6 @@ msgstr "f- cartographie manuscrite"
 msgid "filter"
 msgstr "filtre"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:11
 #: ../../koha-tmpl/intranet-tmpl/default/en/bull/serial-issues.tmpl:69
 msgid "for"
 msgstr "pour"
@@ -14447,6 +14691,10 @@ msgstr "pour le site = %s"
 #, c-format
 msgid "for category = %s"
 msgstr "pour la catégorie = %s"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:35
+msgid "for librarian"
+msgstr "pour le bibliothécaire"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:36
 msgid "for librarian:"
@@ -14480,7 +14728,7 @@ msgstr "valeur de \"framework\""
 msgid "friday"
 msgstr "vendredi"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:136
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:139
 msgid "from an existing biblio:"
 msgstr "A partir d'une notice existante"
 
@@ -14525,7 +14773,9 @@ msgstr "caché"
 msgid ""
 "hidden : allows you to select from 19 possible visibility conditions, 17 of "
 "which are implemented. They are the following:"
-msgstr "caché : vous pouvez choisir parmi 19 combinaisons pour la visibilité, 17 étant actives. En voici la liste :"
+msgstr ""
+"caché : vous pouvez choisir parmi 19 combinaisons pour la visibilité, 17 "
+"étant actives. En voici la liste :"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:18
 msgid ""
@@ -14535,7 +14785,7 @@ msgstr ""
 "caché : signifie que le champ est géré, mais PAS affiché à l'opac.C'est en "
 "général pour les champs internes"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:109
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:110
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:131
 msgid "hidden,"
 msgstr "caché"
@@ -14621,7 +14871,7 @@ msgstr "en <i>%s</i>"
 msgid "insert a new authority : %S"
 msgstr "Ajouter une nouvelle autorité: %S"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:110
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:111
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:132
 msgid "is an url,"
 msgstr "est une URL"
@@ -14699,7 +14949,7 @@ msgstr "lib"
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:47
 msgid ""
 "link : If you enter a field/subfield here (200b), a little glass appears "
-"after the subfield. If the user clic on the glass, a search is done on the "
+"after the subfield. If the user click on the glass, a search is done on the "
 "DB for the field/subfield with the same value. Can be used for 2 main topic :"
 msgstr ""
 "lien : si vous entrez un champ/sous-champ ici (200b), une loupe de recherche "
@@ -14714,8 +14964,11 @@ msgid "link : useless for instance"
 msgstr "lien : sans objet actuellement"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/reports/inventory.tmpl:6
-msgid "list books that haven't been 'seen' and then search for them on the shelves"
-msgstr "Listez les documents qui n'ont pas été 'vus', et recherchez les sur les étagères"
+msgid ""
+"list books that haven't been 'seen' and then search for them on the shelves"
+msgstr ""
+"Listez les documents qui n'ont pas été 'vus', et recherchez les sur les "
+"étagères"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/auth.tmpl:39
@@ -14774,7 +15027,7 @@ msgid "n- New"
 msgstr "n- Nouveau"
 
 #. INPUT type=image
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:134
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:135
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:173
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:80
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:151
@@ -14857,7 +15110,8 @@ msgstr "toutes les"
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-add.tmpl:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:15
-msgid "once every : the number before can be added on every issue or less often"
+msgid ""
+"once every : the number before can be added on every issue or less often"
 msgstr ""
 " toutes les : le nombre avant peut être ajouter à chaque parution ou moins "
 "souvent"
@@ -14895,7 +15149,7 @@ msgstr ""
 "fin).Ce champ doit être rempli manuellement.Rien n'est mis ici "
 "automatiquement"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:10
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:11
 msgid "open on"
 msgstr "ouvert le"
 
@@ -14908,7 +15162,7 @@ msgstr "options >>"
 msgid "or"
 msgstr "ou"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:137
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:140
 #, c-format
 msgid "or <a1> from a suggestion </a> <a2> New biblio </a>"
 msgstr "ou <a1> d'après une suggestion </a> <a2>Nouvelle notice </a>"
@@ -14971,7 +15225,7 @@ msgid "port must be a number"
 msgstr "port doit être un nombre"
 
 #. INPUT type=image
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:130
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:131
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_tag_structure.tmpl:168
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:75
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authtypes.tmpl:150
@@ -15104,13 +15358,13 @@ msgstr "samedi"
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:91
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieveorder.tmpl:120
-#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:124
+#: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:128
 msgid "save"
 msgstr "enregistrer"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=seealso
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:108
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:109
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:130
 #, c-format
 msgid "see also : %s,"
@@ -15182,10 +15436,12 @@ msgstr ""
 "valeurs autorisées, et entrer les valeurs souhaitée. Vous pourrez les "
 "utiliser lors de la saisie des informations lecteur"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:23
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:36
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:28
-#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:39
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:21
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:32
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/auth_finder.tmpl:43
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:24
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:35
+#: ../../koha-tmpl/intranet-tmpl/default/en/authorities/authorities-home.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/authorities/searchresultlist-auth.tmpl:35
 msgid "start by"
@@ -15195,7 +15451,7 @@ msgstr "commence par"
 msgid "start date"
 msgstr "date de début"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:104
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/auth_subfields_structure.tmpl:105
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:124
 msgid "subfield ignored"
 msgstr "sous-champ ignoré"
@@ -15305,7 +15561,8 @@ msgstr "text/html; charset=iso-8859-1"
 
 #
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:132
-msgid "the barcode generator deals with generating barcodes for items you acquire"
+msgid ""
+"the barcode generator deals with generating barcodes for items you acquire"
 msgstr ""
 " Le générateur de code-barres génère les étiquettes pour les documents que "
 "vous achetez"
@@ -15366,7 +15623,8 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:134
 msgid "there is a null value in a frameworkcode. Check the following tables"
-msgstr "Il y a une valeur NULL dans frameworkcode. Vérifier les tables suivantes"
+msgstr ""
+"Il y a une valeur NULL dans frameworkcode. Vérifier les tables suivantes"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:45
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:21
@@ -15572,3 +15830,11 @@ msgstr ""
 "|{700a}{701a}{702a}| ; #200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. "
 "200i}{ / 200f}{ ; 200g}|"
 
+#~ msgid "<a1> Print </a> <a2>%s biblios</a>"
+#~ msgstr "<a1> Imprimer </a> <a2>%s Notices</a>"
+
+#~ msgid "Back to biblio"
+#~ msgstr "Retour notice"
+
+#~ msgid "Reserve report"
+#~ msgstr "Bilan réserve"

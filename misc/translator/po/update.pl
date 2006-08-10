@@ -14,9 +14,10 @@ GetOptions(
 ) || exit(1);
 
 my $lang = $ARGV[0];
-die <<EOF unless $pot_p || $lang =~ /^[a-z]{2}(?:_[A-Z]{2})?$/;
-Usage: $0 LANG
-       $0 --pot
+die <<EOF unless $pot_p || $lang eq 'ALL' || $lang =~ /^[a-z]{2}(?:_[A-Z]{2})?$/;
+Usage: $0 LANG (LANG language)
+       $0 ALL (all languages)
+       $0 --pot (.pot file)
 EOF
 
 # Remember whether we see the "po" directory; this is used later to guess
@@ -28,32 +29,43 @@ my $chdir_needed_p = 1 unless -d('po');
 for my $spec (
       ['css',     'opac'    ],
       ['default', 'intranet']
-) {
-   my($theme, $module) = @$spec;
-   my $pid = fork;
-   die "fork: $!\n" unless defined $pid;
-   if (!$pid) {
+  ) {
+    my($theme, $module) = @$spec;
+    if ($lang ne 'ALL') {
+            build_lang($theme,$module,$lang);
+        } else {
+            foreach my $lang (('fr_FR', 'es_ES','it_IT','pl_PL','ta_MY','uk_UA','zh_TW','hu_HU')) {
+                build_lang($theme,$module,$lang);
+            }
+        }
+}
+wait;
 
-      # If current directory is translator/po instead of translator,
-      # then go back to the parent
-      if ($chdir_needed_p) {
-	 chdir('..') || die "..: cd: $!\n";
-      }
-
-      # Now call tmpl_process3.pl to do the real work
-      #
-      # Traditionally, the pot file should be named PACKAGE.pot
-      # (for Koha probably something like koha_intranet_css.pot),
-      # but this is not Koha's convention.
-      #
-      my $target = "po/${theme}_${module}" . ($pot_p? ".pot": "_$lang.po");
-      rename($target, "$target~") if $pot_p;
-      exec('./tmpl_process3.pl', ($pot_p? 'create': 'update'),
-	    '-i', "../../koha-tmpl/$module-tmpl/$theme/en/",
-	    '-s', $target, '-r', '-x', '.*unimarc.*');
-
-      die "tmpl_process3.pl: exec: $!\n";
-   }
-   wait;
+sub build_lang {
+    my ($theme,$module,$lang) = @_;
+    my $pid = fork;
+    die "fork: $!\n" unless defined $pid;
+    if (!$pid) {
+    
+        # If current directory is translator/po instead of translator,
+        # then go back to the parent
+        if ($chdir_needed_p) {
+        chdir('..') || die "..: cd: $!\n";
+        }
+    
+        # Now call tmpl_process3.pl to do the real work
+        #
+        # Traditionally, the pot file should be named PACKAGE.pot
+        # (for Koha probably something like koha_intranet_css.pot),
+        # but this is not Koha's convention.
+        #
+        my $target = "po/${theme}_${module}" . ($pot_p? ".pot": "_$lang.po");
+        rename($target, "$target~") if $pot_p;
+        exec('./tmpl_process3.pl', ($pot_p? 'create': 'update'),
+            '-i', "../../koha-tmpl/$module-tmpl/$theme/en/",
+            '-s', $target, '-r', '-x', '.*unimarc.*',"\n");
+    
+        die "tmpl_process3.pl: exec: $!\n";
+    }
 }
 
