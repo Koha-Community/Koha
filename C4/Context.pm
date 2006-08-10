@@ -45,8 +45,8 @@ C4::Context - Maintain and manipulate the context of a Koha script
 =head1 DESCRIPTION
 
 When a Koha script runs, it makes use of a certain number of things:
-configuration settings in F</etc/koha.conf>, a connection to the Koha
-database, and so forth. These things make up the I<context> in which
+configuration settings in F</etc/koha.xml>, a connection to the Koha
+databases, and so forth. These things make up the I<context> in which
 the script runs.
 
 This module takes care of setting up the context for a script:
@@ -66,7 +66,7 @@ different contexts to search both databases. Such scripts should use
 the C<&set_context> and C<&restore_context> functions, below.
 
 By default, C4::Context reads the configuration from
-F</etc/koha.conf>. This may be overridden by setting the C<$KOHA_CONF>
+F</etc/koha.xml>. This may be overridden by setting the C<$KOHA_CONF>
 environment variable to the pathname of a configuration file to use.
 
 =head1 METHODS
@@ -156,11 +156,11 @@ sub import
 =item new
 
   $context = new C4::Context;
-  $context = new C4::Context("/path/to/koha.conf");
+  $context = new C4::Context("/path/to/koha.xml");
 
 Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
-environment variable, or F</etc/koha.conf>.
+environment variable, or F</etc/koha.xml>.
 
 C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
@@ -409,7 +409,7 @@ my $server=shift;
 
 sub Zconnauth {
         my $self = shift;
-my $server=shift;
+	my $server="biblioserver"; #shift;
 	my $Zconnauth;
 	 if (defined($context->{"Zconnauth"})) {
 	    $Zconnauth = $context->{"Zconnauth"};
@@ -440,6 +440,8 @@ retry:
 	eval {
 		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
 		preferredRecordSyntax => "USmarc",elementSetName=> "F");
+        $Zconn->option(cqlfile=> $context->{"config"}->{"zebradir"}."/etc/cql.properties");
+        $Zconn->option(cclfile=> $context->{"config"}->{"zebradir"}."/etc/ccl.properties");
 	};
 	if ($@){
 ###Uncomment the lines below if you want to automatically restart your zebra if its stop
@@ -465,6 +467,14 @@ my $server=shift;
 my $tried=0;
 my $Zconnauth;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
+	my $o = new ZOOM::Options();
+	$o->option(async => 1);
+	$o->option(preferredRecordSyntax => "usmarc");
+	$o->option(elementSetName => "F");
+	$o->option(user=>$context->{"config"}->{"zebrauser"});
+	$o->option(password=>$context->{"config"}->{"zebrapass"});
+	$o->option(databaseName=>$context->{"config"}->{$server});
+
 retry:
 eval{
  $Zconnauth=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
@@ -826,6 +836,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.43  2006/08/10 12:49:37  toins
+# sync with dev_week.
+#
 # Revision 1.42  2006/07/04 14:36:51  toins
 # Head & rel_2_2 merged
 #
