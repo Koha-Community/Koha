@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Copy Import<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Patron Pictures Import System<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -6,21 +6,20 @@
 <h1>Patron Pictures Import System</h1>
 
 <!-- TMPL_IF name="total" -->
-	<ul class="data">
-		<li>Unpacking completed</li>
-	</ul>
-<!-- 
-<!-- TMPL_VAR NAME="total" --> Scanned
-<!-- TMPL_VAR NAME="handled" --> Processed
-<!-- TMPL_LOOP name="counts" -->
-	<!-- TMPL_VAR name="count" --> 	Images moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->
-	<!-- TMPL_LOOP name="filenames" -->
-		<!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" -->
-	<!-- /TMPL_LOOP -->
-<!-- /TMPL_LOOP -->
- -->
+<div class="details">
+	<h3>Unpacking completed</h3>
+	<ul>
+    <li><!-- TMPL_VAR NAME="total" --> Scanned</li>
+	<li><!-- TMPL_VAR NAME="handled" --> Processed</li>
+	<li><ul><!-- TMPL_LOOP name="counts" -->
+	<li><!-- TMPL_VAR name="count" --> 	Images moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->
+	<ul><!-- TMPL_LOOP name="filenames" -->
+		<li><!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" --></li>
+	<!-- /TMPL_LOOP --></ul>
+    <!-- /TMPL_LOOP --></li></ul></li></ul>
+</div>
 <!-- TMPL_ELSE -->
-
+<div class="details">
 <!-- TMPL_IF name="errors" -->
 	<!-- TMPL_LOOP name="errors" -->
 	<ul class="error">
@@ -40,12 +39,13 @@
 <!-- /TMPL_IF -->
 
 <form method="post" action="/cgi-bin/koha/import/picture-upload.pl" enctype="multipart/form-data">
-<div class="data">
-<ul>
+    <div class="error"><h3>Warning, this feature is experimental. It's possible that it won't work for you</h3></div>
+<h4>Instructions:</h4>
+<ol>
 	<li>Select a file to unpack on the server. Each .jpg file contained therein will be copied to the appropriate place on the server for patron pictures.</li>
 	<li>You can include multiple picture packs in the .zip file in seperate directories.</li>
 	<li>There should be a DATALINK.TXT or IDLINK.TXT file for each picture pack that has the cardnumber of the patron and the file containing that patrons picture.  One patron per line seperated by either ,'s or tabs.  Quotes around the fields are ignored.</li>
-</ul>
+</ol>
 <table>
 	<tr>
 		<th><label for="uploadfile">Select the .zip file to unpack: </label></th>
@@ -54,10 +54,10 @@
 		</td>
 	</tr>
 </table>
-</div>
+
 	<input type="submit" value="Unpack" class="submit" />
 </form>
-
+</div>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
