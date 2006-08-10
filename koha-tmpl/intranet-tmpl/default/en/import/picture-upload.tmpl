@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+<h1>Patron Pictures Import System</h1>
+
+<!-- TMPL_IF name="total" -->
+	<ul class="data">
+		<li>Unpacking completed</li>
+	</ul>
+    <!-- TMPL_VAR NAME="total" --> Scanned
+    <!-- TMPL_VAR NAME="handled" --> Processed
+    <!-- TMPL_LOOP name="counts" -->
+        <!-- TMPL_VAR name="count" --> 	Images moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->
+        <!-- TMPL_LOOP name="filenames" -->
+            <!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" -->
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+
+    <!-- TMPL_IF name="errors" -->
+        <!-- TMPL_LOOP name="errors" -->
+        <ul class="error">
+        <!-- TMPL_IF name="NOTZIP" -->
+            <li>The upload file does not appear to be a zip file.  The extention is not '.zip'.</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="NOWRITETEMP" -->
+            <li>This script is not able to create/write to the necessary temporary directory.</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="NOWRITEDEST" -->
+            <li>This script is not able to write to the patronpictures holding directory.</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="EMPTYUPLOAD" -->
+            <li>The upload file appears to be empty.</li>
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_IF -->
+    <form method="post" action="/cgi-bin/koha/import/picture-upload.pl" enctype="multipart/form-data">
+    <h2 class="problem">Warning, this feature is experimental. It's possible that it won't work for you</h2>
+    <ul>
+        <li>Select a file to unpack on the server. Each .jpg file contained therein will be copied to the appropriate place on the server for patron pictures.</li>
+        <li>You can include multiple picture packs in the .zip file in seperate directories.</li>
+        <li>There should be a DATALINK.TXT or IDLINK.TXT file for each picture pack that has the cardnumber of the patron and the file containing that patrons picture.  One patron per line seperated by either ,'s or tabs.  Quotes around the fields are ignored.</li>
+    </ul>
+    <table>
+        <tr>
+            <th><label for="uploadfile">Select the .zip file to unpack: </label></th>
+            <td>
+                <input type="file" id="uploadfile" name="uploadfile" /><br />
+            </td>
+        </tr>
+    </table>
+        <input type="submit" value="Unpack" class="submit" />
+    </form>
+    
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
