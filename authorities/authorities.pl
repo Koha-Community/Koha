@@ -201,7 +201,7 @@ sub build_tabs ($$$$) {
 					next if (length $subfield !=1);
 					next if ($tagslib->{$tag}->{$subfield}->{tab} eq -1);
 					next if ($tag<10);
-					next if (defined($record->field($tag)->subfield($subfield)));
+					next if (defined($field->subfield($subfield)));
 					push(@subfields_data, &create_input($tag,$subfield,'',$i,$record,$authorised_values_sth));
 					$i++;
 				}
@@ -329,8 +329,18 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+	my $record;
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+        my %indicators;
+        for (my $i=0;$i<=$#ind_tag;$i++) {
+            $indicators{$ind_tag[$i]} = $indicator[$i];
+        }
+        $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	} else {
+        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
+	warn "REC : ".$record->as_formatted;
         # 
 # MARC::Record built => now, record in DB
 	# check for a duplicate
@@ -358,16 +368,25 @@ if ($op eq "add") {
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
-	my $addedfield = $input->param('addfield_field');
+	my $addedfield = substr('000'.$input->param('addfield_field'),-3);
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-        # 
+	my $record;
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+        my %indicators;
+        for (my $i=0;$i<=$#ind_tag;$i++) {
+            $indicators{$ind_tag[$i]} = $indicator[$i];
+        }
+        $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	} else {
+        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
+	warn "REC : ".$record->as_formatted;
 	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
 	$record->append_fields($field);
 
