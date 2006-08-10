@@ -21,9 +21,8 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
-# use C4::Search;
+use C4::Search;
 use C4::Breeding;
-use C4::SearchMarc;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
@@ -87,6 +86,8 @@ my $dbh = C4::Context->dbh;
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,'biblio.title','ASC');
+	warn "NB::::".$total;
+
 # 	@results = @$resultsref;
 
 #     my @loop_data = ();
