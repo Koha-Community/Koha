@@ -79,9 +79,9 @@ my $popup = $query->param('popup'); # if set to 1, then don't insert links, it's
 # warn "itemtype :".$itemtype;
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-my $record = get_record($biblionumber);
+#my $record = C4::Search::get_record($biblionumber);
 
-# my $record =MARCgetbiblio($dbh,$biblionumber);
+my $record =MARCgetbiblio($dbh,$biblionumber);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
@@ -123,10 +123,24 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # loop through each tag
 	my @fields = $record->fields();
 	my @loop_data =();
-# 	foreach my $field (@fields) {
 	my @subfields_data;
+	# deal with leader
+	unless ($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop) { #  or ($tagslib->{'000'}->{'@'}->{hidden}==(-7|-4|-3|-2|2|3|5|8))) {
+		my %subfield_data;
+		$subfield_data{marc_lib}=$tagslib->{'000'}->{'@'}->{lib};
+		$subfield_data{marc_value}=$record->leader();
+		$subfield_data{marc_subfield}='@';
+		$subfield_data{marc_tag}='000';
+		push(@subfields_data, \%subfield_data);
+		my %tag_data;
+			$tag_data{tag}='000 -'. $tagslib->{'000'}->{lib};
+		my @tmp = @subfields_data;
+		$tag_data{subfield} = \@tmp;
+		push (@loop_data, \%tag_data);
+		undef @subfields_data;
+	}
+	my @fields = $record->fields();
 	for (my $x_i=0;$x_i<=$#fields;$x_i++) {
-# 		warn "$tabloop => $x_i";
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($fields[$x_i]->tag()<10) {
 			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
@@ -164,12 +178,20 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				push(@subfields_data, \%subfield_data);
 			}
 		}
+		if ($#subfields_data==0) {
+			$subfields_data[0]->{marc_lib}='';
+			$subfields_data[0]->{marc_subfield}='';
+		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
 			if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
 				$tag_data{tag}="";
 			} else {
+				if (C4::Context->preference('hide_marc')) {
+					$tag_data{tag}=$tagslib->{$fields[$x_i]->tag()}->{lib};
+				} else {
 				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+				}
 			}
 			my @tmp = @subfields_data;
 			$tag_data{subfield} = \@tmp;
@@ -202,6 +224,9 @@ foreach my $field (@fields) {
 		push(@big_array, \%this_row);
 	}
 }
+my ($holdingbrtagf,$holdingbrtagsubf) = &MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$itemtype);
+@big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
+
 #fill big_row with missing datas
 foreach my $subfield_code  (keys(%witness)) {
 	for (my $i=0;$i<=$#big_array;$i++) {
@@ -232,6 +257,10 @@ $template->param(item_loop => \@item_value_loop,
 						biblionumber => $biblionumber,
 						subscriptionsnumber => $subscriptionsnumber,
 						popup => $popup,
+						hide_marc => C4::Context->preference('hide_marc'),
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
 
