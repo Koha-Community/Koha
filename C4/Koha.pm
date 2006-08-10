@@ -619,6 +619,7 @@ sub getalllanguages {
                 next if $language=~ /css$/;
                 next if $language=~ /CVS$/;
                 next if $language=~ /itemtypeimg$/;
+		next if $language=~ /\.txt$/i; #Don't read the readme.txt !
                 push @languages, $language;
             }
             return sort @languages;
@@ -633,6 +634,7 @@ sub getalllanguages {
                     next if $language=~ /css$/;
                     next if $language=~ /CVS$/;
                     next if $language=~ /itemtypeimg$/;
+		    next if $language=~ /\.txt$/i; #Don't read the readme.txt !
                     $lang->{$language}=1;
                 }
             }
@@ -650,6 +652,7 @@ sub getalllanguages {
                 next if $language=~ /css$/;
                 next if $language=~ /CVS$/;
                 next if $language=~ /itemtypeimg$/;
+                next if $language=~ /\.txt$/i; #Don't read the readme.txt !
                 push @languages, $language;
             }
             return sort @languages;
@@ -664,6 +667,7 @@ sub getalllanguages {
                     next if $language=~ /css$/;
                     next if $language=~ /CVS$/;
                     next if $language=~ /itemtypeimg$/;
+		    next if $language=~ /\.txt$/i; #Don't read the readme.txt !
                     $lang->{$language}=1;
                 }
             }
@@ -682,6 +686,7 @@ sub getalllanguages {
                 next if $language=~ /css$/;
                 next if $language=~ /CVS$/;
                 next if $language=~ /itemtypeimg$/;
+		next if $language=~ /\.txt$/i; #Don't read the readme.txt !
                 $lang->{$language}=1;
             }
         }
@@ -695,6 +700,7 @@ sub getalllanguages {
             next if $language=~ /css$/;
             next if $language=~ /CVS$/;
             next if $language=~ /itemtypeimg$/;
+	    next if $language=~ /\.txt$/i; #Don't read the readme.txt !
             $lang->{$language}=1;
             }
         }
