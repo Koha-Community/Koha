@@ -454,10 +454,10 @@
 	</tr>
 
 	<tr>
-	<td>Jeux de caracteres (obligatoire) 1</td>
+	<td>Jeux de caracteres (obligatoire) 1 </td>
 		<td>
 			<select name="f12" size="1">
-	   <!-- TMPL_IF name="f12  " -->
+	  		<!-- TMPL_IF name="f12  " -->
                                 <option value="  " SELECTED>None</option>
                         <!-- TMPL_ELSE -->
                                 <option value="  ">None</option>
@@ -504,6 +504,15 @@
 				<option value="06">ISO 6438
 	(caracteres africains codes)</option>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1250" -->
+				<option value="50" SELECTED>ISO 10646
+					(UNICODE)
+				</option>
+			<!-- TMPL_ELSE -->
+				<option value="50">ISO 10646
+					(UNICODE)
+				</option>
+			<!-- /TMPL_IF -->
 			</select>
 		</td>
 
@@ -513,7 +522,7 @@
 	<td>Jeux de caracteres (obligatoire) 2</td>
 		<td>
 			<select name="f13" size="1">
-	   <!-- TMPL_IF name="f13  " -->
+			<!-- TMPL_IF name="f13  " -->
                                 <option value="  " SELECTED>None</option>
                         <!-- TMPL_ELSE -->
                                 <option value="  ">None</option>
@@ -559,6 +568,15 @@
 			<!-- TMPL_ELSE -->
 				<option value="06">ISO 6438
 	(caracteres africains codes)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1250" -->
+				<option value="50" SELECTED>ISO 10646
+					(UNICODE)
+				</option>
+			<!-- TMPL_ELSE -->
+				<option value="50">ISO 10646
+					(UNICODE)
+				</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
