@@ -10,116 +10,116 @@
         <h3>Search for Serial Routing List</h3>
 <!-- /TMPL_IF -->
 
-	<table>
-		<tr>
-			<th>ISSN</th>
-			<th>Title</th>
-			<th>
-				Note
-			</td>
-			<th colspan=2>&nbsp;</th>
-		</tr>
-		<tr>
-			<form action="serials-home.pl" method="post">
-			<!-- TMPL_IF NAME="routing" -->
-		        <input type="hidden" name="routing" value="<!-- TMPL_VAR NAME="routing" -->" />
-			<!-- /TMPL_IF -->
-			<input type="hidden" name="searched" value="1" />
-			<td>
-				<input type="text" size=10 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription">
-			</td>
-			<td>
-				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->" title="type a title -complete or partial- to filter subscription">
-			</td>
-			<td>
-				&nbsp;
-			</td>
-			<td colspan=2>
-				<input type="submit" value="filter" class="button serial" title="set a filter on ISSN / title">
-			</td>
-		</tr>
-		<!-- TMPL_LOOP name="subscriptions" -->
-			<tr>
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="ISSN" -->
-						<a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
-					<!-- /TMPL_IF -->
-					
-				</td>
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="title" -->
-						<!-- TMPL_VAR name="title" -->
-					<!-- TMPL_ELSE -->
-						|
-					<!-- /TMPL_IF -->
-				</td>
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
-				</td>
-			    <!-- TMPL_IF NAME="routing" -->
-				<!-- TMPL_IF name="toggle" -->
-				        <td class="hilighted">
-				<!-- TMPL_ELSE -->
-				        <td>
-				<!-- /TMPL_IF -->
-				        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Routing List</a>
-                                        </td>
-			    <!-- TMPL_ELSE -->
-			      <!-- TMPL_IF NAME="alt_links" -->
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<a href="alt_subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
-				</td>
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
-				</td>			      
-			      <!-- TMPL_ELSE -->
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
-				</td>
-				<!-- TMPL_IF name="toggle" -->
-					<td class="hilighted">
-				<!-- TMPL_ELSE -->
-					<td>
-				<!-- /TMPL_IF -->
-					<a href="serials-recieve.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
-				</td>
-			      <!-- /TMPL_IF -->
-			</tr>
-		<!-- /TMPL_LOOP -->
-	</table>
-	
-	<!-- TMPL_IF NAME="routing" -->
-	<!-- TMPL_ELSE -->
-	      <!-- TMPL_IF NAME="alt_links" -->
-  	          <a href="/cgi-bin/koha/serials/alt_subscription-add.pl" class="button serial">Add subscription</a>	      
-	      <!-- TMPL_ELSE -->      
-  	          <a href="/cgi-bin/koha/serials/subscription-add.pl" class="button serial">Add subscription</a>
-	      <!-- /TMPL_IF -->
-	<!-- /TMPL_IF -->
+    <table>
+        <tr>
+            <th>ISSN</th>
+            <th>Title</th>
+            <th>
+                Note
+            </td>
+            <th colspan=2>&nbsp;</th>
+        </tr>
+        <tr>
+            <form action="serials-home.pl" method="post">
+            <!-- TMPL_IF NAME="routing" -->
+                <input type="hidden" name="routing" value="<!-- TMPL_VAR NAME="routing" -->" />
+            <!-- /TMPL_IF -->
+            <input type="hidden" name="searched" value="1" />
+            <td>
+                <input type="text" size=10 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription">
+            </td>
+            <td>
+                <input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->" title="type a title -complete or partial- to filter subscription">
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td colspan=2>
+                <input type="submit" value="filter" class="button serial" title="set a filter on ISSN / title">
+            </td>
+        </tr>
+        <!-- TMPL_LOOP name="subscriptions" -->
+            <tr>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="ISSN" -->
+                    <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
+                <!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="title" -->
+                    <!-- TMPL_VAR name="title" -->
+                <!-- TMPL_ELSE -->
+                    |
+                <!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF NAME="routing" -->
+                    <!-- TMPL_IF name="toggle" -->
+                        <td class="hilighted">
+                    <!-- TMPL_ELSE -->
+                        <td>
+                    <!-- /TMPL_IF -->
+                        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Routing List</a>
+                    </td>
+                <!-- TMPL_ELSE -->
+                <!-- TMPL_IF NAME="alt_links" -->
+                        <!-- TMPL_IF name="toggle" -->
+                            <td class="hilighted">
+                        <!-- TMPL_ELSE -->
+                        <td>
+                        <!-- /TMPL_IF -->
+                            <a href="alt_subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
+                        </td>
+                        <!-- TMPL_IF name="toggle" -->
+                            <td class="hilighted">
+                        <!-- TMPL_ELSE -->
+                            <td>
+                        <!-- /TMPL_IF -->
+                        <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
+                        </td>			      
+                <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF name="toggle" -->
+                            <td class="hilighted">
+                        <!-- TMPL_ELSE -->
+                            <td>
+                        <!-- /TMPL_IF -->
+                            <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
+                        </td>
+                        <!-- TMPL_IF name="toggle" -->
+                            <td class="hilighted">
+                        <!-- TMPL_ELSE -->
+                            <td>
+                        <!-- /TMPL_IF -->
+                            <a href="serials-recieve.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
+                        </td>
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+            </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+    
+    <!-- TMPL_IF NAME="routing" -->
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF NAME="alt_links" -->
+            <a href="/cgi-bin/koha/serials/alt_subscription-add.pl" class="button serial">Add subscription</a>	      
+        <!-- TMPL_ELSE -->      
+            <a href="/cgi-bin/koha/serials/subscription-add.pl" class="button serial">Add subscription</a>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
