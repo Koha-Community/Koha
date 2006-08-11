@@ -1,4 +1,4 @@
-<p>
+<div id="submenu">
 	<a href="/cgi-bin/koha/admin/systempreferences.pl">System pref</a>
 	<a href="/cgi-bin/koha/admin/branches.pl">Branches</a>
 	<a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds</a>
@@ -15,4 +15,4 @@
 	<a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a>
 	<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a>
 	<a href="/cgi-bin/koha/import/breeding.pl">Reservoir</a>
-</p>
+</div>

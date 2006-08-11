@@ -4,7 +4,7 @@ function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
-<p>
+<div id="mainmenu">
 	<a href="/cgi-bin/koha/mainpage.pl">Koha</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
@@ -16,7 +16,7 @@ function Help() {
 	<a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
 	<a href="/cgi-bin/koha/about.pl">About</a>
 	<a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
-</p>
+</div>
 
 <div id="librarian_information">
 <p><!-- TMPL_VAR name="loggedinusername" -->, from <!-- TMPL_VAR name="branchname" --></p>
