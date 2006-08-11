@@ -179,13 +179,6 @@ sub checkvalidisbn {
 Returns the scrolling list with name $input_name, built on authorised Values named $name.
 Returns NULL if no authorised values found
 
-=item buildCGISort
-
-  $CGIScrollingList = &BuildCGISort($name string, $input_name string);
-
-Returns the scrolling list with name $input_name, built on authorised Values named $name.
-Returns NULL if no authorised values found
-
 =cut
 sub buildCGIsort {
     use strict;
