@@ -50,7 +50,7 @@ $VERSION = 0.01;
   &getbiblioitembybiblionumber
   &getbiblioitem &getitemsbybiblioitem
   &skip &getitemtypes
-
+  &get_itemnumbers_of
 
   &MARCfind_oldbiblionumber_from_MARCbibid
   &MARCfind_MARCbibid_from_oldbiblionumber
@@ -371,26 +371,24 @@ sub MARCgetbiblio {
 	my $sth = $dbh->prepare("select marcxml from biblioitems where biblionumber=? "  );
     $sth->execute($bibid);
     my ($marcxml)=$sth->fetchrow;
-    $marcxml =~ s/\<subfield code="[A-Z><]"\>/\<subfield code="a"\>/g;
+#    $marcxml =~ s/\<subfield code="[A-Z><]"\>/\<subfield code="a"\>/g;
     my $record = MARC::Record->new();
     $record = MARC::Record::new_from_xml( $marcxml,'utf8' ) if $marcxml;
 	return $record;
 }
 ############OLD VERSION HERE###############################################
 #    # Returns MARC::Record of the biblio passed in parameter.
+#sub MARCgetbiblio {
 #    my ( $dbh, $bibid ) = @_;
-#  
-#
-#    my $sth =
-#      $dbh->prepare("select marcxml from biblioitems where biblionumber=? "  );
-#    
+#	my $dbh = C4::Context->dbh;
+#    my $sth = $dbh->prepare("select marcxml from biblioitems where biblionumber=? ");
 #    $sth->execute($bibid);
-#   my ($marc)=$sth->fetchrow;
-# my $record = MARC::File::USMARC::decode($marc);
-#warn "=>".$record->as_formatted;
-# return $record;
-#
+#	my ($marc)=$sth->fetchrow;
+#	my $record = MARC::File::USMARC::decode($marc);
+#	warn "=>".$record->as_formatted;
+#	return $record;
 #}
+#
 #############################################################################
 
 sub XMLgetbiblio {
@@ -403,12 +401,10 @@ sub XMLgetbiblio {
     
     $sth->execute($biblionumber);
    	my ($marc)=$sth->fetchrow;
-	warn "******FOOO********";
 	$marc=MARC::File::USMARC::decode($marc);
 	# print Dumper($marc);
 	my $marcxml=$marc->as_xml_record();
 	print Dumper($marcxml);
-	warn "*******BAR2******";
  	return $marcxml;
 }
 sub MARCgetbiblio2 {
@@ -2482,6 +2478,42 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     return ( $count, @results );
 }    # sub getitemsbybiblioitem
 
+
+=head2 get_itemnumbers_of
+
+  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
+
+Given a list of biblionumbers, return the list of corresponding itemnumbers
+for each biblionumber.
+
+Return a reference on a hash where keys are biblionumbers and values are
+references on array of itemnumbers.
+
+=cut
+sub get_itemnumbers_of {
+    my @biblionumbers = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+SELECT itemnumber,
+       biblionumber
+  FROM items
+  WHERE biblionumber IN (?'.(',?' x scalar @biblionumbers - 1).')
+';
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@biblionumbers);
+
+    my %itemnumbers_of;
+
+    while (my ($itemnumber, $biblionumber) = $sth->fetchrow_array) {
+        push @{$itemnumbers_of{$biblionumber}}, $itemnumber;
+    }
+
+    return \%itemnumbers_of;
+}
+
+
 sub logchange {
 
     # Subroutine to log changes to databases
@@ -2948,6 +2980,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.177  2006/08/11 16:04:07  toins
+# re-input an old function.
+#
 # Revision 1.176  2006/08/10 12:44:12  toins
 # sync with dev_week.
 #
