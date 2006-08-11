@@ -27,7 +27,7 @@ use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Biblio;
-use C4::SearchMarc;
+use C4::Search;
 use C4::Amazon;
 use C4::Review;
 
@@ -48,10 +48,9 @@ $template->param( biblionumber => $biblionumber );
 # change back when ive fixed request.pl
 my @items = &ItemInfo( undef, $biblionumber, 'opac' );
 my $dat = &bibdata($biblionumber);
-my ( $authorcount,        $addauthor )      = &getaddauthor($biblionumber);
+my ( $authorcount,        $addauthor )      = &addauthor($biblionumber);
 my ( $webbiblioitemcount, @webbiblioitems ) = &getwebbiblioitems($biblionumber);
 my ( $websitecount,       @websites )       = &getwebsites($biblionumber);
-my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
