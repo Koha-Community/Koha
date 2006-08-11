@@ -25,6 +25,7 @@ use Date::Manip;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Search;
+use C4::Letters;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -1002,7 +1003,7 @@ sub NewSubscription {
         $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
         $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
         $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-        $numberingmethod, $status, $notes) = @_;
+        $numberingmethod, $status, $notes, $letter) = @_;
     my $dbh = C4::Context->dbh;
 #save subscription (insert into database)
     my $query = qq|
@@ -1012,8 +1013,8 @@ sub NewSubscription {
             add1,every1,whenmorethan1,setto1,lastvalue1,innerloop1,
             add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
-            numberingmethod, status, notes)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            numberingmethod, status, notes, letter)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth=$dbh->prepare($query);
     $sth->execute(
@@ -1022,7 +1023,7 @@ sub NewSubscription {
         $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
         $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
         $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-        $numberingmethod, $status, $notes);
+        $numberingmethod, $status, $notes, $letter);
 
 #then create the 1st waited number
     my $subscriptionid = $dbh->{'mysql_insertid'};
@@ -1159,34 +1160,41 @@ sub serialchangestatus {
     my ($subscriptionid,$oldstatus) = $sth->fetchrow;
     # change status & update subscriptionhistory
     if ($status eq 6){
-	delissue($serialseq, $subscriptionid)
+        delissue($serialseq, $subscriptionid)
     }else{
-	$sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?,notes=? where serialid = ?");
-	$sth->execute($serialseq,$planneddate,$status,$notes,$serialid);
-	$sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
-	$sth->execute($subscriptionid);
-	my ($missinglist,$recievedlist) = $sth->fetchrow;
-	if ($status eq 2) {
-	    $recievedlist .= "| $serialseq";
-	    $recievedlist =~ s/^\| //g;
-	}
-	$missinglist .= "| $serialseq" if ($status eq 4) ;
-	$missinglist .= "| not issued $serialseq" if ($status eq 5);
-	$missinglist =~ s/^\| //g;
-	$sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
-	$sth->execute($recievedlist,$missinglist,$subscriptionid);
+        $sth = $dbh->prepare("update serial set serialseq=?,planneddate=?,status=?,notes=? where serialid = ?");
+        $sth->execute($serialseq,$planneddate,$status,$notes,$serialid);
+        $sth = $dbh->prepare("select missinglist,recievedlist from subscriptionhistory where subscriptionid=?");
+        $sth->execute($subscriptionid);
+        my ($missinglist,$recievedlist) = $sth->fetchrow;
+        if ($status eq 2) {
+            $recievedlist .= "| $serialseq";
+            $recievedlist =~ s/^\| //g;
+        }
+        $missinglist .= "| $serialseq" if ($status eq 4) ;
+        $missinglist .= "| not issued $serialseq" if ($status eq 5);
+        $missinglist =~ s/^\| //g;
+        $sth=$dbh->prepare("update subscriptionhistory set recievedlist=?, missinglist=? where subscriptionid=?");
+        $sth->execute($recievedlist,$missinglist,$subscriptionid);
     }
     # create new waited entry if needed (ie : was a "waited" and has changed)
     if ($oldstatus eq 1 && $status ne 1) {
-	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+        $sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+        $sth->execute($subscriptionid);
+        my $val = $sth->fetchrow_hashref;
+        # next issue number
+        my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3) = New_Get_Next_Seq($val);
+        my $nextplanneddate = Get_Next_Date($planneddate,$val);
+        NewIssue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
+        $sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=? where subscriptionid = ?");
+        $sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$subscriptionid);
+    }
+    # check if an alert must be sent... (= a letter is defined & status became "arrived"
+   	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
 	$sth->execute($subscriptionid);
-	my $val = $sth->fetchrow_hashref;
-	# next issue number
-	my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3) = New_Get_Next_Seq($val);
-	my $nextplanneddate = Get_Next_Date($planneddate,$val);
-	NewIssue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
-	$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=? where subscriptionid = ?");
-	$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$subscriptionid);
+	my $subscription = $sth->fetchrow_hashref; 
+    if ($subscription->{letter} && $status eq 2) {
+        sendalerts('issue',$subscription->{subscriptionid},$subscription->{letter});
     }
 }
 
