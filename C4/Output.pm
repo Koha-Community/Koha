@@ -71,13 +71,14 @@ if (!$query){
 	} else {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
-
+    my $path = C4::Context->preference('intranet_includes') || 'includes';
+    warn "PATH : $path";
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac, $query);
 	my $opacstylesheet = C4::Context->preference('opacstylesheet');
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
 				   global_vars       => 1,
-				   path              => ["$htdocs/$theme/$lang/includes"]);
+				   path              => ["$htdocs/$theme/$lang/$path"]);
 
 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),

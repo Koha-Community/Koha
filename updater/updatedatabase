@@ -17,7 +17,6 @@ use strict;
 # CPAN modules
 use DBI;
 use Getopt::Long;
-
 # Koha modules
 use C4::Context;
 
@@ -41,7 +40,9 @@ my (
 );
 
 my $silent;
-GetOptions( 's' => \$silent );
+GetOptions(
+	's' =>\$silent
+	);
 my $dbh = C4::Context->dbh;
 print "connected to your DB. Checking & modifying it\n" unless $silent;
 $|=1; # flushes output
@@ -178,14 +179,6 @@ my %requiretables = (
 	                        borrower1 integer,
 	                        borrower2 integer
 	                        )",
-       subscriptionroutinglist => "(
-	                        routingid int(11) NOT NULL auto_increment,
-	                        subscriptionid int(11) NOT NULL default '0',
-	                        borrowernumber int(11) NOT NULL default '0',
-	                        ranking int(11) NOT NULL default '0',
-	                        numberpattern varchar(100) NULL,
-	                        PRIMARY KEY  (routingid)
-	                        )",
 
 );
 
@@ -201,12 +194,6 @@ my %requirefields = (
 );
 
 my %dropable_table = (
-	sessionqueries	=> 'sessionqueries',
-	marcrecorddone	=> 'marcrecorddone',
-	users			=> 'users',
-	itemsprices		=> 'itemsprices',
-	biblioanalysis	=> 'biblioanalysis',
-	borexp			=> 'borexp',
 # tablename => 'tablename',
 );
 
@@ -234,519 +221,6 @@ my %tabledata = (
 #	},
 # ],
     systempreferences => [
-		{
-            uniquefieldrequired => 'variable',
-            variable            => 'Activate_Log',
-            value               => 'On',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'Turn Log Actions on DB On an Off',
-	    type		=> 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'IndependantBranches',
-            value               => 0,
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'Turn Branch independancy management On an Off',
-	    type		=> 'YesNo',
-        },
-		{
-            uniquefieldrequired => 'variable',
-            variable            => 'ReturnBeforeExpiry',
-            value               => 'Off',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1},
-            explanation         => 'If Yes, Returndate on issuing can\'t be after borrower card expiry',
-	    type		=> 'YesNo',
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opacstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to use an alternate layout stylesheet in OPAC',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaccolorstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the color stylesheet to use in the OPAC',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclayoutstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the layout stylesheet to use in the OPAC',
-            type => 'free',
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opacreadinghistory',
-            value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Turn on/off display of Patron Reading History in OPAC',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclanguagesdisplay',
-            value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Turn on/off display of Change Language feature on OPAC',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'patronimages',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Turn on/off display of patron images in Intranet and specify a file extension for images',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'intranetstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to use an alternate layout stylesheet in Intranet',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'intranetcolorstylesheet',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Enter the name of the color stylesheet to use in Intranet',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opacsmallimage',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to an image, will be on top/left instead of the Koha logo',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaclargeimage',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enter a complete URL to an image, will be on the main page, instead of the Koha logo',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'delimiter',
-            value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'separator for reports exported to spreadsheet',
-            type        => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'MIME',
-            value               => 'OPENOFFICE.ORG',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Define the default application for report exportations into files',
-            type    => 'Choice',
-            options => 'EXCEL|OPENOFFICE.ORG'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'Delimiter',
-            value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-'Define the default separator character for report exportations into files',
-            type    => 'Choice',
-            options => ';|tabulation|,|/|\|#'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'SubscriptionHistory',
-            value               => ';',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            explanation =>
-              'Define the information level for serials history in OPAC',
-            type    => 'Choice',
-            options => 'simplified|full'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'hidelostitems',
-            value               => 'No',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'show or hide "lost" items in OPAC.',
-            type        => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'IndependantBranches',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'Turn Branch independency management On and Off',
-            type        => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'ReturnBeforeExpiry',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'If Yes, Returndate on issuing can\'t be after borrower card expiry',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'Disable_Dictionary',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation => 'Disables Dictionary buttons if set to yes',
-            type        => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'hide_marc',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'hide marc specific datas like subfield code & indicators to library',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'NotifyBorrowerDeparture',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-              'Delay before expiry where a notice is sent when issuing',
-            type => 'Integer',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'OpacPasswordChange',
-            value               => '1',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Enable/Disable password change in OPAC (disable it when using LDAP auth)',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'OpacNav',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Use HTML tabs to add navigational links to the left-hand navigational bar in OPAC',
-            type    => 'Textarea',
-            options => '70|10'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'IntranetNav',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1
-            },
-            explanation =>
-'Use HTML tabs to add navigational links to the left-hand navigational bar in Intranet',
-            type    => 'Textarea',
-            options => '70|10'
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AnonSuggestions',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-              'Set to anonymous borrowernumber to enable Anonymous suggestions',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'MARCOrgCode',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                        type' => 1
-            },
-            explanation =>
-'Your MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonContent',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-'Turn On Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled',
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonDevKey',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-'see: aws-portal.amazon.com/gp/aws/developer/registration/index.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'AmazonAssocTag',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-	    				type' => 1
-            },
-            explanation =>
-              'see: associates.amazon.com/gp/flex/associates/apply-login.html',
-            type => 'free',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            forceupdate         => {
-                'explanation' => 1,
-                'type'        => 1,
-                'options'     => 1
-            },
-            variable    => 'TemplateEncoding',
-            value       => 'iso-8859-1',
-            explanation => 'Specify the encoding to use in Templates',
-            type        => 'Choice',
-            options     => 'iso-8859-1|utf-8'
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'opaccredits',
-            value               => '',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-              'Put any HTML Credits at the bottom of the OPAC page',
-            type    => 'Textarea',
-            options => '70|10'
-        },
-		
-{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacheader',
-            value               => '',
-            forceupdate         => { 'explanation' => 1,                                                             		
-							'type' => 1},
-            explanation         => 'Enter HTML to be included as a custom header in the OPAC',
-            type                => 'Textarea',
-			options				=> '30|10'
-        },
-
-		{
-            uniquefieldrequired => 'variable',
-            variable            => 'IntranetBiblioDefaultView',
-            value               => 'marc',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Define the default view of a biblio in the intranet. Can be either normal, marc, or ISBD',
-            type                => 'Choice',
-			options				=> 'normal|marc|isbd'
-        },
-		
-				{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacbookbag',
-            value               => '1',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Enable or disable display of biblio basket (book bag)',
-            type                => 'YesNo'
-        },
-		
-				{
-            uniquefieldrequired => 'variable',
-            variable            => 'opacuserlogin',
-            value               => '1',
-            forceupdate         => { 'explanation' => 1,                                                             
-								'type' => 1},
-            explanation         => 'Enable or disable display of user login features',
-            type                => 'YesNo'
-        },
-		
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'serialsadditems',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-'If set, a new item will be automatically added when receiving an issue',
-            type => 'YesNo',
-        },
-
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'RoutingSerials',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-'If set, will use alternate serials and routing lists functionality',
-            type => 'YesNo',
-        },
-           
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'advancedMARCeditor',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"If set, the MARC editor won't show you tag/subfields description",
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'z3950NormalizeAuthor',
-            value               => '0',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"If set, Personnal Authorities will replace authors in biblio.author",
-            type => 'YesNo',
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'z3950AuthorAuthFields',
-            value               => '701,702,700',
-            forceupdate         => {
-                'explanation' => 1,
-                '
-                                        type' => 1
-            },
-            explanation =>
-"contains the MARC biblio tags of person authorities to fill biblio.author with when importing biblio",
-            type => 'free',
-        },
         {
             uniquefieldrequired => 'variable',
             variable            => 'useDaysMode',
@@ -838,6 +312,15 @@ my %tabledata = (
             explanation         => 'Allows patrons to submit reviews from the opac',
             type                => 'YesNo',
         },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'intranet_includes',
+            value               => 'includes',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'The includes directory you want for specific look of Koha (includes or includes_npl for example)',
+            type                => 'Free',
+        },
     ],
 
 );
@@ -860,67 +343,7 @@ my %fielddefinitions = (
             default => '',
             extra   => ''
         },
-	{
-	    field   => 'routingnotes',
-	    type    => 'TEXT',
-	    null    => 'NULL',
-	    key     => '',
-	    default => '',
-	    extra   => ''
-	},
-	{
-	    field   => 'claimdate',
-	    type    => 'DATE',
-	    null    => 'NULL',
-	    key     => '',
-	    default => '',
-	    extra   => ''
-	},	    
     ],
-
- subscription => [
-           {    
-	         field => 'firstacquidate',
-                 type    => 'DATE',
-                 null    => 'NULL',
-                 key     => '',
-                 default => '0000-00-00',
- 	         extra   => ''		 
-           },
-           {     
-	         field => 'numberpattern',
-                 type    => 'int(4)',
-                 null    => 'NULL',
-                 key     => '',
-                 default => '0',
- 	         extra   => ''		 		 
-           },
-           {     
-	         field => 'irregularity',
-                 type    => 'varchar(255)',
-                 null    => 'NULL',
-                 key     => '',
-                 default => '',
- 	         extra   => ''		 		 
-           },
-           {     
-	         field => 'hemisphere',
-                 type    => 'int(1)',
-                 null    => '',
-                 key     => '',
-                 default => '1',
- 	         extra   => ''		 		 
-           },
-           {     
-	         field => 'callnumber',
-                 type    => 'varchar(100)',
-                 null    => 'NULL',
-                 key     => '',
-                 default => '',
- 	         extra   => ''		 		 
-           },     
-         ],
-    
 	aqbasket =>  [
 		{
 			field	=> 'booksellerid',
@@ -932,23 +355,15 @@ my %fielddefinitions = (
 		},
 	],
 	aqbooksellers =>  [
-{
-            field   => 'id',
-            type    => 'int(11)',
-            null    => 'NOT NULL',
-            key     => '',
-            default => '',
-            extra   => 'auto_increment',
-},
-{
-            field   => 'listprice',
-            type    => 'varchar(10)',
-            null    => 'NULL',
-            key     => '',
-            default => '',
-            extra   => '',
-},
-{
+		{
+			field	=> 'listprice',
+			type	=> 'varchar(10)',
+			null	=> 'NULL',
+			key		=> '',
+			default	=> '',
+			extra	=> '',
+		},
+		{
 			field	=> 'invoiceprice',
 			type	=> 'varchar(10)',
 			null	=> 'NULL',
@@ -1700,10 +1115,11 @@ while ( my ($table) = $sth->fetchrow ) {
     $existingtables{$table} = 1;
 }
 
+
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     unless ( $existingtables{$table} ) {
-        print "Adding $table table...\n" unless $silent;
+	print "Adding $table table...\n" unless $silent;
         my $sth = $dbh->prepare("create table $table $requiretables{$table}");
         $sth->execute;
         if ( $sth->err ) {
@@ -1715,13 +1131,13 @@ foreach $table ( keys %requiretables ) {
 
 # now drop useless tables
 foreach $table ( keys %dropable_table ) {
-    if ( $existingtables{$table} ) {
-        print "Dropping unused table $table\n" if $debug and not $silent;
-        $dbh->do("drop table $table");
-        if ( $dbh->err ) {
-            print "Error : $dbh->errstr \n";
-        }
-    }
+	if ( $existingtables{$table} ) {
+		print "Dropping unused table $table\n" if $debug and not $silent;
+		$dbh->do("drop table $table");
+		if ( $dbh->err ) {
+			print "Error : $dbh->errstr \n";
+		}
+	}
 }
 
 #---------------------------------
@@ -1737,8 +1153,7 @@ foreach $table ( keys %requirefields ) {
         $types{$column} = $type;
     }    # while
     foreach $column ( keys %{ $requirefields{$table} } ) {
-        print "  Check column $column  [$types{$column}]\n"
-          if $debug and not $silent;
+        print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
         if ( !$types{$column} ) {
 
             # column doesn't exist
@@ -1807,14 +1222,13 @@ foreach $table ( keys %fielddefinitions ) {
 				$action="add";
 			}
 # if it's a primary key, drop the previous pk, before altering the table
-# 			my $sth;
-   my $request = "alter table $table ";
-    $request.=" drop primary key" if $key eq 'PRIMARY KEY';
-    $request.= " $action $field $type $null $key $extra ";
-    $request.= "default ".$dbh->quote($default) if $default;
-    $request.= " $after";
-#    print "REQ : $request";
-			$dbh->do($request);
+			my $sth;
+			if ($key ne 'PRIMARY KEY') {
+				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
+			} else {
+				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
+			}
+			$sth->execute($default);
 			print "  alter or create $field in $table\n" unless $silent;
 		}
 	}
@@ -1822,38 +1236,34 @@ foreach $table ( keys %fielddefinitions ) {
 
 # Populate tables with required data
 
+
 # synch table and deletedtable.
-foreach my $table ( ( 'borrowers', 'items', 'biblio', 'biblioitems' ) ) {
-    my %deletedborrowers;
-    print "synch'ing $table\n";
-    $sth = $dbh->prepare("show columns from deleted$table");
-    $sth->execute;
-    while ( my ( $column, $type, $null, $key, $default, $extra ) =
-        $sth->fetchrow )
-    {
-        $deletedborrowers{$column} = 1;
-    }
-    $sth = $dbh->prepare("show columns from $table");
-    $sth->execute;
-    my $previous;
-    while ( my ( $column, $type, $null, $key, $default, $extra ) =
-        $sth->fetchrow )
-    {
-        unless ( $deletedborrowers{$column} ) {
-            my $newcol = "alter table deleted$table add $column $type";
-            if ( $null eq 'YES' ) {
-                $newcol .= " NULL ";
-            }
-            else {
-                $newcol .= " NOT NULL ";
-            }
-            $newcol .= "default $default" if $default;
-            $newcol .= " after $previous" if $previous;
-            $previous = $column;
-            print "creating column $column\n";
-            $dbh->do($newcol);
-        }
-    }
+foreach my $table (('borrowers','items','biblio','biblioitems')) {
+	my %deletedborrowers;
+	print "synch'ing $table\n";
+	$sth = $dbh->prepare("show columns from deleted$table");
+	$sth->execute;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		$deletedborrowers{$column}=1;
+	}
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute;
+	my $previous;
+	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+		unless ($deletedborrowers{$column}) {
+			my $newcol="alter table deleted$table add $column $type";
+			if ($null eq 'YES') {
+				$newcol .= " NULL ";
+			} else {
+				$newcol .= " NOT NULL ";
+			}
+			$newcol .= "default $default" if $default;
+			$newcol .= " after $previous" if $previous;
+			$previous=$column;
+			print "creating column $column\n";
+			$dbh->do($newcol);
+		}
+	}
 }
 
 foreach my $table ( keys %tabledata ) {
@@ -1866,7 +1276,7 @@ foreach my $table ( keys %tabledata ) {
         my $sth                 =
           $dbh->prepare(
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
-          );
+        );
         $sth->execute($uniquevalue);
 		if ($sth->rows) {
 			foreach my $field (keys %$forceupdate) {
@@ -2036,7 +1446,7 @@ unless ($marcdone) {
 		my $record = MARCgetbiblio($dbh,$bibid);
 	#Force UTF-8 in record leader
 		$record->encoding('UTF-8');
-		print $record->as_formatted if ($biblionumber==3902);
+# 		print $record->as_formatted if ($biblionumber==3902);
 		$sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
 		$totaldone++;
 		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
@@ -2047,26 +1457,25 @@ unless ($marcdone) {
 
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
-    my @fields = split /,/, $uselessfields{$table};
-    my $fields;
-    my $exists;
-    foreach my $fieldtodrop (@fields) {
-        $fieldtodrop =~ s/\t//g;
-        $fieldtodrop =~ s/\n//g;
-        $exists = 0;
-        $sth    = $dbh->prepare("show columns from $table");
-        $sth->execute;
-        while ( my ( $column, $type, $null, $key, $default, $extra ) =
-            $sth->fetchrow )
-        {
-            $exists = 1 if ( $column eq $fieldtodrop );
-        }
-        if ($exists) {
-            print "deleting $fieldtodrop field in $table...\n" unless $silent;
-            my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
-            $sth->execute;
-        }
-    }
+	my @fields = split /,/,$uselessfields{$table};
+	my $fields;
+	my $exists;
+	foreach my $fieldtodrop (@fields) {
+		$fieldtodrop =~ s/\t//g;
+		$fieldtodrop =~ s/\n//g;
+		$exists =0;
+		$sth = $dbh->prepare("show columns from $table");
+		$sth->execute;
+		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+		{
+			$exists =1 if ($column eq $fieldtodrop);
+		}
+		if ($exists) {
+			print "deleting $fieldtodrop field in $table...\n" unless $silent;
+			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+			$sth->execute;
+		}
+	}
 }    # foreach
 
 
@@ -2078,11 +1487,15 @@ while ( my $table = $sth->fetchrow_hashref ) {
 # 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
 # 		print "moving $table->{Name} to InnoDB\n";
 # 	}
+    next if $table->{Name} eq 'marc_word';
+    next if $table->{Name} eq 'marc_subfield_table';
+    next if $table->{Name} eq 'auth_word';
+    next if $table->{Name} eq 'auth_subfield_table';
 	unless ($table->{Collation} =~ /^utf8/) {
+ 		print "moving $table->{Name} to utf8\n";
 		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
 		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
- 		print "moving $table->{Name} to utf8\n";
 	} else {
 	}
 }
@@ -2256,14 +1669,8 @@ sub MARCgetitem {
 exit;
 
 # $Log$
-# Revision 1.156  2006/07/20 04:36:01  bob_lyon
-# Merging back in some katipo changes to serials
-#
-# Revision 1.155  2006/07/17 12:51:48  toins
-# auto_increment id in aqbooksellers
-#
-# Revision 1.153  2006/07/04 14:36:52  toins
-# Head & rel_2_2 merged
+# Revision 1.157  2006/08/11 10:03:13  tipaul
+# the new "includes" features, for personalized templates. Look at koha-devel, i'll write a mail here (& something on the wiki)
 #
 # Revision 1.152  2006/06/27 09:26:37  btoumi
 # modify (initials,phone ) fields property in borrowers and deletedborrowers table
