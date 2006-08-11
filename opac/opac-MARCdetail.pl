@@ -63,15 +63,13 @@ my $query=new CGI;
 my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
-# my $bibid = $query->param('bibid');
-# $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-# $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-# my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-my $framework = "";
-my $itemtype = "";
-my $tagslib = &MARCgettagslib($dbh,0,$framework);
+my $bibid = $query->param('bibid');
+$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
+$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
+my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+my $tagslib = &MARCgettagslib($dbh,0,$itemtype);
 
-my $record = get_record($biblionumber);
+my $record =MARCgetbiblio($dbh,$bibid);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "opac-MARCdetail.tmpl",

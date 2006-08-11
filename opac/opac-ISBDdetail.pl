@@ -23,8 +23,6 @@
 
 MARCdetail.pl : script to show a biblio in MARC format
 
-=head1 SYNOPSIS
-
 
 =head1 DESCRIPTION
 
@@ -67,10 +65,9 @@ my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
 my $bibid = $query->param('bibid');
-#$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-#$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-#my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-my $itemtype="";
+$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
+$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
+my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
