@@ -166,9 +166,9 @@ CREATE TABLE IF NOT EXISTS `marc_subfield_structure` (
 -- ******************************
 
 
-INSERT INTO `biblio_framework` VALUES ('ASMP_BOOKS', 'ASMP Books (including workbooks and activity guides)');
-INSERT INTO `biblio_framework` VALUES ('ASMP_SOUND_RECORDINGS', 'ASMP Sound Recordings (including audio cassettes and CDs)');
-INSERT INTO `biblio_framework` VALUES ('ASMP_VIDEORECORDINGS', 'ASMP Videorecordings (including VHS videocassettes and DVDs)');
+INSERT INTO `biblio_framework` VALUES ('ASMP_BOOKS', 'Books, Booklets, Workbooks');
+INSERT INTO `biblio_framework` VALUES ('ASMP_SOUND_RECORDINGS', 'Audio Cassettes, CDs)');
+INSERT INTO `biblio_framework` VALUES ('ASMP_VIDEORECORDINGS', 'DVDs, VHS)');
 
 
 -- ******************************************************
