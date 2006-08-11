@@ -17,7 +17,11 @@
 	</p>
 	<p>
 		<label>Itemtype</label>
-		<!-- TMPL_VAR name="CGIitemtype" -->
+            <select name="value">
+            <!-- TMPL_LOOP name="itemtypeloop" -->
+                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
 		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="category" -->">
 		<input type="hidden" name="marclist" value="">
 		<input type="hidden" name="and_or" value="and">

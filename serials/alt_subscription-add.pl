@@ -67,8 +67,6 @@ if ($op eq 'mod') {
 	$cost = $subs->{'cost'};
 	$aqbooksellerid = $subs->{'aqbooksellerid'};
 	$aqbooksellername = $subs->{'aqbooksellername'};
-	$bookfundid = $subs->{'bookfundid'};
-	$aqbudgetid = $subs->{'aqbudgetid'};
 	$startdate = $subs->{'startdate'};
 	$firstacquidate = $subs->{'firstacquidate'};    
 	$periodicity = $subs->{'periodicity'};
@@ -180,18 +178,6 @@ if ($op eq 'mod') {
 	                        "numberpattern$numberpattern" => 1,
 				);
 }
-(my $temp,@budgets) = bookfunds();
-# find default value & set it for the template
-for (my $i=0;$i<=$#budgets;$i++) {
-	if ($budgets[$i]->{'aqbudgetid'} eq $aqbudgetid) {
-		$budgets[$i]->{'selected'}=1;
-	}
-}
-$template->param(budgets => \@budgets,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 
 if ($op eq 'addsubscription') {
         my @irregular = $query->param('irregular');

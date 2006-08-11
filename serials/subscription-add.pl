@@ -79,14 +79,6 @@ my ($template, $loggedinuser, $cookie)
                 debug => 1,
                 });
 
-
-#FIXME : If Budgets are never used, then these lines are useless.
-$dbh = C4::Context->dbh;
-my $sthtemp = GetBranchCodeFromBorrowers();
-$sthtemp->execute($loggedinuser);
-my ($flags, $homebranch)=$sthtemp->fetchrow;
-#FIXME : END added by hdl on July,14 2005
-
 if ($op eq 'mod') {
     my $subscriptionid = $query->param('subscriptionid');
     my $subs = &GetSubscription($subscriptionid);
@@ -173,17 +165,6 @@ if ($op eq 'mod') {
         "dow$dow" => 1,
         );
 }
-@budgets = GetBookFunds($homebranch);
-my $temp = scalar(@budgets);
-
-# find default value & set it for the template
-for (my $i=0;$i<$#budgets;$i++) {
-    if ($budgets[$i]->{'aqbudgetid'} eq $aqbudgetid) {
-        $budgets[$i]->{'selected'}=1;
-    }
-}
-$template->param(budgets => \@budgets);
-#FIXME : END Added by hdl on July, 14 2005
 
 my @letterlist = GetLetterList('serial');
 for (my $i=0;$i<=$#letterlist;$i++) {
