@@ -1715,54 +1715,58 @@ sub OLDmodsubject {
 
 sub OLDmodbibitem {
     my ( $dbh, $biblioitem ) = @_;
+	my $dbh = C4::Context->dbh; # FIXME unused to pass $dbh n input arg.
     my $query;
 ##Recalculate LC in case it changed --TG
 
-    $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
-    $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
-    $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
-    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
-    $biblioitem->{'publishercode'} =
-      $dbh->quote( $biblioitem->{'publishercode'} );
-    $biblioitem->{'publicationyear'} =
-      $dbh->quote( $biblioitem->{'publicationyear'} );
-    $biblioitem->{'classification'} =      $dbh->quote( $biblioitem->{'classification'} );
-    $biblioitem->{'dewey'}       = $dbh->quote( $biblioitem->{'dewey'} );
-    $biblioitem->{'subclass'}    = $dbh->quote( $biblioitem->{'subclass'} );
-    $biblioitem->{'illus'}       = $dbh->quote( $biblioitem->{'illus'} );
-    $biblioitem->{'pages'}       = $dbh->quote( $biblioitem->{'pages'} );
-    $biblioitem->{'volumeddesc'} = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'bnotes'}      = $dbh->quote( $biblioitem->{'bnotes'} );
-    $biblioitem->{'size'}        = $dbh->quote( $biblioitem->{'size'} );
-    $biblioitem->{'place'}       = $dbh->quote( $biblioitem->{'place'} );
-my($lcsort)=calculatelc($biblioitem->{'classification'}).$biblioitem->{'subclass'};
+    $biblioitem->{'itemtype'}        = $dbh->quote( $biblioitem->{'itemtype'} );
+    $biblioitem->{'url'}             = $dbh->quote( $biblioitem->{'url'} );
+    $biblioitem->{'isbn'}            = $dbh->quote( $biblioitem->{'isbn'} );
+    $biblioitem->{'issn'}            = $dbh->quote( $biblioitem->{'issn'} );
+    $biblioitem->{'publishercode'}   = $dbh->quote( $biblioitem->{'publishercode'} );
+    $biblioitem->{'publicationyear'} = $dbh->quote( $biblioitem->{'publicationyear'} );
+    $biblioitem->{'classification'}  = $dbh->quote( $biblioitem->{'classification'} );
+    $biblioitem->{'dewey'}           = $dbh->quote( $biblioitem->{'dewey'} );
+    $biblioitem->{'subclass'}        = $dbh->quote( $biblioitem->{'subclass'} );
+    $biblioitem->{'illus'}           = $dbh->quote( $biblioitem->{'illus'} );
+    $biblioitem->{'pages'}           = $dbh->quote( $biblioitem->{'pages'} );
+    $biblioitem->{'volumeddesc'}     = $dbh->quote( $biblioitem->{'volumeddesc'} );
+    $biblioitem->{'bnotes'}          = $dbh->quote( $biblioitem->{'bnotes'} );
+    $biblioitem->{'size'}            = $dbh->quote( $biblioitem->{'size'} );
+    $biblioitem->{'place'}           = $dbh->quote( $biblioitem->{'place'} );
 
+	my ($lcsort) = calculatelc($biblioitem->{'classification'}).$biblioitem->{'subclass'};
+	$lcsort = "NULL";
+#	$lcsort=$dbh->quote($lcsort);
 
-$lcsort=$dbh->quote($lcsort);
+	$query = "
+		UPDATE biblioitems SET
+		itemtype        = ".$biblioitem->{'itemtype'}.",
+		url             = ".$biblioitem->{'url'}.",
+		isbn            = ".$biblioitem->{'isbn'}.",
+		issn            = ".$biblioitem->{'issn'}.",
+		publishercode   = ".$biblioitem->{'publishercode'}.",
+		publicationyear = ".$biblioitem->{'publicationyear'}.",
+		classification  = ".$biblioitem->{'classification'}.",
+		dewey           = ".$biblioitem->{'dewey'}.",
+		subclass        = ".$biblioitem->{'subclass'}.",
+		illus           = ".$biblioitem->{'illus'}.",
+		pages           = ".$biblioitem->{'pages'}.",
+		volumeddesc     = ".$biblioitem->{'volumeddesc'}.",
+		notes 		    = ".$biblioitem->{'bnotes'}.",
+		size		    = ".$biblioitem->{'size'}.",
+		place		    = ".$biblioitem->{'place'}.",
+		lcsort	        = ".$lcsort."";
+	# where biblionumber = ".$biblioitem->{'biblionumber'}."
+	#";
 
+    my $sth = $dbh->prepare($query);
+	$sth->execute;	
 
- $query = "Update biblioitems set
-itemtype        = $biblioitem->{'itemtype'},
-url             = $biblioitem->{'url'},
-isbn            = $biblioitem->{'isbn'},
-issn            = $biblioitem->{'issn'},
-publishercode   = $biblioitem->{'publishercode'},
-publicationyear = $biblioitem->{'publicationyear'},
-classification  = $biblioitem->{'classification'},
-dewey           = $biblioitem->{'dewey'},
-subclass        = $biblioitem->{'subclass'},
-illus           = $biblioitem->{'illus'},
-pages           = $biblioitem->{'pages'},
-volumeddesc     = $biblioitem->{'volumeddesc'},
-notes 		= $biblioitem->{'bnotes'},
-size		= $biblioitem->{'size'},
-place		= $biblioitem->{'place'},
-lcsort	=$lcsort where biblionumber = $biblioitem->{'biblionumber'}";
-
-    $dbh->do($query);
     if ( $dbh->errstr ) {
-		warn "$query";
+		warn "[error]=> $query";
     }
+
 }    # sub modbibitem
 
 sub OLDmodnote {
@@ -2350,7 +2354,35 @@ sub GetBiblioItemByBiblioNumber {
 
     $sth->finish;
     return @results;
-}    # sub
+}
+
+=head2 getbibliofromitemnumber
+
+  $item = &getbibliofromitemnumber($env, $dbh, $itemnumber);
+
+Looks up the item with the given itemnumber.
+
+C<$env> and C<$dbh> are ignored.
+
+C<&itemnodata> returns a reference-to-hash whose keys are the fields
+from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
+database.
+
+=cut
+#'
+sub getbibliofromitemnumber {
+  my ($env,$dbh,$itemnumber) = @_;
+  $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from biblio,items,biblioitems
+    where items.itemnumber = ?
+    and biblio.biblionumber = items.biblionumber
+    and biblioitems.biblioitemnumber = items.biblioitemnumber");
+#  print $query;
+  $sth->execute($itemnumber);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
+}
 
 sub getbiblio {
     my ($biblionumber) = @_;
@@ -2411,25 +2443,29 @@ sub getbiblioitembybiblionumber {
     return ( $count, @results );
 }    # sub
 
+=head2 getitemtypes
+
+FIXME :: do not use this function : use C4::Koha::GetItemTypes;
+
+=cut 
+
 sub getitemtypes {
     my $dbh   = C4::Context->dbh;
     my $query = "select * from itemtypes order by description";
     my $sth   = $dbh->prepare($query);
 
     # || die "Cannot prepare $query" . $dbh->errstr;      
-    my $count = 0;
     my @results;
 
     $sth->execute;
 
     # || die "Cannot execute $query\n" . $sth->errstr;
     while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
+		push @results, $data;
     }    # while
 
     $sth->finish;
-    return ( $count, @results );
+    return @results;
 }    # sub getitemtypes
 
 sub getstacks{
@@ -2848,11 +2884,11 @@ sub zebraop{
 	my $reconnect=0;
 	my $record;
 	my $shadow;
+	warn "Server is: ".$server;
 reconnect:
 	$Zconnbiblio[0]=C4::Context->Zconnauth($server);
 	if ($server eq "biblioserver"){
 		$record =XMLgetbiblio($dbh,$biblionumber);
-		warn "******BAR1********";
 		$shadow="biblioservershadow";
 	}elsif($server eq "authorityserver"){
 		$record =C4::AuthoritiesMarc::XMLgetauthority($dbh,$biblionumber);
@@ -2980,6 +3016,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.178  2006/08/21 09:51:15  toins
+# Add a forgetted function : getbibliofromitemnumber
+#
 # Revision 1.177  2006/08/11 16:04:07  toins
 # re-input an old function.
 #
