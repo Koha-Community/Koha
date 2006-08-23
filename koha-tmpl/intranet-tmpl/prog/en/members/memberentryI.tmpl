@@ -44,7 +44,7 @@
 <form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 	<!-- 		field always hidden in different form (1,2,3) -->
 		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="">
+		<input type="hidden" name="FormFieldList" value="cardnumber|surname|contactname|contactfirstname|select_city">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -152,7 +152,7 @@
 <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 		<!-- 		field always hidden in different form (1,2,3) -->
 		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="">
+		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|city|phonepro|emailpro|fax|contactnotes">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -231,7 +231,7 @@
 			<input type="text" name="address" size="34" value="<!-- TMPL_VAR NAME="address" -->">
 		</p>
 		<p>
-			<!-- TMPL_IF NAME="mandatoryaddress2s" -->
+			<!-- TMPL_IF NAME="mandatoryaddress2" -->
 				<label class="borrowers_mandafield">
 			<!--TMPL_ELSE-->
 				<label>
@@ -284,7 +284,7 @@
 			<input type="text" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" >
 		</p>
 		<p>
-			<!-- TMPL_IF NAME="mandatoryefax" -->
+			<!-- TMPL_IF NAME="mandatoryfax" -->
 				<label class="borrowers_mandafield">
 			<!--TMPL_ELSE-->
 				<label>
@@ -317,7 +317,7 @@
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 		<!-- 		field always hidden in different form (1,2,3) -->
 		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="">
+		<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -408,7 +408,7 @@
 	<fieldset id="memberentry_userid">
 		<legend>OPAC login</legend>
 		<p>
-			<!-- TMPL_IF NAME="mandatorylogin" -->
+			<!-- TMPL_IF NAME="mandatoryuserid" -->
 			<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 			<label>

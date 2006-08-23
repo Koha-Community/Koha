@@ -49,7 +49,7 @@
 		<form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 		<!-- 		field always hidden in different form (1,2,3) -->		
 			<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-			<input type="hidden" name="FormFieldList" value="cardnumber|title|surname|firstname|dateofbirth|categorycode|sort1">
+			<input type="hidden" name="FormFieldList" value="cardnumber|title|surname|firstname|dateofbirth|initials|othernames|select_city|sort1|sort2">
 			<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 			<input type="hidden" name="type" value="borrowers">
 			<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -244,7 +244,7 @@
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 <!-- 		field always hidden in different form (1,2,3) -->
 		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="streetnumber|address|address2|zipcode|contacttitle|city|contactname|contactfirstname|branchcode|phone|phonepro|mobile|email|emailpro|B_email|B_phone">
+		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|contacttitle|city|contactname|contactfirstname|phone|phonepro|mobile|email|emailpro|B_email|B_phone|relationship|fax">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -496,7 +496,7 @@
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 <!-- 		field always hidden in different form (1,2,3) -->
 		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="">
+		<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
