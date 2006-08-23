@@ -80,7 +80,6 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 
 // function to test all fields in forms and nav in different forms(1 ,2 or 3)
  function check_form_borrowers(nav){
-
 var statut=0;
 if (nav < document.form.step.value) {
 	document.form.step.value=nav;
@@ -107,33 +106,35 @@ if (nav < document.form.step.value) {
 	var champ_verif = document.form.BorrowerMandatoryfield.value.split ('|');
  	var champ_form= document.form.FormFieldList.value.split('|');
 		var message ="The following fields are mandatory :\n";
-	var message_champ="";
-		for (var j=0; j<champ_form.length; j++){ 
+		var message_champ="";
+	for (var j=0; j<champ_form.length; j++){ 
+		if (document.getElementsByName(""+champ_form[j]+"")[0]){
 			for (var i=0; i<champ_verif.length; i++) {
-				if (eval("document.form.elements['"+champ_verif[i]+"']") && eval("document.form.elements['"+champ_verif[j]+"']")) {
-					var val_champ=eval("document.form."+champ_verif[i]+".value");
-					var ref_champ=eval("document.form."+champ_verif[i]);
-					var val_form=eval("document.form."+champ_form[j]+".value");
-					if (champ_verif[i] == champ_form[j]){
-						//check if it's a select
-						if (ref_champ.type=='select-one'){
-							if (ref_champ.options[0].selected ){
-								// action if field is empty
-								message_champ+=champ_verif[i]+"\n";
-								//test to konw if u must show a message with error
-								statut=1;
+					if (eval("document.form.elements['"+champ_verif[i]+"']") ) {
+						var val_champ=eval("document.form."+champ_verif[i]+".value");
+						var ref_champ=eval("document.form."+champ_verif[i]);
+						var val_form=eval("document.form."+champ_form[j]+".value");
+						if (champ_verif[i] == champ_form[j]){
+							//check if it's a select
+							if (ref_champ.type=='select-one'){
+								if (ref_champ.options[0].selected ){
+									// action if field is empty
+									message_champ+=champ_verif[i]+"\n";
+									//test to konw if u must show a message with error
+									statut=1;
+								}
+							}else {
+								if ( val_champ == '' ) {
+									// action if the field is not empty
+									message_champ+=champ_verif[i]+"\n";
+									statut=1;
+								}	
 							}
-						}else {
-							if ( val_champ == '' ) {
-								// action if the field is not empty
-								message_champ+=champ_verif[i]+"\n";
-								statut=1;
-							}	
 						}
 					}
-				}
 			}
 		}
+	}
 	}
 //borrowers form 2 test if u chcked no to the quetsion of double 
  	if (document.form.step.value==2 && statut!=1 && document.form.check_member.value > 0 )
