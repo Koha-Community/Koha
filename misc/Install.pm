@@ -52,7 +52,19 @@ to perform an actual installation.
 =cut
 
 # set the version for version checking
+<<<<<<< Install.pm
+<<<<<<< Install.pm
+<<<<<<< Install.pm
+$VERSION = 2.3.0;
+=======
 $VERSION = 0.01;
+>>>>>>> 1.88.2.7
+=======
+$VERSION = 2.2.3;
+>>>>>>> 1.94
+=======
+$VERSION = 0.01;
+>>>>>>> 1.88.2.10
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -1828,16 +1840,38 @@ sub databasesetup {
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
 	startsysout();
+<<<<<<< Install.pm
+	print system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\" -h$hostname mysql\;");
+	system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\" -h$hostname mysql");
+	system("$mysqldir/bin/mysqladmin -u$mysqluser -h$hostname reload");
+=======
 	my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "create", "$database");
 	system("$mysqldir/bin/mysql -u$mysqluser -e \"GRANT ALL PRIVILEGES on ".$database.".* to '$user' IDENTIFIED BY '$pass' \" mysql");
+>>>>>>> 1.88.2.10
 	# Change to admin user login
 	setmysqlclipass($pass);
+<<<<<<< Install.pm
+	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "-h$hostname", "create", "$database");
+=======
+>>>>>>> 1.88.2.10
 	if ($result) {
 		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
 	} else {
 		# Create the database structure
 		startsysout();
+<<<<<<< Install.pm
+<<<<<<< Install.pm
+<<<<<<< Install.pm
+		system("$mysqldir/bin/mysql '-u$user' '-h$hostname' '$database' < koha.mysql");
+=======
 		system("$mysqldir/bin/mysql -u$user $database < koha.mysql");
+>>>>>>> 1.88.2.7
+=======
+		system("$mysqldir/bin/mysql '-u$user' '$database' < koha.mysql");
+>>>>>>> 1.94
+=======
+		system("$mysqldir/bin/mysql -u$user $database < koha.mysql");
+>>>>>>> 1.88.2.10
 	}
 
 }
@@ -1945,17 +1979,20 @@ sub populatedatabase {
 	my $input;
 	my $response;
 	my $branch='MAIN';
+	my $setbranch=0; //MJR: as $branch has a default, need a new test variable
 	if ($auto_install->{BranchName}) {
 		$branch=$auto_install->{BranchName};
 		print ON_YELLOW.BLACK."auto-setting a branch : $branch".RESET."\n";
+		$setbranch=1;
 	} else {
 		$response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
 		unless ($response =~/^n/i) {
 			$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
 			$branch=~s/[^A-Za-z0-9\s]//g;
+			$setbranch=1;
 		}
 	}
-	if ($branch) {
+	if ($setbranch==1) {
 		my $branchcode=$branch;
 		$branchcode=~s/[^A-Za-z0-9]//g;
 		$branchcode=uc($branchcode);
