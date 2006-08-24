@@ -144,7 +144,7 @@
 			<td>
 				<!-- TMPL_IF name="red" --><span class="overdue"><!-- /TMPL_IF -->
 				<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="red" --></span><!-- /TMPL_IF -->
-				<a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+				<a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 					<!-- TMPL_VAR NAME="barcode" -->
 				</a>
 			</td>
@@ -159,7 +159,7 @@
 			<td><!-- TMPL_VAR NAME="replacementprice" --></td>
 			<td>
 			<!-- TMPL_IF name="norenew" -->
-				<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
+				<a href="/cgi-bin/koha/reserve/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
 			<!-- TMPL_ELSE -->
 			<input type="checkbox"
 							name="items[]"
@@ -189,7 +189,7 @@
 </fieldset>
 <fieldset>
 	<legend>Reserves</legend>
-	<form action="/cgi-bin/koha/modrequest.pl" method="post">
+	<form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
 		<input type="hidden" name="from" value="borrower" />
 		<table>
 		<tr>
