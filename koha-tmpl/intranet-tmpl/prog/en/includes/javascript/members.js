@@ -110,7 +110,7 @@ if (nav < document.form.step.value) {
 	for (var j=0; j<champ_form.length; j++){ 
 		if (document.getElementsByName(""+champ_form[j]+"")[0]){
 			for (var i=0; i<champ_verif.length; i++) {
-					if (eval("document.form.elements['"+champ_verif[i]+"']") ) {
+					if (document.getElementsByName(""+champ_verif[i]+"")[0]) {
 						var val_champ=eval("document.form."+champ_verif[i]+".value");
 						var ref_champ=eval("document.form."+champ_verif[i]);
 						var val_form=eval("document.form."+champ_form[j]+".value");
