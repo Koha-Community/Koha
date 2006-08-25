@@ -1,5 +1,4 @@
 package C4::Output;
-
 # $Id$
 
 #package to deal with marking up output
@@ -24,15 +23,12 @@ package C4::Output;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# NOTE: I'm pretty sure this module is deprecated in favor of
-# templates.
 
 use strict;
 require Exporter;
 
 use C4::Context;
-use C4::Database;
-use HTML::Template;
+use HTML::Template::Pro;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -72,10 +68,15 @@ if (!$query){
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
     my $path = C4::Context->preference('intranet_includes') || 'includes';
-    warn "PATH : $path";
+#    warn "PATH : $path";
+my $filter=sub {
+#my $win=shift;
+$_=~s /\xef\xbb\xbf//g;
+};
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac, $query);
 	my $opacstylesheet = C4::Context->preference('opacstylesheet');
-	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
+	
+my $template = HTML::Template::Pro->new(filename      => "$htdocs/$theme/$lang/$tmplbase", case_sensitive=>1, 
 				   die_on_bad_params => 0,
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/$path"]);
@@ -102,17 +103,22 @@ sub themelanguage {
   my $dbh = C4::Context->dbh;
   my @languages;
   my @themes;
-  if ( $section eq "intranet")
-  {
+my ($theme, $lang);
+  if ($section eq "intranet"){
+    $lang=$query->cookie('KohaOpacLanguage');
+
+  if ($lang){
+  
+    push @languages,$lang;
+    @themes = split " ", C4::Context->preference("template");
+  } 
+  else {
     @languages = split " ", C4::Context->preference("opaclanguages");
     @themes = split " ", C4::Context->preference("template");
-  }
-  else
-  {
-  # we are in the opac here, what im trying to do is let the individual user
-  # set the theme they want to use.
-  # and perhaps the them as well.
-  my $lang=$query->cookie('KohaOpacLanguage');
+    }
+ }else{
+   $lang=$query->cookie('KohaOpacLanguage');
+
   if ($lang){
   
     push @languages,$lang;
@@ -122,9 +128,9 @@ sub themelanguage {
     @languages = split " ", C4::Context->preference("opaclanguages");
     @themes = split " ", C4::Context->preference("opacthemes");
     }
-  }
+}
 
-  my ($theme, $lang);
+  
 # searches through the themes and languages. First template it find it returns.
 # Priority is for getting the theme right.
   THEME:

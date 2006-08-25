@@ -29,10 +29,9 @@ package C4::Z3950;
 use strict;
 
 # standard or CPAN modules used
-use DBI;
 
 # Koha modules used
-use C4::Database;
+use C4::Context;
 use C4::Input;
 use C4::Biblio;
 
@@ -306,6 +305,17 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.11  2006/08/25 21:07:08  tgarip1957
+# New set of routines for HEAD.
+# Uses a complete new ZEBRA Indexing.
+# ZEBRA is now XML and comprises of a KOHA meta record. Explanatory notes will be on koha-devel
+# Fixes UTF8 problems
+# Fixes bug with authorities
+# SQL database major changes.
+# Separate biblioograaphic and holdings records. Biblioitems table depreceated
+# etc. etc.
+# Wait for explanatory document on koha-devel
+#
 # Revision 1.10  2003/10/01 15:08:14  tipaul
 # fix fog bug #622 : processz3950queue fails
 #

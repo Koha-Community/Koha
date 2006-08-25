@@ -62,8 +62,9 @@ orders, basket and parcels.
   &GetOrderNumber &GetLateOrders &NewOrder &DelOrder
   &SearchOrder &GetHistory
   &ModOrder &ModReceiveOrder &ModOrderBiblioNumber
-  &GetParcels &GetParcel
+  &GetParcels &GetParcel 
 );
+
 
 =head2 FUNCTIONS ABOUT BASKETS
 
@@ -267,19 +268,18 @@ sub GetOrders {
     my $dbh   = C4::Context->dbh;
     my $query ="
         SELECT  aqorderbreakdown.*,
-                biblio.*,biblioitems.*,
+                biblio.*,
                 aqorders.*,
                 biblio.title
-        FROM    aqorders,biblio,biblioitems
+        FROM    aqorders,biblio
         LEFT JOIN aqorderbreakdown ON
                     aqorders.ordernumber=aqorderbreakdown.ordernumber
         WHERE   basketno=?
             AND biblio.biblionumber=aqorders.biblionumber
-            AND biblioitems.biblioitemnumber=aqorders.biblioitemnumber
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
     ";
 
-    $orderby = "biblioitems.publishercode" unless $orderby;
+    $orderby = "biblio.title" unless $orderby;
     $query .= " ORDER BY $orderby";
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
@@ -301,7 +301,7 @@ sub GetOrders {
 
 $ordernumber = &GetOrderNumber($biblioitemnumber, $biblionumber);
 
-Looks up the ordernumber with the given biblionumber and biblioitemnumber.
+Looks up the ordernumber with the given biblionumber 
 
 Returns the number of this order.
 
@@ -311,16 +311,16 @@ Returns the number of this order.
 
 =cut
 sub GetOrderNumber {
-    my ( $biblionumber,$biblioitemnumber ) = @_;
+    my ( $biblionumber ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT ordernumber
         FROM   aqorders
         WHERE  biblionumber=?
-        AND    biblioitemnumber=?
+       
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $biblioitemnumber );
+    $sth->execute( $biblionumber );
 
     return $sth->fetchrow;
 }
@@ -336,7 +336,7 @@ $order = &GetOrder($ordernumber);
 Looks up an order by order number.
 
 Returns a reference-to-hash describing the order. The keys of
-C<$order> are fields from the biblio, biblioitems, aqorders, and
+C<$order> are fields from the biblio, , aqorders, and
 aqorderbreakdown tables of the Koha database.
 
 =back
@@ -348,11 +348,11 @@ sub GetOrder {
     my $dbh      = C4::Context->dbh;
     my $query = "
         SELECT *
-        FROM   biblio,biblioitems,aqorders
+        FROM   biblio,aqorders
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         WHERE aqorders.ordernumber=?
         AND   biblio.biblionumber=aqorders.biblionumber
-        AND   biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+       
     ";
     my $sth= $dbh->prepare($query);
     $sth->execute($ordnum);
@@ -392,9 +392,9 @@ C<$subscription> may be either "yes", or anything else for "no".
 
 sub NewOrder {
    my (
-        $basketno,  $bibnum,       $title,        $quantity,
+        $basketno,  $biblionumber,       $title,        $quantity,
         $listprice, $booksellerid, $authorisedby, $notes,
-        $bookfund,  $bibitemnum,   $rrp,          $ecost,
+        $bookfund,    $rrp,          $ecost,
         $gst,       $budget,       $cost,         $sub,
         $invoice,   $sort1,        $sort2
       )
@@ -434,14 +434,14 @@ sub NewOrder {
     my $query = "
         INSERT INTO aqorders
            ( biblionumber,title,basketno,quantity,listprice,notes,
-           biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )
+      rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )
     ";
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
-        $bibnum, $title,      $basketno, $quantity, $listprice,
-        $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
+        $biblionumber, $title,      $basketno, $quantity, $listprice,
+        $notes,  $rrp,      $ecost,    $gst,
         $cost,   $sub,        $sort1,    $sort2
     );
     $sth->finish;
@@ -483,9 +483,9 @@ table are also updated to the new book fund ID.
 
 sub ModOrder {
     my (
-        $title,      $ordnum,   $quantity, $listprice, $bibnum,
+        $title,      $ordnum,   $quantity, $listprice, $biblionumber,
         $basketno,   $supplier, $who,      $notes,     $bookfund,
-        $bibitemnum, $rrp,      $ecost,    $gst,       $budget,
+        $rrp,      $ecost,    $gst,       $budget,
         $cost,       $invoice,  $sort1,    $sort2
       )
       = @_;
@@ -502,7 +502,7 @@ sub ModOrder {
     $sth->execute(
         $title, $quantity, $listprice, $basketno, $rrp,
         $ecost, $cost,     $invoice,   $notes,    $sort1,
-        $sort2, $ordnum,   $bibnum
+        $sort2, $ordnum,   $biblionumber
     );
     $sth->finish;
     my $query = "
@@ -540,17 +540,6 @@ Updates the order with order number C<$ordernum> and biblionumber C<$biblionumbe
 
 =cut
 
-sub ModOrderBiblioNumber {
-    my ($biblioitemnumber,$ordnum, $biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
-      UPDATE aqorders
-      SET    biblioitemnumber = ?
-      WHERE  ordernumber = ?
-      AND biblionumber =  ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblioitemnumber, $ordnum, $biblionumber );
-}
 
 #------------------------------------------------------------#
 
@@ -578,7 +567,7 @@ Also updates the book fund ID in the aqorderbreakdown table.
 
 sub ModReceiveOrder {
     my (
-        $biblio,    $ordnum,  $quantrec, $user, $cost,
+        $biblionumber,    $ordnum,  $quantrec, $user, $cost,
         $invoiceno, $freight, $rrp,      $bookfund
       )
       = @_;
@@ -590,11 +579,11 @@ sub ModReceiveOrder {
         WHERE biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
-    my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblio );
+    my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
     if ($suggestionid) {
-        ModStatus( $suggestionid, 'AVAILABLE', '', $biblio );
+        ModStatus( $suggestionid, 'AVAILABLE', '', $biblionumber );
     }
-    $sth->execute( $quantrec, $invoiceno, $cost, $freight, $rrp, $biblio,
+    $sth->execute( $quantrec, $invoiceno, $cost, $freight, $rrp, $biblionumber,
         $ordnum );
     $sth->finish;
 
@@ -649,6 +638,9 @@ C<@results> is an array of references-to-hash with the following keys:
 =cut
 
 sub SearchOrder {
+### Requires fixing for KOHA 3 API for performance. Currently just fiixed so it works
+## Very CPU expensive searches seems to be repeated!! 
+## This search can be directed to ZEBRA for title,isbn etc. ordernumber ,booksellerid to acquiorders
     my ( $search, $id, $biblio, $catview ) = @_;
     my $dbh = C4::Context->dbh;
     my @data = split( ' ', $search );
@@ -661,11 +653,11 @@ sub SearchOrder {
     my $query;
     if ($id) {
         $query =
-          "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
-            WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
+          "SELECT *,biblio.title FROM aqorders,biblio,aqbasket
+            WHERE biblio.biblionumber=aqorders.biblionumber AND
             aqorders.basketno = aqbasket.basketno
             AND aqbasket.booksellerid = ?
-            AND biblio.biblionumber=aqorders.biblionumber
+
             AND ((datecancellationprinted is NULL)
             OR (datecancellationprinted = '0000-00-00'))
             AND (("
@@ -673,16 +665,16 @@ sub SearchOrder {
             join( " AND ",
                 map { "(biblio.title like ? or biblio.title like ?)" } @data )
           )
-          . ") OR biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
+          . ") OR biblio.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
 
     }
     else {
         $query =
           " SELECT *,biblio.title
-            FROM   aqorders,biblioitems,biblio,aqbasket
-            WHERE  aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+            FROM   aqorders,biblio,aqbasket
+            WHERE  aqorders.biblionumber = biblio.biblionumber
             AND    aqorders.basketno = aqbasket.basketno
-            AND    biblio.biblionumber=aqorders.biblionumber
+         
             AND    ((datecancellationprinted is NULL)
             OR     (datecancellationprinted = '0000-00-00'))
             AND    (aqorders.quantityreceived < aqorders.quantity OR aqorders.quantityreceived is NULL)
@@ -691,18 +683,15 @@ sub SearchOrder {
             join( " AND ",
                 map { "(biblio.title like ? OR biblio.title like ?)" } @data )
           )
-          . ") or biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
+          . ") or biblio.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
     }
     $query .= " GROUP BY aqorders.ordernumber";
     my $sth = $dbh->prepare($query);
     $sth->execute(@searchterms);
     my @results = ();
-    my $query2 = "
-        SELECT *
-        FROM   biblio
-        WHERE  biblionumber=?
-    ";
-    my $sth2 = $dbh->prepare($query2);
+
+
+
     my $query3 = "
         SELECT *
         FROM   aqorderbreakdown
@@ -711,8 +700,11 @@ sub SearchOrder {
     my $sth3 = $dbh->prepare($query3);
 
     while ( my $data = $sth->fetchrow_hashref ) {
-        $sth2->execute( $data->{'biblionumber'} );
-        my $data2 = $sth2->fetchrow_hashref;
+## Retrieving a whole marc record just to extract seriestitle is very poor performance
+## Rewrite these searches
+my $record=MARCgetbiblio($dbh,$data->{'biblionumber'});
+my $data2=MARCmarc2koha($dbh,$record,"biblios");
+       
         $data->{'author'}      = $data2->{'author'};
         $data->{'seriestitle'} = $data2->{'seriestitle'};
         $sth3->execute( $data->{'ordernumber'} );
@@ -722,7 +714,7 @@ sub SearchOrder {
         push( @results, $data );
     }
     $sth->finish;
-    $sth2->finish;
+
     $sth3->finish;
     return @results;
 }
@@ -744,7 +736,7 @@ cancelled.
 =cut
 
 sub DelOrder {
-    my ( $bibnum, $ordnum ) = @_;
+    my ( $biblionumber, $ordnum ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
@@ -752,7 +744,7 @@ sub DelOrder {
         WHERE  biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $bibnum, $ordnum );
+    $sth->execute( $biblionumber, $ordnum );
     $sth->finish;
 }
 
@@ -779,7 +771,7 @@ Looks up all of the received items from the supplier with the given
 bookseller ID at the given date, for the given code (bookseller Invoice number). Ignores cancelled and completed orders.
 
 C<@results> is an array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
+the aqorders, biblio tables of the Koha database.
 
 C<@results> is sorted alphabetically by book title.
 
@@ -930,6 +922,7 @@ the table of supplier with late issues. This table is full of hashref.
 =cut
 
 sub GetLateOrders {
+## requirse fixing for KOHA 3 API. Currently does not return publisher
     my $delay      = shift;
     my $supplierid = shift;
     my $branch     = shift;
@@ -954,12 +947,11 @@ sub GetLateOrders {
                 aqbooksellers.name AS supplier,
                 aqorders.title,
                 biblio.author,
-                biblioitems.publishercode AS publisher,
-                biblioitems.publicationyear,
+               
                 DATEDIFF(CURDATE( ),closedate) AS latesince
-            FROM  (((
+            FROM  ((
                 (aqorders LEFT JOIN biblio ON biblio.biblionumber = aqorders.biblionumber)
-            LEFT JOIN biblioitems ON  biblioitems.biblionumber=biblio.biblionumber)
+            
             LEFT JOIN aqorderbreakdown ON aqorders.ordernumber = aqorderbreakdown.ordernumber)
             LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
             (aqbasket LEFT JOIN borrowers ON aqbasket.authorisedby = borrowers.borrowernumber)
@@ -996,12 +988,11 @@ sub GetLateOrders {
                     aqbooksellers.name AS supplier,
                     biblio.title,
                     biblio.author,
-                    biblioitems.publishercode AS publisher,
-                    biblioitems.publicationyear,
+                   
                     (CURDATE -  closedate) AS latesince
-                    FROM(( (
+                    FROM(( 
                         (aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber)
-                        LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber)
+                       
                         LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber)
                         LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
                         (aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id

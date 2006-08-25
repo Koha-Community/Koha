@@ -273,7 +273,7 @@ sub GetBookFundBreakdown {
     my $query = "
         SELECT  quantity,datereceived,freight,unitprice,
                 listprice,ecost,quantityreceived AS qrev,
-                subscription,title,itemtype,aqorders.biblionumber,
+                subscription,biblio.title,itemtype,aqorders.biblionumber,
                 aqorders.booksellerinvoicenumber,
                 quantity-quantityreceived AS tleft,
                 aqorders.ordernumber AS ordnum,entrydate,budgetdate,
@@ -281,7 +281,7 @@ sub GetBookFundBreakdown {
         FROM    aqorderbreakdown,
                 aqbasket,
                 aqorders
-        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
         WHERE   bookfundid=?
             AND aqorders.ordernumber=aqorderbreakdown.ordernumber
             AND aqorders.basketno=aqbasket.basketno

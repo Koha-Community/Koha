@@ -21,7 +21,6 @@ package C4::Suggestions;
 
 use strict;
 require Exporter;
-use DBI;
 use C4::Context;
 use C4::Output;
 use Mail::Sendmail;
@@ -382,6 +381,7 @@ sub ModStatus {
     $sth = $dbh->prepare($queryMail);
     $sth->execute($suggestionid);
     my $emailinfo = $sth->fetchrow_hashref;
+if ($emailinfo->{byemail}){
     my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
 
     $template->param(
@@ -402,6 +402,7 @@ sub ModStatus {
         Message => "".$template->output
     );
     sendmail(%mail);
+}
 }
 
 =head2 ConnectSuggestionAndBiblio

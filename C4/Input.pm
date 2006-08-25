@@ -21,7 +21,6 @@ package C4::Input; #assumes C4/Input
 use strict;
 require Exporter;
 use C4::Context;
-use CGI;
 
 use vars qw($VERSION @ISA @EXPORT);
 

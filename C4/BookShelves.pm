@@ -24,9 +24,12 @@ package C4::BookShelves;
 
 use strict;
 require Exporter;
-use DBI;
 use C4::Context;
 use C4::Circulation::Circ2;
+use C4::AcademicInfo;
+use C4::Search;
+use C4::Date;
+use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -53,13 +56,21 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList		&GetShelfContents		&GetShelf
-			&AddToShelf			&AddToShelfFromBiblio
-			&RemoveFromShelf	&AddShelf				&ModifShelf 
-			&RemoveShelf		&ShelfPossibleAction
-				);
+@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio
+				&RemoveFromShelf &AddShelf &RemoveShelf
+				&ShelfPossibleAction
 
-my $dbh = C4::Context->dbh;
+				&GetShelfListExt &AddShelfExt &EditShelfExt &RemoveShelfExt 
+				&GetShelfInfo &GetShelfContentsExt &RemoveFromShelfExt 
+				&GetShelfListOfExt &AddToShelfExt
+				
+				&AddRequestToShelf &CountShelfRequest &GetShelfRequests 
+				&RejectShelfRequest &CatalogueShelfRequest &GetShelfRequestOwner
+				&GetShelfRequest);
+
+	
+my $dbh;
+	 $dbh = C4::Context->dbh;
 
 =item ShelfPossibleAction
 
@@ -116,12 +127,13 @@ sub GetShelfList {
 	my ($owner,$mincategory) = @_;
 	# mincategory : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
 	# bookshelves of the owner are always selected, whatever the category
-	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,category,
+	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
 							count(shelfcontents.itemnumber) as count
 								FROM		bookshelf
 								LEFT JOIN	shelfcontents
 								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
 								left join borrowers on bookshelf.owner = borrowers.borrowernumber
+								
 								where owner=? or category>=?
 								GROUP BY	bookshelf.shelfnumber order by shelfname");
     $sth->execute($owner,$mincategory);
@@ -129,20 +141,17 @@ sub GetShelfList {
     while (my ($shelfnumber, $shelfname,$owner,$surname,$firstname,$category,$count) = $sth->fetchrow) {
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
 	$shelflist{$shelfnumber}->{'count'}=$count;
-	$shelflist{$shelfnumber}->{'category'}=$category;
 	$shelflist{$shelfnumber}->{'owner'}=$owner;
-	$shelflist{$shelfnumber}->{surname} = $surname;
-	$shelflist{$shelfnumber}->{firstname} = $firstname;
+	$shelflist{$shelfnumber}->{'surname'} = $surname;
+	$shelflist{$shelfnumber}->{'firstname'} = $firstname;
+	$shelflist{$shelfnumber}->{'category'} = $category;
+	
+	
     }
+
     return(\%shelflist);
 }
 
-sub GetShelf {
-	my ($shelfnumber) = @_;
-	my $sth=$dbh->prepare("select shelfnumber,shelfname,owner,category from bookshelf where shelfnumber=?");
-	$sth->execute($shelfnumber);
-	return $sth->fetchrow;
-}
 =item GetShelfContents
 
   $itemlist = &GetShelfContents($env, $shelfnumber);
@@ -204,8 +213,8 @@ sub AddToShelfFromBiblio {
 	if ($sth->rows) {
 # already on shelf
 	} else {
-		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values (?, ?, 0)");
-		$sth->execute($shelfnumber, $itemnumber);
+		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags,biblionumber) values (?, ?, 0,?)");
+		$sth->execute($shelfnumber, $itemnumber,$biblionumber);
 	}
 }
 
@@ -240,25 +249,20 @@ success, or an error message giving the reason for failure.
 C<$env> is ignored.
 
 =cut
-
+#'
+# FIXME - Perhaps this could/should return the number of the new bookshelf
+# as well?
 sub AddShelf {
-    my ($env, $shelfname, $owner, $category) = @_;
+    my ($env, $shelfname,$owner,$category) = @_;
     my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
 	$sth->execute($shelfname);
     if ($sth->rows) {
-		return(1, "Shelf \"$shelfname\" already exists");
+	return(1, "Shelf \"$shelfname\" already exists");
     } else {
-		$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
-		$sth->execute($shelfname,$owner,$category);
-		my $shelfnumber = $dbh->{'mysql_insertid'};
-		return (0, "Done",$shelfnumber);
+	$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
+	$sth->execute($shelfname,$owner,$category);
+	return (0, "Done");
     }
-}
-
-sub ModifShelf {
-	my ($shelfnumber, $shelfname, $owner, $category) = @_;
-	my $sth = $dbh->prepare("update bookshelf set shelfname=?,owner=?,category=? where shelfnumber=?");
-	$sth->execute($shelfname,$owner,$category,$shelfnumber);
 }
 
 =item RemoveShelf
@@ -290,21 +294,327 @@ sub RemoveShelf {
     }
 }
 
+sub GetShelfListOfExt {
+	my ($owner) = @_;
+	my $sth;
+	if ($owner) {
+		$sth = $dbh->prepare("SELECT	* FROM bookshelf WHERE (owner = ?) or category>=2 ORDER BY shelfname");
+		$sth->execute($owner);
+	} else {
+		$sth = $dbh->prepare("SELECT	* FROM bookshelf where category<2 ORDER BY shelfname");
+		$sth->execute();
+	}
+	
+	my $sth2 = $dbh->prepare("SELECT count(biblionumber) as bibliocount FROM shelfcontents WHERE (shelfnumber = ?)");
+	
+	my @results;
+	while (my $row = $sth->fetchrow_hashref) {
+		$sth2->execute($row->{'shelfnumber'});
+		$row->{'bibliocount'} = $sth2->fetchrow;
+		if ($row->{'category'} == 1) {
+			$row->{'private'} = 1;
+		} else {
+			$row->{'public'} = 1;
+		}
+		push @results, $row;
+	}
+    return \@results;
+}
+
+sub GetShelfListExt {
+	my ($owner,$mincategory,$id_intitution, $intra) = @_;
+
+	my $sth1 = $dbh->prepare("SELECT * FROM careers WHERE id_institution = ?");
+	$sth1->execute($id_intitution);
+	my @results;
+
+	my $total_shelves = 0;
+	while (my $row1 = $sth1->fetchrow_hashref) {
+		
+		my @shelves;
+		my $sth2;
+		if ($intra) {
+			$sth2=$dbh->prepare("SELECT		
+									bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
+									count(shelfcontents.biblionumber) as count
+								FROM 
+									bookshelf
+									LEFT JOIN shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
+									LEFT JOIN borrowers ON bookshelf.owner = borrowers.borrowernumber	
+								    LEFT JOIN bookshelves_careers ON bookshelves_careers.shelfnumber = bookshelf.shelfnumber
+								WHERE 
+									(id_career = ?) 
+								GROUP BY bookshelf.shelfnumber 
+								ORDER BY shelfname");
+			$sth2->execute($row1->{'id_career'});
+		
+		} else {
+			$sth2=$dbh->prepare("SELECT		
+									bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
+									count(shelfcontents.biblionumber) as count
+								FROM 
+									bookshelf
+									LEFT JOIN shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
+									LEFT JOIN borrowers ON bookshelf.owner = borrowers.borrowernumber	
+								    LEFT JOIN bookshelves_careers ON bookshelves_careers.shelfnumber = bookshelf.shelfnumber
+								WHERE 
+									(owner = ? OR category >= ?) AND (id_career = ?) 
+								GROUP BY bookshelf.shelfnumber 
+								ORDER BY shelfname");
+			$sth2->execute($owner,$mincategory,$row1->{'id_career'});
+		}
+		
+		$row1->{'shelfcount'} = 0;
+		while (my $row2 = $sth2->fetchrow_hashref) {
+			if ($owner == $row2->{'owner'}) {
+				$row2->{'canmanage'} = 1;
+			}
+			if ($row2->{'category'} == 1) {
+				$row2->{'private'} = 1;
+			} else {
+				$row2->{'public'} = 1;
+			}
+			$row1->{'shelfcount'}++;
+			$total_shelves++; 
+			push @shelves, $row2;
+		}
+		$row1->{'shelvesloop'} = \@shelves;
+		push @results, $row1;
+	}
+
+    return($total_shelves, \@results);
+}
+
+sub AddShelfExt {
+    my ($shelfname,$owner,$category,$careers) = @_;
+    my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfname = ?");
+	$sth->execute($shelfname);
+    if ($sth->rows) {
+		return 0;
+    } else {
+		$sth = $dbh->prepare("INSERT INTO bookshelf (shelfname,owner,category) VALUES (?,?,?)");
+		$sth->execute($shelfname,$owner,$category);
+		my $shelfnumber = $dbh->{'mysql_insertid'};
+
+		foreach my $row (@{$careers}) {
+			$sth = $dbh->prepare("INSERT INTO bookshelves_careers VALUES (?,?)");
+			$sth->execute($shelfnumber, $row);
+		}
+		return $shelfnumber;
+    }
+}
+
+sub EditShelfExt {
+    my ($shelfnumber,$shelfname,$category,$careers) = @_;
+    my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfname = ? AND NOT shelfnumber = ? ");
+	$sth->execute($shelfname, $shelfnumber);
+    if ($sth->rows) {
+		return 0;
+    } else {
+		$sth = $dbh->prepare("UPDATE bookshelf SET shelfname = ?, category = ? WHERE shelfnumber = ?");
+		$sth->execute($shelfname,$category,$shelfnumber);
+		
+		$sth = $dbh->prepare("DELETE FROM bookshelves_careers WHERE shelfnumber = ?");
+		$sth->execute($shelfnumber);
+
+		foreach my $row (@{$careers}) {
+			$sth = $dbh->prepare("INSERT INTO bookshelves_careers VALUES (?,?)");
+			$sth->execute($shelfnumber, $row);
+		}
+		return $shelfnumber;
+    }
+}
+
+
+sub RemoveShelfExt {
+    my ($shelfnumber) = @_;
+	my $sth = $dbh->prepare("DELETE FROM bookshelves_careers WHERE shelfnumber = ?");
+	$sth->execute($shelfnumber);
+	my $sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ?");
+	$sth->execute($shelfnumber);
+	$sth = $dbh->prepare("DELETE FROM bookshelf WHERE shelfnumber = ?");
+	$sth->execute($shelfnumber);
+	return 1;
+}
+
+sub GetShelfInfo {
+	my ($shelfnumber, $owner) = @_;
+	my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfnumber = ?");
+	$sth->execute($shelfnumber);
+	my $result = $sth->fetchrow_hashref;
+	
+	if ($result->{'owner'} == $owner) {
+		$result->{'canmanage'} = 1;
+	}
+
+	my $sth = $dbh->prepare("SELECT id_career FROM bookshelves_careers WHERE shelfnumber = ?");
+	$sth->execute($shelfnumber);
+	my @careers;
+	while (my $row = $sth->fetchrow) {
+		push @careers, $row;
+	}
+	$result->{'careers'} = \@careers;
+	return $result;
+}
+
+sub GetShelfContentsExt {
+    my ($shelfnumber) = @_;
+    my $sth = $dbh->prepare("SELECT biblionumber FROM shelfcontents WHERE shelfnumber = ? ORDER BY biblionumber");
+    $sth->execute($shelfnumber);
+	my @biblios;
+	my $even = 0;
+    while (my ($biblionumber) = $sth->fetchrow) {
+	my $biblio=ZEBRA_readyXML_noheader($dbh,$biblionumber);
+	push @biblios,$biblio;
+     }	
+my (@results)=parsefields($dbh,"opac",@biblios);
+    
+    return (\@results);
+}
+
+sub RemoveFromShelfExt {
+    my ($biblionumber, $shelfnumber) = @_;
+    my $sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
+    $sth->execute($shelfnumber,$biblionumber);
+}
+
+sub AddToShelfExt {
+	my ($biblionumber, $shelfnumber) = @_;
+	my $sth = $dbh->prepare("SELECT * FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
+	$sth->execute($shelfnumber, $biblionumber);
+	if ($sth->rows) {
+		return 0
+	} else {
+		$sth = $dbh->prepare("INSERT INTO shelfcontents (shelfnumber, biblionumber) VALUES (?, ?)");
+		$sth->execute($shelfnumber, $biblionumber);
+	}
+}
+
+sub AddRequestToShelf {
+	my ($shelfnumber, $requestType, $requestName, $comments) = @_;
+	my $sth = $dbh->prepare("INSERT INTO shelf_requests (shelfnumber, request_name, request_type, status, request_date, comments) VALUES (?,?,?,?, CURRENT_DATE(),?)");
+	$sth->execute($shelfnumber, $requestName, $requestType, "PENDING", $comments);
+	return $dbh->{'mysql_insertid'};
+}
+
+sub CountShelfRequest {
+	my ($shelfnumber, $status) = @_;
+	my $sth;
+	if ($shelfnumber) {
+		$sth = $dbh->prepare("SELECT count(idRequest) FROM shelf_requests WHERE shelfnumber = ? AND status = ?");
+		$sth->execute($shelfnumber, $status);
+	} else {
+		$sth = $dbh->prepare("SELECT count(idRequest) FROM shelf_requests WHERE status = ?");
+		$sth->execute($status);
+	}
+	my ($count) = $sth->fetchrow_array;
+	return $count;
+}
+
+sub GetShelfRequests {
+	my ($shelfnumber, $status, $type) = @_;
+	my @params;
+	my $query = "SELECT * FROM shelf_requests SR INNER JOIN bookshelf BS ON SR.shelfnumber = BS.shelfnumber WHERE status = ?";
+	push @params, $status;
+	if ($shelfnumber) {
+		$query.= " AND shelfnumber = ?";
+		push @params, $shelfnumber;
+	}
+	if ($type) {
+		$query.= " AND request_type = ?";
+		push @params, $type;
+	}
+	$query.= " ORDER BY SR.shelfnumber, SR.request_date";
+	my $sth = $dbh->prepare($query);
+	$sth->execute(@params);
+	my @results;
+
+	my $color = 0;
+	while (my $row = $sth->fetchrow_hashref) {
+		my $borrdata = borrdata('',$row->{'owner'});
+		$row->{'surname'} = $borrdata->{'surname'};
+		$row->{'firstname'} = $borrdata->{'firstname'};
+		$row->{'cardnumber'} = $borrdata->{'cardnumber'};
+		$row->{'request_date'} = format_date($row->{'request_date'});
+		$row->{$row->{'request_type'}} = 1;
+		$row->{$row->{'status'}} = 1;
+		$row->{'color'} = $color = not $color;
+		push @results, $row;
+	}
+	return (\@results);
+}
+
+sub RejectShelfRequest {
+	my ($idRequest) = @_;
+	#get the type and name request
+	my $sth = $dbh->prepare("SELECT request_type, request_name FROM shelf_requests WHERE idRequest = ?");
+	$sth->execute($idRequest);
+	my ($request_type, $request_name) = $sth->fetchrow_array;	
+	#if the request is a file, then unlink the file
+	if ($request_type eq 'file') {
+		unlink($ENV{'DOCUMENT_ROOT'}."/uploaded-files/shelf-files/$idRequest-$request_name");
+	}
+	#change tha request status to REJECTED
+	$sth = $dbh->prepare("UPDATE shelf_requests SET status = ? WHERE idRequest = ?");
+	$sth->execute("REJECTED", $idRequest);
+	return 1;
+}
+
+sub GetShelfRequestOwner {
+	my ($idRequest) = @_;
+	my $sth = $dbh->prepare("SELECT owner FROM shelf_requests R INNER JOIN bookshelf S ON R.shelfnumber = S.shelfnumber WHERE idRequest = ?");
+	$sth->execute($idRequest);
+	my ($owner) = $sth->fetchrow_array;	
+	my $bordata = &borrdata(undef, $owner);
+	#print "Content-type: text/plain \n\n  --- $owner ----- $bordata->{'emailaddress'}" ;
+	return ($bordata);
+}
+
+sub GetShelfRequest {
+	my ($idRequest) = @_;
+	my $sth = $dbh->prepare("SELECT * FROM shelf_requests R INNER JOIN bookshelf S ON R.shelfnumber = S.shelfnumber WHERE idRequest = ?");
+	$sth->execute($idRequest);
+	my $request_data = $sth->fetchrow_hashref;	
+	return $request_data;
+}
+
+sub CatalogueShelfRequest {
+	my ($idRequest, $shelfnumber, $biblionumber) = @_;
+	#find the last request status 
+	my $sth = $dbh->prepare("SELECT status, biblionumber FROM shelf_requests WHERE idRequest = ?");
+	$sth->execute($idRequest);
+	my ($prev_status, $prev_biblionumber) = $sth->fetchrow_array;
+	#if the status was not seted, inserts an entry in shelfcontents	
+	if ($prev_status ne "CATALOGUED") {
+		$sth = $dbh->prepare("INSERT INTO shelfcontents (shelfnumber, biblionumber) VALUES (?,?)");
+		$sth->execute($shelfnumber, $biblionumber);		
+	#if the request was previously catalogued, delete the entry in shelfcontens
+	} elsif ($prev_status ne "REJECTED") {
+		$sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
+		$sth->execute($shelfnumber, $prev_biblionumber);		
+	}
+	#change the status to catalogued
+	$sth = $dbh->prepare("UPDATE shelf_requests SET status = ?, biblionumber = ? WHERE idRequest = ?");
+	$sth->execute("CATALOGUED", $biblionumber, $idRequest);
+	return 1;
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
 
 #
 # $Log$
-# Revision 1.15  2004/12/16 11:30:58  tipaul
-# adding bookshelf features :
-# * create bookshelf on the fly
-# * modify a bookshelf name & status
-#
-# Revision 1.14  2004/12/15 17:28:23  tipaul
-# adding bookshelf features :
-# * create bookshelf on the fly
-# * modify a bookshelf (this being not finished, will commit the rest soon)
+# Revision 1.16  2006/08/25 21:07:08  tgarip1957
+# New set of routines for HEAD.
+# Uses a complete new ZEBRA Indexing.
+# ZEBRA is now XML and comprises of a KOHA meta record. Explanatory notes will be on koha-devel
+# Fixes UTF8 problems
+# Fixes bug with authorities
+# SQL database major changes.
+# Separate biblioograaphic and holdings records. Biblioitems table depreceated
+# etc. etc.
+# Wait for explanatory document on koha-devel
 #
 # Revision 1.13  2004/03/11 16:06:20  tipaul
 # *** empty log message ***

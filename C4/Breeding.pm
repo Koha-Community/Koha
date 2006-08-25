@@ -19,9 +19,10 @@ package C4::Breeding;
 
 use strict;
 use C4::Biblio;
+use C4::Search;
 use MARC::File::USMARC;
+use MARC::Record;
 require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -32,8 +33,6 @@ $VERSION = 0.01;
 C4::Breeding : script to add a biblio in marc_breeding table.
 
 =head1 SYNOPSIS
-
-	use C4::Scan;
 	&ImportBreeding($marcrecords,$overwrite_biblio,$filename,$z3950random);
 
 	C<$marcrecord> => the MARC::Record
@@ -58,27 +57,33 @@ sub  ImportBreeding {
 	my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random) = @_;
 	my @marcarray = split /\x1D/, $marcrecords;
 	my $dbh = C4::Context->dbh;
-	my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
-	my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-	my $searchbreeding = $dbh->prepare("select id from marc_breeding
-where isbn=? and title=?");
-	my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random) values(?,?,?,?,?,?,?)");
-	my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=? where id=?");
+my @kohafields;
+my @values;
+my @relations;
+my $sort;
+my @and_or;
+my @results;
+my $count;
+	my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=? and title=?");
+my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
+
+	my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random,classification,subclass) values(?,?,?,?,?,?,?,?,?)");
+	my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=?,classification=?,subclass=? where id=?");
 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
 	# fields used for import results
 	my $imported=0;
 	my $alreadyindb = 0;
 	my $alreadyinfarm = 0;
 	my $notmarcrecord = 0;
+	my $breedingid;
 	for (my $i=0;$i<=$#marcarray;$i++) {
-		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
+		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D","","UTF-8",1);
 		my @warnings = $marcrecord->warnings();
 		if (scalar($marcrecord->fields()) == 0) {
 			$notmarcrecord++;
 		} else {
+
 			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
-			$oldbiblio->{title} = char_decode($oldbiblio->{title},$encoding);
-			$oldbiblio->{author} = char_decode($oldbiblio->{author},$encoding);
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
 			# drop every "special" char : spaces, - ...
 			$oldbiblio->{isbn} =~ s/ |-|\.//g,
@@ -87,20 +92,27 @@ where isbn=? and title=?");
 			$oldbiblio->{issn} = substr($oldbiblio->{issn},0,10);
 			# search if biblio exists
 			my $biblioitemnumber;
+		    if ( !$z3950random){
 			if ($oldbiblio->{isbn}) {
-				$searchisbn->execute($oldbiblio->{isbn});
-				($biblioitemnumber) = $searchisbn->fetchrow;
+			push @kohafields,"isbn";
+			push @values,$oldbiblio->{isbn};
+			push @relations,"";
+			push @and_or,"";
+			($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
 			} else {
-				if ($oldbiblio->{issn}) {
-                                $searchissn->execute($oldbiblio->{issn});
-                                ($biblioitemnumber) = $searchissn->fetchrow;
-                                }
+			push @kohafields,"issn";
+			push @values,$oldbiblio->{issn};
+			push @relations,"";
+			push @and_or,"";
+			$sort="";
+			($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
 			}
-			if ($biblioitemnumber) {
+	    	     }
+			if ($count>0 && !$z3950random) {
 				$alreadyindb++;
 			} else {
 				# search in breeding farm
-				my $breedingid;
+				
 				if ($oldbiblio->{isbn}) {
 					$searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
 					($breedingid) = $searchbreeding->fetchrow;
@@ -114,16 +126,18 @@ where isbn=? and title=?");
 					my $recoded;
 					$recoded = $marcrecord->as_usmarc();
 					if ($breedingid && $overwrite_biblio eq 1) {
-						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random,$breedingid);
+						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$marcarray[$i]."\x1D",$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass},$breedingid);
 					} else {
-						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random);
+						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$marcarray[$i]."\x1D",$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass});
+					$findbreedingid->execute;
+					$breedingid=$findbreedingid->fetchrow;
 					}
 					$imported++;
 				}
 			}
 		}
 	}
-	return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported);
+	return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
 }
 
 
@@ -147,7 +161,7 @@ sub BreedingSearch {
 	my $sth;
 	my @results;
 
-	$query = "Select id,file,isbn,title,author from marc_breeding where ";
+	$query = "Select id,file,isbn,title,author,classification,subclass from marc_breeding where ";
 	if ($z3950random) {
 		$query .= "z3950random = ?";
 		@bind=($z3950random);

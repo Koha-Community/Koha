@@ -16,225 +16,347 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Database;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
-use ZOOM;
-use Data::Dumper;
+use XML::Simple;
+use Encode;
+
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 2.01;
 
 @ISA = qw(Exporter);
 
-#
-# don't forget MARCxxx subs are exported only for testing purposes. Should not be used
-# as the old-style API and the NEW one are the only public functions.
+# &itemcount removed, now  resides in Search.pm
 #
 @EXPORT = qw(
-  &updateBiblio &updateBiblioItem &updateItem
-  &itemcount &newbiblio &newbiblioitem
-  &modnote &newsubject &newsubtitle
-  &modbiblio &checkitems
-  &newitems &modbibitem
-  &modsubtitle &modsubject &modaddauthor &moditem &countitems
-  &delitem &deletebiblioitem &delbiblio
-  &getbiblio &getstacks
-  &GetBiblioItemByBiblioNumber
-  &getbiblioitembybiblionumber
-  &getbiblioitem &getitemsbybiblioitem
-  &skip &getitemtypes
-  &get_itemnumbers_of
 
-  &MARCfind_oldbiblionumber_from_MARCbibid
-  &MARCfind_MARCbibid_from_oldbiblionumber
-  &MARCfind_marc_from_kohafield
-  &MARCfindsubfield
-  &MARCfind_frameworkcode
-  &MARCgettagslib
-  &MARCmoditemonefield
-  &NEWnewbiblio &NEWnewitem
-  &NEWmodbiblio &NEWmoditem
-  &NEWdelbiblio &NEWdelitem
-  &NEWmodbiblioframework
-  &zebraop
+&getitemtypes
+&getkohafields
+&getshelves
 
-  &MARCaddbiblio &MARCadditem &MARCmodLCindex
-  &MARCmodsubfield &MARCaddsubfield
-  &MARCmodbiblio &MARCmoditem
-  &MARCkoha2marcBiblio &MARCmarc2koha
-  &MARCkoha2marcItem &MARChtml2marc &MARChtml2xml
-  &MARCgetbiblio &MARCgetitem &XMLgetbiblio
-  &MARCaddword &MARCdelword 
-  &MARCdelsubfield
- 
-  &MARCgetbiblio2
-  &char_decode
-  &DisplayISBN
-&itemcalculator &calculatelc
+&NEWnewbiblio 
+&NEWnewitem
+&NEWmodbiblio 
+&NEWmoditem
+&NEWdelbiblio 
+&NEWdelitem
+&NEWmodbiblioframework
+
+&MARCgetallitems 
+&MARCfind_marc_from_kohafield
+&MARCfind_frameworkcode
+&MARCfind_itemtype
+&MARCgettagslib
+&MARCitemsgettagslib
+&MARCmoditemonefield
+&MARCkoha2marc
+&MARCmarc2koha 
+&MARCkoha2marcOnefield 
+&MARCfind_attr_from_kohafield
+&MARChtml2marc 
+&MARChtml2xml 
+&MARChtml2marcxml
+&MARCgetbiblio 
+&MARCgetitem 
+
+&XMLgetbiblio 
+&XMLgetitem 
+&XMLgetallitems 
+&XML_xml2hash 
+&XML_hash2xml 
+&XMLmarc2koha
+&XML_readline
+&XML_writeline
+
+&ZEBRAgetrecord   
+&ZEBRAgetallitems 
+&ZEBRAop &ZEBRAopserver 
+&ZEBRA_readyXML 
+&ZEBRA_readyXML_noheader
+
+&newbiblio
+&modbiblio
+&DisplayISBN
+
 );
+
+#################### XML XML  XML  XML ###################
+### XML Read- Write functions
+
+
+sub XML_readline{
+my ($xml,$kohafield,$recordtype)=@_;
+#$xml represents one record node hashed of holdings or a complete xml koharecord
+### $recordtype is needed for reading the child records( like holdings records) .Otherwise main  record is assumed ( like biblio)
+## holding records are parsed and sent here one by one
+my ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype);
+my @itemresults;
+if ($tag){
+if ($recordtype eq "holdings"){
+	my $item=$xml->{'datafield'};
+	my $hcontrolfield=$xml->{'controlfield'};
+     if ($tag>9){
+	foreach my $data (@$item){
+   	    if ($data->{'tag'} eq $tag){
+		foreach my $subfield ( $data->{'subfield'}){
+		    foreach my $code ( @$subfield){
+			if ($code->{'code'} eq $subf){
+			return Encode::decode("UTF-8",$code->{content});
+			}
+		   }
+		}
+  	   }
+	}
+      }else{
+	foreach my $control (@$hcontrolfield){
+		if ($control->{'tag'} eq $tag){
+		return  Encode::decode("UTF-8",$control->{'content'});
+		}
+	}
+      }##tag
+
+}else{ ##Not a holding read biblio
+my $biblio=$xml->{'record'}->[0]->{'datafield'};
+my $controlfields=$xml->{'record'}->[0]->{'controlfield'};
+ if ($tag>9){
+	foreach my $data (@$biblio){
+   	    if ($data->{'tag'} eq $tag){
+		foreach my $subfield ( $data->{'subfield'}){
+		    foreach my $code ( @$subfield){
+			if ($code->{'code'} eq $subf){
+			return Encode::decode("UTF-8",$code->{'content'});
+			}
+		   }
+		}
+  	   }
+	}
+  }else{
+	
+	foreach my $control (@$controlfields){
+		if ($control->{'tag'} eq $tag){
+		return	Encode::decode("UTF-8",$control->{'content'}) if $control->{'content'};
+		}
+	}
+   }##tag
+}## Holding or not
+}## if tag is mapped
+return "";
+}
+
+sub XML_writeline{
+## This routine modifies one line of marcxml record mainly useful for updating circulation data
+my ($xml,$kohafield,$newvalue,$recordtype)=@_;
+my $biblio=$xml->{'record'}->[0]->{'datafield'};
+my $controlfield=$xml->{'record'}->[0]->{'controlfield'};
+my ($tag,$subf)=MARCfind_kohafield($kohafield,$recordtype);
+my $updated=0;
+    if ($tag>9){
+	foreach my $data (@$biblio){
+        		if ($data->{'tag'} eq $tag){
+			my @subfields=$data->{'subfield'};
+			foreach my $subfield ( @subfields){
+	 		      foreach my $code ( @$subfield){
+				if ($code->{'code'} eq $subf){	
+				$code->{content}=$newvalue;
+				$updated=1;
+				}
+	  		      }
+			}
+		     if (!$updated){	
+			 push @subfields,{code=>$subf,content=>$newvalue};
+			$data->{subfield}= \@subfields;
+			
+		     }	
+		}
+       	 }
+		## Tag did not exist
+		  if (!$updated){
+	                push @$biblio,{datafield=>[{
+                                                                               'ind1' => ' ',
+                                                                               'ind2' => ' ',
+                                                                               'subfield' => [
+                                                                                               {
+                                                                                                 'content' => $newvalue,
+                                                                                                 'code' => $subf
+                                                                                               }
+                                                                                             ],
+                                                                               'tag' => $tag
+                                                                             }]
+				};
+		  }## created now
+    }else{
+	foreach my $control(@$controlfield){
+		if ($control->{'tag'} eq $tag){
+			$control->{'content'}=$newvalue;
+			$updated=1;
+		}
+	     }
+	 if (!$updated){
+	   push @$controlfield,{tag=>$tag,content=>$newvalue};     
+	}
+   }
+return $xml;
+}
+
+sub XML_xml2hash{
+##make a perl hash from xml file
+my ($xml)=@_;
+  my $hashed = XMLin( $xml ,KeyAttr =>['leader','controlfield','datafield'],ForceArray => ['leader','controlfield','datafield','subfield','holdings','record'],KeepRoot=>0);
+return $hashed;
+}
+
+sub XML_hash2xml{
+## turn a hash back to xml
+my ($hashed,$root)=@_;
+$root="record" unless $root;
+my $xml= XMLout($hashed,KeyAttr=>['collection','record','leader','controlfıeld','datafield'],NoSort => 1,AttrIndent => 0,KeepRoot=>0,SuppressEmpty => 1,RootName=>$root);
+return $xml;
+}
+
+
+sub XMLgetbiblio {
+    # Returns MARC::XML of the biblionumber passed in parameter.
+    my ( $dbh, $biblionumber ) = @_;
+    my $sth =      $dbh->prepare("select marcxml from biblio where biblionumber=? "  );
+    $sth->execute( $biblionumber);
+   my ($marcxml)=$sth->fetchrow;
+ return ($marcxml);
+}
+
+sub XMLgetitem {
+   # Returns MARC::XML   of the item passed in parameter uses either itemnumber or barcode
+    my ( $dbh, $itemnumber,$barcode ) = @_;
+my $sth;
+if ($itemnumber){
+   $sth = $dbh->prepare("select marcxml from items  where itemnumber=?"  ); 
+    $sth->execute($itemnumber);
+}else{
+ $sth = $dbh->prepare("select marcxml from items where barcode=?"  ); 
+    $sth->execute($barcode);
+}
+ my ($marcxml)=$sth->fetchrow;
+    return ($marcxml);
+}
+
+sub XMLgetallitems {
+# warn "XMLgetallitems";
+    # Returns an array of MARC:XML   of the items passed in parameter as biblionumber
+    my ( $dbh, $biblionumber ) = @_;
+my @results;
+my   $sth = $dbh->prepare("select marcxml from items where biblionumber =?"  ); 
+    $sth->execute($biblionumber);
+
+ while(my ($marcxml)=$sth->fetchrow_array){
+    push @results,$marcxml;
+}
+return @results;
+}
+
+sub XMLmarc2koha {
+# warn "XMLmarc2koha";
+##Returns two hashes from KOHA_XML record
+## A biblio hash and and array of item hashes
+	my ($dbh,$xml,$related_record,@fields) = @_;
+	my ($result,@items);
+	
+## if @fields is given do not bother about the rest of fields just parse those
+
+if ($related_record eq "biblios" || $related_record eq "" || !$related_record){
+	if (@fields){
+		foreach my $field(@fields){
+		my $val=&XML_readline($xml,$field,'biblios');
+			$result->{$field}=$val if $val;
+			
+		}
+	}else{
+	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where  recordtype like 'biblios' and tagfield is not null" );
+	$sth2->execute();
+	my $field;
+		while ($field=$sth2->fetchrow) {
+		$result->{$field}=&XML_readline($xml,$field,'biblios');
+		}
+	}
+
+## we only need the following for biblio data
+	
+# modify copyrightdate to keep only the 1st year found
+	my $temp = $result->{'copyrightdate'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'copyrightdate'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$temp =~ m/(\d\d\d\d)/;
+		$result->{'copyrightdate'} = $1;
+	}
+# modify publicationyear to keep only the 1st year found
+	$temp = $result->{'publicationyear'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'publicationyear'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$temp =~ m/(\d\d\d\d)/;
+		$result->{'publicationyear'} = $1;
+	}
+}
+if ($related_record eq "holdings" || $related_record eq ""  || !$related_record){
+my $holdings=$xml->{holdings}->[0]->{record};
+
+
+	if (@fields){
+	    foreach my $holding (@$holdings){	
+my $itemresult;
+		foreach my $field(@fields){
+		my $val=&XML_readline($holding,$field,'holdings');
+		$itemresult->{$field}=$val if $val;	
+		}
+	    push @items, $itemresult;
+	   }
+	}else{
+	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where recordtype like 'holdings' and tagfield is not null" );
+	   foreach my $holding (@$holdings){	
+	   $sth2->execute();
+	    my $field;
+my $itemresult;
+		while ($field=$sth2->fetchrow) {
+		$itemresult->{$field}=&XML_readline($xml,$field,'holdings');
+		}
+	 push @items, $itemresult;
+	   }
+	}
+
+}
+
+	return ($result,@items);
+}
 
 #
 #
 # MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC
 #
-#
-# all the following subs takes a MARC::Record as parameter and manage
-# the MARC-DB. They are called by the 1.0/1.2 xxx subs, and by the
-# NEWxxx subs (xxx deals with old-DB parameters, the NEWxxx deals with MARC-DB parameter)
+## Script to deal with MARC read write operations
 
-=head1 NAME
 
-C4::Biblio - acquisition, catalog  management functions
+##Sub to match kohafield to Z3950 -attributes
 
-=head1 SYNOPSIS
+sub MARCfind_attr_from_kohafield {
+# warn "MARCfind_attr_from_kohafield";
+## returns attribute
+    my (  $kohafield ) = @_;
+    return 0, 0 unless $kohafield;
 
-move from 1.2 to 1.4 version :
-1.2 and previous version uses a specific API to manage biblios. This API uses old-DB style parameters.
-In the 1.4 version, we want to do 2 differents things :
- - keep populating the old-DB, that has a LOT less datas than MARC
- - populate the MARC-DB
-To populate the DBs we have 2 differents sources :
- - the standard acquisition system (through book sellers), that does'nt use MARC data
- - the MARC acquisition system, that uses MARC data.
+	my $relations = C4::Context->attrfromkohafield;
+	return ($relations->{$kohafield});
+}
 
-Thus, we have 2 differents cases :
-- with the standard acquisition system, we have non MARC data and want to populate old-DB and MARC-DB, knowing it's an incomplete MARC-record
-- with the MARC acquisition system, we have MARC datas, and want to loose nothing in MARC-DB. So, we can't store datas in old-DB, then copy in MARC-DB. we MUST have an API for true MARC data, that populate MARC-DB then old-DB
-
-That's why we need 4 subs :
-all I<subs beginning by MARC> manage only MARC tables. They manage MARC-DB with MARC::Record parameters
-all I<subs beginning by OLD> manage only OLD-DB tables. They manage old-DB with old-DB parameters
-all I<subs beginning by NEW> manage both OLD-DB and MARC tables. They use MARC::Record as parameters. it's the API that MUST be used in MARC acquisition system
-all I<subs beginning by seomething else> are the old-style API. They use old-DB as parameter, then call internally the OLD and MARC subs.
-
-- NEW and old-style API should be used in koha to manage biblio
-- MARCsubs are divided in 2 parts :
-* some of them manage MARC parameters. They are heavily used in koha.
-* some of them manage MARC biblio : they are mostly used by NEW and old-style subs.
-- OLD are used internally only
-
-all subs requires/use $dbh as 1st parameter.
-
-I<NEWxxx related subs>
-
-all subs requires/use $dbh as 1st parameter.
-those subs are used by the MARC-compliant version of koha : marc import, or marc management.
-
-I<OLDxxx related subs>
-
-all subs requires/use $dbh as 1st parameter.
-those subs are used by the MARC-compliant version of koha : marc import, or marc management.
-
-They all are the exact copy of 1.0/1.2 version of the sub without the OLD.
-The OLDxxx is called by the original xxx sub.
-the 1.4 xxx sub also builds MARC::Record an calls the MARCxxx
-
-WARNING : there is 1 difference between initialxxx and OLDxxx :
-the db header $dbh is always passed as parameter to avoid over-DB connexion
-
-=head1 DESCRIPTION
-
-=over 4
-
-=item @tagslib = &MARCgettagslib($dbh,1|0,$itemtype);
-
-last param is 1 for liblibrarian and 0 for libopac
-$itemtype contains the itemtype framework reference. If empty or does not exist, the default one is used
-returns a hash with tag/subfield meaning
-=item ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,$kohafield);
-
-finds MARC tag and subfield for a given kohafield
-kohafield is "table.field" where table= biblio|biblioitems|items, and field a field of the previous table
-
-=item $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$MARCbibi);
-
-finds a old-db biblio number for a given MARCbibid number
-
-=item $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
-
-finds a MARC bibid from a old-db biblionumber
-
-=item $MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);
-
-MARCkoha2marcBiblio is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB biblio/biblioitem
-
-=item $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
-
-MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB item
-
-=item $MARCRecord = &MARCkoha2marcSubtitle($dbh,$biblionumber,$subtitle);
-
-MARCkoha2marcSubtitle is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB subtitle
-
-=item $olddb = &MARCmarc2koha($dbh,$MARCRecord);
-
-builds a hash with old-db datas from a MARC::Record
-
-=item &MARCaddbiblio($dbh,$MARC::Record,$biblionumber);
-
-creates a biblio (in the MARC tables only). $biblionumber is the old-db biblionumber of the biblio
-
-=item &MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
-
-adds a subfield in a biblio (in the MARC tables only).
-
-=item $MARCRecord = &MARCgetbiblio($dbh,$bibid);
-
-Returns a MARC::Record for the biblio $bibid.
-
-=item &MARCmodbiblio($bibid,$record,$frameworkcode,$delete);
-
-MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
-It 1st delete the biblio, then recreates it.
-WARNING : the $delete parameter is not used anymore (too much unsolvable cases).
-=item ($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);
-
-MARCmodsubfield changes the value of a given subfield
-
-=item $subfieldid = &MARCfindsubfield($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue);
-
-MARCfindsubfield returns a subfield number given a bibid/tag/subfieldvalue values.
-Returns -1 if more than 1 answer
-
-=item $subfieldid = &MARCfindsubfieldid($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-
-MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
-
-=item &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-
-MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
-If $subfieldorder is not set, delete all the $tag$subfield subfields 
-
-=item &MARCdelbiblio($dbh,$bibid);
-
-MARCdelbiblio delete biblio $bibid
-
-=item &MARCkoha2marcOnefield
-
-used by MARCkoha2marc and should not be useful elsewhere
-
-=item &MARCmarc2kohaOnefield
-
-used by MARCmarc2koha and should not be useful elsewhere
-
-=item MARCaddword
-
-used to manage MARC_word table and should not be useful elsewhere
-
-=item MARCdelword
-
-used to manage MARC_word table and should not be useful elsewhere
-
-=cut
 
 sub MARCgettagslib {
+# warn "MARCgettagslib";
     my ( $dbh, $forlibrarian, $frameworkcode ) = @_;
     $frameworkcode = "" unless $frameworkcode;
     my $sth;
@@ -243,13 +365,13 @@ sub MARCgettagslib {
     # check that framework exists
     $sth =
       $dbh->prepare(
-        "select count(*) from marc_tag_structure where frameworkcode=?");
+        "select count(*) from biblios_tag_structure where frameworkcode=?");
     $sth->execute($frameworkcode);
     my ($total) = $sth->fetchrow;
     $frameworkcode = "" unless ( $total > 0 );
     $sth =
       $dbh->prepare(
-"select tagfield,liblibrarian,libopac,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield"
+"select tagfield,liblibrarian,libopac,mandatory,repeatable from biblios_tag_structure where frameworkcode=? order by tagfield"
     );
     $sth->execute($frameworkcode);
     my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
@@ -263,7 +385,7 @@ sub MARCgettagslib {
 
     $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
+"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,seealso,hidden,isurl,link from biblios_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
     );
     $sth->execute($frameworkcode);
 
@@ -271,7 +393,7 @@ sub MARCgettagslib {
     my $authorised_value;
     my $authtypecode;
     my $value_builder;
-    my $kohafield;
+   
     my $seealso;
     my $hidden;
     my $isurl;
@@ -280,7 +402,7 @@ sub MARCgettagslib {
     while (
         ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
-        $value_builder, $kohafield,  $seealso,          $hidden,
+        $value_builder,   $seealso,          $hidden,
         $isurl,			$link )
         = $sth->fetchrow
       )
@@ -292,7 +414,6 @@ sub MARCgettagslib {
         $res->{$tag}->{$subfield}->{authorised_value} = $authorised_value;
         $res->{$tag}->{$subfield}->{authtypecode}     = $authtypecode;
         $res->{$tag}->{$subfield}->{value_builder}    = $value_builder;
-        $res->{$tag}->{$subfield}->{kohafield}        = $kohafield;
         $res->{$tag}->{$subfield}->{seealso}          = $seealso;
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
@@ -300,641 +421,187 @@ sub MARCgettagslib {
     }
     return $res;
 }
-
-sub MARCfind_marc_from_kohafield {
-    my ( $dbh, $kohafield,$frameworkcode ) = @_;
-    return 0, 0 unless $kohafield;
-	my $relations = C4::Context->marcfromkohafield;
-	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
-}
-
-sub MARCfind_oldbiblionumber_from_MARCbibid {
-    my ( $dbh, $MARCbibid ) = @_;
-#    my $sth =
- #     $dbh->prepare("select biblionumber from marc_biblio where bibid=?");
-#    $sth->execute($MARCbibid);
- #   my ($biblionumber) = $sth->fetchrow;
-    return $MARCbibid;
-}
-
-sub MARCfind_MARCbibid_from_oldbiblionumber {
-    my ( $dbh, $oldbiblionumber ) = @_;
-#    my $sth =
- #     $dbh->prepare("select bibid from marc_biblio where biblionumber=?");
- #   $sth->execute($oldbiblionumber);
- #   my ($bibid) = $sth->fetchrow;
-    return $oldbiblionumber;
-}
-
-sub MARCaddbiblio {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-	my ($record,$biblionumber,$frameworkcode,$bibid) = @_;
-	my $dbh = C4::Context->dbh;
-	my @fields=$record->fields();
-	if (!$frameworkcode){
-		$frameworkcode="";
-	}
-    my $sth = $dbh->prepare("update  biblio set frameworkcode=? where biblionumber=?" );
-    $sth->execute(  $frameworkcode,$biblionumber );
-    $sth->finish;
-	my $encoding = C4::Context->preference("marcflavour");
-    my $sth =$dbh->prepare("update biblioitems set marc=?  where biblionumber=?"   );
-    $sth->execute( $record->as_usmarc() , $biblionumber);     
-    $sth->finish;
-	&zebraop($dbh,$biblionumber,"specialUpdate","biblioserver");
-    return $biblionumber;
-}
-
-sub MARCadditem {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ($dbh,$record,$biblionumber) = @_;
-my $newrec=&MARCgetbiblio($dbh,$biblionumber);
-# 2nd recreate it
-	my @fields = $record->fields();
- 
-     foreach my $field (@fields) {
-	  $newrec->append_fields($field);
-	}
-my $bibid=&MARCaddbiblio($newrec,$biblionumber);
-    return $bibid;
-}
-
-sub MARCaddsubfield {
-
-}
-
-sub MARCgetbiblio {
-	my ( $dbh, $bibid ) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select marcxml from biblioitems where biblionumber=? "  );
-    $sth->execute($bibid);
-    my ($marcxml)=$sth->fetchrow;
-#    $marcxml =~ s/\<subfield code="[A-Z><]"\>/\<subfield code="a"\>/g;
-    my $record = MARC::Record->new();
-    $record = MARC::Record::new_from_xml( $marcxml,'utf8' ) if $marcxml;
-	return $record;
-}
-############OLD VERSION HERE###############################################
-#    # Returns MARC::Record of the biblio passed in parameter.
-#sub MARCgetbiblio {
-#    my ( $dbh, $bibid ) = @_;
-#	my $dbh = C4::Context->dbh;
-#    my $sth = $dbh->prepare("select marcxml from biblioitems where biblionumber=? ");
-#    $sth->execute($bibid);
-#	my ($marc)=$sth->fetchrow;
-#	my $record = MARC::File::USMARC::decode($marc);
-#	warn "=>".$record->as_formatted;
-#	return $record;
-#}
-#
-#############################################################################
-
-sub XMLgetbiblio {
-
-    # Returns MARC::XML of the biblio passed in parameter.
-    my ( $dbh, $biblionumber ) = @_;
-  	my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare("select marc from biblioitems where biblionumber=? "  );
-    
-    $sth->execute($biblionumber);
-   	my ($marc)=$sth->fetchrow;
-	$marc=MARC::File::USMARC::decode($marc);
-	# print Dumper($marc);
-	my $marcxml=$marc->as_xml_record();
-	print Dumper($marcxml);
- 	return $marcxml;
-}
-sub MARCgetbiblio2 {
-
-    # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid ) = @_;
-  
-
-    my $sth =
-      $dbh->prepare("select marc from biblioitems where biblionumber=? "  );
-    
-    $sth->execute($bibid);
-   my ($marc)=$sth->fetchrow;
- my $record = MARC::File::USMARC::decode($marc);
-my $oldbiblio = MARCmarc2koha($dbh,$record,'');
-   if($oldbiblio->{'biblionumber'}){
- return $record;
-}else{
-	warn "Record $bibid does not have field for biblionumber";
-	return undef;
-}
-}
-
-sub MARCgetitem_frombarcode {
-
-    my ( $dbh, $biblionumber, $barcode ) = @_;
-	my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
-	# get the complete MARC record
-	
-	my $record = MARCgetbiblio($dbh,$biblionumber);
-#	warn "ITEMRECORD".$record->as_formatted;
-	# now, find the relevant itemnumber
-	my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.barcode','');
-	# prepare the new item record
-	my $itemrecord = MARC::Record->new();
-	# parse all fields fields from the complete record
-	foreach ($record->field($itemnumberfield)) {
-		# when the item field is found, save it
-#		warn "Itenumberfield = $itemnumberfield";
-		if ($_->subfield($itemnumbersubfield) == $barcode) {
-#			warn "Inside if subfield=$itemnumbersubfield";
-			$itemrecord->append_fields($_);
-		} 
-	}
-#	warn "ITEMS".$itemrecord->as_formatted;
-    return $itemrecord;
-}
-
-sub MARCgetitem {
-    # Returns MARC::Record of the item passed in parameter.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
- my $newrecord = MARC::Record->new();
-
-  my $sth =
-      $dbh->prepare("select marc from biblioitems b, items i where b.biblionumber=i.biblionumber and i.itemnumber=?"  );
-    
-    $sth->execute($itemnumber);
- my ($marc)=$sth->fetchrow;
- my $record = MARC::File::USMARC::decode($marc);
- #search item field code
-my ($itemnumberfield,$itemnumbersubfield) = MARCfind_marc_from_kohafield($dbh,'items.itemnumber','');
-	
- my @fields = $record->field($itemnumberfield);
- 
-     foreach my $field (@fields) {
-#my $pos=index($field->as_string() ,$itemnumber );
-
-      if ($field->subfield($itemnumbersubfield) eq $itemnumber ){
-
-	$newrecord->add_fields($field);
-	}
-}
-    return $newrecord;
-}
-sub MARCmodbiblio {
-	my ($bibid,$record,$frameworkcode,$delete)=@_;
-	my $dbh = C4::Context->dbh;
-#delete original marcrecord
-	my $newrec=&MARCdelbiblio($dbh,$bibid,$delete);
-# 2nd recreate it
-	my @fields = $record->fields();
-     foreach my $field (@fields) {
-
-	  $newrec->append_fields($field);
-	}
-##correct the leader
-	$newrec->leader($record->leader());
-	&MARCmodLCindex($dbh,$newrec,$frameworkcode);
-	&MARCaddbiblio($newrec,$bibid,$frameworkcode,$bibid);
-	
-}
-
-sub MARCdelbiblio {
-    my ( $dbh, $bibid, $keep_items ) = @_;
-
-    # if the keep_item is set to 1, then all items are preserved.
-    # This flag is set when the delbiblio is called by modbiblio
-    # due to a too complex structure of MARC (repeatable fields and subfields),
-    # the best solution for a modif is to delete / recreate the record.
-
-# 1st of all, copy the MARC::Record to deletedbiblio table => if a true deletion, MARC data will be kept.
-# if deletion called before MARCmodbiblio => won't do anything, as the oldbiblionumber doesn't
-    # exist in deletedbiblio table
-    my $record = MARCgetbiblio( $dbh, $bibid );
-    my $oldbiblionumber =
-      MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    my $copy2deleted =
-      $dbh->prepare("update deletedbiblio set marc=? where biblionumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $oldbiblionumber );
- my @fields = $record->fields();
-  # now, delete in MARC tables.
-    if ( $keep_items eq 1 ) {
-
-        #search item field code
-        my $sth =
-          $dbh->prepare(
-"select tagfield from marc_subfield_structure where kohafield like 'items.%'"
-        );
-        $sth->execute;
-        my $itemtag = $sth->fetchrow_hashref->{tagfield};
-
- 
-     foreach my $field (@fields) {
-  
-      if ($field->tag() ne $itemtag){
-	$record->delete_field($field);
-	}#if
-	}#foreach
-           }
-    else {
-   foreach my $field (@fields) {
-    
-	$record->delete_field($field);
-	
-	}#foreach  
-           }
-      return $record;     
-}
-
-sub MARCdelitem {
-
-    # delete the item passed in parameter in MARC tables.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-
-    #    my $record = MARC::Record->new();
-    # search MARC tagorder
-    my $record = MARCgetbiblio( $dbh, $bibid);
-    my $copy2deleted =
-      $dbh->prepare("update deleteditems set marc=? where itemnumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
-
-    #search item field code
-        my $sth =
-          $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield like 'items.itemnumber'"
-        );
-        $sth->execute;
-        my ($itemtag,$itemsubfield) = $sth->fetchrow;
- my @fields = $record->field($itemtag);
- 
-     foreach my $field (@fields) {
-#   my $field_item = $record->field($itemtag);
-#my $pos=index($field->as_string() ,$itemnumber );
-      if ($field->subfield($itemsubfield) eq $itemnumber ){
-	$record->delete_field($field);
-	}#if
-	}#foreach
-           
-return $record;
-}
-
-
-
-sub MARCmoditemonefield{
-my ($dbh,$biblionumber,$itemnumber,$itemfield,$newvalue)=@_;
-if (!defined $newvalue){
-$newvalue="";
-}
-
-my $record = MARCgetitem($dbh,$biblionumber,$itemnumber);
-
-my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
-    );
-    my $tagfield;
-    my $tagsubfield;
-    $sth->execute($itemfield);
-    if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
- my $tag = $record->field($tagfield);
-
-        if ( $tag)  {
-           
-	    my $tagsubs=$record->field($tagfield)->subfield($tagsubfield);
-           
-		$tag->update($tagsubfield =>$newvalue);
-		$record->delete_field($tag);
-                $record->add_fields($tag);
-	
-	&MARCmoditem($dbh,$record,$biblionumber,$itemnumber,0);
-	}
-     }	
-
-}
-sub MARCmoditem {
-	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	my $newrec=&MARCdelitem($dbh,$bibid,$itemnumber);
-
-# 2nd recreate it
-	my @fields = $record->fields();
- ###NEU specific add cataloguers cardnumber as well
-my $cardtag=C4::Context->preference('itemcataloguersubfield');
-
-     foreach my $field (@fields) {
-	if ($cardtag){	
-	my $me= C4::Context->userenv;
-	my $cataloguer=$me->{'cardnumber'} if ($me);
-	$field->update($cardtag=>$cataloguer) if ($me);	
-	}
-	  $newrec->append_fields($field);
-	}
-	&MARCaddbiblio($newrec,$biblionumber);
-	
-}
-sub MARCmodsubfield {
-
-    # Subroutine changes a subfield value given a subfieldid.
-    my ( $dbh, $subfieldid, $subfieldvalue ) = @_;
-    $dbh->do("lock tables marc_blob_subfield WRITE,marc_subfield_table WRITE");
-    my $sth1 =
-      $dbh->prepare(
-        "select valuebloblink from marc_subfield_table where subfieldid=?");
-    $sth1->execute($subfieldid);
-    my ($oldvaluebloblink) = $sth1->fetchrow;
-    $sth1->finish;
+sub MARCitemsgettagslib {
+# warn "MARCitemsgettagslib";
+    my ( $dbh, $forlibrarian, $frameworkcode ) = @_;
+    $frameworkcode = "" unless $frameworkcode;
     my $sth;
+    my $libfield = ( $forlibrarian eq 1 ) ? 'liblibrarian' : 'libopac';
 
-    # if too long, use a bloblink
-    if ( length($subfieldvalue) > 255 ) {
-
-        # if already a bloblink, update it, otherwise, insert a new one.
-        if ($oldvaluebloblink) {
-            $sth =
-              $dbh->prepare(
-"update marc_blob_subfield set subfieldvalue=? where blobidlink=?"
-            );
-            $sth->execute( $subfieldvalue, $oldvaluebloblink );
-        }
-        else {
-            $sth =
-              $dbh->prepare(
-                "insert into marc_blob_subfield (subfieldvalue) values (?)");
-            $sth->execute($subfieldvalue);
-            $sth =
-              $dbh->prepare("select max(blobidlink) from marc_blob_subfield");
-            $sth->execute;
-            my ($res) = $sth->fetchrow;
-            $sth =
-              $dbh->prepare(
-"update marc_subfield_table set subfieldvalue=null, valuebloblink=? where subfieldid=?"
-            );
-            $sth->execute( $res, $subfieldid );
-        }
-    }
-    else {
-
-# note this can leave orphan bloblink. Not a big problem, but we should build somewhere a orphan deleting script...
-        $sth =
-          $dbh->prepare(
-"update marc_subfield_table set subfieldvalue=?,valuebloblink=null where subfieldid=?"
-        );
-        $sth->execute( $subfieldvalue, $subfieldid );
-    }
-    $dbh->do("unlock tables");
-    $sth->finish;
+    # check that framework exists
     $sth =
       $dbh->prepare(
-"select bibid,tag,tagorder,subfieldcode,subfieldid,subfieldorder from marc_subfield_table where subfieldid=?"
+        "select count(*) from holdings_tag_structure where frameworkcode=?");
+    $sth->execute($frameworkcode);
+    my ($total) = $sth->fetchrow;
+    $frameworkcode = "" unless ( $total > 0 );
+    $sth =
+      $dbh->prepare(
+"select tagfield,liblibrarian,libopac,mandatory,repeatable from holdings_tag_structure where frameworkcode=? order by tagfield"
     );
-    $sth->execute($subfieldid);
-    my ( $bibid, $tagid, $tagorder, $subfieldcode, $x, $subfieldorder ) =
-      $sth->fetchrow;
-    $subfieldid = $x;
-        return ( $subfieldid, $subfieldvalue );
-}
+    $sth->execute($frameworkcode);
+    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
 
-sub MARCfindsubfield {
-    my ( $dbh, $bibid, $tag, $subfieldcode, $subfieldorder, $subfieldvalue ) =
-      @_;
-    my $resultcounter = 0;
-    my $subfieldid;
-    my $lastsubfieldid;
-    my $query =
-"select subfieldid from marc_subfield_table where bibid=? and tag=? and subfieldcode=?";
-    my @bind_values = ( $bibid, $tag, $subfieldcode );
-    if ($subfieldvalue) {
-        $query .= " and subfieldvalue=?";
-        push ( @bind_values, $subfieldvalue );
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
+        $res->{$tag}->{lib}        = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
+        $res->{$tab}->{tab}        = "";            # XXX
+        $res->{$tag}->{mandatory}  = $mandatory;
+        $res->{$tag}->{repeatable} = $repeatable;
     }
-    else {
-        if ( $subfieldorder < 1 ) {
-            $subfieldorder = 1;
-        }
-        $query .= " and subfieldorder=?";
-        push ( @bind_values, $subfieldorder );
-    }
-    my $sti = $dbh->prepare($query);
-    $sti->execute(@bind_values);
-    while ( ($subfieldid) = $sti->fetchrow ) {
-        $resultcounter++;
-        $lastsubfieldid = $subfieldid;
-    }
-    if ( $resultcounter > 1 ) {
 
-# Error condition.  Values given did not resolve into a unique record.  Don't know what to edit
-# should rarely occur (only if we use subfieldvalue with a value that exists twice, which is strange)
-        return -1;
-    }
-    else {
-        return $lastsubfieldid;
-    }
-}
-
-sub MARCfindsubfieldid {
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    my $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
-				where bibid=? and tag=? and tagorder=?
-					and subfieldcode=? and subfieldorder=?"
+    $sth =
+      $dbh->prepare(
+"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,seealso,hidden,isurl,link from holdings_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
     );
-    $sth->execute( $bibid, $tag, $tagorder, $subfield, $subfieldorder );
-    my ($res) = $sth->fetchrow;
-    unless ($res) {
-        $sth = $dbh->prepare( "select subfieldid from marc_subfield_table
-				where bibid=? and tag=? and tagorder=?
-					and subfieldcode=?"
-        );
-        $sth->execute( $bibid, $tag, $tagorder, $subfield );
-        ($res) = $sth->fetchrow;
+    $sth->execute($frameworkcode);
+
+    my $subfield;
+    my $authorised_value;
+    my $authtypecode;
+    my $value_builder;
+   
+    my $seealso;
+    my $hidden;
+    my $isurl;
+	my $link;
+
+    while (
+        ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
+        $mandatory,     $repeatable, $authorised_value, $authtypecode,
+        $value_builder, $seealso,          $hidden,
+        $isurl,			$link )
+        = $sth->fetchrow
+      )
+    {
+        $res->{$tag}->{$subfield}->{lib}              = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
+        $res->{$tag}->{$subfield}->{tab}              = $tab;
+        $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
+        $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
+        $res->{$tag}->{$subfield}->{authorised_value} = $authorised_value;
+        $res->{$tag}->{$subfield}->{authtypecode}     = $authtypecode;
+        $res->{$tag}->{$subfield}->{value_builder}    = $value_builder;
+        $res->{$tag}->{$subfield}->{seealso}          = $seealso;
+        $res->{$tag}->{$subfield}->{hidden}           = $hidden;
+        $res->{$tag}->{$subfield}->{isurl}            = $isurl;
+        $res->{$tag}->{$subfield}->{link}            = $link;
     }
     return $res;
 }
+sub MARCfind_marc_from_kohafield {
+# warn "MARCfind_marc_from_kohafield";
+    my (  $kohafield,$recordtype) = @_;
+    return 0, 0 unless $kohafield;
+$recordtype="biblios" unless $recordtype;
+	my $relations = C4::Context->marcfromkohafield;
+	return ($relations->{$recordtype}->{$kohafield}->[0],$relations->{$recordtype}->{$kohafield}->[1]);
+}
+
+
+
+sub MARCgetbiblio {
+    # Returns MARC::Record of the biblio passed in parameter.
+    ### Takes a new parameter of $title_author =1 which parses the record obly on those fields and nothing else
+    ### Its useful when Koha requires only title&author for performance issues
+    my ( $dbh, $biblionumber, $title_author ) = @_;
+    my $sth =
+      $dbh->prepare("select marc from biblio where biblionumber=? "  );
+    $sth->execute( $biblionumber);
+   my ($marc)=$sth->fetchrow;
+my $record;
+	if ($title_author){
+	$record = MARC::File::USMARC::decode($marc,\&func_title_author);
+	}else{
+	 $record = MARC::File::USMARC::decode($marc);
+	}
+$sth->finish;
+ return $record;
+}
+
+
+
+
+
+sub MARCgetitem {
+# warn "MARCgetitem";
+    # Returns MARC::Record   of the item passed in parameter uses either itemnumber or barcode
+    my ( $dbh, $itemnumber,$barcode ) = @_;
+my $sth;
+if ($itemnumber){
+   $sth = $dbh->prepare("select i.marc from items i where i.itemnumber=?"  ); 
+    $sth->execute($itemnumber);
+}else{
+ $sth = $dbh->prepare("select i.marc from  items i where i.barcode=?"  ); 
+    $sth->execute($barcode);
+}
+ my ($marc)=$sth->fetchrow;
+ my $record = MARC::File::USMARC::decode($marc);
+	
+    return ($record);
+}
+
+sub MARCgetallitems {
+# warn "MARCgetallitems";
+    # Returns an array of MARC::Record   of the items passed in parameter as biblionumber
+    my ( $dbh, $biblionumber ) = @_;
+my @results;
+my   $sth = $dbh->prepare("select marc from items where biblionumber =?"  ); 
+    $sth->execute($biblionumber);
+
+ while(my ($marc)=$sth->fetchrow_array){
+ my $record = MARC::File::USMARC::decode($marc);
+    push @results,$record;
+}
+return @results;
+}
+
+sub MARCmoditemonefield{
+# This routine will be depraeciated as soon as mysql dependency on items is removed;
+## this function is different to MARCkoha2marcOnefield this one does not need the record but the itemnumber
+my ($dbh,$biblionumber,$itemnumber,$itemfield,$newvalue,$donotupdate)=@_;
+my ($record) = MARCgetitem($dbh,$itemnumber);
+   MARCkoha2marcOnefield( $record, $itemfield, $newvalue,"holdings" );
+ if($donotupdate){
+	## Prevent various update calls to zebra wait until all changes finish
+	## Fix  to pass this record around to prevent Mysql update as well
+		my $sth=$dbh->prepare("update items set marc=? where itemnumber=?");
+		$sth->execute($record->as_usmarc,$itemnumber);
+		$sth->finish;
+	}else{
+		NEWmoditem($dbh,$record,$biblionumber,$itemnumber);
+}
+
+}
+
+
+
 
 sub MARCfind_frameworkcode {
-    my ( $dbh, $bibid ) = @_;
+# warn "MARCfind_frameworkcode";
+    my ( $dbh, $biblionumber ) = @_;
     my $sth =
       $dbh->prepare("select frameworkcode from biblio where biblionumber=?");
-    $sth->execute($bibid);
+    $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
     return $frameworkcode;
 }
-
-sub MARCdelsubfield {
-
-    # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-	if ($subfieldorder) {
-		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-				tag='$tag' and tagorder='$tagorder'
-				and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
-				"
-		);
-			} else {
-		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-				tag='$tag' and tagorder='$tagorder'
-				and subfieldcode='$subfield'"
-		);
-			}
-}
-
-sub MARCkoha2marcBiblio {
-
-    # this function builds partial MARC::Record from the old koha-DB fields
-    my ( $dbh, $biblionumber, $biblioitemnumber ) = @_;
+sub MARCfind_itemtype {
+# warn "MARCfind_itemtype";
+    my ( $dbh, $biblionumber ) = @_;
     my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    my $record = MARC::Record->new();
-
-    #--- if bibid, then retrieve old-style koha data
-    if ( $biblionumber > 0 ) {
-        my $sth2 =
-          $dbh->prepare(
-"select biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
-		from biblio where biblionumber=?"
-        );
-        $sth2->execute($biblionumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
-                    $row->{$code}, '');
-            }
-        }
-    }
-
-    #--- if biblioitem, then retrieve old-style koha data
-    if ( $biblioitemnumber > 0 ) {
-        my $sth2 =
-          $dbh->prepare(
-            " SELECT biblioitemnumber,biblionumber,volume,number,classification,
-						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
-						volumedate,volumeddesc,timestamp,illus,pages,notes AS bnotes,size,place
-					FROM biblioitems
-					WHERE biblioitemnumber=?
-					"
-        );
-        $sth2->execute($biblioitemnumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblioitems." . $code,
-                    $row->{$code},'' );
-            }
-        }
-    }
-
-    # other fields => additional authors, subjects, subtitles
-    my $sth2 =
-      $dbh->prepare(
-        " SELECT author FROM additionalauthors WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author",
-            $row->{'author'},'' );
-    }
-    $sth2 =
-      $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject",
-            $row->{'subject'},'' );
-    }
-    $sth2 =
-      $dbh->prepare(
-        " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
-    $sth2->execute($biblionumber);
-    while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
-            $row->{'subtitle'},'' );
-    }
-    return $record;
+      $dbh->prepare("select itemtype from biblio where biblionumber=?");
+    $sth->execute($biblionumber);
+    my ($itemtype) = $sth->fetchrow;
+    return $itemtype;
 }
 
-sub MARCkoha2marcItem {
 
-    # this function builds partial MARC::Record from the old koha-DB fields
-    my ( $dbh, $biblionumber, $itemnumber ) = @_;
 
-    #    my $dbh=&C4Connect;
-    my $sth =      $dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
-    my $record = MARC::Record->new();
-
-    #--- if item, then retrieve old-style koha data
-    if ( $itemnumber > 0 ) {
-
-        #	print STDERR "prepare $biblionumber,$itemnumber\n";
-        my $sth2 =
-          $dbh->prepare(
-"SELECT itemnumber,biblionumber,multivolumepart,biblioitemnumber,barcode,dateaccessioned,
-						booksellerid,homebranch,price,replacementprice,replacementpricedate,datelastborrowed,
-						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,itemcallnumber,issues,renewals,
-					reserves,restricted,binding,itemnotes,holdingbranch,timestamp,onloan,Cutterextra
-					FROM items
-					WHERE itemnumber=?"
-        );
-        $sth2->execute($itemnumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "items." . $code,
-                    $row->{$code},'' );
-            }
-        }
-    }
-    return $record;
-}
-
-sub MARCkoha2marcSubtitle {
-
-    # this function builds partial MARC::Record from the old koha-DB fields
-    my ( $dbh, $bibnum, $subtitle ) = @_;
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    my $record = MARC::Record->new();
-    &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
-        $subtitle,'' );
-    return $record;
-}
-
-sub MARCkoha2marcOnefield {
-    my ( $sth, $record, $kohafieldname, $value,$frameworkcode ) = @_;
-    my $tagfield;
-    my $tagsubfield;
-
-if (!defined $sth){
-my $dbh=C4::Context->dbh;
-$sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-}
-    $sth->execute($frameworkcode,$kohafieldname);
-    if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
- #       if ( $record->field($tagfield) ) {
-            my $tag = $record->field($tagfield);
-        if ($tag) {
-                $tag->update( $tagsubfield=> $value );
-                $record->delete_field($tag);
-                $record->add_fields($tag);
-
-            
-        }else {
-            $record->add_fields( $tagfield, " ", " ", $tagsubfield => $value );
-        }
-    }
-
-    return $record;
-}
 sub MARChtml2xml {
+# warn "MARChtml2xml ";
 	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
-	#use MARC::File::XML;
-	my $xml= MARC::File::XML::header('UTF-8'); 
-	#$xml =~ s/UTF-8/ISO-8859-1/;
+#	use MARC::File::XML;
+	my $xml= marc_record_header('UTF-8'); #### we do not need a collection wrapper
+
     my $prevvalue;
     my $prevtag=-1;
     my $first=1;
@@ -948,7 +615,7 @@ sub MARChtml2xml {
 
 		if ((@$tags[$i] ne $prevtag)){
 			$j++ unless (@$tags[$i] eq "");
-			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
+			## warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 			if (!$first){
 		    	$xml.="</datafield>\n";
 				if ((@$tags[$i] > 10) && (@$values[$i] ne "")){
@@ -994,11 +661,36 @@ sub MARChtml2xml {
 		}
 		$prevtag = @$tags[$i];
 	}
-	$xml.= MARC::File::XML::footer();
-	#warn $xml;
+	$xml.="</record>";
+	# warn $xml;
 	return $xml;
 }
+sub marc_record_header {
+####  this one is for <record>
+    my $format = shift;
+    my $enc = shift || 'UTF-8';
+    return( <<MARC_XML_HEADER );
+<?xml version="1.0" encoding="$enc"?>
+<record
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+MARC_XML_HEADER
+}
+
+
+sub collection_header {
+####  this one is for koha collection 
+    my $format = shift;
+    my $enc = shift || 'UTF-8';
+    return( <<KOHA_XML_HEADER );
+<?xml version="1.0" encoding="$enc"?>
+<kohacollection xmlns:marc="http://loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://library.neu.edu.tr/kohanamespace/koharecord.xsd">
+KOHA_XML_HEADER
+}
+
 sub MARChtml2marc {
+# warn "MARChtml2marc";
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = -1;
 	my $record = MARC::Record->new();
@@ -1008,13 +700,13 @@ sub MARChtml2marc {
 	for (my $i=0; $i< @$rtags; $i++) {
 		next unless @$rvalues[$i];
 		# rebuild MARC::Record
-# 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
+# 			# warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
 
 					if ($prevtag ne '000') {
-						$record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
+						$record->insert_fields_ordered((sprintf "%03s",$prevtag),$prevvalue);
 					} else {
 
 						$record->leader($prevvalue);
@@ -1023,7 +715,7 @@ sub MARChtml2marc {
 				}
 			} else {
 				if ($field) {
-					$record->add_fields($field);
+					$record->insert_fields_ordered($field);
 				}
 			}
 			$indicators{@$rtags[$i]}.='  ';
@@ -1033,7 +725,7 @@ sub MARChtml2marc {
 			} else {
 				undef $prevvalue;
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
-# 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
+# 			# warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
 			$prevtag = @$rtags[$i];
 		} else {
@@ -1042,46 +734,50 @@ sub MARChtml2marc {
 			} else {
 				if (length(@$rvalues[$i])>0) {
 					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
-# 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
+# 			# warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 				}
 			}
 			$prevtag= @$rtags[$i];
 		}
 	}
 	# the last has not been included inside the loop... do it now !
-	$record->add_fields($field) if $field;
-# 	warn "HTML2MARC=".$record->as_formatted;
+	$record->insert_fields_ordered($field) if $field;
+# 	# warn "HTML2MARC=".$record->as_formatted;
 	$record->encoding( 'UTF-8' );
 #	$record->MARC::File::USMARC::update_leader();
 	return $record;
 }
 
-sub MARCmarc2koha {
-	my ($dbh,$record,$frameworkcode) = @_;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
-	my $result;
-	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
-	$sth2->execute;
+sub MARCkoha2marc {
+# warn "MARCkoha2marc";
+## This routine most probably will be depreaceated -- it is still used for acqui management
+##Returns a  MARC record from a hash
+	my ($dbh,$result,$recordtype) = @_;
+
+	my $record = MARC::Record->new();
+	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where tagfield is not null and recordtype=?");
+	$sth2->execute($recordtype);
 	my $field;
 	while (($field)=$sth2->fetchrow) {
-		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result,$frameworkcode);
+		$record=&MARCkoha2marcOnefield($record,$field,$result->{$field},$recordtype) if $result->{$field};
 	}
-	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
-	$sth2->execute;
-	while (($field)=$sth2->fetchrow) {
-		if ($field eq 'notes') { $field = 'bnotes'; }
-		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result,$frameworkcode);
+return $record;
+}
+sub MARCmarc2koha {
+# warn "MARCmarc2koha";
+##Returns a hash from MARC record
+	my ($dbh,$record,$related_record) = @_;
+	my $result;
+if (!$related_record){$related_record="biblios";}
+	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where  recordtype like ? and tagfield is not null" );
+	$sth2->execute($related_record);
+	my $field;
+	while ($field=$sth2->fetchrow) {
+		$result=&MARCmarc2kohaOneField($field,$record,$result,$related_record);
 	}
-	$sth2=$dbh->prepare("SHOW COLUMNS from items");
-	$sth2->execute;
-	while (($field)=$sth2->fetchrow) {
-		$result=&MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
-	}
-	# additional authors : specific
-	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result,$frameworkcode);
-	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result,$frameworkcode); 
-	$result = &MARCmarc2kohaOneField($sth,"bibliosubject","subject",$record,$result,$frameworkcode);
-#
+
+## we only need the following for biblio data
+if ($related_record eq "biblios"){	
 # modify copyrightdate to keep only the 1st year found
 	my $temp = $result->{'copyrightdate'};
 	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
@@ -1100,18 +796,54 @@ sub MARCmarc2koha {
 		$temp =~ m/(\d\d\d\d)/;
 		$result->{'publicationyear'} = $1;
 	}
+}
 	return $result;
 }
 
-sub MARCmarc2kohaOneField {
+sub MARCkoha2marcOnefield {
+##Updates or creates one field in MARC record
+    my ( $record, $kohafieldname, $value,$recordtype ) = @_;
+my ( $tagfield, $tagsubfield ) = MARCfind_marc_from_kohafield($kohafieldname,$recordtype);
+if ($tagfield){
+my $tag = $record->field($tagfield);
+    if  (  $tagfield>9) { 
+        if ($tag) {
+	  	if ($value){## We may be trying to delete a subfield value
+               	 $tag->update( $tagsubfield=> $value );
+	  	}else{	
+		$tag->delete_subfield(code=>$tagsubfield);
+	  	}
+                $record->delete_field($tag);
+                $record->insert_fields_ordered($tag);         
+        }else {
+	my $newtag=MARC::Field->new( $tagfield, " ", " ", $tagsubfield => $value);
+            $record->insert_fields_ordered($newtag);   
+        }
+    }else {
+        if ($tag) {
+	  if ($value){	
+                $tag->update( $value );
+                $record->delete_field($tag);
+                $record->insert_fields_ordered($tag);    
+	  }else{
+	  $record->delete_field($tag);  
+	  }
+        }else {
+	my $newtag=MARC::Field->new( $tagfield => $value);
+            $record->insert_fields_ordered($newtag);   
+        }
+    }
+}## $tagfield defined
+    return $record;
+}
 
-# FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
-    my ( $sth, $kohatable, $kohafield, $record, $result,$frameworkcode ) = @_;
-    #    warn "kohatable / $kohafield / $result / ";
+sub MARCmarc2kohaOneField {
+    my (  $kohafield, $record, $result,$recordtype ) = @_;
+    #    # warn "kohatable / $kohafield / $result / ";
     my $res = "";
-    my $tagfield;
-    my $subfield;
-    ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
+
+  my  ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield($kohafield,$recordtype);
+if ($tagfield){
     foreach my $field ( $record->field($tagfield) ) {
 		if ($field->tag()<10) {
 			if ($result->{$kohafield}) {
@@ -1135,957 +867,336 @@ sub MARCmarc2kohaOneField {
 			}
 		}
     }
-# 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
+}
     return $result;
 }
 
-sub MARCaddword {
-
-    # split a subfield string and adds it into the word table.
-    # removes stopwords
-    my (
-        $dbh,        $bibid,         $tag,    $tagorder,
-        $subfieldid, $subfieldorder, $sentence
-      )
-      = @_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\}|\/)/ /g;
-    my @words = split / /, $sentence;
-    my $stopwords = C4::Context->stopwords;
-    my $sth       =
-      $dbh->prepare(
-"insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word)
-			values (?,concat(?,?),?,?,?,soundex(?))"
-    );
-    foreach my $word (@words) {
-# we record only words one char long and not in stopwords hash
-	if (length($word)>=1 and !($stopwords->{uc($word)})) {
-	    $sth->execute($bibid,$tag,$subfieldid,$tagorder,$subfieldorder,$word,$word);
-	    if ($sth->err()) {
-		warn "ERROR ==> insert into marc_word (bibid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($bibid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
-	    }
-	}
-    }
-}
-
-sub MARCdelword {
-
-# delete words. this sub deletes all the words from a sentence. a subfield modif is done by a delete then a add
-    my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    my $sth =
-      $dbh->prepare(
-"delete from marc_word where bibid=? and tagsubfield=concat(?,?) and tagorder=? and subfieldorder=?"
-    );
-    $sth->execute( $bibid, $tag, $subfield, $tagorder, $subfieldorder );
-}
-
-#
-#
-# NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
-#
-#
-# all the following subs are useful to manage MARC-DB with complete MARC records.
-# it's used with marcimport, and marc management tools
-#
-
-=item ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
-
-creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
-are builded from the MARC::Record. If they are passed, they are used.
-
-=item NEWnewitem($dbh, $record,$bibid);
-
-adds an item in the db.
-
-=cut
-
-sub NEWnewbiblio {
-    my ( $dbh, $record, $frameworkcode) = @_;
-    my $oldbibnum;
-    my $oldbibitemnum;
-    my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
-    $oldbibnum = OLDnewbiblio( $dbh, $olddata );
-	$olddata->{'biblionumber'} = $oldbibnum;
-    $oldbibitemnum = OLDnewbiblioitem( $dbh, $olddata );
-
-    # search subtiles, addiauthors and subjects
-    my ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "additionalauthors.author",$frameworkcode );
-    my @addiauthfields = $record->field($tagfield);
-    foreach my $addiauthfield (@addiauthfields) {
-        my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#addiauthsubfields ) {
-            OLDmodaddauthor( $dbh, $oldbibnum,
-                $addiauthsubfields[$subfieldcount] );
-        }
-    }
-    ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.subtitle",$frameworkcode );
-    my @subtitlefields = $record->field($tagfield);
-    foreach my $subtitlefield (@subtitlefields) {
-        my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#subtitlesubfields ) {
-            OLDnewsubtitle( $dbh, $oldbibnum,
-                $subtitlesubfields[$subfieldcount] );
-        }
-    }
-    ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubject.subject",$frameworkcode );
-    my @subj = $record->field($tagfield);
-    my @subjects;
-    foreach my $subject (@subj) {
-        my @subjsubfield = $subject->subfield($tagsubfield);
-        foreach my $subfieldcount ( 0 .. $#subjsubfield ) {
-            push @subjects, $subjsubfield[$subfieldcount];
-        }
-    }
-    OLDmodsubject( $dbh, $oldbibnum, 1, @subjects );
-	
-    # we must add bibnum and bibitemnum in MARC::Record...
-    # we build the new field with biblionumber and biblioitemnumber
-    # we drop the original field
-    # we add the new builded field.
-# NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
-    # (steve and paul : thinks 090 is a good choice)
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
-    );
-    $sth->execute("biblio.biblionumber");
-    ( my $tagfield1, my $tagsubfield1 ) = $sth->fetchrow;
-    $sth->execute("biblioitems.biblioitemnumber");
-   ( my $tagfield2, my $tagsubfield2 ) = $sth->fetchrow;
-
-	my $newfield;
-	# biblionumber & biblioitemnumber are in different fields
-    if ( $tagfield1 != $tagfield2 ) {
-		# deal with biblionumber
-		if ($tagfield1<10) {
-			$newfield = MARC::Field->new(
-				$tagfield1, $oldbibnum,
-			);
-		} else {
-			$newfield = MARC::Field->new(
-				$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-			);
-		}
-		# drop old field and create new one...
-		my $old_field = $record->field($tagfield1);
-		$record->delete_field($old_field);
-		$record->append_fields($newfield);
-		# deal with biblioitemnumber
-		if ($tagfield2<10) {
-			$newfield = MARC::Field->new(
-				$tagfield2, $oldbibitemnum,
-			);
-		} else {
-			$newfield = MARC::Field->new(
-				$tagfield2, '', '', "$tagsubfield2" => $oldbibitemnum,
-			);
-		}
-		# drop old field and create new one...
-		$old_field = $record->field($tagfield2);
-		$record->delete_field($old_field);
-		$record->add_fields($newfield);
-	# biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
-	} else {
-		my $newfield = MARC::Field->new(
-			$tagfield1, '', '', "$tagsubfield1" => $oldbibnum,
-			"$tagsubfield2" => $oldbibitemnum
-		);
-		# drop old field and create new one...
-		my $old_field = $record->field($tagfield1);
-		$record->delete_field($old_field);
-		$record->add_fields($newfield);
-	}
-# 	warn "REC : ".$record->as_formatted;
-###NEU specific add cataloguers cardnumber as well
-my $cardtag=C4::Context->preference('cataloguersfield');
-if ($cardtag){
-my $tag=substr($cardtag,0,3);
-my $subf=substr($cardtag,3,1);		
-my $me= C4::Context->userenv;
-my $cataloger=$me->{'cardnumber'} if ($me);
-my $newtag=  MARC::Field->new($tag, '', '', $subf => $cataloger) if ($me);
-$record->delete_field($newtag);
-$record->add_fields($newtag);	
-}
-## We must add the indexing fields for LC in MARC record--TG
-	&MARCmodLCindex($dbh,$record,$frameworkcode);
-
-
-    my $bibid = MARCaddbiblio($record, $oldbibnum, $frameworkcode );
-    return ( $bibid, $oldbibnum, $oldbibitemnum );
-}
-
-
-
 sub MARCmodLCindex{
-my ($dbh,$record,$frameworkcode)=@_;
-if(!$frameworkcode){
-$frameworkcode="";
-}
-my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.classification",$frameworkcode);
-my ($tagfield,$tagsubfieldsub) = MARCfind_marc_from_kohafield($dbh,"biblioitems.subclass",$frameworkcode);
+# warn "MARCmodLCindex";
+my ($dbh,$record)=@_;
+
+my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield("classification","biblios");
+my ($tagfield2,$tagsubfieldsub) = MARCfind_marc_from_kohafield("subclass","biblios");
 my $tag=$record->field($tagfield);
 if ($tag){
 my ($lcsort)=calculatelc($tag->subfield($tagsubfield)).$tag->subfield($tagsubfieldsub);
 
- &MARCkoha2marcOnefield( undef, $record, "biblioitems.lcsort", $lcsort,$frameworkcode);
+ &MARCkoha2marcOnefield( $record, "lcsort", $lcsort,"biblios");
 }
 return $record;
 }
 
+##########################NEW NEW NEW#############################
+sub NEWnewbiblio {
+    my ( $dbh, $record, $frameworkcode) = @_;
+    my $biblionumber;
+$frameworkcode="" unless $frameworkcode;
+    my $olddata = MARCmarc2koha( $dbh, $record,"biblios" );
+## In case reimporting records with biblionumbers keep them
+if ($olddata->{'biblionumber'}){
+$biblionumber=NEWmodbiblio( $dbh, $olddata->{'biblionumber'},$record,$frameworkcode );
+}else{
+    $biblionumber = NEWaddbiblio( $dbh, $record,$frameworkcode );
+}
+
+   return ( $biblionumber );
+}
+
+
+
+
+
 sub NEWmodbiblioframework {
-	my ($bibid,$frameworkcode) =@_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("Update biblio SET frameworkcode=? WHERE biblionumber=$bibid");
+	my ($dbh,$biblionumber,$frameworkcode) =@_;
+	my $sth = $dbh->prepare("Update biblio SET frameworkcode=? WHERE biblionumber=$biblionumber");
 	$sth->execute($frameworkcode);
 	return 1;
 }
-sub NEWmodbiblio {
-	my ($record,$bibid,$frameworkcode) =@_;
-	my $dbh = C4::Context->dbh;
-	$frameworkcode="" unless $frameworkcode;
-	&MARCmodbiblio($bibid,$record,$frameworkcode,1);
-	my $oldbiblio = MARCmarc2koha($dbh,$record,$frameworkcode);
 
-	
-	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
-
-
-	OLDmodbibitem($dbh,$oldbiblio);
-
-	# now, modify addi authors, subject, addititles.
-	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
-	my @addiauthfields = $record->field($tagfield);
-	foreach my $addiauthfield (@addiauthfields) {
-		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
-		foreach my $subfieldcount (0..$#addiauthsubfields) {
-			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
-		}
-	}
-	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle",$frameworkcode);
-	my @subtitlefields = $record->field($tagfield);
-	foreach my $subtitlefield (@subtitlefields) {
-		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
-		# delete & create subtitle again because OLDmodsubtitle can't handle new subtitles
-		# between 2 modifs
-		$dbh->do("delete from bibliosubtitle where biblionumber=$oldbiblionumber");
-		foreach my $subfieldcount (0..$#subtitlesubfields) {
-			foreach my $subtit(split /\||#/,$subtitlesubfields[$subfieldcount]) {
-				OLDnewsubtitle($dbh,$oldbiblionumber,$subtit);
-			}
-		}
-	}
-	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject",$frameworkcode);
-	my @subj = $record->field($tagfield);
-	my @subjects;
-	foreach my $subject (@subj) {
-		my @subjsubfield = $subject->subfield($tagsubfield);
-		foreach my $subfieldcount (0..$#subjsubfield) {
-			push @subjects,$subjsubfield[$subfieldcount];
-		}
-	}
-	OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
-	return 1;
-}
 
 sub NEWdelbiblio {
-    my ( $dbh, $bibid ) = @_;
-    my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
 
-&zebraop($dbh,$bibid,"RecordDelete","biblioserver");
-    &OLDdelbiblio( $dbh, $biblio );
-    my $sth =
-      $dbh->prepare(
-        "select biblioitemnumber from biblioitems where biblionumber=?");
-    $sth->execute($biblio);
-    while ( my ($biblioitemnumber) = $sth->fetchrow ) {
-        OLDdeletebiblioitem( $dbh, $biblioitemnumber );
-    }
-	
-    &MARCdelbiblio( $dbh, $bibid, 0 );
-	
+    my ( $dbh, $biblionumber ) = @_;
+my $sth=$dbh->prepare("SELECT itemnumber FROM items where biblionumber=?");
+
+$sth->execute($biblionumber);
+	while (my $itemnumber =$sth->fetchrow){
+	OLDdelitem($dbh,$itemnumber) ;
+	}
+
+	ZEBRAop($dbh,$biblionumber,"recordDelete","biblioserver");
+OLDdelbiblio($dbh,$biblionumber) ;
+
 }
 
 sub NEWnewitem {
-    my ( $dbh, $record, $bibid ) = @_;
-    # add item in old-DB
-	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
-    my $item = &MARCmarc2koha( $dbh, $record,$frameworkcode );
-    # needs old biblionumber and biblioitemnumber
-    $item->{'biblionumber'} =MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    my $sth =
-      $dbh->prepare(
-        "select biblioitemnumber,itemtype from biblioitems where biblionumber=?");
-    $sth->execute( $item->{'biblionumber'} );
-my $itemtype;
-    ( $item->{'biblioitemnumber'}, $itemtype ) = $sth->fetchrow;
-my $sth=$dbh->prepare("select notforloan from itemtypes where itemtype='$itemtype'");
+    my ( $dbh, $record, $biblionumber ) = @_;
+	my $itemtype= MARCfind_itemtype($dbh,$biblionumber);
+    my $item = &MARCmarc2koha( $dbh, $record,"holdings" );
+## In case we are re-importing marc records from bulk import do not change itemnumbers
+if ($item->{itemnumber}){
+NEWmoditem ( $dbh, $record, $biblionumber, $item->{itemnumber});
+}else{
+    $item->{'biblionumber'} =$biblionumber;
+##Add biblionumber to $record
+    MARCkoha2marcOnefield($record,"biblionumber",$biblionumber,"holdings");
+ my $sth=$dbh->prepare("select notforloan from itemtypes where itemtype='$itemtype'");
 $sth->execute();
 my $notforloan=$sth->fetchrow;
 ##Change the notforloan field if $notforloan found
-if ($notforloan >0){
-$item->{'notforloan'}=$notforloan;
-&MARCitemchange($dbh,$record,"items.notforloan",$notforloan);
-}
+	if ($notforloan >0){
+	$item->{'notforloan'}=$notforloan;
+	&MARCkoha2marcOnefield($record,"notforloan",$notforloan,"holdings");
+	}
 if(!$item->{'dateaccessioned'}||$item->{'dateaccessioned'} eq ''){
 # find today's date
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =                                                           
 localtime(time); $year +=1900; $mon +=1;
 my $date = "$year-".sprintf ("%0.2d", $mon)."-".sprintf("%0.2d",$mday);
 $item->{'dateaccessioned'}=$date;
-&MARCitemchange($dbh,$record,"items.dateaccessioned",$date);
-
+&MARCkoha2marcOnefield($record,"dateaccessioned",$date,"holdings");
 }
-    my ( $itemnumber, $error ) = &OLDnewitems( $dbh, $item, $item->{barcode} );
-    # add itemnumber to MARC::Record before adding the item.
-    $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    &MARCkoha2marcOnefield( $sth, $record, "items.itemnumber", $itemnumber,$frameworkcode );
+  
+## Now calculate itempart of cutter
+my ($cutterextra)=itemcalculator($dbh,$item->{'biblionumber'},$item->{'itemcallnumber'});
+&MARCkoha2marcOnefield($record,"cutterextra",$cutterextra,"holdings");
+
 ##NEU specific add cataloguers cardnumber as well
-my $cardtag=C4::Context->preference('itemcataloguersubfield');
-if ($cardtag){	
-$sth->execute($frameworkcode,"items.itemnumber");
-my ($itemtag,$subtag)=$sth->fetchrow;	
-my $me= C4::Context->userenv;
-my $cataloguer=$me->{'cardnumber'} if ($me);
-my $newtag= $record->field($itemtag);
-$newtag->update($cardtag=>$cataloguer) if ($me);
-$record->delete_field($newtag);
-$record->append_fields($newtag);	
-}
-    # add the item
-    my $bib = &MARCadditem( $dbh, $record, $item->{'biblionumber'} );
-}
-
-sub MARCitemchange {
-my ($dbh,$record,$itemfield,$newvalue)=@_;
-    my ($tagfield, $tagsubfield)=MARCfind_marc_from_kohafield($dbh,$itemfield,"");
-    if (($tagfield) && ($tagsubfield))  {
- my $tag = $record->field($tagfield);
-
-        if ( $tag)  {
-	   	$tag->update($tagsubfield =>$newvalue);
-		$record->delete_field($tag);
-                $record->add_fields($tag);
+my ($tag,$cardtag)=MARCfind_marc_from_kohafield("circid","holdings");
+	if ($tag && $cardtag){	
+	my $me= C4::Context->userenv;
+	my $cataloguer=$me->{'cardnumber'} if ($me);
+	my $newtag= $record->field($tag);
+	$newtag->update($cardtag=>$cataloguer) if ($me);
+	$record->delete_field($newtag);
+	$record->insert_fields_ordered($newtag);	
 	}
+##Add item to SQL
+my  $itemnumber = &OLDnewitems( $dbh, $item->{barcode},$record );
 
-    }
+# add the item to zebra it will add the biblio as well!!!
+    ZEBRAop( $dbh, $biblionumber,"specialUpdate","biblioserver" );
+return $itemnumber;
+}## added new item
+
 }
-sub NEWmoditem {
-    my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
 
-	&MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
-	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
-    my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
-    OLDmoditem( $dbh, $olditem );
+
+
+sub NEWmoditem{
+    my ( $dbh, $record, $biblionumber, $itemnumber ) = @_;
+##Get a hash of this record as well
+my $item=MARCmarc2koha($dbh,$record,"holdings");
+##Add itemnumber incase lost (old bug 090c was lost) --just incase
+my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("itemnumber","holdings");
+	my $newfield;
+my $old_field = $record->field($tagfield);
+if ($tagfield<10){
+	 $newfield = MARC::Field->new($tagfield,  $itemnumber);
+}else{
+	if ($old_field){
+	$old_field->update($tagsubfield=>$biblionumber);
+	$newfield=$old_field->clone();
+	}else{	
+	 $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $itemnumber);
+	}
+}	
+		# drop old field and create new one...
+		
+		$record->delete_field($old_field);
+		$record->insert_fields_ordered($newfield);
+##Add biblionumber incase lost on html
+my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("biblionumber","holdings");
+	my $newfield;
+my $old_field = $record->field($tagfield);
+if ($tagfield<10){
+	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
+}else{
+	if ($old_field){
+	$old_field->update($tagsubfield=>$biblionumber);
+	$newfield=$old_field->clone();
+	}else{	
+	 $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $biblionumber);
+	}
+}	
+		# drop old field and create new one...
+		$record->delete_field($old_field);
+		$record->insert_fields_ordered($newfield);
+		
+###NEU specific add cataloguers cardnumber as well
+my ($tag,$cardtag)=MARCfind_marc_from_kohafield("circid","holdings");
+if ($tag && $cardtag){	
+my $me= C4::Context->userenv;
+my $cataloger=$me->{'cardnumber'} if ($me);
+my $oldtag=$record->field($tag);
+	if (!$oldtag){
+	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
+	$record->insert_fields_ordered($newtag);	
+	}else{
+	$oldtag->update($cardtag=>$cataloger) if ($me);
+	$record->delete_field($oldtag);
+	$record->insert_fields_ordered($oldtag);
+	}
+}
+## We must add the indexing fields for LC Cutter in MARC record in case it changed
+my ($cutterextra)=itemcalculator($dbh,$biblionumber,$item->{'itemcallnumber'});
+MARCkoha2marcOnefield($record,"cutterextra",$cutterextra,"holdings");
+    OLDmoditem( $dbh, $record,$biblionumber,$itemnumber,$item->{barcode} );
+    ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
 }
 
 sub NEWdelitem {
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-    my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
-    &OLDdelitem( $dbh, $itemnumber );
-    my $newrec=&MARCdelitem( $dbh, $bibid, $itemnumber );
-&MARCaddbiblio($newrec,$bibid,);
+    my ( $dbh, $itemnumber ) = @_;
+	
+my $sth=$dbh->prepare("SELECT biblionumber from items where itemnumber=?");
+$sth->execute($itemnumber);
+my $biblionumber=$sth->fetchrow;
+OLDdelitem( $dbh, $itemnumber ) ;
+ZEBRAop($dbh,$biblionumber,"recordDelete","biblioserver");
+
 }
+
+
+
+
+sub NEWaddbiblio {
+    my ( $dbh, $record,$frameworkcode ) = @_;
+     my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
+    $sth->execute;
+    my $data   = $sth->fetchrow;
+    my $biblionumber = $data + 1;
+    $sth->finish;
+    # we must add biblionumber MARC::Record...
+  my  (  $tagfield,  $tagsubfield ) =MARCfind_marc_from_kohafield("biblionumber","biblios");
+	my $newfield;
+if ($tagfield<10){
+	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
+}else{
+ $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => "$biblionumber");
+}
+		# drop old field and create new one..
+		$record->delete_field($newfield);
+		$record->insert_fields_ordered($newfield);
+
+###NEU specific add cataloguers cardnumber as well
+my ($tag,$cardtag)=MARCfind_marc_from_kohafield("indexedby","biblios");
+if ($tag && $cardtag){	
+my $me= C4::Context->userenv;
+my $cataloger=$me->{'cardnumber'} if ($me);
+my $oldtag=$record->field($tag);
+	if (!$oldtag){
+	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
+	$record->insert_fields_ordered($newtag);	
+	}else{
+	$oldtag->update($cardtag=>$cataloger) if ($me);
+	$record->delete_field($oldtag);
+	$record->insert_fields_ordered($oldtag);
+	}
+}
+## We must add the indexing fields for LC in MARC record--TG
+	&MARCmodLCindex($dbh,$record);
+
+##Find itemtype
+ ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("itemtype","biblios");
+my $itemtype=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+##Find ISBN
+($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("isbn","biblios") ;
+my $isbn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+##Find ISSN
+($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("issn","biblios") ;
+my $issn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+    $sth = $dbh->prepare("insert into biblio set biblionumber  = ?, marc = ?, frameworkcode=?, itemtype=?,marcxml=?,title=?,author=?,isbn=?,issn=?" );
+    $sth->execute( $biblionumber,  $record->as_usmarc,$frameworkcode, $itemtype,MARC::File::XML::record( $record ) ,$record->title(),$record->author,$isbn,$issn  );
+
+    $sth->finish;
+### Do not add biblio to ZEBRA unless there is an item with it -- depends on system preference defaults to NO
+if (C4::Context->preference('AddaloneBiblios')){
+ ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
+}
+    return ($biblionumber);
+}
+
+sub NEWmodbiblio {
+    my ( $dbh, $biblionumber,$record,$frameworkcode ) = @_;
+##Add biblionumber incase lost on html
+my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("biblionumber","biblios");
+	my $newfield;
+if ($tagfield<10){
+	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
+}else{
+ $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $biblionumber);
+}	
+		# drop old field and create new one...
+		my $old_field = $record->field($tagfield);
+		$record->delete_field($old_field);
+		$record->insert_fields_ordered($newfield);
+
+###NEU specific add cataloguers cardnumber as well
+my ($tag,$cardtag)=MARCfind_marc_from_kohafield("indexedby","biblios");
+if ($tag && $cardtag){	
+my $me= C4::Context->userenv;
+my $cataloger=$me->{'cardnumber'} if ($me);
+my $oldtag=$record->field($tag);
+	if (!$oldtag){
+	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
+	$record->insert_fields_ordered($newtag);	
+	}else{
+	$oldtag->update($cardtag=>$cataloger) if ($me);
+	$record->delete_field($oldtag);
+	$record->insert_fields_ordered($oldtag);
+	}
+}
+## We must add the indexing fields for LC in MARC record--TG
+   MARCmodLCindex($dbh,$record);
+    OLDmodbiblio ($dbh,$record,$biblionumber,$frameworkcode);
+    my $ok=ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
+    return ($biblionumber);
+}
+
 #
 #
 # OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD
 #
 #
 
-=item $biblionumber = OLDnewbiblio($dbh,$biblio);
-
-adds a record in biblio table. Datas are in the hash $biblio.
-
-=item $biblionumber = OLDmodbiblio($dbh,$biblio);
-
-modify a record in biblio table. Datas are in the hash $biblio.
-
-=item OLDmodsubtitle($dbh,$bibnum,$subtitle);
-
-modify subtitles in bibliosubtitle table.
-
-=item OLDmodaddauthor($dbh,$bibnum,$author);
-
-adds or modify additional authors
-NOTE :  Strange sub : seems to delete MANY and add only ONE author... maybe buggy ?
-
-=item $errors = OLDmodsubject($dbh,$bibnum, $force, @subject);
-
-modify/adds subjects
-
-=item OLDmodbibitem($dbh, $biblioitem);
-
-modify a biblioitem
-
-=item OLDmodnote($dbh,$bibitemnum,$note
-
-modify a note for a biblioitem
-
-=item OLDnewbiblioitem($dbh,$biblioitem);
-
-adds a biblioitem ($biblioitem is a hash with the values)
-
-=item OLDnewsubject($dbh,$bibnum);
-
-adds a subject
-
-=item OLDnewsubtitle($dbh,$bibnum,$subtitle);
-
-create a new subtitle
-
-=item ($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);
-
-create a item. $item is a hash and $barcode the barcode.
-
-=item OLDmoditem($dbh,$item);
-
-modify item
-
-=item OLDdelitem($dbh,$itemnum);
-
-delete item
-
-=item OLDdeletebiblioitem($dbh,$biblioitemnumber);
-
-deletes a biblioitem
-NOTE : not standard sub name. Should be OLDdelbiblioitem()
-
-=item OLDdelbiblio($dbh,$biblio);
-
-delete a biblio
-
-=cut
-
-sub OLDnewbiblio {
-    my ( $dbh, $biblio ) = @_;
-
-    #  my $dbh    = &C4Connect;
-    my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
-    $sth->execute;
-    my $data   = $sth->fetchrow_arrayref;
-    my $bibnum = $$data[0] + 1;
-    my $series = 0;
-
-    if ( $biblio->{'seriestitle'} ) { $series = 1 }
-    $sth->finish;
-    $sth =
-      $dbh->prepare(
-"insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?"
-    );
-    $sth->execute(
-        $bibnum,             $biblio->{'title'},
-        $biblio->{'author'}, $biblio->{'copyrightdate'},
-        $biblio->{'serial'},             $biblio->{'seriestitle'},
-        $biblio->{'notes'},  $biblio->{'abstract'},
-		$biblio->{'unititle'},
-    );
-
-    $sth->finish;
-
-    #  $dbh->disconnect;
-    return ($bibnum);
-}
-
-sub OLDmodbiblio {
-    my ( $dbh, $biblio ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $query;
-    my $sth;
-
-    $query = "";
-    $sth   =
-      $dbh->prepare(
-"Update biblio set title = ?, author = ?, abstract = ?, copyrightdate = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ? where biblionumber = ?"
-    );
-    $sth->execute(
-        $biblio->{'title'},       $biblio->{'author'},
-        $biblio->{'abstract'},    $biblio->{'copyrightdate'},
-        $biblio->{'seriestitle'}, $biblio->{'serial'},
-        $biblio->{'unititle'},    $biblio->{'notes'},
-        $biblio->{'biblionumber'}
-    );
-
-    $sth->finish;
-    return ( $biblio->{'biblionumber'} );
-}    # sub modbiblio
-
-sub OLDmodsubtitle {
-    my ( $dbh, $bibnum, $subtitle ) = @_;
-    my $sth =
-      $dbh->prepare(
-        "update bibliosubtitle set subtitle = ? where biblionumber = ?");
-    $sth->execute( $subtitle, $bibnum );
-    $sth->finish;
-}    # sub modsubtitle
-
-sub OLDmodaddauthor {
-    my ( $dbh, $bibnum, @authors ) = @_;
-
-    #    my $dbh   = C4Connect;
-    my $sth =
-      $dbh->prepare("Delete from additionalauthors where biblionumber = ?");
-
-    $sth->execute($bibnum);
-    $sth->finish;
-    foreach my $author (@authors) {
-        if ( $author ne '' ) {
-            $sth =
-              $dbh->prepare(
-                "Insert into additionalauthors set author = ?, biblionumber = ?"
-            );
-
-            $sth->execute( $author, $bibnum );
-
-            $sth->finish;
-        }    # if
-    }
-}    # sub modaddauthor
-
-sub OLDmodsubject {
-    my ( $dbh, $bibnum, $force, @subject ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $count = @subject;
-    my $error;
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-        $subject[$i] =~ s/^ //g;
-        $subject[$i] =~ s/ $//g;
-        my $sth =
-          $dbh->prepare(
-"select * from catalogueentry where entrytype = 's' and catalogueentry = ?"
-        );
-        $sth->execute( $subject[$i] );
-
-        if ( my $data = $sth->fetchrow_hashref ) {
-        }
-        else {
-            if ( $force eq $subject[$i] || $force == 1 ) {
-
-                # subject not in aut, chosen to force anway
-                # so insert into cataloguentry so its in auth file
-                my $sth2 =
-                  $dbh->prepare(
-"Insert into catalogueentry (entrytype,catalogueentry) values ('s',?)"
-                );
-
-                $sth2->execute( $subject[$i] ) if ( $subject[$i] );
-                $sth2->finish;
-            }
-            else {
-                $error =
-                  "$subject[$i]\n does not exist in the subject authority file";
-                my $sth2 =
-                  $dbh->prepare(
-"Select * from catalogueentry where entrytype = 's' and (catalogueentry like ? or catalogueentry like ? or catalogueentry like ?)"
-                );
-                $sth2->execute( "$subject[$i] %", "% $subject[$i] %",
-                    "% $subject[$i]" );
-                while ( my $data = $sth2->fetchrow_hashref ) {
-                    $error .= "<br>$data->{'catalogueentry'}";
-                }    # while
-                $sth2->finish;
-            }    # else
-        }    # else
-        $sth->finish;
-    }    # else
-    if ( $error eq '' ) {
-        my $sth =
-          $dbh->prepare("Delete from bibliosubject where biblionumber = ?");
-        $sth->execute($bibnum);
-        $sth->finish;
-        $sth =
-          $dbh->prepare(
-            "Insert into bibliosubject (subject,biblionumber) values (?,?)");
-        my $query;
-        foreach $query (@subject) {
-            $sth->execute( $query, $bibnum ) if ( $query && $bibnum );
-        }    # foreach
-        $sth->finish;
-    }    # if
-
-    #  $dbh->disconnect;
-    return ($error);
-}    # sub modsubject
-
-sub OLDmodbibitem {
-    my ( $dbh, $biblioitem ) = @_;
-	my $dbh = C4::Context->dbh; # FIXME unused to pass $dbh n input arg.
-    my $query;
-##Recalculate LC in case it changed --TG
-
-    $biblioitem->{'itemtype'}        = $dbh->quote( $biblioitem->{'itemtype'} );
-    $biblioitem->{'url'}             = $dbh->quote( $biblioitem->{'url'} );
-    $biblioitem->{'isbn'}            = $dbh->quote( $biblioitem->{'isbn'} );
-    $biblioitem->{'issn'}            = $dbh->quote( $biblioitem->{'issn'} );
-    $biblioitem->{'publishercode'}   = $dbh->quote( $biblioitem->{'publishercode'} );
-    $biblioitem->{'publicationyear'} = $dbh->quote( $biblioitem->{'publicationyear'} );
-    $biblioitem->{'classification'}  = $dbh->quote( $biblioitem->{'classification'} );
-    $biblioitem->{'dewey'}           = $dbh->quote( $biblioitem->{'dewey'} );
-    $biblioitem->{'subclass'}        = $dbh->quote( $biblioitem->{'subclass'} );
-    $biblioitem->{'illus'}           = $dbh->quote( $biblioitem->{'illus'} );
-    $biblioitem->{'pages'}           = $dbh->quote( $biblioitem->{'pages'} );
-    $biblioitem->{'volumeddesc'}     = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'bnotes'}          = $dbh->quote( $biblioitem->{'bnotes'} );
-    $biblioitem->{'size'}            = $dbh->quote( $biblioitem->{'size'} );
-    $biblioitem->{'place'}           = $dbh->quote( $biblioitem->{'place'} );
-
-	my ($lcsort) = calculatelc($biblioitem->{'classification'}).$biblioitem->{'subclass'};
-	$lcsort = "NULL";
-#	$lcsort=$dbh->quote($lcsort);
-
-	$query = "
-		UPDATE biblioitems SET
-		itemtype        = ".$biblioitem->{'itemtype'}.",
-		url             = ".$biblioitem->{'url'}.",
-		isbn            = ".$biblioitem->{'isbn'}.",
-		issn            = ".$biblioitem->{'issn'}.",
-		publishercode   = ".$biblioitem->{'publishercode'}.",
-		publicationyear = ".$biblioitem->{'publicationyear'}.",
-		classification  = ".$biblioitem->{'classification'}.",
-		dewey           = ".$biblioitem->{'dewey'}.",
-		subclass        = ".$biblioitem->{'subclass'}.",
-		illus           = ".$biblioitem->{'illus'}.",
-		pages           = ".$biblioitem->{'pages'}.",
-		volumeddesc     = ".$biblioitem->{'volumeddesc'}.",
-		notes 		    = ".$biblioitem->{'bnotes'}.",
-		size		    = ".$biblioitem->{'size'}.",
-		place		    = ".$biblioitem->{'place'}.",
-		lcsort	        = ".$lcsort."";
-	# where biblionumber = ".$biblioitem->{'biblionumber'}."
-	#";
-
-    my $sth = $dbh->prepare($query);
-	$sth->execute;	
-
-    if ( $dbh->errstr ) {
-		warn "[error]=> $query";
-    }
-
-}    # sub modbibitem
-
-sub OLDmodnote {
-    my ( $dbh, $bibitemnum, $note ) = @_;
-
-    #  my $dbh=C4Connect;
-    my $query = "update biblioitems set notes='$note' where
-  biblioitemnumber='$bibitemnum'";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    $sth->finish;
-
-    #  $dbh->disconnect;
-}
-
-sub OLDnewbiblioitem {
-    my ( $dbh, $biblioitem ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Select max(biblioitemnumber) from biblioitems");
-    my $data;
-    my $bibitemnum;
-
-    $sth->execute;
-    $data       = $sth->fetchrow_arrayref;
-    $bibitemnum = $$data[0] + 1;
-
-    $sth->finish;
-
-    $sth = $dbh->prepare( "insert into biblioitems set
-									biblioitemnumber = ?,		biblionumber 	 = ?,
-									volume		 = ?,			number		 = ?,
-									classification  = ?,			itemtype         = ?,
-									url              = ?,				isbn		 = ?,
-									issn		 = ?,				dewey		 = ?,
-									subclass	 = ?,				publicationyear	 = ?,
-									publishercode	 = ?,		volumedate	 = ?,
-									volumeddesc	 = ?,		illus		 = ?,
-									pages		 = ?,				notes		 = ?,
-									size		 = ?,				lccn		 = ?,
-									marc		 = ?,	
-											
-									place		 = ?, lcsort=?
-									"
-    );
-my ($lcsort)=calculatelc($biblioitem->{'classification'}).$biblioitem->{'subclass'};
-    $sth->execute(
-        $bibitemnum,                     $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},         $biblioitem->{'number'},
-        $biblioitem->{'classification'}, $biblioitem->{'itemtype'},
-        $biblioitem->{'url'},            $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},           $biblioitem->{'dewey'},
-        $biblioitem->{'subclass'},       $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},  $biblioitem->{'volumedate'},
-        $biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
-        $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},           $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},           $biblioitem->{'place'},$lcsort
-    );
-    $sth->finish;
-
-    #    $dbh->disconnect;
-    return ($bibitemnum);
-}
-
-sub OLDnewsubject {
-    my ( $dbh, $bibnum ) = @_;
-    my $sth =
-      $dbh->prepare("insert into bibliosubject (biblionumber) values (?)");
-    $sth->execute($bibnum);
-    $sth->finish;
-}
-
-sub OLDnewsubtitle {
-    my ( $dbh, $bibnum, $subtitle ) = @_;
-    my $sth =
-      $dbh->prepare(
-        "insert into bibliosubtitle set biblionumber = ?, subtitle = ?");
-    $sth->execute( $bibnum, $subtitle ) if $subtitle;
-    $sth->finish;
-}
-
 sub OLDnewitems {
-    my ( $dbh, $item, $barcode ) = @_;
 
-    #  my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Select max(itemnumber) from items");
+    my ( $dbh, $barcode,$record) = @_;
+    my $sth = $dbh->prepare("SELECT max(itemnumber) from items");
     my $data;
     my $itemnumber;
-    my $error = "";
-
     $sth->execute;
     $data       = $sth->fetchrow_hashref;
     $itemnumber = $data->{'max(itemnumber)'} + 1;
     $sth->finish;
-    $sth->finish;
-## Now calculate lccalnumber
-my ($cutterextra)=itemcalculator($dbh,$item->{'biblioitemnumber'},$item->{'itemcallnumber'});
-# FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
-    if ( $item->{'loan'} ) {
-        $item->{'notforloan'} = $item->{'loan'};
-    }
+      &MARCkoha2marcOnefield(  $record, "itemnumber", $itemnumber,"holdings" );
+    my ($biblionumbertag,$subf)=MARCfind_marc_from_kohafield( "biblionumber","holdings");
 
-    # if dateaccessioned is provided, use it. Otherwise, set to NOW()
-    if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
-
-        $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,			biblionumber         = ?,
-							multivolumepart      = ?,
-							biblioitemnumber     = ?,			barcode              = ?,
-							booksellerid         = ?,			dateaccessioned      = NOW(),
-							homebranch           = ?,			holdingbranch        = ?,
-							price                = ?,			replacementprice     = ?,
-							replacementpricedate = NOW(),		datelastseen		= NOW(),
-							multivolume			= ?,			stack				= ?,
-							itemlost			= ?,			wthdrawn			= ?,
-							paidfor				= ?,			itemnotes            = ?,
-							itemcallnumber	=?, 							notforloan = ?,
-							location = ?,
-							Cutterextra=?
-							"
-        );
-        $sth->execute(
-			$itemnumber,				$item->{'biblionumber'},
-			$item->{'multivolumepart'},
-			$item->{'biblioitemnumber'},$barcode,
-			$item->{'booksellerid'},	
-			$item->{'homebranch'},		$item->{'holdingbranch'},
-			$item->{'price'},			$item->{'replacementprice'},
-			$item->{multivolume},		$item->{stack},
-			$item->{itemlost},			$item->{wthdrawn},
-			$item->{paidfor},			$item->{'itemnotes'},
-			$item->{'itemcallnumber'},	$item->{'notforloan'},
-			$item->{'location'},$cutterextra
-        );
-    }
-    else {
-        $sth = $dbh->prepare( "Insert into items set
-							itemnumber           = ?,			biblionumber         = ?,
-							multivolumepart      = ?,
-							biblioitemnumber     = ?,			barcode              = ?,
-							booksellerid         = ?,			dateaccessioned      = ?,
-							homebranch           = ?,			holdingbranch        = ?,
-							price                = ?,			replacementprice     = ?,
-							replacementpricedate = NOW(),		datelastseen		= NOW(),
-							multivolume			= ?,			stack				= ?,
-							itemlost			= ?,			wthdrawn			= ?,
-							paidfor				= ?,			itemnotes            = ?,
-							itemcallnumber	=?, 							notforloan = ?,
-							location = ?,
-							Cutterextra=?
-							"
-        );
-        $sth->execute(
-			$itemnumber,				$item->{'biblionumber'},
-			$item->{'multivolumepart'},
-			$item->{'biblioitemnumber'},$barcode,
-			$item->{'booksellerid'},	$item->{'dateaccessioned'},
-			$item->{'homebranch'},		$item->{'holdingbranch'},
-			$item->{'price'},			$item->{'replacementprice'},
-			$item->{multivolume},		$item->{stack},
-			$item->{itemlost},			$item->{wthdrawn},
-			$item->{paidfor},			$item->{'itemnotes'},
-			$item->{'itemcallnumber'},	$item->{'notforloan'},
-			$item->{'location'},$cutterextra
-        );
-    }
-    if ( defined $sth->errstr ) {
-        $error .= $sth->errstr;
-    }
-
-    return ( $itemnumber, $error );
+my $biblionumber;
+  if ($biblionumbertag <10){
+  $biblionumber=$record->field($biblionumbertag)->data();
+  }else{
+   $biblionumber=$record->field($biblionumbertag)->subfield($subf);
+  }
+        $sth = $dbh->prepare( "Insert into items set itemnumber = ?,	biblionumber  = ?,barcode = ?,marc=?	,marcxml=?"   );
+        $sth->execute($itemnumber,$biblionumber,$barcode,$record->as_usmarc(),MARC::File::XML::record( $record));
+    return $itemnumber;
 }
 
 sub OLDmoditem {
-    my ( $dbh, $item ) = @_;
-    $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-
-## Now calculate lccalnumber
-my ($cutterextra)=itemcalculator($dbh,$item->{'bibitemnum'},$item->{'itemcallnumber'});
-    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,homebranch=?,cutterextra=?, onloan=?";
-    my @bind = (
-        $item->{'barcode'},			$item->{'notes'},
-        $item->{'itemcallnumber'},	$item->{'notforloan'},
-        $item->{'location'},		$item->{multivolumepart},
-		$item->{multivolume},		$item->{stack},
-		$item->{wthdrawn},$item->{holdingbranch},$item->{homebranch},$cutterextra,$item->{onloan}
-    );
-    if ( $item->{'lost'} ne '' ) {
-        $query = "update items set biblioitemnumber=?,barcode=?,itemnotes=?,homebranch=?,
-							itemlost=?,wthdrawn=?,itemcallnumber=?,notforloan=?,
-				 			location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,cutterextra=?,onloan=?";
-        @bind = (
-            $item->{'bibitemnum'},     $item->{'barcode'},
-            $item->{'notes'},          $item->{'homebranch'},
-            $item->{'lost'},           $item->{'wthdrawn'},
-            $item->{'itemcallnumber'}, $item->{'notforloan'},
-            $item->{'location'},		$item->{multivolumepart},
-			$item->{multivolume},		$item->{stack},
-			$item->{wthdrawn},$item->{holdingbranch},$cutterextra,$item->{onloan}
-        );
-#		if ($item->{homebranch}) {
-#			$query.=",homebranch=?";
-#			push @bind, $item->{homebranch};
-#		}
-#		if ($item->{holdingbranch}) {
-#			$query.=",holdingbranch=?";
-#			push @bind, $item->{holdingbranch};
-#		}
-    }
-	$query.=" where itemnumber=?";
-	push @bind,$item->{'itemnum'};
-   if ( $item->{'replacement'} ne '' ) {
-        $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
+    my ( $dbh, $record,$biblionumber,$itemnumber,$barcode  ) = @_;
+    my $sth =$dbh->prepare("replace items set  biblionumber=?,marc=?,marcxml=?,barcode=? , itemnumber=?");
+    $sth->execute($biblionumber,$record->as_usmarc(),MARC::File::XML::record( $record),$barcode,$itemnumber);
     $sth->finish;
-
-    #  $dbh->disconnect;
 }
 
 sub OLDdelitem {
-    my ( $dbh, $itemnum ) = @_;
-
-    #  my $dbh=C4Connect;
-    my $sth = $dbh->prepare("select * from items where itemnumber=?");
-    $sth->execute($itemnum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    my $query = "Insert into deleteditems set ";
-    my @bind  = ();
-    foreach my $temp ( keys %$data ) {
-        $query .= "$temp = ?,";
-        push ( @bind, $data->{$temp} );
-    }
-    $query =~ s/\,$//;
-
-    #  print $query;
-    $sth = $dbh->prepare($query);
-#    $sth->execute(@bind);
-#    $sth->finish;
-    $sth = $dbh->prepare("Delete from items where itemnumber=?");
-    $sth->execute($itemnum);
-    $sth->finish;
-
-    #  $dbh->disconnect;
-}
-
-sub OLDdeletebiblioitem {
-    my ( $dbh, $biblioitemnumber ) = @_;
-
-    #    my $dbh   = C4Connect;
-    my $sth = $dbh->prepare( "Select * from biblioitems
-where biblioitemnumber = ?"
-    );
-    my $results;
-
-    $sth->execute($biblioitemnumber);
-
-    if ( $results = $sth->fetchrow_hashref ) {
-        $sth->finish;
-        $sth =
-          $dbh->prepare(
-"Insert into deletedbiblioitems (biblioitemnumber, biblionumber, volume, number, classification, itemtype,
-					isbn, issn ,dewey ,subclass ,publicationyear ,publishercode ,volumedate ,volumeddesc ,timestamp ,illus ,
-     					pages ,notes ,size ,url ,lccn ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-        );
-
-        $sth->execute(
-            $results->{biblioitemnumber}, $results->{biblionumber},
-            $results->{volume},           $results->{number},
-            $results->{classification},   $results->{itemtype},
-            $results->{isbn},             $results->{issn},
-            $results->{dewey},            $results->{subclass},
-            $results->{publicationyear},  $results->{publishercode},
-            $results->{volumedate},       $results->{volumeddesc},
-            $results->{timestamp},        $results->{illus},
-            $results->{pages},            $results->{notes},
-            $results->{size},             $results->{url},
-            $results->{lccn}
-        );
-        my $sth2 =
-          $dbh->prepare("Delete from biblioitems where biblioitemnumber = ?");
-        $sth2->execute($biblioitemnumber);
-        $sth2->finish();
-    }    # if
-    $sth->finish;
-
-    # Now delete all the items attached to the biblioitem
-    $sth = $dbh->prepare("Select * from items where biblioitemnumber = ?");
-    $sth->execute($biblioitemnumber);
-    my @results;
-#    while ( my $data = $sth->fetchrow_hashref ) {
-#        my $query = "Insert into deleteditems set ";
-#        my @bind  = ();
-#        foreach my $temp ( keys %$data ) {
-#            $query .= "$temp = ?,";
-#           push ( @bind, $data->{$temp} );
-#        }
-#        $query =~ s/\,$//;
-#        my $sth2 = $dbh->prepare($query);
-#        $sth2->execute(@bind);
-#    }    # while
-    $sth->finish;
-    $sth = $dbh->prepare("Delete from items where biblioitemnumber = ?");
-    $sth->execute($biblioitemnumber);
-    $sth->finish();
-
-    #    $dbh->disconnect;
-}    # sub deletebiblioitem
-
-sub OLDdelbiblio {
-    my ( $dbh, $biblio ) = @_;
-    my $sth = $dbh->prepare("select * from biblio where biblionumber=?");
-    $sth->execute($biblio);
+    my ( $dbh, $itemnumber ) = @_;
+my $sth = $dbh->prepare("select * from items where itemnumber=?");
+    $sth->execute($itemnumber);
     if ( my $data = $sth->fetchrow_hashref ) {
         $sth->finish;
-        my $query = "Insert into deletedbiblio set ";
+        my $query = "replace deleteditems set ";
         my @bind  = ();
         foreach my $temp ( keys %$data ) {
             $query .= "$temp = ?,";
@@ -2097,357 +1208,248 @@ sub OLDdelbiblio {
         $sth = $dbh->prepare($query);
         $sth->execute(@bind);
         $sth->finish;
+   $sth = $dbh->prepare("Delete from items where itemnumber=?");
+    $sth->execute($itemnumber);
+    $sth->finish;
+  }
+ $sth->finish;
+}
+
+sub OLDmodbiblio {
+# modifies the biblio table
+my ($dbh,$record,$biblionumber,$frameworkcode) = @_;
+	if (!$frameworkcode){
+	$frameworkcode="";
+	}
+my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("itemtype","biblios");
+my $itemtype=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("isbn","biblios");
+my $isbn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("issn","biblios");
+my $issn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+$isbn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
+$issn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
+$isbn=~s/^\s+|\s+$//g;
+$isbn=substr($isbn,0,13);
+        my $sth = $dbh->prepare("REPLACE  biblio set biblionumber=?,marc=?,marcxml=?,frameworkcode=? ,itemtype=? , title=?,author=?,isbn=?,issn=?" );
+        $sth->execute( $biblionumber,$record->as_usmarc() ,MARC::File::XML::record( $record), $frameworkcode,$itemtype, $record->title(),$record->author(),$isbn,$issn);  
+        $sth->finish;
+    return $biblionumber;
+}
+
+sub OLDdelbiblio {
+    my ( $dbh, $biblionumber ) = @_;
+    my $sth = $dbh->prepare("select * from biblio where biblionumber=?");
+    $sth->execute($biblionumber);
+    if ( my $data = $sth->fetchrow_hashref ) {
+        $sth->finish;
+        my $query = "replace deletedbiblio set ";
+        my @bind  = ();
+           foreach my $temp ( keys %$data ) {
+            $query .= "$temp = ?,";
+            push ( @bind, $data->{$temp} );
+           }
+
+        #replacing the last , by ",?)"
+        $query =~ s/\,$//;
+        $sth = $dbh->prepare($query);
+        $sth->execute(@bind);
+        $sth->finish;
         $sth = $dbh->prepare("Delete from biblio where biblionumber=?");
-        $sth->execute($biblio);
+        $sth->execute($biblionumber);
         $sth->finish;
     }
     $sth->finish;
 }
 
+
 #
 #
-# old functions
+#
+#ZEBRA ZEBRA ZEBRA
 #
 #
 
-sub itemcount {
-    my ($biblio) = @_;
-    my $dbh = C4::Context->dbh;
-
-    #  print $query;
-    my $sth = $dbh->prepare("Select count(*) from items where biblionumber=?");
-    $sth->execute($biblio);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ( $data->{'count(*)'} );
+sub ZEBRAopfiles{
+##Utility function to write an xml file to disk when the zebra server goes down
+my ($dbh,$biblionumber,$record,$folder,$server)=@_;
+#my $record = XMLgetbiblio($dbh,$biblionumber);
+my $op;
+my $zebradir = C4::Context->zebraconfig($server)->{directory}."/".$folder."/";
+my $zebraroot=C4::Context->zebraconfig($server)->{directory};
+my $serverbase=C4::Context->config($server);
+	unless (opendir(DIR, "$zebradir")) {
+# warn "$zebradir not found";
+			return;
+	} 
+	closedir DIR;
+	my $filename = $zebradir.$biblionumber;
+if ($record){
+	open (OUTPUT,">", $filename.".xml");
+	print OUTPUT $record;
+	close OUTPUT;
 }
+
+}
+
+sub ZEBRAop {
+### Puts the zebra update in queue writes in zebraserver table
+my ($dbh,$biblionumber,$op,$server)=@_;
+my ($record);
+
+my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
+$sth->execute($biblionumber,$server,$op);
+}
+
+
+sub ZEBRAopserver{
+
+###Accepts a $server variable thus we can use it to update  biblios, authorities or other zebra dbs
+my ($record,$op,$server)=@_;
+my @Zconnbiblio;
+my @port;
+my $Zpackage;
+my $tried=0;
+my $recon=0;
+my $reconnect=0;
+$record=Encode::encode("UTF-8",$record);
+my $shadow=$server."shadow";
+reconnect:
+
+$Zconnbiblio[0]=C4::Context->Zconnauth($server);
+if ($record){
+my $Zpackage = $Zconnbiblio[0]->package();
+$Zpackage->option(action => $op);
+	$Zpackage->option(record => $record);
+retry:
+		$Zpackage->send("update");
+my $i;
+my $event;
+
+while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
+    $event = $Zconnbiblio[0]->last_event();
+    last if $event == ZOOM::Event::ZEND;
+}
+ my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio[0]->error_x();
+	if ($error==10007 && $tried<3) {## timeout --another 30 looonng seconds for this update
+		sleep 1;	##  wait a sec!
+		$tried=$tried+1;
+		goto "retry";
+	}elsif ($error==2 && $tried<2) {## timeout --temporary zebra error !whatever that means
+		sleep 2;	##  wait two seconds!
+		$tried=$tried+1;
+		goto "retry";
+	}elsif($error==10004 && $recon==0){##Lost connection -reconnect
+		sleep 1;	##  wait a sec!
+		$recon=1;
+		$Zpackage->destroy();
+		$Zconnbiblio[0]->destroy();
+		goto "reconnect";
+	}elsif ($error){
+	#	warn "Error-$server   $op  /errcode:, $error, /MSG:,$errmsg,$addinfo \n";	
+		$Zpackage->destroy();
+		$Zconnbiblio[0]->destroy();
+	#	ZEBRAopfiles($dbh,$biblionumber,$record,$op,$server);
+		return 0;
+	}
+	## System preference batchMode=1 means wea are bulk importing
+	## DO NOT COMMIT while in batchMode for faster operation
+	my $batchmode=C4::Context->preference('batchMode');
+	 if (C4::Context->$shadow >0 && !$batchmode){
+	 $Zpackage->send('commit');
+		while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
+		 $event = $Zconnbiblio[0]->last_event();
+    		last if $event == ZOOM::Event::ZEND;
+		}
+	     my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio[0]->error_x();
+	     if ($error) { ## This is serious ZEBRA server is not updating	
+	     $Zpackage->destroy();
+	     $Zconnbiblio[0]->destroy();
+	     return 0;
+	    }
+	 }##commit
+#
+$Zpackage->destroy();
+$Zconnbiblio[0]->destroy();
+return 1;
+}
+return 0;
+}
+
+sub ZEBRA_readyXML{
+my ($dbh,$biblionumber)=@_;
+my $biblioxml=XMLgetbiblio($dbh,$biblionumber);
+my @itemxml=XMLgetallitems($dbh,$biblionumber);
+my $zebraxml=collection_header();
+$zebraxml.="<koharecord>";
+$zebraxml.=$biblioxml;
+$zebraxml.="<holdings>";
+      foreach my $item(@itemxml){
+	$zebraxml.=$item if $item;
+     }
+$zebraxml.="</holdings>";
+$zebraxml.="</koharecord>";
+$zebraxml.="</kohacollection>";
+return $zebraxml;
+}
+
+sub ZEBRA_readyXML_noheader{
+my ($dbh,$biblionumber)=@_;
+my $biblioxml=XMLgetbiblio($dbh,$biblionumber);
+my @itemxml=XMLgetallitems($dbh,$biblionumber);
+my $zebraxml="<koharecord>";
+$zebraxml.=$biblioxml;
+$zebraxml.="<holdings>";
+      foreach my $item(@itemxml){
+	$zebraxml.=$item if $item;
+     }
+$zebraxml.="</holdings>";
+$zebraxml.="</koharecord>";
+return $zebraxml;
+}
+
+#
+#
+# various utility subs and those not complying to new rules
+#
+#
 
 sub newbiblio {
+## Used in acqui management -- creates the biblio from hash rather than marc-record
     my ($biblio) = @_;
     my $dbh    = C4::Context->dbh;
-    my $bibnum = OLDnewbiblio( $dbh, $biblio );
-    # finds new (MARC bibid
-    # 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
-    my $record = &MARCkoha2marcBiblio( $dbh, $bibnum );
-    MARCaddbiblio($record, $bibnum,'' );
-    return ($bibnum);
+my $record=MARCkoha2marc($dbh,$biblio,"biblios");
+$record->encoding('UTF-8');
+   my $biblionumber=NEWnewbiblio($dbh,$record);
+    return ($biblionumber);
 }
-
-=item modbiblio
-
-  $biblionumber = &modbiblio($biblio);
-
-Update a biblio record.
-
-C<$biblio> is a reference-to-hash whose keys are the fields in the
-biblio table in the Koha database. All fields must be present, not
-just the ones you wish to change.
-
-C<&modbiblio> updates the record defined by
-C<$biblio-E<gt>{biblionumber}> with the values in C<$biblio>.
-
-C<&modbiblio> returns C<$biblio-E<gt>{biblionumber}> whether it was
-successful or not.
-
-=cut
-
 sub modbiblio {
-	my ($biblio) = @_;
-	my $dbh  = C4::Context->dbh;
-	my $biblionumber=OLDmodbiblio($dbh,$biblio);
-	my $record = MARCkoha2marcBiblio($dbh,$biblionumber,$biblionumber);
-	# finds new (MARC bibid
-	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
-	MARCmodbiblio($bibid,$record,"",0);
-	return($biblionumber);
-} # sub modbiblio
-
-=item modsubtitle
-
-  &modsubtitle($biblionumber, $subtitle);
-
-Sets the subtitle of a book.
-
-C<$biblionumber> is the biblionumber of the book to modify.
-
-C<$subtitle> is the new subtitle.
-
-=cut
-
-sub modsubtitle {
-    my ( $bibnum, $subtitle ) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDmodsubtitle( $dbh, $bibnum, $subtitle );
-}    # sub modsubtitle
-
-=item modaddauthor
-
-  &modaddauthor($biblionumber, $author);
-
-Replaces all additional authors for the book with biblio number
-C<$biblionumber> with C<$author>. If C<$author> is the empty string,
-C<&modaddauthor> deletes all additional authors.
-
-=cut
-
-sub modaddauthor {
-    my ( $bibnum, @authors ) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDmodaddauthor( $dbh, $bibnum, @authors );
-}    # sub modaddauthor
-
-=item modsubject
-
-  $error = &modsubject($biblionumber, $force, @subjects);
-
-$force - a subject to force
-
-$error - Error message, or undef if successful.
-
-=cut
-
-sub modsubject {
-    my ( $bibnum, $force, @subject ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $error = &OLDmodsubject( $dbh, $bibnum, $force, @subject );
-    if ($error eq ''){
-		# When MARC is off, ensures that the MARC biblio table gets updated with new
-		# subjects, of course, it deletes the biblio in marc, and then recreates.
-		# This check is to ensure that no MARC data exists to lose.
-		if (C4::Context->preference("MARC") eq '0'){
-			my $MARCRecord = &MARCkoha2marcBiblio($dbh,$bibnum);
-			my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
-			&MARCmodbiblio($bibid, $MARCRecord);
-		}
-	}
-	return ($error);
-}    # sub modsubject
-
-sub modbibitem {
-    my ($biblioitem) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDmodbibitem( $dbh, $biblioitem );
-}    # sub modbibitem
-
-sub modnote {
-    my ( $bibitemnum, $note ) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDmodnote( $dbh, $bibitemnum, $note );
-}
-
-sub newbiblioitem {
-    my ($biblioitem) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $bibitemnum = &OLDnewbiblioitem( $dbh, $biblioitem );
-    my $MARCbiblio =
-      MARCkoha2marcBiblio( $dbh, 0, $bibitemnum )
-      ; # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
-    &MARCaddbiblio($MARCbiblio, $biblioitem->{biblionumber}, '' );
-    return ($bibitemnum);
-}
-
-sub newsubject {
-    my ($bibnum) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDnewsubject( $dbh, $bibnum );
-}
-
-sub newsubtitle {
-    my ( $bibnum, $subtitle ) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDnewsubtitle( $dbh, $bibnum, $subtitle );
+## Used in acqui management -- modifies the biblio from hash rather than marc-record
+    my ($biblio) = @_;
+    my $dbh    = C4::Context->dbh;
+my $record=MARCkoha2marc($dbh,$biblio,"biblios");
+   my $biblionumber=NEWmodbiblio($dbh,$record,$biblio->{biblionumber});
+    return ($biblionumber);
 }
 
 sub newitems {
+## Used in acqui management -- creates the item from hash rather than marc-record
     my ( $item, @barcodes ) = @_;
     my $dbh = C4::Context->dbh;
     my $errors;
     my $itemnumber;
     my $error;
     foreach my $barcode (@barcodes) {
-        ( $itemnumber, $error ) = &OLDnewitems( $dbh, $item, uc($barcode) );
-        $errors .= $error;
-        my $MARCitem =
-          &MARCkoha2marcItem( $dbh, $item->{biblionumber}, $itemnumber );
-        &MARCadditem( $dbh, $MARCitem, $item->{biblionumber} );
+	$item->{barcode}=$barcode;
+my $record=MARCkoha2marc($dbh,$item,"holdings");	
+  my $itemnumber=     NEWnewitem($dbh,$record,$item->{biblionumber});
+    
     }
-    return ($errors);
+    return $itemnumber ;
 }
 
-sub moditem {
-    my ($item) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDmoditem( $dbh, $item );
-    my $MARCitem =
-      &MARCkoha2marcItem( $dbh, $item->{'biblionumber'}, $item->{'itemnum'} );
-    my $bibid =
-      &MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $item->{biblionumber} );
-    &MARCmoditem( $dbh, $MARCitem, $bibid, $item->{itemnum}, 0 );
-}
 
-sub checkitems {
-    my ( $count, @barcodes ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $error;
-    my $sth = $dbh->prepare("Select * from items where barcode=?");
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-        $barcodes[$i] = uc $barcodes[$i];
-        $sth->execute( $barcodes[$i] );
-        if ( my $data = $sth->fetchrow_hashref ) {
-            $error .= " Duplicate Barcode: $barcodes[$i]";
-        }
-    }
-    $sth->finish;
-    return ($error);
-}
 
-sub countitems {
-    my ($bibitemnum) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "";
-    my $sth   =
-      $dbh->prepare("Select count(*) from items where biblioitemnumber=?");
-    $sth->execute($bibitemnum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ( $data->{'count(*)'} );
-}
-
-sub delitem {
-    my ($itemnum) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDdelitem( $dbh, $itemnum );
-}
-
-sub deletebiblioitem {
-    my ($biblioitemnumber) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDdeletebiblioitem( $dbh, $biblioitemnumber );
-}    # sub deletebiblioitem
-
-sub delbiblio {
-    my ($biblio) = @_;
-    my $dbh = C4::Context->dbh;
-    &OLDdelbiblio( $dbh, $biblio );
-    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $biblio );
-    &MARCdelbiblio( $dbh, $bibid, 0 );
-}
-
-=item GetBiblioItemByBiblioNumber
-
-NOTE : This function has been copy/paste from C4/Biblio.pm from head before zebra integration.
-
-=cut
-
-sub GetBiblioItemByBiblioNumber {
-    my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * from biblioitems where biblionumber = ?");
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-
-    $sth->finish;
-    return @results;
-}
-
-=head2 getbibliofromitemnumber
-
-  $item = &getbibliofromitemnumber($env, $dbh, $itemnumber);
-
-Looks up the item with the given itemnumber.
-
-C<$env> and C<$dbh> are ignored.
-
-C<&itemnodata> returns a reference-to-hash whose keys are the fields
-from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
-database.
-
-=cut
-#'
-sub getbibliofromitemnumber {
-  my ($env,$dbh,$itemnumber) = @_;
-  $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,items,biblioitems
-    where items.itemnumber = ?
-    and biblio.biblionumber = items.biblionumber
-    and biblioitems.biblioitemnumber = items.biblioitemnumber");
-#  print $query;
-  $sth->execute($itemnumber);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
-
-sub getbiblio {
-    my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * from biblio where biblionumber = ?");
-
-    # || die "Cannot prepare $query\n" . $dbh->errstr;
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-
-    # || die "Cannot execute $query\n" . $sth->errstr;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
-    }    # while
-
-    $sth->finish;
-    return ( $count, @results );
-}    # sub getbiblio
-
-sub getbiblioitem {
-    my ($biblioitemnum) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "Select * from biblioitems where
-biblioitemnumber = ?"
-    );
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblioitemnum);
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
-    }    # while
-
-    $sth->finish;
-    return ( $count, @results );
-}    # sub getbiblioitem
-
-sub getbiblioitembybiblionumber {
-    my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * from biblioitems where biblionumber = ?");
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
-    }    # while
-
-    $sth->finish;
-    return ( $count, @results );
-}    # sub
-
-=head2 getitemtypes
-
-FIXME :: do not use this function : use C4::Koha::GetItemTypes;
-
-=cut 
 
 sub getitemtypes {
     my $dbh   = C4::Context->dbh;
@@ -2455,55 +1457,9 @@ sub getitemtypes {
     my $sth   = $dbh->prepare($query);
 
     # || die "Cannot prepare $query" . $dbh->errstr;      
-    my @results;
-
-    $sth->execute;
-
-    # || die "Cannot execute $query\n" . $sth->errstr;
-    while ( my $data = $sth->fetchrow_hashref ) {
-		push @results, $data;
-    }    # while
-
-    $sth->finish;
-    return @results;
-}    # sub getitemtypes
-
-sub getstacks{
-  my $dbh   = C4::Context->dbh;
-  my $i=0;
-my @results;
-my $stackstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.stack"');
-		$stackstatus->execute;
-		
-		my ($authorised_valuecode) = $stackstatus->fetchrow;
-		if ($authorised_valuecode) {
-			$stackstatus = $dbh->prepare("select * from authorised_values where category=? ");
-			$stackstatus->execute($authorised_valuecode);
-			
-			while (my $data = $stackstatus->fetchrow_hashref){
-			$results[$i]=$data;
-			$i++;
-		}#while
-		}#if
-$stackstatus->finish;
-		return ( $i, @results );
-
-}
-
-sub getitemsbybiblioitem {
-    my ($biblioitemnum) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "Select * from items, biblio where
-biblio.biblionumber = items.biblionumber and biblioitemnumber
-= ?"
-    );
-
-    # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
-
-    $sth->execute($biblioitemnum);
-
+    $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
     while ( my $data = $sth->fetchrow_hashref ) {
         $results[$count] = $data;
@@ -2512,309 +1468,37 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
 
     $sth->finish;
     return ( $count, @results );
-}    # sub getitemsbybiblioitem
+}    # sub getitemtypes
 
 
-=head2 get_itemnumbers_of
 
-  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
-
-Given a list of biblionumbers, return the list of corresponding itemnumbers
-for each biblionumber.
-
-Return a reference on a hash where keys are biblionumbers and values are
-references on array of itemnumbers.
-
-=cut
-sub get_itemnumbers_of {
-    my @biblionumbers = @_;
-
-    my $dbh = C4::Context->dbh;
-
-    my $query = '
-SELECT itemnumber,
-       biblionumber
-  FROM items
-  WHERE biblionumber IN (?'.(',?' x scalar @biblionumbers - 1).')
-';
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@biblionumbers);
-
-    my %itemnumbers_of;
-
-    while (my ($itemnumber, $biblionumber) = $sth->fetchrow_array) {
-        push @{$itemnumbers_of{$biblionumber}}, $itemnumber;
-    }
-
-    return \%itemnumbers_of;
+sub getkohafields{
+#returns MySQL like fieldnames to emulate searches on sql like fieldnames
+my $type=@_;
+## Either opac or intranet to select appropriate fields
+## Assumes intranet
+$type="intra" unless $type;
+if ($type eq "intranet"){ $type="intra";}
+my $dbh   = C4::Context->dbh;
+  my $i=0;
+my @results;
+$type=$type."show";
+my $sth=$dbh->prepare("SELECT  * FROM koha_attr  where $type=1 order by liblibrarian");
+$sth->execute();
+while (my $data=$sth->fetchrow_hashref){
+	$results[$i]=$data;
+	$i++;
+	}
+$sth->finish;
+return ($i,@results);
 }
 
 
-sub logchange {
-
-    # Subroutine to log changes to databases
-# Eventually, this subroutine will be used to create a log of all changes made,
-    # with the possibility of "undo"ing some changes
-    my $database = shift;
-    if ( $database eq 'kohadb' ) {
-        my $type     = shift;
-        my $section  = shift;
-        my $item     = shift;
-        my $original = shift;
-        my $new      = shift;
-
-        #	print STDERR "KOHA: $type $section $item $original $new\n";
-    }
-    elsif ( $database eq 'marc' ) {
-        my $type        = shift;
-        my $Record_ID   = shift;
-        my $tag         = shift;
-        my $mark        = shift;
-        my $subfield_ID = shift;
-        my $original    = shift;
-        my $new         = shift;
-
-#	print STDERR "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
-    }
-}
-
-#------------------------------------------------
-
-#---------------------------------------
-# Find a biblio entry, or create a new one if it doesn't exist.
-#  If a "subtitle" entry is in hash, add it to subtitle table
-sub getoraddbiblio {
-
-    # input params
-    my (
-        $dbh,       # db handle
-                    # FIXME - Unused argument
-        $biblio,    # hash ref to fields
-    ) = @_;
-
-    # return
-    my $biblionumber;
-
-    my $debug = 0;
-    my $sth;
-    my $error;
-
-    #-----
-    $dbh = C4::Context->dbh;
-
-    print "<PRE>Looking for biblio </PRE>\n" if $debug;
-    $sth = $dbh->prepare( "select biblionumber
-		from biblio
-		where title=? and author=?
-		  and copyrightdate=? and seriestitle=?"
-    );
-    $sth->execute(
-        $biblio->{title},     $biblio->{author},
-        $biblio->{copyright}, $biblio->{seriestitle}
-    );
-    if ( $sth->rows ) {
-        ($biblionumber) = $sth->fetchrow;
-        print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
-    }
-    else {
-
-        # Doesn't exist.  Add new one.
-        print "<PRE>Adding biblio</PRE>\n" if $debug;
-        ( $biblionumber, $error ) = &newbiblio($biblio);
-        if ($biblionumber) {
-            print "<PRE>Added with biblio number=$biblionumber</PRE>\n"
-              if $debug;
-            if ( $biblio->{subtitle} ) {
-                &newsubtitle( $biblionumber, $biblio->{subtitle} );
-            }    # if subtitle
-        }
-        else {
-            print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
-        }    # if added
-    }
-
-    return $biblionumber, $error;
-
-}    # sub getoraddbiblio
-
-sub char_decode {
-
-    # converts ISO 5426 coded string to UTF-8
-    # sloppy code : should be improved in next issue
-    my ( $string, $encoding ) = @_;
-    $_ = $string;
-
-     	$encoding = C4::Context->preference("marcflavour") unless $encoding;
-    if ( $encoding eq "UNIMARC" ) {
-#         s/\xe1/Æ/gm;
-        s/\xe2/Ğ/gm;
-        s/\xe9/Ø/gm;
-        s/\xec/ş/gm;
-        s/\xf1/æ/gm;
-        s/\xf3/ğ/gm;
-        s/\xf9/ø/gm;
-        s/\xfb/ß/gm;
-        s/\xc1\x61/à/gm;
-        s/\xc1\x65/è/gm;
-        s/\xc1\x69/ì/gm;
-        s/\xc1\x6f/ò/gm;
-        s/\xc1\x75/ù/gm;
-        s/\xc1\x41/À/gm;
-        s/\xc1\x45/È/gm;
-        s/\xc1\x49/Ì/gm;
-        s/\xc1\x4f/Ò/gm;
-        s/\xc1\x55/Ù/gm;
-        s/\xc2\x41/Á/gm;
-        s/\xc2\x45/É/gm;
-        s/\xc2\x49/Í/gm;
-        s/\xc2\x4f/Ó/gm;
-        s/\xc2\x55/Ú/gm;
-        s/\xc2\x59/İ/gm;
-        s/\xc2\x61/á/gm;
-        s/\xc2\x65/é/gm;
-        s/\xc2\x69/í/gm;
-        s/\xc2\x6f/ó/gm;
-        s/\xc2\x75/ú/gm;
-        s/\xc2\x79/ı/gm;
-        s/\xc3\x41/Â/gm;
-        s/\xc3\x45/Ê/gm;
-        s/\xc3\x49/Î/gm;
-        s/\xc3\x4f/Ô/gm;
-        s/\xc3\x55/Û/gm;
-        s/\xc3\x61/â/gm;
-        s/\xc3\x65/ê/gm;
-        s/\xc3\x69/î/gm;
-        s/\xc3\x6f/ô/gm;
-        s/\xc3\x75/û/gm;
-        s/\xc4\x41/Ã/gm;
-        s/\xc4\x4e/Ñ/gm;
-        s/\xc4\x4f/Õ/gm;
-        s/\xc4\x61/ã/gm;
-        s/\xc4\x6e/ñ/gm;
-        s/\xc4\x6f/õ/gm;
-        s/\xc8\x41/Ä/gm;
-        s/\xc8\x45/Ë/gm;
-        s/\xc8\x49/Ï/gm;
-        s/\xc8\x61/ä/gm;
-        s/\xc8\x65/ë/gm;
-        s/\xc8\x69/ï/gm;
-        s/\xc8\x6F/ö/gm;
-        s/\xc8\x75/ü/gm;
-        s/\xc8\x76/ÿ/gm;
-        s/\xc9\x41/Ä/gm;
-        s/\xc9\x45/Ë/gm;
-        s/\xc9\x49/Ï/gm;
-        s/\xc9\x4f/Ö/gm;
-        s/\xc9\x55/Ü/gm;
-        s/\xc9\x61/ä/gm;
-        s/\xc9\x6f/ö/gm;
-        s/\xc9\x75/ü/gm;
-        s/\xca\x41/Å/gm;
-        s/\xca\x61/å/gm;
-        s/\xd0\x43/Ç/gm;
-        s/\xd0\x63/ç/gm;
-
-        # this handles non-sorting blocks (if implementation requires this)
-        $string = nsb_clean($_);
-    }
-    elsif ( $encoding eq "USMARC" || $encoding eq "MARC21" ) {
- ##MARC-8 to UTF-8    
-		
-            s/\xe1\x61/à/gm;
-            s/\xe1\x65/è/gm;
-            s/\xe1\x69/ì/gm;
-            s/\xe1\x6f/ò/gm;
-            s/\xe1\x75/ù/gm;
-            s/\xe1\x41/À/gm;
-            s/\xe1\x45/È/gm;
-            s/\xe1\x49/Ì/gm;
-            s/\xe1\x4f/Ò/gm;
-            s/\xe1\x55/Ù/gm;
-            s/\xe2\x41/Á/gm;
-            s/\xe2\x45/É/gm;
-            s/\xe2\x49/Í/gm;
-            s/\xe2\x4f/Ó/gm;
-            s/\xe2\x55/Ú/gm;
-            s/\xe2\x59/İ/gm;
-            s/\xe2\x61/á/gm;
-            s/\xe2\x65/é/gm;
-            s/\xe2\x69/í/gm;
-            s/\xe2\x6f/ó/gm;
-            s/\xe2\x75/ú/gm;
-            s/\xe2\x79/ı/gm;
-            s/\xe3\x41/Â/gm;
-            s/\xe3\x45/Ê/gm;
-            s/\xe3\x49/Î/gm;
-            s/\xe3\x4f/Ô/gm;
-            s/\xe3\x55/Û/gm;
-            s/\xe3\x61/â/gm;
-            s/\xe3\x65/ê/gm;
-            s/\xe3\x69/î/gm;
-            s/\xe3\x6f/ô/gm;
-            s/\xe3\x75/û/gm;
-            s/\xe4\x41/Ã/gm;
-            s/\xe4\x4e/Ñ/gm;
-            s/\xe4\x4f/Õ/gm;
-            s/\xe4\x61/ã/gm;
-            s/\xe4\x6e/ñ/gm;
-            s/\xe4\x6f/õ/gm;
-	    s/\xe6\x41/Ă/gm;
-            s/\xe6\x45/Ĕ/gm;
-            s/\xe6\x65/ĕ/gm;
-            s/\xe6\x61/ă/gm;
-            s/\xe8\x45/Ë/gm;
-            s/\xe8\x49/Ï/gm;
-            s/\xe8\x65/ë/gm;
-            s/\xe8\x69/ï/gm;
-            s/\xe8\x76/ÿ/gm;
-            s/\xe9\x41/A/gm;
-            s/\xe9\x4f/O/gm;
-            s/\xe9\x55/U/gm;
-            s/\xe9\x61/a/gm;
-            s/\xe9\x6f/o/gm;
-            s/\xe9\x75/u/gm;
-            s/\xea\x41/A/gm;
-            s/\xea\x61/a/gm;
-#Additional Turkish characters
-  s/\x1b//gm;
-  s/\x1e//gm;
- s/(\xf0)s/\xc5\x9f/gm; 
-	 s/(\xf0)S/\xc5\x9e/gm; 
-		s/(\xf0)c/ç/gm; 
-	   s/(\xf0)C/Ç/gm;
-	s/\xe7\x49/\\xc4\xb0/gm;
-	s/(\xe6)G/\xc4\x9e/gm;
-	s/(\xe6)g/ğ\xc4\x9f/gm;
-	s/\xB8/ı/gm;
-	s/\xB9/£/gm;
- 	 s/(\xe8|\xc8)o/ö/gm ;
-	   s/(\xe8|\xc8)O/Ö/gm ;
-	   s/(\xe8|\xc8)u/ü/gm ;
-	   s/(\xe8|\xc8)U/Ü/gm ;
-	s/\xc2\xb8/\xc4\xb1/gm;
-	s/¸/\xc4\xb1/gm;
-            # this handles non-sorting blocks (if implementation requires this)
-            $string = nsb_clean($_);
-        
-    }
-    return ($string);
-}
-
-sub nsb_clean {
-    my $NSB = '\x88';    # NSB : begin Non Sorting Block
-    my $NSE = '\x89';    # NSE : Non Sorting Block end
-                         # handles non sorting blocks
-    my ($string) = @_;
-    $_ = $string;
-    s/$NSB/(/gm;
-    s/[ ]{0,1}$NSE/) /gm;
-    $string = $_;
-    return ($string);
-}
 
 
 
 sub DisplayISBN {
+## Old style ISBN handling should be modified to accept 13 digits
 	my ($isbn)=@_;
 	my $seg1;
 	if(substr($isbn, 0, 1) <=7) {
@@ -2849,103 +1533,13 @@ sub DisplayISBN {
 	my $seg4 = substr($x, -1, 1);
 	return "$seg1-$seg2-$seg3-$seg4";
 }
-sub zebraopfiles{
-
-my ($dbh,$biblionumber,$record,$folder,$server)=@_;
-#my $record = XMLgetbiblio($dbh,$biblionumber);
-my $op;
-my $zebradir = C4::Context->zebraconfig($server)->{directory}."/".$folder."/";
-	unless (opendir(DIR, "$zebradir")) {
-			warn "$zebradir not found";
-			return;
-	} 
-	closedir DIR;
-	my $filename = $zebradir.$biblionumber;
-if ($record){
-	open (OUTPUT,">", $filename.".xml");
-	print OUTPUT $record;
-
-	close OUTPUT;
-}
-
-
-}
-
-
-
-
-sub zebraop{
-###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-	my ($dbh,$biblionumber,$op,$server) = @_;
-	my $dbh = C4::Context->dbh;
-	my @Zconnbiblio;
-	my $tried=0;
-	my $recon=0;
-	my $reconnect=0;
-	my $record;
-	my $shadow;
-	warn "Server is: ".$server;
-reconnect:
-	$Zconnbiblio[0]=C4::Context->Zconnauth($server);
-	if ($server eq "biblioserver"){
-		$record =XMLgetbiblio($dbh,$biblionumber);
-		$shadow="biblioservershadow";
-	}elsif($server eq "authorityserver"){
-		$record =C4::AuthoritiesMarc::XMLgetauthority($dbh,$biblionumber);
-		$shadow="authorityservershadow";
-	} ## Add other servers as necessary
-
-	my $Zpackage = $Zconnbiblio[0]->package();
-	$Zpackage->option(action => $op);
-	$Zpackage->option(record => $record);
-retry:
-	$Zpackage->send("update");
-	my $i;
-	my $event;
-
-	while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
-    	$event = $Zconnbiblio[0]->last_event();
-	    last if $event == ZOOM::Event::ZEND;
-	}
-	my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio[0]->error_x();
-	if ($error==10000 && $reconnect==0) { ## This is serious ZEBRA server is not available -reconnect
-		$reconnect=1;
-		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
-		warn "Trying to restart ZEBRA Server";
-		goto "reconnect";
-   	 }elsif ($error==10007 && $tried<2) {## timeout --another 30 looonng seconds for this update
-		$tried=$tried+1;
-		goto "retry";
-	}elsif($error==10004 && $recon==0){##Lost connection -reconnect
-		$recon=1;
-		goto "reconnect";
-	}elsif ($error){
-		warn "Error-$server   $op $biblionumber /errcode:, $error, /MSG:,$errmsg,$addinfo \n";	
-		$Zpackage->destroy();
-		$Zconnbiblio[0]->destroy();
-		zebraopfiles($dbh,$biblionumber,$record,$op,$server);
-		return;
-	}
-	 if (C4::Context->$shadow){
-		$Zpackage->send('commit');
-		while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
-			#waiting zebra to finish;
-		}	
-	}
-	$Zpackage->destroy();
-	$Zconnbiblio[0]->destroy();
-
-}
-
-
 sub calculatelc{
+## Function to create padded LC call number for sorting items with their LC code. Not exported
 my  ($classification)=@_;
 $classification=~s/^\s+|\s+$//g;
 my $i=0;
 my $lc2;
 my $lc1;
-
-
 for  ($i=0; $i<length($classification);$i++){
 my $c=(substr($classification,$i,1));
 	if ($c ge '0' && $c le '9'){
@@ -2959,7 +1553,7 @@ my $c=(substr($classification,$i,1));
 }#while
 
 my $other=length($lc1);
-if(!$lc1){$other==0;}
+if(!$lc1){$other=0;}
 my $extras;
 if ($other<4){
 	for (1..(4-$other)){
@@ -2986,19 +1580,27 @@ return($lc1.$lc2);
 }
 
 sub itemcalculator{
-my ($dbh,$biblioitem,$callnumber)=@_;
-my $sth=$dbh->prepare("select classification, subclass from biblioitems where biblioitemnumber=?");
+## Sublimentary function to obtain sorted LC for items. Not exported
+my ($dbh,$biblionumber,$callnumber)=@_;
+my ($record,$frameworkcode)=MARCgetbiblio($dbh,$biblionumber);
+my $biblio=MARCmarc2koha($dbh,$record,$frameworkcode,"biblios");
 
-$sth->execute($biblioitem);
-my ($classification,$subclass)=$sth->fetchrow;
-my $all=$classification." ".$subclass;
+my $all=$biblio->{classification}." ".$biblio->{subclass};
 my $total=length($all);
-my $cutterextra=substr($callnumber,$total-1);
+my $cutterextra=substr($callnumber,$total);
 
 return $cutterextra;
 
 }
 
+
+#### This function allows decoding of only title and author out of a MARC record
+  sub func_title_author {
+        my ($tagno,$tagdata) = @_;
+  my ($titlef,$subf)=&MARCfind_marc_from_kohafield("title","biblios");
+  my ($authf,$subf)=&MARCfind_marc_from_kohafield("author","biblios");
+	return ($tagno == $titlef || $tagno == $authf);
+    }
 
 
 
@@ -3010,593 +1612,5 @@ END { }    # module clean-up code here (global destructor)
 
 Koha Developement team <info@koha.org>
 
-Paul POULAIN paul.poulain@free.fr
 
-=cut
 
-# $Id$
-# $Log$
-# Revision 1.178  2006/08/21 09:51:15  toins
-# Add a forgetted function : getbibliofromitemnumber
-#
-# Revision 1.177  2006/08/11 16:04:07  toins
-# re-input an old function.
-#
-# Revision 1.176  2006/08/10 12:44:12  toins
-# sync with dev_week.
-#
-# Revision 1.115.2.51.2.14  2006/07/15 19:22:46  kados
-# comment out warns
-#
-# Revision 1.115.2.51.2.13  2006/07/03 16:05:26  kados
-# fix shadow call to ZOOM
-#
-# Revision 1.115.2.51.2.12  2006/06/02 23:11:23  kados
-# Committing my working dev_week. It's been tested only with
-# searching, and there's quite a lot of config stuff to set up
-# beforehand. As things get closer to a release, we'll be making
-# some scripts to do it for us
-#
-# Revision 1.115.2.51.2.11  2006/05/28 18:49:12  tgarip1957
-# This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
-# Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to
-#
-# Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
-# fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
-# (Not all items fields mapped to MARC)
-#
-# Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
-# adding decoder for Ä string
-#
-# Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
-# * removing a useless & CPU consuming call to MARCgetbiblio
-# * Leader management.
-# If you create a MARC tag "000", with a subfield '@', it will be managed as the leader.
-# Seems to work correctly.
-#
-# Now going to create a plugin for leader()
-#
-# Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
-# * fixing a bug in subfield order when MARCgetbiblio
-# * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
-# * adding some diacritic decoding (Ä, Ü...)
-#
-# Revision 1.115.2.14  2005/06/27 23:24:06  hdl
-# Display dashed ISBN
-#
-# Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
-# patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
-#
-# Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
-# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
-#
-# Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
-# * removing my for variables already declared
-# * updating biblio.unititle  field as well as other fields in biblio table
-#
-# Revision 1.115.2.10  2005/05/25 09:30:50  hdl
-# Adding NEWmodbiblioframework feature
-# Used by addbiblio.pl when modifying a framework selection.
-#
-# Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
-# adding / to the list of symbols that are replace by spaces for searches
-#
-# Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
-# some improvements :
-# * return immediatly when a subfield is empty
-# * search duplicate on isbn must be done only when there is an isbn ;-)
-#
-# Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
-# * adding glass to opac marc detail.
-# * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
-# * fixing bug with libopac
-#
-# Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
-# Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
-# Longer, but solves problems with repeated subfields.
-#
-# The previous version was not buggy except under certain circumstances (a repeated subfield, that does not exist usually in items)
-#
-# Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
-# exporting MARCdelsubfield sub. It's used in authority merging.
-# Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
-#
-# Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
-# bug in acquisition : the title was also stored as subtitle.
-#
-# Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
-# * multiple main authors are now correctly handled in simple (non-MARC) view
-#
-# Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
-# in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
-#
-# Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
-# bugfix : issn were not stored correctly in non-MARC DB on biblio modification
-#
-# Revision 1.115  2005/01/06 14:32:17  tipaul
-# improvement of speed for bulkmarcimport.
-# A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.
-# this is only a little improvement for normal DB modif, but almost x2 the speed of bulkmarcimport... from 6records/seconds to more than 10.
-#
-# Revision 1.114  2005/01/03 10:48:33  tipaul
-# * bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
-# * partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
-#
-# Revision 1.113  2004/12/10 16:27:53  tipaul
-# limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items)
-# In 2.4, a new DB structure will highly speed things and this limit will be removed.
-# FindDuplicate is activated again, the perf problems were due to this problem.
-#
-# Revision 1.112  2004/12/08 10:14:42  tipaul
-# * desactivate FindDuplicate
-# * fix from Genji
-#
-# Revision 1.111  2004/11/25 17:39:44  tipaul
-# removing useless &branches in package declaration
-#
-# Revision 1.110  2004/11/24 16:00:01  tipaul
-# removing sub branches (commited by chris for MARC=OFF bugfix, but sub branches is already in Acquisition.pm)
-#
-# Revision 1.109  2004/11/24 15:58:31  tipaul
-# * critical fix for acquisition (see RC3 release notes)
-# * critical fix for duplicate finder
-#
-# Revision 1.108  2004/11/19 19:41:22  rangi
-# Shifting branches() from deprecated C4::Catalogue to C4::Biblio
-# Allowing the non marc interface acquisitions to work.
-#
-# Revision 1.107  2004/11/05 10:15:27  tipaul
-# Improving FindDuplicate to find duplicate records on adding biblio
-#
-# Revision 1.106  2004/11/02 16:44:45  tipaul
-# new feature : checking for duplicate biblio.
-#
-# For instance, it's only done on ISBN only. Will be improved soon.
-#
-# When a duplicate is detected, the biblio is not saved, but the user is asked for a confirmations.
-#
-# Revision 1.105  2004/09/23 16:15:37  tipaul
-# indenting diff
-#
-# Revision 1.104  2004/09/16 15:06:46  tipaul
-# enabling # (| still possible too) for repeatable subfields
-#
-# Revision 1.103  2004/09/06 14:17:34  tipaul
-# some commented warning added + 1 major bugfix => drop empty fields, NOT fields containing 0
-#
-# Revision 1.102  2004/09/06 10:00:19  tipaul
-# adding a "location" field to the library.
-# This field is useful when the callnumber contains no information on the room where the item is stored.
-# With this field, we now have 3 levels of informations to find a book :
-# * the branch.
-# * the location.
-# * the callnumber.
-#
-# This should be versatile enough to solve any storing method.
-# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
-#
-# Revision 1.101  2004/08/18 16:01:37  tipaul
-# modifs to support frameworkcodes
-#
-# Revision 1.100  2004/08/13 16:37:25  tipaul
-# adding frameworkcode to API in some subs
-#
-# Revision 1.99  2004/07/30 13:54:50  doxulting
-# Beginning of serial commit
-#
-# Revision 1.98  2004/07/15 09:48:10  tipaul
-# * removing useless sub
-# * minor bugfix in moditem (managing homebranch & holdingbranch)
-#
-# Revision 1.97  2004/07/02 15:53:53  tipaul
-# bugfix (due to frameworkcode field)
-#
-# Revision 1.96  2004/06/29 16:07:10  tipaul
-# last sync for 2.1.0 release
-#
-# Revision 1.95  2004/06/26 23:19:59  rangi
-# Fixing modaddauthor, and adding getitemtypes.
-# Also tidying up formatting of code
-#
-# Revision 1.94  2004/06/17 08:16:32  tipaul
-# merging tag & subfield in marc_word for better perfs
-#
-# Revision 1.93  2004/06/11 15:38:06  joshferraro
-# Changes MARCaddword to index words >= 1 char ... needed for more accurate
-# searches using SearchMarc routines.
-#
-# Revision 1.92  2004/06/10 08:29:01  tipaul
-# MARC authority management (continued)
-#
-# Revision 1.91  2004/06/03 10:03:01  tipaul
-# * frameworks and itemtypes are independant
-# * in the MARC editor, showing the + to duplicate a tag only if the tag is repeatable
-#
-# Revision 1.90  2004/05/28 08:25:53  tipaul
-# hidding hidden & isurl constraints into MARC subfield structure
-#
-# Revision 1.89  2004/05/27 21:47:21  rangi
-# Fix for bug 787
-#
-# Revision 1.88  2004/05/18 15:23:49  tipaul
-# framework management : 1 MARC framework for each itemtype
-#
-# Revision 1.87  2004/05/18 11:54:07  tipaul
-# getitemtypes moved in Koha.pm
-#
-# Revision 1.86  2004/05/03 09:19:22  tipaul
-# some fixes for mysql prepare & execute
-#
-# Revision 1.85  2004/04/02 14:55:48  tipaul
-# renaming items.bulk field to items.itemcallnumber.
-# Will be used to store call number for libraries that don't use dewey classification.
-# Note it's related to ITEMS, not biblio.
-#
-# Revision 1.84  2004/03/24 17:18:30  joshferraro
-# Fixes bug 749 by removing the comma on line 1488.
-#
-# Revision 1.83  2004/03/15 14:31:50  tipaul
-# adding a minor check
-#
-# Revision 1.82  2004/03/07 05:47:31  acli
-# Various updates/fixes from rel_2_0
-# Fixes for bugs 721 (templating), 727, and 734
-#
-# Revision 1.81  2004/03/06 20:26:13  tipaul
-# adding seealso feature in MARC searches
-#
-# Revision 1.80  2004/02/12 13:40:56  tipaul
-# deleting subs duplicated by error
-#
-# Revision 1.79  2004/02/11 08:40:09  tipaul
-# synch'ing 2.0.0 branch and head
-#
-# Revision 1.78.2.3  2004/02/10 13:15:46  tipaul
-# removing 2 warnings
-#
-# Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
-# dealing correctly "bulk" field
-#
-# Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
-# * minor html fixes
-# * adding publisher in acquisition process (& ordering basket by publisher)
-#
-# Revision 1.78  2003/12/09 15:57:28  tipaul
-# rolling back to working char_decode sub
-#
-# Revision 1.77  2003/12/03 17:47:14  tipaul
-# bugfixes for biblio deletion
-#
-# Revision 1.76  2003/12/03 01:43:41  slef
-# conflict markers?
-#
-# Revision 1.75  2003/12/03 01:42:03  slef
-# bug 662 fixes securing DBI
-#
-# Revision 1.74  2003/11/28 09:48:33  tipaul
-# bugfix : misusing prepare & execute => now using prepare(?) and execute($var)
-#
-# Revision 1.73  2003/11/28 09:45:25  tipaul
-# bugfix for iso2709 file import in the "notforloan" field.
-#
-# But notforloan field called "loan" somewhere, so in case "loan" is used, copied to "notforloan" to avoid a bug.
-#
-# Revision 1.72  2003/11/24 17:40:14  tipaul
-# fix for #385
-#
-# Revision 1.71  2003/11/24 16:28:49  tipaul
-# biblio & item deletion now works fine in MARC editor.
-# Stores deleted biblio/item in the marc field of the deletedbiblio/deleteditem table.
-#
-# Revision 1.70  2003/11/24 13:29:55  tipaul
-# moving $id from beginning to end of file (70 commits... huge comments...)
-#
-# Revision 1.69  2003/11/24 13:27:17  tipaul
-# fix for #380 (bibliosubject)
-#
-# Revision 1.68  2003/11/06 17:18:30  tipaul
-# bugfix for #384
-#
-# 1st draft for MARC biblio deletion.
-# Still does not work well, but at least, Biblio.pm compiles & it should'nt break too many things
-# (Note the trash in the MARCdetail, but don't use it, please :-) )
-#
-# Revision 1.67  2003/10/25 08:46:27  tipaul
-# minor fixes for bilbio deletion (still buggy)
-#
-# Revision 1.66  2003/10/17 10:02:56  tipaul
-# Indexing only words longer than 2 letters. Was >=2 before, & 2 letters words usually means nothing.
-#
-# Revision 1.65  2003/10/14 09:45:29  tipaul
-# adding rebuildnonmarc.pl script : run this script when you change a link between marc and non MARC DB. It rebuilds the non-MARC DB (long operation)
-#
-# Revision 1.64  2003/10/06 15:20:51  tipaul
-# fix for 536 (subtitle error)
-#
-# Revision 1.63  2003/10/01 13:25:49  tipaul
-# seems a char encoding problem modified something in char_decode sub... changing back to something that works...
-#
-# Revision 1.62  2003/09/17 14:21:13  tipaul
-# fixing bug that makes a MARC biblio disappear when using full acquisition (order => recieve ==> MARC editor).
-# Before this 2 lines fix, the MARC biblio was deleted during recieve, and had to be entirely recreated :-(
-#
-# Revision 1.61  2003/09/17 10:24:39  tipaul
-# notforloan value in itemtype was overwritting notforloan value in a given item.
-# I changed this behaviour :
-# if notforloan is set for a given item, and NOT for all items from this itemtype, the notforloan is kept.
-# If notforloan is set for itemtype, it's used (and impossible to loan a specific item from this itemtype)
-#
-# Revision 1.60  2003/09/04 14:11:23  tipaul
-# fix for 593 (data duplication in MARC-DB)
-#
-# Revision 1.58  2003/08/06 12:54:52  tipaul
-# fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
-# (note that copyrightdate still extracted to get numeric format)
-#
-# Revision 1.57  2003/07/15 23:09:18  slef
-# change show columns to use biblioitems bnotes too
-#
-# Revision 1.56  2003/07/15 11:34:52  slef
-# fixes from paul email
-#
-# Revision 1.55  2003/07/15 00:02:49  slef
-# Work on bug 515... can we do a single-side rename of notes to bnotes?
-#
-# Revision 1.54  2003/07/11 11:51:32  tipaul
-# *** empty log message ***
-#
-# Revision 1.52  2003/07/10 10:37:19  tipaul
-# fix for copyrightdate problem, #514
-#
-# Revision 1.51  2003/07/02 14:47:17  tipaul
-# fix for #519 : items.dateaccessioned imports incorrectly
-#
-# Revision 1.49  2003/06/17 11:21:13  tipaul
-# improvments/fixes for z3950 support.
-# * Works now even on ADD, not only on MODIFY
-# * able to search on ISBN, author, title
-#
-# Revision 1.48  2003/06/16 09:22:53  rangi
-# Just added an order clause to getitemtypes
-#
-# Revision 1.47  2003/05/20 16:22:44  tipaul
-# fixing typo in Biblio.pm POD
-#
-# Revision 1.46  2003/05/19 13:45:18  tipaul
-# support for subtitles, additional authors, subject.
-# This supports is only for MARC <-> OLD-DB link. It worked previously, but values entered as MARC were not reported to OLD-DB, neither values entered as OLD-DB were reported to MARC.
-# Note that some OLD-DB subs are strange (dummy ?) see OLDmodsubject, OLDmodsubtitle, OLDmodaddiauthor in C4/Biblio.pm
-# For example it seems impossible to have more that 1 addi author and 1 subtitle. In MARC it's not the case. So, if you enter more than one, I'm afraid only the LAST will be stored.
-#
-# Revision 1.45  2003/04/29 16:50:49  tipaul
-# really proud of this commit :-)
-# z3950 search and import seems to works fine.
-# Let me explain how :
-# * a "search z3950" button is added in the addbiblio template.
-# * when clicked, a popup appears and z3950/search.pl is called
-# * z3950/search.pl calls addz3950search in the DB
-# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
-# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
-# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
-#
-# Note :
-# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
-# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
-#
-# Revision 1.44  2003/04/28 13:07:14  tipaul
-# Those fixes solves the "internal server error" with MARC::Record 1.12.
-# It was due to an illegal contruction in Koha : we tried to retrive subfields from <10 tags.
-# That's not possible. MARC::Record accepted this in 0.93 version, but it was fixed after.
-# Now, the construct/retrieving is OK !
-#
-# Revision 1.43  2003/04/10 13:56:02  tipaul
-# Fix some bugs :
-# * worked in 1.9.0, but not in 1.9.1 :
-# - modif of a biblio didn't work
-# - empty fields where not shown when modifying a biblio. empty fields managed by the library (ie in tab 0->9 in MARC parameter table) MUST be entered, even if not presented.
-#
-# * did not work before :
-# - repeatable subfields now works correctly. Enter 2 subfields separated by | and they will be splitted during saving.
-# - dropped the last subfield of the MARC form :-(
-#
-# Internal changes :
-# - MARCmodbiblio now works by deleting and recreating the biblio. It's not perf optimized, but MARC is a "do_something_impossible_to_trace" standard, so, it's the best solution. not a problem for me, as biblio are rarely modified.
-# Note the MARCdelbiblio has been rewritted to enable deletion of a biblio WITHOUT deleting items.
-#
-# Revision 1.42  2003/04/04 08:41:11  tipaul
-# last commits before 1.9.1
-#
-# Revision 1.41  2003/04/01 12:26:43  tipaul
-# fixes
-#
-# Revision 1.40  2003/03/11 15:14:03  tipaul
-# pod updating
-#
-# Revision 1.39  2003/03/07 16:35:42  tipaul
-# * moving generic functions to Koha.pm
-# * improvement of SearchMarc.pm
-# * bugfixes
-# * code cleaning
-#
-# Revision 1.38  2003/02/27 16:51:59  tipaul
-# * moving prepare / execute to ? form.
-# * some # cleaning
-# * little bugfix.
-# * road to 1.9.2 => acquisition and cataloguing merging
-#
-# Revision 1.37  2003/02/12 11:03:03  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.36  2003/02/12 11:01:01  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.35  2003/02/03 18:46:00  acli
-# Minor factoring in C4/Biblio.pm, plus change to export the per-tag
-# 'mandatory' property to a per-subfield 'tag_mandatory' template parameter,
-# so that addbiblio.tmpl can distinguish between mandatory subfields in a
-# mandatory tag and mandatory subfields in an optional tag
-#
-# Not-minor factoring in acqui.simple/addbiblio.pl to make the if-else blocks
-# smaller, and to add some POD; need further testing for this
-#
-# Added function to check if a MARC subfield name is "koha-internal" (instead
-# of checking it for 'lib' and 'tag' everywhere); temporarily added to Koha.pm
-#
-# Use above function in acqui.simple/additem.pl and search.marc/search.pl
-#
-# Revision 1.34  2003/01/28 14:50:04  tipaul
-# fixing MARCmodbiblio API and reindenting code
-#
-# Revision 1.33  2003/01/23 12:22:37  tipaul
-# adding char_decode to decode MARC21 or UNIMARC extended chars
-#
-# Revision 1.32  2002/12/16 15:08:50  tipaul
-# small but important bugfix (fixes a problem in export)
-#
-# Revision 1.31  2002/12/13 16:22:04  tipaul
-# 1st draft of marc export
-#
-# Revision 1.30  2002/12/12 21:26:35  tipaul
-# YAB ! (Yet Another Bugfix) => related to biblio modif
-# (some warning cleaning too)
-#
-# Revision 1.29  2002/12/12 16:35:00  tipaul
-# adding authentification with Auth.pm and
-# MAJOR BUGFIX on marc biblio modification
-#
-# Revision 1.28  2002/12/10 13:30:03  tipaul
-# fugfixes from Dombes Abbey work
-#
-# Revision 1.27  2002/11/19 12:36:16  tipaul
-# road to 1.3.2
-# various bugfixes, improvments, and migration from acquisition.pm to biblio.pm
-#
-# Revision 1.26  2002/11/12 15:58:43  tipaul
-# road to 1.3.2 :
-# * many bugfixes
-# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
-#
-# Revision 1.25  2002/10/25 10:58:26  tipaul
-# Road to 1.3.2
-# * bugfixes and improvements
-#
-# Revision 1.24  2002/10/24 12:09:01  arensb
-# Fixed "no title" warning when generating HTML documentation from POD.
-#
-# Revision 1.23  2002/10/16 12:43:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.22  2002/10/15 13:39:17  tipaul
-# removing Acquisition.pm
-# deleting unused code in biblio.pm, rewriting POD and answering most FIXME comments
-#
-# Revision 1.21  2002/10/13 11:34:14  arensb
-# Replaced expressions of the form "$x = $x <op> $y" with "$x <op>= $y".
-# Thus, $x = $x+2 becomes $x += 2, and so forth.
-#
-# Revision 1.20  2002/10/13 08:28:32  arensb
-# Deleted unused variables.
-# Removed trailing whitespace.
-#
-# Revision 1.19  2002/10/13 05:56:10  arensb
-# Added some FIXME comments.
-#
-# Revision 1.18  2002/10/11 12:34:53  arensb
-# Replaced &requireDBI with C4::Context->dbh
-#
-# Revision 1.17  2002/10/10 14:48:25  tipaul
-# bugfixes
-#
-# Revision 1.16  2002/10/07 14:04:26  tipaul
-# road to 1.3.1 : viewing MARC biblio
-#
-# Revision 1.15  2002/10/05 09:49:25  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.14  2002/10/03 11:28:18  tipaul
-# Extending Context.pm to add stopword management and using it in MARC-API.
-# First benchmarks show a medium speed improvement, which  is nice as this part is heavily called.
-#
-# Revision 1.13  2002/10/02 16:26:44  tipaul
-# road to 1.3.1
-#
-# Revision 1.12.2.4  2002/10/05 07:09:31  arensb
-# Merged in changes from main branch.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12  2002/10/01 11:48:51  arensb
-# Added some FIXME comments, mostly marking duplicate functions.
-#
-# Revision 1.11  2002/09/24 13:49:26  tipaul
-# long WAS the road to 1.3.0...
-# coming VERY SOON NOW...
-# modifying installer and buildrelease to update the DB
-#
-# Revision 1.10  2002/09/22 16:50:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.9  2002/09/20 12:57:46  tipaul
-# long is the road to 1.4.0
-# * MARCadditem and MARCmoditem now wroks
-# * various bugfixes in MARC management
-# !!! 1.3.0 should be released very soon now. Be careful !!!
-#
-# Revision 1.8  2002/09/10 13:53:52  tipaul
-# MARC API continued...
-# * some bugfixes
-# * multiple item management : MARCadditem and MARCmoditem have been added. They suppose that ALL the MARC field linked to koha-item are in the same MARC tag (on the same line of MARC file)
-#
-# Note : it should not be hard for marcimport and marcexport to re-link fields from internal tag/subfield to "legal" tag/subfield.
-#
-# Revision 1.7  2002/08/14 18:12:51  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.6  2002/07/25 13:40:31  tipaul
-# pod documenting the API.
-#
-# Revision 1.5  2002/07/24 16:11:37  tipaul
-# Now, the API...
-# Database.pm and Output.pm are almost not modified (var test...)
-#
-# Biblio.pm is almost completly rewritten.
-#
-# WHAT DOES IT ??? ==> END of Hitchcock suspens
-#
-# 1st, it does... nothing...
-# Every old API should be there. So if MARC-stuff is not done, the behaviour is EXACTLY the same (if there is no added bug, of course). So, if you use normal acquisition, you won't find anything new neither on screen or old-DB tables ...
-#
-# All old-API functions have been cloned. for example, the "newbiblio" sub, now has become :
-# * a "newbiblio" sub, with the same parameters. It just call a sub named OLDnewbiblio
-# * a "OLDnewbiblio" sub, which is a copy/paste of the previous newbiblio sub. Then, when you want to add the MARC-DB stuff, you can modify the newbiblio sub without modifying the OLDnewbiblio one. If we correct a bug in 1.2 in newbiblio, we can do the same in main branch by correcting OLDnewbiblio.
-# * The MARC stuff is usually done through a sub named MARCxxx where xxx is the same as OLDxxx. For example, newbiblio calls MARCnewbiblio. the MARCxxx subs use a MARC::Record as parameter.
-# The last thing to solve was to manage biblios through real MARC import : they must populate the old-db, but must populate the MARC-DB too, without loosing information (if we go from MARC::Record to old-data then back to MARC::Record, we loose A LOT OF ROWS). To do this, there are subs beginning by "NEWxxx" : they manage datas with MARC::Record datas. they call OLDxxx sub too (to populate old-DB), but MARCxxx subs too, with a complete MARC::Record ;-)
-#
-# In Biblio.pm, there are some subs that permits to build a old-style record from a MARC::Record, and the opposite. There is also a sub finding a MARC-bibid from a old-biblionumber and the opposite too.
-# Note we have decided with steve that a old-biblio <=> a MARC-Biblio.
-#

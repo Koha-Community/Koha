@@ -1,7 +1,7 @@
 package C4::Stats;
 
 # $Id$
-
+# Modified by TG
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,14 +21,12 @@ package C4::Stats;
 
 use strict;
 require Exporter;
-use DBI;
+
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
-};
+$VERSION = 0.01;
 
 =head1 NAME
 
@@ -49,10 +47,9 @@ the Koha database, which acts as an activity log.
 
 =cut
 
-@ISA    = qw(Exporter);
+@ISA = qw(Exporter);
 @EXPORT = qw(&UpdateStats &statsreport &TotalOwing
-  &TotalPaid &getcharges &Getpaidbranch &unfilledreserves &getcredits
-  getrefunds);
+&TotalPaid &getcharges &Getpaidbranch &unfilledreserves &getcredits &getinvoices);
 
 =item UpdateStats
 
@@ -72,217 +69,165 @@ C<$env-E<gt>{branchcode}>.
 C<$env-E<gt>{usercode}> specifies the value of the C<usercode> field.
 
 =cut
-
 #'
 sub UpdateStats {
-
-    #module to insert stats data into stats table
-    my (
-        $env,      $branch,         $type,
-        $amount,   $other,          $itemnum,
-        $itemtype, $borrowernumber, $accountno
-      )
-      = @_;
-    my $dbh = C4::Context->dbh;
-    if ( $branch eq '' ) {
-        $branch = $env->{'branchcode'};
-    }
-    my $user         = $env->{'usercode'};
-    my $organisation = $env->{'organisation'};
-    print $borrowernumber;
-
-    # FIXME - Use $dbh->do() instead
-    my $sth = $dbh->prepare(
-        "Insert into statistics (datetime,branch,type,usercode,value,
-                                        other,itemnumber,itemtype,borrowernumber,proccode,associatedborrower) values (now(),?,?,?,?,?,?,?,?,?,?)"
-    );
-    $sth->execute(
-        $branch,    $type,    $user,     $amount,
-        $other,     $itemnum, $itemtype, $borrowernumber,
-        $accountno, $organisation
-    );
-    $sth->finish;
+        #module to insert stats data into stats table
+        my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno)=@_;
+        my $dbh = C4::Context->dbh;
+        if ($branch eq ''){
+                $branch=$env->{'branchcode'};
+        }
+        my $user = $env->{'usercode'};
+        print $borrowernumber;
+        # FIXME - Use $dbh->do() instead
+        my $sth=$dbh->prepare("Insert into statistics (datetime,branch,type,usercode,value,
+                                        other,itemnumber,itemtype,borrowernumber,proccode) values (now(),?,?,?,?,?,?,?,?,?)");
+        $sth->execute($branch,$type,$user,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno);
+        $sth->finish;
 }
 
 # Otherwise, it'd need a POD.
 sub TotalPaid {
-    my ( $time, $time2, $spreadsheet ) = @_;
-    $time2 = $time unless $time2;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM statistics,borrowers
-  WHERE statistics.borrowernumber= borrowers.borrowernumber
-  AND (statistics.type='payment' OR statistics.type='writeoff') ";
-    if ( $time eq 'today' ) {
-        $query = $query . " AND datetime = now()";
-    }
-    else {
-        $query .= " AND datetime > '$time'";
-    }
-    if ( $time2 ne '' ) {
-        $query .= " AND datetime < '$time2'";
-    }
-    if ($spreadsheet) {
-        $query .= " ORDER BY branch, type";
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    $sth->finish;
-    return (@results);
+        my ($time,$time2)=@_;
+        $time2=$time unless $time2;
+        my $dbh = C4::Context->dbh;
+
+
+        my $query="Select * from accountlines,borrowers where (accounttype = 'Pay' or accounttype='W')
+                                        and accountlines.borrowernumber = borrowers.borrowernumber";
+        my @bind = ();
+        if ($time eq 'today'){
+                $query .= " and date = now()";
+        } else {
+                $query.=" and date>=? and date<=?";
+                @bind = ($time,$time2);
+        }
+
+      
+
+
+           $query.=" order by timestamp";
+
+          # print $query;
+
+        my $sth=$dbh->prepare($query);
+
+       # $sth->execute();
+         $sth->execute(@bind);
+        my @results;
+        my $i=0;
+        while (my $data=$sth->fetchrow_hashref){
+                $results[$i]=$data;
+                $i++;
+        }
+        $sth->finish;
+        #  print $query;
+        return(@results);
 }
 
 # Otherwise, it needs a POD.
-sub getcharges {
-    my ( $borrowerno, $timestamp, $accountno ) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $timestamp2 = $timestamp - 1;
-    my $query      = "";
-    my $sth;
+sub getcharges{
+        my($borrowerno,$offset,$accountno)=@_;
+        my $dbh = C4::Context->dbh;
+        my $query="";
+        my $sth;
 
-    # getcharges is now taking accountno. as an argument
-    if ($accountno) {
-        $sth = $dbh->prepare(
-            "Select * from accountlines where borrowernumber=?
-              and accountno = ?"
-        );
-        $sth->execute( $borrowerno, $accountno );
+        # getcharges is now taking accountno. as an argument
+        if ($offset){
+              $sth=$dbh->prepare("Select * from accountlines where borrowernumber=?
+              and accountno = ? and amount>0");
+              $sth->execute($borrowerno,$offset);
 
         # this bit left in for old 2 arg usage of getcharges
-    }
-    else {
-        $sth = $dbh->prepare(
-            "Select * from accountlines where borrowernumber=?
-              and timestamp = ? and accounttype <> 'Pay' and
-              accounttype <> 'W'"
-        );
-        $sth->execute( $borrowerno, $timestamp );
-    }
+        } else {
+                 $sth=$dbh->prepare("Select * from accountlines where borrowernumber=?
+              and accountno = ?");
+              $sth->execute($borrowerno,$accountno);
+        }
 
-    #  print $query,"<br>";
-    my $i = 0;
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-
+        #  print $query,"<br>";
+        my $i=0;
+        my @results;
+        while (my $data=$sth->fetchrow_hashref){
         #    if ($data->{'timestamp'} == $timestamp){
-        $results[$i] = $data;
-        $i++;
-
+                $results[$i]=$data;
+                $i++;
         #    }
-    }
-    return (@results);
+        }
+        return(@results);
 }
 
 # Otherwise, it needs a POD.
-sub getcredits {
-    my ( $date, $date2 ) = @_;
-    my $dbh = C4::Context->dbh;
+sub getcredits{
+        my ($date,$date2)=@_;
+        my $dbh = C4::Context->dbh;
 
-    #takes date converts to timestamps
-    my $padding = "000000";
-    ( my $a, my $b, my $c ) = unpack( "A4 x1 A2 x1 A2", $date );
-    ( my $x, my $y, my $z ) = unpack( "A4 x1 A2 x1 A2", $date2 );
-    my $timestamp  = $a . $b . $c . $padding;
-    my $timestamp2 = $x . $y . $z . $padding;
 
-    my $sth = $dbh->prepare(
-"Select * from accountlines,borrowers where (((accounttype = 'LR')  or (accounttype <> 'Pay'))
+
+        my $sth=$dbh->prepare("Select * from accountlines,borrowers where (( (accounttype <> 'Pay'))
                                    and amount < 0  and accountlines.borrowernumber = borrowers.borrowernumber
-                                   and timestamp >=?  and timestamp <?)"
-    );
-    $sth->execute( $timestamp, $timestamp2 );
+                                   and date >=?  and date <=?)");
+        $sth->execute($date, $date2);
 
-    my $i = 0;
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$i] = $data;
-        $i++;
-    }
-    return (@results);
+        my $i=0;
+        my @results;
+        while (my $data=$sth->fetchrow_hashref){
+                $results[$i]=$data;
+                $i++;
+        }
+        return(@results);
 }
 
-sub getrefunds {
-    my ( $date, $date2 ) = @_;
-    my $dbh = C4::Context->dbh;
+sub getinvoices{
+        my ($date,$date2)=@_;
+        my $dbh = C4::Context->dbh;
+        my $sth=$dbh->prepare("Select * from accountlines,borrowers where amount>0 and amountoutstanding > 0  and accountlines.borrowernumber = borrowers.borrowernumber
+                                   and (date >=?  and date <=?)");
+        $sth->execute($date, $date2);
 
-    #takes date converts to timestamps
-    my $padding = "000000";
-    ( my $a, my $b, my $c ) = unpack( "A4 x1 A2 x1 A2", $date );
-    ( my $x, my $y, my $z ) = unpack( "A4 x1 A2 x1 A2", $date2 );
-    my $timestamp  = $a . $b . $c . $padding;
-    my $timestamp2 = $x . $y . $z . $padding;
-
-    my $sth = $dbh->prepare(
-"Select * from accountlines,borrowers where (accounttype = 'REF'                                                                
-		                          and accountlines.borrowernumber = borrowers.borrowernumber                                                                          
-		                                   and timestamp >=?  and timestamp <?)"
-    );
-    $sth->execute( $timestamp, $timestamp2 );
-
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    return (@results);
+        my $i=0;
+        my @results;
+        while (my $data=$sth->fetchrow_hashref){
+                $results[$i]=$data;
+                $i++;
+        }
+        return(@results);
 }
+
 
 # Otherwise, this needs a POD.
-sub Getpaidbranch {
-    my ( $date, $borrno ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"select * from statistics where type='payment' and datetime >? and  borrowernumber=?"
-      );
-    $sth->execute( $date, $borrno );
-
-    #  print $query;
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ( $data->{'branch'} );
+sub Getpaidbranch{
+        my($date,$borrno)=@_;
+        my $dbh = C4::Context->dbh;
+        my $sth=$dbh->prepare("select * from statistics where type='payment' and datetime >? and  borrowernumber=?");
+        $sth->execute($date,$borrno);
+        #  print $query;
+        my $data=$sth->fetchrow_hashref;
+        $sth->finish;
+        return($data->{'branch'});
 }
 
 # FIXME - This is only used in reservereport.pl and reservereport.xls,
 # neither of which is used.
 # Otherwise, it needs a POD.
 sub unfilledreserves {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-"select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where (found <> 'F' or
-	    found is NULL) and cancellationdate
-                                                                is NULL and biblio.biblionumber=reserves.biblionumber and
-                                                                reserves.constrainttype='o'
-                                                                and (reserves.biblionumber=reserveconstraints.biblionumber
-                                                                and reserves.borrowernumber=reserveconstraints.borrowernumber)
-                                                                and
-                                                                reserves.borrowernumber=borrowers.borrowernumber and
-                                                                biblioitems.biblioitemnumber=reserveconstraints.biblioitemnumber order by
-                                                                biblio.title,reserves.reservedate"
-    );
-    $sth->execute;
-    my $i = 0;
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$i] = $data;
-        $i++;
-    }
-    $sth->finish;
-    $sth = $dbh->prepare(
-"select *,biblio.title from reserves,biblio,borrowers where (found <> 'F' or found is NULL) and cancellationdate
-                is NULL and biblio.biblionumber=reserves.biblionumber and reserves.constrainttype='a' and
+        my $dbh = C4::Context->dbh;
+      
+        my $i=0;
+        my @results;
+       
+   my     $sth=$dbh->prepare("select *,biblio.title from reserves,biblio,borrowers where (found <> '1' or found is NULL) and cancellationdate
+                is NULL and biblio.biblionumber=reserves.biblionumber  and
                 reserves.borrowernumber=borrowers.borrowernumber
                 order by
-                biblio.title,reserves.reservedate"
-    );
-    $sth->execute;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$i] = $data;
-        $i++;
-    }
-    $sth->finish;
-    return ( $i, \@results );
+                reserves.reservedate,biblio.title");
+        $sth->execute;
+        while (my $data=$sth->fetchrow_hashref){
+                $results[$i]=$data;
+                $i++;
+        }
+        $sth->finish;
+        return($i,\@results);
 }
 
 1;

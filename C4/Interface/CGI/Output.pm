@@ -22,10 +22,9 @@ package C4::Interface::CGI::Output;
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 require Exporter;
-
+use open ':utf8';
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -37,9 +36,9 @@ C4::CGI::Output - Convenience functions for handling outputting HTML pages
 
 =head1 SYNOPSIS
 
-  use C4::CGI::Output;
+  use C4::Interface::CGI::Output;
 
-  print $query->header(-type => C4::CGI::Output::gettype($output)), $output;
+  print $query->header(-type => "text/html"), $output;
 
 =head1 DESCRIPTION
 
@@ -53,46 +52,12 @@ related to the (guessed) charset.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(
-		&guesscharset
-		&guesstype
-		&output_html_with_http_headers
+@EXPORT = qw(	&output_html_with_http_headers
 		);
 
-=item guesscharset
 
-   &guesscharset($output)
 
-"Guesses" the charset from the some HTML that would be output.
 
-C<$output> is the HTML page to be output. If it contains a META tag
-with a Content-Type, the tag will be scanned for a language code.
-This code is returned if it is found; undef is returned otherwise.
-
-This function only does sloppy guessing; it will be confused by
-unexpected things like SGML comments. What it basically does is to
-grab something that looks like a META tag and scan it.
-
-=cut
-
-sub guesscharset ($) {
-    my($html) = @_;
-    my $charset = undef;
-    local($`, $&, $', $1, $2, $3);
-    # FIXME... These regular expressions will miss a lot of valid tags!
-    if ($html =~ /<meta\s+http-equiv=(["']?)Content-Type\1\s+content=(["'])text\/html\s*;\s*charset=([^\2\s\r\n]+)\2\s*(?:\/?)>/is) {
-        $charset = $3;
-    } elsif ($html =~ /<meta\s+content=(["'])text\/html\s*;\s*charset=([^\1\s\r\n]+)\1\s+http-equiv=(["']?)Content-Type\3\s*(?:\/?)>/is) {
-        $charset = $2;
-    }
-    return $charset;
-} # guess
-
-sub guesstype ($) {
-    my($html) = @_;
-    my $charset = guesscharset($html);
-    return defined $charset? "text/html; charset=$charset": "text/html";
-}
 
 =item output_html_with_http_headers
 
@@ -105,11 +70,13 @@ corresponds to the HTML page $html.
 =cut
 
 sub output_html_with_http_headers ($$$) {
+
     my($query, $cookie, $html) = @_;
     print $query->header(
-	-type   => guesstype($html),
+	-type   => "text/html",
+	-charset=>"UTF-8",
 	-cookie => $cookie,
-    ), $html;
+  ), $html;
 }
 
 #---------------------------------

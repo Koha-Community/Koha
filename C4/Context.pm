@@ -18,7 +18,7 @@
 # $Id$
 package C4::Context;
 use strict;
-use DBI;
+use C4::UTF8DBI;
 use C4::Boolean;
 use XML::Simple;
 use vars qw($VERSION $AUTOLOAD),
@@ -200,6 +200,7 @@ sub new
 	$self->{"Zconnauth"} = undef;	# Zebra Connection for updating
 	$self->{"stopwords"} = undef; # stopwords list
 	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
+	$self->{"attrfromkohafield"} = undef; # the hash with relations between koha table fields and Bib1-attributes
 	$self->{"userenv"} = undef;		# User env
 	$self->{"activeuser"} = undef;		# current active user
 
@@ -397,27 +398,22 @@ creates one and connects.
 sub Zconn {
         my $self = shift;
 my $server=shift;
+my $syntax=shift;
 	my $Zconn;
-      if (defined($context->{"Zconn"})) {
-	    $Zconn = $context->{"Zconn"};
-         	    return $context->{"Zconn"};
-	} else { 
-		$context->{"Zconn"} = &new_Zconn($server);
-		return $context->{"Zconn"};
-        }
+	$context->{"Zconn"} = &new_Zconn($server,$syntax);
+	return $context->{"Zconn"};
+  
 }
 
 sub Zconnauth {
         my $self = shift;
-	my $server="biblioserver"; #shift;
+my $server=shift;
+my $syntax=shift;
 	my $Zconnauth;
-	 if (defined($context->{"Zconnauth"})) {
-	    $Zconnauth = $context->{"Zconnauth"};
-          	    return $context->{"Zconnauth"};
-	} else {
-		$context->{"Zconnauth"} = &new_Zconnauth($server);
+##We destroy each connection made so create a new one	
+		$context->{"Zconnauth"} = &new_Zconnauth($server,$syntax);
 		return $context->{"Zconnauth"};
-	}	
+		
 }
 
 
@@ -432,30 +428,19 @@ the data given in the current context and returns it.
 sub new_Zconn {
 use ZOOM;
 my $server=shift;
-my $tried=0;
+my $syntax=shift;
+$syntax="xml" unless $syntax;
 my $Zconn;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
+my $o = new ZOOM::Options();
+$o->option(async => 1);
+$o->option(preferredRecordSyntax => $syntax); ## Authorities use marc while biblioserver is xml
+$o->option(databaseName=>$context->{"config"}->{$server});
+#$o->option(proxy=>$context->{"config"}->{"proxy"});## if proxyserver provided will route searches to proxy
+my $o2= new ZOOM::Options();
 
-retry:
-	eval {
-		$Zconn=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
-		preferredRecordSyntax => "USmarc",elementSetName=> "F");
-        $Zconn->option(cqlfile=> $context->{"config"}->{"zebradir"}."/etc/cql.properties");
-        $Zconn->option(cclfile=> $context->{"config"}->{"zebradir"}."/etc/ccl.properties");
-	};
-	if ($@){
-###Uncomment the lines below if you want to automatically restart your zebra if its stop
-###The system call is for Windows it should be changed to unix deamon starting for Unix platforms	
-#		if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
-#		$tried==1;
-#		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
-#		goto "retry";
-#		}else{
-		warn "Error ", $@->code(), ": ", $@->message(), "\n";
-		$Zconn="error";
-		return $Zconn;
-#		}
-	}
+ $Zconn=create ZOOM::Connection($o);
+	$Zconn->connect($context->{"config"}->{"hostname"},$port);
 	
 	return $Zconn;
 }
@@ -464,37 +449,20 @@ retry:
 sub new_Zconnauth {
 use ZOOM;
 my $server=shift;
-my $tried=0;
+my $syntax=shift;
+$syntax="xml" unless $syntax;
 my $Zconnauth;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
-	my $o = new ZOOM::Options();
-	$o->option(async => 1);
-	$o->option(preferredRecordSyntax => "usmarc");
-	$o->option(elementSetName => "F");
-	$o->option(user=>$context->{"config"}->{"zebrauser"});
-	$o->option(password=>$context->{"config"}->{"zebrapass"});
-	$o->option(databaseName=>$context->{"config"}->{$server});
-
-retry:
-eval{
- $Zconnauth=new ZOOM::Connection($context->config("hostname"),$port,databaseName=>$context->{"config"}->{$server},
-						user=>$context->{"config"}->{"zebrauser"},
-						password=>$context->{"config"}->{"zebrapass"},preferredRecordSyntax => "USmarc",elementSetName=> "F");
-};
-	if ($@){
-###Uncomment the lines below if you want to automatically restart your zebra if its stop
-###The system call is for Windows it should be changed to unix deamon starting for Unix platforms	
-#		if ($@->code==10000 && $tried==0){ ##No connection try restarting Zebra
-#		$tried==1;
-#		my $res=system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
-#		goto "retry";
-#		}else{
-		warn "Error ", $@->code(), ": ", $@->message(), "\n";
-		$Zconnauth="error";
-		return $Zconnauth;
-#		}
-	}
-	return $Zconnauth;
+my $o = new ZOOM::Options();
+#$o->option(async => 1);
+$o->option(preferredRecordSyntax => $syntax);
+$o->option(user=>$context->{"config"}->{"zebrauser"});
+$o->option(password=>$context->{"config"}->{"zebrapass"});
+$o->option(databaseName=>$context->{"config"}->{$server});
+ $o->option(charset=>"UTF8");
+ $Zconnauth=create ZOOM::Connection($o);
+$Zconnauth->connect($context->config("hostname"),$port);
+return $Zconnauth;
 }
 
 
@@ -516,11 +484,14 @@ sub _new_dbh
 	my $db_host   = $context->config("hostname");
 	my $db_user   = $context->config("user");
 	my $db_passwd = $context->config("pass");
-	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
+	my $dbh= UTF8DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
 	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
 	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
-	$dbh->do("set NAMES 'utf8'");
+#	$dbh->do("set NAMES 'utf8'");
+#	$dbh->do("SET character_set_client=utf8");
+#	$dbh->do("SET character_set_connection=utf8");
+#	$dbh->do("SET character_set_results=utf8");
 	return $dbh;
 }
 
@@ -660,22 +631,50 @@ sub marcfromkohafield
 	return $context->{"marcfromkohafield"};
 }
 
+
 # _new_marcfromkohafield
-# Internal helper function (not a method!). This creates a new
-# hash with stopwords
+# Internal helper function (not a method!). 
 sub _new_marcfromkohafield
 {
 	my $dbh = C4::Context->dbh;
 	my $marcfromkohafield;
-	my $sth = $dbh->prepare("select frameworkcode,kohafield,tagfield,tagsubfield from marc_subfield_structure where kohafield > ''");
+	my $sth = $dbh->prepare("select marctokoha,tagfield,tagsubfield,recordtype from koha_attr where tagfield is not null  ");
 	$sth->execute;
-	while (my ($frameworkcode,$kohafield,$tagfield,$tagsubfield) = $sth->fetchrow) {
+	while (my ($kohafield,$tagfield,$tagsubfield,$recordtype) = $sth->fetchrow) {
 		my $retval = {};
-		$marcfromkohafield->{$frameworkcode}->{$kohafield} = [$tagfield,$tagsubfield];
+		$marcfromkohafield->{$recordtype}->{$kohafield} = [$tagfield,$tagsubfield];
 	}
+	
 	return $marcfromkohafield;
 }
 
+
+#item attrfromkohafield
+#To use as a hash of koha to z3950 attributes
+sub _new_attrfromkohafield
+{
+	my $dbh = C4::Context->dbh;
+	my $attrfromkohafield;
+	my $sth2 = $dbh->prepare("select marctokoha,attr from koha_attr" );
+	$sth2->execute;
+	while (my ($marctokoha,$attr) = $sth2->fetchrow) {
+		my $retval = {};
+		$attrfromkohafield->{$marctokoha} = $attr;
+	}
+	return $attrfromkohafield;
+}
+sub attrfromkohafield
+{
+	my $retval = {};
+
+	# If the hash already exists, return it.
+	return $context->{"attrfromkohafield"} if defined($context->{"attrfromkohafield"});
+
+	# No hash. Create one.
+	$context->{"attrfromkohafield"} = &_new_attrfromkohafield();
+
+	return $context->{"attrfromkohafield"};
+}
 =item stopwords
 
   $dbh = C4::Context->stopwords;
@@ -836,6 +835,17 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.44  2006/08/25 21:07:08  tgarip1957
+# New set of routines for HEAD.
+# Uses a complete new ZEBRA Indexing.
+# ZEBRA is now XML and comprises of a KOHA meta record. Explanatory notes will be on koha-devel
+# Fixes UTF8 problems
+# Fixes bug with authorities
+# SQL database major changes.
+# Separate biblioograaphic and holdings records. Biblioitems table depreceated
+# etc. etc.
+# Wait for explanatory document on koha-devel
+#
 # Revision 1.43  2006/08/10 12:49:37  toins
 # sync with dev_week.
 #

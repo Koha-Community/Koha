@@ -22,7 +22,7 @@ package C4::Koha;
 use strict;
 require Exporter;
 use C4::Context;
-
+use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
@@ -51,7 +51,7 @@ Koha.pm provides many functions for Koha scripts.
             &subfield_is_koha_internal_p
             &GetBranches &getbranch &getbranchdetail
             &getprinters &getprinter
-            &GetItemTypes &getitemtypeinfo
+            &GetItemTypes &getitemtypeinfo &ItemType
                         get_itemtypeinfos_of
             &getframeworks &getframeworkinfo
             &getauthtypes &getauthtype
@@ -137,9 +137,9 @@ sub GetBranches {
             if ($type){
             $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? and categorycode = ?");
             $nsth->execute($branch->{'branchcode'},$type);
-        } else {
+      	  } else {
             $nsth->execute($branch->{'branchcode'});
-        }
+      	  }
         while (my ($cat) = $nsth->fetchrow_array) {
             # FIXME - This seems wrong. It ought to be
             # $branch->{categorycodes}{$cat} = 1;
@@ -152,14 +152,7 @@ sub GetBranches {
             # that aren't fields in the "branches" table.
             $branch->{$cat} = 1;
             }
-                        if ($type) {
-                $branches{$branch->{'branchcode'}}=$branch;
-            }
-            }
-                if (!$type){
-            $branches{$branch->{'branchcode'}}=$branch;
-        }
-
+}
     return (\%branches);
 }
 
@@ -354,6 +347,15 @@ SELECT itemtype,
     return get_infos_of($query, 'itemtype');
 }
 
+sub ItemType {
+  my ($type)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("select description from itemtypes where itemtype=?");
+  $sth->execute($type);
+  my $dat=$sth->fetchrow_hashref;
+  $sth->finish;
+  return ($dat->{'description'});
+}
 =head2 getauthtypes
 
   $authtypes = &getauthtypes();
@@ -456,7 +458,7 @@ sub getframeworks {
 # returns a reference to a hash of references to branches...
     my %itemtypes;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select * from biblio_framework");
+    my $sth=$dbh->prepare("select * from biblios_framework");
     $sth->execute;
     while (my $IT=$sth->fetchrow_hashref) {
             $itemtypes{$IT->{'frameworkcode'}}=$IT;
@@ -474,7 +476,7 @@ Returns information about an frameworkcode.
 sub getframeworkinfo {
     my ($frameworkcode) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+    my $sth=$dbh->prepare("select * from biblios_framework where frameworkcode=?");
     $sth->execute($frameworkcode);
     my $res = $sth->fetchrow_hashref;
     return $res;
@@ -869,11 +871,11 @@ labels.
 =cut
 sub get_notforloan_label_of {
     my $dbh = C4::Context->dbh;
-
+my($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("notforloan","holdings");
     my $query = '
 SELECT authorised_value
-  FROM marc_subfield_structure
-  WHERE kohafield = \'items.notforloan\'
+  FROM holdings_subfield_structure
+  WHERE tagfield =$tagfield and tagsubfield=$tagsubfield
   LIMIT 0, 1
 ';
     my $sth = $dbh->prepare($query);

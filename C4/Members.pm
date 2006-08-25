@@ -56,15 +56,41 @@ This module contains routines for adding, modifying and deleting members/patrons
 @ISA    = qw(Exporter);
 
 @EXPORT = qw(
- &BornameSearch &getmember &borrdata &borrdata2 &fixup_cardnumber &findguarantees &findguarantor &GuarantornameSearch &NewBorrowerNumber   &modmember &newmember &changepassword &borrissues &allissues
-  &checkuniquemember &getzipnamecity &getidcity &getguarantordata &getcategorytype
-  &calcexpirydate &checkuserpassword
-  &getboracctrecord
-  &borrowercategories &getborrowercategory
-  &fixEthnicity
-  &ethnicitycategories get_institutions add_member_orgs
-  &get_age &GetBorrowersFromSurname &GetBranchCodeFromBorrowers
-  &GetFlagsAndBranchFromBorrower
+&allissues
+&borrdata 
+&borrdata2 
+&BornameSearch 
+&borrissues
+&borrowercategories 
+
+&changepassword  
+&checkuniquemember 
+&calcexpirydate 
+&checkuserpassword
+&ethnicitycategories get_institutions add_member_orgs
+&fixEthnicity
+&fixup_cardnumber 
+&findguarantees 
+&findguarantor 
+
+
+
+&getmember 
+&getzipnamecity 
+&getidcity 
+&getguarantordata 
+&getcategorytype
+&getboracctrecord
+&getborrowercategory
+&get_age 
+&GetBorrowersFromSurname 
+&GetBranchCodeFromBorrowers
+&GetFlagsAndBranchFromBorrower
+&GuarantornameSearch 
+
+&NewBorrowerNumber   
+&modmember 
+&newmember 
 );
 
 
