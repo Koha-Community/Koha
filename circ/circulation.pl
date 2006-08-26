@@ -127,7 +127,7 @@ if ($borrowernumber) {
 	#warn $borrower->{'expiry'};
  	my $warningdate = DateCalc($borrower->{'expiry'},"- ".C4::Context->preference('NotifyBorrowerDeparture')."  days");
 	my $offset = '+ '.$borrower->{'enrolmentperiod'}.' years';
-	my $renewaldate = DateCalc($warningdate, $offset);
+	my $renewaldate = DateCalc(ParseDate("today"), $offset);
 	$renewaldate = UnixDate($renewaldate,'%Y-%m-%d');
 	my $warning=Date_Cmp(ParseDate("today"),$warningdate);
 	if ($warning>0){ 
