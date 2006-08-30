@@ -27,7 +27,7 @@ require Exporter;
 use C4::Context;
 use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
-use C4::Members;  # getpatroninformation
+use C4::Circulation::Circ2;  # getpatroninformation
 # use Net::LDAP;
 # use Net::LDAP qw(:all);
 
@@ -56,8 +56,7 @@ C4::Auth - Authenticates Koha users
 			  });
 
   print $query->header(
-    -type => "text/html",
-    -charset=>"utf-8",
+    -type => guesstype($template->output),
     -cookie => $cookie
   ), $template->output;
 
@@ -509,8 +508,7 @@ sub checkauth {
 					-value => $sessionID,
 					-expires => '');
 	print $query->header(
-		-type => "text/html",
-		-charset=>"utf-8",
+		-type => guesstype($template->output),
 		-cookie => $cookie
 		), $template->output;
 	exit;
