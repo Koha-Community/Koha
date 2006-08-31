@@ -2104,6 +2104,18 @@ if ( $sth->fetchrow == 0 ) {
         }
     }
 }
+
+
+#
+# update publisheddate 
+#
+$sth = $dbh->prepare("select count(*) from serial where publisheddate is NULL");
+$sth->execute;
+my ($emptypublished) = $sth->fetchrow;
+if ($emptypublished) {
+    print "Updating publisheddate\n";
+    $dbh->do("update serial set publisheddate=planneddate where publisheddate is NULL");
+}
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
@@ -2181,6 +2193,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.54  2006/08/31 14:37:04  tipaul
+# fix for :
+# http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1140
+# (published date never null now)
+#
 # Revision 1.100.2.53  2006/08/09 16:28:30  kados
 # adds ReceiveBackIssues systempref with default set to 5
 #
