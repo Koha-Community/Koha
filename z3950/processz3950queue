@@ -258,7 +258,7 @@ while (1) {
 								print "$$/$id : connected to $globalname\n";
 								print "Global Syntax =>".$globalsyntax."<=";
  								eval {$conn->option(elementSetName => 'F')};
-								eval { $conn->option(preferredRecordSyntax => 'USMARC');} if ($globalsyntax eq "USMARC");
+								eval { $conn->option(preferredRecordSyntax => 'USMARC');} if ($globalsyntax eq "USMARC" or $globalsyntax eq 'MARC21');
  								eval { $conn->option(preferredRecordSyntax => 'UNIMARC');} if ($globalsyntax eq "UNIMARC");
  								if ($@) {
  									print "$$/$id : $globalname ERROR: $@ for $resultsid\n";
