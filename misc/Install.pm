@@ -867,6 +867,21 @@ sub checkperlmodules {
 				push @missing,"You will need PDF::API2 for barcode generator";
 			}
 	}
+	unless (eval {require GD::Barcorde})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need GD::Barcode for the new barcode generator";
+			}
+	}
+	unless (eval {require Data::Random})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need Data::Random for the new barcode generator";
+			}
+	}
+	unless (eval {require PDF::Reuse::Barcode})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need PDF::Reuse::Barcode for the new barcode generator";
+			}
+	}
 	unless (eval {require Net::LDAP})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Net::LDAP";
@@ -1829,7 +1844,7 @@ sub databasesetup {
 	# Set up permissions
 	startsysout();
 	my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "create", "$database");
-	system("$mysqldir/bin/mysql -u$mysqluser -e \"GRANT ALL PRIVILEGES on ".$database.".* to '$user' IDENTIFIED BY '$pass' \" mysql");
+	system("$mysqldir/bin/mysql '-u$mysqluser' -e \"GRANT ALL PRIVILEGES on ".$database.".* to '$user' IDENTIFIED BY '$pass' \" mysql");
 	# Change to admin user login
 	setmysqlclipass($pass);
 	if ($result) {
@@ -1837,7 +1852,7 @@ sub databasesetup {
 	} else {
 		# Create the database structure
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user $database < koha.mysql");
+		system("$mysqldir/bin/mysql '-u$user' $database < koha.mysql");
 	}
 
 }
@@ -1865,8 +1880,10 @@ $messages->{'UpdateMarcTables'}->{en} =
    heading('MARC FIELD DEFINITIONS') . qq|
 You can import MARC settings for:
 
-  1 MARC21
-  2 UNIMARC
+  1 MARC21 in english
+  2 UNIMARC in french
+  3 UNIMARC in english
+  4 UNIMARC in ukrainian
   N none
 
 NOTE: If you choose N,
@@ -1912,14 +1929,20 @@ sub updatedatabase {
 		$response=$auto_install->{UpdateMarcTables};
 		print ON_YELLOW.BLACK."auto-setting UpdateMarcTable to : $response".RESET."\n";
 	} else {
-		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12Nn', '1');
+		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 1234Nn', '1');
 	}
 	startsysout();
 	if ($response eq '1') {
-		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql '-u$user' $database");
 	}
 	if ($response eq '2') {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql '-u$user' $database");
+	}
+	if ($response eq '3') {
+		system("cat scripts/misc/marc_datas/unimarc_en/structure_def.sql | $mysqldir/bin/mysql '-u$user' $database");
+	}
+	if ($response eq '4') {
+		system("cat scripts/misc/marc_datas/unimarc_uk/structure_def.sql | $mysqldir/bin/mysql '-u$user' $database");
 	}
 	delete($ENV{"KOHA_CONF"});
 
@@ -1945,7 +1968,7 @@ sub populatedatabase {
 	my $input;
 	my $response;
 	my $branch='MAIN';
-	my $setbranch=0; //MJR: need new test flag, because branch is preset
+	my $setbranch=0; #MJR: need new test flag, because branch is preset
 	if ($auto_install->{BranchName}) {
 		$branch=$auto_install->{BranchName};
 		print ON_YELLOW.BLACK."auto-setting a branch : $branch".RESET."\n";
@@ -1975,9 +1998,9 @@ sub populatedatabase {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
 
 		my $printername='lp';
 		my $printerqueue='/dev/lp0';
@@ -1996,7 +2019,7 @@ sub populatedatabase {
 			$printerqueue=~s/[^A-Za-z0-9]//g;
 		}
 		startsysout();	
-		system("$mysqldir/bin/mysql -u$user -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
 	}
 	my $language;
 	if ($auto_install->{Language}) {
@@ -2006,7 +2029,7 @@ sub populatedatabase {
 		$language=showmessage(getmessage('Language'), 'free', 'en');
 	}
 	startsysout();	
-	system("$mysqldir/bin/mysql -u$user -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
+	system("$mysqldir/bin/mysql '-u$user' -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
 	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
 		# ask for directory to look for files to append
@@ -2070,7 +2093,7 @@ if you confirm, the file will be added to the DB
 						# if confirmed, upload the file in the DB
 						unless ($response =~/^n/i) {
 							$FileToUpload =~ s/\.txt/\.sql/;
-							system("$mysqldir/bin/mysql -u$user $database <scripts/misc/sql-datas/$sqluploaddir/$FileToUpload");
+							system("$mysqldir/bin/mysql '-u$user' $database <scripts/misc/sql-datas/$sqluploaddir/$FileToUpload");
 						}
 					}
 				}
