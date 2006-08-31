@@ -56,7 +56,7 @@
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->')">+</a><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" name="repeat_field" value="" size="2" onchange="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="subfield_loop" -->
@@ -301,7 +301,7 @@ function openAuth(tagid,authtype,X) {
 }
 
 
-function AddField(field) {
+function AddField(field,cntrepeatfield) {
 	document.forms['f'].op.value = "addfield";
 	document.forms['f'].addfield_field.value=field;
 	document.f.submit();

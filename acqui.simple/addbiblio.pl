@@ -545,7 +545,9 @@ if ($op eq "addbiblio") {
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
 	my $addedfield = $input->param('addfield_field');
-	my $tagaddfield_subfield = $input->param('addfield_subfield');
+	my $cntrepeatfield=$input->param('repeat_field');
+    $cntrepeatfield=1 unless ($cntrepeatfield);
+    my $tagaddfield_subfield = $input->param('addfield_subfield');
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
@@ -553,10 +555,18 @@ if ($op eq "addbiblio") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	my $record=MARC::Record->new_from_xml($xml, C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+    my $record;
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+		$record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	} else {
+		my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
 	# adding an empty field
-	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
-	$record->append_fields($field);
+	for (my $i=1;$i<=$cntrepeatfield;$i++){
+        my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
+        $record->append_fields($field);
+    }
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
