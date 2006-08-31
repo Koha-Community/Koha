@@ -54,7 +54,6 @@ my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
 
 my $pagesize=20;
 my $op = $input->param('op');
-$searchfield=~ s/\,//g;
 
 my ($template, $loggedinuser, $cookie) 
     = get_template_and_user({template_name => "parameters/z3950servers.tmpl",
@@ -80,6 +79,7 @@ if ($op eq 'add_form') {
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
 		$sth->execute($searchfield);
+		warn "SEARCH : $searchfield";
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
