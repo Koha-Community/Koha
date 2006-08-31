@@ -30,7 +30,6 @@ use HTML::Template;
 use DBI;
 use C4::Koha;
 
-
 # this is a reorganisation of circulationold.pl
 # dividing it up into three scripts......
 # this will be the first one that chooses branch and printer settings....
