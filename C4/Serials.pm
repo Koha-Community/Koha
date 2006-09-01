@@ -1041,8 +1041,9 @@ sub NewSubscription {
     $sth = $dbh->prepare($query);
     $sth->execute($biblionumber, $subscriptionid, format_date_in_iso($startdate), format_date_in_iso($enddate), "", "", "", $notes);
 ## User may have subscriptionid stored in MARC so check and fill it
-my $record=MARCgetbiblio($dbh,$biblionumber);
-MARCkoha2marcOnefield( $record, "subscriptionid", $subscriptionid,"biblios" );
+my $record=XMLgetbiblio($dbh,$biblionumber);
+$record=XML_xml2hash_onerecord($record);
+XML_writeline( $record, "subscriptionid", $subscriptionid,"biblios" );
 my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
 NEWmodbiblio($dbh,$biblionumber,$record,$frameworkcode);
 # reread subscription to get a hash (for calculation of the 1st issue number)
@@ -1084,9 +1085,9 @@ sub ReNewSubscription {
     my ($subscriptionid,$user,$startdate,$numberlength,$weeklength,$monthlength,$note) = @_;
     my $dbh = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
-    my $record=MARCgetbiblio($dbh,$subscription->{biblionumber});
-
-    my $biblio = MARCmarc2koha($dbh,$record,"biblios");
+    my $record=XMLgetbiblio($dbh,$subscription->{biblionumber});
+    $record=XML_xml2hash_onerecord($record);
+    my $biblio = XMLmarc2koha_onerecord($dbh,$record,"biblios");
     NewSuggestion($user,$subscription->{bibliotitle},$biblio->{author},$biblio->{publishercode},$biblio->{note},'','','','','',$subscription->{biblionumber});
     # renew subscription
     my $query = qq|
@@ -1295,8 +1296,9 @@ sub DelSubscription {
     my ($subscriptionid,$biblionumber) = @_;
     my $dbh = C4::Context->dbh;
 ## User may have subscriptionid stored in MARC so check and remove it
-my $record=MARCgetbiblio($dbh,$biblionumber);
-MARCkoha2marcOnefield( $record, "subscriptionid", "","biblios" );
+my $record=XMLgetbiblio($dbh,$biblionumber);
+$record=XML_xml2hash_onerecord($record);
+XML_writeline( $record, "subscriptionid", "","biblios" );
 my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
 NEWmodbiblio($dbh,$biblionumber,$record,$frameworkcode);
     $subscriptionid=$dbh->quote($subscriptionid);

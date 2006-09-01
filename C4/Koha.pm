@@ -138,6 +138,8 @@ sub GetBranches {
             $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? and categorycode = ?");
             $nsth->execute($branch->{'branchcode'},$type);
       	  } else {
+	            $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ? ");
+ 
             $nsth->execute($branch->{'branchcode'});
       	  }
         while (my ($cat) = $nsth->fetchrow_array) {

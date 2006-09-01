@@ -24,7 +24,8 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use XML::Simple;
 use Encode;
-
+use utf8;
+use Data::Dumper;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -54,29 +55,34 @@ $VERSION = 2.01;
 &MARCfind_itemtype
 &MARCgettagslib
 &MARCitemsgettagslib
-&MARCmoditemonefield
 &MARCkoha2marc
 &MARCmarc2koha 
 &MARCkoha2marcOnefield 
 &MARCfind_attr_from_kohafield
-&MARChtml2marc 
 &MARChtml2xml 
-&MARChtml2marcxml
+
 &MARCgetbiblio 
 &MARCgetitem 
 
 &XMLgetbiblio 
+&XMLgetbibliohash
 &XMLgetitem 
+&XMLgetitemhash
 &XMLgetallitems 
 &XML_xml2hash 
+&XML_xml2hash_onerecord
 &XML_hash2xml 
 &XMLmarc2koha
+&XMLmarc2koha_onerecord
 &XML_readline
+&XML_readline_onerecord
 &XML_writeline
+&XMLmoditemonefield
 
 &ZEBRAgetrecord   
-&ZEBRAgetallitems 
-&ZEBRAop &ZEBRAopserver 
+
+&ZEBRAop 
+&ZEBRAopserver 
 &ZEBRA_readyXML 
 &ZEBRA_readyXML_noheader
 
@@ -88,14 +94,52 @@ $VERSION = 2.01;
 
 #################### XML XML  XML  XML ###################
 ### XML Read- Write functions
+sub XML_readline_onerecord{
+my ($xml,$kohafield,$recordtype,$tag,$subf)=@_;
+#$xml represents one record of MARCXML as perlhashed 
+### $recordtype is needed for mapping the correct field
+ ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
 
+if ($tag){
+my $biblio=$xml->{'datafield'};
+my $controlfields=$xml->{'controlfield'};
+my $leader=$xml->{'leader'};
+ if ($tag>9){
+	foreach my $data (@$biblio){
+   	    if ($data->{'tag'} eq $tag){
+		foreach my $subfield ( $data->{'subfield'}){
+		    foreach my $code ( @$subfield){
+			if ($code->{'code'} eq $subf){
+			return $code->{'content'};
+			}
+		   }
+		}
+  	   }
+	}
+  }else{
+	if ($tag eq "000" || $tag eq "LDR"){
+		return  $leader->[0] if $leader->[0];
+	}else{
+	     foreach my $control (@$controlfields){
+		if ($control->{'tag'} eq $tag){
+		return	$control->{'content'} if $control->{'content'};
+
+		}
+	    }
+	}
+   }##tag
+}## if tag is mapped
+return "";
+}
 
 sub XML_readline{
-my ($xml,$kohafield,$recordtype)=@_;
+my ($xml,$kohafield,$recordtype,$tag,$subf)=@_;
 #$xml represents one record node hashed of holdings or a complete xml koharecord
 ### $recordtype is needed for reading the child records( like holdings records) .Otherwise main  record is assumed ( like biblio)
 ## holding records are parsed and sent here one by one
-my ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype);
+# If kohafieldname given find tag
+
+($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
 my @itemresults;
 if ($tag){
 if ($recordtype eq "holdings"){
@@ -107,7 +151,7 @@ if ($recordtype eq "holdings"){
 		foreach my $subfield ( $data->{'subfield'}){
 		    foreach my $code ( @$subfield){
 			if ($code->{'code'} eq $subf){
-			return Encode::decode("UTF-8",$code->{content});
+			return $code->{content};
 			}
 		   }
 		}
@@ -116,7 +160,7 @@ if ($recordtype eq "holdings"){
       }else{
 	foreach my $control (@$hcontrolfield){
 		if ($control->{'tag'} eq $tag){
-		return  Encode::decode("UTF-8",$control->{'content'});
+		return  $control->{'content'};
 		}
 	}
       }##tag
@@ -130,7 +174,7 @@ my $controlfields=$xml->{'record'}->[0]->{'controlfield'};
 		foreach my $subfield ( $data->{'subfield'}){
 		    foreach my $code ( @$subfield){
 			if ($code->{'code'} eq $subf){
-			return Encode::decode("UTF-8",$code->{'content'});
+			return $code->{'content'};
 			}
 		   }
 		}
@@ -140,7 +184,7 @@ my $controlfields=$xml->{'record'}->[0]->{'controlfield'};
 	
 	foreach my $control (@$controlfields){
 		if ($control->{'tag'} eq $tag){
-		return	Encode::decode("UTF-8",$control->{'content'}) if $control->{'content'};
+		return	$control->{'content'}if $control->{'content'};
 		}
 	}
    }##tag
@@ -150,45 +194,57 @@ return "";
 }
 
 sub XML_writeline{
-## This routine modifies one line of marcxml record mainly useful for updating circulation data
-my ($xml,$kohafield,$newvalue,$recordtype)=@_;
-my $biblio=$xml->{'record'}->[0]->{'datafield'};
-my $controlfield=$xml->{'record'}->[0]->{'controlfield'};
-my ($tag,$subf)=MARCfind_kohafield($kohafield,$recordtype);
+## This routine modifies one line of marcxml record hash
+my ($xml,$kohafield,$newvalue,$recordtype,$tag,$subf)=@_;
+$newvalue= Encode::decode('utf8',$newvalue) if $newvalue;
+my $biblio=$xml->{'datafield'};
+my $controlfield=$xml->{'controlfield'};
+ ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
 my $updated=0;
     if ($tag>9){
 	foreach my $data (@$biblio){
         		if ($data->{'tag'} eq $tag){
 			my @subfields=$data->{'subfield'};
+			my @newsubs;
 			foreach my $subfield ( @subfields){
 	 		      foreach my $code ( @$subfield){
 				if ($code->{'code'} eq $subf){	
-				$code->{content}=$newvalue;
+				$code->{'content'}=$newvalue;
 				$updated=1;
 				}
+			      push @newsubs,$code;
 	  		      }
 			}
 		     if (!$updated){	
-			 push @subfields,{code=>$subf,content=>$newvalue};
-			$data->{subfield}= \@subfields;
-			
+			 push @newsubs,{code=>$subf,content=>$newvalue};
+			$data->{subfield}= \@newsubs;
+			$updated=1;
 		     }	
 		}
        	 }
-		## Tag did not exist
+	## Tag did not exist
 		  if (!$updated){
-	                push @$biblio,{datafield=>[{
-                                                                               'ind1' => ' ',
-                                                                               'ind2' => ' ',
-                                                                               'subfield' => [
-                                                                                               {
-                                                                                                 'content' => $newvalue,
-                                                                                                 'code' => $subf
-                                                                                               }
-                                                                                             ],
-                                                                               'tag' => $tag
-                                                                             }]
-				};
+		if ($subf){	
+	                push @$biblio,
+                                           {
+                                             'ind1' => ' ',
+                                             'ind2' => ' ',
+                                             'subfield' => [
+                                                             {
+                                                               'content' =>$newvalue,
+                                                               'code' => $subf
+                                                             }
+                                                           ],
+                                             'tag' =>$tag
+                                           } ;
+		   }else{
+	                push @$biblio,
+                                           {
+                                             'ind1' => ' ',
+                                             'ind2' => ' ',
+                                             'tag' =>$tag
+                                           } ;
+		   }								
 		  }## created now
     }else{
 	foreach my $control(@$controlfield){
@@ -211,13 +267,32 @@ my ($xml)=@_;
 return $hashed;
 }
 
+sub XML_separate{
+##Separates items from biblio
+my $hashed=shift;
+my $biblio=$hashed->{record}->[0];
+my @items;
+my $items=$hashed->{holdings}->[0]->{record};
+foreach my $item (@$items){
+ push @items,$item;
+}
+return ($biblio,@items);
+}
+
+sub XML_xml2hash_onerecord{
+##make a perl hash from xml file
+my ($xml)=@_;
+  my $hashed = XMLin( $xml ,KeyAttr =>['leader','controlfield','datafield'],ForceArray => ['leader','controlfield','datafield','subfield'],KeepRoot=>0);
+return $hashed;
+}
 sub XML_hash2xml{
 ## turn a hash back to xml
 my ($hashed,$root)=@_;
 $root="record" unless $root;
-my $xml= XMLout($hashed,KeyAttr=>['collection','record','leader','controlfıeld','datafield'],NoSort => 1,AttrIndent => 0,KeepRoot=>0,SuppressEmpty => 1,RootName=>$root);
+my $xml= XMLout($hashed,KeyAttr=>['leader','controlfıeld','datafield'],NoSort => 1,AttrIndent => 0,KeepRoot=>0,SuppressEmpty => 1,RootName=>$root );
 return $xml;
 }
+
 
 
 sub XMLgetbiblio {
@@ -226,7 +301,16 @@ sub XMLgetbiblio {
     my $sth =      $dbh->prepare("select marcxml from biblio where biblionumber=? "  );
     $sth->execute( $biblionumber);
    my ($marcxml)=$sth->fetchrow;
+	$marcxml=Encode::decode('utf8',$marcxml);
  return ($marcxml);
+}
+
+sub XMLgetbibliohash{
+## Utility to return s hashed MARCXML
+my ($dbh,$biblionumber)=@_;
+my $xml=XMLgetbiblio($dbh,$biblionumber);
+my $xmlhash=XML_xml2hash_onerecord($xml);
+return $xmlhash;
 }
 
 sub XMLgetitem {
@@ -241,8 +325,17 @@ if ($itemnumber){
     $sth->execute($barcode);
 }
  my ($marcxml)=$sth->fetchrow;
+$marcxml=Encode::decode('utf8',$marcxml);
     return ($marcxml);
 }
+sub XMLgetitemhash{
+## Utility to return s hashed MARCXML
+ my ( $dbh, $itemnumber,$barcode ) = @_;
+my $xml=XMLgeitem( $dbh, $itemnumber,$barcode);
+my $xmlhash=XML_xml2hash_onerecord($xml);
+return $xmlhash;
+}
+
 
 sub XMLgetallitems {
 # warn "XMLgetallitems";
@@ -253,6 +346,7 @@ my   $sth = $dbh->prepare("select marcxml from items where biblionumber =?"  );
     $sth->execute($biblionumber);
 
  while(my ($marcxml)=$sth->fetchrow_array){
+$marcxml=Encode::decode('utf8',$marcxml);
     push @results,$marcxml;
 }
 return @results;
@@ -260,7 +354,7 @@ return @results;
 
 sub XMLmarc2koha {
 # warn "XMLmarc2koha";
-##Returns two hashes from KOHA_XML record
+##Returns two hashes from KOHA_XML record hashed
 ## A biblio hash and and array of item hashes
 	my ($dbh,$xml,$related_record,@fields) = @_;
 	my ($result,@items);
@@ -334,7 +428,63 @@ my $itemresult;
 
 	return ($result,@items);
 }
+sub XMLmarc2koha_onerecord {
+# warn "XMLmarc2koha_onerecord";
+##Returns a koha hash from MARCXML hash
 
+	my ($dbh,$xml,$related_record,@fields) = @_;
+	my ($result);
+	
+## if @fields is given do not bother about the rest of fields just parse those
+
+	if (@fields){
+		foreach my $field(@fields){
+		my $val=&XML_readline_onerecord($xml,$field,$related_record);
+			$result->{$field}=$val if $val;			
+		}
+	}else{
+	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where  recordtype like ? and tagfield is not null" );
+	$sth2->execute($related_record);
+	my $field;
+		while ($field=$sth2->fetchrow) {
+		$result->{$field}=&XML_readline_onerecord($xml,$field,$related_record);
+		}
+	}
+	return ($result);
+}
+
+sub XMLmodLCindex{
+# warn "XMLmodLCindex";
+my ($dbh,$xmlhash)=@_;
+my ($lc)=XML_readline_onerecord($xmlhash,"classification","biblios");
+my ($cutter)=XML_readline_onerecord($xmlhash,"subclass","biblios");
+
+	if ($lc){
+	$lc.=$cutter;
+	my ($lcsort)=calculatelc($lc);
+	$xmlhash=XML_writeline($xmlhash,"lcsort",$lcsort,"biblios");
+	}
+return $xmlhash;
+}
+
+sub XMLmoditemonefield{
+# This routine takes itemnumber and biblionumber and updates XMLmarc;
+### the ZEBR DB update can wait depending on $donotupdate flag
+my ($dbh,$biblionumber,$itemnumber,$itemfield,$newvalue,$donotupdate)=@_;
+my ($record) = XMLgetitem($dbh,$itemnumber);
+	my $recordhash=XML_xml2hash_onerecord($record);
+   	XML_writeline( $recordhash, $itemfield, $newvalue,"holdings" );	
+ if($donotupdate){
+	## Prevent various update calls to zebra wait until all changes finish
+		$record=XML_hash2xml($recordhash);
+		my $sth=$dbh->prepare("update items set marcxml=? where itemnumber=?");
+		$sth->execute($record,$itemnumber);
+		$sth->finish;
+	}else{
+		NEWmoditem($dbh,$recordhash,$biblionumber,$itemnumber);
+}
+
+}
 #
 #
 # MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC MARC
@@ -554,23 +704,7 @@ my   $sth = $dbh->prepare("select marc from items where biblionumber =?"  );
 return @results;
 }
 
-sub MARCmoditemonefield{
-# This routine will be depraeciated as soon as mysql dependency on items is removed;
-## this function is different to MARCkoha2marcOnefield this one does not need the record but the itemnumber
-my ($dbh,$biblionumber,$itemnumber,$itemfield,$newvalue,$donotupdate)=@_;
-my ($record) = MARCgetitem($dbh,$itemnumber);
-   MARCkoha2marcOnefield( $record, $itemfield, $newvalue,"holdings" );
- if($donotupdate){
-	## Prevent various update calls to zebra wait until all changes finish
-	## Fix  to pass this record around to prevent Mysql update as well
-		my $sth=$dbh->prepare("update items set marc=? where itemnumber=?");
-		$sth->execute($record->as_usmarc,$itemnumber);
-		$sth->finish;
-	}else{
-		NEWmoditem($dbh,$record,$biblionumber,$itemnumber);
-}
 
-}
 
 
 
@@ -631,6 +765,8 @@ sub MARChtml2xml {
 		    	if (@$values[$i] ne "") {
 		    		# leader
 		    		if (@$tags[$i] eq "000") {
+				##Force the leader to UTF8
+				substr(@$values[$i],9,1)="a";
 						$xml.="<leader>@$values[$i]</leader>\n";
 						$first=1;
 					# rest of the fixed fields
@@ -663,16 +799,17 @@ sub MARChtml2xml {
 	}
 	$xml.="</record>";
 	# warn $xml;
+	$xml=Encode::decode('utf8',$xml);
 	return $xml;
 }
 sub marc_record_header {
 ####  this one is for <record>
     my $format = shift;
     my $enc = shift || 'UTF-8';
+##
     return( <<MARC_XML_HEADER );
 <?xml version="1.0" encoding="$enc"?>
-<record
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<record  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
   xmlns="http://www.loc.gov/MARC21/slim">
 MARC_XML_HEADER
@@ -689,64 +826,7 @@ sub collection_header {
 KOHA_XML_HEADER
 }
 
-sub MARChtml2marc {
-# warn "MARChtml2marc";
-	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
-	my $prevtag = -1;
-	my $record = MARC::Record->new();
-# 	my %subfieldlist=();
-	my $prevvalue; # if tag <10
-	my $field; # if tag >=10
-	for (my $i=0; $i< @$rtags; $i++) {
-		next unless @$rvalues[$i];
-		# rebuild MARC::Record
-# 			# warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
-		if (@$rtags[$i] ne $prevtag) {
-			if ($prevtag < 10) {
-				if ($prevvalue) {
 
-					if ($prevtag ne '000') {
-						$record->insert_fields_ordered((sprintf "%03s",$prevtag),$prevvalue);
-					} else {
-
-						$record->leader($prevvalue);
-
-					}
-				}
-			} else {
-				if ($field) {
-					$record->insert_fields_ordered($field);
-				}
-			}
-			$indicators{@$rtags[$i]}.='  ';
-			if (@$rtags[$i] <10) {
-				$prevvalue= @$rvalues[$i];
-				undef $field;
-			} else {
-				undef $prevvalue;
-				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
-# 			# warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-			}
-			$prevtag = @$rtags[$i];
-		} else {
-			if (@$rtags[$i] <10) {
-				$prevvalue=@$rvalues[$i];
-			} else {
-				if (length(@$rvalues[$i])>0) {
-					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
-# 			# warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-				}
-			}
-			$prevtag= @$rtags[$i];
-		}
-	}
-	# the last has not been included inside the loop... do it now !
-	$record->insert_fields_ordered($field) if $field;
-# 	# warn "HTML2MARC=".$record->as_formatted;
-	$record->encoding( 'UTF-8' );
-#	$record->MARC::File::USMARC::update_leader();
-	return $record;
-}
 
 sub MARCkoha2marc {
 # warn "MARCkoha2marc";
@@ -871,32 +951,18 @@ if ($tagfield){
     return $result;
 }
 
-sub MARCmodLCindex{
-# warn "MARCmodLCindex";
-my ($dbh,$record)=@_;
 
-my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield("classification","biblios");
-my ($tagfield2,$tagsubfieldsub) = MARCfind_marc_from_kohafield("subclass","biblios");
-my $tag=$record->field($tagfield);
-if ($tag){
-my ($lcsort)=calculatelc($tag->subfield($tagsubfield)).$tag->subfield($tagsubfieldsub);
-
- &MARCkoha2marcOnefield( $record, "lcsort", $lcsort,"biblios");
-}
-return $record;
-}
 
 ##########################NEW NEW NEW#############################
 sub NEWnewbiblio {
-    my ( $dbh, $record, $frameworkcode) = @_;
-    my $biblionumber;
+    my ( $dbh, $xml, $frameworkcode) = @_;
 $frameworkcode="" unless $frameworkcode;
-    my $olddata = MARCmarc2koha( $dbh, $record,"biblios" );
+my $biblionumber=XML_readline_onerecord($xml,"biblionumber","biblios");
 ## In case reimporting records with biblionumbers keep them
-if ($olddata->{'biblionumber'}){
-$biblionumber=NEWmodbiblio( $dbh, $olddata->{'biblionumber'},$record,$frameworkcode );
+if ($biblionumber){
+$biblionumber=NEWmodbiblio( $dbh, $biblionumber,$xml,$frameworkcode );
 }else{
-    $biblionumber = NEWaddbiblio( $dbh, $record,$frameworkcode );
+    $biblionumber = NEWaddbiblio( $dbh, $xml,$frameworkcode );
 }
 
    return ( $biblionumber );
@@ -930,49 +996,49 @@ OLDdelbiblio($dbh,$biblionumber) ;
 }
 
 sub NEWnewitem {
-    my ( $dbh, $record, $biblionumber ) = @_;
+    my ( $dbh, $xmlhash, $biblionumber ) = @_;
 	my $itemtype= MARCfind_itemtype($dbh,$biblionumber);
-    my $item = &MARCmarc2koha( $dbh, $record,"holdings" );
+
 ## In case we are re-importing marc records from bulk import do not change itemnumbers
-if ($item->{itemnumber}){
-NEWmoditem ( $dbh, $record, $biblionumber, $item->{itemnumber});
+my $itemnumber=XML_readline_onerecord($xmlhash,"itemnumber","holdings");
+if ($itemnumber){
+NEWmoditem ( $dbh, $xmlhash, $biblionumber, $itemnumber);
 }else{
-    $item->{'biblionumber'} =$biblionumber;
+   
 ##Add biblionumber to $record
-    MARCkoha2marcOnefield($record,"biblionumber",$biblionumber,"holdings");
+$xmlhash=XML_writeline($xmlhash,"biblionumber",$biblionumber,"holdings");
+#    MARCkoha2marcOnefield($record,"biblionumber",$biblionumber,"holdings");
  my $sth=$dbh->prepare("select notforloan from itemtypes where itemtype='$itemtype'");
 $sth->execute();
 my $notforloan=$sth->fetchrow;
 ##Change the notforloan field if $notforloan found
 	if ($notforloan >0){
-	$item->{'notforloan'}=$notforloan;
-	&MARCkoha2marcOnefield($record,"notforloan",$notforloan,"holdings");
+	$xmlhash=XML_writeline($xmlhash,"notforloan",$notforloan,"holdings");
 	}
-if(!$item->{'dateaccessioned'}||$item->{'dateaccessioned'} eq ''){
+my $dateaccessioned=XML_readline_onerecord($xmlhash,"dateaccessioned","holdings");
+unless($dateaccessioned){
 # find today's date
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =                                                           
 localtime(time); $year +=1900; $mon +=1;
 my $date = "$year-".sprintf ("%0.2d", $mon)."-".sprintf("%0.2d",$mday);
-$item->{'dateaccessioned'}=$date;
-&MARCkoha2marcOnefield($record,"dateaccessioned",$date,"holdings");
+
+$xmlhash=XML_writeline($xmlhash,"dateaccessioned",$date,"holdings");
 }
   
-## Now calculate itempart of cutter
-my ($cutterextra)=itemcalculator($dbh,$item->{'biblionumber'},$item->{'itemcallnumber'});
-&MARCkoha2marcOnefield($record,"cutterextra",$cutterextra,"holdings");
+## Now calculate itempart of cutter-- This is NEU specific
+my $itemcallnumber=XML_readline_onerecord($xmlhash,"itemcallnumber","holdings");
+if ($itemcallnumber){
+my ($cutterextra)=itemcalculator($dbh,$biblionumber,$itemcallnumber);
+$xmlhash=XML_writeline($xmlhash,"cutterextra",$cutterextra,"holdings");
+}
 
 ##NEU specific add cataloguers cardnumber as well
-my ($tag,$cardtag)=MARCfind_marc_from_kohafield("circid","holdings");
-	if ($tag && $cardtag){	
-	my $me= C4::Context->userenv;
-	my $cataloguer=$me->{'cardnumber'} if ($me);
-	my $newtag= $record->field($tag);
-	$newtag->update($cardtag=>$cataloguer) if ($me);
-	$record->delete_field($newtag);
-	$record->insert_fields_ordered($newtag);	
-	}
+my $me= C4::Context->userenv;
+my $cataloger=$me->{'cardnumber'} if ($me);
+$xmlhash=XML_writeline($xmlhash,"circid",$cataloger,"holdings") if $cataloger;
+
 ##Add item to SQL
-my  $itemnumber = &OLDnewitems( $dbh, $item->{barcode},$record );
+my  $itemnumber = &OLDnewitems( $dbh, $xmlhash );
 
 # add the item to zebra it will add the biblio as well!!!
     ZEBRAop( $dbh, $biblionumber,"specialUpdate","biblioserver" );
@@ -984,70 +1050,32 @@ return $itemnumber;
 
 
 sub NEWmoditem{
-    my ( $dbh, $record, $biblionumber, $itemnumber ) = @_;
-##Get a hash of this record as well
-my $item=MARCmarc2koha($dbh,$record,"holdings");
-##Add itemnumber incase lost (old bug 090c was lost) --just incase
-my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("itemnumber","holdings");
-	my $newfield;
-my $old_field = $record->field($tagfield);
-if ($tagfield<10){
-	 $newfield = MARC::Field->new($tagfield,  $itemnumber);
-}else{
-	if ($old_field){
-	$old_field->update($tagsubfield=>$biblionumber);
-	$newfield=$old_field->clone();
-	}else{	
-	 $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $itemnumber);
-	}
-}	
-		# drop old field and create new one...
-		
-		$record->delete_field($old_field);
-		$record->insert_fields_ordered($newfield);
+    my ( $dbh, $xmlhash, $biblionumber, $itemnumber ) = @_;
+
+##Add itemnumber incase lost (old bug 090c was lost sometimes) --just incase
+$xmlhash=XML_writeline($xmlhash,"itemnumber",$itemnumber,"holdings");
 ##Add biblionumber incase lost on html
-my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("biblionumber","holdings");
-	my $newfield;
-my $old_field = $record->field($tagfield);
-if ($tagfield<10){
-	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
-}else{
-	if ($old_field){
-	$old_field->update($tagsubfield=>$biblionumber);
-	$newfield=$old_field->clone();
-	}else{	
-	 $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $biblionumber);
-	}
-}	
-		# drop old field and create new one...
-		$record->delete_field($old_field);
-		$record->insert_fields_ordered($newfield);
-		
-###NEU specific add cataloguers cardnumber as well
-my ($tag,$cardtag)=MARCfind_marc_from_kohafield("circid","holdings");
-if ($tag && $cardtag){	
+$xmlhash=XML_writeline($xmlhash,"biblionumber",$biblionumber,"holdings");
+##Read barcode
+my $barcode=XML_readline_onerecord($xmlhash,"barcode","holdings");		
+## Now calculate itempart of cutter-- This is NEU specific
+my $itemcallnumber=XML_readline_onerecord($xmlhash,"itemcallnumber","holdings");
+if ($itemcallnumber){
+my ($cutterextra)=itemcalculator($dbh,$biblionumber,$itemcallnumber);
+$xmlhash=XML_writeline($xmlhash,"cutterextra",$cutterextra,"holdings");
+}
+
+##NEU specific add cataloguers cardnumber as well
 my $me= C4::Context->userenv;
 my $cataloger=$me->{'cardnumber'} if ($me);
-my $oldtag=$record->field($tag);
-	if (!$oldtag){
-	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
-	$record->insert_fields_ordered($newtag);	
-	}else{
-	$oldtag->update($cardtag=>$cataloger) if ($me);
-	$record->delete_field($oldtag);
-	$record->insert_fields_ordered($oldtag);
-	}
-}
-## We must add the indexing fields for LC Cutter in MARC record in case it changed
-my ($cutterextra)=itemcalculator($dbh,$biblionumber,$item->{'itemcallnumber'});
-MARCkoha2marcOnefield($record,"cutterextra",$cutterextra,"holdings");
-    OLDmoditem( $dbh, $record,$biblionumber,$itemnumber,$item->{barcode} );
+$xmlhash=XML_writeline($xmlhash,"circid",$cataloger,"holdings") if $cataloger;
+my $xml=XML_hash2xml($xmlhash);
+    OLDmoditem( $dbh, $xml,$biblionumber,$itemnumber,$barcode );
     ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
 }
 
 sub NEWdelitem {
-    my ( $dbh, $itemnumber ) = @_;
-	
+    my ( $dbh, $itemnumber ) = @_;	
 my $sth=$dbh->prepare("SELECT biblionumber from items where itemnumber=?");
 $sth->execute($itemnumber);
 my $biblionumber=$sth->fetchrow;
@@ -1060,53 +1088,39 @@ ZEBRAop($dbh,$biblionumber,"recordDelete","biblioserver");
 
 
 sub NEWaddbiblio {
-    my ( $dbh, $record,$frameworkcode ) = @_;
+    my ( $dbh, $xmlhash,$frameworkcode ) = @_;
      my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
     $sth->execute;
     my $data   = $sth->fetchrow;
     my $biblionumber = $data + 1;
     $sth->finish;
-    # we must add biblionumber MARC::Record...
-  my  (  $tagfield,  $tagsubfield ) =MARCfind_marc_from_kohafield("biblionumber","biblios");
-	my $newfield;
-if ($tagfield<10){
-	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
-}else{
- $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => "$biblionumber");
-}
-		# drop old field and create new one..
-		$record->delete_field($newfield);
-		$record->insert_fields_ordered($newfield);
+    # we must add biblionumber 
+my $record;
+$xmlhash=XML_writeline($xmlhash,"biblionumber",$biblionumber,"biblios");
 
 ###NEU specific add cataloguers cardnumber as well
-my ($tag,$cardtag)=MARCfind_marc_from_kohafield("indexedby","biblios");
-if ($tag && $cardtag){	
+
 my $me= C4::Context->userenv;
 my $cataloger=$me->{'cardnumber'} if ($me);
-my $oldtag=$record->field($tag);
-	if (!$oldtag){
-	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
-	$record->insert_fields_ordered($newtag);	
-	}else{
-	$oldtag->update($cardtag=>$cataloger) if ($me);
-	$record->delete_field($oldtag);
-	$record->insert_fields_ordered($oldtag);
-	}
-}
+$xmlhash=XML_writeline($xmlhash,"indexedby",$cataloger,"biblios") if $cataloger;
+
 ## We must add the indexing fields for LC in MARC record--TG
-	&MARCmodLCindex($dbh,$record);
+&XMLmodLCindex($dbh,$xmlhash);
 
 ##Find itemtype
- ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("itemtype","biblios");
-my $itemtype=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+my $itemtype=XML_readline_onerecord($xmlhash,"itemtype","biblios");
 ##Find ISBN
-($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("isbn","biblios") ;
-my $isbn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+my $isbn=XML_readline_onerecord($xmlhash,"isbn","biblios");
 ##Find ISSN
-($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("issn","biblios") ;
-my $issn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
-    $sth = $dbh->prepare("insert into biblio set biblionumber  = ?, marc = ?, frameworkcode=?, itemtype=?,marcxml=?,title=?,author=?,isbn=?,issn=?" );
-    $sth->execute( $biblionumber,  $record->as_usmarc,$frameworkcode, $itemtype,MARC::File::XML::record( $record ) ,$record->title(),$record->author,$isbn,$issn  );
+my $issn=XML_readline_onerecord($xmlhash,"issn","biblios");
+##Find Title
+my $title=XML_readline_onerecord($xmlhash,"title","biblios");
+##Find Author
+my $author=XML_readline_onerecord($xmlhash,"title","biblios");
+my $xml=XML_hash2xml($xmlhash);
+
+    $sth = $dbh->prepare("insert into biblio set biblionumber  = ?,frameworkcode=?, itemtype=?,marcxml=?,title=?,author=?,isbn=?,issn=?" );
+    $sth->execute( $biblionumber,$frameworkcode, $itemtype,$xml ,$title,$author,$isbn,$issn  );
 
     $sth->finish;
 ### Do not add biblio to ZEBRA unless there is an item with it -- depends on system preference defaults to NO
@@ -1117,38 +1131,21 @@ if (C4::Context->preference('AddaloneBiblios')){
 }
 
 sub NEWmodbiblio {
-    my ( $dbh, $biblionumber,$record,$frameworkcode ) = @_;
+    my ( $dbh, $biblionumber,$xmlhash,$frameworkcode ) = @_;
 ##Add biblionumber incase lost on html
-my  (  $tagfield,  $tagsubfield )  =MARCfind_marc_from_kohafield("biblionumber","biblios");
-	my $newfield;
-if ($tagfield<10){
-	 $newfield = MARC::Field->new($tagfield,  $biblionumber);
-}else{
- $newfield = MARC::Field->new($tagfield, '', '', "$tagsubfield" => $biblionumber);
-}	
-		# drop old field and create new one...
-		my $old_field = $record->field($tagfield);
-		$record->delete_field($old_field);
-		$record->insert_fields_ordered($newfield);
+
+$xmlhash=XML_writeline($xmlhash,"biblionumber",$biblionumber,"biblios");
 
 ###NEU specific add cataloguers cardnumber as well
-my ($tag,$cardtag)=MARCfind_marc_from_kohafield("indexedby","biblios");
-if ($tag && $cardtag){	
 my $me= C4::Context->userenv;
 my $cataloger=$me->{'cardnumber'} if ($me);
-my $oldtag=$record->field($tag);
-	if (!$oldtag){
-	my $newtag=  MARC::Field->new($tag, '', '', $cardtag => $cataloger) if ($me);
-	$record->insert_fields_ordered($newtag);	
-	}else{
-	$oldtag->update($cardtag=>$cataloger) if ($me);
-	$record->delete_field($oldtag);
-	$record->insert_fields_ordered($oldtag);
-	}
-}
+
+$xmlhash=XML_writeline($xmlhash,"indexedby",$cataloger,"biblios") if $cataloger;
+
 ## We must add the indexing fields for LC in MARC record--TG
-   MARCmodLCindex($dbh,$record);
-    OLDmodbiblio ($dbh,$record,$biblionumber,$frameworkcode);
+
+##   XMLmodLCindex($dbh,$xmlhash);
+    OLDmodbiblio ($dbh,$xmlhash,$biblionumber,$frameworkcode);
     my $ok=ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
     return ($biblionumber);
 }
@@ -1161,7 +1158,7 @@ my $oldtag=$record->field($tag);
 
 sub OLDnewitems {
 
-    my ( $dbh, $barcode,$record) = @_;
+    my ( $dbh, $xmlhash) = @_;
     my $sth = $dbh->prepare("SELECT max(itemnumber) from items");
     my $data;
     my $itemnumber;
@@ -1169,24 +1166,19 @@ sub OLDnewitems {
     $data       = $sth->fetchrow_hashref;
     $itemnumber = $data->{'max(itemnumber)'} + 1;
     $sth->finish;
-      &MARCkoha2marcOnefield(  $record, "itemnumber", $itemnumber,"holdings" );
-    my ($biblionumbertag,$subf)=MARCfind_marc_from_kohafield( "biblionumber","holdings");
-
-my $biblionumber;
-  if ($biblionumbertag <10){
-  $biblionumber=$record->field($biblionumbertag)->data();
-  }else{
-   $biblionumber=$record->field($biblionumbertag)->subfield($subf);
-  }
-        $sth = $dbh->prepare( "Insert into items set itemnumber = ?,	biblionumber  = ?,barcode = ?,marc=?	,marcxml=?"   );
-        $sth->execute($itemnumber,$biblionumber,$barcode,$record->as_usmarc(),MARC::File::XML::record( $record));
+      $xmlhash=XML_writeline(  $xmlhash, "itemnumber", $itemnumber,"holdings" );
+my $biblionumber=XML_readline_onerecord($xmlhash,"biblionumber","holdings");
+ my $barcode=XML_readline_onerecord($xmlhash,"barcode","holdings");
+my $xml=XML_hash2xml($xmlhash);
+        $sth = $dbh->prepare( "Insert into items set itemnumber = ?,	biblionumber  = ?,barcode = ?,marcxml=?"   );
+        $sth->execute($itemnumber,$biblionumber,$barcode,$xml);
     return $itemnumber;
 }
 
 sub OLDmoditem {
-    my ( $dbh, $record,$biblionumber,$itemnumber,$barcode  ) = @_;
-    my $sth =$dbh->prepare("replace items set  biblionumber=?,marc=?,marcxml=?,barcode=? , itemnumber=?");
-    $sth->execute($biblionumber,$record->as_usmarc(),MARC::File::XML::record( $record),$barcode,$itemnumber);
+    my ( $dbh, $xml,$biblionumber,$itemnumber,$barcode  ) = @_;
+    my $sth =$dbh->prepare("replace items set  biblionumber=?,marcxml=?,barcode=? , itemnumber=?");
+    $sth->execute($biblionumber,$xml,$barcode,$itemnumber);
     $sth->finish;
 }
 
@@ -1217,22 +1209,29 @@ my $sth = $dbh->prepare("select * from items where itemnumber=?");
 
 sub OLDmodbiblio {
 # modifies the biblio table
-my ($dbh,$record,$biblionumber,$frameworkcode) = @_;
+my ($dbh,$xmlhash,$biblionumber,$frameworkcode) = @_;
 	if (!$frameworkcode){
 	$frameworkcode="";
 	}
-my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("itemtype","biblios");
-my $itemtype=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
-my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("isbn","biblios");
-my $isbn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
-my ($tagfield,$tagsubfield)=MARCfind_marc_from_kohafield("issn","biblios");
-my $issn=$record->field($tagfield)->subfield($tagsubfield) if ($record->field($tagfield));
+##Find itemtype
+my $itemtype=XML_readline_onerecord($xmlhash,"itemtype","biblios");
+##Find ISBN
+my $isbn=XML_readline_onerecord($xmlhash,"isbn","biblios");
+##Find ISSN
+my $issn=XML_readline_onerecord($xmlhash,"issn","biblios");
+##Find Title
+my $title=XML_readline_onerecord($xmlhash,"title","biblios");
+##Find Author
+my $author=XML_readline_onerecord($xmlhash,"author","biblios");
+my $xml=XML_hash2xml($xmlhash);
+
+#my $marc=MARC::Record->new_from_xml($xml,'UTF-8');## this will be depreceated
 $isbn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
 $issn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
 $isbn=~s/^\s+|\s+$//g;
 $isbn=substr($isbn,0,13);
-        my $sth = $dbh->prepare("REPLACE  biblio set biblionumber=?,marc=?,marcxml=?,frameworkcode=? ,itemtype=? , title=?,author=?,isbn=?,issn=?" );
-        $sth->execute( $biblionumber,$record->as_usmarc() ,MARC::File::XML::record( $record), $frameworkcode,$itemtype, $record->title(),$record->author(),$isbn,$issn);  
+        my $sth = $dbh->prepare("REPLACE  biblio set biblionumber=?,marcxml=?,frameworkcode=? ,itemtype=? , title=?,author=?,isbn=?,issn=?" );
+        $sth->execute( $biblionumber ,$xml, $frameworkcode,$itemtype, $title,$author,$isbn,$issn);  
         $sth->finish;
     return $biblionumber;
 }
@@ -1270,27 +1269,31 @@ sub OLDdelbiblio {
 #
 #
 
-sub ZEBRAopfiles{
-##Utility function to write an xml file to disk when the zebra server goes down
-my ($dbh,$biblionumber,$record,$folder,$server)=@_;
-#my $record = XMLgetbiblio($dbh,$biblionumber);
-my $op;
-my $zebradir = C4::Context->zebraconfig($server)->{directory}."/".$folder."/";
-my $zebraroot=C4::Context->zebraconfig($server)->{directory};
-my $serverbase=C4::Context->config($server);
-	unless (opendir(DIR, "$zebradir")) {
-# warn "$zebradir not found";
-			return;
-	} 
-	closedir DIR;
-	my $filename = $zebradir.$biblionumber;
-if ($record){
-	open (OUTPUT,">", $filename.".xml");
-	print OUTPUT $record;
-	close OUTPUT;
+sub ZEBRAgetrecord {
+my $biblionumber=shift;
+my  @oConnection;
+ $oConnection[0]=C4::Context->Zconn("biblioserver");
+my $field=MARCfind_attr_from_kohafield("biblionumber");
+my $query=$field." ".$biblionumber;
+my $oResult= $oConnection[0]->search_pqf($query);
+my $event;
+my $i;
+   while (($i = ZOOM::event(\@oConnection)) != 0) {
+	$event = $oConnection[$i-1]->last_event();
+	last if $event == ZOOM::Event::ZEND;
+   }# while
+if ($oResult->size()){
+my $xmlrecord=$oResult->record(0)->raw() ;
+$oConnection[0]->destroy;
+$xmlrecord=Encode::decode('utf8',$xmlrecord);
+my $hashed=XML_xml2hash($xmlrecord);
+my ( $xmlrecord, @itemsrecord) = XML_separate($hashed);
+return ($xmlrecord, @itemsrecord);
+}else{
+return (undef,undef);
+}
 }
 
-}
 
 sub ZEBRAop {
 ### Puts the zebra update in queue writes in zebraserver table
@@ -1499,6 +1502,7 @@ return ($i,@results);
 
 sub DisplayISBN {
 ## Old style ISBN handling should be modified to accept 13 digits
+
 	my ($isbn)=@_;
 	my $seg1;
 	if(substr($isbn, 0, 1) <=7) {
@@ -1582,13 +1586,13 @@ return($lc1.$lc2);
 sub itemcalculator{
 ## Sublimentary function to obtain sorted LC for items. Not exported
 my ($dbh,$biblionumber,$callnumber)=@_;
-my ($record,$frameworkcode)=MARCgetbiblio($dbh,$biblionumber);
-my $biblio=MARCmarc2koha($dbh,$record,$frameworkcode,"biblios");
-
-my $all=$biblio->{classification}." ".$biblio->{subclass};
+my $xml=XMLgetbiblio($dbh,$biblionumber);
+my $xmlhash=XML_xml2hash_onerecord($xml);
+my $lc=XML_readline_onerecord($xmlhash,"classification","biblios");
+my $cutter=XML_readline_onerecord($xmlhash,"subclass","biblios");
+my $all=$lc." ".$cutter;
 my $total=length($all);
 my $cutterextra=substr($callnumber,$total);
-
 return $cutterextra;
 
 }

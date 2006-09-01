@@ -22,10 +22,7 @@ use C4::Context;
 use C4::Reserves2;
 use C4::Biblio;
 use Date::Calc;
-use MARC::File::USMARC;
-use MARC::Record;
-use MARC::File::XML;
-
+use Encode;
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
 use C4::Date;
@@ -84,7 +81,7 @@ See sub FindDuplicates for an example;
 
 sub ZEBRAsearch_kohafields{
 my ($kohafield,$value, $relation,$sort, $and_or, $fordisplay,$reorder,$startfrom,$number_of_results,$searchfrom)=@_;
-return (0,0) unless (@$value[0]);
+return (0,undef) unless (@$value[0]);
 my $server="biblioserver";
 my @results;
 my $attr;
@@ -135,7 +132,7 @@ my ($sortattr)=MARCfind_attr_from_kohafield($sortpart[0]);
 $query="\@attr 2=102 ".$query;
 }
 }
-#warn $query;
+##warn $query;
 my $oResult;
 
 my $tried=0;
@@ -174,10 +171,11 @@ my $dbh=C4::Context->dbh;
 	$ri=$startfrom if $startfrom;
 		for ( $ri; $ri<$numresults ; $ri++){
 		my $xmlrecord=$oResult->record($ri)->raw();
-			if (!$fordisplay){
+		$xmlrecord=Encode::decode("utf8",$xmlrecord);
+			#if (!$fordisplay){
 			### Turn into hash of xml
 			 $xmlrecord=XML_xml2hash($xmlrecord);
-			}
+			##}
 			$z++;
 			push @results,$xmlrecord;
 			last if ($number_of_results &&  $z>=$number_of_results);
@@ -265,7 +263,7 @@ my ($search,$num,$offset) = @_;
 my $dbh=C4::Context->dbh;
 #Prepare search
 my $query;
-my $condition="select SQL_CALC_FOUND_ROWS marc from biblio where ";
+my $condition="select SQL_CALC_FOUND_ROWS marcxml from biblio where ";
 if ($search->{'isbn'} ne''){
 $search->{'isbn'}=$search->{'isbn'}."%";
 $query=$search->{'isbn'};
@@ -286,8 +284,8 @@ my $i=0;
 my @results;
 while (my $marc=$sth->fetchrow){
 	if (($i >= $startfrom) && ($i < $limit)) {
-	my $record=MARC::File::USMARC::decode($marc);
-	my $data=MARCmarc2koha($dbh,$record,"biblios");
+	my $record=XML_xml2hash_onerecord($marc);
+	my $data=XMLmarc2koha_onerecord($dbh,$record,"biblios");
 	push @results,$data;
 	}
 $i++;
@@ -299,9 +297,9 @@ return ($count,@results);
 
 
 sub FindDuplicate {
-	my ($record)=@_;
+	my ($xml)=@_;
 my $dbh=C4::Context->dbh;
-	my $result = MARCmarc2koha($dbh,$record,"biblios");
+	my ($result) = XMLmarc2koha_onerecord($dbh,$xml,"biblios");
 	my @kohafield;
 	my @value;
 	my @relation;
@@ -485,7 +483,7 @@ The returned items include very overdue items, but not lost ones.
 sub barcodes{
     #called from request.pl 
     my ($biblionumber)=@_;
-warn $biblionumber;
+#warn $biblionumber;
     my $dbh = C4::Context->dbh;
 	my @kohafields;
 	my @values;
@@ -504,12 +502,52 @@ push  @fields,"barcode","itemlost","itemnumber","date_due","wthdrawn","notforloa
 return(@items);
 }
 
+sub XML_repeated_read{
+my ($xml,$kohafield,$recordtype,$tag,$subf)=@_;
+#$xml represents one record of MARCXML as perlhashed 
+## returns an array of read fields--useful for readind repeated fields
+### $recordtype is needed for mapping the correct field if supplied
+my @value;
+ ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
+if ($tag){
+my $biblio=$xml->{'datafield'};
+my $controlfields=$xml->{'controlfield'};
+my $leader=$xml->{'leader'};
+ if ($tag>9){
+	foreach my $data (@$biblio){
+   	    if ($data->{'tag'} eq $tag){
+		foreach my $subfield ( $data->{'subfield'}){
+		    foreach my $code ( @$subfield){
+			if ($code->{'code'} eq $subf || !$subf){
+			push @value, $code->{'content'};
+			}
+		   }
+		}
+  	   }
+	}
+  }else{
+	if ($tag eq "000" || $tag eq "LDR"){
+		push @value,  $leader->[0] if $leader->[0];
+	}else{
+	     foreach my $control (@$controlfields){
+		if ($control->{'tag'} eq $tag){
+		push @value,	$control->{'content'} if $control->{'content'};
 
+		}
+	    }
+	}
+   }##tag
+return @value;
+}## if tag is mapped
+return "";
+}
 
 
 
 sub getMARCnotes {
+##Requires a MARCXML as $record
         my ($dbh, $record, $marcflavour) = @_;
+
 	my ($mintag, $maxtag);
 	if ($marcflavour eq "MARC21") {
 	        $mintag = "500";
@@ -518,31 +556,10 @@ sub getMARCnotes {
 		$mintag = "300";
 		$maxtag = "399";
 	}
-
-
-
-
 	my @marcnotes;
-	my $note = "";
-	my $tag = "";
-	my $marcnote;
-
-	foreach my $field ($record->field('5..')) {
-		my $value = $field->as_string();
-		if ( $note ne "") {
-	
-		        $marcnote = {marcnote => $note,};
-			push @marcnotes, $marcnote;
-			$note=$value;
-		}
-		if ($note ne $value) {
-		        $note = $note." ".$value;
-		}
-	}
-
-	if ($note) {
-	        $marcnote = {MARCNOTE => $note};
-		push @marcnotes, $marcnote;   #load last tag into array
+	foreach my $field ($mintag..$maxtag) {
+	my @value=XML_repeated_read($record,"","",$field,"");
+	push @marcnotes, \@value;	
 	}
 
 
@@ -568,11 +585,12 @@ sub getMARCsubjects {
 	my $subfield = "";
 	my $marcsubjct;
 
-	foreach my $field ($record->field('6..')) {
-		my $value = $field->subfield('a');
-		        $marcsubjct = {MARCSUBJCT => $value,};
+	foreach my $field ($mintag..$maxtag) {
+		my @value =XML_repeated_read($record,"","",$field,"a");
+			foreach my $subject (@value){
+		        $marcsubjct = {MARCSUBJCT => $subject,};
 			push @marcsubjcts, $marcsubjct;
-			$subjct = $value;
+			}
 		
 	}
 	my $marcsubjctsarray=\@marcsubjcts;
@@ -596,14 +614,16 @@ sub getMARCurls {
 	my $url = "";
 	my $subfil = "";
 	my $marcurl;
-	foreach my $field ($record->field('856')) {
-		my $value = $field->subfield('u');
-#		my $subfil = $data->[1];
-		if ( $value ne $url) {
-		        $marcurl = {MARCURL => $value,};
-			push @marcurls, $marcurl;
-			$url = $value;
-		}
+	my $value;
+	foreach my $field ($mintag..$maxtag) {
+		my @value =XML_repeated_read($record,"","",$field,"a");
+			foreach my $url (@value){
+				if ( $value ne $url) {
+		    	   	 $marcurl = {MARCURL => $url,};
+				push @marcurls, $marcurl;
+				 $value=$url;
+				}
+			}
 	}
 
 
@@ -644,8 +664,8 @@ my $shelfstatus = $dbh->prepare("select authorised_value from holdings_subfield_
 			}
 		}
 my $even=1;
-foreach my $xmlrecord(@marcrecords){
-my $xml=XML_xml2hash($xmlrecord);
+foreach my $xml(@marcrecords){
+#my $xml=XML_xml2hash($xmlrecord);
 my @kohafields; ## just name those necessary for the result page
 push @kohafields, "biblionumber","title","author","publishercode","classification","itemtype","copyrightdate", "holdingbranch","date_due","location","shelf","itemcallnumber","notforloan","itemlost","wthdrawn";
 my ($oldbiblio,@itemrecords) = XMLmarc2koha($dbh,$xml,"",@kohafields);
@@ -739,17 +759,15 @@ my $norequests = 1;
 
 sub getcoverPhoto {
 ## return the address of a cover image if defined otherwise the amazon cover images
-	my $record =shift  @_;
+	my $record =shift  ;
 
-my($phototag,$photosubtag)=MARCfind_marc_from_kohafield("coverphoto","biblios");
-if ($phototag){
-	my $imagetag=$record->field($phototag);
-	my $image=$imagetag->subfield($photosubtag) if $imagetag;
-return $image if $image;
-}
+	my $image=XML_readline_onerecord($record,"coverphoto","biblios");
+	if ($image){
+	return $image;
+	}
 # if there is no image put the amazon cover image adress
-my($isbntag,$isbnsubtag)=MARCfind_marc_from_kohafield("isbn","biblios");	
-my $isbn=$record->field($isbntag)->subfield($isbnsubtag) if $record->field($isbntag);
+
+my $isbn=XML_readline_onerecord($record,"isbn","biblios");
 return "http://images.amazon.com/images/P/".$isbn.".01.MZZZZZZZ.jpg";	
 }
 

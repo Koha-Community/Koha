@@ -381,7 +381,7 @@ sub manualcredit{
   my $dbh = C4::Context->dbh;
   my $insert;
   $itemnum=~ s/ //g;
-  my %env;
+
   my $accountno=getnextacctno('',$bornum,$dbh);
 #  my $amountleft=$amount;
 my $amountleft;
@@ -389,60 +389,50 @@ my $noerror;
   if ($type eq 'CN' || $type eq 'CA'  || $type eq 'CR' 
   || $type eq 'CF' || $type eq 'CL' || $type eq 'CM'){
     my $amount2=$amount*-1;	# FIXME - $amount2 = -$amount
-   ( $amountleft, $noerror,$oldaccount)=fixcredit(\%env,$bornum,$amount2,$itemnum,$type,$user);
+   ( $amountleft, $noerror,$oldaccount)=fixcredit($dbh,$bornum,$amount2,$itemnum,$type,$user);
   }
  if ($noerror>0){
-  if ($type eq 'CN'){
-    $desc.="Card fee credited by:".$user;
-  }
-if ($type eq 'CM'){
-    $desc.="Other fees credited by:".$user;
-  }
-if ($type eq 'CR'){
-    $desc.="Resrvation fee credited by:".$user;
-  }
-if ($type eq 'CA'){
-    $desc.="Managenent fee credited by:".$user;
-  }
-  if ($type eq 'CL' && $desc eq ''){
-    $desc="Lost Item credited by:".$user;
-  }
+	  if ($type eq 'CN'){
+   	 $desc.="Card fee credited by:".$user;
+  	}
+	if ($type eq 'CM'){
+    	$desc.="Other fees credited by:".$user;
+  	}
+	if ($type eq 'CR'){
+	    $desc.="Resrvation fee credited by:".$user;
+  	}
+	if ($type eq 'CA'){
+   	 $desc.="Managenent fee credited by:".$user;
+  	}
+  	if ($type eq 'CL' && $desc eq ''){
+   	 $desc="Lost Item credited by:".$user;
+  	}
  
-  if ($itemnum ne ''){
-
-    $desc.=" Credited for overdue item:".$itemnum. " by:".$user;
-    my $sth=$dbh->prepare("INSERT INTO	accountlines
+  	if ($itemnum ne ''){
+    	$desc.=" Credited for overdue item:".$itemnum. " by:".$user;
+    	my $sth=$dbh->prepare("INSERT INTO	accountlines
 			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber,offset)
 	VALUES (?, ?, now(), ?,?, ?,?,?,?)");
-     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$oldaccount);
-  } else {
-#    $desc=$dbh->quote($desc);
-    my $sth=$dbh->prepare("INSERT INTO	accountlines
+     	$sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$oldaccount);
+  	} else {
+   	 my $sth=$dbh->prepare("INSERT INTO	accountlines
 			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,offset)
 			VALUES (?, ?, now(), ?, ?, ?, ?,?)");
-    $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft,$oldaccount);
-
-  }
+    	$sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft,$oldaccount);
+  	}
 return ("0");
 } else {
 	return("1");
 }
 }
 # fixcredit
-# $amountleft = &fixcredit($env, $bornumber, $data, $barcode, $type, $user);
-#
-# This function is only used internally.
-# FIXME - Figure out what this function does, and write it down.
 sub fixcredit{
   #here we update both the accountoffsets and the account lines
-  my ($env,$bornumber,$data,$barcode,$type,$user)=@_;
-  my $dbh = C4::Context->dbh;
+  my ($dbh,$bornumber,$data,$itemnumber,$type,$user)=@_;
   my $newamtos = 0;
   my $accdata = "";
   my $amountleft = $data;
- 
- #   my $item=getiteminformation($env,'',$barcode);
-    my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
+ my $env;
     my $query="Select * from accountlines where (borrowernumber=?
     and amountoutstanding > 0)";
 my $exectype;
@@ -463,8 +453,8 @@ my $exectype;
   	  }
 #    print $query;
     my $sth=$dbh->prepare($query);
- if ($exectype && $barcode ne ''){
-    $sth->execute($bornumber,$barcode);
+ if ($exectype && $itemnumber ne ''){
+    $sth->execute($bornumber,$itemnumber);
 	}else{
 	 $sth->execute($bornumber);
 	}
@@ -484,14 +474,9 @@ if ($accdata){
      where (borrowernumber = ?) and (accountno=?)");
      $usth->execute($newamtos,$bornumber,$thisacct);
      $usth->finish;
-#     $usth = $dbh->prepare("insert into accountoffsets
- #    (borrowernumber, accountno, offsetaccount,  offsetamount)
-  #   values (?,?,?,?)");
-#     $usth->execute($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
- #    $usth->finish;
+
   
   # begin transaction
-  my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
   my $sth = $dbh->prepare("select * from accountlines
   where (borrowernumber = ?) and (amountoutstanding >0)
@@ -512,16 +497,9 @@ if ($accdata){
      where (borrowernumber = ?) and (accountno=?)");
      $usth->execute($newamtos,$bornumber,$thisacct);
      $usth->finish;
-#     $usth = $dbh->prepare("insert into accountoffsets
- #    (borrowernumber, accountno, offsetaccount,  offsetamount)
- #    values (?,?,?,?)");
-  #   $usth->execute($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
-   #  $usth->finish;
   }
   $sth->finish;
-#  $env->{'branch'}=$user;
- # $type="Credit ".$type;
- # UpdateStats($env,$user,$type,$data,$user,'','',$bornumber);
+
   $amountleft*=-1;
   return($amountleft,1,$accdata->{'accountno'});
 }else{
@@ -540,7 +518,6 @@ sub refund{
   my $amountleft = $data *-1;
 
   # begin transaction
-  my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
   my $sth = $dbh->prepare("select * from accountlines
   where (borrowernumber = ?) and (amountoutstanding<0)
@@ -562,11 +539,7 @@ sub refund{
      where (borrowernumber = ?) and (accountno=?)");
      $usth->execute($newamtos,$bornumber,$thisacct);
      $usth->finish;
-#     $usth = $dbh->prepare("insert into accountoffsets
-#     (borrowernumber, accountno, offsetaccount,  offsetamount)
- #    values (?,?,?,?)");
-#     $usth->execute($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
-#     $usth->finish;
+
   }
   $sth->finish;
   return($amountleft);
