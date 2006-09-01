@@ -12,26 +12,34 @@ use MARC::File::USMARC;
 use MARC::Record;
 use MARC::Batch;
 use MARC::Charset;
+
+# According to kados, an undocumented feature of setting MARC::Charset to 
+# ignore_errors(1) is that errors are not ignored.  Instead of deleting the 
+# whole subfield when a character does not translate properly from MARC8 into 
+# UTF-8, just the problem characters are deleted.  This should solve at least 
+# some of the fixme problems for fMARC8ToUTF8().
+# 
+# Problems remain if there are MARC 21 records where 000/09 is set incorrectly. 
+# -- thd.
+MARC::Charset->ignore_errors(1);
+
 use C4::Context;
 use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;
 binmode(STDOUT, ":utf8");
 
-use Getopt::Long;
-
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit);
+my ($version, $delete, $test_parameter,$marcFlavour, $verbose);
 
 GetOptions(
-	'commit:f'	=> \$commit,
-    'file:s'    => \$input_marc_file,
-    'n:f' => \$number,
-    'h' => \$version,
-    'd' => \$delete,
-    't' => \$test_parameter,
-    'c:s' => \$char_encoding,
-    'v:s' => \$verbose,
+	'file:s'    => \$input_marc_file,
+	'n' => \$number,
+	'h' => \$version,
+	'd' => \$delete,
+	't' => \$test_parameter,
+	'c:s' => \$marcFlavour,
+	'v:s' => \$verbose,
 );
 
 # FIXME:  Management of error conditions needed for record parsing problems
@@ -145,8 +153,7 @@ parameters :
 \th : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
 \tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
-\tn : the number of records to import. If missing, all the file is imported
-\tcommit : the number of records to wait before performing a 'commit' operation
+\tn : the number of the record to import. If missing, all the file is imported
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
 \tc : the characteristic MARC flavour. At the moment, only MARC21 and UNIMARC 
 \tsupported. MARC21 by default.
@@ -154,12 +161,10 @@ parameters :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
 \t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
 \t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
-IMPORTANT : don't use this script before you've entered and checked your MARC parameters tables twice (or more!).
-Otherwise, the import won't work correctly and you will get invalid data.
+IMPORTANT : don't use this script before you've entered and checked twice (or more) your  MARC parameters tables.
+If you fail this, the import won't work correctly and you will get invalid datas.
 
-SAMPLE : 
-\t\$ export KOHA_CONF=/etc/koha.conf
-\t\$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 -file /home/jmf/koha.mrc -n 3000
+SAMPLE : ./bulkmarcimport.pl -file /home/paul/koha.dev/local/npl -n 1
 EOF
 ;#'
 die;
@@ -191,35 +196,50 @@ my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
-my $commitnum = 50;
-
-if ($commit) {
-
-$commitnum = $commit;
-
-}
-
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
-warn "I:".$i;
-warn "NUM:".$number;
 	$i++;
-
-	if ($i==$number) {
-		z3950_extended_services('commit',set_service_options('commit'));
-		print "COMMIT OPERATION SUCCESSFUL\n";
-
-		my $timeneeded = gettimeofday - $starttime;
-		die "$i MARC records imported in $timeneeded seconds\n";
+#FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and 
+	# then back again just to fix the encoding
+	#
+	# It is even sillier when the conversion too frequently produces errors 
+	# instead of fixing the encoding.  Hence, the following MARC::File::XML 
+	# lines are now commented out until character set conversion in XML 
+	# works better. -- thd
+	## my $uxml = $record->as_xml;
+	## $record = MARC::Record::new_from_xml($uxml, 'UTF-8');
+	
+	# Check record encoding and convert encoding if necessary.
+	
+	if ($marcFlavour eq 'MARC21') {
+		my $tag000_pos09;
+		if ($record->encoding() eq 'UTF-8') {
+			if ($verbose) {
+				print "\nRecord $i encoding is UTF-8\n";
+				$tag000_pos09 = substr ($record->leader, 9, 1);
+				$tag000_pos09 =~ s/ /#/;
+				print "\nUTF-8 LEADER/09: " . $tag000_pos09 ."\n";
+			}
+		} elsif ($record->encoding() eq 'MARC-8') {
+			print "\nConverting record $i encoding from MARC8 to UTF-8\n";
+			# Convert MARC-8 to UTF-8
+			$record = fMARC8ToUTF8($record, $verbose);
+			if ($verbose) {
+				print "\nRecord $i encoding has been converted to UTF-8\n";
+				$tag000_pos09 = substr ($record->leader, 9, 1);
+				$tag000_pos09 =~ s/ /#/;
+				print "\nUTF-8 LEADER/09: " . $tag000_pos09 ."\n";
+			}
+		}
+	} elsif ($marcFlavour eq 'UNIMARC') {
+		# I have not developed a UNIMARC character encoding conversion script 
+		# yet.  Common encodings should be easy.  Less comon and multiple 
+		# encodings will need extra work.  I am happy to work on this if there 
+		# is some interest. -- thd
 	}
-	# perform the commit operation ever so often
-	if ($i==$commit) {
-		z3950_extended_services('commit',set_service_options('commit'));
-		$commit+=$commitnum;
-		print "COMMIT OPERATION SUCCESSFUL\n";
-	}
+	
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
 	## create an empty record object to populate
@@ -245,9 +265,9 @@ warn "NUM:".$number;
 
 	# go through each subfield code/data pair
 	foreach my $pair ( $oldField->subfields() ) { 
-		#$pair->[1] =~ s/\<//g;
-		#$pair->[1] =~ s/\>//g;
-		push( @newSubfields, $pair->[0], $pair->[1] ); #char_decode($pair->[1],$char_encoding) );
+		$pair->[1] =~ s/\<//g;
+		$pair->[1] =~ s/\>//g;
+		push( @newSubfields, $pair->[0], char_decode($pair->[1],$marcFlavour) );
 	}
 
 	# add the new field to our new record
@@ -262,7 +282,10 @@ warn "NUM:".$number;
 
 	}
 
-	warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
+
+	if ($verbose) {
+		warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
+	}
 	my @fields = $newRecord->field($tagfield);
 	my @items;
 	my $nbitems=0;
@@ -277,17 +300,13 @@ warn "NUM:".$number;
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
-		    warn "here is the biblioitemnumber $oldbibitemnum";
-			NEWnewitem($dbh,$items[$i],$bibid,$oldbibitemnum);
+			NEWnewitem($dbh,$items[$i],$bibid);
 		}
 	}
 }
-# final commit of the changes
-z3950_extended_services('commit',set_service_options('commit'));
-print "COMMIT OPERATION SUCCESSFUL\n";
-
+# $dbh->do("unlock tables");
 my $timeneeded = gettimeofday - $starttime;
-print "$i MARC records done in $timeneeded seconds\n";
+print "$i MARC record done in $timeneeded seconds";
