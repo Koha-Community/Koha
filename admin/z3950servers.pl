@@ -23,9 +23,7 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
-use C4::Database;
 use C4::Context;
-use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -200,8 +198,5 @@ if ($op eq 'add_form') {
 				 nextpage => $offset+$pagesize);
 	}
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -50,8 +50,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
-use C4::Koha;
 
 # Fixed variables
 my $linecolor1='#ffffcc';
@@ -89,24 +87,25 @@ if ($op eq 'add') {
 	# If the user has pressed the "add new branch" button.
 	heading("Branches: Add Branch");
 	$template->param('heading-branches-add-branch-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	editbranchform();
 
 } elsif ($op eq 'edit') {
 	# if the user has pressed the "edit branch settings" button.
 	heading("Branches: Edit Branch");
 	$template->param('heading-branches-edit-branch-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	$template->param(add => 1);
 	editbranchform($branchcode);
 } elsif ($op eq 'add_validate') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'branchcode'} && $params->{'branchname'}) {
-		$template->param(else => 1);
-		default ("MESSAGE1");
+		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
 	} else {
 		setbranchinfo($params);
 		$template->param(else => 1);
-		default ("MESSAGE2");
+		default ("Branch record changed for branch: $params->{'branchname'}");
 	}
 } elsif ($op eq 'delete') {
 	# if the user has pressed the "delete branch" button.
@@ -123,21 +122,22 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletebranch($branchcode);
 	$template->param(else => 1);
-	default("MESSAGE3");
+	default("The branch \"$branchname\" ($branchcode) has been deleted.");
 } elsif ($op eq 'editcategory') {
 	# If the user has pressed the "add new category" or "modify" buttons.
+	heading("Branches: Edit Category");
 	$template->param('heading-branches-edit-category-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	editcatform($categorycode);
 } elsif ($op eq 'addcategory_validate') {
 	# confirm settings change...
 	my $params = $input->Vars;
 	unless ($params->{'categorycode'} && $params->{'categoryname'}) {
-		$template->param(else => 1);
-		default ("MESSAGE4");
+		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
 	} else {
 		setcategoryinfo($params);
 		$template->param(else => 1);
-		default ("MESSAGE5");
+		default ("Category record changed for category $params->{'categoryname'}");
 	}
 } elsif ($op eq 'delete_category') {
 	# if the user has pressed the "delete branch" button.
@@ -153,7 +153,7 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletecategory($categorycode);
 	$template->param(else => 1);
-	default("MESSAGE6");
+	default("The category with code $categorycode has been deleted.");
 
 } else {
 	# if no operation has been set...
@@ -170,7 +170,8 @@ sub default {
 	my ($message) = @_;
 	heading("Branches");
 	$template->param('heading-branches-p' => 1);
-	$template->param("$message" => 1);
+	$template->param('use-heading-flags-p' => 1);
+	$template->param(message => $message);
 	$template->param(action => $script_name);
 	branchinfotable();
 }
@@ -183,52 +184,20 @@ sub heading {
 
 sub editbranchform {
 	# prepares the edit form...
-
-# initiate the scrolling-list to select the printers
-	my %env;
-	my $printers=getprinters(\%env);
-	my @printerloop;
-	my $printercount=0;
-	my $oldprinter;
-	my $CGIprinter;
 	my ($branchcode) = @_;
 	my $data;
-	
 	if ($branchcode) {
 		$data = getbranchinfo($branchcode);
 		$data = $data->[0];
-	# get the old printer of the branch
-		$oldprinter = $data->{'branchprinter'}; 
-# 	printer loop
-		foreach my $thisprinter (keys %$printers) {
-			my $selected = 1 if $oldprinter eq $printers->{$thisprinter}->{'printqueue'};
-			my %row =(value => $thisprinter,
-					selected => $selected,
-					branchprinter => $printers->{$thisprinter}->{'printqueue'},
-			);
-		push @printerloop, \%row;
-		}
-		
-		$template->param(printerloop => \@printerloop );
 		$template->param(branchcode => $data->{'branchcode'});
-		$template->param(branch_name => $data->{'branchname'});
+		$template->param(branchname => $data->{'branchname'});
 		$template->param(branchaddress1 => $data->{'branchaddress1'});
 		$template->param(branchaddress2 => $data->{'branchaddress2'});
 		$template->param(branchaddress3 => $data->{'branchaddress3'});
 		$template->param(branchphone => $data->{'branchphone'});
 		$template->param(branchfax => $data->{'branchfax'});
 		$template->param(branchemail => $data->{'branchemail'});
-		$template->param(branchip => $data->{'branchip'});
-    	}
-	else { #case of an add branch select printer
-		foreach my $thisprinter (keys %$printers) {
-			my %row =(value => $thisprinter,
-				branchprinter => $printers->{$thisprinter}->{'printqueue'},
-			);
-		push @printerloop, \%row;
-		}
-	$template->param(printerloop => \@printerloop );	
-	}
+    }
 
     # make the checkboxs.....
     #
@@ -293,11 +262,10 @@ sub branchinfotable {
 	} else {
 		$branchinfo = getbranchinfo();
 	}
-	my $toggle;
-	my $i;
+	my $color;
 	my @loop_data =();
 	foreach my $branch (@$branchinfo) {
-		($i % 2) ? ($toggle = 1) : ($toggle = 0);
+		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		#
 		# We export the following fields to the template. These are not
 		# pre-composed as a single "address" field because the template
@@ -325,7 +293,7 @@ sub branchinfotable {
 		# Handle address fields separately
 		my $address_empty_p = 1;
 		for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
-			'branchphone', 'branchfax', 'branchemail', 'branchip', 'branchprinter') {
+			'branchphone', 'branchfax', 'branchemail') {
 			$row{$field} = $branch->{$field};
 			if ( $branch->{$field} ) {
 				$address_empty_p = 0;
@@ -353,27 +321,21 @@ sub branchinfotable {
 		# Handle all other fields
 		$row{'branch_name'} = $branch->{'branchname'};
 		$row{'branch_code'} = $branch->{'branchcode'};
-		$row{'toggle'} = $toggle;
+		$row{'color'} = $color;
 		$row{'value'} = $branch->{'branchcode'};
 		$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
 
 		push @loop_data, { %row };
-		$i++;
 	}
 	my @branchcategories =();
 	my $catinfo = getcategoryinfo();
-	my $toggle;
-	my $i = 0;
 	foreach my $cat (@$catinfo) {
-		($i % 2) ? ($toggle = 1) : ($toggle = 0);
 		push @branchcategories, {
-			toggle => $toggle,
 			categoryname    => $cat->{'categoryname'},
 			categorycode    => $cat->{'categorycode'},
 			codedescription => $cat->{'codedescription'},
 		};
-		$i++;
-	} 
+	}
 
 	$template->param(branches => \@loop_data,
 							branchcategories => \@branchcategories);
@@ -456,11 +418,11 @@ sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
 	my ($data) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,branchip,branchprinter) values (?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)");
 	$sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
 		$data->{'branchaddress1'}, $data->{'branchaddress2'},
 		$data->{'branchaddress3'}, $data->{'branchphone'},
-		$data->{'branchfax'}, $data->{'branchemail'}, $data->{'branchip'},$data->{'branchprinter'});
+		$data->{'branchfax'}, $data->{'branchemail'});
 
 	$sth->finish;
 	# sort out the categories....
@@ -538,7 +500,7 @@ sub checkdatabasefor {
     my $message;
     if ($total) {
 	# FIXME: need to be replaced by an exported boolean parameter
-	$message = "MESSAGE7";
+	$message = "Branch cannot be deleted because there are $total items using that branch.";
     }
     return $message;
 }
@@ -558,10 +520,7 @@ sub checkcategorycode {
     }
     return $message;
 }
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:

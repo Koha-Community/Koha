@@ -24,7 +24,6 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
-use HTML::Template;
 use C4::Context;
 
 
@@ -126,6 +125,7 @@ if ($op eq 'add_form') {
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
+	
 	$template->param(searchfield => $searchfield,
 							Tvalue => $data->{'authorised_value'},
 							id =>$id,
@@ -139,6 +139,7 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
 	$sth->finish;
+	
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
 	exit;
 
@@ -157,7 +158,6 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"",
 			-size=>1,
- 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$searchfield) {
@@ -203,8 +203,5 @@ if ($op eq 'add_form') {
 		);
 	}
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+
 output_html_with_http_headers $input, $cookie, $template->output;

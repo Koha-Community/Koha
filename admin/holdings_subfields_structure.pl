@@ -28,13 +28,13 @@ use C4::Context;
 
 
 sub StringSearch  {
-	my ($env,$searchstring,$authtypecode)=@_;
+	my ($env,$searchstring,$frameworkcode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from auth_subfield_structure where (tagfield like ? and authtypecode=?) order by tagfield");
-	$sth->execute("$searchstring%",$authtypecode);
+	my $sth=$dbh->prepare("Select * from holdings_subfield_structure where (tagfield like ? and frameworkcode=?) order by tagfield");
+	$sth->execute("$searchstring%",$frameworkcode);
 	my @results;
 	my $cnt=0;
 	my $u=1;
@@ -51,13 +51,13 @@ sub StringSearch  {
 my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
-my $authtypecode=$input->param('authtypecode');
+my $frameworkcode=$input->param('frameworkcode');
 my $pkfield="tagfield";
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/auth_subfields_structure.pl";
+my $script_name="/cgi-bin/koha/admin/holdings_subfields_structure.pl";
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/auth_subfields_structure.tmpl",
+    = get_template_and_user({template_name => "admin/holdings_subfields_structure.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -71,12 +71,12 @@ $tagfield=~ s/\,//g;
 if ($op) {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
-						authtypecode => $authtypecode,
+						frameworkcode => $frameworkcode,
 						$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
-						authtypecode => $authtypecode,
+						frameworkcode => $frameworkcode,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
 
@@ -87,8 +87,9 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 	my $more_subfields = $input->param("more_subfields")+1;
 	
+	
 	# build authorised value list
-
+	
 my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	$sth2->execute;
 	my @authorised_values;
@@ -98,7 +99,15 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	}
 	push (@authorised_values,"branches");
 	push (@authorised_values,"itemtypes");
-
+	# build thesaurus categories list
+	$sth2->finish;
+	$sth2 = $dbh->prepare("select authtypecode from auth_types");
+	$sth2->execute;
+	my @authtypes;
+	push @authtypes,"";
+	while ((my $authtypecode) = $sth2->fetchrow_array) {
+		push @authtypes, $authtypecode;
+	}
 	# build value_builder list
 	my @value_builder=('');
 
@@ -119,13 +128,12 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and authtypecode=?"); # and tagsubfield='$tagsubfield'");
-	$sth->execute($tagfield,$authtypecode);
+	my $sth=$dbh->prepare("select * from holdings_subfield_structure where tagfield=? and frameworkcode=?"); # and tagsubfield='$tagsubfield'");
+	$sth->execute($tagfield,$frameworkcode);
 	my @loop_data = ();
 	my $toggle=1;
 	my $i=0;
 	while ($data =$sth->fetchrow_hashref) {
-
 		my %row_data;  # get a fresh hash for the row data
 		if ($toggle eq 1){
 			$toggle=0;
@@ -134,9 +142,8 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id=>"tab$i",
-					-values=>['-1','0'],
-					-labels => {'-1' =>'ignore','0'=>'0',
-									},
+					-values=>['-1','10'],
+					-labels => {'-1' =>'ignore','10'=>'items (10)',	},
 					-default=>$data->{'tab'},
 					-size=>1,
 					-multiple=>0,
@@ -152,9 +159,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
 					-id=>"ihidden$i",
 					-values=>['0','2'],
-					-labels => {'0'=>'Show',
-									'2' =>'Hide',
-									},
+					-labels => {'0'=>'Show','2' =>'Hide',},
 					-default=>substr($data->{'hidden'},1,1),
 					-size=>1,
 					-multiple=>0,
@@ -173,6 +178,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
+		
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
 					-id=>'authorised_value',
 					-values=> \@authorised_values,
@@ -187,7 +193,13 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 					-size=>1,
 					-multiple=>0,
 					);
-		
+		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-id=>'authtypecode',
+					-values=> \@authtypes,
+					-default=>$data->{'authtypecode'},
+					-size=>1,
+					-multiple=>0,
+					);
 		$row_data{repeatable} = CGI::checkbox(-name=>"repeatable$i",
 	-checked => $data->{'repeatable'}?'checked':'',
 	-value => 1,
@@ -198,20 +210,15 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	-value => 1,
 	-label => '',
 	-id => "mandatory$i");
-		$row_data{hidden} = CGI::escapeHTML($data->{hidden}) ;
+		$row_data{hidden} = CGI::escapeHTML($data->{hidden});
 		$row_data{isurl} = CGI::checkbox( -name => "isurl$i",
 			-id => "isurl$i",
 			-checked => $data->{'isurl'}?'checked':'',
 			-value => 1,
 			-label => '');
-		$row_data{link} = CGI::checkbox( -name => "link$i",
-			-id => "link$i",
-			-checked => $data->{'link'}?'checked':'',
-			-value => 1,
-			-label => '');
 		$row_data{row} = $i;
 		$row_data{toggle} = $toggle;
-		# $row_data{link} = CGI::escapeHTML($data->{'link'});
+		$row_data{link} = CGI::escapeHTML($data->{'link'});
 		push(@loop_data, \%row_data);
 		$i++;
 	}
@@ -220,9 +227,8 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id => "tab$i",
-					-values=>['-1','0'],
-					-labels => {'-1' =>'ignore','0'=>'0',
-									},
+					-values=>['-1','10'],
+					-labels => {'-1' =>'ignore','10'=>'items (10)',},
 					-default=>"",
 					-size=>1,
 					-multiple=>0,
@@ -235,7 +241,6 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 					-size=>1,
 					-multiple=>0,
 					);
-
 		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
 					-id=>"ihidden$i",
 					-values=>['0','2'],
@@ -281,12 +286,13 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{link} = CGI::checkbox( -name => "link",
-			-id => "link$i",
-			-checked => '',
-			-value => 1,
-			-label => '');
-		# $row_data{link} = CGI::escapeHTML($data->{'link'});
+		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-id => 'authtypecode',
+					-values=> \@authtypes,
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{link} = CGI::escapeHTML($data->{'link'});
 		$row_data{toggle} = $toggle;
 		$row_data{row} = $i;
 		push(@loop_data, \%row_data);
@@ -305,20 +311,21 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace auth_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl, link)
-									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace holdings_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
+	
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
-	#my @hidden		= $input->param('hidden');
+#	my @hidden		= $input->param('hidden');
 	my @hidden;
 	my @ohidden		= $input->param('ohidden');
 	my @ihidden		= $input->param('ihidden');
 	my @ehidden		= $input->param('ehidden');
 	my @authorised_values	= $input->param('authorised_value');
-#	my $authtypecodes	= $input->param('authtypecode');
+	my @authtypecodes	= $input->param('authtypecode');
 	my @value_builder	=$input->param('value_builder');
 	my @link		=$input->param('link');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
@@ -329,15 +336,15 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		my $libopac			=$libopac[$i];
 		my $repeatable		=$input->param("repeatable$i")?1:0;
 		my $mandatory		=$input->param("mandatory$i")?1:0;
-
+		
 		my $tab				=$tab[$i];
 		my $seealso				=$seealso[$i];
 		my $authorised_value		=$authorised_values[$i];
-#		my $authtypecode		=$authtypecodes;
+		my $authtypecode		=$authtypecodes[$i];
 		my $value_builder=$value_builder[$i];
 		my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
-		my $link = $input->param("link$i")?1:0;
+		my $link = $link[$i];
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
 				$sth->execute ($tagfield,
@@ -346,6 +353,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 									$libopac,
 									$repeatable,
 									$mandatory,
+									
 									$tab,
 									$seealso,
 									$authorised_value,
@@ -353,7 +361,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 									$value_builder,
 									$hidden,
 									$isurl,
-									
+									$frameworkcode,
 
 	 $link,
 					      );
@@ -361,7 +369,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		}
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=holdings_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 
 													# END $OP eq ADD_VALIDATE
@@ -369,7 +377,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
+	my $sth=$dbh->prepare("select * from holdings_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
 	#FIXME : called with 2 bind variables when 3 are needed
 	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
@@ -379,7 +387,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 							delete_link => $script_name,
 							tagfield      =>$tagfield,
 							tagsubfield => $tagsubfield,
-							authtypecode => $authtypecode,
+							frameworkcode => $frameworkcode,
 							);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -387,18 +395,18 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
-		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
-		$sth->execute($tagfield,$tagsubfield,$authtypecode);
+		my $sth=$dbh->prepare("delete from holdings_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+		$sth->execute($tagfield,$tagsubfield,$frameworkcode);
 		$sth->finish;
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=holdings_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 	$template->param(tagfield => $tagfield);
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	my $env;
-	my ($count,$results)=StringSearch($env,$tagfield,$authtypecode);
+	my ($count,$results)=StringSearch($env,$tagfield,$frameworkcode);
 	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -411,6 +419,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
 		$row_data{tagsubfield} = $results->[$i]{'tagsubfield'};
 		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
+		
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};
@@ -421,7 +430,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{hidden}	= $results->[$i]{'hidden'} if($results->[$i]{'hidden'} gt "000") ;
 		$row_data{isurl}	= $results->[$i]{'isurl'};
 		$row_data{link}	= $results->[$i]{'link'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&authtypecode=$authtypecode";
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&frameworkcode=$frameworkcode";
 		$row_data{toggle} = $toggle;
 		if ($row_data{tab} eq -1) {
 			$row_data{subfield_ignored} = 1;
@@ -431,7 +440,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	}
 	$template->param(loop => \@loop_data);
 	$template->param(edit_tagfield => $tagfield,
-		edit_authtypecode => $authtypecode);
+		edit_frameworkcode => $frameworkcode);
 	
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;

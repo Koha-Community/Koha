@@ -38,10 +38,10 @@
 
 use strict;
 use CGI;
+
 use C4::Context;
 use C4::Output;
 use C4::Search;
-use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -51,7 +51,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from categories where (description like ?) order by category_type,description");
+	my $sth=$dbh->prepare("Select * from categories where (description like ?)");
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -73,7 +73,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1, management => 1},
+			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
 
@@ -92,35 +92,34 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired, canmakepublicshelves, addRequestToShelves, allowrenewsfromopac from categories where categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
 
-	$template->param(description        => $data->{'description'},
+	$template->param(description             => $data->{'description'},
 				enrolmentperiod         => $data->{'enrolmentperiod'},
 				upperagelimit           => $data->{'upperagelimit'},
 				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-				enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'}),
+				enrolmentfee            => $data->{'enrolmentfee'},
 				overduenoticerequired   => $data->{'overduenoticerequired'},
 				issuelimit              => $data->{'issuelimit'},
-				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
-				category_type           => $data->{'category_type'},
-				"type_".$data->{'category_type'} => " SELECTED ",
-				);
+				reservefee              => $data->{'reservefee'},
+				canmakepublicshelves	=> $data->{'canmakepublicshelves'},
+				addRequestToShelves		=> $data->{'addRequestToShelves'},
+				allowrenewsfromopac		=> $data->{'allowrenewsfromopac'}
+	);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?)");
-	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
+	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired, issuelimit, canmakepublicshelves, addRequestToShelves , allowrenewsfromopac) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired', 'issuelimit', 'canmakepublicshelves', 'addRequestToShelves', 'allowrenewsfromopac'));
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=categorie.pl\"></html>";
-	exit;
-
+	
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
@@ -134,7 +133,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired, canmakepublicshelves, addRequestToShelves,allowrenewsfromopac  from categories where categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -146,12 +145,17 @@ if ($op eq 'add_form') {
                                 enrolmentperiod         => $data->{'enrolmentperiod'},
                                 upperagelimit           => $data->{'upperagelimit'},
                                 dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'}),
+                                enrolmentfee            => $data->{'enrolmentfee'},
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
-                                reservefee              =>  sprintf("%.2f",$data->{'reservefee'}),
-                                category_type           => $data->{'category_type'}
-                                );
+                                reservefee              => $data->{'reservefee'},
+								canmakepublicshelves    => $data->{'canmakepublicshelves'},
+								addRequestToShelves		=> $data->{'addRequestToShelves'},
+								allowrenewsfromopac     => $data->{'allowrenewsfromopac'},
+		
+		);
+
+
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -162,9 +166,6 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from categories where categorycode=?");
 	$sth->execute($categorycode);
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=categorie.pl\"></html>";
-	exit;
-
 													# END $OP eq DELETE_CONFIRMED
 } else { # DEFAULT
 	$template->param(else => 1);
@@ -178,30 +179,25 @@ if ($op eq 'add_form') {
 				enrolmentperiod => $results->[$i]{'enrolmentperiod'},
 				upperagelimit => $results->[$i]{'upperagelimit'},
 				dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
-				enrolmentfee => sprintf("%.2f",$results->[$i]{'enrolmentfee'}),
+				enrolmentfee => $results->[$i]{'enrolmentfee'},
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},
-				reservefee => sprintf("%.2f",$results->[$i]{'reservefee'}),
-				category_type => $results->[$i]{'category_type'},
+				reservefee => $results->[$i]{'reservefee'},
+				canmakepublicshelves => $results->[$i]{'canmakepublicshelves'},
+				addRequestToShelves		=> $results->[$i]{'addRequestToShelves'},
+				allowrenewsfromopac => $results->[$i]{'allowrenewsfromopac'},
 				toggle => $toggle );	
 		push @loop, \%row;
-		if ( $toggle eq 0 )
-		{
-			$toggle = 1;
-		}
-		else
-		{
-			$toggle = 0;
-		}
+		$toggle = not $toggle;
 	}
 	$template->param(loop => \@loop);
 	# check that I (institution) and C (child) exists. otherwise => warning to the user
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select category_type from categories where category_type='C'");
+	my $sth=$dbh->prepare("select categorycode from categories where categorycode='C'");
 	$sth->execute;
 	my ($categoryChild) = $sth->fetchrow;
 	$template->param(categoryChild => $categoryChild);
-	$sth=$dbh->prepare("select category_type from categories where category_type='I'");
+	$sth=$dbh->prepare("select categorycode from categories where categorycode='I'");
 	$sth->execute;
 	my ($categoryInstitution) = $sth->fetchrow;
 	$template->param(categoryInstitution => $categoryInstitution);
@@ -211,9 +207,6 @@ if ($op eq 'add_form') {
 } #---- END $OP eq DEFAULT
 
 
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+
 output_html_with_http_headers $input, $cookie, $template->output;
 

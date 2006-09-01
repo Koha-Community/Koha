@@ -28,7 +28,7 @@ use C4::Output;
 use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -36,7 +36,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from biblio_framework where (frameworkcode like ?) order by frameworktext");
+	my $sth=$dbh->prepare("Select * from biblios_framework where (frameworkcode like ?) order by frameworktext");
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -50,13 +50,13 @@ sub StringSearch  {
 my $input = new CGI;
 my $searchfield=$input->param('frameworkcode');
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/biblio_framework.pl";
+my $script_name="/cgi-bin/koha/admin/biblios_framework.pl";
 my $frameworkcode=$input->param('frameworkcode');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/biblio_framework.tmpl",
+    = get_template_and_user({template_name => "admin/biblios_framework.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -83,7 +83,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($frameworkcode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+		my $sth=$dbh->prepare("select * from biblios_framework where frameworkcode=?");
 		$sth->execute($frameworkcode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -97,10 +97,10 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace biblio_framework (frameworkcode,frameworktext) values (?,?)");
+	my $sth=$dbh->prepare("replace biblios_framework (frameworkcode,frameworktext) values (?,?)");
 	$sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblios_framework.pl\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -111,14 +111,14 @@ if ($op eq 'add_form') {
 
 	# Check both categoryitem and biblioitems, see Bug 199
 	my $total = 0;
-	for my $table ('marc_tag_structure') {
+	for my $table ('biblios_tag_structure') {
 	   my $sth=$dbh->prepare("select count(*) as total from $table where frameworkcode=?");
 	   $sth->execute($frameworkcode);
 	   $total += $sth->fetchrow_hashref->{total};
 	   $sth->finish;
 	}
 
-	my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+	my $sth=$dbh->prepare("select * from biblios_framework where frameworkcode=?");
 	$sth->execute($frameworkcode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -133,14 +133,14 @@ if ($op eq 'add_form') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
 	my $frameworkcode=uc($input->param('frameworkcode'));
-	my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
+	my $sth=$dbh->prepare("delete from biblios_tag_structure where frameworkcode=?");
 	$sth->execute($frameworkcode);
-	$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
+	$sth=$dbh->prepare("delete from biblios_subfield_structure where frameworkcode=?");
 	$sth->execute($frameworkcode);
-	$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
+	$sth=$dbh->prepare("delete from biblios_framework where frameworkcode=?");
 	$sth->execute($frameworkcode);
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblios_framework.pl\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
@@ -170,10 +170,6 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?offset=".$nextpage);
 	}
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:

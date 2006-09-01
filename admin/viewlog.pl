@@ -23,7 +23,6 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use HTML::Template;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Log;
@@ -31,7 +30,7 @@ use Date::Manip;
 
 =head1 NAME
 
-plugin that shows a stats on borrowers
+plugin that shows a stats on catalogers
 
 =head1 DESCRIPTION
 
@@ -42,7 +41,7 @@ plugin that shows a stats on borrowers
 
 my $input = new CGI;
 my $do_it=$input->param('do_it');
-my $fullreportname = "admin/viewlog.tmpl";
+my $fullreportname = "parameters/viewlog.tmpl";
 my $modulename = $input->param("module");
 my $userfilter = $input->param("user");
 my $actionfilter = $input->param("action");
@@ -53,7 +52,7 @@ my $mime = $input->param("MIME");
 my $del = $input->param("sep");
 my $output = $input->param("output");
 
-#warn "module : ".$modulename;
+
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
 				query => $input,
@@ -86,7 +85,7 @@ if ($do_it) {
 	my ($count, $results) = displaylog( $modulename, @filters);
 	if ($output eq "screen"){
 # Printing results to screen
-		$template->param(modulename =>$modulename, $modulename => 1, looprow => $results);
+		$template->param(modulename =>$modulename, $modulename => 1, looprow => $results,counter=>$count);
 		output_html_with_http_headers $input, $cookie, $template->output;
 		exit(1);
 	} else {

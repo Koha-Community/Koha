@@ -45,11 +45,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
-use HTML::Template;
 use C4::Context;
-
-
-# Fix me, shouldnt we store this stuff in the systempreferences table? 
 
 my %tabsysprefs;
 # Acquisitions
@@ -73,20 +69,37 @@ my %tabsysprefs;
 	$tabsysprefs{marcflavour}="Catalogue";
 	$tabsysprefs{serialsadditems}="Catalogue";
 	$tabsysprefs{sortbynonfiling}="Catalogue";
+	$tabsysprefs{MARCOrgCode}="Catalogue";
+	$tabsysprefs{z3950AuthorAuthFields}="Catalogue";
+	$tabsysprefs{z3950NormalizeAuthor}="Catalogue";
+	$tabsysprefs{SQLorZEBRA}="Catalogue";
 # Circulation
 	$tabsysprefs{maxoutstanding}="Circulation";
 	$tabsysprefs{maxreserves}="Circulation";
 	$tabsysprefs{noissuescharge}="Circulation";
-	$tabsysprefs{IssuingInProcess}="Circulation";
 	$tabsysprefs{patronimages}="Circulation";
 	$tabsysprefs{printcirculationslips}="Circulation";
 	$tabsysprefs{ReturnBeforeExpiry}="Circulation";
+	$tabsysprefs{allowrenewalsbefore}="Circulation";
+	$tabsysprefs{defaultBranch}="Circulation";
+	$tabsysprefs{strictrenewals}="Circulation";
+# Intranet
+	$tabsysprefs{TemplateEncoding}="Intranet";
+	$tabsysprefs{template}="Intranet";
+	$tabsysprefs{intranetstylesheet}="Intranet";
+	$tabsysprefs{IntranetNav}="Intranet";
+	$tabsysprefs{intranetcolorstylesheet}="Intranet";
+	$tabsysprefs{Activate_Log}="Intranet";
+	$tabsysprefs{allowrenewalsbefore}="Intranet";
+	
+	$tabsysprefs{zebrawait}="Intranet";
+	$tabsysprefs{retrieve_from}="Intranet";
+	$tabsysprefs{batchMode}="Intranet";
+	
 # Members
 	$tabsysprefs{automembernum}="Members";
 	$tabsysprefs{checkdigit}="Members";
 	$tabsysprefs{NotifyBorrowerDeparture}="Members";
-        $tabsysprefs{memberofinstitution}="Members";
-        $tabsysprefs{ReadingHistory}="Members";
 # OPAC
 	$tabsysprefs{AmazonAssocTag}="OPAC";
 	$tabsysprefs{AmazonContent}="OPAC";
@@ -113,6 +126,8 @@ my %tabsysprefs;
 	$tabsysprefs{SubscriptionHistory}="OPAC";
 	$tabsysprefs{suggestion}="OPAC";
 	$tabsysprefs{virtualshelves}="OPAC";
+	$tabsysprefs{opacheader}="OPAC";
+	$tabsysprefs{allowrenewsfromopac}="OPAC";
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -157,14 +172,13 @@ sub StringSearch  {
 	return ($cnt,\@results);
 }
 
-
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/systempreferences.tmpl",
+    = get_template_and_user({template_name => "admin/systempreferences.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -177,10 +191,10 @@ $searchfield=~ s/\,//g;
 
 if ($op) {
 $template->param(script_name => $script_name,
-						$op              => 1,); # we show only the TMPL_VAR names $op
+						$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						else              => 1,); # we show only the TMPL_VAR names $op
+						else              => 1); # we show only the TMPL_VAR names $op
 }
 
 if ($op eq 'update_and_reedit') {

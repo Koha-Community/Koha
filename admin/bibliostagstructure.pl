@@ -26,8 +26,7 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
-use C4::Context;
-use HTML::Template;
+
 
 # retrieve parameters
 my $input = new CGI;
@@ -40,18 +39,18 @@ my $searchfield=$input->param('searchfield');
 $searchfield=0 unless $searchfield;
 $searchfield=~ s/\,//g;
 
-my $offset=$input->param('offset') || 0;
-my $op = $input->param('op') || '';
+my $offset=$input->param('offset');
+my $op = $input->param('op');
 my $dspchoice = $input->param('select_display');
 my $pagesize=20;
 
-my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
+my $script_name="/cgi-bin/koha/admin/bibliostagstructure.pl";
 
 my $dbh = C4::Context->dbh;
 
 # open template
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/marctagstructure.tmpl",
+    = get_template_and_user({template_name => "admin/bibliostagstructure.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -71,8 +70,8 @@ foreach my $thisframeworkcode (keys %$frameworks) {
 	push @frameworkloop, \%row;
 }
 
-# check that framework is defined in marc_tag_structure
-my $sth=$dbh->prepare("select count(*) from marc_tag_structure where frameworkcode=?");
+# check that framework is defined in biblios_tag_structure
+my $sth=$dbh->prepare("select count(*) from biblios_tag_structure where frameworkcode=?");
 $sth->execute($frameworkcode);
 my ($frameworkexist) = $sth->fetchrow;
 if ($frameworkexist) {
@@ -104,7 +103,7 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?");
+		$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from biblios_tag_structure where tagfield=? and frameworkcode=?");
 		$sth->execute($searchfield,$frameworkcode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -119,7 +118,6 @@ if ($op eq 'add_form') {
 	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
 			-values=> \@authorised_values,
 			-size=>1,
- 			-tabindex=>'',
 			-id=>"authorised_value",
 			-multiple=>0,
 			-default => $data->{'authorised_value'},
@@ -127,10 +125,11 @@ if ($op eq 'add_form') {
 
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
-								searchfield => $searchfield);
+								searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
 		$template->param('heading-modify-tag-p' => 1);
 	} else {
-		$template->param(action => "Add tag");
+		$template->param(action => "Add tag",
+								searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
 		$template->param('heading-add-tag-p' => 1);
 	}
 	$template->param('use-heading-flags-p' => 1);
@@ -139,13 +138,11 @@ if ($op eq 'add_form') {
 			repeatable => CGI::checkbox(-name=>'repeatable',
 						-checked=> $data->{'repeatable'}?'checked':'',
 						-value=> 1,
- 						-tabindex=>'',
 						-label => '',
 						-id=> 'repeatable'),
 			mandatory => CGI::checkbox(-name => 'mandatory',
 						-checked => $data->{'mandatory'}?'checked':'',
 						-value => 1,
- 						-tabindex=>'',
 						-label => '',
 						-id => 'mandatory'),
 			authorised_value => $authorised_value,
@@ -155,7 +152,7 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$sth=$dbh->prepare("replace marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
+	$sth=$dbh->prepare("replace biblios_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
 	my $tagfield       =$input->param('tagfield');
 	my $liblibrarian  = $input->param('liblibrarian');
 	my $libopac       =$input->param('libopac');
@@ -173,13 +170,13 @@ if ($op eq 'add_form') {
 							);
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=bibliostagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?");
+	$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from biblios_tag_structure where tagfield=? and frameworkcode=?");
 	$sth->execute($searchfield,$frameworkcode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -192,14 +189,15 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from marc_tag_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
-		$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
+		$dbh->do("delete from biblios_tag_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
+		$dbh->do("delete from biblios_subfield_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
+		
 	}
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
 } elsif ($op eq 'framework_create') {
-	$sth = $dbh->prepare("select count(*),marc_tag_structure.frameworkcode,frameworktext from marc_tag_structure,biblio_framework where biblio_framework.frameworkcode=marc_tag_structure.frameworkcode group by marc_tag_structure.frameworkcode");
+	$sth = $dbh->prepare("select count(*),biblios_tag_structure.frameworkcode,frameworktext from biblios_tag_structure,biblios_framework where biblios_framework.frameworkcode=biblios_tag_structure.frameworkcode group by biblios_tag_structure.frameworkcode");
 	$sth->execute;
 	my @existingframeworkloop;
 	while (my ($tot,$thisframeworkcode,$frameworktext) = $sth->fetchrow) {
@@ -226,7 +224,7 @@ if ($op eq 'add_form') {
 		my $env;
 		$searchfield=~ s/\'/\\\'/g;
 		my @data=split(' ',$searchfield);
-		my $sth=$dbh->prepare("Select marc_tag_structure.tagfield as mts_tagfield,marc_tag_structure.liblibrarian as mts_liblibrarian,marc_tag_structure.libopac as mts_libopac,marc_tag_structure.repeatable as mts_repeatable,marc_tag_structure.mandatory as mts_mandatory,marc_tag_structure.authorised_value as mts_authorized_value,marc_subfield_structure.* from marc_tag_structure LEFT JOIN marc_subfield_structure ON (marc_tag_structure.tagfield=marc_subfield_structure.tagfield AND marc_tag_structure.frameworkcode=marc_subfield_structure.frameworkcode) where (marc_tag_structure.tagfield >= ? and marc_tag_structure.frameworkcode=?) AND marc_subfield_structure.tab>=0 order by marc_tag_structure.tagfield,marc_subfield_structure.tagsubfield");
+		my $sth=$dbh->prepare("Select biblios_tag_structure.tagfield as mts_tagfield,biblios_tag_structure.liblibrarian as mts_liblibrarian,biblios_tag_structure.libopac as mts_libopac,biblios_tag_structure.repeatable as mts_repeatable,biblios_tag_structure.mandatory as mts_mandatory,biblios_tag_structure.authorised_value as mts_authorized_value,biblios_subfield_structure.* from biblios_tag_structure LEFT JOIN biblios_subfield_structure ON (biblios_tag_structure.tagfield=biblios_subfield_structure.tagfield AND biblios_tag_structure.frameworkcode=biblios_subfield_structure.frameworkcode) where (biblios_tag_structure.tagfield >= ? and biblios_tag_structure.frameworkcode=?) AND biblios_subfield_structure.tab>=0 order by biblios_tag_structure.tagfield,biblios_subfield_structure.tagsubfield");
 		#could be ordoned by tab
 		$sth->execute($data[0], $frameworkcode);
 		my @results = ();
@@ -252,7 +250,7 @@ if ($op eq 'add_form') {
 			$row_data{repeatable} = $results[$i]->{'mts_repeatable'};
 			$row_data{mandatory} = $results[$i]->{'mts_mandatory'};
 			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?op=add_form&tagfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{subfield_link} ="biblios_subfields_structure.pl?op=add_form&tagfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{toggle} = $toggle;
@@ -267,7 +265,6 @@ if ($op eq 'add_form') {
 				my %subfield_data;
 				$subfield_data{tagsubfield} = $results[$j]->{'tagsubfield'};
 				$subfield_data{liblibrarian} = $results[$j]->{'liblibrarian'};
-				$subfield_data{kohafield} = $results[$j]->{'kohafield'};
 				$subfield_data{repeatable} = $results[$j]->{'repeatable'};
 				$subfield_data{mandatory} = $results[$j]->{'mandatory'};
 				$subfield_data{tab} = $results[$j]->{'tab'};
@@ -308,7 +305,7 @@ if ($op eq 'add_form') {
 			$row_data{repeatable} = $results->[$i]{'repeatable'};
 			$row_data{mandatory} = $results->[$i]{'mandatory'};
 			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{subfield_link} ="biblios_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 			$row_data{toggle} = $toggle;
@@ -352,12 +349,11 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield >= ? and frameworkcode=?) order by tagfield");
+	my $sth=$dbh->prepare("Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from biblios_tag_structure where (tagfield >= ? and frameworkcode=?) order by tagfield");
 	$sth->execute($data[0], $frameworkcode);
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	warn "=> ".$data->{liblibrarian};
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -369,18 +365,33 @@ sub StringSearch  {
 #
 sub duplicate_framework {
 	my ($newframeworkcode,$oldframeworkcode) = @_;
-	my $sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where frameworkcode=?");
+	my $sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from biblios_tag_structure where frameworkcode=?");
 	$sth->execute($oldframeworkcode);
-	my $sth_insert = $dbh->prepare("insert into marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) values (?,?,?,?,?,?,?)");
+	my $sth_insert = $dbh->prepare("insert into biblios_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) values (?,?,?,?,?,?,?)");
 	while ( my ($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value) = $sth->fetchrow) {
 		$sth_insert->execute($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value,$newframeworkcode);
 	}
 
-	$sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,seealso from marc_subfield_structure where frameworkcode=?");
+	$sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,authtypecode,value_builder,seealso from biblios_subfield_structure where frameworkcode=?");
 	$sth->execute($oldframeworkcode);
-	$sth_insert = $dbh->prepare("insert into marc_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso) = $sth->fetchrow) {
-	    $sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso);
+	$sth_insert = $dbh->prepare("insert into biblios_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,authtypecode,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory,  $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso) = $sth->fetchrow) {
+	    $sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso);
+	}
+	
+## now the same for holdings
+	$sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from holdings_tag_structure where frameworkcode=?");
+	$sth->execute($oldframeworkcode);
+	my $sth_insert = $dbh->prepare("insert into holdings_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) values (?,?,?,?,?,?,?)");
+	while ( my ($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value) = $sth->fetchrow) {
+		$sth_insert->execute($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value,$newframeworkcode);
+	}
+
+	$sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,authtypecode,value_builder,seealso from holdings_subfield_structure where frameworkcode=?");
+	$sth->execute($oldframeworkcode);
+	$sth_insert = $dbh->prepare("insert into holdings_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,authtypecode,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory,  $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso) = $sth->fetchrow) {
+	    $sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso);
 	}
 }
 

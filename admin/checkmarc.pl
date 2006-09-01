@@ -26,7 +26,6 @@ use CGI;
 use C4::Search;
 use C4::Context;
 use C4::Biblio;
-use HTML::Template;
 
 my $input = new CGI;
 
@@ -41,110 +40,80 @@ my ($template, $borrowernumber, $cookie)
 
 my $dbh = C4::Context->dbh;
 my $total;
-# checks itemnum field
-my $sth = $dbh->prepare("select tab from marc_subfield_structure where kohafield=\"items.itemnumber\"");
+# checks itemnumber field
+my $sth = $dbh->prepare("select tagfield from koha_attr where marctokoha=\"itemnumber\"");
 $sth->execute;
 my ($res) = $sth->fetchrow;
-if ($res==-1) {
-	$template->param(itemnum => 0);
-} else {
-	$template->param(itemnum => 1);
+unless ($res) {
+	$template->param(itemnumber => 1);
 	$total++;
 }
-
-# checks biblio.biblionumber and biblioitem.biblioitemnumber (same tag and tab=-1)
-$sth = $dbh->prepare("select tagfield,tab from marc_subfield_structure where kohafield=\"biblio.biblionumber\"");
+#check biblionumber
+my $sth = $dbh->prepare("select tagfield from koha_attr where marctokoha=\"biblionumber\"");
 $sth->execute;
-my $tab;
-($res,$tab) = $sth->fetchrow;
-$sth = $dbh->prepare("select tagfield,tab from marc_subfield_structure where kohafield=\"biblioitems.biblioitemnumber\"");
-$sth->execute;
-my ($res2,$tab2) = $sth->fetchrow;
-if ($res && $res2 && ($res eq $res2) && $tab==-1 && $tab2==-1) {
-	$template->param(biblionumber => 0);
-} else {
+my ($res) = $sth->fetchrow;
+if ($res ){
+	($res) = $sth->fetchrow;
+	unless ($res){
 	$template->param(biblionumber => 1);
 	$total++;
-}
-
-# checks all item fields are in the same tag and in tab 10
-
-$sth = $dbh->prepare("select tagfield,tab,kohafield from marc_subfield_structure where kohafield like \"items.%\"");
-$sth->execute;
-my $field;
-($res,$res2,$field) = $sth->fetchrow;
-my $tagfield = $res;
-my $tab = $res2;
-my $subtotal=0;
-warn "TAGF : $tagfield";
-while (($res,$res2,$field) = $sth->fetchrow) {
-	# (ignore itemnumber, that must be in -1 tab)
-	if (($res ne $tagfield or $res2 ne $tab ) && $res2 ne -1) {
-		$subtotal++;
 	}
 }
-$sth = $dbh->prepare("select kohafield from marc_subfield_structure where tagfield=?");
-$sth->execute($tagfield);
-while (($res2) = $sth->fetchrow) {
-	if (!$res2 || $res2 =~ /^items/) {
-	} else {
-		$subtotal++;
-	}
-}
-if ($subtotal eq 0) {
-	$template->param(itemfields => 0);
-} else {
-	$template->param(itemfields => 1);
+#check barcode
+my $sth = $dbh->prepare("select tagfield from koha_attr where marctokoha=\"barcode\"");
+$sth->execute;
+my ($res) = $sth->fetchrow;
+unless ($res){
+	$template->param(barcode=> 1);
 	$total++;
 }
-
-$sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where tab = 10");
+#check isbn
+my $sth = $dbh->prepare("select tagfield from koha_attr where marctokoha=\"isbn\"");
 $sth->execute;
-my $totaltags = 0;
-my $list = "";
-while (($res2) = $sth->fetchrow) {
-	$totaltags++;
-	$list.=$res2.",";
-}
-if ($totaltags > 1) {
-	$template->param(itemtags => $list);
+my ($res) = $sth->fetchrow;
+unless ($res){
+	$template->param(isbn => 1);
 	$total++;
-} else {
-	$template->param(itemtags => 0);
 }
-
-
-# checks biblioitems.itemtype must be mapped and use authorised_value=itemtype
-$sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"biblioitems.itemtype\"");
+## Check for itemtype
+my $sth = $dbh->prepare("select tagfield,tagsubfield from koha_attr where marctokoha=\"itemtype\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2>=0 && $field eq "itemtypes") {
-	$template->param(itemtype => 0);
-} else {
+my ($res,$res2) = $sth->fetchrow;
+if ($res) {
+$sth = $dbh->prepare("select authorised_value from biblios_subfield_structure where tagfield=? and tagsubfield=?");
+$sth->execute($res,$res2);
+ my ($item)=$sth->fetchrow;
+    unless ($item eq "itemtypes"){
 	$template->param(itemtype => 1);
 	$total++;
+    }
 }
 
-# checks items.homebranch must be mapped and use authorised_value=branches
-$sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"items.homebranch\"");
+## Check for homebranch
+my $sth = $dbh->prepare("select tagfield from koha_attr where marctokoha=\"homebranch\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2 eq 10 && $field eq "branches") {
-	$template->param(branch => 0);
-} else {
+my ($res) = $sth->fetchrow;
+unless  ($res) {
 	$template->param(branch => 1);
 	$total++;
+    
 }
-# checks items.homebranch must be mapped and use authorised_value=branches
-$sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"items.holdingbranch\"");
+
+## Check for holdingbranch
+my $sth = $dbh->prepare("select tagfield,tagsubfield from koha_attr where marctokoha=\"holdingbranch\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2 eq 10 && $field eq "branches") {
-	$template->param(holdingbranch => 0);
-} else {
+my ($res,$res2) = $sth->fetchrow;
+if ($res) {
+$sth = $dbh->prepare("select authorised_value from biblios_subfield_structure where tagfield=? and tagsubfield=?");
+$sth->execute($res,$res2);
+ my ($item)=$sth->fetchrow;
+    unless ($item eq "branches"){
 	$template->param(holdingbranch => 1);
 	$total++;
+    }
 }
+
+
 
 # checks that itemtypes & branches tables are not empty
 $sth = $dbh->prepare("select count(*) from itemtypes");
@@ -163,31 +132,5 @@ unless ($res) {
 	$total++;
 }
 
-$sth = $dbh->prepare("select count(*) from marc_biblio where frameworkcode is NULL");
-$sth->execute;
-($res) = $sth->fetchrow;
-if ($res) {
-	$template->param(frameworknull =>1);
-	$total++;
-}
-$sth = $dbh->prepare("select count(*) from marc_subfield_structure where frameworkcode is NULL");
-$sth->execute;
-($res) = $sth->fetchrow;
-if ($res) {
-	$template->param(frameworknull =>1);
-	$total++;
-}
-$sth = $dbh->prepare("select count(*) from marc_tag_structure where frameworkcode is NULL");
-$sth->execute;
-($res) = $sth->fetchrow;
-if ($res) {
-	$template->param(frameworknull =>1);
-	$total++;
-}
-
-$template->param(total => $total,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+$template->param(total => $total);
 output_html_with_http_headers $input, $cookie, $template->output;

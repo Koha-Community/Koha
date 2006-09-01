@@ -21,12 +21,10 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
-use C4::Database;
 use C4::Auth;
 use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -55,8 +53,8 @@ if ($op eq 'save') {
 	my $sth_Fupdate=$dbh->prepare("Update issuingrules set fine=?,firstremind=?,chargeperiod=? where branchcode=? and categorycode=? and itemtype=?");
 	my $sth_Fdelete=$dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and issuelength=0");
 
-	my $sth_Iinsert = $dbh->prepare("insert into issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength,rentaldiscount) values (?,?,?,?,?,?)");
-	my $sth_Iupdate=$dbh->prepare("Update issuingrules set maxissueqty=?, issuelength=?, rentaldiscount=? where branchcode=? and categorycode=? and itemtype=?");
+	my $sth_Iinsert = $dbh->prepare("insert into issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength) values (?,?,?,?,?)");
+	my $sth_Iupdate=$dbh->prepare("Update issuingrules set maxissueqty=?, issuelength=? where branchcode=? and categorycode=? and itemtype=?");
 	my $sth_Idelete=$dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and fine=0");
 	foreach my $key (@names){
 		# ISSUES
@@ -65,14 +63,14 @@ if ($op eq 'save') {
 			my $bor = $2; # borrower category
 			my $cat = $3; # item type
 			my $data=$input->param($key);
-			my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
+			my ($issuelength,$maxissueqty)=split(',',$data);
 # 			if ($maxissueqty >0) {
 				$sth_search->execute($br,$bor,$cat);
 				my $res = $sth_search->fetchrow_hashref();
 				if ($res->{total}) {
-					$sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
+					$sth_Iupdate->execute($maxissueqty,$issuelength,$br,$bor,$cat);
 				} else {
-					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
+					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength);
 				}
 # 			} else {
 # 				$sth_Idelete->execute($br,$bor,$cat);
@@ -100,7 +98,7 @@ if ($op eq 'save') {
 	}
 
 }
-my $branches = GetBranches;
+my $branches = getbranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;
@@ -113,7 +111,7 @@ foreach my $thisbranch (keys %$branches) {
 
 my $sth=$dbh->prepare("Select description,categorycode from categories order by description");
 $sth->execute;
-my @trow3;
+ my @trow3;
 my @title_loop;
 # my $i=0;
 while (my $data=$sth->fetchrow_hashref){
@@ -158,12 +156,11 @@ foreach my $data (@itemtypes) {
 		my $fine=$dat->{'fine'}+0;
 		my $maxissueqty = $dat->{'maxissueqty'}+0;
 		my $issuelength = $dat->{'issuelength'}+0;
-	        my $rentaldiscount = $dat->{'rentaldiscount'}+0;
 		my $finesvalue;
 		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine+$dat->{'firstremind'}+$dat->{'chargeperiod'}>0;
 		my $issuingvalue;
 # 		if ($maxissueqty>0) {
-		    $issuingvalue = "$issuelength,$maxissueqty,$rentaldiscount" if $issuelength+$maxissueqty>0;
+		    $issuingvalue = "$issuelength,$maxissueqty" if $issuelength+$maxissueqty>0;
 # 		}
 # 		else {		
 # 		    $issuingvalue = "$issuelength, 5";
@@ -186,9 +183,5 @@ $sth->finish;
 $template->param(title => \@title_loop,
 						row => \@row_loop,
 						branchloop => \@branchloop,
-						branch => $branch,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-						);
+						branch => $branch);
 output_html_with_http_headers $input, $cookie, $template->output;

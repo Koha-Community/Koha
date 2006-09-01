@@ -1,6 +1,24 @@
 #!/usr/bin/perl
 
+#script to administer the aqbudget table
 #written 20/02/2002 by paul.poulain@free.fr
+# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
+
+# ALGO :
+# this script use an $op to know what to do.
+# if $op is empty or none of the above values,
+#	- the default screen is build (with all records, or filtered datas).
+#	- the   user can clic on add, modify or delete record.
+# if $op=add_form
+#	- if primkey exists, this is a modification,so we read the $primkey record
+#	- builds the add/modify form
+# if $op=add_validate
+#	- the user has just send datas, so we create/modify the record
+# if $op=delete_form
+#	- we show the record having primkey=$primkey and ask for deletion validation form
+# if $op=delete_confirm
+#	- we delete the record having primkey=$primkey
+
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -19,91 +37,73 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
-=head1 NAME
-
-aqbookfund.pl
-
-=head1 DESCRIPTION
-
-script to administer the aqbudget table.
-
-=head1 CGI PARAMETERS
-
-=over 4
-
-=item op
-this script use an C<$op> to know what to do.
-C<op> can be equal to:
-* empty or none of the above values, then
-    - the default screen is build (with all records, or filtered datas).
-	- the   user can clic on add, modify or delete record.
-* add_form, then
-	- if primkey exists, this is a modification,so we read the $primkey record
-	- builds the add/modify form
-* add_validate, then
-	- the user has just send datas, so we create/modify the record
-* delete_form, then
-	- we show the record having primkey=$primkey and ask for deletion validation form
-* delete_confirm, then
-    - we delete the record having primkey=$primkey
-
-=cut
-
 use strict;
 use CGI;
-use HTML::Template;
-use List::Util qw/min/;
 use C4::Auth;
-use C4::Koha;
 use C4::Context;
-use C4::Bookfund;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use C4::Date;
 
-my $dbh = C4::Context->dbh;
+sub StringSearch  {
+	my ($env,$searchstring,$type)=@_;
+	my $dbh = C4::Context->dbh;
+	$searchstring=~ s/\'/\\\'/g;
+	my @data=split(' ',$searchstring);
+	my $count=@data;
+	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like ?) order by bookfundid");
+	$sth->execute("%$data[0]%");
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		push(@results,$data);
+	}
+	#  $sth->execute;
+	$sth->finish;
+	return (scalar(@results),\@results);
+}
+
 my $input = new CGI;
+my $searchfield=$input->param('searchfield');
+my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/aqbookfund.pl";
 my $bookfundid=$input->param('bookfundid');
-my $pagesize = 10;
-my $op = $input->param('op') || '';
+my $pagesize=20;
+my $op = $input->param('op');
+$searchfield=~ s/\,//g;
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user(
-        {template_name => "admin/aqbookfund.tmpl",
-         query => $input,
-         type => "intranet",
-         authnotrequired => 0,
-         flagsrequired => {parameters => 1, management => 1},
-         debug => 1,
-        }
-    );
+    = get_template_and_user({template_name => "admin/aqbookfund.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1, management => 1},
+			     debug => 1,
+			     });
 
 if ($op) {
-    $template->param(
-        script_name => $script_name,
-        $op => 1,
-    ); # we show only the TMPL_VAR names $op
-}
-else {
-    $template->param(script_name => $script_name,
+$template->param(script_name => $script_name,
+		$op              => 1); # we show only the TMPL_VAR names $op
+} else {
+$template->param(script_name => $script_name,
 		else              => 1); # we show only the TMPL_VAR names $op
 }
 $template->param(action => $script_name);
 
-my $branches = GetBranches;
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $dataaqbookfund;
+	my $data;
 	my $header;
 	if ($bookfundid) {
-    	$dataaqbookfund = GetBookFund($bookfundid);
-	}
+		my $dbh = C4::Context->dbh;
+		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
+		$sth->execute($bookfundid);
+		$data=$sth->fetchrow_hashref;
+		$sth->finish;
+	    }
 	if ($bookfundid) {
 	    $header = "Modify book fund";
 	    $template->param('header-is-modify-p' => 1);
@@ -119,171 +119,78 @@ if ($op eq 'add_form') {
 	}
 	$template->param(add_or_modify => $add_or_modify);
 	$template->param(bookfundid =>$bookfundid);
-	$template->param(bookfundname =>$dataaqbookfund->{'bookfundname'});
+	$template->param(bookfundname =>$data->{'bookfundname'});
 
-        my @branchloop;
-        foreach my $branchcode (sort keys %{$branches}) {
-            my $row = {
-                branchcode => $branchcode,
-                branchname => $branches->{$branchcode}->{branchname},
-            };
-
-            if (defined $bookfundid
-                and defined $dataaqbookfund->{branchcode}
-                and $dataaqbookfund->{branchcode} eq $branchcode) {
-                $row->{selected} = 1;
-            }
-
-            push @branchloop, $row;
-        }
-
-        $template->param(branches => \@branchloop);
-
-} # END $OP eq ADD_FORM
-
+													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
-elsif ($op eq 'add_validate') {
-	my $bookfundid = uc $input->param('bookfundid');
-
-    my $number = Countbookfund($bookfundid);
-
-    my $bookfund_already_exists = $number > 0 ? 1 : 0;
-
-    if ($bookfund_already_exists) {
-        my $bookfundname = $input->param('bookfundname');
-        my $branchcode = $input->param('branchcode') || undef;
-
-        ModBookFund($bookfundname,$branchcode,$bookfundid);
-    }
-    else {
-        NewBookFund(
-            $bookfundid,
-            $input->param('bookfundname'),
-            $input->param('branchcode')
-        );
-    }
-    $input->redirect('aqbookfund.pl');
-# END $OP eq ADD_VALIDATE
-}
+} elsif ($op eq 'add_validate') {
+        my $dbh = C4::Context->dbh;
+	my $bookfundid=uc($input->param('bookfundid'));
+	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
+	$sth->execute($bookfundid);
+	$sth->finish;
+	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
+	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
+	$sth->finish;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
+	exit;
+			
+										# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-
-elsif ($op eq 'delete_confirm') {
-    my $data = GetBookFund($bookfundid);
+} elsif ($op eq 'delete_confirm') {
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
+	$sth->execute($bookfundid);
+	my $data=$sth->fetchrow_hashref;
+	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
 	$template->param(bookfundname => $data->{'bookfundname'});
-} # END $OP eq DELETE_CONFIRM
-
-
+													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
-elsif ($op eq 'delete_confirmed') {
-    DelBookFund(uc($input->param('bookfundid')));
-
-}# END $OP eq DELETE_CONFIRMED
-
-
+} elsif ($op eq 'delete_confirmed') {
+	my $dbh = C4::Context->dbh;
+	my $bookfundid=uc($input->param('bookfundid'));
+	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid=?");
+	$sth->execute($bookfundid);
+	$sth->finish;
+	$sth=$dbh->prepare("delete from aqbudget where bookfundid=?");
+	$sth->execute($bookfundid);
+	$sth->finish;
+													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
-else { # DEFAULT
-    my ($query, $sth);
-
-    $template->param(scriptname => $script_name);
-
-    # filters
-    my @branchloop;
-    foreach my $branchcode (sort keys %{$branches}) {
-        my $row = {
-            code => $branchcode,
-            name => $branches->{$branchcode}->{branchname},
-        };
-
-        if (defined $input->param('filter_branchcode')
-            and $input->param('filter_branchcode') eq $branchcode) {
-            $row->{selected} = 1;
-        }
-
-        push @branchloop, $row;
-    }
-
-    my @bookfundids_loop;
-    my $sth = GetBookFundsId();
-
-    while (my $row = $sth->fetchrow_hashref) {
-        if (defined $input->param('filter_bookfundid') and $input->param('filter_bookfundid') eq $row->{bookfundid}){
-            $row->{selected} = 1;
-        }
-         push @bookfundids_loop, $row;
-     }
-
-    $template->param(
-        filter_bookfundids => \@bookfundids_loop,
-        filter_branches => \@branchloop,
-        filter_bookfundname => $input->param('filter_bookfundname') || undef,
-    );
-
-    # searching the bookfunds corresponding to our filtering rules
-    my @results = SearchBookFund(
-        $input->param('filter'),
-        $input->param('filter_bookfundid'),
-        $input->param('filter_bookfundname'),
-        $input->param('filter_branchcode'),
-    );
-
-    # does the book funds have budgets?
-    my @loop_id;
-    my $sth = GetBookFundsId();
-    while (my $row = $sth->fetchrow){
-        push @loop_id, $row;
-    }
-
-    my ($id,%nb_budgets_of);
-    foreach $id (@loop_id){
-        my $number = Countbookfund($id);
-        $nb_budgets_of{$id} = $number;
-    }
-
-    # pagination informations
-    my $page = $input->param('page') || 1;
-    my @loop;
-
-    my $first = ($page - 1) * $pagesize;
-
-    # if we are on the last page, the number of the last word to display
-    # must not exceed the length of the results array
-    my $last = min(
-        $first + $pagesize - 1,
-        scalar(@results) - 1,
-    );
-
-    my $toggle = 0;
-    foreach my $result (@results[$first .. $last]) {
-        push(
-            @loop,
-            {
-                %{$result},
-                toggle => $toggle++%2,
-                branchname =>
-                    $branches->{ $result->{branchcode} }->{branchname},
-                has_budgets => defined $nb_budgets_of{ $result->{bookfundid} },
-            }
-        );
-    }
-
-    $template->param(
-            bookfund => \@loop,
-            pagination_bar => pagination_bar(
-                        $script_name,
-                        getnbpages(scalar @results, $pagesize),
-                        $page,
-                        'page'
-            )
-        );
+} else { # DEFAULT
+	$template->param(scriptname => $script_name);
+	if  ($searchfield ne '') {
+		$template->param(search => 1);
+		$template->param(searchfield => $searchfield);
+	}
+	my $env;
+	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my $toggle="white";
+	my @loop_data =();
+	my $dbh = C4::Context->dbh;
+	my $sth2 = $dbh->prepare("Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where bookfundid = ? order by bookfundid");
+	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+		my %row_data;
+		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
+		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+		$sth2->execute($row_data{bookfundid});
+		my @budget_loop;
+		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
+			my %budgetrow_data;
+			$budgetrow_data{aqbudgetid} = $aqbudgetid;
+			$budgetrow_data{startdate} = format_date($startdate);
+			$budgetrow_data{enddate} = format_date($enddate);
+			$budgetrow_data{budgetamount} = $budgetamount;
+			push @budget_loop,\%budgetrow_data;
+		}
+		$row_data{budget} = \@budget_loop;
+		push @loop_data,\%row_data;
+	}
+	$template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT
-$template->param(
-    intranetcolorstylesheet =>C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav => C4::Context->preference("IntranetNav"),
-    );
 
 output_html_with_http_headers $input, $cookie, $template->output;
