@@ -1,4 +1,4 @@
-package C4::Circulation::Fines;
+package C4::Circulation::Fines2;
 
 # $Id$
 
@@ -49,7 +49,7 @@ overdue items. It is primarily used by the 'misc/fines2.pl' script.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine &ReplacementCost &GetFine &ReplacementCost2);
+@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine &ReplacementCost);
 
 =item Getoverdues
 
@@ -261,13 +261,11 @@ sub UpdateFine {
   } else {
     # I think this else-clause deals with the case where we're adding
     # a new fine.
-    my $sth4=$dbh->prepare("select biblio.marc from biblio ,items where items.itemnumber=?
+    my $sth4=$dbh->prepare("select title from biblio ,items where items.itemnumber=?
     and biblio.biblionumber=items.biblionumber");
     $sth4->execute($itemnum);
-    my $marc=$sth4->fetchrow;
+    my $title=$sth4->fetchrow;
     $sth4->finish;
-my $record=MARC::File::USMARC::decode($marc,\&func_title);
-my $title=$record->title();
  #   print "not in account";
     my $sth3=$dbh->prepare("Select max(accountno) from accountlines");
     $sth3->execute;
@@ -285,11 +283,7 @@ my $title=$record->title();
   $sth->finish;
 }
 
-  sub func_title {
-        my ($tagno,$tagdata) = @_;
-  my ($titlef,$subf)=&MARCfind_marc_from_kohafield("title","biblios");
-        return ($tagno == $titlef );
-    }
+
 
 =item BorType
 
@@ -327,36 +321,12 @@ Returns the replacement cost of the item with the given item number.
 sub ReplacementCost{
   my ($itemnumber)=@_;
   my $dbh = C4::Context->dbh;
-  my ($itemrecord)=MARCgetitem($dbh,$itemnumber);
- my $data=MARCmarc2koha($dbh,$itemrecord,"holdings"); 
-  return($data->{'replacementprice'});
-}
-sub GetFine {
-    my ( $itemnum, $bornum ) = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query = "SELECT sum(amountoutstanding) FROM accountlines 
-    where accounttype like 'F%'  
-  AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $itemnum, $bornum );
-    my $data = $sth->fetchrow_hashref();
-    $sth->finish();
-    $dbh->disconnect();
-    return ( $data->{'sum(amountoutstanding)'} );
+  my ($itemrecord)=XMLgetitem($dbh,$itemnumber);
+$itemrecord=XML_xml2hash_onerecord($itemrecord);
+ my $replacementprice=XML_readline_onerecord($itemrecord,"replacementprice","holdings"); 
+  return($replacementprice);
 }
 
-sub ReplacementCost2 {
-    my ( $itemnum, $bornum ) = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query = "SELECT amountoutstanding FROM accountlines
-    where accounttype like 'L'  AND amountoutstanding > 0 AND
-  itemnumber = ? AND borrowernumber= ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $itemnum, $bornum );
-    my $data = $sth->fetchrow_hashref();
-    $sth->finish();
-    $dbh->disconnect();
-    return ( $data->{'amountoutstanding'} );
 1;
 __END__
 

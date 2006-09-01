@@ -81,6 +81,7 @@ Also deals with stocktaking.
 	&calc_charges 
 	&listitemsforinventory 
 	&itemseen 
+	&itemseenbarcode
 	&fixdate 
 	&itemissues 
 	&patronflags
@@ -176,7 +177,7 @@ and issues.borrowernumber = borrowers.borrowernumber");
 						where itemnumber = ?
 									and issues.borrowernumber = borrowers.borrowernumber
 									and returndate is not NULL
-									order by returndate desc,timestamp desc ,limit 2") ;
+									order by returndate desc,timestamp desc limit 2") ;
         $sth2->execute($data->{'itemnumber'}) ;
 #        for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
 my $i2=0;
@@ -211,26 +212,26 @@ sub itemseen {
 my $sth=$dbh->prepare("select biblionumber from items where itemnumber=?");
 	$sth->execute($itemnumber);
 my ($biblionumber)=$sth->fetchrow; 
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',"0",1);
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',"0",1);
 # find today's date
 my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 	$year += 1900;
 	$mon += 1;
 	my $timestamp = sprintf("%4d%02d%02d%02d%02d%02d.0",
 		$year,$mon,$mday,$hour,$min,$sec);
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'datelastseen', $timestamp);	
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'datelastseen', $timestamp);	
 }
 sub itemseenbarcode {
 	my ($dbh,$barcode) = @_;
 my $sth=$dbh->prepare("select biblionumber,itemnumber from items where barcode=$barcode");
 	$sth->execute();
 my ($biblionumber,$itemnumber)=$sth->fetchrow; 
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',"0",1);
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',"0",1);
 my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 	$year += 1900;
 	$mon += 1;
 my $timestamp = sprintf("%4d%02d%02d%02d%02d%02d.0",$year,$mon,$mday,$hour,$min,$sec);
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'datelastseen', $timestamp);	
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'datelastseen', $timestamp);	
 }
 
 sub listitemsforinventory {
@@ -352,12 +353,14 @@ sub getiteminformation {
 # returns a hash of item information together with biblio given either the itemnumber or the barcode
 	my ($env, $itemnumber, $barcode) = @_;
 	my $dbh=C4::Context->dbh;
-	my ($itemrecord)=MARCgetitem($dbh,$itemnumber,$barcode);
-	my $iteminformation=MARCmarc2koha($dbh,$itemrecord,"holdings");
+	my ($itemrecord)=XMLgetitem($dbh,$itemnumber,$barcode);
+	 my $itemhash=XML_xml2hash_onerecord($itemrecord);	
+	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemhash,"holdings");
 ##Now get full biblio details from MARC
 	if ($iteminformation) {
-my ($record)=MARCgetbiblio($dbh,$iteminformation->{'biblionumber'});
-my $biblio=MARCmarc2koha($dbh,$record,"biblios");
+my ($record)=XMLgetbiblio($dbh,$iteminformation->{'biblionumber'});
+	my $recordhash=XML_xml2hash_onerecord($record);
+my $biblio=XMLmarc2koha_onerecord($dbh,$recordhash,"biblios");
 		foreach my $field (keys %$biblio){
 		$iteminformation->{$field}=$biblio->{$field};
 		} 
@@ -505,7 +508,7 @@ $itemnumber=~s /\'//g;
 my $sth=$dbh->prepare("select biblionumber from items where itemnumber=$itemnumber");
 	$sth->execute();
 my ($biblionumber)=$sth->fetchrow; 
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'holdingbranch',$holdingbranch,1);
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'holdingbranch',$holdingbranch,1);
 	$sth->finish;
 }
 
@@ -894,10 +897,12 @@ C<$date> contains the max date of return. calculated if empty.
 # issuing book. We already have checked it can be issued, so, just issue it !
 #
 sub issuebook {
+### fix me STOP using koha hashes, change so that XML hash is used
 	my ($env,$borrower,$barcode,$date,$cancelreserve) = @_;
 	my $dbh = C4::Context->dbh;
-	my ($itemrecord)=MARCgetitem($dbh,"",$barcode);
-	my $iteminformation=MARCmarc2koha($dbh,$itemrecord,"holdings");
+	my ($itemrecord)=XMLgetitem($dbh,"",$barcode);
+	 $itemrecord=XML_xml2hash_onerecord($itemrecord);
+	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
 	my $error;
 #
 # check if we just renew the issue.
@@ -995,17 +1000,17 @@ sub issuebook {
 		$sth->finish;
 		$iteminformation->{'issues'}++;
 ##Record in MARC the new data ,date_due as due date,issue count and the borrowernumber
-		&MARCkoha2marcOnefield($itemrecord, "issues", $iteminformation->{'issues'},"holdings");
-		&MARCkoha2marcOnefield($itemrecord, "date_due", $dateduef,"holdings");
-		&MARCkoha2marcOnefield($itemrecord, "borrowernumber", $borrower->{'borrowernumber'},"holdings");
-		&MARCkoha2marcOnefield($itemrecord, "itemlost", "0","holdings");
+		$itemrecord=XML_writeline($itemrecord, "issues", $iteminformation->{'issues'},"holdings");
+		$itemrecord=XML_writeline($itemrecord, "date_due", $dateduef,"holdings");
+		$itemrecord=XML_writeline($itemrecord, "borrowernumber", $borrower->{'borrowernumber'},"holdings");
+		$itemrecord=XML_writeline($itemrecord, "itemlost", "0","holdings");
 		# find today's date as timestamp
 		my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 		$year += 1900;
 		$mon += 1;
 		my $timestamp = sprintf("%4d%02d%02d%02d%02d%02d.0",
 		$year,$mon,$mday,$hour,$min,$sec);
-		&MARCkoha2marcOnefield($itemrecord, "datelastseen", $timestamp,"holdings");
+		$itemrecord=XML_writeline($itemrecord, "datelastseen", $timestamp,"holdings");
 		##Now update the zebradb
 		NEWmoditem($dbh,$itemrecord,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'});
 		# If it costs to borrow this book, charge it to the patron's account.
@@ -1140,8 +1145,9 @@ sub returnbook {
 	my $doreturn = 1;
 	die '$branch not defined' unless defined $branch; # just in case (bug 170)
 	# get information on item
-	my ($itemrecord)=MARCgetitem($dbh,"",$barcode);
-	my $iteminformation=MARCmarc2koha($dbh,$itemrecord,"holdings");
+	my ($itemrecord)=XMLgetitem($dbh,"",$barcode);
+	$itemrecord=XML_xml2hash_onerecord($itemrecord);
+	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
 	if (not $iteminformation) {
 		$messages->{'BadBarcode'} = $barcode;
 		$doreturn = 0;
@@ -1171,8 +1177,8 @@ sub returnbook {
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	
 		$sth->finish;
-	&MARCkoha2marcOnefield($itemrecord, "date_due", "","holdings");
-	&MARCkoha2marcOnefield($itemrecord, "borrowernumber", "","holdings");
+	$itemrecord=XML_writeline($itemrecord, "date_due", "","holdings");
+	$itemrecord=XML_writeline($itemrecord, "borrowernumber", "","holdings");
 	}
 	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
 	my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
@@ -1180,7 +1186,7 @@ sub returnbook {
 		$mon += 1;
 		my $timestamp = sprintf("%4d%02d%02d%02d%02d%02d.0",
 		$year,$mon,$mday,$hour,$min,$sec);
-		&MARCkoha2marcOnefield($itemrecord, "datelastseen", $timestamp,"holdings");
+		$itemrecord=XML_writeline($itemrecord, "datelastseen", $timestamp,"holdings");
 		
 		
 	($borrower) = getpatroninformation(\%env, $currentborrower, 0);
@@ -1193,7 +1199,7 @@ sub returnbook {
 	if ($iteminformation->{'itemlost'}) {
 		fixaccountforlostandreturned($iteminformation, $borrower);
 		$messages->{'WasLost'} = 1; # FIXME is the "= 1" right?
-		&MARCkoha2marcOnefield($itemrecord, "itemlost", "","holdings");
+		$itemrecord=XML_writeline($itemrecord, "itemlost", "","holdings");
 	}
 ####WARNING-- FIXME#########	
 ### The following new script is commented out
@@ -1224,7 +1230,7 @@ sub returnbook {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 	# fix up the overdues in accounts...
 	fixoverduesonreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-	&MARCkoha2marcOnefield($itemrecord, "itemoverdue", "","holdings");
+	$itemrecord=XML_writeline($itemrecord, "itemoverdue", "","holdings");
 	# find reserves.....
 	my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
 	if ($resfound) {
@@ -1465,19 +1471,16 @@ sub checkoverdues {
 	my $today = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
 	my @overdueitems;
 	my $count = 0;
-	my $sth = $dbh->prepare("SELECT issues.* , i.biblionumber as biblionumber FROM issues, items i
+	my $sth = $dbh->prepare("SELECT issues.* , i.biblionumber as biblionumber,b.* FROM issues, items i,biblio b
 			WHERE  i.itemnumber=issues.itemnumber
+				AND i.biblionumber=b.biblionumber
 				AND issues.borrowernumber  = ?
 				AND issues.returndate is NULL
 				AND issues.date_due < ?");
 	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {
-	my ($record)=MARCgetbiblio($dbh,$data->{biblionumber});
-	my $bibliodata=MARCmarc2koha($dbh,$record,"biblios");
-	foreach my $field (keys % $data){
-	$bibliodata->{$field}=$data->{$field};
-	}
-	push (@overdueitems, $bibliodata);
+	
+	push (@overdueitems, $data);
 	$count++;
 	}
 	$sth->finish;
@@ -1660,25 +1663,20 @@ sub getissues {
 	my $todaysdate = (1900+$datearr[5])."-".sprintf ("%0.2d", ($datearr[4]+1))."-".sprintf ("%0.2d", $datearr[3]);
 	my $counter = 0;
 	my $select = "SELECT *
-			FROM issues,items
+			FROM issues,items,biblio
 			WHERE issues.borrowernumber  = ?
 			AND issues.itemnumber      = items.itemnumber
+			AND items.biblionumber      = biblio.biblionumber
 			AND issues.returndate      IS NULL
 			ORDER BY issues.date_due";
 	#    print $select;
 	my $sth=$dbh->prepare($select);
 	$sth->execute($borrowernumber);
-	while (my $data = $sth->fetchrow_hashref) {
-	my ($record)=MARCgetbiblio($dbh,$data->{biblionumber},1);
-	 $bibliodata=MARCmarc2koha($dbh,$record,"biblios");
-		foreach my $field (keys %$data){
-		$bibliodata->{$field}=$data->{$field};
+	while (my $data = $sth->fetchrow_hashref) { 	
+		if ($data->{'date_due'}  lt $todaysdate) {
+			$data->{'overdue'} = 1;
 		}
-	 	$bibliodata->{'date_due'} = $data->{'date_due'};
-		if ($bibliodata->{'date_due'}  lt $todaysdate) {
-			$bibliodata->{'overdue'} = 1;
-		}
-		$currentissues{$counter} = $bibliodata;
+		$currentissues{$counter} = $data;
 		$counter++;
 	}
 	$sth->finish;
@@ -1741,12 +1739,14 @@ my $borrower=getpatroninformation($dbh,$bornum,undef);
 		## faculty members and privileged get renewal whatever the case may be
 		if ($borrower->{'categorycode'} eq 'F' ||$borrower->{'categorycode'} eq 'P'){
 		$renewokay = 1;
+		return $renewokay;
 		}
 	}
 	# FIXME - I think this function could be redone to use only one SQL call.
-	my $sth1 = $dbh->prepare("select * from issues,items
+	my $sth1 = $dbh->prepare("select * from issues,items,biblio
 								where (borrowernumber = ?)
 								and (issues.itemnumber = ?)
+								and items.biblionumber=biblio.biblionumber
 								and returndate is null
 								and items.itemnumber=issues.itemnumber");
 	$sth1->execute($bornum,$itemnumber);
@@ -1754,11 +1754,8 @@ my $borrower=getpatroninformation($dbh,$bornum,undef);
 		# Found a matching item
 	
 		# See if this item may be renewed. 
-		my ($record)=MARCgetbiblio($dbh,$data1->{biblionumber});
-		
-		my $bibliodata=MARCmarc2koha($dbh,$record,"biblios");
 		my $sth2 = $dbh->prepare("select renewalsallowed from itemtypes	where itemtypes.itemtype=?");
-		$sth2->execute($bibliodata->{itemtype});
+		$sth2->execute($data1->{itemtype});
 		if (my $data2=$sth2->fetchrow_hashref) {
 		$renews = $data2->{'renewalsallowed'};
 		}
@@ -1766,7 +1763,7 @@ my $borrower=getpatroninformation($dbh,$bornum,undef);
 			$renewokay= 1;
 		}else{
 			if (C4::Context->preference("strictrenewals")){
-			$renewokay=3 unless $renewokay==1;
+			$renewokay=3 ;
 			}
 		}
 		$sth2->finish;
@@ -1815,9 +1812,8 @@ if (C4::Context->preference("strictrenewals")){
 	$sth->execute($startdate);
 	my $difference = $sth->fetchrow;
 	$sth->finish;
-
 	if  ($difference < 0) {
-	$renewokay=2 unless $renewokay==1;
+	$renewokay=2 ;
 	}
 }##strictrenewals
 	return($renewokay);
@@ -1903,7 +1899,7 @@ if ($datedue eq "" ) {
 
 	## Update items and marc record with new date -T.G
 	my $iteminformation = getiteminformation($env, $itemnumber,0);
-	&MARCmoditemonefield($dbh,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'},'date_due',$datedue);
+	&XMLmoditemonefield($dbh,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'},'date_due',$datedue);
 		
 	# Log the renewal
 	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemnumber);
@@ -1953,16 +1949,13 @@ sub calc_charges {
 	my $charge=0;
 	my $dbh = C4::Context->dbh;
 	my $item_type;
-	my $sth= $dbh->prepare("select biblionumber from items where itemnumber=?");
+	my $sth= $dbh->prepare("select itemtype from biblio,items where items.biblionumber=biblio.biblionumber and itemnumber=?");
 	$sth->execute($itemnumber);
-	my $data1=$sth->fetchrow;
+	my $itemtype=$sth->fetchrow;
 	$sth->finish;
-	my ($record)=MARCgetbiblio($dbh,$data1);
-		
-		my $bibliodata=MARCmarc2koha($dbh,$record,"biblios");
-	# Get the book's item type and rental charge (via its biblioitem).
+	
 	my $sth1= $dbh->prepare("select rentalcharge from itemtypes where  itemtypes.itemtype=?");
-	$sth1->execute($bibliodata->{itemtype});
+	$sth1->execute($itemtype);
 	
 	$charge = $sth1->fetchrow;
 	my $q2 = "select rentaldiscount from issuingrules,borrowers
@@ -1970,7 +1963,7 @@ sub calc_charges {
               and (borrowers.categorycode = issuingrules.categorycode)
               and (issuingrules.itemtype = ?)";
             my $sth2=$dbh->prepare($q2);
-            $sth2->execute($bornum,$bibliodata->{itemtype});
+            $sth2->execute($bornum,$itemtype);
     if (my $data2=$sth2->fetchrow_hashref) {
 		my $discount = $data2->{'rentaldiscount'};
 		if ($discount eq 'NULL') {
@@ -1982,7 +1975,7 @@ sub calc_charges {
         $sth2->finish;
         
 	$sth1->finish;
-	return ($charge,$bibliodata->{itemtype});
+	return ($charge,$itemtype);
 }
 
 
