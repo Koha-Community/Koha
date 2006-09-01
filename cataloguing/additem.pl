@@ -28,122 +28,79 @@ use C4::Biblio;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Search;
-use HTML::Template;
-use MARC::File::USMARC;
-use Smart::Comments;
+use C4::Circulation::Circ2;
+use Encode;
+use C4::Log;
+
+my $logstatus=C4::Context->preference('Activate_log');
 
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
 	my $result;
 	my $indicator;
-	foreach my $field ($record->field($tagfield)) {
-		my @subfields = $field->subfields();
-		foreach my $subfield (@subfields) {
-			if (@$subfield[0] eq $insubfield) {
-				$result .= @$subfield[1];
-				$indicator = $field->indicator(1).$field->indicator(2);
-			}
+my $item=$record->{datafield};
+my $controlfield=$record->{controlfield};
+my $leader=$record->{leader};
+ if ($tagfield eq '000'){
+## We are getting the leader
+$result=$leader->[0];
+return($indicator,$result);
+}
+     if ($tagfield <10){
+	foreach my $control (@$controlfield) {
+		if ($control->{tag} eq $tagfield){
+		$result.=$control->{content};
 		}
 	}
+      }else{
+	foreach my $field (@$item) {		
+	      if ($field->{tag} eq $tagfield){	
+		    foreach my $subfield ( $field->{'subfield'}){
+		       foreach my $code ( @$subfield){
+			if ($code->{code} eq $insubfield) {
+				$result .= $code->{content};
+				$indicator = $field->{ind1}.$field->{ind2};
+			}
+		      }## each code
+		  }##each subfield
+	      }## if tag
+	}### $field
+     }## tag<10
 	return($indicator,$result);
 }
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
-if (!$biblionumber){
-    $biblionumber=$input->param('bibid');
-}
-my $biblioitemnumber = find_biblioitemnumber($dbh,$biblionumber);
-my $itemnumber = $input->param('itemnumber');
-if (!$itemnumber){
-    $itemnumber=$input->param('itemnum');
-    }
-
+my $oldbiblionumber =$biblionumber;
+my $frameworkcode=$input->param('frameworkcode');
 my $op = $input->param('op');
-
-# find itemtype
-my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
-
-my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
-my $record = MARCgetbiblio($dbh,$biblionumber);
-# warn "==>".$record->as_formatted;
-my $oldrecord = MARCmarc2koha($dbh,$record);
+my $itemnumber = $input->param('itemnumber');
+my $fromserials=$input->param('fromserials');## if a serial is being added do not display navigation menus
+my $serialid=$input->param('serialid');
+my @itemrecords; ##Builds existing items
+my $bibliorecord; #Bibliorecord relared to this item
+my $newrecord; ## the new record buing built
+my $itemrecexist; #item record we are editing
+my $xml; ## data on html
+ $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber) unless $frameworkcode;
+my $tagslib = &MARCitemsgettagslib($dbh,1,$frameworkcode);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
-#------------------------------------------------------------------------------------------------------------------------------
-if ($op eq "additem") {
-#------------------------------------------------------------------------------------------------------------------------------
-	# rebuild
-	my @tags = $input->param('tag');
-	my @subfields = $input->param('subfield');
-	my @values = $input->param('field_value');
-	# build indicator hash.
-	my @ind_tag = $input->param('ind_tag');
-	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-	# if autoBarcode is ON, calculate barcode...
-	if (C4::Context->preference('autoBarcode')) {
-		my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
-		unless ($record->field($tagfield)->subfield($tagsubfield)) {
-			my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
-			$sth_barcode->execute;
-			my ($newbarcode) = $sth_barcode->fetchrow;
-			$newbarcode++;
-			# OK, we have the new barcode, now create the entry in MARC record
-			my $fieldItem = $record->field($tagfield);
-			$record->delete_field($fieldItem);
-			$fieldItem->add_subfields($tagsubfield => $newbarcode);
-			$record->insert_fields_ordered($fieldItem);
-		}
-	}
-# check for item barcode # being unique
-	my $addedolditem = MARCmarc2koha($dbh,$record);
-	my $exists = get_item_from_barcode($addedolditem->{'barcode'});
-	push @errors,"barcode_not_unique" if($exists);
-	# if barcode exists, don't create, but report The problem.
-	$itemnumber = NEWnewitem($dbh,$record,$biblionumber,$biblioitemnumber) unless ($exists);
-	$nextop = "additem";
-#------------------------------------------------------------------------------------------------------------------------------
-} elsif ($op eq "edititem") {
-#------------------------------------------------------------------------------------------------------------------------------
-# retrieve item if exist => then, it's a modif
-	$itemrecord = get_record($biblionumber);
-	$nextop="saveitem";
-#------------------------------------------------------------------------------------------------------------------------------
-} elsif ($op eq "delitem") {
-#------------------------------------------------------------------------------------------------------------------------------
-# retrieve item if exist => then, it's a modif
-	&NEWdelitem($dbh,$biblionumber,$itemnumber);
-	$nextop="additem";
-#------------------------------------------------------------------------------------------------------------------------------
-} elsif ($op eq "saveitem") {
-#------------------------------------------------------------------------------------------------------------------------------
-	# rebuild
-	my @tags = $input->param('tag');
-	my @subfields = $input->param('subfield');
-	my @values = $input->param('field_value');
-	# build indicator hash.
-	my @ind_tag = $input->param('ind_tag');
-	my @indicator = $input->param('indicator');
-#	my $itemnumber = $input->param('itemnumber');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-        my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
-# MARC::Record builded => now, record in DB
-# warn "R: ".$record->as_formatted;
-	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$itemrecord,$biblionumber,$itemnumber,0);
-	$itemnumber="";
-	$nextop="additem";
-}
 
-#
-#------------------------------------------------------------------------------------------------------------------------------
-# build screen with existing items. and "new" one
-#------------------------------------------------------------------------------------------------------------------------------
+###DO NOT CHANGE TO RETRIVE FROM ZEBRA#####
+my $record =XMLgetbiblio($dbh,$biblionumber);
+$bibliorecord=XML_xml2hash_onerecord($record);
+my @itemxmls=XMLgetallitems($dbh,$biblionumber);
+	foreach my $itemrecord(@itemxmls){
+	my $itemhash=XML_xml2hash($itemrecord);
+	push @itemrecords, $itemhash;
+	}
+####
+
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
+    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -151,52 +108,200 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my %indicators;
-$indicators{995}='  ';
-# now, build existiing item list
-my $temp = get_record($biblionumber);
-my @fields = $temp->fields();
-#my @fields = $record->fields();
-my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
-my @big_array;
-#---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
-my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$itemtype);
+#------------------------------------------------------------------------------------------------------------------------------
+if ($op eq "additem") {
+#------------------------------------------------------------------------------------------------------------------------------
+	# rebuild
 
-foreach my $field (@fields) {
-	next if ($field->tag()<10);
-	my @subf=$field->subfields;
-	my %this_row;
-# loop through each subfield
-	for my $i (0..$#subf) {
-		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10 && ($field->tag() ne $itemtagfield && $subf[$i][0] ne $itemtagsubfield));
-		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
-		$this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
-		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
-			#verifying rights
-			my $userenv = C4::Context->userenv;
-			unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subf[$i][1]))){
-					$this_row{'nomod'}=1;
-			}
-		}
-		$this_row{itemnum} = $subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	if (%this_row) {
-		push(@big_array, \%this_row);
+## check for malformed xml -- non UTF-8 like (MARC8) will break xml without warning
+### This usually happens with data coming from other Z3950 servers
+## Slows the saving process so comment out at your own risk
+eval{
+ $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);	
+};
+ if ($@){
+push @errors,"non_utf8" ;
+$nextop = "additem";
+goto FINAL;
+  };
+ my $newrecord=XML_xml2hash_onerecord($xml);
+my $newbarcode=XML_readline_onerecord($newrecord,"barcode","holdings");	
+
+	# if autoBarcode is ON, calculate barcode...
+	if (C4::Context->preference('autoBarcode')) {	
+		unless ($newbarcode) {
+			my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
+			$sth_barcode->execute;
+			($newbarcode) = $sth_barcode->fetchrow;
+			$newbarcode++;
+			# OK, we have the new barcode, now create the entry in MARC record
+			$newrecord=XML_writeline( $newrecord, "barcode", $newbarcode,"holdings" );
+		}
+	}
+# check for item barcode # being unique
+	my ($oldrecord)=XMLgetitem($dbh,"",$newbarcode);
+	
+	push @errors,"barcode_not_unique" if($oldrecord);
+# MARC::Record builded => now, record in DB
+## User may be keeping serialids in marc records -- check and add it 
+if ($fromserials){
+$newrecord=XML_writeline( $newrecord, "serialid", $serialid,"holdings" );
+}
+	# if barcode exists, don't create, but report the problem.
+	unless ($oldrecord){
+	  $itemnumber=NEWnewitem($dbh,$newrecord,$biblionumber) ;
+		if ($fromserials){
+		my $holdingbranch=XML_readline_onerecord($newrecord,"holdingbranch","holdings");	
+		$template->param(exit=>1,holdingbranch=>$holdingbranch);
+		}
+	$nextop = "additem";
+	}
+	else{
+		$nextop = "additem";
+		$itemrecexist = $newrecord;
+	} 
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "edititem") {
+#------------------------------------------------------------------------------------------------------------------------------
+# retrieve item if exist => then, it's a modif
+	 ($itemrecexist) = XMLfinditem($itemnumber,@itemrecords);## item is already in our array-getit
+	$nextop="saveitem";
+	
+#logaction($loggedinuser,"acqui.simple","modify",$oldbiblionumber,"item : ".$itemnumber) if ($logstatus);
+	
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "delitem") {
+#------------------------------------------------------------------------------------------------------------------------------
+# retrieve item if exist => then, it's a modif
+my $sth=$dbh->prepare("select * from issues i where i.returndate is null and i.itemnumber=?");
+ $sth->execute($itemnumber);
+my $onloan=$sth->fetchrow;
+push @errors,"book_on_loan" if ($onloan);
+	if ($onloan){
+	$nextop = "additem";
+}else{
+	&NEWdelitem($dbh,$itemnumber);
+	$nextop="additem";
+}
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "saveitem") {
+#------------------------------------------------------------------------------------------------------------------------------
+	# rebuild
+#warn "save item";
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	my $itemnumber = $input->param('itemnumber');
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+## check for malformed xml -- non UTF-8 like (MARC8) will break xml without warning
+### This usually happens with data coming from other Z3950 servers
+## Slows the saving process so comment out at your own risk
+eval{
+ $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);	
+};
+	 if ($@){
+push @errors,"non_utf8" ;
+$nextop = "edititem";
+goto FINAL;
+  };
+ my $newrecord=XML_xml2hash_onerecord($xml);
+	my $newbarcode=XML_readline_onerecord($newrecord,"barcode","holdings");
+	my ($oldrecord)=XMLgetitem($dbh,"",$newbarcode);
+	$oldrecord=XML_xml2hash_onerecord($oldrecord);
+	my $exist=XML_readline_onerecord($oldrecord,"itemnumber","holdings") if $oldrecord;
+	if ($exist && ($exist ne $itemnumber)){
+	push @errors,"barcode_not_unique" ; ## Although editing user may have changed the barcode
+	$nextop="edititem";
+	}else{
+	 NEWmoditem($dbh,$newrecord,$biblionumber,$itemnumber);
+	$itemnumber="";
+	$nextop="additem";
+
 	}
 }
+
+#
+#------------------------------------------------------------------------------------------------------------------------------
+# build screen with existing items. and "new" one
+#------------------------------------------------------------------------------------------------------------------------------
+FINAL:
+my %indicators;
+$indicators{995}='  ';
+# now, build existing item list
+
+
+
+my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield("itemnumber","holdings");
+my @itemnums;
+my @fields;
+my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
+my @big_array;
+my @item_value_loop;
+my @header_value_loop;
+unless($fromserials){ ## do not display existing items if adding a serial. It could be a looong list
+foreach my $itemrecord (@itemrecords){
+
+my $item=$itemrecord->{datafield};
+my $controlfield=$itemrecord->{controlfield};
+my $leader=$itemrecord->{leader};
+my %this_row;
+	### The leader
+	unless ($tagslib->{'000'}->{'@'}->{tab}  ne 10 || substr($tagslib->{'000'}->{'@'}->{hidden},1,1)>0){
+	my @datasub='000@';
+	$witness{$datasub[0]} = $tagslib->{'000'}->{'@'}->{lib};
+	$this_row{$datasub[0]} =$leader->[0];
+	}## leader
+	foreach my $control (@$controlfield){
+		push @itemnums,$control->{content} if ($control->{tag} eq $itemtagfield);
+		next if ($tagslib->{$control->{tag}}->{'@'}->{tab}  ne 10);
+		next if (substr($tagslib->{$control->{tag}}->{'@'}->{hidden},1,1)>0);	
+					
+			my @datasub=$control->{tag}.'@';
+			$witness{$datasub[0]} = $tagslib->{$control->{tag}}->{'@'}->{lib};
+			$this_row{$datasub[0]} =$control->{content};		     	
+	}## Controlfields 
+	foreach my $data (@$item){
+		foreach my $subfield ( $data->{'subfield'}){
+		   	foreach my $code ( @$subfield){	
+			# loop through each subfield			
+			push @itemnums,$code->{content} if ($data->{tag} eq $itemtagfield && $code->{code} eq $itemtagsubfield);
+			next if ($tagslib->{$data->{tag}}->{$code->{code}}->{tab}  ne 10);
+			next if (substr($tagslib->{$data->{tag}}->{$code->{code}}->{hidden},1,1)>0);
+			$witness{$data->{tag}.$code->{code}} = $tagslib->{$data->{tag}}->{$code->{code}}->{lib};
+			$this_row{$data->{tag}.$code->{code}} =$code->{content};
+			}
+			
+		}# subfield
+	
+	}## each data
+	if (%this_row) {
+	push(@big_array, \%this_row);
+	}
+}## each record
 #fill big_row with missing datas
 foreach my $subfield_code  (keys(%witness)) {
 	for (my $i=0;$i<=$#big_array;$i++) {
 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
 	}
 }
-my ($holdingbrtagf,$holdingbrtagsubf) = &MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$itemtype);
-@big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
-
 # now, construct template !
-my @item_value_loop;
-my @header_value_loop;
+
 for (my $i=0;$i<=$#big_array; $i++) {
 	my $items_data;
 	foreach my $subfield_code (sort keys(%witness)) {
@@ -204,9 +309,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
 	}
 	my %row_data;
 	$row_data{item_value} = $items_data;
-	$row_data{itemnum} = $big_array[$i]->{itemnum};
-	#reporting this_row values
-	$row_data{'nomod'} = $big_array[$i]{'nomod'};
+	$row_data{itemnumber} = $itemnums[$i];
 	push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {
@@ -214,40 +317,43 @@ foreach my $subfield_code (sort keys(%witness)) {
 	$header_value{header_value} = $witness{$subfield_code};
 	push(@header_value_loop, \%header_value);
 }
-
+}## unless from serials
 # next item form
 my @loop_data =();
 my $i=0;
 my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by lib");
 
 foreach my $tag (sort keys %{$tagslib}) {
+ if ($itemtagfield <10){
+next if($tag==$itemtagfield);
+}
 	my $previous_tag = '';
 # loop through each subfield
 	foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
 		next if subfield_is_koha_internal_p($subfield);
 		next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
+		next if  ($tagslib->{$tag} eq $itemtagfield && $tagslib->{$tag}->{$subfield} eq $itemtagsubfield);
 		my %subfield_data;
 		$subfield_data{tag}=$tag;
 		$subfield_data{subfield}=$subfield;
-#		$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 		$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 		$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 		$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+	$subfield_data{hidden}= "display:none" if (substr($tagslib->{$tag}->{$subfield}->{hidden},2,1)>0);
+	
 		my ($x,$value);
-		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
-		#testing branch value if IndependantBranches.
-		my $test = (C4::Context->preference("IndependantBranches")) && 
-					($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
-					(C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
-# 		print $input->redirect(".pl?biblionumber=$biblionumber") if ($test);
+		($x,$value) = find_value($tag,$subfield,$itemrecexist) if ($itemrecexist);
 		# search for itemcallnumber if applicable
-		if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
+		my ($itemcntag,$itemcntagsub)=MARCfind_marc_from_kohafield("itemcallnumber","holdings");
+		if ($tag eq $itemcntag && $subfield eq $itemcntagsub && C4::Context->preference('itemcallnumber')) {
 			my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
 			my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
-			my $temp = $record->field($CNtag);
-			if ($temp) {
-				$value = $temp->subfield($CNsubfield);
-			}
+			my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
+			my $temp1 = XML_readline_onerecord($bibliorecord,"","",$CNtag,$CNsubfield);
+			my $temp2 = XML_readline_onerecord($bibliorecord,"","",$CNtag,$CNsubfield2);
+			$value = $temp1.' '.$temp2;
+			$value=~s/^\s+|\s+$//g;
+			
 		}
 		if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 			my @authorised_values;
@@ -255,22 +361,12 @@ foreach my $tag (sort keys %{$tagslib}) {
 			# builds list, depending on authorised value...
 			#---- branch
 			if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-				if ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags} != 1)){
-						my $sth=$dbh->prepare("select branchcode,branchname from branches where branchcode = ? order by branchname");
-						$sth->execute(C4::Context->userenv->{branch});
-						push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-						while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-							push @authorised_values, $branchcode;
-							$authorised_lib{$branchcode}=$branchname;
-						}
-				} else {
-					my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
-					$sth->execute;
-					push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-					while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-						push @authorised_values, $branchcode;
-						$authorised_lib{$branchcode}=$branchname;
-					}
+				my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
+				$sth->execute;
+				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+				while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+					push @authorised_values, $branchcode;
+					$authorised_lib{$branchcode}=$branchname;
 				}
 			#----- itemtypes
 			} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
@@ -292,20 +388,21 @@ foreach my $tag (sort keys %{$tagslib}) {
 			}
 			$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
 																		-values=> \@authorised_values,
-																		-default=>"$value",
-																		-labels => \%authorised_lib,
-																		-size=>1,
-																		-multiple=>0,
-																		);
+																		-default=>"$value",																		-labels => \%authorised_lib,																		-size=>1,
+																		-multiple=>0,												);
 		} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$i',$i)\">...</a>";
 			#"
 		} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
-			my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
-			require $plugin;
-			my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
-			my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		my $cgidir = C4::Context->intranetdir ."/cgi-bin/value_builder";
+		unless (opendir(DIR, "$cgidir")) {
+			$cgidir = C4::Context->intranetdir."/value_builder";
+		} 
+		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'}; 
+		require $plugin;
+		my $extended_param = plugin_parameters($dbh,$newrecord,$tagslib,$i,0);
+		my ($function_name,$javascript) = plugin_javascript($dbh,$newrecord,$tagslib,$i,0);
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" size=\"47\" maxlength=\"255\" DISABLE READONLY OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 		} else {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
 		}
@@ -315,21 +412,32 @@ foreach my $tag (sort keys %{$tagslib}) {
 	}
 }
 
+
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
-						biblionumber => $biblionumber,
-                                                bibid        => $biblionumber, 
-						title => $oldrecord->{title},
-						author => $oldrecord->{author},
+						biblionumber =>$biblionumber,
+						title => &XML_readline_onerecord($bibliorecord,"title","biblios"),
+						author => &XML_readline_onerecord($bibliorecord,"author","biblios"),
 						item => \@loop_data,
 						itemnumber => $itemnumber,
-    						itemnum => $itemnumber,
 						itemtagfield => $itemtagfield,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
-						opisadd => ($nextop eq "saveitem")?0:1);
+						opisadd => ($nextop eq "saveitem")?0:1,
+						fromserials=>$fromserials, serialid=>$serialid,);
 foreach my $error (@errors) {
 	$template->param($error => 1);
+
 }
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub XMLfinditem {
+my ($itemnumber,@itemrecords)=@_;
+foreach my $record (@itemrecords){
+my $inumber=XML_readline_onerecord($record,"itemnumber","holdings");
+	if ($inumber ==$itemnumber){
+	return $record;
+	}
+}
+}
