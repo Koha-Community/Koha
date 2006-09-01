@@ -20,7 +20,6 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use HTML::Template;
 use strict;
 require Exporter;
 use C4::Koha;
@@ -31,16 +30,17 @@ use C4::Output; # contains gettemplate
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
-
+use C4::Context;
+use C4::Biblio;
+use C4::Accounts2;
+use C4::Circulation::Circ2;
+use MARC::Record;
+my $dbh=C4::Context->dbh;
 my $query=new CGI;
 
-# FIXME  subject is not exported to the template?
-my $subject=$query->param('subject');
 
-# if its a subject we need to use the subject.tmpl
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => ($subject? 'catalogue/subject.tmpl':
-				      'catalogue/moredetail.tmpl'),
+	template_name   => ( 'catalogue/moredetail.tmpl'),
 	query           => $query,
 	type            => "intranet",
 	authnotrequired => 0,
@@ -48,12 +48,17 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     });
 
 # get variables
+my $op=$query->param('op');
+my $lost=$query->param('lost');
+my $withdrawn=$query->param('withdrawn');
+my $override=$query->param('override');
+my $itemnumber=$query->param('itemnumber');
+my $barcode=$query->param('barcode');
 
-my $biblionumber=$query->param('bib');
 my $title=$query->param('title');
-my $bi=$query->param('bi');
-
-my $data=bibitemdata($bi);
+my $biblionumber=$query->param('biblionumber');
+my ($record,)=MARCgetbiblio($dbh,$biblionumber);
+my $data=MARCmarc2koha($dbh,$record,"biblios");
 my $dewey = $data->{'dewey'};
 # FIXME Dewey is a string, not a number, & we should use a function
 $dewey =~ s/0+$//;
@@ -68,12 +73,82 @@ $data->{'dewey'}=$dewey;
 
 my @results;
 
-my (@items)=itemissues($bi);
+my @items;
+if ($op eq "update"){
+my $env;
+##Do Lost or Withdraw here
+my $flag=0;
+  my ($resbor,$resrec)=C4::Reserves2::CheckReserves($env,$dbh,$itemnumber);
+if ($override ne "yes"){
+  if ($resbor){
+#    print $query->header;
+    $template->param(error => "This item   has a reserve on it");
+ $template->param(biblionumber =>$biblionumber);
+ $template->param(itemnumber =>$itemnumber);
+ $template->param(lost =>$lost);
+ $template->param(withdrawn =>$withdrawn);
+    $flag=1;
+  }
+  my $sth=$dbh->prepare("Select * from issues where (itemnumber=?) and (returndate is null)");
+  $sth->execute($itemnumber);
+ 
+  if (my $data=$sth->fetchrow_hashref) {
+   $template->param(biblionumber =>$biblionumber);
+ $template->param(itemnumber =>$itemnumber);
+ $template->param(error => "This item   is On Loan to a member");
+ $template->param(lost =>$lost);
+ $template->param(withdrawn =>$withdrawn);
+    $flag=2;
+  }
+}
+if ($flag != 0 && $override ne "yes"){
+
+  }else {
+   ##UPDATE here
+my $sth=$dbh->prepare("update items set itemlost=? ,wthdrawn=? where itemnumber=?");
+$sth->execute($lost,$withdrawn,$itemnumber);
+$sth->finish;
+MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'wthdrawn',$withdrawn,1);
+MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',$lost);
+
+     if ($lost ==1 && $flag ==2){
+    my $sth=$dbh->prepare("Select * from issues where (itemnumber=?) and (returndate is null)");
+    $sth->execute($itemnumber);
+    my $data=$sth->fetchrow_hashref;
+    if ($data->{'borrowernumber'} ne '') {
+      #item on issue add replacement cost to borrowers record
+      my $accountno=getnextacctno($env,$data->{'borrowernumber'},$dbh);
+      my $item=getiteminformation($env, $itemnumber);
+      my $sth2=$dbh->prepare("Insert into accountlines
+      (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+      values
+      (?,?,now(),?,?,'L',?,?)");
+      $sth2->execute($data->{'borrowernumber'},$accountno,$item->{'replacementprice'},
+      "Lost Item $item->{'title'} $item->{'barcode'}",
+      $item->{'replacementprice'},$itemnumber);
+      $sth2->finish;
+    }
+    }
+	if ($flag==1){
+	foreach my $res ($resrec){
+	C4::Reserves2::CancelReseve(undef,$res->{itemnumber},$res->{borrowernumber});
+	}
+	}
+    
+  }
+}
+my @itemrecords=MARCgetallitems($dbh,$biblionumber);
+foreach my $itemrecord (@itemrecords){
+
+my $items = MARCmarc2koha($dbh,$itemrecord,"holdings");
+$items->{itemtype}=$data->{itemtype};
+$items->{biblionumber}=$biblionumber;
+$items=itemissues($dbh,$items,$biblionumber);
+push @items,$items;
+}
 my $count=@items;
 $data->{'count'}=$count;
-
-my $ordernum = GetOrderNumber($biblionumber,$bi);
-my $order = GetOrder($ordernum);
+my ($order,$ordernum)=GetOrder($biblionumber,$barcode);
 
 my $env;
 $env->{itemcount}=1;
@@ -88,13 +163,14 @@ foreach my $item (@items){
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
-    if ($item->{'date_due'} eq 'Available'){
-		$item->{'issue'}= 0;
-    } else {
-		$item->{'date_due'} = format_date($item->{'date_due'});
-		$item->{'issue'}= 1;
-		$item->{'borrowernumber'} = $item->{'borrower'};
+    if ($item->{'date_due'} gt '0000-00-00'){
+	$item->{'date_due'} = format_date($item->{'date_due'});		
+$item->{'issue'}= 1;
+		$item->{'borrowernumber'} = $item->{'borrowernumber'};
 		$item->{'cardnumber'} = $item->{'card'};
+			
+    } else {
+	$item->{'issue'}= 0;
     }
 }
 
