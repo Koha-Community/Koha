@@ -2,19 +2,6 @@
 
 # $Id$
 
-#
-# Modified saas@users.sf.net 12:00 01 April 2001
-# The biblioitemnumber was not correctly initialised
-# The max(barcode) value was broken - koha 'barcode' is a string value!
-# - If left blank, barcode value now defaults to max(biblionumber)
-
-#
-# TODO
-#
-# Add info on biblioitems and items already entered as you enter new ones
-#
-# Add info on biblioitems and items already entered as you enter new ones
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -35,11 +22,9 @@
 use strict;
 use CGI;
 use C4::Auth;
-# use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::Koha;
 
 my $query = new CGI;
