@@ -12,6 +12,17 @@ use MARC::File::USMARC;
 use MARC::Record;
 use MARC::Batch;
 use MARC::Charset;
+
+# According to kados, an undocumented feature of setting MARC::Charset to 
+# ignore_errors(1) is that errors are not ignored.  Instead of deleting the 
+# whole subfield when a character does not translate properly from MARC8 into 
+# UTF-8, just the problem characters are deleted.  This should solve at least 
+# some of the fixme problems for fMARC8ToUTF8().
+# 
+# Problems remain if there are MARC 21 records where 000/09 is set incorrectly. 
+# -- thd.
+MARC::Charset->ignore_errors(1);
+
 use C4::Context;
 use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
