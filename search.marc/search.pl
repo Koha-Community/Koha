@@ -97,7 +97,15 @@ my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
 $startfrom=0 if(!defined $startfrom);
-my ($template, $loggedinuser, $cookie);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "search.marc/result.tmpl",
+            query => $query,
+            type => $type,
+            authnotrequired => 0,
+            flagsrequired => {borrowers => 1},
+            flagsrequired => {catalogue => 1},
+            debug => 1,
+            });
 my $resultsperpage;
 
 if ($op eq "do_search") {
@@ -150,15 +158,6 @@ if ($op eq "do_search") {
 	}
 	 exit
 	}
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "search.marc/result.tmpl",
-				query => $query,
-				type => $type,
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
 
 	# multi page display gestion
 	my $displaynext=0;
