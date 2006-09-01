@@ -392,19 +392,27 @@ if (C4::Context->preference("sortbynonfiling")) {
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
 	my $sth_itemCN;
-	if (C4::Context->preference('hidelostitems')) {
-		$sth_itemCN = $dbh->prepare("
-  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
-  FROM items 
-  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL)
-  GROUP BY items.holdingbranch, items.location, items.itemcallnumber
-  ORDER BY homebranch");
-	} else {
+	my $userenv=C4::Context->userenv;
+# 	warn "FLAGS : ".($userenv->{flags} & 2**9);
+    # hide lost items if :
+    # - the preference hidelostitems is set
+    # - the user not logged in, or is not a superlibrarian or a librarian with cataloguing permissions
+    # otherwise, show everything
+	if (!C4::Context->preference('hidelostitems') or ($userenv && ($userenv->{'flags'} eq 1 or ($userenv->{'flags'} & 2**9)) )) {
+	# show everything
 		$sth_itemCN = $dbh->prepare("
   SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
   FROM items 
   WHERE biblionumber=? 
   GROUP BY items.holdingbranch, items.location, items.itemcallnumber 
+  ORDER BY homebranch");
+	} else {
+	# hide lost items
+		$sth_itemCN = $dbh->prepare("
+  SELECT items.holdingbranch, items.location, items.itemcallnumber, count(*) AS cnt, items.itemnumber, items.notforloan
+  FROM items 
+  WHERE biblionumber=? AND (itemlost = 0 OR itemlost IS NULL)
+  GROUP BY items.holdingbranch, items.location, items.itemcallnumber
   ORDER BY homebranch");
 	}
 	my $sth_issue = $dbh->prepare("
