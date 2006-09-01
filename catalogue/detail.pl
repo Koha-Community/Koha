@@ -1,14 +1,17 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use CGI;
+use C4::Search;
 use C4::Auth;
 use C4::Serials; #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
-use HTML::Template;
+use CGI;
 use C4::Biblio;
-use C4::Search;
+use C4::Context;
 
+use Encode;
+
+my $dbh=C4::Context->dbh;
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name => "catalogue/detail.tmpl",
@@ -19,58 +22,60 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 my $biblionumber=$query->param('biblionumber');
-if (!$biblionumber){
-    $biblionumber=$query->param('bib');
-    }
 $template->param(biblionumber => $biblionumber);
+my $retrieve_from=C4::Context->preference('retrieve_from');
+my ($record,$frameworkcode);
+my @itemrecords;
+my @items;
+if ($retrieve_from eq "zebra"){
+($record,@itemrecords)=ZEBRAgetrecord($biblionumber);
+}else{
+ $record =XMLgetbiblio($dbh,$biblionumber);
+$record=XML_xml2hash_onerecord($record);
+my @itemxmls=XMLgetallitems($dbh,$biblionumber);
+	foreach my $itemrecord(@itemxmls){
+	my $itemhash=XML_xml2hash_onerecord($itemrecord);
+	push @itemrecords, $itemhash;
+	}
+}	
 
+my $dat = XMLmarc2koha_onerecord($dbh,$record,"biblios");
+my $norequests = 1;
+foreach my $itemrecord (@itemrecords){
 
-# change back when ive fixed request.pl
-my @items                                 = &ItemInfo(undef, $biblionumber, 'intra');
-my $dat                                   = &bibdata($biblionumber);
-my ($authorcount, $addauthor)             = &addauthor($biblionumber);
-my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
+my $item= XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
+$item=ItemInfo($dbh,$item);
+$item->{itemtype}=$dat->{itemtype};
+  $norequests = 0 unless $item->{'notforloan'};
+   $item->{$item->{'publictype'}} = 1; ## NOT sure what this is kept from old db probably useless now
+push @items,$item;
+}
+
+my $subscriptionsnumber = GetSubscriptionsFromBiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
-
-$dat->{'additional'}=$addauthor->[0]->{'author'};
-for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
-} # for
-
-my $norequests = 1;
-foreach my $itm (@items) {
-    $norequests = 0 unless $itm->{'notforloan'};
-    $itm->{$itm->{'publictype'}} = 1;
-}
-
+$template->param(count =>$dat->{'count'});
 $template->param(norequests => $norequests);
 
-  ## get notes and subjects from MARC record
-my $marc = C4::Context->preference("marc");
-if ($marc eq "yes") {
-	my $dbh = C4::Context->dbh;
+  ## get notes subjects and URLS from MARC record
+	
 	my $marcflavour = C4::Context->preference("marcflavour");
-	my $marcnotesarray = &getMARCnotes($dbh,$biblionumber,$marcflavour);
-	my $marcsubjctsarray = &getMARCsubjects($dbh,$biblionumber,$marcflavour);
-
+	my $marcnotesarray = &getMARCnotes($dbh,$record,$marcflavour);
+	my $marcsubjctsarray = &getMARCsubjects($dbh,$record,$marcflavour);
+	my $marcurlssarray = &getMARCurls($dbh,$record,$marcflavour);
+	$template->param(MARCURLS => $marcurlssarray);
 	$template->param(MARCNOTES => $marcnotesarray);
 	$template->param(MARCSUBJCTS => $marcsubjctsarray);
-}
+
 
 my @results = ($dat,);
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
-my $webarray=\@webbiblioitems;
-my $sitearray=\@websites;
+
 
 $template->param(BIBLIO_RESULTS => $resultsarray,
 				ITEM_RESULTS => $itemsarray,
-				WEB_RESULTS => $webarray,
-				SITE_RESULTS => $sitearray,
 				subscriptionsnumber => $subscriptionsnumber,
 );
 
