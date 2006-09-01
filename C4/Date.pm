@@ -23,7 +23,7 @@ package C4::Date;
 
 use strict;
 use C4::Context;
-#use Date::Manip ;
+use Date::Manip;
 
 
 require Exporter;
@@ -39,6 +39,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
   &format_date
   &format_date_in_iso
   &get_date_format_string_for_DHTMLcalendar
+  &Date_diff
 );
 
 sub get_date_format {
@@ -87,7 +88,7 @@ sub get_date_format_string_for_DHTMLcalendar {
 
 sub format_date {
     my $olddate = shift;
-   my $newdate;
+    my $newdate;
 
     if ( !$olddate ) {
         return "";
@@ -96,15 +97,14 @@ sub format_date {
     my $dateformat = get_date_format();
 
     if ( $dateformat eq "us" ) {
-       Date_Init("DateFormat=US");
-     $olddate = ParseDate($olddate);
-      $newdate = UnixDate( $olddate, '%Y/%m/%d' );
+        Date_Init("DateFormat=US");
+        $olddate = ParseDate($olddate);
+        $newdate = UnixDate( $olddate, '%m/%d/%Y' );
     }
     elsif ( $dateformat eq "metric" ) {
         Date_Init("DateFormat=metric");
-       $olddate = ParseDate($olddate);
+        $olddate = ParseDate($olddate);
         $newdate = UnixDate( $olddate, '%d/%m/%Y' );
-	
     }
     elsif ( $dateformat eq "iso" ) {
         Date_Init("DateFormat=iso");
@@ -133,7 +133,7 @@ sub format_date_in_iso {
     }
     elsif ( $dateformat eq "metric" ) {
         Date_Init("DateFormat=metric");
-         $olddate = ParseDate($olddate);
+        $olddate = ParseDate($olddate);
     }
     elsif ( $dateformat eq "iso" ) {
         Date_Init("DateFormat=iso");
@@ -156,10 +156,5 @@ my $sth = $dbh->prepare("SELECT DATEDIFF(?,?)");
 	$sth->finish;
 return $difference;
 }
-sub Date_Init{
-}
-sub ParseDate{
-}
-sub UnixDate{
-}
+
 1;

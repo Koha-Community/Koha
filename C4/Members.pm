@@ -24,11 +24,15 @@ package C4::Members;
 use strict;
 require Exporter;
 use C4::Context;
-use Date::Manip;
 use C4::Date;
 use Digest::MD5 qw(md5_base64);
 use Date::Calc qw/Today/;
-
+use C4::Biblio;
+use C4::Stats;
+use C4::Reserves2;
+use C4::Koha;
+use C4::Accounts2;
+use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
@@ -57,42 +61,73 @@ This module contains routines for adding, modifying and deleting members/patrons
 
 @EXPORT = qw(
 &allissues
+&add_member_orgs
 &borrdata 
 &borrdata2 
+&borrdata3
 &BornameSearch 
 &borrissues
-&borrowercategories 
-
-&changepassword  
+&borrowercard_active
+&borrowercategories
+&change_user_pass
 &checkuniquemember 
 &calcexpirydate 
 &checkuserpassword
-&ethnicitycategories get_institutions add_member_orgs
+
+&ethnicitycategories 
 &fixEthnicity
 &fixup_cardnumber 
 &findguarantees 
-&findguarantor 
-
-
+&findguarantor  
+&fixupneu_cardnumber
 
 &getmember 
+&getMemberPhoto 
+&get_institutions
 &getzipnamecity 
 &getidcity 
 &getguarantordata 
 &getcategorytype
 &getboracctrecord
 &getborrowercategory
+&getborrowercategoryinfo
 &get_age 
+&getpatroninformation
 &GetBorrowersFromSurname 
 &GetBranchCodeFromBorrowers
 &GetFlagsAndBranchFromBorrower
-&GuarantornameSearch 
-
-&NewBorrowerNumber   
+&GuarantornameSearch
+&NewBorrowerNumber 
 &modmember 
 &newmember 
-);
+	);
 
+
+=head2 borrowercategories
+
+  ($codes_arrayref, $labels_hashref) = &borrowercategories();
+
+Looks up the different types of borrowers in the database. Returns two
+elements: a reference-to-array, which lists the borrower category
+codes, and a reference-to-hash, which maps the borrower category codes
+to category descriptions.
+
+=cut
+#'
+
+sub borrowercategories {
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("Select categorycode,description from categories order by description");
+    $sth->execute;
+    my %labels;
+    my @codes;
+    while (my $data=$sth->fetchrow_hashref){
+      push @codes,$data->{'categorycode'};
+      $labels{$data->{'categorycode'}}=$data->{'description'};
+    }
+    $sth->finish;
+    return(\@codes,\%labels);
+}
 
 =item BornameSearch
 
@@ -116,67 +151,184 @@ are the fields of the C<borrowers> table in the Koha database.
 C<$count> is the number of elements in C<$borrowers>.
 
 =cut
-
 #'
 #used by member enquiries from the intranet
 #called by member.pl
-sub BornameSearch {
-    my ( $env, $searchstring, $orderby, $type ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "";
-    my $count;
-    my @data;
-    my @bind = ();
+sub BornameSearch  {
+	my ($env,$searchstring,$orderby,$type)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query = ""; my $count; 
+	my @data;
+	my @bind=();
 
-    if ( $type eq "simple" )    # simple search for one letter only
-    {
-        $query =
-          "Select * from borrowers where surname like ? order by $orderby";
-        @bind = ("$searchstring%");
-    }
-    else    # advanced search looking in surname, firstname and othernames
-    {
-        @data  = split( ' ', $searchstring );
-        $count = @data;
-        $query = "Select * from borrowers
-		where ((surname like ? or surname like ?
-		or firstname  like ? or firstname like ?
-		or othernames like ? or othernames like ?)
-		";
-        @bind = (
-            "$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
-            "$data[0]%", "% $data[0]%"
-        );
-        for ( my $i = 1 ; $i < $count ; $i++ ) {
-            $query = $query . " and (" . " surname like ? or surname like ?
-                        or firstname  like ? or firstname like ?
-		        or othernames like ? or othernames like ?)";
-            push( @bind,
-                "$data[$i]%",   "% $data[$i]%", "$data[$i]%",
-                "% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
+	if($type eq "simple")	# simple search for one letter only
+	{
+		$query="Select * from borrowers where surname like '$searchstring%' order by $orderby";
+#		@bind=("$searchstring%");
+	}
+	else	# advanced search looking in surname, firstname and othernames
+	{
+### Try to determine whether numeric like cardnumber
+	if ($searchstring+1>1) {
+	$query="Select * from borrowers where  cardnumber  like '$searchstring%' ";
 
-            # FIXME - .= <<EOT;
-        }
-        $query = $query . ") or cardnumber like ?
-		order by $orderby";
-        push( @bind, $searchstring );
+	}else{
+	
+	my @words=split / /,$searchstring;
+	foreach my $word(@words){
+	$word="+".$word;
+	
+	}
+	$searchstring=join " ",@words;
+	
+		$query="Select * from borrowers where  MATCH(surname,firstname,othernames) AGAINST('$searchstring'  in boolean mode)";
 
-        # FIXME - .= <<EOT;
-    }
+	}
+		$query=$query." order by $orderby";
+	}
 
-    my $sth = $dbh->prepare($query);
+	my $sth=$dbh->prepare($query);
+#	warn "Q $orderby : $query";
+	$sth->execute();
+	my @results;
+	my $cnt=$sth->rows;
+	while (my $data=$sth->fetchrow_hashref){
+	push(@results,$data);
+	}
+	#  $sth->execute;
+	$sth->finish;
+	return ($cnt,\@results);
+}
+=head2 getpatroninformation
 
-    #	warn "Q $orderby : $query";
-    $sth->execute(@bind);
-    my @results;
-    my $cnt = $sth->rows;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
+  ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, $cardnumber);
+Looks up a patron and returns information about him or her. If
+C<$borrowernumber> is true (nonzero), C<&getpatroninformation> looks
+up the borrower by number; otherwise, it looks up the borrower by card
+number.
+C<$env> is effectively ignored, but should be a reference-to-hash.
+C<$borrower> is a reference-to-hash whose keys are the fields of the
+borrowers table in the Koha database. In addition,
+C<$borrower-E<gt>{flags}> is a hash giving more detailed information
+about the patron. Its keys act as flags :
 
-    #  $sth->execute;
-    $sth->finish;
-    return ( $cnt, \@results );
+	if $borrower->{flags}->{LOST} {
+		# Patron's card was reported lost
+	}
+
+Each flag has a C<message> key, giving a human-readable explanation of
+the flag. If the state of a flag means that the patron should not be
+allowed to borrow any more books, then it will have a C<noissues> key
+with a true value.
+
+The possible flags are:
+
+=head3 CHARGES
+
+=over 4
+
+Shows the patron's credit or debt, if any.
+
+=back
+
+=head3 GNA
+
+=over 4
+
+(Gone, no address.) Set if the patron has left without giving a
+forwarding address.
+
+=back
+
+=head3 LOST
+
+=over 4
+
+Set if the patron's card has been reported as lost.
+
+=back
+
+=head3 DBARRED
+
+=over 4
+
+Set if the patron has been debarred.
+
+=back
+
+=head3 NOTES
+
+=over 4
+
+Any additional notes about the patron.
+
+=back
+
+=head3 ODUES
+
+=over 4
+
+Set if the patron has overdue items. This flag has several keys:
+
+C<$flags-E<gt>{ODUES}{itemlist}> is a reference-to-array listing the
+overdue items. Its elements are references-to-hash, each describing an
+overdue item. The keys are selected fields from the issues, biblio,
+biblioitems, and items tables of the Koha database.
+
+C<$flags-E<gt>{ODUES}{itemlist}> is a string giving a text listing of
+the overdue items, one per line.
+
+=back
+
+=head3 WAITING
+
+=over 4
+
+Set if any items that the patron has reserved are available.
+
+C<$flags-E<gt>{WAITING}{itemlist}> is a reference-to-array listing the
+available items. Each element is a reference-to-hash whose keys are
+fields from the reserves table of the Koha database.
+
+=back
+
+=back
+
+=cut
+
+sub getpatroninformation {
+# returns
+	my ($env, $borrowernumber,$cardnumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query;
+	my $sth;
+	if ($borrowernumber) {
+		$sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
+		$sth->execute($borrowernumber);
+	} elsif ($cardnumber) {
+		$sth = $dbh->prepare("select * from borrowers where cardnumber=?");
+		$sth->execute($cardnumber);
+	} else {
+		$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
+		return();
+	}
+	my $borrower = $sth->fetchrow_hashref;
+	my $amount = C4::Accounts2::checkaccount($env, $borrowernumber, $dbh);
+	$borrower->{'amountoutstanding'} = $amount;
+	my $flags = C4::Circulation::Circ2::patronflags($env, $borrower, $dbh);
+	my $accessflagshash;
+ 
+	$sth=$dbh->prepare("select bit,flag from userflags");
+	$sth->execute;
+	while (my ($bit, $flag) = $sth->fetchrow) {
+		if ($borrower->{'flags'} & 2**$bit) {
+		$accessflagshash->{$flag}=1;
+		}
+	}
+	$sth->finish;
+	$borrower->{'flags'}=$flags;
+	$borrower->{'authflags'} = $accessflagshash;
+	return ($borrower); #, $flags, $accessflagshash);
 }
 
 =item getmember
@@ -208,6 +360,176 @@ it returns the $flags & the homebranch in scalar context.
 
 =cut
 
+
+
+=item borrissues
+
+  ($count, $issues) = &borrissues($borrowernumber);
+
+Looks up what the patron with the given borrowernumber has borrowed.
+
+C<&borrissues> returns a two-element array. C<$issues> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields from the C<issues>, C<biblio>, and C<items> tables
+in the Koha database. C<$count> is the number of elements in
+C<$issues>.
+
+=cut
+#'
+sub borrissues {
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from issues,biblio,items where borrowernumber=?
+   and items.itemnumber=issues.itemnumber
+	and items.biblionumber=biblio.biblionumber
+	and issues.returndate is NULL order by date_due");
+    $sth->execute($bornum);
+  my @result;
+  while (my $data = $sth->fetchrow_hashref) {
+    push @result, $data;
+  }
+  $sth->finish;
+  return(scalar(@result), \@result);
+}
+
+=item allissues
+
+  ($count, $issues) = &allissues($borrowernumber, $sortkey, $limit);
+
+Looks up what the patron with the given borrowernumber has borrowed,
+and sorts the results.
+
+C<$sortkey> is the name of a field on which to sort the results. This
+should be the name of a field in the C<issues>, C<biblio>,
+C<biblioitems>, or C<items> table in the Koha database.
+
+C<$limit> is the maximum number of results to return.
+
+C<&allissues> returns a two-element array. C<$issues> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
+C<items> tables of the Koha database. C<$count> is the number of
+elements in C<$issues>
+
+=cut
+#'
+sub allissues {
+  my ($bornum,$order,$limit)=@_;
+  #FIXME: sanity-check order and limit
+  my $dbh = C4::Context->dbh;
+  my $query="Select * from issues,biblio,items
+  where borrowernumber=? and
+  items.itemnumber=issues.itemnumber and
+  items.biblionumber=biblio.biblionumber order by $order";
+  if ($limit !=0){
+    $query.=" limit $limit";
+  }
+  #print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute($bornum);
+  my @result;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $result[$i]=$data;;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@result);
+}
+
+
+sub borrdata3 {
+## NEU specific. used in Reserve section issues
+  my ($env,$bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $query="Select count(*) from  reserveissue as r where r.borrowernumber='$bornum' 
+     and rettime is null";
+    # print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select count(*),timediff(now(),  duetime  ) as elapsed, hour(timediff(now(),  duetime  )) as hours, MINUTE(timediff(now(),  duetime  )) as min from 
+    reserveissue as r where  r.borrowernumber='$bornum' and rettime is null and duetime< now() group by r.borrowernumber");
+  $sth->execute;
+
+  my $data2=$sth->fetchrow_hashref;
+my $resfine;
+my $rescharge=C4::Context->preference('resmaterialcharge');
+	if (!$rescharge){
+	$rescharge=1;
+	}
+	if ($data2->{'elapsed'}>0){
+	 $resfine=($data2->{'hours'}+$data2->{'min'}/60)*$rescharge;
+	$resfine=sprintf  ("%.1f",$resfine);
+	}
+  $sth->finish;
+  $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
+    borrowernumber='$bornum'");
+  $sth->execute;
+  my $data3=$sth->fetchrow_hashref;
+  $sth->finish;
+
+
+return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'},$resfine);
+}
+=item getboracctrecord
+
+  ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
+
+Looks up accounting data for the patron with the given borrowernumber.
+
+C<$env> is ignored.
+
+
+C<&getboracctrecord> returns a three-element array. C<$acctlines> is a
+reference-to-array, where each element is a reference-to-hash; the
+keys are the fields of the C<accountlines> table in the Koha database.
+C<$count> is the number of elements in C<$acctlines>. C<$total> is the
+total amount outstanding for all of the account lines.
+
+=cut
+#'
+sub getboracctrecord {
+   my ($env,$params) = @_;
+   my $dbh = C4::Context->dbh;
+   my @acctlines;
+   my $numlines=0;
+   my $sth=$dbh->prepare("Select * from accountlines where
+borrowernumber=? order by date desc,timestamp desc");
+#   print $query;
+   $sth->execute($params->{'borrowernumber'});
+   my $total=0;
+   while (my $data=$sth->fetchrow_hashref){
+      $acctlines[$numlines] = $data;
+      $numlines++;
+      $total += $data->{'amountoutstanding'};
+   }
+   $sth->finish;
+   return ($numlines,\@acctlines,$total);
+}
+
+sub getborrowercategory{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
+	$sth->execute($catcode);
+	my $description = $sth->fetchrow();
+	$sth->finish();
+	return $description;
+} # sub getborrowercategory
+
+sub getborrowercategoryinfo{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT * FROM categories WHERE categorycode = ?");
+	$sth->execute($catcode);
+	my $category = $sth->fetchrow_hashref;
+	$sth->finish();
+	return $category;
+} # sub getborrowercategoryinfo
+
+
 sub GetFlagsAndBranchFromBorrower {
     my $loggedinuser = @_;
     my $dbh = C4::Context->dbh;
@@ -223,7 +545,6 @@ sub GetFlagsAndBranchFromBorrower {
 }
 
 
-#'
 sub getmember {
     my ( $cardnumber, $bornum ) = @_;
     $cardnumber = uc $cardnumber;
@@ -232,8 +553,7 @@ sub getmember {
     if ( $bornum eq '' ) {
         $sth = $dbh->prepare("Select * from borrowers where cardnumber=?");
         $sth->execute($cardnumber);
-    }
-    else {
+    } else {
         $sth = $dbh->prepare("Select * from borrowers where borrowernumber=?");
         $sth->execute($bornum);
     }
@@ -360,245 +680,181 @@ sub modmember {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-	$data{'dateexpiry'}=format_date_in_iso($data{'dateexpiry'});
-	$data{'dateenrolled'}=format_date_in_iso($data{'dateenrolled'});
-#  	warn "num user".$data{'borrowernumber'};
-	my $query;
-	my $sth;
-	$data{'userid'}='' if ($data{'password'}eq '');
-	# test to know if u must update or not the borrower password
-	if ($data{'password'} eq '****'){
-		
-		$query="UPDATE borrowers SET 
-		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
-		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
-		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
-		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
-		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
-		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
-		ethnotes = ?,sex = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
-		WHERE borrowernumber=$data{'borrowernumber'}";
-	$sth=$dbh->prepare($query);
-	$sth->execute(
-		$data{'cardnumber'},$data{'surname'},
-		$data{'firstname'},$data{'title'},
-		$data{'othernames'},$data{'initials'},
-		$data{'streetnumber'},$data{'streettype'},
-		$data{'address'},$data{'address2'},
-		$data{'city'},$data{'zipcode'},
-		$data{'email'},$data{'phone'},
-		$data{'mobile'},$data{'fax'},
-		$data{'emailpro'},$data{'phonepro'},
-		$data{'B_streetnumber'},$data{'B_streettype'},
-		$data{'B_address'},$data{'B_city'},
-		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
-		$data{'dateofbirth'},$data{'branchcode'},
-		$data{'categorycode'},$data{'dateenrolled'},
-		$data{'dateexpiry'},$data{'gonenoaddress'},
-		$data{'lost'},$data{'debarred'},
-		$data{'contactname'},$data{'contactfirstname'},
-		$data{'contacttitle'},$data{'guarantorid'},
-		$data{'borrowernotes'},$data{'relationship'},
-		$data{'ethnicity'},$data{'ethnotes'},
-		$data{'sex'},
-		$data{'flags'},$data{'userid'},
-		$data{'opacnote'},$data{'contactnote'},
-		$data{'sort1'},$data{'sort2'});
+
+
+	$data{'joining'}=format_date_in_iso($data{'joining'});
+	
+	if ($data{'expiry'} eq '') {
+	
+		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+		$sth->execute($data{'categorycode'});
+		my ($enrolmentperiod) = $sth->fetchrow;
+		$enrolmentperiod = 12 unless ($enrolmentperiod);
+		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
 	}
-	else{
-		
-		($data{'password'}=md5_base64($data{'password'})) if ($data{'password'} ne '');
-		$query="UPDATE borrowers SET 
-		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
-		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
-		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
-		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
-		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
-		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
-		ethnotes = ?,sex = ?,password = ?,flags = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
-		WHERE borrowernumber=$data{'borrowernumber'}";
-	$sth=$dbh->prepare($query);
-	$sth->execute(
-		$data{'cardnumber'},$data{'surname'},
-		$data{'firstname'},$data{'title'},
-		$data{'othernames'},$data{'initials'},
-		$data{'streetnumber'},$data{'streettype'},
-		$data{'address'},$data{'address2'},
-		$data{'city'},$data{'zipcode'},
-		$data{'email'},$data{'phone'},
-		$data{'mobile'},$data{'fax'},
-		$data{'emailpro'},$data{'phonepro'},
-		$data{'B_streetnumber'},$data{'B_streettype'},
-		$data{'B_address'},$data{'B_city'},
-		$data{'B_zipcode'},$data{'B_email'},$data{'B_phone'},
-		$data{'dateofbirth'},$data{'branchcode'},
-		$data{'categorycode'},$data{'dateenrolled'},
-		$data{'dateexpiry'},$data{'gonenoaddress'},
-		$data{'lost'},$data{'debarred'},
-		$data{'contactname'},$data{'contactfirstname'},
-		$data{'contacttitle'},$data{'guarantorid'},
-		$data{'borrowernotes'},$data{'relationship'},
-		$data{'ethnicity'},$data{'ethnotes'},
-		$data{'sex'},$data{'password'},
-		$data{'flags'},$data{'userid'},
-		$data{'opacnote'},$data{'contactnote'},
-		$data{'sort1'},$data{'sort2'}
-		);
-	}
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	my $query= "UPDATE borrowers SET 
+					cardnumber		= '$data{'cardnumber'}'		,
+					surname			= '$data{'surname'}'		,
+					firstname		= '$data{'firstname'}'		,
+					title			= '$data{'title'}'			,
+					initials		= '$data{'initials'}'		,
+					dateofbirth		= '$data{'dateofbirth'}'	,
+					sex				= '$data{'sex'}'			,
+					streetaddress	= '$data{'streetaddress'}'	,
+					streetcity		= '$data{'streetcity'}'		,	
+					zipcode			= '$data{'zipcode'}'		,
+					phoneday		= '$data{'phoneday'}'		,
+					physstreet		= '$data{'physstreet'}'		,	
+					city			= '$data{'city'}'			,
+					homezipcode		= '$data{'homezipcode'}'	,
+					phone			= '$data{'phone'}'			,
+					emailaddress	= '$data{'emailaddress'}'	,
+					faxnumber		= '$data{'faxnumber'}'		,
+					textmessaging	= '$data{'textmessaging'}'	,			 
+					categorycode	= '$data{'categorycode'}'	,
+					branchcode		= '$data{'branchcode'}'		,
+					borrowernotes	= '$data{'borrowernotes'}'	,
+					ethnicity		= '$data{'ethnicity'}'		,
+					ethnotes		= '$data{'ethnotes'}'		,
+					expiry			= '$data{'expiry'}'			,
+					dateenrolled	= '$data{'joining'}'		,
+					sort1			= '$data{'sort1'}'			, 
+					sort2			= '$data{'sort2'}'			,	
+					debarred		= '$data{'debarred'}'		,
+					lost			= '$data{'lost'}'			,
+					gonenoaddress   = '$data{'gna'}'			
+			WHERE borrowernumber = $data{'borrowernumber'}";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
 	$sth->finish;
 	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 	# so when we update information for an adult we should check for guarantees and update the relevant part
 	# of their records, ie addresses and phone numbers
- 	my ($category_type,undef)=getcategorytype($data{'category_type'});
-	if ($category_type eq 'A' ){
- 	
-	# is adult check guarantees;
- 		updateguarantees(%data);
- 	
+	if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
+		# is adult check guarantees;
+		updateguarantees(%data);
 	}
-
-
 }
 
 sub newmember {
-    my (%data) = @_;
-    my $dbh = C4::Context->dbh;
-    $data{'userid'} = '' unless $data{'password'};
-    $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
-    $data{'dateofbirth'} = format_date_in_iso( $data{'dateofbirth'} );
-    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} );
-    $data{'dateexpiry'} = format_date_in_iso( $data{'dateexpiry'} );
- 	my $query =
-        "insert into borrowers set cardnumber="
-      . $dbh->quote( $data{'cardnumber'} )
-      . ",surname="
-      . $dbh->quote( $data{'surname'} )
-      . ",firstname="
-      . $dbh->quote( $data{'firstname'} )
-      . ",title="
-      . $dbh->quote( $data{'title'} )
-      . ",othernames="
-      . $dbh->quote( $data{'othernames'} )
-      . ",initials="
-      . $dbh->quote( $data{'initials'} )
-      . ",streetnumber="
-      . $dbh->quote( $data{'streetnumber'} )
-      . ",streettype="
-      . $dbh->quote( $data{'streettype'} )
-      . ",address="
-      . $dbh->quote( $data{'address'} )
-      . ",address2="
-      . $dbh->quote( $data{'address2'} )
-      . ",zipcode="
-      . $dbh->quote( $data{'zipcode'} )
-      . ",city="
-      . $dbh->quote( $data{'city'} )
-      . ",phone="
-      . $dbh->quote( $data{'phone'} )
-      . ",email="
-      . $dbh->quote( $data{'email'} )
-      . ",mobile="
-      . $dbh->quote( $data{'mobile'} )
-      . ",phonepro="
-      . $dbh->quote( $data{'phonepro'} )
-      . ",opacnote="
-      . $dbh->quote( $data{'opacnote'} )
-      . ",guarantorid="
-      . $dbh->quote( $data{'guarantorid'} )
-      . ",dateofbirth="
-      . $dbh->quote( $data{'dateofbirth'} )
-      . ",branchcode="
-      . $dbh->quote( $data{'branchcode'} )
-      . ",categorycode="
-      . $dbh->quote( $data{'categorycode'} )
-      . ",dateenrolled="
-      . $dbh->quote( $data{'dateenrolled'} )
-      . ",contactname="
-      . $dbh->quote( $data{'contactname'} )
-      . ",borrowernotes="
-      . $dbh->quote( $data{'borrowernotes'} )
-      . ",dateexpiry="
-      . $dbh->quote( $data{'dateexpiry'} )
-      . ",contactnote="
-      . $dbh->quote( $data{'contactnote'} )
-      . ",B_address="
-      . $dbh->quote( $data{'B_address'} )
-      . ",B_zipcode="
-      . $dbh->quote( $data{'B_zipcode'} )
-      . ",B_city="
-      . $dbh->quote( $data{'B_city'} )
-      . ",B_phone="
-      . $dbh->quote( $data{'B_phone'} )
-      . ",B_email="
-      . $dbh->quote( $data{'B_email'}, )
-      . ",password="
-      . $dbh->quote( $data{'password'} )
-      . ",userid="
-      . $dbh->quote( $data{'userid'} )
-      . ",sort1="
-      . $dbh->quote( $data{'sort1'} )
-      . ",sort2="
-      . $dbh->quote( $data{'sort2'} )
-      . ",contacttitle="
-      . $dbh->quote( $data{'contacttitle'} )
-      . ",emailpro="
-      . $dbh->quote( $data{'emailpro'} )
-      . ",contactfirstname="
-      . $dbh->quote( $data{'contactfirstname'} ) 
-      . ",sex="
-      . $dbh->quote( $data{'sex'} ) 
-      . ",fax="
-      . $dbh->quote( $data{'fax'} )
-      . ",flags="
-      . $dbh->quote( $data{'flags'} )
-      . ",relationship="
-      . $dbh->quote( $data{'relationship'} )
-      . ",B_streetnumber="
-      . $dbh->quote( $data{'B_streetnumber'}) 
-      . ",B_streettype="
-      . $dbh->quote( $data{'B_streettype'})
-      . ",gonenoaddress="
-      . $dbh->quote( $data{'gonenoaddress'})	
-      . ",lost="
-      . $dbh->quote( $data{'lost'})	 	 	
-      . ",debarred="
-      . $dbh->quote( $data{'debarred'})
-      . ",ethnicity="
-      . $dbh->quote( $data{'ethnicity'})
-      . ",ethnotes="
-      . $dbh->quote( $data{'ethnotes'});
+	my (%data) = @_;
+	my $dbh = C4::Context->dbh;
+	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+	$data{'joining'} = &ParseDate("today") unless $data{'joining'};
+	$data{'joining'}=format_date_in_iso($data{'joining'});
+	# if expirydate is not set, calculate it from borrower category subscription duration
+	unless ($data{'expiry'}) {
+		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+		$sth->execute($data{'categorycode'});
+		my ($enrolmentperiod) = $sth->fetchrow;
+		$enrolmentperiod = 12 unless ($enrolmentperiod);
+		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
+	}
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	my $query= "INSERT INTO borrowers (
+							cardnumber,
+							surname,
+							firstname,
+							title,
+							initials,
+							dateofbirth,
+							sex,
+							streetaddress,
+							streetcity,
+							zipcode,
+							phoneday,
+							physstreet,
+							city,
+							homezipcode,
+							phone,
+							emailaddress,
+							faxnumber,
+							textmessaging,
+							categorycode,
+							branchcode,
+							borrowernotes,
+							ethnicity,
+							ethnotes,
+							expiry,
+							dateenrolled,
+							sort1,
+							sort2
+								) 
+				VALUES (
+							'$data{'cardnumber'}',
+							'$data{'surname'}',
+							'$data{'firstname'}',
+							'$data{'title'}',
+							'$data{'initials'}',
+							'$data{'dateofbirth'}',
+							'$data{'sex'}',
+							
+							'$data{'streetaddress'}',
+							'$data{'streetcity'}',
+							'$data{'zipcode'}',
+							'$data{'phoneday'}',
+							
+							'$data{'physstreet'}',
+							'$data{'city'}',
+							'$data{'homezipcode'}',
+							'$data{'phone'}',
 
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    $sth->finish;
-    $data{'borrowernumber'} = $dbh->{'mysql_insertid'};
-    return $data{'borrowernumber'};
+							'$data{'emailaddress'}',
+							'$data{'faxnumber'}',
+							'$data{'textmessaging'}',
+
+							'$data{'categorycode'}',
+							'$data{'branchcode'}',
+							'$data{'borrowernotes'}',
+							'$data{'ethnicity'}',
+							'$data{'ethnotes'}',
+							'$data{'expiry'}',
+							'$data{'joining'}',
+							'$data{'sort1'}',
+							'$data{'sort2'}'
+							)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+	$data{'bornum'} =$dbh->{'mysql_insertid'};
+	return $data{'bornum'};
 }
 
-sub changepassword {
-    my ( $uid, $member, $digest ) = @_;
+sub calcexpirydate {
+    my ( $categorycode, $dateenrolled ) = @_;
     my $dbh = C4::Context->dbh;
-
-#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-#Then we need to tell the user and have them create a new one.
     my $sth =
       $dbh->prepare(
-        "select * from borrowers where userid=? and borrowernumber != ?");
-    $sth->execute( $uid, $member );
-    if ( ( $uid ne '' ) && ( $sth->fetchrow ) ) {
-        return 0;
-    }
-    else {
-
-        #Everything is good so we can update the information.
-        $sth =
-          $dbh->prepare(
-            "update borrowers set userid=?, password=? where borrowernumber=?");
-        $sth->execute( $uid, $digest, $member );
-        return 1;
-    }
+        "select enrolmentperiod from categories where categorycode=?");
+    $sth->execute($categorycode);
+    my ($enrolmentperiod) = $sth->fetchrow;
+    $enrolmentperiod = 12 unless ($enrolmentperiod);
+    return format_date_in_iso(
+        &DateCalc( $dateenrolled, "$enrolmentperiod months" ) );
 }
 
+=head2 checkuserpassword (OUEST-PROVENCE)
+
+check for the password and login are not used
+return the number of record 
+0=> NOT USED 1=> USED
+
+=cut
+
+sub checkuserpassword {
+    my ( $borrowernumber, $userid, $password ) = @_;
+    $password = md5_base64($password);
+    my $dbh = C4::Context->dbh;
+    my $sth =
+      $dbh->prepare(
+"Select count(*) from borrowers where borrowernumber !=? and userid =? and password=? "
+      );
+    $sth->execute( $borrowernumber, $userid, $password );
+    my $number_rows = $sth->fetchrow;
+    return $number_rows;
+
+}
 sub getmemberfromuserid {
     my ($userid) = @_;
     my $dbh      = C4::Context->dbh;
@@ -606,7 +862,6 @@ sub getmemberfromuserid {
     $sth->execute($userid);
     return $sth->fetchrow_hashref;
 }
-
 sub updateguarantees {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
@@ -643,7 +898,7 @@ sub fixup_cardnumber ($) {
     my ($cardnumber) = @_;
     my $autonumber_members = C4::Context->boolean_preference('autoMemberNum');
     $autonumber_members = 0 unless defined $autonumber_members;
-
+my $rem;
     # Find out whether member numbers should be generated
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".
@@ -668,15 +923,15 @@ sub fixup_cardnumber ($) {
             my $data = $sth->fetchrow_hashref;
             $cardnumber = $data->{'max(substring(borrowers.cardnumber,2,7))'};
             $sth->finish;
-            if ( !$cardnumber ) {    # If DB has no values,
+	
+            	if ( !$cardnumber ) {    # If DB has no values,
                 $cardnumber = 1000000;    # start at 1000000
-            }
-            else {
+            	} else {
                 $cardnumber += 1;
-            }
+            	}
 
             my $sum = 0;
-            for ( my $i = 0 ; $i < 8 ; $i += 1 ) {
+	            for ( my $i = 0 ; $i < 8 ; $i += 1 ) {
 
                 # read weightings, left to right, 1 char at a time
                 my $temp1 = $weightings[$i];
@@ -686,9 +941,9 @@ sub fixup_cardnumber ($) {
 
                 # mult each char 1-7 by its corresponding weighting
                 $sum += $temp1 * $temp2;
-            }
+	            }
 
-            my $rem = ( $sum % 11 );
+             $rem = ( $sum % 11 );
             $rem = 'X' if $rem == 10;
 
             $cardnumber = "V$cardnumber$rem";
@@ -705,57 +960,56 @@ sub fixup_cardnumber ($) {
 
             $sth->execute;
 
-            my ($result) = $sth->fetchrow;
-            $sth->finish;
-            $cardnumber = $result + 1;
-        }
+	$cardnumber="V$cardnumber$rem";
     }
     return $cardnumber;
 }
-
-sub findguarantees {
-    my ($bornum) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $sth      = $dbh->prepare(
-        "select cardnumber,borrowernumber from borrowers where
-  guarantorid=?"
-    );
-    $sth->execute($bornum);
-    my @dat;
-    my $i = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $dat[$i] = $data;
-        $i++;
-    }
-    $sth->finish;
-    return ( $i, \@dat );
 }
+sub fixupneu_cardnumber{
+    my($cardnumber,$categorycode) = @_;
+    my $autonumber_members = C4::Context->boolean_preference('autoMemberNum');
+    $autonumber_members = 0 unless defined $autonumber_members;
+    # Find out whether member numbers should be generated
+    # automatically. Should be either "1" or something else.
+    # Defaults to "0", which is interpreted as "no".
+my $dbh = C4::Context->dbh;
+my $sth;
+    if (! $cardnumber  && $autonumber_members && $categorycode) {
+	if ($categorycode eq "A" || $categorycode eq "W" || $categorycode eq "C"){
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '5%' ");
+	}elsif ($categorycode eq "L"){	
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '10%' ");
+	}elsif ($categorycode eq "F" || $categorycode eq "E")	{
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '30%' ");
+	}elsif ($categorycode eq "N"){	
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '40%' ");
+	}else{
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '6%' ");
+	}
+	$sth->execute;
 
-=item findguarantor
+	my $data=$sth->fetchrow_hashref;
+	$cardnumber=$data->{'max(borrowers.cardnumber)'};
+	$sth->finish;
 
-  $guarantor = &findguarantor($borrower_no);
-  $guarantor_cardno = $guarantor->{"cardnumber"};
-  $guarantor_surname = $guarantor->{"surname"};
-  ...
+	# purpose: generate checksum'd member numbers.
+	# We'll assume we just got the max value of digits 2-8 of member #'s
+	# from the database and our job is to increment that by one,
+	# determine the 1st and 9th digits and return the full string.
 
-C<&findguarantor> takes a borrower number (presumably that of a child
-patron), finds the guarantor for C<$borrower_no> (the child's parent),
-and returns the record for the guarantor.
+	if (! $cardnumber) { 			# If DB has no values,
+	 if ($categorycode eq "A" || $categorycode eq "W" || $categorycode eq "C"){   $cardnumber = 5000000;}	
+	 elsif ($categorycode eq "L"){   $cardnumber = 1000000;}
+	 elsif ($categorycode  eq "F"){   $cardnumber = 3000000;}
+	else{$cardnumber = 6000000;}	
+	# start at 1000000 or 3000000 or 5000000
+	} else {
+	    $cardnumber += 1;
+	}
 
-C<&findguarantor> returns a reference-to-hash. Its keys are the fields
-from the C<borrowers> database table;
-
-=cut
-
-#'
-sub findguarantor {
-    my ($bornum) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * from borrowers where borrowernumber=?");
-    $sth->execute($bornum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
+	
+    }
+    return $cardnumber;
 }
 
 =item GuarantornameSearch
@@ -843,401 +1097,130 @@ sub GuarantornameSearch {
     return ( $cnt, \@results );
 }
 
-=item NewBorrowerNumber
 
-  $num = &NewBorrowerNumber();
+=item findguarantees
 
-Allocates a new, unused borrower number, and returns it.
+  ($num_children, $children_arrayref) = &findguarantees($parent_borrno);
+  $child0_cardno = $children_arrayref->[0]{"cardnumber"};
+  $child0_borrno = $children_arrayref->[0]{"borrowernumber"};
+
+C<&findguarantees> takes a borrower number (e.g., that of a patron
+with children) and looks up the borrowers who are guaranteed by that
+borrower (i.e., the patron's children).
+
+C<&findguarantees> returns two values: an integer giving the number of
+borrowers guaranteed by C<$parent_borrno>, and a reference to an array
+of references to hash, which gives the actual results.
 
 =cut
-
 #'
-# FIXME - This is identical to C4::Circulation::Borrower::NewBorrowerNumber.
-# Pick one and stick with it. Preferably use the other one. This function
-# doesn't belong in C4::Search.
-sub NewBorrowerNumber {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select max(borrowernumber) from borrowers");
-    $sth->execute;
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    $data->{'max(borrowernumber)'}++;
-    return ( $data->{'max(borrowernumber)'} );
+sub findguarantees{
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("select cardnumber,borrowernumber, firstname, surname from borrowers where guarantor=?");
+  $sth->execute($bornum);
+
+  my @dat;
+  while (my $data = $sth->fetchrow_hashref)
+  {
+    push @dat, $data;
+  }
+  $sth->finish;
+  return (scalar(@dat), \@dat);
 }
 
-=head2 borrissues
+=item findguarantor
 
-  ($count, $issues) = &borrissues($borrowernumber);
+  $guarantor = &findguarantor($borrower_no);
+  $guarantor_cardno = $guarantor->{"cardnumber"};
+  $guarantor_surname = $guarantor->{"surname"};
+  ...
 
-Looks up what the patron with the given borrowernumber has borrowed.
+C<&findguarantor> takes a borrower number (presumably that of a child
+patron), finds the guarantor for C<$borrower_no> (the child's parent),
+and returns the record for the guarantor.
 
-C<&borrissues> returns a two-element array. C<$issues> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields from the C<issues>, C<biblio>, and C<items> tables
-in the Koha database. C<$count> is the number of elements in
-C<$issues>.
+C<&findguarantor> returns a reference-to-hash. Its keys are the fields
+from the C<borrowers> database table;
 
 =cut
-
 #'
-sub borrissues {
-    my ($bornum) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $sth      = $dbh->prepare(
-        "Select * from issues,biblio,items where borrowernumber=?
-   and items.itemnumber=issues.itemnumber
-	and items.biblionumber=biblio.biblionumber
-	and issues.returndate is NULL order by date_due"
-    );
-    $sth->execute($bornum);
-    my @result;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @result, $data;
-    }
-    $sth->finish;
-    return ( scalar(@result), \@result );
+sub findguarantor{
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("select guarantor from borrowers where borrowernumber=?");
+  $sth->execute($bornum);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($data->{'guarantor'});
+  $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
 }
 
-=head2 allissues
-
-  ($count, $issues) = &allissues($borrowernumber, $sortkey, $limit);
-
-Looks up what the patron with the given borrowernumber has borrowed,
-and sorts the results.
-
-C<$sortkey> is the name of a field on which to sort the results. This
-should be the name of a field in the C<issues>, C<biblio>,
-C<biblioitems>, or C<items> table in the Koha database.
-
-C<$limit> is the maximum number of results to return.
-
-C<&allissues> returns a two-element array. C<$issues> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
-C<items> tables of the Koha database. C<$count> is the number of
-elements in C<$issues>
-
-=cut
-
-#'
-sub allissues {
-    my ( $bornum, $order, $limit ) = @_;
-
-    #FIXME: sanity-check order and limit
-    my $dbh   = C4::Context->dbh;
-    my $count=0;
-    my $query = "Select * from issues,biblio,items,biblioitems
-  where borrowernumber=? and
-  items.biblioitemnumber=biblioitems.biblioitemnumber and
-  items.itemnumber=issues.itemnumber and
-  items.biblionumber=biblio.biblionumber order by $order";
-    if ( $limit != 0 ) {
-        $query .= " limit $limit";
-    }
-
-    #print $query;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($bornum);
-    my @result;
-    my $i = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $result[$i] = $data;
-        $i++;
-	$count++;
-    }
-
-    # get all issued items for bornum from oldissues table
-    # large chunk of older issues data put into table oldissues
-    # to speed up db calls for issuing items
-    if(C4::Context->preference("ReadingHistory")){
-          my $query2="SELECT * FROM oldissues,biblio,items,biblioitems
-                      WHERE borrowernumber=? 
-                      AND items.biblioitemnumber=biblioitems.biblioitemnumber
-                      AND items.itemnumber=oldissues.itemnumber
-                      AND items.biblionumber=biblio.biblionumber
-                      ORDER BY $order";
-          if ($limit !=0){
-                $limit=$limit-$count;
-                $query2.=" limit $limit";
-          }
-
-          my $sth2=$dbh->prepare($query2);
-          $sth2->execute($bornum);
-
-          while (my $data2=$sth2->fetchrow_hashref){
-                $result[$i]=$data2;
-                $i++;
-          }
-          $sth2->finish;
-    }
-    $sth->finish;
-
-    return ( $i, \@result );
+sub borrowercard_active {
+	my ($bornum) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT expiry FROM borrowers WHERE (borrowernumber = ?) AND (NOW() <= expiry)");
+	$sth->execute($bornum);
+	if (my $data=$sth->fetchrow_hashref){	
+	return ('1');
+	}else{
+	return ('0');
+	}
 }
 
-=head2 getboracctrecord
-
-  ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
-
-Looks up accounting data for the patron with the given borrowernumber.
-
-C<$env> is ignored.
-
-(FIXME - I'm not at all sure what this is about.)
-
-C<&getboracctrecord> returns a three-element array. C<$acctlines> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields of the C<accountlines> table in the Koha database.
-C<$count> is the number of elements in C<$acctlines>. C<$total> is the
-total amount outstanding for all of the account lines.
-
-=cut
-
-#'
-sub getboracctrecord {
-    my ( $env, $params ) = @_;
-    my $dbh = C4::Context->dbh;
-    my @acctlines;
-    my $numlines = 0;
-    my $sth      = $dbh->prepare(
-        "Select * from accountlines where
-borrowernumber=? order by date desc,timestamp desc"
-    );
-
-    #   print $query;
-    $sth->execute( $params->{'borrowernumber'} );
-    my $total = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-
-        #FIXME before reinstating: insecure?
-        #      if ($data->{'itemnumber'} ne ''){
-        #        $query="Select * from items,biblio where items.itemnumber=
-        #	'$data->{'itemnumber'}' and biblio.biblionumber=items.biblionumber";
-        #	my $sth2=$dbh->prepare($query);
-        #	$sth2->execute;
-        #	my $data2=$sth2->fetchrow_hashref;
-        #	$sth2->finish;
-        #	$data=$data2;
-        #     }
-        $acctlines[$numlines] = $data;
-        $numlines++;
-        $total += $data->{'amountoutstanding'};
-    }
-    $sth->finish;
-    return ( $numlines, \@acctlines, $total );
+# Search the member photo, in case that photo doesn´t exists, return a default photo.for NEU
+sub getMemberPhoto {
+	my $cardnumber = shift @_;
+ my $htdocs = C4::Context->config('opacdir');
+my $dirname = $htdocs."/htdocs/uploaded-files/users-photo/";
+#	my $dirname = "$ENV{'DOCUMENT_ROOT'}/uploaded-files/users-photo";
+	opendir(DIR, $dirname) or die "Can't open directory $dirname: $!";
+	while (defined(my $file = readdir(DIR))) {
+	   if ($file =~ /^$cardnumber\..+/){
+		   return "/uploaded-files/users-photo/$file";
+	   }
+	}
+	closedir(DIR);
+	return "http://cc.neu.edu.tr/stdpictures/".$cardnumber.".jpg";
 }
 
-=head2 checkuniquemember (OUEST-PROVENCE)
-
-  $result = &checkuniquemember($collectivity,$surname,$categorycode,$firstname,$dateofbirth);
-
-Checks that a member exists or not in the database.
-
-C<&result> is 1 (=exist) or 0 (=does not exist)
-C<&collectivity> is 1 (= we add a collectivity) or 0 (= we add a physical member)
-C<&surname> is the surname
-C<&categorycode> is from categorycode table
-C<&firstname> is the firstname (only if collectivity=0)
-C<&dateofbirth> is the date of birth (only if collectivity=0)
-
-=cut
-
-sub checkuniquemember {
-    my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $request;
-    if ($collectivity) {
-
-# 				$request="select count(*) from borrowers where surname=? and categorycode=?";
-        $request =
-          "select borrowernumber,categorycode from borrowers where surname=? ";
-    }
-    else {
-
-# 				$request="select count(*) from borrowers where surname=? and categorycode=? and firstname=? and dateofbirth=?";
-        $request =
-"select borrowernumber,categorycode from borrowers where surname=?  and firstname=? and dateofbirth=?";
-    }
-    my $sth = $dbh->prepare($request);
-    if ($collectivity) {
-        $sth->execute( uc($surname) );
-    }
-    else {
-        $sth->execute( uc($surname), ucfirst($firstname), $dateofbirth );
-    }
-    my @data = $sth->fetchrow;
-    if ( $data[0] ) {
-        $sth->finish;
-        return $data[0], $data[1];
-
-        #
-    }
-    else {
-        $sth->finish;
-        return 0;
-    }
+sub change_user_pass {
+	my ($uid,$member,$digest) = @_;
+	my $dbh = C4::Context->dbh;
+	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+	#Then we need to tell the user and have them create a new one.
+	my $sth=$dbh->prepare("select * from borrowers where userid=? and borrowernumber <> ?");
+	$sth->execute($uid,$member);
+	if ( ($uid ne '') && ($sth->fetchrow) ) {
+		
+		return 0;
+    } else {
+		#Everything is good so we can update the information.
+		$sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
+    		$sth->execute($uid, $digest, $member);
+		return 1;
+	}
 }
 
-=head2 getzipnamecity (OUEST-PROVENCE)
-
-take all info from table city for the fields city and  zip
-check for the name and the zip code of the city selected
-
-=cut
-
-sub getzipnamecity {
-    my ($cityid) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $sth      =
-      $dbh->prepare(
-        "select city_name,city_zipcode from cities where cityid=? ");
-    $sth->execute($cityid);
-    my @data = $sth->fetchrow;
-    return $data[0], $data[1];
-}
-
-=head2 updatechildguarantor (OUEST-PROVENCE)
-
-check for title,firstname,surname,adress,zip code and city  from guarantor to 
-guarantorchild
-
-=cut
-
-#'
-
-sub getguarantordata {
-    my ($borrowerid) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $sth          =
-      $dbh->prepare(
-"Select title,firstname,surname,streetnumber,address,streettype,address2,zipcode,city,phone,phonepro,mobile,email,emailpro,fax  from borrowers where borrowernumber =? "
-      );
-    $sth->execute($borrowerid);
-    my $guarantor_data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $guarantor_data;
-}
-
-=head2 getdcity (OUEST-PROVENCE)
-recover cityid  with city_name condition
-=cut
-
-sub getidcity {
-    my ($city_name) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select cityid from cities where city_name=? ");
-    $sth->execute($city_name);
-    my $data = $sth->fetchrow;
-    return $data;
-}
-
-=head2 getcategorytype (OUEST-PROVENCE)
-
-check for the category_type with categorycode
-and return the category_type 
-
-=cut
-
-sub getcategorytype {
-    my ($categorycode) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            =
-      $dbh->prepare(
-"Select category_type,description from categories where categorycode=?  "
-      );
-    $sth->execute($categorycode);
-    my ( $category_type, $description ) = $sth->fetchrow;
-    return $category_type, $description;
-}
-
-sub calcexpirydate {
-    my ( $categorycode, $dateenrolled ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "select enrolmentperiod from categories where categorycode=?");
-    $sth->execute($categorycode);
-    my ($enrolmentperiod) = $sth->fetchrow;
-    $enrolmentperiod = 12 unless ($enrolmentperiod);
-    return format_date_in_iso(
-        &DateCalc( $dateenrolled, "$enrolmentperiod months" ) );
-}
-
-=head2 checkuserpassword (OUEST-PROVENCE)
-
-check for the password and login are not used
-return the number of record 
-0=> NOT USED 1=> USED
-
-=cut
-
-sub checkuserpassword {
-    my ( $borrowernumber, $userid, $password ) = @_;
-    $password = md5_base64($password);
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"Select count(*) from borrowers where borrowernumber !=? and userid =? and password=? "
-      );
-    $sth->execute( $borrowernumber, $userid, $password );
-    my $number_rows = $sth->fetchrow;
-    return $number_rows;
-
-}
-
-=head2 borrowercategories
-
-  ($codes_arrayref, $labels_hashref) = &borrowercategories();
-
-Looks up the different types of borrowers in the database. Returns two
-elements: a reference-to-array, which lists the borrower category
-codes, and a reference-to-hash, which maps the borrower category codes
-to category descriptions.
-
-=cut
-
-#'
-sub borrowercategories {
-    my ( $category_type, $action ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $request;
-    $request =
-"Select categorycode,description from categories where category_type=? order by categorycode";
-    my $sth = $dbh->prepare($request);
-    $sth->execute($category_type);
-    my %labels;
-    my @codes;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @codes, $data->{'categorycode'};
-        $labels{ $data->{'categorycode'} } = $data->{'description'};
-    }
-    $sth->finish;
-    return ( \@codes, \%labels );
-}
-
-=head2 getborrowercategory
-
-  $description,$dateofbirthrequired,$upperagelimit,$category_type = &getborrowercategory($categorycode);
-
-Given the borrower's category code, the function returns the corresponding
-description , dateofbirthrequired , upperagelimit and category type for a comprehensive information display.
-
-=cut
-
-sub getborrowercategory {
-    my ($catcode) = @_;
-    my $dbh       = C4::Context->dbh;
-    my $sth       =
-      $dbh->prepare(
-        "SELECT description,dateofbirthrequired,upperagelimit,category_type FROM categories WHERE categorycode = ?");
-    $sth->execute($catcode);
-    my ($description,$dateofbirthrequired,$upperagelimit,$category_type) = $sth->fetchrow();
-    $sth->finish();
-    return ($description,$dateofbirthrequired,$upperagelimit,$category_type);
-}    # sub getborrowercategory
 
 
+
+
+
+# # A better approach might be to set borrowernumber autoincrement and 
+# 
+ sub NewBorrowerNumber {
+   my $dbh = C4::Context->dbh;
+   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
+   $sth->execute;
+   my $data=$sth->fetchrow_hashref;
+   $sth->finish;
+   $data->{'max(borrowernumber)'}++;
+   return($data->{'max(borrowernumber)'});
+ }
 
 =head2 ethnicitycategories
 
@@ -1399,7 +1382,5 @@ sub GetBorrowersFromSurname  {
      $sth->finish;
      return ($count,\@results);
 }
-
-END { }       # module clean-up code here (global destructor)
 
 1;

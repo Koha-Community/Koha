@@ -67,8 +67,6 @@ entering Z39.50 lookup requests.
 @EXPORT = qw(
 	&getz3950servers
 	&z3950servername
-	&addz3950queue
-	&checkz3950searchdone
 );
 
 #------------------------------------------------
@@ -136,161 +134,7 @@ sub z3950servername {
 
 #---------------------------------------
 
-=item addz3950queue
 
-  $errmsg = &addz3950queue($query, $type, $request_id, @servers);
-
-Adds a Z39.50 search query for the Z39.50 server to look up.
-
-C<$query> is the term to search for.
-
-C<$type> is the query type, e.g. C<isbn>, C<lccn>, etc.
-
-C<$request_id> is a unique string that will identify this query.
-
-C<@servers> is a list of servers to query (obviously, this can be
-given either as an array, or as a list of scalars). Each element may
-be either a Z39.50 server ID from the z3950server table of the Koha
-database, the string C<DEFAULT> or C<CHECKED>, or a complete server
-specification containing a colon.
-
-C<DEFAULT> and C<CHECKED> are synonymous, and refer to those servers
-in the z3950servers table whose 'checked' field is set and non-NULL.
-
-Once the query has been submitted to the Z39.50 daemon,
-C<&addz3950queue> sends a SIGHUP to the daemon to tell it to process
-this new request.
-
-C<&addz3950queue> returns an error message. If it was successful, the
-error message is the empty string.
-
-=cut
-#'
-sub addz3950queue {
-	use strict;
-	# input
-	my (
-		$query,		# value to look up
-		$type,			# type of value ("isbn", "lccn", "title", "author", "keyword")
-		$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
-		@z3950list,	# list of z3950 servers to query
-	)=@_;
-	# Returns:
-	my $error;
-
-	my (
-		$sth,
-		@serverlist,
-		$server,
-		$failed,
-		$servername,
-	);
-
-	# FIXME - Should be configurable, probably in /etc/koha.conf.
-	my $pidfile='/var/log/koha/processz3950queue.pid';
-
-	$error="";
-
-	my $dbh = C4::Context->dbh;
-	# list of servers: entry can be a fully qualified URL-type entry
-	#   or simply just a server ID number.
-	foreach $server (@z3950list) {
-		if ($server =~ /:/ ) {
-			push @serverlist, $server;
-		} elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
-			$sth=$dbh->prepare("select host,port,db,userid,password ,name,syntax from z3950servers where checked <> 0 ");
-			$sth->execute;
-			while ( my ($host, $port, $db, $userid, $password,$servername,$syntax) = $sth->fetchrow ) {
-				push @serverlist, "$servername/$host\:$port/$db/$userid/$password/$syntax";
-			} # while
-		} else {
-			$sth=$dbh->prepare("select host,port,db,userid,password,syntax from z3950servers where id=? ");
-			$sth->execute($server);
-			my ($host, $port, $db, $userid, $password,$syntax) = $sth->fetchrow;
-			push @serverlist, "$server/$host\:$port/$db/$userid/$password/$syntax";
-		}
-	}
-
-	my $serverlist='';
-
-	$serverlist = join("|", @serverlist);
-# 	chop $serverlist;
-
-	# FIXME - Is this test supposed to test whether @serverlist is
-	# empty? If so, then a) there are better ways to do that in
-	# Perl (e.g., "if (@serverlist eq ())"), and b) it doesn't
-	# work anyway, since it checks whether $serverlist is composed
-	# of one or more spaces, which is never the case, not even
-	# when there are 0 or 1 elements in @serverlist.
-	if ( $serverlist !~ /^ +$/ ) {
-		# Don't allow reinsertion of the same request identifier.
-		$sth=$dbh->prepare("select identifier from z3950queue
-			where identifier=?");
-		$sth->execute($requestid);
-		if ( ! $sth->rows) {
-			$sth=$dbh->prepare("insert into z3950queue (term,type,servers, identifier) values (?, ?, ?, ?)");
-			$sth->execute($query, $type, $serverlist, $requestid);
-			if ( -r $pidfile ) {
-				# FIXME - Perl is good at opening files. No need to
-				# spawn a separate 'cat' process.
-				my $pid=`cat $pidfile`;
-				chomp $pid;
-				warn "PID : $pid";
-				# Kill -HUP the Z39.50 daemon to tell it to process
-				# this query.
-				my $processcount=kill 1, $pid;
-				if ($processcount==0) {
-					$error.="Z39.50 search daemon error: no process signalled. ";
-				}
-			} else {
-				# FIXME - Error-checking like this should go close
-				# to the test.
-				$error.="No Z39.50 search daemon running: no file $pidfile. ";
-			} # if $pidfile
-		} else {
-			# FIXME - Error-checking like this should go close
-			# to the test.
-			$error.="Duplicate request ID $requestid. ";
-		} # if rows
-	} else {
-		# FIXME - Error-checking like this should go close to the
-		# test. I.e.,
-		#	return "No Z39.50 search servers specified. "
-		#		if @serverlist eq ();
-
-		# server list is empty
-		$error.="No Z39.50 search servers specified. ";
-	} # if serverlist empty
-
-	return $error;
-
-} # sub addz3950queue
-
-=item &checkz3950searchdone
-
-  $numberpending= &	&checkz3950searchdone($random);
-
-Returns the number of pending z3950 requests
-
-C<$random> is the random z3950 query number.
-
-=cut
-sub checkz3950searchdone {
-	my ($z3950random) = @_;
-	my $dbh = C4::Context->dbh;
-	# first, check that the deamon already created the requests...
-	my $sth = $dbh->prepare("select count(*) from z3950queue,z3950results where z3950queue.id = z3950results.queryid and z3950queue.identifier=?");
-	$sth->execute($z3950random);
-	my ($result) = $sth->fetchrow;
-	if ($result eq 0) { # search not yet begun => should be searches to do !
-		return "??";
-	}
-	# second, count pending requests
-	$sth = $dbh->prepare("select count(*) from z3950queue,z3950results where z3950queue.id = z3950results.queryid and z3950results.enddate is null and z3950queue.identifier=?");
-	$sth->execute($z3950random);
-	($result) = $sth->fetchrow;
-	return $result;
-}
 
 1;
 __END__
@@ -304,17 +148,12 @@ Koha Developement team <info@koha.org>
 =cut
 
 #--------------------------------------
+##No more deamon to start. Z3950 now handled by ZOOM asynch mode-TG
 # $Log$
-# Revision 1.11  2006/08/25 21:07:08  tgarip1957
-# New set of routines for HEAD.
-# Uses a complete new ZEBRA Indexing.
-# ZEBRA is now XML and comprises of a KOHA meta record. Explanatory notes will be on koha-devel
-# Fixes UTF8 problems
-# Fixes bug with authorities
-# SQL database major changes.
-# Separate biblioograaphic and holdings records. Biblioitems table depreceated
-# etc. etc.
-# Wait for explanatory document on koha-devel
+# Revision 1.12  2006/09/01 22:16:00  tgarip1957
+# New XML API
+# Event & Net::Z3950 dependency removed
+# HTML::Template::Pro dependency added
 #
 # Revision 1.10  2003/10/01 15:08:14  tipaul
 # fix fog bug #622 : processz3950queue fails

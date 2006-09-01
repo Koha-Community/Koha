@@ -24,7 +24,7 @@ package C4::Reserves2;
 
 use strict;
 require Exporter;
-#use DBI;
+
 use C4::Context;
 use C4::Search;
 use C4::Biblio;
@@ -152,12 +152,13 @@ sub FindReserves {
 	my $i = 0;
 	my @results;
 	while (my $data = $sth->fetchrow_hashref){
-		my ($bibdatarecord) =MARCgetbiblio($dbh,$data->{'biblionumber'});
-		my $bibdata=MARCmarc2koha($dbh,$bibdatarecord,"biblios");
-		$data->{'author'} = $bibdata->{'author'};
-		$data->{'publishercode'} = $bibdata->{'publishercode'};
-		$data->{'publicationyear'} = $bibdata->{'publicationyear'};
-		$data->{'title'} = $bibdata->{'title'};
+		my ($bibdatarecord) =XMLgetbiblio($dbh,$data->{'biblionumber'});
+		
+		my $bibdata=XML_xml2hash_onerecord($bibdatarecord);
+		$data->{'author'} =XML_readline_onerecord($bibdata,"author","biblios");
+		$data->{'publishercode'} = XML_readline_onerecord($bibdata,"publishercode","biblios");
+		$data->{'publicationyear'} = XML_readline_onerecord($bibdata,"publicationyear","biblios");
+		$data->{'title'} = XML_readline_onerecord($bibdata,"title","biblios");
 		push @results, $data;
 		$i++;
 	}

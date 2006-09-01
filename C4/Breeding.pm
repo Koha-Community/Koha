@@ -22,6 +22,7 @@ use C4::Biblio;
 use C4::Search;
 use MARC::File::USMARC;
 use MARC::Record;
+use Encode;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -46,7 +47,7 @@ C4::Breeding : script to add a biblio in marc_breeding table.
 
 =head1 DESCRIPTION
 
-This module doesn't do anything.
+This is for depository of records coming from z3950 or directly imported.
 
 =cut
 
@@ -55,7 +56,8 @@ This module doesn't do anything.
 
 sub  ImportBreeding {
 	my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random) = @_;
-	my @marcarray = split /\x1D/, $marcrecords;
+## use marc:batch send them in one by one
+#	my @marcarray = split /\x1D/, $marcrecords;
 	my $dbh = C4::Context->dbh;
 my @kohafields;
 my @values;
@@ -76,14 +78,16 @@ my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
 	my $alreadyinfarm = 0;
 	my $notmarcrecord = 0;
 	my $breedingid;
-	for (my $i=0;$i<=$#marcarray;$i++) {
-		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D","","UTF-8",1);
+#	for (my $i=0;$i<=$#marcarray;$i++) {
+		my $marcrecord = MARC::File::USMARC::decode($marcrecords);
+		my $marcxml=$marcrecord->as_xml_record($marcrecord);
+		$marcxml=Encode::encode('utf8',$marcxml);
 		my @warnings = $marcrecord->warnings();
 		if (scalar($marcrecord->fields()) == 0) {
 			$notmarcrecord++;
 		} else {
-
-			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
+			my $xmlhash=XML_xml2hash_onerecord($marcxml);	
+			my $oldbiblio = XMLmarc2koha_onerecord($dbh,$xmlhash,'biblios');
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
 			# drop every "special" char : spaces, - ...
 			$oldbiblio->{isbn} =~ s/ |-|\.//g,
@@ -123,12 +127,13 @@ my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
 				if ($breedingid && $overwrite_biblio eq 0) {
 					$alreadyinfarm++;
 				} else {
-					my $recoded;
-					$recoded = $marcrecord->as_usmarc();
+					my $recoded=MARC::Record->new_from_xml($marcxml,"UTF-8");
+					$recoded->encoding('UTF-8');
+					
 					if ($breedingid && $overwrite_biblio eq 1) {
-						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$marcarray[$i]."\x1D",$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass},$breedingid);
+						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded->as_usmarc,$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass},$breedingid);
 					} else {
-						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$marcarray[$i]."\x1D",$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass});
+						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded->as_usmarc,$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass});
 					$findbreedingid->execute;
 					$breedingid=$findbreedingid->fetchrow;
 					}
@@ -136,7 +141,7 @@ my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
 				}
 			}
 		}
-	}
+	#}
 	return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
 }
 

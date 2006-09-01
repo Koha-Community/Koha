@@ -605,16 +605,10 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
-# Revision 1.16  2006/08/25 21:07:08  tgarip1957
-# New set of routines for HEAD.
-# Uses a complete new ZEBRA Indexing.
-# ZEBRA is now XML and comprises of a KOHA meta record. Explanatory notes will be on koha-devel
-# Fixes UTF8 problems
-# Fixes bug with authorities
-# SQL database major changes.
-# Separate biblioograaphic and holdings records. Biblioitems table depreceated
-# etc. etc.
-# Wait for explanatory document on koha-devel
+# Revision 1.17  2006/09/01 22:16:00  tgarip1957
+# New XML API
+# Event & Net::Z3950 dependency removed
+# HTML::Template::Pro dependency added
 #
 # Revision 1.13  2004/03/11 16:06:20  tipaul
 # *** empty log message ***

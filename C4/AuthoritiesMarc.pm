@@ -19,11 +19,10 @@ package C4::AuthoritiesMarc;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Database;
 use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
-#use ZOOM;
+
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -34,7 +33,6 @@ $VERSION = 0.01;
 	&AUTHgettagslib
 	&AUTHfindsubfield
 	&AUTHfind_authtypecode
-
 	&AUTHaddauthority
 	&AUTHmodauthority
 	&AUTHdelauthority
@@ -46,9 +44,7 @@ $VERSION = 0.01;
 	&getsummary
 	&authoritysearch
 	&XMLgetauthority
-	
 	&AUTHhtml2marc
-	
 	&merge
 	&FindDuplicate
  );
@@ -60,24 +56,24 @@ $authtypecode="" unless $authtypecode;
 my $marcfromkohafield;
 	my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where kohafield= ? and authtypecode=? ");
 	$sth->execute($kohafield,$authtypecode);
-	my ($tagfield,$tagsubfield) = $sth->fetchrow;
-		
+	my ($tagfield,$tagsubfield) = $sth->fetchrow;	
 	return  ($tagfield,$tagsubfield);
 }
 sub authoritysearch {
-	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode) = @_;
+## This routine requires rewrite--TG
+	my ($dbh, $tags, $operator, $value, $offset,$length,$authtypecode,$dictionary) = @_;
+###Dictionary flag used to set what to show in summary;
 	my $query;
 	my $attr;
-	# the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
-	# the authtypecode. Then, search on $a of this tag_to_report
-	# also store main entry MARC tag, to extract it at end of search
+	my $server;
 	my $mainentrytag;
-	##first set the authtype search and may be multiple authorities
+	##first set the authtype search and may be multiple authorities( linked authorities)
 	my $n=0;
 	my @authtypecode;
 				my @auths=split / /,$authtypecode ;
+				my ($attrfield)=MARCfind_attr_from_kohafield("auth_authtypecode");
 				foreach my  $auth (@auths){
-				$query .=" \@attr 1=1013 \@attr 5=100 ".$auth; ##No truncation on authtype
+				$query .=$attrfield." ".$auth." "; ##No truncation on authtype
 				push @authtypecode ,$auth;
 				$n++;
 				}
@@ -94,16 +90,17 @@ sub authoritysearch {
 	if (@$value[$i]){
 	##If mainentry search $a tag
 		if (@$tags[$i] eq "mainentry") {
-		$attr =" \@attr 1=21 ";
+		 ($attr)=MARCfind_attr_from_kohafield("auth_mainentry")." ";
+		
 		}else{
-		$attr =" \@attr 1=47 ";
+		($attr) =MARCfind_attr_from_kohafield("auth_allentry")." ";
 		}
 		
 
 	
 		
 		if (@$operator[$i] eq 'phrase') {
-			 $attr.=" \@attr 4=1  \@attr 5=100 \@attr 6=2 ";##Phrase, No truncation,all of subfield field must match
+			 $attr.="  \@attr 4=1  \@attr 5=100  \@attr 6=3 ";##Phrase, No truncation,all of subfield field must match
 		
 		} else {
 		
@@ -127,15 +124,18 @@ my $counter = $offset;
 $length=10 unless $length;
 my @oAuth;
 my $i;
- $oAuth[0]=C4::Context->Zconnauth("authorityserver");
-#$oAuth[0]->connect;
-my $Anewq= new ZOOM::Query::PQF($query);
-$Anewq->sortby("1=21 i< 1=47 i< ");
+ $oAuth[0]=C4::Context->Zconnauth("authorityserver","USMARC");
+my ($mainentry)=MARCfind_attr_from_kohafield("auth_mainentry");
+my ($allentry)=MARCfind_attr_from_kohafield("auth_allentry");
+
+$query="\@attr 2=102 \@or \@or ".$query." \@attr 7=1 ".$mainentry." 0 \@attr 7=1 ".$allentry." 1"; ## sort on mainfield and subfields
+
+
 my $oAResult;
- $oAResult= $oAuth[0]->search($Anewq) ; 
+ $oAResult= $oAuth[0]->search_pqf($query) ; 
 while (($i = ZOOM::event(\@oAuth)) != 0) {
     my $ev = $oAuth[$i-1]->last_event();
-#    warn("Authority ", $i-1, ": event $ev (", ZOOM::event_str($ev), ")\n");
+#   warn("Authority ", $i-1, ": event $ev (", ZOOM::event_str($ev), ")\n");
     last if $ev == ZOOM::Event::ZEND;
 }
  my($error, $errmsg, $addinfo, $diagset) = $oAuth[0]->error_x();
@@ -151,16 +151,13 @@ my $nremains=$nbresults;
 	my @result = ();
 	my @finalresult = ();
 
-
 if ($nbresults>0){
 
 ##Find authid and linkid fields
-##we may be searching multiple authoritytypes.
-##Fix me this assumes that all authid and linkid fields are the same for all authority types
-my ($authidfield,$authidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode[0]);
-my ($linkidfield,$linkidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.linkid",$authtypecode[0]);
-while (($counter < $nbresults) && ($counter < ($offset + $length))) {
 
+my ($authidfield,$authidsubfield)=MARCfind_marc_from_kohafield("auth_authid","authorities");
+my ($linkidfield,$linkidsubfield)=MARCfind_marc_from_kohafield("auth_linkid","authorities");
+while (($counter < $nbresults) && ($counter < ($offset + $length))) {
 ##Here we have to extract MARC record and $authid from ZEBRA AUTHORITIES
 my $rec=$oAResult->record($counter);
 my $marcdata=$rec->raw();
@@ -169,11 +166,15 @@ my $linkid;
 my @linkids;	
 my $separator=C4::Context->preference('authoritysep');
 my $linksummary=" ".$separator;	
-	
+my $authid;	
 	$authrecord = MARC::File::USMARC::decode($marcdata);
-		
-my $authid=$authrecord->field($authidfield)->subfield($authidsubfield); 
+	if ($authidfield >9){	
+	my $authid=$authrecord->field($authidfield)->subfield($authidsubfield); 
+	}else{
+	$authid=$authrecord->field($authidfield)->data();
+	}
 	if ($authrecord->field($linkidfield)){
+
 my @fields=$authrecord->field($linkidfield);
 
 	foreach my $field (@fields){
@@ -185,13 +186,24 @@ my $linktype=AUTHfind_authtypecode($dbh,$linkid);
 		}
  	}
 	}#
-
-my $summary=getsummary($dbh,$authrecord,$authid,$authtypecode);
+my  $summary;
+unless ($dictionary){
+ $summary=getsummary($dbh,$authrecord,$authid,$authtypecode);
 $summary="<a href='detail.pl?authid=$authid'>".$summary.".</a>";
-if ($linkid && $linksummary ne " ".$separator){
-$summary="<b>".$summary."</b>".$linksummary;
+	if ($linkid && $linksummary ne " ".$separator){
+	$summary="<b>".$summary."</b>".$linksummary;
+	}
+}else{
+ $summary=getdictsummary($dbh,$authrecord,$authid,$authtypecode);
 }
-	my %newline;
+my $toggle;
+	if ($counter % 2) {
+		$toggle="#ffffcc";
+	} else {
+		$toggle="white";
+	}
+my %newline;
+	$newline{'toggle'}=$toggle;	
 	$newline{summary} = $summary;
 	$newline{authid} = $authid;
 	$newline{linkid} = $linkid;
@@ -203,39 +215,9 @@ $summary="<b>".$summary."</b>".$linksummary;
 	}## while counter
 
 
-###
-my @oConnection;
-
-
-my @oResult;
-$oConnection[0]=C4::Context->Zconnauth("biblioserver");
-for (my $z=0; $z<@finalresult; $z++){
-	my $nquery;
-		
-		$nquery= "\@attr GILS 1=2057 ".$finalresult[$z]{authid};
-		$nquery="\@or ".$nquery." \@attr GILS 1=2057 ".$finalresult[$z]{linkid} if $finalresult[$z]{linkid};
-		 $oResult[$z] = $oConnection[0]->search_pqf($nquery);
-
-
-OTHERS:
-while (($i = ZOOM::event(\@oConnection)) != 0) {
-    my $ev = $oConnection[0]->last_event();
-#    warn("connection ", $i-1, ": event $ev (", ZOOM::event_str($ev), ")\n");
-    last if $ev == ZOOM::Event::ZEND;
-}
-if ($i !=0){
- my($error, $errmsg, $addinfo, $diagset) = $oConnection[0]->error_x();
-    if ($error) {
-	warn  "oConnection $ error: $errmsg ($error) $addinfo\n";
-	 ##In fact its an error. Should we inform at least the librarian?
-	next;
-  	  }
-		
-		my  $count=$oResult[$z]->size()  ;
-		$finalresult[$z]{used}=$count;
-#		$oResult->destroy();
-#		$oConnection[$i-1]->destroy();
-}
+for (my $z=0; $z<$length; $z++){
+		$finalresult[$z]{used}=AUTHcount_usage($finalresult[$z]{authid});
+	
  }# all $z's
 
 
@@ -247,75 +229,25 @@ $oAuth[0]->destroy();
 	return (\@finalresult, $nbresults);
 }
 
-# Creates the SQL Request
-
-sub create_request {
-	my ($dbh,$tags, $and_or, $operator, $value) = @_;
-
-	my $sql_tables; # will contain marc_subfield_table as m1,...
-	my $sql_where1; # will contain the "true" where
-	my $sql_where2 = "("; # will contain m1.authid=m2.authid
-	my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
-	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
-
-
-	for(my $i=0; $i<=@$value;$i++) {
-		if (@$value[$i]) {
-			$nb_active++;
-			if ($nb_active==1) {
-				
-					$sql_tables = "auth_subfield_table as m$nb_table,";
-					$sql_where1 .= "( m$nb_table.subfieldvalue like '@$value[$i]' ";
-					if (@$tags[$i]) {
-						$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) IN (@$tags[$i])";
-							}
-					$sql_where1.=")";
-					} else {
-				
-					
-					
-					
-					$nb_table++;
-					
-					$sql_tables .= "auth_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue   like '@$value[$i]' ";
-					if (@$tags[$i]) {
-					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) IN (@$tags[$i])";
-							}
-					$sql_where1.=")";
-					$sql_where2.="m1.authid=m$nb_table.authid and ";
-								
-				
-					} 
-				}
-		}
-
-	if($sql_where2 ne "(")	# some datas added to sql_where2, processing
-	{
-		$sql_where2 = substr($sql_where2, 0, (length($sql_where2)-5)); # deletes the trailing ' and '
-		$sql_where2 .= ")";
-	}
-	else	# no sql_where2 statement, deleting '('
-	{
-		$sql_where2 = "";
-	}
-	chop $sql_tables;	# deletes the trailing ','
-	
-	return ($sql_tables, $sql_where1, $sql_where2);
-}
 
 
 sub AUTHcount_usage {
 	my ($authid) = @_;
 ### try ZOOM search here
-my $oConnection=C4::Context->Zconn("biblioserver");
+my @oConnection;
+$oConnection[0]=C4::Context->Zconn("biblioserver");
 my $query;
-$query= "\@attr GILS 1=2057 ".$authid;
+my ($attrfield)=MARCfind_attr_from_kohafield("auth_authid");
+$query= $attrfield." ".$authid;
 
-my $oResult = $oConnection->search_pqf($query);
-
-my $result=$oResult->size() if  ($oResult);
-	
+my $oResult = $oConnection[0]->search_pqf($query);
+my $event;
+my $i;
+   while (($i = ZOOM::event(\@oConnection)) != 0) {
+	$event = $oConnection[$i-1]->last_event();
+	last if $event == ZOOM::Event::ZEND;
+   }# while
+my $result=$oResult->size() ;
 	return ($result);
 }
 
@@ -355,7 +287,7 @@ $sth->execute($authtypecode);
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
     }
-	$sth=      $dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from auth_subfield_structure where authtypecode=? order by tagfield,tagsubfield"
+	$sth=      $dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,seealso,hidden,isurl,link from auth_subfield_structure where authtypecode=? order by tagfield,tagsubfield"
     );
 	$sth->execute($authtypecode);
 
@@ -372,7 +304,7 @@ $sth->execute($authtypecode);
     while (
         ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
-        $value_builder, $kohafield,  $seealso,          $hidden,
+        $value_builder,   $seealso,          $hidden,
         $isurl,			$link )
         = $sth->fetchrow
       )
@@ -384,7 +316,6 @@ $sth->execute($authtypecode);
         $res->{$tag}->{$subfield}->{authorised_value} = $authorised_value;
         $res->{$tag}->{$subfield}->{authtypecode}     = $authtypecode;
         $res->{$tag}->{$subfield}->{value_builder}    = $value_builder;
-        $res->{$tag}->{$subfield}->{kohafield}        = $kohafield;
         $res->{$tag}->{$subfield}->{seealso}          = $seealso;
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
@@ -397,13 +328,9 @@ sub AUTHaddauthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
 	my ($dbh,$record,$authid,$authtypecode) = @_;
 
-#my $leadercode=AUTHfind_leader($dbh,$authtypecode);
-my $leader='         a              ';##Fixme correct leader as this one just adds utf8 to MARC21
-#substr($leader,8,1)=$leadercode;
-#	$record->leader($leader);
-my ($authfield,$authidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode);
-my ($authfield2,$authtypesubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authtypecode",$authtypecode);
-my ($linkidfield,$linkidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.linkid",$authtypecode);
+
+	$record->encoding("UTF-8");
+my ($linkidfield,$linkidsubfield)=MARCfind_marc_from_kohafield("auth_linkid","authorities");
 
 # if authid empty => true add, find a new authid number
 	if (!$authid) {
@@ -412,30 +339,27 @@ my ($linkidfield,$linkidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header
 		($authid)=$sth->fetchrow;
 		$authid=$authid+1;
 		
-##Insert the recordID in MARC record 
-
-##Both authid and authtypecode is expected to be in the same field. Modify if other requirements arise
-	$record->add_fields($authfield,'','',$authidsubfield=>$authid,$authtypesubfield=>$authtypecode);
-
+##Insert the recordID and authtype in MARC record 
+##
+MARCkoha2marcOnefield($record,"auth_authid",$authid,"authorities");
+MARCkoha2marcOnefield($record,"auth_authtypecode",$authtypecode,"authorities");
 		$dbh->do("lock tables auth_header WRITE");
 		 $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc) values (?,now(),?,?)");
 		$sth->execute($authid,$authtypecode,$record->as_usmarc);		
 		$sth->finish;
 	
 	}else{
-##Modified record reinsertid
-my $idfield=$record->field($authfield);
-$record->delete_field($idfield);
-$record->add_fields($authfield,'','',$authtypesubfield=>$authtypecode,$authidsubfield=>$authid);
+##Modified record reinsertid update authid-- bulk import comes here
+MARCkoha2marcOnefield($record,"auth_authid",$authid,"authorities");
+MARCkoha2marcOnefield($record,"auth_authtypecode",$authtypecode,"authorities");
 
-	$dbh->do("lock tables auth_header WRITE");
-	my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
-	$sth->execute($record->as_usmarc,$authid);
+	my $sth=$dbh->prepare("replace auth_header set marc=?  authid=?,authtypecode=?,datecreated=now()");
+	$sth->execute($record->as_usmarc,$authid,$authtypecode);
 	$sth->finish;
 	}
-	$dbh->do("unlock tables");
-	zebraop($dbh,$authid,'specialUpdate',"authorityserver");
-
+	
+	ZEBRAop($dbh,$authid,'specialUpdate',"authorityserver");
+## If the record is linked to another update the linked authorities with new authid
 if ($record->field($linkidfield)){
 my @fields=$record->field($linkidfield);
 
@@ -455,25 +379,16 @@ my ($dbh,$linkid,$authid)=@_;
 my $record=AUTHgetauthority($dbh,$linkid);
 my $authtypecode=AUTHfind_authtypecode($dbh,$linkid);
 #warn "adding l:$linkid,a:$authid,auth:$authtypecode";
-$record=AUTH2marcOnefieldlink($dbh,$record,"auth_header.linkid",$authid,$authtypecode);
+$record=MARCkoha2marcOnefield($record,"auth_linkid",$authid,"authorities");
 $dbh->do("lock tables auth_header WRITE");
 	my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
 	$sth->execute($record->as_usmarc,$linkid);
 	$sth->finish;	
 	$dbh->do("unlock tables");
-	zebraop($dbh,$linkid,'specialUpdate',"authorityserver");
+	ZEBRAop($dbh,$linkid,'specialUpdate',"authorityserver");
 }
 
-sub AUTH2marcOnefieldlink {
-    my ( $dbh, $record, $kohafieldname, $newvalue,$authtypecode ) = @_;
-my $sth =      $dbh->prepare(
-"select tagfield,tagsubfield from auth_subfield_structure where authtypecode=? and kohafield=?"
-    );
-    $sth->execute($authtypecode,$kohafieldname);
-my  ($tagfield,$tagsubfield)=$sth->fetchrow;
-            $record->add_fields( $tagfield, " ", " ", $tagsubfield => $newvalue );
-    return $record;
-}
+
 
 sub XMLgetauthority {
 
@@ -488,27 +403,14 @@ sub XMLgetauthority {
    my ($marc)=$sth->fetchrow;
 $marc=MARC::File::USMARC::decode($marc);
  my $marcxml=$marc->as_xml_record();
+#warn $marcxml;
  return $marcxml;
 
+
 }
 
 
-sub AUTHfind_leader{
-##Hard coded for NEU auth types 
-my($dbh,$authtypecode)=@_;
 
-my $leadercode;
-if ($authtypecode eq "AUTH"){
-$leadercode="a";
-}elsif ($authtypecode eq "ESUB"){
-$leadercode="b";
-}elsif ($authtypecode eq "TSUB"){
-$leadercode="c";
-}else{
-$leadercode=" ";
-}
-return $leadercode;
-}
 
 sub AUTHgetauthority {
 # Returns MARC::Record of the biblio passed in parameter.
@@ -528,16 +430,16 @@ sub AUTHgetauth_type {
 	$sth->execute($authtypecode);
 	return $sth->fetchrow_hashref;
 }
-sub AUTHmodauthority {
 
-	my ($dbh,$authid,$record,$authtypecode,$merge)=@_;
+sub AUTHmodauthority {
+	my ($dbh,$authid,$record,$authtypecode)=@_;
 	my ($oldrecord)=&AUTHgetauthority($dbh,$authid);
 	if ($oldrecord eq $record) {
 		return;
 	}
 my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
-#warn find if linked records exist and delete them
-my($linkidfield,$linkidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.linkid",$authtypecode);
+# find if linked records exist and delete them
+my($linkidfield,$linkidsubfield)=MARCfind_marc_from_kohafield("auth_linkid","authorities");
 
 if ($oldrecord->field($linkidfield)){
 my @fields=$oldrecord->field($linkidfield);
@@ -547,13 +449,13 @@ my	$linkid=$field->subfield($linkidsubfield) ;
 		##Modify the record of linked 
 		my $linkrecord=AUTHgetauthority($dbh,$linkid);
 		my $linktypecode=AUTHfind_authtypecode($dbh,$linkid);
-		my ( $linkidfield2,$linkidsubfield2)=AUTHfind_marc_from_kohafield($dbh,"auth_header.linkid",$linktypecode);
-		my @linkfields=$linkrecord->field($linkidfield2);
+#		my ( $linkidfield2,$linkidsubfield2)=MARCfind_marc_from_kohafield("auth_linkid","authorities");
+		my @linkfields=$linkrecord->field($linkidfield);
 			foreach my $linkfield (@linkfields){
-			if ($linkfield->subfield($linkidsubfield2) eq $authid){
+			if ($linkfield->subfield($linkidsubfield) eq $authid){
 				$linkrecord->delete_field($linkfield);
 				$sth->execute($linkrecord->as_usmarc,$linkid);
-				zebraop($dbh,$linkid,'specialUpdate',"authorityserver");
+				ZEBRAop($dbh,$linkid,'specialUpdate',"authorityserver");
 			}
 			}#foreach linkfield
 	}
@@ -563,9 +465,8 @@ my	$linkid=$field->subfield($linkidsubfield) ;
 $authid=AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 
 
-### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
+### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.pl
 ### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
-### the $merge flag is now depreceated and will be removed at code cleaning
 
 if (C4::Context->preference('dontmerge') ){
 # save the file in localfile/modified_authorities
@@ -588,7 +489,7 @@ sub AUTHdelauthority {
 	my ($dbh,$authid,$keep_biblio) = @_;
 # if the keep_biblio is set to 1, then authority entries in biblio are preserved.
 
-zebraop($dbh,$authid,"recordDelete","authorityserver");
+ZEBRAop($dbh,$authid,"recordDelete","authorityserver");
 	$dbh->do("delete from auth_header where authid=$authid") ;
 
 # FIXME : delete or not in biblio tables (depending on $keep_biblio flag)
@@ -791,6 +692,74 @@ my ($dbh,$record,$authid,$authtypecode)=@_;
 		}
 return $summary;
 }
+sub getdictsummary{
+## give this a Marc record to return summary
+my ($dbh,$record,$authid,$authtypecode)=@_;
+ my $authref = getauthtype($authtypecode);
+		my $summary = $authref->{summary};
+		my @fields = $record->fields();
+#		chop $tags_using_authtype;
+		# if the library has a summary defined, use it. Otherwise, build a standard one
+		if ($summary) {
+			my @fields = $record->fields();
+			foreach my $field (@fields) {
+				my $tag = $field->tag();
+				my $tagvalue = $field->as_string();
+				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
+				if ($tag<10) {
+				} else {
+					my @subf = $field->subfields;
+					for my $i (0..$#subf) {
+						my $subfieldcode = $subf[$i][0];
+						my $subfieldvalue = $subf[$i][1];
+						my $tagsubf = $tag.$subfieldcode;
+						$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+					}
+				}
+			}
+			$summary =~ s/\[(.*?)]//g;
+			$summary =~ s/\n/<br>/g;
+		} else {
+			my $heading; # = $authref->{summary};
+			my $altheading;
+			my $seeheading;
+			my $see;
+			my @fields = $record->fields();
+			if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+			# construct UNIMARC summary, that is quite different from MARC21 one
+				# accepted form
+				foreach my $field ($record->field('2..')) {
+					$heading.= $field->as_string();
+				}
+				# rejected form(s)
+				foreach my $field ($record->field('4..')) {
+					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+				}
+				# see :
+				foreach my $field ($record->field('5..')) {
+					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
+					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
+				}
+				# // form
+				foreach my $field ($record->field('7..')) {
+					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
+					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
+					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
+				}
+				$summary = "<b>".$heading."</b><br />".$seeheading.$altheading.$summary;	
+			} else {
+			# construct MARC21 summary
+				foreach my $field ($record->field('1..')) {				
+						$heading.= $field->as_string('a');
+					
+				} #See From
+				
+				$summary=$heading;
+			}
+		}
+return $summary;
+}
 sub merge {
 	my ($dbh,$mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
 	my $authtypecodefrom = AUTHfind_authtypecode($dbh,$mergefrom);
@@ -813,20 +782,31 @@ sub merge {
 	@record_from = $MARCfrom->field($auth_tag_to_report)->subfields() if $MARCfrom->field($auth_tag_to_report);
 	
 	# search all biblio tags using this authority.
-	$sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+	$sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=? ");
 	$sth->execute($authtypecodefrom);
 my @tags_using_authtype;
 	while (my ($tagfield) = $sth->fetchrow) {
-		push @tags_using_authtype,$tagfield."9" ;
+		push @tags_using_authtype,$tagfield ;
 	}
-
+## The subfield for linking authorities is stored in koha_attr named auth_biblio_link_subf
+## This way we may use whichever subfield we want without harcoding 9 in
+my $tagsubfield=MARCfind_marc_from_kohafield("auth_biblio_link_subf","biblios");
 	# now, find every biblio using this authority
 ### try ZOOM search here
-my $oConnection=C4::Context->Zconn("biblioserver");
+my @oConnection;
+ $oConnection[0]=C4::Context->Zconn("biblioserver");
+$oConnection[0]->option(elementSetName=>"biblios"); ## we only need the bibliographic record
 my $query;
-$query= "\@attr GILS 1=2057 ".$mergefrom;
-my $oResult = $oConnection->search_pqf($query);
-my $count=$oResult->size() if  ($oResult);
+my ($attr2)=MARCfind_attr_from_kohafield("auth_authid");
+my $attrfield.=$attr2;
+$query= $attrfield." ".$mergefrom;
+my ($event,$i);
+my $oResult = $oConnection[0]->search_pqf($query);
+  while (($i = ZOOM::event(\@oConnection)) != 0) {
+	$event = $oConnection[$i-1]->last_event();
+	last if $event == ZOOM::Event::ZEND;
+   }# while
+my $count=$oResult->size();
 my @reccache;
 my $z=0;
 while ( $z<$count ) {
@@ -837,20 +817,21 @@ push @reccache, $marcdata;
 $z++;
 }
 $oResult->destroy();
+$oConnection[0]->destroy();
 foreach my $marc(@reccache){
-
 my $update;
-	my $marcrecord;					
-	$marcrecord = MARC::File::USMARC::decode($marc);
+	my $marcrecord=MARC::Record->new_from_xml($marc,'UTF-8');			
+#	$marcrecord = MARC::File::USMARC::decode($marc);
 	foreach my $tagfield (@tags_using_authtype){
-	$tagfield=substr($tagfield,0,3);
-		my @tags = $marcrecord->field($tagfield);
+
+	
+	my @tags = $marcrecord->field($tagfield);
 		foreach my $tag (@tags){
-	    		my $tagsubs=$tag->subfield("9");
+	    	my $tagsubs=$tag->subfield($tagsubfield);
 #warn "$tagfield:$tagsubs:$mergefrom";
-            		if ($tagsubs== $mergefrom) {
+            		if ($tagsubs eq $mergefrom) {
                
-			$tag->update("9" =>$mergeto);
+			$tag->update($tagsubfield =>$mergeto);
 	foreach my $subfield (@record_to) {
 #		warn "$subfield,$subfield->[0],$subfield->[1]";
 			$tag->update($subfield->[0] =>$subfield->[1]);
@@ -861,9 +842,9 @@ my $update;
 		$update=1;
 		}#for each tag
 	}#foreach tagfield
-my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,"") ;
+my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,"biblios") ;
 		if ($update==1){
-		&NEWmodbiblio($dbh,$marcrecord,$oldbiblio->{'biblionumber'},undef,"0000") ;
+		&NEWmodbiblio($dbh,$oldbiblio->{'biblionumber'},$marcrecord,"") ;
 		}
 		
 }#foreach $marc
@@ -882,12 +863,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.28  2006/08/02 16:40:23  kados
-# rolling back previous merge, will do manually
-#
-# Revision 1.9.2.17.2.1  2006/05/28 18:49:12  tgarip1957
-# This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
-# Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to
+# Revision 1.29  2006/09/01 22:16:00  tgarip1957
+# New XML API
+# Event & Net::Z3950 dependency removed
+# HTML::Template::Pro dependency added
 #
 # Revision 1.9.2.6  2005/06/07 10:02:00  tipaul
 # porting dictionnary search from head to 2.2. there is now a ... facing titles, author & subject, to search in biblio & authorities existing values.
