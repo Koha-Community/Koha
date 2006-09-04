@@ -496,6 +496,7 @@ sub checkauth {
 			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 			IntranetNav => C4::Context->preference("IntranetNav"),
+			opacnav => C4::Context->preference("OpacNav"),
 			TemplateEncoding => C4::Context->preference("TemplateEncoding"),
 
 			);
