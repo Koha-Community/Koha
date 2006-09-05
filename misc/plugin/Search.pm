@@ -1014,7 +1014,7 @@ sub CatSearch  {
 
 	my $title = lc($search->{'title'});
 
-	if ($type eq 'loose') {
+	if ($type eq 'loose' || $type eq 'loose_acq') {
 		if ($search->{'author'} ne ''){
 			my @key=split(' ',$search->{'author'});
 			my $count=@key;
@@ -1296,6 +1296,9 @@ sub CatSearch  {
 			$dewey=$bibitemdata->{'dewey'};
 			$subclass=$bibitemdata->{'subclass'};
 			$publishercode=$bibitemdata->{'publishercode'};
+		}
+	        if($type eq 'loose_acq'){ # want to return biblio info for biblios that do not have attached biblioitems 
+		    $true=1;		    
 		}
 		#  print STDERR "$dewey $subclass $publishercode\n";
 		# FIXME - The Dewey code is a string, not a number.
