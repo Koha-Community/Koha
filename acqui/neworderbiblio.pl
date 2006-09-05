@@ -81,6 +81,7 @@ my $input = new CGI;
 
 #whether it is called from the opac of the intranet
 my $type = $input->param('type');
+my $acq_search = $input->param('acq_search');
 if ( $type eq '' ) {
     $type = 'intra';
 }
@@ -145,7 +146,11 @@ elsif ( $search{'front'} ne '' ) {
       FrontSearch( undef, 'intra', \%search, $num, $offset );
 }
 elsif ( $search{'author'} || $search{'title'} ) {
-    ( $count, @results ) = CatSearch( undef, 'loose', \%search, $num, $offset );
+    if($acq_search == 1){
+        ( $count, @results ) = CatSearch( undef, 'loose_acq', \%search, $num, $offset );
+    } else {
+        ( $count, @results ) = CatSearch( undef, 'loose', \%search, $num, $offset );
+    }
 }
 else {
     $invalidsearch = 1;
