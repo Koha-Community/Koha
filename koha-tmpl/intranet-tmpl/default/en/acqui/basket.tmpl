@@ -133,6 +133,7 @@
 			<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
 				<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
 				<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+				<input type="hidden" name="acq_search" value="1">
 				<p>from an existing biblio: </b><input type="text"  size="25"   name="search"><input type="submit" class="button acquisition" value="Search"></p>
 				<p>or
 					<a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">
