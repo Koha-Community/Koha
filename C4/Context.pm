@@ -832,9 +832,8 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
-# Revision 1.45  2006/09/01 15:33:47  tgarip1957
-# No more MARC Records - everything is MARC XML
-# we read - write only XML
+# Revision 1.46  2006/09/06 16:21:03  tgarip1957
+# Clean up before final commits
 #
 # Revision 1.43  2006/08/10 12:49:37  toins
 # sync with dev_week.

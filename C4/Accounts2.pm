@@ -312,7 +312,7 @@ EOT
 sub returnlost{
   my ($borrnum,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $borrower=borrdata('',$borrnum); #from C4::Search;
+  my $borrower=C4::Members::borrdata('',$borrnum); #from C4::Members;
   my $sth=$dbh->prepare("Update issues set returndate=now() where
   borrowernumber=? and itemnumber=? and returndate is null");
   $sth->execute($borrnum,$itemnum);

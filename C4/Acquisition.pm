@@ -23,8 +23,8 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Date;
-use MARC::Record;
 use C4::Suggestions;
+use C4::Biblio;
 use Time::localtime;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -62,7 +62,7 @@ orders, basket and parcels.
   &GetOrderNumber &GetLateOrders &NewOrder &DelOrder
   &SearchOrder &GetHistory
   &ModOrder &ModReceiveOrder &ModOrderBiblioNumber
-  &GetParcels &GetParcel 
+  &GetParcels &GetParcel &GetSingleOrder
 );
 
 
@@ -96,7 +96,7 @@ sub GetBasket {
     my $dbh        = C4::Context->dbh;
     my $query = "
         SELECT  aqbasket.*,
-                borrowers.firstname+' '+borrowers.surname AS authorisedbyname,
+                concat(borrowers.firstname,'  ',borrowers.surname) AS authorisedbyname,
                 borrowers.branchcode AS branch
         FROM    aqbasket
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
@@ -291,6 +291,19 @@ sub GetOrders {
     }
     $sth->finish;
     return @results;
+}
+
+sub GetSingleOrder {
+  my ($ordnum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from biblio,aqorders left join aqorderbreakdown
+  on aqorders.ordernumber=aqorderbreakdown.ordernumber
+  where aqorders.ordernumber=?
+  and biblio.biblionumber=aqorders.biblionumber");
+  $sth->execute($ordnum);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  return($data);
 }
 
 #------------------------------------------------------------#
@@ -702,11 +715,11 @@ sub SearchOrder {
     while ( my $data = $sth->fetchrow_hashref ) {
 ## Retrieving a whole marc record just to extract seriestitle is very poor performance
 ## Rewrite these searches
-my $record=MARCgetbiblio($dbh,$data->{'biblionumber'});
-my $data2=MARCmarc2koha($dbh,$record,"biblios");
+my $record=XMLgetbibliohash($dbh,$data->{'biblionumber'});
+my $seriestitle=XML_readline_onerecord($record,"seriestitle","biblios");
        
-        $data->{'author'}      = $data2->{'author'};
-        $data->{'seriestitle'} = $data2->{'seriestitle'};
+#        $data->{'author'}      = $data->{'author'};
+        $data->{'seriestitle'} = $seriestitle;
         $sth3->execute( $data->{'ordernumber'} );
         my $data3 = $sth3->fetchrow_hashref;
         $data->{'branchcode'} = $data3->{'branchcode'};

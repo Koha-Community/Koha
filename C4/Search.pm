@@ -132,7 +132,7 @@ my ($sortattr)=MARCfind_attr_from_kohafield($sortpart[0]);
 $query="\@attr 2=102 ".$query;
 }
 }
-##warn $query;
+#warn $query;
 my $oResult;
 
 my $tried=0;
@@ -172,10 +172,7 @@ my $dbh=C4::Context->dbh;
 		for ( $ri; $ri<$numresults ; $ri++){
 		my $xmlrecord=$oResult->record($ri)->raw();
 		$xmlrecord=Encode::decode("utf8",$xmlrecord);
-			#if (!$fordisplay){
-			### Turn into hash of xml
 			 $xmlrecord=XML_xml2hash($xmlrecord);
-			##}
 			$z++;
 			push @results,$xmlrecord;
 			last if ($number_of_results &&  $z>=$number_of_results);
@@ -502,45 +499,7 @@ push  @fields,"barcode","itemlost","itemnumber","date_due","wthdrawn","notforloa
 return(@items);
 }
 
-sub XML_repeated_read{
-my ($xml,$kohafield,$recordtype,$tag,$subf)=@_;
-#$xml represents one record of MARCXML as perlhashed 
-## returns an array of read fields--useful for readind repeated fields
-### $recordtype is needed for mapping the correct field if supplied
-my @value;
- ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
-if ($tag){
-my $biblio=$xml->{'datafield'};
-my $controlfields=$xml->{'controlfield'};
-my $leader=$xml->{'leader'};
- if ($tag>9){
-	foreach my $data (@$biblio){
-   	    if ($data->{'tag'} eq $tag){
-		foreach my $subfield ( $data->{'subfield'}){
-		    foreach my $code ( @$subfield){
-			if ($code->{'code'} eq $subf || !$subf){
-			push @value, $code->{'content'};
-			}
-		   }
-		}
-  	   }
-	}
-  }else{
-	if ($tag eq "000" || $tag eq "LDR"){
-		push @value,  $leader->[0] if $leader->[0];
-	}else{
-	     foreach my $control (@$controlfields){
-		if ($control->{'tag'} eq $tag){
-		push @value,	$control->{'content'} if $control->{'content'};
 
-		}
-	    }
-	}
-   }##tag
-return @value;
-}## if tag is mapped
-return "";
-}
 
 
 
@@ -558,7 +517,7 @@ sub getMARCnotes {
 	}
 	my @marcnotes;
 	foreach my $field ($mintag..$maxtag) {
-	my @value=XML_repeated_read($record,"","",$field,"");
+	my @value=XML_readline_asarray($record,"","",$field,"");
 	push @marcnotes, \@value;	
 	}
 
@@ -586,7 +545,7 @@ sub getMARCsubjects {
 	my $marcsubjct;
 
 	foreach my $field ($mintag..$maxtag) {
-		my @value =XML_repeated_read($record,"","",$field,"a");
+		my @value =XML_readline_asarray($record,"","",$field,"a");
 			foreach my $subject (@value){
 		        $marcsubjct = {MARCSUBJCT => $subject,};
 			push @marcsubjcts, $marcsubjct;
@@ -616,7 +575,7 @@ sub getMARCurls {
 	my $marcurl;
 	my $value;
 	foreach my $field ($mintag..$maxtag) {
-		my @value =XML_repeated_read($record,"","",$field,"a");
+		my @value =XML_readline_asarray($record,"","",$field,"a");
 			foreach my $url (@value){
 				if ( $value ne $url) {
 		    	   	 $marcurl = {MARCURL => $url,};

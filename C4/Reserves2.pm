@@ -152,9 +152,9 @@ sub FindReserves {
 	my $i = 0;
 	my @results;
 	while (my $data = $sth->fetchrow_hashref){
-		my ($bibdatarecord) =XMLgetbiblio($dbh,$data->{'biblionumber'});
-		
-		my $bibdata=XML_xml2hash_onerecord($bibdatarecord);
+		my ($bibdata) =XMLgetbibliohash($dbh,$data->{'biblionumber'});
+		my ($itemhash)=XMLgetitemhash($dbh,$data->{'itemnumber'});
+		$data->{'holdingbranch'}=XML_readline_onerecord($itemhash,"holdingbranch","holdings");
 		$data->{'author'} =XML_readline_onerecord($bibdata,"author","biblios");
 		$data->{'publishercode'} = XML_readline_onerecord($bibdata,"publishercode","biblios");
 		$data->{'publicationyear'} = XML_readline_onerecord($bibdata,"publicationyear","biblios");

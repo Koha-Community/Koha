@@ -23,13 +23,20 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-
+use HTML::Template;
+use C4::Search;
+use C4::Output;
 
 =head1
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+# find today's date
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); 
+
+$year +=1900; $mon +=1;
+my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
@@ -42,12 +49,12 @@ my $res="
 <script>
 function Focus$function_name(subfield_managed) {
     for (i=0 ; i<document.f.field_value.length ; i++) {
-		if (document.f.tag[i].value == '000') {
-			if (!document.f.field_value[i].value) {
-				document.f.field_value[i].value = '     naa a22     7ar4500';
-			}
-		}
-	}
+        if (document.f.tag[i].value == '008') {
+            if (!document.f.field_value[i].value) {
+                document.f.field_value[i].value = '$dateentered' + '1p||||8|||401ab|||0000000';
+            }
+        }
+    }
 return 1;
 }
 
@@ -56,8 +63,9 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
+return;
 	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"\",'width=400,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_008_holdings.pl&index=\"+i+\"&result=\"+defaultvalue,\"008\",'width=400,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -77,33 +85,53 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/marc21_leader.tmpl",
+    = get_template_and_user({template_name => "value_builder/marc21_008_holdings.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     naa a22     7ar4500" unless $result;
-	my $f5 = substr($result,5,1);
+	$result = '$dateentered' + '1p||||8|||401ab|||0000000';
+	my $f1 = substr($result,0,6);
 	my $f6 = substr($result,6,1);
-	my $f7 = substr($result,7,1);
-	my $f8 = substr($result,8,1);
-	my $f9 = substr($result,9,1);
-	my $f17 = substr($result,17,1);
-	my $f18 = substr($result,18,1);
-	my $f19 = substr($result,19,1);
-	my $f2023 = substr($result,20,4);
-	$template->param(index => $index,
-							"f5$f5" => 1,
-							"f6$f6" => 1,
-							"f7$f7" => 1,
-							"f8$f8" => 1,
-							"f9$f9" => 1,
-							"f17$f17" => 1,
-							"f18$f18" => 1,
-							"f19$f19" => 1,
-							"f2023" => $f2023,
+	my $f710 = substr($result,7,4);
+	my $f1114 = substr($result,11,4);
+	my $f1517 = substr($result,15,3);
+	my $f1821 = substr($result,18,4);
+	my $f22 = substr($result,22,1);
+	my $f23 = substr($result,23,1);
+	my $f2427 = substr($result,24,4);
+	my $f28 = substr($result,28,1);
+	my $f29 = substr($result,29,1);
+	my $f30 = substr($result,30,1);
+	
+if (!$f1){
+	$f1=$dateentered
+}
+
+	$template->param(				index => $index,
+							f1 => $f1,
+							f6 => $f6,
+							"f6$f6" => $f6,
+							f710 => $f710,
+							f1114 => $f1114,
+							f1517 => $f1517,
+							f1821 => $f1821,
+							f22 => $f22,
+							"f22$f22" => $f22,
+							f23 => $f23,
+                                                        "f23$f23" => $f23,
+							f2427 => $f2427,
+							"f24$f2427" => $f2427,
+							f28 => $f28,
+                                                        "f28$f28" => $f28,
+							f29 => $f29,
+                                                        "f29$f29" => $f29,
+							f30 => $f30,
+                                                        "f30$f30" => $f30,
+				
+                                                      
 					);
 	print $input->header(-cookie => $cookie),$template->output;
 }

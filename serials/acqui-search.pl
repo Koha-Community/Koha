@@ -24,9 +24,9 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
+
 use C4::Bookfund;
+use C4::Acquisition;
 my $query = new CGI;
 
 my ($template, $loggedinuser, $cookie)
@@ -38,8 +38,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-# FIXME : Is this page still used ????
-# looks like no.
+
+
 
 # budget
 my $dbh = C4::Context->dbh;
@@ -77,8 +77,8 @@ my $count = scalar @rates;
 my @loop_currency = ();
 for (my $i=0;$i<$count;$i++){
 	my %line;
-	$line{currency} = $rates->[$i]->{'currency'};
-	$line{rate} = $rates->[$i]->{'rate'};
+	$line{currency} = $rates[$i]->{'currency'};
+	$line{rate} = $rates[$i]->{'rate'};
 	push @loop_currency, \%line;
 }
 $template->param(classlist => $classlist,
@@ -88,6 +88,10 @@ $template->param(classlist => $classlist,
 						total => sprintf("%.2f",$total),
 						totspent => sprintf("%.2f",$totspent),
 						totcomtd => sprintf("%.2f",$totcomtd),
-						totavail => sprintf("%.2f",$totavail));
+						totavail => sprintf("%.2f",$totavail),
+						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+						);
 
 output_html_with_http_headers $query, $cookie, $template->output;

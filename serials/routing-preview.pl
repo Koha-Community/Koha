@@ -14,7 +14,6 @@ use C4::Reserves2;
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use HTML::Template;
 use C4::Search;
 use C4::Serials;
 

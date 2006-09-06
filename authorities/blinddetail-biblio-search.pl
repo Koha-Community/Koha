@@ -19,7 +19,6 @@
 
 =head1 NAME
 
-etail.pl : script to show an authority in MARC format
 
 =head1 SYNOPSIS
 
@@ -28,8 +27,7 @@ etail.pl : script to show an authority in MARC format
 
 This script needs an authid
 
-It shows the authority in a (nice) MARC format depending on authority MARC
-parameters tables.
+
 
 =head1 FUNCTIONS
 
@@ -39,32 +37,27 @@ parameters tables.
 
 
 use strict;
-require Exporter;
 use C4::AuthoritiesMarc;
 use C4::Auth;
 use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
-use MARC::Record;
 use C4::Koha;
-use HTML::Template;
-
+use C4::Biblio;
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
 my $authid = $query->param('authid');
-my $index = $query->param('index');
-my $tagid = $query->param('tagid');
+my $index=$query->param('index');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
-
+my ($dummyfield,$linkidsubfield)=MARCfind_marc_from_kohafield("auth_biblio_link_subf","biblios");
 my $auth_type = AUTHgetauth_type($authtypecode);
-# warn "XX = ".$auth_type->{auth_tag_to_report};
+#warn "$authid =$authtypecode ".$auth_type->{auth_tag_to_report};
 
-my $record =AUTHgetauthority($dbh,$authid);
+my $record =XMLgetauthorityhash($dbh,$authid) if $authid;
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/blinddetail-biblio-search.tmpl",
@@ -80,30 +73,29 @@ my @loop_data =();
 my $tag;
 my @loop_data =();
 if ($authid) {
-	foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
-		my @subfields_data;
-		my @subf=$field->subfields;
+	my @record_subs=XML_readline_withtags($record,"","",$auth_type->{auth_tag_to_report});
+	##Put the result in a hash
+	my %filled_subfield;
+	foreach my $subfield (@record_subs) {
+	$filled_subfield{$subfield->[0]}=$subfield->[1];
+	}
+			my @subfields_data;
+			
 		# loop through each subfield
-		my %result;
-		for my $i (0..$#subf) {
-			$subf[$i][0] = "@" unless $subf[$i][0];
-			$result{$subf[$i][0]}.=$subf[$i][1]."|";
-		}
-		foreach (keys %result) {
+		foreach my $subfield ('a'..'z') {			
 			my %subfield_data;
-			chop $result{$_};
-			$subfield_data{marc_value}=$result{$_};
-			$subfield_data{marc_subfield}=$_;
-# 			$subfield_data{marc_tag}=$field->tag();
+			$subfield_data{marc_value}=$filled_subfield{$subfield} ;
+			$subfield_data{marc_subfield}=$subfield;
+			$subfield_data{marc_tag}=$auth_type->{auth_tag_to_report};
 			push(@subfields_data, \%subfield_data);
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
-			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+			$tag_data{tag}=$auth_type->{auth_tag_to_report}.' -'. $tagslib->{$auth_type->{auth_tag_to_report}}->{lib};
 			$tag_data{subfield} = \@subfields_data;
 			push (@loop_data, \%tag_data);
 		}
-	}
+	
 } else {
 # authid is empty => the user want to empty the entry.
 	my @subfields_data;
@@ -113,34 +105,21 @@ if ($authid) {
 			$subfield_data{marc_subfield}=$subfield;
 			push(@subfields_data, \%subfield_data);
 		}
-# 	if ($#subfields_data>=0) {
+	foreach my $subfield ('0'..'9') {
+			my %subfield_data;
+			$subfield_data{marc_value}='';
+			$subfield_data{marc_subfield}=$subfield;
+			push(@subfields_data, \%subfield_data);
+		}
 		my %tag_data;
-# 			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
 		$tag_data{subfield} = \@subfields_data;
 		push (@loop_data, \%tag_data);
-# 	}
 }
 
 $template->param("0XX" =>\@loop_data);
 
-# my $authtypes = getauthtypes;
-# my @authtypesloop;
-# foreach my $thisauthtype (keys %$authtypes) {
-# 	my $selected = 1 if $thisauthtype eq $authtypecode;
-# 	my %row =(value => $thisauthtype,
-# 				selected => $selected,
-# 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-# 			);
-# 	push @authtypesloop, \%row;
-# }
 
-$template->param(authid => $authid?$authid:"",
-# 				authtypesloop => \@authtypesloop,
-				index => $index,
-				tagid => $tagid,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-				);
+
+$template->param(authid => $authid?$authid:"", linkidsubfield=>$linkidsubfield,index=>$index,);
 output_html_with_http_headers $query, $cookie, $template->output;
 

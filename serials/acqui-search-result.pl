@@ -43,14 +43,12 @@ acqui-search-result.pl
 use strict;
 use C4::Auth;
 use C4::Biblio;
-use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
 use C4::Bookseller;
+use C4::Acquisition;
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)

@@ -605,10 +605,8 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
-# Revision 1.17  2006/09/01 22:16:00  tgarip1957
-# New XML API
-# Event & Net::Z3950 dependency removed
-# HTML::Template::Pro dependency added
+# Revision 1.18  2006/09/06 16:21:03  tgarip1957
+# Clean up before final commits
 #
 # Revision 1.13  2004/03/11 16:06:20  tipaul
 # *** empty log message ***

@@ -19,24 +19,19 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
+
 use CGI;
 use C4::Auth;
-use HTML::Template;
 use C4::Context;
 use C4::Search;
-use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AuthoritiesMarc;
-use C4::Acquisition;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 
 my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $index = $query->param('index');
-my $tagid=$query->param('tagid');
 my $resultstring = $query->param('result');
 my $dbh = C4::Context->dbh;
 
@@ -59,17 +54,14 @@ foreach my $thisauthtype (keys %$authtypes) {
 
 if ($op eq "do_search") {
 	my @marclist = $query->param('marclist');
-	my @and_or = $query->param('and_or');
-	my @excluding = $query->param('excluding');
+	
 	my @operator = $query->param('operator');
 	my @value = $query->param('value');
 
 	$resultsperpage= $query->param('resultsperpage');
-	$resultsperpage = 19 if(!defined $resultsperpage);
+	$resultsperpage = 10 ;
 
-	my ($results,$total) = authoritysearch($dbh, \@marclist,\@and_or,
-										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
+	my ($results,$total) = authoritysearch($dbh, \@marclist, \@operator, \@value,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
 
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/searchresultlist-auth.tmpl",
@@ -94,8 +86,6 @@ if ($op eq "do_search") {
 	my @marclist_ini = $query->param('marclist'); # get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name
 	for(my $i = 0 ; $i <= $#marclist ; $i++) {
 		push @field_data, { term => "marclist", val=>$marclist_ini[$i] };
-		push @field_data, { term => "and_or", val=>$and_or[$i] };
-		push @field_data, { term => "excluding", val=>$excluding[$i] };
 		push @field_data, { term => "operator", val=>$operator[$i] };
 		push @field_data, { term => "value", val=>$value[$i] };
 	}
@@ -131,8 +121,7 @@ if ($op eq "do_search") {
 							resultsperpage => $resultsperpage,
 							startfromnext => $startfrom+1,
 							startfromprev => $startfrom-1,
-					        index => $index,
-					        tagid => $tagid,
+					      		  index => $index,
 							searchdata=>\@field_data,
 							total=>$total,
 							from=>$from,
@@ -152,17 +141,13 @@ if ($op eq "do_search") {
 				});
 
 	$template->param(index=>$query->param('index')."",
-					tagid => $tagid,
 					resultstring => $resultstring,
 					);
 }
 
 $template->param(authtypesloop => \@authtypesloop,
-		authtypecode => $authtypecode,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+				authtypecode => $authtypecode,
+				nonav=>"1",);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -25,13 +25,14 @@
 
 use strict;
 use CGI;
-use C4::Circulation::Circ2;
+use C4::Circulation::Circ3;
 use C4::Search;
 use C4::Output;
 use C4::Print;
 use C4::Reserves2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+#use HTML::Template;
 use C4::Koha;
 use C4::Members;
 my $query = new CGI;
@@ -39,7 +40,7 @@ my $query = new CGI;
 #getting the template
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/returns.tmpl",
+        template_name   => "circ/resreturns.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -54,7 +55,7 @@ my $headerbackgroundcolor = '#99cc33';
 my $linecolor1            = '#ffffcc';
 my $linecolor2            = 'white';
 
-my $branches = GetBranches();
+my $branches = getbranches();
 my $printers = getprinters( \%env );
 
 # my $branch  = getbranch( $query,  $branches );
@@ -101,10 +102,9 @@ foreach ( $query->param ) {
 }
 
 ############
-my $item;
 # Deal with the requests....
 if ( $query->param('resbarcode') ) {
-    $item       = $query->param('itemnumber');
+    my $item       = $query->param('itemnumber');
     my $borrnum    = $query->param('borrowernumber');
     my $resbarcode = $query->param('resbarcode');
 
@@ -136,6 +136,7 @@ my $iteminformation;
 my $borrower;
 my $returned = 0;
 my $messages;
+
 my $barcode = $query->param('barcode');
 
 # actually return book and prepare item table.....
@@ -160,14 +161,13 @@ if ($barcode) {
     elsif ( !$messages->{'BadBarcode'} ) {
 		if ( $messages->{'NotIssued'} ) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select duetime from reserveissue where itemnumber=? and isnull(rettime)");
+		my $sth=$dbh->prepare("select date_due from issues where itemnumber=? and isnull(returndate)");
 		$sth->execute($iteminformation->{'itemnumber'});
 		my ($date_due) = $sth->fetchrow;
 		
 		$sth->finish;
-			if ($date_due){
-#				$messages->{'ReserveIssued'} =$barcode;			
-			print $query->redirect("/cgi-bin/koha/circ/resreturns.pl?barcode=$barcode");
+			if ($date_due){	
+			print $query->redirect("/cgi-bin/koha/circ/returns.pl?barcode=$barcode");
 			}
 		}
         my %input;
@@ -194,7 +194,7 @@ if ($barcode) {
         itemtitle => $iteminformation->{'title'},
 
         #									itembc => $iteminformation->{'barcode'},
-        #									itemdatedue => $iteminformation->{'datedue'},
+        #									itemdatedue => $iteminformation->{'date_due'},
         itemauthor => $iteminformation->{'author'}
     );
 }
@@ -273,7 +273,7 @@ if ( $messages->{'ResFound'} ) {
 my @errmsgloop;
 foreach my $code ( keys %$messages ) {
 
-    #    warn $code;
+   #     warn $code;
     my %err;
     my $exit_required_p = 0;
     if ( $code eq 'BadBarcode' ) {
@@ -295,9 +295,6 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'WasTransfered' ) {
         ;    # FIXME... anything to do here?
-    }
-	elsif ( $code eq 'ReserveIssued' ) {
-        $err{reserveissued} = 1;
     }
     elsif ( $code eq 'wthdrawn' ) {
         $err{withdrawn} = 1;
@@ -425,8 +422,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
               . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
               . sprintf( "%0.2d", $datearr[3] );
 	    $ri{duedate}=$duedate;
-            my ($borrower) =
-              getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
+            my ($borrower) =              getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
             $ri{bornum}       = $borrower->{'borrowernumber'};
             $ri{borcnum}      = $borrower->{'cardnumber'};
             $ri{borfirstname} = $borrower->{'firstname'};
@@ -437,7 +433,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{bornum} = $riborrowernumber{$_};
         }
 #        my %ri;
-        my ($iteminformation) = getiteminformation( \%env, 0, $barcode );
+        my ($iteminformation) =C4::Circulation::Circ2::getiteminformation( \%env, 0, $barcode );
         $ri{color}            = $color;
         $ri{itembiblionumber} = $iteminformation->{'biblionumber'};
         $ri{itemtitle}        = $iteminformation->{'title'};

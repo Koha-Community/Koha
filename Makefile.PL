@@ -25,13 +25,13 @@ die "perl 5.6.1 or later required" unless ($] >= 5.006001);
 WriteMakefile(
     NAME => 'Koha',
     DISTNAME => 'koha',
-    VERSION => '2.3.0',
+    VERSION => '3.2.0',
     NO_META => 1,
     PREREQ_PM => {
         'DBI' => 1,
         'Date::Manip' => 1,
         'DBD::MySQL' => 1,
-        'HTML::Template' => 1,
+        'HTML::Template::Pro' => 1,
         'Digest::MD5' => 1,
         'MARC::Record' => 2.0,
         'MARC::Charset' => 0.95,
@@ -39,8 +39,7 @@ WriteMakefile(
         'Mail::Sendmail' => 1,
         'PDF::API2' => 1,
         'Net::LDAP' => 1,
-        'Event' => 1,
-        'Net::Z3950' => 1,
+       XML::Simple=>1,
 	'XML::SAX::LibXML' => 1
         },
    CONFIGURE => sub {

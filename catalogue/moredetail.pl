@@ -57,8 +57,8 @@ my $barcode=$query->param('barcode');
 
 my $title=$query->param('title');
 my $biblionumber=$query->param('biblionumber');
-my ($record,)=MARCgetbiblio($dbh,$biblionumber);
-my $data=MARCmarc2koha($dbh,$record,"biblios");
+my ($record)=XMLgetbibliohash($dbh,$biblionumber);
+my $data=XMLmarc2koha_onerecord($dbh,$record,"biblios");
 my $dewey = $data->{'dewey'};
 # FIXME Dewey is a string, not a number, & we should use a function
 $dewey =~ s/0+$//;
@@ -105,11 +105,11 @@ if ($flag != 0 && $override ne "yes"){
 
   }else {
    ##UPDATE here
-my $sth=$dbh->prepare("update items set itemlost=? ,wthdrawn=? where itemnumber=?");
-$sth->execute($lost,$withdrawn,$itemnumber);
-$sth->finish;
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'wthdrawn',$withdrawn,1);
-MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',$lost);
+#my $sth=$dbh->prepare("update items set itemlost=? ,wthdrawn=? where itemnumber=?");
+#$sth->execute($lost,$withdrawn,$itemnumber);
+#$sth->finish;
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'wthdrawn',$withdrawn,1);
+XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',$lost);
 
      if ($lost ==1 && $flag ==2){
     my $sth=$dbh->prepare("Select * from issues where (itemnumber=?) and (returndate is null)");
@@ -137,13 +137,13 @@ MARCmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',$lost);
     
   }
 }
-my @itemrecords=MARCgetallitems($dbh,$biblionumber);
+my @itemrecords=XMLgetallitems($dbh,$biblionumber);
 foreach my $itemrecord (@itemrecords){
-
-my $items = MARCmarc2koha($dbh,$itemrecord,"holdings");
+$itemrecord=XML_xml2hash_onerecord($itemrecord);
+my $items = XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
 $items->{itemtype}=$data->{itemtype};
 $items->{biblionumber}=$biblionumber;
-$items=itemissues($dbh,$items,$biblionumber);
+$items=itemissues($dbh,$items,$items->{'itemnumber'});
 push @items,$items;
 }
 my $count=@items;
@@ -166,7 +166,7 @@ foreach my $item (@items){
     if ($item->{'date_due'} gt '0000-00-00'){
 	$item->{'date_due'} = format_date($item->{'date_due'});		
 $item->{'issue'}= 1;
-		$item->{'borrowernumber'} = $item->{'borrowernumber'};
+		$item->{'borrowernumber'} = $item->{'borrower'};
 		$item->{'cardnumber'} = $item->{'card'};
 			
     } else {

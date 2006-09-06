@@ -33,6 +33,7 @@ use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts2;
 use C4::Circulation::Circ2;
+use Date::Manip;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
@@ -60,6 +61,7 @@ This module contains routines for adding, modifying and deleting members/patrons
 @ISA    = qw(Exporter);
 
 @EXPORT = qw(
+
 &allissues
 &add_member_orgs
 &borrdata 
@@ -100,7 +102,9 @@ This module contains routines for adding, modifying and deleting members/patrons
 &NewBorrowerNumber 
 &modmember 
 &newmember 
+&expand_sex_into_predicate
 	);
+
 
 
 =head2 borrowercategories
@@ -377,7 +381,9 @@ C<$issues>.
 =cut
 #'
 sub borrissues {
+
   my ($bornum)=@_;
+warn $bornum;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from issues,biblio,items where borrowernumber=?
    and items.itemnumber=issues.itemnumber
@@ -1383,4 +1389,22 @@ sub GetBorrowersFromSurname  {
      return ($count,\@results);
 }
 
+=head2 expand_sex_into_predicate
+
+  $data{&expand_sex_into_predicate($data{sex})} = 1;
+
+Converts a single 'M' or 'F' into 'sex_M_p' or 'sex_F_p'
+respectively.
+
+In some languages, 'M' and 'F' are not appropriate. However,
+with HTML::Template, there is no way to localize 'M' or 'F'
+unless these are converted into variables that TMPL_IF can
+understand. This function provides this conversion.
+
+=cut
+
+sub expand_sex_into_predicate ($) {
+   my($sex) = @_;
+   return "sex_${sex}_p";
+} # expand_sex_into_predicate
 1;

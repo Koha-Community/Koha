@@ -139,15 +139,12 @@ The borrower number of the last three patrons who borrowed this item.
 =cut
 #'
 sub itemissues {
-    my ($dbh,$data, $biblio)=@_;
+    my ($dbh,$data, $itemnumber)=@_;
     
-    my $sth   = $dbh->prepare("Select * from items where items.biblionumber = ?");
-     
+      
     my $i     = 0;
     my @results;
 
-    $sth->execute($biblio);
-   
 
         # Find out who currently has this item.
         # FIXME - Wouldn't it be better to do this as a left join of
@@ -161,10 +158,10 @@ where itemnumber = ?
 and returndate is NULL
 and issues.borrowernumber = borrowers.borrowernumber");
 
-        $sth2->execute($data->{'itemnumber'});
+        $sth2->execute($itemnumber);
         if (my $data2 = $sth2->fetchrow_hashref) {
 
-            $data->{'date_due'} = $data2->{'date_due'};
+  	$data->{'date_due'}=$data2->{'date_due'};
 	$data->{'datelastborrowed'} = $data2->{'issue_date'};
             $data->{'card'}     = $data2->{'cardnumber'};
 	    $data->{'borrower'}     = $data2->{'borrowernumber'};
@@ -178,7 +175,7 @@ and issues.borrowernumber = borrowers.borrowernumber");
 									and issues.borrowernumber = borrowers.borrowernumber
 									and returndate is not NULL
 									order by returndate desc,timestamp desc limit 2") ;
-        $sth2->execute($data->{'itemnumber'}) ;
+        $sth2->execute($itemnumber) ;
 #        for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
 my $i2=0;
           while (my $data2  = $sth2->fetchrow_hashref) {
@@ -191,9 +188,6 @@ $data->{'datelastborrowed'} = $data2->{'issue_date'} unless $data->{'datelastbor
 #       } # for
 
         $sth2->finish;
-       
-
-    $sth->finish;
     return($data);
 }
 

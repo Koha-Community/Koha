@@ -40,11 +40,10 @@ this script print the list of members who have reserved the subscription given o
 
 =cut
 
-use HTML::Template;
+
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Auth;
 use C4::Serials;

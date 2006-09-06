@@ -23,7 +23,9 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-
+use HTML::Template;
+use C4::Search;
+use C4::Output;
 
 =head1
 
@@ -41,13 +43,6 @@ my $function_name= "100".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
-    for (i=0 ; i<document.f.field_value.length ; i++) {
-		if (document.f.tag[i].value == '000') {
-			if (!document.f.field_value[i].value) {
-				document.f.field_value[i].value = '     naa a22     7ar4500';
-			}
-		}
-	}
 return 1;
 }
 
@@ -57,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"\",'width=400,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -77,33 +72,22 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/marc21_leader.tmpl",
+    = get_template_and_user({template_name => "value_builder/marc21_field_007.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     naa a22     7ar4500" unless $result;
-	my $f5 = substr($result,5,1);
-	my $f6 = substr($result,6,1);
-	my $f7 = substr($result,7,1);
-	my $f8 = substr($result,8,1);
-	my $f9 = substr($result,9,1);
-	my $f17 = substr($result,17,1);
-	my $f18 = substr($result,18,1);
-	my $f19 = substr($result,19,1);
-	my $f2023 = substr($result,20,4);
-	$template->param(index => $index,
-							"f5$f5" => 1,
-							"f6$f6" => 1,
-							"f7$f7" => 1,
-							"f8$f8" => 1,
-							"f9$f9" => 1,
-							"f17$f17" => 1,
-							"f18$f18" => 1,
-							"f19$f19" => 1,
-							"f2023" => $f2023,
+	$result = "ta" unless $result;
+	my $f0 = substr($result,0,1);
+	my $f1 = substr($result,1,4);
+
+	$template->param(				index => $index,
+							f0 => $f0,
+							"f0$f0" => $f0,
+							f1 => $f1,
+                                                        "f1$f1" => $f1,
 					);
 	print $input->header(-cookie => $cookie),$template->output;
 }

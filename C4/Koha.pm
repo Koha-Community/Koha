@@ -154,6 +154,7 @@ sub GetBranches {
             # that aren't fields in the "branches" table.
             $branch->{$cat} = 1;
             }
+	$branches{$branch->{'branchcode'}}=$branch;
 }
     return (\%branches);
 }

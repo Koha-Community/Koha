@@ -52,7 +52,6 @@ use CGI;
 use C4::Koha;
 use C4::Auth;
 use C4::Date;
-use HTML::Template;
 use C4::Context;
 use C4::Search;
 use C4::Auth;

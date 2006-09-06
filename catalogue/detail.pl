@@ -59,13 +59,13 @@ $template->param(norequests => $norequests);
 
   ## get notes subjects and URLS from MARC record
 	
-	my $marcflavour = C4::Context->preference("marcflavour");
-	my $marcnotesarray = &getMARCnotes($dbh,$record,$marcflavour);
-	my $marcsubjctsarray = &getMARCsubjects($dbh,$record,$marcflavour);
-	my $marcurlssarray = &getMARCurls($dbh,$record,$marcflavour);
-	$template->param(MARCURLS => $marcurlssarray);
-	$template->param(MARCNOTES => $marcnotesarray);
-	$template->param(MARCSUBJCTS => $marcsubjctsarray);
+#	my $marcflavour = C4::Context->preference("marcflavour");
+#	my $marcnotesarray = &getMARCnotes($dbh,$record,$marcflavour);
+#	my $marcsubjctsarray = &getMARCsubjects($dbh,$record,$marcflavour);
+#	my $marcurlssarray = &getMARCurls($dbh,$record,$marcflavour);
+#	$template->param(MARCURLS => $marcurlssarray);
+#	$template->param(MARCNOTES => $marcnotesarray);
+#	$template->param(MARCSUBJCTS => $marcsubjctsarray);
 
 
 my @results = ($dat,);

@@ -1,30 +1,5 @@
 #!/usr/bin/perl
-# NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
 
-#require '/u/acli/lib/cvs.pl';#DEBUG
-#open(DEBUG,'>/tmp/koha.debug');
-
-# FIXME: individual fields in branch address need to be exported to templates,
-#        in order to fix bug 180; need to notify translators
-# FIXME: looped html (e.g., list of checkboxes) need to be properly
-#        TMPL_LOOP'ized; doing this properly will fix bug 130; need to
-#        notify translators
-# FIXME: need to implement the branch categories stuff
-# FIXME: there are too many TMPL_IF's; the proper way to do it is to have
-#        separate templates for each individual action; need to notify
-#        translators
-# FIXME: there are lots of error messages exported to the template; a lot
-#        of these should be converted into exported booleans / counters etc
-#        so that the error messages can be localized; need to notify translators
-#
-# NOTE:  heading() should now be called like this:
-#        1. Use heading() as before
-#        2. $template->param('heading-LISPISHIZED-HEADING-p' => 1);
-#        3. $template->param('use-heading-flags-p' => 1);
-#        This ensures that both converted and unconverted templates work
-
-# Finlay working on this file from 26-03-2002
-# Reorganising this branches admin page.....
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -50,7 +25,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-
+use C4::Search;
 # Fixed variables
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
@@ -492,15 +467,21 @@ sub deletecategory {
 sub checkdatabasefor {
 # check to see if the branchcode is being used in the database somewhere....
     my ($branchcode) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
-    $sth->execute($branchcode, $branchcode);
-    my ($total) = $sth->fetchrow_array;
-    $sth->finish;
+my @kohafield;
+my @value;
+my @relation;
+my @and_or;
+ push @kohafield, "holdingbranch","homebranch";
+push @value, $branchcode,$branchcode;
+push @and_or, "\@or";
+push @relation ,"\@attr 5=100","\@attr 5=100"; ##do not truncate
+    my ($total,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,"", \@and_or);
+   
     my $message;
     if ($total) {
-	# FIXME: need to be replaced by an exported boolean parameter
+	# We do not return verbal messages but a flag. fix templates to accept $error=1 as a message
 	$message = "Branch cannot be deleted because there are $total items using that branch.";
+	
     }
     return $message;
 }

@@ -29,7 +29,6 @@ use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Search;
 use C4::Circulation::Circ2;
-use Encode;
 use C4::Log;
 
 my $logstatus=C4::Context->preference('Activate_log');
@@ -89,15 +88,6 @@ my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
 
-###DO NOT CHANGE TO RETRIVE FROM ZEBRA#####
-my $record =XMLgetbiblio($dbh,$biblionumber);
-$bibliorecord=XML_xml2hash_onerecord($record);
-my @itemxmls=XMLgetallitems($dbh,$biblionumber);
-	foreach my $itemrecord(@itemxmls){
-	my $itemhash=XML_xml2hash($itemrecord);
-	push @itemrecords, $itemhash;
-	}
-####
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/additem.tmpl",
@@ -174,7 +164,7 @@ $newrecord=XML_writeline( $newrecord, "serialid", $serialid,"holdings" );
 } elsif ($op eq "edititem") {
 #------------------------------------------------------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-	 ($itemrecexist) = XMLfinditem($itemnumber,@itemrecords);## item is already in our array-getit
+	 ($itemrecexist) = XMLgetitemhash($dbh,$itemnumber);## item is already in our array-getit
 	$nextop="saveitem";
 	
 #logaction($loggedinuser,"acqui.simple","modify",$oldbiblionumber,"item : ".$itemnumber) if ($logstatus);
@@ -244,6 +234,15 @@ FINAL:
 my %indicators;
 $indicators{995}='  ';
 # now, build existing item list
+###DO NOT CHANGE TO RETRIVE FROM ZEBRA#####
+my $record =XMLgetbiblio($dbh,$biblionumber);
+$bibliorecord=XML_xml2hash_onerecord($record);
+my @itemxmls=XMLgetallitems($dbh,$biblionumber);
+	foreach my $itemrecord(@itemxmls){
+	my $itemhash=XML_xml2hash($itemrecord);
+	push @itemrecords, $itemhash;
+	}
+####
 
 
 
