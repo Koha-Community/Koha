@@ -1,1 +1,0 @@
-<div id="topmenu"><a href="/cgi-bin/koha/bull-home.pl">Serials Home</a> | <a href="/cgi-bin/koha/bull/subscription-add.pl">Add Subscription</a> | <a href="/cgi-bin/koha/bull/lateissues.pl">Late Issues</a></div>
