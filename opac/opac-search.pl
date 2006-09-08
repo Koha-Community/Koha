@@ -121,20 +121,36 @@ if ($op eq "do_search") {
 	push @field_data, {term => "orderby", val => $orderby} if $orderby;
 	my @numbers = ();
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
-	    		my $highlight=0;
-	    		($startfrom==($i-1)) && ($highlight=1);
-	    		push @numbers, { number => $i,
-					highlight => $highlight ,
-					searchdata=> \@field_data,
-					startfrom => ($i-1)};
+	if ($total>$resultsperpage){
+		
+		if($startfrom>5){
+			for(my $i = $startfrom-4;$i<$total/$resultsperpage+1;$i++){
+				if($i<$startfrom+7){
+					my $highlight = 0;
+					($startfrom==($i-1)) && ($highlight = 1);
+					push @numbers,
+					{       number => $i,
+						 highlight => $highlight ,
+						 searchdata=> \@field_data,
+						 startfrom => ($i-1)
+					};
+				}
 			}
-    	}
+		}
+		else {
+			for (my $i=1; $i<$total/$resultsperpage+1; $i++){
+				if (($i<=10)) {
+					my $highlight = 0;
+					($startfrom==($i-1)) && ($highlight = 1);
+					push @numbers,{
+						number => $i,
+						highlight => $highlight ,
+						searchdata=> \@field_data,
+						startfrom => ($i-1)
+					};
+				}
+			}
+		}
 	}
 
 	my $from = $startfrom*$resultsperpage+1;
@@ -147,22 +163,23 @@ if ($op eq "do_search") {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
 	my $defaultview = 'BiblioDefaultView'.C4::Context->preference('BiblioDefaultView');
-	$template->param(results => $results,
-							startfrom=> $startfrom,
-							displaynext=> $displaynext,
-							displayprev=> $displayprev,
-							resultsperpage => $resultsperpage,
-							orderby => $orderby,
-							startfromnext => $startfrom+1,
-							startfromprev => $startfrom-1,
-							searchdata=>\@field_data,
-							total=>$total,
-							from=>$from,
-							to=>$to,
-							numbers=>\@numbers,
-							searchdesc=> $searchdesc,
-							$defaultview => 1,
-							);
+	$template->param(
+			results => $results,
+			startfrom=> $startfrom,
+			displaynext=> $displaynext,
+			displayprev=> $displayprev,
+			resultsperpage => $resultsperpage,
+			orderby => $orderby,
+			startfromnext => $startfrom+1,
+			startfromprev => $startfrom-1,
+			searchdata=>\@field_data,
+			total=>$total,
+			from=>$from,
+			to=>$to,
+			numbers=>\@numbers,
+			searchdesc=> $searchdesc,
+			$defaultview => 1,
+		);
 
 } else {
 	($template, $loggedinuser, $cookie)
