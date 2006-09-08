@@ -332,9 +332,30 @@ function cloneSubfield(index) {
 }
 
 function upSubfield(index) {
-var original = document.getElementById(index);
-var previous = original.previousSibling;
-original.parentNode.insertBefore( original, previous );
+	try{
+		var line = document.getElementById(index); // get the line where the user has clicked.
+	} catch(e) {
+		return;
+	}
+	var tag = line.parentNode; // get the dad of this line. (should be "<div tag=XXX>")
+	
+	// getting all subfields for this tag
+	var subfields = tag.getElementsByTagName('div');
+	var subfieldsLength = subfields.length;
+	if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
+	// among all subfields 
+	for(var i=0;i<subfieldsLength;i++){ 
+		if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
+			if(i==0){ // if the clicked subfield is on the top
+				tag.appendChild(subfields[0]);
+				return;
+			}else{
+				var lineAbove = subfields[i-1];
+				tag.insertBefore(line,lineAbove);
+				return;
+			}
+		}
+	}
 }
 
 function unHideSubfield(index,labelindex) {
