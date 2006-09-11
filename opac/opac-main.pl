@@ -49,7 +49,7 @@ my ($template, $borrowernumber, $cookie)
 my $borrower = getmember('',$borrowernumber);
 my @options;
 my $counter=0;
-foreach my $language (getalllanguages()) {
+foreach my $language (getalllanguages("opac")) {
 	next if $language eq 'images';
 	next if $language eq 'CVS';
 	next if $language=~ /png$/;
