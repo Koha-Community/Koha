@@ -23,7 +23,6 @@ my $csv = Text::CSV_XS->new(
 
 my $input=new CGI;
 my $time=$input->param('time');
-my $time2=$input->param('time2');
 
 my @loop1;
 my @loop2;
@@ -57,10 +56,6 @@ if ($time eq ''){
         $date2=ParseDate('tomorrow');
 }
 
-if ($time2 ne ''){
-            $date=ParseDate($time);
-            $date2=ParseDate($time2);
-}
 
 my $date=UnixDate($date,'%Y-%m-%d');
 my $date2=UnixDate($date2,'%Y-%m-%d');
@@ -99,8 +94,7 @@ while ($i<$count ){
                my $sec=substr($payments[$i]{'timestamp'},12,2);
                my $time="$hour:$min:$sec";
                my $time2="$payments[$i]{'date'}";
-#               my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
-	       my $branch=$payments[$i]{'branch'};
+               my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
 
                my @rows1 = ($branch,          # lets build up a row
                             $payments[$i]->{'datetime'},
@@ -108,19 +102,17 @@ while ($i<$count ){
                             $payments[$i]->{'firstname'},
                             $charges[$i2]->{'description'},
                             $charges[$i2]->{'accounttype'},
-   # rounding amounts to 2dp and adding dollar sign to make excel read it as currency format
-                            "\$".sprintf("%.2f", $charges[$i2]->{'amount'}), 
+                            sprintf("%.2f", $charges[$i2]->{'amount'}), # rounding amounts to 2dp
                             $payments[$i]->{'type'},
-                            "\$".$payments[$i]->{'value'});
+                            $payments[$i]->{'value'});
 
                push (@loop1, \@rows1);
-	       $totalpaid = $totalpaid + $payments[$i]->{'value'};
            }
        } else {
          ++$totalwritten;
        }
-
        $i++; #increment the while loop
+       $totalpaid = $totalpaid + $payments[$i]->{'value'};
 }
 
 #get credits and append to the bottom of payments
@@ -137,11 +129,11 @@ while ($i<$count ){
                     $credits[$i]->{'firstname'},
                     $credits[$i]->{'description'},
                     $credits[$i]->{'accounttype'},
-                    "\$".$credits[$i]->{'amount'});
+                    $credits[$i]->{'amount'});
 
        push (@loop2, \@rows2);
-       $totalcredits = $totalcredits + $credits[$i]->{'amount'};
        $i++;
+       $totalcredits = $totalcredits + $credits[$i]->{'amount'};
 }
 
 #takes off first char minus sign "-100.00"
@@ -149,9 +141,9 @@ $totalcredits = substr($totalcredits, 1);
 
 print $input->header(
     -type       => 'application/vnd.ms-excel',
-    -attachment => "stats.csv",
+    -attachment => "moo.csv",         
 );
-print "Branch, Datetime, Surname, Firstnames, Description, Type, Invoice amount, Payment type, Payment Amount\n";
+print "Branch, Datetime, Surame, Firstnames, Description, Type, Invoice amount, Payment type, Payment Amount\n";
 
 
 for my $row ( @loop1 ) {
@@ -175,4 +167,3 @@ print ",,,,,,,\n";
 print ",,Total Amount Paid, $totalpaid\n";
 print ",,Total Number Written, $totalwritten\n";
 print ",,Total Amount Credits, $totalcredits\n";
-

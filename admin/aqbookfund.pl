@@ -41,22 +41,41 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
-use C4::Output;
+use C4::Acquisition;
+use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use C4::Date;
 
+
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,%branches)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
+	my @data=split(' ',$searchstring) if ($searchstring ne "");
 	my $count=@data;
-	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like ?) order by bookfundid");
-	$sth->execute("%$data[0]%");
+	my $strsth= "select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where 1 ";
+	$strsth.=" AND bookfundname like ? " if ($searchstring ne "");
+	if (%branches){
+		$strsth.= "AND (aqbookfund.branchcode is null " ;
+		foreach my $branchcode (keys %branches){
+			$strsth .= "or aqbookfund.branchcode = '".$branchcode."' "; 
+		}
+		$strsth .= ") ";
+	}
+	$strsth.= "order by aqbookfund.bookfundid";
+#	warn "chaine de recherche : ".$strsth;
+	
+	my $sth=$dbh->prepare($strsth);
+	if ($searchstring){
+		$sth->execute("%$data[0]%");
+	} else {
+		$sth->execute;
+	}
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 		push(@results,$data);
+#		warn "id ".$data->{bookfundid}." name ".$data->{bookfundname}." branchcode ".$data->{branchcode};
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -90,6 +109,26 @@ $template->param(script_name => $script_name,
 }
 $template->param(action => $script_name);
 
+
+my @select_branch;
+my %select_branches;
+my ($branches)=GetBranches();
+
+push @select_branch,"";
+$select_branches{""}="";
+
+my $homebranch=C4::Context->userenv->{branch};
+foreach my $brnch (keys %$branches){
+	push @select_branch, $branches->{$brnch}->{'branchcode'};#
+	$select_branches{$branches->{$brnch}->{'branchcode'}} = $branches->{$brnch}->{'branchname'};
+}
+
+my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+			-values   => \@select_branch,
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+$template->param(CGIbranch => $CGIbranch);
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -130,9 +169,15 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from aqbookfund where bookfundid =?");
 	$sth->execute($bookfundid);
 	$sth->finish;
-	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
-	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
-	$sth->finish;
+	if ($input->param('branchcode') ne ""){
+		my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname,branchcode) values (?,?,?)");
+		$sth->execute($input->param('bookfundid'),$input->param('bookfundname'),$input->param('branchcode'));
+		$sth->finish;
+	} else {
+		my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
+		$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
+		$sth->finish;
+	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
 	exit;
 			
@@ -168,29 +213,50 @@ if ($op eq 'add_form') {
 		$template->param(searchfield => $searchfield);
 	}
 	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($env,$searchfield,%select_branches);
 	my $toggle="white";
 	my @loop_data =();
 	my $dbh = C4::Context->dbh;
-	my $sth2 = $dbh->prepare("Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where bookfundid = ? order by bookfundid");
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+# 		warn "i ".$i." offset".$offset." pagesize ".$pagesize." id ".$results->[$i]{bookfundid}." name ".$results->[$i]{bookfundname}." branchcode ".$results->[$i]{branchcode};
 		my %row_data;
 		$row_data{bookfundid} =$results->[$i]{'bookfundid'};
 		$row_data{bookfundname} = $results->[$i]{'bookfundname'};
+#  		warn "".$results->[$i]{'bookfundid'}." ".$results->[$i]{'bookfundname'}." ".$results->[$i]{'branchcode'};
+		$row_data{branchname} = $select_branches{$results->[$i]{'branchcode'}};
+		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount from aqbudget where aqbudget.bookfundid = ?";
+# 		my $strsth2="Select aqbudgetid,startdate,enddate,budgetamount,branchcode from aqbudget where aqbudget.bookfundid = ?";
+# 		if ($homebranch){
+# 			$strsth2 .= " AND ((aqbudget.branchcode is null) OR (aqbudget.branchcode='') OR (aqbudget.branchcode= ".$dbh->quote($homebranch).")) " ;
+# 		} else {
+# 			$strsth2 .= " AND (aqbudget.branchcode='') " if ((C4::Context->userenv) && (C4::Context->userenv->{flags}>1));
+# 		}
+		$strsth2 .= " order by aqbudgetid";
+#  		warn "".$strsth2;
+		my $sth2 = $dbh->prepare($strsth2);
 		$sth2->execute($row_data{bookfundid});
 		my @budget_loop;
+# 		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount,$branchcode) = $sth2->fetchrow) {
 		while (my ($aqbudgetid,$startdate,$enddate,$budgetamount) = $sth2->fetchrow) {
 			my %budgetrow_data;
 			$budgetrow_data{aqbudgetid} = $aqbudgetid;
 			$budgetrow_data{startdate} = format_date($startdate);
 			$budgetrow_data{enddate} = format_date($enddate);
 			$budgetrow_data{budgetamount} = $budgetamount;
+# 			$budgetrow_data{branchcode} = $branchcode;
 			push @budget_loop,\%budgetrow_data;
 		}
 		$row_data{budget} = \@budget_loop;
 		push @loop_data,\%row_data;
 	}
+	$template->param(max => (($count>$offset+$pagesize)?$offset+$pagesize:$count));
+	$template->param(min => ($offset?$offset:1));
+	$template->param(nbresults => $count);
+	$template->param(Next => ($count>$offset+$pagesize)) if ($count>$offset+$pagesize);
 	$template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

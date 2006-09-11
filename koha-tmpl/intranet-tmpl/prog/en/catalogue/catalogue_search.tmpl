@@ -1,0 +1,162 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Simple Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+	<h1>Catalogue Search</h1>
+<table align ="center" >
+	
+	    <td align ="center">
+	       <input id="searchType1" type="button" value="Zoom Search" onclick="changeSearch1()" <!-- TMPL_IF name="zoom_search" -->style="background-color:orange"<!-- TMPL_ELSE -->style="background-color:yellow"<!-- /TMPL_IF -->>
+		</td>	
+		<td align ="center">
+	       <input id="searchType2" type="button" value="SQL search" onclick="changeSearch2()" <!-- TMPL_IF name="sql_search" -->style="background-color:orange"<!-- TMPL_ELSE -->style="background-color:yellow"<!-- /TMPL_IF --> background-color="orange">
+		</td>
+	</tr>
+</table>
+<form  name="zoom_form" id="zoom_form" action="/cgi-bin/koha/catalogue/catalogue-search.pl" method='post' <!-- TMPL_IF name="zoom_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+    <input type="hidden" name="op" value="do_search">
+    <input type="hidden" name="search_type" value="zoom">
+    <input type="hidden" name="startfrom" value="0">
+	<input type="hidden" name="zoom" value="1">
+<table style="border:0" align="center">
+
+<tr><td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td><td><b>Display per page:</b><input type text name="number_of_results" value="10" size="3"/></td></tr>
+
+<tr>	<td>Search on:</td><td><select size="1"  name="kohafield" style="width:170px">
+				<!-- TMPL_LOOP name="kohafields" -->
+	                <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+				<!-- /TMPL_LOOP --></select></td><td><input type="text"  size="25" name="value" value="<!-- TMPL_VAR name="value" -->" ></td>
+							<td>With</td><td><Select type="text"  name="relation">
+							<option value=" " <!-- TMPL_IF name="blank" -->selected<!-- /TMPL_IF --> >&nbsp;
+							</option>
+				            			<option value="@attr 5=1 " <!-- TMPL_IF name="@attr 5=1 " -->selected<!-- /TMPL_IF --> >* wildcard anywhere
+							</option>
+							<option value="@attr 5=100 " <!-- TMPL_IF name="@attr 5=100 " -->selected<!-- /TMPL_IF --> >No truncation
+							</option>
+							<option value="@attr 5=102 " <!-- TMPL_IF name="@attr 5=102 " -->selected<!-- /TMPL_IF --> >Mistakes allowed
+							</option>
+							<option value="@attr 5=1 @attr 6=3 " <!-- TMPL_IF name="@attr 5=1 @attr 6=3 " -->selected<!-- /TMPL_IF --> >Starts with
+							</option>
+							<option value="@attr 2=1  " <!-- TMPL_IF name="@attr 2=1 " -->selected<!-- /TMPL_IF --> >Less than
+							</option>
+							<option value="@attr 2=2  " <!-- TMPL_IF name="@attr 2=2 " -->selected<!-- /TMPL_IF --> >Less than & equal
+							</option>
+							<option value="@attr 2=5  " <!-- TMPL_IF name="@attr 2=5 " -->selected<!-- /TMPL_IF --> >Greater than
+							</option>
+							<option value="@attr 2=4  " <!-- TMPL_IF name="@attr 2=4 " -->selected<!-- /TMPL_IF --> >Greater than & equal
+							</option>
+						</select></td></tr>
+		<tr><td>		
+					<Select type="text"  name="and_or">
+				            			<option value="@and" <!-- TMPL_IF name="and" -->selected<!-- /TMPL_IF --> >AND
+							</option>
+							<option value="@or" <!-- TMPL_IF name="or" -->selected<!-- /TMPL_IF --> >OR
+							</option>
+							<option value="@not" <!-- TMPL_IF name="not" -->selected<!-- /TMPL_IF --> >NOT
+							</option>
+						</select></td></tr>
+			<tr>	<td>Search on:</td><td><select size="1"  name="kohafield" style="width:170px">
+				<option value="">All</option>
+				<!-- TMPL_LOOP name="kohafields" -->
+	                <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+				<!-- /TMPL_LOOP --></select></td><td><input type="text"  size="25" name="value" value="<!-- TMPL_VAR name="value" -->" ></td>
+							<td>With</td><td><Select type="text"  name="relation">
+							<option value=" " <!-- TMPL_IF name="blank" -->selected<!-- /TMPL_IF --> >&nbsp;
+							</option>
+				            			<option value="@attr 5=1 " <!-- TMPL_IF name="@attr 5=1 " -->selected<!-- /TMPL_IF --> >* wildcard anywhere
+							</option>
+							<option value="@attr 5=100 " <!-- TMPL_IF name="@attr 5=100 " -->selected<!-- /TMPL_IF --> >No truncation
+							</option>
+							<option value="@attr 5=102 " <!-- TMPL_IF name="@attr 5=102 " -->selected<!-- /TMPL_IF --> >Mistakes allowed
+							</option>
+							<option value="@attr 5=1 @attr 6=3 " <!-- TMPL_IF name="@attr 5=1 @attr 6=3 " -->selected<!-- /TMPL_IF --> >Starts with
+							</option>
+							<option value="@attr 2=1  " <!-- TMPL_IF name="@attr 2=1 " -->selected<!-- /TMPL_IF --> >Less than
+							</option>
+							<option value="@attr 2=2  " <!-- TMPL_IF name="@attr 2=2 " -->selected<!-- /TMPL_IF --> >Less than & equal
+							</option>
+							<option value="@attr 2=5  " <!-- TMPL_IF name="@attr 2=5 " -->selected<!-- /TMPL_IF --> >Greater than
+							</option>
+							<option value="@attr 2=4  " <!-- TMPL_IF name="@attr 2=4 " -->selected<!-- /TMPL_IF --> >Greater than & equal
+							</option>
+						</select></td></tr>
+<tr>
+			<td colspan=2><b>Sort on:</b><select size="1"  name="order" style="width:170px">
+			<option value="">System Ranked</option>	
+			<!-- TMPL_LOOP name="sorts" -->
+	              	  <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+				<!-- /TMPL_LOOP --></select>
+			<select size="1"  name="asc" style="width:100px">
+				<option value="1">Ascending</option>
+				<option value="2">Descending</option>
+				</td>
+				</tr><tr><td colspan=2><input class = "button" type="submit" value="Start search"></td></tr>
+	
+</form>
+<form onSubmit="return checkSQLSearch()" name="precise_form" id="sql_form" action="/cgi-bin/koha/catalogue/catalogue-search.pl" method='post' <!-- TMPL_IF name="sql_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+
+    <input type="hidden" name = "op" value="do_search">
+    <input type="hidden" name = "search_type" value="sql">
+<input type="hidden" name="zoom" value="0">
+	<table style="border:0" align="center">
+<tr>
+<td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td>
+	    <tr>
+			<td>Barcode</td>
+			<td colspan="1"><input type="text"  size="15"   name="barcode" value="<!-- TMPL_VAR name="barcode" -->" onchange="if(this.value != '') {this.form.itemnumber.value = ''; this.form.biblionumber.value = ''}"></td>
+		    <td>Item number</td>
+			<td colspan="1"><input type="text"  size="15"   name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->" onchange="if(this.value != '') {this.form.biblionumber.value = ''; this.form.barcode.value = ''} "></td>
+		
+			 <td>Biblio Number</td>
+			<td colspan="1"><input type="text"  size="15"   name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" onchange="if(this.value != '') {this.form.barcode.value = ''; this.form.itemnumber.value = ''} "></td>
+		</tr>
+
+	    <tr>
+			<td colspan = "4" align = "center">
+			    <br>
+				<input class = "button" type="submit" value="Start search">
+	      		</td>
+		</tr>
+
+	</table>
+</form>
+</table>
+<script language="JavaScript" type="text/javascript">
+function hideSearchsTypes() {
+            document.getElementById('zoom_form').style.display = 'none';
+            document.getElementById('sql_form').style.display = 'none';
+          
+		}
+
+		function resetButtonsColors() {
+			document.getElementById('searchType1').style.backgroundColor = 'yellow';
+			document.getElementById('searchType2').style.backgroundColor = 'yellow';
+			
+			
+		}
+
+		function changeSearch1() {
+		    resetButtonsColors();
+		    document.getElementById('searchType1').style.backgroundColor = 'orange';
+		    hideSearchsTypes();
+		    document.getElementById('zoom_form').style.display = 'inline';
+		}
+
+        function changeSearch2() {
+            resetButtonsColors();
+		    document.getElementById('searchType2').style.backgroundColor = 'orange';
+		    hideSearchsTypes();
+		    document.getElementById('sql_form').style.display = 'inline';
+		}
+function checkSQLSearch() {
+		if ( (document.sql_form.barcode.value == '') &&
+			(document.sql_form.itemnumber.value == '') && (document.sql_form.biblionumber.value == '') ) {
+			alert("Enter a barcode or itemnumber or biblionumber to start searching.");
+			return false;
+		} else {
+		    return true;
+		}
+	}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

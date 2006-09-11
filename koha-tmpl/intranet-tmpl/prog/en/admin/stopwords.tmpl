@@ -1,97 +1,160 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-Koha -- System Administration: Stop Words Administration
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF NAME="else" -->Stop Words Administration<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Stop Word<!-- TMPL_ELSE -->Add Stop Word<!-- /TMPL_IF --><!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="add_validate" -->Stop Word Added<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Stop Word '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="delete_confirmed" -->Stop Word Deleted<!-- /TMPL_IF --> 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="main">
+<!-- TMPL_IF NAME="add_form" -->
+        <script>
+        //
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+   return false;
+                }
+                return true;
+        }
+        //
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        //
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull==0 && v.value=="") {
+                return false;
+        }
+        return true;
+        }
+        //
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        //
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.word.value.length==0) {
+                        _alertString += "- word missing\n";
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2 += _alertString;
+                        alert(alertString2);
+                }
+        }
+        </SCRIPT>
 
-<script>
-  function toUC(f) {
-    var x=f.value.toUpperCase();
-    f.value=x;
-    return true;
-  }
-</script>
 
-<h1>Stop Words Administration</h1>
 
-<ul id="admin_stopwords_informations">
-<!-- TMPL_IF NAME="stopword_added" -->
-  <li>Stop Words Added</li>
-<!-- /TMPL_IF --> <!-- stopword_added -->
-
-<!-- TMPL_IF NAME="delete_confirmed" -->
-  <li>Stop Words Deleted</li>
-<!-- /TMPL_IF --> <!-- delete_confirmed -->
-</ul>
-
-<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-
-<!-- TMPL_IF NAME="delete_confirm" -->
-  <fieldset id="admin_stopwords_confirmation">
-    <legend>Confirm</legend>
-
-    <p>Confirm Deletion of the following Stop Words:</p>
-    <ul>
-  <!-- TMPL_LOOP NAME="stopwords_to_delete" -->
-      <li>
-        <!-- TMPL_VAR NAME="word" -->
-        <input type="hidden" name="confirmed_stopwords[]" value="<!-- TMPL_VAR NAME="word" -->" />
-      </li>
-  <!-- /TMPL_LOOP -->
-    </ul>
-
-    <p id="action">
-      <input type="submit" name="confirmDeletion" value="Confirm Deletion" />
-      <input type="submit" name="doNotConfirmDeletion" value="Do Not Confirm" />
-    </p>
-  </fieldset>
+        <form action="<!-- TMPL_VAR NAME=script_name -->" name="Aform" method="post">
+        <input type="hidden" name="op" value="add_validate" />
+<!-- TMPL_IF NAME="searchfield" -->
+                <h1>Modify Stop Word</h1>
+        <!-- TMPL_ELSE -->
+                <h1>Add Stop Word</h1>
+        <!-- /TMPL_IF -->         
+<table>
+        <!-- TMPL_IF NAME="searchfield" -->
+                <tr>
+                        <td>Stop Word</td>
+                        <td><input type="hidden" name="word" value="<!-- TMPL_VAR NAME=searchfield -->" /><!-- TMPL_VAR NAME="searchfield" -->
+                        </td>
+                </tr>
+        <!-- TMPL_ELSE -->
+                <tr>
+                        <td>Stop Word: </td>
+                        <td>
+                                <input type="text" name="word" size="50" maxlength="250" onblur="toUC(this);" />
+                        </td>
+                </tr>
+        <!-- /TMPL_IF -->
+        </table><p><input type="button" value="<!-- TMPL_IF NAME="searchfield" -->Update Stop Word<!-- TMPL_ELSE -->Add Stop Word <!-- /TMPL_IF -->" onclick="Check(this.form);" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';" /></p>
+        </form>
 <!-- /TMPL_IF -->
 
-  <fieldset id="admin_stopwords_add">
-    <legend>Add Stop Words</legend>
+<!-- TMPL_IF NAME="add_validate" -->
+<h3>Stop Word Added</h3>
+<div class="form"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="submit" value="OK" class="submit" />
+        </form></div>
+<!-- /TMPL_IF -->
 
-    <table>
-      <tr>
-        <th>Stop Words</th>
-        <td>
-          <input type="text" name="word" size="50" maxlength="250" onblur="toUC(this);" />
-        </td>
-      </tr>
-    </table>
+<!-- TMPL_IF NAME="delete_confirm" -->
+ <h3>Confirm Deletion of Stop Word <em><!-- TMPL_VAR NAME="searchfield" --></em></h3>                       <table>
+                <tr>
+                        <td>Stop Word: </td>
+                        <td><!-- TMPL_VAR NAME="searchfield" --></td>
+                </tr>
+	</table><div class="tabitem"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                        <input type="hidden" name="op" value="delete_confirmed" />
+                        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Stop Word" class="cancel" />
+                                </form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                                        <input type="submit" value="Do Not Delete" class="submit" />
+                                </form></div>
+<!-- /TMPL_IF -->
 
-    <p id="action">
-      <input type="submit" name="add" value="Add Stop Words" />
-      <input type="reset" value="Reset" />
-    </p>
-  </fieldset>
+<!-- TMPL_IF NAME="delete_confirmed" -->
+<h3>Stop Word Deleted</h3>
+<div class="form"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                <input type="submit" value="OK" class="submit" />
+</form></div>
+<!-- /TMPL_IF -->
 
-  <fieldset id="admin_stopwords_select">
-    <legend>Stop Words selection</legend>
+<!-- TMPL_IF NAME="else" -->
+ <h3>Stop Words Administration</h3>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+                <input type="submit" name="submit" value="Search" class="submit" />
+        </form>
+<div id="results">        <!-- TMPL_IF NAME="searchfield" -->
+                You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+        <!-- /TMPL_IF --></div>
+<!-- TMPL_IF NAME="loop" -->
+<table>
+                <tr>
+                        <th>Word</th>
+                        <th>&nbsp;</th>
+                </tr>
+                <!-- TMPL_LOOP NAME="loop" -->
+                <tr>
+                        <td><!-- TMPL_VAR NAME="word" --></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+<!-- /TMPL_IF -->
+<div class="tabitem"><!-- TMPL_IF NAME="offsetgtzero" -->
+               <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" /><input type="submit" class="submit" value="&lt;&lt; Prev" /></form>
+        <!-- /TMPL_IF --> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Word" class="submit" />
+        </form> <!-- TMPL_IF NAME="ltcount" -->
+                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="next_page" -->" /><input type="submit" class="submit" value="Next &gt;&gt;" /></form>
+        <!-- /TMPL_iF --></div>
+        
 
-    <p>
-      <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-      <input type="submit" name="filter" value="Filter" />
-    </p>
+        
 
-    <ul>
-<!-- TMPL_LOOP NAME="loop" -->
-      <li style="display: inline;">
-        <label>
-          <input type="checkbox" name="stopwords[]" value="<!-- TMPL_VAR NAME="word" -->" />
-          <!-- TMPL_VAR NAME="word" -->
-        </label>
-      </li>
-<!-- /TMPL_LOOP -->
-    </ul>
+        
 
-    <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+<!-- /TMPL_IF -->
 
-    <p id="action">
-      <input type="submit" name="deleteSelected" value="Delete selected Stop Words" />
-      <input type="reset" value="Reset" />
-    </p>
-  </fieldset>
-</form>
-
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

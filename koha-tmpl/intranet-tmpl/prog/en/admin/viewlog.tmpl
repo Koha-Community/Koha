@@ -1,14 +1,15 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Log viewer<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->System Administration<!-- TMPL_INCLUDE NAME="doc-head-close-calendar.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main" >
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 <!-- TMPL_IF NAME="do_it" -->
 <script language="JavaScript" type="text/javascript">
 function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
-		<h1>Koha : LogView for <!-- TMPL_VAR NAME="modulename"--> </h1>
+		<h1 class="parameters">Koha :  <!-- TMPL_VAR NAME="modulename"--> için yapılan işlemler cetveli. Toplam:<!-- TMPL_VAR NAME="counter"--></h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -16,58 +17,50 @@ function Dopop(link) {
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
 		<br>
-		<table>
+		<table border="1">
 			<!-- TMPL_IF NAME="catalogue" -->
 				<tr >
-							<th>Timestamp
+							<th class="parameters">Modified on
 							</th>
-							<th>Firstname
+							<th class="parameters">Title
 							</th>
-							<th>Surname
+							<th class="parameters">Librarian
 							</th>
-							<th>Action
+							<th class="parameters">Action
 							</th>
-							<th>Info
-							</th>
-							<th>Title
-							</th>
-							<th>Author
+							<th class="parameters">Info
 							</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<!-- TMPL_IF NAME="hilighted" --><tr class="higlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-						<td><!-- TMPL_IF NAME="timestamp" --><!-- TMPL_VAR NAME="timestamp" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="day" --><br/>(<!-- TMPL_VAR NAME="timestamp" -->)
 						</td>
-						<td><!-- TMPL_IF NAME="firstname" --><!-- TMPL_VAR NAME="firstname" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="title" -->, <!-- TMPL_VAR NAME="author" -->
 						</td>
-						<td><!-- TMPL_IF NAME="surname" --><!-- TMPL_VAR NAME="surname" --><!-- /TMPL_IF -->
+						<td><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 						</td>
 						<td><!-- TMPL_IF NAME="action" --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
 						</td>
 						<td><!-- TMPL_IF NAME="info" --><!-- TMPL_VAR NAME="info" --><!-- /TMPL_IF -->
-						</td>
-						<td><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF -->
-						</td>
-						<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="acqui" -->
 				<tr >
-							<th>Timestamp
+							<th class="parameters">Timestamp
 							</th>
-							<th>Firstname
+							<th class="parameters">Firstname
 							</th>
-							<th>Surname
+							<th class="parameters">Surname
 							</th>
-							<th>Action
+							<th class="parameters">Action
 							</th>
-							<th>Info
+							<th class="parameters">Info
 							</th>
-							<th>Title
+							<th class="parameters">Title
 							</th>
-							<th>Author
+							<th class="parameters">Author
 							</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
@@ -89,19 +82,19 @@ function Dopop(link) {
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="members" -->
 				<tr >
-							<th>Timestamp
+							<th class="parameters">Timestamp
 							</th>
-							<th>Firstname
+							<th class="parameters">Firstname
 							</th>
-							<th>Surname
+							<th class="parameters">Surname
 							</th>
-							<th>Action
+							<th class="parameters">Action
 							</th>
-							<th>Info
+							<th class="parameters">Info
 							</th>
-							<th>Title
+							<th class="parameters">Title
 							</th>
-							<th>Author
+							<th class="parameters">Author
 							</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
@@ -133,18 +126,18 @@ function Dopop(link) {
 	<table>
 		<thead>
 			<tr>
-			<th>On Module</th>
-			<th>User/Action Filters</th>
-			<th>Object Filter</th>
+			<th class="parameters">On Module</th>
+			<th class="parameters">User/Action Filters</th>
+			<th class="parameters">Object Filter</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>
 					<select name="module">
-						<option value ="catalogue" checked>Catalogue</option>
-						<option value ="members">Borrowers</option>
-						<option value ="acqui">Acquisitions</option>
+						<option value ="catalogue" checked>Eser kaydı</option>
+						<option value ="members">Üyeler</option>
+						<option value ="acqui">Satın alma</option>
 					</select>
 				</td>
 				<td>
@@ -152,10 +145,10 @@ function Dopop(link) {
 					Koha User : <input type="text" name="user" value="">
 				</p>
 				<p>	Action type : <select name="action">
-						<option value ="">All</option>
-						<option value ="add">Add</option>
-						<option value ="del">Delete</option>
-						<option value ="mod">Modify</option>
+						<option value ="">Tümü</option>
+						<option value ="add">Ekleme</option>
+						<option value ="del">Sılme</option>
+						<option value ="modify">Değişme</option>
 					</select>
 				</p>
 				<p> From <input type="text" readonly="readonly" size="10" id="from" name="from" >
@@ -220,8 +213,8 @@ function Dopop(link) {
 			</tr>
 	</table>
 	
-	<div>
-		<h3>Output</h3>
+	<div id="bloc25">
+		<h3 class="parameters"> Output </h3>
 		<input type="radio" checked name="output" value="screen" > To screen into the browser
 		<br>
 		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
@@ -237,6 +230,3 @@ function Dopop(link) {
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-
-
-

@@ -64,11 +64,7 @@ my ($template, $borrowernumber, $cookie)
 				flagsrequired => {editcatalogue => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+$template->param(do_it => $do_it);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($line, $column, $rodsp, $podsp, $calc, \@filters);
@@ -161,7 +157,7 @@ if ($do_it) {
 		$hassort1 =1 if ($value);
 		push @select, $value;
 	}
-	my $branches=GetBranches();
+	my $branches=getbranches();
 	my @select_branch;
 	my %select_branches;
 	push @select_branch,"";

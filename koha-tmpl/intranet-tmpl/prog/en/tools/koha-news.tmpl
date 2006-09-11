@@ -1,101 +1,103 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_INCLUDE NAME="holidays-top.inc" -->
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->System Administration<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menu.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<div id="koha-news_main">
 	<h1> OPAC & KOHA News</h1>
 	<!-- TMPL_IF name="add_form" -->
+
 		<form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
-			<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
-			<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
-			<p>
-			<select name="lang">
+			<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
+			<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+			<table style="border:0" cellspacing="0" cellpadding="2">
+			    <tr>
+			        <td>Language</td>
+			        </td>
+			        <td>
+						<select name="lang">
+				<option value="">All news</option>
 				<option value="koha">Librarian interface</option>
 				<!-- TMPL_LOOP name="lang_list" -->
-					<!-- TMPL_IF name="selected" -->
-						<option value="<!-- TMPL_VAR name="language" -->" selected>
-					<!-- TMPL_ELSE -->
-						<option value="<!-- TMPL_VAR name="language" -->">
-					<!-- /TMPL_IF -->
-						<!-- TMPL_VAR name="language" -->
-					</option>
+					
+						<option value="<!-- TMPL_VAR name="language" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="language" -->	</option>
 				<!-- /TMPL_LOOP" -->
 			</select>
-			</p>
-			<p>
-				<label>Title</label>
-				<input size="30" type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
-			</p>
-			<p>News</p>
-			<textarea name="new" cols="35" rows="4"><!-- TMPL_VAR NAME="new" --></textarea>
-			<p>
-				<input class="button" type="submit" value="Save" />
-				<input class="button" type="button" value="Cancel" onclick="window.location.href='/cgi-bin/koha/tools/opac-news.pl'" />
-			</p>
+					</td>
+			    </tr>
+				<tr>
+					<td>Title</td>
+					<td><input size="30" type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->"></td>
+				</tr>
+				<tr>
+					<td>News</td>
+					<td><textarea name="new" cols="35" rows="4"><!-- TMPL_VAR NAME="new" --></textarea></td>
+				</tr>
+				<tr>
+					<td  colspan="2">
+						<input class="button" type="submit" value="Save">
+						<input class="button" type="button" value="Cancel" onclick="window.location.href='/cgi-bin/koha/tools/koha-news.pl'">
+					</td>
+				</tr>
+			</table>
 		</form>
+
+
 	<!-- TMPL_ELSE -->
-		<div id="koha-news_filter">
-			<form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" />
-			<label>Language</label>
+
+		<!-- TMPL_IF NAME="opac_news_count" -->
+
+            <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
+			Language:
+			
 			<select name="lang">
-			<option value="">All</option>
-			<option value="koha">Librarian interface</option>
+				<option value="">All news</option>
+				<option value="koha">Librarian interface</option>
 				<!-- TMPL_LOOP name="lang_list" -->
-					<!-- TMPL_IF name="selected" -->
-						<option value="<!-- TMPL_VAR name="language" -->" selected />
-					<!-- TMPL_ELSE -->
-						<option value="<!-- TMPL_VAR name="language" -->" />
-					<!-- /TMPL_IF -->
-						<!-- TMPL_VAR name="language" -->
-					</option>
+					
+						<option value="<!-- TMPL_VAR name="language" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="language" -->	</option>
 				<!-- /TMPL_LOOP" -->
 			</select>
+		
 			<input type="submit" class="button" value="Filter">
 			</form>
-		</div>
-		<!-- TMPL_IF NAME="opac_news_count" -->
-		<div id="koha-news_list">
-			<form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('Are you sure you want to delete the selected news?')">
-				<table>
-					<tr>
-						<th></th>
-						<th>Language</th>
+
+			<form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('¿Are you sure you want to delete the selected news?')">
+				<table border="0" cellspacing="0" cellpadding="3">
+					<tr bgcolor="#99cc33">
+						<th></td>
+						<th style="padding-left:3px;padding-right:3px">Language</th>
 						<th>Date</th>
-						<th>Title</th>
+						<th  width="20%">Title</th>
 						<th>News</th>
 						<th></th>
 					</tr>
+
 					<!-- TMPL_LOOP NAME="opac_news" -->
 						<tr>
-							<td>
-								<input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->" />
-							</td>
-							<td><!-- TMPL_VAR NAME="lang" --></td>
+							<td width="5%"><input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->"</td>
+							<td align="center"><!-- TMPL_VAR NAME="lang" --></td>
 							<td><!-- TMPL_VAR NAME="newdate" --></td>
-							<td><!-- TMPL_VAR NAME="title" --></td>
+							<td align="center"><!-- TMPL_VAR NAME="title" --></td>
 							<td><!-- TMPL_VAR NAME="new" --></td>
-							<td>
+							<td width="5%">
 								<a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&id=<!-- TMPL_VAR NAME="idnew" -->">Edit</a>
 							</td>
 						</tr>
 					<!-- /TMPL_LOOP -->
+
 				</table>
-				<p>
-					<input type="hidden" name="op" value="del" />
-					<input type="submit" class="button" value="Delete selected" />
-				</p>
+					<input type="hidden" name="op" value="del">
+					<input type="submit" class="button" value="Delete selected">
 			</form>
 		<!-- TMPL_ELSE -->
-			<p>No news loaded</p>
+			<h5>No news loaded</h5>
 		<!-- /TMPL_IF -->
+
 		<form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl">
-			<input type="hidden" name="op" value="add_form" />
-			<input type="submit" class="button" value="Add news" />
+			<input type="hidden" name="op" value="add_form">
+			<input type="submit" class="button" value="Add  news">
 		</form>
-	</div>
+	
+	
 	<!-- /TMPL_IF -->
 
-</div>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

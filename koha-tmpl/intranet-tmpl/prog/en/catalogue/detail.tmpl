@@ -1,202 +1,103 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue MARC detail<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Details for <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<h3 class="title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></h3>
+
+	<div class="tabitem">
+<form action="MARCdetail.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View MARC" /></form>
+<form action="moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="View Item Details" /></form> 	
+<form action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Add to Shelf" onclick="openWindow('/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->', 'popped'); return false;" /></form> 
+<form action="detailprint.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Print" onclick="openWindow('detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','printview'); return false;" /></form>
+<!-- TMPL_UNLESS NAME="norequests" --> <form action="/cgi-bin/koha/reserve/request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="biblionumber" /> <input type="submit" value="Reserves" class="submit" /></form><!-- /TMPL_UNLESS -->
+	 </div>
+<!-- TMPL_IF NAME="isbn" --><div >
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" />
+</div><!-- /TMPL_IF -->
+<div class="details">
+			
+<ul>
+			<!-- TMPL_IF NAME="subtitle" --><li><b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="author" --><li><b>Author:</b> <a href="catalogue-search.pl?kohafield=author&op=do_search&value=<!--TMPL_VAR NAME="author" ESCAPE=URL>&and_or=@and&order=author,1&zoom=1"><!-- TMPL_VAR NAME="author" --></a></li><!--/TMPL_IF-->
+			<!-- TMPL_IF NAME="additionalauthor" --><li><b>Additional Author:</b> <!-- TMPL_VAR NAME="additionalauthor" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="isbn" --><li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="classification" --><li><strong>Classification:</strong> <!-- TMPL_VAR NAME="classification" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><li><b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subject" --><li><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="copyrightdate" --><li><b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="notes" --><li><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="unititle" --><li><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="serial" --><li><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --></li><!-- /TMPL_IF --> 
+			<!-- TMPL_IF name="url" --><li><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!--TMPL_VAR NAME="url" --></a></li><!-- /TMPL_IF -->
+			
+<!-- /TMPL_LOOP -->
+			<!-- TMPL_LOOP NAME="MARCSUBJCTS" --><!-- TMPL_IF NAME="MARCSUBJCT" --><li><b>Subjects:</b><!-- TMPL_VAR NAME="MARCSUBJCT" --><!--/TMPL_IF--><!-- /TMPL_LOOP -->
+			<!-- TMPL_LOOP NAME="MARCURLS" --><!-- TMPL_IF NAME="MARCURL" --><li><b>URLs:</b><!-- TMPL_VAR NAME="MARCURL" --><!--/TMPL_IF--><!-- /TMPL_LOOP -->
+			<!-- TMPL_LOOP NAME="MARCNOTES" --><!-- TMPL_IF NAME="MARCNOTE" --><li><b>Abstract:</b><!-- TMPL_VAR NAME="MARCNOTE" --><!--/TMPL_IF--><!-- /TMPL_LOOP -->
+
+			<li><b>Biblio Record</b> <!-- TMPL_VAR NAME="biblionumber" --></li>
+			<li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li>
+			</ul>
+
+<br clear="both" /></div><div class="tabitem">
+		<form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Edit Record" /></form>
+		<form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate Record" /></form>
+		<form action="/cgi-bin/koha/cataloguing/additem.pl" method="get" ><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber"-->" /><input type="submit" class="submit" value="Edit Items" /></form>
+		</div>
+
+
+<div class="table"><table>
+	<tr>
+		<th>Item Type</th>
+		<th>LC Classifiction</th>
+		<th>Location</th>
+		<th>Date Due</th>
+		<th>Last Seen</th>
+		<th>Barcode</th>
+		<th>Volume</th>
+	</tr>
+	
+<!-- TMPL_IF NAME="ITEM_RESULTS" -->
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="branchname" -->-<!-- TMPL_VAR NAME="shelf" --></td>
+			<td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+			<td><a href="moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;barcode=<!-- TMPL_VAR NAME="barcode" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+			 <td><!-- TMPL_IF NAME="volumedesc" --><!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td> 
+		
+		</tr>
+	<!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="6">This record has no items.</td></tr><!-- /TMPL_IF -->
+	
+</table></div>
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	<h1><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
-	
-	<div id="catalogue_detail_biblio">
-		<h2>biblio detail</h2>
-		<!-- TMPL_IF name="subtitles" -->
-			<p><label>Subtitle(s):</label>
-			<!-- TMPL_LOOP name="subtitles" -->
-				<!-- TMPL_VAR NAME="subtitle" --> ; 
-			<!-- /TMPL_LOOP -->
-			</p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="author" -->
-			<p><label><b>Author:</b> </label><!-- TMPL_VAR NAME="author" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="additional" -->
-			<p><label><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="illus" -->
-			<p><label><b>Illus:</b></label><!-- TMPL_VAR name="illus" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="publishercode" -->
-			<p><label><b>Published by :</b></label> <!-- TMPL_VAR NAME="publishercode" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="publicationyear" -->
-			<p><label><b>in </b></label><!-- TMPL_VAR NAME="publicationyear" --></p>
-		<!-- /TMPL_IF -->
-		<p>
-			<label>&nbsp;</label>
-				<!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-				<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
-		</p>
-		<!-- TMPL_IF name="isbn" -->
-			<p><label><b>ISBN:</b> </label><!-- TMPL_VAR NAME="isbn" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="issn" -->
-			<p><label><b>ISSN:</b> </label><!-- TMPL_VAR NAME="issn" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="seriestitle" -->
-			<p><label><b>Collection:</b> </label>
-				<!-- TMPL_VAR NAME="seriestitle" --> 
-				<!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
-				<!-- TMPL_VAR name="volumedesc" -->
-			</p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="MARCSUBJCTS" -->
-			<p><label><b>Subjects:</b></label></p>
-			<p>
-				<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-					<label>-</label><a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
-						<!-- TMPL_VAR NAME="marcsubjct" -->
-					</a><br>
-				<!-- /TMPL_LOOP -->
-			</p>
-		<!-- TMPL_ELSE -->
-			<!-- TMPL_IF name="subjects" --><p><label><b>Subject(s):</b> </label></p>
-				<!-- TMPL_LOOP name="subjects" -->
-					<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator==&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="copyrightdate" -->
-			<p><label><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="MARCNOTES" -->
-			<p><label><b>Notes:</b> </label></p>
-			<p>
-				<!-- TMPL_LOOP NAME="MARCNOTES" -->
-					<p>- <!-- TMPL_VAR NAME="marcnote" --></p>
-				<!-- /TMPL_LOOP -->
-			</p>
-		<!-- TMPL_ELSE -->
-			<!-- TMPL_IF name="notes" -->
-				<p><label><b>Notes:</b> </label><!-- TMPL_VAR NAME="notes" --></p>
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="unititle" -->
-			<p><label><b>Alt title:</b> </label><!-- TMPL_VAR NAME="unititle" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="classification" -->
-			<p><label><b>classification:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="dewey" -->
-			<p><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="URLS" -->
-			<p><label><b>URL:</b> </label>
-				<!-- TMPL_LOOP name="URLS" -->
-					<a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
-				<!-- /TMPL_LOOP -->
-			</p>
-		<!-- /TMPL_IF -->
-		<p><label><b>Item type : </b></label>
-			<!-- TMPL_IF name="description" -->
-				<!-- TMPL_VAR name="description" -->
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_VAR NAME="itemtype" -->
-			<!-- /TMPL_IF -->
-		</p>
-		<!-- TMPL_IF name="count" -->
-			<p><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
-		<!-- /TMPL_IF -->
-	</div>
+<!-- TMPL_IF NAME="abstract -->
+<table>
+<caption>Abstract</caption>
+<tr>
+<td><!-- TMPL_VAR NAME="abstact" --></td>
+</tr>
+</table>
+<!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-<div id="catalogue_detail_items">
-	<h2>Items</h2>
-	<table>
-		<tr>
-			<th>Item type</th>
-			<th>Location</th>
-			<th>Status</th>
-			<th>Date Due</th>
-			<th>Last seen</th>
-			<th>Barcode</th>
-			<th>Volume</th>
-		</tr>
-		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-			<tr>
-				<td><!-- TMPL_VAR NAME="description" --></td>
-				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
-				<td>
-					<!-- TMPL_IF name="datedue" -->
-						On issue to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>
-					<!-- TMPL_ELSE -->
-						<!-- TMPL_VAR name="notforloan" -->
-					<!-- /TMPL_IF -->
-				</td>
-				<td><!-- TMPL_VAR NAME="datedue" --></td>
-				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
-				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
-				<!-- TMPL_IF NAME="type" -->
-					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
-					</td>
-				<!-- /TMPL_IF -->
-			</tr>
-		<!-- /TMPL_LOOP -->
-	</table>
-</div>
 
-<div id="action">
-		<form action="javascript:Addbiblio('')">
-			<input type="submit" value="Edit biblio" />
-		</form>
-		<form action="javascript:Addbiblio('duplicate')">
-			<input type="submit" value="Duplicate" />
-		</form>
-		<form action="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->">
-			<input type="submit" value="Edit item" />
-		</form>
-		<form action="javascript:confirm_deletion()">
-			<input type="submit" value="delete" />
-		</form>
-		<form action="MARCdetail.pl">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="Complete" />
-		</form>
-		<form action="#">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="Normal" />
-		</form>
-		<form action="ISBDdetail.pl">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="ISBD" />
-		</form>
-		<form action="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
-			<input type="submit" value="Add to shelf" />
-		</form>
-		<form action="javascript:Dopop('detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
-			<input type="submit" value="Print" />
-		</form>
-		<!-- TMPL_IF name="subscriptionsnumber" -->
-		<form action="serials-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-			<input type="submit" value="Subscription(s)" />
-		</form>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="norequests" -->
-		<!-- TMPL_ELSE -->
-			<form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-				<input type="submit" value="Request" />
-			</form>
-		<!-- /TMPL_IF -->
-</div>
+<!-- TMPL_IF NAME="SITE_RESULTS" -->
+<table>
+<caption>Links to Associated Web Sites</caption>
+<!-- TMPL_LOOP NAME="SITE_RESULTS" -->
+<tr>
+<td><b>Title:</b> <!-- TMPL_VAR name="title" --><br>
+<b>Description:</b> <!-- TMPL_VAR name="description" --><br>
+<b>URL:</b><a href="http://<!-- TMPL_VAR name="url" -->">http://<!--TMPL_VAR name="url"></a><br>
+</td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
 
-<script language="javascript" type="text/javascript">
-function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-function confirm_deletion() {
-	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
-	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
-	}
-}
-</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

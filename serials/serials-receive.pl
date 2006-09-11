@@ -99,7 +99,6 @@ my $abouttoexpire = abouttoexpire($subscriptionid);
 my @itemnumbers=$query->param('itemnumber');
 my $subscription=GetSubscription($subscriptionid);
 
- $hassubscriptionexpired=1 ;
 my $auser = $subscription->{'librarian'}; # bob
 my $routing = check_routing($subscriptionid); # to see if routing list exists
 my $manualdate ='';

@@ -1,7 +1,7 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
+
 
 <h1>Serials</h1>
 <div id="serials_home">
@@ -11,7 +11,7 @@
 <!-- /TMPL_IF -->
 
     <table>
-        <tr>
+        <tr><th>Biblionumber</th>
             <th>ISSN</th>
             <th>Title</th>
             <th>
@@ -25,6 +25,9 @@
                 <input type="hidden" name="routing" value="<!-- TMPL_VAR NAME="routing" -->" />
             <!-- /TMPL_IF -->
             <input type="hidden" name="searched" value="1" />
+	<td>
+                <input type="text" size=10 maxlength=15 name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" title="type biblionumber here to filter subscription">
+            </td>
             <td>
                 <input type="text" size=10 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription">
             </td>
@@ -39,75 +42,45 @@
             </td>
         </tr>
         <!-- TMPL_LOOP name="subscriptions" -->
-            <tr>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
+	 <!-- TMPL_IF name="toggle" -->
+            <tr class="hilighted">
                 <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
+	<tr>
+	          <!-- /TMPL_IF -->
+                    
+               <td><a href="/cgi-bin/koha/cataloguing/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial" title="Biblio"><!-- TMPL_VAR name="biblionumber" --></a></td>
+       <td>
                 <!-- TMPL_IF name="ISSN" -->
-                    <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
+                   <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>   
                 <!-- /TMPL_IF -->
-                </td>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
+             </td>
+               
                     <td>
-                <!-- /TMPL_IF -->
+            
                 <!-- TMPL_IF name="title" -->
                     <!-- TMPL_VAR name="title" -->
                 <!-- TMPL_ELSE -->
                     |
                 <!-- /TMPL_IF -->
                 </td>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
+                
                     <td>
-                <!-- /TMPL_IF -->
+             
                 <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
                 </td>
                 <!-- TMPL_IF NAME="routing" -->
-                    <!-- TMPL_IF name="toggle" -->
-                        <td class="hilighted">
-                    <!-- TMPL_ELSE -->
                         <td>
-                    <!-- /TMPL_IF -->
                         <a href="routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Routing List</a>
                     </td>
                 <!-- TMPL_ELSE -->
-                <!-- TMPL_IF NAME="alt_links" -->
-                        <!-- TMPL_IF name="toggle" -->
-                            <td class="hilighted">
-                        <!-- TMPL_ELSE -->
-                        <td>
-                        <!-- /TMPL_IF -->
-                            <a href="alt_subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
-                        </td>
-                        <!-- TMPL_IF name="toggle" -->
-                            <td class="hilighted">
-                        <!-- TMPL_ELSE -->
                             <td>
-                        <!-- /TMPL_IF -->
-                        <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
-                        </td>			      
-                <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="toggle" -->
-                            <td class="hilighted">
-                        <!-- TMPL_ELSE -->
-                            <td>
-                        <!-- /TMPL_IF -->
                             <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
                         </td>
-                        <!-- TMPL_IF name="toggle" -->
-                            <td class="hilighted">
-                        <!-- TMPL_ELSE -->
                             <td>
-                        <!-- /TMPL_IF -->
-                            <a href="serials-recieve.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
+                            <a href="serials-receive.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="receive issues for this subscription">Receive</a>
                         </td>
                 <!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
@@ -121,5 +94,6 @@
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 </div>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

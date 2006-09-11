@@ -1,0 +1,183 @@
+#!/usr/bin/perl
+
+# $Id$
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+use C4::Auth;
+use CGI;
+use C4::Context;
+use HTML::Template;
+use C4::Search;
+use C4::Output;
+use C4::Koha;
+
+=head1 NAME
+
+plugin that shows a stats on borrowers
+
+=head1 DESCRIPTION
+
+
+=over2
+
+=cut
+
+sub set_parameters {
+	my ($template) = @_;
+	my $dbh = C4::Context->dbh;
+	return $template;
+}
+
+sub calculate {
+	my ($line, $column, $filters) = @_;
+	my @results =();
+	my @mainloop;
+	my @loopfooter;
+	my @loopcol;
+	my @looprow;
+	my %globalline;
+	my $grantotal =0;
+# extract parameters
+	my $dbh = C4::Context->dbh;
+# build the SQL query & execute it
+	my $linefilter = "";
+	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
+	$linefilter = @$filters[4] if ($line =~ /zipcode/ )  ;
+	$linefilter = @$filters[2] if ($line =~ /sort1/ ) ;
+	$linefilter = @$filters[3] if ($line =~ /sort2/ ) ;
+
+	my $colfilter = "";
+	$colfilter = @$filters[0] if ($column =~ /categorycode/);
+	$colfilter = @$filters[4] if ($column =~ /zipcode/);
+	$colfilter = @$filters[2] if ($column =~ /sort1/);
+	$colfilter = @$filters[3] if ($column =~ /sort2/);
+
+	my @loopfilter;
+	for (my $i=0;$i<=4;$i++) {
+		my %cell;
+		if ( @$filters[$i] ) {
+			$cell{filter} .= @$filters[$i];
+			$cell{crit} .="Category Code " if ($i==0);
+			$cell{crit} .="Status" if ($i==1);
+			$cell{crit} .="Sort1" if ($i==2);
+			$cell{crit} .="Sort2" if ($i==3);
+			$cell{crit} .="Zip Code" if ($i==4);
+			push @loopfilter, \%cell;
+		}
+	}
+# 1st, loop rows.
+#problem with NULL Values.
+	my $strsth;
+	$strsth .= "select distinctrow $line from borrowers";
+	$linefilter =~ s/\*/%/g;
+	if ( $linefilter ) {
+		$strsth .= " where $line LIKE ? and $line is not null" ;
+	} else {
+		$strsth .= " where $line is not null" ;
+	}
+	$strsth .=" order by $line";
+	my $sth = $dbh->prepare( $strsth );
+	if ( $linefilter ) {
+		$sth->execute($linefilter);
+	} else {
+		$sth->execute;
+	}
+ 	while ( my ($celvalue) = $sth->fetchrow) {
+ 		my %cell;
+		if ($celvalue) {
+			$cell{rowtitle} = $celvalue;
+		} else {
+			$cell{rowtitle} = "";
+		}
+ 		$cell{totalrow} = 0;
+		push @looprow, \%cell;
+ 	}
+
+# 2nd, loop cols.
+	my $strsth2;
+	$colfilter =~ s/\*/%/g;
+	$strsth2 .= "select distinctrow $column from borrowers";
+	if ( $colfilter ) {
+		$strsth2 .= " where $column LIKE ? and $column is not null";
+	} else {
+		$strsth2 .= " where $column is not null";
+	}
+	$strsth2 .= " order by $column";
+	my $sth2 = $dbh->prepare( $strsth2 );
+	if ($colfilter) {
+		$sth2->execute($colfilter);
+	} else {
+		$sth2->execute;
+	}
+ 	while (my ($celvalue) = $sth2->fetchrow) {
+ 		my %cell;
+		my %ft;
+		$cell{coltitle} = $celvalue;
+ 		$ft{totalcol} = 0;
+		push @loopcol, \%cell;
+		push @loopfooter, \%ft;
+ 	}
+# now, parse each category. Before filling the result array, fill it with 0 to have every itemtype column.
+ 	my $strcalc .= "SELECT  count( * ) FROM borrowers WHERE $line = ? and $column= ? ";
+	$strcalc .= " AND categorycode like '" . @$filters[1] ."%' " if ( @$filters[1] );
+	$strcalc .= " AND sort1 like ' " . @$filters[2] ."%'" if ( @$filters[2] );
+	$strcalc .= " AND sort2 like ' " . @$filters[3] ."%'" if ( @$filters[3] );
+	$strcalc .= " AND zipcode like ' " . @$filters[4] ."%'" if ( @$filters[4] );
+	my $dbcalc = $dbh->prepare($strcalc);
+	my $i=0;
+	my @totalcol;
+	my $hilighted=-1;
+	# for each line
+	for (my $i=0; $i<=$#looprow; $i++) {
+		my $row = $looprow[$i]->{'rowtitle'};
+		my @loopcell;
+		my $totalrow=0;
+		# for each column
+		for (my $j=0;$j<=$#loopcol;$j++) {
+			my $col = $loopcol[$j]->{'coltitle'};
+			$dbcalc->execute($row,$col);
+			my ($value) = $dbcalc->fetchrow;
+# 			warn "$row / $col / $value";
+			$totalrow += $value;
+			$grantotal += $value;
+			$loopfooter[$j]->{'totalcol'} +=$value;
+			push @loopcell,{value => $value};
+		}
+		$looprow[$i]->{'totalrow'}=$totalrow;
+		$looprow[$i]->{'loopcell'}=\@loopcell;
+		$looprow[$i]->{'hilighted'} = 1 if $hilighted eq 1;
+		$hilighted = -$hilighted;
+	}
+
+# 	# the header of the table
+ 	$globalline{loopfilter}=\@loopfilter;
+	$globalline{looprow} = \@looprow;
+# 	# the core of the table
+ 	$globalline{loopcol} = \@loopcol;
+# 	# the foot (totals by borrower type)
+ 	$globalline{loopfooter} = \@loopfooter;
+ 	$globalline{total}= $grantotal;
+	$globalline{line} = $line;
+	$globalline{column} = $column;
+	push @mainloop,\%globalline;
+	return \@mainloop;
+}
+
+1;

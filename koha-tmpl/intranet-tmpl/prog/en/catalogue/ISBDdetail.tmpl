@@ -1,64 +1,18 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue MARC detail<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: ISBD View<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="search-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<div id="main">
 
+<div class="tabitem"><form action="MARCdetail.pl" method="get">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form> <form action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form> <form action="acqui.simple/addbiblio.pl"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Edit this Record" class="submit" /></form><!-- /TMPL_IF -->
+</div>
 
-<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="biblionumber" --></h1>
-
-	<div id="catalogue_ISBDdetail">
-		<!-- TMPL_VAR NAME="ISBD" -->
+	<div class="isbd">
+		<p><!-- TMPL_VAR NAME="ISBD" --></p>
 	</div>
 </div>
-
-<div id="action">
-		<form action="javascript:Addbiblio('')">
-			<input type="submit" value="Edit biblio" />
-		</form>
-		<form action="javascript:Addbiblio('duplicate')">
-			<input type="submit" value="Duplicate" />
-		</form>
-		<form action="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->">
-			<input type="submit" value="Edit item" />
-		</form>
-		<form action="javascript:confirm_deletion()">
-			<input type="submit" value="delete" />
-		</form>
-		<form action="MARCdetail.pl">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="Complete" />
-		</form>
-		<form action="#">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="Normal" />
-		</form>
-		<form action="ISBDdetail.pl">
-			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" value="ISBD" />
-		</form>
-		<form action="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
-			<input type="submit" value="Add to shelf" />
-		</form>
-		<form action="javascript:Dopop('detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')">
-			<input type="submit" value="Print" />
-		</form>
-		<!-- TMPL_IF name="subscriptionsnumber" -->
-		<form action="serials-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-			<input type="submit" value="Subscription(s)" />
-		</form>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="norequests" -->
-		<!-- TMPL_ELSE -->
-			<form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-				<input type="submit" value="Request" />
-			</form>
-		<!-- /TMPL_IF -->
-</div>
-
-<script language="javascript" type="text/javascript">
-function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

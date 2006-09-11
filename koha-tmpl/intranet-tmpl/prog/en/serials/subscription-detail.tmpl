@@ -1,31 +1,199 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription detail<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!--
+TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
 
-<h1>Subscription for <!-- TMPL_VAR name="bibliotitle" --></h1>
-<div id="serials_subscription_detail">
+<script language="Javascript" type="text/javascript">
+<!--
+// the english words used in display purposes
+var text = new Array('Number','Volume','Issue','Month','Week','Starting with:','Rollover at:','Choose Hemisphere:','Northern','Southern',
+'Autumn','Winter','Spring','Summer','Fall','Season','Year');
+
+// common pre defined number patterns
+function num_pattern() {
+var patternchoice = '<!--TMPL_VAR NAME='numberpattern'-->';
+	switch(patternchoice){
+	case "2":
+		options(text[1],text[0],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "3":
+		options(text[1],text[0]);
+		irregularity();
+		display_table(0);
+		break;
+	case "4":
+		options(text[1],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "5":
+		options(text[0],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "6":
+		var d = new Date();
+		var sYear = d.getFullYear();
+		// options_seasons(text[15],sYear);
+		irregularity();
+		is_season = 1;
+		display_table(0);
+		break;
+	case "7":
+		display_table(1);
+		irregularity();
+		break;
+	default:
+		options(text[0]);
+		irregularity();
+		display_table(0);
+		break;
+	}
+}
+
+function display_table(n) {
+	if(n==1){
+		document.getElementById("basetable").style.display = 'block';
+	} else {
+		document.getElementById("basetable").style.display = 'none';
+	}
+}
+
+// to dispaly the options section
+function options(x,y,z){
+var textbox = '';
+	// alert("X: "+x+"Y: "+y+"Z: "+z);
+	if(x){
+		document.f.xfield.value = x;
+		if(y){
+			document.f.yfield.value = y;
+			if(z){
+				document.f.zfield.value = z;
+			}
+		}
+	}
+}
+
+function irregularity(){
+	var periodicity = '<!-- TMPL_VAR NAME="periodicity"-->';
+	switch(periodicity){
+	case "1":
+		var names = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+		break;
+	case "2":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "3":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "4":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "5":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "6":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "7":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "8":
+		var names = new Array('Autumn','Winter','Spring','Summer','Fall');
+		break;
+	case "9":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "10":
+		expected =1;
+		break;
+	default:
+		break;
+	}
+
+	<!-- TMPL_IF NAME="irregularity" -->
+	var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
+	var irregarray = irregular.split('|');
+	var irregtext = '<p>';
+	for(var i=0;i<irregarray.length;i++){
+		irregtext += names[i]+' &nbsp;';
+	}
+	irregtext += '</p>';
+	document.getElementById("irreg").innerHTML = irregtext;
+	<!-- /TMPL_IF -->
+}
+
+-->
+</script>
+
+
+<h1>Subscription Details for biblio :  <!-- TMPL_VAR name="biblionumber" --></h1>
+<form class="inline" method="get" action="subscription-add.pl">
+<input type="hidden" name="op" value="mod" />
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="submit" class="submit" title="Modify subscription" value="Edit" /></form>
+
+<form class="inline" method="get" action="serials-receive.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="submit" class="submit" value="Receive Issues" /></form>
+
+<form class="inline" method="get" action="serial-issues.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="All issues on this title" value="Issue History" /></form>
+
+<form class="inline" method="get" action="/cgi-bin/koha/serials/serials-home.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->" value="Subscriptions" /></form>
+
+<form class="inline" method="get" action="/cgi-bin/koha/catalogue/MARCdetail.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit"  title="go to <!-- TMPL_VAR name="bibliotitle" -->" value="View Biblio Record" /></form>
+
+<form class="inline"><input type="submit" class="cancel" value="Delete Subscription" onclick="confirm_deletion(); return false;" /></form>
+<!-- TMPL_IF NAME="routing" -->
+<form class="inline" method="get" action="/cgi-bin/koha/serials/routing.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="submit"  class="submit" value="Edit Routing List"/></form>
+<!-- TMPL_ELSE -->
+<form class="inline" method="get" action="/cgi-bin/koha/serials/routing.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input type="hidden" name="op" value="new" />
+<input type="submit"  class="submit" value="Create Routing List"/></form>
+<!-- /TMPL_IF -->
+
+<table>
+<tr valign="top"><td>
+
+<div class="bloc25">
 	<h2>Subscription information</h2>
-		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
-		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
-		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
-		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
-		<p><label>Biblio</label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
-		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
-		<p>
-			<!-- TMPL_IF name="letter" -->
-				<label>Issue alert with letter:</label><!-- TMPL_VAR name="letter" -->
-			<!-- TMPL_ELSE -->
-				Borrowers can't subscribe to issue alerts
-			<!-- /TMPL_IF -->
-		</p>
-		<p><label>Distributed to</label>
-		<p><ul><!-- TMPL_VAR name="distributedto" --></ul></p>
+	<p><label class="label100">Librarian identity:</label> <!-- TMPL_VAR name="librarian" --></p><br />
+
+	<p><label class="label100">Supplier:</label> <!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</p>
+
+	<p><label class="label100">Cost:</label> <!-- TMPL_VAR name="cost" -->&nbsp;</p>
+
+	<p><label class="label100">Budget:</label> <!-- TMPL_VAR name="bookfundid" -->&nbsp;</p>
+
+	<p><label class="label100">Biblio:</label> <i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p><br />
+	<p><label class="label100">Call Number:</label> <!-- TMPL_VAR name="callnumber" -->&nbsp;</p>
+
+	<p><label class="label100">Notes:</label> <!-- TMPL_VAR name="notes" --></p>
 </div>
-<div id="serials_subscription_detail_planning">
+
+<div class="bloc25">
+	<form name="f">
 	<h2>Planning</h2>
-	<p><label>Beginnning date:</label> <!-- TMPL_VAR name="startdate" --></p>
-	<p><label>Frequency (*):</label>
+	<p><label class="label100">Beginning date:</label> <!-- TMPL_VAR name="publisheddate" -->
+	</p>
+	<p><label class="label100">Frequency (*):</label>
 		<!--TMPL_IF name="periodicity1" -->
 				1/day
 		<!-- /TMPL_IF -->
@@ -60,108 +228,156 @@
 				1/2 years
 		<!-- /TMPL_IF -->
 	</p>
-	<p><label>Arrives on:</label>
-		<!--TMPL_IF name="arrival1" -->
-			Monday
+	<p><label class="label100">Number Pattern:</label>
+		<!-- TMPL_IF name="numberpattern1" -->
+			Number
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival2" -->
-				Tuesday
+		<!-- TMPL_IF name="numberpattern2" -->
+			Volume, Number, Issue
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival3" -->
-				Wednesday
+		<!-- TMPL_IF name="numberpattern3" -->
+			Volume, Number
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival4" -->
-				Thursday
+		<!-- TMPL_IF name="numberpattern4" -->
+			Volume, Issue
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival5" -->
-				Friday
+		<!-- TMPL_IF name="numberpattern5" -->
+			Number, Issue
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival6" -->
-				Saturday
+		<!-- TMPL_IF name="numberpattern6" -->
+			Seasonal only
 		<!-- /TMPL_IF -->
-		<!--TMPL_IF name="arrival7" -->
-				Sunday
+		<!-- TMPL_IF name="numberpattern7" -->
+			None of the above
 		<!-- /TMPL_IF -->
+	</p>
+	<table cellpadding="0" cellspacing="0">
+	<tr><td>&nbsp;</td>
+	    <td align="right"><input type="text" name="xfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+	<!--TMPL_IF NAME="lastvalue2"-->
+	    <td align="right"><input type="text" name="yfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+	<!--/TMPL_IF-->
+	<!--TMPL_IF NAME="lastvalue3"-->
+	    <td align="right"><input type="text" name="zfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+	<!--/TMPL_IF-->
+	</tr>
+	<tr><td><p><label class="label100">Starting with:</label></p></td>
+	    <td align="center"><!--TMPL_VAR NAME="lastvalue1"--></td>
+	<!--TMPL_IF NAME="lastvalue2"-->
+	    <td align="center">&nbsp; 
+			<!--TMPL_VAR NAME="lastvalue2"-->
+	    </td>
+	<!--/TMPL_IF-->
+	<!--TMPL_IF NAME="lastvalue3"-->
+	    <td align="center">&nbsp; 
+			<!--TMPL_VAR NAME="lastvalue3"-->
+	    </td>
+	<!--/TMPL_IF-->
+	</tr>
+	<tr><td><p><label class="label100">Rollover:</label></p></td>
+	    <td align="center">&nbsp;</td>
+	<!--TMPL_IF NAME="whenmorethan2"-->
+	    <td align="center">&nbsp; 
+			<!--TMPL_VAR NAME="whenmorethan2"-->
+	    </td>
+	<!--/TMPL_IF-->
+	<!--TMPL_IF NAME="whenmorethan3"-->
+	    <td align="center">&nbsp; 
+			<!--TMPL_VAR NAME="whenmorethan3"-->
+	    </td>
+	<!--/TMPL_IF-->
+	</tr>
+	</table>
+	<!-- TMPL_IF NAME="irregularity" -->
+	<p><label class="label100">Irregularity:</label>
+		<div id="irreg"></div>
+	</p>
+	<!-- /TMPL_IF -->
+	<p><label class="label100">Begins on:</label>
+		<!--TMPL_VAR name="startdate" -->
+	</p>
+	</form>
 </div>
-<div id="serials_subscription_detail_length">
+<div class="bloc25">
 	<h2>Subscription length</h2>
-	<p><label>Number of issues</label><!-- TMPL_VAR name="numberlength" --></p>
-	<p><label>Number of weeks</label><!-- TMPL_VAR name="weeklength" --></p>
-	<p><label>Number of months</label><!-- TMPL_VAR name="monthlength" --></p>
+	<!-- TMPL_IF name="numberlength" --><p><label>Number of issues:</label> <!-- TMPL_VAR name="numberlength" --></p><!-- /TMPL_IF -->
+	<!-- TMPL_IF name="weeklength" --><p><label>Number of weeks:</label> <!-- TMPL_VAR name="weeklength" --></p><!-- /TMPL_IF -->
+	<!-- TMPL_IF name="monthlength" --><p><label class="label100">Number of months:</label> <!-- TMPL_VAR name="monthlength" --></p><!-- /TMPL_IF -->
 
 </div>
-<div id="serials_subscription_detail_calculation">
+<div class="bloc25">
 	<h2>Numbering calculation</h2>
-	<p>
-		<p>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></p>
-		<table>
-			<tr>
-				<th>&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<p><label class="label100">Numbering formula:</label> <!-- TMPL_VAR name="numberingmethod" --></p>
+</div>
+<div class="bloc25" id="basetable">
+	<table cellpadding="0" cellspacing="0" border="0" class="collapse">
+		<tr>
+			<th class="cell-header">&nbsp;</th>
+			<th class="cell-header">X</th>
+			<th class="cell-header">Y</th>
+			<th class="cell-header">Z</th>
 			</tr>
 			<tr>
-				<td>Add</td>
-				<td>
+				<td class="cell">Add</td>
+				<td class="cell">
 					<!-- TMPL_VAR name="add1" -->
 				</td>
-				<td>
+				<td class="cell">
 					<!-- TMPL_VAR name="add2" -->
 				</td>
-				<td>
+				<td class="cell">
 					<!-- TMPL_VAR name="add3" -->
 				</td>
 			</tr>
 			<tr>
-				<td>once every</td>
-				<td><!-- TMPL_VAR name="every1" --></td>
-				<td><!-- TMPL_VAR name="every2" --></td>
-				<td><!-- TMPL_VAR name="every3" --></td>
+				<td class="cell">once every</td>
+				<td class="cell"><!-- TMPL_VAR name="every1" --></td>
+				<td class="cell"><!-- TMPL_VAR name="every2" --></td>
+				<td class="cell"><!-- TMPL_VAR name="every3" --></td>
 			</tr>
 			<tr>
-				<td>When more than</td>
-				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+				<td class="cell">When more than</td>
+				<td class="cell"><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
 					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
-				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+				<td class="cell"><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
 					<i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
-				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+				<td class="cell"><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
 					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
-				<td>Set back to</td>
-				<td><!-- TMPL_VAR name="setto1" --></td>
-				<td><!-- TMPL_VAR name="setto2" --></td>
-				<td><!-- TMPL_VAR name="setto3" --></td>
+				<td class="cell">Set back to</td>
+				<td class="cell"><!-- TMPL_VAR name="setto1" --></td>
+				<td class="cell"><!-- TMPL_VAR name="setto2" --></td>
+				<td class="cell"><!-- TMPL_VAR name="setto3" --></td>
 			</tr>
 			<tr>
-				<td>
+				<td class="cell">
 						Last value
 				</td>
-				<td><!-- TMPL_VAR name="lastvalue1" --></td>
-				<td><!-- TMPL_VAR name="lastvalue2" --></td>
-				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+				<td class="cell"><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td class="cell"><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td class="cell"><!-- TMPL_VAR name="lastvalue3" --></td>
 			</tr>
 		</table>
 </div>
-<div id="serials_subscription_detail_issue_list">
+</td><td>
+<div class="bloc25">
 	<h2>Issues</h2>
-	<table class="small">
+	<table cellpadding="0" cellspacing="0" border="0" class="collapse">
 	<tr>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Issue number&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="cell-header">Issue number</th>
+		<th class="cell-header">Planned date</th>
+		<th class="cell-header">Status</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
-			<td>
+			<td class="cell">
 				<!-- TMPL_VAR name="serialseq" -->
 			</td>
-			<td>
+			<td class="cell">
 				<!-- TMPL_VAR name="planneddate" -->
 			</td>
-			<td>
+			<td class="cell">
 					<!--TMPL_IF name="status1" -->
 						Waited
 					<!-- /TMPL_IF -->
@@ -174,58 +390,28 @@
 					<!--TMPL_IF name="status4" -->
 						Missing
 					<!-- /TMPL_IF -->
-				</select>
-			</td>
-			<td>
-				<!-- TMPL_VAR name="notes" -->
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
 </div>
+</td></tr>
+</table>
 
-<div id="action">
-	<form action="subscription-add.pl">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
-		<input type="hidden" name="op" value="mod" />
-		<input type="submit" value="Modify subscription" />
-	</form>
-	<form action="serials-recieve.pl">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
-		<input type="submit" value="Recieve issues" />
-	</form>
-	<form action="serial-issues.pl">
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="submit" value="Issue history" />
-	</form>
-	<form action="/cgi-bin/koha/serials/serials-home.pl">
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="submit" value="Subscriptions" />
-	</form>
-<!-- TMPL_IF name="letter" -->
-	<form action="viewalerts.pl">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
-		<input type="submit" value="Alerted borrowers" />
-	</form>
-<!-- /TMPL_IF -->
-	<form action="/cgi-bin/koha/MARCdetail.pl">
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="submit" value="Back to biblio" />
-	</form>
-	<!-- TMPL_UNLESS name="totalissues" -->
-		<form action="javascript:confirm_deletion()">
-			<input type="submit" value="delete" />
-		</form>
-	<!-- /TMPL_UNLESS -->
-</div>
 
-<script>
+<script type="text/javascript">
 function _(s) { return s } // dummy function for gettext
 function confirm_deletion() {
-	var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	<!-- TMPL_IF name="totalissues" -->
+		var is_confirmed = confirm(_('You already made <!-- TMPL_VAR name="totalissues"--> receipts. Do you confirm deletion?'));
+	<!-- TMPL_ELSE -->
+		var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	<!-- /TMPL_IF -->	
 	if (is_confirmed) {
 		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
 	}
 }
+window.onload = num_pattern();
 </script>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

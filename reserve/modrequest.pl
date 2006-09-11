@@ -28,7 +28,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Reserves2;
-
+use C4::Members;
 my $input = new CGI;
 #print $input->header;
 
@@ -39,16 +39,16 @@ my @biblionumber=$input->param('biblionumber');
 my @borrower=$input->param('borrowernumber');
 my @branch=$input->param('pickup');
 my $count=@rank;
-
+my $cataloger=$input->param('loggedinuser');
 # goes through and manually changes the reserves record....
 # no attempt is made to check consistency.
 for (my $i=0;$i<$count;$i++){
-    UpdateReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i]); #from C4::Reserves2
+    UpdateReserves($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$cataloger); #from C4::Reserves2
 }
 
 my $from=$input->param('from');
 if ($from eq 'borrower'){
   print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrower[0]");
  } else {
-   print $input->redirect("/cgi-bin/koha/reserve/request.pl?bib=$biblionumber[0]");
+   print $input->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
 }

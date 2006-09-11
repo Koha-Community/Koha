@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 use strict;
-require Exporter;
+
 use CGI;
-#use C4::Interface::CGI::KOHACGI;
 use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -12,7 +11,7 @@ use POSIX qw(ceil floor);
 
 my $query = new CGI;
 my $dbh = C4::Context->dbh;
-$query->charset('UTF8');
+
 my $op = $query->param('op'); #show the search form or execute the search
 
 my $format=$query->param('MARC');
@@ -28,12 +27,29 @@ my $reorder=$query->param('reorder');
 my $number_of_results=$query->param('number_of_results');
 my $zoom=$query->param('zoom');
 my $ascend=$query->param('asc');
+
+my @marclist = $query->param('marclist');
 # collect all the fields ...
 my %search;
 my @forminputs;		#this is for the links to navigate among the results
 my (@searchdesc, %hashdesc); 	#this is to show the description of the current search
 my @fields = ('value', 'kohafield', 'and_or', 'relation','order','barcode','biblionumber','itemnumber','asc','from');
 
+###Collect all the marclist values coming from old Koha MARCdetails
+## Although we can not search on all marc fields- if any is matched in Zebra we can use it it
+my $sth=$dbh->prepare("Select marctokoha from koha_attr where tagfield=? and tagsubfield=? and intrashow=1");
+foreach my $marc (@marclist) {
+		if ($marc) {
+		$sth->execute(substr($marc,0,3),substr($marc,3,1));
+			if ((my $kohafield)=$sth->fetchrow){
+			push @kohafield,$kohafield;
+			push @and_or,"\@or";
+			push @value,@value[0] if @kohafield>1;
+			push @relation ,"\@attr 5=1";
+			}
+		}
+}
+#### Now   normal search routine
 foreach my $field (@fields) {
 	$search{$field} = $query->param($field);
 	if ($search{$field}) {

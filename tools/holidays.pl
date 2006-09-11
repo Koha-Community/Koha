@@ -1,28 +1,18 @@
 #!/usr/bin/perl
-#####Sets holiday periods for each branch. Datedues will be extended if branch is closed -TG
+
 use strict;
 use CGI;
 
 use C4::Auth;
-use C4::Output;
+
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
-use C4::Calendar;
+
+use C4::Calendar::Calendar;
 
 my $input = new CGI;
-#my $branch = $input->param('branch');
-my $branch=C4::Context->preference('defaultbranch') || $input->param('branch');
+my $branch = $input->param('branch');
+my $branch=C4::Context->preference('defaultbranch') unless $branch;
 my $dbh = C4::Context->dbh();
-# Get the template to use
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/holidays.tmpl",
-			                 type => "intranet",
-			                 query => $input,
-			                 authnotrequired => 0,
-			                 flagsrequired => {parameters => 1},
-					         debug => 1,
-			               });
 
 # Set all the branches.
 my $branches = $dbh->prepare("select branchcode, branchname from branches");
@@ -48,12 +38,10 @@ my $branchesList = CGI::scrolling_list(-name => 'branch',
 $branches->finish;
 
 # Get all the holidays
-warn "BRANCH : $branch";
-my $calendar = C4::Calendar->new(branchcode => $branch);
+my $calendar = C4::Calendar::Calendar->new(branchcode => $branch);
 my $week_days_holidays = $calendar->get_week_days_holidays();
 my @week_days;
 foreach my $weekday (keys %$week_days_holidays) {
-warn "WEEK DAY : $weekday";
 	my %week_day;
 	%week_day = (KEY => $weekday,
 		         TITLE => $week_days_holidays->{$weekday}{title},
@@ -90,6 +78,16 @@ foreach my $yearMonthDay (keys %$single_holidays) {
 		        DESCRIPTION => $single_holidays->{$yearMonthDay}{description});
 	push @holidays, \%holiday;
 }
+
+# Get the template to use
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "tools/holidays.tmpl",
+			                 type => "intranet",
+			                 query => $input,
+			                 authnotrequired => 0,
+			                 flagsrequired => {parameters => 1},
+					         debug => 1,
+			               });
 
 # Replace the template values with the real ones
 $template->param(BRANCHES => $branchesList);

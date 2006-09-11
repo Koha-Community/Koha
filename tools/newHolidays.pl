@@ -6,9 +6,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
-use C4::Calendar;
+use C4::Calendar::Calendar;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh();
@@ -21,7 +19,7 @@ my $year = $input->param('newYear');
 my $title = $input->param('newTitle');
 my $description = $input->param('newDescription');
 
-my $calendar = C4::Calendar->new(branchcode => $branchcode);
+my $calendar = C4::Calendar::Calendar->new(branchcode => $branchcode);
 
 if ($input->param('newOperation') eq 'weekday') {
 	$calendar->insert_week_day_holiday(weekday => $weekday,

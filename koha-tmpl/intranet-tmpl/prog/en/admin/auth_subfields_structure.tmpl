@@ -3,8 +3,7 @@
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-!-- TMPL_IF NAME="add_form" -->
+<!-- TMPL_IF NAME="add_form" -->
 
 	<h1><!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF -->
@@ -19,7 +18,6 @@
 	<tr><th><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable:</label></th><td><!-- TMPL_VAR NAME="repeatable" --></td></tr>
 	<tr><th><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory:</label></th><td><!-- TMPL_VAR NAME="mandatory" --> </td></tr>
 	<tr><th><label for="seealso<!-- TMPL_VAR NAME="row" -->">Search also:</label></th><td><input type="text" id="seealso<!-- TMPL_VAR NAME="row" -->" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size="20" /> (example for 200a: '200c','200d','200e'...)</td></tr>
-	<tr><th><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link:</label></th><td><!-- TMPL_VAR NAME="kohafield" --></td></tr>
 			</table>
 	<table>
 	<caption>Editor constaints</caption>
@@ -81,7 +79,6 @@
 <!-- TMPL_IF NAME="else" -->
 <h1>Authority MARC subfield structure admin for <!-- TMPL_VAR NAME="tagfield" --> (authority: <!--TMPL_VAR NAME="authtypecode" -->)</h1>
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
-<p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, and a Koha interface. This link ensures that both DB are synchronized</p>
 
 <table>
 <tr>
@@ -104,7 +101,6 @@
 			<i>subfield ignored</i>
 		<!-- TMPL_ELSE -->
 			<strong>Tab:</strong><!-- TMPL_VAR NAME="tab" -->,
-			<!-- TMPL_IF NAME="kohafield" --> | <strong>Koha field:</strong> <!-- TMPL_VAR NAME="kohafield" -->, <!--/TMPL_IF -->
 			<!-- TMPL_IF NAME="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="mandatory" -->Mandatory, <!-- TMPL_ELSE -->Not mandatory,<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="seealso" --> | <strong>See Also:</strong> <!-- TMPL_VAR NAME="seealso" -->,<!-- /TMPL_IF -->
@@ -130,7 +126,6 @@
 	</a>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-
 
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

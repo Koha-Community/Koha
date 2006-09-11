@@ -20,13 +20,10 @@
 use strict;
 use CGI;
 use C4::Context;
-use C4::Output;
-use C4::Database;
 use C4::Auth;
-use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -121,7 +118,7 @@ if ($op eq 'save') {
 	}
 	unless ($err) {$template->param(datasaved=>1);}
 }
-my $branches = GetBranches;
+my $branches = getbranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;

@@ -1,0 +1,235 @@
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Simple Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+
+var no_biblios_selected = "Select one or more documents to add to your virtual shelves.";
+var no_shelves_selected = "Select one or more virtual shelves to add the selected documents.";
+
+/*Add the selected biblionumber to the seleted virtual shelves*/
+function addBibliosToShelves(){
+	shelf_frm = document.shelf_form;
+	//check for at least one shelf seleted
+	shelf_sel = false;
+	for (var i=0; i < shelf_frm.shelfnumber.length; i++) {
+		if (shelf_frm.shelfnumber[i].checked) {
+			shelf_sel = true;
+			break;
+		}
+	}
+	if (shelf_sel) {
+	    shelf_frm.biblios.value = '';
+		for (var i=0; i < document.myform.bibid.length; i++) {
+			if (document.myform.bibid[i].checked) {
+				shelf_frm.biblios.value = shelf_frm.biblios.value + document.myform.bibid[i].value + ",";
+			}
+		}
+		if (shelf_frm.biblios.value == '') {
+            alert(no_biblios_selected);
+		} else {
+			shelf_frm.submit();
+		}
+	} else {
+        alert(no_shelves_selected);
+	}
+}
+
+function show_shelfPanel() {
+
+	if (document.getElementById('shelf_panel').style.display == 'block') {
+	    //document.getElementById('shelf_panel').style.visibility = 'hidden';
+	    document.getElementById('shelf_panel').style.display = 'none';
+	} else {
+	    document.getElementById('shelf_panel').style.display = 'block';
+        //document.getElementById('shelf_panel').style.visibility = 'visible';
+	}
+}
+
+</script>
+
+
+
+    <h1>Catalogue search</h1>
+
+<!-- TMPL_ELSE -->
+	<!-- TMPL_LOOP NAME="searchdesc" -->
+    	You searched:
+    	<div style="color:green;">|&nbsp;
+	 <!-- TMPL_VAR name="query" -->&nbsp;|&nbsp;
+		</div>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_VAR NAME="numrecords" --> results
+
+<div id="pages" >
+    <!-- Row of numbers corresponding to search result pages -->
+    
+    <!-- TMPL_LOOP NAME="numbers" -->
+		<!-- TMPL_IF NAME="highlight" -->
+		    <span class="current">
+		    <!-- TMPL_VAR NAME="number" -->
+	        </span>
+		<!-- TMPL_ELSE -->
+		    <span class="pages">
+	        <a class="pages"  href="catalogue-search.pl?op=do_search&amp;zoom=1&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="forminputs" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="HTML" --><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->&amp;reorder=<!-- TMPL_VAR NAME="reorder" -->"><!-- TMPL_VAR NAME="number" --></a>
+	        </span>
+		<!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+    
+</div>
+
+<!-- TMPL_IF name="shelvescount" -->
+<table style="border:0">
+	<tr>
+	    <td width="75%"></td>
+		<td>
+			<input type="button" value="Add to my virtual shelves" class="button"
+				    style="border:0px;background-color:#F2F0E9;text-align:left;display:block;"
+					onclick="show_shelfPanel();">
+
+			<div class="shelf_panel" id="shelf_panel" style="display:none;">
+	    		<form name="shelf_form" action="/cgi-bin/koha/bookshelves/add-biblios-to-shelves.pl" method="post">
+        		<input type="checkbox" name="shelfnumber" value="-1" style="display:none;">
+				<input type="hidden" name="biblios" value="">
+				<input type="hidden" name="return_url" value="catalogue-search.pl?op=do_search&amp;zoom=1&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">
+				<span class="style3">Select one or more documents and the virtual shelves you want to add them.</span>
+				<table style="border:0">
+				<!-- TMPL_LOOP name="shelves" -->
+		    	<tr>
+		        	<td>
+						<input type="checkbox" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+					</td>
+		        	<td>
+						<a class="style12" href="/cgi-bin/koha/bookshelves/shelves.pl?op=viewcontent&shelfnumber=<!-- TMPL_VAR name="shelfnumber" -->"><!-- TMPL_VAR name="shelfname" --></a>
+					</td>
+					<td>
+						<!-- TMPL_VAR name="bibliocount" --> documents
+					</td>
+				</tr>
+				<!-- /TMPL_LOOP -->
+				</table>
+				<div align="right" class="style5">
+					<input type="button" onclick="addBibliosToShelves()" value="Add" style="border:0px;background-color:#4898B0;height:20px;" class="button">
+				</div>
+				</form>
+			</div>
+  		</td>
+  	</tr>
+</table>
+<!-- /TMPL_IF -->
+
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="numrecords" -->
+<form name="myform" action="" style="margin:0px">
+	<br>
+	<table border="0" cellspacing="0" cellpadding="2" width="80%" align="center">
+	<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+        <th colspan="2"></th>
+		<th align="left"> <a  href="catalogue-search.pl?op=do_search&amp;zoom=1&amp;reorder=title,2<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">▼</a>Title <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=title,1">▲</a>
+	   </th>
+		<th align="left"> <a  href="catalogue-search.pl?op=do_search&amp;zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=author,2 ">▼</a>Author<a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=author,1">▲</a>
+
+		<th>Publisher</th>
+		
+		<th>&copy;</th>
+		<th align="left"> <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=lcsort,2 ">▼</a>LC <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=lcsort,1">▲</a>
+	<th>Availability</th>
+		<th>&nbsp;</th>
+	</tr>
+
+
+	<!-- Actual Search Results -->
+	    <input type="checkbox" name="bibid" value="0" style="display:none">
+		<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+			<tr <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->>
+				<td>
+					<div align="center">
+							<img src='<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif'
+							     width="16" height="16">
+						</div>
+				</td>
+				<td width="10" align="center" valign="middle">
+					<input type="checkbox" name="bibid" value='<!-- TMPL_VAR NAME="biblionumber" -->'>
+				</td>
+				<td >
+					
+					<a class="transparent" href="/cgi-bin/koha/<!--TMPL_VAR NAME="script"-->?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->
+					</a>
+					<br>
+					<span style="font-size:90%">
+                    <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_VAR NAME="subtitle" --><br> <!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="isbn" -->ISBN: <!-- TMPL_VAR NAME="isbn" --> <!-- /TMPL_IF -->
+					</span>
+				</td>
+				<td> <!-- TMPL_IF NAME="author" --> <a class="transparent" href="catalogue-search.pl?op=do_search&zoom=1&kohafield=author&value=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><br><!-- /TMPL_IF -->
+				    <span style="font-size:90%">
+					<!-- TMPL_LOOP NAME="additionalauthors" -->
+					    <a class="transparent" href="catalogue-search.pl?op=do_search&zoom=1&kohafield=author&value=<!-- TMPL_VAR NAME="value" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="value" --></a><br>
+                   				 <!-- /TMPL_LOOP -->
+                    </span>
+				</td>
+                <td ><!-- TMPL_VAR NAME="publishercode" --></a></td>
+				
+				<td align="center" > <!-- TMPL_IF NAME="copyrightdate" --> <!-- TMPL_VAR NAME="copyrightdate" --> <!-- TMPL_ELSE --> - <!-- /TMPL_IF --> </td>
+				<td><!-- TMPL_VAR NAME="classification" --></td>
+				<td align="center">
+                    <!-- TMPL_IF NAME="on-loan-p" --> <!-- TMPL_VAR NAME="on-loan-p" --> - On Loan <br> <!-- /TMPL_IF -->
+					    <!-- TMPL_IF NAME="lost-p" --> <!-- TMPL_VAR NAME="lost-p" --> - Lost <br> <!-- /TMPL_IF -->
+					  <!-- TMPL_IF NAME="withdrawn-p" --> <!-- TMPL_VAR NAME="withdrawn-p" --> -Withdrawn <br> <!-- /TMPL_IF -->
+					  
+					    <!-- TMPL_IF NAME="not-available-p" --> <!-- TMPL_VAR NAME="not-available-p" --> - Not available <br> <!-- /TMPL_IF -->
+							<!-- TMPL_IF name="location-only" -->
+							<!-- TMPL_VAR name="location-only" -->
+						<!-- TMPL_ELSE -->
+							-
+						<!-- /TMPL_IF -->
+				</td>
+				<td align="center">
+					<!-- TMPL_IF NAME="noitems" -->
+								-
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="norequests" -->
+        							 Not reservable
+								<!-- TMPL_ELSE -->
+									<a class="style1"
+									   href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+          								Reserve
+									</a>
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+
+
+		
+		</table>
+</form>
+<br>
+<div class="pages">
+    <!-- Row of numbers corresponding to search result pages -->
+
+    <!-- TMPL_LOOP NAME="numbers" -->
+		<!-- TMPL_IF NAME="highlight" -->
+		    <span class="current">
+		    <!-- TMPL_VAR NAME="number" -->
+	        </span>
+		<!-- TMPL_ELSE -->
+		    <span class="pages">
+	        <a class="pages" href="catalogue-search.pl?op=do_search&zoom=1&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="forminputs" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;pg=<!-- TMPL_VAR NAME="pg" -->&amp;reorder=<!-- TMPL_VAR NAME="reorder" -->"><!-- TMPL_VAR NAME=number --></a>
+	        </span>
+		<!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+    
+</div>
+<br>
+<div align="center">Results <b><!-- TMPL_VAR NAME="startfrom" --></b> - <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.</div>
+<!-- TMPL_ELSE -->
+	<div align="center">0 records <br></div>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<div align="center"><a class="transparent" href="catalogue-search.pl">New search</a></div>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

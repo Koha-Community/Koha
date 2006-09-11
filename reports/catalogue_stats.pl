@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+## Will not work. Requires a complete re-write for ZEBRA
 # $Id$
 
 # Copyright 2000-2002 Katipo Communications
@@ -23,7 +23,6 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use HTML::Template;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
@@ -32,7 +31,7 @@ use C4::Circulation::Circ2;
 
 =head1 NAME
 
-plugin that shows a stats on borrowers
+plugin that shows a stats on catalogue
 
 =head1 DESCRIPTION
 
@@ -106,99 +105,66 @@ if ($do_it) {
 	my %labels;
 	my $count=0;
 	my $req;
-	$req = $dbh->prepare("select count(dewey) from biblioitems ");
-	$req->execute;
-	my $hasdewey;
+###Use mfield of koha_attr instead of dewey
+my $sth = $dbh->prepare("select authorised_value from authorised_values where category='mfield' order by lib");
+	$sth->execute;
+	my @authorised_values;
+	#push @authorised_values,"";
+	while ((my $category) = $sth->fetchrow_array) {
+		push @authorised_values, $category;
+	}
+my $hasdewey;
+	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
+ 				-id => 'Filter',
+ 				-values   => \@authorised_values,
+ 				-size     => 1,
+ 				-multiple => 0 );
+	
+
+	my $haslccn=1;
+	my $hlghtlccn=1;
 	my @select;
-# 	push @select,"";
-	while (my ($value) =$req->fetchrow) {
-		$hasdewey =1 if (($value>2) and (! $hasdewey));
-		$count++ if (($value>2) and (! $hasdewey));
-#		push @select, $value;
-	}
-# 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
-	
-	$req = $dbh->prepare( "select count(lccn) from biblioitems ");
-	$req->execute;
-# 	undef @select;
-# 	push @select,"";
-	my $haslccn;
-	my $hlghtlccn;
-	while (my ($value) =$req->fetchrow) {
-		$hlghtlccn = !($hasdewey);
-		$haslccn =1 if (($value>2) and (! $haslccn));
-		$count++ if (($value) and (! $haslccn));
-#		push @select, $value;
-	}
-# 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
-	
-	$req = $dbh->prepare("select count(itemcallnumber) from items");
-	$req->execute;
-#	undef @select;
-#	push @select,"";
-	my $hascote;
-	my $hlghtcote;
-	while (my ($value) =$req->fetchrow) {
-		$hascote =1 if (($value>2) and (! $hascote));
-		$count++ if (($value) and (! $hascote));
-		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
-#		push @select, $value;
-	}
-# 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
-	$count++;
-	my $hglghtDT =$count % 2;
-#	warn "highlightDT ".$hglghtDT;
-	$count++;
-	my $hglghtPub =$count % 2;
-#	warn "highlightPub ".$hglghtPub;
-	$count++;
-	my $hglghtPY =$count % 2;
-#	warn "highlightPY ".$hglghtPY;
-	$count++;
-	my $hglghtHB =$count % 2;
-#	warn "highlightHB ".$hglghtHB;
-	$count++;
-	my $hglghtLOC =$count % 2;
-#	warn "highlightLOC ".$hglghtLOC;
-	
-	
-	$req = $dbh->prepare("select distinctrow itemtype from biblioitems order by itemtype");
-	$req->execute;
-	undef @select;
-	push @select,"";
-	while (my ($value) =$req->fetchrow) {
+	for my $value ("A".."Z") {
 		push @select, $value;
 	}
+	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
+ 				-id => 'Filter',
+ 				-values   => \@select,
+ 				-size     => 1,
+ 				-multiple => 0 );
+	
+	my $hascote;
+	my $hlghtcote;
+	$count++;
+	my $hglghtDT =$count % 2;
+	$count++;
+	my $hglghtPub =$count % 2;
+	$count++;
+	my $hglghtPY =$count % 2;
+	$count++;
+	my $hglghtHB =$count % 2;
+	$count++;
+	my $hglghtLOC =$count % 2;
+	my $hglghtSTACK =$count % 2;
+	
+	my $itemtypes = GetItemTypes;
+	undef @select;
+	push @select,"";
+	my %select_item;
+	$select_item{""} = "";
+foreach my $thisitemtype (sort keys %$itemtypes) {
+ 	push @select,$thisitemtype;
+	$select_item{$thisitemtype}=$itemtypes->{$thisitemtype}->{'description'};
+
+}
+
 	my $CGIitemtype=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'itemtype',
 				-values   => \@select,
+				-labels=>\%select_item,
 				-size     => 1,
 				-multiple => 0 );
 	
-# 	$req = $dbh->prepare("select distinctrow left(publishercode,75) from biblioitems order by publishercode");
-# 	$req->execute;
-# 	undef @select;
-# 	push @select,"";
-# 	while (my ($value) =$req->fetchrow) {
-# 		push @select, $value;
-# 	}
-# 	my $CGIpublisher=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
 
 	undef @select;
 	push @select,"";
@@ -215,14 +181,28 @@ if ($do_it) {
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
-	
-	$req = $dbh->prepare("select distinctrow holdingbranch from items order by holdingbranch");
+
+	my $CGIholdingbranch=CGI::scrolling_list( -name     => 'Filter',
+				-id => 'holdingbranch',
+				-values   => \@select,
+				-labels   => \%select_branches,
+				-size     => 1,
+				-multiple => 0 );
+	$req = $dbh->prepare("select authorised_value,lib from authorised_values where category='sections'");
 	$req->execute;
 	undef @select;
 	push @select,"";
-	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'holdingbranch',
+	my %desc;
+	$desc{""}="";
+	while (my ($value,$desc) =$req->fetchrow) {
+		push @select, $value;
+		$desc{$value}=$desc;
+	}
+
+	my $CGISTACK=CGI::scrolling_list( -name     => 'Filter',
+				-id => 'shelf',
 				-values   => \@select,
+				-labels =>\%desc,
 				-size     => 1,
 				-multiple => 0 );
 	
@@ -247,12 +227,12 @@ if ($do_it) {
 				-multiple => 0 );
 	
 	$template->param(hasdewey=>$hasdewey,
-#					CGIFromDeweyClass => $CGIdewey,
-#					CGIToDeweyClass => $CGIdewey,
+					CGIFromDeweyClass => $CGIdewey,
+					CGIToDeweyClass => $CGIdewey,
 					haslccn=> $haslccn,
 					hlghtlccn => $hlghtlccn,
-#					CGIFromLoCClass => $CGIlccn,
-#					CGIToLoCClass => $CGIlccn,
+					CGIFromLoCClass => $CGIlccn,
+					CGIToLoCClass => $CGIlccn,
 					hascote=> $hascote,
 					hlghtcote => $hlghtcote,
 					hglghtDT => $hglghtDT,
@@ -260,14 +240,11 @@ if ($do_it) {
 					hglghtPY => $hglghtPY,
 					hglghtHB => $hglghtHB,
 					hglghtLOC => $hglghtLOC,
-#					CGIFromCoteClass => $CGIcote,
-#					CGIToCoteClass => $CGIcote,
+					hglghtSTACK => $hglghtSTACK,
 					CGIItemType => $CGIitemtype,
-# 					CGIFromPublicationYear => $CGIpublicationyear,
-# 					CGIToPublicationYear => $CGIpublicationyear,
-#					CGIPublisher => $CGIpublisher,
 					CGIBranch => $CGIbranch,
-					CGILocation => $CGIlocation,
+					CGILocation => $CGIbranch,
+					CGISTACK => $CGISTACK,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice
 					);
@@ -302,16 +279,17 @@ sub calculate {
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Dewey Classification From" if ($i==0);
 			$cell{crit} .="Dewey Classification To" if ($i==1);
-			$cell{crit} .="Lccn Classification From" if ($i==2);
-			$cell{crit} .="Lccn Classification To" if ($i==3);
-			$cell{crit} .="Cote Classification From" if ($i==4);
-			$cell{crit} .="Cote Classification To" if ($i==5);
+			$cell{crit} .="Classification From" if ($i==2);
+			$cell{crit} .="Classification To" if ($i==3);
+			$cell{crit} .="Call Number From" if ($i==4);
+			$cell{crit} .="Call Number To" if ($i==5);
 			$cell{crit} .="Document type" if ($i==6);
 			$cell{crit} .="Publisher" if ($i==7);
 			$cell{crit} .="Publication year From" if ($i==8);
 			$cell{crit} .="Publication year To" if ($i==9);
 			$cell{crit} .="Branch :" if ($i==10);
 			$cell{crit} .="Location:" if ($i==11);
+			$cell{crit} .="Shelving:" if ($i==12);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -324,46 +302,47 @@ sub calculate {
 	
  	$linefilter[0] = @$filters[0] if ($line =~ /dewey/ )  ;
  	$linefilter[1] = @$filters[1] if ($line =~ /dewey/ )  ;
- 	$linefilter[0] = @$filters[2] if ($line =~ /lccn/ )  ;
- 	$linefilter[1] = @$filters[3] if ($line =~ /lccn/ )  ;
- 	$linefilter[0] = @$filters[4] if ($line =~ /items.itemcallnumber/ )  ;
- 	$linefilter[1] = @$filters[5] if ($line =~ /items.itemcallnumber/ )  ;
+ 	$linefilter[0] = @$filters[2] if ($line =~ /classification/ )  ;
+ 	$linefilter[1] = @$filters[3] if ($line =~ /classification/ )  ;
+ 	$linefilter[0] = @$filters[4] if ($line =~ /itemcallnumber/ )  ;
+ 	$linefilter[1] = @$filters[5] if ($line =~ /itemcallnumber/ )  ;
  	$linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
  	$linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
- 	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	@linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
+ 	$linefilter[0] = @$filters[10] if ($line =~ /homebranch/ ) ;
+ 	$linefilter[0] = @$filters[11] if ($line =~ /holdingbranch/ ) ;
+	$linefilter[0] = @$filters[12] if ($line =~ /shelf/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
  	$colfilter[1] = @$filters[1] if ($column =~ /dewey/ )  ;
- 	$colfilter[0] = @$filters[2] if ($column =~ /lccn/ )  ;
- 	$colfilter[1] = @$filters[3] if ($column =~ /lccn/ )  ;
+ 	$colfilter[0] = @$filters[2] if ($column =~ /classification/ )  ;
+ 	$colfilter[1] = @$filters[3] if ($column =~ /classification/ )  ;
  	$colfilter[0] = @$filters[4] if ($column =~ /itemcallnumber/ )  ;
  	$colfilter[1] = @$filters[5] if ($column =~ /itemcallnumber/ )  ;
  	$colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
  	$colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
- 	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	@colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
-
+ 	$colfilter[0] = @$filters[10] if ($column =~ /homebranch/ ) ;
+ 	$colfilter[0] = @$filters[11] if ($column =~ /holdingbranch/ ) ;
+	$colfilter[0] = @$filters[12] if ($column =~ /shelf/ ) ;
 # 1st, loop rows.
 	my $linefield;
 	if (($line =~/dewey/)  and ($deweydigits)) {
 		$linefield .="left($line,$deweydigits)";
-	} elsif (($line=~/lccn/) and ($lccndigits)) {
+	} elsif (($line=~/classification/) and ($lccndigits)) {
 		$linefield .="left($line,$lccndigits)";
-	} elsif (($line=~/items.itemcallnumber/) and ($cotedigits)) {
+	} elsif (($line=~/itemcallnumber/) and ($cotedigits)) {
 		$linefield .="left($line,$cotedigits)";
 	}else {
 		$linefield .= $line;
 	}
 	
-	
+warn $linefield,$colfilter[0],$linefilter[0],$line;	
 	my $strsth;
-	$strsth .= "select distinctrow $linefield from biblioitems left join items on (items.biblioitemnumber = biblioitems.biblioitemnumber) where $line is not null ";
+	$strsth .= "select distinctrow $linefield from biblio left join items on (items.biblionumber = biblio.biblionumber) where $line is not null ";
 	if ( @linefilter ) {
 		if ($linefilter[1]){
 			$strsth .= " and $line >= ? " ;
@@ -399,7 +378,7 @@ sub calculate {
 	my $colfield;
 	if (($column =~/dewey/)  and ($deweydigits)) {
 		$colfield .="left($column,$deweydigits)";
-	}elsif (($column=~/lccn/) and ($lccndigits)) {
+	}elsif (($column=~/classification/) and ($lccndigits)) {
 		$colfield .="left($column,$lccndigits)";
 	}elsif (($column=~/itemcallnumber/) and ($cotedigits)) {
 		$colfield .="left($column,$cotedigits)";
@@ -408,7 +387,7 @@ sub calculate {
 	}
 	
 	my $strsth2;
-	$strsth2 .= "select distinctrow $colfield from biblioitems left join items on (items.biblioitemnumber = biblioitems.biblioitemnumber) where $column is not null ";
+	$strsth2 .= "select distinctrow $colfield from biblio left join items on (items.biblionumber = biblio.biblionumber) where $column is not null ";
 	if (( @colfilter ) and ($colfilter[1])) {
 		$strsth2 .= " and $column> ? and $column< ?";
 	}elsif ($colfilter[0]){
@@ -452,45 +431,83 @@ sub calculate {
 		}
 		$table{$row->{rowtitle}}->{totalrow}=0;
 	}
-
-# preparing calculation
+my @kohafield;
+my @values;
+my @and_or;
+my @relations;
+# preparing calculation in zebra
 	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM biblioitems LEFT JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber) WHERE 1";
 	if (@$filters[0]){
 		@$filters[0]=~ s/\*/%/g;
 		$strcalc .= " AND dewey >" . @$filters[0] ."";
+		push @and_or, "\@and";
+		push @relations "\@attr 2=5";
+		push @kohafield, "dewey";
+		push @values,  @$filters[0] ;
+
 	}
 	if (@$filters[1]){
 		@$filters[1]=~ s/\*/%/g ;
 		$strcalc .= " AND dewey <" . @$filters[1] ."";
+		push @and_or, "\@and";
+		push @relations "\@attr 2=1";
+		push @kohafield, "dewey";
+		push @values,  @$filters[1] ;
+
 		
 	}
 	if (@$filters[2]){
 		@$filters[2]=~ s/\*/%/g ;
-		$strcalc .= " AND lccn >" . @$filters[2] ."" ;
+		$strcalc .= " AND classification >=" .$dbh->quote(@$filters[2]) ."" ;
+		push @and_or, "\@and";
+		push @relations "\@attr 2=4";
+		push @kohafield, "classification";
+		push @values,  @$filters[2];
+
 	}
 	if (@$filters[3]){
 		@$filters[3]=~ s/\*/%/g;
-		$strcalc .= " AND lccn <" . @$filters[3] ."" ;
+		$strcalc .= " AND classification <=" . $dbh->quote(@$filters[3]) ."" ;
+		push @and_or, "\@and";
+		push @relations "\@attr 2=2";
+		push @kohafield, "classification";
+		push @values,  @$filters[3] ;
 	}
 	if (@$filters[4]){
 		@$filters[4]=~ s/\*/%/g ;
 		$strcalc .= " AND items.itemcallnumber >=" . $dbh->quote(@$filters[4]) ."" ;
+		push @and_or, "\@and";
+		push @relations "\@attr 2=4";
+		push @kohafield, "itemcallnumber";
+		push @values,  @$filters[4] ;
 	}
 	
 	if (@$filters[5]){
 		@$filters[5]=~ s/\*/%/g;
 		$strcalc .= " AND items.itemcallnumber <=" . $dbh->quote(@$filters[5]) ."" ;
+		push @and_or, "\@and";
+		push @relations "\@attr 2=2";
+		push @kohafield, "itemcallnumber";
+		push @values,  @$filters[5] ;
 	}
 	
 	if (@$filters[6]){
 		@$filters[6]=~ s/\*/%/g;
 		$strcalc .= " AND biblioitems.itemtype like '" . @$filters[6] ."'";
+		push @and_or, "\@and";
+		push @relations "\@attr 2=3";
+		push @kohafield, "itemtype";
+		push @values,  @$filters[6] ;
 	}
 	
 	if (@$filters[7]){
 		@$filters[7]=~ s/\*/%/g;
 		@$filters[7].="%" unless @$filters[7]=~/%/;
 		$strcalc .= " AND biblioitems.publishercode like \"" . @$filters[7] ."\"";
+		push @and_or, "\@and";
+		push @relations "\@attr 2=3";
+		push @kohafield, "publishercode";
+		push @values,  @$filters[7]; 
 	}
 	if (@$filters[8]){
 		@$filters[8]=~ s/\*/%/g;
@@ -508,11 +525,14 @@ sub calculate {
 		@$filters[11]=~ s/\*/%/g;
 		$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
 	}
-	
+	if (@$filters[12]){
+		@$filters[12]=~ s/\*/%/g;
+		$strcalc .= " AND items.stack like '" . @$filters[12] ."'" if ( @$filters[12] );
+	}
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
 	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
-	$dbcalc->execute;
+#	$dbcalc->execute;
 #	warn "filling table";
 	
 	my $emptycol; 
@@ -527,11 +547,6 @@ sub calculate {
 		$grantotal += $value;
 	}
 
-# 	my %cell = {rowtitle => 'zzROWEMPTY'};
-# 	push @loopline,\%cell;
-# 	undef %cell;
-# 	my %cell;
-# 	%cell = {coltitle => "zzEMPTY"};
  	push @loopcol,{coltitle => "NULL"} if ($emptycol);
 	
 	foreach my $row ( sort keys %table ) {

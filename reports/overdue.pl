@@ -21,18 +21,21 @@
 
 use strict;
 use C4::Context;
-use C4::Output;
 use CGI;
-use HTML::Template;
-use C4::Auth;
 
+use C4::Auth;
+use C4::Date;
+use C4::Biblio;
+use C4::Search;
+use C4::Interface::CGI::Output;
+use C4::Date;
 my $input = new CGI;
 my $type=$input->param('type');
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 
 my ($template, $loggedinuser, $cookie)
-      = get_template_and_user({template_name => "overdue.tmpl",
+      = get_template_and_user({template_name => "reports/overdue.tmpl",
 	                                 query => $input,
 	                                 type => "intranet",
 	                                 authnotrequired => 0,
@@ -41,11 +44,13 @@ my ($template, $loggedinuser, $cookie)
 	                                 });
 my $duedate;
 my $bornum;
-my $itemnum;
+my $itemnumber;
+my $barcode;
 my $data1;
 my $data2;
 my $data3;
 my $name;
+my $categorycode;
 my $phone;
 my $email;
 my $biblionumber;
@@ -53,53 +58,69 @@ my $title;
 my $author;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
-
+my $dateformatted= sprintf ("%0.2d", $datearr[3]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.(1900+$datearr[5]);
 my $dbh = C4::Context->dbh;
+my $count=0;
+my @results;
+my @kohafields;
+my @values;
+my @relations;
+my $sort;
+my @and_or;
+push @kohafields, "date_due","date_due";
+push @values,$todaysdate,"0000-00-00";
+push @relations ,"\@attr 2=1","\@attr 2=5"; ## 
+push @and_or,"\@and";
+	($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations,$sort,\@and_or);
 
-my $sth=$dbh->prepare("select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<? order by date_due,borrowernumber");
-$sth->execute($todaysdate);
+
 
 my @overduedata;
-while (my $data=$sth->fetchrow_hashref) {
-  $duedate=$data->{'date_due'};
+foreach my $xml(@results) {
+my @kohafields; ## just parse the fields required
+push @kohafields,"title","author","biblionumber","itemnumber","barcode","date_due","borrowernumber";
+my ($biblio,@itemrecords) = XMLmarc2koha($dbh,$xml,"",@kohafields);
+ foreach my $data(@itemrecords){
+   if ($data->{'date_due'} lt $todaysdate && $data->{'date_due'} gt "0000-00-00" ){
+  $duedate=format_date($data->{'date_due'});
   $bornum=$data->{'borrowernumber'};
-  $itemnum=$data->{'itemnumber'};
+  $itemnumber=$data->{'itemnumber'};
+  $biblionumber=$data->{'biblionumber'};
+  $barcode=$data->{'barcode'};
 
-  my $sth1=$dbh->prepare("select concat(firstname,' ',surname),phone,emailaddress from borrowers where borrowernumber=?");
+  my $sth1=$dbh->prepare("select concat(firstname,' ',surname),phone,emailaddress,categorycode from borrowers where borrowernumber=?");
   $sth1->execute($bornum);
   $data1=$sth1->fetchrow_hashref;
   $name=$data1->{'concat(firstname,\' \',surname)'};
   $phone=$data1->{'phone'};
+  $categorycode=$data1->{'categorycode'};
   $email=$data1->{'emailaddress'};
   $sth1->finish;
 
-  my $sth2=$dbh->prepare("select biblionumber from items where itemnumber=?");
-  $sth2->execute($itemnum);
-  $data2=$sth2->fetchrow_hashref;
-  $biblionumber=$data2->{'biblionumber'};
-  $sth2->finish;
+ 
 
-  my $sth3=$dbh->prepare("select title,author from biblio where biblionumber=?");
-  $sth3->execute($biblionumber);
-  $data3=$sth3->fetchrow_hashref;
-  $title=$data3->{'title'};
-  $author=$data3->{'author'};
-  $sth3->finish;
-  push (@overduedata, {	duedate      => $duedate,
+
+
+  $title=$biblio->{'title'};
+  $author=$biblio->{'author'};
+   push (@overduedata, {	duedate      => format_date($duedate),
 			bornum       => $bornum,
-			itemnum      => $itemnum,
+			itemnum      => $itemnumber,
 			name         => $name,
+			categorycode         => $categorycode,
 			phone        => $phone,
 			email        => $email,
 			biblionumber => $biblionumber,
+
+			barcode		=>$barcode,
 			title        => $title,
 			author       => $author });
+  }## if overdue
 
-}
+  }##foreach item
+}## for each biblio
 
-$sth->finish;
-
-$template->param(		todaysdate        => $todaysdate,
+$template->param(		dateformatted      => $dateformatted, count=>$count,
 		overdueloop       => \@overduedata );
 
-print "Content-Type: text/html\n\n", $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+<body>
+
+<script language="JavaScript" type="text/javascript">
+
+function goforward()
+{
+var start = <!-- TMPL_VAR NAME="index">;
+var subfields=opener.opener.document.getElementsByName('subfield'+start);
+var fields=opener.opener.document.getElementsByName('field_value'+start);
+// go forward, until reaching the end of the field.
+for  (var i=0; i<fields.length; i++) {
+	if ( subfields.item(i).value == '<!-- TMPL_VAR NAME="linkidsubfield">') {
+		fields.item(i).value = "<!-- TMPL_VAR NAME="authid">";
+	}
+	<!-- TMPL_LOOP NAME="0XX" -->
+		<!-- TMPL_LOOP NAME="subfield" -->
+			if (subfields.item(i).value == '<!-- TMPL_VAR NAME="marc_subfield" -->') 
+			{
+				fields.item(i).value = "<!-- TMPL_VAR NAME="marc_value" -->";
+			}
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+}
+
+	opener.close();
+	self.close();
+	return false;
+
+
+}
+</script>
+<script language="javascript" type="text/javascript">
+window.onload=goforward();
+</script>
+
+
+</body>
+</html>

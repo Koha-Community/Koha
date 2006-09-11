@@ -26,7 +26,6 @@
 use strict;
 use CGI;
 use C4::Output;
-use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Context;
@@ -35,7 +34,8 @@ use C4::Stats;
 
 my $input=new CGI;
 my $time=$input->param('time');
-
+my $date=$input->param('from');
+my $date2=$input->param('to');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "stats.tmpl",
 			     query => $input,
@@ -45,33 +45,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $date;
-my $date2;
-if ($time eq 'yesterday'){
-	$date=ParseDate('yesterday');
-	$date2=ParseDate('today');
-}
-if ($time eq 'today'){
-	$date=ParseDate('today');
-	$date2=ParseDate('tomorrow');
-}
-if ($time eq 'daybefore'){
-	$date=ParseDate('2 days ago');
-	$date2=ParseDate('yesterday');
-}
-if ($time eq 'month') {
-	$date = ParseDate('1 month ago');
-	$date2 = ParseDate('today');
-	warn "d : $date // d2 : $date2";
-}
-if ($time=~ /\//){
-	$date=ParseDate($time);
-	$date2=ParseDateDelta('+ 1 day');
-	$date2=DateCalc($date,$date2);
-}
-$date=UnixDate($date,'%Y-%m-%d');
-$date2=UnixDate($date2,'%Y-%m-%d');
-	warn "d : $date // d2 : $date2";
+
+
 my @payments=TotalPaid($date,$date2);
 my $count=@payments;
 my $total=0;
@@ -81,20 +56,22 @@ my @loop;
 my %row;
 my $i=0;
 while ($i<$count){
-	warn " pay : ".$payments[$i]{'timestamp'};
+#	warn " pay : ".$payments[$i]{'timestamp'};
 	my $time=$payments[$i]{'datetime'};
 	my $payments=$payments[$i]{'value'};
 	my $charge=0;
 	my @temp=split(/ /,$payments[$i]{'datetime'});
-	my $date=$temp[0];
-	my @charges=getcharges($payments[$i]{'borrowernumber'},$payments[$i]{'timestamp'});
-	my $count=@charges;
+	my $date=$payments[$i]{'date'};
+
+	my @charges=getcharges($payments[$i]{'borrowernumber'},$payments[$i]{'date'});
+	my $count2=@charges;
+warn "$count2";
 	my $temptotalf=0;
 	my $temptotalr=0;
 	my $temptotalres=0;
 	my $temptotalren=0;
 	my $temptotalw=0;
-	for (my $i2=0;$i2<$count;$i2++){
+	for (my $i2=0;$i2<$count2;$i2++){
 		$charge+=$charges[$i2]->{'amount'};
 		%row = ( name   => $charges[$i2]->{'description'},
 					type   => $charges[$i2]->{'accounttype'},
@@ -149,6 +126,7 @@ while ($i<$count){
 		$bornum=$payments[$i]{'borrowernumber'};
 		$i++;
 	}
+
 }
 
 $template->param( loop1   => \@loop,

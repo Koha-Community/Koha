@@ -43,18 +43,24 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Koha;
+use C4::Search;
+use MARC::Record;
 use C4::Biblio;
+use C4::Acquisition;
+use HTML::Template;
 
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
-my $biblionumber=$query->param('biblionumber');
-my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
+my $biblionumber=$query->param('bib');
+my $bibid = $query->param('bibid');
+$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
+$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
+my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
-my $record =MARCgetbiblio($dbh,$biblionumber);
+my $record =MARCgetbiblio($dbh,$bibid);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/ISBDdetail.tmpl",
@@ -129,13 +135,12 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchdetail($value)->{branchname};
+       return getbranchname($value);
     }
 
    #---- itemtypes
    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-   		my $itemtypedef = getitemtypeinfo($itemtype);
-       return $itemtypedef->{description};
+       return ItemType($value);
     }
 
    #---- "true" authorized value

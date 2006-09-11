@@ -23,14 +23,11 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use HTML::Template;
 use C4::Search;
-use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 use Date::Manip;
-use C4::Members;
 
 =head1 NAME
 
@@ -62,11 +59,7 @@ my ($template, $borrowernumber, $cookie)
 				flagsrequired => {editcatalogue => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+$template->param(do_it => $do_it);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($limit, $column, \@filters);
@@ -137,50 +130,10 @@ if ($do_it) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
-	#branch
-	my $branches = getallbranches;
-	my @branchloop;
-	foreach my $thisbranch (keys %$branches) {
-# 			my $selected = 1 if $thisbranch eq $branch;
-			my %row =(value => $thisbranch,
-# 									selected => $selected,
-									branchname => $branches->{$thisbranch}->{'branchname'},
-							);
-			push @branchloop, \%row;
-	}
-
-	#doctype
-	my $itemtypes = GetItemTypes;
-	my @itemtypeloop;
-	foreach my $thisitemtype (keys %$itemtypes) {
-# 			my $selected = 1 if $thisbranch eq $branch;
-			my %row =(value => $thisitemtype,
-# 									selected => $selected,
-									description => $itemtypes->{$thisitemtype}->{'description'},
-							);
-			push @itemtypeloop, \%row;
-	}
 	
-	#borcat
- 	my ($codes,$labels) = borrowercategories;
- 	my @borcatloop;
- 	foreach my $thisborcat (sort keys %$labels) {
- # 			my $selected = 1 if $thisbranch eq $branch;
- 			my %row =(value => $thisborcat,
- # 									selected => $selected,
- 									description => $labels->{$thisborcat},
- 							);
- 			push @borcatloop, \%row;
- 	}
-	
-	#Day
-	#Month
 	$template->param(
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice,
-					branchloop =>\@branchloop,
-					itemtypeloop =>\@itemtypeloop,
-					borcatloop =>\@borcatloop,
+					CGIsepChoice => $CGIsepChoice
 					);
 output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -288,7 +241,7 @@ sub calculate {
 	
 		while (my ($celvalue) = $sth2->fetchrow) {
 			my %cell;
-			$cell{'coltitle'} = ($celvalue?$celvalue:"NULL");
+			$cell{coltitle} = $celvalue;
 			push @loopcol, \%cell;
 		}
 	#	warn "fin des titres colonnes";
@@ -341,29 +294,31 @@ sub calculate {
 	
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
-	$strcalc .= " order by RANK DESC";
-	$strcalc .= ",$colfield " if ($colfield);
-# 	my $max;
-# 	if (@loopcol) {
-# 		$max = $line*@loopcol;
-# 	} else { $max=$line;}
-# 	$strcalc .= " LIMIT 0,$max";
+	$strcalc .= " order by ";
+	$strcalc .= "$colfield, " if ($colfield);
+	$strcalc .= "RANK DESC ";
+	my $max;
+	if (@loopcol) {
+		$max = $line*@loopcol;
+	} else { $max=$line;}
+	$strcalc .= " LIMIT 0,$max";
 	warn "SQL :". $strcalc;
 	
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
 	my $previous_col;
-	my %indice;
+	my $i=1;
 	while (my  @data = $dbcalc->fetchrow) {
 		my ($row, $rank, $id, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
-		$indice{$col}=1 if (not($indice{$col}));
-		$table[$indice{$col}]->{$col}->{'name'}=$row;
-		$table[$indice{$col}]->{$col}->{'count'}=$rank;
-		$table[$indice{$col}]->{$col}->{'link'}=$id;
-#		warn " ".$i." ".$col. " ".$row;
-		$indice{$col}++;
+		$i=1 if (($previous_col) and not($col eq $previous_col));
+		$table[$i]->{$col}->{'name'}=$row;
+		$table[$i]->{$col}->{'count'}=$rank;
+		$table[$i]->{$col}->{'link'}=$id;
+		warn " ".$i." ".$col. " ".$row;
+		$i++;
+		$previous_col=$col;
 	}
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
@@ -371,7 +326,7 @@ sub calculate {
 	for ($i=1; $i<=$line;$i++) {
 		my @loopcell;
 		warn " $i";
-		#@loborrowersopcol ensures the order for columns is common with column titles
+		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		my $colcount=0;
 		foreach my $col ( @loopcol ) {

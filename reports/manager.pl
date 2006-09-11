@@ -21,10 +21,9 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
-use HTML::Template;
+
 
 my $input = new CGI;
 my $report_name=$input->param("report_name");
@@ -40,11 +39,7 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		report_name => $report_name,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+		report_name => $report_name);
 my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
 unless (opendir(DIR, "$cgidir")) {
 	$cgidir = C4::Context->intranetdir."/reports/";

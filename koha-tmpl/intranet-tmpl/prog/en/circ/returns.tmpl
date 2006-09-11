@@ -1,15 +1,12 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
-
-
 <!-- TMPL_IF Name="found" -->
-		<h3>Reserve Found<!-- TMPL_IF Name="waiting" --> (item is already consigned) <!-- /TMPL_IF --></h3>
+		<h3 class="alert">Reserve Found<!-- TMPL_IF Name="waiting" --> (item is already <em>consigned</em>) <!-- /TMPL_IF --></h3>
 		<!-- TMPL_IF Name="waiting" -->
-		
+		<div class="items">
 		<table>
-		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+		<caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
 		<tr><th>Patron: </th><td>
 			<ul>
 						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
@@ -17,39 +14,27 @@
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
 			<li><!-- TMPL_VAR Name="borphone" --></li>
+			
 			</ul></td></tr>
 	<tr><th>Transfer to:</th><td><!-- TMPL_VAR Name="branchname" --></td></tr>
-		</table><form method="post" action="returns.pl" name="mainform" id="mainform">
-			<input type="submit" value="Confirm" /><!-- TMPL_LOOP Name="inputloop" -->
+		</table></div><form method="post" action="returns.pl" name="mainform" id="mainform">
+			<input type="submit" value="Confirm" class="submit" /><!-- TMPL_LOOP Name="inputloop" -->
 				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
 				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
 				<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
 			<!-- /TMPL_LOOP -->
 			<input type="hidden" name="barcode" value="0" />
-			</form>			
-		<!-- /TMPL_IF -->
+			</form>
 		
-		<!-- TMPL_IF Name="transfer" -->
-			<h2>This item must return to his homebranch :</h2>
-			<p>The document <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) Must be returned to his homebranch(<b><!-- TMPL_VAR NAME="itemhomebranch" --></b>)
-				<form method="post" action="returns.pl">
-					<!-- TMPL_LOOP Name="inputloop" -->
-						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
-						<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
-						<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
-					<!-- /TMPL_LOOP -->
-					<input type="hidden" name="barcode" value="0">
-					<input type="submit" value="OK">
-				</form>
+			
 		<!-- /TMPL_IF -->
-		
 		<!-- TMPL_IF Name="diffbranch" -->
-			<h3>Item Consigned:</h3>
-    	
+			<h3>Item Consigned:</h3><br>
+    	<div class="item">
 		<table>
-		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+		<caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
 		<tr><th>Patron:</th><td><!-- TMPL_VAR Name="name" --></td></tr>
-		</table><form method="post" action="returns.pl" name="mainform" id="mainform"><input type="submit" value="OK" />
+		</table></div><form method="post" action="returns.pl" name="mainform" id="mainform"><input type="submit" value="OK" />
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<!-- TMPL_UNLESS Name="first" -->
 					<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
@@ -64,20 +49,21 @@
 
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="reserved" -->
-			
+			<div class="items">
 			<table>
-			<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+			<caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
 			<tr><th>Patron: </th><td>
 			<ul>
 						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
-			<li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
+			<li><!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" --></li>
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
 			<li><!-- TMPL_VAR Name="borphone" --></li>
+			<!-- Display for NPL // <!-- TMPL_IF NAME="boremail" --><li><a href="/intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->" onclick="window.open('/intranet-reserve-notify.php?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;biblionum=<!-- TMPL_VAR NAME="itembiblionumber" -->','notify','width=650,height=450,location=no,menubar=no,toolbar=no,scrollbars=yes'); return false;"><!-- TMPL_VAR Name="boremail" --></a></li><!-- /TMPL_IF --> // Display for NPL -->
 			</ul></td></tr>
 			<tr><th>Transfer to: </th><td><!-- TMPL_VAR Name="branchname" --></td></tr></table>
-			 <form method="post" action="returns.pl" name="mainform" id="mainform">
-			<input type="submit" value="Confirm" />
+			</div> <form method="post" action="returns.pl" name="mainform" id="mainform">
+			<input type="submit" class="submit" value="Confirm" />
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
 				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -90,80 +76,85 @@
 	
 <!-- TMPL_ELSE -->
 <h1>Circulation: Returns</h1>
-	
+	<div class="details">
 	<form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
 			<label for="barcode">Enter Item Barcode</label>
-			<input name="barcode" id="barcode" size="14" maxlength="14" />
-			<input type="submit" value="Submit" />
+			<input name="barcode" id="barcode" size="14" maxlength="14" class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" />
+			<input type="submit" class="submit" value="Submit" />
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
 				<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
 				<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" />
 			<!-- /TMPL_LOOP -->
 		</form><!-- TMPL_IF NAME="errmsgloop" --><!-- TMPL_LOOP Name="errmsgloop" -->
-				
+				<div class="error">
 				<!-- TMPL_IF Name="badbarcode" -->
 					No Item with barcode: <!-- TMPL_VAR Name="msg" -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="ispermanent" -->
 					Please return to  <!-- TMPL_VAR Name="msg" -->
 				<!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF Name="reserveissued" -->
+					Issued from RESERVE Section-  Use RESERVE return.
+				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF Name="notissued" -->
 					Not On Issue.
-				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF --><!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="waslost" -->
 					Item was lost, now found.
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="withdrawn" -->
 					Item Cancelled
 				<!-- /TMPL_IF -->
-				
+				</div>
 			<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF Name="returned" -->
-<table>
+<div class="table"><table>
 		<tr><th>Item Information</th><th>Patron Information</th></tr>
 		<tr><td><!-- TMPL_VAR Name="itemtitle" -->
-		</td><td>
+		</td><td><div class="flags">
 <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->"><!-- TMPL_VAR Name="riborcnum" --></a>
 		<!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" -->
 
+<!-- removed: removed-from-returns.tmpl -->
 <!-- TMPL_IF Name="flagset" -->
  (<!-- TMPL_LOOP Name="flagloop" -->
-<!-- TMPL_VAR Name="flag" -->, 
-<!-- /TMPL_LOOP -->)<!-- /TMPL_IF -->
+<span class="error"><!-- TMPL_VAR Name="flag" -->, </span>
+<!-- /TMPL_LOOP -->)<!-- /TMPL_IF --></div>
 </td></tr></table>
-
+</div>
 <!-- /TMPL_IF -->
 
 
 
 <!-- TMPL_IF Name="riloop" -->
-
+<div class="table">
 		<table>
 		<caption>Returned Items</caption>
 		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Patron</th></tr>
 		<!-- TMPL_LOOP Name="riloop" -->
-			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><!-- /TMPL_IF --><!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->/<!-- TMPL_VAR Name="year" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
+			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR Name="day" -->/<!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="year" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
 			<td>
-			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
+			<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
 			<td><!-- TMPL_VAR Name="itemtitle" --></td>
 			<td><!-- TMPL_VAR Name="itemauthor" --></td>
 			<td><!-- TMPL_VAR Name="itemtype" --></td>
 			<td>
-			<!-- TMPL_IF Name="duedate" -->Yes, duedate
+			<!-- TMPL_IF Name="duedate" -->
 				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->">
 					<!-- TMPL_VAR Name="borcnum" -->
-				</a><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> 
+				</a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 			<!-- TMPL_ELSE -->
-								Not on issue.
+								<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 			<!-- /TMPL_IF -->
 			</td></tr>
 		<!-- /TMPL_LOOP -->
 		</table>
-		
+	</div>
 <!-- /TMPL_IF -->
 
 
