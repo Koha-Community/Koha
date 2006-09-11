@@ -42,6 +42,7 @@ my $z3950 = $input->param('z3950');
 my $logstatus=C4::Context->preference('Activate_log');
 my $xml;
 my $itemtype; # created here because it can be used in build_authorized_values_list sub
+my $fromserials=$input->param('fromserials');## if a serial is being added do not display navigation menus
 
 ###Find related tags for Z3950 searches- required  by template
 my($isbntag,$isbnsub)=MARCfind_marc_from_kohafield("isbn","biblios");
@@ -598,14 +599,14 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	
+	my @tagindex=$input->param('tagindex');
 	
 	
 ## check for malformed xml -- non UTF-8 like (MARC8) will break xml without warning
 ### This usually happens with data coming from other Z3950 servers
 ## Slows the saving process so comment out at your own risk
 eval{
- $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);	
+ $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,\@tagindex);	
 };
  if ($@){
 warn $@;
@@ -629,14 +630,21 @@ my $xmlhash=XML_xml2hash_onerecord($xml);
 
 		}
 	# now, redirect to additem page
-		print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+		unless ($fromserials){
+		print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode") unless $fromserials;
 		exit;
+		}else{
+		my $title=XML_readline_onerecord($xmlhash,"title","biblios");
+		$template->param(exit=>1,biblionumber=>$biblionumber,title=>$title);
+		goto FINAL;
+		}
+
 	} else {
 FINAL:
 	# it may be a duplicate, warn the user and do nothing
 		build_tabs ($template, $xmlhash, $dbh);
 		build_hidden_data;
-		$template->param(
+		$template->param(fromserials=>$fromserials,
 			oldbiblionumber             => $oldbiblionumber,
 			biblionumber                      => $biblionumber,
 			oldbiblionumtagfield        => $oldbiblionumtagfield,
@@ -655,7 +663,8 @@ FINAL:
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	my @tagindex=$input->param('tagindex');
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,\@tagindex);
 	my $xmlhash=XML_xml2hash_onerecord($xml);
 	# adding an empty field
 	build_tabs ($template, $xmlhash, $dbh,$addedfield);
@@ -665,6 +674,7 @@ FINAL:
 		biblionumber                     => $biblionumber,
 		oldbiblionumtagfield        => $oldbiblionumtagfield,
 		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+		fromserials=>$fromserials
 		 );
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -679,8 +689,6 @@ print	$input->redirect("/cgi-bin/koha/catalogue/catalogue-search.pl");
 	}else{
 
 $template->param(error            => 1, onloan=>1,);
-
-goto OUT;
 	}
 #------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------
@@ -701,7 +709,8 @@ goto OUT;
 		oldbiblionumber             => $oldbiblionumber,
 		biblionumber                       => $biblionumber,
 		oldbiblionumtagfield        => $oldbiblionumtagfield,
-		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield			
+		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+		fromserials=>$fromserials			
 		);
 }
 $template->param(
