@@ -1,99 +1,103 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Search Results for <!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-	<h2>Search Results for <!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --></h2>
-
-<!-- TMPL_IF name="total" -->
-Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" -->
-<!-- /TMPL_IF -->
-	
-		<!-- TMPL_IF name="loop" -->
-			
-					<!-- TMPL_IF NAME="displayprev" --> 
-						<a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
-					<!-- TMPL_LOOP NAME="numbers" -->
-						<!-- TMPL_IF NAME="highlight" -->
-							<!-- TMPL_VAR NAME="number" -->
-						<!-- TMPL_ELSE --><a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" -->					<a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF -->
-
-<!-- /TMPL_IF -->
-<table>
-	<caption>Existing Bibliographic Records</caption>
-				<tr>
-					<th>Title</th>
-					<th>Author</th>
-					<th>&copy;</th>
-					<th>Call Number</th>
-					<th>&nbsp;</th>
-				<!-- TMPL_UNLESS NAME="NOTMARC" -->
-					<th colspan="2">&nbsp;</th>
-				<!-- /TMPL_UNLESS -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+	<h1 class="acquisition">Search Results</h1>
+	<div id="bloc25">
+		<h2 class="acquisition">Results for <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR NAME="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></b></h2>
+		<!-- TMPL_IF name="total" -->
+			<p><!-- TMPL_VAR NAME="grandtotal" --> total results</p>
+			<p>Results <i><!-- TMPL_VAR NAME="showoffset" --></i> to <i><!-- TMPL_VAR NAME="total" --></i> displayed</p>
+		<!-- /TMPL_IF -->
+	</div>
+	<div id="bloc100">
+		<h2 class="acquisition">Exists in Koha</h2>
+		<table>
+			<tr>
+				<th class="acquisition">Title</th>
+				<th class="acquisition">Author</th>
+				<th class="acquisition">copyright</th>
+				<th class="acquisition">LC</th>
+				<th class="acquisition">&nbsp;</th>
+<th class="acquisition">&nbsp;</th>
+<th class="acquisition">&nbsp;</th>
+			</tr>
+			<!-- TMPL_IF name="results_loop" -->
+			<!-- TMPL_LOOP NAME="results_loop" -->
+				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+					<td><!-- TMPL_VAR NAME="title" --></a>
+					<td><!-- TMPL_VAR NAME="author" --></td>
+					<td><!-- TMPL_VAR NAME="copyrightdate" --></td>
+					<td><!-- TMPL_VAR NAME="classification" -->&nbsp;<!-- TMPL_VAR NAME="subclass" --></td>
+					
+					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button acquisition">Edit Book</a></td>
+					<td><a href="additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Items</a></td>
+						
+						
+						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;op=duplicate">Duplicate</a></td></tr>
 				</tr>
-				<!-- TMPL_IF name="loop" -->
-				<!-- TMPL_LOOP NAME="loop" -->
-				<tr>
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-						<td><!-- TMPL_VAR NAME="author" --></td>
-						<td><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-<td><!-- TMPL_IF NAME="classification" --><!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --></td>
-						<!-- TMPL_IF NAME="NOTMARC" -->
-						<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add items</a></td>
-						<!-- TMPL_ELSE -->
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Biblio</a></td>
-						<td><a href="additem.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->">Edit Items</a></td>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_UNLESS NAME="NOTMARC" -->
-						<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;op=duplicate">Duplicate</a></td><!-- /TMPL_UNLESS --></tr>
-				<!-- /TMPL_LOOP -->
-					<!-- TMPL_ELSE -->
-	<tr><td colspan="6">Nothing found</td></tr>
-	<!-- /TMPL_IF -->
-			</table>
-			
-			
-					<!-- TMPL_IF NAME="displayprev" --> 
-						<a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
-					<!-- TMPL_LOOP NAME="numbers" -->
-						<!-- TMPL_IF NAME="highlight" -->
-							<!-- TMPL_VAR NAME="number" -->
-						<!-- TMPL_ELSE --><a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" -->					<a href="isbnsearch.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF -->
-
-
-<!-- TMPL_IF name="breeding_loop" -->
-<table>
-	<caption>Bibliographic Records in the Reservoir</caption>
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_ELSE -->
+			<tr><td colspan="4">Nothing found</td></tr>
+			<!-- /TMPL_IF -->
+		</table>
+		<p class="center">
+			<!-- Row of numbers corresponding to search result pages -->
+			<!-- TMPL_IF name="displayprev" -->
+				<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0">
+				</a>
+			<!-- TMPL_ELSE -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF name="highlight" -->
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+					<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0">
+					</a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF name="displaynext" -->
+				<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0">
+				</a>
+			<!-- TMPL_ELSE -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+			<!-- /TMPL_IF -->
+		</p>
+		<h2 class="acquisition">Books in breeding farm</h2>
+		<!-- TMPL_IF name="breeding_loop" -->
+			<table>
 				<tr>
 					<th>Title</th>
 					<th>Author</th>
 					<th>ISBN</th>
+					<th>LC</th>
 					<th>coming from</th>
 					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-				</tr>
+					
 					<!-- TMPL_LOOP NAME="breeding_loop" -->
-						<!-- TMPL_IF NAME="highlight" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+						<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
 							<td><!-- TMPL_VAR NAME="title" --></a>
 							<td><!-- TMPL_VAR NAME="author" --></td>
 							<td><!-- TMPL_VAR NAME="isbn" --></td>
+							<td><!-- TMPL_VAR NAME="classification" -->&nbsp;<!-- TMPL_VAR NAME="subclass" --></td>
 							<td><!-- TMPL_VAR NAME="file" --></td>
-							<!-- TMPL_IF NAME="NOTMARC" -->
-							
-							<!-- TMPL_ELSE -->
 							<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
-							<!-- /TMPL_IF -->
+							
 						</tr>
 					<!-- /TMPL_LOOP -->
 			</table>
-<!-- TMPL_ELSE --><h3>No records found in the Reservoir</h3><!-- /TMPL_IF -->
-
-
-<h2>Create a New Record</h2>
-		<!-- TMPL_IF NAME="NOTMARC" -->
-			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->">Add New Record</a>
 		<!-- TMPL_ELSE -->
-		<form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="post">
-			<input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->" />
-			<input type="hidden" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" /><label for="frameworkcode">Choose a Framework: </label><select id="frameworkcode" name="frameworkcode">
-				<option value="">Default</option><!-- TMPL_LOOP NAME="frameworkcodeloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option><!-- /TMPL_LOOP --></select> <input type="submit" class="submit" value="Add New Record" /></form>
+			<p class="center">Nothing found</p>
 		<!-- /TMPL_IF -->
+		<p class="center">
+		
+			<a href="addbiblio.pl" class="button acquisition">Add new record</a>
+		
+		</p>
+	</div>
+	
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
