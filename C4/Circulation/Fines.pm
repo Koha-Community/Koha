@@ -1,4 +1,4 @@
-package C4::Circulation::Fines2;
+package C4::Circulation::Fines;
 
 # $Id$
 

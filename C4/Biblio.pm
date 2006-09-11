@@ -282,7 +282,7 @@ my $updated=0;
 		   }								
 	   }## created now
     }else{
-	foreach my $control(@$controlfield){
+	foreach my $control (@$controlfield){
 		if ($control->{'tag'} eq $tag){
 			$control->{'content'}=$newvalue;
 			$updated=1;
@@ -621,7 +621,7 @@ sub MARCgettagslib {
     $sth->execute($frameworkcode);
     my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
 
-    while ( my ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
         $res->{$tag}->{lib}        = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
         $res->{$tab}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
@@ -767,9 +767,8 @@ sub MARCfind_itemtype {
 
 sub MARChtml2xml {
 # warn "MARChtml2xml ";
-	my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;        
-#	use MARC::File::XML;
-	my $xml= marc_record_header('UTF-8'); #### we do not need a collection wrapper
+	my ($tags,$subfields,$values,$indicator,$ind_tag,$tagindex) = @_;        
+	my $xml= "<record>";
 
     my $prevvalue;
     my $prevtag=-1;
@@ -782,8 +781,8 @@ sub MARChtml2xml {
 		@$values[$i] =~ s/"/&quot;/g;
 		@$values[$i] =~ s/'/&apos;/g;
 
-		if ((@$tags[$i] ne $prevtag)){
-			my $tag=substr(@$tags[$i],0,3);
+		if ((@$tags[$i].@$tagindex[$i] ne $prevtag)){
+			my $tag=@$tags[$i];
 			$j++ unless ($tag eq "");
 			## warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
 			if (!$first){
@@ -820,7 +819,7 @@ sub MARChtml2xml {
 			}
 		} else { # @$tags[$i] eq $prevtag
                                  unless (@$values[$i] eq "") {
-              		my $tag=substr(@$tags[$i],0,3);
+              		my $tag=@$tags[$i];
 					if ($first){
 						my $ind1 = substr(@$indicator[$j],0,1);                        
 						my $ind2 = substr(@$indicator[$j],1,1);
@@ -830,7 +829,7 @@ sub MARChtml2xml {
 		    	$xml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
 				}
 		}
-		$prevtag = @$tags[$i];
+		$prevtag = @$tags[$i].@$tagindex[$i];
 	}
 	$xml.="</record>";
 	# warn $xml;
@@ -968,7 +967,6 @@ my $barcode=XML_readline_onerecord($xmlhash,"barcode","holdings");
 my $itemcallnumber=XML_readline_onerecord($xmlhash,"itemcallnumber","holdings");
 if ($itemcallnumber){
 my ($cutterextra)=itemcalculator($dbh,$biblionumber,$itemcallnumber);
-warn $cutterextra;
 $xmlhash=XML_writeline($xmlhash,"cutterextra",$cutterextra,"holdings");
 }
 
@@ -987,7 +985,7 @@ my $sth=$dbh->prepare("SELECT biblionumber from items where itemnumber=?");
 $sth->execute($itemnumber);
 my $biblionumber=$sth->fetchrow;
 OLDdelitem( $dbh, $itemnumber ) ;
-ZEBRAop($dbh,$biblionumber,"recordDelete","biblioserver");
+ZEBRAop($dbh,$biblionumber,"specialUpdate","biblioserver");
 
 }
 
@@ -1132,7 +1130,6 @@ my $title=XML_readline_onerecord($xmlhash,"title","biblios");
 my $author=XML_readline_onerecord($xmlhash,"author","biblios");
 my $xml=XML_hash2xml($xmlhash);
 
-#my $marc=MARC::Record->new_from_xml($xml,'UTF-8');## this will be depreceated
 $isbn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
 $issn=~ s/(\.|\?|\;|\=|\-|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)//g;
 $isbn=~s/^\s+|\s+$//g;
@@ -1214,14 +1211,14 @@ $sth->execute($biblionumber,$server,$op);
 sub ZEBRAopserver{
 
 ###Accepts a $server variable thus we can use it to update  biblios, authorities or other zebra dbs
-my ($record,$op,$server)=@_;
+my ($record,$op,$server,$biblionumber)=@_;
 my @Zconnbiblio;
 my @port;
 my $Zpackage;
 my $tried=0;
 my $recon=0;
 my $reconnect=0;
-$record=Encode::encode("utf8",$record);
+$record=Encode::encode("UTF-8",$record);
 my $shadow=$server."shadow";
 reconnect:
 
@@ -1230,6 +1227,7 @@ if ($record){
 my $Zpackage = $Zconnbiblio[0]->package();
 $Zpackage->option(action => $op);
 	$Zpackage->option(record => $record);
+	$Zpackage->option(recordIdOpaque => $biblionumber);
 retry:
 		$Zpackage->send("update");
 my $i;
@@ -1290,16 +1288,15 @@ my ($dbh,$biblionumber)=@_;
 my $biblioxml=XMLgetbiblio($dbh,$biblionumber);
 my @itemxml=XMLgetallitems($dbh,$biblionumber);
 my $zebraxml=collection_header();
-$zebraxml.="<koharecord>\n";
+$zebraxml.="<koharecord>";
 $zebraxml.=$biblioxml;
-$zebraxml.="<holdings>\n";
+$zebraxml.="<holdings>";
       foreach my $item(@itemxml){
-	$zebraxml.=$item;
+	$zebraxml.=$item if $item;
      }
-$zebraxml.="</holdings>\n";
-$zebraxml.="</koharecord>\n";
-$zebraxml.="</kohacollection>\n";
-
+$zebraxml.="</holdings>";
+$zebraxml.="</koharecord>";
+$zebraxml.="</kohacollection>";
 return $zebraxml;
 }
 

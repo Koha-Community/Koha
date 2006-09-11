@@ -167,8 +167,8 @@ my @linkid=XML_readline_asarray($authrecord,"auth_linkid","authorities");##May h
 	
 	foreach my $linkid (@linkid){
 		my $linktype=AUTHfind_authtypecode($dbh,$linkid);
-#		my $linkrecord=XMLgetauthorityhash($dbh,$linkid);
-#		$linksummary.="<br>&nbsp;&nbsp;&nbsp;&nbsp;<a href='detail.pl?authid=$linkid'>".getsummary($dbh,$linkrecord,$linkid,$linktype).".</a>".$separator;
+		my $linkrecord=XMLgetauthorityhash($dbh,$linkid);
+		$linksummary.="<br>&nbsp;&nbsp;&nbsp;&nbsp;<a href='detail.pl?authid=$linkid'>".getsummary($dbh,$linkrecord,$linkid,$linktype).".</a>".$separator;
 		
  	}
 my  $summary;
@@ -322,7 +322,7 @@ sub AUTHaddauthority {
 XML_writeline($record,"auth_authid",$authid,"authorities");
 XML_writeline($record,"auth_authtypecode",$authtypecode,"authorities");
 my $xml=XML_hash2xml($record);
-	my $sth=$dbh->prepare("REPLACE auth_header set marcxml=?  authid=?,authtypecode=?,datecreated=now()");
+	my $sth=$dbh->prepare("REPLACE auth_header set marcxml=?,  authid=?,authtypecode=?,datecreated=now()");
 	$sth->execute($xml,$authid,$authtypecode);
 	$sth->finish;
 	
@@ -387,10 +387,10 @@ sub AUTHgetauth_type {
 sub AUTHmodauthority {
 ## $record is expected to be an xmlhash
 	my ($dbh,$authid,$record,$authtypecode)=@_;
-	my ($oldrecord)=&AUTHgetauthorityhash($dbh,$authid);
+	my ($oldrecord)=&XMLgetauthorityhash($dbh,$authid);
 ### This equality is very dodgy ,It porobaby wont work
 	if ($oldrecord eq $record) {
-		return;
+		return $authid;
 	}
 ##
 my $sth=$dbh->prepare("update auth_header set marcxml=? where authid=?");
@@ -399,7 +399,7 @@ my @linkids=XML_readline_asarray($oldrecord,"auth_linkid","authorities");
 
 	foreach my $linkid (@linkids){
 		##Modify the record of linked 
-		my $linkrecord=AUTHgetauthorityhash($dbh,$linkid);
+		my $linkrecord=XMLgetauthorityhash($dbh,$linkid);
 		my $linktypecode=AUTHfind_authtypecode($dbh,$linkid);
 		my @linkfields=XML_readline_asarray($linkrecord,"auth_linkid","authorities");
 		my $updated;
@@ -607,30 +607,28 @@ my ($dbh,$record,$authid,$authtypecode)=@_;
 return $summary;
 }
 sub getdictsummary{
-## give this a Marc record to return summary
+## give this a XML record to return a brief summary
 my ($dbh,$record,$authid,$authtypecode)=@_;
  my $authref = getauthtype($authtypecode);
 		my $summary = $authref->{summary};
-		my @fields = $record->fields();
-#		chop $tags_using_authtype;
+		my $fields = $record->{'datafield'};
 		# if the library has a summary defined, use it. Otherwise, build a standard one
-		if ($summary) {
-			my @fields = $record->fields();
-			foreach my $field (@fields) {
-				my $tag = $field->tag();
-				my $tagvalue = $field->as_string();
-				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
+	if ($summary) {
+			foreach my $field (@$fields) {
+				my $tag = $field->{'tag'};				
 				if ($tag<10) {
+				my $tagvalue = XML_readline_onerecord($record,"","",$field->{tag});
+				$summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
 				} else {
-					my @subf = $field->subfields;
+					my @subf = XML_readline_withtags($record,"","",$tag);
 					for my $i (0..$#subf) {
 						my $subfieldcode = $subf[$i][0];
 						my $subfieldvalue = $subf[$i][1];
 						my $tagsubf = $tag.$subfieldcode;
 						$summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
-					}#for $i
+					}## each subf
 				}#tag >10
-			}## each field
+			}##each field
 			$summary =~ s/\[(.*?)]//g;
 			$summary =~ s/\n/<br>/g;
 		} else {
@@ -641,27 +639,16 @@ my ($dbh,$record,$authid,$authtypecode)=@_;
 			my @fields = $record->{datafields};
 			if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 			# construct UNIMARC summary, that is quite different from MARC21 one
+			foreach my $field (@$fields) {
 				# accepted form
-				foreach my $field ($record->field('2..')) {
-					$heading.= $field->as_string();
-				}
-				# rejected form(s)
-				foreach my $field ($record->field('4..')) {
-					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-				}
-				# see :
-				foreach my $field ($record->field('5..')) {
-					$summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-					$summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-				}
-				# // form
-				foreach my $field ($record->field('7..')) {
-					$seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";	
-					$altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-					$altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
-				}
-				$summary = "<b>".$heading."</b><br />".$seeheading.$altheading.$summary;	
+				if ($field->{tag} = ~/'2..'/) {
+					foreach my $subfield ("a".."z"){
+					## Fixme-- if UNICODE uses numeric subfields as well add them
+					$heading.=XML_readline_onerecord($record,"","",$field->{tag},$subfield); 
+					}
+				}##tag 2..
+			}
+				$summary = $heading;	
 			} else {
 			# construct MARC21 summary
 				foreach my $field (@fields) {	
@@ -863,7 +850,7 @@ Paul POULAIN paul.poulain@free.fr
 =cut
 
 # $Id$
-# $Log$
+
 # Revision 1.30  2006/09/06 16:21:03  tgarip1957
 # Clean up before final commits
 #
@@ -916,3 +903,4 @@ Paul POULAIN paul.poulain@free.fr
 # Revision 1.1  2004/06/07 07:35:01  tipaul
 # MARC authority management package
 #
+>>>>>>> 1.30

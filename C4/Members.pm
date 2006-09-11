@@ -381,9 +381,7 @@ C<$issues>.
 =cut
 #'
 sub borrissues {
-
   my ($bornum)=@_;
-warn $bornum;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from issues,biblio,items where borrowernumber=?
    and items.itemnumber=issues.itemnumber
@@ -981,7 +979,7 @@ sub fixupneu_cardnumber{
 my $dbh = C4::Context->dbh;
 my $sth;
     if (! $cardnumber  && $autonumber_members && $categorycode) {
-	if ($categorycode eq "A" || $categorycode eq "W" || $categorycode eq "C"){
+	if ($categorycode eq "A" || $categorycode eq "W" ){
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '5%' ");
 	}elsif ($categorycode eq "L"){	
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '10%' ");
@@ -989,6 +987,9 @@ my $sth;
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '30%' ");
 	}elsif ($categorycode eq "N"){	
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '40%' ");
+	}elsif ($categorycode eq "C"){	
+	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '80%' ");
+
 	}else{
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '6%' ");
 	}
@@ -1004,9 +1005,10 @@ my $sth;
 	# determine the 1st and 9th digits and return the full string.
 
 	if (! $cardnumber) { 			# If DB has no values,
-	 if ($categorycode eq "A" || $categorycode eq "W" || $categorycode eq "C"){   $cardnumber = 5000000;}	
+	 if ($categorycode eq "A" || $categorycode eq "W" ){   $cardnumber = 5000000;}	
 	 elsif ($categorycode eq "L"){   $cardnumber = 1000000;}
 	 elsif ($categorycode  eq "F"){   $cardnumber = 3000000;}
+	elsif ($categorycode  eq "C"){   $cardnumber = 8000000;}
 	else{$cardnumber = 6000000;}	
 	# start at 1000000 or 3000000 or 5000000
 	} else {
@@ -1209,6 +1211,127 @@ sub change_user_pass {
     		$sth->execute($uid, $digest, $member);
 		return 1;
 	}
+=head2 checkuniquemember (OUEST-PROVENCE)
+
+  $result = &checkuniquemember($collectivity,$surname,$categorycode,$firstname,$dateofbirth);
+
+Checks that a member exists or not in the database.
+
+C<&result> is 1 (=exist) or 0 (=does not exist)
+C<&collectivity> is 1 (= we add a collectivity) or 0 (= we add a physical member)
+C<&surname> is the surname
+C<&categorycode> is from categorycode table
+C<&firstname> is the firstname (only if collectivity=0)
+C<&dateofbirth> is the date of birth (only if collectivity=0)
+
+=cut
+
+sub checkuniquemember {
+    my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $request;
+    if ($collectivity) {
+
+# 				$request="select count(*) from borrowers where surname=? and categorycode=?";
+        $request =
+          "select borrowernumber,categorycode from borrowers where surname=? ";
+    }
+    else {
+
+# 				$request="select count(*) from borrowers where surname=? and categorycode=? and firstname=? and dateofbirth=?";
+        $request =
+"select borrowernumber,categorycode from borrowers where surname=?  and firstname=? and dateofbirth=?";
+    }
+    my $sth = $dbh->prepare($request);
+    if ($collectivity) {
+        $sth->execute( uc($surname) );
+    }
+    else {
+        $sth->execute( uc($surname), ucfirst($firstname), $dateofbirth );
+    }
+    my @data = $sth->fetchrow;
+    if ( $data[0] ) {
+        $sth->finish;
+        return $data[0], $data[1];
+
+        #
+    }
+    else {
+        $sth->finish;
+        return 0;
+    }
+}
+=head2 getzipnamecity (OUEST-PROVENCE)
+
+take all info from table city for the fields city and  zip
+check for the name and the zip code of the city selected
+
+=cut
+
+sub getzipnamecity {
+    my ($cityid) = @_;
+    my $dbh      = C4::Context->dbh;
+    my $sth      =
+      $dbh->prepare(
+        "select city_name,city_zipcode from cities where cityid=? ");
+    $sth->execute($cityid);
+    my @data = $sth->fetchrow;
+    return $data[0], $data[1];
+}
+
+=head2 updatechildguarantor (OUEST-PROVENCE)
+
+check for title,firstname,surname,adress,zip code and city  from guarantor to 
+guarantorchild
+
+=cut
+
+#'
+
+sub getguarantordata {
+    my ($borrowerid) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $sth          =
+      $dbh->prepare(
+"Select title,firstname,surname,streetnumber,address,streettype,address2,zipcode,city,phone,phonepro,mobile,email,emailpro,fax  from borrowers where borrowernumber =? "
+      );
+    $sth->execute($borrowerid);
+    my $guarantor_data = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $guarantor_data;
+}
+
+=head2 getdcity (OUEST-PROVENCE)
+recover cityid  with city_name condition
+=cut
+
+sub getidcity {
+    my ($city_name) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("select cityid from cities where city_name=? ");
+    $sth->execute($city_name);
+    my $data = $sth->fetchrow;
+    return $data;
+}
+
+=head2 getcategorytype (OUEST-PROVENCE)
+
+check for the category_type with categorycode
+and return the category_type 
+
+=cut
+
+sub getcategorytype {
+    my ($categorycode) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            =
+      $dbh->prepare(
+"Select category_type,description from categories where categorycode=?  "
+      );
+    $sth->execute($categorycode);
+    my ( $category_type, $description ) = $sth->fetchrow;
+    return $category_type, $description;
+}
 }
 
 
