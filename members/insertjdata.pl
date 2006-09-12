@@ -48,7 +48,7 @@ for (my $i=0;$i<1;$i++){
 	my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
 	$sth->execute($data{'bornumber_child_$i'});
 	if (my $data=$sth->fetchrow_hashref){
-		$query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
+		$query="update borrowers set title='$data{'title'}',branchcode='$data{'branchcode'}',expiry='$data{'expiry'}',
 		cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
 		streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
 		altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
@@ -79,7 +79,7 @@ for (my $i=0;$i<1;$i++){
 		$query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 		firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
 		altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-		initials,ethnicity,borrowernumber,guarantor,school,physstreet,sort1,sort2)
+		initials,ethnicity,borrowernumber,guarantor,school,physstreet,sort1,sort2, branchcode)
 		values ('','$data{'expiry'}',
 		'$cardnumber',
 		'$sex','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
@@ -87,7 +87,7 @@ for (my $i=0;$i<1;$i++){
 		'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 		'$data{'phoneday'}','C','$data{'city'}','$data{'area'}','$data{'phone'}',
 		'$notes','$data{'altphone'}','$surname','$data{'initials'}',
-		'$data{'ethnicity'}','$bornum','$guarant','$school','$data{'physstreet'}','$data{'sort1'}','$data{'sort2'}')";
+		'$data{'ethnicity'}','$bornum','$guarant','$school','$data{'physstreet'}','$data{'sort1'}','$data{'sort2'}','$data{'branchcode'}')";
 
 	}
 	#print $query;
