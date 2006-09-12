@@ -189,8 +189,9 @@ my @fields = $temp->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
-my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$itemtype);
+my $fwkcode = MARCfind_frameworkcode($dbh,$bibid);
+my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$fwkcode);
+my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$fwkcode);
 
 foreach my $field (@fields) {
 	next if ($field->tag()<10);
@@ -210,7 +211,7 @@ foreach my $field (@fields) {
                 $this_row{$subf[$i][0]}=get_authorised_value_desc($field->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
             }
         }		
-		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+		if (($field->tag eq $branchtagfield) && ($subf[$i][0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
 			#verifying rights
 			my $userenv = C4::Context->userenv;
 			unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subf[$i][1]))){
