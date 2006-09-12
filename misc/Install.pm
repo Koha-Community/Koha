@@ -904,15 +904,17 @@ sub checkperlmodules {
 		}
     }
     unless (eval {require LWP::Simple})       {
-		showmessage(getmessage('LWP::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "LWP::Simple";
 		}
     }
     unless (eval {require XML::Simple})       {
-		showmessage(getmessage('XML::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "XML::Simple";
+		}
+    unless (eval {require Date::Calc})       {
+		if ($#missing>=0) { # see above note
+			push @missing, "Date::Calc";
 		}
     }
 
