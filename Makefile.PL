@@ -40,7 +40,7 @@ WriteMakefile(
         'PDF::API2' => 1,
         'Net::LDAP' => 1,
        XML::Simple=>1,
-	'XML::SAX::LibXML' => 1
+	'XML::LibXML' => 1.58
         },
    CONFIGURE => sub {
      # Figure out options here?
