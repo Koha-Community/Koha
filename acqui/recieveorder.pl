@@ -124,9 +124,7 @@ $template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$da
 $template->param(
 		name => $booksellers[0]->{'name'},
 		supplierid => $supplierid,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+		GST => C4::Context->preference("gist"),
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

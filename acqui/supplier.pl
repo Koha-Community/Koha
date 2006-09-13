@@ -74,9 +74,7 @@ if ($op eq "display"){
 					discount => $booksellers[0]->{'discount'},
 					invoiceprice=>$booksellers[0]->{'invoiceprice'},
 					listprice=>$booksellers[0]->{'listprice'},
-					intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-					intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-					IntranetNav => C4::Context->preference("IntranetNav"),
+					GST => C4::Context->preference("gist"),
 					);
 }else{
 	my  ($count, $currencies) = &getcurrencies();
@@ -120,10 +118,8 @@ if ($op eq "display"){
 						discount => $booksellers[0]->{'discount'},
 						loop_pricescurrency => \@loop_pricescurrency,
 						loop_invoicecurrency => \@loop_invoicecurrency,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-			IntranetNav => C4::Context->preference("IntranetNav"),
-			enter=>1,
+						GST => C4::Context->preference("gist"),
+						enter=>1,
 						);
 }
 output_html_with_http_headers $query, $cookie, $template->output;

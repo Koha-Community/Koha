@@ -205,9 +205,7 @@ $template->param( existing => $biblio,
 						ecost => $data->{'ecost'},
 						notes => $data->{'notes'},
 						publishercode => $data->{'publishercode'},
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+						GST => C4::Context->preference("gist"),
 						);
 
 output_html_with_http_headers $input, $cookie, $template->output;
