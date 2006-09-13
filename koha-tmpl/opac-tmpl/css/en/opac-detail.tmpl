@@ -137,7 +137,7 @@
 					<!-- /TMPL_IF -->
 				</td>
 				<td>
-					<!-- TMPL_IF name="datedue" -->
+					<!-- TMPL_IF name="borrowernumber" -->
 						On loan
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF name="notforloantext" -->
@@ -147,7 +147,8 @@
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
-				<td><!-- TMPL_VAR NAME="datedue" --></td>
+				<td><!-- TMPL_VAR NAME="datedue" -->
+				<!-- TMPL_IF name="reservestatus" -->Reserve <!-- TMPL_VAR name="reservestatus" --><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><!-- TMPL_VAR NAME="barcode" --></td>
 			</tr>

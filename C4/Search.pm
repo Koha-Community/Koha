@@ -1338,9 +1338,10 @@ sub ItemInfo {
 		if ($datedue eq ''){
 	#	$datedue="Available";
 			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
-			if ($restype) {
-				$datedue=$restype;
-			}
+            $data->{reservestatus} = $restype;
+# 			if ($restype) {
+# 				$datedue=$restype;
+# 			}
 		}
 		$isth->finish;
 	#get branch information.....
