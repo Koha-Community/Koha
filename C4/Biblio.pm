@@ -2012,14 +2012,14 @@ sub OLDmoditem {
 			$item->{multivolume},		$item->{stack},
 			$item->{wthdrawn},
         );
-		if ($item->{homebranch}) {
-			$query.=",homebranch=?";
-			push @bind, $item->{homebranch};
-		}
-		if ($item->{holdingbranch}) {
-			$query.=",holdingbranch=?";
-			push @bind, $item->{holdingbranch};
-		}
+    }
+    if ($item->{homebranch}) {
+        $query.=",homebranch=?";
+        push @bind, $item->{homebranch};
+    }
+    if ($item->{holdingbranch}) {
+        $query.=",holdingbranch=?";
+        push @bind, $item->{holdingbranch};
     }
 	$query.=" where itemnumber=?";
 	push @bind,$item->{'itemnum'};
@@ -3017,6 +3017,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.61  2006/09/13 14:30:31  tipaul
+# oups...
+# homebranch & holdingbranch modifications where just in an improper {} : should be done everytime (not only when item is lost)
+#
+# Fixes bug #1163
+#
 # Revision 1.115.2.60  2006/08/04 15:00:50  kados
 # fix for bug 1139: ISBN search fails with double dashes
 #
