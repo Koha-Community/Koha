@@ -79,8 +79,8 @@
 		</td>
 	</tr>
 	<tr>
-		<th><label for="notes">Notes</label></th>
-		<td><textarea id="notes" name="notes" cols="20" rows="4"><!-- TMPL_VAR name="contnotes" --></textarea>
+		<th><label for="notes1">Notes</label></th>
+		<td><textarea id="notes1" name="notes" cols="20" rows="4"><!-- TMPL_VAR name="contnotes" --></textarea>
 		</td>
 	</tr>
 </table></div>
@@ -94,7 +94,7 @@
 	</tr>
 </table></div>
 
-<div class="details">
+<div class="data">
 <table>
 	<caption>Ordering Information</caption>
 	<tr>
@@ -122,7 +122,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr>
+	<!-- TMPL_IF NAME="GST" --><tr>
 		<th><label for="gst">GST Registered</label></th>
 		<td>
 			<input type="radio" id="gst" name="gst" value="1"<!-- TMPL_IF name="gstreg" --> checked="checked"<!-- /TMPL_IF --> />Yes
@@ -142,15 +142,19 @@
 			<input type="radio" id="invoice_gst" name="invoice_gst" value="1"<!-- TMPL_IF name= "invoiceincgst" --> checked="checked"<!-- /TMPL_IF --> />Yes
 			<input type="radio" name="invoice_gst" value="0"<!-- TMPL_UNLESS name="invoiceincgst" --> checked="checked"<!-- /TMPL_UNLESS --> />No
 		</td>
-	</tr>
+	</tr><!-- TMPL_ELSE -->
+	<input type="hidden" name="gst" value="0" />
+	<input type="hidden" name="list_gst" value="0" />
+	<input type="hidden" name="invoice_gst" value="0" />
+	<!-- /TMPL_IF -->
 	<tr>
 		<th><label for="discount">Discount</label></th>
 		<td><input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR name="discount" -->" /> %</td>
 	</tr>
 	<tr>
 		<th>
-			<label for="notes">Notes</label></th><td>
-			<textarea cols="40" rows="4" name="notes" id="notes"><!-- TMPL_VAR NAME="notes" --></textarea>
+			<label for="notes2">Notes</label></th><td>
+			<textarea cols="40" rows="4" name="notes" id="notes2"><!-- TMPL_VAR NAME="notes" --></textarea>
 </td>
 	</tr>
 </table>
@@ -249,7 +253,7 @@
 		<tr><th>
 			Invoice Prices are: </th><td><!--TMPL_VAR Name="invoiceprice"-->
 		</td></tr>
-		<tr><th>
+<!-- TMPL_IF NAME="GST" -->		<tr><th>
 			GST Registered: </th><td>
 				<!-- TMPL_IF name="gstreg" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF -->
 		</td></tr>
@@ -260,7 +264,7 @@
 		<tr><th>
 			Invoice Item Price Includes GST: </th><td>
 				<!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF -->
-		</td></tr>
+		</td></tr><!-- /TMPL_IF -->
 		<tr><th>
 			Discount: </th><td>
 			<!-- TMPL_VAR NAME="discount" --> %
