@@ -143,7 +143,11 @@ sub themelanguage {
   if ($theme and $lang) {
     return ($theme, $lang);
   } else {
-    return ('default', 'en');
+    if ($section eq 'intranet') {
+        return ('default', 'en');
+    } else {
+        return ('css', 'en');
+    }
   }
 }
 
