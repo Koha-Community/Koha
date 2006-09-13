@@ -123,25 +123,28 @@ if ($op eq "do_search") {
 	# builds tag and subfield arrays
 	my @tags;
 
-	foreach my $marc (@marclist) {
-		if ($marc) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
-			if ($tag) {
-				push @tags,$dbh->quote("$tag$subfield");
-			} else {
-				if ($marc =~ /^(\d){3}(. -)(.)*/)
-				{
-					# The user is using the search catalogue part, more fields
-					push @tags, $dbh->quote(substr($marc,0,4));
-				}
-				else
-				{
-					push @tags, $marc;
-				}
-			}
-		} else {
-			push @tags, "";
+	for (my $i=0;$i<=$#marclist;$i++) {
+		if ($marclist[$i] eq "biblioitems.isbn") {
+			$value[$i] =~ s/-//g;
 		}
+# 		if ($marc) {
+# 			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
+# 			if ($tag) {
+# 				push @tags,$dbh->quote("$tag$subfield");
+# 			} else {
+# 				if ($marc =~ /^(\d){3}(. -)(.)*/)
+# 				{
+# 					# The user is using the search catalogue part, more fields
+# 					push @tags, $dbh->quote(substr($marc,0,4));
+# 				}
+# 				else
+# 				{
+# 					push @tags, $marc;
+# 				}
+# 			}
+# 		} else {
+# 			push @tags, "";
+# 		}
 	}
 	findseealso($dbh,\@tags);
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
