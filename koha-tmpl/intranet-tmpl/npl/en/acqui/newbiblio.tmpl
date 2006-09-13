@@ -154,7 +154,7 @@ function check(f) {
 				<input type="text" size="20" id="rrp" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
 		  	<!--/TMPL_IF--></td></tr>
 		<tr><th><label for="ecost">Budgeted Cost</label></th><td><input type="text" size="20" id="ecost" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" --> readonly="readonly"<!--/TMPL_IF--> /></td></tr>
-		<!-- TMPL_IF NAME="haveGST" --><tr><th><label for="GST">Budgeted GST</label></th><td><input type="text" size="20" id="GST" name="GST" value=""<!-- TMPL_IF name="close" --> readonly="readonly"<!--/TMPL_IF-->  /></td></tr><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="GST" --><tr><th><label for="GST">Budgeted GST</label></th><td><input type="text" size="20" id="GST" name="GST" value=""<!-- TMPL_IF name="close" --> readonly="readonly"<!--/TMPL_IF-->  /></td></tr><!-- TMPL_ELSE --><input type="hidden" name="GST" value="0" /><!-- /TMPL_IF -->
 		<tr><th><label for="total"><strong>BUDGETED TOTAL</strong></label></th><td><input type="text" size="20" id="total" name="total" value=""<!-- TMPL_IF name="close" --> readonly="readonly"<!--/TMPL_IF--> /></td></tr>
 		<tr><th><label for="cost">Actual Cost</label></th><td><input type="text" size="20" id="cost" name="cost" value="<!-- TMPL_VAR name="ecost"-->"<!-- TMPL_IF name="close" --> readonly="readonly"<!--/TMPL_IF--> /></td></tr>
 		<tr><th><label for="invoice">Invoice Number *</label></th><td><input type="text" size="20" id="invoice" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /></td></tr>
