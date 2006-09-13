@@ -96,7 +96,7 @@ function check(f) {
 	</h1>
 	Shopping Basket For <!-- TMPL_VAR NAME="name" -->
 	<div id="bloc25">
-		<h2 class="acquisition">catalogue details</h2>
+		<h2 class="acquisition">Catalogue details</h2>
 		<p>
 			<label class="label100"><b>Title *</b></label>
 			<!-- TMPL_IF name="biblio" -->
@@ -192,10 +192,10 @@ function check(f) {
 			<label class="label100">Budgeted Cost</label>
 			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
-		<p>
+<!-- TMPL_IF NAME="GST" -->		<p>
 			<label class="label100">Budgeted GST</label>
-			<input type="text" size="20" name="GST" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
-		</p>
+			<input type="text" size="20" name="GST" value="<!-- TMPL_VAR NAME="GST" -->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+		</p><!-- TMPL_ELSE --><input type="hidden" name="GST" value="0"><!-- /TMPL_IF -->
 		<p>
 			<label class="label100"><b>BUDGETED TOTAL</b></label>
 			<input type="text" size="20" name="total" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>

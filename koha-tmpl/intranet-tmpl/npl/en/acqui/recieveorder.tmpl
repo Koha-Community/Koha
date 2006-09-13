@@ -84,8 +84,8 @@ Results per page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resul
 			<label for="invoice">Parcel Code</label></th>
 			<td><input type="text" size="20" id="invoice" name="invoice" /></td></tr>
 		
-			<tr><th><label for="gst">GST</label></th>
-		<td>	<input type="text" size="20" id="gst" name="gst" /></td></tr>
+	<!-- TMPL_IF NAME="GST" -->		<tr><th><label for="gst">GST</label></th>
+		<td>	<input type="text" size="20" id="gst" name="gst" /></td></tr><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0" /><!-- /TMPL_IF -->
 		
 			<tr><th><label for="freight">Freight</label></th>
 			<td><input type="text" size="20" id="freight" name="freight" /></td></tr>

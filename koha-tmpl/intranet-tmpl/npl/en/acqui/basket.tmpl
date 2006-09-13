@@ -86,8 +86,8 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			
-			<tr>
-				<td colspan="2" rowspan="3">&nbsp;</td>
+<!-- TMPL_IF NAME="GST" -->			<tr>
+				<td colspan="2">&nbsp;</td>
 				<th>SubTotal</th>
 				<th><!-- TMPL_VAR NAME="sub_total_est" --></th>
 				<th>&nbsp;</th>
@@ -97,13 +97,16 @@
 				
 			</tr>
 			<tr>
+				<td colspan="2">&nbsp;</td>
 				<th>GST</th>
 				<th><!-- TMPL_VAR NAME="gist_est" --></th>
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 				<th><!-- TMPL_VAR NAME="gist" --></th>
 			</tr>
+<!-- /TMPL_IF -->
 			<tr>
+				<td colspan="2">&nbsp;</td>
 				<th>TOTAL  (<!-- TMPL_VAR NAME="currency" -->)</th>
 				<th><!-- TMPL_VAR NAME="grand_total_est" --></th>
 				<th>&nbsp;</th>

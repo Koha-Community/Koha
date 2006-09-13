@@ -32,7 +32,7 @@
 				<th class="acquisition doNotPrint">Order</th>
 				<th class="acquisition">Publisher<span class="doNotPrint"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[order]</a></span></th>
 				<th class="acquisition">Title</th>
-				<th class="acquisition doNotPrint">rrp</th>
+				<th class="acquisition doNotPrint" title="Recommended Retail Price">RRP</th>
 				<th class="acquisition">est</th>
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
@@ -94,33 +94,33 @@
 					&nbsp;
 				</td>
 				<td class="acquisition number">
-					<p>Sub total</p>
-					<p>GST</p>
+					<!-- TMPL_IF NAME="GST" --><p>Sub total</p>
+					<p>GST</p><!-- /TMPL_IF -->
 					<p>TOTAL (<!-- TMPL_VAR NAME="currency" -->)</p>
 				</td>
 				<td class="acquisition number">
-					<p><!-- TMPL_VAR NAME="sub_total_est" --></p>
-					<p><!-- TMPL_VAR NAME="gist_est" --></p>
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR NAME="sub_total_est" --></p>
+					<p><!-- TMPL_VAR NAME="gist_est" --></p><!-- /TMPL_IF -->
 					<p><!-- TMPL_VAR NAME="grand_total_est" --></p>
 				</td>
 				<td class="acquisition doNotPrint">
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
-				</td>
-				<td class="acquisition number">
-					<p><!-- TMPL_VAR name="qty_total" --></p>
-					<p>&nbsp;</p>
+					<!-- TMPL_IF NAME="GST" --><p>&nbsp;</p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
 					<p>&nbsp;</p>
 				</td>
 				<td class="acquisition number">
-					<p><!-- TMPL_VAR NAME="sub_total" --></p>
-					<p><!-- TMPL_VAR NAME="gist" --></p>
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR name="qty_total" --></p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition number">
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR NAME="sub_total" --></p>
+					<p><!-- TMPL_VAR NAME="gist" --></p><!-- /TMPL_IF -->
 					<p><!-- TMPL_VAR NAME="grand_total" --></p>
 				</td>
-				<td class="acquisition">
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
+				<td colspan="3" class="acquisition">
+					<!-- TMPL_IF NAME="GST" --><p>&nbsp;</p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
 					<p>&nbsp;</p>
 				</td>
 			</tr>

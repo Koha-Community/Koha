@@ -108,10 +108,10 @@
 			<label>Parcel Code</label>
 			<input type="text" size="20" name="invoice">
 		</p>
-		<p>
+<!-- TMPL_IF NAME="GST" -->		<p>
 			<label>GST</label>
 			<input type="text" size="20" name="gst">
-		</p>
+		</p><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0"><!-- /TMPL_IF -->
 		<p>
 			<label>Freight</label>
 			<input type="text" size="20" name="freight">
