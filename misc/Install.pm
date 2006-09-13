@@ -178,30 +178,6 @@ web site (http://www.koha.org/).
 
 |;
 
-$messages->{'NETZ3950Missing'}->{en}=qq|
-
-The Net::Z3950 module is missing.  This module is necessary if you want to use
-Koha's Z39.50 client to download bibliographic records from other libraries.
-
-To install this module, you will need the yaz client installed from
-http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-command:
-
-perl -MCPAN -e 'install Net::Z3950'
-
-...or by installing packages for your distribution, if available.
-
-IMPORTANT NOTE : If you use Perl 5.8.0, you might need to 
-edit NET::Z3950's Makefile.PL and yazwrap/Makefile.PL to include:
-
-    'DEFINE' => '-D_GNU_SOURCE',
-
-Also note that some installations of Perl on Red Hat will generate a lot of
-"'my_perl' undeclared" errors when running make in Net-Z3950.  This is fixed by
-inserting in yazwrap/ywpriv.h a line saying #include "XSUB.h"
-
-Press the <ENTER> key to continue: |;	#'
-
 $messages->{'CheckingPerlModules'}->{en} = heading('PERL MODULES') . qq|
 Checking perl modules ...
 |;
@@ -861,6 +837,11 @@ sub checkperlmodules {
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
 	unless (eval {require MARC::Charset})   { push @missing,"MARC::Charset" };
 	unless (eval {require MARC::File::XML})   { push @missing,"MARC::File::XML" };
+	unless (eval {require MARC::File::XML})   { push @missing,"LWP::Simple" };
+	unless (eval {require MARC::File::XML})   { push @missing,"XML::Simple" };
+	unless (eval {require MARC::File::XML})   { push @missing,"Date::Calc" };
+	unless (eval {require MARC::File::XML})   { push @missing,"MARC::File::XML" };
+	unless (eval {require ZOOM})   { push @missing,"ZOOM" };
 # The following modules are not mandatory, depends on how the library want to use Koha
 	unless (eval {require PDF::API2})   { 
 			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
@@ -884,7 +865,7 @@ sub checkperlmodules {
 	}
 	unless (eval {require Net::LDAP})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-				push @missing, "Net::LDAP";
+				push @missing, "You will need Net::LDAP if you want to authentify patrons through a LDAP";
 			}
         }
         unless (eval {require Text::Wrap})       {
@@ -892,32 +873,6 @@ sub checkperlmodules {
                                 push @missing, "You will need Text::Wrap if you want to use Spine-label printing";
                         }
         }
-	unless (eval {require Event})       {
-		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-				push @missing, "Event";
-			}
-    }
-    unless (eval {require Net::Z3950})       {
-		showmessage(getmessage('NETZ3950Missing'), 'PressEnter', '', 1);
-		if ($#missing>=0) { # see above note
-			push @missing, "Net::Z3950";
-		}
-    }
-    unless (eval {require LWP::Simple})       {
-		if ($#missing>=0) { # see above note
-			push @missing, "LWP::Simple";
-		}
-    }
-    unless (eval {require XML::Simple})       {
-		if ($#missing>=0) { # see above note
-			push @missing, "XML::Simple";
-		}
-    unless (eval {require Date::Calc})       {
-		if ($#missing>=0) { # see above note
-			push @missing, "Date::Calc";
-		}
-    }
-
 #
 # Print out a list of any missing modules
 #
