@@ -22,7 +22,7 @@ a.catalogue:hover {
 
 <body onload="javascript:Activate(0);load_macles(630);">
 <h1 class="catalogue">Gestion des index MACLES</h1>
-<form name="f_pop" onSubmit="javascript:add_macles('630');">
+<form name="f_pop"> <!-- onSubmit="javascript:add_macles('630');"> -->
 
 <div class="tabbed">
 	<div class="tabs">
@@ -40,7 +40,8 @@ a.catalogue:hover {
     <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:visible">
 <!-- /TMPL_IF -->
           <h2 class="catalogue"> <!--TMPL_VAR Name="hdr_tab"--></h2>
-          <input type="submit" class="button catalogue" value="Envoyer" />
+	  <a href="#" class="button catalogue" onclick="JavaScript:add_macles('630');">Envoyer</a>
+          <!-- <input type="submit" class="button catalogue" value="Envoyer" /> -->
           <a class="button catalogue" href="" onclick="javascript:load_macles(630);">Réinitialiser</a>
           <a class="button catalogue" href="javascript:uncheck_tab(<!-- TMPL_VAR name="number" -->)">d&eacute;selectionner onglet</a>
           <input type="reset" class="button catalogue" value="d&eacute;selectionner tout" />
@@ -97,9 +98,9 @@ a.catalogue:hover {
 <script language="JavaScript" type="text/javascript">
 function Activate(numlayer)
 {
-	for (i=0; i <= 9 ; i++ ) {
-		ong = i+"XX";
-		link = "link"+i;
+	for (var i=0; i <= 9 ; i++ ) {
+		var ong = i+"XX";
+		var link = "link"+i;
 		if (numlayer==i) {
 			with(document){
 			if (document.getElementById(ong)){
@@ -129,7 +130,7 @@ function add_macles(myvalue)
   var myinputs=document.getElementsByTagName("input");
   var mycountMACLESgen=0;
   var tab = new Array();
-  for (i=0;i<myinputs.length;i++){
+  for (var i=0;i<myinputs.length;i++){
     if (myinputs[i].checked) {
       tab[mycountMACLESgen]=myinputs[i].value;
       mycountMACLESgen++;
@@ -165,7 +166,7 @@ function add_macles(myvalue)
       }
     }
   }
-  self.close;
+  window.close();
   return false;
 }
 
