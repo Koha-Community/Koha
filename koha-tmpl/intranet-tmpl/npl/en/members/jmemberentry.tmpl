@@ -5,6 +5,9 @@
 
 
 <div id="main"><form action="/cgi-bin/koha/members/newjmember.pl" method="post">
+	<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" -->" />
+	<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->" />
+	<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="zipcode" -->" />
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->" />
 	<input type="hidden" name="updtype" value="I" />
 	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
