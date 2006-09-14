@@ -725,7 +725,7 @@ sub canbookbeissued {
 # DEBTS
 	my $amount = checkaccount($env,$borrower->{'borrowernumber'}, $dbh,$duedate);
 	if ($amount >0) {
-		$needsconfirmation{DEBT} = $amount;
+		$needsconfirmation{DEBT} = sprintf("%.2f",$amount);
 	}
 
 
