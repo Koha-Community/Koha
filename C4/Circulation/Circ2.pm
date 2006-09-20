@@ -348,6 +348,7 @@ sub getiteminformation {
 	my ($env, $itemnumber, $barcode) = @_;
 	my $dbh=C4::Context->dbh;
 	my ($itemrecord)=XMLgetitem($dbh,$itemnumber,$barcode);
+	return undef unless $itemrecord; ## This is to prevent a system crash if barcode does not exist	
 	 my $itemhash=XML_xml2hash_onerecord($itemrecord);	
 	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemhash,"holdings");
 ##Now get full biblio details from MARC
@@ -894,9 +895,9 @@ sub issuebook {
 ### fix me STOP using koha hashes, change so that XML hash is used
 	my ($env,$borrower,$barcode,$date,$cancelreserve) = @_;
 	my $dbh = C4::Context->dbh;
-	my ($itemrecord)=XMLgetitem($dbh,"",$barcode);
-	 $itemrecord=XML_xml2hash_onerecord($itemrecord);
+	my $itemrecord=XMLgetitemhash($dbh,"",$barcode);
 	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
+              $iteminformation->{'itemtype'}=MARCfind_itemtype($dbh,$iteminformation->{biblionumber});
 	my $error;
 #
 # check if we just renew the issue.
@@ -973,6 +974,7 @@ sub issuebook {
 		
 		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode,issue_date) values (?,?,?,?,NOW())");
 		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+
 		my $dateduef;
 		 my @datearr = localtime();
 		$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-". $datearr[3];
@@ -1040,7 +1042,7 @@ sub getLoanLength {
 	$sth->execute($borrowertype,$itemtype,"");
 	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
-	
+
 	$sth->execute($borrowertype,"*",$branchcode);
 	$loanlength = $sth->fetchrow_hashref;
 	return $loanlength->{issuelength} if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
@@ -1139,9 +1141,9 @@ sub returnbook {
 	my $doreturn = 1;
 	die '$branch not defined' unless defined $branch; # just in case (bug 170)
 	# get information on item
-	my ($itemrecord)=XMLgetitem($dbh,"",$barcode);
-	$itemrecord=XML_xml2hash_onerecord($itemrecord);
+	my $itemrecord=XMLgetitemhash($dbh,"",$barcode);
 	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
+              $iteminformation->{'itemtype'}=MARCfind_itemtype($dbh,$iteminformation->{biblionumber});
 	if (not $iteminformation) {
 		$messages->{'BadBarcode'} = $barcode;
 		$doreturn = 0;

@@ -78,7 +78,7 @@ and branchcode.
 =cut
 
 sub GetBookFund {
-    my $bookfundid = @_;
+    my $bookfundid = shift;
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT
@@ -90,6 +90,7 @@ sub GetBookFund {
         WHERE bookfundid = ?
     ";
     my $sth=$dbh->prepare($query);
+$sth->execute($bookfundid);
     return $sth->fetchrow_hashref;
 }
 
@@ -147,12 +148,12 @@ sub GetBookFunds {
     my $branch   = $userenv->{branch};
     my $strsth;
 
-    if ( $branch ne '' ) {
+    if ( $branch  ) {
         $strsth = "
         SELECT *
         FROM   aqbookfund,aqbudget
         WHERE  aqbookfund.bookfundid=aqbudget.bookfundid
-            AND startdate<now()
+            AND startdate<=now()
             AND enddate>now()
             AND (aqbookfund.branchcode IS NULL OR aqbookfund.branchcode='' OR aqbookfund.branchcode= ? )
       GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
@@ -169,7 +170,7 @@ sub GetBookFunds {
         ";
     }
     my $sth = $dbh->prepare($strsth);
-    if ( $branch ne '' ) {
+    if ( $branch  ) {
         $sth->execute($branch);
     }
     else {

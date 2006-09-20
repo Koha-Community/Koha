@@ -75,7 +75,7 @@ $VERSION = 2.01;
 &XMLmoditemonefield
 &XMLkoha2marc
 &XML_separate
-
+&XML_record_header
 &ZEBRAdelbiblio
 &ZEBRAgetrecord   
 &ZEBRAop 
@@ -235,7 +235,7 @@ $newvalue= Encode::decode('utf8',$newvalue) if $newvalue;
 my $biblio=$xml->{'datafield'};
 my $controlfield=$xml->{'controlfield'};
  ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;
-my $updated=0;
+my $updated;
     if ($tag>9){
 	foreach my $data (@$biblio){
         		if ($data->{'tag'} eq $tag){
@@ -281,7 +281,7 @@ my $updated=0;
                                            } ;
 		   }								
 	   }## created now
-    }else{
+    }elsif ($tag>0){
 	foreach my $control (@$controlfield){
 		if ($control->{'tag'} eq $tag){
 			$control->{'content'}=$newvalue;
@@ -348,6 +348,7 @@ return ($biblio,@items);
 sub XML_xml2hash_onerecord{
 ##make a perl hash from xml file
 my ($xml)=@_;
+return undef unless $xml;
   my $hashed = XMLin( $xml ,KeyAttr =>['leader','controlfield','datafield'],ForceArray => ['leader','controlfield','datafield','subfield'],KeepRoot=>0);
 return $hashed;
 }
@@ -567,14 +568,14 @@ my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 $year=substr($year,2,2);
 	my $accdate=sprintf("%2d%02d%02d",$year,$mon,$mday);
 my ($titletag,$titlesubf)=MARCfind_marc_from_kohafield("title","biblios");
-my $xml="<record><leader>     naa a22     7ar4500</leader><controlfield tag='005'>$timestamp</controlfield><controlfield tag='008'>$accdate</controlfield><datafield ind1='' ind2='' tag='$titletag'></datafield></record>";
+##create a dummy record
+my $xml="<record><leader>     naa a22     7ar4500</leader><controlfield tag='xxx'></controlfield><datafield ind1='' ind2='' tag='$titletag'></datafield></record>";
 ## Now build XML
 	my $record = XML_xml2hash($xml);
 	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where tagfield is not null and recordtype=?");
 	$sth2->execute($recordtype);
 	my $field;
 	while (($field)=$sth2->fetchrow) {
-warn $field;
 		$record=XML_writeline($record,$field,$result->{$field},$recordtype) if $result->{$field};
 	}
 return $record;
@@ -836,7 +837,7 @@ sub MARChtml2xml {
 	$xml=Encode::decode('utf8',$xml);
 	return $xml;
 }
-sub marc_record_header {
+sub XML_record_header {
 ####  this one is for <record>
     my $format = shift;
     my $enc = shift || 'UTF-8';

@@ -73,7 +73,7 @@ sub authoritysearch {
 	my $n=0;
 	my @authtypecode;
 				my @auths=split / /,$authtypecode ;
-				my ($attrfield)=MARCfind_attr_from_kohafield("auth_authtypecode");
+				my ($attrfield)=MARCfind_attr_from_kohafield("authtypecode");
 				foreach my  $auth (@auths){
 				$query .=$attrfield." ".$auth." "; ##No truncation on authtype
 				push @authtypecode ,$auth;
@@ -92,9 +92,9 @@ sub authoritysearch {
 	if (@$value[$i]){
 	##If mainentry search $a tag
 		if (@$tags[$i] eq "mainentry") {
-		 ($attr)=MARCfind_attr_from_kohafield("auth_mainentry")." ";		
+		 ($attr)=MARCfind_attr_from_kohafield("mainentry")." ";		
 		}else{
-		($attr) =MARCfind_attr_from_kohafield("auth_allentry")." ";
+		($attr) =MARCfind_attr_from_kohafield("allentry")." ";
 		}
 		if (@$operator[$i] eq 'phrase') {
 			 $attr.="  \@attr 4=1  \@attr 5=100  \@attr 6=3 ";##Phrase, No truncation,all of subfield field must match
@@ -122,8 +122,8 @@ $length=10 unless $length;
 my @oAuth;
 my $i;
  $oAuth[0]=C4::Context->Zconnauth("authorityserver");
-my ($mainentry)=MARCfind_attr_from_kohafield("auth_mainentry");
-my ($allentry)=MARCfind_attr_from_kohafield("auth_allentry");
+my ($mainentry)=MARCfind_attr_from_kohafield("mainentry");
+my ($allentry)=MARCfind_attr_from_kohafield("allentry");
 
 $query="\@attr 2=102 \@or \@or ".$query." \@attr 7=1 ".$mainentry." 0 \@attr 7=1 ".$allentry." 1"; ## sort on mainfield and subfields
 
@@ -162,8 +162,8 @@ $authrecord=XML_xml2hash_onerecord($authrecord);
 my @linkids;	
 my $separator=C4::Context->preference('authoritysep');
 my $linksummary=" ".$separator;	
-my $authid=XML_readline_onerecord($authrecord,"auth_authid","authorities");	
-my @linkid=XML_readline_asarray($authrecord,"auth_linkid","authorities");##May have many linked records	
+my $authid=XML_readline_onerecord($authrecord,"authid","authorities");	
+my @linkid=XML_readline_asarray($authrecord,"linkid","authorities");##May have many linked records	
 	
 	foreach my $linkid (@linkid){
 		my $linktype=AUTHfind_authtypecode($dbh,$linkid);
@@ -220,7 +220,7 @@ sub AUTHcount_usage {
 my @oConnection;
 $oConnection[0]=C4::Context->Zconn("biblioserver");
 my $query;
-my ($attrfield)=MARCfind_attr_from_kohafield("auth_authid");
+my ($attrfield)=MARCfind_attr_from_kohafield("authid");
 $query= $attrfield." ".$authid;
 
 my $oResult = $oConnection[0]->search_pqf($query);
@@ -319,17 +319,15 @@ sub AUTHaddauthority {
 	}	
 
 ##Modified record may also come here use REPLACE -- bulk import comes here
-XML_writeline($record,"auth_authid",$authid,"authorities");
-XML_writeline($record,"auth_authtypecode",$authtypecode,"authorities");
+XML_writeline($record,"authid",$authid,"authorities");
+XML_writeline($record,"authtypecode",$authtypecode,"authorities");
 my $xml=XML_hash2xml($record);
 	my $sth=$dbh->prepare("REPLACE auth_header set marcxml=?,  authid=?,authtypecode=?,datecreated=now()");
 	$sth->execute($xml,$authid,$authtypecode);
-	$sth->finish;
-	
-	
+	$sth->finish;	
 	ZEBRAop($dbh,$authid,'specialUpdate',"authorityserver");
 ## If the record is linked to another update the linked authorities with new authid
-my @linkids=XML_readline_asarray($record,"auth_linkid","authorities");
+my @linkids=XML_readline_asarray($record,"linkid","authorities");
 	foreach my $linkid (@linkids){
 	##Modify the record of linked 
 	AUTHaddlink($dbh,$linkid,$authid);
@@ -342,9 +340,9 @@ my ($dbh,$linkid,$authid)=@_;
 my $record=XMLgetauthorityhash($dbh,$linkid);
 my $authtypecode=AUTHfind_authtypecode($dbh,$linkid);
 #warn "adding l:$linkid,a:$authid,auth:$authtypecode";
-XML_writeline($record,"auth_linkid",$authid,"authorities");
+XML_writeline($record,"linkid",$authid,"authorities");
 my $xml=XML_hash2xml($record);
-$dbh->do("lock tables auth_header WRITE");
+$dbh->do("lock tables header WRITE");
 	my $sth=$dbh->prepare("update auth_header set marcxml=? where authid=?");
 	$sth->execute($xml,$linkid);
 	$sth->finish;	
@@ -395,17 +393,17 @@ sub AUTHmodauthority {
 ##
 my $sth=$dbh->prepare("update auth_header set marcxml=? where authid=?");
 # find if linked records exist and delete the link in them
-my @linkids=XML_readline_asarray($oldrecord,"auth_linkid","authorities");
+my @linkids=XML_readline_asarray($oldrecord,"linkid","authorities");
 
 	foreach my $linkid (@linkids){
 		##Modify the record of linked 
 		my $linkrecord=XMLgetauthorityhash($dbh,$linkid);
 		my $linktypecode=AUTHfind_authtypecode($dbh,$linkid);
-		my @linkfields=XML_readline_asarray($linkrecord,"auth_linkid","authorities");
+		my @linkfields=XML_readline_asarray($linkrecord,"linkid","authorities");
 		my $updated;
 		       foreach my $linkfield (@linkfields){
 			if ($linkfield eq $authid){
-				XML_writeline_id($linkrecord,"auth_linkid",$linkfield,"","authorities");
+				XML_writeline_id($linkrecord,"linkid",$linkfield,"","authorities");
 				$updated=1;
 			}
 		       }#foreach linkfield
@@ -695,7 +693,7 @@ my @oConnection;
  $oConnection[0]=C4::Context->Zconn("biblioserver");
 ##$oConnection[0]->option(elementSetName=>"biblios"); ##  Needs a fix
 my $query;
-my ($attr2)=MARCfind_attr_from_kohafield("auth_authid");
+my ($attr2)=MARCfind_attr_from_kohafield("authid");
 my $attrfield.=$attr2;
 $query= $attrfield." ".$mergefrom;
 my ($event,$i);
@@ -903,4 +901,4 @@ Paul POULAIN paul.poulain@free.fr
 # Revision 1.1  2004/06/07 07:35:01  tipaul
 # MARC authority management package
 #
->>>>>>> 1.30
+

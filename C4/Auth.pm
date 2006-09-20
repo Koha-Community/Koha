@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Members;  # getpatroninformation
+use C4::Koha;## to get branch
 # use Net::LDAP;
 # use Net::LDAP qw(:all);
 
@@ -127,6 +128,8 @@ sub get_template_and_user {
 		$bordat[0] = $borr;
 		$template->param(USER_INFO => \@bordat,
 		);
+		my $branches=GetBranches();
+		$template->param(branchname=>$branches->{$borr->{branchcode}}->{branchname},);
 		
 		# We are going to use the $flags returned by checkauth
 		# to create the template's parameters that will indicate

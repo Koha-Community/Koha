@@ -298,6 +298,7 @@ Insert a new suggestion on database with value given on input arg.
 sub NewSuggestion {
     my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
     my $dbh = C4::Context->dbh;
+
     my $query = qq |
         INSERT INTO suggestions
             (status,suggestedby,title,author,publishercode,note,copyrightdate,
@@ -323,7 +324,7 @@ Note that there is no function to modify a suggestion : only the status can be m
 
 =cut
 sub ModStatus {
-    my ($suggestionid,$status,$managedby,$biblionumber) = @_;
+    my ($suggestionid,$status,$managedby,$biblionumber,$input) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($managedby>0) {
@@ -382,7 +383,7 @@ sub ModStatus {
     $sth->execute($suggestionid);
     my $emailinfo = $sth->fetchrow_hashref;
 if ($emailinfo->{byemail}){
-    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
+    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet",$input);
 
     $template->param(
         byemail => $emailinfo->{byemail},
