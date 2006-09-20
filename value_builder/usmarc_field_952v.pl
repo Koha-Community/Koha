@@ -64,7 +64,10 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
                                                                localtime(time);
 $year +=1900;
 $mon +=1;
-my $date = "$year-$mon-$mday";
+$pmon = sprintf("%0*d", "2",$mon);
+
+$pmday = sprintf("%0*d", "2",$mday);
+my $date = "$year-$pmon-$pmday";
 my $res  = "
 <script>
 function Blur$function_name(index) {
@@ -74,7 +77,9 @@ function Blur$function_name(index) {
 function Focus$function_name(subfield_managed) {
 	for (i=0 ; i<document.f.field_value.length ; i++) {
                 if (document.f.tag[i].value == '952' && document.f.subfield[i].value == 'v') {
-                        document.f.field_value[i].value = '$date';
+						if (document.f.field_value[i].value == '') {
+							document.f.field_value[i].value = '$date';
+						}
                 }
         }
 return 0;
