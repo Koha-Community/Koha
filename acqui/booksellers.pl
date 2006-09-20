@@ -55,12 +55,8 @@ the C<basket> we have to close if op is equal to 'close'.
 
 use strict;
 use C4::Auth;
-use C4::Biblio;
-use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
 use C4::Acquisition;
 use C4::Date;
 use C4::Bookseller;
@@ -85,19 +81,19 @@ my $count = scalar @suppliers;
 
 # check if we have to "close" a basket before building page
 my $op     = $query->param('op');
-my $basket = $query->param('basket');
+my $basketno = $query->param('basketno');
 if ( $op eq 'close' ) {
-    CloseBasket($basket);
+    CloseBasket($basketno);
 }
 
 #build result page
 my $toggle = 0;
+ my $ordcount;
 my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my $orders  = GetPendingOrders( $suppliers[$i]->{'id'} );
-    my $ordcount = scalar @$orders;
-# FIXME : $ordcount seems to be equals to 0 each times...
-
+   my $orders  = GetPendingOrders( $suppliers[$i]->{'id'} );
+ my    $ordercount = scalar @$orders;
+$ordcount+=$ordercount;
     my %line;
     if ( $toggle == 0 ) {
         $line{even} = 1;
@@ -110,18 +106,10 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{supplierid} = $suppliers[$i]->{'id'};
     $line{name}       = $suppliers[$i]->{'name'};
     $line{active}     = $suppliers[$i]->{'active'};
+    $line{ordcount}=$ordercount;	
     my @loop_basket;
-    for ( my $i2 = 0 ; $i2 < $ordcount ; $i2++ ) {
-        my %inner_line;
-        $inner_line{basketno}     = $orders->[$i2]->{'basketno'};
-        $inner_line{total}        = $orders->[$i2]->{'count(*)'};
-        $inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-        $inner_line{surname}      = $orders->[$i2]->{'firstname'};
-        $inner_line{firstname}    = $orders->[$i2]->{'surname'};
-        $inner_line{creationdate} =
-          format_date( $orders->[$i2]->{'creationdate'} );
-        $inner_line{closedate} = format_date( $orders->[$i2]->{'closedate'} );
-        push @loop_basket, \%inner_line;
+     foreach my $order(@$orders){
+        push @loop_basket, $order;
     }
     $line{loop_basket} = \@loop_basket;
     push @loop_suppliers, \%line;
@@ -129,7 +117,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 $template->param(
     loop_suppliers          => \@loop_suppliers,
     supplier                => $supplier,
-    count                   => $count,
+    count                   => $ordcount,
     intranetcolorstylesheet =>
     C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),

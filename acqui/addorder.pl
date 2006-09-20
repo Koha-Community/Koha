@@ -90,7 +90,7 @@ bookfund use to pay this order.
 
 =item C<ecost>
 
-=item C<GST>
+=item C<gst>
 
 =item C<budget>
 
@@ -115,20 +115,12 @@ if it is an order from an existing suggestion : the id of this suggestion.
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Acquisition;
 use C4::Suggestions;
 use C4::Biblio;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
-
-#use Data::Dumper;
-#use Date::Manip;
 
 my $input = new CGI;
-
 # get_template_and_user used only to check auth & get user id
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -140,6 +132,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
 
 # get CGI parameters
 my $ordnum       = $input->param('ordnum');
@@ -154,166 +147,80 @@ my $itemtype      = $input->param('format');
 my $quantity      = $input->param('quantity');
 my $listprice     = $input->param('list_price');
 my $branch        = $input->param('branch');
+my $discount=$input->param('discount');
 if ( $listprice eq '' ) {
     $listprice = 0;
 }
 my $series = $input->param('series');
 my $notes         = $input->param('notes');
-my $bookfund      = $input->param('bookfund');
+my $bookfundid      = $input->param('bookfundid');
 my $sort1         = $input->param('sort1');
 my $sort2         = $input->param('sort2');
 my $rrp           = $input->param('rrp');
 my $ecost         = $input->param('ecost');
-my $gst           = $input->param('GST');
+my $gst           = $input->param('gstrate');
 my $budget        = $input->param('budget');
-my $cost          = $input->param('cost');
+my $unitprice         = $input->param('unitprice');
 my $sub           = $input->param('sub');
-my $invoice       = $input->param('invoice');
+my $purchaseordernumber       = $input->param('purchaseordernumber');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
 my $donation      = $input->param('donation');
 my $user          = $input->remote_user;
-
-#warn "CREATEBIBITEM =  $input->param('createbibitem')";
-#warn Dumper $input->param('createbibitem');
+my $biblionumber=$input->param('biblionumber');
 my $createbibitem = $input->param('createbibitem');
 
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been se to 0 by the librarian
-my $bibnum;
-my $bibitemnum;
-if ( $quantity ne '0' ) {
+my $dbh=C4::Context->dbh;
 
+if ($quantity ne '0'){
     #check to see if biblio exists
     if ( $existing eq 'no' ) {
-
-        #if it doesnt create it
-        $bibnum = &newbiblio(
-            {
-                title         => $title         ? $title         : "",
-                author        => $author        ? $author        : "",
-                copyrightdate => $copyrightdate ? $copyrightdate : "",
-                series        => $series        ? $series        : "",
-            }
-        );
-        $bibitemnum = &newbiblioitem(
-            {
-                biblionumber  => $bibnum,
-                itemtype      => $itemtype ? $itemtype : "",
-                isbn          => $isbn ? $isbn : "",
-                publishercode => $publishercode ? $publishercode : "",
-            }
-        );
-
+        #if it doesnt its created on template
         # change suggestion status if applicable
         if ($suggestionid) {
-            ModStatus( $suggestionid, 'ORDERED', '', $bibnum );
+my $data=GetSuggestion($suggestionid);
+
+ my $biblio={title=>$data->{title},author=>$data->{author},publishercode=>$data->{publishercode},copyrightdate=>$data->{copyrightdate},isbn=>$data->{isbn},place=>$data->{place},};
+my $xmlhash=XMLkoha2marc($dbh,$biblio,"biblios");
+$biblionumber = NEWnewbiblio($dbh,$xmlhash,"");
+
+            ModStatus( $suggestionid, 'ORDERED', '', $biblionumber,$input );
+warn "modstatus";
         }
-    }
+    }## biblio didnot exist now created
 
-    elsif ( $createbibitem eq 'YES' ) {
-        $bibnum     = $input->param('biblio');
-        $bibitemnum = $input->param('bibitemnum');
-        $bibitemnum = &newbiblioitem(
-            {
-                biblionumber  => $bibnum,
-                itemtype      => $itemtype ? $itemtype : "",
-                isbn          => $isbn ? $isbn : "",
-                publishercode => $publishercode ? $publishercode : "",
-            }
-        );
-        &modbiblio(
-            {
-                biblionumber  => $bibnum,
-                title         => $title ? $title : "",
-                author        => $author ? $author : "",
-                copyrightdate => $copyrightdate ? $copyrightdate : "",
-                series        => $series ? $series : ""
-            }
-        );
-    }
+    
 
-    # then attach it to an existing bib
-
-    else {
-        warn "attaching to an existing bibitem";
-
-        $bibnum = $input->param('biblio');
-
-        # if we are moddig the bibitem, not creating it createbib wont be set,
-        #
-        if ($createbibitem) {
-            $bibitemnum = $createbibitem;
-        }
-        else {
-            $bibitemnum = $input->param('bibitemnum');
-        }
-
-        my $oldtype = $input->param('oldtype');
-        &modbibitem(
-            {
-                biblioitemnumber => $bibitemnum,
-                isbn             => $isbn,
-                publishercode    => $publishercode,
-                itemtype         =>
-                  $itemtype,    # added itemtype, not prev. being changed.
-            }
-        );
-        &modbiblio(
-            {
-                biblionumber  => $bibnum,
-                title         => $title ? $title : "",
-                author        => $author ? $author : "",
-                copyrightdate => $copyrightdate ? $copyrightdate : "",
-                series        => $series ? $series : ""
-            },
-        );
-    }
+   
     if ($ordnum) {
 
         # 		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
         ModOrder(
             $title,   $ordnum,   $quantity,     $listprice,
-            $bibnum,  $basketno, $booksellerid, $loggedinuser,
-            $notes,   $bookfund, $bibitemnum,   $rrp,
-            $ecost,   $gst,      $budget,       $cost,
-            $invoice, $sort1,    $sort2
+            $biblionumber,  $basketno, $booksellerid, $loggedinuser,
+            $notes,   $bookfundid,    $rrp,
+            $ecost,   $gst,      $budget,       $unitprice,
+            $purchaseordernumber, $sort1,    $sort2,$discount,$branch
         );
     }
     else {
         ( $basketno, $ordnum ) = NewOrder(
-            $basketno,  $bibnum,       $title,        $quantity,
+            $basketno,  $biblionumber,       $title,        $quantity,
             $listprice, $booksellerid, $loggedinuser, $notes,
-            $bookfund,  $bibitemnum,   $rrp,          $ecost,
-            $gst,       $budget,       $cost,         $sub,
-            $invoice,   $sort1,        $sort2
+            $bookfundid,    $rrp,          $ecost,
+            $gst,       $budget,       $unitprice,         $sub,
+            $purchaseordernumber,   $sort1,        $sort2, $discount,$branch
         );
     }
-    if ($donation) {
-        my $barcode  = $input->param('barcode');
-        my @barcodes = split( /\,| |\|/, $barcode );
-        my ($error)  = newitems(
-            {
-                biblioitemnumber => $bibitemnum,
-                biblionumber     => $bibnum,
-                replacementprice => $rrp,
-                price            => $cost,
-                booksellerid     => $booksellerid,
-                homebranch       => $branch,
-                loan             => 0
-            },
-            @barcodes
-        );
-        ModReceiveOrder(
-            $bibnum,  $ordnum, $quantity, $user, $cost,
-            $invoice, 0,       $bookfund, $rrp
-        );
-    }
+
 }
 else {
-    $bibnum = $input->param('biblio');
-    DelOrder( $bibnum, $ordnum );
+#    $biblionumber = $input->param('biblionumber');
+    DelOrder( $biblionumber, $ordnum,$loggedinuser );
 }
-print $input->redirect("basket.pl?basket=$basketno");
+warn "goingout";
+print $input->redirect("basket.pl?basketno=$basketno");

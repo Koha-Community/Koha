@@ -77,7 +77,6 @@ can be equal to
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Suggestions;
@@ -120,50 +119,40 @@ if ($op eq 'connectDuplicate') {
 my $suggestions_loop= &SearchSuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
 foreach (@$suggestions_loop) {
 	unless ($_->{biblionumber}) {
-		my (@tags, @and_or, @excluding, @operator, @value, $offset,$length);
+		my (@kohafields, @and_or, @value, @relation,  $offset,$length);
 		# search on biblio.title
 		if ($_->{title}) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.title","");
-			push @tags, "'".$tag.$subfield."'";
-			push @and_or, "and";
-			push @excluding, "";
-			push @operator, "contains";
+			push @kohafields, "title";
+			push @and_or, "\@and";
+			push @relation, "\@attr 5=1";
 			push @value, $_->{title};
 		}
 		if ($_->{author}) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author","");
-			push @tags, "'".$tag.$subfield."'";
-			push @and_or, "and";
-			push @excluding, "";
-			push @operator, "contains";
+			push @kohafields, "author";
+			push @and_or, "\@and";
+			push @relation, "";
 			push @value, $_->{author};
 		}
 		# ... and on publicationyear.
 		if ($_->{publicationyear}) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.publicationyear","");
-			push @tags, "'".$tag.$subfield."'";
-			push @and_or, "and";
-			push @excluding, "";
-			push @operator, "=";
+			push @kohafields, "copyrightdate";
+			push @and_or, "\@and";
+			push @relation, "";
 			push @value, $_->{publicationyear};
 		}
 		# ... and on publisher.
 		if ($_->{publishercode}) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.publishercode","");
-			push @tags, "'".$tag.$subfield."'";
-			push @and_or, "and";
-			push @excluding, "";
-			push @operator, "=";
+			push @kohafields, "publishercode";
+			push @and_or, "\@and";
+			push @relation, "";
 			push @value, $_->{publishercode};
 		}
 	
-		my ($finalresult,$nbresult) = catalogsearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10);
+		my ($nbresult,@finalresult) = ZEBRAsearch_kohafields(\@kohafields,\@value,\@relation,"",\@and_or,0,"",0,1);
 
 		# there is at least 1 result => return the 1st one
 		if ($nbresult) {
-	 		#warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
- 			#warn "DUPLICATE ==>".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
-			$_->{duplicateBiblionumber} = @$finalresult[0]->{biblionumber};
+			$_->{duplicateBiblionumber} = $finalresult[0]->{biblionumber};
 		}
 	}
 }

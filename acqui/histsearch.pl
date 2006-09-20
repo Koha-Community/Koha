@@ -52,8 +52,6 @@ to filter on ended date.
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
-
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Acquisition;

@@ -45,9 +45,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
 use C4::Suggestions;
-use HTML::Template;
 use C4::Acquisition;
 use C4::Bookfund;
 use C4::Members;
@@ -65,11 +63,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # budget
-my ( $flags, $homebranch ) = GetFlagsAndBranchFromBorrower($loggedinuser);
-
+my $me= C4::Context->userenv;
+my $homebranch=$me->{'branch'} ;
 my @results = GetBookFunds($homebranch);
 my $count = scalar @results;
-
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
