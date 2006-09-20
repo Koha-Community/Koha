@@ -92,7 +92,9 @@ function Blur$function_name(index) {
 function Focus$function_name(subfield_managed) {
 		for (i=0 ; i<document.f.field_value.length ; i++) {
 			if (document.f.tag[i].value == '952' && document.f.subfield[i].value == 'p') {
-				document.f.field_value[i].value = '$nextnum';
+				if (document.f.field_value[i].value == '') {
+					document.f.field_value[i].value = '$nextnum';
+				}
 			}
 		}
 return 0;
