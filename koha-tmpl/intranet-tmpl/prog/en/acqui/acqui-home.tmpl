@@ -20,7 +20,7 @@
 <div id="acqui_acqui_home_currency">
 <!-- TMPL_IF NAME="loop_currency" -->
 	<h2>Exchange rates</h2>
-	<form action="/cgi-bin/koha/currency.pl">
+	<form action="/cgi-bin/koha/acqui/currency.pl">
 	<table>
 		<tr>
 			<th>Currency</th>
@@ -92,10 +92,11 @@
 	Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
 	
 	<h2>Help</h2>
-	<p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
-	<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </p>
-	<p>To start a new shopping basket with a new supplier return to this page and just start a new supplier search.</p>
-	<p>To close off a shopping basket click on "view shopping baskets" or search above, and the click on "confirm basket".</p>
+	<p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, (set donations as a supplier if you wish), and click add order which  will set up a "shopping basket" for you.</p>
+	<p>To place an order you need to establish whether a biblio already exists for it, or set up a new biblio from scratch or from a suggestion.  </p>
+	<p>To close  a shopping basket  click on "confirm Close Basket". After closing a basket it can not be modified or deleted</p>
+	<p>To receive an order (a parcel)  search for the supplier and click receive. After confirming invoice details you will be asked to create items for the order</p>
+	
 </div>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

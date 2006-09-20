@@ -28,7 +28,7 @@
 
 <div id="resultlist">
 <!-- Search Results Table -->
-<!-- TMPL_IF NAME="count" -->
+
 <form method="post" action="parcels.pl">
 	<table class="small">
 		<tr>
@@ -56,10 +56,10 @@
 			</th>
 			<th class="acquisition">
 				Sort by :<select name="orderby" size="1">
-				<option value="aqorders.booksellerinvoicenumber"> Code</option>
+				<option value="aqorders.booksellerinvoicenumber"> Invoice- Ascending order</option>
 				<option value="datereceived"> Date Received</option>
 				<option value="datereceived desc"> Date Received reverse</option>
-				<option value="aqorders.booksellerinvoicenumber desc"> Code reverse</option>
+				<option value="aqorders.booksellerinvoicenumber desc"> Invoice reverse</option>
 				</select><br />
 				Results per page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resultsperpage"-->" size="1">
 				<option value="20">20</option>
@@ -101,26 +101,6 @@
 <!-- /TMPL_LOOP -->
 </table>
 </form>
-<!--/TMPL_IF-->
-	<div id="bloc25">
-	<h2 class="acquisition"> Receive a new Parcel </h2>
-		<form method="get" action="parcel.pl">
-		<p>
-			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
-			<label>Parcel Code</label>
-			<input type="text" size="20" name="invoice">
-		</p>
-		<p>
-			<label>GST</label>
-			<input type="text" size="20" name="gst">
-		</p>
-		<p>
-			<label>Freight</label>
-			<input type="text" size="20" name="freight">
-		</p>
-		<p>
-			<input type="submit" class="button acquisition" value="save">
-		</p>
-		</form>
-	</div>
+
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -122,7 +122,7 @@
 		</p>
 		<p>
 			<label>Invoice Item Price Includes GST</label>
-				<!-- TMPL_IF name="invoice_gst" -->
+				<!-- TMPL_IF name="invoiceincgst" -->
 					<input type="radio" name="invoiceincgst" value="1" checked="checked" /> Yes
 					<input type="radio" name="invoiceincgst" value="0" /> No
 				<!-- TMPL_ELSE -->
@@ -135,7 +135,7 @@
 			<input type="text" size="3" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %
 		</p>
 	</div>
-	<input type="submit"  name="submit" title="save" />
+	<input type="submit"  name="submit" value="save" />
 	</form>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
