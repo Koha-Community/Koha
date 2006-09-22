@@ -34,7 +34,7 @@
 					(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 				</p>
 				<center>
-				<form method="post" action="returns.pl">
+				<form name="f" method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<!-- TMPL_UNLESS Name="first" -->
 						<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
@@ -93,7 +93,7 @@
 		</div>
 	<!-- TMPL_ELSE -->
 		<div id="bloc25">
-			<form method="post" action="/cgi-bin/koha/circ/returns.pl">
+			<form name="f" method="post" action="/cgi-bin/koha/circ/returns.pl">
 				<h2 class="circulation">Enter Book Barcode</h2>
 				<label class="label20">Item Barcode:</label><input name="barcode" size="10">
 				</table>
