@@ -110,6 +110,7 @@ my $db_host   = C4::Context->config("hostname");
 my $db_user   = C4::Context->config("user");
 my $db_passwd = C4::Context->config("pass");
 my $dbh = DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
+# print "DBI : $db_driver:$db_name:$db_host,$db_user, $db_passwd";
 
 # we begin the script, so "unactive" every pending request : they will never give anything, the script died :-(
 my $sth=$dbh->prepare("update z3950results set active=0 where active<>-1");
@@ -216,13 +217,15 @@ while (1) {
 							my $error=0;
 # the z3950 query is builded. Launch it.
 							if ($user) {
-								$conn= new ZOOM::Connection($servername, $port, databaseName => $database, user => $user, password => $password) || ($noconnection=1);
+								$conn= new ZOOM::Connection($servername, $port, databaseName => "$database", user => "$user", password => "$password");
+                                $noconnection=1 if $@;
 							} else {
-								$conn= new ZOOM::Connection($servername, $port, databaseName => $database) || ($noconnection=1);
+								$conn= new ZOOM::Connection($servername, $port, databaseName => $database);
+                                $noconnection=1 if $@;
 							}
 							if ($noconnection || $error) {
 # if connection impossible, don't go further !
-								print "$$/$id : no connection at $globalname\n";
+								print "$$/$id : no connection at $globalname ($servername, $port,$database,$user,$password)\n";
 								my $result = MARC::Record->new();
 								my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($result,-1,"$globalname server is NOT responding","",$random);
 							} else {
