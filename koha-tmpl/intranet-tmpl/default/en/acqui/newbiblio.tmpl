@@ -85,7 +85,7 @@ function check(f) {
 	<!-- TMPL_LOOP NAME="loop_currencies" -->
 		<input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->">
 	<!-- /TMPL_LOOP -->
-	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->" class="button acquisition">View Basket</a>
+	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">View Basket</a>
 	<h1 class="acquisition">
 		<!-- TMPL_IF name="ordnum" -->
 			Modify order details (line #<!-- TMPL_VAR NAME="ordnum" -->)
