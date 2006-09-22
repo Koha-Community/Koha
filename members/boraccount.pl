@@ -29,14 +29,11 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Date;
 use CGI;
+use C4::Search;
 use C4::Members;
-use HTML::Template;
-
 my $input=new CGI;
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-#my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
-#my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/boraccount.tmpl",
 			     query => $input,
@@ -77,13 +74,16 @@ for (my $i=0;$i<$numaccts;$i++){
   	$accts->[$i]{'amountoutstandingcredit'} = 1;
   }
   my %row = (   'date'              => format_date($accts->[$i]{'date'}),
+		'accountid' => $accts->[$i]{'accountid'},
+		'itemnum' => $accts->[$i]{'itemnumber'},
   		'amountcredit' => $accts->[$i]{'amountcredit'},
   		'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
   		'toggle' => $accts->[$i]{'toggle'},
 		'description'       => $accts->[$i]{'description'},
   		'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
+		'accounttype'	=>$accts->[$i]{'accounttype'},
 		'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}) );
-
+		
   if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
     $row{'printtitle'}=1;
     $row{'title'} = $accts->[$i]{'title'};

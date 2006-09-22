@@ -1,9 +1,11 @@
 #!/usr/bin/perl
+# WARNING: Not enough context to figure out the correct tabstop size
+# WARNING: Assume that this file uses 4-character tabs
 
 # $Id$
 
-# written 11/1/2000 by chris@katipo.oc.nz
-# part of the koha library system, script to facilitate paying off fines
+#written 11/1/2000 by chris@katipo.oc.nz
+#part of the koha library system, script to facilitate paying off fines
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -26,63 +28,15 @@
 use strict;
 use C4::Context;
 use C4::Auth;
-use C4::Output;
+use C4::Interface::CGI::Output;
 use CGI;
-use C4::Members;
+use C4::Search;
 use C4::Accounts2;
 use C4::Stats;
-use C4::Koha;
-use HTML::Template;
+use C4::Members;
 
 my $input=new CGI;
-
-#print $input->header;
-my $bornum=$input->param('bornum');
-if ($bornum eq ''){
-	$bornum=$input->param('bornum0');
-}
-# get borrower details
-my $data=borrdata('',$bornum);
-my $user=$input->remote_user;
-
-# get account details
-my %bor;
-$bor{'borrowernumber'}=$bornum;
-my $branches = GetBranches();
-my $printers = getprinters();
-my $branch = getbranch($input, $branches);
-
-my @names=$input->param;
-my %inp;
-my $check=0;
-for (my $i=0;$i<@names;$i++){
-	my $temp=$input->param($names[$i]);
-	if ($temp eq 'wo'){
-		$inp{$names[$i]}=$temp;
-		$check=1;
-	}
-	if ($temp eq 'yes'){
-	        # For HLT
-		$user=~ s/Levin/L/i;
-		$user=~ s/Foxton/F/i;
-		$user=~ s/Shannon/S/i;
-		# FIXME : using array +4, +5, +6 is dirty. Should use arrays for each accountline
-		my $amount=$input->param($names[$i+4]);
-		my $bornum=$input->param($names[$i+5]);
-		my $accountno=$input->param($names[$i+6]);
-		makepayment($bornum,$accountno,$amount,$user,$branch);
-		$check=2;
-	}
-}
-my %env;
-    $user=~ s/Levin/L/i;
-    $user=~ s/Foxton/F/i;
-    $user=~ s/Shannon/S/i;
-
-$env{'branchcode'}=$branch;
-my $total=$input->param('total');
-if ($check ==0){
-	my($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
 		= get_template_and_user ({ template_name => "members/pay.tmpl",
 					   query => $input,
 					   type => "intranet",
@@ -90,6 +44,64 @@ if ($check ==0){
 					   flagsrequired => {borrowers => 1},
 					   debug => 1,
 					 });
+
+my $bornum=$input->param('bornum');
+if ($bornum eq ''){
+	$bornum=$input->param('bornum0');
+}
+#get borrower details
+my $data=borrdata('',$bornum);
+my $user=C4::Context->preference('defaultBranch');
+my $me=borrdata('',$loggedinuser);
+my $accountant=$me->{'firstname'}.' '.$me->{'surname'};
+#get account details
+my %bor;
+$bor{'borrowernumber'}=$bornum;
+
+my @names=$input->param;
+my %inp;
+my $check=0;
+my $type;
+my $totalamount;
+my $totaldesc;
+my $totalaccounttype;
+
+for (my $i=0;$i<@names;$i++){
+	my$temp=$input->param($names[$i]);
+	if ($temp eq 'wo'){
+		$type="W";
+		$check=2;
+	}
+if ($temp eq 'yes'){
+		$type="Pay";
+		$check=2;
+	}
+	if ($temp eq 'yes' || $temp eq 'wo'){
+		
+		my $desc=$input->param($names[$i+7]);
+		my $accounttype=$input->param($names[$i+2]);
+		my $amount=$input->param($names[$i+4]);
+		my $bornum=$input->param($names[$i+5]);
+		my $accountno=$input->param($names[$i+6]);
+		my $amounttopay=$input->param($names[$i+8]);
+
+		makepayment($bornum,$accountno,$amounttopay,$accountant, $type);
+		$totalamount=$totalamount+$amounttopay;
+		$totaldesc .="<br> ".$desc."-  Fee:".$amounttopay;
+		$totalaccounttype .="<br> ".$accounttype;
+		$check=2;
+	}
+}
+if ($type eq "Pay" || $type eq "W"){
+print $input->redirect("/cgi-bin/koha/members/payprint.pl?bornum=$bornum&accounttype=$totalaccounttype&amount=$totalamount&desc=$totaldesc");
+}
+my %env;
+   
+
+$env{'branchcode'}=C4::Context->preference('defaultBranch');
+my $total=$input->param('total');
+if ($check ==0){
+	
 	if ($total ne ''){
 		recordpayment(\%env,$bornum,$total);
 	}
@@ -117,12 +129,11 @@ if ($check ==0){
 							surname => $data->{'surname'},
 							bornum => $bornum,
 							loop_pay => \@loop_pay,
-							total => sprintf("%.2f",$total));
-	print "Content-Type: text/html\n\n", $template->output;
+							total => sprintf("%.2f",$total),
+							totalamountopay => sprintf("%.2f",$total));
+output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-#  my $quety=$input->query_string;
-#  print $input->redirect("/cgi-bin/koha/sec/writeoff.pl?$quety");
 	my%inp;
 	my @name=$input->param;
 	for (my $i=0;$i<@name;$i++){
@@ -140,33 +151,14 @@ if ($check ==0){
 		$bornum=$input->param("bornum$value");
 		my $itemno=$input->param("itemnumber$value");
 		my $amount=$input->param("amount$value");
-	        my $accountno=$input->param("accountno$value");
-		writeoff($bornum,$accountno,$itemno,$accounttype,$amount);
+		
 	}
 	$bornum=$input->param('bornum');
-	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
+	print $input->redirect("/cgi-bin/koha/members/pay.pl?bornum=$bornum");
 }
 
 
-sub writeoff{
-	my ($bornum,$accountnum,$itemnum,$accounttype,$amount)=@_;
-	my $user=$input->remote_user;
-	my $dbh = C4::Context->dbh;
-	my $env;
-	my $sth=$dbh->prepare("Update accountlines set amountoutstanding=0 where accounttype='Res' and accountno=? and borrowernumber=?");
-        $sth->execute($accountnum,$bornum);
-      	$sth->finish;
-	$sth=$dbh->prepare("select max(accountno) from accountlines");
-	$sth->execute;
-	my $account=$sth->fetchrow_hashref;
-	$sth->finish;
-	$account->{'max(accountno)'}++;
-	$sth=$dbh->prepare("insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)
-						values (?,?,?,now(),?,'Writeoff','W')");
-	$sth->execute($bornum,$account->{'max(accountno)'},$itemnum,$amount);
-	$sth->finish;
-	UpdateStats($env,$branch,'writeoff',$amount,'','','',$bornum);
-}
+
 
 # Local Variables:
 # tab-width: 4

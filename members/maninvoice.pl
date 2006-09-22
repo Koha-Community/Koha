@@ -26,27 +26,28 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Members;
+use C4::Search;
 use C4::Accounts2;
-use HTML::Template;
+use C4::Members;
+
 
 my $input=new CGI;
 
 my $bornum=$input->param('bornum');
 #get borrower details
 my $data=borrdata('',$bornum);
+my $user=$data->{firstname}.",".$data->{surname}."-".$data->{cardnumber};
 my $add=$input->param('add');
 if ($add){
 #  print $input->header;
-  my $itemnum=$input->param('itemnum');
   my $desc=$input->param('desc');
   my $amount=$input->param('amount');
   my $type=$input->param('type');
-  manualinvoice($bornum,$itemnum,$desc,$type,$amount);
+  manualinvoice($bornum,$desc,$type,$amount);
   print $input->redirect("/cgi-bin/koha/members/boraccount.pl?bornum=$bornum");
 } else {
 	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "maninvoice.tmpl",
+	= get_template_and_user({template_name => "members/maninvoice.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
@@ -54,9 +55,6 @@ if ($add){
 					debug => 1,
 					});
 	$template->param(bornum => $bornum);
-	print $input->header(
-	    -type => guesstype($template->output),
-	    -cookie => $cookie
-	),$template->output;
-
+	$template->param(user => $user);
+	output_html_with_http_headers $input, $cookie, $template->output;
 }
