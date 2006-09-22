@@ -133,6 +133,22 @@ function confirm_deletion(biblionumber,itemnumber) {
 	}
 }
 function CloseMe(serialid,itemnumber,holdingbranch) {
+	if( serialid==000){
+	 itemcount = opener.document.getElementsByName('itemcount');
+	bibliocount=opener.document.getElementsByName('bibliocount');
+	addcount=opener.document.getElementById(<!--TMPL_VAR NAME="biblionumber"-->);
+	      for (var s=0; s<itemcount.length; s++){
+		 if  (bibliocount.item(s).value==<!--TMPL_VAR NAME="biblionumber"-->){
+		 itemcount.item(s).value=itemcount.item(s).value -1;
+			if ( itemcount.item(s).value==0){
+			addcount.style.display= "none";
+			self.close();
+			return false;
+			}
+		}
+	     }
+	return true;
+	}
 	var myfield = opener.document.getElementById('serial'+serialid);
 	 myfield.value = itemnumber;
 	var myfield = opener.document.getElementById('holdingbranch'+serialid);
