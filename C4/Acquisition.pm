@@ -796,8 +796,8 @@ sub histsearch {
 		$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
 		$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
 		$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
-		$query .= " and creationdate >" .$dbh->quote($from_placed_on) if $from_placed_on;
-		$query .= " and creationdate<".$dbh->quote($to_placed_on) if $to_placed_on;
+		$query .= " and creationdate >=" .$dbh->quote($from_placed_on) if $from_placed_on;
+		$query .= " and creationdate=<".$dbh->quote($to_placed_on) if $to_placed_on;
 		if (C4::Context->preference("IndependantBranches")) {
 			my $userenv = C4::Context->userenv;
 			if (($userenv) &&($userenv->{flags} != 1)){

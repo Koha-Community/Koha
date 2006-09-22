@@ -56,6 +56,9 @@ $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($count2,@booksellers)=bookseller($booksellerid);
 $booksellers[0]->{'postal'} =~ s/\n/<br\/>/g;
 
+# get branches information, to show branchaddress in template
+my $branches = getbranches();
+
 # get librarian branch...
 if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
@@ -143,5 +146,9 @@ $template->param(basketno => $basketno,
 				currency => $booksellers[0]->{'listprice'},
 				qty_total => $qty_total,
 				GST => C4::Context->preference("gist"),
+				branchname => $branches->{C4::Context->userenv->{branch}}->{branchname},
+				branchaddress1 => $branches->{C4::Context->userenv->{branch}}->{branchaddress1},
+				branchaddress2 => $branches->{C4::Context->userenv->{branch}}->{branchaddress2},
+				branchaddress3 => $branches->{C4::Context->userenv->{branch}}->{branchaddress3},
 				);
 output_html_with_http_headers $query, $cookie, $template->output;
