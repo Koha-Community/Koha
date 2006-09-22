@@ -1,46 +1,54 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Pay Fines for  <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->KOHA -- Pay Fines for  <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-
-<h1>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1>
-<form action="/cgi-bin/koha/members/pay.pl" method="post">
-	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" />
-
-<table>
+	<form class="inline" id="payment" action="/cgi-bin/koha/members/pay.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->" />
+<div class="table"><table>
+<input type="hidden" name="loggedinuser" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+<caption>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></caption>
 <tr>
 	<th>Fines &amp; Charges</th>
 	<th>Description</th>
 	<th>Account Type</th>
 	<th>Amount</th>
 	<th>Amount Outstanding</th>
-</tr>
+	<th>Amount to pay</th></tr>
 	
 <!-- TMPL_LOOP name="loop_pay" -->
 <tr>
-	<td><select name="payfine<!-- TMPL_VAR name="i" -->">
-	<option value="no">Unpaid</option>
-	<option value="yes">Paid</option>
-	<option value="wo">Writeoff</option>
-	</select>
+	<td><fieldset><label for="payfine<!-- TMPL_VAR name="i" -->">Unpaid</label><input id="payfine<!-- TMPL_VAR name="i" -->" type="radio" name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked="checked" /><br>
+	<label for="payfine<!-- TMPL_VAR name="i" -->">Pay</label><input type="radio" id="payfine<!-- TMPL_VAR name="i" -->" name="payfine<!-- TMPL_VAR name="i" -->" value="yes" /><br>
+	<!--TMPL_IF NAme="CAN_user_management"--> <label for="payfine<!-- TMPL_VAR name="i" -->">Writeoff</label><input type="radio" id="payfine<!-- TMPL_VAR name="i" -->" name="payfine<!-- TMPL_VAR name="i" -->" value="wo" /><!--/TMPL_IF--> </fieldset>
 	<input type="hidden" name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->" />
 	<input type="hidden" name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->" />
 	<input type="hidden" name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount" -->" />
 	<input type="hidden" name="out<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amountoutstanding" -->" />
 	<input type="hidden" name="bornum<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="bornum" -->" />
 	<input type="hidden" name="accountno<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accountno" -->" />
+	<input type="hidden" name="desc<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="description" --><!-- TMPL_VAR name="title" -->" />
+	<input type="hidden" id="counter" value="">
 	</td>
 	<td><!-- TMPL_VAR name="description" --><!-- TMPL_VAR name="title" --></td>
 	<td><!-- TMPL_VAR name="accounttype" --></td>
 	<td class="debit"><!-- TMPL_VAR name="amount" --></td>
 	<td class="debit"><!-- TMPL_VAR name="amountoutstanding" --></td>
+	<td><input type="text" name="amounttopay<!-- TMPL_VAR name="i" -->" size="5" value="<!-- TMPL_VAR name="amountoutstanding" -->" />
+	</td>
 </tr>
 <!-- /TMPL_LOOP -->
 <tr>
 	<td colspan="4">Total Due</td>
-	<td><!-- TMPL_VAR name="total" --></td>
-</tr>
-</table>
-<input type="submit" name="submit"  value="Make Payment" class="submit" /></form>
-<form action="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" value="Return to Patron Record" /></form>
+	<td class="debit"><!-- TMPL_VAR name="total" --></td>
+	</tr>
+</table><div>
+<input type="submit" name="submit"  value="Make Payment" class="submit" /></form> <form class="inline" action="/cgi-bin/koha/members/moremember.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="bornum" -->" name="bornum" /> <input type="submit" class="submit" value="Return to Member Record" /></form>
+
+<script language="JavaScript" type="text/javascript">
+function changetotal() {
+mytotal=0;
+for (i=0 ; i<document.forms['payment'].counter.length ; i++) {
+ mytotal +=document.getElementById("amounttopay"+i).value;
+}
+document.forms['payment'].totalamountopay.value=mytotal;
+}
+</script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

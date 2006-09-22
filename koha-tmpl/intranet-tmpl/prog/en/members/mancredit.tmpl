@@ -1,0 +1,38 @@
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->KOHA -- Users: Create Manual Credit<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<h3>Manual Credit</h3>
+<!-- TMPL_IF NAME="error" -->
+		<div class="error">
+		<h3>Error Crediting User: Either no such invoice exists or no amount given</h3>
+		
+</div><!--/TMPL_IF-->
+<form class="inline" action="mancredit.pl" method="post" name="manualcredit">
+<input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+<input type="hidden" name="loggedinuser" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+<input type="hidden" name="accounttype" value=  "<!-- TMPL_VAR NAME="accounttype" -->"/>
+<input type="hidden" name="itemnum" value=  "<!-- TMPL_VAR NAME="itemnum" -->"/>
+<input type="hidden" name="accountid" value=  "<!-- TMPL_VAR NAME="accountid" -->"/>
+<input type="hidden" name="user" value=  "<!-- TMPL_VAR NAME="user" -->"/>
+<input type="hidden" name="add" value=  "add"/>
+<div class="data">
+<table>
+	<tr><th>Fine Details</th><td><div class="error">User:<!-- TMPL_VAR Name="user" -->&nbsp;&nbsp;&nbsp;Amount:<!-- TMPL_VAR NAME="amount" --> </div></td></tr>
+	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th>Amount</th><td><input type="text" name="amount" /></td></tr>
+</table>
+</div>
+<input type="button"  onclick="AddCredit(this.form)" value="Add Credit" />
+</form> <form class="inline" action="boraccount.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR Name="bornum" -->" name="bornum" /><input type="submit" class="cancel" value="Cancel" /></form>
+
+<script type="text/javascript">
+function AddCredit(f){
+if (f.amount.value==""){
+alert("No amount given");
+return false;
+}
+document.manualcredit.submit();
+
+
+
+}
+</script>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
