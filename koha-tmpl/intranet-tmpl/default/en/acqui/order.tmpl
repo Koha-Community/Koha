@@ -7,7 +7,7 @@
 	<th class="acquisition">Order</th>
 	<th class="acquisition">Receive</th>
 	<th class="acquisition">Supplier</th>
-	<th class="acquisition">&nbsp;</th>
+	<th class="acquisition">Basket</th>
 </tr>
 
 <!-- TMPL_LOOP name="loop_suppliers" -->
@@ -25,6 +25,7 @@
 		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->&op=display"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 			<table>
+			     <!-- TMPL_IF name="loop_basket" -->
 					<tr>
 						<th class="acquisition">Basket</th>
 						<th class="acquisition">Items</th>
@@ -32,6 +33,9 @@
 						<th class="acquisition">Date</th>
 						<th class="acquisition">&nbsp;</th>
 					</tr>
+				<!-- TMPL_ELSE -->
+				    </p>No pending basket</p>
+                <!-- /TMPL_IF -->
 					<!-- TMPL_LOOP NAME="loop_basket" -->
 						<tr>
 							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
