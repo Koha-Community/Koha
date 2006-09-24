@@ -121,7 +121,7 @@ my $counter = $offset;
 $length=10 unless $length;
 my @oAuth;
 my $i;
- $oAuth[0]=C4::Context->Zconnauth("authorityserver");
+ $oAuth[0]=C4::Context->Zconn("authorityserver",1,1);
 my ($mainentry)=MARCfind_attr_from_kohafield("mainentry");
 my ($allentry)=MARCfind_attr_from_kohafield("allentry");
 
@@ -738,7 +738,7 @@ $oConnection[0]->destroy();
 		if ($update==1){
 		my $biblionumber=XML_readline_onerecord($xmlhash,"biblionumber","biblios");
 		my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
-		NEWmodbiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
+		ModBiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
 		}
 		
      }#foreach $xmlhash
