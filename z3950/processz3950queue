@@ -285,10 +285,47 @@ while (1) {
 									for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
 										my $rec=$rs->record($i-1);
  										my $marcdata = $rec->raw();
-										#my $marcrecord = MARC::Record->new_from_usmarc($marcdata);
-										#warn $marcrecord->as_formatted(); 
-										$globalencoding = ref($rec);
- 										$result.=$marcdata;
+                                        if (C4::Context->preference("MARCFLAVOUR") eq "UNIMARC"){
+                                          warn "marcdata :".$marcdata;
+                                          my $marcrecord = MARC::Record->new_from_usmarc($marcdata);
+                                          use Encode;
+                                          use Encode::Guess;
+                                          my $targetcharset="utf8" if (C4::Context->preference("TemplateEncoding") eq "utf-8");
+                                          $targetcharset="latin1" if (C4::Context->preference("TemplateEncoding") eq "iso-8859-1");
+                                          my $decoder = guess_encoding($marcdata, qw/utf8 latin1/);
+                                          die $decoder unless ref($decoder);
+                                          warn "decodage : ".$decoder->name;
+                                          warn "decodage cible : ".$targetcharset;
+                                          my $newRecord=MARC::Record->new();
+                                          foreach my $field ($marcrecord->fields()){
+                                            my $newField=$field->clone;
+                                            if ($field->tag()<'010'){
+                                              $newRecord->insert_grouped_field($field);
+                                            } else {
+                                              foreach my $subfield ($newField->subfields()){
+  #                                               warn ' valeur avant encodage'.$subfield->[1];
+#                                                 map {char_decode($_,"UNIMARC");Encode::from_to($_,$decoder->name,$targetcharset);$_=~tr#\r##} @$subfield;
+                                                map {char_decode($_,"UNIMARC");Encode::from_to($_,$decoder->name,$targetcharset);$_=~tr#\r##} @$subfield;
+  #                                               warn ' valeur apres encodage'.$subfield->[1];
+  #                                               warn ' valeur theorique'.Encode::from_to($_,$decoder->name,$targetcharset);
+                                                if (($newField->tag eq '100')) {
+                                                    substr($subfield->[1],26,2,"0103") if ($targetcharset eq "latin1");
+                                                    substr($subfield->[1],26,4,"5050") if ($targetcharset eq "utf8");
+                                                }
+                                                $newField->update($subfield->[0]=>$subfield->[1])
+                                              }
+                                              $newRecord->insert_grouped_field($newField);
+                                            }
+                                          }
+                                          $newRecord->encoding('UTF-8') if ($targetcharset eq 'utf8');
+                                          $newRecord->encoding('MARC-8') if ($targetcharset ne 'utf8');
+                                          warn $newRecord->as_formatted(); 
+                                          $globalencoding = $targetcharset;
+                                          $result.=$newRecord->as_usmarc;
+                                        } else {
+                                          $globalencoding = ref($rec);
+                                          $result.=$marcdata;
+                                        }
 									}
 									my @x=split /::/,$globalencoding;
 									my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($result,-1,"Z3950-$globalname",$x[3],$random);
