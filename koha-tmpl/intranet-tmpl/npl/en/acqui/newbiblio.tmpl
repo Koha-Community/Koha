@@ -67,7 +67,7 @@ function check(f) {
 
 </script>
 <div id="main">
-<form action="basket.pl" method="get" style="float: right"><input type="hidden" name="basket" value="<!-- TMPL_VAR NAME="basket" -->" /><input type="submit" value="View Basket" class="submit" /></form>
+<form action="basket.pl" method="get" style="float: right"><input type="hidden" name="basket" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="submit" value="View Basket" class="submit" /></form>
 	<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin">
 	<!-- TMPL_UNLESS name="existing" --><input type="hidden" name="existing" value="no" /><!-- /TMPL_UNLESS -->
 	<!-- <!-- TMPL_VAR NAME="title" --> -->

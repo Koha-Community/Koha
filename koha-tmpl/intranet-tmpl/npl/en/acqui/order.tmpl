@@ -9,7 +9,7 @@
 	<th>Order</th>
 	<th>Receive</th>
 	<th>Company</th>
-	<th>Exisiting Baskets</th>
+	<th>Basket</th>
 </tr>
 
 <!-- TMPL_LOOP name="loop_suppliers" -->
@@ -23,6 +23,7 @@
 		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=display"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 <div class="data"><table>
+			     <!-- TMPL_IF name="loop_basket" -->
 					<tr>
 						<th scope="col">Basket</th>
 						<th scope="col">Items</th>
@@ -30,6 +31,9 @@
 						<th scope="col">Date</th>
 						<th scope="col">&nbsp;</th>
 					</tr>
+				<!-- TMPL_ELSE -->
+				    <tr><td>No pending basket</td></tr>
+                <!-- /TMPL_IF -->
 					<!-- TMPL_LOOP NAME="loop_basket" -->
 						<tr>
 							<td><!-- TMPL_VAR NAME="basketno" --></a></td>

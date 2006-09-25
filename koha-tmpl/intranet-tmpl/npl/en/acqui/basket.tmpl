@@ -27,6 +27,12 @@
 		<tr><td><!-- TMPL_VAR name="address3" --></td></tr>
 		<tr><td><!-- TMPL_VAR name="address4" --></td></tr>
 		</table>
+		
+		<table>
+		<tr><th rowspan="4">For Branch:</th><td><!-- TMPL_VAR name="branchname" --></td></tr>
+	   <tr><td><!-- TMPL_VAR name="branchaddress1" --></td></tr>
+	   <tr><td><!-- TMPL_VAR name="branchaddress2" --></td></tr>
+	   <tr><td><!-- TMPL_VAR name="branchaddress3" --></td></tr></table>
 		</div>	
 		
 	<div class="data">
@@ -43,8 +49,10 @@
 				<th scope="col">Total</th>
 				<th scope="col"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">Fund</a></th>
 					<!-- TMPL_IF name="active" -->
-					<th scope="col">Remove</th>
-					<th scope="col">Edit</th>
+						<!-- TMPL_UNLESS name="closedate" -->
+						<th scope="col">Remove</th>
+						<th scope="col">Edit</th>
+						<!-- /TMPL_UNLESS -->
 					<!-- /TMPL_IF -->
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
@@ -75,6 +83,7 @@
 					<td><!-- TMPL_VAR NAME="line_total" --></td>
 					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 					<!-- TMPL_IF name="active" -->
+						<!-- TMPL_UNLESS name="closedate" -->
 					<td>
 							<form action="addorder.pl" method="get"><input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" /><input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="quantity" value="0" /><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="delete" value="Delete" /></form>
 						</td>
@@ -82,6 +91,7 @@
 						<form action="newbiblio.pl" method="get"><input type="hidden" name="sub" value="" /><input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" /><input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" /><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" /><!--TMPL_IF name="closedate"--><input type="hidden" name="close" value="1" /><!--/TMPL_IF --><input type="submit" class="submit" value="Edit" />
 							</form>
 						</td>
+						<!-- /TMPL_UNLESS -->
 						<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->

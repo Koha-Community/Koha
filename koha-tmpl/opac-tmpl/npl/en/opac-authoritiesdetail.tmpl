@@ -9,9 +9,9 @@
 	<a href="opac-search.pl?type=opac&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding="><!-- TMPL_VAR name="count" --> biblios</a>
 </div>
 <table><!-- TMPL_LOOP name="0XX" -->
-        <tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+        <tr><td colspan="2" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+                <tr>
                     <td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
                     <td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
