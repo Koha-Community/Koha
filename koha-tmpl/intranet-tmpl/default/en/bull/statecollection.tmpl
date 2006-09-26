@@ -8,7 +8,7 @@
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Back to biblio</a>
 
 <div id="bloc25">
-<h2 class="bull">waited or late numbers</h2>
+<h2 class="bull">waited or late issues</h2>
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus">
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
@@ -35,13 +35,13 @@
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
 			<td>
-				Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+				Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="40" maxlength="100">
 			</td>
 			<td>
-				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size=10 maxlength=15>
+				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
 			</td>
 			<td>
-				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
 			</td>
 			<td>
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">

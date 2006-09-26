@@ -460,7 +460,7 @@ sub serialchangestatus {
 		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
 		# next date (calculated from actual date & frequency parameters)
 		my $nextpublisheddate = Get_Next_Date($publisheddate,$val);
-		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpublisheddate,0);
+		newissue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpublisheddate,$nextpublisheddate);
 		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
 														innerloop1=?,innerloop2=?,innerloop3=?
 														where subscriptionid = ?");
