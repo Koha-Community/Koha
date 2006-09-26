@@ -117,7 +117,6 @@ if ($op eq 'add' or $op eq 'modify') {
 			}
 		}
 	}
-	warn "==> ".format_date_in_iso($data{'joining'})." > ".format_date_in_iso($data{'expiry'});
 	if ($data{'expiry'} && format_date_in_iso($data{'joining'}) > format_date_in_iso($data{'expiry'})) {
 		push @errors, "ERROR_date";
 		warn "ERROR DATE";
