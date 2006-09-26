@@ -3,7 +3,7 @@ NOTES DE VERSION
 
 L'équipe internationale qui développe Koha continue à innover et vous propose une nouvelle version du SIGB sous licence libre. Cette nouvelle version est le fruit de plusieurs mois de travail rassemblant bibliothécaires et informaticiens du monde entier.
 
-Elle est numérotée 2.4.0 (et non plus 2.2.x) car elle contient de nombreuses nouveautés parmi lesquelles :
+Elle contient de nombreuses nouveautés parmi lesquelles :
 * une interface publique (OPAC) repensée, avec de nombreux paramètres locaux pour plus de souplesse.
 * l'exemplarisation à la volée des bulletins dans le module bulletinage, pratique pour les bibliothèques qui prètent les périodiques.
 * des options fort utiles dans l'éditeur MARC pour les bibliothèques qui ont des grilles de catalogage importantes.
@@ -23,16 +23,17 @@ AVERTISSEMENT
 - MARC::Charset (0.95),
 - LWP::Simple 
 - XML::Simple
+- GD::Barcode
+- Data::Random
 Attention : certains de ces paquetages doivent être dans une version très récente. donc partez du principe que vous devez les installer !
-Voilà la liste des commandes à taper :
-perl -MCPAN -e 'install MARC::File::XML' (qui a installé MARC::Charset)
+
 
 
 * L'interface bibliothécaire est testée seulement avec Mozilla-firefox. L'OPAC devrait fonctionner correctement avec n'importe quel navigateur. 
 
 PROBLEMES CONNUS
 ******
-Critiques/bloquants : aucun
+Critiques/bloquants : Koha 2.2.6 ne fonctionnera pas avec mySQL 5. Il nécessite mySQL 4.1. L'équipe de développement règlera ce problème avec Koha 3, pas avant.
 Voir bugs.koha.org pour plus d'information
 
 ============================
@@ -90,14 +91,14 @@ SVP, LISEZ ces notes de version. Tout est compatible avec les versions précédent
 === CATALOGAGE ===
 	* Ajout d'un script (périodique/crontab : delete_authority.pl) qui supprime une autorité dans toutes les notices biblio l'utilisant.
 	* *AMELIORATIONS MAJEURES* dans l'éditeur MARC :
-		- la duplication d'un champ (+ sur le champ) ne nécessite plur un appel au serveur : c'est NETTEMENT plus rapide.
+		- la duplication d'un champ (+ sur le champ) demande maintenant le nombre de duplication à faire. Ainsi, vous pouvez en 1 coup créer, par exemple, 6 sujets.
 		- la duplication d'un sous-champ n'est plus faite au travers du pipe (|), mais en cliquant sur le + en face du sous-champ.
 		- la propriété "hidden" (caché) des grilles de catalogage a dorénavant 19 valeurs possibles. Regardez l'aide en ligne pour comprendre ce qu'ils permettent. La valeur la plus immédiatement utile est le -1 : le sous-champ est minimisé dans l'éditeur MARC par défaut, vous devez cliquer dessus pour le faire apparaitre. Les sous-champs peu utilisés n'encombrent plus l'écran et sont plus faciles à gérer.
 		- une préférence système "advancedMARCeditor" a été ajoutée. Si elle est positionnée les libellés des champs et sous-champs n'apparaissent plus (sauf au survol de la souris sur le champ ou le sous-champ). Cette préférence système donne un écran encore plus dépouillé, mais plaira uniquement aux "adorateurs du MARC" (catégorie de bibliothécaires peu fréquente mais exigeante)
 	* de nombreux plugins ont été ajoutés pour le MARC21. Il y a maintenant presque autant de plugins pour les champs codés en MARC21 qu'en UNIMARC (pour mémoire : les plugins permettent de saisir confortablement les champs/sous champs codés dans l'éditeur MARC)
 	
 === LECTEURS ===
-	* Gestion des images : une préférence système a été ajoutée (patronimages, dans la section lecteurs). Si elle est positionnée (elle doit contenir une extension d'image : jpg par exemple), l'image du lecteur apparaitra sur le détail de sa fiche et lorsqu'il empruntera des documents. L'image doit être stockée dans KOHADIR/htdocs/intranet-tmpl/patronimages.
+	* Gestion des images : une préférence système a été ajoutée (patronimages, dans la section lecteurs). Si elle est positionnée (elle doit contenir une extension d'image : jpg par exemple), l'image du lecteur apparaitra sur le détail de sa fiche et lorsqu'il empruntera des documents. L'image doit être stockée dans KOHADIR/htdocs/intranet-tmpl/patronimages/ .
 	elle doit être nommée <borrowernumber>.<patronimagessystempref> (1.jpg par exemple, pour le lecteur #1)
 
 === OPAC ===
@@ -106,6 +107,7 @@ SVP, LISEZ ces notes de version. Tout est compatible avec les versions précédent
 	* Pages de couvertures de livres : si la préférence système AmazonContent est activée ET AmazonDevKey/AmazoneDevTag sont saisies (à demander sur www.amazon.com) ET le package XML::Simple est installé, l'OPAC affichera les pages de couvertures des documents lorsqu'ils sont disponibles. Notez que cette fonctionnalité n'est pas légale dans tous les pays (en particulier en France : il faudrait demander la permission à tous les éditeurs)
 	* Nouvelle préférence système : opaccredit : Si quelque chose (y compris du HTML) est saisi ici, le pied de la page d'accueil contiendra ce que vous saisissez (à la place de "bibliothèque sous Koha...)
 	* nouvelle préférence système : opacnav. Dans cette préférence système, vous pouvez saisir n'importe quel code HTML qui sera ajouté au début des menus (par exemple, pour ajouter un bouton pour accéder au site de koha : <a class="menu" href="http://www.koha-fr.org" title="Site de Koha">Koha</a>
+	* Nouvelle préférence système : opacbookbag. Si elle est mise à 0, les fonctionnalités de panier seront désactivées à l'OPAC (même pour les utilisateurs identifiés)
 	* recherche autorités : un menu a été ajouté : l'utilisateur peut chercher dans les autorités (comme dans l'interface professionnelle)
 	* nouvelle préférence système : opaclanguagesdisplay. si elle est positionnée, le lecteur ne peut pas choisir sa langue, Koha reste dans le langage par défaut seulement.
 	* nouvelle préférence système : opacreadinghistory. Si elle est positionnée à Yes (valeur par défaut), les lecteurs ont accès à leur historique de lecteur  l'OPAC (uniquement lorsqu'ils sont identifiés). Si elle est mise à No, cette option n'apparait pas.
@@ -118,3 +120,6 @@ SVP, LISEZ ces notes de version. Tout est compatible avec les versions précédent
 === PERIODIQUES ===
 	* AMELIORATIONS MAJEURES : Ajout d'une option pour exemplariser les bulletins : si vous activez la préférence système (section catalogue) serialsadditems, sous l'écran de réception d'un bulletin, vous aurez un formulaire pour créer un exemplaire à la volée. L'exemplaire contient la cote, le site, le code barre et la localisation (si c'est pertinent). Après avoir marqué un bulletin "arrivé", un exemplaire est automatiquement créé dans le catalogue. Si vous laissez la préférence sur Off, le fonctionnement est inchangé.
 	* Les 5 derniers bulletins arrivés sont affichés lorsque l'on bulletine.
+
+=== GENERAL ===
+    * Nous accueillons maintenant l'UNIMARC en anglais et l'UNIMARC en ukrainien dans les nouvelles possibilités de paramétrage.

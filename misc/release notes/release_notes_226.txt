@@ -2,11 +2,13 @@ RELEASE NOTES
 =============
 
 Koha is the first Open-Source Integrated Library System.
-Released in New Zealand, in January 2000, it is maintained by a team of volunteers from around the globe. The Koha system is a full catalogue, opac, circulation and acquisitions system.
+Released in New Zealand, in January 2000, it is maintained by a team of volunteers (developers & librarians) from around the globe. The Koha system is a full catalogue, opac, circulation and acquisitions system.
 
-Koha 2.2.6 is more than 247 000 lines of code, developed by more than 30 differents developers (and even more translators).
+Koha 2.2.6 is more than 250 000 lines of code(see : http://bureau.paulpoulain.com/cvslog/) , developed by almost 50 differents developers (46, +translators).
 
-With the 2.2.6 version, Koha is now a mature product, with a lot of nice features. It's used in more than 100 libraries, of all kinds (public, schools, religious...), of different sizes (from 1 to 8 branches, from 1000 to 300 000 items).
+With the 2.2.6 version, Koha is now a mature product, with a lot of nice features.
+
+More than 100 libraries are listed as users on wiki.koha.org, and we are sure that more than 300 libraries uses the software. There are 2 projects derived from Koha.
 
 
 ========
@@ -21,11 +23,30 @@ WARNINGS
 - MARC::Charset (0.95),
 - LWP::Simple 
 - XML::Simple
+- GD::Barcode
+- Data::Random
+- ZOOM
+They will be checked during upgrade process.
+
+* during install, you may get some warnings during package dependency checkings. Something like : 
+"Too late to run INIT block at /usr/local/lib/perl/5.8.4/ZOOM.pm line 37."
+or 
+"Subroutine PDF::API2::Resource::Font::Postscript::O_RDONLY redefined at /usr/share/perl/5.8/Exporter.pm line 65."
+
+You can ignore them.
+
+
 
 
 KNOWN BUGS
 **********
-Critical/blocking : none
+Critical/blocking :
+
+* mySQL5.0 : Koha is NOT compatible with mySQL 5.0 We plan to add 5.0 compatibility in Koha 3. If you want to give a try to 2.2.6 with mySQL5, you can have a look at http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1089, but it's untested & unofficial.
+* child card craziness, see http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1117 for details
+* Update child looses guarantor and address., see http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1065 for details
+* don't use spaces in currencies codes. Use USD, not US DOLLAR, for example. spaces breaks acquisition module.
+
 see bugs.koha.org for more information. Please report any problem in bugs.koha.org
 
 Apple users : it seems there is an annoying bug in Firefox, that you can have in librarian biblio search: only the first MARC field list is available and the others can't be opened. The problem is described and fixed at http://www.macfixit.com/article.php?story=20051226091140372
@@ -41,11 +62,12 @@ DB CHANGES
 
 DB structure : dewey field has been moved to a char(30)
 DB content : many many new systempreferences
-Koha opac stylesheets : none
+Koha opac stylesheets : none, but the opac css stylesheet has been redesigned even if it contains no new classes.
 
 BUGFIXES
 === ACQUISITION ===
-
+    * Acquisition has been deeply investigated & tested. should work fine. (there was complex problems depending on prices rebates, VAT charging,...)
+    
 === CATALOGUE ===
 
 === CATALOGUING ===
@@ -62,6 +84,7 @@ BUGFIXES
 	* minor bugfix : Adding 0 before days and months in order to make date comparison work.
 	
 === MEMBERS ===
+    * fixed a but to be able to modify an Institution.
 
 === PARAMETERS ===
 	* adding page facility in book funds.
@@ -73,11 +96,13 @@ BUGFIXES
 === OPAC ===
 	
 IMPROVEMENTS
-Almost nothing has changed in the DB, so the stability should be good. But you are warned that some/few bugs may occur.
+Almost nothing has changed in the DB & this version has been heavily tested, so the stability should be good.
+But you are warned that some/few bugs may occur.
+
 Please READ the release notes. Everything is compatible with previous versions, so, if you just install Koha, you should have the same behaviour as previously, but you will miss many interesting features!
 
 === ACQUISITION ===
-	* added a (crontab) script : check_suggestion.pl, that send a mail to the librarian when a suggestion is pending
+	* added a (crontab) script : check_suggestion.pl, that send a mail to the librarian when a suggestion is pending.
 	* *MAJOR IMPROVEMENT* :
 		- online help has been added
 		- the order.pl page doesn't show baskets closed for more than 6 months anymore.
@@ -89,7 +114,7 @@ Please READ the release notes. Everything is compatible with previous versions, 
 	* if the library doesn't define a summary for an authority, a standard/default one will be built automatically.
 	* if the librarian set * as subfield, all subfields will be shown, without any separator, but respecting the order. Previously, you had to define every subfield, causing problems in case of reordered subfields.
 	
-=== CIRCULATION===
+=== CIRCULATION ===
 	* added a (crontab) script : overduenoticesSelect.pl, that can be used as replacement for the overduenotice script. This one has many more parameters, including a filter on branches and an external letter (to avoid the need to modify the script on each release)
 	* merged today & previous issues list during issuing. Added a button to renew issues & return issues in 1 click
 
@@ -100,14 +125,14 @@ Please READ the release notes. Everything is compatible with previous versions, 
 === CATALOGUING ===
 	* added a (crontab) script : delete_authority.pl, that deletes all entries of an authority in a biblio.
 	* *MAJOR IMPROVEMENT* in MARC editing :
-		- duplicating a field (+ on the tag) does not require a server call anymore : it's much faster.
+		- duplicating a field (+ on the tag) will show a number of creation to do. Thus, you can quickly create 6 subjects lines (for example)
 		- duplicating a subfield is no longer done with a pipe (|), but by clicking on the + facing the subfield
 		- the "hidden" property of the framework now has 19 possible values. Look in the online help to see them. The immediate interesting value is -1, which means the subfield is minimized on the MARC editor and you must click on it to expand it. Rarely used fields/subfields are easier to manage.
 		- a advancedMARCeditor systempref has been added. If set, tag/subfield values are not shown, except when putting the mouse on the tag/subfield. This systempref is only for "MARC addicts"!
 	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 as in UNIMARC! Note that plugins help you filling a tag/subfield in the MARC editor.
 
 === MEMBERS ===
-	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages. The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
+	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages/ . The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
 	
 === OPAC ===
 	Many preferences have been added to OPAC. Read them carefully, as you will be able to modify highly the look and behaviour of your OPAC!
@@ -115,6 +140,7 @@ Please READ the release notes. Everything is compatible with previous versions, 
 	* Amazon content : if the new AmazonContent systempref is set AND an AmazonDevKey/AmazoneDevTag (available on www.amazon.com) is entered in systempreferences AND XML::Simple package is installed, OPAC will show amazon cover pages when available. Note that this feature may not be legal everywhere. For example, it seems it may not be legal in France (you must ask each editor for permission)
 	* new systempref : opaccredit. If something (including html) is stored there, the footer of OPAC pages will contain what is there (instead of the "Library powered by Koha..." that is on css default templates)
 	* new systempref : opacnav. In this preference, you can put any html that will be added to your menu. For example, to add a button to reach the koha website : <a class="menu" href="http://www.koha.org" title="Koha world website">Koha</a>
+	* new systempref : opacbookbag : if set to 0, the basket/book bag features will be hidden in OPAC (even for logged in users).
 	* authorities heading search : a new menu has been added so the user can search in authorities (same behaviour as in intranet)
 	* new systempref : opaclanguagesdisplay. If set to "yes" (default value), the list of available language is shown. Otherwise, there is no list, koha will stay in default language only.
 	* new systempref : opacreadinghistory. If set to "yes" (default value), the reading history will be available on OPAC (for logged in users). If set to "no", the reading history never appears.
@@ -132,3 +158,5 @@ Please READ the release notes. Everything is compatible with previous versions, 
 === SYSTEM PREFERENCES ===
 	
 === ALL ==
+    * Unimarc datas in english are provided
+    * Unimarc datas in ukrainian are provided
