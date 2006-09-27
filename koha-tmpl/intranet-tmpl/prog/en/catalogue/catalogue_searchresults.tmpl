@@ -1,8 +1,11 @@
 ﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Simple Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<!--TMPL_IF NAME="facets_loop"-->
+<!-- TMPL_INCLUDE NAME="intranet-facets.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!--TMPL_ELSE-->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
-
+<!--/TMPL_IF-->
 <script language="JavaScript" type="text/javascript">
 
 var no_biblios_selected = "Select one or more documents to add to your virtual shelves.";
@@ -53,7 +56,7 @@ function show_shelfPanel() {
 
     <h1>Catalogue search</h1>
 
-<!-- TMPL_ELSE -->
+
 	<!-- TMPL_LOOP NAME="searchdesc" -->
     	You searched:
     	<div style="color:green;">|&nbsp;
@@ -133,7 +136,7 @@ function show_shelfPanel() {
 		<th>Publisher</th>
 		
 		<th>&copy;</th>
-		<th align="left"> <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=lcsort,2 ">▼</a>LC <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=lcsort,1">▲</a>
+		<th align="left"> <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=local-number,2 ">▼</a>LC <a  href="catalogue-search.pl?op=do_search&zoom=1<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->&amp;reorder=local-number,1">▲</a>
 	<th>Availability</th>
 		<th>&nbsp;</th>
 	</tr>
@@ -224,12 +227,11 @@ function show_shelfPanel() {
     
 </div>
 <br>
-<div align="center">Results <b><!-- TMPL_VAR NAME="startfrom" --></b> - <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.</div>
+<div align="center">Results <b><!-- TMPL_VAR NAME="beginning" --></b> - <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.</div>
 <!-- TMPL_ELSE -->
 	<div align="center">0 records <br></div>
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-<div align="center"><a class="transparent" href="catalogue-search.pl">New search</a></div>
 
+<div align="center"><a class="transparent" href="catalogue-search.pl">New search</a></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

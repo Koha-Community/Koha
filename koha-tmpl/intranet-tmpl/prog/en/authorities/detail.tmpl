@@ -1,9 +1,10 @@
 ﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="masthead.inc" --><!--/TMPL_UNLESS-->
-<!-- TMPL_INCLUDE NAME="authorities-topmenu.inc" -->
-<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" --><!--/TMPL_UNLESS-->
-
+<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
+<!--TMPL_ELSE-->
+<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
+<!--/TMPL_UNLESS-->
 
 <div id="main">
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
@@ -17,7 +18,7 @@
 	</a>
 	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->')" class="button authority">
 		Print
-	</a><!--/TMPL_UNLESS--><!--TMPL_IF NAME="count"-->&nbsp;<a href="/cgi-bin/koha/catalogue/catalogue-search.pl?value=<!-- TMPL_VAR NAME="authid" -->&kohafield=auth_authid&amp;op=do_search&amp;zoom=1" class="button authority">Used in <!-- TMPL_VAR NAME="count" --> biblio(s)</a><!--/TMPL_IF-->
+	</a><!--/TMPL_UNLESS--><!--TMPL_IF NAME="count"-->&nbsp;<a href="/cgi-bin/koha/catalogue/catalogue-search.pl?value=<!-- TMPL_VAR NAME="authid" -->&kohafield=authid&amp;op=do_search&amp;zoom=1" class="button authority">Used in <!-- TMPL_VAR NAME="count" --> biblio(s)</a><!--/TMPL_IF-->
 </div>
 
 <div name="0XX" id="0XX" class="tab" style="visibility:visible">

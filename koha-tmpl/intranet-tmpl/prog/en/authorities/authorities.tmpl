@@ -1,12 +1,14 @@
 ﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->NEULIS -- Authorities
-<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
-<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="masthead.inc" --><!--/TMPL_UNLESS-->
-<!-- TMPL_INCLUDE NAME="authorities-topmenu.inc" -->
-<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" --><!--/TMPL_UNLESS-->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_UNLESS NAME="nonav"--><!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
+<!--TMPL_ELSE-->
+<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
+<!--/TMPL_UNLESS-->
 
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
-<div id="main">
+
+
 <!-- TMPL_IF name="error" -->
 			<div class="error">
 				<!--TMPL_IF NAME="xmlerror"-->
@@ -107,7 +109,7 @@
                 <!-- TMPL_IF NAME="repeatable" -->
                     <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
                 <!-- /TMPL_IF -->
-                <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" --><!--TMPL_VAR NAME="id"-->"/>
+                <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->"/>
                 <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1"/>
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"/>
                 <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->"/>

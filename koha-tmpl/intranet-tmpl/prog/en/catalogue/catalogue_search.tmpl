@@ -1,9 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Simple Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
-
 	<h1>Catalogue Search</h1>
+
 <table align ="center" >
 	
 	    <td align ="center">
@@ -12,20 +11,24 @@
 		<td align ="center">
 	       <input id="searchType2" type="button" value="SQL search" onclick="changeSearch2()" <!-- TMPL_IF name="sql_search" -->style="background-color:orange"<!-- TMPL_ELSE -->style="background-color:yellow"<!-- /TMPL_IF --> background-color="orange">
 		</td>
+		<td align ="center">
+	       <input id="searchType3" type="button" value="Brave search" onclick="changeSearch3()" <!-- TMPL_IF name="brave_search" -->style="background-color:orange"<!-- TMPL_ELSE -->style="background-color:yellow"<!-- /TMPL_IF --> background-color="orange">
+		</td>
 	</tr>
 </table>
+
 <form  name="zoom_form" id="zoom_form" action="/cgi-bin/koha/catalogue/catalogue-search.pl" method='post' <!-- TMPL_IF name="zoom_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
     <input type="hidden" name="op" value="do_search">
     <input type="hidden" name="search_type" value="zoom">
     <input type="hidden" name="startfrom" value="0">
 	<input type="hidden" name="zoom" value="1">
-<table style="border:0" align="center">
+<table style="border:0" align="center"><tbody id="queryarea">
 
-<tr><td><b>Format to display</b></td><td>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></td><td><b>Display per page:</b><input type text name="number_of_results" value="10" size="3"/></td></tr>
+<tr><td ><fieldset><b>Display per page:</b><input type text name="number_of_results" value="10" size="3"/></fieldset></td><td colspan="2"><fieldset><b>Format to display </b>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></fieldset></td></tr>
 
-<tr>	<td>Search on:</td><td><select size="1"  name="kohafield" style="width:170px">
+<tr>	<td align="right">Search on:</td><td><select size="1"  name="kohafield" style="width:170px">
 				<!-- TMPL_LOOP name="kohafields" -->
-	                <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+	                <option value="<!-- TMPL_VAR name="kohafield" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="label" --></option>
 				<!-- /TMPL_LOOP --></select></td><td><input type="text"  size="25" name="value" value="<!-- TMPL_VAR name="value" -->" ></td>
 							<td>With</td><td><Select type="text"  name="relation">
 							<option value=" " <!-- TMPL_IF name="blank" -->selected<!-- /TMPL_IF --> >&nbsp;
@@ -47,19 +50,19 @@
 							<option value="@attr 2=4  " <!-- TMPL_IF name="@attr 2=4 " -->selected<!-- /TMPL_IF --> >Greater than & equal
 							</option>
 						</select></td></tr>
-		<tr><td>		
-					<Select type="text"  name="and_or">
+		<tr id="andor"><td>		
+					<Select type="text"   name="and_or">
 				            			<option value="@and" <!-- TMPL_IF name="and" -->selected<!-- /TMPL_IF --> >AND
 							</option>
 							<option value="@or" <!-- TMPL_IF name="or" -->selected<!-- /TMPL_IF --> >OR
 							</option>
 							<option value="@not" <!-- TMPL_IF name="not" -->selected<!-- /TMPL_IF --> >NOT
 							</option>
-						</select></td></tr>
-			<tr>	<td>Search on:</td><td><select size="1"  name="kohafield" style="width:170px">
-				<option value="">All</option>
+						</select></td>
+				<td><select size="1"  name="kohafield" id="kohafield" style="width:170px">
+				
 				<!-- TMPL_LOOP name="kohafields" -->
-	                <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+	               		 <option value="<!-- TMPL_VAR name="kohafield" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="label" --></option>
 				<!-- /TMPL_LOOP --></select></td><td><input type="text"  size="25" name="value" value="<!-- TMPL_VAR name="value" -->" ></td>
 							<td>With</td><td><Select type="text"  name="relation">
 							<option value=" " <!-- TMPL_IF name="blank" -->selected<!-- /TMPL_IF --> >&nbsp;
@@ -80,19 +83,48 @@
 							</option>
 							<option value="@attr 2=4  " <!-- TMPL_IF name="@attr 2=4 " -->selected<!-- /TMPL_IF --> >Greater than & equal
 							</option>
-						</select></td></tr>
+						</select></td></tr></tbody>
+	<tr>
+<td ><fieldset>Limit with itemtype: 
+			<input type="hidden" name="kohafield" value="itemtype"/>
+			<input type="hidden" name="and_or" value="@and"/>
+			<select name="value"  style="width:170px">			
+			<option value="">All item types</option>
+		<!-- TMPL_LOOP NAME="itemtypeloop" -->
+			<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+		<!-- /TMPL_LOOP -->
+			</select></fieldset>
+</td>
+<td colspan="4">
+	<fieldset>Location:<input type="hidden" name="kohafield" value="holdingbranch"/>
+		<input type="hidden" name="and_or" value="@and"/>
+		<select name="value" id="branchloop" size="1">
+		<option value="">All Branches</option>
+		<!-- TMPL_LOOP NAME="branchloop" -->
+		<option value=<!-- TMPL_VAR NAME="branchcode" --> ><!-- TMPL_VAR NAME="branchname"--></option>
+		<!-- /TMPL_LOOP -->
+		</select>
+		<input type="hidden" name="kohafield" value="date_due"/>
+		<input type="hidden" name="and_or" value="@and"/>
+		<input type="checkbox" id="available-items" name="value" value="0000-00-00"/><label for="available-items">Only items currently available</label></p>
+	</fieldset>
+</td>
+
+</tr>
 <tr>
-			<td colspan=2><b>Sort on:</b><select size="1"  name="order" style="width:170px">
+			<td colspan="2"><fieldset >Sort on:<select size="1"  name="order" style="width:170px">
 			<option value="">System Ranked</option>	
 			<!-- TMPL_LOOP name="sorts" -->
-	              	  <option value="<!-- TMPL_VAR name="marctokoha" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="liblibrarian" --></option>
+	              	  <option value="<!-- TMPL_VAR name="attr" -->" <!-- TMPL_IF name="sel" -->selected<!-- /TMPL_IF -->  ><!-- TMPL_VAR name="label" --></option>
 				<!-- /TMPL_LOOP --></select>
 			<select size="1"  name="asc" style="width:100px">
-				<option value="1">Ascending</option>
-				<option value="2">Descending</option>
-				</td>
-				</tr><tr><td colspan=2><input class = "button" type="submit" value="Start search"></td></tr>
-	
+				<option value="<i">Ascending</option>
+				<option value=">i">Descending</option>
+				</fieldset></td>
+
+</tr>
+<tr><td colspan=2><input class = "button" type="submit" value="Start search"></td><td><a href="#" onClick="cloneQuery();" title="add another search field">[+]</a></td></tr>
+
 </form>
 <form onSubmit="return checkSQLSearch()" name="precise_form" id="sql_form" action="/cgi-bin/koha/catalogue/catalogue-search.pl" method='post' <!-- TMPL_IF name="sql_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
 
@@ -121,18 +153,46 @@
 
 	</table>
 </form>
-</table>
+<form onSubmit="return BraveSearch()" name="brave_form" id="brave_form" action="/cgi-bin/koha/catalogue/catalogue-search.pl" method='post' <!-- TMPL_IF name="brave_search" -->style="display:inline;"<!-- TMPL_ELSE -->style="display:none;"<!-- /TMPL_IF -->>
+
+    <input type="hidden" name = "op" value="do_search">
+  <input type="hidden" name="search_type" value="brave">
+<input type="hidden" name="zoom" value="1">
+	<table style="border:0" align="center">
+<tr>
+<td><fieldset><b>Format to display </b>MARC<input type="radio" name="MARC" value="1" checked=1>Brief<input type="radio" name="MARC" value="0"></fieldset></td><td><fieldset><b>Display per page:</b><input type text name="number_of_results" value="10" size="1"/></fieldset></td></tr>
+	    <tr>
+			<td>Query  <textarea name = "value"  id="bravetext" cols="40" rows="5" ></textarea></td>
+			 <td> of type: <select  name = "searchtype" >
+			<option value="pqf">PQF</option>
+			<option value="ccl">CCL</option>
+			<option value="cql">CQL</option>
+			</select>
+			</td>
+		</tr>
+
+	    <tr>
+			<td colspan = "4" align = "center">
+			    <br>
+				<input class = "button" type="submit" value="Start search">
+	      		</td>
+		</tr>
+
+	</table>
+</form>
+</table>	
 <script language="JavaScript" type="text/javascript">
 function hideSearchsTypes() {
             document.getElementById('zoom_form').style.display = 'none';
             document.getElementById('sql_form').style.display = 'none';
+	 document.getElementById('brave_form').style.display = 'none';
           
 		}
 
 		function resetButtonsColors() {
 			document.getElementById('searchType1').style.backgroundColor = 'yellow';
 			document.getElementById('searchType2').style.backgroundColor = 'yellow';
-			
+			document.getElementById('searchType3').style.backgroundColor = 'yellow';
 			
 		}
 
@@ -149,6 +209,12 @@ function hideSearchsTypes() {
 		    hideSearchsTypes();
 		    document.getElementById('sql_form').style.display = 'inline';
 		}
+	 function changeSearch3() {
+            resetButtonsColors();
+		    document.getElementById('searchType3').style.backgroundColor = 'orange';
+		    hideSearchsTypes();
+		    document.getElementById('brave_form').style.display = 'inline';
+		}
 function checkSQLSearch() {
 		if ( (document.sql_form.barcode.value == '') &&
 			(document.sql_form.itemnumber.value == '') && (document.sql_form.biblionumber.value == '') ) {
@@ -158,5 +224,20 @@ function checkSQLSearch() {
 		    return true;
 		}
 	}
+
+function BraveSearch() {
+		if ( document.brave_form.text.value == '')   {
+			alert("Enter some code to start searching.");
+			return false;
+		} else {
+		    return true;
+		}
+	}
+function cloneQuery() {
+var cloneoriginal = document.getElementById('andor');
+ var clone = cloneoriginal.cloneNode(true);
+queryarea.appendChild(clone);
+
+}
 </script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
