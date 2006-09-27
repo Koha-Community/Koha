@@ -2,20 +2,21 @@ RELEASE NOTES
 =============
 
 Koha is the first Open-Source Integrated Library System.
-Released in New Zealand, in January 2000, it is maintained by a team of volunteers (developers & librarians) from around the globe. The Koha system is a full catalogue, opac, circulation and acquisitions system.
 
-Koha 2.2.6 is more than 250 000 lines of code(see : http://bureau.paulpoulain.com/cvslog/) , developed by almost 50 differents developers (46, +translators).
+Koha is a full-featured open-source ILS. Developed initially in New Zealand by Katipo Communications Ltd and first deployed in January of 2000 for Horowhenua Library Trust, it is currently maintained by a team of software providers and library technology staff from around the globe.
 
-With the 2.2.6 version, Koha is now a mature product, with a lot of nice features.
+Koha 2.2.6 is more than 250,000 lines of code (see : http://bureau.paulpoulain.com/cvslog/) , contributed by about 50 different developers (46, +translators).
 
-More than 100 libraries are listed as users on wiki.koha.org, and we are sure that more than 300 libraries uses the software. There are 2 projects derived from Koha.
+The 2.2.6 version of Koha is a mature product, with a lot of nice features.
 
+More than 100 libraries are registered as users on wiki.koha.org, and we are sure that at least 300 libraries use the software. There are 2 projects derived from Koha.
 
 ========
 WARNINGS
 ========
 * The librarian interface is tested only with Mozilla/Firefox. Should work (partially) with IE. OPAC should work fine with any browser.
-* In this release, french & english are uptodate. Other language po files are provided in the package. If you update/complete one of them, please send it to paul.poulain @ free.fr, it will be included in a 2.2.6b release !
+* In this release, french & english are up to date. Other language po files are provided in the package. If you update/complete one of them, please send it to paul.poulain @ free.fr, it will be included in a 2.2.6b release !
+
 * NEW PACKAGES REQUIRED :
 - Class::Accessor (0.25)
 - XML::SAX (0.14)
@@ -129,7 +130,7 @@ Please READ the release notes. Everything is compatible with previous versions, 
 		- duplicating a subfield is no longer done with a pipe (|), but by clicking on the + facing the subfield
 		- the "hidden" property of the framework now has 19 possible values. Look in the online help to see them. The immediate interesting value is -1, which means the subfield is minimized on the MARC editor and you must click on it to expand it. Rarely used fields/subfields are easier to manage.
 		- a advancedMARCeditor systempref has been added. If set, tag/subfield values are not shown, except when putting the mouse on the tag/subfield. This systempref is only for "MARC addicts"!
-	* MARC21 : many plugins have been added (by joshua). It seems you now have as many plugins for fixed length fields in MARC21 as in UNIMARC! Note that plugins help you filling a tag/subfield in the MARC editor.
+	* MARC21 : many plugins have been added (by LibLime). It seems you now have as many plugins for fixed length fields in MARC21 as in UNIMARC! Note that plugins help you filling a tag/subfield in the MARC editor.
 
 === MEMBERS ===
 	* patron images management. A new systempreference has been added (patronimages, in borrowers section). If set (to an image extension, like jpg or gif), the image will be shown on patron detail or circulation page. The images must be stored in KOHADIR/htdocs/intranet-tmpl/patronimages/ . The image must be named <borrowernumber>.<patronimagessystempref> (1.jpg for example, for borrower #1)
