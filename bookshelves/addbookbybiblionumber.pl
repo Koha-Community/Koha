@@ -25,12 +25,11 @@ use strict;
 use C4::Search;
 use C4::Biblio;
 use CGI;
-use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+
 
 my $env;
 my $query = new CGI;
@@ -85,6 +84,9 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.5  2006/09/27 21:19:21  tgarip1957
+# Finalized XML version for intranet
+#
 # Revision 1.4  2006/07/04 14:36:51  toins
 # Head & rel_2_2 merged
 #

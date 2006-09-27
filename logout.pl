@@ -69,7 +69,7 @@ my $cookie=$query->cookie(-name => 'sessionID',
 
 # Should redirect to intranet home page after logging out
 
-print $query->redirect("userpage.pl");
+print $query->redirect("mainpage.pl");
 exit;
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#wrriten 18/09/2005 by TG
+#wrriten 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
 
@@ -26,60 +26,37 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-
-use C4::Search;
-use C4::Accounts2;
+use HTML::Template;
 use C4::Members;
+use C4::Accounts2;
 my $input=new CGI;
-  my $accounttype=$input->param('accounttype');
- my $accountid=$input->param('accountid');
-my $amount=$input->param('amount');
-my $itemnum=$input->param('itemnum');
-my $error=0;
+
+
 my $bornum=$input->param('bornum');
 #get borrower details
 my $data=borrdata('',$bornum);
-my $user=$data->{firstname}.",".$data->{surname}."-".$data->{cardnumber};
 my $add=$input->param('add');
-# $error=$input->param('error');
-my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "members/mancredit.tmpl",
+if ($add){
+  my $itemnum=$input->param('itemnum');
+  my $desc=$input->param('desc');
+  my $amount=$input->param('amount');
+  $amount = -$amount;
+  my $type=$input->param('type');
+  manualinvoice($bornum,$itemnum,$desc,$type,$amount);
+  print $input->redirect("/cgi-bin/koha/members/boraccount.pl?bornum=$bornum");
+} else {
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "mancredit.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
 					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
-	$template->param(user => $user);
 	$template->param( bornum => $bornum);
-	$template->param( itemnum => $itemnum);
-	$template->param( amount => $amount);
-	$template->param( accounttype => $accounttype);
-	$template->param( accountid => $accountid);
-if ($add){
-if ($accounttype eq "F" || $accounttype eq "FU"){
-$accounttype="CF";
-}else{
-$accounttype="C".$accounttype;
-}
-	
-  my $desc=$input->param('desc');
-  my $amount=$input->param('amount');
-  $amount = -$amount;
-my $loggeduser=$input->param('loggedinuser');
-my   $error=manualcredit($bornum,$accountid,$desc,$accounttype,$amount,$loggeduser);
-	if ($error>0 ) {
-	$template->param( error => "1");
-	$template->param(user => $user);
-	$template->param( bornum => $bornum);
-	$template->param( itemnum => $itemnum);
-	$template->param( amount => $amount);
-	$template->param( accounttype => $accounttype);
-	$template->param( accountid => $accountid);
-	} else {
-	print $input->redirect("/cgi-bin/koha/members/boraccount.pl?bornum=$bornum");
-	}
-} 
-	
+	print $input->header(
+	    -type => guesstype($template->output),
+	    -cookie => $cookie
+	),$template->output;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+}

@@ -26,17 +26,13 @@
 use strict;
 use CGI;
 use C4::Circulation::Circ3;
-#use C4::Search;
-use C4::Output;
-use C4::Print;
-use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
-#use HTML::Template;
 use C4::Date;
 use C4::Context;
 use C4::Members;
+use C4::Print;
 #
 # PARAMETERS READING
 #
@@ -50,9 +46,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 	authnotrequired	=> 0,
 	flagsrequired	=> { circulate => 1 },
     });
-my $branches = getbranches();
+my $branches = GetBranches();
 my $printers = getprinters();
-#my $branch = getbranch($query, $branches);
 my $branch=C4::Context->preference("defaultBranch");
 my $printer = getprinter($query, $printers);
 

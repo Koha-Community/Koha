@@ -116,7 +116,7 @@ sub MARCfindbreeding {
 			}	
 		$record->insert_fields_ordered($newfield);
 		}
-	my $xml=  $record->as_xml_record();
+	my $xml=MARC::File::XML::record($record);
 	$xml=Encode::encode('utf8',$xml);
 	my $xmlhash=XML_xml2hash_onerecord($xml);
 		return $xmlhash,$encoding;
@@ -246,6 +246,8 @@ my $id=100;
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
 		where category=? order by lib");
+my ($biblionumtagfield,$biblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblionumber","biblios");
+
 my $biblio;
 my $controlfields;
 my $leader;
@@ -262,6 +264,7 @@ for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 
 		my @loop_data = ();
 	foreach my $tag (sort(keys (%{$tagslib}))) {
+	next if ($tag eq $biblionumtagfield);## Otherwise biblionumber will be duplicated on modifs if user has set visibility to true
 			my $indicator;
 				# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
 				# if MARC::Record is empty => use tab as master loop.
@@ -272,19 +275,15 @@ for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		
 			my %tagdefined;
 			my %definedsubfields;
-			my $hiddenrequired;
+			
 			my ($ind1,$ind2);
 			
 		 if ($tag>9){
 			foreach my $data (@$biblio){
-					$hiddenrequired=0;
 					my @subfields_data;
 					undef %definedsubfields;
    	 			 if ($data->{'tag'} eq $tag){
 					$tagdefined{$tag}=1 ;
-					   if ($built{$tag}==1){
-						$hiddenrequired=1;
-					    }
 					    $ind1="  ";
 					      $ind2="  ";		
 					      foreach my $subfieldcode ( $data->{'subfield'}){
@@ -301,17 +300,7 @@ for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 					    $ind1=$data->{'ind1'};
 					    $ind2=	$data->{'ind2'};
 					  
-					if ($hiddenrequired && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
-						my @hiddensubfields_data;
-						my %tag_data;
-						push(@hiddensubfields_data, &create_input('','','',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
-						$tag_data{tag} = '';
-						$tag_data{tag_lib} = '';
-						$tag_data{indicator} = '';
-						$tag_data{subfield_loop} = \@hiddensubfields_data;
-						push (@loop_data, \%tag_data);
-						$i++;
-					}
+					
 					# now, loop again to add parameter subfield that are not in the MARC::Record
 					
 					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
@@ -361,26 +350,14 @@ for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 					my @subfields_data;
 					if ($control->{'tag'} eq $tag){
-					$hiddenrequired=0;
 					$tagdefined{$tag}=1 ;
-					 if ($built{$tag}==1){$hiddenrequired=1;}
 					my $value=$control->{'content'} ;
 					$definedsubfields{$tag.'@'}=1;
 					push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$xmlhash,$authorised_values_sth,$id));					
 					$i++;
 					
 					   $built{$tag}=1;
-					if ($hiddenrequired && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
-						my @hiddensubfields_data;
-						my %tag_data;
-						push(@hiddensubfields_data, &create_input('','','',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
-						$tag_data{tag} = '';
-						$tag_data{tag_lib} = '';
-						$tag_data{subfield_loop} = \@hiddensubfields_data;
-						$tag_data{fixedfield} = 1;
-						push (@loop_data, \%tag_data);
-						$i++;
-					}
+					
 					if ($#subfields_data >= 0) {
 						my %tag_data;
 						$tag_data{tag} = $tag;
@@ -528,7 +505,7 @@ my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
 my $duplicateok = $input->param('duplicateok');
-
+my $suggestionid=$input->param('suggestionid');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 my $biblionumber;
@@ -575,7 +552,11 @@ $xmlhash=XML_xml2hash_onerecord($record) if ($biblionumber);
 $frameworkcode=MARCfind_frameworkcode( $dbh, $biblionumber );
 ###########
 $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
-
+if ($suggestionid && !$biblionumber){
+my $data=GetSuggestion($suggestionid) ;
+$xml=$data->{xml};
+$xmlhash=XML_xml2hash_onerecord($xml);
+}
 my $encoding="";
 ($xmlhash,$encoding) = MARCfindbreeding($dbh,$breedingid,$oldbiblionumber) if ($breedingid);
 

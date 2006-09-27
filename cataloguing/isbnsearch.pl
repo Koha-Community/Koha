@@ -37,6 +37,7 @@ my $showoffset = $offset + 1;
 my $total;
 my $count;
 my @results;
+my $facets;
 my %search;
 my $toggle;
 my $marc_p = C4::Context->boolean_preference("marc");
@@ -66,7 +67,7 @@ my @kohafield;
 my @value;
 my @relation;
 my @and_or;
-my $order="title";
+my $order="title,1";
 if ($isbn){
 $search{'isbn'}=$isbn;
 push @kohafield, "isbn";
@@ -81,7 +82,7 @@ $search{avoidquerylog}=1;
 if ($SQLorZEBRA eq "sql"){
 ($count, @results) =cataloguing_search(\%search,$num,$offset);
 }else{
-($count,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,$order, \@and_or, 1,"",$offset, $num,"intranet");
+($count,$facets,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,$order, \@and_or, 1,"",$offset, $num,"intranet");
 
 }
 my $grandtotal=$count;

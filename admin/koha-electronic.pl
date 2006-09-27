@@ -67,7 +67,7 @@ if ($op eq 'add_form') {
 	my $href	= $cgi->param('href');
 	my $section	= $cgi->param('section');
 	add_opac_electronic($title, $edata, $lang,$image, $href,$section);
-	print $cgi->redirect('/cgi-bin/koha/admin/opac-electronic.pl');
+	print $cgi->redirect('/cgi-bin/koha/admin/koha-electronic.pl');
 
 } elsif ($op eq 'edit') {
 # warn "edit";
@@ -79,13 +79,13 @@ if ($op eq 'add_form') {
 	my $href	= $cgi->param('href');
 	my $section	= $cgi->param('section');
 	upd_opac_electronic($id, $title, $edata, $lang,$image,$href,$section);
-	print $cgi->redirect('/cgi-bin/koha/admin/opac-electronic.pl');
+	print $cgi->redirect('/cgi-bin/koha/admin/koha-electronic.pl');
 
 } elsif ($op eq 'del') {
 # warn "del";
 	my @ids = $cgi->param('ids');
 	del_opac_electronic(join ",", @ids);
-	print $cgi->redirect('/cgi-bin/koha/admin/opac-electronic.pl');
+	print $cgi->redirect('/cgi-bin/koha/admin/koha-electronic.pl');
 
 } else { 
 # warn "else";

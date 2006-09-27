@@ -11,7 +11,7 @@ use C4::Calendar::Calendar;
 
 my $input = new CGI;
 my $branch = $input->param('branch');
-my $branch=C4::Context->preference('defaultbranch') unless $branch;
+$branch=C4::Context->preference('defaultBranch') unless $branch;
 my $dbh = C4::Context->dbh();
 
 # Set all the branches.
@@ -26,14 +26,13 @@ my @listValues = keys(%list);
 if (!defined($branch)) {
 	$branch =$listValues[4];
 }
-my $branchesList = CGI::scrolling_list(-name => 'branch',
+my $branchesList = CGI::scrolling_list(-name => 'branch', -id=>'branch',
                            		       -values => \@listValues,
 			                           -labels => \%list,
 			                           -size => 1,
-									   -default => [$branch],
+					 -default => [$branch],
 			                           -multiple => 0,
-									   -id => "branch",
-									   -onChange => "changeBranch()");
+					 -onChange => "changeBranch()");
 
 $branches->finish;
 

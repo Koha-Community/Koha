@@ -24,14 +24,12 @@ use strict;
 # external modules
 use Date::Calc qw/Today/;
 use CGI;
-use HTML::Template;
 use Date::Manip;
 use Digest::MD5 qw(md5_base64);
 
 # internal modules
 use C4::Auth;
 use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use C4::Members;

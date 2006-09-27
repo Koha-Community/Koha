@@ -95,8 +95,8 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
-# Revision 1.2  2006/09/11 17:41:56  tgarip1957
-# New XML API
+# Revision 1.3  2006/09/27 21:19:22  tgarip1957
+# Finalized XML version for intranet
 #
 # Revision 1.2.4.1  2005/04/07 10:10:52  tipaul
 # copying processz3950queue from 2.0 branch. The 2.2 version misses an important fix

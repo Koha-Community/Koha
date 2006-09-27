@@ -37,30 +37,27 @@ from koha style DB.  Automaticaly maps to marc biblionumber).
 
 
 use strict;
-require Exporter;
+
 use C4::Auth;
 use C4::Context;
-use C4::Output;
+use C4::AuthoritiesMarc;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
-use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
-use HTML::Template;
+use C4::Koha;
 
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
-my $biblionumber=$query->param('bib');
-my $bibid = $query->param('bibid');
-$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
+my $biblionumber=$query->param('biblionumber');
+
+my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
-my $record =MARCgetbiblio($dbh,$bibid);
+my $record =XMLgetbibliohash($dbh,$biblionumber);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/ISBDdetail.tmpl",
@@ -71,32 +68,29 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $ISBD = C4::Context->preference('ISBD');
-# my @blocs = split /\@/,$ISBD;
-# my @fields = $record->fields();
 my $res;
-# foreach my $bloc (@blocs) {
-# 	$bloc =~ s/\n//g;
 	my $bloc = $ISBD;
 	my $blocres;
 	foreach my $isbdfield (split /#/,$bloc) {
-# 		$isbdfield= /(.?.?.?)/;
 		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
 		my $fieldvalue=$1;
 		my $textbefore=$2;
 		my $analysestring=$3;
 		my $textafter=$4;
-# 		warn "==> $1 / $2 / $3 / $4";
-# 		my $fieldvalue=substr($isbdfield,0,3);
 		if ($fieldvalue>0) {
-	# 		warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
-# 			warn "FV : $fieldvalue";
 			my $hasputtextbefore=0;
-			foreach my $field ($record->field($fieldvalue)) {
+			
 				my $calculated = $analysestring;
-				my $tag = $field->tag();
+				my $tag = $fieldvalue;
 				if ($tag<10) {
+				my $value=XML_readline_onerecord($record,"","",$tag);
+				my $subfieldcode = "@";
+						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $value, '', $dbh);;
+						my $tagsubf = $tag.$subfieldcode;
+						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
+					
 				} else {
-					my @subf = $field->subfields;
+					my @subf = XML_readline_withtags($record,"","",$tag);
 					for my $i (0..$#subf) {
 						my $subfieldcode = $subf[$i][0];
 						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);;
@@ -112,7 +106,7 @@ my $res;
 					$calculated =~ s/^( |;|:|\.|-)*//g;
 					$blocres.=$calculated;
 				}
-			}
+			
 			$blocres .=$textafter if $hasputtextbefore;
 		} else {
 			$blocres.=$isbdfield;

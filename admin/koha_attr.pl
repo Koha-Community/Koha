@@ -70,7 +70,7 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($id) {
-		$sth=$dbh->prepare("select id,marctokoha,attr,liblibrarian,sorts,recordtype,tagfield,tagsubfield,opacshow,intrashow from koha_attr where id=? ");
+		$sth=$dbh->prepare("select id,kohafield,attr,extraattr,label,sorts,recordtype,tagfield,tagsubfield,opacshow,intrashow,facets_label from koha_attr where id=? ");
 		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -116,19 +116,21 @@ if ($op eq 'add_form') {
 			);
 	
 	if ($searchfield) {
-		$template->param(action => "Modify tag",id=>$id ,searchfield => "<input type=\"hidden\" name=\"marctokoha\" value=\"$searchfield\" />$searchfield");
+		$template->param(action => "Modify tag",id=>$id ,searchfield => "<input type=\"hidden\" name=\"kohafield\" value=\"$searchfield\" />$searchfield");
 		$template->param('heading-modify-tag-p' => 1);
 	} else {
 		$template->param(action => "Add tag",
-								searchfield => "<input type=\"text\" name=\"marctokoha\" size=\"40\" maxlength=\"80\" />");
+								searchfield => "<input type=\"text\" name=\"kohafield\" size=\"40\" maxlength=\"80\" />");
 		$template->param('heading-add-tag-p' => 1);
 	}
 	$template->param('use-heading-flags-p' => 1);
-	$template->param(liblibrarian => $data->{'liblibrarian'},
+	$template->param(label => $data->{'label'},
 			attr=> $data->{'attr'},
+			extraattr=>$data->{'extraattr'},
 			recordtype=>$recordlist,
 			tagfield=>$taglist,
 			tagsubfield=>$tagsublist,
+			facets_label=>$data->{'facets_label'},
 			sorts => CGI::checkbox(-name=>'sorts',
 						-checked=> $data->{'sorts'}?'checked':'',
 						-value=> 1,
@@ -153,34 +155,36 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 my $id       =$input->param('id');
 
-	$sth=$dbh->prepare("replace koha_attr  set id=?,marctokoha=?,attr=?,liblibrarian=?,sorts=?,recordtype=?,tagfield=?,tagsubfield=? ,opacshow=?,intrashow=? ");
+	$sth=$dbh->prepare("replace koha_attr  set id=?,kohafield=?,attr=?,extraattr=?,label=?,sorts=?,recordtype=?,tagfield=?,tagsubfield=? ,opacshow=?,intrashow=? ,facets_label=?");
 
 	
-	my $marctokoha       =$input->param('marctokoha');
+	my $kohafield       =$input->param('kohafield');
 	my $attr       =$input->param('attr');
-	my $liblibrarian  = $input->param('liblibrarian');
+	my $extraattr       =$input->param('extraattr');
+	my $label  = $input->param('label');
 	my $sorts =$input->param('sorts');
 	my $opacshow =$input->param('opacshow');
 	my $intrashow =$input->param('intrashow');
 	my $recordtype =$input->param('recordtype');
 	my $tagfield =$input->param('tagfield');
 	my $tagsubfield =$input->param('tagsubfield');
+	my $facets_label =$input->param('facets_label');
 	unless (C4::Context->config('demo') eq 1) {
-		$sth->execute( $id,$marctokoha,$attr,$liblibrarian,$sorts?1:0,$recordtype,$tagfield,$tagsubfield,$opacshow?1:0,$intrashow?1:0);
+		$sth->execute( $id,$kohafield,$attr,$extraattr,$label,$sorts?1:0,$recordtype,$tagfield,$tagsubfield,$opacshow?1:0,$intrashow?1:0,$facets_label);
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=koha_attr.pl?searchfield=$marctokoha\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=koha_attr.pl?searchfield=$kohafield\"></html>";
 
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	$sth=$dbh->prepare("select id,marctokoha,liblibrarian,recordtype from koha_attr where id=? ");
+	$sth=$dbh->prepare("select id,kohafield,label,recordtype from koha_attr where id=? ");
 		$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	$template->param(liblibrarian => $data->{'liblibrarian'}."/". $data->{'recordtype'},id=>$data->{'id'},
+	$template->param(label => $data->{'label'}."/". $data->{'recordtype'},id=>$data->{'id'},
 							searchfield => $searchfield,
 							);
 													# END $OP eq DELETE_CONFIRM
@@ -202,7 +206,7 @@ my $id       =$input->param('id');
 	my $cnt=0;
 	if ($dspchoice) {
 		#here, user only wants used tags/subfields displayed
-		my $sth=$dbh->prepare("Select * from koha_attr where tagfield <>'' and marctokoha >= ? ");
+		my $sth=$dbh->prepare("Select * from koha_attr where tagfield <>'' and kohafield >= ? ");
 		#could be ordoned by tab
 		$sth->execute($searchfield);
 
@@ -225,17 +229,19 @@ my $id       =$input->param('id');
 			}
 			my %row_data;  # get a fresh hash for the row data
 			$row_data{id} = $results[$i]->{'id'};
-			$row_data{marctokoha} = $results[$i]->{'marctokoha'};
-			$row_data{liblibrarian} = $results[$i]->{'liblibrarian'};
+			$row_data{kohafield} = $results[$i]->{'kohafield'};
+			$row_data{label} = $results[$i]->{'label'};
 			$row_data{sorts} = $results[$i]->{'sorts'};
 			$row_data{attr} = $results[$i]->{'attr'};
+			$row_data{extraattr} = $results[$i]->{'extraattr'};
 			$row_data{recordtype} = $results[$i]->{'recordtype'};
 			$row_data{tagfield} = $results[$i]->{'tagfield'};
 			$row_data{tagsubfield} = $results[$i]->{'tagsubfield'};
 			$row_data{opacshow} = $results[$i]->{'opacshow'};
 			$row_data{intrashow} = $results[$i]->{'intrashow'};
-			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'marctokoha'}."&amp;id=".$results[$i]->{'id'};
-			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'marctokoha'}."&amp;id=".$results[$i]->{'id'};
+			$row_data{facets_label} = $results[$i]->{'facets_label'};
+			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'kohafield'}."&amp;id=".$results[$i]->{'id'};
+			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'kohafield'}."&amp;id=".$results[$i]->{'id'};
 			$row_data{toggle} = $toggle;
 			push(@loop_data, \%row_data);
 			$i++;
@@ -257,15 +263,17 @@ my $id       =$input->param('id');
 			}
 			my %row_data;  # get a fresh hash for the row data
 			$row_data{id} = $results[$i]->{'id'};
-			$row_data{marctokoha} = $results[$i]->{marctokoha};
-			$row_data{liblibrarian} = $results[$i]->{liblibrarian};
-			$row_data{sorts} = $results[$i]->{sorts};
-			$row_data{opacshow} = $results[$i]->{'opacshow'};
-			$row_data{intrashow} = $results[$i]->{'intrashow'};
-			$row_data{attr} = $results[$i]->{attr};
+			$row_data{kohafield} = $results[$i]->{'kohafield'};
+			$row_data{label} = $results[$i]->{'label'};
+			$row_data{sorts} = $results[$i]->{'sorts'};
+			$row_data{attr} = $results[$i]->{'attr'};
+			$row_data{extraattr} = $results[$i]->{'extraattr'};
 			$row_data{recordtype} = $results[$i]->{'recordtype'};
 			$row_data{tagfield} = $results[$i]->{'tagfield'};
 			$row_data{tagsubfield} = $results[$i]->{'tagsubfield'};
+			$row_data{opacshow} = $results[$i]->{'opacshow'};
+			$row_data{intrashow} = $results[$i]->{'intrashow'};
+			$row_data{facets_label} = $results[$i]->{'facets_label'};
 			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{marctokoha}."&amp;id=".$results[$i]->{'id'};
 			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{marctokoha}."&amp;id=".$results[$i]->{'id'};
 			$row_data{toggle} = $toggle;
@@ -305,7 +313,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 #
 sub StringSearch  {
 	my ($dbh,$searchstring)=@_;
-	my $sth=$dbh->prepare("Select * from koha_attr  where marctokoha >=?  order by marctokoha");
+	my $sth=$dbh->prepare("Select * from koha_attr  where kohafield >=?  order by kohafield");
 	$sth->execute($searchstring);
 	my @dataresults;
 	while (my $data=$sth->fetchrow_hashref){

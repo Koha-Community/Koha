@@ -54,7 +54,7 @@ my $index = $query->param('index');
 my $authtypecode=$query->param('authtypecode');
  $authtypecode = &AUTHfind_authtypecode($dbh,$authid) if !$authtypecode;
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
-my ($linkidfield,$linkidsubfield)=MARCfind_marc_from_kohafield("auth_linkid","authorities");
+my ($linkidfield,$linkidsubfield)=MARCfind_marc_from_kohafield("linkid","authorities");
 my $auth_type = AUTHgetauth_type($authtypecode);
 
 my $record =XMLgetauthorityhash($dbh,$authid);
