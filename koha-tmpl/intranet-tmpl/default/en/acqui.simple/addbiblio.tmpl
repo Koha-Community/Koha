@@ -308,27 +308,31 @@ function AddField(field,cntrepeatfield) {
 }
 
 function cloneSubfield(index) {
- var original = document.getElementById(index);
- var clone = original.cloneNode(true);
- clone.setAttribute("id", index + index); 
-// orginput : the value of the original field (in [0] if hide_marc=1, otherwise in [1]
-// image : the up button. don't exist is hide_marc=1
- <!-- TMPL_IF name="hide_marc" -->
-	var orginput = original.getElementsByTagName('input')[0];
- <!-- TMPL_ELSE -->
- 	var orginput = original.getElementsByTagName('input')[1];
-	image = clone.getElementsByTagName('img')[0];
-	image.setAttribute("onclick","upSubfield('" + index + index + "')");
- <!-- /TMPL_IF -->
- trigger = original.getElementsByTagName('a')[0];
- if (trigger) {
- 	trigger.parentNode.removeChild(trigger);
- }
- clonetrigger = clone.getElementsByTagName('a')[0];
- clonetrigger.setAttribute("onclick","cloneSubfield('" + index + index + "')");
- clone.setAttribute("tabindex","1");
- orginput.value = '';
- original.parentNode.insertBefore( clone, original.nextSibling); 
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+
+    // set the attribute for the new 'div' subfields
+    clone.setAttribute('id',index + index);//set another id.
+    var NumTabIndex;
+    NumTabIndex = parseInt(original.getAttribute('tabindex'));
+    if(isNaN(NumTabIndex)) NumTabIndex = 0;
+    clone.setAttribute('tabindex',NumTabIndex+1);
+
+    var ButtonPlus;
+    var CloneButtonPlus;
+    try{
+        ButtonPlus = original.getElementsByTagName('a')[0];  // getting the '<a href=...>+</a>
+        ButtonPlus.parentNode.removeChild(ButtonPlus);  // removing the '+' button
+
+        CloneButtonPlus = clone.getElementsByTagName('a')[0];
+        CloneButtonPlus.setAttribute('onclick',"cloneSubfield('" + index + index + "')");
+    }
+    catch(e){
+        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    }
+
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
 }
 
 function upSubfield(index) {
