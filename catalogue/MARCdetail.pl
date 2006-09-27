@@ -177,12 +177,12 @@ for (my $tabloop = 0; $tabloop<10;$tabloop++) {
 			$subfield_data{marc_lib}=$tagslib->{$data->{'tag'}}->{$code->{'code'}}->{lib};
 			$subfield_data{link}=$tagslib->{$data->{'tag'}}->{$code->{'code'}}->{link};
 			if ($tagslib->{$data->{'tag'}}->{$code->{'code'}}->{isurl}) {
-				$subfield_data{marc_value}="<a href=\"$value]\">$value</a>";
+				$subfield_data{marc_value}="<a href=\"$value\">$value</a>";
 			} elsif ($data->{'tag'} eq $isbntag && $code->{'code'} eq $isbnsub) {
 				$subfield_data{marc_value}=DisplayISBN($value);
 			} else {
 				if ($tagslib->{$data->{'tag'}}->{$code->{'code'}}->{authtypecode}) {
-				my ($authtag,$authtagsub)=MARCfind_marc_from_kohafield("auth_authid","biblios");
+				my ($authtag,$authtagsub)=MARCfind_marc_from_kohafield("auth_biblio_link_subf","biblios");
 				$subfield_data{authority}=XML_readline_onerecord($xmlhash,"","",$data->{'tag'},$authtagsub);
 				}	
 			$subfield_data{marc_value}=get_authorised_value_desc($data->{'tag'}, $code->{'code'}, $value, '', $dbh);

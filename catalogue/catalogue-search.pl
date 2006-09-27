@@ -27,17 +27,18 @@ my $reorder=$query->param('reorder');
 my $number_of_results=$query->param('number_of_results');
 my $zoom=$query->param('zoom');
 my $ascend=$query->param('asc');
+my $searchtype=$query->param('searchtype'); ## this is actual query type
 
 my @marclist = $query->param('marclist');
 # collect all the fields ...
 my %search;
 my @forminputs;		#this is for the links to navigate among the results
-my (@searchdesc, %hashdesc); 	#this is to show the description of the current search
-my @fields = ('value', 'kohafield', 'and_or', 'relation','order','barcode','biblionumber','itemnumber','asc','from');
+my (@searchdesc, %hashdesc,$facetsdesc); 	#this is to show the description of the current search
+my @fields = ('value', 'kohafield', 'and_or', 'relation','order','barcode','biblionumber','itemnumber','asc','from','searchtype');
 
 ###Collect all the marclist values coming from old Koha MARCdetails
-## Although we can not search on all marc fields- if any is matched in Zebra we can use it it
-my $sth=$dbh->prepare("Select marctokoha from koha_attr where tagfield=? and tagsubfield=? and intrashow=1");
+## Although we can not search on all marc fields- if any is matched in Zebra we can use it 
+my $sth=$dbh->prepare("Select kohafield from koha_attr where tagfield=? and tagsubfield=? and intrashow=1");
 foreach my $marc (@marclist) {
 		if ($marc) {
 		$sth->execute(substr($marc,0,3),substr($marc,3,1));
@@ -51,10 +52,11 @@ foreach my $marc (@marclist) {
 }
 #### Now   normal search routine
 foreach my $field (@fields) {
-	$search{$field} = $query->param($field);
-	if ($search{$field}) {
-		push @forminputs, { field=>$field ,value=> $search{$field}} unless ($field eq 'reorder');
-	    	}
+	my @fieldvalue = $query->param($field);
+	foreach my $fvalue (@fieldvalue) {
+		push @forminputs, { field=>$field ,value=> $fvalue} unless ($field eq 'reorder');
+		$facetsdesc.="&".$field."=".$fvalue;
+	  }
 }
 
 
@@ -66,7 +68,7 @@ push @searchdesc,\%hashdesc;
 if ($op eq "do_search"){
  
 #this fields is just to allow the user come back to the search form with all the values  previously entered
-$search{'search_type'} = $query->param('search_type');
+$search{'search_type'} = $query->param('search_type');# this is the panel type
 push @forminputs, {field => 'search_type', value => $search{'search_type'}};
 
 
@@ -84,18 +86,18 @@ push @forminputs, {field => 'search_type', value => $search{'search_type'}};
 	$search{'searchdesc'} = \@searchdesc;
 	$template->param(FORMINPUTS => \@forminputs);
 	$template->param(reorder => $query->param('reorder'));
-
+	$template->param(facetsdesc=>$facetsdesc);
 	# do the searchs ....
 	 $number_of_results = 10 unless $number_of_results;
 	my $startfrom=$query->param('startfrom');
 	($startfrom) || ($startfrom=0);
-my ($count,@results);
+my ($count,@results,$facets);
 if (!$zoom){
 ## using sql search for barcode,biblionumber or itemnumber only useful for libraian interface
 	($count, @results) =sqlsearch($dbh,\%search);
 }else{
 my $sortorder=$order.",".$ascend if $order;
- ($count,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,$sortorder, \@and_or, 1,$reorder,$startfrom, $number_of_results,"intranet");
+ ($count,$facets,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,$sortorder, \@and_or, 1,$reorder,$startfrom, $number_of_results,"intranet",$searchtype);
 }
 	if ( $count eq "error"){
 	$template->param(error =>1);
@@ -114,16 +116,17 @@ if ( $count == 1){
 }
 	# sorting out which results to display.
 	# the result number to star to show
-	$template->param(starting => $startfrom+$number_of_results);
-	$template->param(endinging => $startfrom+1);
-	$template->param(startfrom => $startfrom+1);
+	$template->param(startfrom => $startfrom);
+	$template->param(beginning => $startfrom+1);
 	# the result number to end to show
 	($startfrom+$num<=$count) ? ($template->param(endat => $startfrom+$num+1)) : ($template->param(endat => $count));
 	# the total results searched
 	$template->param(numrecords => $count);
-
+	$template->param(FORMINPUTS => \@forminputs );
 	$template->param(searchdesc => \@searchdesc );
-	$template->param(SEARCH_RESULTS => \@results);
+	$template->param(SEARCH_RESULTS => \@results,
+			facets_loop => $facets,
+			);
 
 	#this is to show the images numbers to navigate among the results, if it has to show the number highlighted or not
 	my $numbers;
@@ -184,12 +187,12 @@ if ( $count == 1){
 						  pg => $url };
 		push @$numbers, { number => "&gt;&gt;", 
 						  highlight => 0 , forminputs=>\@forminputs,
-						  startfrom => ($total_pages-1)*$number_of_results, 
+						  start => ($total_pages-1)*$number_of_results, 
 						  pg => $total_pages};
 	}
 #	push @$numbers,{forminputs=>@forminputs};
-	$template->param(numbers =>$numbers);
-
+	$template->param(numbers =>$numbers,
+			);
 	#show the virtual shelves
 	#my $results = &GetShelfList($borrowernumber);
 	#$template->param(shelvescount => scalar(@{$results}));
@@ -213,7 +216,7 @@ if ($format eq '1') {
 	my $kohafield = $query->param('kohafield');
 	my ($fieldcount,@kohafields)=getkohafields();
 	foreach my $row (@kohafields) {
-		if ($kohafield eq $row->{'marctokoha'}) {
+		if ($kohafield eq $row->{'kohafield'}) {
 			$row->{'sel'} = 1;
 		}
 	}
@@ -224,13 +227,27 @@ my @sorts;
 	foreach my $sort (@kohafields) {
 	    if ($sort->{sorts}){
 		push @sorts,$sort;
-		if ($order eq $sort->{'marctokoha'}) {
+		if ($order eq $sort->{'attr'}) {
 			$sort->{'sel'} = 1;
 		}
 	   }
 	}
 	$template->param(sorts => \@sorts);
+# load the branches
+my @branches = GetallBranches();
+$template->param(branchloop => \@branches,);
 
+# load the itemtypes 
+my $itemtypes=GetItemTypes();
+my (@item_type_loop);
+foreach my $thisitemtype (sort keys %$itemtypes) {
+    my %row =(value => $thisitemtype,
+                 description => $itemtypes->{$thisitemtype}->{'description'},
+            );
+    push @item_type_loop, \%row;
+}
+
+$template->param(itemtypeloop=>\@item_type_loop,);
 my $search_type = $query->param('search_type');
 	if ((!$search_type) || ($search_type eq 'zoom'))  {
 		$template->param(zoom_search => 1);
