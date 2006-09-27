@@ -1,0 +1,56 @@
+-- MySQL dump 10.9
+--
+-- Host: localhost    Database: koha
+-- ------------------------------------------------------
+-- Server version	4.1.15-nt
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `koha_attr`
+--
+
+DROP TABLE IF EXISTS `koha_attr`;
+CREATE TABLE `koha_attr` (
+  `kohafield` varchar(45) NOT NULL default '',
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `attr` varchar(45) NOT NULL default '',
+  `label` varchar(100) NOT NULL default '',
+  `sorts` tinyint(1) unsigned NOT NULL default '0',
+  `recordtype` varchar(45) NOT NULL default '',
+  `opacshow` tinyint(1) unsigned zerofill NOT NULL default '0',
+  `tagfield` varchar(3) default NULL,
+  `tagsubfield` char(1) default NULL,
+  `intrashow` tinyint(1) unsigned zerofill NOT NULL default '0',
+  `extraattr` varchar(245) NOT NULL default '',
+  `facets_label` varchar(45) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `marctokoha` USING BTREE (`kohafield`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `koha_attr`
+--
+
+
+/*!40000 ALTER TABLE `koha_attr` DISABLE KEYS */;
+LOCK TABLES `koha_attr` WRITE;
+INSERT INTO `koha_attr` VALUES ('biblionumber',305,'Number-db','Biblionumber in holdings',0,'holdings',0,'004','',0,'',''),('author',293,'author','Author',1,'biblios',1,'100','a',1,'','Authors'),('title',3,'title','Title',1,'biblios',0,'245','a',1,'',''),('unititle',4,'title-uniform','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('notes',5,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('serial',6,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('seriestitle',7,'title-series','Series title',0,'biblios',0,NULL,NULL,1,'',''),('copyrightdate',8,'date','Copyright date',0,'biblios',0,'260','c',1,'@attr 4=5',''),('abstract',262,'abstract','Summary/abstract',0,'biblios',1,'','',1,'',''),('frameworkcode',11,'','Not mapped - unnecessary',0,'biblios',0,NULL,NULL,0,'',''),('subject',71,'subject-heading','Subject',0,'biblios',0,'650','a',1,'','Subject'),('volume',14,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('number',15,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('classification',16,'LC-call-number','LC classification',0,'biblios',0,'050','a',1,'',''),('itemtype',17,'Material-type','Item type',0,'biblios',0,'245','h',1,'',''),('isbn',18,'isbn','ISBN',0,'biblios',0,'020','a',1,'',''),('issn',19,'issn','ISSN',0,'biblios',0,'022','a',1,'',''),('dewey',20,'Dewey-classification','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('subclass',21,'LC-call-number','Not mapped - userschoice',0,'biblios',0,'050','b',0,'',''),('publicationyear',22,'date-of-publication','Publication year',0,'biblios',0,NULL,NULL,1,'@attr 4=4',''),('publishercode',23,'Publisher','Publisher',0,'biblios',0,'260','b',1,'',''),('volumedate',24,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('volumeddesc',25,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('illus',27,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('pages',28,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('size',30,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('place',31,'place-publication','Place of publication',0,'biblios',0,NULL,NULL,1,'',''),('lccn',32,'lc-card-number','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('marc',33,'','Internals for koha',0,'biblios',0,NULL,NULL,0,'',''),('url',34,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('language',35,'code-language','Language',0,'biblios',0,NULL,NULL,1,'',''),('lcsort',36,'local-number','Sorted LC',1,'biblios',0,'942','k',1,'',''),('itemnumber',37,'itemnumber','Item number',0,'holdings',0,'001',NULL,1,'@attr 4=109',''),('additionalauthor',266,'author','author',0,'biblios',0,'700','a',0,'','Authors'),('multivolumepart',39,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('barcode',295,'barcode','Barcode',0,'holdings',0,'952','p',1,'',''),('dateaccessioned',277,'dateacquired','Date item added (YYMMDD)',0,'holdings',0,'008','',1,'@attr 4=5',''),('booksellerid',299,'booksellerid','Supplier',0,'holdings',0,'952','e',1,'',''),('homebranch',285,'homebranch','HOME branch',0,'holdings',0,'952','a',1,'',''),('price',45,'price','Not mapped - userschoice',0,'holdings',0,'','',0,'',''),('replacementprice',46,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('replacementpricedate',47,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('datelastborrowed',48,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('datelastseen',279,'datelasseen','Date last seen(YYYYMMDD)',0,'holdings',0,'005',NULL,1,'@attr 4=5',''),('multivolume',50,'','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('shelf',51,'shelf','Shelf',0,'holdings',0,'952','f',1,'',''),('notforloan',52,'notforloan','Not for loan(1 or 0)',0,'holdings',0,'952','y',1,'@attr 4=109',''),('itemlost',53,'itemlost','Lost item (1 or 0)',0,'holdings',0,'952','0',1,'@attr 4=109',''),('wthdrawn',54,'temlost','Withdrawn item (1 or 0)',0,'holdings',0,'952','1',1,'@attr 4=109',''),('itemcallnumber',303,'itemcallnumber','Item callnumber',0,'holdings',0,'952','o',1,'',''),('issues',56,'','number of issues',0,'holdings',0,'952','9',0,'',''),('renewals',57,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('reserves',58,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('restricted',59,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('binding',60,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('itemnotes',61,'itemnotes','Item notes (Gifted by)',0,'holdings',0,'952','z',1,'',''),('holdingbranch',283,'holdingbranch','Holding branch',0,'holdings',0,'952','b',1,'',''),('paidfor',63,'','Not mapped - userschoice',0,'holdings',0,NULL,NULL,0,'',''),('location',65,'location','Floor',0,'holdings',0,'952','g',1,'',''),('cutterextra',68,'cutterextra','internals for koha',0,'holdings',0,'952','m',0,'',''),('indexedby',72,'indexed-by','Catalogers ID',0,'biblios',0,'942','x',1,'',''),('circid',282,'circid','Circulation ID',0,'holdings',0,'952','x',1,'',''),('subscriptionid',75,'thematic-number','Subscription ID',0,'biblios',0,'310','6',0,'@attr 4=109',''),('authtypecode',76,'record-type','Authority type',0,'authorities',0,'035','a',0,' @attr 5=100',''),('authid',77,'Authority/format-id','Authority id',0,'authorities',0,'001','',0,'',''),('linkid',78,'','Authority linkingid field',0,'authorities',0,'750','8',0,'',''),('mainentry',79,'LC-subject-heading','Authority main heading',0,'authorities',0,NULL,NULL,0,'',''),('allentry',80,'Subject-heading','Authority whole field',0,'authorities',0,NULL,NULL,0,'',''),('title_parallel',243,'title-parallel','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('title_collective',242,'title-collective','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('identifier_standard',239,'identifier-standard','ISBN & ISSN',0,'biblios',0,NULL,NULL,1,'',''),('author_name_conference',238,'author-name-conference','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('author_name_corporate',237,'author-name-corporate','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('author_name_personal',236,'author-name-personal','Personal name',0,'biblios',0,NULL,NULL,1,'',''),('map_scale',234,'map-scale','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('music_key',233,'music-key','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('title_other_variant',241,'title-other-variant','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('record_source',232,'record-source','Cataloguing agency',0,'biblios',0,NULL,NULL,1,'',''),('author_title',231,'author-title','Not mapped - userschoice',0,'biblios',0,NULL,NULL,0,'',''),('subject_heading_local',230,'local-subject-index','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('title_former',240,'title-former','Not mapped - userschoice',0,'biblios',0,'','',0,'',''),('conference_name',227,'conference-name','Conference name',0,'biblios',0,NULL,NULL,1,'',''),('corporate_name',226,'corporate-name','Corporate name',0,'biblios',0,NULL,NULL,1,'',''),('personal_name',225,'personal-name','Personal name',0,'biblios',0,NULL,NULL,0,'',''),('subject_subdivision_lc',224,'subject-subdivision','LC subject subdivision',0,'biblios',0,'','',1,'',''),('subject_heading_lc',223,'lc-subject-heading','LC subject heading',0,'biblios',0,NULL,NULL,1,'',''),('date_due',275,'date_due','Date due(YYYY-MM-DD)',1,'holdings',0,'952','4',1,'@attr 4=5',''),('borrowernumber',301,'borrowernumber','Borrowernumber item issued to',0,'holdings',0,'887','a',0,'',''),('date_added_db',280,'Date/time-added-to-db','Date biblio added(YYMMDD)',1,'biblios',0,'008','',0,'@attr 4=5',''),('biblionumber',306,'number-db','Biblionumber',0,'biblios',0,'001','',1,'',''),('auth_biblio_link_subf',318,'','Dummy field used to link authorities to biblios',0,'biblios',0,'000','9',0,'',''),('coverphoto',310,'','Book cover omage',0,'biblios',0,'956','u',0,'',''),('itemoverdue',314,'','Item overdue',0,'holdings',0,'952','5',1,'',''),('any',319,'any','Any field',0,'biblios',1,'','',1,'',''),('',321,'title','',0,'biblios',0,'630','a',0,'','Titles'),('',322,'subject-heading','',0,'biblios',0,'651','a',0,'','Places'),('',323,'author','',0,'biblios',0,'110','a',0,'','Authors'),('',324,'title-series','',0,'biblios',0,'440','a',0,'','Series'),('',325,'title-series','',0,'biblios',0,'490','a',0,'','Series');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `koha_attr` ENABLE KEYS */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
