@@ -434,9 +434,9 @@ my $Zconn;
 my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
 my $o = new ZOOM::Options();
 $o->option(async => 1);
-$o->option(preferredRecordSyntax => $syntax); ## Authorities use marc while biblioserver is xml
+$o->option(preferredRecordSyntax => $syntax); ## in case we use MARC
 $o->option(databaseName=>$context->{"config"}->{$server});
-#$o->option(proxy=>$context->{"config"}->{"proxy"});## if proxyserver provided will route searches to proxy
+
 my $o2= new ZOOM::Options();
 
  $Zconn=create ZOOM::Connection($o);
@@ -635,7 +635,7 @@ sub _new_marcfromkohafield
 {
 	my $dbh = C4::Context->dbh;
 	my $marcfromkohafield;
-	my $sth = $dbh->prepare("select marctokoha,tagfield,tagsubfield,recordtype from koha_attr where tagfield is not null  ");
+	my $sth = $dbh->prepare("select kohafield,tagfield,tagsubfield,recordtype from koha_attr where tagfield is not null  ");
 	$sth->execute;
 	while (my ($kohafield,$tagfield,$tagsubfield,$recordtype) = $sth->fetchrow) {
 		my $retval = {};
@@ -652,11 +652,11 @@ sub _new_attrfromkohafield
 {
 	my $dbh = C4::Context->dbh;
 	my $attrfromkohafield;
-	my $sth2 = $dbh->prepare("select marctokoha,attr from koha_attr" );
+	my $sth2 = $dbh->prepare("select kohafield,attr,extraattr from koha_attr" );
 	$sth2->execute;
-	while (my ($marctokoha,$attr) = $sth2->fetchrow) {
+	while (my ($kohafield,$attr,$extra) = $sth2->fetchrow) {
 		my $retval = {};
-		$attrfromkohafield->{$marctokoha} = $attr;
+		$attrfromkohafield->{$kohafield} = "\@attr 1=".$attr." ".$extra;
 	}
 	return $attrfromkohafield;
 }
@@ -832,6 +832,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.47  2006/09/27 19:53:52  tgarip1957
+# Finalizing main components. All koha modules are now working with the new XML API
+#
 # Revision 1.46  2006/09/06 16:21:03  tgarip1957
 # Clean up before final commits
 #

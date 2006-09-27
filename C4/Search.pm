@@ -22,7 +22,9 @@ use C4::Context;
 use C4::Reserves2;
 use C4::Biblio;
 use Date::Calc;
+use ZOOM;
 use Encode;
+
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
 use C4::Date;
@@ -60,11 +62,11 @@ ZEBRA databases.
 @EXPORT = qw(
  &barcodes   &ItemInfo &itemcount
  &getcoverPhoto &add_query_line
- &FindDuplicate   &ZEBRAsearch_kohafields &sqlsearch &cataloguing_search
+ &FindDuplicate   &ZEBRAsearch_kohafields &convertPQF &sqlsearch &cataloguing_search
 &getMARCnotes &getMARCsubjects &getMARCurls &parsefields);
 # make all your functions, whether exported or not;
 
-=item
+=head1
 ZEBRAsearchkohafields is the underlying API for searching zebra for KOHA internal use
 its kept similar to earlier version Koha Marc searches. instead of passing marc tags to the routine
 you pass named kohafields
@@ -72,7 +74,7 @@ So you give an array of @kohafieldnames,@values, what relation they have @relati
 you receive an array of XML records.
 The routine also has a flag $fordisplay and if it is set to 1 it will return the @results as an array of Perl hashes so that your previous
 search results templates do actually work.
-However more advanced search frontends will be available and this routine can serve as the connecting API for circulation and serials management
+This routine will also take CCL,CQL or PQF queries and pass them straight to the server
 See sub FindDuplicates for an example;
 =cut
 
@@ -80,17 +82,17 @@ See sub FindDuplicates for an example;
 
 
 sub ZEBRAsearch_kohafields{
-my ($kohafield,$value, $relation,$sort, $and_or, $fordisplay,$reorder,$startfrom,$number_of_results,$searchfrom)=@_;
+my ($kohafield,$value, $relation,$sort, $and_or, $fordisplay,$reorder,$startfrom,$number_of_results,$searchfrom,$searchtype)=@_;
 return (0,undef) unless (@$value[0]);
 my $server="biblioserver";
 my @results;
 my $attr;
 my $query;
 
-
 my $i;
+     unless($searchtype){
 	for ( $i=0; $i<=$#{$value}; $i++){
-	last if (@$value[$i] eq "");
+	next if (@$value[$i] eq "");
 
 	my $keyattr=MARCfind_attr_from_kohafield(@$kohafield[$i]) if (@$kohafield[$i]);
 	if (!$keyattr){$keyattr=" \@attr 1=any";}
@@ -100,39 +102,42 @@ my $i;
 	for (my $z= 0;$z<=$#{$and_or};$z++){
 	$query=@$and_or[$z]." ".$query if (@$value[$z+1] ne "");
 	}
-
+     }
 
 #warn $query;
+
 my @oConnection;
 ($oConnection[0])=C4::Context->Zconn($server);
-
-
-
-if ($reorder){
-my (@sortpart)=split /,/,$reorder;
-	if (@sortpart<2){
-	push @sortpart,1; ##
-	}
-my ($sortattr)=MARCfind_attr_from_kohafield($sortpart[0]);
-my @sortfield=split /@/,$sortattr; ## incase our $sortattr contains type modifiers
-	$query.=" \@attr 7=".$sortpart[1]." \@".$sortfield[1]." 0";## 
-	$query= "\@or ".$query;
+my @sortpart;
+if ($reorder ){
+ (@sortpart)=split /,/,$reorder;
 }elsif ($sort){
-my (@sortpart)=split /,/,$sort;
+ (@sortpart)=split /,/,$sort;
+}
+if (@sortpart){
+##sortpart is expected to contain the form "title i<" notation or "title,1" both mean the same thing
 	if (@sortpart<2){
-	push @sortpart,1; ## Ascending by default
+	push @sortpart," "; ##In case multisort variable is coming as a single query
 	}
-my ($sortattr)=MARCfind_attr_from_kohafield($sortpart[0]);
- my @sortfield=split /@/,$sortattr; ## incase our $sortattr contains type modifiers
-	$query.=" \@attr 7=".$sortpart[1]." \@".$sortfield[1]." 0";## fix to accept secondary sort as well
-	$query= "\@or ".$query;
+	if ($sortpart[1]==2){
+	$sortpart[1]=">i"; ##Descending
+	}elsif ($sortpart[1]==1){
+	$sortpart[1]="<i"; ##Ascending
+	}
 }else{
  unless($query=~/4=109/){ ###ranked sort not valid for numeric fields
 ##Use Ranked sort
 $query="\@attr 2=102 ".$query;
 }
 }
-#warn $query;
+
+if ($searchtype){
+$query=convertPQF($searchtype,$oConnection[0],$value);
+}else{
+$query=new ZOOM::Query::PQF($query);
+}
+goto EXITING unless $query;## erronous query coming in
+$query->sortby($sortpart[0]." ".$sortpart[1]) if @sortpart;
 my $oResult;
 
 my $tried=0;
@@ -140,7 +145,7 @@ my $tried=0;
 my $numresults;
 
 retry:
-$oResult= $oConnection[0]->search_pqf($query);
+$oResult= $oConnection[0]->search($query);
 my $i;
 my $event;
    while (($i = ZOOM::event(\@oConnection)) != 0) {
@@ -170,26 +175,56 @@ my $dbh=C4::Context->dbh;
 
 	$ri=$startfrom if $startfrom;
 		for ( $ri; $ri<$numresults ; $ri++){
+
 		my $xmlrecord=$oResult->record($ri)->raw();
 		$xmlrecord=Encode::decode("utf8",$xmlrecord);
 			 $xmlrecord=XML_xml2hash($xmlrecord);
 			$z++;
+
 			push @results,$xmlrecord;
 			last if ($number_of_results &&  $z>=$number_of_results);
 			
 	
 		}## for #numresults	
 			if ($fordisplay){
-			my (@parsed)=parsefields($dbh,$searchfrom,@results);
-			return ($numresults,@parsed)  ;
+			my ($facets,@parsed)=parsefields($dbh,$searchfrom,@results);
+			return ($numresults,$facets,@parsed)  ;
 			}
     }# if numresults
-
+EXITING:
 $oResult->destroy();
 $oConnection[0]->destroy();
 return ($numresults,@results)  ;
-#return (0,undef);
 }
+
+sub convertPQF{
+# Convert CCL, CQF or PQF to ZEBRA RPN queries,trap errors
+my ($search_type,$zconn,$query)=@_;
+
+my $pqf_query;
+if ($search_type eq "pqf"){
+eval{
+$pqf_query=new ZOOM::Query::PQF(@$query[0]);
+};
+}elsif ($search_type eq "ccl"){
+
+my $cclfile=C4::Context->config("ccl2rpn");
+$zconn->option(cclfile=>$cclfile);## CCL conversion file path
+eval{
+$pqf_query=new ZOOM::Query::CCL2RPN(@$query[0],$zconn);
+};
+}elsif ($search_type eq "cql"){
+eval{
+$pqf_query=new ZOOM::Query::CQL(@$query[0]);
+};
+}
+if ($@){
+$pqf_query=0;
+}
+
+return $pqf_query;
+}
+
 
 =item add_bold_fields
 After a search the searched keyword is <b>boldened</b> in the displayed search results if it exists in the title or author
@@ -201,11 +236,9 @@ sub add_html_bold_fields {
 		my $new_key; 
 		
 			$new_key = 'bold_' . $key;
-			$data->{$new_key} = $data->{$key};
-		
-	
+			$data->{$new_key} = $data->{$key};	
 		my $key1;
-		
+	
 			$key1 = $key;
 		
 
@@ -508,23 +541,27 @@ sub getMARCnotes {
         my ($dbh, $record, $marcflavour) = @_;
 
 	my ($mintag, $maxtag);
-	if ($marcflavour eq "MARC21") {
+	if (uc($marcflavour) eq uc"MARC21" || uc($marcflavour) eq "USMARC") {
 	        $mintag = "500";
 		$maxtag = "599";
 	} else {           # assume unimarc if not marc21
 		$mintag = "300";
 		$maxtag = "399";
 	}
-	my @marcnotes;
+	my @marcnotes=();
+	
 	foreach my $field ($mintag..$maxtag) {
-	my @value=XML_readline_asarray($record,"","",$field,"");
-	push @marcnotes, \@value;	
+	my %line;
+	my @values=XML_readline_asarray($record,"","",$field,"");
+	foreach my $value (@values){
+	$line{MARCNOTE}=$value if $value;
+	push @marcnotes,\%line if $line{MARCNOTE};	
+	}
 	}
 
-
-
 	my $marcnotesarray=\@marcnotes;
-	return $marcnotesarray;
+        return $marcnotesarray;
+	
 }  # end getMARCnotes
 
 
@@ -532,7 +569,7 @@ sub getMARCsubjects {
 
     my ($dbh, $record, $marcflavour) = @_;
 	my ($mintag, $maxtag);
-	if ($marcflavour eq "MARC21") {
+	if (uc($marcflavour) eq uc"MARC21" || uc($marcflavour) eq "USMARC") {
 	        $mintag = "600";
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
@@ -561,7 +598,7 @@ sub getMARCurls {
 ### This code is wrong only works with MARC21
     my ($dbh, $record, $marcflavour) = @_;
 	my ($mintag, $maxtag);
-	if ($marcflavour eq "MARC21") {
+	if (uc($marcflavour) eq uc"MARC21" || uc($marcflavour) eq "USMARC") {
 	        $mintag = "856";
 		$maxtag = "856";
 	} else {           # assume unimarc if not marc21
@@ -575,7 +612,7 @@ sub getMARCurls {
 	my $marcurl;
 	my $value;
 	foreach my $field ($mintag..$maxtag) {
-		my @value =XML_readline_asarray($record,"","",$field,"a");
+		my @value =XML_readline_asarray($record,"","",$field,"u");
 			foreach my $url (@value){
 				if ( $value ne $url) {
 		    	   	 $marcurl = {MARCURL => $url,};
@@ -623,8 +660,16 @@ my $shelfstatus = $dbh->prepare("select authorised_value from holdings_subfield_
 			}
 		}
 my $even=1;
+### FACETED RESULTS
+    my $facets_counter = ();
+    my $facets_info = ();
+   my @facets_loop; # stores the ref to array of hashes for template
+
 foreach my $xml(@marcrecords){
-#my $xml=XML_xml2hash($xmlrecord);
+
+	if (C4::Context->preference('useFacets')){
+	($facets_counter,$facets_info)=FillFacets($xml,$facets_counter,$facets_info);
+	}
 my @kohafields; ## just name those necessary for the result page
 push @kohafields, "biblionumber","title","author","publishercode","classification","itemtype","copyrightdate", "holdingbranch","date_due","location","shelf","itemcallnumber","notforloan","itemlost","wthdrawn";
 my ($oldbiblio,@itemrecords) = XMLmarc2koha($dbh,$xml,"",@kohafields);
@@ -713,8 +758,94 @@ my $norequests = 1;
 	push @results,$oldbiblio;
    
 }## For each record received
-	return(@results);
+@facets_loop=BuildFacets($facets_counter,$facets_info,%branches);
+
+	return(@facets_loop,@results);
 }
+
+sub FillFacets{
+my ($facet_record,$facets_counter,$facets_info)=@_;
+  my $facets = C4::Koha::getFacets(); 
+	for (my $k=0; $k<@$facets;$k++) {
+		my $tags=@$facets->[$k]->{tags};
+		my $subfields=@$facets->[$k]->{subfield};
+                        	my @fields;
+                        	      for (my $i=0; $i<@$tags;$i++) {
+			my $type="biblios";
+			$type="holdings" if @$facets->[$k]->{'link_value'} =~/branch/; ## if using other facets from items add them here
+			if ($type eq "holdings"){
+			###Read each item record
+			my $holdings=$facet_record->{holdings}->[0]->{record};
+				foreach my $holding(@$holdings){
+				my $data=XML_readline($holding,"","holdings",@$tags[$i],@$subfields[$i]);
+				$facets_counter->{ @$facets->[$k]->{'link_value'} }->{ $data }++ if $data;    
+				}
+			}else{
+			my $data=XML_readline($facet_record,"","biblios",@$tags[$i],@$subfields[$i]);
+			$facets_counter->{ @$facets->[$k]->{'link_value'} }->{ $data }++ if $data;                            	
+                        		}  
+		     }                   		
+                        	$facets_info->{ @$facets->[$k]->{'link_value'} }->{ 'label_value' } = @$facets->[$k]->{'label_value'};
+                        	$facets_info->{ @$facets->[$k]->{'link_value'} }->{ 'expanded' } = @$facets->[$k]->{'expanded'};
+            	}
+return ($facets_counter,$facets_info);
+}
+
+sub BuildFacets {
+my ($facets_counter, $facets_info,%branches) = @_;
+
+    my @facets_loop; # stores the ref to array of hashes for template
+# BUILD FACETS
+    foreach my $link_value ( sort { $facets_counter->{$b} <=> $facets_counter->{$a} } keys %$facets_counter) {
+        my $expandable;
+        my $number_of_facets;
+        my @this_facets_array;
+        foreach my $one_facet ( sort { $facets_counter->{ $link_value }->{$b} <=> $facets_counter->{ $link_value }->{$a} }  keys %{$facets_counter->{$link_value}} ) {
+            $number_of_facets++;
+            if (($number_of_facets < 11) ||  ($facets_info->{ $link_value }->{ 'expanded'})) {
+
+                # sanitize the link value ), ( will cause errors with CCL
+                my $facet_link_value = $one_facet;
+                $facet_link_value =~ s/(\(|\))/ /g;
+
+                # fix the length that will display in the label
+                my $facet_label_value = $one_facet;
+                $facet_label_value = substr($one_facet,0,20)."..." unless length($facet_label_value)<=20;
+                # well, if it's a branch, label by the name, not the code
+                if ($link_value =~/branch/) {
+                    $facet_label_value = $branches{$one_facet};
+                }
+
+                # but we're down with the whole label being in the link's title
+                my $facet_title_value = $one_facet;
+
+                push @this_facets_array ,
+                ( { facet_count => $facets_counter->{ $link_value }->{ $one_facet },
+                    facet_label_value => $facet_label_value,
+                    facet_title_value => $facet_title_value,
+                    facet_link_value => $facet_link_value,
+                    type_link_value => $link_value,
+                    },
+                );
+             }## if $number_of_facets
+        }##for $one_facet
+        unless ($facets_info->{ $link_value }->{ 'expanded'}) {
+            $expandable=1 if ($number_of_facets > 10);
+        }
+        push @facets_loop,(
+         { type_link_value => $link_value,
+            type_id => $link_value."_id",
+            type_label  => $facets_info->{ $link_value }->{ 'label_value' },
+            facets => \@this_facets_array,
+            expandable => $expandable,
+            expand => $link_value,
+            },
+        );	
+       
+ }
+return \@facets_loop;
+}
+
 
 sub getcoverPhoto {
 ## return the address of a cover image if defined otherwise the amazon cover images

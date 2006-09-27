@@ -171,19 +171,19 @@ sub CalcFine {
   # the first thing the patron gets is a second notice, but that's a
   # week after the server crash, so people may not connect the two
   # events.
-  if ($difference >= $data->{'firstremind'}){
+  if ($difference > $data->{'firstremind'}){
     # Yes. Set the fine as listed.
     $amount=$data->{'fine'}* $difference;
     $printout="First Notice";
   }
 
   # Is it time to send out a second reminder?
-#  my $second=$data->{'firstremind'}+$data->{'chargeperiod'};
-#  if ($difference == $second){
+  my $second=$data->{'firstremind'}+$data->{'chargeperiod'};
+  if ($difference == $second){
 #    # Yes. The fine is double.
 #    $amount=$data->{'fine'}*2;
-#    $printout="Second Notice";
-#  }
+    $printout="Second Notice";
+  }
 
   # Is it time to send the account to a collection agency?
   # FIXME - At least, I *think* that's what this code is doing.
@@ -252,8 +252,8 @@ sub UpdateFine {
       my $out=$data->{'amountoutstanding'}+$diff;
       my $sth2=$dbh->prepare("update accountlines set date=now(), amount=?,
       amountoutstanding=?,accounttype='FU' where
-      accountno=?");
-      $sth2->execute($amount,$out,$data->{'accountno'});
+      accountid=?");
+      $sth2->execute($amount,$out,$data->{'accountid'});
       $sth2->finish;
    } else {
       print "no update needed $data->{'amount'} \n";

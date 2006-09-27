@@ -56,7 +56,7 @@ Koha.pm provides many functions for Koha scripts.
             &getframeworks &getframeworkinfo
             &getauthtypes &getauthtype
             &getallthemes &getalllanguages
-            &getallbranches &getletters
+            &GetallBranches &getletters
             &getbranchname
                         getnbpages
                         getitemtypeimagedir
@@ -67,6 +67,8 @@ Koha.pm provides many functions for Koha scripts.
                         get_branchinfos_of
                         get_notforloan_label_of
                         get_infos_of
+                        &getFacets
+			
             $DEBUG);
 
 use vars qw();
@@ -173,61 +175,26 @@ sub getbranchname {
 
 =head2 getallbranches
 
-  $branches = &getallbranches();
+  @branches = &GetallBranches();
   returns informations about ALL branches.
   Create a branch selector with the following code
   IndependantBranches Insensitive...
   
-=head3 in PERL SCRIPT
-
-my $branches = getallbranches;
-my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-    my $selected = 1 if $thisbranch eq $branch;
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
-}
-
-
-=head3 in TEMPLATE  
-            <select name="branch">
-                <option value="">Default</option>
-            <!-- TMPL_LOOP name="branchloop" -->
-                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
-            <!-- /TMPL_LOOP -->
-            </select>
 
 =cut
 
 
-sub getallbranches {
-# returns a reference to a hash of references to ALL branches...
-    my %branches;
+sub GetallBranches {
+# returns an array to ALL branches...
+    my @branches;
     my $dbh = C4::Context->dbh;
     my $sth;
        $sth = $dbh->prepare("Select * from branches order by branchname");
     $sth->execute;
     while (my $branch=$sth->fetchrow_hashref) {
-        my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
-        $nsth->execute($branch->{'branchcode'});
-        while (my ($cat) = $nsth->fetchrow_array) {
-            # FIXME - This seems wrong. It ought to be
-            # $branch->{categorycodes}{$cat} = 1;
-            # otherwise, there's a namespace collision if there's a
-            # category with the same name as a field in the 'branches'
-            # table (i.e., don't create a category called "issuing").
-            # In addition, the current structure doesn't really allow
-            # you to list the categories that a branch belongs to:
-            # you'd have to list keys %$branch, and remove those keys
-            # that aren't fields in the "branches" table.
-            $branch->{$cat} = 1;
-            }
-            $branches{$branch->{'branchcode'}}=$branch;
+        push @branches,$branch;
     }
-    return (\%branches);
+    return (@branches);
 }
 
 =head2 getletters
@@ -945,6 +912,31 @@ sub get_infos_of {
 
     return \%infos_of;
 }
+sub getFacets {
+###Subfields is an array as well although MARC21 has them all in "a" in case UNIMARC has differing subfields
+my $dbh=C4::Context->dbh;
+my @facets;
+my $sth=$dbh->prepare("SELECT  facets_label,attr FROM koha_attr  where (facets_label<>'' ) group by facets_label");
+my $sth2=$dbh->prepare("SELECT * FROM koha_attr where facets_label=?");
+$sth->execute();
+while (my ($label,$attr)=$sth->fetchrow){
+ $sth2->execute($label);
+my (@tags,@subfield);
+	while (my $data=$sth2->fetchrow_hashref){
+	push @tags,$data->{tagfield} ;
+	push @subfield,$data->{tagsubfield} ;
+	}
+   	 my $facet =  {
+      	 link_value =>"kohafield=$attr",
+        	label_value =>$label,
+        	tags => \@tags,
+        	subfield =>\@subfield,
+        	} ;
+	 push @facets,$facet;
+}
+  return \@facets;
+}
+
 
 1;
 __END__

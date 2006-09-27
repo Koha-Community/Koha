@@ -85,8 +85,8 @@ Also deals with stocktaking.
 	&fixdate 
 	&itemissues 
 	&patronflags
-	 get_current_return_date_of
-                get_transfert_infos
+	 &get_current_return_date_of
+                &get_transfert_infos
 		&checktransferts
 		&GetReservesForBranch
 		&GetReservesToBranch
@@ -1730,7 +1730,7 @@ sub renewstatus {
 	my $renewokay; ##
 	# Look in the issues table for this item, lent to this borrower,
 	# and not yet returned.
-my $borrower=getpatroninformation($dbh,$bornum,undef);
+my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
 	if (C4::Context->preference("LibraryName") eq "NEU Grand Library"){
 		## faculty members and privileged get renewal whatever the case may be
 		if ($borrower->{'categorycode'} eq 'F' ||$borrower->{'categorycode'} eq 'P'){

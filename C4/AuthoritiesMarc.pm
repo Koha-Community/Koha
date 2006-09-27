@@ -121,7 +121,7 @@ my $counter = $offset;
 $length=10 unless $length;
 my @oAuth;
 my $i;
- $oAuth[0]=C4::Context->Zconn("authorityserver",1,1);
+ $oAuth[0]=C4::Context->Zconnauth("authorityserver");
 my ($mainentry)=MARCfind_attr_from_kohafield("mainentry");
 my ($allentry)=MARCfind_attr_from_kohafield("allentry");
 
@@ -316,15 +316,23 @@ sub AUTHaddauthority {
 		$sth->execute;
 		($authid)=$sth->fetchrow;
 		$authid=$authid+1;
-	}	
+		XML_writeline($record,"authid",$authid,"authorities");
+		XML_writeline($record,"authtypecode",$authtypecode,"authorities");
+		my $xml=XML_hash2xml($record);
+		$dbh->do("lock tables auth_header WRITE");
+		 $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marcxml) values (?,now(),?,?)");
+		$sth->execute($authid,$authtypecode,$xml);		
+		$sth->finish;
+	}else	
 
-##Modified record may also come here use REPLACE -- bulk import comes here
-XML_writeline($record,"authid",$authid,"authorities");
-XML_writeline($record,"authtypecode",$authtypecode,"authorities");
-my $xml=XML_hash2xml($record);
-	my $sth=$dbh->prepare("REPLACE auth_header set marcxml=?,  authid=?,authtypecode=?,datecreated=now()");
-	$sth->execute($xml,$authid,$authtypecode);
+##Modified record may also come here use UPDATE -- bulk import comes here
+	XML_writeline($record,"authid",$authid,"authorities");
+	XML_writeline($record,"authtypecode",$authtypecode,"authorities");
+	my $xml=XML_hash2xml($record);
+	my $sth=$dbh->prepare("UPDATE  auth_header set marcxml=?,authtypecode=? where  authid=?");
+	$sth->execute($xml,$authtypecode,$authid);
 	$sth->finish;	
+	}
 	ZEBRAop($dbh,$authid,'specialUpdate',"authorityserver");
 ## If the record is linked to another update the linked authorities with new authid
 my @linkids=XML_readline_asarray($record,"linkid","authorities");
@@ -738,7 +746,7 @@ $oConnection[0]->destroy();
 		if ($update==1){
 		my $biblionumber=XML_readline_onerecord($xmlhash,"biblionumber","biblios");
 		my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
-		ModBiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
+		NEWmodbiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
 		}
 		
      }#foreach $xmlhash

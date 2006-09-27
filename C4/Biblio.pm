@@ -436,7 +436,7 @@ if ($related_record eq "biblios" || $related_record eq "" || !$related_record){
 			
 		}
 	}else{
-	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where  recordtype like 'biblios' and tagfield is not null" );
+	my $sth2=$dbh->prepare("SELECT  kohafield from koha_attr where  recordtype like 'biblios' and tagfield is not null" );
 	$sth2->execute();
 	my $field;
 		while ($field=$sth2->fetchrow) {
@@ -479,7 +479,7 @@ my $itemresult;
 	    push @items, $itemresult;
 	   }
 	}else{
-	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where recordtype like 'holdings' and tagfield is not null" );
+	my $sth2=$dbh->prepare("SELECT  kohafield from koha_attr where recordtype like 'holdings' and tagfield is not null" );
 	   foreach my $holding (@$holdings){	
 	   $sth2->execute();
 	    my $field;
@@ -510,7 +510,7 @@ sub XMLmarc2koha_onerecord {
 			$result->{$field}=$val if $val;			
 		}
 	}else{
-	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where  recordtype like ? and tagfield is not null" );
+	my $sth2=$dbh->prepare("SELECT  kohafield from koha_attr where  recordtype like ? and tagfield is not null" );
 	$sth2->execute($related_record);
 	my $field;
 		while ($field=$sth2->fetchrow) {
@@ -572,7 +572,7 @@ my ($titletag,$titlesubf)=MARCfind_marc_from_kohafield("title","biblios");
 my $xml="<record><leader>     naa a22     7ar4500</leader><controlfield tag='xxx'></controlfield><datafield ind1='' ind2='' tag='$titletag'></datafield></record>";
 ## Now build XML
 	my $record = XML_xml2hash($xml);
-	my $sth2=$dbh->prepare("SELECT  marctokoha from koha_attr where tagfield is not null and recordtype=?");
+	my $sth2=$dbh->prepare("SELECT  kohafield from koha_attr where tagfield is not null and recordtype=?");
 	$sth2->execute($recordtype);
 	my $field;
 	while (($field)=$sth2->fetchrow) {
@@ -913,7 +913,6 @@ NEWmoditem ( $dbh, $xmlhash, $biblionumber, $itemnumber);
    
 ##Add biblionumber to $record
 $xmlhash=XML_writeline($xmlhash,"biblionumber",$biblionumber,"holdings");
-#    MARCkoha2marcOnefield($record,"biblionumber",$biblionumber,"holdings");
  my $sth=$dbh->prepare("select notforloan from itemtypes where itemtype='$itemtype'");
 $sth->execute();
 my $notforloan=$sth->fetchrow;
@@ -1381,7 +1380,7 @@ sub getitemtypes {
 
 sub getkohafields{
 #returns MySQL like fieldnames to emulate searches on sql like fieldnames
-my $type=@_;
+my $type=shift;
 ## Either opac or intranet to select appropriate fields
 ## Assumes intranet
 $type="intra" unless $type;
@@ -1390,7 +1389,7 @@ my $dbh   = C4::Context->dbh;
   my $i=0;
 my @results;
 $type=$type."show";
-my $sth=$dbh->prepare("SELECT  * FROM koha_attr  where $type=1 order by liblibrarian");
+my $sth=$dbh->prepare("SELECT  * FROM koha_attr  where $type=1 order by label");
 $sth->execute();
 while (my $data=$sth->fetchrow_hashref){
 	$results[$i]=$data;
