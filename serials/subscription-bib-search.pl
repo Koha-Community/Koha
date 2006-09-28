@@ -56,7 +56,7 @@ if ($op eq "do_search") {
 	$resultsperpage = 9 if(!defined $resultsperpage);
 	# builds tag and subfield arrays
 	
-	my ($total,@results) = ZEBRAsearch_kohafields(\@kohafield,\@value,\@relation,$order,\@and_or,1,"",$startfrom,$resultsperpage,"intranet");
+	my ($total,$facets,@results) = ZEBRAsearch_kohafields(\@kohafield,\@value,\@relation,$order,\@and_or,1,"",$startfrom,$resultsperpage,"intranet");
  										
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "serials/result.tmpl",
