@@ -189,7 +189,6 @@ my $xmlhash=XMLkoha2marc($dbh,$biblio,"biblios");
 $biblionumber = NEWnewbiblio($dbh,$xmlhash,"");
 
             ModStatus( $suggestionid, 'ORDERED', '', $biblionumber,$input );
-warn "modstatus";
         }
     }## biblio didnot exist now created
 
@@ -222,5 +221,5 @@ else {
 #    $biblionumber = $input->param('biblionumber');
     DelOrder( $biblionumber, $ordnum,$loggedinuser );
 }
-warn "goingout";
+
 print $input->redirect("basket.pl?basketno=$basketno");

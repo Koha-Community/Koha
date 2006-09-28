@@ -148,7 +148,7 @@ foreach (@$suggestions_loop) {
 			push @value, $_->{publishercode};
 		}
 	
-		my ($nbresult,@finalresult) = ZEBRAsearch_kohafields(\@kohafields,\@value,\@relation,"",\@and_or,0,"",0,1);
+		my ($nbresult,$facets,@finalresult) = ZEBRAsearch_kohafields(\@kohafields,\@value,\@relation,"",\@and_or,0,"",0,1);
 
 		# there is at least 1 result => return the 1st one
 		if ($nbresult) {
