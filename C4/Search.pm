@@ -93,11 +93,11 @@ my $i;
      unless($searchtype){
 	for ( $i=0; $i<=$#{$value}; $i++){
 	next if (@$value[$i] eq "");
-
 	my $keyattr=MARCfind_attr_from_kohafield(@$kohafield[$i]) if (@$kohafield[$i]);
 	if (!$keyattr){$keyattr=" \@attr 1=any";}
 	@$value[$i]=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)/ /g;
-	$query.=@$relation[$i]." ".$keyattr." \"".@$value[$i]."\" " if @$value[$i];
+	my $weighted=weightRank(@$kohafield[$i],@$value[$i],$i) unless($sort || $reorder);
+	$query.=$weighted.@$relation[$i]." ".$keyattr." \"".@$value[$i]."\" " if @$value[$i];
 	}
 	for (my $z= 0;$z<=$#{$and_or};$z++){
 	$query=@$and_or[$z]." ".$query if (@$value[$z+1] ne "");
@@ -124,11 +124,6 @@ if (@sortpart){
 	}elsif ($sortpart[1]==1){
 	$sortpart[1]="<i"; ##Ascending
 	}
-}else{
- unless($query=~/4=109/){ ###ranked sort not valid for numeric fields
-##Use Ranked sort
-$query="\@attr 2=102 ".$query;
-}
 }
 
 if ($searchtype){
@@ -191,16 +186,36 @@ my $dbh=C4::Context->dbh;
 			return ($numresults,$facets,@parsed)  ;
 			}
     }# if numresults
-EXITING:
+
 $oResult->destroy();
 $oConnection[0]->destroy();
+EXITING:
 return ($numresults,@results)  ;
 }
 
+sub weightRank {
+my ($kohafield,$value,$i)=@_;
+### If a multi query is received weighting is reduced from 1st query being highest rank to last query being lowest;
+my $weighted;
+my $weight=1000 -($i*100);
+$weight=100 if $weight==0;
+	return "" if $value eq "";
+	my $keyattr=MARCfind_attr_from_kohafield($kohafield) if ($kohafield);
+	return "" if($keyattr=~/4=109/ || $keyattr=~/4=4/ || $keyattr=~/4=5/); ###ranked sort not valid for numeric fields
+	my $fullfield; ### not all indexes are Complete-field. Use only for title||author
+	if ($kohafield eq "title" || $kohafield eq "" || $kohafield eq "any"){
+	$keyattr=" \@attr 1=title-cover";
+ 	$fullfield="\@attr 6=3 ";
+	}elsif ($kohafield eq "author"){
+	$fullfield="\@attr 6=3 ";
+	}
+	$weighted.="\@attr 2=102 ".$keyattr." \@attr 3=1 $fullfield  \@attr 9=$weight \"".$value."\" " ;
+      $weighted=" \@or ".$weighted;
+  return $weighted;
+}
 sub convertPQF{
 # Convert CCL, CQF or PQF to ZEBRA RPN queries,trap errors
 my ($search_type,$zconn,$query)=@_;
-
 my $pqf_query;
 if ($search_type eq "pqf"){
 eval{

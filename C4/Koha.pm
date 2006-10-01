@@ -916,18 +916,18 @@ sub getFacets {
 ###Subfields is an array as well although MARC21 has them all in "a" in case UNIMARC has differing subfields
 my $dbh=C4::Context->dbh;
 my @facets;
-my $sth=$dbh->prepare("SELECT  facets_label,attr FROM koha_attr  where (facets_label<>'' ) group by facets_label");
-my $sth2=$dbh->prepare("SELECT * FROM koha_attr where facets_label=?");
+my $sth=$dbh->prepare("SELECT  facets_label,kohafield FROM facets  where (facets_label<>'' ) group by facets_label");
+my $sth2=$dbh->prepare("SELECT * FROM facets where facets_label=?");
 $sth->execute();
-while (my ($label,$attr)=$sth->fetchrow){
+while (my ($label,$kohafield)=$sth->fetchrow){
  $sth2->execute($label);
 my (@tags,@subfield);
 	while (my $data=$sth2->fetchrow_hashref){
 	push @tags,$data->{tagfield} ;
-	push @subfield,$data->{tagsubfield} ;
+	push @subfield,$data->{subfield} ;
 	}
    	 my $facet =  {
-      	 link_value =>"kohafield=$attr",
+      	 link_value =>"kohafield=$kohafield",
         	label_value =>$label,
         	tags => \@tags,
         	subfield =>\@subfield,

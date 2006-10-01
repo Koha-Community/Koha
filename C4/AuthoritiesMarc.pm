@@ -121,7 +121,7 @@ my $counter = $offset;
 $length=10 unless $length;
 my @oAuth;
 my $i;
- $oAuth[0]=C4::Context->Zconn("authorityserver",1,1);
+ $oAuth[0]=C4::Context->Zconnauth("authorityserver");
 my ($mainentry)=MARCfind_attr_from_kohafield("mainentry");
 my ($allentry)=MARCfind_attr_from_kohafield("allentry");
 
@@ -738,7 +738,7 @@ $oConnection[0]->destroy();
 		if ($update==1){
 		my $biblionumber=XML_readline_onerecord($xmlhash,"biblionumber","biblios");
 		my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
-		ModBiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
+		NEWmodbiblio($dbh,$biblionumber,$xmlhash,$frameworkcode) ;
 		}
 		
      }#foreach $xmlhash
@@ -811,7 +811,7 @@ my ($xml,$kohafield,$recordtype,$tag,$subf)=@_;
 #$xml represents one record of MARCXML as perlhashed 
 ## returns an array of read fields--useful for reading repeated fields
 ### $recordtype is needed for mapping the correct field if supplied
-### If only $tag is give reads the whole tag
+### If only $tag is given reads the whole tag
 ###Returns subfieldcodes as well
 my @value;
  ($tag,$subf)=MARCfind_marc_from_kohafield($kohafield,$recordtype) if $kohafield;

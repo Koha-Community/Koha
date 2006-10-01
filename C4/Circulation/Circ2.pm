@@ -237,20 +237,21 @@ sub listitemsforinventory {
 	my @relations;
 	my $sort;
 	my @and_or;
+	my $facets;
 	if ($datelastseen){
 		push @kohafields, "classification","datelastseen";
 		push @values,$minlocation,$datelastseen;
 		push @relations,"\@attr 5=1  \@attr 6=3 \@attr 4=1 ","\@attr 2=1 ";
 		push @and_or,"\@and";
 		$sort="lcsort";
-		($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations,$sort,\@and_or,0,"",$offset,$size);
+		($count,$facets,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations,$sort,\@and_or,0,"",$offset,$size);
 	}else{
 	push @kohafields, "classification";
 		push @values,$minlocation;
 		push @relations,"\@attr 5=1  \@attr 6=3 \@attr 4=1 ";
 		push @and_or,"";
 		$sort="lcsort";
-		($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations,$sort,\@and_or,0,"",$offset,$size);
+		($count,$facets,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations,$sort,\@and_or,0,"",$offset,$size);
 	}
 	
 	return @results;

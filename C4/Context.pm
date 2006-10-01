@@ -652,11 +652,11 @@ sub _new_attrfromkohafield
 {
 	my $dbh = C4::Context->dbh;
 	my $attrfromkohafield;
-	my $sth2 = $dbh->prepare("select kohafield,attr,extraattr from koha_attr" );
+	my $sth2 = $dbh->prepare("select kohafield,attr from koha_attr" );
 	$sth2->execute;
-	while (my ($kohafield,$attr,$extra) = $sth2->fetchrow) {
+	while (my ($kohafield,$attr) = $sth2->fetchrow) {
 		my $retval = {};
-		$attrfromkohafield->{$kohafield} = "\@attr 1=".$attr." ".$extra;
+		$attrfromkohafield->{$kohafield} = $attr;
 	}
 	return $attrfromkohafield;
 }
@@ -832,6 +832,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.48  2006/10/01 21:48:54  tgarip1957
+# Field weighting applied to ranked searches. A new facets table in mysql db
+#
 # Revision 1.47  2006/09/27 19:53:52  tgarip1957
 # Finalizing main components. All koha modules are now working with the new XML API
 #

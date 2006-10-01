@@ -96,20 +96,22 @@ my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
 			$oldbiblio->{issn} = substr($oldbiblio->{issn},0,10);
 			# search if biblio exists
 			my $biblioitemnumber;
+			my $facets;
 		    if ( !$z3950random){
 			if ($oldbiblio->{isbn}) {
 			push @kohafields,"isbn";
 			push @values,$oldbiblio->{isbn};
 			push @relations,"";
 			push @and_or,"";
-			($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
+			
+			($count,$facets,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
 			} else {
 			push @kohafields,"issn";
 			push @values,$oldbiblio->{issn};
 			push @relations,"";
 			push @and_or,"";
 			$sort="";
-			($count,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
+			($count,$facets,@results)=ZEBRAsearch_kohafields(\@kohafields,\@values,\@relations);
 			}
 	    	     }
 			if ($count>0 && !$z3950random) {
