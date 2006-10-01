@@ -21,7 +21,7 @@ use strict;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT);
-#use Data::Dumper;
+use Data::Dumper;
 use PDF::Reuse;
 
 
@@ -41,7 +41,8 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 @EXPORT = qw(
   	&get_label_options &get_label_items
   	&build_circ_barcode &draw_boundaries
-	&drawbox
+	&drawbox &GetActiveLabelTemplate
+	&GetAllLabelTemplates
 );
 
 =item get_label_options;
@@ -62,6 +63,35 @@ sub get_label_options {
     $sth->finish;
     return $conf_data;
 }
+
+
+sub GetActiveLabelTemplate  {
+    my $dbh    = C4::Context->dbh;
+    my $query = " SELECT * FROM labels_templates where active = 1 limit 1";
+    my $sth    = $dbh->prepare($query);
+    $sth->execute();
+    my $active_tmpl = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $active_tmpl;
+}
+
+sub GetAllLabelTemplates  {
+  my $dbh = C4::Context->dbh;
+    # get the actual items to be printed.
+    my @data;
+    my $query = " Select * from labels_templates ";
+    my $sth    = $dbh->prepare($query);
+    $sth->execute();
+    my @resultsloop;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @resultsloop, $data );
+    }
+    $sth->finish;
+
+#warn Dumper @resultsloop;
+    return @resultsloop;
+}
+
 
 =item get_label_items;
 
@@ -124,12 +154,12 @@ sub build_circ_barcode {
 
     if ( $barcodetype eq 'EAN13' ) {
 
-        #testing EAN13 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 12 );
+        # testing EAN13 barcodes hack
+        # $value = $value . '000000000';
+        # $value =~ s/-//;
+        # $value = substr( $value, 0, 12 );
+        # warn $value;
 
-        #warn $value;
         eval {
             PDF::Reuse::Barcode::EAN13(
                 x     => ( $x_pos_circ + 27 ),
@@ -180,13 +210,12 @@ sub build_circ_barcode {
     elsif ( $barcodetype eq 'Matrix2of5' ) {
 
         #warn "MATRIX ELSE:";
-
         #testing MATRIX25  barcodes hack
         #    $value = $value.'000000000';
         $value =~ s/-//;
 
-        #    $value = substr( $value, 0, 12 );
-        #warn $value;
+        # $value = substr( $value, 0, 12 );
+        # warn $value;
 
         eval {
             PDF::Reuse::Barcode::Matrix2of5(
@@ -211,12 +240,11 @@ sub build_circ_barcode {
 
     elsif ( $barcodetype eq 'EAN8' ) {
 
-        #testing ean8 barcodes hack
-        $value = $value . '000000000';
-        $value =~ s/-//;
-        $value = substr( $value, 0, 8 );
-
-        #warn $value;
+        # testing ean8 barcodes hack
+        # $value = $value . '000000000';
+        # $value =~ s/-//;
+        # $value = substr( $value, 0, 8 );
+        # warn $value;
 
         #warn "EAN8 ELSEIF";
         eval {
