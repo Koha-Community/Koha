@@ -23,6 +23,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Biblio;
+use CGI;
 use vars qw($VERSION @ISA @EXPORT);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
@@ -915,9 +916,12 @@ sub get_infos_of {
 sub getFacets {
 ###Subfields is an array as well although MARC21 has them all in "a" in case UNIMARC has differing subfields
 my $dbh=C4::Context->dbh;
+my $query=new CGI;
+my $lang=$query->cookie('KohaOpacLanguage');
+$lang="en" unless $lang;
 my @facets;
-my $sth=$dbh->prepare("SELECT  facets_label,kohafield FROM facets  where (facets_label<>'' ) group by facets_label");
-my $sth2=$dbh->prepare("SELECT * FROM facets where facets_label=?");
+my $sth=$dbh->prepare("SELECT  facets_label_$lang,kohafield FROM facets  where (facets_label_$lang<>'' ) group by facets_label_$lang");
+my $sth2=$dbh->prepare("SELECT * FROM facets where facets_label_$lang=?");
 $sth->execute();
 while (my ($label,$kohafield)=$sth->fetchrow){
  $sth2->execute($label);
