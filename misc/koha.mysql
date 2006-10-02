@@ -899,8 +899,6 @@ CREATE TABLE `koha_attr` (
   `tagfield` varchar(3) default NULL,
   `tagsubfield` char(1) default NULL,
   `intrashow` tinyint(1) unsigned zerofill NOT NULL default '0',
-  `extraattr` varchar(245) NOT NULL default '',
-  `facets_label` varchar(45) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `marctokoha` USING BTREE (`kohafield`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
