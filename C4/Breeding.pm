@@ -75,10 +75,12 @@ where isbn=? and title=?");
 		my @warnings = $marcrecord->warnings();
 		if (scalar($marcrecord->fields()) == 0) {
 			$notmarcrecord++;
+            print "===================NOT MARCRECORD================";
 		} else {
+            print "MARCRECORD";
 			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
-			$oldbiblio->{title} = char_decode($oldbiblio->{title},$encoding);
-			$oldbiblio->{author} = char_decode($oldbiblio->{author},$encoding);
+#  			$oldbiblio->{title} = char_decode($oldbiblio->{title},$encoding) ;#if (C4::Context->preference("TemplateEncoding") eq "iso-8859-1");
+#  			$oldbiblio->{author} = char_decode($oldbiblio->{author},$encoding);# if (C4::Context->preference("TemplateEncoding") eq "iso-8859-1");
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
 			# drop every "special" char : spaces, - ...
 			$oldbiblio->{isbn} =~ s/ |-|\.//g,
@@ -87,13 +89,13 @@ where isbn=? and title=?");
 			$oldbiblio->{issn} = substr($oldbiblio->{issn},0,10);
 			# search if biblio exists
 			my $biblioitemnumber;
-			if ($oldbiblio->{isbn}) {
-				$searchisbn->execute($oldbiblio->{isbn});
-				($biblioitemnumber) = $searchisbn->fetchrow;
-			} else {
-				$searchissn->execute($oldbiblio->{issn});
-				($biblioitemnumber) = $searchissn->fetchrow;
-			}
+# 			if ($oldbiblio->{isbn}) {
+# 				$searchisbn->execute($oldbiblio->{isbn});
+# 				($biblioitemnumber) = $searchisbn->fetchrow;
+# 			} else {
+# 				$searchissn->execute($oldbiblio->{issn});
+# 				($biblioitemnumber) = $searchissn->fetchrow;
+# 			}
 			if ($biblioitemnumber) {
 				$alreadyindb++;
 			} else {

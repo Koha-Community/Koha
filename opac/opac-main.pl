@@ -63,6 +63,26 @@ my $languages_count = @options;
 if($languages_count > 1){
 		$template->param(languages => \@options);
 }
+if (C4::Context->preference("SearchMyLibraryFirst")){
+  if (C4::Context->userenv){
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches = getallbranches();
+	my @branchloop;
+	foreach my $thisbranch (keys %$branches) {
+        warn "branch".C4::Context->userenv->{branch}. 'mabranche : '.$thisbranch." egalite :".($thisbranch eq C4::Context->userenv->{branch});
+        my %row =('value' => $thisbranch,
+                                'branchname' => $branches->{$thisbranch}->{'branchname'},
+                        );
+        $row{'selected'} = 1 if ($thisbranch eq C4::Context->userenv->{branch});
+        push @branchloop, \%row;
+	}
+    $template->param("mylibraryfirst"=>1,"branchloop"=>\@branchloop);
+  } else {
+    $template->param("mylibraryfirst"=>0)
+   }
+}
 $template->param(itemtypeloop => \@itemtypeloop,
 				branchloop=>\@branchloop,
 				suggestion => C4::Context->preference("suggestion"),

@@ -47,7 +47,21 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="contains" />
-				Quick search : <input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
+				Quick search : <input type="text" size="27" name="value" tabindex="1" /> 
+            <!--TMPL_IF Name="mylibraryfirst"-->
+				<br />in Branch
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+                <select name="value">
+                    <option value="">Any Branch</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
+            <!-- /TMPL_IF -->
+                <input type="submit" value="OK" class="button" /><br />
 			</p>
 			<p>
 				<a href="/cgi-bin/koha/opac-search.pl" class="button">Advanced Search, More Options	</a>
