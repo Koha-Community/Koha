@@ -67,13 +67,13 @@ if ($op eq 'save') {
 			my $data=$input->param($key);
 			my ($issuelength,$maxissueqty)=split(',',$data);
 # 			if ($maxissueqty >0) {
-				$sth_search->execute($br,$bor,$cat);
-				my $res = $sth_search->fetchrow_hashref();
-				if ($res->{total}) {
-					$sth_Iupdate->execute($maxissueqty,$issuelength,$br,$bor,$cat);
-				} else {
-					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength);
-				}
+			$sth_search->execute($br,$bor,$cat);
+			my $res = $sth_search->fetchrow_hashref();
+			if ($res->{total}) {
+				$sth_Iupdate->execute($maxissueqty,$issuelength,$br,$bor,$cat);
+			} else {
+				$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength);
+			}
 # 			} else {
 # 				$sth_Idelete->execute($br,$bor,$cat);
 # 			}
@@ -155,14 +155,14 @@ foreach my $data (@itemtypes) {
 		$sth2->execute($branch,$trow3[$i],$$data->{'itemtype'});
 		my $dat=$sth2->fetchrow_hashref;
 		$sth2->finish;
-		my $fine=$dat->{'fine'}+0;
-		my $maxissueqty = $dat->{'maxissueqty'}+0;
-		my $issuelength = $dat->{'issuelength'}+0;
+		my $fine=$dat->{'fine'};
+		my $maxissueqty = $dat->{'maxissueqty'};
+		my $issuelength = $dat->{'issuelength'};
 		my $finesvalue;
-		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine+$dat->{'firstremind'}+$dat->{'chargeperiod'}>0;
+		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" unless ($dat->{'fine'} eq undef);
 		my $issuingvalue;
 # 		if ($maxissueqty>0) {
-		    $issuingvalue = "$issuelength,$maxissueqty" if $issuelength+$maxissueqty>0;
+		    $issuingvalue = "$issuelength,$maxissueqty" unless ($dat->{'maxissueqty'} eq undef or $dat->{'maxissueqty'} eq undef);
 # 		}
 # 		else {		
 # 		    $issuingvalue = "$issuelength, 5";
