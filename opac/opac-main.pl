@@ -9,6 +9,7 @@ use C4::Interface::CGI::Output;
 use C4::BookShelves;
 use C4::Koha;
 use C4::Members;
+use C4::Acquisition;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -25,19 +26,6 @@ while (my ($value,$lib) = $sth->fetchrow_array) {
 }
 $sth->finish;
 
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches = getallbranches();
-my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
-        my %row =(value => $thisbranch,
-                                selected => $selected,
-                                branchname => $branches->{$thisbranch}->{'branchname'},
-                        );
-        push @branchloop, \%row;
-}
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-main.tmpl",
@@ -63,25 +51,44 @@ my $languages_count = @options;
 if($languages_count > 1){
 		$template->param(languages => \@options);
 }
+my @branchloop;
 if (C4::Context->preference("SearchMyLibraryFirst")){
   if (C4::Context->userenv){
+		my @oldbranches;
+	my @oldselect_branch;
+	my %oldselect_branches;
+	my ($oldcount2,@oldbranches)=branches();
+	push @oldselect_branch, "";
+	$oldselect_branches{''} = "";
+	for (my $i=0;$i<$oldcount2;$i++){
+		push @oldselect_branch, $oldbranches[$i]->{'branchcode'};#
+		$oldselect_branches{$oldbranches[$i]->{'branchcode'}} = $oldbranches[$i]->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+				-values   => \@oldselect_branch,
+				-labels   => \%oldselect_branches,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
+
 	my @branches;
 	my @select_branch;
 	my %select_branches;
 	my $branches = getallbranches();
-	my @branchloop;
+	
 	foreach my $thisbranch (keys %$branches) {
-        warn "branch".C4::Context->userenv->{branch}. 'mabranche : '.$thisbranch." egalite :".($thisbranch eq C4::Context->userenv->{branch});
-        my %row =('value' => $thisbranch,
-                                'branchname' => $branches->{$thisbranch}->{'branchname'},
+        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
+        warn $thisbranch;
+        warn C4::Context->userenv;
+        warn C4::Context->userenv->{branch};
+        warn " => ".C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch});
+        my %row =(value => $thisbranch,
+                                selected => $selected,
+                                branchname => $branches->{$thisbranch}->{'branchname'},
                         );
-        $row{'selected'} = C4::Context->userenv->{branch} if ($thisbranch eq C4::Context->userenv->{branch});
-        foreach (keys %row){
-            warn "$_ : $row{$_}";
-        }
         push @branchloop, \%row;
 	}
-    $template->param("mylibraryfirst"=>1,"branchloop"=>\@branchloop);
+    $template->param("mylibraryfirst"=>1);
   } else {
     $template->param("mylibraryfirst"=>0)
    }
