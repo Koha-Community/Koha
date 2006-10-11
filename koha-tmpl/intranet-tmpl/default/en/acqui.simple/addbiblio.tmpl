@@ -317,13 +317,9 @@ function cloneSubfield(index) {
     NumTabIndex = parseInt(original.getAttribute('tabindex'));
     if(isNaN(NumTabIndex)) NumTabIndex = 0;
     clone.setAttribute('tabindex',NumTabIndex+1);
-
-    var ButtonPlus;
+    
     var CloneButtonPlus;
     try{
-        ButtonPlus = original.getElementsByTagName('a')[0];  // getting the '<a href=...>+</a>
-        ButtonPlus.parentNode.removeChild(ButtonPlus);  // removing the '+' button
-
         CloneButtonPlus = clone.getElementsByTagName('a')[0];
         CloneButtonPlus.setAttribute('onclick',"cloneSubfield('" + index + index + "')");
     }
