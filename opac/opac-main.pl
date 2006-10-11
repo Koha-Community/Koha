@@ -75,7 +75,10 @@ if (C4::Context->preference("SearchMyLibraryFirst")){
         my %row =('value' => $thisbranch,
                                 'branchname' => $branches->{$thisbranch}->{'branchname'},
                         );
-        $row{'selected'} = 1 if ($thisbranch eq C4::Context->userenv->{branch});
+        $row{'selected'} = C4::Context->userenv->{branch} if ($thisbranch eq C4::Context->userenv->{branch});
+        foreach (keys %row){
+            warn "$_ : $row{$_}";
+        }
         push @branchloop, \%row;
 	}
     $template->param("mylibraryfirst"=>1,"branchloop"=>\@branchloop);
