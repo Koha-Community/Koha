@@ -231,6 +231,8 @@ while ($i < $count2){
 	$i++;
 }
 
+my $previous =  $offset-$dispnum if($dispnum>1); #for multipage gestion
+
 $offset=$num+$offset;
 $template->param(	bookselname => $booksellers[0]->{'name'},
 								booksellerid => $booksellerid,
@@ -241,6 +243,7 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								dispnum => $dispnum,
 								offsetover => ($offset < $count ),
 								num => $num,
+								previous => $previous,
 								offset => $offset,
 								type =>  $type,
 								title => $title,
