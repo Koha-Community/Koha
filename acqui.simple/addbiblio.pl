@@ -573,7 +573,7 @@ if ($op eq "addbiblio") {
 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 	}
 	for (my $i=1;$i<=$cntrepeatfield;$i++){
-        my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
+        my $field = MARC::Field->new("$addedfield",'','',"$tagaddfield_subfield" => "");
         $record->append_fields($field);
     }
 	build_tabs ($template, $record, $dbh,$encoding);
