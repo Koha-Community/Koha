@@ -1107,7 +1107,6 @@ sub MARChtml2xml {
 		$prevtag = @$tags[$i];
 	}
 	$xml.= MARC::File::XML::footer();
-	#warn $xml;
 	return $xml;
 }
 sub MARChtml2marc {
@@ -3017,6 +3016,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.62  2006/10/13 08:34:21  tipaul
+# removing warn
+#
 # Revision 1.115.2.61  2006/09/13 14:30:31  tipaul
 # oups...
 # homebranch & holdingbranch modifications where just in an improper {} : should be done everytime (not only when item is lost)
