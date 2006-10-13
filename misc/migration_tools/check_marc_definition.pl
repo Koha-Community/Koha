@@ -47,7 +47,7 @@ my $sth2 = $dbh->prepare("select tab,liblibrarian,kohafield from marc_subfield_s
 if ($all) {
 	print "framework|tag|subfield|value|used|tab\n";
 }
-my $sth3 = $dbh->prepare("update marc_subfield_structure set tab=1 where frameworkcode=? and tagfield=? and tagsubfield=?");
+my $sth3 = $dbh->prepare("update marc_subfield_structure set tab=0 where frameworkcode=? and tagfield=? and tagsubfield=?");
 while (my ($total,$tag,$subfield,$frameworkcode) = $sth->fetchrow) {
 	$sth2->execute($tag,$subfield,$frameworkcode);
 	$tags{$frameworkcode." / ".$tag." / ".$subfield} ++;
@@ -57,10 +57,12 @@ while (my ($total,$tag,$subfield,$frameworkcode) = $sth->fetchrow) {
 	} else {
 		if ($tab eq -1 && $kohafield ne "biblio.biblionumber" && $kohafield ne "biblioitems.biblioitemnumber" && $kohafield ne "items.itemnumber") {
 			print "Tab ignore for framework $frameworkcode, $tag\$$subfield - $liblibrarian (used $total times)\n";
-			$sth3->execute($frameworkcode,$tag,$subfield) if $autoactivate && tab eq -1;
-			
 		}
 	}
+	if ($autoactivate && $total>0 && $kohafield ne "biblio.biblionumber" && $kohafield ne "biblioitems.biblioitemnumber" && !($kohafield=~/^items/)) {
+	   $sth3->execute($frameworkcode,$tag,$subfield);
+	   print "auto activate $frameworkcode $tag $subfield ($kohafield)\n";
+    }
 }
 
 $sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield from marc_subfield_structure where tab<>-1 order by frameworkcode,tagfield,tagsubfield");
@@ -70,8 +72,10 @@ print "===================\n";
 my $sth2 = $dbh->prepare("update marc_subfield_structure set tab=-1 where frameworkcode=? and tagfield=? and tagsubfield=?");
 while (my ($frameworkcode,$tag,$subfield) = $sth->fetchrow) {
 	print "$tag, $subfield in framework $frameworkcode is active, but never filled" unless $tags{$frameworkcode." / ".$tag." / ".$subfield};
-	print "... auto cleaned" if $autoclean;
-	print "\n" unless $tags{$frameworkcode." / ".$tag." / ".$subfield};
-	$sth2->execute($frameworkcode,$tag,$subfield) if $autoclean;
+	unless ($tags{$frameworkcode." / ".$tag." / ".$subfield}) {
+        print "... auto cleaned" if $autoclean;
+        print "\n";
+        $sth2->execute($frameworkcode,$tag,$subfield) if $autoclean;
+    }
 }
 print "Done\n";
