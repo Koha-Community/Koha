@@ -475,6 +475,7 @@ $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;
 my $encoding="";
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
+#warn "REC : ".$record->as_formatted;
 ($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
 
 $is_a_modif=0;
@@ -576,6 +577,7 @@ if ($op eq "addbiblio") {
         my $field = MARC::Field->new("$addedfield",'','',"$tagaddfield_subfield" => "");
         $record->append_fields($field);
     }
+    #warn "result : ".$record->as_formatted;
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
