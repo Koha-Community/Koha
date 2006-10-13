@@ -143,13 +143,16 @@
 		<!-- TMPL_IF NAME="NOTMARC" -->
 			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button catalogue">Add New Biblio</a>
 		<!-- TMPL_ELSE -->
+		<p>
+		<form action="addbiblio.pl" method="post">
 			<select name="frameworkcode">
 				<option value="">Default</option>
 				<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
 					<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 				<!-- /TMPL_LOOP -->
 			</select>
-			<a href="addbiblio.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button catalogue">Add New Biblio</a>
+			<input type="submit" value="Create Empty biblio" class="button catalogue">
+		</form>
 		<!-- /TMPL_IF -->
 		</p>
 	</div>
