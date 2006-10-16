@@ -16,6 +16,7 @@
 <div class="tabbed">
 		<input type="hidden" name="op" value="addbiblio" />
 		<input type="hidden" name="addfield_field" />
+		<input type="hidden" name="repeat_field" />
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 		<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="oldbiblionumber" -->" />
 		<!-- TMPL_IF name="bibid" -->
@@ -67,7 +68,7 @@
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" name="repeat_field" value="" size="2" onchange="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" value="" size="2" onchange="javascript:AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="subfield_loop" -->
@@ -315,6 +316,7 @@ function openAuth(tagid,authtype,X) {
 function AddField(field,cntrepeatfield) {
 	document.forms['f'].op.value = "addfield";
 	document.forms['f'].addfield_field.value=field;
+	document.forms['f'].repeat_field.value=cntrepeatfield;
 	document.f.submit();
 }
 
@@ -329,13 +331,9 @@ function cloneSubfield(index) {
     if(isNaN(NumTabIndex)) NumTabIndex = 0;
     clone.setAttribute('tabindex',NumTabIndex+1);
 
-    var ButtonPlus;
     var CloneButtonPlus;
     try{
-        ButtonPlus = original.getElementsByTagName('a')[0];  // getting the '<a href=...>+</a>
-        ButtonPlus.parentNode.removeChild(ButtonPlus);  // removing the '+' button
-
-        CloneButtonPlus = clone.getElementsByTagName('a')[0];
+		CloneButtonPlus = clone.getElementsByTagName('a')[0];
         CloneButtonPlus.setAttribute('onclick',"cloneSubfield('" + index + index + "')");
     }
     catch(e){

@@ -66,9 +66,13 @@
 <!-- /TMPL_LOOP -->
 
 </table>
-
+	<!-- TMPL_IF name="previous" -->
+	<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="previous" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
+	&lt; Previous
+	</a>
+	<!-- /TMPL_IF -->
 <!-- TMPL_IF name="offsetover" -->
-<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">Next</a>
+<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">Next &gt;</a>
 <!-- /TMPL_IF -->
 </div>
 
