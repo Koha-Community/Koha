@@ -1,0 +1,99 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="bull">Випуски для передплати</h1>
+	<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Назад до передплат</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Назад до бібліотечного запису</a> <a class="button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=full">Повний вигляд</a>
+
+	<!-- TMPL_LOOP name="subscription_LOOP" -->
+	<div id="bloc25">
+		<h2 class="bull">Інформація про передплату для <!-- TMPL_VAR name="bibliotitle" --></h2>
+		<p>Це почалося зі <b><!-- TMPL_VAR name="histstartdate" --></b> та випускається кожен <b>
+		<!--TMPL_IF name="periodicity1" -->
+				день
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				тиждень
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				2 тижні
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				3 тижні
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				місяць
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				2 місяці
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				3 місяці
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				квартал
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2 квартали
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				рік
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				2 роки
+		<!-- /TMPL_IF -->
+		</b>
+		<!--TMPL_IF name="arrival1" -->
+			на <b>понеділок</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+			на <b>вівторок</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+			на <b>середа</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+			на <b>четвер</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+			на <b>п'ятниця</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+			на <b>субота</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+			на <b>неділя</b>
+		<!-- /TMPL_IF -->
+		для <b>
+			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> випусків<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> тижні<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> місяці<!-- /TMPL_IF -->
+			</b>
+		</p>
+		<p>Останнє відновлення передплати було <b><!-- TMPl_VAR name="startdate" --></b></p>
+		<!-- TMPL_IF name="enddate" --><p><b>Передплата ця зараз не ведеться. Останній випуск був отриманий <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF name="enddate" -->
+	<!--TMPL_UNLESS Name=fullinfo -->
+		<p><!-- TMPL_VAR name="notes" --></p>
+		<!-- TMPL_IF name="opacnote" -->
+			<h3 class="bull">Звіт про випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="opacnote" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="recievedlist" -->
+			<h3 class="bull">Отримані випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="recievedlist" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="missinglist" -->
+			<h3 class="bull">Відсутні випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="missinglist" -->
+			</p>
+		<!-- /TMPL_IF -->
+	</div>
+	<!-- /TMPL_UNLESS -->
+<!-- /TMPL_LOOP -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

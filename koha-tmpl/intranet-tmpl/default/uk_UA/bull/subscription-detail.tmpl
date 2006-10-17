@@ -1,0 +1,194 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="bull">Передплата</h1>
+<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Modify subscription">Редагування</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="Recieve issues">Отримання</a> <a href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="All issues on this title">Хронологія випусків</a> <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Передплати</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Назад до бібліотечного запису</a> <a href="javascript:confirm_deletion()" class="button bull"> видалити </a>
+<form method="post" name="f">
+<div id="bloc25">
+	<h2 class="bull">Інформація про передплату</h2>
+		<p>Особа бібліотекаря: </td><td> <!-- TMPL_VAR name="librarian" --></p>
+		<p><label>Постачальник  </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label>Вартість </label><!-- TMPL_VAR name="cost" --></p>
+		<p><label>Витрати </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label>Бібліотечний запис </label><i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label>Нотатки: </label><!-- TMPL_VAR name="notes" --></p>
+</div>
+<div id="bloc25">
+	<h2 class="bull">Планування</h2>
+	<p><label class="label100">Дата початку: </label> <!-- TMPL_VAR name="startdate" --></p>
+	<p><label class="label100">Частота (*): </label>
+		<!--TMPL_IF name="periodicity1" -->
+				1/день
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				1/тиждень
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				1/2 тижні
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				1/3 тижня
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				1/місяць
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				1/2 місяці (6/рік)
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				1/квартал
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				1/квартал
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2/рік
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				1/рік
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				1/2 роки
+		<!-- /TMPL_IF -->
+	</p>
+	<p><label class="label100">Прибуває у: </label>
+		<!--TMPL_IF name="arrival1" -->
+			Понеділок
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Вівторок
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Середа
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Четвер
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				П'ятниця
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Субота
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Неділя
+		<!-- /TMPL_IF -->
+</div>
+<div id="bloc25">
+	<h2 class="bull">Тривалість передплати</h2>
+	<p><label class="label100">Число випусків </label><!-- TMPL_VAR name="numberlength" --></p>
+	<p><label class="label100">Число тижнів </label><!-- TMPL_VAR name="weeklength" --></p>
+	<p><label class="label100">Число місяців </label><!-- TMPL_VAR name="monthlength" --></p>
+
+</div>
+<div id="bloc25">
+	<h2 class="bull">Обчислення нумерації</h2>
+	<p>
+		<p>Формула нумерування: <!-- TMPL_VAR name="numberingmethod" --></p>
+		<table class="small" width="20%">
+			<tr>
+				<th class="bull">&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			</tr>
+			<tr>
+				<td class="bull">Додати</td>
+				<td>
+					<!-- TMPL_VAR name="add1" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add2" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add3" -->
+				</td>
+			</tr>
+			<tr>
+				<td class="bull">раз в </td>
+				<td><!-- TMPL_VAR name="every1" --></td>
+				<td><!-- TMPL_VAR name="every2" --></td>
+				<td><!-- TMPL_VAR name="every3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">Стартовий період</td>
+				<td><!-- TMPL_IF name="innerloop1" --><!-- TMPL_VAR name="innerloop1" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF name="innerloop2" --><!-- TMPL_VAR name="innerloop2" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF name="innerloop3" --><!-- TMPL_VAR name="innerloop3" --><!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
+				<td class="bull">Коли більш ніж </td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">Встановити назад до: </td>
+				<td><!-- TMPL_VAR name="setto1" --></td>
+				<td><!-- TMPL_VAR name="setto2" --></td>
+				<td><!-- TMPL_VAR name="setto3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">
+						Останнє значення
+				</td>
+				<td><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+			</tr>
+		</table>
+</div>
+<div id="bloc25">
+	<h2 class="bull">Serial issues</h2>
+	<table class="small">
+	<tr>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Номер випуску&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Планована дата&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Статус&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Примітка&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR name="serialseq" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR name="planneddate" -->
+			</td>
+			<td>
+					<!--TMPL_IF name="status1" -->
+						Чекають
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						Прибувають
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						Затримка
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						Відсутнє
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+			<td>
+				<!-- TMPL_VAR name="notes" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+<script>
+function _(s) { return s } // dummy function for gettext
+function confirm_deletion() {
+	<!-- TMPL_IF name="totalissues" -->
+		var is_confirmed = confirm(_('Ви вже зробили <!-- TMPL_VAR name="totalissues"--> отримань. Чи підтверджуєте видалення?'));
+	<!-- TMPL_ELSE -->
+		var is_confirmed = confirm(_('Чи ви бсправді хочете видалити цю передлату?'));
+	<!-- /TMPL_IF -->	
+	if (is_confirmed) {
+		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
+	}
+}
+</script>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

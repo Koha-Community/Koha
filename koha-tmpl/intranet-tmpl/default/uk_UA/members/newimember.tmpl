@@ -1,0 +1,180 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- TMPL_IF NAME="missingloop" -->
+	<!-- TMPL_VAR NAME="string" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME="invalid" -->
+		Недійсний номер квитка.<p>
+	<!-- TMPL_ELSE -->
+	<h1> Підтвердіть запис </h1>
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> НОВИЙ ВІДВІДУВАЧ </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Найменування </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="institution_name" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> ПОДРОБИЦІ ПРО ВІДВІДУВАЧА </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Номер відвідувача </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornum" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Номер квитка</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="cardnumber_institution" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Приєднання підрозділу</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="branchcode" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>АДРЕСА ВІДВІДУВАЧА</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Поштова адреса</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="postal" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Домашня адреса</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="home" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПОДРОБИЦІ ДЛЯ КОНТАКТУ З ВІДВІДУВАЧЕМ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Телефон (домашній)</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Телефон (денний час)</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phoneday" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Факс</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Електронічна пошта</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign="top" bgcolor="white" >
+                        <td>
+                                <b>Текстове повідомлення</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="textmessaging" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПОДРОБИЦІ АЛЬТЕРНАТИВНОГО КОНТАКТУ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Найменування </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="contactname" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Телефон</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altphone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Взаємовідношення</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Нотатки </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altnotes" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПРИМІТКИ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Загальні примітки</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornotes" -->
+			</td>
+		</tr>
+		</table><p>
+		Допустимі значення. Клацніть 'Гаразд' для підтвердження цього нового позичальника
+		<form action="/cgi-bin/koha/members/insertidata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" name="submit" value="Гаразд">
+		</form>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

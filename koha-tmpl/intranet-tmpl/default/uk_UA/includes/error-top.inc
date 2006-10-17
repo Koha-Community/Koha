@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<title>КОХА: ІНТЕРФЕЙС БІБЛІОТЕКАРЯ: Каталог</title>
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
+
+<script language="JavaScript">
+<!-- Hide from old browsers
+function openWindow(targeturl, windowname) {
+newwin =
+window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
+}
+// end hiding -->
+</script>
+
+<script language="JavaScript" type="text/javascript">
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<style type="text/css">
+.catalogue {
+	background-color:#ad11ad;
+	color:#FFFFFF;
+	background-image:none;
+	text-decoration: normal;
+	}
+a.catalogue:hover {
+	background-color: #ad11ad;
+	color: #FFFFFF;
+	text-decoration: none;
+	}
+</style>
+</head>
+
+<body>
+<!-- MENUS -->
+<div id="menubar">
+	<span class="koha">КОХА</span>
+	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Коха</a></span>
+	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Надходження</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Каталог</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Обіг</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Відвідувачі</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Авторитетні джерела</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Звіти</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Параметри</a> <a class="about" href="/cgi-bin/koha/about.pl">Про систему</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Допомога</a>
+</div>
+<div id="submenu">
+	<span class="koha">можливості &gt;&gt;&nbsp;&nbsp;</span>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">пошук</a> <a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Віртуальні полиці</a> <a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Додати бібліотечний запис</a> <a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Обслуговування каталогу</a>
+</div>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align="left">Зайдено у систему як: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Вихід</a>]</p>
+<!-- TMPL_ELSE -->
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Реєструватися</a> у Коха</p>
+<!-- /TMPL_IF -->

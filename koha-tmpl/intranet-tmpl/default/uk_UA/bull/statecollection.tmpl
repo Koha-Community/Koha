@@ -1,0 +1,224 @@
+
+<!-- TMPL_INCLUDE name="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="bull">Передплата для <!-- TMPL_VAR name="bibliotitle" --></h1>
+<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="detail of the subscription">Передплата</a> <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Передплати</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Назад до бібліотечного запису</a>
+
+<div id="bloc25">
+<h2 class="bull">waited or late issues</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="serialchangestatus">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	<table class="small">
+	<tr>
+		<th class="bull">
+			Пронумеровано
+		</th>
+		<th class="bull">
+			Опубліковано: 
+		</th>
+		<th class="bull">
+			планується для
+		</th>
+		<th class="bull">
+			Стан
+		</th>
+		<th class="bull">
+			Нотатки 
+		</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				Випуск <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="40" maxlength="100">
+			</td>
+			<td>
+				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
+				<select name="status" size="1">
+					<!--TMPL_IF name="status1" -->
+						<option value="1" selected>Чекають</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						<option value="2" selected>Прибувають</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Прибувають</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						<option value="3" selected>Затримка</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Затримка</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						<option value="4" selected>Відсутнє</option>
+					<!-- TMPL_ELSE -->
+						<option value="4">Відсутнє</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status5" -->
+						<option value="5" selected>Не опубліковано</option>
+					<!-- TMPL_ELSE -->
+						<option value="5">Не опубліковано</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status6" -->
+						<option value="6" selected>Видалити</option>
+					<!-- TMPL_ELSE -->
+						<option value="6">Видалити</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+			<td>
+				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
+			</td>
+		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+            <td>
+				Штрих-код <input type="text" name="barcode" value="" size=20 maxlength=20> Шифр для замовлення <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+            </td>
+			</td>
+            &nbsp;
+			<td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Підрозділ</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemstatus"-->
+					<select name="itemstatus" size="1">
+						<option value="">Стан одиниці</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Розташування</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
+		<tr>
+			<td>
+				Ручний випуск <input type="text" name="serialseq" size=30 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="publisheddate" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="text" name="planneddate" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="0">
+				<select name="status" size="1">
+						<option value="2">Прибувають</option>
+						<option value="3" selected>Затримка</option>
+						<option value="4">Відсутнє</option>
+				</select>
+			</td>
+		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+            <td>
+				Штрих-код <input type="text" name="barcode" value="" size=20 maxlength=20> Шифр для замовлення <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+			</td>
+			<td>
+				&nbsp;
+            </td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Підрозділ</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemstatus"-->
+					<select name="itemstatus" size="1">
+						<option value="">Стан одиниці</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Розташування</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
+	<!-- /TMPL_UNLESS -->
+	</table>
+	<input type="submit" value="Зберегти зміни" accesskey="w" class="button bull">
+	<!-- TMPL_IF name="hassubscriptionexpired" -->
+		<p>Передплата закінчилася. Статус очікування останнього випуску не може бути змінено.  <a href="#" onClick="popup()" class="button bull">Відновіть</a> Вашу передплату</p>
+	<!-- /TMPL_IF -->
+	</form>
+</div>
+
+<div id="bloc25">
+	<h2 class="bull">Короткий звіт про передплату</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Бібліотекар</label><!-- TMPL_VAR name="user" --></p>
+		<p><label class="label100">Дата початку (*) </label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
+		<p><label class="label100">Кінцева дата </label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>Отримані випуски</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Відсутні випуски</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Записка для електронічного каталогу</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<input type="submit" value="Зберегти зміни" class="button bull">
+	</form>
+</div>
+
+</table>
+<script language="JavaScript" type="text/javascript">
+
+function popup()
+{
+	 window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid">","subscription renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE name="bull-bottom.inc" -->

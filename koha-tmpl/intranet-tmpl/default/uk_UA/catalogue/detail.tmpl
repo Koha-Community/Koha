@@ -1,0 +1,157 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+<div id="mainbloc">
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
+	<div class="bibliomenu">
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Редагувати бібліотечний запис </a> <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue"> Дублювати </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Редагувати одиницю зберігання </a> <a href="javascript:confirm_deletion()" class="button catalogue"> Видалити </a> <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Повністю </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Нормальний </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати на полицю </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Друкувати </a>
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Передплата(и)
+		</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="norequests" -->
+		<!-- TMPL_ELSE -->
+			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Запит</a>
+		<!-- /TMPL_IF -->
+	</div>
+	<div id="bloc25">
+	<table class="small">
+		<!-- BIBLIO RECORD TABLE -->
+		<tr>
+			<th class="catalogue">
+				<!-- TMPL_VAR NAME="title" --> (запис <!-- TMPL_VAR NAME="biblionumber" -->)
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<!-- TMPL_IF name="subtitles" -->
+					<p><label class="label100"><b>Підзаголов(ок/ки): </b> </label>
+					<!-- TMPL_LOOP name="subtitles" -->
+						<!-- TMPL_VAR NAME="subtitle" --> ; 
+					<!-- /TMPL_LOOP -->
+					</p>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="author" --><p><label class="label100"><b>Автор: </b> </label><!-- TMPL_VAR NAME="author" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="additional" --><p><label class="label100"><b>Додатковий автор: </b></label><!-- TMPL_VAR NAME="additional" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="illus" --><p><label class="label100"><b>Ілюстр.:</b></label><!-- TMPL_VAR name="illus" --></p><!-- /TMPL_IF -->
+				<p>
+					<!-- TMPL_IF name="publishercode" --><label class="label100"><b>Опубліковано :</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
+				</p>
+				<!-- TMPL_IF name="publicationyear" --><p><label class="label100"><b>у </b></label><!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+				<p>
+					<label class="label100">&nbsp;</label><!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+					<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
+				</p>
+				<!-- TMPL_IF name="isbn" --><p><label class="label100"><b>ISBN: </b> </label><!-- TMPL_VAR NAME="isbn" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="issn" --><p><label class="label100"><b>ISSN: </b> </label><!-- TMPL_VAR NAME="issn" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="seriestitle" --><p><label class="label100"><b>Зібрання:</b> </label><!-- TMPL_VAR NAME="seriestitle" --> <!-- TMPL_IF name="volume" -->том <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF --><!-- TMPL_VAR name="volumedesc" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="MARCSUBJCTS" -->
+					<p><label class="label100"><b>Теми: </b></label></p>
+					<p>
+						<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+							<label class="label100">-</label><a href="/cgi-bin/koha/search.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
+								<!-- TMPL_VAR NAME="marcsubjct" -->
+							</a><br>
+						<!-- /TMPL_LOOP -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_IF name="subjects" --><p><label class="label100"><b>Тематик(а/и): </b> </label></p>
+						<!-- TMPL_LOOP name="subjects" -->
+							<p><a href="/cgi-bin/koha/search.marc/search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->&type=intranet"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="copyrightdate" --><p><label class="label100"><b>Рік: </b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="MARCNOTES" -->
+					<p><label class="label100"><b>Нотатки: </b> </label></p>
+					<p>
+						<!-- TMPL_LOOP NAME="MARCNOTES" -->
+							<p>- <!-- TMPL_VAR NAME="marcnote" --></p>
+						<!-- /TMPL_LOOP -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_IF name="notes" --><p><label class="label100"><b>Нотатки: </b> </label><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="unititle" --><p><label class="label100"><b>Альтернативний заголовок: </b> </label><!-- TMPL_VAR NAME="unititle" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="classification" --><p><label class="label100"><b>класифікація:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dewey" --><p><label class="label100"><b>Індекс Дьюї (ДДК): </b></label><!-- TMPL_VAR name="dewey" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="URLS" -->
+					<p><label class="label100"><b>URL:</b> </label>
+						<!-- TMPL_LOOP name="URLS" -->
+							<a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
+						<!-- /TMPL_LOOP -->
+					</p>
+				<!-- /TMPL_IF -->
+				<p><label class="label100"><b>Тип одиниці зберігання:  </b></label>
+					<!-- TMPL_IF name="description" -->
+						<!-- TMPL_VAR name="description" -->
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR NAME="itemtype" -->
+					<!-- /TMPL_IF -->
+				</p>
+				<!-- TMPL_IF name="count" -->
+					<p><b>Загальна кількість одиниць:</b> <!-- TMPL_VAR NAME="count" --></p>
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+	</table>
+	</div>
+<!-- /TMPL_LOOP -->
+<div id="bloc25">
+	<h2 class="catalogue">Одиниці</h2>
+	<table>
+		<tr>
+			<th class="catalogue">Тип одиниці зберігання</th>
+			<th class="catalogue">Розташування</th>
+			<th class="catalogue">Стан</th>
+			<th class="catalogue">Дата повернення</th>
+			<th class="catalogue">Востаннє побачено</th>
+			<th class="catalogue">Штрих-код</th>
+			<th class="catalogue">Том</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="description" --></td>
+				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+				<td>
+					<!-- TMPL_IF name="borrowernumber" -->
+						На видачі до <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+						    <!-- TMPL_IF name="itemlost"-->
+						        Втрачена одиниця
+						    <!-- TMPL_ELSE -->
+							<!-- TMPL_IF NAME="wthdrawn" -->Одиниця скасована<!-- TMPL_ELSE -->Доступно<!-- /TMPL_IF -->
+						    <!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				</td>
+				<td><!-- TMPL_VAR NAME="datedue" -->
+				<!-- TMPL_IF name="reservestatus" -->Reserve <!-- TMPL_VAR name="reservestatus" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+				<!-- TMPL_IF NAME="type" -->
+					<td>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Фіксувати тип одиниці</a>
+					</td>
+				<!-- /TMPL_IF -->
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<script language="javascript" type="text/javascript">
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	if (is_confirmed) {
+		window.location="acqui.simple/addbiblio.pl?op=delete&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->";
+	}
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

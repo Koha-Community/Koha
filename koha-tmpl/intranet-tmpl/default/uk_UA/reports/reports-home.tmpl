@@ -1,0 +1,46 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<!-- ------------------------MAIN BODY OF PAGE------------------------ -->
+<div id="mainbloc">
+
+
+<h1 class="reports">Звіти</h1>
+<div id="bloc25">
+	<h2 class="reports">Майстри статистики</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Надходження</a></li>
+		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Позичальники</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Каталог</a></li>
+		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Обіг</a></li>
+	</ul>
+</div>
+<div id="bloc25">
+	<h2 class="reports">Верхні місця</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Найбільш активні позичальники</a></li>
+		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Найбіль видавані од.зб.</a></li>
+	</ul>
+	<h2 class="reports">Аутсайдери</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Позичальники без видач</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Не видані одиниці</a></li>
+	</ul>
+</div>
+<div id="bloc25">
+	<h2 class="reports">Інша статистика</h2>
+	<p>по каталогу</p>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/inventory.pl">Наявні фонди/Інвентаризація</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Каталог за типами одиниць збереження</a></li>
+	</ul>
+	<p>по видачах</p>
+	<ul>
+		<li><a href="/cgi-bin/koha/stats.pl?time=yesterday">До погодження:</a> щоденний звіт (вчора)</li>
+		<li><a href="/cgi-bin/koha/stats.pl?time=today">До погодження:</a> щоденний звіт (сьогодні)</li>
+		<li><a href="/cgi-bin/koha/overdue.pl">Прострочені одиниці збереження</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Видачі за категоріями позичальників</a></li>
+		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Середній час позики</a></li>
+	</ul>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+

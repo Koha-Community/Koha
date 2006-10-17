@@ -1,0 +1,20 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+<div id="mainbloc">
+	<h1 class="member">Самостійний кредит</h1>
+	<form action="/cgi-bin/koha/mancredit.pl" method="post">
+		<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+		<p><label class="label100">Номер позичальника</label><!-- TMPL_VAR NAME="bornum" --></p>
+		<p><label class="label100">Тип </label>
+			<select name="type">
+				<option value="C">Кредит</option>
+				<option value="BAY">Регулювання Baycorp</option>
+				<option value="WORK">Оброблено</option>
+			</select>
+		</p>
+		<p><label class="label100">Номер од.зб. </label><input type="text" name="itemnum"></p>
+		<p><label class="label100">Опис </label><input type="text" name="desc" size="50"></p>
+		<p><label class="label100">Кількість </label><input type="text" name="amount"></p>
+		<p><input type="submit" name="add" value="Додати" class="button"></p>
+	</form>
+</div>
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

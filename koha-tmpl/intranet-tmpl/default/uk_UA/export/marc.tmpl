@@ -1,0 +1,26 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+<h1>Експорт біблографічних записів у МАРК</h1>
+	<div id="bloc25">
+		<h2 class="parameters">Вибір бібліотечних записів для експорту</h2>
+		<form method="post">
+			<p>починаючи з номера бібліотечного запису: <input type="text" name="start_bib"> аж по номер: <input type="text" name="end_bib"></p>
+			<p>Тип документу: <!--TMPL_VAR Name="CGIitemtype"--></p>
+			<p>Підрозділ:   <select name="branch">
+			<option value="">По умовчанню</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+</p>
+			<p>від шифру для замовлення одиниці: <input type="text" name="start_callnumber">  до шифру для замовлення одиниці: <input type="text" name="end_callnumber"></p>
+			<p>Обмежитися першими <input type="text" name="limit"> бібліотечними записами</p>
+			<p>Note : the items are exported by this tool</p>
+			<input type="hidden" name="op" value="export">
+			<input type="submit" value="Експортувати" class="button">
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

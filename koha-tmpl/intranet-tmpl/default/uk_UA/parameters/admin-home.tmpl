@@ -1,0 +1,139 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF name="CAN_user_management" -->
+<h1>Параметри</h1><br>
+<!-- /TMPL_IF -->
+
+<div id="bloc100">
+<!-- TMPL_IF name="CAN_user_management" -->
+	<div id="bloctitle">Системні параметри </div>
+
+	<table>
+	<tr>
+	<td colspan="2"><b>Заповнюйте ці таблиці у порядку як вони появляються і отримаєте працюючу Коха</b></td>
+	</tr>
+	<!-- TMPL_IF name="CAN_user_parameters" -->	
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Підрозділи бібліотеки</a></td>
+			<td>Різноманітні підрозділи, якими Ви управляєте з допомогою цього сервера Коха.</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF name="CAN_user_management" -->
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Фонди одиниць зберігання</a></td>
+			<td>Керування фондами одиниць збереження. Не забудьте утворити Ваші фонди од.зб. до того, як почнете встановлювати витрати.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl">Грошові одиниці</a></td>
+			<td>Визначення обмінних курсів.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/itemtypes.pl">Типи одиниць зберігання</a></td>
+			<td>Визначення типів одиниць збереження.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">Категорії позичальників</a></td>
+			<td>Визначення категорій позичальників.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Правила видачі</a></td>
+			<td>Визначення правил видачі для підрозділів / позичальників / типів одиниць збереження (кількість видач, тривалості, плати...)</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Авторитетні джерела</a></td>
+			<td>Визначення категорій та авторитетних джерел для них. Авторитетні джерела використовуються у МАРК-формі щоб обмежити та допомогти у редагування бібліотечних записів МАРК.</td>
+		</tr>
+	<!-- /TMPL_IF -->
+		
+	<!-- TMPL_IF name="CAN_user_parameters" -->
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Структура тезаурусу</a></td>
+			<td>Означення категорій та МАРК-структури тезаурусу/авторитетного джерела.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/biblio_framework.pl">Структура бібліотечного запису (структура MARC)</a></td>
+			<td>Означення структур для МАРК-редактора. Створіть структури, потім встановіть необхідні МАРК-поля (поля та підполя)</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Зв'язки між БД Коха та МАРК</a></td>
+			<td>Визначте зв'язки між стандартною БД Коха та МАРК-БД. Зауважте, що ці зв'язки можна визначити через МАРК-поля. Цей інструмент є лише способом прискорити редагування.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">МАРК-перевірка</a></td>
+			<td>Перевірка МАРК-структури. ВИКОРИСТОВУЙТЕ ЦЕ перед роботою з реальними даними. Цей покаже помилки, які можуть ЗРУЙНУВАТИ БД Коха!</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	
+	<tr>
+	<th colspan="2">Різні параметри</th>
+	</tr>
+	<!-- TMPL_IF name="CAN_user_parameters" -->
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Друкарки</a></td>
+			<td>Друкарки (шляхи UNIX).</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF name="CAN_user_management" -->
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Несуттєві слова</a></td>
+			<td>Слова, що вилучаються під час пошуків.
+				<!-- TMPL_UNLESS name="stopwords" --><p class="problem">ПОПЕРЕДЖЕННЯ: Ви повинні визначити несуттєві слова</p><!-- /TMPL_UNLESS --></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF name="CAN_user_parameters" -->
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/z3950servers.pl">Сервери Z39.50</a></td>
+			<td>Сервери для запитів за МАРК-даними.</td>
+		</tr>
+
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/systempreferences.pl">Системні налаштування</a></td>
+			<td>Системні налаштування.</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	</table>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="CAN_user_tools" -->
+	<h1>Інструменти</h1>
+	<table>
+		<tr>
+		<th colspan="2"> Експортувати</th>
+		</tr>
+		<tr>
+			<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">Експорт біблографічних записів у МАРК</a></td>
+			<td> Експорт у МАРК-форматі.</td>
+		</tr>
+		<tr>
+		<th colspan="2">Імпортувати</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Завантаження МАРК-записів у сховище</a></td>
+			<td>Сховище це таблиця де імпортовані МАРК-записи збережені. МАРК-запис зберігається у сховищі, поки Ви не маєте одиниці. Коли Ви вводите ISBN або заголовок бібліотечної одиниці, то за ними шукається у сховищі. Якщо щось знайдено, то бібліотечний запис додається до активної таблиці Коха.
+			</td>
+		</tr>
+		<tr>
+		<th colspan="2">Ґенератор штрих-коду</th>
+		</tr>
+		<tr valign="top">
+			<td width="20%"><a href="/cgi-bin/koha/barcodes/barcodes.pl">Утворити штрих-коди</a></td>
+			<td>Ґенератор штрих-коду займається виробництвом штрих-кодів для одиниць, що надходять до Вас
+			</td>
+		</tr>
+	</table>
+<!-- /TMPL_IF -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

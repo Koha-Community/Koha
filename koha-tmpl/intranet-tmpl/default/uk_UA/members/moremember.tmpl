@@ -1,0 +1,221 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<div id="mainbloc">
+	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+	<div class="bloc25">
+		<h2 class="members">Запис про відвідувача</h2>
+		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
+		<p><label class="label100">Номер квитка:  </label><!-- TMPL_VAR NAME="cardnumber" --><br>
+		<label class="label100">Поштова адреса: </label><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
+		<!-- TMPL_UNLESS name="I" --><label class="label100">Домашня адреса: </label><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
+		<label class="label100">Домашній телефон:  </label><!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
+		<label class="label100">Телефон (денний час):  </label><!-- TMPL_VAR NAME="phoneday" --><br>
+		<label class="label100">Факс: </label><!-- TMPL_VAR NAME="faxnumber" --><br>
+		<label class="label100">Електронна пошта:  </label><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
+		<label class="label100">Текстове повідомлення: </label><!-- TMPL_VAR NAME="textmessaging" --><br>
+		<label class="label100">Номер відвідувача:  </label><!-- TMPL_VAR NAME="borrowernumber" --><br>
+		<label class="label100">Категорія відвідувачів: </label><!-- TMPL_VAR NAME="categorycode" --><br>
+		<label class="label100">Приєднуються: </label><!-- TMPL_VAR NAME="dateenrolled" -->,<br>
+		<label class="label100"> Закінчується:</label><!-- TMPL_VAR NAME="expiry" --><br>
+		<label class="label100">Приєднання підрозділу: </label><!-- TMPL_VAR NAME="branchcode" -->
+		</p>
+		<p>
+		<!-- TMPL_IF NAME="printethnicityline" -->
+			<label class="label100">Етнічна приналежність:  </label><!-- TMPL_VAR NAME="ethnicity" -->, <!-- TMPL_VAR NAME="ethnotes" --><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_UNLESS name="I" -->
+			<label class="label100">Дата народження: </label><!-- TMPL_VAR NAME="dateofbirth" --><br>
+			<label class="label100">Стать: </label><!-- TMPL_VAR NAME="sex" --><br>
+		<!-- /TMPL_UNLESS -->
+		<label class="label100">Контактувати через: </label><!-- TMPL_VAR NAME="contactname" --><br>
+		<label class="label100">Телефон:  </label><!-- TMPL_VAR NAME="altphone" --><br>
+		<!-- TMPL_UNLESS name="I" -->
+			<label class="label100">Взаємовідношення: </label><!-- TMPL_VAR NAME="altrelationship" --><br>
+		<!-- /TMPL_UNLESS -->
+		<label class="label100">Нотатки:  </label><!-- TMPL_VAR NAME="altnotes" -->
+		<!-- TMPL_IF NAME="sort1" -->
+			<p><label class="label100">Сортувальне поле 1:  </label><!-- TMPL_VAR NAME="sort1" --></p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort2" -->
+			<p><label class="label100">Сортувальне поле 2:  </label><!-- TMPL_VAR NAME="sort2" --></p>
+		<!-- /TMPL_IF -->
+		</p>
+		<p>
+		<!-- TMPL_UNLESS name="I" -->
+			<!-- TMPL_IF NAME="isguarantee" -->
+				Гарантії:<br><!-- TMPL_LOOP NAME="guaranteeloop" --><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" --> - <!-- TMPL_VAR NAME="cardnumber" --></a><br><!-- /TMPL_LOOP -->
+			<!-- TMPL_ELSE -->
+				Ґарант: 
+				<!-- TMPL_IF NAME="guarantorborrowernumber" -->
+					<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
+				<!-- TMPL_ELSE -->
+					Немає ґаранта<br>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label100">Примітка для обігу: </label>
+			<!-- TMPL_VAR NAME="borrowernotes" -->
+		</p>
+		<p>
+			 <label class="label100">Ім'я входу в електронічний каталог:  </label><!-- TMPL_VAR name="userid" -->
+			 <!-- TMPL_IF name="password" -->(визначений пароль) <!-- TMPL_ELSE -->(без паролю)<!-- /TMPL_IF -->
+		</p>
+		<p>
+		<!-- TMPL_UNLESS NAME="unvalidlibrarian"--> 
+			<!-- TMPL_IF NAME="I" -->
+				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->&categorycode=I" class="button">Змінити</a>
+			<!-- TMPL_ELSE -->
+				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="bornum" -->" class="button">Змінити</a>
+			<!-- /TMPL_IF -->
+			<a href="javascript:confirm_deletion()" class="button">Видалити</a> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Видані книги</a> <a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Змінити пароль</a>
+			</p>
+			<br/>
+			<p>
+			<!-- TMPL_IF NAME="IS_ADULT" -->
+				<a href="/cgi-bin/koha/members/jmemberentry.pl?type=Add&bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button">Додайте дитину</a>
+			<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Змінити позначки користувача</a>
+		<!-- /TMPL_UNLESS -->
+		<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" class="button">Друк сторінки</a> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" class="button">Друк бланку</a>
+		</p>
+	</div>
+	
+<!-- TMPL_IF NAME="flagged" -->	<div class="bloc25">
+		<h2 class="members">Позначки відвідувача</h2>
+		<ul>
+		<!-- TMPL_IF NAME="debarred" --><li>Відвідувач заборонений.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gonenoaddress" --><li>Адреса відвідувача є під сумнівом.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="lost" --><li>Було повідомлення про втрату квитка відвідувача.</li><!-- /TMPL_IF -->
+		</ul>
+		<!-- TMPL_VAR NAME="borrowernotes" -->
+	</div><!-- /TMPL_IF -->
+
+	<div class="bloc25">
+		<h2 class="members">Пені та плати</h2>
+		<!-- TMPL_IF NAME="totaldue" -->
+			Загальний збір <!-- TMPL_VAR NAME="totaldue"-->
+		<TMPL_ELSE>
+			Немає боргів
+		</TMPL_IF>
+		<p>
+		<!-- TMPL_UNLESS NAME="unvalidlibrarian"--> 
+			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"> Перегляд облікового рахунку </a> <a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"> Оплатити пені</a>
+		<!-- /TMPL_UNLESS -->
+		</p>
+	</div>
+	<div class="bloc25">
+		<h2 class="members">Запитувані одиниці</h2>
+			<!-- TMPL_IF NAME="reserveloop" -->
+			<form action="/cgi-bin/koha/modrequest.pl" method="post">
+			<table>
+				<tr>
+					<th>Заголовок</th>
+					<th>Запитано </th>
+					<th>Видалити</th>
+				</tr>
+					<!-- TMPL_LOOP NAME="reserveloop" -->
+					<tr>
+						<td><input type="hidden" name="from" value="borrower">
+							<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
+							<!-- TMPL_IF NAME="volumeddesc" -->
+								<!-- TMPL_VAR NAME="volumeddesc" -->
+								<!-- TMPL_VAR NAME="itemtype" -->
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="reservedate2" --></td>
+						<td>
+							<select name="rank-request">
+							<option value="n">Ні
+							<option value="del">Так
+							</select><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+						<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+						</td>
+						
+					</tr>
+					<!-- /TMPL_LOOP -->
+					<tr>
+						<td colspan="5" align="right">
+						<!-- TMPL_UNLESS NAME="unvalidlibrarian"--> 
+							<!-- TMPL_IF NAME="reserveloop" -->
+								<input type="submit" name="submit" value="Оновлення" class="button">
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_UNLESS -->
+						</td>
+					</tr>
+				</table>
+				</form>
+			<!-- TMPL_ELSE -->
+				Немає
+			<!-- /TMPL_IF -->
+	</div>
+
+	<div class="bloc25">
+		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Історія читання</a>
+	</div>
+	<!-- TMPL_IF NAME="patronimages" -->
+		<div class="bloc25">
+			<img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="НЕМАЄ ЗОБРАЖЕННЯ" border="0">
+		</div>
+	<!-- /TMPL_IF -->
+	<div class="bloc25">
+		<h2 class="members">Одиниці, видані зараз</h2>
+		<!-- TMPL_IF NAME="issueloop" -->
+			<form action="../renewscript.pl" method="post">
+			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+
+			<table>
+			<tr>
+				<th>Заголовок</th>
+				<th>Повернення</th>
+				<th>Тип одиниці</th>
+				<th>Плата</th>
+				<!-- TMPL_UNLESS Name ="unvalidlibrarian"--> 
+					<th>Продовжити</th>
+				<!-- /TMPL_UNLESS -->
+			</tr>
+
+			<!-- TMPL_LOOP NAME="issueloop" -->
+			<tr>
+				<td><!-- TMPL_IF NAME="red" --><p class="problem"><!-- TMPL_ELSE --> <p><!-- /TMPL_IF -->
+				<!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="itemcallnumber" --> <i>(<!-- TMPL_VAR name="itemcallnumber" -->)</i> <!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+					<!-- TMPL_VAR NAME="barcode" -->
+				</a></p>
+				</td>
+				<td><!-- TMPL_IF NAME="red" --><p class="problem"><!-- TMPL_ELSE --> <p><!-- /TMPL_IF --><!-- TMPL_VAR NAME="date_due" --></p></td>
+				<td><!-- TMPL_VAR NAME="itemtype" --></td>
+				<td><!-- TMPL_VAR NAME="charge" --></td>
+				<!-- TMPL_UNLESS Name ="unvalidlibrarian"--> 
+					<td>
+						<!-- TMPL_IF NAME="norenew" -->
+							<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">На запит - немає продовжень</a>
+						<!-- TMPL_ELSE -->
+							<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y">Y  <input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="n">N
+						<!-- /TMPL_IF -->
+					</td>
+				<!-- /TMPL_UNLESS --> 
+			</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+			<!-- TMPL_UNLESS Name ="unvalidlibrarian"--> 
+				<input type="submit" class="button" value="Продовжити одиниці">
+			<!-- /TMPL_UNLESS --> 
+		</form>
+		<!-- TMPL_ELSE -->
+			Немає
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<script language="JavaScript" type="text/javascript">
+function confirm_deletion() {
+	var is_confirmed = confirm('do you confirm deletetion ?');
+	if (is_confirmed) {
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
+	}
+}
+</script>
+<!-- endmenu -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

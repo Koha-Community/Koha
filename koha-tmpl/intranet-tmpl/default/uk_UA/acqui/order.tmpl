@@ -1,0 +1,68 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+<h1 class="acquisition">Ви шукали за <b>постачальником <!-- TMPL_VAR name="supplier" -->,</b> знайдено <!-- TMPL_VAR name="count" --></h1>
+<div id="bloc100">
+<table>
+<tr>
+	<th class="acquisition">Замовлення</th>
+	<th class="acquisition">Отримання</th>
+	<th class="acquisition">Постачальник </th>
+	<th class="acquisition">Поличка замовлень</th>
+</tr>
+
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr valign="top">
+		<td>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Додати замовлення" alt="Додати" border=0></a>
+			<!-- TMPL_ELSE -->
+				Незадіяно
+			<!-- /TMPL_IF -->
+		</td>
+		<td>
+			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="отримання" alt="Додати" border=0></a>
+		</td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->&op=display"><!-- TMPL_VAR name="name" --></a></td>
+		<td>
+			<table>
+			     <!-- TMPL_IF name="loop_basket" -->
+					<tr>
+						<th class="acquisition">Поличка замовлень</th>
+						<th class="acquisition">Одиниці</th>
+						<th class="acquisition">Створено</th>
+						<th class="acquisition">Дата</th>
+						<th class="acquisition">&nbsp;</th>
+					</tr>
+				<!-- TMPL_ELSE -->
+				    </p>No pending basket</p>
+                <!-- /TMPL_IF -->
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td>
+								<!-- TMPL_VAR name="firstname" -->
+									<!-- TMPL_VAR name="surname" -->
+							</td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									закрито <!-- TMPL_VAR NAME="closedate" --> <a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Перегляд</a>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_IF name="active" -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">змінити</a>
+									<!-- TMPL_ELSE -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Перегляд</a>
+									<!-- /TMPL_IF -->
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+	<a class="button acquisition" href="supplier.pl?supplierid=0">Додати постачальника</a>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -1,0 +1,66 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">Пропозиції</h1>
+	<table>
+		<tr>
+			<th class="acquisition">Пропозиція</th>
+			<th class="acquisition">Запропоновано</th>
+			<th class="acquisition">Прийнято</th>
+			<th class="acquisition">Здублювати</th>
+			<th class="acquisition">&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="/cgi-bin/koha/acqui/suggestion-select.pl" method="get">
+				<th class="acquisition">
+					<p>Фільтр на:  заголовок: <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->"> автор: <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->"> видавець: <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					<input type="submit" class="button acquisition" value="Задіяти фільтрування">
+				</th>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
+					<p>
+						<!-- TMPL_IF name="copyrightdate" -->рік авторського права: <!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumedesc" -->том:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="isbn" -->ISBN: <i><!-- TMPL_VAR NAME="isbn" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" --><br/>видано:<!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publicationyear" --> у <i><!-- TMPL_VAR NAME="publicationyear" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> на <i><!-- TMPL_VAR NAME="place" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR NAME="note" -->)</i></p> <!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamesuggestedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="duplicateBiblionumber" -->
+						<a href=# onClick="javascript:window.open('/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicateBiblionumber" -->')" class="button acquisition">Підозрюваний дублікат</a> <a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR name="supplierid" -->&basketno=<!-- TMPL_VAR name="basketno"-->&op=connectDuplicate&duplicateNumber=<!-- TMPL_VAR name="duplicateBiblionumber" -->&suggestionid=<!-- TMPL_VAR name="suggestionid" -->" class="button acquisition">З'єднати</a>
+					<!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF name="biblionumber" -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Замовлення</a>
+					<!-- TMPL_ELSE -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Замовлення</a>
+					<!-- /TMPL_IF -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

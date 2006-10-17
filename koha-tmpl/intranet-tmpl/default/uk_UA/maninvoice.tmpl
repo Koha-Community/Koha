@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+<div id="mainbloc">
+	<h1 class="member">Ручна накладна</h1>
+	<form action="/cgi-bin/koha/maninvoice.pl" method="post">
+	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+	<p><label class="label100">Номер позичальника </label><!-- TMPL_VAR NAME="bornum" --></p>
+	<p>
+		<label class="label100"><b>Тип </label>
+		<select name="type">
+			<option value="L">Втрачена одиниця</option>
+			<option value="F">Пеня</option>
+			<option value="A">Плата за управління рахунком</option>
+			<option value="N">Новий квиток</option>
+			<option value="M">Всяка всячина</option>
+			<option value="REF">Плата за повернення</option>
+		</select>
+	</p>
+	<p><label class="label100">Номер од.зб. </label><input type="text" name="itemnum"></p>
+	<p><label class="label100">Опис </label><input type="text" name="desc" size="50"></p>
+	<p><label class="label100">Кількість </label><input type="text" name="amount"></p>
+	<p><label class="label100"><input type="submit" class="button" name="add" value="Додати"></p>
+	</table>
+	</form>
+</div>
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

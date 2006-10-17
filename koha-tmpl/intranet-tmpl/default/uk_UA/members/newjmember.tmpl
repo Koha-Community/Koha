@@ -1,0 +1,100 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+<div id="mainbloc">
+	<!-- TMPL_IF Name="NOK" -->
+	<h3>Наступні поля введені неправильно. Будь-ласка, поверніться назад та виправте їх.</h3>
+	<ul>
+		<!-- TMPL_IF NAME="cardnumber_missing" --><li>Будь-ласка, введіть номер бібліотечного квитка.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="firstname_missing" --><li>Будь-ласка, введіть ім'я патрона.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="surname_missing" --><li>Будь-ласка, введіть прізвище патрона.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="dob_missing" --><li>Будь-ласка, введіть дату народження патрона.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gender_missing" --><li>Будь-ласка, введіть рід патрона.</li><!-- /TMPL_IF -->
+	</ul>
+	<!-- TMPL_ELSE -->
+		<h1> Підтвердіть запис </h1>
+		<!-- TMPL_LOOP Name="identsloop" -->
+			<!-- TMPL_IF Name="cardchild" -->
+				<table border="0" cellspacing="0" cellpadding="5">
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> НОВИЙ ВІДВІДУВАЧ </b>
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Найменування </b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="name" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> ПОДРОБИЦІ ПРО ВІДВІДУВАЧА </b>
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Номер відвідувача </b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="bornum" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Номер штрих-коду</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="cardchild" -->
+						</td>
+					</tr>					
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Дата народження</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="dob" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Стать</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="sex" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Школа</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="school" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Загальні примітки</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="notes" -->
+						</td>
+					</tr>
+				</table><p>
+			<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+		<form action="/cgi-bin/koha/members/insertjdata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" name="submit" value="затвердити" class="button members">
+		</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

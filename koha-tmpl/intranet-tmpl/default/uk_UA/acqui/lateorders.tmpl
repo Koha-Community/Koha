@@ -1,0 +1,105 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="acquisition"><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Затримані випуски</h1>
+	<table>
+		<tr>
+			<th class="acquisition doNotPrint">Постачальник </th>
+			<th class="acquisition">Дата замовлення</th>
+			<th class="acquisition">Замовлено</th>
+			<th class="acquisition doNotPrint">Включення замовлення</th>
+			<th class="acquisition">Книжкова інформація</th>
+			<th class="acquisition doNotPrint">Підрозділ</th>
+			<th class="acquisition doNotPrint">Встановлена питома ціна</th>
+			<th class="acquisition">Питома ціна з каталогу продавця</th>
+			<th class="acquisition">Кількість</th>
+			<th class="acquisition">Повна вартість</th>
+			<th class="acquisition doNotPrint">Витрати</th>
+			<th class="acquisition doNotPrint">&nbsp;</th>
+		</tr>
+		<tr class="doNotPrint">
+			<form action="lateorders.pl" method="post">
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="CGIsupplier" -->
+				</td>
+				<td> &nbsp;</td>
+				<td align="center" class="doNotPrint">
+					<input align="right" size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" > дні
+				</td>
+				<td colspan="2">
+					&nbsp;
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="CGIbranch" -->
+				</td>
+				<td colspan="5">
+					&nbsp;
+				</td>
+				
+				<td class="doNotPrint">
+					<input type="submit" value="фільтр" class="button acquisition">
+				</td>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP name="lateorders" -->
+			<!--TMPL_IF Name="hilighted" --> <tr class="hilighted"> <!--TMPL_ELSE--> <tr> <!-- /TMPL_IF -->
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="supplier" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="orderdate" -->
+				</td>
+				<td class="number" align="right">
+					<!-- TMPL_VAR name="latesince" -->
+				</td>
+				<td align="center" class="doNotPrint">
+					<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a>
+				</td>
+				<td >
+					<b><!-- TMPL_VAR name="title" --></b>
+				<!-- TMPL_IF name="author" --><br/><i>Автор:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publisher" --><br/><i>Видано:</i> <!-- TMPL_VAR NAME="publisher" --><!-- TMPL_IF name="publicationyear" --><i> у </i><!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="branch" -->
+				</td>
+				<td align="right" class="doNotPrint">
+					<!-- TMPL_VAR name="unitpricelib" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="unitpricesupplier" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="quantity" -->
+				</td>
+				<td align="right">
+					<!-- TMPL_VAR name="subtotal" -->
+				</td>
+				<td class="doNotPrint">
+					<!-- TMPL_VAR name="budget" -->
+				</td>
+				<td class="doNotPrint">
+					&nbsp;
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr> 
+				<th class="acquisition">
+					Загалом
+				</th>
+				<th class="acquisition" colspan="2">
+					&nbsp;
+				</th>
+				<th class="acquisition" class="doNotPrint"> &nbsp;</th>
+				<th class="acquisition"  colspan="5">
+					&nbsp;
+				</th>
+				
+				<th class="acquisition">
+					<!-- TMPL_VAR name="total" -->
+				</th>
+		</tr>
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+

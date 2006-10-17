@@ -1,0 +1,244 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<!-- TMPL_IF NAME="add_form" -->
+		<script language="javascript" type="text/javascript">
+			function _(s) { return s } // dummy function for gettext
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNotNull(f,noalert) {
+					if (f.value.length ==0) {
+						return false;
+					}
+					return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function toUC(f) {
+					var x=f.value.toUpperCase();
+					f.value=x;
+					return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNum(v,maybenull) {
+			var n = new Number(v.value);
+			if (isNaN(n)) {
+					return false;
+					}
+			if (maybenull==0 && v.value=='') {
+					return false;
+			}
+			return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isDate(f) {
+					var t = Date.parse(f.value);
+					if (isNaN(t)) {
+						return false;                       
+					}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function Check(f) {
+					var ok=1;
+					var _alertString="";
+					var alertString2;
+					if (f.searchfield.value.length==0) {
+							_alertString += "\n- " + _("ім'я сайту відсутнє");
+					}
+					if (f.host.value.length==0) {
+							_alertString += "\n- " + _("хост відсутній");
+					}
+					if (f.port.value.length==0) {
+							_alertString += "\n- " + _("порт відсутній");
+					}
+					if (f.db.value.length==0) {
+							_alertString += "\n- " + _("відсутня база даних");
+					}
+					if (isNaN(f.port.value)) {
+							_alertString += "\n- " + _("порт повинен бути числом");
+					}
+					if (isNaN(f.rank.value)) {
+							_alertString += "\n- " + _("ранґ повинен бути номером");
+					}
+					if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
+							_alertString += "\n- " + _("перевіряльне повинно бути 0 або 1");
+					}
+					if (_alertString.length==0) {
+							document.Aform.submit();
+					} else {
+							alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+							alertString2 += "\n------------------------------------------------------------------------------------\n";
+							alertString2 += _alertString;
+							alert(alertString2);
+					}
+			}
+		</script>
+		<!-- TMPL_IF NAME="searchfield" -->
+				<h1>Змінити Z39.50-сервер</h1>
+		<!-- TMPL_ELSE -->
+				<h1>Додати Z39.50-сервер</h1>
+		<!-- /TMPL_IF -->
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+			<input type="hidden" name="op" value="add_validate">
+			<!-- TMPL_IF NAME="searchfield" -->
+				<p>
+					<label class="label100">Сервер Z39.50</label>
+					<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" -->
+				</p>
+			<!-- TMPL_ELSE -->
+				<p>
+					<label class="label100">Сервер Z39.50</label>
+					<input type="text" name="searchfield" size="100" maxlength="100" onblur="toUC(this)">
+				</p>
+			<!-- /TMPL_IF -->
+			<p>
+				<label class="label100">Найменування вузла</label>
+				<input type="text" name="host" size="30" value="<!-- TMPL_VAR NAME="host" -->">
+			</p>
+			<p>
+				<label class="label100">Порт</label>
+				<input type="text" name="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)">
+			</p>
+			<p>
+				<label class="label100">База даних</label>
+				<input type="text" name="db" value="<!-- TMPL_VAR NAME="db" -->">
+			</p>
+			<p>
+				<label class="label100">Ідентифікатор користувача</label>
+				<input type="text" name="userid" value="<!-- TMPL_VAR NAME="userid" -->">
+			</p>
+			<p>
+				<label class="label100">Пароль</label>
+				<input type="text" name="password" value="<!-- TMPL_VAR NAME="password" -->">
+			</p>
+			<p>
+				<label class="label100">Відмічено (знайдено за умовчанням)</label>
+				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)">
+			</p>
+			<p>
+				<label class="label100">Ранг (порядок відображення)</label>
+				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)">
+			</p>
+			<p>
+				<label class="label100">Синтаксис (z3950 може посилати бібліотечні записи у різних форматах. Виберіть один)</label>
+				<select name="syntax">
+					<option value="MARC21">MARC21</option>
+					<option value="UNIMARC">UNIMARC</option>
+				</select>
+			</p>
+			<input type="button" value="Гаразд" onclick="Check(this.form)" class="button">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+		Дані записані
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="Гаразд" class="button">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+		<!-- TMPL_VAR NAME="reqsel" -->
+			<table>
+			<tr>
+				<th>Сайт</th>
+				<th><!-- TMPL_VAR NAME="searchfield" --></th>
+			</tr>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="hidden" name="op" value="delete_confirmed">
+				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<tr>
+				<td>Найменування вузла</td>
+				<td><!-- TMPL_VAR NAME="host" --></td>
+			</tr>
+			<tr>
+				<td>Порт</td>
+				<td><!-- TMPL_VAR NAME="port" --></td>
+			</tr>
+			<tr>
+				<td>База даних</td>
+				<td><!-- TMPL_VAR NAME="db" --></td>
+			</tr>
+			<tr>
+				<td>Ідентифікатор користувача</td>
+				<td><!-- TMPL_VAR NAME="userid" --></td>
+			</tr>
+			<tr>
+				<td>Пароль</td>
+				<td><!-- TMPL_VAR NAME="password" --></td>
+			</tr>
+			<tr>
+				<td>Відмічено</td>
+				<td><!-- TMPL_VAR NAME="checked" --></td>
+			</tr>
+			<tr>
+				<td>Ранг</td>
+				<td><!-- TMPL_VAR NAME="rank" --></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">ПІДТВЕРДІТЬ ВИДАЛЕННЯ</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="ТАК"></form></td>
+				<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="НІ"></form></td>
+			</tr>
+		</table>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+			Видалені дані
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="Гаразд">
+			</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+			<h1 class="parameters">Управління Z39.50-серверами</h1>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
+				<input type="submit" name="ok" value="Гаразд" class="button">
+			</form>
+			<!-- TMPL_IF NAME="searchfield" -->
+				Ви шукали за <b><!-- TMPL_VAR NAME="searchfield" --></b>
+			<!-- /TMPL_IF -->
+			<table>
+				<tr>
+					<th>Сайт</th>
+					<th>Найменування вузла</th>
+					<th>Порт</th>
+					<th>База даних</th>
+					<th>Ідентифікатор користувача</th>
+					<th>Пароль</th>
+					<th>Відмічено</th>
+					<th>Ранг</th>
+					<th>Синтаксис</th>
+					<th> </td>
+					<th> </td>
+				</tr>
+				<!-- TMPL_LOOP NAME="loop" -->
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+					<td><!-- TMPL_VAR NAME="name" --></td>
+					<td><!-- TMPL_VAR NAME="host" --></td>
+					<td><!-- TMPL_VAR NAME="port" --></td>
+					<td><!-- TMPL_VAR NAME="db" --></td>
+					<td><!-- TMPL_VAR NAME="userid" --></td>
+					<td><!-- TMPL_VAR NAME="password" --></td>
+					<td><!-- TMPL_VAR NAME="checked" --></td>
+					<td><!-- TMPL_VAR NAME="rank" --></td>
+					<td><!-- TMPL_VAR NAME="syntax" --></td>
+					<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Редагувати" title="редагувати" border="0"></a></td>
+					<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" alt="Видалити" title="видалити" border="0"></a></td>
+				</tr>
+				<!-- /TMPL_LOOP -->
+		</table>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="add_form">
+			<!-- TMPL_IF NAME="offsetgtzero" -->
+					<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->" class="button">&lt;&lt; Попередній</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ltcount" -->
+					<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->" class="button">Наступні &gt;&gt;</a>
+			<!-- /TMPL_iF -->
+			<input type="submit" class="button" alt="Додати Z39.50-сервер" value="Додати Z39.50-сервер">
+		</form>
+	
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

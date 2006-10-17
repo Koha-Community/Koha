@@ -1,0 +1,193 @@
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+
+<div id="mainbloc">
+<!-- TMPL_IF Name="viewshelf" -->
+	<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
+		<h1 class="catalogue"><!-- TMPL_VAR NAME="shelfname" --></h1>
+
+		<div id="bloc25">
+		<h2 class="catalogue">Вміст полиці</h2>
+			<table class="small">
+				<tr colspan="4">
+					<th class="catalogue"><!-- TMPL_IF name="manageshelf" -->Видалити<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></th>
+					<th class="catalogue">Штрих-код</th>
+					<th class="catalogue">Заголовок</th>
+					<th class="catalogue">Автор</th>
+				</tr>
+				<!-- TMPL_LOOP Name="itemsloop" -->
+					<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+						<td><!-- TMPL_IF name="manageshelf" --><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<!-- TMPL_IF name="manageshelf" -->
+				<input type="submit" value="Видалити помічені елементи" class="button catalogue">
+			<!-- /TMPL_IF -->
+		</div>
+	</form>
+
+	<!-- TMPL_IF name="manageshelf" -->
+	<div id="bloc25">
+		<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
+		<h2 class="catalogue">Додати книгу штриховим кодом</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input name="addbarcode">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="submit" value="Зберегти" class="button catalogue">
+		</form>
+	</div>
+	<!-- /TMPL_IF -->
+	<div id="bloc25">
+		<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="button catalogue">Список полиць</a>
+	</div>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<h1 class="catalogue">Книжкові полиці</h1>
+		<!-- TMPL_IF Name="status1" -->
+			<p class="problem"><!-- TMPL_VAR NAME="string1" --><p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<p class="problem"><!-- TMPL_VAR NAME="string" --><p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<div id="bloc25">
+					<h2 class="catalogue">Виберіть полицю для видалення</h2>
+					<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
+					<input type="hidden" name="shelves" value="1">
+						<!-- TMPL_LOOP Name="shelvesloop" -->
+						<!-- TMPL_IF name="canmanage" -->
+						<p>
+							<label>
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
+							</label>
+								<a href="shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a> (<!-- TMPL_VAR NAME="shelfbookcount" --> одиниц(я/і))
+						</p>
+						<!-- /TMPL_IF -->
+						<!-- /TMPL_LOOP -->
+					<p>
+						<input type="submit" value="Видалити полиці" class="button catalogue">
+					</p>
+					</form>
+		</div>
+		<div id="bloc25">
+			<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
+				<input type="hidden" name="shelves" value="1">
+				<h2 class="catalogue">Додати полицю</h2>
+				<p><label>Найменування </label><input type="text" name="addshelf" size="25"></p>
+				<p><label>Власник </label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+				<p><label>Категорія</label>
+					<select name="category">
+						<option value="1">Приватна</option>
+						<option value="2">Спільна</option>
+						<option value="3">Вільна</option>
+					</select>
+				</p>
+				<p> <li>приватною книжковою полицею керуєте Ви &amp; можете бачити лише Ви.</li>
+					<li> Спільну може бачити кожен, але складаєте тільки Ви.</li>
+					<li> Вільною керує будь-який користувач.</li>
+				</p>
+				<p>
+					<input type="submit" value="Додати нову полицю" class="button catalogue">
+					<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="button catalogue">повернутись до списку полиць</a>
+				</p>
+
+			</form>
+		</div>
+	<!-- TMPL_ELSE -->
+		<div id="bloc25">
+			<h2 class="catalogue">Список полиць</h2>
+			<table class="small">
+				<tr>
+					<th class="catalogue">Назва полиці</th>
+					<th class="catalogue">Категорія</th>
+					<th class="catalogue">Обсяг</th>
+					<th class="catalogue">Змінити</th>
+				</tr>
+				<!-- TMPL_LOOP Name="shelvesloop" -->
+				<!-- TMPL_IF NAME="toggle" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+					<td>
+						<a href="/cgi-bin/koha/bookshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+							<!-- TMPL_VAR NAME="shelfname" -->
+						</a>
+					</td>
+					<td>
+						<!-- TMPL_IF NAME="category1" -->
+							Приватна
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category2" -->
+							Спільна
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category3" -->
+							Вільна
+						<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<!-- TMPL_VAR NAME="shelfbookcount" --> одиниц(я/і)
+					</td>
+					<!-- TMPL_IF name="mine" -->
+						<td>
+							<a href="/cgi-bin/koha/bookshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Змінити</a> <!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
+						</td>
+						<!-- TMPL_ELSE -->
+						<td>&nbsp;</td>
+					<!-- /TMPL_IF -->
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+		<div id="bloc25">
+			<a href="/cgi-bin/koha/bookshelves/shelves.pl?shelves=1" class="button catalogue">Додавання чи видалення книжкових полиць</a>
+		</div>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="edit" -->
+	<div id="bloc25">
+		<form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">
+			<input type="hidden" name="op" value="modifsave">
+			<h2 class="catalogue">Видозміна полиці</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+			<p><label>Найменування </label><input type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
+			<p><label>Власник </label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+			<p><label>Категорія</label>
+				<select name="category">
+					<!-- TMPL_IF name="category1" -->
+						<option value="1" selected>Приватна</option>
+					<!-- TMPL_ELSE -->
+						<option value="1">Приватна</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category2" -->
+						<option value="2" selected>Спільна</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Спільна</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category3" -->
+						<option value="3" selected>Вільна</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Вільна</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</p>
+			<p> <li>приватною книжковою полицею керуєте Ви &amp; можете бачити лише Ви.</li>
+				<li> Спільну може бачити кожен, але складаєте тільки Ви.</li>
+				<li> Вільною керує будь-який користувач.</li>
+			</p>
+			<p>
+				<input type="submit" value="Зберегти" class="button catalogue">
+			</p>
+
+		</form>
+	</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

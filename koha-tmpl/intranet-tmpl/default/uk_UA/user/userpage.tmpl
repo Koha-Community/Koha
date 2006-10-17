@@ -1,0 +1,89 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- TMPL_IF NAME="loggedinuser" -->
+	<p align=left>Зайдено у систему як: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Вихід</a>]</p>
+	<p>
+	<center>
+	<h3>Ця сторінка - лише жартівлива модель</h3>
+
+	<table border=0 cellspacing=15>
+	<tr><td valign=top>
+
+	<table border=1 cellpadding=10>
+	<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Резервування</font></th></tr>
+	<tr><td>
+	<b>Ви маєте наступні книги, що чекають, щоб їх взяли: </b>
+	<ul>
+	<li>"Угода великої матусі" Галини Пампушки у головній бібліотеці
+	<li>"Між братами" Ірини Морви в головній бібліотеці
+	</ul>
+	<p>
+	<b>Ви маєте наступні запити на одиниці у позиці: </b>
+	<ul>
+	<li>"Дивовижна яблунева книга" Пауля Буржуа
+	<li>"Северин Великий" Сергія Дубика
+	<li>"Біографія ґрізлі" Томпсона Ернеста Сетона
+	</ul>
+	</td></tr>
+	</table>
+
+	</td><td valign=top>
+
+		<form method="post">
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Лаштунки читача</font></th></tr>
+		<tr><td align ="center">
+		<table border=0 cellpadding=5>
+			<tr><td>Мова</td><td>
+			<select name=language>
+			<option value=english>Англійська мова
+			<option value=english>Французька мова
+			<option value=english>Німецька мова
+			<option value=english>Польська мова
+			</select>
+			</td></tr>
+			<tr><td>Адреса E-mail</td><td><input type= name=email size=30 value="<!-- TMPL_VAR NAME=loggedinuser -->@biblioteka.ua"></td></tr>
+			<tr><td>Підрозділ, якому надається перевага<br>для перехвату резервувань</td><td>
+			<select name=pickupbranch>
+			<option value=MAIN>Головна бібліотека
+			<option value=SEDGE>Бібліотека "Україніка"
+			<option value=HANSEN selected>Бібліотека Тараса Бульби
+			<option value=CAT>Бібліотека Католінська
+			</select>
+			</td></tr>
+			<tr><td colspan=2>
+			<input name="specialeventsbyemail" type="checkbox" checked> Повідомляти мене про особливі події електронічною поштою<br>
+			<input name="overduesbyemail" type="checkbox" checked> Повідомляти мене електронічною поштою щодо прострочень<br>
+			<input name="recordreadingrecord" type="checkbox"> Веcти облік книг, які я читав<br>
+			<input name="recordreadingrecord" type="checkbox"> Дозволити бібліотечному штату бачити мій запис читання<br>
+			</td></tr>
+			<tr><td align=center colspan=2>
+			<input type=submit value="Задати налаштування">
+			</td>
+			</tr>
+		</table>
+		</td></tr>
+	</table>
+	</form>
+
+	</td></tr>
+	</table>
+
+	</center>
+<!-- TMPL_ELSE -->
+	<center>
+	<form method=post>
+		<table border=1 cellpadding=10>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif" colspan=2><font size=+2>Лаштунки читача</font></th></tr>
+		<tr><td>Ім'я:</td><td><input name="userid"></td></tr>
+		<tr><td>Пароль: </td><td><input type="password" name="password"></td></tr>
+		<tr><td align="center" colspan=2>
+		    <input type="submit" value="Реєстрація">
+		</td>
+		</tr>
+	    </table>
+	</form>
+	</center>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

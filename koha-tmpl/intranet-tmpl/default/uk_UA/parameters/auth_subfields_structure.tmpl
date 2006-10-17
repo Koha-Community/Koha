@@ -1,0 +1,138 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+<!-- TMPL_IF NAME="add_form" -->
+<!-- ------------------------------------------------------------------------ -->
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-edit-subfields-p" -->Редагувати підполя<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+	<table>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td>
+			<h2 class="parameters">Ознака <!-- TMPL_VAR NAME="tagfield" -->, підполе <!-- TMPL_VAR NAME="tagsubfield" --></h2>
+			<h3>МАРК-примуси</h3>
+			<ul>
+			<p>
+				<!-- TMPL_VAR NAME="repeatable" --> повторюване
+            </p>
+            <p>
+				<!-- TMPL_VAR NAME="mandatory" --> обов'язкове
+			</p>
+			<p>
+                <label>Шукати також</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (наприклад для 200a : '200c','200d','200e')
+			</p>
+			</ul>
+			<h3><br>Редакторські примуси</h3>
+			<ul>
+			<p>Опис </p>
+			<p>
+				<label>для бібліотекарів </label>
+				<input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80"> для електронічного каталогу <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
+			</p>
+			<p><label>Ведеться</label> <!-- TMPL_VAR NAME="tab" --></p>
+			<p>
+				<label>Авторитетне джерело: </label> <!-- TMPL_VAR NAME="authorised_value" --> чи тезаурус: <!-- TMPL_VAR NAME="thesaurus_category" --> чи плаґін: <!-- TMPL_VAR NAME="value_builder" -->
+			</p>
+			</ul>
+		</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="Гаразд" class="button parameters">
+	<p>Зверніть увагу: в останньому стовпці Ви можете вибрати:
+	<ul><li>"Авторитетне джерело": підполе буде пов'язане зі списком авторитетних значень. Подивіться відповідну управляючу таблицю.</li>
+	<li>"Будівник значень": будівельники для значеь це perl-програмки що допомагають Вам вибрати значення для поля. Вони ґрунтуються на МАРК-у та іноді заповнюють інше підполе автоматично.</li>
+	</ul>
+	</p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<!-- ------------------------------------------------------------------------ -->
+<div id="bloc25">
+	<h2 class="parameters">
+		Підполе <!-- TMPL_VAR NAME="tagsubfield" --> <!-- TMPL_VAR NAME="liblibrarian" -->
+	</h2>
+	<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+		<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->">
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+		<p>ПІДТВЕРДІТЬ ВИДАЛЕННЯ</p>
+		<input type="submit" value="ТАК" class="button parameters">
+	</form>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+		<input type="submit" value="НІ" class="button parameters">
+	</form>
+</div>
+<!-- /TMPL_IF -->
+
+<!-- ------------------------------------------------------------------------ -->
+<!-- TMPL_IF NAME="else" -->
+<h1>Управління підполями ознаки <!-- TMPL_VAR NAME="tagfield" --> у Марк-структурі авторитетних джерел <!-- TMPL_IF NAME="authtypecode" -->(структура  <!--TMPL_VAR NAME="authtypecode" -->)<!-- TMPL_ELSE -->(структура по умовчанню)<!-- /TMPL_IF --></h1>
+<p>На цьому екрані представлені підполя, пов'язані з вибраною ознакою. Ви можете редагувати підполя чи додавати нове клацнувши на [редагуванні]. </p>
+
+<table>
+<tr>
+	<th>Підполе</th>
+	<th>Текст </th>
+	<th>Обмеження</th>
+	<th>Видалити</th>
+<!-- TMPL_LOOP NAME="loop" -->
+<tr bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+	<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
+	<td>
+		<!-- TMPL_IF NAME="subfield_ignored" -->
+			<i><!-- TMPL_VAR NAME="liblibrarian" --></i>
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_VAR NAME="liblibrarian" -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<!-- TMPL_IF NAME="subfield_ignored" -->
+			<i>проігнороване підполе</i>
+		<!-- TMPL_ELSE -->
+			Ведеться, <!-- TMPL_IF NAME="repeatable" -->Повторюване, <!-- TMPL_ELSE -->Не повторюване,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="mandatory" -->Обов'язкове, <!-- TMPL_ELSE -->Не обов'язкове,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seealso" -->подивіться також : <!-- TMPL_VAR NAME="seealso" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="hidden" -->приховано, <!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="isurl" -->є гіперпосиланням,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="authorised_value" --> Авторитетне джерело: <!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="value_builder" -->Плаґін: <!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<a href="<!-- TMPL_VAR NAME="delete" -->">
+			<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+		</a>
+	</td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_VAR NAME="edit" -->
+	<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0">
+</a>
+<a href="auth_tag_structure.pl?searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">
+	<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2uparrow.png" width="32" hspace="0" vspace="0" border="0">
+</a>
+<!-- TMPL_IF NAME="previous" -->
+	<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="назад" alt="назад" border="0">
+	</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="next" -->
+	<!-- TMPL_VAR NAME="next" -->
+		<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="далі" alt="далі" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

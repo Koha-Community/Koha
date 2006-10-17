@@ -1,0 +1,94 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="acquisition">Надходження</h1>
+<div id="bloc25">
+	<h2 class="acquisition">Старт, отримання, зміна замовлення</h2>
+	<!-- TMPL_IF name="nobudget" -->
+		<p class="problem">Ви повинні задати витрати у параметрах</p>
+	<!-- TMPL_ELSE -->
+		<form action="/cgi-bin/koha/acqui/order.pl" method="post">
+			Ім'я постачальника: <input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button acquisition" value="Гаразд">
+		</form>
+	<p>або <a href="histsearch.pl" class="button acquisition">шукати по історії замовлень</a></p>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- currencies-->
+<div id="bloc25">
+	<form action="/cgi-bin/koha/currency.pl">
+	<input type="hidden" name="type" value="change">
+	<h2 class="acquisition">курси обміну</h2>
+	<!-- TMPL_LOOP NAME="loop_currency" -->
+		<p>
+			<label><!-- TMPL_VAR NAME="currency" --></label>
+			<input type="text"  size="10"  name="<!-- TMPL_VAR NAME="currency" -->" value=<!-- TMPL_VAR NAME="rate" -->>
+		</p>
+	<!-- /TMPL_LOOP -->
+	<input type="submit" value="Зберегти" class="button acquisition">
+</div>
+
+<!-- suggestions -->
+<div id="bloc25">
+	<h2 class="acquisition">Пропозиції для відзначення</h2>
+		<!-- TMPL_IF name="suggestion" -->
+			<!--TMPL_VAR NAME="suggestion" --> пропозицій очікують <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Керувати</a>
+		<!-- TMPL_ELSE -->
+			Немає очікуючих пропозицій
+		<!-- /TMPL_IF -->
+</div>
+
+<!-- showbudget-->
+<div id="bloc25">
+	<h2 class="acquisition">витрати та фонди одиниць зберігання</h2>
+	<!-- TMPL_IF name="nobudget" -->
+		<p class="problem">Ви повинні задати витрати у параметрах</p>
+	<!-- TMPL_ELSE -->
+		<table class="noborder">
+			<tr>
+				<th class="acquisition">Витрати</th>
+				<th class="acquisition">від</th>
+				<th class="acquisition">до</th>
+				<th class="acquisition">Загалом</th>
+				<th class="acquisition">Витрачено</th>
+				<th class="acquisition">Зайнято</th>
+				<th class="acquisition">Дост.</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="loop_budget" -->
+				<tr>
+					<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="startdate" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="enddate" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="budgetamount" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="spent" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="comtd" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="avail" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			<tr>
+				<th class="acquisition" align="right" colspan="3">Загалом</th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="total" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totspent" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totcomtd" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totavail" --></th>
+			</tr>
+		</table>
+		<p>
+		Використовуйте кнопку перезавантаження, щоб отримати найсвіжіші розрахунки. Здійснені розрахунки є лише приблизними, оскільки обмінні норми впливатимуть на фактично сплачені суми.
+		</p>
+	<!-- /TMPL_IF -->
+</div>
+
+<div id="bloc25">
+	<h2 class="acquisition">ДОПОМОГА по замовленню</h2>
+	<ul>
+		<p>Щоб запустити придбання чи зробити замовлення, локальну закупівлю чи пожертвування спершу знайдіть постачальна, та додайте нового, якщо потрібно.</p>
+		<p>Потім вибирають попереднє замовлення або створюють нове. Зауважте, що замовлення буде прикріплено до користувача, з якого Ви зареєструвалися </p>
+		<p>Щоб замовити одиницю, Вам потрібно встановити, чи існує вже такий бібліотечний запис, і або додати одиницю, або створити новий бібліотечний запис і аж тоді додати одиницю.</p>
+		<p>Щоб блокувати замовлення на покупку клацніть на "перегляд замовлень на покупку" чи шукайте вище, а потім клацніть на "підтвердіть замовлення".</p>
+	</ul>
+</div>
+
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

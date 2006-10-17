@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<h1>Система МАРК-надходжень</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Імпорт до сховища</font></td>
+	</tr>
+</table>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Результати імпорту: </p>
+<ul>
+	<p><!-- TMPL_VAR NAME="imported" --> імпортовано записів</p>
+	<p><!-- TMPL_VAR NAME="alreadyindb" --> не імпортовано, тому що вже є у БД</p>
+	<p><!-- TMPL_VAR NAME="alreadyinfarm" --> не імпортовано, тому що вже є у 'фермі' записів</p>
+	<p><!-- TMPL_VAR NAME="notmarcrecord" --> не імпортовано, тому що вони, здається, не є у МАРК-форматі (або відсутні ISBN/ISSN)!</p>
+	<p><!-- TMPL_VAR NAME="total" --> проаналізовано записів</p>
+	<p><a href="addbooks.pl">Назад до надходжень</a>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Виберіть файл для імпорту до сховища. Він буде проаналізований, і для кожного знайденого ISBN, новий малюк-запис буде створений у сховищі.</li>
+	<li>Якщо ISBN вже існує у сховищі, Ви можете вибрати, чи нехтувати новим записом чи записати поверх старого.</li>
+	<li>Ви можете ввести ім'я цього імпорту. Воно може бути корисно при створенні бібліотечного запису, щоб пам'ятати, звідки прийшли запропоновані МАРК-дані!</li>
+	<li>Звичайно, якщо ISBN вже існує у активній БД, бібліотечний запис буде проігноровано.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table cellpadding="3" border="0">
+	<tr valign="top">
+		<td>Виберіть файл для імпорту: </td>
+		<td>
+			<input type="file" name="uploadmarc" /><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Назва для цього імпортування: </td>
+		<td>
+			<input type="text" name="filename" /><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Кодування символів (MARC21 або UNIMARC)</td>
+		<td>
+			<select name="syntax" /><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Якщо ISBN вже є у сховищі:  </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked> Ігнорувати його, зберігши існуючий<br/>
+			<input type="radio" name="overwrite_biblio" value="1"> Цей записати поверха існуючого</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="Імпортувати"></td>
+	</tr>
+
+</table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

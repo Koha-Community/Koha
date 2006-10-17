@@ -1,0 +1,323 @@
+<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+<script language="JavaScript" type="text/javascript">
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Коха: <!-- TMPL_VAR NAME="limit"--> найбільш активних позичальників за видачами </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Фільтрується на</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<br>
+		<table border="1">
+			<tr >
+				<th class="reports">Ранґ/Позичальники</th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports" colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+			</tr>
+			<tr >
+				<th class="reports">&nbsp;</th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports">Позичальник</th>
+					<th class="reports">Кількість видач</th>
+				<!-- /TMPL_LOOP -->
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../members/moremember.pl?bornum=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
+							</td>
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
+							</td>
+						<!-- /TMPL_LOOP -->
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Коха: найбільш активні позичальники за видачами  </h1>
+	<form method="post">
+	
+	<table>
+		<thead>
+			<tr>
+			<th class="reports">Обмежити до </th>
+			<th class="reports">За </th>
+			<th class="reports" colspan="2">Фільтри</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<select name="Limit">
+						<option value ="5" checked> 5</option>
+						<option value ="10">10</option>
+						<option value ="15">15</option>
+						<option value ="20">20</option>
+	<!--					<option value ="25">25</option>
+						<option value ="40">40</option>
+						<option value ="50">50</option>
+						<option value ="100">100</option>-->
+					</select>
+				</td>
+				<td>
+					<select name="Criteria">
+						<option value ="" checked>Немає</option>
+						<option value ="issuingbranch">Підрозділ</option>
+						<option value ="categorycode">Код_категорії</option>
+						<option value ="itemtype">Тип одиниці</option>
+						<option value ="Day">День</option>
+						<option value ="Week">Тиждень</option>
+						<option value ="Month">Місяць</option>
+						<option value ="Year">Рік</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Дата видачі</td>
+				<td> від <input type="text" readonly="readonly" size="10" id="from" name="Filter" >
+							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+								<script language="JavaScript" type="text/javascript">
+									function validate1(date) {
+										var day = date.getDate();
+										var month = date.getMonth() + 1;
+										var year = date.getFullYear();
+										var weekDay = date.getDay();
+										var dayMonth = month + '-' + day;
+										var dateString = year + '-' + month + '-' + day;
+										var dateTo = document.getElementById('to').value.split("-");
+										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+										if (date > limitDate) {
+											return true;
+										} else {
+											return false;
+										}
+									}
+					
+									Calendar.setup(
+										{
+											inputField : "from",
+											ifFormat : "%Y-%m-%d",
+											button : "openCalendarFrom",
+											disableFunc : validate1,
+											dateStatusFunc : validate1
+										}
+									);
+								</script>
+					до <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								function validate2(date) {
+									var day = date.getDate();
+									var month = date.getMonth() + 1;
+									var year = date.getFullYear();
+									var weekDay = date.getDay();
+									var dayMonth = month + '-' + day;
+									var dateString = year + '-' + month + '-' + day;
+									var dateFrom = document.getElementById('from').value.split("-");
+									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+									if (limitDate > date) {
+										return true;
+									} else {
+										return false;
+									}
+								}
+		
+								Calendar.setup(
+									{
+										inputField : "to",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarTo",
+										disableFunc : validate2,
+										dateStatusFunc : validate2
+									}
+								);
+							</script>
+				</td>
+			</tr>
+			<tr>
+				<td> &nbsp;</td>
+				<td> &nbsp;</td>
+				<td>Повернення</td>
+				<td > від <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" >
+							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
+								<script language="JavaScript" type="text/javascript">
+									function validate1(date) {
+										var day = date.getDate();
+										var month = date.getMonth() + 1;
+										var year = date.getFullYear();
+										var weekDay = date.getDay();
+										var dayMonth = month + '-' + day;
+										var dateString = year + '-' + month + '-' + day;
+										var dateTo = document.getElementById('toRO').value.split("-");
+										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+										if (date > limitDate) {
+											return true;
+										} else {
+											return false;
+										}
+									}
+					
+									Calendar.setup(
+										{
+											inputField : "fromRO",
+											ifFormat : "%Y-%m-%d",
+											button : "openCalendarFromRO",
+											disableFunc : validate1,
+											dateStatusFunc : validate1
+										}
+									);
+								</script>
+					до <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" >
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								function validate2(date) {
+									var day = date.getDate();
+									var month = date.getMonth() + 1;
+									var year = date.getFullYear();
+									var weekDay = date.getDay();
+									var dayMonth = month + '-' + day;
+									var dateString = year + '-' + month + '-' + day;
+									var dateFrom = document.getElementById('fromRO').value.split("-");
+									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+									if (limitDate > date) {
+										return true;
+									} else {
+										return false;
+									}
+								}
+		
+								Calendar.setup(
+									{
+										inputField : "toRO",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarToRO",
+										disableFunc : validate2,
+										dateStatusFunc : validate2
+									}
+								);
+							</script>
+				</td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Підрозділ</td>
+				<td>
+					<select name="Filter">
+						<option value="">Усі підрозділи</option>
+						<!-- TMPL_LOOP name="branchloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="branchname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Тип документу</td>
+				<td>
+					<select name="Filter">
+						<option value="">Усі типи одиниць</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Категорія позичальника</td>
+				<td>
+					<select name="Filter">
+						<option value="">Усі категорії позичальників</option>
+						<!-- TMPL_LOOP name="borcatloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+	="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>День</td>
+				<td>
+					<select name="Filter">
+						<option value="">Будь-який день</option>
+						<option value="Monday">Понеділок</option>
+						<option value="Tuesday">Вівторок</option>
+						<option value="Wednesday">Середа</option>
+						<option value="Thursday">Четвер</option>
+						<option value="Friday">П'ятниця</option>
+						<option value="Saturday">Субота</option>
+						<option value="Sunday">Неділя</option>
+					</select>
+				</td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Місяць</td>
+				<td>
+					<select name="Filter">
+						<option value="">Будь-який місяць</option>
+						<option value="January">Січень</option>
+						<option value="February">Лютий</option>
+						<option value="March">Березень</option>
+						<option value="April">Квітень</option>
+						<option value="May">Травень</option>
+						<option value="June">Червень</option>
+						<option value="July">Липень</option>
+						<option value="August">Серпень</option>
+						<option value="September">Вересень</option>
+						<option value="October">Жовтень</option>
+						<option value="November">Листопад</option>
+						<option value="December">Грудень</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Рік</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Виведення </h3>
+		<input type="radio" checked name="output" value="screen" > на екран у броузер
+		<br>
+		<input type="radio" name="output" value="file"> до файлу <input type="text" name="basename" value="Export"> у прикладну програму <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input type="submit" value="Гаразд" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

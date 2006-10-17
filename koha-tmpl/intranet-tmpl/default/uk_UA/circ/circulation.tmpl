@@ -1,0 +1,320 @@
+<!-- TMPL_INCLUDE NAME="circulation-top.inc" -->
+ <div id="mainbloc">
+	<h1 class="circulation">Обіг: видачі</h1>
+
+<!--
+
+ INITIAL BLOC : PARAMETERS & BORROWER INFO
+ 
+-->
+	<div id="bloc25">
+		<h2 class="circulation">Параметри</h2>
+		<p>
+			<b>Підрозділ:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Друкарка:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Змінити встановлення</a>
+		</p>
+	
+	<!-- TMPL_IF NAME="message" -->
+		<h2 class="circulation">Повідомлення</h2>
+			<p>Немає позичальника, підходящого <!-- TMPL_VAR NAME="message" --></p>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="CGIselectborrower" -->
+		<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
+		<h2 class="circulation">Вибір позичальника</h2>
+		<!-- TMPL_VAR NAME="CGIselectborrower" -->
+		<input type="submit" value="Гаразд" class="button circulation">
+	<!-- TMPL_ELSE -->
+		<!-- TMPL_IF NAME="borrowernumber" -->
+			<h2 class="circulation">Дані про позичальника</h2>
+			<!--TMPL_IF Name="warndeparture"--><p class="problem"><!--TMPL_ELSE--><p><!--/TMPL_IF--><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->) <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " class="button circulation"> подробиця </a> <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ" class="button circulation">редагувати</a>
+			<!--TMPL_IF Name="warndeparture"--><br /> Позичальник залише скоро<br /><!--/TMPL_IF-->
+			<!-- TMPL_IF NAME="patronimages" -->
+				<div class="bloc25">
+					<img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="НЕМАЄ ЗОБРАЖЕННЯ" border="0">
+				</div>
+			<!-- /TMPL_IF -->
+			</p>
+			<p>
+				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->
+			</p>
+			<p>
+				<!-- TMPL_VAR NAME="phone" -->
+			</p>
+			<p>Категорія: <!-- TMPL_VAR NAME="categorycode" --></p>
+			<p><!-- TMPL_VAR NAME="issuecount" --> випусків<!-- TMPL_IF NAME="overduecount" -->, <!-- TMPL_VAR NAME="overduecount" --> прострочено<!-- /TMPL_IF --></p>
+			<p><b><!-- TMPL_VAR NAME="borrowernotes" --></b></p>
+  			<!-- TMPL_IF NAME="dbarred" -->
+				<span class="error">Заборонено:</span> Патрон заборонений 
+				<form action="/cgi-bin/koha/members/setdebar.pl" method="post">
+					<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+					<input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+					<input type="hidden" value="circ" name="destination" />
+					<input type="hidden" name="status" value="0" />
+					<input type="submit" class="button circulation" value="Підняти заборону">
+				</form>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+				<h2 class="circulation">
+					Введіть номер квитка позичальника або частину прізвища
+				</h2>
+				<form method="post" name="f" action="/cgi-bin/koha/circ/circulation.pl">
+					<input name="findborrower">
+					<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+					<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
+					<input type="submit" value="Гаразд" class="button circulation">
+				</form>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	</div>
+
+<!--
+	BARCODE ENTRY
+-->
+
+<!-- TMPL_IF NAME="borrowernumber" -->
+	<div id="bloc25">
+	<form method="post" name="f" action="/cgi-bin/koha/circ/circulation.pl">
+		<h2 class="circulation">Введіть штрихкод книги</h2>
+		<p>Штрих-код одиниці зберігання: <input name="barcode" size="10"> <input type="submit" value="Видача" class="button circulation"></p>
+		<p>
+			<select name="day">
+				<option value="0">День</option>
+				<option value="01"<!-- TMPL_IF NAME="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
+				<option value="02"<!-- TMPL_IF NAME="day2" --> selected="selected"<!-- /TMPL_IF -->>2</option>
+				<option value="03"<!-- TMPL_IF NAME="day3" --> selected="selected"<!-- /TMPL_IF -->>3</option>
+				<option value="04"<!-- TMPL_IF NAME="day4" --> selected="selected"<!-- /TMPL_IF -->>4</option>
+				<option value="05"<!-- TMPL_IF NAME="day5" --> selected="selected"<!-- /TMPL_IF -->>5</option>
+				<option value="06"<!-- TMPL_IF NAME="day6" --> selected="selected"<!-- /TMPL_IF -->>6</option>
+				<option value="07"<!-- TMPL_IF NAME="day7" --> selected="selected"<!-- /TMPL_IF -->>7</option>
+				<option value="08"<!-- TMPL_IF NAME="day8" --> selected="selected"<!-- /TMPL_IF -->>8</option>
+				<option value="09"<!-- TMPL_IF NAME="day9" --> selected="selected"<!-- /TMPL_IF -->>9</option>
+				<option value="10"<!-- TMPL_IF NAME="day10" --> selected="selected"<!-- /TMPL_IF -->>10</option>
+				<option value="11"<!-- TMPL_IF NAME="day11" --> selected="selected"<!-- /TMPL_IF -->>11</option>
+				<option value="12"<!-- TMPL_IF NAME="day12" --> selected="selected"<!-- /TMPL_IF -->>12</option>
+				<option value="13"<!-- TMPL_IF NAME="day13" --> selected="selected"<!-- /TMPL_IF -->>13</option>
+				<option value="14"<!-- TMPL_IF NAME="day14" --> selected="selected"<!-- /TMPL_IF -->>14</option>
+				<option value="15"<!-- TMPL_IF NAME="day15" --> selected="selected"<!-- /TMPL_IF -->>15</option>
+				<option value="16"<!-- TMPL_IF NAME="day16" --> selected="selected"<!-- /TMPL_IF -->>16</option>
+				<option value="17"<!-- TMPL_IF NAME="day17" --> selected="selected"<!-- /TMPL_IF -->>17</option>
+				<option value="18"<!-- TMPL_IF NAME="day18" --> selected="selected"<!-- /TMPL_IF -->>18</option>
+				<option value="19"<!-- TMPL_IF NAME="day19" --> selected="selected"<!-- /TMPL_IF -->>19</option>
+				<option value="20"<!-- TMPL_IF NAME="day20" --> selected="selected"<!-- /TMPL_IF -->>20</option>
+				<option value="21"<!-- TMPL_IF NAME="day21" --> selected="selected"<!-- /TMPL_IF -->>21</option>
+				<option value="22"<!-- TMPL_IF NAME="day22" --> selected="selected"<!-- /TMPL_IF -->>22</option>
+				<option value="23"<!-- TMPL_IF NAME="day23" --> selected="selected"<!-- /TMPL_IF -->>23</option>
+				<option value="24"<!-- TMPL_IF NAME="day24" --> selected="selected"<!-- /TMPL_IF -->>24</option>
+				<option value="25"<!-- TMPL_IF NAME="day25" --> selected="selected"<!-- /TMPL_IF -->>25</option>
+				<option value="26"<!-- TMPL_IF NAME="day26" --> selected="selected"<!-- /TMPL_IF -->>26</option>
+				<option value="27"<!-- TMPL_IF NAME="day27" --> selected="selected"<!-- /TMPL_IF -->>27</option>
+				<option value="28"<!-- TMPL_IF NAME="day28" --> selected="selected"<!-- /TMPL_IF -->>28</option>
+				<option value="29"<!-- TMPL_IF NAME="day29" --> selected="selected"<!-- /TMPL_IF -->>29</option>
+				<option value="30"<!-- TMPL_IF NAME="day30" --> selected="selected"<!-- /TMPL_IF -->>30</option>
+				<option value="31"<!-- TMPL_IF NAME="day31" --> selected="selected"<!-- /TMPL_IF -->>31</option>
+			</select>
+			<select name="month">
+				<option value="0">Місяць</option>
+				<option value="01"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Січ.</option>
+				<option value="02"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Лют.</option>
+				<option value="03"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Бер.</option>
+				<option value="04"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Квіт.</option>
+				<option value="05"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>Травень</option>
+				<option value="06"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Чер.</option>
+				<option value="07"<!-- TMPL_IF NAME="month7" --> selected="selected"<!-- /TMPL_IF -->>Лип.</option>
+				<option value="08"<!-- TMPL_IF NAME="month8" --> selected="selected"<!-- /TMPL_IF -->>Сер.</option>
+				<option value="09"<!-- TMPL_IF NAME="month9" --> selected="selected"<!-- /TMPL_IF -->>Вер.</option>
+				<option value="10"<!-- TMPL_IF NAME="month10" --> selected="selected"<!-- /TMPL_IF -->>Жовт.</option>
+				<option value="11"<!-- TMPL_IF NAME="month11" --> selected="selected"<!-- /TMPL_IF -->>Лист.</option>
+				<option value="12"<!-- TMPL_IF NAME="month12" --> selected="selected"<!-- /TMPL_IF -->>Груд.</option>
+			</select>
+			<select name="year">
+				<option value="0">Рік</option>
+				<option value="2004"<!-- TMPL_IF NAME="year2004" --> selected="selected"<!-- /TMPL_IF -->>2004</option>
+				<option value="2005"<!-- TMPL_IF NAME="year2005" --> selected="selected"<!-- /TMPL_IF -->>2005</option>
+				<option value="2006"<!-- TMPL_IF NAME="year2006" --> selected="selected"<!-- /TMPL_IF -->>2006</option>
+				<option value="2007"<!-- TMPL_IF NAME="year2007" --> selected="selected"<!-- /TMPL_IF -->>2007</option>
+				<option value="2008"<!-- TMPL_IF NAME="year2008" --> selected="selected"<!-- /TMPL_IF -->>2008</option>
+			</select>
+		</p>
+		<p>
+		<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR NAME="selected" -->> Липкий термін боргу
+		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
+		<input type="hidden" name="print" value="maybe">
+		<!-- TMPL_IF NAME="CHARGES" -->
+			<input type="hidden" name="charges" value="yes">
+			<input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->">
+		<!-- /TMPL_IF -->
+		</p>
+	</form>
+	</div>
+
+
+
+<!--
+	RESULT OF ISSUING REQUEST
+-->
+	<div id="bloc25">
+		<!-- TMPL_IF NAME="IMPOSSIBLE" -->
+		<h2 class="problem">Видання неможливе</h2>
+			<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+				<p class="problem">Ви пробуєте видати книгу, яка не знаходиться у Вашому підрозділу.</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="INVALID_DATE" -->
+				<p class="problem">Термін боргу неправильний</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
+				<p class="problem">Штрих-код невідомий</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
+				<p class="problem">Од.зб. не для позики</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="WTHDRAWN" -->
+				<p class="problem">Одиниця забрана</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="GNA" -->
+				<p class="problem">Позичальник йде без адреси</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="CARD_LOST" -->
+				<p class="problem">Квиток позичальника втрачений</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="DEBARRED" -->
+				<p class="problem">Позичальник заборонений</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
+				<p class="problem">Продовжити більше не можливо</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="EXPIRED" -->
+				<p class="problem">Квиток позичалька прострочений</p>
+			<!-- /TMPL_IF -->
+			<br/>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
+		<h2 class="problem">Мені потрібне підтвердження перед виданням</h2>
+			<!-- TMPL_IF NAME="DEBT" -->
+				<p>Позичальник має борг <!-- TMPL_VAR name="DEBT" --></p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="RENEW_ISSUE" -->
+				<p>Не видача а продовження</p>
+			<!-- /TMPL_IF -->	
+			<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+				<p>Зарезевоване чекає на <!-- TMPL_VAR NAME="RESERVE_WAITING" --></p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="RESERVED" -->
+				<p>Зарезервовано <!-- TMPL_VAR NAME="RESERVED" --></p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
+				<p>Одиниця видана <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Повернути та видати?</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="TOO_MANY" -->
+				<p class="problem">Занадто багато видач (вже видано / максимум: <!-- TMPL_VAR name="TOO_MANY" -->)</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
+			<form method="post">
+				<!-- TMPL_IF NAME="RESERVED" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Відміна резервування</p>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Відміна резервування</p>
+				<!-- /TMPL_IF -->
+				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
+				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">">
+				<input type="hidden" name="issueconfirmed" value="1">
+				<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
+				<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
+				<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
+				<input type="submit" value="Підтвердити видачу" class="button circulation">
+				<a href="circulation.pl?borrnumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button circulation">Не видавати</a>
+			</form>
+			<!-- /TMPL_UNLESS -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="issued" -->
+			<p>Одиниця видана</p>
+		<!-- /TMPL_IF -->
+	</div>
+<!-- /TMPL_IF -->
+
+
+
+<!--
+SUMMARY : TODAY & PREVIOUS ISSUES
+-->
+
+<div id="bloc25">
+	<h2 class="circulation">Видачі</h2>
+	<form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post">
+	<input type="hidden" value="circ" name="destination" />
+	<input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+	<table>
+		<tr>
+			<th class="circulation">Дата повернення</th>
+			<th class="circulation">Штрих-код</th>
+			<th class="circulation">Заголовок</th>
+			<th class="circulation">Продовжити?</th>
+			<th class="circulation">Повернення?</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="todayissues" -->
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="dd" --></td>
+			<td>
+				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
+			</td>
+			<td>
+				<p><!-- TMPL_VAR NAME="title" --></p>
+				<p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+				<p><i><!-- TMPL_VAR name="itemnotes" --></i></p>
+			</td>
+			<td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
+			<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->">Повернення</a></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	
+        <!-- TMPL_LOOP NAME="previssues" -->
+		<!-- TMPL_IF NAME="togglecolor" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="od" -->
+					<td class="problem">
+						<!-- TMPL_VAR NAME="dd" -->
+					</td>
+					<td class="problem">
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
+					</td>
+					<td class="problem">
+					   <p><!-- TMPL_VAR NAME="title" --></p>
+					   <p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+					</td>
+                    <td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
+                    <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->" class="button circulation">Повернення</a></td>
+				<!-- TMPL_ELSE -->
+					<td>
+						<!-- TMPL_VAR NAME="dd" -->
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a>
+					</td>
+					<td>
+					   <p><!-- TMPL_VAR NAME="title" --></p>
+					   <p><!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+					</td>
+                    <td><input type="checkbox" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y"<!-- TMPL_IF NAME="od" --> checked="checked"<!-- /TMPL_IF --> /></td>
+                    <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR name="barcode" -->" class="button circulation">Повернення</a></td>
+				<!-- /TMPL_IF -->
+			</tr>
+		<!-- /TMPL_LOOP -->
+	
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="submit" value="Продовжити" class="button circulation"></td>
+        <td>
+        </tr>
+	</table>
+    </form>
+</div>
+
+</div>
+<!-- TMPL_INCLUDE NAME="circulation-bottom.inc" -->
+

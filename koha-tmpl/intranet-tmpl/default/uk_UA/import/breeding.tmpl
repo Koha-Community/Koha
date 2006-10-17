@@ -1,0 +1,34 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1 class="parameters">Імпорт до сховища</h2>
+	<!-- TMPL_IF NAME="uploadmarc" -->
+	<p>Результати імпорту: </p>
+	<ul>
+		<p><!-- TMPL_VAR NAME="imported" --> імпортовано записів</p>
+		<p><!-- TMPL_VAR NAME="alreadyindb" --> не імпортовано, тому що вже є у БД</p>
+		<p><!-- TMPL_VAR NAME="alreadyinfarm" --> не імпортовано, тому що вже є у 'фермі' записів</p>
+		<p><!-- TMPL_VAR NAME="notmarcrecord" --> не імпортовано, тому що вони, здається, не є у МАРК-форматі (або відсутні ISBN/ISSN)!</p>
+		<p><!-- TMPL_VAR NAME="total" --> проаналізовано записів</p>
+		<p><a href="/cgi-bin/koha/admin-home.pl">Повернутися</a>
+	</ul>
+	<!-- TMPL_ELSE -->
+	<ul>
+		<li>Виберіть файл для імпорту до сховища. Він буде проаналізований, і для кожного знайденого ISBN, новий малюк-запис буде створений у сховищі.</li>
+		<li>Якщо ISBN вже існує у сховищі, Ви можете вибрати, чи нехтувати новим записом чи записати поверх старого.</li>
+		<li>Ви можете ввести ім'я цього імпорту. Воно може бути корисно при створенні бібліотечного запису, щоб пам'ятати, звідки прийшли запропоновані МАРК-дані!</li>
+		<li>Звичайно, якщо ISBN вже існує у активній БД, бібліотечний запис буде проігноровано.</li>
+	</ul>
+	<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" enctype="multipart/form-data">
+		<p><label class="label100">Виберіть файл для імпорту: </label><input type="file" name="uploadmarc" /></p>
+		<p><label class="label100">Назва для цього імпортування: </label><input type="text" name="filename" /></p>
+		<p><label class="label100">Кодування символів</label>
+			<select name="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		</p>
+		<p>Якщо ISBN вже у сховищі</p>
+				<p><label class="label100">&nbsp; </label><input type="radio" name="overwrite_biblio" value="0" checked> Ігнорувати його, зберігши існуючий</p>
+				<p><label class="label100">&nbsp; </label><input type="radio" name="overwrite_biblio" value="1"> Цей записати поверха існуючого</p>
+		<p><label class="label100">&nbsp; </label><input type="submit" value="Імпортувати" class="button parameters"></p>
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,0 +1,261 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
+		}
+		//
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		//
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
+			return false;
+		}
+		return true;
+		}
+		//
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		//
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.variable.value.length==0) {
+				_alertString += "\n- " + _("змінна відсутня");
+			}
+			if (f.value.value.length==0) {
+				_alertString += "\n- " + _("відсутнє значення");
+			}
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
+		}
+		</script>
+	
+	<!-- TMPL_IF NAME="add_form" -->
+	
+		<!-- TMPL_IF NAME="modify" -->
+			<h1>Редагування системної змінної</h1>
+		<!-- TMPL_ELSE -->
+			<h1>Додавання системної змінної</h1>
+		<!-- /TMPL_IF -->
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<div id="bloc25">
+			<h2 class="parameters"><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->"></h2>
+			<input type="hidden" name="op" value="add_validate">
+			<p>
+			<!-- TMPL_IF NAME="searchfield" -->
+				<label>Змінна </label><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<!-- TMPL_ELSE -->
+				<label>Змінна </label><input type="text" name="variable" size="60">
+			<!-- /TMPL_IF -->
+			</p>
+			<p><label>Значення</label>
+				<!-- TMPL_IF NAME="type-free" -->
+					<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->">
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-textarea" -->
+					<textarea name="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-choice" -->
+					<select name="value">
+						<!-- TMPL_LOOP NAME="options" -->
+							<option value="<!-- TMPL_VAR NAME="option" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-yesno" -->
+					<input type="radio" name="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked<!-- /TMPL_IF -->>Так <input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked<!-- /TMPL_IF -->>Ні
+				<!-- /TMPL_IF -->
+	
+			</p>
+			<p><label>&nbsp;</label><input type="submit" value="Гаразд" class="button"></p>
+		</div>
+		<div id="bloc25">
+			<h2 class="parameters">Внутрішні налаштування Коха (У Вас не мало б бути жодних причин змінювати наступні значення за умовчанням)</h2>
+			<p>Тип змінної: <input type="text" name="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"> (вибір=Choice, ТакНі=YesNo, ціле число=Integer, ввід тексту=Textarea, число&nbsp;з&nbsp;пл.&nbsp;крапкою=Float, теми=Themes, мови=Languages)</p>
+			Можливі варіанти змінної: <input type="text" name="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="80" maxlength="80"> (вибірний список для 'Choice' (відокремлено знаком&nbsp;|) та стовпчики|рядки для області вводу тексту)
+		</div>
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	
+		Дані записані
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="Гаразд">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	
+	<table border="0" cellspacing="0" cellpadding="2">
+		<tr valign="top" bgcolor="#99cc33">
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Змінна </b></td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
+		</tr>
+		<tr><td>Значення</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<tr><td colspan="2" align="center">ПІДТВЕРДІТЬ ВИДАЛЕННЯ</td></tr>
+		<tr><td><input type="submit" value="ТАК"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="НІ"></form></td></tr>
+	</table>
+	
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	
+		Видалені дані
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="Гаразд">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+	<h1>Управління системними налаштуваннями</h1>
+	<table>
+		<tr>
+			<td>
+				<!--TMPL_IF Name="Admin"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="button">Управління
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Управління
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Acquisitions"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="button">Надходження
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Надходження
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Authorities"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="button">Авторитетні джерела
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Авторитетні джерела
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Librarian"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet" class="button">Інтерфейс бібліотекаря
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet">Інтерфейс бібліотекаря
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Catalogue"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="button">Каталог
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Каталог
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Circulation"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="button">Обіг
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Обіг
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Members"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="button">Відвідувачі
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Відвідувачі
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="OPAC"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="button">Електронічний каталог
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">Електронічний каталог
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Others"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="button">Інше
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Інше
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+	</table>
+	<table>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<!-- TMPL_IF NAME="toggle" -->
+			<tr valign="top" class="hilighted">
+		<!-- TMPL_ELSE -->
+			<tr valign="top">
+		<!-- /TMPL_IF -->
+		<td>
+			<p><b><!-- TMPL_VAR NAME="variable" -->:</b> <!-- TMPL_VAR NAME="value" --></p>
+			<p align="right"><i>(<!-- TMPL_VAR NAME="explanation" -->)</i></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="edit" -->" class="button parameters">Змінити</a></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="delete" -->" class="button parameters">Видалити</a></p>
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form">
+	</table>
+	<table width="40%">
+		<tr>
+			<td width="50%"><!-- TMPL_VAR NAME="previous" --></td>
+			<td width="50%"><!-- TMPL_VAR NAME="next" --></td>
+		</tr>
+	</table>
+	</form>
+	
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form">
+		<input type="submit" class="button" value="Додати системну змінну">
+	</form>
+	
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

@@ -1,0 +1,94 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+
+<div id="mainbloc">
+	<h1 class="acquisition">
+			Отримання пакета для <i><!-- TMPL_VAR NAME="name" --></i>
+	</h1>
+	
+	<div id="bloc25">
+		<p><label>Накладна</label><!-- TMPL_VAR NAME="invoice" --></p>
+        <p><label>Дата</label> <!-- TMPL_VAR name="formatteddatereceived"--></p>
+	</div>
+	
+	<div id="bloc25">
+	<h2 class="acquisition"> Одиниць у пакеті</h2>
+	<p>
+	<!-- TMPL_VAR NAME="countreceived" --> бібліотечних одиниць отримано
+	</p>
+	<table>
+		<tr>
+			<th class="acquisition">Поличка замовлень</th>
+			<th class="acquisition">Заголовок</th>
+			<th class="acquisition">Розрахункова вартість</th>
+			<th class="acquisition">Замовлена кількість</th>
+			<th class="acquisition">Вартість перевезення</th>
+			<th class="acquisition">Фактично</th>
+			<th class="acquisition">Кількість</th>
+			<th class="acquisition">Загалом</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="loop_received" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td></td>
+				<td class="number"><!-- TMPL_VAR NAME="unitprice" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="total" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td colspan="5" rowspan=3  bgcolor="#ffdf61">
+			<b>ДОПОМОГА</b>
+				<p>Підсумок знизу сторінки повинен бути в межах декількох копійок підсумку для накладної.</p>
+			</td>
+			<td colspan="2"  class="acquisition number"><b>ПДВ</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="gst" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="acquisition number"><b>ФРАХТ</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="freight" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="acquisition number"><b>ЗАГАЛОМ</b></td>
+			<td class="acquisition number"><!-- TMPL_VAR NAME="grandtot" --></td>
+		</tr>
+	</table>
+	</div>
+	
+	<div id="bloc25">
+	<h2 class="acquisition"> Очікуючі замовлення </h2>
+		<form action="/cgi-bin/koha/acqui/acquire.pl">
+			<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
+			<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
+			<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
+			<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+			
+			<b>Пошук за ISBN або заголовком:</b> <input type="text" size="25" name="recieve">
+		</form>
+	<p>
+	<form action="" method="get" name="orderform">
+	
+	<table class="small">
+		<tr>
+			<th class="acquisition">Поличка замовлень</th>
+			<th class="acquisition">Заголовок</th>
+			<th class="acquisition">Замовлено</th>
+			<th class="acquisition">Отримано</th>
+			<th class="acquisition"></th>
+		</tr>
+		<!-- TMPL_VAR NAME="countpending" --> рядків
+		<!-- TMPL_LOOP NAME="loop_orders" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><!-- TMPL_VAR NAME="title" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+                <td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&catview=yes" class="button acquisition">Отримання</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -1,0 +1,76 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+<div id="mainbloc">
+	<div id="bloc25">
+	<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
+		<h2 class="catalogue">
+			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra">
+				<!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+			</a>
+		</h2>
+		<p>
+		<form action="/cgi-bin/koha/modbibitem.pl" method="post">
+			<input type="hidden" name="bibitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+			<p><!-- TMPL_VAR NAME="biblioitemnumber" --> ГРУПА - <!-- TMPL_VAR NAME="description" --> </p>
+			<p><b>Номер бібліотечного запису:</b> <!-- TMPL_VAR NAME="biblionumber" --></p>
+			<p><b>Тип елемента:</b> <!-- TMPL_VAR NAME="itemtype" --></p>
+			<p><b>URL:</b> <!-- TMPL_VAR NAME="url" --></p>
+			<p><b>Тривалість позики:</b> <!-- TMPL_VAR NAME="loanlength" --></p>
+			<p><b>Плата за прокат:</b> <!-- TMPL_VAR NAME="rentalcharge" --></p>
+			<p><b>Класифікація:</b> <!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --></p>
+			<p><b>ISBN:</b> <!-- TMPL_VAR NAME="isbn" --></p>
+			<p><b>Видавець:</b> <!-- TMPL_VAR NAME="publishercode" --> </p>
+			<p><b>Місце:</b> <!-- TMPL_VAR NAME="place" --></p>
+			<p><b>Дата:</b> <!-- TMPL_VAR NAME="publicationyear" --></p>
+			<p><b>Том:</b> <!-- TMPL_VAR NAME="volumeddesc" --></p>
+			<p><b>Сторінки:</b> <!-- TMPL_VAR NAME="pages" --></p>
+			<p><b>Ілюстр.:</b> <!-- TMPL_VAR NAME="illus" --></p>
+			<p><b>Розмір:</b> <!-- TMPL_VAR NAME="size" --></p>
+			<p><b>Примітки:</b> <!-- TMPL_VAR NAME="bnotes" --></p>
+			<p><b>Кількість одиниць:</b> <!-- TMPL_VAR NAME="count" --></p>
+		</form>
+		<input type="image" name="submit" value="змінити" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
+		<input type="image" name="delete" value="видалити" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
+		<a class="button" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Запити</a>
+	<!-- /TMPL_LOOP -->
+	</div>
+<!-- TMPL_LOOP NAME="ITEM_DATA" -->
+<div id="bloc25">
+	<h2 class="catalogue">ШТРИХ-КОД <!-- TMPL_VAR NAME="barcode" --></h2>
+	<form action="/cgi-bin/koha/moditem.pl" method="post">
+	<input type="hidden" name="bibitem" value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+	<input type="hidden" name="item" value=<!-- TMPL_VAR NAME="itemnumber" -->>
+	<input type="hidden" name="type" value=<!-- TMPL_VAR NAME="type" -->>
+	<input type="image" name="submit" value="змінити" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
+	<input type="image" name="delete" value="видалити" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
+	<br>
+	<b>Домашній підрозділ:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+	<b>Чинний підрозділ:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+	<b>Востаннє побачено:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
+	<b>Востаннє зайняв:</b> <!-- TMPL_VAR NAME="datelastborrowed" --><br>
+	<b>Стан одиниці: </b> <!-- TMPL_IF NAME="issue" -->На видачі до <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Доступно <!-- /TMPL_IF --><br>
+	<!-- TMPL_IF NAME="issue" --><b>Дата повернення:</b> <!-- TMPL_VAR NAME="date_due" --><br><!-- /TMPL_IF -->
+	<b>Останній позичальник 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+	<b>Останній позичальник 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
+	<b>Ціна заміни:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
+	<b>Втрачена одиниця:</b> <!-- TMPL_IF NAME="itemlost" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --><br>
+	<b>Заплачено:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+	<b>Примітки:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
+	<b>Продовження:</b> <!-- TMPL_VAR NAME="renewals" --><br>
+	<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Дата вступу:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
+	<b>Скасовано: </b> <!-- TMPL_IF NAME="wthdrawn" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --><br>
+	<b><a
+	href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Загальна кількість випусків:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
+	<b>Номер групи:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
+	<b>Номер бібліотечного запису:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
+	</h2>
+</div>
+</form>
+<!-- /TMPL_LOOP -->
+
+<p>
+</form>
+</center>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

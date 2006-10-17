@@ -1,0 +1,59 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1 class="parameters">Визначення правил видачі для <!-- TMPL_VAR NAME="branch" --></h1>
+	<div id="bloc25">
+		<h2 class="parameters">ПОРАДИ щодо видач</h2>
+		<p>У кожному полі необхідно заповнити тривалість_видачі, максимальну_кількість_видач</p>
+		<p> - наприклад: 21,5 дозволить позичити на 21 день та зробити 5 видач</p>
+		<h2 class="parameters">ПОРАДИ щодо пені</h2>
+		<p>У кожному полі потрібно задати пеню, час_початку_нарахування, цикл_нарахування</p>
+		<p>наприклад 1,7,7 = пеня в розмірі 1 ГРН, USD, EUR і т.д., після 7 днів, кожні 7 днів</p>
+		<p>Примітка : пеню нараховує скрипт fines2.pl, що розташовується у теці [misc]. </p>
+		<p>Попросіть свого системного адміністратора помістити цей скрипт у crontab, після опівночі, щоб мати пені, обчислені щоночі</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="parameters">Значення по умовчанню</h2>
+		<p> Якщо у комірці не заповнено, шукатиметься одне з наступних значень: </p>
+		<ul>
+			<li>такий же підрозділ і така ж категорія позичальника, тип од.зб. *</li>
+			<li>такий же підрозділ і такий же тип од.зб., категорія позичальника *</li>
+			<li>такий же тип од.зб. і категорія позичальника, підрозділ *</li>
+			<li>усюди</li>
+			<li>Якщо нічого не встановлено, значення по умовчанню буде 21,5 (жорстко задано)</li>
+		</li>
+	</div>
+	<div id="bloc100">
+		<form method="post">
+		Вибір підрозділу :
+			<select name="branch" onchange="javascript:submit()">
+				<option value="">По умовчанню</option>
+			<!-- TMPL_LOOP NAME="branchloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</form>
+		<form method="post">
+			<input type="hidden" name="op" value="save">
+			<table>
+			<tr>
+				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th><!-- TMPL_VAR NAME="in_title" --><br/>видача / пеня</th><!-- /TMPL_LOOP -->
+			</tr>
+			<!-- TMPL_LOOP NAME="row" -->
+				<tr align="center">
+					<th>
+						<!-- TMPL_VAR NAME="categorycode" -->
+					</th>
+					<!-- TMPL_LOOP NAME="cell" -->
+						<td<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
+							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
+							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
+						</td>
+					<!-- /TMPL_LOOP -->
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+			<input type="submit" value="Зберегти" class="button parameters">
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

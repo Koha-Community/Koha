@@ -1,0 +1,77 @@
+    <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="authority">Пошук за авторитетним джерелом</h1>
+
+<form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div id="bloc25">
+		<h2 class="authority">Пошук за
+			<select name="authtypecode">
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="authtypetext" -->
+				</option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</h2>
+		<p>
+			<label class="label100">Основне входження ($a тільки)</label>
+			<select name="operator">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="$a">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+		</p>
+		<p>
+			<label class="label100">Основне входження </label>
+			<select name="operator">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="mainentry">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+		</p>
+		<p>
+			<label class="label100">Де-небудь </label>
+			<select name="operator">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+		</p>
+        <p>(додавайте символ % в кінці Вашого слова, якщо Ви хочете використовувати усікання справа: при введені <b>теор%</b> буде знайдено теорія та теорії)</p>
+		<p>
+			<input type="submit" value="Почати пошук" class="button authority">
+		</p>
+	</div>
+</form>
+<div id="bloc25">
+<h2 class="authority">Додати авторитетне джерело</h2>
+<form name="f2" method="post" action="authorities.pl">
+	<p>Тип авторитетного джерела 
+	<select name="authtypecode">
+		<!-- TMPL_LOOP name="authtypesloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+				<!-- TMPL_VAR name="authtypetext" -->
+			</option>
+		<!-- /TMPL_LOOP -->
+	</select>
+	<input type="submit" value="Додати" class="button authority">
+	</p>
+</form>
+</div>
+
+</div>
+<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
+

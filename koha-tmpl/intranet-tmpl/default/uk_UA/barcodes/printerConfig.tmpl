@@ -1,0 +1,103 @@
+<!-- TMPL_INCLUDE NAME="barcodes-top.inc" -->
+<div id="mainbloc">
+	<h1>Налаштування друкарки</h1>
+	<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+		<tr valign="center">
+			<td><font size="4">Встановлення конфіґурації друкарки відповідно Вашому системному оточенню</font></td>
+		</tr>
+	</table>
+	<ul>
+		<li>Встановити ширину і висоту мітки з якою Ви працюєте.</li>
+		<li>Встановити Вашу системну роздільну здатність (DPI) по умовчанню.</li>
+		<li>Встановити тип сторінки.</li>
+		<li>Вибрати, скільки стовпців та рядків розміститься на Вашому типі сторінки.</li>
+		<li>Встановити ліве та нижнє поля для сторінки, яку збираєтеся використовувати. Ці параметри допоможуть вирівняти по центру штрих-коди у мітках.</li>
+	</ul>
+	<br>
+	<form id="formulario" method="POST" action='<!-- TMPL_VAR NAME="SCRIPT_NAME" -->' name="form1">
+		<input type="hidden" name="saveSettings" value="1">
+		<table cellpadding="3" border=0 class="myTable">
+			<tr>
+				<td>
+					Ширина мітки (в мм)
+				</td>
+				<td>
+					Висота мітки (у мм)
+				</td>
+				<td>
+					Системна роздільна здатність (DPI)
+				</td>
+				<td>
+					Тип cторінки
+				</td>
+				<td>
+					Стовпці
+				</td>
+				<td>
+					Рядки
+				</td>
+				<td>
+					Поле знизу (у мм)
+				</td>
+				<td>
+					Поле зліва (у мм)
+				</td>
+			<tr>
+  			<tr valign="top">
+				<td align="left"> 
+					<input id="labelWidth" type="text" name="labelWidth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_WIDTH" -->">
+				</td>
+				<td align="left"> 
+					<input id="labelHeigth" type="text" name="labelHeigth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_HEIGTH" -->">
+				</td>
+				<td align="left">
+					<input id="systemDpi" type="text" name="systemDpi" size="5"
+					       value="<!-- TMPL_VAR NAME="SYSTEM_DPI" -->">
+				</td>
+				<td align="left">
+					<select name="pageType" id="pageType" size="1">
+						<!-- TMPL_IF name="A4" -->
+							<option value="A4" selected>A4 (21 х 29,7 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="A4">A4 (21 х 29,7 см)</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Letter" -->
+							<option value="Letter" selected>Лист (21,59 х 27,94 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Letter">Лист (21,59 х 27,94 см)</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Legal" -->
+							<option value="Legal" selected>Legal (21,59 х 35,56 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Legal">Legal (21,59 х 35,56 см)</option>
+						<!-- /TMPL_IF -->
+		            </select>
+				</td>
+  			    <td align="left">
+					<input id="columns" type="text" name="columns" size="5"
+					       value="<!-- TMPL_VAR NAME="COLUMNS" -->">
+				</td>
+  			    <td align="left">
+					<input id="rows" type="text" name="rows" size="5"
+					       value="<!-- TMPL_VAR NAME="ROWS" -->">
+				</td>
+  			    <td align="left">
+					<input id="marginBottom" type="text" name="marginBottom" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_TOP" -->">
+				</td>
+  			    <td align="left">
+					<input id="marginLeft" type="text" name="marginLeft" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_LEFT" -->">
+				</td>
+  			</tr>
+  			<tr valign="top">
+  			    <td colspan="8" align="center">
+					<input type="submit" value="Зберегти встановлення">
+				</td>
+  			</tr>
+		</table>		
+	</form>
+</div>
+<!-- TMPL_INCLUDE NAME="barcodes-bottom.inc" -->

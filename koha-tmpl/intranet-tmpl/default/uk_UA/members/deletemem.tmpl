@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<div id="mainbloc">
+	<div id="bloc25">
+	<h2 class="members">Видалення неможливе</h2>
+		<!-- TMPL_IF name="ItemsOnIssues" -->
+			<p>Позичальник має видану(их) <!-- TMPL_VAR name="ItemsOnIssues" --> одиницю(ць)</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="charges -->
+			<p>Позичальник має <!-- TMPL_VAR name="charges" --> боргу</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="guarantees" -->
+			<p>Позичальник має ґарантії</p>
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

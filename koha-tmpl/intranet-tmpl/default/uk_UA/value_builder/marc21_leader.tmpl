@@ -1,0 +1,321 @@
+<html>
+<head>
+<title>Конструктор початкової ділянки запису</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>1-4 Розмір запису</td>
+		<td>(автозаповнено)</td>
+	</tr>
+	<tr>
+		<td>5- Статус запису</td>
+		<td>
+			<select name="f5" size="1">
+			<!-- TMPL_IF name="f5a" -->
+				<option value=" " SELECTED>a- Збільшення у рівні кодування</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">a- Збільшення у рівні кодування</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" SELECTED>c- Корекція чи перегляд</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">c- Корекція чи перегляд</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" SELECTED>d- Вилучено</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">d- Вилучено</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5n" -->
+				<option value="n" SELECTED>n- Новий</option>
+			<!-- TMPL_ELSE -->
+				<option value="n">n- Новий</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5p" -->
+				<option value="p" SELECTED>p- Збільшення у рівні кодування від попередньої публікації</option>
+			<!-- TMPL_ELSE -->
+				<option value="p">p- Збільшення у рівні кодування від попередньої публікації</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>6- Тип запису</td>
+		<td>
+			<select name="f6" size="1">
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" SELECTED>a- Мовні матеріали (монографія)</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">a- Мовні матеріали (монографія)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6c" -->
+				<option value="c" SELECTED>c- Нотна музика</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">c- Нотна музика</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6d" -->
+				<option value="d" SELECTED>d- Рукописна нотна музика</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">d- Рукописна нотна музика</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6e" -->
+				<option value="e" SELECTED>e- Картографічний матеріал</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">e- Картографічний матеріал</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6f" -->
+				<option value="f" SELECTED>f - Рукописний картографічний матеріал</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">f - Рукописний картографічний матеріал</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6g" -->
+				<option value="g" SELECTED>g - Проектований засіб</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">g - Проектований засіб</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6i" -->
+				<option value="i" SELECTED>i - Звукозаписи немузичні</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">i - Звукозаписи немузичні</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6j" -->
+				<option value="j" SELECTED>j - Музичний звуковий запис</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">j - Музичний звуковий запис</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6k" -->
+				<option value="k" SELECTED>k - Двовимірна графіка, неспроектована</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">k - Двовимірна графіка, неспроектована</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6m" -->
+				<option value="m" SELECTED>m - Комп'ютерний файл</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">m - Комп'ютерний файл</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6o" -->
+				<option value="o" SELECTED>o - Спорядження</option>
+			<!-- TMPL_ELSE -->
+				<option value="o">o - Спорядження</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6r" -->
+				<option value="r" SELECTED>r - Тривимірні штучні та реальні об’єкти</option>
+			<!-- TMPL_ELSE -->
+				<option value="r">r - Тривимірні штучні та реальні об’єкти</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6t" -->
+				<option value="t" SELECTED>t - Мова рукописного матеріалу</option>
+			<!-- TMPL_ELSE -->
+				<option value="t">t - Мова рукописного матеріалу</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>7- Бібліографічний рівень</td>
+		<td>
+			<select name="f7" size="1">
+				<!-- TMPL_IF name="f7a" -->
+					<option value="a" SELECTED>a- Монографічна складова частина</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a- Монографічна складова частина</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7b" -->
+					<option value="b" SELECTED>b- Серійна складова частина</option>
+				<!-- TMPL_ELSE -->
+					<option value="b">a- Серійна складова частина</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7c" -->
+					<option value="c" SELECTED>c - Зібрання</option>
+				<!-- TMPL_ELSE -->
+					<option value="c">c - Зібрання</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7d" -->
+					<option value="d" SELECTED>d- Підодиниця</option>
+				<!-- TMPL_ELSE -->
+					<option value="d">d- Підодиниця</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7i" -->
+					<option value="i" SELECTED>i- Об'єднання ресурсу</option>
+				<!-- TMPL_ELSE -->
+					<option value="i">i- Об'єднання ресурсу</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7m" -->
+					<option value="m" SELECTED>m- Монографія/одиниця</option>
+				<!-- TMPL_ELSE -->
+					<option value="m">m- Монографія/одиниця</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7s" -->
+					<option value="s" SELECTED>s - періодичне виданння</option>
+				<!-- TMPL_ELSE -->
+					<option value="s">s - періодичне виданння</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>8- Ієрархічний рівень</td>
+		<td>
+			<select name="f8" size="1">
+				<!-- TMPL_IF name="f8 " -->
+					<option value=" " SELECTED>Немає специфічного типу</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">Немає специфічного типу</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f8a" -->
+					<option value="a" SELECTED>a- Архівний</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a- Архівний</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td>9- Кодування</td>
+		<td>
+			<select name="f9" size="1">
+				<!-- TMPL_IF name="f9 " -->
+					<option value=" " SELECTED>MARC-8</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">MARC-8</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f9a" -->
+					<option value="a" SELECTED>a- UCS/Unicode</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a- UCS/Unicode</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>10-16 індикатор/підполя/розмір</td>
+		<td>(автозаповнено)</td>
+	<tr>
+		<td>17- Кодування</td>
+		<td>
+			<select name="f17" size="1">
+				<!-- TMPL_IF name="f17 " -->
+					<option value=" " SELECTED>повний рівень</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">Повний рівень</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f171" -->
+					<option value="1" SELECTED>1- Повний рівень, матеріал не розглянуто</option>
+				<!-- TMPL_ELSE -->
+					<option value="1">1- Повний рівень, матеріал не розглянуто</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f172" -->
+					<option value="2" SELECTED>2 - Менш ніж повний рівень, матеріал, що не розглядається</option>
+				<!-- TMPL_ELSE -->
+					<option value="2">2 - Менш ніж повний рівень, матеріал, що не розглядається</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f173" -->
+					<option value="3" SELECTED>3- Скорочений рівень</option>
+				<!-- TMPL_ELSE -->
+					<option value="3">3- Скорочений рівень</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f174" -->
+					<option value="4" SELECTED>4- Рівень ядра</option>
+				<!-- TMPL_ELSE -->
+					<option value="4">4- Рівень ядра</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f175" -->
+					<option value="5" SELECTED>5- Частковий (попередній) рівень</option>
+				<!-- TMPL_ELSE -->
+					<option value="5">5- Частковий (попередній) рівень</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f177" -->
+					<option value="7" SELECTED>7- Мінімальний рівень</option>
+				<!-- TMPL_ELSE -->
+					<option value="7">7- Мінімальний рівень</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f178" -->
+					<option value="8" SELECTED>8- Рівень попередньої публікації</option>
+				<!-- TMPL_ELSE -->
+					<option value="8">8- Рівень попередньої публікації</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f17u" -->
+					<option value="u" SELECTED>u - Невідомо</option>
+				<!-- TMPL_ELSE -->
+					<option value="u">u - Невідомо</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f17z" -->
+					<option value="z" SELECTED>z- Не застосовно</option>
+				<!-- TMPL_ELSE -->
+					<option value="z">z- Не придатний повний рівень</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td>18 - Форма каталогізаційного опису</td>
+		<td>
+			<select name="f18" size="1">
+				<!-- TMPL_IF name="f18 " -->
+					<option value=" " SELECTED>Не-ISBD</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">Не-ISBD</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f18a" -->
+					<option value="a" SELECTED>a- AACR 2</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a- AACR 2</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f18i" -->
+					<option value="i" SELECTED>i- ISBD</option>
+				<!-- TMPL_ELSE -->
+					<option value="i">i- ISBD</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f18u" -->
+					<option value="u" SELECTED>u- Невідомо</option>
+				<!-- TMPL_ELSE -->
+					<option value="u">u- Невідомо</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>19 - Вимога зв'язаного запису</td>
+		<td>
+			<select name="f19" size="1">
+				<!-- TMPL_IF name="f19 " -->
+					<option value=" " SELECTED>Зв'язаний запис не потрібний</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">Зв'язаний запис не потрібний</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f18r" -->
+					<option value="r" SELECTED>r- Необхідний зв'язаний запис</option>
+				<!-- TMPL_ELSE -->
+					<option value="r">r- Необхідний зв'язаний запис</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>20-24 Карта довідника та довжини</td>
+		<td>(автозаповнено)</td>
+	<tr>
+
+	<tr><td colspan=2><input type="submit" value="Гаразд"></td></tr>
+</table>
+</form>
+<script>
+function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
+			'    '+document.f_pop.f5.value +
+			document.f_pop.f6.value+ document.f_pop.f7.value+
+			document.f_pop.f8.value+ document.f_pop.f9.value+ '       '+
+			document.f_pop.f17.value+ document.f_pop.f18.value+ document.f_pop.f19.value+'     ';
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

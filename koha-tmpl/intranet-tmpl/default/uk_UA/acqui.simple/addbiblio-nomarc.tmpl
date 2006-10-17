@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+<div id="mainbloc">
+	<h1 class="catalogue">Додавання нового бібліотечного запису</h1>
+	
+	<div id="bloc60">
+		<h2 class="catalogue">Частина перша: Інформація щодо авторського права </h2>
+	
+		<!-- TMPL_IF NAME="ERROR" -->
+			<p class="problem">Будь-ласка конкретизуйте заголовок</p>
+		<!-- /TMPL_IF -->
+		
+		<form action="savebiblio.pl" method="post">
+		<p><label class="label100">Заголовок:* </label><input name="title" size="40" /></p>
+		<p><label class="label100">Підзаголовок: </label><input name="subtitle" size="40" /></p>
+		<p><label class="label100">Автор: </label><input name="author" size="40" /></p>
+		<p>Додаткові автори: <i>По одному автору на рядок</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="additionalauthors" cols="30" rows="6"></textarea>
+		</p>
+		</p>
+		<p>Заголовок серіального видання:  <i>(якщо застосовується)</i></p>
+		<p><label class="label100">&nbsp;</label><input name="seriestitle" size="40" /></p>
+		<p>Тематичні рубрики:  <i>По одній темі на рядок</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="subjectheadings" cols="30" rows="6"></textarea>
+		</p>
+		<label class="label100">Дата авторського права: </label><input name="copyrightdate" size="40" /></p>
+		<label class="label100">Анотація: </label><textarea cols="30" rows="6" name="abstract"></textarea></p>
+		<label class="label100">Нотатки: </label><textarea cols="30" rows="6" name="notes"></textarea></p>
+		<p><input type="submit" value="Затвердити" class="button catalogue"></p>
+		</form>
+		* Обов'язкове
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

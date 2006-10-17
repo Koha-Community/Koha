@@ -1,0 +1,255 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+
+<!-- TMPL_IF Name="OK" -->
+	<h1> Підтвердіть запис </h1>
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> НОВИЙ ВІДВІДУВАЧ </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Найменування </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="name" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> ПОДРОБИЦІ ПРО ВІДВІДУВАЧА </b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Номер відвідувача </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornum" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Номер квитка</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="cardnum" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Категорія відвідувачів</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="memcat" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Плата</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="fee" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Дата запису</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="joindate" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Дата закінчення терміну</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="expdate" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Приєднання підрозділу</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="branchcode" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ДЕТАЛІ ПРО ОСОБУ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Дата народження</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="dob" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Стать</b>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="sex" -->
+					Чоловік
+				<!-- TMPL_ELSE -->
+					Жінка
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>АДРЕСА ВІДВІДУВАЧА</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Поштова адреса</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="postal" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Домашня адреса</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="home" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПОДРОБИЦІ ДЛЯ КОНТАКТУ З ВІДВІДУВАЧЕМ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Домашній телефон</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Телефон (денний час)</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="phoneday" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Факс</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Електронічна пошта</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign="top" bgcolor="white" >
+                        <td>
+                                <b>Текстове повідомлення</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="textmessaging" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПОДРОБИЦІ АЛЬТЕРНАТИВНОГО КОНТАКТУ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Найменування </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="contactname" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Телефон</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altphone" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Взаємовідношення</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Нотатки </b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="altnotes" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ПРИМІТКИ</b>
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Загальні примітки</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="bornotes" -->
+			</td>
+		</tr>
+		</table><p>
+		<form action="/cgi-bin/koha/members/insertdata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" name="submit" value="Затвердити">
+		</form>
+<!-- TMPL_ELSE -->
+	<h1>ПОМИЛКА</h1>
+	<p>Наступні поля мають заборонені значення. Будь-ласка, натисніть кнопку назад та спробуйте знову:  </p>
+	<!-- TMPL_IF NAME="cardnumber" -->
+		Номер квитка<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="invalid_cardnumber" -->
+		Недійсний номер квитка<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="gender" -->
+		Рід<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="firstname" -->
+		Імена<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="surname" -->
+		Прізвище<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="address" -->
+		Поштова вулична адреса<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="city" -->
+		Поштове місто<br/>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->
