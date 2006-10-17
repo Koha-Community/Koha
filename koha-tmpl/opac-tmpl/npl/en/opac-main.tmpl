@@ -28,6 +28,19 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" size="27" name="value" id="value" /></p>
+		 <!--TMPL_IF Name="mylibraryfirst"--><p>
+				in Branch
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+                <select name="value">
+                    <option value="">Any Branch</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
+            </p><!-- /TMPL_IF -->
 		<p><input type="submit" value="Search" class="submit" /></p>
 		<p>
 			<a href="/cgi-bin/koha/opac-search.pl">Advanced Search (More Options)</a>
