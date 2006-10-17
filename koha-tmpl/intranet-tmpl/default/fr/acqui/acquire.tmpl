@@ -74,8 +74,9 @@
 			<p>
 				<label class="label100">Numéro Facture/BL</label>
 					<!-- TMPL_VAR NAME="invoice" -->
-					<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
-			</p>
+                <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+                <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived" -->">
+                </p>
 			<p>
 				<label class="label100">Notes</label>
 				<!-- TMPL_VAR NAME="notes" -->
@@ -87,13 +88,7 @@
 				<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
 				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
 				<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
-				<!-- TMPL_IF name="catview" -->
-					<input type="submit" class="button acquisition" value="enregistrer"> (tous les prix sont pour 1 exemplaire)
-				<!-- TMPL_ELSE -->
-					<a class="button acquisition" href="/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR NAME="supplierid" -->">
-						Editer
-					</a>
-				<!-- /TMPL_IF -->
+                <input type="submit" class="button acquisition" value="enregistrer"> (tous les prix sont pour 1 exemplaire)
 			</p>
 		</div>
 		</form>

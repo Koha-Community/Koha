@@ -15,7 +15,30 @@
 <li>Texte pour les bibliothécaires :  c'est ce qui est affiché avant le sous- champ dans l'intranet</li>
 <li>Texte pour l'OPAC : c'est ce qui apparaît avant le champ à l'OPAC.S'il est vide, c'est le texte pour les bibliothécaires qui est utilisé  à la place</li>
 <li>Géré dans l'onglet : indique l'onglet où le sous-champ est visible. Ignore signifie que le sous-champ n'est pas géré. Tous les sous-champs d'un champ donné doivent se trouver dans le même onglet ou être ignorés : premièrement c'est plus logique, deuxièment, Koha ne saurait plus trop répéter des champs répétables autrement!!!</li>
-<li>caché : signifie que le champ est géré, mais PAS affiché à l'opac.C'est en général pour les champs internes</li>
+<li>caché : vous pouvez choisir parmi 19 combinaisons pour la visibilité, 17 étant actives. En voici la liste :</li>
+<code><br />
+(! signifie 'invisible' ou, dans le cas de 'minimisé' : 'non minimisé')
+<br /><br />
+  -9 => réservé<br/>
+  -8 => Flag<br/>
+  -7 => OPAC !Intranet !Editeur Minimisé<br/>
+  -6 => OPAC Intranet !Editeur !Minimisé<br/>
+  -5 => OPAC Intranet !Editeur Minimisé<br/>
+  -4 => OPAC !Intranet !Editeur !Minimisé<br/>
+  -3 => OPAC !Intranet Editeur Minimisé<br/>
+  -2 => OPAC !Intranet Editeur !Minimisé<br/>
+  -1 => OPAC intranet Editeur minimisé<br/>
+   0 => OPAC Intranet Editeur !Minimisé<br/>
+   1 => !OPAC Intranet Editeur Minimisé<br/>
+   2 => !OPAC !Intranet Editeur !Minimisé<br/>
+   3 => !OPAC !Intranet Editeur Minimisé<br/>
+   4 => !OPAC Intranet Editeur !Minimisé<br/>
+   5 => !OPAC !Intranet !Editeur Minimisé<br/>
+   6 => !OPAC Intranet !Editeur !Minimisé<br/>
+   7 => !OPAC Intranet !Editeur Minimisé<br/>
+   8 => !OPAC !Intranet !Editeur !Minimisé<br/>
+   9 => Réservé<br/>
+</code>
 <li>URL si coché, indique que le champ est une URL valide et peut-être cliquée</li>
 <li>Valeur autorisée : signifie que la valeur n'est pas libre, mais dans une liste de valeurs autorisées du genre sélectionné</li>
 <li>Liste d'autorité : signifie que la valeur n'est libre, mais doit être choisie dans la liste d'autorité de la catégorie choisie</li>

@@ -1,16 +1,20 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 
+<div id="mainbloc">
 	<table border="0" cellspacing="0" cellpadding="5" align="center">
 		<tr bgcolor="#99cc33">
-			<td background="/images/background-mem.gif"><b>Nom</b></td>
-			<td background="/images/background-mem.gif"><b>Type</b></td>
-			<td background="/images/background-mem.gif"><b>Date/heure</b></td>
-			<td background="/images/background-mem.gif"><b>Montant</b></td>
-			<td background="/images/background-mem.gif"><b>Site</b></td>
+			<th>Nom</th>
+			<th>Description</th>
+			<th>Type</th>
+			<th>Date/heure</th>
+			<th>Montant</th>
+			<th>Site</th>
+			
 		<tr>
 		<!-- TMPL_LOOP NAME=loop1 -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="name" --></td>
+			<td><!-- TMPL_VAR NAME="description" --></td>
 			<td><!-- TMPL_VAR NAME="type" --></td>
 			<td><!-- TMPL_VAR NAME="time" --></td>
 			<td><!-- TMPL_VAR NAME="amount" --></td>
@@ -26,6 +30,5 @@
 	<b>Total annulé : <!-- TMPL_VAR NAME="totalw" --></b>
 </p>
 
+</div>
 <!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
-</body>
-</html>

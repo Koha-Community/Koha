@@ -48,6 +48,8 @@
 		<table class="noborder">
 			<tr>
 				<th class="acquisition">Budgets</th>
+				<th class="acquisition">De</th>
+				<th class="acquisition">à</th>
 				<th class="acquisition">Total</th>
 				<th class="acquisition">Dépensé</th>
 				<th class="acquisition">Engagé</th>
@@ -56,6 +58,8 @@
 			<!-- TMPL_LOOP NAME="loop_budget" -->
 				<tr>
 					<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="startdate" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="enddate" --></td>
 					<td align="right"><!-- TMPL_VAR NAME="budgetamount" --></td>
 					<td align="right"><!-- TMPL_VAR NAME="spent" --></td>
 					<td align="right"><!-- TMPL_VAR NAME="comtd" --></td>
@@ -63,7 +67,7 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<th class="acquisition" align="right">Total</th>
+				<th class="acquisition" align="right" colspan="3">Total</th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="total" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totspent" --></th>
 				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totcomtd" --></th>

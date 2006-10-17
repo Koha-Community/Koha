@@ -125,7 +125,7 @@
 </div>
 <div id="bloc25">
 	<h2 class="bull">Durée d'abonnement</h2>
-	<p>Saisir 1 des champs suivants :</p>
+	<p>Saisir 1 (et 1 seul) des champs suivants :</p>
 	<ul>
 		<p><label class="label100">Nombre de bulletins</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
 		<p><label class="label100">Nombre de semaines</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
@@ -162,19 +162,21 @@
 				<td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
 			</tr>
 			<tr>
+				<!-- TMPL_IF name="mod" -->
+					<td class="bull">Le compteur est actuellement</td>
+				<!-- TMPL_ELSE -->
+					<td class="bull">Début abonnement</td>
+				<!-- /TMPL_IF -->
+				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
+				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
+				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+			</tr>
+			<tr>
 				<td class="bull">Quand supérieur à</td>
 				<td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
 				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
 				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
 			</tr>
-			<!-- TMPL_IF name="mod" -->
-			<tr>
-				<td class="bull">Le compteur est actuellement</td>
-				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
-				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
-				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
-			</tr>
-			<!-- /TMPL_IF -->
 			<tr>
 				<td class="bull">Retourner à</td>
 				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>

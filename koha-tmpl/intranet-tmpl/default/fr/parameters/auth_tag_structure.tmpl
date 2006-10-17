@@ -146,7 +146,7 @@
 		<th>Editer</th>
 		<th>Supprimer</th>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+	<!-- TMPL_IF NAME="toggle" --><tr valign="top" class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
 		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
 		<td><!-- TMPL_IF NAME="repeatable" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>

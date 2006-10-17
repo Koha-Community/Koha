@@ -15,27 +15,41 @@
 			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
 		</p>
 		<p>
-			<label class="label100">Vedette</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
+			<label class="label100">Vedette ($a seulement)</label>
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="resultstring" -->">
+			<input type="hidden" name="marclist" value="$a">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+		</p>
+		<p>
+			<label class="label100">Vedette</label>
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
+			<input type="text" name="value">
 			<input type="hidden" name="marclist" value="mainentry">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<select name="operator">
-				<option value="start">commence par</option>
-				<option value="contains">contient</option>
-			</select>
-			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 		</p>
 		<p>
-			<label class="label100">Partout</label><input type="text" name="value">
+			<label class="label100">Partout</label>
+			<select name="operator">
+				<option value="contains">contient</option>
+				<option value="start">commence par</option>
+			</select>
+			<input type="text" name="value">
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<select name="operator">
-				<option value="contains">contient</option>
-				<option value="start">commence par</option>
-			</select>
 			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+			<input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->">
 		</p>
+        <p>(ajouter % à la fin des mots si vous voulez une troncature : <b>théor%</b> trouvera théorie et théorèmes)</p>
 		<p>
 			<input type="submit" value="Lancer la recherche" class="button authority">
 		</p>

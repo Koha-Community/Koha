@@ -6,7 +6,7 @@
 <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="detail of the subscription">Abonnement</a> <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Abonnements</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Notice</a>
 
 <div id="bloc25">
-<h2 class="bull">Numéros attendus ou en retard</h2>
+<h2 class="bull">numéros attendus ou en retard</h2>
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus">
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
@@ -18,7 +18,10 @@
 			Numéroté
 		</th>
 		<th class="bull">
-			Prevu pour
+			Publié le
+		</th>
+		<th class="bull">
+			Arrive le
 		</th>
 		<th class="bull">
 			Etat
@@ -30,10 +33,13 @@
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
 			<td>
-				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+				Bulletin <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="40" maxlength="100">
 			</td>
 			<td>
-				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
 			</td>
 			<td>
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
@@ -72,11 +78,56 @@
 				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
 			</td>
 		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+            <td>
+				Code à barres <input type="text" name="barcode" value="" size=20 maxlength=20> Cote <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+            </td>
+			</td>
+            &nbsp;
+			<td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Site</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemstatus"-->
+					<select name="itemstatus" size="1">
+						<option value="">Etat exemplaire</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Localisation</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
 		<tr>
 			<td>
 				Bulletin hors série <input type="text" name="serialseq" size=30 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="publisheddate" size=10 maxlength=15>
 			</td>
 			<td>
 				<input type="text" name="planneddate" size=10 maxlength=15>
@@ -90,6 +141,48 @@
 				</select>
 			</td>
 		</tr>
+		<!--TMPL_IF Name="serialadditems" -->
+		<tr>
+            <td>
+				Code à barres <input type="text" name="barcode" value="" size=20 maxlength=20> Cote <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+			</td>
+			<td>
+				&nbsp;
+            </td>
+			<td>
+				<select name="branch" size="1">
+						<option value="">Site</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemstatus"-->
+					<select name="itemstatus" size="1">
+						<option value="">Etat exemplaire</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+			<td>
+				<!-- TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Localisation</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			</td>
+		</tr>
+		<!--/TMPL_IF-->
 	<!-- /TMPL_UNLESS -->
 	</table>
 	<input type="submit" value="Enregistrer les changements" accesskey="w" class="button bull">

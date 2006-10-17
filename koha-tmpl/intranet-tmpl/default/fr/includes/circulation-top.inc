@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET:Prêt</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 
 <script language="JavaScript">
 <!-- Hide from old browsers
@@ -12,7 +12,7 @@ newwin =
 window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
 function focusOnFirst (){
-document.forms[0].elements[0].focus();
+document.forms['f'].elements[0].focus();
 }
 // end hiding -->
 </script>
@@ -40,7 +40,7 @@ a.circulation:hover {
 </style>
 </head>
 
-<body onload="javascript:focusOnFirst()">
+<body onload="focusOnFirst()">
 
 <!-- TMPL_INCLUDE name="menus.inc" -->
 <!-- TMPL_IF NAME="loggedinusername" -->

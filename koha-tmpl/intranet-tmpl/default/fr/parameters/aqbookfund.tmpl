@@ -7,6 +7,7 @@
 	<!-- TMPL_IF NAME="search" -->
 		<br>Vous cherchiez <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
 	<!-- /TMPL_IF -->
+		<p><br>Budgets <!-- TMPL_VAR NAME="min" --> à <!-- TMPL_VAR NAME="max" --> sur <!-- TMPL_VAR NAME="nbresults" --> <!--TMPL_IF Name="Next" --><a href="/cgi-bin/koha/admin/aqbookfund.pl?offset=<!-- TMPL_VAR NAME="max" -->">plus </a><!-- /TMPL_IF--></p><br><p>
 	<table border="0" cellspacing="0" cellpadding="2" width="80%">
 	<tr>
 		<th>Ligne de crédit</th>
@@ -151,7 +152,7 @@
 	</p>
 	<p>
 		<label>Site</label><!-- TMPL_VAR NAME="CGIbranch"-->&nbsp;
-		<br/> Sélectionner une branche si le budget lui est spécifique. Sinon, laisser blanc
+		<br/> Sélectionner un site si le budget lui est spécifique. Sinon, laisser blanc
 	</p>
 	<p>
 		<label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" class="button">

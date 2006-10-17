@@ -15,7 +15,7 @@
 </script>
 <!-- /Additions for Calendar-system -->
 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 <script language="JavaScript" type="text/javascript">
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
@@ -27,12 +27,12 @@ function Help() {
 	background-color: #ffdf61;
 	color:#000000;
 	background-image:none;
-	text-decoration: normal;
+	text-decoration: none;
 	}
 a.acquisition:hover {
 	background-color: #ffdf61;
 	color: #000000;
-	text-decoration: normal;
+	text-decoration: none;
 	}
 </style>
 </head>

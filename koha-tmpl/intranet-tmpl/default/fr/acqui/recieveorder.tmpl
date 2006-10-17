@@ -1,19 +1,117 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Réception de Commandes Pour le Fournisseur <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+	<h1 class="acquisition">Réception de colis pour le fournisseur <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+
+<!-- TMPL_IF NAME="count" --><p> <!-- TMPL_VAR NAME="count" --> colis trouvés</p><!--/TMPL_IF-->
+<div id="resultnumber">
+<!-- Row of numbers corresponding to search result pages -->
+<!-- TMPL_IF NAME="displayprev" -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0"></a>
+<!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
+	<!-- TMPL_ELSE -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0"></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="displaynext" -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0"></a>
+<!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
+<!-- /TMPL_IF -->
+</div>
+
+<div id="resultlist">
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="count" -->
+<form method="post" action="recieveorder.pl">
+	<table class="small">
+		<tr>
+			<th class="acquisition">Ligne</th>
+			<th class="acquisition">Code</th>
+			<th class="acquisition">Reçu le</th>
+			<th class="acquisition">Nombre d'exemplaires</th>
+			<th class="acquisition">Total notices</th>
+			<th class="acquisition">Documetns attendus</th>
+		</tr>
+		<tr>
+			<th class="acquisition">
+				&nbsp;
+				<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
+			</th>
+			<th class="acquisition">
+				<input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->">
+			</th>
+			<th class="acquisition">
+				De <input type="text" size="9" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->"> 
+				<p>à : <input type="text" size="9" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->">
+			</th>
+			<th class="acquisition">
+				&nbsp;
+			</th>
+			<th class="acquisition">
+				Trié par :<select name="orderby" size="1">
+				<option value="aqorders.booksellerinvoicenumber"> Code</option>
+				<option value="datereceived"> Reçu le</option>
+				<option value="datereceived desc"> Date réception (inversée)</option>
+				<option value="aqorders.booksellerinvoicenumber desc"> Code inversé</option>
+				</select><br />
+				Résultats par page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resultsperpage"-->" size="1">
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				</select>
+			</th>
+			<th class="acquisition">
+				<input type="submit" class="button acquisition" value="Sélectionner">
+			</th>
+		</tr>
+<!-- Actual Search Results -->
+<!-- TMPL_LOOP NAME="searchresults" -->
+	<tr>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="number" -->
+		</td>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+			<!--TMPL_IF Name="code"--><!--TMPL_VAR Name="code" --><!--/TMPL_IF-->
+		</td>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number">
+		<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="raw_datereceived" ESCAPE=URL --><!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="code" ESCAPE=URL --><!--/TMPL_IF-->">
+				<!-- TMPL_VAR NAME="datereceived" -->
+			</a>
+		</td>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number">
+		<!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="reccount" --> 
+		</td>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="bibcount" -->
+		</td>
+		<!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="itemcount" -->
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+</form>
+<!--/TMPL_IF-->
 	<div id="bloc25">
+	<h2 class="acquisition"> Réceptionner un nouveau colis </h2>
 		<form method="get" action="receive.pl">
 		<p>
 			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
-			<h2 class="acquisition">Information facture fournissseur</h2>
-		<p>
-			<label>Numéro de Facture/BL</label>
+			<label>Code colis</label>
 			<input type="text" size="20" name="invoice">
 		</p>
-		<p>
+<!-- TMPL_IF NAME="GST" -->		<p>
 			<label>TVA</label>
 			<input type="text" size="20" name="gst">
-		</p>
+		</p><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0"><!-- /TMPL_IF -->
 		<p>
 			<label>Frais de port</label>
 			<input type="text" size="20" name="freight">

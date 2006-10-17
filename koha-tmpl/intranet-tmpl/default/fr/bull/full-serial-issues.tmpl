@@ -4,22 +4,26 @@
 <!-- TMPL_UNLESS name="popup" -->
 	<h1 class="bull">Information d'abonnement pour notice N°<!-- TMPL_VAR NAME="biblionumber" --> titre : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Retour notice</a>
+	<a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Retour aux abonnements</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Retour à la notice</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
-		<!-- TMPL_IF NAME="year" -->
+		<!-- TMPL_IF NAME="Nodate" -->
+			<a  class="button bull" href="javascript:active(1900)">Pas de publication</a>
+		<!-- TMPL_ELSE-->
 			<a  class="button bull" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	<a class=" button bull" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Vue compacte</a>
 	</p>
 	<!-- TMPL_LOOP NAME="years" -->
-	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
+	<div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
 				<th class="bull">Information
 				</th>
-				<th class="bull">Date
+				<th class="bull">Année de Publication
+				</th>
+				<th class="bull">Date réception
 				</th>
 				<th class="bull">Nombre
 				</th>
@@ -32,14 +36,17 @@
 					<!-- TMPL_VAR name="notes" -->
 				</td>
 				<td>
+					<!-- TMPL_VAR Name="publisheddate" -->
+				</td>
+				<td>
 					<!-- TMPL_VAR Name="planneddate" -->
 				</td>
 				<td>
 					<!-- TMPL_VAR Name="serialseq" -->
 				</td>
 				<td>
-					<!-- TMPL_IF Name="status1" -->Arrivé<!-- /TMPL_IF -->
-					<!-- TMPL_IF Name="status2" -->Attendu<!-- /TMPL_IF -->
+					<!-- TMPL_IF Name="status1" -->Attendu<!-- /TMPL_IF -->
+					<!-- TMPL_IF Name="status2" -->Arrivé<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="status3" -->En retard<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="status4" -->Manquant<!-- /TMPL_IF -->
 				</td>
@@ -52,13 +59,13 @@
 active(<!-- TMPL_VAR name="yearmin" -->);
 function active(numlayer)
 {
-	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
-		ong = i;
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
+	var yeardata=document.getElementsByName("yeardata");
+    for (i=0; i<=yeardata.length; i++ ) {
+		ong=yeardata[i].getAttribute('id');
+        if (numlayer==ong) {
+			yeardata[i].style.visibility="visible";
 		} else {
-			document.getElementById(ong).style.visibility="hidden";
+			yeardata[i].style.visibility="hidden";
 		}
 	}
 }

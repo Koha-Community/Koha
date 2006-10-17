@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+<h1 class="reports">Koha : Réservations</h1>
+<table>
+	<tr><th>Nom</th><th>Date réservation</th><th>Titre</th><th>classification</th></tr>
+	<!-- TMPL_LOOP Name="dataloop" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR Name="name" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="reservedate" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="title" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="classification" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<p><!-- TMPL_VAR Name="count" --></p>
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

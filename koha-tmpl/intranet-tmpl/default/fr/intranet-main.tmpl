@@ -3,7 +3,7 @@
 <head>
 	<title>BIENVENUE DANS L'INTRANET KOHA </title>
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/intranet-main.css">
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 <!-- JAVASCRIPT SCRIPTS -->
 	<script language="JavaScript" type="text/javascript">
 		var IE = document.all?true:false;
@@ -88,7 +88,7 @@
 			<a class="catalogue" href="/cgi-bin/koha/bull-home.pl">Périodiques</a>
 				<p>Gestion des abonnements et des périodiques</p>
 			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Etagères Virtuelles</a>
-				<p>Les étagères virtuelles peuvent être utilisées par des bibliothécaires ou des usagers pour constituer des bibliothèques virtuelles au sein de la vraie. L'étagère virtuelle peut être utilisé par un enseignant pour aider ses élèves dans la recherche d'information sur un sujet particulier.On peut l'utiliser  dans une bibliothèque pour indiquer des listes de documents (les plus empruntés, les plus représentatifs...).</p>
+				<p>Les étagères virtuelles peuvent être utilisées par des bibliothécaires ou des lecteurs pour constituer des bibliothèques virtuelles au sein de la vraie. L'étagère virtuelle peut être utilisé par un enseignant pour aider ses élèves dans la recherche d'information sur un sujet particulier. On peut l'utiliser dans une bibliothèque pour indiquer des listes de documents (les plus empruntés, les plus représentatifs...).</p>
 			<!-- TMPL_IF NAME="NOTMARC" -->
 				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
 					<input type="hidden" name="module" value="search">
@@ -125,7 +125,7 @@
 			Nom Fournisseur : <input type="text"  size="25"   name="supplier">
 			<input type="submit" class="button acquisition" value="OK">
 			</form>
-			<p>ou <a href="histsearch.pl" class="button acquisition">Recherche dans l'historique des commandes</a></p>
+			<p>ou <a href="acqui/histsearch.pl" class="button acquisition">Recherche dans l'historique des commandes</a></p>
 			
 		</div>
 		<div id="Hint4" class="hint">
@@ -158,7 +158,7 @@
 			</div>
 			<div id="bloc25">
 			<h2 class="reports">Les plus</h2>
-				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/bor_issues_top.pl">Plus gros usagers</a></p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/bor_issues_top.pl">Plus gros lecteurs</a></p>
 				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/cat_issues_top.pl">Documents les plus empruntés</a></p>
 			</div>
 		</div>

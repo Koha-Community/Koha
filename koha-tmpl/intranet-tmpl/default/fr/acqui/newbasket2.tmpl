@@ -83,9 +83,14 @@
 		</tr>
 	</table>
 	
+	<!-- TMPL_IF name="previous" -->
+	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="previous" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
+	&lt; Préc.
+	</a>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="offsetover" -->
 	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="offset" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
-	Suivant
+	Suivant &gt;
 	</a>
 	<!-- /TMPL_IF -->
 </div>

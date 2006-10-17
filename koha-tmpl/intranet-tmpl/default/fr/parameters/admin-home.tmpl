@@ -1,25 +1,25 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
-<TMPL_IF name="CAN_user_management">
+<!-- TMPL_IF name="CAN_user_management" -->
 <h1>Paramètres</h1><br>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 <div id="bloc100">
-<TMPL_IF name="CAN_user_management">
+<!-- TMPL_IF name="CAN_user_management" -->
 	<div id="bloctitle">Paramètres Système </div>
 
 	<table>
 	<tr>
 	<td colspan="2"><b> Remplissez ces tables dans l'ordre où elles apparaissent pour que Koha fonctionne</b></td>
 	</tr>
-	<TMPL_IF name="CAN_user_parameters">	
+	<!-- TMPL_IF name="CAN_user_parameters" -->	
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Sites de la Bibliothèque</a></td>
 			<td>Les différents sites que vous gérez avec ce serveur Koha</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	
-	<TMPL_IF name="CAN_user_management">
+	<!-- TMPL_IF name="CAN_user_management" -->
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Lignes de crédit</a></td>
 			<td>Administration des lignes de crédit.Pensez à mettre vos lignes de crédit à jour avant de commencer à libeller les budgets.</td>
@@ -49,9 +49,9 @@
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Valeurs autorisées</a></td>
 			<td>Definir des catégories et les valeurs autorisées pour celles-ci.Les valeurs autorisées sont utilisées dans la grille MARC pour limiter et aider la saisie des notices  MARC biblio.</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 		
-	<TMPL_IF name="CAN_user_parameters">
+	<!-- TMPL_IF name="CAN_user_parameters" -->
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Structure des autorités</a></td>
 			<td>Définir des catégories et les structures  des autorités MARC</td>
@@ -71,27 +71,27 @@
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">Contrôle MARC</a></td>
 			<td>Contrôle la structure MARC.A UTILISER avant de travailler avec des données réelles.ça pointe les erreurs qui peuvent CASSER la base de données Koha</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	
 	<tr>
 	<th colspan="2">Paramètres divers</th>
 	</tr>
-	<TMPL_IF name="CAN_user_parameters">
+	<!-- TMPL_IF name="CAN_user_parameters" -->
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Imprimantes</a></td>
 			<td>Imprimantes (chemin UNIX)</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	
-	<TMPL_IF name="CAN_user_management">
+	<!-- TMPL_IF name="CAN_user_management" -->
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/stopwords.pl">Mots vides</a></td>
 			<td>Mots ignorés lors de la recherche
 				<!-- TMPL_UNLESS name="stopwords" --><p class="problem">ALERTE : vous devez définir des mot-vides</p><!-- /TMPL_UNLESS --></td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	
-	<TMPL_IF name="CAN_user_parameters">
+	<!-- TMPL_IF name="CAN_user_parameters" -->
 		<tr>
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/z3950servers.pl">Serveurs Z39.50</a></td>
 			<td>Serveurs à interroger pour données MARC</td>
@@ -101,12 +101,12 @@
 			<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/systempreferences.pl">Préférences Système</a></td>
 			<td>Préférences Système.</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_IF name="CAN_user_tools">
+<!-- TMPL_IF name="CAN_user_tools" -->
 	<h1>Outils</h1>
 	<table>
 		<tr>
@@ -133,7 +133,7 @@
 			</td>
 		</tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

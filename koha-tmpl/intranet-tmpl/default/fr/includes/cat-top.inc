@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Catalogue</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers

@@ -59,7 +59,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 <div id="Subm3"> 
 	<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Sorties</a> <a href="/cgi-bin/koha/circ/returns.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Retours</a> <a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Transferts</a>
 	<hr />
-	<a href="/cgi-bin/koha/circ/reserve.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Réservation en attente</a>
+	<a href="/cgi-bin/koha/circ/reserve.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Réservations en attente</a> <a href="/cgi-bin/koha/overdue.pl" class="submenu circulation" onMouseOver="CancelTimeOut(TID)" onMouseOut="LaunchSetOff(3)">Retards</a>
 </div>
 <!-- MEMBERS -->
 <div id="Subm4"> 
@@ -106,7 +106,7 @@ var ns7 = (document.getElementById) ? 1:0;*/
 
 <TMPL_IF name="CAN_user_tools">
 	<hr>
-		<a href="/cgi-bin/koha/export/marc.pl" title="Exporting in MARC format" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Export notices</a> <a href="/cgi-bin/koha/import/breeding.pl" title="The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Import réservoir</a> <a href="/cgi-bin/koha/barcodes/barcodes.pl" title="the barcode generator deals with generating barcodes for items you acquire" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Generer code-barres</a>
+		<a href="/cgi-bin/koha/import/picture-upload.pl" title="Import members pictures" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Import photos lecteurs</a><a href="/cgi-bin/koha/export/marc.pl" title="Exporting in MARC format" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Export notices</a> <a href="/cgi-bin/koha/import/breeding.pl" title="The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Import réservoir</a> <a href="/cgi-bin/koha/barcodes/barcodes.pl" title="the barcode generator deals with generating barcodes for items you acquire" class="submenu parameters" onMouseOver="CancelTimeOut(TID)" onMouseOut="TID=setTimeout('SetOff(7)',Mduration)">Générer code-barres</a>
 </TMPL_IF>
 
 </div>

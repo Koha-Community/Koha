@@ -17,28 +17,29 @@
 		<td>
 			<h2 class="parameters">Etiquette <!-- TMPL_VAR NAME="tagfield" -->, Sous-champ <!-- TMPL_VAR NAME="tagsubfield" --></h2>
 			<h3>Restrictions MARC</h3>
+			<ul>
 			<p>
-				<label>&nbsp;</label><!-- TMPL_VAR NAME="repeatable" --> répétable <!-- TMPL_VAR NAME="mandatory" --> obligatoire
+				<!-- TMPL_VAR NAME="repeatable" --> répétable
+            </p>
+            <p>
+				<!-- TMPL_VAR NAME="mandatory" --> obligatoire
 			</p>
 			<p>
-				<label>&nbsp;</label>
-				<label>Rechercher aussi</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (exemple pour 200a : '200c','200d','200e')
+                <label>Rechercher aussi</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (exemple pour 200a : '200c','200d','200e')
 			</p>
+			</ul>
 			<h3>Editeur des restrictions</h3>
-			<p> <label>&nbsp;</label>
-				<label>Texte pour le bibliothécaire</label>
-				<input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80">
-			</p>
+			<ul>
+			<p>Description</p>
 			<p>
-				<label>&nbsp;</label>
-				<label>Texte pour l'OPAC</label> <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
+				<label>pour le bibliothécaire</label>
+				<input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80"> pour l'OPAC <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
 			</p>
-			<p><label>&nbsp;</label><label>Géré</label> <!-- TMPL_VAR NAME="tab" --></p>
-			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="hidden" --> caché (champ géré, mais caché. - devrait être rempli par un module d'extension ou un type d'autorité-)</p>
-			<p><label>&nbsp;</label> <!-- TMPL_VAR NAME="isurl" --> URL (si coché, indique que le champ est une URL valide et peut-être cliquée</p>
+			<p><label>Géré</label> <!-- TMPL_VAR NAME="tab" --></p>
 			<p>
-				<label>&nbsp;</label><label>Valeur Autorisée :</label> <!-- TMPL_VAR NAME="authorised_value" --> ou type d'autorité : <!-- TMPL_VAR NAME="thesaurus_category" --> ou module d'extension : <!-- TMPL_VAR NAME="value_builder" -->
+				<label>Valeur Autorisée :</label> <!-- TMPL_VAR NAME="authorised_value" --> ou type d'autorité : <!-- TMPL_VAR NAME="thesaurus_category" --> ou module d'extension : <!-- TMPL_VAR NAME="value_builder" -->
 			</p>
+			</ul>
 		</td>
 		</tr>
 	<!-- /TMPL_LOOP -->

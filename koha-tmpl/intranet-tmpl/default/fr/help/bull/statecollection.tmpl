@@ -1,15 +1,19 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 	<h1>Abonnement Périodiques et résumé</h1>
 	<p>Cet écran est divisé en 2 parties</p>
-	<h2>La partie droite</h2>
-	<p>La partie droite concerne les parutions.Quand vous créez un nouvel abonnement, le 1er numéro est calculé automatiquement.Lorsque vous voulez/ avez besoin,vous pouvez définir les numeros qui ont un nouveau statut :</p>
+	<h2>La 1ere partie, numéros attendus ou en retard</h2>
+	<p>La première partie contient les bulletins. Quand vous créez un nouvel abonnement, le 1er numéro est calculé automatiquement. Lorsque vous voulez/ avez besoin,vous pouvez définir les numéros qui ont un nouveau statut :</p>
 	<ul>
 		<li>Arrivé : lorqu'un bulletin arrive, vous pouvez le mettre en état"arrivé". Le bulletin disparait de la liste et le numéro est ajouté dans la liste des bulletins arrivés (à gauche)</li>
 		<li>En retard : signifie que le document est en retard et devrait être arrivé.Un numéro, qui noté à l'état en retard reste dans la liste des bulletins attendus et le  bulletin suivant attendu est généré</li>
-		<li>Manquant : signifie que la livraison n'aura jamais lieu.Le numéro disparaît de la liste et est ajouté à la liste "Liste des lacunes" (sur la partie gauche)</li>
+		<li>Manquant : signifie que le bulletin n'est pas dans la bibliothèque, mais a été publié (il a été perdu par exemple). Le numéro disparaît de la liste et est ajouté à la liste "Liste des lacunes" (sur la partie gauche)</li>
+		<li>Non publié : signifie que le bulletin n'arrivera jamais parce qu'il n'a pas été publié. Le bulletin disparaît de la liste et est ajouté dans l'élémant "lacunes" de l'état de collection.</li>
+		<li>Supprimer : ce bulletin sera supprimé de la base. C'est utile lorsque 2 bulletins sont fusionnés en un : modifiez la numérotation du 1er bulletin, et supprimez le 2nd.</li>
 	</ul>
-	<h2>La partie gauche</h2>
-	<p>Il y a 6 informations différentes dans la partie gauche, qui sont calculées automatiquement pour la plupart, mais vous pouvez les changer<p>
+	<p>Lorsque vous changez un bulletin de "attendu" à autre chose, le prochain bulletin est automatiquement créé. La liste contient seulement les bulletins attendus, en retard, et les 5 derniers.</p>
+	<p>"Publié le" et "Prévu le" : pour les nouveaux bulletins, ces valeurs sont automatiquement calculées. La première contient la date de publication. Elle n'est généralement jamais modifiée. La seconde est la date à laquelle vous attendez le bulletin, ou l'avez effectivement reçu. Les bulletins en retard dépendent de la date de réception prévue, alors que la date de publication est utilisée pour trier les bulletins dans l'état de collection détaillé : pour une publication mensuelle, vous pouvez recevoir le numéro de février en avril, mais avez quand même besoin de savoir que le numéro de février a été publié avant celui de mars.</p>
+	<h2>La 2eme partie</h2>
+	<p>Il y a 6 informations différentes dans la 2ème partie, qui sont calculées automatiquement pour la plupart, mais vous pouvez les changer<p>
 	<ul>
 		<li>Date de début d'abonnement : la date de début du premier abonnement.Ne devrait être modifiée et n'est pas modifié automatiquement lors du renouvellement des abonnements</li>
 		<li>Date de fin d'abonnement : doit être entré manuellement lorsque l'abonnement est définitivement clos</li>

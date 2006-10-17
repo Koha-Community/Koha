@@ -85,17 +85,17 @@ function check(f) {
 	<!-- TMPL_LOOP NAME="loop_currencies" -->
 		<input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->">
 	<!-- /TMPL_LOOP -->
-	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->" class="button acquisition">Voir le panier</a> <h1 class="acquisition">
+	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Voir le panier</a> <h1 class="acquisition">
 		<!-- TMPL_IF name="ordnum" -->
 			Modifier les détails de la commande (ligne #<!-- TMPL_VAR NAME="ordnum" -->)
 		<!-- TMPL_ELSE -->
-			Nouvelle commande
+			Ajouter une ligne de commande
 		<!-- /TMPL_IF -->
 		 <!-- TMPL_IF name="suggestionid" -->spécifié à partir de la suggestion #<!-- TMPL_VAR NAME="suggestionid" --><!-- /TMPL_IF -->
 	</h1>
 	Panier d'Achat pour <!-- TMPL_VAR NAME="name" -->
 	<div id="bloc25">
-		<h2 class="acquisition">Détails du catalogue</h2>
+		<h2 class="acquisition">Détails notice</h2>
 		<p>
 			<label class="label100"><b>Titre *</b></label>
 			<!-- TMPL_IF name="biblio" -->
@@ -191,10 +191,10 @@ function check(f) {
 			<label class="label100">Coût budgété</label>
 			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
-		<p>
+<!-- TMPL_IF NAME="GST" -->		<p>
 			<label class="label100">TVA budgetée</label>
-			<input type="text" size="20" name="GST" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
-		</p>
+			<input type="text" size="20" name="GST" value="<!-- TMPL_VAR NAME="GST" -->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+		</p><!-- TMPL_ELSE --><input type="hidden" name="GST" value="0"><!-- /TMPL_IF -->
 		<p>
 			<label class="label100"><b>TOTAL BUDGETE</b></label>
 			<input type="text" size="20" name="total" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
@@ -204,7 +204,7 @@ function check(f) {
 			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
 		</p>
 		<p>
-			<label class="label100">Numéro Facture/BL *</label>
+			<label class="label100"><i>Code colis</i></label>
 			<input type="text" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->">
 		<p>
 			<label class="label100">Notes</label>

@@ -17,28 +17,27 @@
 		<td>
 			<h2 class="parameters">Etiquette <!-- TMPL_VAR NAME="tagfield" -->, Sous-champ <!-- TMPL_VAR NAME="tagsubfield" --></h2>
 			<h3>Restrictions MARC</h3>
+			<p>
 			<ul>
-				<p>
-					<!-- TMPL_VAR NAME="repeatable" --> répétable <!-- TMPL_VAR NAME="mandatory" --> obligatoire
-				</p>
+				<p><!-- TMPL_VAR NAME="repeatable" --> répétable </p>
+				<p><!-- TMPL_VAR NAME="mandatory" --> obligatoire</p>
 				<!-- TMPL_IF name="frameworkcode" -->
 					<p>Rechercher aussi <i>(a un sens seulement pour la grille par défaut)</i></p>
 				<!-- TMPL_ELSE -->
 					<p>
-						Rechercher aussi <input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (exemple pour 200a : '200c','200d','200e')
+						<label>Rechercher aussi</label> <input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20> (exemple pour 200a : '200c','200d','200e')
 					</p>
 				<!-- /TMPL_IF -->
-				<p>Lien Koha : <!-- TMPL_VAR NAME="kohafield" --></p>
+				<p><label>Lien Koha</label><!-- TMPL_VAR NAME="kohafield" --></p>
 			</ul>
+			</p>
 			<h3>Editeur des restrictions</h3>
-			<ul>
-				<p>Texte pour le bibliothécaire <input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80">
+			<ul><p>Description
+				<p><label>pour le bibliothécaire</label> <input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80"> Texte pour l'OPAC <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
 				</p>
-				<p>Texte pour l'OPAC <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
-				</p>
-				<p>Géré dans l'onglet <!-- TMPL_VAR NAME="tab" --> (ignorer signifie que le sous-champ n'est pas géré par Koha)</p>
-				<p><!-- TMPL_VAR NAME="hidden" --> caché (champ géré, mais caché. - devrait être rempli par un module d'extension ou un type d'autorité-)</p>
-				<p> <!-- TMPL_VAR NAME="isurl" --> URL (si coché, indique que le champ est une URL valide et peut-être cliquée</p>
+				<p><label>Onglet</label><!-- TMPL_VAR NAME="tab" --> (ignore signifie que le sous-champ n'est PAS géré par Koha)</p>
+				<p><label>caché</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (voir aide en ligne)</label></p>
+				<p><!-- TMPL_VAR NAME="isurl" --> URL (si coché, indique que le champ est une URL valide et peut-être cliquée</p>
 				<p>
 					<label>Valeur Autorisée :</label> <!-- TMPL_VAR NAME="authorised_value" --> ou type d'autorité : <!-- TMPL_VAR NAME="authtypes" --> ou module d'extension : <!-- TMPL_VAR NAME="value_builder" -->
 				</p>

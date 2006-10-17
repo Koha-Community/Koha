@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<div id="mainbloc">
+<h1>Import des photos des lecteurs</h1>
+
+<!-- TMPL_IF name="total" -->
+	<ul class="data">
+		<li>Import terminé</li>
+	</ul>
+    <!-- TMPL_VAR NAME="total" --> récupérées <!-- TMPL_VAR NAME="handled" --> traitées
+    <!-- TMPL_LOOP name="counts" -->
+        <!-- TMPL_VAR name="count" --> images déplacées de <!-- TMPL_VAR name="source" --> à <!-- TMPL_VAR name="dest" -->
+        <!-- TMPL_LOOP name="filenames" -->
+            <!-- TMPL_VAR name="source" --> vers <!-- TMPL_VAR name="dest" -->
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+
+    <!-- TMPL_IF name="errors" -->
+        <!-- TMPL_LOOP name="errors" -->
+        <ul class="error">
+        <!-- TMPL_IF name="NOTZIP" -->
+            <li>Le fichier importé n'est pas un fichier compressé (.zip)</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="NOWRITETEMP" -->
+            <li>Impossible d'écrire dans le répertoire temporaire !</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="NOWRITEDEST" -->
+            <li>Impossible d'écrire dans le répertoire de photos lecteurs.</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="EMPTYUPLOAD" -->
+            <li>Le fichier semble vide.</li>
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_IF -->
+    <form method="post" action="/cgi-bin/koha/import/picture-upload.pl" enctype="multipart/form-data">
+    <h2 class="problem">Attention, cette fonctionnalité est expérimentale, et peut donc mal fonctionner pour vous.</h2>
+    <ul>
+        <li>Sélectionner un fichier à importer sur le serveur. Chaque fichier .jpg sera copié dans le répertoire approprié en tant que photo du lecteur.</li>
+        <li>Vous pouvez inclure plusieurs photos dans le fichier .zip et mettre plusieurs répertoires.</li>
+        <li>Il doit y avoir un fichier DATALINK.TXT ou IDLINK.TXT pour chaque photo. Il doit contenir le numéro de carte lecteur et le nom du fichier (.jpg) avec la photo. Un lecteur par ligne, séparé par des virgules ou des tabulations. Les ' sont ignorés.</li>
+    </ul>
+    <table>
+        <tr>
+            <th><label for="uploadfile">Sélectionnez le fichier à importer : </label></th>
+            <td>
+                <input type="file" id="uploadfile" name="uploadfile" /><br />
+            </td>
+        </tr>
+    </table>
+        <input type="submit" value="Importer" class="submit">
+    </form>
+    
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

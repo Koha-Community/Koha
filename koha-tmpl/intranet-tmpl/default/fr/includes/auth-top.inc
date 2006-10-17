@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Autorités</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 
 <script language="JavaScript">
 <!-- Hide from old browsers
@@ -20,12 +20,12 @@ function Help() {
 }
 
 function addauthority() {
-	X = document.forms[0].authtype.value;
+	X = document.forms['f'].authtype.value;
 	window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
 }
 function searchauthority() {
-	X = document.forms[0].authtype2.value;
-	Y = document.forms[0].value.value;
+	X = document.forms['f'].authtype2.value;
+	Y = document.forms['f'].value.value;
 	window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>

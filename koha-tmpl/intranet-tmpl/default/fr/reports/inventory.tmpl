@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
 	<h1 class="reports">Inventaire/récolement</h1>
-	<form method="post">
+	<div id="bloc25"><form method="post">
 		<h2 class="reports">Sélectionnez les exemplaires que vous souhaitez vérifier</h2>
 		<p>
 			Cote de l'exemplaire ((items.itemcallnumber) entre <input type="text" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->"> et <input type="text" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->">
@@ -17,6 +17,24 @@
 		</p>
 	</form>
 	
+	</div>
+	<div id="bloc25">
+		<form  name="barcodefile" method="post">
+		<h2 class="reports">Utiliser un fichier de code-barre</h2>
+		<p>ficher de code-barres : <input type="file" name="uploadbarcodes" /></p>
+		<p>mettre date dernier mouvement à : <input type="text" name="setdate" /></p>
+		<p><input type="submit" value="OK" class="button reports"></p>
+		</form>
+		<!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> documents modifiés : date dernier mouvement positionné à <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
+		<!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> ne peut pas être ouvert</p><!-- /TMPL_IF-->
+	</div>
+	<!--TMPL_LOOP Name="errorloop"--><p class="error"><!--TMPL_VAR Name="barcode"-->
+	<!--TMPL_IF Name="ERR_BARCODE"--> : code-barre non trouvé<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_WTHDRAWN"--> : Exemplaire retiré<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_RET"--> : le document était en prêt : il a été retourné avant d'être mis à jour<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"--> : le document est en prêt. N'a pas pu être retourné.<!--/TMPL_IF-->
+	</p><!-- /TMPL_LOOP-->
+	<!-- TMPL_IF NAME="loop" -->
 	<form method="post">
 	<input type="hidden" name="markseen" value="1">
 	<input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->">
@@ -24,7 +42,6 @@
 	<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->">
 	<input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->">
 	<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="offset" -->">
-	<!-- TMPL_IF NAME="loop" -->
 	<table>
 		<tr>
 			<th class="reports">Vu</th>

@@ -1,5 +1,58 @@
 <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
+<!-- TMPL_IF Name="displayhierarchy"-->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/hierarchy.css">
+<script language="JavaScript" type="text/javascript">
+function showParents(mynumber) {
+  var parents=document.getElementsByName(mynumber+'p')
+  for(i=0;i<parents.length;i++){
+    if (parents[i].style.display == "none") {
+      parents[i].style.display ="block";
+    } else {
+      parents[i].style.display ="none";
+    }
+  } 
+}
+function showChildren(mynumber) {
+  var children=document.getElementsByName(mynumber+'c')
+  for(i=0;i<children.length;i++){
+    if (children[i].style.display == "none") {
+      children[i].style.display = "block";
+    } else {
+      children[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+<div class="hierarchies">
+<!--TMPL_LOOP Name="loophierarchies" -->
+  <div class="hierarchy">
+  <!--TMPL_LOOP Name="loopelement" -->
+    <div id="<!--TMPL_VAR Name="loopauthid" -->" class="<!--TMPL_VAR Name="class" -->">
+    <!--TMPL_IF Name="ifparents" -->
+      <!--TMPL_LOOP Name="loopparents" -->
+        <div name="<!--TMPL_VAR Name="loopauthid" -->p" class="parent"> <a href="detail.pl?authid=<!--TMPL_VAR Name="parentauthid" -->"><!--TMPL_VAR Name="parentvalue" --></a></div>
+      <!--/TMPL_LOOP-->
+    <!--/TMPL_IF -->
+    <!-- TMPL_IF name="current_value" -->
+        <!--TMPL_VAR Name="value" -->
+    <!-- TMPL_ELSE -->
+        <a href="detail.pl?authid=<!--TMPL_VAR Name="loopauthid" -->" title="Terme"><!--TMPL_VAR Name="value" --></a>
+    <!-- /TMPL_IF -->
+    <!--TMPL_IF Name="ifchildren" -->
+      <sub><a class="parents" title="Termes spécifiques" href="JavaScript:showChildren('<!--TMPL_VAR Name="loopauthid" -->');">+</a></sub><br/>
+      <!--TMPL_LOOP Name="loopchildren" -->
+        <div name="<!--TMPL_VAR Name="loopauthid" -->c" class="child"> <a href="detail.pl?authid=<!--TMPL_VAR Name="childauthid" -->"><!--TMPL_VAR Name="childvalue" --></a></div>
+      <!--/TMPL_LOOP-->
+    <!-- /TMPL_IF -->
+    </div>
+  <!--/TMPL_LOOP-->
+    
+  </div>
+<!--/TMPL_LOOP-->
+</div>
+<!-- /TMPL_IF -->
 <div class="tabbed">
 	<h1 class="authority">Autorité  #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
 	<a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">
@@ -10,7 +63,7 @@
 			<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
 		</a>
 	<!-- /TMPL_UNLESS -->
-	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->')" class="button authority"> Imprimer </a> <a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR name="count" --> Notices</a>
+	<a href="../search.marc/search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR name="count" --> notices</a>
 </div>
 
 <div name="0XX" id="0XX" class="tab" style="visibility:visible">

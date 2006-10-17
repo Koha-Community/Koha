@@ -6,8 +6,8 @@
 <tr>
 	<th class="acquisition">Commande</th>
 	<th class="acquisition">Réception</th>
-	<th class="acquisition">Société</th>
-	<th class="acquisition">&nbsp;</th>
+	<th class="acquisition">Fournisseur</th>
+	<th class="acquisition">Panier</th>
 </tr>
 
 <!-- TMPL_LOOP name="loop_suppliers" -->
@@ -22,9 +22,10 @@
 		<td>
 			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="Réceptionner" alt="Ajouter" border=0></a>
 		</td>
-		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->&op=display"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 			<table>
+			     <!-- TMPL_IF name="loop_basket" -->
 					<tr>
 						<th class="acquisition">Panier</th>
 						<th class="acquisition">Exemplaires</th>
@@ -32,6 +33,9 @@
 						<th class="acquisition">Date</th>
 						<th class="acquisition">&nbsp;</th>
 					</tr>
+				<!-- TMPL_ELSE -->
+				    </p>Pas de panier en attente</p>
+                <!-- /TMPL_IF -->
 					<!-- TMPL_LOOP NAME="loop_basket" -->
 						<tr>
 							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
