@@ -11,7 +11,9 @@
 		Prêts
 	</a>
 	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="opacbookbag" -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Ajouter au panier</a>
+	<!-- /TMPL_IF -->
 </div>
 	<div class="tabs">
 		<!-- TMPL_IF name="0XX" -->
@@ -60,7 +62,7 @@
 					<!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -84,7 +86,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -108,7 +110,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -132,7 +134,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -156,7 +158,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -180,7 +182,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -204,7 +206,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -228,7 +230,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -252,7 +254,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>
@@ -276,7 +278,7 @@
 						<!-- TMPL_VAR name="marc_subfield" -->
 						<!-- TMPL_VAR name="marc_lib" -->
 					</label>
-					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_VAR name="marc_value" ESCAPE="HTML" -->
 					<!-- TMPL_IF name="link" -->
 						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
 							<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/<!-- TMPL_VAR NAME="lang" -->/images/filefind.png" height="15" title='Chercher sur <!-- TMPL_VAR name="marc_value" -->'>

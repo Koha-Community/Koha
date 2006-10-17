@@ -1,23 +1,30 @@
 /*
-	blue/green : # 009999
-	light-blue/green : #ACE6E6
-	orange : #FFB380
-	light orange : #FFD9BF
+	bleu : #3366CC;
+	jaune-vert : CCFF00;
+	vert : 99cc00
+	jaune : ffff99
+	orange : ffdd75
+	gris clair : efefef
+	bleu profond : 000066
+	jaune vert 2 : d3dfad
+	th : ccffcc
+	violet : 993366
 */
+
 body {
-	background-color:#006b6b;
+	background-color:white;
 	font-family:verdana,arial,helvetica,sans-serif;
-	font-size:12pt;
+	font-size:11pt;
 	margin:0px;
 	padding:0px
 }
 
 /* base tags */
 a {
-	background-color: #FFD9BF;
-	text-decoration:none;
+	color: #993366;
+/* 	text-decoration:none; */
 /* 	padding:2px 2px; */
-	color:#000000;
+/* 	color:#000000; */
 }
 
 a.transparent {
@@ -27,7 +34,7 @@ a.transparent {
 }
 
 a:hover {
-	background-color: #FFB380;
+	color: #99cc00;
 }
 
 /* the page result number */
@@ -46,18 +53,18 @@ a.results:hover {
 /* label size & look just before input fields */
 label {
 	float:left;
-	width: 10em;
+	width: 9em;
 }
 
 /* images */
-img {
+/*img {
 	border-width:0px;
 	text-align:left;
 	display:inline;
 	float:left;
 	padding-left:10px;
 	padding-right:10px;
-}
+}*/
 
 .relative { /* for images in relative position */
 	border-width:5px;
@@ -67,33 +74,29 @@ img {
 
 /* main title */
 h1 {
-	color:#FFD9BF;
-	background-color:#006b6b;
+	color:#000066;
 	font-weight:bold;
 	font-size: 150%;
-	text-align:center;
 	padding: 5px;
-	margin:0px 25% 10px 25%;
-	border: 1px solid black;
-	width:50%;
+/* 	margin:0px 25% 10px 25%; */
+/* 	border-bottom: 1px solid #000066; */
 }
 
 /* style for library name, on top of menu (defined in LibraryName systempref) */
 /* in opac-main page */
 .LibraryName {
-	color:#000000;
-	background-color:#FFD9BF;
+	color:#000066;
 	font-weight:bold;
 	font-size: 150%;
-	text-align:center;
+	text-align:left;
 	padding: 2px;
-	border: 1px solid #000000;
 	width:75%;
+	border-bottom:0px;
 }
 
 /* in all other pages */
 .SmallLibraryName {
-	color:#FFD9BF;
+	color:#000066;
 	background-color:transparent;
 	font-weight:bold;
 	font-size: 115%;
@@ -104,8 +107,7 @@ h1 {
 
 /* subtitles. headers of blocks */
 h2 {
-	color:#000000;
-	background-color:#009999;
+	color:#000066;
 	font-weight:bold;
 	font-size: 125%;
 	width:100%;
@@ -148,12 +150,13 @@ p.copyright {
 table {
 	border:1px solid #000000;
 	border-collapse:collapse;
-	width:80%;
+	width:100%;
 	position:static;
 }
 /* header */
 th {
-	background-color: #99cccc;
+	background-color: #ccffcc;
+	color:black;
 	font-weight:bold;
 	text-align:center;
 	font-size:10pt;
@@ -180,7 +183,7 @@ td {
 tr.hilighted td, td.hilighted {
 	font-size:10pt;
 	border-left:1px solid #000000;
-	background-color:#ffffcc;
+	background-color:#efefef;
 	vertical-align:top;
 }
 
@@ -189,25 +192,24 @@ tr.hilighted td, td.hilighted {
 .button {
 	text-align: center;
 	padding: 2px 2px;
-	border-bottom:1px solid #FFB380;
-	border-left: 3px solid #FFB380;
 	text-decoration: none;
-	color: black;
 	line-height:175%;
-	background-color:#FFD9BF;
+	background-color:#993366;
+	color : #FEEDDB;
 	margin : 3px 3px 3px 0px;
+	border:1px solid #888888;
+	border-style: outset;
 }
 
 .button:hover {
 	text-align: center;
 	padding: 2px 2px;
-	border-bottom:1px solid #FFB380;
-	border-left: 3px solid #FFB380;
 	text-decoration: none;
-	color: black;
 	line-height:175%;
-	background-color:#FFB380;
+	background-color:#993366;
+	color : #FEEDDB;
 	margin : 3px 3px 3px 0px;
+	border-style: inset;
 }
 
 /* standard input field */
@@ -222,7 +224,6 @@ input:hover {
 
 /* textarea input field */
 textarea {
-	border:0px;
 	border:1px solid #888888;
 	background-color:#FFFFFF;
 }
@@ -232,7 +233,6 @@ textarea:hover {
 }
 /* select input field */
 select {
-	border:0px;
 	border:1px solid #888888;
 	background-color:#FFFFFF;
 }
@@ -271,29 +271,24 @@ select {
 }
 
 /* the mainbloc : everything is in mainbloc, except menu */
-#mainbloc {
-	float:left;
-	width:90%;
-	background-color:#ACE6E6;
-	border:1px solid #000000;
-	margin-left:10px;
-	margin-right:10px;
-	padding-bottom:100px;
-	padding-left:10px;
-	padding-top:10px;
-	padding-right:10px;
+#mainbloc 
+{
+	float:right;
+	padding-bottom:10px;
+	margin-top:60px;
+	width:83%; 
 }
 
 #homebloc {
-	float:right;
-	width:65%;
+	float:left;
+/* 	width:%; */
 	margin-right:10px;
+	margin-left:0px;
 	border:0;
 }
 
 #leftbloc {
 	float:left;
-	width:30%;
 	border:0;
 }
 
@@ -309,25 +304,28 @@ select {
 /* used in members */
 #bloc20, .bloc20 {
 	float:left;
-	border:1px solid #000000;
-	padding-bottom:10px;
+	border:0px;
+	padding:10px;
 	margin-bottom:10px;
 	margin-left:10px;
+	background:#efefef;
 }
 #bloc60, .bloc60 {
 	float:left;
-	border:1px solid #000000;
-	padding-bottom:10px;
+	border:0px;
+	padding:10px;
 	margin-bottom:10px;
+	background:#efefef;
 }
 
 /* used in biblio detail */
 
 #bibliobloc {
 	float:left;
-	width:40%;
-	border:0;
-	border:1px solid #000000;
+	border:0px;
+	padding:10px;
+	margin-bottom:10px;
+	background:#efefef;
 }
 
 #itembloc {
@@ -337,32 +335,50 @@ select {
 	border:0;
 }
 
-/* menu styles */
-.menu {
-	border:1px solid #000000;
-	padding-left:10pt;
-	padding-right:10pt;
-	margin-bottom:10px;
-	display:inline;
-}
 
 #title {
 	display:block;
+	width:100%;
 	margin-left:0px;
+	padding-left:0px;
+	padding-top:0px;
+}
+
+.menu {
+	display:block;
+	padding-right:10px;
+	padding-left:10px;
+	padding-bottom:10px;
+	padding-top:10px;
+	font-weight:bold;
+	font-size:14px;
+	color:white;
+	font-family:serif;
+	border-bottom:1px solid #99cc00;
+	text-decoration:none;
+	background:#993366;
 }
 
 #menuline {
 	display:block;
-	margin-left:100px;
-	margin-bottom:20px;
+	float:left;
+	position:absolute;
+	left:0px;
+	margin-top:60px;
+	margin-right:10px;
+	font-weight:bold;
+	width:15%;
+	font-size:12px;
+	color:#fff;
+	border-bottom:1px solid #efdfc8;
+	text-decoration:none;
+	background-color:#556268;
 }
 
 #bibliomenu {
-	position: relative;
-	float:left;
 	display:block;
-	margin-left:10%;
-	width:100%;
+	margin-top:60px;
+	margin-left:20%;
 }
 
 /* a little spacer. should not be used */
@@ -373,8 +389,8 @@ select {
 
 /* for SubscritptionHistory view  */
 div.tabsubs {
-	margin-left:150px;
-	position:inline;
+	margin-left:20%;
+	display : inline;
 }
 
 div.tabsubs a {
@@ -384,22 +400,25 @@ div.tabsubs a {
 	padding: 10px 10px;
 	-moz-border-radius: 5px 5px 0px 0px;
 }
+div.tabsubs a:hover {
+	background-color:#993366;
+}
 
 div.tabsub {
-	background-color: #ACE6E6;
+	background-color: white;
 	position:absolute;
 	visibility:hidden;
-	margin-left:150px;
+	margin-left:20%;
 	margin-top:0px;
-border:4px;
+	margin-right:5%;
 }
 
 /* for MARC view  */
 div.tabs {
 	width:15px;
 	display:block;
-	margin-top:70px;
-	margin-left:40px;
+	margin-top:1px;
+	margin-left:200px;
 }
 
 div.tabs a {
@@ -414,31 +433,30 @@ div.tabs a {
 div.tabbloc {
 	position:absolute;
 	display:block;
-	top:140px;
-	left:62px;
+	top:165px;
+	left:230px;
 	width:80%;
 	margin-right:0px;
-	border: 1px solid black;
-	background-color:none;
+	border: 0px solid black;
+	background-color:transparent;
 }
 
 div.tab {
-	background-color: #ACE6E6;
 	display: block;
 	visibility:hidden;
 	position:absolute;
 	float:left;
 	margin-right:0px;
-	background-color:none;
+	background-color:transparent;
 	width:80%;
 }
 
 .MARCtag { /* style for tag definition (700 - Statement of responsability) */
 	font-weight:bold;
-	color:#FFB380;
-	background-color:#FFFFFF;
+	color:#993366;
+	background-color:#efefef;
 	background-image:none;
-	border-bottom: thin solid #FFB380;
+	border-bottom: thin solid #993366;
 	margin-right:30%;
 }
 
@@ -446,4 +464,19 @@ div.tab {
 	float:left;
 	width: 12em;
 	margin-left:30px;
+}
+
+# STARS styles, for Amazon.com ratings
+#starMT {
+        position:relative;
+        height: 25px;
+        width: 100px;
+        margin: 0 3px 0 30px;
+        padding:0;
+        background: url(../images/emptystars.png) top left no-repeat;
+}
+#starFull {
+        height: 25px;
+        margin: 0 ; padding: 0;
+        background: url(../images/bluestars.png) top left no-repeat;
 }

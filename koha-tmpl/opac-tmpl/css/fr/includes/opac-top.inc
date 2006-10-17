@@ -9,7 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
 	<!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- /TMPL_IF -->
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext
@@ -32,23 +32,11 @@
 	<!-- MENUS -->
 	<div id="title">
 		<!-- TMPL_IF name="opacsmallimage" -->
-			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" height="65" alt="Logo Koha">
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" alt="Logo Koha">
 		<!-- TMPL_ELSE -->
-			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="Logo Koha">
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" alt="Logo Koha">
 		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
 	</div>
-	<div id="menuline">
-		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Koha home page">Accueil</a> <a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Recherche avancée</a>
-		<!-- TMPL_IF NAME="loggedinusername" -->
-			<!-- TMPL_IF name="virtualshelves" -->
-				<a href="/cgi-bin/koha/opac-shelves.pl" class="menu">Etagères virtuelles</a>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="suggestion" -->
-				<a href="opac-suggestions.pl" class="menu">Suggestions</a>
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Accueil lecteur">Page personnelle</a>
-		<a class="menu" href="javascript:openBasket()" title="Panier de notices">Panier de notices <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
-	</div>
+	<!-- TMPL_INCLUDE name="menus.inc" -->
 	<!-- MAIN BODY OF PAGE -->

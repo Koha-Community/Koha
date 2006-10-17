@@ -69,7 +69,13 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<!-- TMPL_VAR name="CGIitemtype" -->
+			<select name="value">
+				<option value="">Tout type de document</option>
+					<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+							</option>
+					<!-- /TMPL_LOOP -->
+			</select>
 		</p>
 		<p>
 				<label class="label20">Site</label>
@@ -77,7 +83,12 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
-				<!-- TMPL_VAR name="CGIbranch" -->
+                 <select name="value">
+                    <option value="">Tout site</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
 		</p>
 	</div>
 	<div id="bloc20">
@@ -148,6 +159,9 @@
 				<option value="biblioitems.publishercode">Editeur</option>
 				<option value="biblio.timestamp">date d'acquisition</option>
 			</select>
+		</p>
+		<p>
+			<label>&nbsp;</label>
 			<select name="desc_or_asc" size="1">
 				<option value="ASC">Croissant</option>
 				<option value="DESC">Décroissant</option>
@@ -171,7 +185,7 @@
 		<h3>Recherche avec troncature</h3>
 		<p>Une recherche est faite sur tous les mots que vous entrez. Les mots vides sont ignorés. Si vous entrez, par exemple "les deux tours" dans le titre, la liste de réponses contiendra tous les documents avec deux ET tours dans le titre. "Les" sera exclu.</p>
 		<p>Si vous voulez entrer une partie de mot, mettez une * ou un % à la fin du mot. Par exemple, "deux tours*" donnera "Les deux tours" mais aussi "Une tour et deux maisons".</p>
-		<h3>Dictionnaire</h3>
+		<h3>Recherche dictionnaire</h3>
 		<p>Si vous cliquez sur ... sur la droite des titres/auteurs/sujets, vous pouvez faire une recherche dans les valeurs existant dans le catalogue</p>
 	</div>
 </form>

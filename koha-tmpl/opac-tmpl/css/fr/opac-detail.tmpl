@@ -13,13 +13,13 @@
 		Prêts
 	</a>
 	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="opacbookbag" -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Ajouter au panier</a>
+	<!-- /TMPL_IF -->
 </div>
 
 <div id="mainbloc">
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	<h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="class" --></h1>
-
 	<div id="bibliobloc">
 	<h2><!-- TMPL_VAR NAME="title" --></h2>
 				<!-- TMPL_IF name="subtitles" -->
@@ -35,7 +35,7 @@
 				<p>
 					<!-- TMPL_IF name="publishercode" --><label><b>Publié par :</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
 				</p>
-				<!-- TMPL_IF name="publicationyear" --><p><label><b>en </b></label><!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publicationyear" --><p><label><b>en : </b></label><!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
 				<p>
 					<label>&nbsp;</label><!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
 					<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
@@ -49,16 +49,16 @@
 						<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
 							<p>-
 							<!-- TMPL_IF name="linkvalue" -->
-								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=<!-- TMPL_VAR name="link" -->&and_or=and&operator==&value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
+								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=<!-- TMPL_VAR name="link" -->&and_or=and&operator==&value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><img border="0" src="<!-- TMPL_VAR name="themelang"-->/images/filefind.png" height="15" title="Chercher"></a><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<!-- TMPL_VAR name="linkvalue" -->"><!-- TMPL_VAR NAME="marcsubjct" --></a></p>
 							<!-- TMPL_ELSE -->
-								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a>, </p>
+								<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a> </p>
 							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</p>
 				<!-- TMPL_ELSE -->
-					<!-- TMPL_IF name="subjects" --><p><label><b>Sujet :</b> </label></p>
+					<!-- TMPL_IF name="subjects" --><p><label><b>Sujet(s) :</b> </label></p>
 						<!-- TMPL_LOOP name="subjects" -->
-							<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=start&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, </p> <!-- /TMPL_LOOP -->
+							<p><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=start&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a> </p> <!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="copyrightdate" --><p><label><b>Année :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --></p><!-- /TMPL_IF -->
@@ -82,7 +82,7 @@
 						<!-- /TMPL_LOOP -->
 					</p>
 				<!-- /TMPL_IF -->
-				<p><label><b>Type de document </b></label>
+				<p><label><b>Type de document : </b></label>
 					<!-- TMPL_IF name="description" -->
 						<!-- TMPL_VAR name="description" -->
 					<!-- TMPL_ELSE -->
@@ -90,19 +90,28 @@
 					<!-- /TMPL_IF -->
 				</p>
 				<!-- TMPL_IF name="count" -->
-					<p><b>Nombre Total d'exemplaires <!-- TMPL_VAR NAME="count" --></p>
+					<p><b>Nbre. d'exemplaires:</b> <!-- TMPL_VAR NAME="count" --></p>
 				<!-- /TMPL_IF -->
 	</div>
+		<!-- TMPL_IF NAME="AmazonContent" -->
+			<!-- TMPL_IF NAME="amazonisbn" -->
+			<div id="bloc20">
+			<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+				<img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Image de couverture">
+			</a>
+			</div>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 
 	<div id="bloc20">
 	<h2>Exemplaires</h2>
 	<table cellspacing="0">
 		<tr>
-			<th>Localisation</th>
-			<th>Etat</th>
+			<th>localisation</th>
+			<th>état</th>
 			<th>Date de retour</th>
-			<th>Vu pour la dernière fois</th>
+			<th>Vu le</th>
 			<th>code à barres</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -114,7 +123,7 @@
 					<!-- /TMPL_IF -->
 				</td>
 				<td>
-					<!-- TMPL_IF name="datedue" -->
+					<!-- TMPL_IF name="borrowernumber" -->
 						En prêt
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF name="notforloantext" -->
@@ -124,7 +133,8 @@
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
-				<td><!-- TMPL_VAR NAME="datedue" --></td>
+				<td><!-- TMPL_VAR NAME="datedue" -->
+				<!-- TMPL_IF name="reservestatus" -->Réservé <!-- TMPL_VAR name="reservestatus" --><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><!-- TMPL_VAR NAME="barcode" --></td>
 			</tr>
@@ -132,7 +142,7 @@
 		<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 			<tr>
 				<td><!-- TMPL_VAR NAME="itemtype" --></td>
-				<td>Site Web</td>
+				<td>Site web</td>
 				<td>En ligne</td>
 				<td>Disponible</td>
 				<td>&nbsp;</td>
@@ -186,5 +196,39 @@
 		<p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Cliquer ici</a> pour plus plus d'information sur l'abonnement</p>
 		</div>
  	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="AmazonContent" -->
+			<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+			<!-- TMPL_IF NAME="rating" -->
+			<!-- Amazon Reviews -->
+			<div id="bloc20">
+					<h2>L'opinion des lecteurs d'Amazon :</h2>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->		
+				<!-- TMPL_IF NAME="rating" -->
+					<h4>Note (d'Amazon.com)
+						<div id="starMT">
+						<div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px">
+						</div>
+						</div>
+					</h4>
+					<!-- TMPL_LOOP NAME="REVIEWS" -->
+						<div class="content_set">
+						<!-- TMPL_IF NAME="summary" -->
+						<h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="comment" -->
+							<p><!-- TMPL_VAR NAME="comment" -->
+						</p><!-- /TMPL_IF -->
+						</div>
+					<!-- /TMPL_LOOP -->
+				<h4>
+					<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">donnez votre avis</a>
+				</h4>
+			<!-- /TMPL_IF -->
+		</div> <!-- itemReviews -->
+	<!-- /TMPL_IF-->
 </div>
+
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

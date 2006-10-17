@@ -20,12 +20,12 @@
 		<!-- This is what is displayed if user doesnt have permission -->
 		<h2> Vous avez saisi un nom de membre ou mot de passe invalide, merci de réessayer.<h2>
 		<!-- /TMPL_IF -->
-	</div>
-	<div id="bloc60">
 		<!-- TMPL_IF NAME="loginprompt" -->
 		<!-- login prompt time-->
+		<h2>Identification</h2>
+		<p>Vous avez demandé à vous identifier pour avoir des services personnalisés, ou bien vous devez vous identifier pour accéder à la page que vous avez demandée.</p>
+		<p>Si vous ignorez votre login et votre mot de passe, demandez le à la bibliothèque</p>
 		<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
-			<h2>Identification</h2>
 			<p><label>Login/identifiant</label><input name="userid" /></p>
 			<p><label>Mot de passe</label><input type="password" name="password" /></p>
 			<!-- TMPL_LOOP NAME="INPUTS" -->

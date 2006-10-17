@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1>Informations personnelles : <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+
+<h2>Détail contact</h2>
+<p><b>Nom :</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></p>
+<p><b>N° de carte</b> <!-- TMPL_VAR NAME="cardnumber" --></p>
+<p><b>Adresse mail :</b> <!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" --></p>
+
+<p><b>Adresse :</b> <!-- TMPL_VAR NAME="altstreetaddress" -->, <!-- TMPL_VAR NAME="altcity" --></p>
+
+<p><b>Tel (maison)</b> <!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Tel (jour)</b> <!-- TMPL_IF NAME="phoneday" --><!-- TMPL_VAR NAME="phoneday" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Fax :</b> <!-- TMPL_IF NAME="faxnumber" --><!-- TMPL_VAR NAME="faxnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>E-mail :</b> <!-- TMPL_IF NAME="emailaddress" --><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+
+
+<h2>Détails lecteur</h2>
+<p><b>N° de lecteur</b> <!-- TMPL_VAR NAME="borrowernumber" --></p>
+
+<p><b>Catégorie lecteur :</b> <!-- TMPL_VAR NAME="categorycode" --></p>
+
+<p><b>inscrit le :</b> <!-- TMPL_VAR NAME="dateenrolled" --></p>
+
+<p><b>expire :</b> <!-- TMPL_VAR NAME="expiry" --></p>
+
+<!-- TMPL_IF NAME="joiningbranch" --><p><b>Site d'inscription :</b> <!-- TMPL_VAR NAME="joiningbranch" --></p><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+
+<h2>Identité</h2>
+<p><b>Né le :</b> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Sexe :</b> <!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+
+<h2>Autre contact</h2>
+<p><b>Autre contact</b> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Tel :</b> <!-- TMPL_IF NAME="altphone" --><!-- TMPL_VAR NAME="altphone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Relation</b> <!-- TMPL_IF NAME="altrelationship" --><!-- TMPL_VAR NAME="altrelationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </p>
+
+<p><b>Notes:</b> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </p>
+
+<!-- <p><b>Guarantor:</b> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </p> -->
+
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
+<input type="submit" name="Modify" value="Modifier vos informations" class="button">
+</form>
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -1,0 +1,85 @@
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+
+<div name="0XX" id="0XX" class="tab" style="visibility:visible">
+	<h1>Autorité #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+	<a href="opac-search.pl?type=intranet&amp;op=do_search&amp;marclist=<!-- TMPL_VAR NAME="biblio_fields" -->&amp;operator==&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;and_or=and&amp;excluding=" class="button authority"><!-- TMPL_VAR name="count" --> Notice(s)</a>
+	
+<!-- TMPL_IF Name="displayhierarchy"-->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/hierarchy.css">
+<script language="JavaScript" type="text/javascript">
+function showParents(mynumber) {
+  var parents=document.getElementsByName(mynumber+'p')
+  for(i=0;i<parents.length;i++){
+    if (parents[i].style.display == "none") {
+      parents[i].style.display ="block";
+    } else {
+      parents[i].style.display ="none";
+    }
+  } 
+}
+function showChildren(mynumber) {
+  var children=document.getElementsByName(mynumber+'c')
+  for(i=0;i<children.length;i++){
+    if (children[i].style.display == "none") {
+      children[i].style.display = "block";
+    } else {
+      children[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+<div class="hierarchies">
+<!--TMPL_LOOP Name="loophierarchies" -->
+  <div class="hierarchy">
+  <!--TMPL_LOOP Name="loopelement" -->
+    <div id="<!--TMPL_VAR Name="loopauthid" -->" class="<!--TMPL_VAR Name="class" -->">
+    <!-- TMPL_IF name="current_value" -->
+        <!--TMPL_VAR Name="value" -->
+    <!-- TMPL_ELSE -->
+        <a href="opac-authoritiesdetail.pl?authid=<!--TMPL_VAR Name="loopauthid" -->" title="Voir cette autorité"><!--TMPL_VAR Name="value" --></a>
+    <!-- /TMPL_IF -->
+    <!--TMPL_IF Name="ifchildren" -->
+      <sub><a class="parents" title="Voir les termes spécifiques" href="JavaScript:showChildren('<!--TMPL_VAR Name="loopauthid" -->');">+</a></sub><br/>
+      <!--TMPL_LOOP Name="loopchildren" -->
+        <div name="<!--TMPL_VAR Name="loopauthid" -->c" class="child"> <a href="opac-authoritiesdetail.pl?authid=<!--TMPL_VAR Name="childauthid" -->"><!--TMPL_VAR Name="childvalue" --></a></div>
+      <!--/TMPL_LOOP-->
+    <!-- /TMPL_IF -->
+    </div>
+  <!--/TMPL_LOOP-->
+    
+  </div>
+<!--/TMPL_LOOP-->
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="0XX" -->
+			<p class="MARCtag">
+				<!-- TMPL_VAR NAME="tag" -->
+			</p>
+		<!-- TMPL_LOOP NAME="subfield" -->
+			<p>
+				<label class="labelsubfield">
+				<!-- TMPL_VAR NAME="marc_lib" --></label>
+				<!-- TMPL_VAR NAME="marc_value" -->
+			</p>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+</div>
+</div>	
+<script language="JavaScript" type="text/javascript">
+
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this authority?');
+	if (is_confirmed) {
+		window.location="authorities-home.pl?op=delete&amp;authid=<!-- TMPL_VAR NAME="authid" -->";
+	}
+}
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+</body>
+</html>

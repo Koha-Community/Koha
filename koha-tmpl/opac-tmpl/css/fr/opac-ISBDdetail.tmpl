@@ -12,11 +12,15 @@
 		Prêts
 	</a>
 	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="opacbookbag" -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Ajouter au panier</a>
+    <!-- /TMPL_IF -->
 </div>
 
 <div id="mainbloc">
-	<p><!-- TMPL_VAR name="ISBD" --></p>
+		<div id="bloc20">
+			<p><!-- TMPL_VAR name="ISBD" --></p>
+		</div>
 	<!-- TMPL_IF name="subscriptionsnumber" -->
 		<br />
 		<div id="bloc20">
