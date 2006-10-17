@@ -1,0 +1,29 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+		<h2>Історія читання <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
+<!-- TMPL_UNLESS NAME="count" -->
+Ви ніколи не позичали що-небудь у бібліотеці.
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="showfulllink" -->
+Відображення усіх одиниць | <a class="button" href="opac-readingrecord.pl?limit=">Показати лише останні 50 одиниць</a> <!-- TMPL_ELSE --> Показати останні 50 одиниць | <a class="button" href="opac-readingrecord.pl?limit=full">Відобразити усі одиниці</a>
+<!-- /TMPL_IF --><table>
+<tr>
+<tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a class="transparent" href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Заголовок</a><!-- TMPL_ELSE -->Заголовок<!-- /TMPL_UNLESS NAME="orderbyauthor"--></th>
+<th><!-- TMPL_UNLESS --><a class="transparent" href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Автор </a><!-- TMPL_ELSE -->Автор <!-- /TMPL_UNLESS --></th>
+<th><!-- TMPL_UNLESS NAME="orderbydate" --><a class="transparent" href="/cgi-bin/koha/opac-readingrecord.pl">Дата</a><!-- TMPL_ELSE -->Дата<!-- /TMPL_UNLESS --></th></tr>
+
+<!-- TMPL_LOOP NAME="READING_RECORD" -->
+
+<tr>
+<!-- TMPL_IF NAME="toggle" --><td><!-- TMPL_ELSE --><td class="hilighted"><!-- /TMPL_IF --><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+<!-- TMPL_IF NAME="toggle" --><td><!-- TMPL_ELSE --><td class="hilighted"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="author" --></td>
+<!-- TMPL_IF NAME="toggle" --><td><!-- TMPL_ELSE --><td class="hilighted"><!-- /TMPL_IF --><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Перевірено)</em><!-- /TMPL_IF --></td>
+</tr>
+
+<!-- /TMPL_LOOP -->
+</table>
+
+<!-- /TMPL_UNLESS -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

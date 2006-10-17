@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
+	<title><!--TMPL_VAR name="LibraryName"--></title>
+	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+	</script>
+	<script type="text/javascript" language="javascript">
+	var MSG_BASKET_EMPTY = _("Корзина порожня");
+	var MSG_RECORD_IN_BASKET = _("Цей бібліотечний запис знаходиться вже у кошику");
+	var MSG_RECORD_ADDED = _("Бібліотечні записи додані до кошика");
+	var MSG_NRECORDS_ADDED = _(" Бібліотечних записів додано");
+	var MSG_NRECORDS_IN_BASKET = _("вже у кошику");
+	var MSG_NO_RECORD_SELECTED = _("Не вибрано жодного бібліотечного запису");
+	var MSG_NO_RECORD_ADDED = _("Не додано бібліотечного запису");
+	</script>
+</head>
+
+<body>
+<div id="title">
+	<!-- TMPL_IF name="opacsmallimage" -->
+		<img src="<!-- TMPL_VAR name="opacsmallimage"-->" title="коха" alt="коха">
+	<!-- TMPL_ELSE -->
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-small.gif" title="коха" alt="коха">
+	<!-- /TMPL_IF -->
+	<div class="SmallLibraryName"><TMPL_VAR name="LibraryName"></div>
+</div>
+<!-- TMPL_INCLUDE name="menus.inc" -->
+<div id="mainbloc">
+	<div id="bloc60">
+		<h2>Пошук у каталозі</h2>
+		<form action="/cgi-bin/koha/opac-search.pl">
+			<p>
+				<input type="hidden" name="op" value="do_search" />
+				<input type="hidden" name="type" value="opac" />
+				<input type="hidden" name="marclist" value="" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				Простий пошук : <input type="text" size="27" name="value" tabindex="1" /> 
+            <!--TMPL_IF Name="mylibraryfirst"-->
+				<br />in Branch
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+                <select name="value">
+                    <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
+            <!-- /TMPL_IF -->
+                <input type="submit" value="Гаразд" class="button"><br />
+			</p>
+			<p>
+				<a href="/cgi-bin/koha/opac-search.pl" class="button">Детальніший пошук	</a>
+			</p>
+		</form>
+		<h2>Нові надходження</h2>
+		<form action="/cgi-bin/koha/opac-search.pl">
+			<p>
+				<select name="value">
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+								</option>
+						<!-- /TMPL_LOOP -->
+				</select>
+				<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />
+				<input type="hidden" name="op" value="do_search" />
+				<input type="hidden" name="type" value="opac" />
+				отримано за останні <input type="text" name="desc_or_asc" size="3" value="30" /> дні
+				<input type="hidden" name="orderby" value="biblio.timestamp" />
+				<input type="submit" value="Гаразд" class="button">
+			</p>
+		</form>
+		<p>Пошук недавніх <a href="opac-recacquisitions.pl" class="button">надходжень за підрозділами</a></p>
+		<h2>Інші параметри</h2>
+		<!-- TMPL_IF NAME="loggedinusername" -->
+			<p>
+				<!-- TMPL_IF name="virtualshelves" -->
+					<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Віртуальні полиці</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="suggestion" -->
+					<a href="opac-suggestions.pl" class="button">Пропозиції</a>
+				<!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/opac-user.pl" class="button">
+					Мої деталі
+				</a>
+				<!-- TMPL_IF name="opacreadinghistory" -->
+					<a href="/cgi-bin/koha/opac-readingrecord.pl" class="button">Моя історія читання</a>
+				<!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
+					Вийти
+				</a>
+				<!-- TMPL_IF name="textmessaging"-->
+					<h2>Повідомлення від бібліотеки</h2>
+					<!-- TMPL_VAR name="textmessaging" -->
+				<!-- /TMPL_IF -->
+			</p>
+		<!-- TMPL_ELSE -->
+			<p><a href="/cgi-bin/koha/opac-user.pl">Зареєструйтеся у Koha</a> щоб отримати персональні налаштування.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="opaclanguagesdisplay" -->
+			<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+				<p>
+					<select name="language">
+						<TMPL_LOOP NAME="languages">
+							<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+						</TMPL_LOOP>
+					</select>
+					<input type="submit" value="Змінити мову інтерфейсу" class="button">
+				</p>
+			</form>
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<div id="bottombloc">
+	<!-- TMPL_IF NAME="opaccredits" -->
+		<p class="copyright"><!-- TMPL_VAR NAME="opaccredits" --></p>
+	<!-- TMPL_ELSE -->
+		<p class="copyright">
+			Ця бібліотека керується вільною інтегрованою бібліотечною системою (АБІС) <a href="http://www.koha.org">Koha</a>, та дотримується веб-стандартів<a href="http://validator.w3.org/check/referer">
+				<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Вірний XHTML 1.0!" height="16" width="44">
+			</a>
+		</p>
+	<!-- /TMPL_IF -->
+</div>
+</body>
+</html>

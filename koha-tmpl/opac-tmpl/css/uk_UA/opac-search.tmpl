@@ -1,0 +1,193 @@
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="catalogue">Пошук у каталозі</h1>
+
+<form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
+	
+	<div id="bloc60">
+		<h2 class="catalogue">Пошук за</h2>
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+			<label class="label20">Будь-яке слово</label>
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" size="35" />
+		</p>
+		<p>
+			<label class="label20">Заголовок</label>
+			<input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label20">Автор </label> <input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label20">Тематика</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />  
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label20">Заголовок серіального видання</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" size="35"/>
+		</p>
+		<p>
+			<label class="label20">Тип одиниці</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<select name="value">
+				<option value="">Будь-який тип одиниці зберігання</option>
+					<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+							</option>
+					<!-- /TMPL_LOOP -->
+			</select>
+		</p>
+		<p>
+				<label class="label20">Підрозділ</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+                 <select name="value">
+                    <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
+		</p>
+	</div>
+	<div id="bloc20">
+		<h2>Інші параметри</h2>
+		<p>
+				<label class="label20">Штрихкод одиниці збірігання</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="start" />
+				<input type="text" name="value" /> 
+		</p>
+		<p>
+			<label class="label20">Номер виклику</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="start" />
+			<input type="text" name="value" />
+		</p>
+		<p>
+			<label class="label20">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="text" name="value" />
+		</p>
+		<p>
+			<label class="label20">Видавець </label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" />
+		</p>
+		<p>
+			<label class="label20">Опубліковано між</label>
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" name="value" size="6" maxlength="4" /> та
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" name="value" size="6" maxlength="4" />
+		</p>
+		<p>
+			<label class="label20">Результатів на сторінку</label>
+			<select name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</p>
+		<p>
+			<label class="label20">&nbsp;</label><input type="checkbox" value=1 name="exact">Точний пошук
+		</p>
+		<p>
+			<label class="label20">Впорядкувати за</label>
+			<select name="orderby" size="1">
+				<option value="biblio.title">Заголовок</option>
+				<option value="biblio.author">Автор </option>
+				<option value="biblioitems.dewey">Індекс Дьюї (ДДК)</option>
+				<option value="biblioitems.publicationyear">Рік публікації </option>
+				<option value="biblioitems.publishercode">Видавець </option>
+				<option value="biblio.timestamp">Дата придбання</option>
+			</select>
+		</p>
+		<p>
+			<label>&nbsp;</label>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">по зростанню</option>
+				<option value="DESC">по спаданню</option>
+			</select>
+		</p>		
+
+	</div>
+	<p>
+		<input type="submit" value="Почати пошук" class="button catalogue">
+		<input type="reset" value="Очистити усе" class="button catalogue">
+	</p>
+	<div id="bloc60">
+		<h2>Натяки</h2>
+		<h3>Заголовок</h3>
+		<p>Ви можете ввести повний заголовок чи його частину. Пошук також буде здійснений у підзаголовках та інших полях, пов'язаних зі заголовком</p>
+		<h3>Автор </h3>
+		<p>Ви можете ввести ім'я або прізвище. Пошук також буде виконаний у додаткових авторах та інших полях, пов'язаних з авторством (перекладач, ілюстратор...)</p>
+		<p>Пам'ятайте, що заголовок може стосуватися персонального автора (Ігор Павлюк) або ж компанії, групи, колективного автора (ІФКС, бібліотека Стефаника)</p>
+		<h3>Підрозділи</h3>
+		<p>Виберіть підрозділ, якщо Ви хочете обмежити свій пошук за одиницями зберігання по спеціалізованому підрозділу. За умовчанням пошук виконується по усіх підрозділах бібліотеки</p>
+		<h3>Частковий пошук</h3>
+		<p>Пошук здійснюється по кожному введеному слову. Несуттєві слова ігноруються. Якщо Ви наберете, наприклад "У веселій корчмі" у заголовку, список результатів міститиме усі книги, що містять "веселій" ТА "корчмі" у заголовку. "У" буде відкинуто.</p>
+		<p>Якщо Ви хочете набрати частину слова, додайте * або % у кінець слова. Наприклад, від "закон* Україн*" отримаємо "Історія законодавства України", "Закон України про авторське право", "дотримання українських законів"</p>
+		<h3>Пошук у словнику</h3>
+		<p>якщо Ви клацаєте по ... праворуч заголовку/автора/тематики, то знайдете існуючі значення у бібліотеці.</p>
+	</div>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

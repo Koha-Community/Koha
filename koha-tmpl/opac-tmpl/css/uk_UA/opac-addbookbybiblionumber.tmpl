@@ -1,0 +1,20 @@
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc">
+<h1>Покласти книгу на книжкову полицю</h1> 
+<p><label>Заголовок</label><!-- TMPL_VAR NAME="title" --></p>
+<p><label>Автор </label><!-- TMPL_VAR NAME="author" --></p>
+<h2>Виберіть книжкову полицю</h2>
+<form action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="get">
+	<p><label>Покласти на віртуальну полицю</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
+<h2>або покласти на нову книжкову полицю</h2>
+	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+		<select name="category">
+			<option value="1">Приватна</option>
+			<option value="2">Спільна</option>
+			<option value="3">Вільна</option>
+		</select>
+	</p>
+	<input type="submit" value="Покласти на віртуальну полицю" class="button catalogue">
+</form>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->

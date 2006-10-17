@@ -1,0 +1,40 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<!-- TMPL_IF NAME= "Ask_data" -->
+<h1>Змініть свій пароль</h1>
+<!-- TMPL_IF NAME= "Error_messages" -->
+<h3>Була якась проблема з Вашою подачею</h3>
+<p class="error">
+	<!-- TMPL_IF NAME= "PassMismatch" -->
+	Паролі не співпадають. Будь-ласка, повторно наберіть свій новий пароль.
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME= "ShortPass" -->
+	Ваш новий пароль повинен складатися з не менш аніж 6 знаків
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME= "WrongPass" -->
+	Ваш чинний пароль введений неправильно. Якщо ця проблема зберігатиметься, будь-ласка, попросіть бібліотекаря для Вас повторно встановити Ваш пароль.	
+	<!-- /TMPL_IF --></p>
+<!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="get">
+<p><label for="password">Поточний пароль: </label><input type="password" id="Oldkey" size="25"  name="Oldkey" /></p>
+<p><label for="Newkey">Новий пароль: </label><input type="password" id="Newkey"  size="25"  name="Newkey" /></p>
+<p><label for="Confirm">Ще раз введіть новий пароль </label><input type="password"  id="Confirm" size="25" name="Confirm" /></p>
+<p><input type="submit" value="Затвердити зміни" class="button"></p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME= "password_updated" -->
+<h1>Пароль оновлено</h1>
+	Ваш пароль був замінений
+	<form action="/cgi-bin/koha/opac-user.pl" method="post">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+		<p><input type="submit" class="button" value="Повернутися до Вашого запису"></p>
+	</form>
+<!-- /TMPL_IF -->
+</form>
+
+
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

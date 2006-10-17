@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1>Деталі про особу: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+
+<h2>Подробиці контакту</h2>
+<p><b>Ім'я:</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></p>
+<p><b> Номер картки:</b> <!-- TMPL_VAR NAME="cardnumber" --></p>
+<p><b>Адреса відправлення:</b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
+
+<p><b>Постійне місце проживання:</b> <!-- TMPL_VAR NAME="altstreetaddress" -->, <!-- TMPL_VAR NAME="altcity" --></p>
+
+<p><b>Телефон (домашній):</b> <!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Телефон (денний час):</b> <!-- TMPL_IF NAME="phoneday" --><!-- TMPL_VAR NAME="phoneday" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Факс:</b> <!-- TMPL_IF NAME="faxnumber" --><!-- TMPL_VAR NAME="faxnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Електронічна пошта: </b> <!-- TMPL_IF NAME="emailaddress" --><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+
+
+<h2>Подробиці про відвідувача</h2>
+<p><b>Номер відвідувача:</b> <!-- TMPL_VAR NAME="borrowernumber" --></p>
+
+<p><b>Категорія відвідувачів:</b> <!-- TMPL_VAR NAME="categorycode" --></p>
+
+<p><b>Приєднуються:</b> <!-- TMPL_VAR NAME="dateenrolled" --></p>
+
+<p><b>Закінчується:</b> <!-- TMPL_VAR NAME="expiry" --></p>
+
+<!-- TMPL_IF NAME="joiningbranch" --><p><b>Приєднання підрозділу:</b> <!-- TMPL_VAR NAME="joiningbranch" --></p><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+
+<h2>Деталі ідентичності</h2>
+<p><b>Дата народження:</b> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Стать:</b> <!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+
+<h2>Подробиці альтернативного контакту</h2>
+<p><b>Альтернативний контакт:</b> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Телефон:</b> <!-- TMPL_IF NAME="altphone" --><!-- TMPL_VAR NAME="altphone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></p>
+
+<p><b>Взаємовідношення:</b> <!-- TMPL_IF NAME="altrelationship" --><!-- TMPL_VAR NAME="altrelationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </p>
+
+<p><b>Нотатки: </b> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </p>
+
+<!-- <p><b>Guarantor:</b> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </p> -->
+
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
+<input type="submit" name="Modify" value="Зміна Вашого запису" class="button">
+</form>
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

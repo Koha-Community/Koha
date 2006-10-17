@@ -1,0 +1,70 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<div id="bibliomenu">
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> Простий </a> <a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button"> Повний </a> <a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати до кошика </a> <a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue"> Роздрук </a>
+	<!-- TMPL_UNLESS NAME="norequests" -->
+		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+			Запит
+		</a>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF name="subscriptionid" -->
+	<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Випуски періодичного видання">
+		Випуски
+	</a>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="opacbookbag" -->
+	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Додати до кошика</a>
+    <!-- /TMPL_IF -->
+</div>
+
+<div id="mainbloc">
+		<div id="bloc20">
+			<p><!-- TMPL_VAR name="ISBD" --></p>
+		</div>
+	<!-- TMPL_IF name="subscriptionsnumber" -->
+		<br />
+		<div id="bloc20">
+		<h2>Ми маємо <!-- TMPL_VAR name="subscriptionsnumber" --> передплат(у/и), пов'язан(у/і) з цим заголовком.</h2> 
+		<p>Нижче - список трьох найостанніших випусків :</p>
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<!-- TMPL_IF name="subscriptionnotes"-->
+					<h2><!--TMPL_VAR Name="subscriptionnotes"--> </h2>
+				<!-- /TMPL_IF -->
+				<!--TMPL_IF Name="latestserials"-->
+				<table>
+				<tr><th>Номер випуску</th><th>Дата</th><th>Стан</th></tr>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Чекають
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Прибувають
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Затримка
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Відсутнє
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Не випущено
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p>Для отримання більш конкретної інформації про історію передплати <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">клацніть тут</a></p>
+		</div>
+ 	<!-- /TMPL_IF -->
+</div>
+</body>
+</html>

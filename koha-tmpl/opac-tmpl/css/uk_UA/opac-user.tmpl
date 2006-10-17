@@ -1,0 +1,128 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+	<div class="bloc20">
+		<h2>Чи наші записи правильні?</h2>
+		<p>Бібліотечна картка: <!-- TMPL_VAR NAME="cardnumber" --> </p>
+		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+		<p>Робоча адреса: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
+		<p>Домашня адреса: <!-- TMPL_VAR name='physstreet' --></p>
+		<p><!-- TMPL_IF name="phone" -->Домашній телефон: <!-- TMPL_VAR NAME="phone" --><!-- /TMPL_IF --></p>
+		<p><!-- TMPL_IF name="faxnumber" -->Факс: <!-- TMPL_VAR NAME="faxnumber" --><!-- /TMPL_IF --></p>
+		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
+		<p><a href="/cgi-bin/koha/opac-userupdate.pl" class="button">Оновити запис</a></p>
+		<!-- TMPL_IF name="OpacPasswordChange" -->
+			<p><a href="/cgi-bin/koha/opac-passwd.pl" class="button">Змініть свій пароль</a></p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>Повідомлення від бібліотеки</h2>
+			<!-- TMPL_VAR name="textmessaging" -->
+		<!-- /TMPL_IF --></div>
+		
+		<!-- TMPL_IF NAME="flagged" -->
+		<div class="bloc20">
+			<h2>Є відмітки на Вашому обліковому записі!</h2>
+			<!-- TMPL_IF NAME="debarred" -->
+				<p><strong>Будь-ласка, відзначте:</strong> Ваш обліковий запис заблоковано. Зазвичай причиною для блокування облікового запису є старі прострочення або ж збтитові грошові збори. Якщо <a href="/cgi-bin/koha/opac-user.pl">Ваша сторінка облікового запису</a> порожня, будь-ласка проконсультуйтеся з бібліотекарем.</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="gonenoaddress" -->
+				<p><strong>Будь-ласка, відзначте:</strong> Згідно нашим записам, ми не маємо сучасної <a href="/cgi-bin/koha/opac-userdetails.pl">контактної інформації</a> щодо файлу. Будь-ласка, зконтактуйтеся зі своїм бібліотекарем, або використайте <a href="/cgi-bin/koha/opac-userupdate.pl">он-лайн форму модифікації</a>, щоб подати чинну інформацію (<em>Будь-ласка, зауважте</em>: можлива затримка у відновленні Вашого облікового запису, якщо Ви подаєте в он-лайн)</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="lost" -->
+				<p><strong>Будь-ласка, відзначте: </strong> Ваша бібліотечна картка була відмічена, як втрачена або ж  вкрадена. Якщо це помилка, будь-ласка, принесіть свою картку до обмінного столу у Вашій місцевій бібліотеці і помилка буде виправлена.</p>
+			<!-- /TMPL_IF -->
+		</div>
+		<!-- /TMPL_IF -->
+
+	
+	<!-- TMPL_IF NAME="amountoverfive" -->
+	<div class="bloc20">
+		<h2>У Вас є заборговані плати і пеня на <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">Перегляд облікових записів</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="amountoverzero" -->
+	<div class="bloc20">
+		<h2>У Вас є заборговані плати і пеня на <!-- TMPL_VAR NAME="amountoutstanding" --></h2>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">Перегляд облікових записів</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME"amountlessthanzero" -->
+	<div class="bloc20">
+		<p>Ви маєте кредит на <!-- TMPL_VAR NAME="amountoutstanding" --></p>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">Перегляд облікових записів</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP -->
+
+	<!-- TMPL_IF NAME="waiting_count" -->
+	<div class="bloc60">
+		<h2>Ваші зарезервовані бібліотечні одиниці очікують:</h2>
+		<ul>
+			<!-- TMPL_LOOP NAME="WAITING" -->
+				<li><!-- TMPL_VAR NAME="btitle" -->, забирати на: <b><!-- TMPL_VAR NAME="branch" --></b></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<div class="bloc60">
+		<!-- TMPL_IF NAME="issues_count" -->
+			<h2>Ваші бібліотечні одиниці <b><!-- TMPL_VAR NAME="issues_count" --></b> на зараз видані</h2>
+			<table>
+				<tr>
+					<th>Заголовок</th>
+					<th>Автор </th>
+					<th>Дата повернення</th>
+					<th>Тип одиниці</th>
+					<th>Штриховий код</th>
+					<th>Плати</th>
+					<th>Поновлюване</th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ISSUES" -->
+					<!-- TMPL_IF name="overdue"-->
+						<tr class="problem">
+					<!-- TMPL_ELSE -->
+						<tr>
+					<!-- /TMPL_IF-->
+							<td><!-- TMPL_VAR NAME="title" --></td>
+							<td><!-- TMPL_VAR NAME="author" --></td>
+							<td><!-- TMPL_VAR NAME="date_due" --></td>
+							<td><!-- TMPL_VAR NAME="itemtype" --></td>
+							<td><!-- TMPL_VAR NAME="barcode" --></td>
+							<td><!-- TMPL_IF NAME="charges" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="status" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --></td>
+						</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		<!-- TMPL_ELSE -->
+			<h2>У Вас немає виданих бібліотечних елементів.</h2>
+		<!-- /TMPL_IF -->
+	</div>
+
+	<!-- TMPL_IF NAME="reserves_count" -->
+	<div class="bloc60">
+		<h2>Ваші бібліотечні одиниці <b><!-- TMPL_VAR NAME="reserves_count" --></b> на зараз зарезервовані.</h2>
+		<table cellspacing="0" align="center">
+			<tr>
+				<th>Заголовок</th>
+				<th>Автор </th>
+				<th>Зарезервовано до дати</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="RESERVES" -->
+				<tr valign="top">
+				<td><!-- TMPL_VAR NAME="btitle" --></td>
+				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td><!-- TMPL_VAR NAME="reservedate" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<br />
+	</div>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+
