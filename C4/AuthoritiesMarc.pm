@@ -121,7 +121,7 @@ my $counter = $offset;
 $length=10 unless $length;
 my @oAuth;
 my $i;
- $oAuth[0]=C4::Context->Zconnauth("authorityserver");
+ $oAuth[0]=C4::Context->Zconn("authorityserver");
 my ($mainentry)=MARCfind_attr_from_kohafield("mainentry");
 my ($allentry)=MARCfind_attr_from_kohafield("allentry");
 
@@ -634,7 +634,7 @@ my ($dbh,$record,$authid,$authtypecode)=@_;
 			my $altheading;
 			my $seeheading;
 			my $see;
-			my @fields = $record->{datafields};
+			my $fields = $record->{datafield};
 			if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 			# construct UNIMARC summary, that is quite different from MARC21 one
 			foreach my $field (@$fields) {
@@ -649,8 +649,9 @@ my ($dbh,$record,$authid,$authtypecode)=@_;
 				$summary = $heading;	
 			} else {
 			# construct MARC21 summary
-				foreach my $field (@fields) {	
-					if ($field->{tag}=~/'1..'/){			
+				foreach my $field (@$fields) {	
+					my $tag="1..";
+				 	 if($field->{tag}  =~ /^$tag/) {			
 						$heading.= XML_readline_onerecord($record,"","",$field->{tag},"a");
 					}
 				} #each fieldd

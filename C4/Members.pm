@@ -26,14 +26,13 @@ require Exporter;
 use C4::Context;
 use C4::Date;
 use Digest::MD5 qw(md5_base64);
-use Date::Calc qw/Today/;
 use C4::Biblio;
 use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts2;
 use C4::Circulation::Circ2;
-use Date::Manip;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
@@ -688,15 +687,19 @@ sub modmember {
 
 	$data{'joining'}=format_date_in_iso($data{'joining'});
 	
-	if ($data{'expiry'} eq '') {
+	if ($data{'expiry'}) {
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	}else{
 	
 		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
 		$sth->execute($data{'categorycode'});
 		my ($enrolmentperiod) = $sth->fetchrow;
-		$enrolmentperiod = 12 unless ($enrolmentperiod);
-		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
+		$enrolmentperiod = 1 unless ($enrolmentperiod);#enrolmentperiod in years
+		my $duration=get_duration($enrolmentperiod." years");
+		$data{'expiry'} = &DATE_Add_Duration($data{'joining'},$duration );
+		
 	}
-	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	
 	my $query= "UPDATE borrowers SET 
 					cardnumber		= '$data{'cardnumber'}'		,
 					surname			= '$data{'surname'}'		,
@@ -714,6 +717,7 @@ sub modmember {
 					homezipcode		= '$data{'homezipcode'}'	,
 					phone			= '$data{'phone'}'			,
 					emailaddress	= '$data{'emailaddress'}'	,
+					preferredcont    = '$data{'preferredcont'}',
 					faxnumber		= '$data{'faxnumber'}'		,
 					textmessaging	= '$data{'textmessaging'}'	,			 
 					categorycode	= '$data{'categorycode'}'	,
@@ -745,17 +749,25 @@ sub newmember {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-	$data{'joining'} = &ParseDate("today") unless $data{'joining'};
+	
+	
+	if ($data{'joining'}){
 	$data{'joining'}=format_date_in_iso($data{'joining'});
+	}else{
+	$data{'joining'} = get_today();
+	}
 	# if expirydate is not set, calculate it from borrower category subscription duration
-	unless ($data{'expiry'}) {
+	if ($data{'expiry'}) {
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	}else{
 		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
 		$sth->execute($data{'categorycode'});
 		my ($enrolmentperiod) = $sth->fetchrow;
-		$enrolmentperiod = 12 unless ($enrolmentperiod);
-		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
+		$enrolmentperiod = 1 unless ($enrolmentperiod);#enrolmentperiod in years
+		my $duration=get_duration($enrolmentperiod." years");
+		$data{'expiry'} = &DATE_Add_Duration($data{'joining'},$duration);
 	}
-	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	
 	my $query= "INSERT INTO borrowers (
 							cardnumber,
 							surname,
@@ -775,6 +787,7 @@ sub newmember {
 							emailaddress,
 							faxnumber,
 							textmessaging,
+							preferredcont,
 							categorycode,
 							branchcode,
 							borrowernotes,
@@ -807,7 +820,7 @@ sub newmember {
 							'$data{'emailaddress'}',
 							'$data{'faxnumber'}',
 							'$data{'textmessaging'}',
-
+							'$data{'preferredcont'}',
 							'$data{'categorycode'}',
 							'$data{'branchcode'}',
 							'$data{'borrowernotes'}',
@@ -816,7 +829,7 @@ sub newmember {
 							'$data{'expiry'}',
 							'$data{'joining'}',
 							'$data{'sort1'}',
-							'$data{'sort2'}'
+							'$data{'sort2'}' 
 							)";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
@@ -1415,7 +1428,7 @@ sub get_age {
     my ($date, $date_ref) = @_;
 
     if (not defined $date_ref) {
-        $date_ref = sprintf('%04d-%02d-%02d', Today());
+        $date_ref = get_today();
     }
 
     my ($year1, $month1, $day1) = split /-/, $date;

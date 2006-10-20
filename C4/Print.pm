@@ -20,11 +20,11 @@ package C4::Print; #assumes C4/Print.pm
 
 use strict;
 require Exporter;
-#use C4::InterfaceCDK;
+
 
 use C4::Context;
 use C4::Circulation::Circ2;
-
+use C4::Members;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking

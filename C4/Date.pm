@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+## written by T Garip 2006-10-10
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -23,8 +23,10 @@ package C4::Date;
 
 use strict;
 use C4::Context;
-use Date::Manip;
-
+use DateTime;
+use DateTime::Format::ISO8601;
+use DateTime::Format::Strptime;
+use DateTime::Format::Duration;
 
 require Exporter;
 
@@ -39,7 +41,8 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
   &format_date
   &format_date_in_iso
   &get_date_format_string_for_DHTMLcalendar
-  &Date_diff
+  &DATE_diff &DATE_Add
+&get_today &DATE_Add_Duration &DATE_obj &get_duration
 );
 
 sub get_date_format {
@@ -89,72 +92,113 @@ sub get_date_format_string_for_DHTMLcalendar {
 sub format_date {
     my $olddate = shift;
     my $newdate;
-
-    if ( !$olddate ) {
+    if ( !$olddate || $olddate eq "0000-00-00" ) {
         return "";
     }
-
+		$olddate=~s/-//g;
+		my $olddate=substr($olddate,0,8);
     my $dateformat = get_date_format();
+eval{$newdate =DateTime::Format::ISO8601->parse_datetime($olddate);};
+if ($@ || !$newdate){
+##MARC21 tag 008 has this format YYMMDD
+my $parser =    DateTime::Format::Strptime->new( pattern => '%y%m%d' );
+        $newdate =$parser->parse_datetime($olddate);
+}
+if (!$newdate){
+return ""; #### some script call format_date more than once --FIX scripts
+}
 
     if ( $dateformat eq "us" ) {
-        Date_Init("DateFormat=US");
-        $olddate = ParseDate($olddate);
-        $newdate = UnixDate( $olddate, '%m/%d/%Y' );
+      return $newdate->mdy('/');
+    
     }
     elsif ( $dateformat eq "metric" ) {
-        Date_Init("DateFormat=metric");
-        $olddate = ParseDate($olddate);
-        $newdate = UnixDate( $olddate, '%d/%m/%Y' );
+        return $newdate->dmy('/');
     }
     elsif ( $dateformat eq "iso" ) {
-        Date_Init("DateFormat=iso");
-        $olddate = ParseDate($olddate);
-        $newdate = UnixDate( $olddate, '%Y-%m-%d' );
+        return $newdate->ymd;
     }
     else {
         return
 "Invalid date format: $dateformat. Please change in system preferences";
     }
+
 }
 
 sub format_date_in_iso {
     my $olddate = shift;
     my $newdate;
-
-    if ( !$olddate ) {
+  my $parser;
+    if ( !$olddate || $olddate eq "0000-00-00" ) {
         return "";
     }
 
-    my $dateformat = get_date_format();
-
-    if ( $dateformat eq "us" ) {
-        Date_Init("DateFormat=US");
-        $olddate = ParseDate($olddate);
-    }
-    elsif ( $dateformat eq "metric" ) {
-        Date_Init("DateFormat=metric");
-        $olddate = ParseDate($olddate);
-    }
-    elsif ( $dateformat eq "iso" ) {
-        Date_Init("DateFormat=iso");
-        $olddate = ParseDate($olddate);
-    }
-    else {
-        return "9999-99-99";
-    }
-
-    $newdate = UnixDate( $olddate, '%Y-%m-%d' );
-
-    return $newdate;
+$parser =    DateTime::Format::Strptime->new( pattern => '%d/%m/%Y' );
+        $newdate =$parser->parse_datetime($olddate);
+if (!$newdate){
+$parser =    DateTime::Format::Strptime->new( pattern => '%m/%d/%Y' );
+$newdate =$parser->parse_datetime($olddate);
+}
+if (!$newdate){
+ $parser =    DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+$newdate =$parser->parse_datetime($olddate);
+}
+ if (!$newdate){
+ $parser =    DateTime::Format::Strptime->new( pattern => '%y-%m-%d' );
+$newdate =$parser->parse_datetime($olddate);
+}
+  
+    return $newdate->ymd if $newdate;
 }
 sub DATE_diff {
+## returns 1 if date1>date2 0 if date1==date2 -1 if date1<date2
 my ($date1,$date2)=@_;
-my $dbh=C4::Context->dbh;
-my $sth = $dbh->prepare("SELECT DATEDIFF(?,?)");
-	$sth->execute($date1,$date2);
-	my $difference = $sth->fetchrow;
-	$sth->finish;
-return $difference;
+my $dt1=DateTime::Format::ISO8601->parse_datetime($date1);
+my $dt2=DateTime::Format::ISO8601->parse_datetime($date2);
+my $diff=DateTime->compare( $dt1, $dt2 );
+return $diff;
+}
+sub DATE_Add {
+## $amount in days
+my ($date,$amount)=@_;
+my $dt1=DateTime::Format::ISO8601->parse_datetime($date);
+$dt1->add( days=>$amount );
+return $dt1->ymd;
+}
+sub DATE_Add_Duration {
+## Similar as above but uses Duration object as amount --used heavily in serials
+my ($date,$amount)=@_;
+my $dt1=DateTime::Format::ISO8601->parse_datetime($date);
+$dt1->add_duration($amount) ;
+return $dt1->ymd;
+}
+sub get_today{
+my $dt=DateTime->today;
+return $dt->ymd;
 }
 
+sub DATE_obj{
+# only send iso dates to this
+my $date=shift;
+   my $parser =    DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+      my  $newdate =$parser->parse_datetime($date);
+return $newdate;
+}
+sub get_duration{
+my $period=shift;
+my $parse;
+if ($period=~/day/){
+$parse="\%e days";
+}elsif ($period=~/week/){
+$parse="\%W weeks";
+}elsif ($period=~/year/){
+$parse="\%Y years";
+}elsif ($period=~/month/){
+$parse="\%m months";
+}
+my $parser=DateTime::Format::Duration->new(pattern => $parse  );
+	my $duration=$parser->parse_duration($period);
+return $duration;
+
+}
 1;

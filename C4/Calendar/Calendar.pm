@@ -21,10 +21,10 @@ use vars qw($VERSION @EXPORT);
 
 use C4::Context;
 
-#use Date::Calc;
+use C4::Date;
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 1.01;
 
 =head1 NAME
 
@@ -548,23 +548,19 @@ sub daysBetween {
 
 sub Date_DayOfWeek{
 my ($month, $day, $year)=@_;
-my $date=$year."-".$month."-".$day;
-my $dbh=C4::Context->dbh;
-my $sth=$dbh->prepare("SELECT DAYOFWEEK(?)");
-$sth->execute($date);
-my $dayofweek=$sth->fetchrow;
-return $dayofweek;
+my $date=Date_obj($year."-".$month."-".$day);
+
+return $date->day_of_week;
 }
 
 sub Add_Delta_Days{
 my ($year, $month, $day, $offset)=@_;
-my $date=$year."-".$month."-".$day;
-my $dbh=C4::Context->dbh;
-my $sth=$dbh->prepare(" SELECT DATE_ADD(?, INTERVAL ? DAY)");
-$sth->execute($date,$offset);
- $date=$sth->fetchrow;
- ($year, $month, $day)=split /-/,$date;
-return ($year, $month, $day);
+my $date=Date_obj($year."-".$month."-".$day);
+my $duration=get_duration($offset." days");
+
+ $date->add_duration($duration);
+
+return ($date->year, $date->month, $date->day);
 }
 
 

@@ -21,7 +21,7 @@ package C4::Serials; #assumes C4/Serials.pm
 
 use strict;
 use C4::Date;
-use Date::Manip;
+use C4::Date;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Search;
@@ -712,40 +712,40 @@ the date on ISO format.
 sub GetNextDate(@) {
     my ($planneddate,$subscription) = @_;
     my $resultdate;
+   my $duration;
     if ($subscription->{periodicity} == 1) {
-        $resultdate=DateCalc($planneddate,"1 day");
+	$duration=get_duration("1 days");    
     }
     if ($subscription->{periodicity} == 2) {
-        $resultdate=DateCalc($planneddate,"1 week");
+       $duration=get_duration("1 weeks");    
     }
     if ($subscription->{periodicity} == 3) {
-        $resultdate=DateCalc($planneddate,"2 weeks");
+      $duration=get_duration("2 weeks");    
     }
     if ($subscription->{periodicity} == 4) {
-        $resultdate=DateCalc($planneddate,"3 weeks");
+       $duration=get_duration("3 weeks");    
     }
     if ($subscription->{periodicity} == 5) {
-        $resultdate=DateCalc($planneddate,"1 month");
+     $duration=get_duration("1 months");    
     }
     if ($subscription->{periodicity} == 6) {
-        $resultdate=DateCalc($planneddate,"2 months");
+       $duration=get_duration("2 months");    
     }
-    if ($subscription->{periodicity} == 7) {
-        $resultdate=DateCalc($planneddate,"3 months");
+    if ($subscription->{periodicity} == 7 || $subscription->{periodicity} == 8) {
+        $duration=get_duration("3 months");    
     }
-    if ($subscription->{periodicity} == 8) {
-        $resultdate=DateCalc($planneddate,"3 months");
-    }
+    
     if ($subscription->{periodicity} == 9) {
-        $resultdate=DateCalc($planneddate,"6 months");
+         $duration=get_duration("6 months");    
     }
     if ($subscription->{periodicity} == 10) {
-        $resultdate=DateCalc($planneddate,"1 year");
+          $duration=get_duration("1 years");    
     }
     if ($subscription->{periodicity} == 11) {
-        $resultdate=DateCalc($planneddate,"2 years");
+        $duration=get_duration("2 years");    
     }
-    return format_date_in_iso($resultdate);
+ $resultdate=DATE_Add_Duration($planneddate,$duration);
+    return $resultdate;
 }
 
 =head2 GetSeq
@@ -800,8 +800,10 @@ sub GetSubscriptionExpirationDate {
         }
     }
     else {
-        $enddate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{monthlength}." months") if ($subscription->{monthlength});
-        $enddate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+
+        $enddate = DATE_Add_Duration($subscription->{startdate},$duration) ;
     }
     return $enddate;
 }
@@ -1251,10 +1253,12 @@ sub HasSubscriptionExpired {
         |;
         my $sth = $dbh->prepare($query);
         $sth->execute($subscriptionid);
-        my $res = ParseDate(format_date_in_iso($sth->fetchrow));
+        my $res = $sth->fetchrow;
         my $endofsubscriptiondate;
-        $endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{monthlength}." months") if ($subscription->{monthlength});
-        $endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+
+        $endofsubscriptiondate = DATE_Add_Duration($subscription->{startdate},$duration) ;
         return 1 if ($res >= $endofsubscriptiondate);
         return 0;
     }
@@ -1296,8 +1300,7 @@ sub DelSubscription {
     my ($subscriptionid,$biblionumber) = @_;
     my $dbh = C4::Context->dbh;
 ## User may have subscriptionid stored in MARC so check and remove it
-my $record=XMLgetbiblio($dbh,$biblionumber);
-$record=XML_xml2hash_onerecord($record);
+my $record=XMLgetbibliohash($dbh,$biblionumber);
 XML_writeline( $record, "subscriptionid", "","biblios" );
 my $frameworkcode=MARCfind_frameworkcode($dbh,$biblionumber);
 NEWmodbiblio($dbh,$biblionumber,$record,$frameworkcode);
@@ -1670,24 +1673,26 @@ sub abouttoexpire {
 	# a little bit more tricky if based on X weeks/months : search if the latest issue waited is not after subscription startdate + duration
 	my $sth = $dbh->prepare("select max(planneddate) from serial where subscriptionid=?");
 	$sth->execute($subscriptionid);
-	my $res = ParseDate(format_date_in_iso($sth->fetchrow));
+	my $res = $sth->fetchrow;
 	my $endofsubscriptiondate;
-	$endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{monthlength}." months") if ($subscription->{monthlength});
-	$endofsubscriptiondate = DateCalc(format_date_in_iso($subscription->{startdate}),$subscription->{weeklength}." weeks") if ($subscription->{weeklength});
-	# warn "last: ".$endofsubscriptiondate." vs currentdate: ".$res;
+	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+
+        $endofsubscriptiondate = DATE_Add_Duration($subscription->{startdate},$duration) ;
 	my $per = $subscription->{'periodicity'};
 	my $x = 0;
-	if ($per == 1) { $x = '1 day'; }
-	if ($per == 2) { $x = '1 week'; }
+	if ($per == 1) { $x = '1 days'; }
+	if ($per == 2) { $x = '1 weeks'; }
 	if ($per == 3) { $x = '2 weeks'; }
 	if ($per == 4) { $x = '3 weeks'; }
-	if ($per == 5) { $x = '1 month'; }
+	if ($per == 5) { $x = '1 months'; }
 	if ($per == 6) { $x = '2 months'; }
 	if ($per == 7 || $per == 8) { $x = '3 months'; }
 	if ($per == 9) { $x = '6 months'; }
-	if ($per == 10) { $x = '1 year'; }
+	if ($per == 10) { $x = '1 years'; }
 	if ($per == 11) { $x = '2 years'; }
-	my $datebeforeend = DateCalc($endofsubscriptiondate,"- ".$x); # if ($subscription->{weeklength});
+	my $duration=get_duration("-".$x) ;
+ 	my $datebeforeend = DATE_Add_Duration($endofsubscriptiondate,$duration); # if ($subscription->{weeklength});
 	# warn "DATE BEFORE END: $datebeforeend";
 	return 1 if ($res >= $datebeforeend && $res < $endofsubscriptiondate);
 	return 0;
@@ -1718,118 +1723,128 @@ $resultdate - then next date in the sequence
 sub Get_Next_Date(@) {
     my ($planneddate,$subscription) = @_;
     my @irreg = split(/\|/,$subscription->{irregularity});
-
-    my ($year, $month, $day) = UnixDate($planneddate, "%Y", "%m", "%d");
-    my $dayofweek = Date_DayOfWeek($month,$day,$year);
+ my $dateobj=DATE_obj($planneddate);
+    my $dayofweek = $dateobj->day_of_week;
+  my $month=$dateobj->month;
     my $resultdate;
     #       warn "DOW $dayofweek";
+
     if ($subscription->{periodicity} == 1) {
+my $duration=get_duration("1 days");
 	for(my $i=0;$i<@irreg;$i++){
 	    if($dayofweek == 7){ $dayofweek = 0; }
+
 	    if(in_array(($dayofweek+1), @irreg)){
-		$planneddate = DateCalc($planneddate,"1 day");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$dayofweek++;
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"1 day");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 2) {
-	my $wkno = Date_WeekOfYear($month,$day,$year,1);
+	my $wkno = $dateobj->week_number;
+my $duration=get_duration("1 weeks");
 	for(my $i = 0;$i < @irreg; $i++){
 	    if($wkno > 52) { $wkno = 0; } # need to rollover at January
 	    if($irreg[$i] == ($wkno+1)){
-		$planneddate = DateCalc($planneddate,"1 week");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$wkno++;
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"1 week");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 3) {
-	my $wkno = Date_WeekOfYear($month,$day,$year,1);
+	my $wkno = $dateobj->week_number;
+my $duration=get_duration("2 weeks");
 	for(my $i = 0;$i < @irreg; $i++){
 	    if($wkno > 52) { $wkno = 0; } # need to rollover at January
 	    if($irreg[$i] == ($wkno+1)){
-		$planneddate = DateCalc($planneddate,"2 weeks");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$wkno++;
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"2 weeks");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 4) {
-	my $wkno = Date_WeekOfYear($month,$day,$year,1);
+	my $wkno = $dateobj->week_number;
+my $duration=get_duration("3 weeks");
 	for(my $i = 0;$i < @irreg; $i++){
 	    if($wkno > 52) { $wkno = 0; } # need to rollover at January
 	    if($irreg[$i] == ($wkno+1)){
-		$planneddate = DateCalc($planneddate,"3 weeks");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$wkno++;
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"3 weeks");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 5) {
+my $duration=get_duration("1 months");
 	for(my $i = 0;$i < @irreg; $i++){
 	    # warn $irreg[$i];
 	    # warn $month;
 	    if($month == 12) { $month = 0; } # need to rollover to check January
 	    if($irreg[$i] == ($month+1)){ # check next one to see if is to be skipped
-		$planneddate = DateCalc($planneddate,"1 month");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$month++; # to check if following ones are to be skipped too
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"1 month");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
 	# warn "Planneddate2: $planneddate";
     }
     if ($subscription->{periodicity} == 6) {
+my $duration=get_duration("2 months");
 	for(my $i = 0;$i < @irreg; $i++){
+	    # warn $irreg[$i];
+	    # warn $month;
 	    if($month == 12) { $month = 0; } # need to rollover to check January
 	    if($irreg[$i] == ($month+1)){ # check next one to see if is to be skipped
-		$planneddate = DateCalc($planneddate,"2 months");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$month++; # to check if following ones are to be skipped too
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"2 months");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
-    if ($subscription->{periodicity} == 7) {
+    if ($subscription->{periodicity} == 7 || $subscription->{periodicity} == 8 ) {
+my $duration=get_duration("3 months");
 	for(my $i = 0;$i < @irreg; $i++){
+	    # warn $irreg[$i];
+	    # warn $month;
 	    if($month == 12) { $month = 0; } # need to rollover to check January
 	    if($irreg[$i] == ($month+1)){ # check next one to see if is to be skipped
-		$planneddate = DateCalc($planneddate,"3 months");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$month++; # to check if following ones are to be skipped too
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"3 months");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
-    if ($subscription->{periodicity} == 8) {
-	for(my $i = 0;$i < @irreg; $i++){
-	    if($month == 12) { $month = 0; } # need to rollover to check January
-	    if($irreg[$i] == ($month+1)){ # check next one to see if is to be skipped
-		$planneddate = DateCalc($planneddate,"3 months");
-		$month++; # to check if following ones are to be skipped too
-	    }
-	}
-	$resultdate=DateCalc($planneddate,"3 months");
-    }
+
     if ($subscription->{periodicity} == 9) {
+my $duration=get_duration("6 months");
 	for(my $i = 0;$i < @irreg; $i++){
+	    # warn $irreg[$i];
+	    # warn $month;
 	    if($month == 12) { $month = 0; } # need to rollover to check January
 	    if($irreg[$i] == ($month+1)){ # check next one to see if is to be skipped
-		$planneddate = DateCalc($planneddate,"6 months");
+		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$month++; # to check if following ones are to be skipped too
 	    }
 	}
-	$resultdate=DateCalc($planneddate,"6 months");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 10) {
-	$resultdate=DateCalc($planneddate,"1 year");
+my $duration=get_duration("1 years");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     if ($subscription->{periodicity} == 11) {
-	$resultdate=DateCalc($planneddate,"2 years");
+	my $duration=get_duration("2 years");
+	$resultdate=DATE_Add_Duration($planneddate,$duration);
     }
     #    warn "date: ".$resultdate;
-    return format_date_in_iso($resultdate);
+    return $resultdate;
 }
 
 
+	
 END { }       # module clean-up code here (global destructor)
 
 1;

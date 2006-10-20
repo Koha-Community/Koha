@@ -282,7 +282,7 @@ sub get_opac_new {
 sub get_opac_news {
 	my ($limit, $lang) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_news";
+	my $query = "SELECT *, DATE_FORMAT(timestamp,'%Y-%m-%d') AS newdate FROM opac_news";
 	if ($lang) {
 		$query.= " WHERE lang = '" .$lang ."' ";
 	}
@@ -352,7 +352,7 @@ sub get_opac_electronic {
 sub get_opac_electronics {
 	my ($section, $lang) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_electronic";
+	my $query = "SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d') AS newdate FROM opac_electronic";
 	if ($lang) {
 		$query.= " WHERE lang = '" .$lang ."' ";
 	}
@@ -366,6 +366,7 @@ sub get_opac_electronics {
 	my @opac_electronic;
 	my $count = 0;
 	while (my $row = $sth->fetchrow_hashref) {
+		$row->{'newdate'}=format_date($row->{'newdate'});
 			push @opac_electronic, $row;	
 
 		

@@ -489,6 +489,8 @@ sub _new_dbh
 	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
 	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
 	$dbh->do("set NAMES 'utf8'");
+	$dbh->{mysql_auto_reconnect} =  1 ;
+
 	return $dbh;
 }
 
@@ -832,6 +834,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.49  2006/10/20 01:20:56  tgarip1957
+# A new Date.pm to use for all date calculations. Mysql date calculations removed from Circ2.pm, all modules free of DateManip, a new get_today function to call in allscripts, and some bug cleaning in authorities.pm
+#
 # Revision 1.48  2006/10/01 21:48:54  tgarip1957
 # Field weighting applied to ranked searches. A new facets table in mysql db
 #

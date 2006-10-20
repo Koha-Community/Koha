@@ -82,7 +82,7 @@ $VERSION = 2.01;
 &ZEBRAopserver 
 &ZEBRA_readyXML 
 &ZEBRA_readyXML_noheader
-
+&ZEBRAopcommit
 &newbiblio
 &modbiblio
 &DisplayISBN
@@ -1202,19 +1202,21 @@ my ($count,@result)=C4::Search::ZEBRAsearch_kohafields(\@kohafield,\@value);
 sub ZEBRAop {
 ### Puts the zebra update in queue writes in zebraserver table
 my ($dbh,$biblionumber,$op,$server)=@_;
-my ($record);
+if (!$biblionumber){
+warn "Zebra received no biblionumber";
+}else{
 my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
 $sth->execute($biblionumber,$server,$op);
 }
-
+}
 
 sub ZEBRAopserver{
 
 ###Accepts a $server variable thus we can use it to update  biblios, authorities or other zebra dbs
 my ($record,$op,$server,$biblionumber)=@_;
-my @Zconnbiblio;
+
 my @port;
-my $Zpackage;
+
 my $tried=0;
 my $recon=0;
 my $reconnect=0;
@@ -1222,22 +1224,16 @@ $record=Encode::encode("UTF-8",$record);
 my $shadow=$server."shadow";
 reconnect:
 
-$Zconnbiblio[0]=C4::Context->Zconnauth($server);
+ my $Zconnbiblio=C4::Context->Zconnauth($server);
 if ($record){
-my $Zpackage = $Zconnbiblio[0]->package();
+my $Zpackage = $Zconnbiblio->package();
 $Zpackage->option(action => $op);
 	$Zpackage->option(record => $record);
 	$Zpackage->option(recordIdOpaque => $biblionumber);
 retry:
 		$Zpackage->send("update");
-my $i;
-my $event;
 
-while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
-    $event = $Zconnbiblio[0]->last_event();
-    last if $event == ZOOM::Event::ZEND;
-}
- my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio[0]->error_x();
+ my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio->error_x();
 	if ($error==10007 && $tried<3) {## timeout --another 30 looonng seconds for this update
 		sleep 1;	##  wait a sec!
 		$tried=$tried+1;
@@ -1250,39 +1246,41 @@ while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
 		sleep 1;	##  wait a sec!
 		$recon=1;
 		$Zpackage->destroy();
-		$Zconnbiblio[0]->destroy();
+		$Zconnbiblio->destroy();
 		goto "reconnect";
 	}elsif ($error){
 	#	warn "Error-$server   $op  /errcode:, $error, /MSG:,$errmsg,$addinfo \n";	
 		$Zpackage->destroy();
-		$Zconnbiblio[0]->destroy();
-	#	ZEBRAopfiles($dbh,$biblionumber,$record,$op,$server);
+		$Zconnbiblio->destroy();
 		return 0;
 	}
-	## System preference batchMode=1 means wea are bulk importing
-	## DO NOT COMMIT while in batchMode for faster operation
-	my $batchmode=C4::Context->preference('batchMode');
-	 if (C4::Context->$shadow >0 && !$batchmode){
-	 $Zpackage->send('commit');
-		while (($i = ZOOM::event(\@Zconnbiblio)) != 0) {
-		 $event = $Zconnbiblio[0]->last_event();
-    		last if $event == ZOOM::Event::ZEND;
-		}
-	     my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio[0]->error_x();
-	     if ($error) { ## This is serious ZEBRA server is not updating	
-	     $Zpackage->destroy();
-	     $Zconnbiblio[0]->destroy();
-	     return 0;
-	    }
-	 }##commit
-#
+	
 $Zpackage->destroy();
-$Zconnbiblio[0]->destroy();
+$Zconnbiblio->destroy();
 return 1;
 }
 return 0;
 }
 
+
+sub ZEBRAopcommit {
+my $server=shift;
+
+my $Zconnbiblio=C4::Context->Zconnauth($server);
+
+my $Zpackage = $Zconnbiblio->package();
+ $Zpackage->send('commit');
+		
+		 my($error, $errmsg, $addinfo, $diagset) = $Zconnbiblio->error_x();
+		 if ($error) { ## This is serious ZEBRA server is not updating	
+	     $Zpackage->destroy();
+	     $Zconnbiblio->destroy();
+	     return 0;
+	    }
+$Zpackage->destroy();
+$Zconnbiblio->destroy();
+return 1;
+}
 sub ZEBRA_readyXML{
 my ($dbh,$biblionumber)=@_;
 my $biblioxml=XMLgetbiblio($dbh,$biblionumber);

@@ -5,7 +5,7 @@ package C4::Circulation::Circ2;
 
 # $Id$
 
-#package to deal with Returns
+#package to deal with circulation
 #written 3/11/99 by olwen@katipo.co.nz
 
 
@@ -39,7 +39,7 @@ use C4::Biblio;
 use C4::Calendar::Calendar;
 use C4::Search;
 use C4::Members;
-
+use C4::Date;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -636,7 +636,7 @@ sub TooMany ($$){
 	#	print "***" . $alreadyissued;
 	#print "----". $result->{'maxissueqty'};
 	  if ($result->{'maxissueqty'} <= $alreadyissued) {
-			return ("a $alreadyissued /",($result->{'maxissueqty'}+0));
+			return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	  }else {
 	        return;
 	  }
@@ -649,7 +649,7 @@ sub TooMany ($$){
 		$sth2->execute($borrower->{'borrowernumber'}, $type);
 		my $alreadyissued = $sth2->fetchrow;
 	  if ($result->{'maxissueqty'} <= $alreadyissued){
-		return ("b $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	     } else {
 	        return;
 	     }
@@ -663,7 +663,7 @@ sub TooMany ($$){
 		my ($alreadyissued) = $sth3->fetchrow;
 	     if ($result->{'maxissueqty'} <= $alreadyissued){
 #		warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
-		return ("c $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	     } else {
 		return;
 	     }
@@ -676,7 +676,7 @@ sub TooMany ($$){
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
 	    if ($result->{'maxissueqty'} <= $alreadyissued){	    
-		return ("d $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	    } else {
 		return;
 	    }
@@ -689,7 +689,7 @@ sub TooMany ($$){
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
 	    if ($result->{'maxissueqty'} <= $alreadyissued){
-		return ("e $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	    } else {
 		return;
 	    }
@@ -701,7 +701,7 @@ sub TooMany ($$){
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
 	     if ($result->{'maxissueqty'} <= $alreadyissued){
-		return ("f $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	     } else {
 		return;
 	     }
@@ -713,7 +713,7 @@ sub TooMany ($$){
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
 	     if ($result->{'maxissueqty'} <= $alreadyissued){
-		return ("g $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	     } else {
 		return;
 	     }
@@ -725,7 +725,7 @@ sub TooMany ($$){
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth3->fetchrow;
 	     if ($result->{'maxissueqty'} <= $alreadyissued){
-		return ("h $alreadyissued / ".($result->{maxissueqty}+0));
+		return ("$type  $alreadyissued / max:".($result->{'maxissueqty'}+0));
 	     } else {
 		return;
 	     }
@@ -760,7 +760,8 @@ sub canbookbeissued {
 	if ($borrower->{flags}->{'DBARRED'}) {
 		$issuingimpossible{DEBARRED} = 1;
 	}
-	if (DATE_diff($borrower->{expiry},'CURRENT_DATE')<0) {
+	my $today=get_today();
+	if (DATE_diff($borrower->{expiry},$today)<0) {
 		$issuingimpossible{EXPIRED} = 1;
 	}
 #
@@ -788,7 +789,7 @@ sub canbookbeissued {
 #
 	my $toomany = TooMany($borrower, $iteminformation);
 	$needsconfirmation{TOO_MANY} =  $toomany if $toomany;
-
+	$issuingimpossible{TOO_MANY} = $toomany if $toomany;
 #
 # ITEM CHECKING
 #
@@ -1001,6 +1002,7 @@ sub issuebook {
 		$itemrecord=XML_writeline($itemrecord, "date_due", $dateduef,"holdings");
 		$itemrecord=XML_writeline($itemrecord, "borrowernumber", $borrower->{'borrowernumber'},"holdings");
 		$itemrecord=XML_writeline($itemrecord, "itemlost", "0","holdings");
+		$itemrecord=XML_writeline($itemrecord, "onloan", "1","holdings");
 		# find today's date as timestamp
 		my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 		$year += 1900;
@@ -1153,7 +1155,7 @@ sub returnbook {
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
 	if ((not $currentborrower) && $doreturn) {
 		$messages->{'NotIssued'} = $barcode;
-		$doreturn = 0;
+	#	$doreturn = 0;
 	}
 	# check if the book is in a permanent collection....
 	my $hbr = $iteminformation->{'homebranch'};
@@ -1164,17 +1166,18 @@ sub returnbook {
 	# check that the book has been cancelled
 	if ($iteminformation->{'wthdrawn'}) {
 		$messages->{'wthdrawn'} = 1;
-		$doreturn = 0;
+	#	$doreturn = 0;
 	}
 	# update issues, thereby returning book (should push this out into another subroutine
 	my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 	if ($doreturn) {
-		my $sth = $dbh->prepare("update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)");
-		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+		my $sth = $dbh->prepare("update issues set returndate = now() where (itemnumber = ?) and (returndate is null)");
+		$sth->execute( $iteminformation->{'itemnumber'});
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	
 		$sth->finish;
 	$itemrecord=XML_writeline($itemrecord, "date_due", "","holdings");
+	$itemrecord=XML_writeline($itemrecord, "onloan", "0","holdings");
 	$itemrecord=XML_writeline($itemrecord, "borrowernumber", "","holdings");
 	}
 	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
@@ -1464,8 +1467,7 @@ sub checkoverdues {
 # From Main.pm, modified to return a list of overdueitems, in addition to a count
   #checks whether a borrower has overdue items
 	my ($env, $bornum, $dbh)=@_;
-	my @datearr = localtime;
-	my $today = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
+	my $today=get_today();
 	my @overdueitems;
 	my $count = 0;
 	my $sth = $dbh->prepare("SELECT issues.* , i.biblionumber as biblionumber,b.* FROM issues, items i,biblio b
@@ -1489,12 +1491,12 @@ sub currentborrower {
 # Original subroutine for Circ2.pm
 	my ($itemnumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $q_itemnumber = $dbh->quote($itemnumber);
+	
 	my $sth=$dbh->prepare("select borrowers.borrowernumber from
-	issues,borrowers where issues.itemnumber=$q_itemnumber and
+	issues,borrowers where issues.itemnumber=? and
 	issues.borrowernumber=borrowers.borrowernumber and issues.returndate is
 	NULL");
-	$sth->execute;
+	$sth->execute($itemnumber);
 	my ($borrower) = $sth->fetchrow;
 	return($borrower);
 }
@@ -1582,26 +1584,13 @@ sub currentissues {
 	# Make this a flag. Or better yet, return everything in (reverse)
 	# chronological order and let the caller figure out which books
 	# were issued today.
+	my $today=get_today();
 	if ($env->{'todaysissues'}) {
-		# FIXME - Could use
-		#	$today = POSIX::strftime("%Y%m%d", localtime);
-		# FIXME - Since $today will be used in either case, move it
-		# out of the two if-blocks.
-		my @datearr = localtime(time());
-		my $today = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
-		# FIXME - MySQL knows about dates. Just use
-		#	and issues.timestamp = curdate();
+		
 		$crit=" and issues.timestamp like '$today%' ";
 	}
 	if ($env->{'nottodaysissues'}) {
-		# FIXME - Could use
-		#	$today = POSIX::strftime("%Y%m%d", localtime);
-		# FIXME - Since $today will be used in either case, move it
-		# out of the two if-blocks.
-		my @datearr = localtime(time());
-		my $today = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
-		# FIXME - MySQL knows about dates. Just use
-		#	and issues.timestamp < curdate();
+		
 		$crit=" and !(issues.timestamp like '$today%') ";
 	}
 
@@ -1614,11 +1603,8 @@ sub currentissues {
 	$sth->execute($borrowernumber);
 	while (my $data = $sth->fetchrow_hashref) {
 
-		my @datearr = localtime(time());
-		my $todaysdate = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
-		my $datedue=$data->{'date_due'};
-		$datedue=~s/-//g;
-		if ($datedue < $todaysdate) {
+		
+		if ($data->{'date_due'} lt $today) {
 			$data->{'overdue'}=1;
 		}
 		my $itemnumber=$data->{'itemnumber'};
@@ -1656,8 +1642,7 @@ sub getissues {
 	my %currentissues;
 	my $bibliodata;
 	my @results;
-	my @datearr = localtime(time());
-	my $todaysdate = (1900+$datearr[5])."-".sprintf ("%0.2d", ($datearr[4]+1))."-".sprintf ("%0.2d", $datearr[3]);
+	my $todaysdate=get_today();
 	my $counter = 0;
 	my $select = "SELECT *
 			FROM issues,items,biblio
@@ -1789,26 +1774,15 @@ if (C4::Context->preference("strictrenewals")){
 	my $loanlength;
 
 	my $allowRenewalsBefore = C4::Context->preference("allowRenewalsBefore");
-	my @nowarr = localtime(time);
-	my $now = (1900+$nowarr[5])."-".($nowarr[4]+1)."-".$nowarr[3]; 
+	my $today=get_today();
 
 	# Find the issues record for this book### 
-	my $sth=$dbh->prepare("select date_due  from issues where itemnumber=? and returndate is null");
+	my $sth=$dbh->prepare("select SUBDATE(date_due, $allowRenewalsBefore)  from issues where itemnumber=? and returndate is null");
 	$sth->execute($itemnumber);
-	my $issuedata=$sth->fetchrow;
+	my $startdate=$sth->fetchrow;
 	$sth->finish;
-
-	#calculates the date on the we are  allowed to renew the item
-	 $sth = $dbh->prepare("SELECT (DATE_SUB( ?, INTERVAL ? DAY))");
-	$sth->execute($issuedata, $allowRenewalsBefore);
-	my $startdate = $sth->fetchrow;
-
-	$sth->finish;
-	### Fixme we have a Date_diff function use that
-	$sth = $dbh->prepare("SELECT DATEDIFF(CURRENT_DATE,?)");
-	$sth->execute($startdate);
-	my $difference = $sth->fetchrow;
-	$sth->finish;
+	
+	my $difference = DATE_diff($today,$startdate);
 	if  ($difference < 0) {
 	$renewokay=2 ;
 	}
@@ -1874,8 +1848,7 @@ if ($datedue eq "" ) {
 		
 	if ($datedue eq "" ){## incase $datedue chnaged above
 		
-		my  @datearr = localtime();
-		$datedue = (1900+$datearr[5]).sprintf ("%02d", ($datearr[4]+1)).sprintf ("%02d", $datearr[3]);
+		my $datedue=get_today();
 		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
 		my ($yeardue, $monthdue, $daydue) = split /-/, $datedue;
 		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
@@ -1888,7 +1861,7 @@ if ($datedue eq "" ) {
 
 	# Update the issues record to have the new due date, and a new count
 	# of how many times it has been renewed.
-	#my $renews = $issuedata->{'renewals'} +1;
+	
 	$sth=$dbh->prepare("update issues set date_due = ?, renewals = renewals+1
 		where borrowernumber=? and itemnumber=? and returndate is null");
 	$sth->execute($datedue,$bornum,$itemnumber);
@@ -1899,7 +1872,7 @@ if ($datedue eq "" ) {
 	&XMLmoditemonefield($dbh,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'},'date_due',$datedue);
 		
 	# Log the renewal
-	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemnumber);
+	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemnumber,'',$bornum);
 
 	# Charge a new rental fee, if applicable?
 	my ($charge,$type)=calc_charges($env, $itemnumber, $bornum);
@@ -2201,16 +2174,7 @@ sub checktransferts{
 
 	return (@tranferts);
 }
-##Utility date function to prevent dependency on Date::Manip
-sub DATE_diff {
-my ($date1,$date2)=@_;
-my $dbh=C4::Context->dbh;
-my $sth = $dbh->prepare("SELECT DATEDIFF(?,?)");
-	$sth->execute($date1,$date2);
-	my $difference = $sth->fetchrow;
-	$sth->finish;
-return $difference;
-}
+
 
 1;
 __END__

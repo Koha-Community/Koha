@@ -21,12 +21,8 @@ require Exporter;
 use C4::Context;
 use C4::Reserves2;
 use C4::Biblio;
-use Date::Calc;
 use ZOOM;
 use Encode;
-
-	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
-	# So Perl complains that all of the functions here get redefined.
 use C4::Date;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -63,7 +59,7 @@ ZEBRA databases.
  &barcodes   &ItemInfo &itemcount
  &getcoverPhoto &add_query_line
  &FindDuplicate   &ZEBRAsearch_kohafields &convertPQF &sqlsearch &cataloguing_search
-&getMARCnotes &getMARCsubjects &getMARCurls &parsefields);
+&getMARCnotes &getMARCsubjects &getMARCurls &getMARCadditional_authors &parsefields &spellSuggest);
 # make all your functions, whether exported or not;
 
 =head1
@@ -84,6 +80,7 @@ See sub FindDuplicates for an example;
 sub ZEBRAsearch_kohafields{
 my ($kohafield,$value, $relation,$sort, $and_or, $fordisplay,$reorder,$startfrom,$number_of_results,$searchfrom,$searchtype)=@_;
 return (0,undef) unless (@$value[0]);
+
 my $server="biblioserver";
 my @results;
 my $attr;
@@ -95,7 +92,7 @@ my $i;
 	next if (@$value[$i] eq "");
 	my $keyattr=MARCfind_attr_from_kohafield(@$kohafield[$i]) if (@$kohafield[$i]);
 	if (!$keyattr){$keyattr=" \@attr 1=any";}
-	@$value[$i]=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)/ /g;
+	@$value[$i]=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/|\")/ /g;
 	my $weighted=weightRank(@$kohafield[$i],@$value[$i],$i) unless($sort || $reorder);
 	$query.=$weighted.@$relation[$i]." ".$keyattr." \"".@$value[$i]."\" " if @$value[$i];
 	}
@@ -104,7 +101,7 @@ my $i;
 	}
      }
 
-#warn $query;
+##warn $query;
 
 my @oConnection;
 ($oConnection[0])=C4::Context->Zconn($server);
@@ -473,8 +470,8 @@ my ($date_due, $count_reserves);
 		if (my $bdata=$bsth->fetchrow_hashref){
 			$data->{'branchname'} = $bdata->{'branchname'};
 		}
-		my $date=substr($data->{'datelastseen'},0,8);
-		$data->{'datelastseen'}=format_date($date);
+		
+		$data->{'datelastseen'}=format_date($data->{'datelastseen'});
 		$data->{'datedue'}=$datedue;
 		$data->{'count_reserves'} = $count_reserves;
 	# get notforloan complete status if applicable
@@ -610,7 +607,6 @@ sub getMARCsubjects {
 
 
 sub getMARCurls {
-### This code is wrong only works with MARC21
     my ($dbh, $record, $marcflavour) = @_;
 	my ($mintag, $maxtag);
 	if (uc($marcflavour) eq uc"MARC21" || uc($marcflavour) eq "USMARC") {
@@ -642,7 +638,38 @@ sub getMARCurls {
         return $marcurlsarray;
 }  #end getMARCurls
 
+sub getMARCadditional_authors {
+    my ($dbh, $record, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if (uc($marcflavour) eq uc"MARC21" || uc($marcflavour) eq "USMARC") {
+	        $mintag = "700";
+		$maxtag = "700";
+	} else {           # assume unimarc if not marc21
+###FIX ME Correct tag to UNIMARC additional authors
+		$mintag = "200";
+		$maxtag = "200";
+	}
 
+	my @marcauthors;
+	
+	my $subfil = "";
+	my $marcauth;
+	my $value;
+	foreach my $field ($mintag..$maxtag) {
+		my @value =XML_readline_asarray($record,"","",$field,"a");
+			foreach my $author (@value){
+				if ( $value ne $author) {
+		    	   	 $marcauth = {MARCAUTHOR => $author,};
+				push @marcauthors, $marcauth;
+				 $value=$author;
+				}
+			}
+	}
+
+
+	my $marcauthsarray=\@marcauthors;
+        return $marcauthsarray;
+}  #end getMARCurls
 
 sub parsefields{
 #pass this a  MARC record and it will parse it for display purposes
@@ -686,7 +713,7 @@ foreach my $xml(@marcrecords){
 	($facets_counter,$facets_info)=FillFacets($xml,$facets_counter,$facets_info);
 	}
 my @kohafields; ## just name those necessary for the result page
-push @kohafields, "biblionumber","title","author","publishercode","classification","itemtype","copyrightdate", "holdingbranch","date_due","location","shelf","itemcallnumber","notforloan","itemlost","wthdrawn";
+push @kohafields, "biblionumber","title","author","publishercode","classification","subclass","itemtype","copyrightdate", "holdingbranch","date_due","location","shelf","itemcallnumber","notforloan","itemlost","wthdrawn";
 my ($oldbiblio,@itemrecords) = XMLmarc2koha($dbh,$xml,"",@kohafields);
 my $bibliorecord;
 
@@ -791,15 +818,19 @@ my ($facet_record,$facets_counter,$facets_info)=@_;
 			if ($type eq "holdings"){
 			###Read each item record
 			my $holdings=$facet_record->{holdings}->[0]->{record};
-				foreach my $holding(@$holdings){
-				my $data=XML_readline($holding,"","holdings",@$tags[$i],@$subfields[$i]);
+			       foreach my $holding(@$holdings){
+				 for (my $z=0; $z<@$subfields;$z++) {
+				my $data=XML_readline_onerecord($holding,"","holdings",@$tags[$i],@$subfields[$z]);
 				$facets_counter->{ @$facets->[$k]->{'link_value'} }->{ $data }++ if $data;    
 				}
+			      }
 			}else{
-			my $data=XML_readline($facet_record,"","biblios",@$tags[$i],@$subfields[$i]);
-			$facets_counter->{ @$facets->[$k]->{'link_value'} }->{ $data }++ if $data;                            	
+			       for (my $z=0; $z<@$subfields;$z++) {
+			      my $data=XML_readline($facet_record,"","biblios",@$tags[$i],@$subfields[$z]);
+			       $facets_counter->{ @$facets->[$k]->{'link_value'} }->{ $data }++ if $data;   
+			      }                         	
                         		}  
-		     }                   		
+		     }    
                         	$facets_info->{ @$facets->[$k]->{'link_value'} }->{ 'label_value' } = @$facets->[$k]->{'label_value'};
                         	$facets_info->{ @$facets->[$k]->{'link_value'} }->{ 'expanded' } = @$facets->[$k]->{'expanded'};
             	}
@@ -993,6 +1024,37 @@ my ($biblio,@items)=XMLmarc2koha ($dbh,$result[0],"holdings",\@fields);
   return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount);
 }
 
+sub spellSuggest {
+my ($kohafield,$value)=@_;
+ if (@$kohafield[0] eq "title" || @$kohafield[0] eq "author" || @$kohafield eq  "subject"){
+## pass them through
+}else{
+  @$kohafield[0]="any";
+}
+my $kohaattr=MARCfind_attr_from_kohafield(@$kohafield[0]);
+@$value[0]=~ s/(\.|\?|\;|\=|\/|\\|\||\:|\*|\!|\,|\(|\)|\[|\]|\{|\}|\/)/ /g;
+my $query= $kohaattr." \@attr 6=3 \"".@$value[0]."\"";
+my @zconn;
+ $zconn[0]=C4::Context->Zconn("biblioserver");
+$zconn[0]->option(number=>5);
+my $result=$zconn[0]->scan_pqf($query);
+my $i;
+my $event;
+   while (($i = ZOOM::event(\@zconn)) != 0) {
+	$event = $zconn[$i-1]->last_event();
+	last if $event == ZOOM::Event::ZEND;
+   }# whilemy $i;
+
+my $n=$result->size();
+
+my @suggestion;
+for (my $i=0; $i<$n; $i++){
+my ($term,$occ)=$result->term($i);
+push @suggestion, {kohafield=>@$kohafield[0], value=>$term,occ=>$occ} unless $term=~/\@/;
+}
+$zconn[0]->destroy();
+return @suggestion;
+}
 END { }       # module clean-up code here (global destructor)
 
 1;
@@ -1003,6 +1065,6 @@ __END__
 =head1 AUTHOR
 
 Koha Developement team <info@koha.org>
-# New functions to comply with ZEBRA search and new KOHA 3 API added 2006 Tumer Garip tgarip@neu.edu.tr
+# New functions to comply with ZEBRA search and new KOHA 3 XML API added 2006 Tumer Garip tgarip@neu.edu.tr
 
 =cut
