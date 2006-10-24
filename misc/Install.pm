@@ -833,14 +833,13 @@ sub checkperlmodules {
 	unless (eval {require DBD::mysql})       { push @missing,"DBD::mysql" };
 	unless (eval {require HTML::Template})   { push @missing,"HTML::Template" };
 	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
-	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
+	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require MARC::Charset})   { push @missing,"MARC::Charset" };
 	unless (eval {require MARC::File::XML})   { push @missing,"MARC::File::XML" };
-	unless (eval {require MARC::File::XML})   { push @missing,"LWP::Simple" };
-	unless (eval {require MARC::File::XML})   { push @missing,"XML::Simple" };
-	unless (eval {require MARC::File::XML})   { push @missing,"Date::Calc" };
-	unless (eval {require MARC::File::XML})   { push @missing,"MARC::File::XML" };
+	unless (eval {require LWP::Simple})   { push @missing,"LWP::Simple" };
+	unless (eval {require XML::Simple})   { push @missing,"XML::Simple" };
+	unless (eval {require Date::Calc})   { push @missing,"Date::Calc" };
 	unless (eval {require ZOOM})   { push @missing,"ZOOM" };
 # The following modules are not mandatory, depends on how the library want to use Koha
 	unless (eval {require PDF::API2})   { 
