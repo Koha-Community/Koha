@@ -36,6 +36,7 @@ my ($websitecount, @websites)             = &getwebsites($biblionumber);
 my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
+$template->param("candelete"=>1) if ($dat->{'count'}==0||C4::Context->userenv->{flags} eq "1");
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {

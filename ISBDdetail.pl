@@ -70,6 +70,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+my $val=count_items($record);
+$template->param("candelete"=>1) if ($val==0||C4::Context->userenv->{flags} eq "1");
 my $ISBD = C4::Context->preference('ISBD');
 # my @blocs = split /\@/,$ISBD;
 # my @fields = $record->fields();
@@ -159,4 +161,11 @@ sub get_authorised_value_desc ($$$$$) {
    } else {
        return $value; # if nothing is found return the original value
    }
+}
+sub count_items ($$$$$) {
+  my ($record) = @_;
+  my ($tag,$subfield)=MARCfind_marc_from_kohafield(C4::Context->dbh, "items.itemnumber");
+  my @list_item_fields=$record->field($tag);
+  my $value=scalar(@list_item_fields);
+  return $value; # if nothing is found return the original value
 }

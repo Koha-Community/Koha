@@ -86,6 +86,9 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+my $val=count_items($record);
+$template->param("candelete"=>1) if ($val==0||C4::Context->userenv->{flags} eq "1");
+
 #Getting the list of all frameworks
 my $queryfwk =$dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
 $queryfwk->execute;
@@ -277,7 +280,8 @@ sub get_authorised_value_desc ($$$$$) {
 
    #---- branch
     if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchname($value);
+#        return getbranchname($value);
+        return $value;
     }
 
    #---- itemtypes
@@ -296,4 +300,11 @@ sub get_authorised_value_desc ($$$$$) {
    } else {
        return $value; # if nothing is found return the original value
    }
+}
+sub count_items ($$$$$) {
+  my ($record) = @_;
+  my ($tag,$subfield)=MARCfind_marc_from_kohafield(C4::Context->dbh, "items.itemnumber");
+  my @list_item_fields=$record->field($tag);
+  my $value=scalar(@list_item_fields);
+  return $value; # if nothing is found return the original value
 }
