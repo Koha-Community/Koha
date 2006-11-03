@@ -70,6 +70,7 @@ where isbn=? and title=?");
 	my $alreadyindb = 0;
 	my $alreadyinfarm = 0;
 	my $notmarcrecord = 0;
+        my $breedingid;
 	for (my $i=0;$i<=$#marcarray;$i++) {
 		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
 		my @warnings = $marcrecord->warnings();
@@ -100,7 +101,7 @@ where isbn=? and title=?");
 				$alreadyindb++;
 			} else {
 				# search in breeding farm
-				my $breedingid;
+
 				if ($oldbiblio->{isbn}) {
 					$searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
 					($breedingid) = $searchbreeding->fetchrow;
@@ -117,13 +118,14 @@ where isbn=? and title=?");
 						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random,$breedingid);
 					} else {
 						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random);
+					$breedingid=$dbh->{'mysql_insertid'};
 					}
 					$imported++;
 				}
 			}
 		}
 	}
-	return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported);
+	return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
 }
 
 

@@ -293,7 +293,7 @@ function PopupZ3950() {
 		}
 	}
 	if(error < 4){
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?oldbiblionumber=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
 	} else {
 		alert("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");
 	}

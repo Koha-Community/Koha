@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+# This is a completely new Z3950 clients search using async ZOOM -TG 02/11/06
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,98 +19,196 @@
 
 use strict;
 use CGI;
+
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Context;
-use C4::Koha; # XXX subfield_is_koha_internal_p
-use C4::Z3950;
-use C4::Search;
 use C4::Breeding;
-use HTML::Template;
 use MARC::File::USMARC;
-
-use vars qw( $tagslib );
-use vars qw( $is_a_modif );
-
+use ZOOM;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
-my $bibid=$input->param('bibid');
+my $oldbiblionumber=$input->param('oldbiblionumber');
+$oldbiblionumber=0 unless $oldbiblionumber;
 my $title = $input->param('title');
 my $author = $input->param('author');
 my $isbn = $input->param('isbn');
 my $issn = $input->param('issn');
 my $random = $input->param('random');
+my $op=$input->param('op');
+my $noconnection;
+my $numberpending;
+my $attr='';
+my $term;
+my $host;
+my $server;
+my $database;
+my $port;
+my $marcdata;
+my @encoding;
 my @results;
 my $count;
 my $toggle;
-
 my $record;
-my $biblionumber;
-if ($bibid > 0) {
-	$record = MARCgetbiblio($dbh,$bibid);
-	$biblionumber=MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+my $oldbiblio;
+my $dbh = C4::Context->dbh;
+my $errmsg;
+my @serverloop=();
+my @serverhost;
+my @breeding_loop = ();
+
+unless ($random) { # this var is not useful anymore just kept to keep rel2_2 compatibility
+	$random =rand(1000000000);
 }
 
-my $errmsg;
-unless ($random) { # if random is a parameter => we're just waiting for the search to end, it's a refresh.
-	if ($isbn) {
-		$random =rand(1000000000);
-		$errmsg = addz3950queue($isbn, "isbn", $random, 'CHECKED');
-	} elsif ($author) {
-		$random =rand(1000000000);
-		$errmsg = addz3950queue($author, "author", $random, 'CHECKED');
-	} elsif ($title) {
-		$random =rand(1000000000);
-		$errmsg = addz3950queue($title, "title", $random, 'CHECKED');
-	}
-}
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "z3950/searchresult.tmpl",
+my ($template, $loggedinuser, $cookie)= get_template_and_user({
+				template_name => "z3950/searchresult.tmpl",
 				query => $input,
 				type => "intranet",
-				authnotrequired => 0,
+				authnotrequired => 1,
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
 
-#MJR: check for pending then search results, else servers with fast 
-# z3950 links may miss results if the search completes between them
-my $numberpending= &checkz3950searchdone($random);
-# fill with books in breeding farm
-($count, @results) = BreedingSearch($title,$isbn,$random);
-my @breeding_loop = ();
-for (my $i=0; $i <= $#results; $i++) {
-	my %row_data;
-	if ($i % 2) {
-		$toggle=1;
-	} else {
-		$toggle=0;
-	}
-	$row_data{toggle} = $toggle;
-	$row_data{id} = $results[$i]->{'id'};
-	$row_data{isbn} = $results[$i]->{'isbn'};
-	$row_data{file} = $results[$i]->{'file'};
-	$row_data{title} = $results[$i]->{'title'};
-	$row_data{author} = $results[$i]->{'author'};
-	push (@breeding_loop, \%row_data);
-}
-
-$template->param(isbn => $isbn,
-		title => $title,
-		author => $author,
-		breeding_loop => \@breeding_loop,
-		refresh => ($numberpending eq 0 ? "" : "search.pl?bibid=$bibid&random=$random"),
-		numberpending => $numberpending,
-		oldbiblionumber => $biblionumber,
+$template->param(
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
-print $input->header(
--type => guesstype($template->output),
--cookie => $cookie
-),$template->output;
+		IntranetNav => C4::Context->preference("IntranetNav"));
+
+if ($op ne "do_search"){
+	my $sth=$dbh->prepare("select id,host,checked from z3950servers  order by host");
+	$sth->execute();
+	while ($server=$sth->fetchrow_hashref) {
+		my %temploop;
+		$temploop{server}=$server->{host};
+		$temploop{id}=$server->{id};
+		$temploop{checked}=$server->{checked};
+		push (@serverloop, \%temploop);
+	}
+	$template->param(isbn=>$isbn, issn=>$issn,title=>$title,author=>$author,
+						serverloop => \@serverloop,
+						opsearch => "search",
+						oldbiblionumber => $oldbiblionumber,
+						);
+	output_html_with_http_headers $input, $cookie, $template->output;
+}else{
+	my @id=$input->param('id');
+	my @oConnection;
+	my @oResult;
+	my $s=0;
+							
+	if ($isbn ne "/" || $issn ne "/") {
+		$attr='1=7';
+		$term=$isbn if ($isbn ne"/");
+		$term=$issn if ($issn ne"/");
+	} elsif ($title ne"/") {
+		$attr='1=4 @attr 4=1  ';
+		$term=$title;
+	} elsif ($author ne "/") {
+		$attr='1=1003';
+		$term=$author;
+	} 
+
+	my $query="\@attr $attr \"$term\"";	
+	foreach my $servid (@id){
+		my $sth=$dbh->prepare("select * from z3950servers where id=?");
+		$sth->execute($servid);
+    	while ($server=$sth->fetchrow_hashref) {
+			my $noconnection=0;							
+			my $option1=new ZOOM::Options();
+			$option1->option('async'=>1);
+			$option1->option('elementSetName', 'F');
+			$option1->option('databaseName',$server->{db})  ;
+			$option1->option('user',$server->{userid}) if $server->{userid};
+			$option1->option('password',$server->{password})  if $server->{password};
+			$option1->option('preferredRecordSyntax', $server->{syntax});
+			$oConnection[$s]=create ZOOM::Connection($option1) || warn ("something went wrong: ".$oConnection[$s]->errmsg());
+			warn ("server data",$server->{name}, $server->{port});
+			$oConnection[$s]->connect($server->{host}, $server->{port}) || warn ("something went wrong: ".$oConnection[$s]->errmsg());
+			$serverhost[$s]=$server->{host};
+			$encoding[$s]=$server->{syntax};
+			$s++;
+		}## while fetch
+	}# foreach
+	my $nremaining = $s;
+	my $firstresult=1;
+
+	for (my $z=0 ;$z<$s;$z++){
+    	warn "doing the search";
+ 		$oResult[$z] = $oConnection[$z]->search_pqf($query) || warn ("somthing went wrong: " . $oConnection[$s]->errmsg());
+#$oResult[$z] = $oConnection[$z]->search_pqf($query);
+	}
+
+AGAIN:
+	my $k;
+	my $event;
+	while (($k = ZOOM::event(\@oConnection)) != 0) {
+		$event = $oConnection[$k-1]->last_event();
+		warn ("connection ", $k-1, ": event $event (", ZOOM::event_str($event), ")\n");
+		last if $event == ZOOM::Event::ZEND;
+	}
+
+	if ($k != 0) {
+		$k--;
+		warn $serverhost[$k];
+		my($error, $errmsg, $addinfo, $diagset) = $oConnection[$k]->error_x();
+		if ($error) {
+			warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
+			goto MAYBE_AGAIN;
+		}
+		my $numresults=$oResult[$k]->size() ;								
+		my $i;
+		my $result='';
+		@breeding_loop = ();
+		if ($numresults>0){
+			for ($i=0; $i<(($numresults<5) ? ($numresults) : (5)) ; $i++) {
+				my $rec=$oResult[$k]->record($i); 										
+				my $marcrecord;
+				$marcdata = $rec->raw();											
+				$marcrecord = MARC::File::USMARC::decode($marcdata);
+####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
+## In HEAD i change everything to UTF-8
+# In rel2_2 i am not sure what encoding is so no character conversion is done here
+##Add necessary encoding changes to here -TG
+				my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,"");
+				$oldbiblio->{isbn} =~ s/ |-|\.//g,
+				$oldbiblio->{issn} =~ s/ |-|\.//g,
+				my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$bid)=ImportBreeding($marcdata,1,$serverhost[$k],$encoding[$k],$random);
+			
+				my %row_data;
+				if ($i % 2) {
+					$toggle="#ffffcc";
+				} else {
+					$toggle="white";
+				}
+				$row_data{toggle} = $toggle;
+				$row_data{server} = $serverhost[$k];
+				$row_data{isbn} = $oldbiblio->{isbn};
+				$row_data{title} =$oldbiblio->{title};
+				$row_data{author} = $oldbiblio->{author};
+				$row_data{id} = $bid;
+				$row_data{oldbiblionumber}=$oldbiblionumber;
+				push (@breeding_loop, \%row_data);
+         
+			}# upto 5 results
+     
+		}#$numresults
+	}# if $k !=0
+	$numberpending=$nremaining-1;
+	$template->param(breeding_loop => \@breeding_loop,server=>$serverhost[$k],
+				numberpending => $numberpending,
+	);
+	output_html_with_http_headers $input, "", $template->output if $firstresult==1;
+
+	print  $template->output  if $firstresult !=1;
+	$firstresult++;
+
+	MAYBE_AGAIN:
+		if (--$nremaining > 0) {
+    		goto AGAIN;
+		}
+} ## if op=search
