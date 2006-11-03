@@ -52,6 +52,7 @@ Koha.pm provides many functions for Koha scripts.
 @ISA = qw(Exporter);
 @EXPORT = qw(&slashifyDate
 			&fixEthnicity
+            &fixEncoding
 			&borrowercategories
 			&ethnicitycategories
 			&subfield_is_koha_internal_p
@@ -652,7 +653,54 @@ sub getallthemes {
     return @themes;
 }
 
+=item fixEncoding
 
+  $marcrecord = &fixEncoding($marcblob);
+
+Returns a well encoded marcrecord.
+
+=cut
+sub fixEncoding {
+  my $marc=shift;
+  my $record = MARC::Record->new_from_usmarc($marc);
+  if (C4::Context->preference("MARCFLAVOUR") eq "UNIMARC"){
+    use Encode::Guess;
+    my $targetcharset="utf8" if (C4::Context->preference("TemplateEncoding") eq "utf-8");
+    $targetcharset="latin1" if (C4::Context->preference("TemplateEncoding") eq "iso-8859-1");
+    my $decoder = guess_encoding($marc, qw/utf8 latin1/);
+    die $decoder unless ref($decoder);
+    warn "decodage : ".$decoder->name;
+    warn "decodage cible : ".$targetcharset;
+    my $newRecord=MARC::Record->new();
+    foreach my $field ($record->fields()){
+      if ($field->tag()<'010'){
+        $newRecord->insert_grouped_field($field);
+      } else {
+        my $newField;
+        my $createdfield=0;
+        foreach my $subfield ($field->subfields()){
+          if ($createdfield){
+            if (($newField->tag eq '100')) {
+              substr($subfield->[1],26,2,"0103") if ($targetcharset eq "latin1");
+              substr($subfield->[1],26,4,"5050") if ($targetcharset eq "utf8");
+            }
+            map {C4::Biblio::char_decode($_,"UNIMARC");Encode::from_to($_,$decoder->name,$targetcharset);$_=~tr#\r##} @$subfield;
+            $newField->add_subfields($subfield->[0]=>$subfield->[1]);
+          } else {
+            map {C4::Biblio::char_decode($_,"UNIMARC");Encode::from_to($_,$decoder->name,$targetcharset);$_=~tr#\r##} @$subfield;
+            $newField=MARC::Field->new($field->tag(),$field->indicator(1),$field->indicator(2),$subfield->[0]=>$subfield->[1]);
+            $createdfield=1;
+          }
+        }
+        $newRecord->insert_grouped_field($newField);
+      }
+    }
+    warn $newRecord->as_formatted(); 
+    return $newRecord;
+  } else {
+    return $record;
+  }
+}
 1;
 __END__
 

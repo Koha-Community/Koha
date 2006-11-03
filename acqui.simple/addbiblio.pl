@@ -94,7 +94,7 @@ sub MARCfindbreeding {
 	$sth->execute($id);
 	my ($file,$marc,$encoding) = $sth->fetchrow;
 	if ($marc) {
-		my $record = MARC::File::USMARC::decode($marc);
+		my $record = fixEncoding($marc);
 		if (ref($record) eq undef) {
 			return -1;
 		} else {

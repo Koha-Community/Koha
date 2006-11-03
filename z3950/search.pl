@@ -26,7 +26,7 @@ use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Context;
 use C4::Breeding;
-use MARC::File::USMARC;
+use C4::Koha;
 use ZOOM;
 
 my $input = new CGI;
@@ -60,6 +60,7 @@ my $errmsg;
 my @serverloop=();
 my @serverhost;
 my @breeding_loop = ();
+
 
 unless ($random) { # this var is not useful anymore just kept to keep rel2_2 compatibility
 	$random =rand(1000000000);
@@ -103,9 +104,10 @@ if ($op ne "do_search"){
 							
 	if ($isbn ne "/" || $issn ne "/") {
 		$attr='1=7';
-		$term=$isbn if ($isbn ne"/");
-		$term=$issn if ($issn ne"/");
-	} elsif ($title ne"/") {
+        warn "isbn : $isbn";
+		$term=$isbn if ($isbn ne "/");
+		$term=$issn if ($issn ne "/");
+	} elsif ($title ne "/") {
 		$attr='1=4 @attr 4=1  ';
 		$term=$title;
 	} elsif ($author ne "/") {
@@ -114,6 +116,7 @@ if ($op ne "do_search"){
 	} 
 
 	my $query="\@attr $attr \"$term\"";	
+    warn "query ".$query;
 	foreach my $servid (@id){
 		my $sth=$dbh->prepare("select * from z3950servers where id=?");
 		$sth->execute($servid);
@@ -169,7 +172,7 @@ AGAIN:
 				my $rec=$oResult[$k]->record($i); 										
 				my $marcrecord;
 				$marcdata = $rec->raw();											
-				$marcrecord = MARC::File::USMARC::decode($marcdata);
+                $marcrecord= fixEncoding($marcdata);
 ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
