@@ -354,7 +354,7 @@ if (C4::Context->preference("sortbynonfiling")) {
 #                         warn "Here's the sorttitle beforehand: $titledat->{tag_indicator}=".$sorttitle;
                         if (length($titledat->{tag_indicator})==2) {
                                 my $filechar=substr($titledat->{tag_indicator},1,1);
-                                $sorttitle = substr($sorttitle,$filechar,-1,"");  #remove nonfiling characters
+                                $sorttitle = substr($sorttitle,($filechar>length($sorttitle)?0:$filechar),-1,"");  #remove nonfiling characters
 #                                warn "Here it is afterwards:".$sorttitle;
                         }
                         $titles{$bibidno} = $sorttitle; #} = $bibidno;
