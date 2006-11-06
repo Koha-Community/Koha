@@ -1145,17 +1145,19 @@ sub returnbook {
 	die '$branch not defined' unless defined $branch; # just in case (bug 170)
 	# get information on item
 	my $itemrecord=XMLgetitemhash($dbh,"",$barcode);
-	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
-              $iteminformation->{'itemtype'}=MARCfind_itemtype($dbh,$iteminformation->{biblionumber});
-	if (not $iteminformation) {
+	if (not $itemrecord) {
 		$messages->{'BadBarcode'} = $barcode;
 		$doreturn = 0;
+	return ($doreturn, $messages, "", "");
 	}
+	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
+              $iteminformation->{'itemtype'}=MARCfind_itemtype($dbh,$iteminformation->{biblionumber});
+	
 	# find the borrower
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
 	if ((not $currentborrower) && $doreturn) {
 		$messages->{'NotIssued'} = $barcode;
-	#	$doreturn = 0;
+		$doreturn = 0;
 	}
 	# check if the book is in a permanent collection....
 	my $hbr = $iteminformation->{'homebranch'};
@@ -1166,7 +1168,7 @@ sub returnbook {
 	# check that the book has been cancelled
 	if ($iteminformation->{'wthdrawn'}) {
 		$messages->{'wthdrawn'} = 1;
-	#	$doreturn = 0;
+		$doreturn = 0;
 	}
 	# update issues, thereby returning book (should push this out into another subroutine
 	my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
@@ -1717,13 +1719,7 @@ sub renewstatus {
 	# Look in the issues table for this item, lent to this borrower,
 	# and not yet returned.
 my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
-	if (C4::Context->preference("LibraryName") eq "NEU Grand Library"){
-		## faculty members and privileged get renewal whatever the case may be
-		if ($borrower->{'categorycode'} eq 'F' ||$borrower->{'categorycode'} eq 'P'){
-		$renewokay = 1;
-		return $renewokay;
-		}
-	}
+	
 	# FIXME - I think this function could be redone to use only one SQL call.
 	my $sth1 = $dbh->prepare("select * from issues,items,biblio
 								where (borrowernumber = ?)
@@ -1734,7 +1730,13 @@ my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
 	$sth1->execute($bornum,$itemnumber);
 	if (my $data1 = $sth1->fetchrow_hashref) {
 		# Found a matching item
-	
+	if (C4::Context->preference("LibraryName") eq "NEU Grand Library"){
+		##privileged get renewal whatever the case may be
+		if ($borrower->{'categorycode'} eq 'P'){
+		$renewokay = 1;
+		return $renewokay;
+		}
+	}
 		# See if this item may be renewed. 
 		my $sth2 = $dbh->prepare("select renewalsallowed from itemtypes	where itemtypes.itemtype=?");
 		$sth2->execute($data1->{itemtype});
@@ -1820,45 +1822,22 @@ sub renewbook {
 
 	my $loanlength;
 my $dbh=C4::Context->dbh;
+my $sth;
 my  $iteminformation = getiteminformation($env, $itemnumber,0);
-	my $sth=$dbh->prepare("select date_due  from issues where itemnumber=? and returndate is null ");
-	$sth->execute($itemnumber);
-	my $issuedata=$sth->fetchrow;
-	$sth->finish;
 		
 
-## We find a new datedue either from today or from the due_date of the book- if "strictrenewals" is in effect
 
 if ($datedue eq "" ) {
 
-		my  $borrower = getpatroninformation($env,$bornum,0);
+		my  $borrower = C4::Members::getpatroninformation($env,$bornum,0);
 		 $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
-	if (C4::Context->preference("strictrenewals")){
-	my @nowarr = localtime(time);
-	my $now = (1900+$nowarr[5])."-".($nowarr[4]+1)."-".$nowarr[3]; 
-		if ($issuedata<=$now){
 	
-		$datedue=$issuedata;
-		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
-		my ($yeardue, $monthdue, $daydue) = split /-/, $datedue;
-		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
-		$datedue = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
-		}
-	}## stricrenewals	
-		
-	if ($datedue eq "" ){## incase $datedue chnaged above
-		
 		my $datedue=get_today();
 		my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
 		my ($yeardue, $monthdue, $daydue) = split /-/, $datedue;
 		($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
 		$datedue = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
 		
-	}
-
-
-
-
 	# Update the issues record to have the new due date, and a new count
 	# of how many times it has been renewed.
 	
@@ -1868,7 +1847,6 @@ if ($datedue eq "" ) {
 	$sth->finish;
 
 	## Update items and marc record with new date -T.G
-	my $iteminformation = getiteminformation($env, $itemnumber,0);
 	&XMLmoditemonefield($dbh,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'},'date_due',$datedue);
 		
 	# Log the renewal
@@ -1884,8 +1862,8 @@ if ($datedue eq "" ) {
 		$sth->finish;
 	#     print $account;
 	}# end of rental charge
-	
-
+		
+	return format_date($datedue);
 	}
 
  

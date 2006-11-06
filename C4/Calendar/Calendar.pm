@@ -548,14 +548,14 @@ sub daysBetween {
 
 sub Date_DayOfWeek{
 my ($month, $day, $year)=@_;
-my $date=Date_obj($year."-".$month."-".$day);
+my $date=DATE_obj($year."-".$month."-".$day);
 
 return $date->day_of_week;
 }
 
 sub Add_Delta_Days{
 my ($year, $month, $day, $offset)=@_;
-my $date=Date_obj($year."-".$month."-".$day);
+my $date=DATE_obj($year."-".$month."-".$day);
 my $duration=get_duration($offset." days");
 
  $date->add_duration($duration);

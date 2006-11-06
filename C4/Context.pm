@@ -487,9 +487,10 @@ sub _new_dbh
 	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
 	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
-	# this is better than modifying my.cnf (and forcing all communications to be in utf8)
-	$dbh->do("set NAMES 'utf8'");
-	$dbh->{mysql_auto_reconnect} =  1 ;
+	###DBD::Mysql 3.0.7 has an intermittent bug for dbh->do so change to dbh->prepare
+	my $sth=$dbh->prepare("set NAMES 'utf8'");
+	$sth->execute();
+	$sth->finish;
 
 	return $dbh;
 }
@@ -834,6 +835,9 @@ Andrew Arensburger <arensb at ooblick dot com>
 
 =cut
 # $Log$
+# Revision 1.50  2006/11/06 21:01:43  tgarip1957
+# Bug fixing and complete removal of Date::Manip
+#
 # Revision 1.49  2006/10/20 01:20:56  tgarip1957
 # A new Date.pm to use for all date calculations. Mysql date calculations removed from Circ2.pm, all modules free of DateManip, a new get_today function to call in allscripts, and some bug cleaning in authorities.pm
 #

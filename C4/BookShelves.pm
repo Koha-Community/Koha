@@ -465,9 +465,10 @@ sub GetShelfContentsExt {
 	my $even = 0;
     while (my ($biblionumber) = $sth->fetchrow) {
 	my $biblio=ZEBRA_readyXML_noheader($dbh,$biblionumber);
-	push @biblios,$biblio;
+	my  $xmlrecord=XML_xml2hash($biblio);
+	push @biblios,$xmlrecord;
      }	
-my (@results)=parsefields($dbh,"opac",@biblios);
+my ($facets,@results)=parsefields($dbh,"opac",@biblios);
     
     return (\@results);
 }
@@ -605,6 +606,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.19  2006/11/06 21:01:43  tgarip1957
+# Bug fixing and complete removal of Date::Manip
+#
 # Revision 1.18  2006/09/06 16:21:03  tgarip1957
 # Clean up before final commits
 #

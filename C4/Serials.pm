@@ -21,7 +21,6 @@ package C4::Serials; #assumes C4/Serials.pm
 
 use strict;
 use C4::Date;
-use C4::Date;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Search;

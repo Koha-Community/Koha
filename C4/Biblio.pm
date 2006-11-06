@@ -21,7 +21,6 @@ require Exporter;
 use C4::Context;
 use XML::Simple;
 use Encode;
-use utf8;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -1204,9 +1203,20 @@ sub ZEBRAop {
 my ($dbh,$biblionumber,$op,$server)=@_;
 if (!$biblionumber){
 warn "Zebra received no biblionumber";
+}elsif (C4::Context->preference('onlineZEBRA')){
+my $marcxml;
+	if ($server eq "biblioserver"){
+	($marcxml) =ZEBRA_readyXML($dbh,$biblionumber);
+	}elsif($server eq "authorityserver"){
+	$marcxml =C4::AuthoritiesMarc::XMLgetauthority($dbh,$biblionumber);
+	} 
+ZEBRAopserver($marcxml,$op,$server,$biblionumber);
+ZEBRAopcommit($server);
 }else{
 my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
 $sth->execute($biblionumber,$server,$op);
+$sth->finish;
+
 }
 }
 
@@ -1265,7 +1275,7 @@ return 0;
 
 sub ZEBRAopcommit {
 my $server=shift;
-
+return unless C4::Context->config($server."shadow");
 my $Zconnbiblio=C4::Context->Zconnauth($server);
 
 my $Zpackage = $Zconnbiblio->package();

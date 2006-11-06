@@ -691,12 +691,7 @@ sub modmember {
 	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 	}else{
 	
-		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
-		$sth->execute($data{'categorycode'});
-		my ($enrolmentperiod) = $sth->fetchrow;
-		$enrolmentperiod = 1 unless ($enrolmentperiod);#enrolmentperiod in years
-		my $duration=get_duration($enrolmentperiod." years");
-		$data{'expiry'} = &DATE_Add_Duration($data{'joining'},$duration );
+		$data{'expiry'} = calcexpirydate($data{'categorycode'},$data{'joining'} );
 		
 	}
 	
@@ -760,12 +755,8 @@ sub newmember {
 	if ($data{'expiry'}) {
 	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 	}else{
-		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
-		$sth->execute($data{'categorycode'});
-		my ($enrolmentperiod) = $sth->fetchrow;
-		$enrolmentperiod = 1 unless ($enrolmentperiod);#enrolmentperiod in years
-		my $duration=get_duration($enrolmentperiod." years");
-		$data{'expiry'} = &DATE_Add_Duration($data{'joining'},$duration);
+		
+		$data{'expiry'} = calcexpirydate($data{'categorycode'},$data{'joining'});
 	}
 	
 	my $query= "INSERT INTO borrowers (
@@ -846,9 +837,10 @@ sub calcexpirydate {
         "select enrolmentperiod from categories where categorycode=?");
     $sth->execute($categorycode);
     my ($enrolmentperiod) = $sth->fetchrow;
-    $enrolmentperiod = 12 unless ($enrolmentperiod);
-    return format_date_in_iso(
-        &DateCalc( $dateenrolled, "$enrolmentperiod months" ) );
+$enrolmentperiod = 1 unless ($enrolmentperiod);#enrolmentperiod in years
+		my $duration=get_duration($enrolmentperiod." years");
+	return	DATE_Add_Duration($dateenrolled,$duration);
+    
 }
 
 =head2 checkuserpassword (OUEST-PROVENCE)
@@ -991,7 +983,7 @@ sub fixupneu_cardnumber{
     # Defaults to "0", which is interpreted as "no".
 my $dbh = C4::Context->dbh;
 my $sth;
-    if (! $cardnumber  && $autonumber_members && $categorycode) {
+    if (!$cardnumber  && $autonumber_members && $categorycode) {
 	if ($categorycode eq "A" || $categorycode eq "W" ){
 	 $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers where borrowers.cardnumber like '5%' ");
 	}elsif ($categorycode eq "L"){	
@@ -1022,6 +1014,7 @@ my $sth;
 	 elsif ($categorycode eq "L"){   $cardnumber = 1000000;}
 	 elsif ($categorycode  eq "F"){   $cardnumber = 3000000;}
 	elsif ($categorycode  eq "C"){   $cardnumber = 8000000;}
+	elsif ($categorycode  eq "N"){   $cardnumber = 4000000;}
 	else{$cardnumber = 6000000;}	
 	# start at 1000000 or 3000000 or 5000000
 	} else {
@@ -1218,12 +1211,15 @@ sub change_user_pass {
 	if ( ($uid ne '') && ($sth->fetchrow) ) {
 		
 		return 0;
-    } else {
+   	 } else {
 		#Everything is good so we can update the information.
 		$sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
     		$sth->execute($uid, $digest, $member);
 		return 1;
 	}
+
+}
+
 =head2 checkuniquemember (OUEST-PROVENCE)
 
   $result = &checkuniquemember($collectivity,$surname,$categorycode,$firstname,$dateofbirth);
@@ -1238,7 +1234,6 @@ C<&firstname> is the firstname (only if collectivity=0)
 C<&dateofbirth> is the date of birth (only if collectivity=0)
 
 =cut
-
 sub checkuniquemember {
     my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
     my $dbh = C4::Context->dbh;
@@ -1345,7 +1340,7 @@ sub getcategorytype {
     my ( $category_type, $description ) = $sth->fetchrow;
     return $category_type, $description;
 }
-}
+
 
 
 

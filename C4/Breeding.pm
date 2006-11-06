@@ -67,8 +67,6 @@ my @and_or;
 my @results;
 my $count;
 	my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=? and title=?");
-my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
-
 	my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random,classification,subclass) values(?,?,?,?,?,?,?,?,?)");
 	my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=?,classification=?,subclass=? where id=?");
 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
@@ -136,8 +134,8 @@ my $findbreedingid = $dbh->prepare("select max(id) from marc_breeding");
 						$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded->as_usmarc,$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass},$breedingid);
 					} else {
 						$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded->as_usmarc,$encoding,$z3950random,$oldbiblio->{classification},$oldbiblio->{subclass});
-					$findbreedingid->execute;
-					$breedingid=$findbreedingid->fetchrow;
+					
+					$breedingid=$dbh->{'mysql_insertid'};
 					}
 					$imported++;
 				}

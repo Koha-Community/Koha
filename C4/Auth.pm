@@ -36,7 +36,11 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 0.01;
+@ISA = qw(Exporter);
 
+@EXPORT = qw(
+&checkpw
+);
 =head1 NAME
 
 C4::Auth - Authenticates Koha users
