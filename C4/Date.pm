@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-## written by T Garip 2006-10-10
+## written by T Garip 2006-10-10 tgarip@neu.edu.tr
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -43,6 +43,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
   &get_date_format_string_for_DHTMLcalendar
   &DATE_diff &DATE_Add
 &get_today &DATE_Add_Duration &DATE_obj &get_duration
+&DATE_subtract
 );
 
 sub get_date_format {
@@ -200,5 +201,13 @@ my $parser=DateTime::Format::Duration->new(pattern => $parse  );
 	my $duration=$parser->parse_duration($period);
 return $duration;
 
+}
+sub DATE_subtract{
+my ($date1,$date2)=@_;
+my $dt1=DateTime::Format::ISO8601->parse_datetime($date1);
+my $dt2=DateTime::Format::ISO8601->parse_datetime($date2);
+my $dur=$dt2->subtract_datetime_absolute($dt1);## in seconds
+my $days=$dur->seconds/(60*60*24);
+return int($days);
 }
 1;
