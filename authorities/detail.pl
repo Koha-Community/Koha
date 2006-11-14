@@ -108,7 +108,7 @@ my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure w
 $sth->execute($authtypecode);
 my $biblio_fields;
 while (my ($tagfield) = $sth->fetchrow) {
-	$biblio_fields.= $tagfield."9,";
+	$biblio_fields.= "'".$tagfield."9',";
 }
 chop $biblio_fields;
 
