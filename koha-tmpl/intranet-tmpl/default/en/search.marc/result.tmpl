@@ -26,7 +26,7 @@
 					<td>
 				<!-- /TMPL_IF -->
 							<!-- TMPL_IF name="MARC_ON" -->
-								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!--TMPL_IF Name="title" --><!-- TMPL_VAR NAME="title" --><!--TMPL_ELSE --><em>No Title</em><!--/TMPL_IF--></a> <!-- TMPL_VAR NAME="subtitle" --> 
 							<!-- TMPL_ELSE -->
 								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="volume" --> vol <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
