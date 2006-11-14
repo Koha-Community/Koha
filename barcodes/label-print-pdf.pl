@@ -131,6 +131,11 @@ foreach $item (@resultsloop) {
           qw (dewey isbn classification itemtype subclass itemcallnumber);
         my $vPos = ( $y_pos + ( $label_height - $top_text_margin ) );
         my $hPos = ( $x_pos_spine + $left_text_margin );
+
+# chris's extra line fix, to clear top label margin.
+		prText( $hPos, $vPos, "\n" ); 
+		$vPos = $vPos - $line_spacer;
+
         foreach my $field (@fields) {
 
             # if the display option for this field is selected in the DB,
