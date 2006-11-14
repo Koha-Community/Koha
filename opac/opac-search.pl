@@ -43,16 +43,34 @@ if ($op eq "do_search") {
 	my $orderby = $query->param('orderby');
 	my $desc_or_asc = $query->param('desc_or_asc');
 	my $exactsearch = $query->param('exact');
+	my @tags;
 	for (my $i=0;$i<=$#marclist;$i++) {
-
-		if ($marclist[$i] eq "biblioitems.isbn") {
-			$value[$i] =~ s/-//g;
-		}
-                if ($searchdesc) { # don't put the and_or on the 1st search term
-                        $searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
-                } else {                        $searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
-                }
+      if ($marclist[$i] eq "biblioitems.isbn") {
+        $value[$i] =~ s/-//g;
+      }
+      if ($searchdesc) { # don't put the and_or on the 1st search term
+        $searchdesc .= $and_or[$i].$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+      } else {                        $searchdesc = $excluding[$i].($marclist[$i]?$marclist[$i]:"* ")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+      }
+      if ($marclist[$i]) {
+        my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marclist[$i],'');
+        if ($tag) {
+          push @tags,$dbh->quote("$tag$subfield");
+        } else {
+          if ($marclist[$i] =~ /^(\d){3}(. -)(.)*/)
+          {
+            # The user is using the search catalogue part, more fields
+            push @tags, $dbh->quote(substr($marclist[$i],0,4));
+          }
+          else
+          {
+            push @tags, $marclist[$i];
+          }
         }
+      } else {
+        push @tags, "";
+      }
+    }
 	
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
@@ -63,20 +81,18 @@ if ($op eq "do_search") {
 		}
 	}
 	# builds tag and subfield arrays
-	my @tags;
-
-	foreach my $marc (@marclist) {
-		if ($marc) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
-			if ($tag) {
-				push @tags,$dbh->quote("$tag$subfield");
-			} else {
-				push @tags, $dbh->quote(substr($marc,0,4));
-			}
-		} else {
-			push @tags, "";
-		}
-	}
+# 	foreach my $marc (@marclist) {
+# 		if ($marc) {
+# 			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
+# 			if ($tag) {
+# 				push @tags,$dbh->quote("$tag$subfield");
+# 			} else {
+# 				push @tags, $dbh->quote(substr($marc,0,4));
+# 			}
+# 		} else {
+# 			push @tags, "";
+# 		}
+# 	}
 	findseealso($dbh,\@tags);
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
@@ -238,7 +254,7 @@ if ($op eq "do_search") {
 	$template->param(classlist => $classlist,
 					branchloop=>\@branchloop,
 					itemtypeloop => \@itemtypeloop,
-					CGIbranch => $CGIbranch,
+# 					CGIbranch => $CGIbranch,
 					suggestion => C4::Context->preference("suggestion"),
 					virtualshelves => C4::Context->preference("virtualshelves"),
 					LibraryName => C4::Context->preference("LibraryName"),
