@@ -81,9 +81,7 @@ $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
 $env{'queue'}=$printer;
 
-my @datearr = localtime(time());
-# FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
-my $todaysdate = (1900+$datearr[5])."-".sprintf ("%0.2d", ($datearr[4]+1))."-".sprintf ("%0.2d", ($datearr[3]));
+my $todaysdate =get_today();
 
 
 # check and see if we should print

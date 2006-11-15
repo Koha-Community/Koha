@@ -32,7 +32,7 @@ use C4::Print;
 use C4::Reserves2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-#use HTML::Template;
+
 use C4::Koha;
 use C4::Members;
 my $query = new CGI;
@@ -55,7 +55,7 @@ my $headerbackgroundcolor = '#99cc33';
 my $linecolor1            = '#ffffcc';
 my $linecolor2            = 'white';
 
-my $branches = getbranches();
+my $branches = GetBranches();
 my $printers = getprinters( \%env );
 
 # my $branch  = getbranch( $query,  $branches );

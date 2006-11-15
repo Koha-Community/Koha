@@ -52,14 +52,21 @@ foreach my $marc (@marclist) {
 }
 #### Now   normal search routine
 foreach my $field (@fields) {
+	$search{$field} = $query->param($field);
 	my @fieldvalue = $query->param($field);
 	foreach my $fvalue (@fieldvalue) {
 		push @forminputs, { field=>$field ,value=> $fvalue} unless ($field eq 'reorder');
-		$facetsdesc.="&".$field."=".$fvalue;
+		
 	  }
 }
-
-
+## Build the query for facets as well
+ for (my $i=0;$i<@value;$i++){
+$facetsdesc.="&value=".$value[$i];
+$facetsdesc.="&kohafield=".$kohafield[$i];
+$facetsdesc.="&relation=".$relation[$i];
+$facetsdesc.="&and_or=".$and_or[$i];
+}
+$facetsdesc.="&order=".$order;
 $hashdesc{'query'} = join " , ", @value;
 push @searchdesc,\%hashdesc;
 
@@ -96,7 +103,7 @@ if (!$zoom){
 ## using sql search for barcode,biblionumber or itemnumber only useful for libraian interface
 	($count, @results) =sqlsearch($dbh,\%search);
 }else{
-my $sortorder=$order.",".$ascend if $order;
+my $sortorder=$order.$ascend if $order;
  ($count,$facets,@results) =ZEBRAsearch_kohafields(\@kohafield,\@value, \@relation,$sortorder, \@and_or, 1,$reorder,$startfrom, $number_of_results,"intranet",$searchtype);
 }
 	if ( $count eq "error"){
@@ -187,7 +194,7 @@ if ( $count == 1){
 						  pg => $url };
 		push @$numbers, { number => "&gt;&gt;", 
 						  highlight => 0 , forminputs=>\@forminputs,
-						  start => ($total_pages-1)*$number_of_results, 
+						  startfrom => ($total_pages-1)*$number_of_results, 
 						  pg => $total_pages};
 	}
 #	push @$numbers,{forminputs=>@forminputs};
@@ -227,7 +234,7 @@ my @sorts;
 	foreach my $sort (@kohafields) {
 	    if ($sort->{sorts}){
 		push @sorts,$sort;
-		if ($order eq $sort->{'attr'}) {
+		if ($order eq $sort->{'kohafield'}) {
 			$sort->{'sel'} = 1;
 		}
 	   }
@@ -241,7 +248,7 @@ $template->param(branchloop => \@branches,);
 my $itemtypes=GetItemTypes();
 my (@item_type_loop);
 foreach my $thisitemtype (sort keys %$itemtypes) {
-    my %row =(value => $thisitemtype,
+    my %row =(itemtype => $thisitemtype,
                  description => $itemtypes->{$thisitemtype}->{'description'},
             );
     push @item_type_loop, \%row;

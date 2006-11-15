@@ -73,6 +73,7 @@ my %tabsysprefs;
 	$tabsysprefs{z3950AuthorAuthFields}="Catalogue";
 	$tabsysprefs{z3950NormalizeAuthor}="Catalogue";
 	$tabsysprefs{SQLorZEBRA}="Catalogue";
+	
 # Circulation
 	$tabsysprefs{maxoutstanding}="Circulation";
 	$tabsysprefs{maxreserves}="Circulation";

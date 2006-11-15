@@ -17,89 +17,82 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-
-use HTML::Template;
 use strict;
 require Exporter;
-use C4::Context;
-use C4::Output;  # contains gettemplate
-use CGI;
 use C4::Search;
 use C4::Auth;
+use C4::Serials; #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
-use C4::Date;
+use CGI;
+use C4::Biblio;
+use C4::Context;
 
+my $dbh=C4::Context->dbh;
 my $query=new CGI;
-my $type=$query->param('type');
-($type) || ($type='intra');
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "catalogue/detailprint.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			     });
 
-my $biblionumber=$query->param('bib');
+my $biblionumber=$query->param('biblionumber');
+$template->param(biblionumber => $biblionumber);
+my $retrieve_from=C4::Context->preference('retrieve_from');
+my ($record,$frameworkcode);
+my @itemrecords;
+my @items;
+if ($retrieve_from eq "zebra"){
+($record,@itemrecords)=ZEBRAgetrecord($biblionumber);
+}else{
+ $record =XMLgetbiblio($dbh,$biblionumber);
+$record=XML_xml2hash_onerecord($record);
+my @itemxmls=XMLgetallitems($dbh,$biblionumber);
+	foreach my $itemrecord(@itemxmls){
+	my $itemhash=XML_xml2hash_onerecord($itemrecord);
+	push @itemrecords, $itemhash;
+	}
+}	
 
-# change back when ive fixed request.pl
-my @items = ItemInfo(undef, $biblionumber, $type);
+my $dat = XMLmarc2koha_onerecord($dbh,$record,"biblios");
 my $norequests = 1;
-foreach my $itm (@items) {
-     $norequests = 0 unless $itm->{'notforloan'};
+foreach my $itemrecord (@itemrecords){
+
+my $item= XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
+$item=ItemInfo($dbh,$item);
+$item->{itemtype}=$dat->{itemtype};
+  $norequests = 0 unless $item->{'notforloan'};
+   $item->{$item->{'publictype'}} = 1; ## NOT sure what this is kept from old db probably useless now
+push @items,$item;
 }
 
-
-
-my $dat=bibdata($biblionumber);
-my ($authorcount, $addauthor)= &addauthor($biblionumber);
-my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my $subscriptionsnumber = GetSubscriptionsFromBiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
-$dat->{'norequests'} = $norequests;
+$template->param(count =>$dat->{'count'});
+$template->param(norequests => $norequests);
 
-$dat->{'additional'}=$addauthor->[0]->{'author'};
-for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
-} # for
+  ## get notes subjects and URLS from MARC record
+	
+	my $marcflavour = C4::Context->preference("marcflavour");
+	my $marcnotesarray = &getMARCnotes($dbh,$record,$marcflavour);
+	my $marcsubjctsarray = &getMARCsubjects($dbh,$record,$marcflavour);
+	my $marcurlssarray = &getMARCurls($dbh,$record,$marcflavour);
+	$template->param(MARCURLS => $marcurlssarray);
+	$template->param(MARCNOTES => $marcnotesarray);
+	$template->param(MARCSUBJCTS => $marcsubjctsarray);
 
-my @results;
 
-$results[0]=$dat;
+my @results = ($dat,);
 
 my $resultsarray=\@results;
 my $itemsarray=\@items;
-my $webarray=\@webbiblioitems;
-my $sitearray=\@websites;
-
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
-
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => ('catalogue/detailprint.tmpl'),
-	query           => $query,
-	type            => "intranet",
-	authnotrequired => ($type eq 'opac'),
-	flagsrequired   => {catalogue => 1},
-    });
-
-my $count=1;
-
-# now to get the items into a hash we can use and whack that thru
 
 
-my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
-my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
-$template->param(startfrom => $startfrom+1,
-						endat => $startfrom+20,
-						numrecords => $count,
-						nextstartfrom => $nextstartfrom,
-						prevstartfrom => $prevstartfrom,
-						BIBLIO_RESULTS => $resultsarray,
-						ITEM_RESULTS => $itemsarray,
-						WEB_RESULTS => $webarray,
-						SITE_RESULTS => $sitearray,
-						loggedinuser => $loggedinuser,
-						biblionumber => $biblionumber,
-						);
+$template->param(BIBLIO_RESULTS => $resultsarray,
+				ITEM_RESULTS => $itemsarray,
+				subscriptionsnumber => $subscriptionsnumber,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-
-# Local Variables:
-# tab-width: 8
-# End:

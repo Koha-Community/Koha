@@ -104,9 +104,7 @@ if ($flag != 0 && $override ne "yes"){
 
   }else {
    ##UPDATE here
-#my $sth=$dbh->prepare("update items set itemlost=? ,wthdrawn=? where itemnumber=?");
-#$sth->execute($lost,$withdrawn,$itemnumber);
-#$sth->finish;
+
 XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'wthdrawn',$withdrawn,1);
 XMLmoditemonefield($dbh,$biblionumber,$itemnumber,'itemlost',$lost);
 

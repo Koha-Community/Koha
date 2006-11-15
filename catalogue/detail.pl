@@ -9,8 +9,6 @@ use CGI;
 use C4::Biblio;
 use C4::Context;
 
-use Encode;
-
 my $dbh=C4::Context->dbh;
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 

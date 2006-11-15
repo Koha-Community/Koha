@@ -85,12 +85,13 @@ my $res;
 				if ($tag<10) {
 				my $value=XML_readline_onerecord($record,"","",$tag);
 				my $subfieldcode = "@";
-						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $value, '', $dbh);;
+						my $subfieldvalue = get_authorised_value_desc($tag, "", $value, '', $dbh);;
 						my $tagsubf = $tag.$subfieldcode;
 						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
 					
 				} else {
 					my @subf = XML_readline_withtags($record,"","",$tag);
+				
 					for my $i (0..$#subf) {
 						my $subfieldcode = $subf[$i][0];
 						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);;

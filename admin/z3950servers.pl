@@ -33,7 +33,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name like ?) order by rank,name");
+	my $sth=$dbh->prepare("Select * from z3950servers where (name like ?) order by rank,name");
 	$sth->execute("$data[0]\%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref) {
@@ -76,7 +76,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+		my $sth=$dbh->prepare("select * from z3950servers where (name = ?) order by rank,name");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -87,7 +87,17 @@ if ($op eq 'add_form') {
 			 db   => $data->{'db'},
 			 userid => $data->{'userid'},
 			 password => $data->{'password'},
-			 checked => $data->{'checked'},
+		
+			opacshow => CGI::checkbox(-name=>'opacshow',
+						-checked=> $data->{'opacshow'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'opacshow'),
+			checked => CGI::checkbox(-name=>'checked',
+						-checked=> $data->{'checked'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'checked'),
 			 rank => $data->{'rank'});
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -98,30 +108,24 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
 	if ($sth->rows) {
-		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=? where name=?");
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,opacshow=?,syntax=? where name=?");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
 		      $input->param('userid'),
 		      $input->param('password'),
 		      $input->param('searchfield'),
-		      $input->param('checked'),
+		      $input->param('checked')?1:0,
 		      $input->param('rank'),
+		   $input->param('opacshow')?1:0,
 			 $input->param('syntax'),
 		      $input->param('searchfield'),
 		      );
 	} else {
-		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank,syntax) values (?, ?, ?, ?, ?, ?, ?, ?,?)");
-		$sth->execute($input->param('host'),
-		      $input->param('port'),
-		      $input->param('db'),
-		      $input->param('userid'),
-		      $input->param('password'),
-		      $input->param('searchfield'),
-		      $input->param('checked'),
-		      $input->param('rank'),
-			 $input->param('syntax'),
-		      );
+		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank,opacshow,syntax) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
+		$sth->execute($input->param('host'), $input->param('port'), $input->param('db'), $input->param('userid'),
+		      $input->param('password'), $input->param('searchfield'),$input->param('checked')?1:0, $input->param('rank'),
+		      $input->param('opacshow')?1:0,$input->param('syntax') );
 	}
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
@@ -131,7 +135,7 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 
-	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+	my $sth2=$dbh->prepare("select * from z3950servers where (name = ?) order by rank,name");
 	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -141,7 +145,16 @@ if ($op eq 'add_form') {
                          db   => $data->{'db'},
                          userid => $data->{'userid'},
                          password => $data->{'password'},
-                         checked => $data->{'checked'},
+                      checked => CGI::checkbox(-name=>'checked',
+						-checked=> $data->{'checked'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'checked'),
+		opacshow => CGI::checkbox(-name=>'opacshow',
+						-checked=> $data->{'opacshow'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'opacshow'),
                          rank => $data->{'rank'});
 
 													# END $OP eq DELETE_CONFIRM
@@ -173,6 +186,7 @@ if ($op eq 'add_form') {
 			userid =>$results->[$i]{'userid'},
 			password => ($results->[$i]{'password'}) ? ('#######') : ('&nbsp;'),
 			checked => $results->[$i]{'checked'},
+			opacshow => $results->[$i]{'opacshow'},
 			rank => $results->[$i]{'rank'},
 			syntax => $results->[$i]{'syntax'},
 			toggle => $toggle);

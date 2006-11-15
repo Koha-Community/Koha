@@ -34,6 +34,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
 use C4::Members;
+use C4::Date;
 my $query = new CGI;
 
 #getting the template
@@ -53,7 +54,7 @@ my %env;
 my $headerbackgroundcolor = '#99cc33';
 my $linecolor1            = '#ffffcc';
 my $linecolor2            = 'white';
-
+my $todaysdate =get_today();
 my $branches = GetBranches();
 my $printers = getprinters( \%env );
 
@@ -237,16 +238,12 @@ if ( $messages->{'ResFound'} ) {
 
     }
     if ( $res->{'ResFound'} eq "Reserved" ) {
-        my @da         = localtime( time() );
-        my $todaysdate =
-          sprintf( "%0.2d", ( $da[3] + 1 ) ) . "/"
-          . sprintf( "%0.2d", ( $da[4] + 1 ) ) . "/"
-          . ( $da[5] + 1900 );
+      
         $template->param(
             found       => 1,
             branchname  => $branches->{ $res->{'branchcode'} }->{'branchname'},
             reserved    => 1,
-            today       => $todaysdate,
+            today       =>format_date( $todaysdate),
             itemnumber  => $res->{'itemnumber'},
             itemtitle   => $iteminfo->{'title'},
             itemauthor  => $iteminfo->{'author'},
@@ -414,17 +411,9 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         my $overduetext;
         my $borrowerinfo;
         if ($duedate) {
-            my @tempdate = split ( /-/, $duedate );
-	    $ri{year}=$tempdate[0];
-	    $ri{month}=$tempdate[1];
-	    $ri{day}=$tempdate[2];
-            my $duedatenz  = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-            my @datearr    = localtime( time() );
-            my $todaysdate =
-              $datearr[5] . '-'
-              . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
-              . sprintf( "%0.2d", $datearr[3] );
-	    $ri{duedate}=$duedate;
+           
+           
+	    $ri{duedate}=format_date($duedate);
             my ($borrower) =
               getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
             $ri{bornum}       = $borrower->{'borrowernumber'};

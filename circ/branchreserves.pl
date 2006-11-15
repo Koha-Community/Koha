@@ -21,13 +21,10 @@
 
 use strict;
 use C4::Context;
-use C4::Output;
 use CGI;
-use HTML::Template;
 use C4::Auth;
 use C4::Date;
 use C4::Circulation::Circ2;
-use Date::Manip;
 use C4::Reserves2;
 use C4::Search;
 use C4::Koha;
@@ -54,9 +51,8 @@ my ($template, $loggedinuser, $cookie)
 	                                 });
 
 my $default = C4::Context->userenv->{'branch'};
-
-my @datearr = localtime(time());
-my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
+my $dbh=C4::Context->dbh;
+my $todaysdate = get_today();
 
 
 # if we have a return from the form we launch the subroutine CancelReserve
@@ -94,6 +90,7 @@ my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.s
 # 		if the document is not in his homebranch location and there is not reservation after, we transfer it
 		if (($fbr ne $tbr) and (not $nextreservinfo)){
 			C4::Circulation::Circ2::dotransfer($item,$fbr,$tbr);
+			C4::Circulation::Circ2::itemseen($dbh,$itm);
 		}
 	}
 	
@@ -136,4 +133,4 @@ foreach my $num (@getreserves) {
 			show_date	=> format_date($todaysdate),	
 			 );
 	
-	print "Content-Type: text/html\n\n", $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

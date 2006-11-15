@@ -140,8 +140,8 @@ if ( $ordnum eq '' ) {    # create order
     	creationdate     => format_date( $basket->{creationdate} ),
     	authorisedbyname => $basket->{authorisedbyname},);
   }else{
-	my @datetoday = localtime();
-	my $date = (1900+$datetoday[5])."-".($datetoday[4]+1)."-". $datetoday[3];
+	
+	my $date = get_today();
 	$template->param(
     	creationdate     => format_date($date),
     	authorisedbyname => $loggedinuser,);
