@@ -56,8 +56,8 @@ my $supplierid = $query->param('supplierid');
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 push @select_supplier,"";
-foreach my $supplierid (keys %supplierlist){
-    push @select_supplier, $supplierid
+foreach my $supplier (keys %supplierlist){
+    push @select_supplier, $supplier
 }
 my $CGIsupplier=CGI::scrolling_list(
             -name     => 'supplierid',
@@ -67,9 +67,8 @@ my $CGIsupplier=CGI::scrolling_list(
             -size     => 1,
             -multiple => 0 );
 
-my @lateissues;
-@lateissues = GetLateIssues($supplierid) if $supplierid;
-
+my ($count,@lateissues);
+($count,@lateissues) = GetLateIssues($supplierid) ;
 my @supplierinfo=GetBookSeller($supplierid) if $supplierid;
 
 my ($template, $loggedinuser, $cookie)

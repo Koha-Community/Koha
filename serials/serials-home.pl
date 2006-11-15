@@ -52,6 +52,7 @@ use C4::Context;
 my $query = new CGI;
 my $title = $query->param('title');
 my $ISSN = $query->param('ISSN');
+my $supplierid = $query->param('supplierid');
 my $routing = $query->param('routing');
 my $searched = $query->param('searched');
 my $biblionumber = $query->param('biblionumber');
@@ -59,7 +60,7 @@ my $alt_links = 0;
 if(C4::Context->preference("RoutingSerials")){
     $alt_links = 0;
 }
-my @subscriptions = GetSubscriptions($title,$ISSN,$biblionumber);
+my @subscriptions = GetSubscriptions($title,$ISSN,$biblionumber,$supplierid);
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/serials-home.tmpl",
 				query => $query,

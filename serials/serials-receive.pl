@@ -122,11 +122,10 @@ if ($op eq 'serialchangestatus') {
 	my $sth = $dbh->prepare("select status from serial where serialid=?");
 	for (my $i=0;$i<=$#serialids;$i++) {
 		$sth->execute($serialids[$i]);
-		
+		my $today=get_today();
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
-
-	 my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso("today")) if ($status[$i]==2);
+	 my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):$today) if ($status[$i]==2);
 			ModSerialStatus($serialids[$i],$serialseqs[$i],format_date_in_iso($publisheddates[$i]),format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i],$itemnumbers[$i]) unless ($hassubscriptionexpired && $oldstatus ==1 );
 			if (($status[$i]==2) && $itemnumbers[$i]){
 				my %info;
@@ -149,9 +148,9 @@ if ($op eq 'serialchangestatus') {
 			        $sth2->execute($holdingbranches[$i],$subscriptionid);
 			        $sth2->finish;
 			        # remove from missing list if item being checked in is on it
-#			        if ($status2 ==1){
+			       
 				    removeMissingIssue($serialseqs[$i],$subscriptionid);
-#			        }
+			       
 			}
 
 		}

@@ -9,7 +9,7 @@ use C4::Serials;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use Date::Manip;
+use DateTime;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -54,19 +54,22 @@ my ($user, $cookie, $sessionID, $flags)
 
 my $weekarrayjs='';
 my $count = 0;
-my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
-my $firstday = Date_DayOfYear($month,$day,$year);
-my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
+my $today=get_today();
+ my $dateobj=DATE_obj($today);
+  my $year=$dateobj->year;
+  my $month=$dateobj->month;
+  my $day=$dateobj->day_of_month;
+my $firstday = $dateobj->day_of_year;
+my $wkno = $dateobj->week_number;
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
-            $count = $i;
-            if($wkno > 52){$year++; $wkno=1;}
-            if($count>365){$count=$i-365;}
-            my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
-            my $output = "$y-$m-$d";
-            $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
-            $wkno++;
-    }
+        $count = $i;
+        if($wkno > 52){$year++; $wkno=1;}
+        if($count>365){$count=$i-365;}    
+     my $newdate=DateTime->from_day_of_year(year=>$year,day_of_year=>$count);
+        $weekarrayjs .= "'Wk $wkno: ".format_date($newdate->ymd)."',";
+        $wkno++;    
+}
 chop($weekarrayjs);
 
 $template->param(
