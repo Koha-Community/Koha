@@ -75,6 +75,7 @@ $VERSION = 2.01;
 &XMLkoha2marc
 &XML_separate
 &XML_record_header
+&XMLmodLCindex
 &ZEBRAdelbiblio
 &ZEBRAgetrecord   
 &ZEBRAop 

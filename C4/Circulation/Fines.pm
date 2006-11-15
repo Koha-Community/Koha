@@ -93,20 +93,7 @@ standard fine for books might be $0.50, but $1.50 for DVDs, or staff
 members might get a longer grace period between the first and second
 reminders that a book is overdue).
 
-The fine is calculated as follows: if it is time for the first
-reminder, the fine is the value listed for the given (branch, item type,
-borrower code) combination. If it is time for the second reminder, the
-fine is doubled. Finally, if it is time to send the account to a
-collection agency, the fine is set to 5 local monetary units (a really
-good deal for the patron if the library is in Italy). Otherwise, the
-fine is 0.
 
-Note that the way this function is currently implemented, it only
-returns a nonzero value on the notable days listed above. That is, if
-the issuingruless entry says to send a first reminder 7 days after the
-book is due, then if you call C<&CalcFine> 7 days after the book is
-due, it will give a nonzero fine. If you call C<&CalcFine> the next
-day, however, it will say that the fine is 0.
 
 C<$itemnumber> is the book's item number.
 
@@ -133,16 +120,7 @@ sub CalcFine {
   my $dbh = C4::Context->dbh;
   # Look up the issuingrules record for this book's item type and the
   # given borrwer type.
-  # The reason this query is so messy is that it's a messy question:
-  # given the barcode, we can find the book's items record. This gives
-  # us the biblio record, which gives us a set of issuingrules
-  # records. Then we select the one that corresponds to the desired
-  # borrower type.
-
-  # FIXME - Is it really necessary to get absolutely everything from
-  # all four tables? It looks as if this code only wants
-  # firstremind, chargeperiod, accountsent, and chargename from the
-  # issuingrules table.
+ 
 
   my $sth=$dbh->prepare("Select * from items,biblio,itemtypes,issuingrules where items.itemnumber=?
   and items.biblionumber=biblio.biblionumber and
@@ -159,38 +137,26 @@ sub CalcFine {
   my $amount=0;
   my $printout;
 
-  # Is it time to send out the first reminder?
-  # FIXME - I'm not sure the "=="s are correct here. Let's say that
-  # $data->{firstremind} is today, but 'fines2.pl' doesn't run for
-  # some reason (the cron daemon died, the server crashed, the
-  # sysadmin had the machine down for maintenance, or whatever).
-  #
-  # Then the next day, the book is $data->{firstremind}+1 days
-  # overdue. But this function returns $amount == 0, $printout ==
-  # undef, on the assumption that 'fines2.pl' ran the previous day. So
-  # the first thing the patron gets is a second notice, but that's a
-  # week after the server crash, so people may not connect the two
-  # events.
   if ($difference > $data->{'firstremind'}){
     # Yes. Set the fine as listed.
-    $amount=$data->{'fine'}* $difference;
+$amount=$data->{'fine'}* $difference;
+
     $printout="First Notice";
   }
 
   # Is it time to send out a second reminder?
-  my $second=$data->{'firstremind'}+$data->{'chargeperiod'};
+  my $second=$data->{'firstremind'}+$data->{chargeperiod};
   if ($difference == $second){
-#    # Yes. The fine is double.
-#    $amount=$data->{'fine'}*2;
+$amount=$data->{'fine'}* $difference;
+
     $printout="Second Notice";
   }
 
   # Is it time to send the account to a collection agency?
-  # FIXME - At least, I *think* that's what this code is doing.
-  if ($difference == $data->{'accountsent'} && $data->{'fine'} > 0){
-    # Yes. Set the fine at 5 local monetary units.
-    # FIXME - This '5' shouldn't be hard-wired.
-    $amount=$data->{'fine'}* $difference;
+  # FIXME -This $data->{'accountsent'} is not seemed to be set in the DB
+  if ($difference == $data->{'accountsent'}){
+     $amount=$data->{'fine'}* $difference;
+
     $printout="Final Notice";
   }
   return($amount,$data->{'chargename'},$printout);

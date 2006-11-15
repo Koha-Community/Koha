@@ -115,7 +115,7 @@ name,title,planneddate,serialseq,serial.subscriptionid from tables : subscriptio
 
 =cut
 sub GetLateIssues {
-    my ($supplierid) = @_;
+    my ($supplierid) = shift;
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($supplierid) {
@@ -390,8 +390,8 @@ a table of hashref. Each hash containt the subscription.
 
 =cut
 sub GetSubscriptions {
-    my ($title,$ISSN,$biblionumber) = @_;
-    return unless $title or $ISSN or $biblionumber;
+    my ($title,$ISSN,$biblionumber,$supplierid) = @_;
+    return unless $title or $ISSN or $biblionumber or $supplierid;
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($biblionumber) {
@@ -404,10 +404,9 @@ sub GetSubscriptions {
         );
     $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
-    } else {
-        if ($ISSN and $title){
+    } elsif ($ISSN and $title){
             my $query = qq|
-                SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber
+                SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber,aqbooksellerid
                 FROM   subscription,biblio
                 WHERE biblio.biblionumber= subscription.biblionumber
                     AND (biblio.title LIKE ? or biblio.issn = ?)
@@ -415,22 +414,29 @@ sub GetSubscriptions {
             |;
             $sth = $dbh->prepare($query);
             $sth->execute("%$title%",$ISSN);
-        }
-        else{
-            if ($ISSN){
+        } elsif ($ISSN){
                 my $query = qq(
-                    SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber
+                    SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber,aqbooksellerid
                     FROM   subscription,biblio
-                    WHERE  biblio.biblionumber = biblioitems.biblionumber
-                        AND biblio.biblionumber=subscription.biblionumber
-                        AND biblioitems.issn = ?
+                       WHERE biblio.biblionumber=subscription.biblionumber
+                        AND biblio.issn = ?
                     ORDER BY title
                 );
                 $sth = $dbh->prepare($query);
                 $sth->execute($ISSN);
+       }elsif ($supplierid){
+                my $query = qq(
+                    SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber,aqbooksellerid
+                    FROM   subscription,biblio
+                   WHERE biblio.biblionumber=subscription.biblionumber
+                        AND subscription.aqbooksellerid = ?
+                    ORDER BY title
+                );
+                $sth = $dbh->prepare($query);
+                $sth->execute($supplierid);
             } else {
                 my $query = qq(
-                    SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber
+                    SELECT subscription.subscriptionid,biblio.title,biblio.issn,subscription.notes,biblio.biblionumber,aqbooksellerid
                     FROM   subscription,biblio
                     WHERE biblio.biblionumber=subscription.biblionumber
                         AND biblio.title LIKE ?
@@ -438,9 +444,9 @@ sub GetSubscriptions {
                 );
                 $sth = $dbh->prepare($query);
                 $sth->execute("%$title%");
-            }
         }
-    }
+        
+   
     my @results;
     my $previoustitle="";
     my $odd=1;
@@ -599,7 +605,7 @@ all the input params updated.
 =back
 
 =cut
-sub GetNextSeq {
+sub Get_Next_Seq {
     my ($val) =@_;
     my ($calculated,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3);
     $calculated = $val->{numberingmethod};
@@ -631,7 +637,7 @@ sub GetNextSeq {
 }
 
 
-sub New_Get_Next_Seq {
+sub GetNextSeq {
     my ($val) =@_;
     my ($calculated,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3);
     my $pattern = $val->{numberpattern};
@@ -708,44 +714,6 @@ the date on ISO format.
 =back
 
 =cut
-sub GetNextDate(@) {
-    my ($planneddate,$subscription) = @_;
-    my $resultdate;
-   my $duration;
-    if ($subscription->{periodicity} == 1) {
-	$duration=get_duration("1 days");    
-    }
-    if ($subscription->{periodicity} == 2) {
-       $duration=get_duration("1 weeks");    
-    }
-    if ($subscription->{periodicity} == 3) {
-      $duration=get_duration("2 weeks");    
-    }
-    if ($subscription->{periodicity} == 4) {
-       $duration=get_duration("3 weeks");    
-    }
-    if ($subscription->{periodicity} == 5) {
-     $duration=get_duration("1 months");    
-    }
-    if ($subscription->{periodicity} == 6) {
-       $duration=get_duration("2 months");    
-    }
-    if ($subscription->{periodicity} == 7 || $subscription->{periodicity} == 8) {
-        $duration=get_duration("3 months");    
-    }
-    
-    if ($subscription->{periodicity} == 9) {
-         $duration=get_duration("6 months");    
-    }
-    if ($subscription->{periodicity} == 10) {
-          $duration=get_duration("1 years");    
-    }
-    if ($subscription->{periodicity} == 11) {
-        $duration=get_duration("2 years");    
-    }
- $resultdate=DATE_Add_Duration($planneddate,$duration);
-    return $resultdate;
-}
 
 =head2 GetSeq
 
@@ -799,9 +767,9 @@ sub GetSubscriptionExpirationDate {
         }
     }
     else {
-	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
-	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
-
+	my $duration;
+	 $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	 $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
         $enddate = DATE_Add_Duration($subscription->{startdate},$duration) ;
     }
     return $enddate;
@@ -930,8 +898,8 @@ sub ModSerialStatus {
         # next issue number
         my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = GetNextSeq($val);
         # next date (calculated from actual date & frequency parameters)
-          my $nextplanneddate = Get_Next_Date($planneddate,$val);
-          my $nextpublisheddate = Get_Next_Date($publisheddate,$val);
+          my $nextplanneddate = GetNextDate($planneddate,$val);
+          my $nextpublisheddate = GetNextDate($publisheddate,$val);
         NewIssue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpublisheddate,$nextplanneddate,0);
         my $query = qq|
             UPDATE subscription
@@ -1193,7 +1161,7 @@ sub serialchangestatus {
         my $val = $sth->fetchrow_hashref;
         # next issue number
         my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3) = New_Get_Next_Seq($val);
-        my $nextplanneddate = Get_Next_Date($planneddate,$val);
+        my $nextplanneddate = GetNextDate($planneddate,$val);
         NewIssue($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
         $sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=? where subscriptionid = ?");
         $sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$subscriptionid);
@@ -1254,11 +1222,12 @@ sub HasSubscriptionExpired {
         $sth->execute($subscriptionid);
         my $res = $sth->fetchrow;
         my $endofsubscriptiondate;
-	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
-	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+	my $duration;
+	 $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	$duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
 
         $endofsubscriptiondate = DATE_Add_Duration($subscription->{startdate},$duration) ;
-        return 1 if ($res >= $endofsubscriptiondate);
+        return 1 if ($res ge $endofsubscriptiondate);
         return 0;
     }
 }
@@ -1674,8 +1643,9 @@ sub abouttoexpire {
 	$sth->execute($subscriptionid);
 	my $res = $sth->fetchrow;
 	my $endofsubscriptiondate;
-	my $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
-	my $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
+my $duration;
+	 $duration=get_duration($subscription->{monthlength}." months") if ($subscription->{monthlength});
+	 $duration=get_duration($subscription->{weeklength}." weeks") if ($subscription->{weeklength});
 
         $endofsubscriptiondate = DATE_Add_Duration($subscription->{startdate},$duration) ;
 	my $per = $subscription->{'periodicity'};
@@ -1700,15 +1670,13 @@ sub abouttoexpire {
 
 
 
-=head2 Get_Next_Date
+=head2 GetNextDate
 
 =over 4
 
-($resultdate) = &Get_Next_Date($planneddate,$subscription)
+($resultdate) = &GetNextDate($planneddate,$subscription)
 
-this function is an extension of GetNextDate which allows for checking for irregularity
-
-it takes the planneddate and will return the next issue's date and will skip dates if there
+this function  takes the planneddate and will return the next issue's date and will skip dates if there
 exists an irregularity
 - eg if periodicity is monthly and $planneddate is 2007-02-10 but if March and April is to be 
 skipped then the returned date will be 2007-05-10
@@ -1719,21 +1687,24 @@ $resultdate - then next date in the sequence
 =back
 
 =cut
-sub Get_Next_Date(@) {
+sub GetNextDate {
     my ($planneddate,$subscription) = @_;
     my @irreg = split(/\|/,$subscription->{irregularity});
  my $dateobj=DATE_obj($planneddate);
     my $dayofweek = $dateobj->day_of_week;
   my $month=$dateobj->month;
     my $resultdate;
-    #       warn "DOW $dayofweek";
 
     if ($subscription->{periodicity} == 1) {
+	my %irreghash;
+	for(my $i=0;$i<@irreg;$i++){
+	$irreghash{$irreg[$i]}=1;
+	}
 my $duration=get_duration("1 days");
 	for(my $i=0;$i<@irreg;$i++){
 	    if($dayofweek == 7){ $dayofweek = 0; }
 
-	    if(in_array(($dayofweek+1), @irreg)){
+	    if($irreghash{$dayofweek+1}){
 		$planneddate = DATE_Add_Duration($planneddate,$duration);
 		$dayofweek++;
 	    }
@@ -1788,7 +1759,6 @@ my $duration=get_duration("1 months");
 	    }
 	}
 	$resultdate=DATE_Add_Duration($planneddate,$duration);
-	# warn "Planneddate2: $planneddate";
     }
     if ($subscription->{periodicity} == 6) {
 my $duration=get_duration("2 months");

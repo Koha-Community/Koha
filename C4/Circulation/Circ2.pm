@@ -165,10 +165,26 @@ and issues.borrowernumber = borrowers.borrowernumber");
 	$data->{'datelastborrowed'} = $data2->{'issue_date'};
             $data->{'card'}     = $data2->{'cardnumber'};
 	    $data->{'borrower'}     = $data2->{'borrowernumber'};
+	$data->{issues}++;
         } 
 
         $sth2->finish;
+	 my $sth2   = $dbh->prepare("select * from reserveissue,borrowers
+where itemnumber = ?
+and rettime is NULL
+and reserveissue.borrowernumber = borrowers.borrowernumber");
 
+        $sth2->execute($itemnumber);
+        if (my $data2 = $sth2->fetchrow_hashref) {
+
+  	$data->{'date_due'}=$data2->{'duetime'};
+	$data->{'datelastborrowed'} = $data2->{'restime'};
+            $data->{'card'}     = $data2->{'cardnumber'};
+	    $data->{'borrower'}     = $data2->{'borrowernumber'};
+	$data->{issues}++;
+        } 
+
+        $sth2->finish;
         # Find the last 2 people who borrowed this item.
         $sth2 = $dbh->prepare("select * from issues, borrowers
 						where itemnumber = ?
@@ -176,7 +192,6 @@ and issues.borrowernumber = borrowers.borrowernumber");
 									and returndate is not NULL
 									order by returndate desc,timestamp desc limit 2") ;
         $sth2->execute($itemnumber) ;
-#        for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
 my $i2=0;
           while (my $data2  = $sth2->fetchrow_hashref) {
                 $data->{"timestamp$i2"} = $data2->{'timestamp'};
@@ -185,7 +200,6 @@ my $i2=0;
 $data->{'datelastborrowed'} = $data2->{'issue_date'} unless $data->{'datelastborrowed'};
 	$i2++;
             } # while
-#       } # for
 
         $sth2->finish;
     return($data);
@@ -969,7 +983,7 @@ sub issuebook {
 				} else {
 					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
 					transferbook($tobrcd,$barcode, 1);
-					warn "transferbook";
+#					warn "transferbook";
 				}
 			}
 		}
@@ -1148,7 +1162,7 @@ sub returnbook {
 	if (not $itemrecord) {
 		$messages->{'BadBarcode'} = $barcode;
 		$doreturn = 0;
-	return ($doreturn, $messages, "", "");
+	return ($doreturn, $messages, undef, undef);
 	}
 	my $iteminformation=XMLmarc2koha_onerecord($dbh,$itemrecord,"holdings");
               $iteminformation->{'itemtype'}=MARCfind_itemtype($dbh,$iteminformation->{biblionumber});
@@ -1168,7 +1182,7 @@ sub returnbook {
 	# check that the book has been cancelled
 	if ($iteminformation->{'wthdrawn'}) {
 		$messages->{'wthdrawn'} = 1;
-		$doreturn = 0;
+	#	$doreturn = 0;
 	}
 	# update issues, thereby returning book (should push this out into another subroutine
 	my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
@@ -1178,10 +1192,11 @@ sub returnbook {
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	
 		$sth->finish;
+	}
 	$itemrecord=XML_writeline($itemrecord, "date_due", "","holdings");
 	$itemrecord=XML_writeline($itemrecord, "onloan", "0","holdings");
 	$itemrecord=XML_writeline($itemrecord, "borrowernumber", "","holdings");
-	}
+	
 	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
 	my ($sec,$min,$hour,$mday,$mon,$year) = localtime();
 		$year += 1900;
@@ -1715,7 +1730,7 @@ sub renewstatus {
 	my $renews = 1;
 	my $resfound;
 	my $resrec;
-	my $renewokay; ##
+	my $renewokay=0; ##
 	# Look in the issues table for this item, lent to this borrower,
 	# and not yet returned.
 my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
@@ -1728,15 +1743,16 @@ my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
 								and returndate is null
 								and items.itemnumber=issues.itemnumber");
 	$sth1->execute($bornum,$itemnumber);
-	if (my $data1 = $sth1->fetchrow_hashref) {
+my $data1 = $sth1->fetchrow_hashref;
+	if ($data1 ) {
 		# Found a matching item
-	if (C4::Context->preference("LibraryName") eq "NEU Grand Library"){
-		##privileged get renewal whatever the case may be
-		if ($borrower->{'categorycode'} eq 'P'){
-		$renewokay = 1;
-		return $renewokay;
+		if (C4::Context->preference("LibraryName") eq "NEU Grand Library"){
+			##privileged get renewal whatever the case may be
+			if ($borrower->{'categorycode'} eq 'P'){
+			$renewokay = 1;
+			return $renewokay;
+			}
 		}
-	}
 		# See if this item may be renewed. 
 		my $sth2 = $dbh->prepare("select renewalsallowed from itemtypes	where itemtypes.itemtype=?");
 		$sth2->execute($data1->{itemtype});
@@ -1759,18 +1775,15 @@ my $borrower=C4::Members::getpatroninformation($dbh,$bornum,undef);
 			       $renewokay = 0;
          			 }
 		}
-	}## item found
 		 ($resfound, $resrec) = CheckReserves($itemnumber);
                		 if ($resfound) {
               		 	 if (C4::Context->preference("strictrenewals")){
 						$renewokay=4;
-						}else{
+				}else{
 			   	   		 $renewokay = 0;
           				  }
-					}	
-#	}
-	$sth1->finish;
-if (C4::Context->preference("strictrenewals")){
+			}
+     if (C4::Context->preference("strictrenewals")){
 	### A new system pref "allowRenewalsBefore" prevents the renewal before a set amount of days left before expiry
 	## Try to find whether book can be renewed at this date
 	my $loanlength;
@@ -1788,7 +1801,10 @@ if (C4::Context->preference("strictrenewals")){
 	if  ($difference < 0) {
 	$renewokay=2 ;
 	}
-}##strictrenewals
+     }##strictrenewals	
+	}##item found
+	$sth1->finish;
+
 	return($renewokay);
 }
 
@@ -1850,7 +1866,7 @@ if ($datedue eq "" ) {
 	&XMLmoditemonefield($dbh,$iteminformation->{'biblionumber'},$iteminformation->{'itemnumber'},'date_due',$datedue);
 		
 	# Log the renewal
-	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemnumber,'',$bornum);
+	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemnumber,$iteminformation->{'itemtype'},$bornum);
 
 	# Charge a new rental fee, if applicable?
 	my ($charge,$type)=calc_charges($env, $itemnumber, $bornum);

@@ -74,15 +74,17 @@ sub UpdateStats {
         #module to insert stats data into stats table
         my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno)=@_;
         my $dbh = C4::Context->dbh;
+	$env=C4::Context->userenv unless $env;
         if ($branch eq ''){
                 $branch=$env->{'branchcode'};
         }
-        my $user = $env->{'usercode'};
-        print $borrowernumber;
+        my $user = C4::Context->userenv;
+#        print $borrowernumber;
+	my $userid=$user->{'cardnumber'} if $user;
         # FIXME - Use $dbh->do() instead
         my $sth=$dbh->prepare("Insert into statistics (datetime,branch,type,usercode,value,
                                         other,itemnumber,itemtype,borrowernumber,proccode) values (now(),?,?,?,?,?,?,?,?,?)");
-        $sth->execute($branch,$type,$user,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno);
+        $sth->execute($branch,$type,$userid,$amount,$other,$itemnum,$itemtype,$borrowernumber,$accountno);
         $sth->finish;
 }
 

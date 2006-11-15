@@ -27,7 +27,7 @@ use DateTime;
 use DateTime::Format::ISO8601;
 use DateTime::Format::Strptime;
 use DateTime::Format::Duration;
-
+use POSIX qw(ceil floor);
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -187,18 +187,21 @@ return $newdate;
 }
 sub get_duration{
 my $period=shift;
+
 my $parse;
-if ($period=~/day/){
+if ($period=~/ays/){
 $parse="\%e days";
 }elsif ($period=~/week/){
 $parse="\%W weeks";
 }elsif ($period=~/year/){
 $parse="\%Y years";
-}elsif ($period=~/month/){
+}elsif ($period=~/onth/){
 $parse="\%m months";
 }
+
 my $parser=DateTime::Format::Duration->new(pattern => $parse  );
 	my $duration=$parser->parse_duration($period);
+
 return $duration;
 
 }
@@ -208,6 +211,6 @@ my $dt1=DateTime::Format::ISO8601->parse_datetime($date1);
 my $dt2=DateTime::Format::ISO8601->parse_datetime($date2);
 my $dur=$dt2->subtract_datetime_absolute($dt1);## in seconds
 my $days=$dur->seconds/(60*60*24);
-return int($days);
+return floor($days);
 }
 1;
