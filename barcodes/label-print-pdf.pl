@@ -57,10 +57,12 @@ my $upperRightX = 612;
 my $upperRightY = 792;
 
 # setting up the pdf doc
-#remove the file before write, for testing
-unlink "$htdocs_path/barcodes/new.pdf";
-prFile("$htdocs_path/barcodes/new.pdf");
-prLogDir("$htdocs_path/barcodes");
+
+prInitVars();
+$| = 1;
+print STDOUT "Content-Type: application/pdf \r\n\r\n";
+prFile();
+
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 prFont('courier');    # Just setting a font
 prFontSize(9);
