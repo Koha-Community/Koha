@@ -141,8 +141,9 @@ if ($op eq "do_search") {
 	}
 	
 	$strsth=~s/ OR$/)/;
-	my $strsth = $strsth." and authtypecode is not NULL";
-# 	warn $strsth;
+	my $strsth = $strsth." and authtypecode is not NULL ";
+#     $strsth .= " and authtypecode <>''";
+ 	warn "AUTHtypecode : ".$strsth;
 	my $sth=$dbh->prepare($strsth);
 	$sth->execute;
 	
@@ -152,6 +153,7 @@ if ($op eq "do_search") {
 	my @authresults;
 	my $authnbresults;
 	while ((my $authtypecode) = $sth->fetchrow) {
+ 	    warn "AUTHtypecode : ".$authtypecode;
 		my ($curauthresults,$nbresults) = authoritysearch($dbh,[''],[''],[''],['contains'],
 														\@search,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
 		if (defined(@$curauthresults)) {
@@ -160,6 +162,9 @@ if ($op eq "do_search") {
 				@$curauthresults[$i]->{jamainentry} =~ s/'/\\'/g;
 			}
 		}
+        use Data::Dumper;
+        warn Dumper($curauthresults);
+        warn Dumper(@authresults);
 		push @authresults, @$curauthresults;
 		$authnbresults+=$nbresults;
 #		warn "auth : $authtypecode nbauthresults : $nbresults";
