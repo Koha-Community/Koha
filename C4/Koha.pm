@@ -669,8 +669,6 @@ sub fixEncoding {
     $targetcharset="latin1" if (C4::Context->preference("TemplateEncoding") eq "iso-8859-1");
     my $decoder = guess_encoding($marc, qw/utf8 latin1/);
     die $decoder unless ref($decoder);
-    warn "decodage : ".$decoder->name;
-    warn "decodage cible : ".$targetcharset;
     my $newRecord=MARC::Record->new();
     foreach my $field ($record->fields()){
       if ($field->tag()<'010'){
@@ -695,7 +693,7 @@ sub fixEncoding {
         $newRecord->insert_grouped_field($newField);
       }
     }
-    warn $newRecord->as_formatted(); 
+#     warn $newRecord->as_formatted(); 
     return $newRecord;
   } else {
     return $record;
