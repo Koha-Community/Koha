@@ -893,56 +893,46 @@ sub MARCkoha2marcBiblio {
     #--- if bibid, then retrieve old-style koha data
     if ( $biblionumber > 0 ) {
         my $sth2 =
-          $dbh->prepare(
-"select biblionumber,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
-		from biblio where biblionumber=?"
+          $dbh->prepare("SELECT biblio.biblionumber,title,itemtype,author,unititle,biblio.notes,abstract,
+                                serial,seriestitle,copyrightdate,biblio.timestamp,
+                                biblioitemnumber,volume,number,classification,
+                                url,isbn,issn,dewey,subclass,publicationyear,publishercode,
+                                volumedate,volumeddesc,illus,pages,biblioitems.notes AS bnotes,size,place
+                            FROM biblio
+                            LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber 
+                            WHERE biblio.biblionumber=?"
         );
         $sth2->execute($biblionumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
-                    $row->{$code}, '');
-            }
-        }
-        #for an unknown reason, mysql fetchrow_hashref returns author BEFORE the title, even if you want it after
-        # that makes a problem for UNIMARC where we have 200 $atitle $fauthor => the record appears $f $a.
-        # this dirty hack fixes the problem
-        $sth2 = $dbh->prepare("select author from biblio where biblionumber=?");
-        $sth2->execute($biblionumber);
-        $row = $sth2->fetchrow_hashref;
-        $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
-                    $row->{$code}, '');
-            }
-        }
+        my @row = $sth2->fetchrow;
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.biblionumber", $row[0], '') if $row[0];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.title", $row[1], '') if $row[1];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.itemtype", $row[2], '') if $row[2];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.author", $row[3], '') if $row[3];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.unititle", $row[4], '') if $row[4];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.notes", $row[5], '') if $row[5];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.abstract", $row[6], '') if $row[6];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.serial", $row[7], '') if $row[7];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.seriestitle", $row[8], '') if $row[8];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.copyrightdate", $row[9], '') if $row[9];
+        &MARCkoha2marcOnefield( $sth, $record, "biblio.timestamp", $row[10], '') if $row[10];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.biblioitemnumber", $row[11], '') if $row[11];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.volume", $row[12], '') if $row[12];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.number", $row[13], '') if $row[13];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.classification", $row[14], '') if $row[14];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.url", $row[15], '') if $row[15];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.isbn", $row[16], '') if $row[16];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.issn", $row[17], '') if $row[17];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.dewey", $row[18], '') if $row[18];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.subclass", $row[19], '') if $row[19];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.publicationyear", $row[20], '') if $row[20];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.volumedate", $row[21], '') if $row[21];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.volumeddesc", $row[22], '') if $row[22];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.illus", $row[23], '') if $row[23];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.pages", $row[24], '') if $row[24];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.notes", $row[25], '') if $row[25];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.size", $row[26], '') if $row[26];
+        &MARCkoha2marcOnefield( $sth, $record, "biblioitems.place", $row[27], '') if $row[27];
     }
-
-    #--- if biblioitem, then retrieve old-style koha data
-    if ( $biblioitemnumber > 0 ) {
-        my $sth2 =
-          $dbh->prepare(
-            " SELECT biblioitemnumber,biblionumber,volume,number,classification,
-						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
-						volumedate,volumeddesc,timestamp,illus,pages,notes AS bnotes,size,place
-					FROM biblioitems
-					WHERE biblioitemnumber=?
-					"
-        );
-        $sth2->execute($biblioitemnumber);
-        my $row = $sth2->fetchrow_hashref;
-        my $code;
-        foreach $code ( keys %$row ) {
-            if ( $row->{$code} ) {
-                &MARCkoha2marcOnefield( $sth, $record, "biblioitems." . $code,
-                    $row->{$code},'' );
-            }
-        }
-    }
-
     # other fields => additional authors, subjects, subtitles
     my $sth2 =
       $dbh->prepare(
@@ -967,6 +957,7 @@ sub MARCkoha2marcBiblio {
         &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
             $row->{'subtitle'},'' );
     }
+#     warn "REC : ".$record->as_formatted;
     return $record;
 }
 
@@ -3016,6 +3007,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.63  2006/11/22 13:58:11  tipaul
+# there are some strange problems with mysql_fetchrow_hashref, that reorders silently the hashref returned.
+# This hack fixes them by retrieving the results in an array & rebuilding the MARC record from that.
+# This function is used in acquisition, when the librarian creates a new order from a new biblio : the MARC::Record was incorrect (at least in UNIMARC, but this fix should change nothing in MARC21)
+#
 # Revision 1.115.2.62  2006/10/13 08:34:21  tipaul
 # removing warn
 #
