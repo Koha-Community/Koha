@@ -104,7 +104,7 @@ if ($op ne "do_search"){
 							
 	if ($isbn ne "/" || $issn ne "/") {
 		$attr='1=7';
-        warn "isbn : $isbn";
+#         warn "isbn : $isbn";
 		$term=$isbn if ($isbn ne "/");
 		$term=$issn if ($issn ne "/");
 	} elsif ($title ne "/") {
@@ -116,7 +116,7 @@ if ($op ne "do_search"){
 	} 
 
 	my $query="\@attr $attr \"$term\"";	
-    warn "query ".$query;
+#     warn "query ".$query;
 	foreach my $servid (@id){
 		my $sth=$dbh->prepare("select * from z3950servers where id=?");
 		$sth->execute($servid);
@@ -130,7 +130,7 @@ if ($op ne "do_search"){
 			$option1->option('password',$server->{password})  if $server->{password};
 			$option1->option('preferredRecordSyntax', $server->{syntax});
 			$oConnection[$s]=create ZOOM::Connection($option1) || warn ("something went wrong: ".$oConnection[$s]->errmsg());
-			warn ("server data",$server->{name}, $server->{port});
+# 			warn ("server data",$server->{name}, $server->{port});
 			$oConnection[$s]->connect($server->{host}, $server->{port}) || warn ("something went wrong: ".$oConnection[$s]->errmsg());
 			$serverhost[$s]=$server->{host};
 			$encoding[$s]=$server->{syntax};
@@ -166,7 +166,6 @@ AGAIN:
 		my $numresults=$oResult[$k]->size() ;								
 		my $i;
 		my $result='';
-		@breeding_loop = ();
 		if ($numresults>0){
 			for ($i=0; $i<(($numresults<5) ? ($numresults) : (5)) ; $i++) {
 				my $rec=$oResult[$k]->record($i); 										
@@ -196,18 +195,17 @@ AGAIN:
 				$row_data{id} = $bid;
 				$row_data{oldbiblionumber}=$oldbiblionumber;
 				push (@breeding_loop, \%row_data);
-         
 			}# upto 5 results
      
 		}#$numresults
 	}# if $k !=0
 	$numberpending=$nremaining-1;
-	$template->param(breeding_loop => \@breeding_loop,server=>$serverhost[$k],
+	$template->param(breeding_loop => \@breeding_loop, server=>$serverhost[$k],
 				numberpending => $numberpending,
 	);
-	output_html_with_http_headers $input, "", $template->output if $firstresult==1;
+	output_html_with_http_headers $input, $cookie, $template->output if $numberpending==0;
 
-	print  $template->output  if $firstresult !=1;
+# 	print  $template->output  if $firstresult !=1;
 	$firstresult++;
 
 	MAYBE_AGAIN:
