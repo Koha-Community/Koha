@@ -57,7 +57,7 @@
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden"  value="" size="2" onchange="javascript:alert(this.value);AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden"  value="" size="2" onchange="AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="subfield_loop" -->
