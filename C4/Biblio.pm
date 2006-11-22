@@ -1492,6 +1492,11 @@ sub NEWdelbiblio {
     while ( my ($biblioitemnumber) = $sth->fetchrow ) {
         OLDdeletebiblioitem( $dbh, $biblioitemnumber );
     }
+    # delete from other koha tables
+    $sth = $dbh->prepare("DELETE FROM bibliosubject WHERE biblionumber=?");
+    $sth->execute($biblio);
+    $sth = $dbh->prepare("DELETE FROM additionalauthors WHERE biblionumber=?");
+    $sth->execute($biblio);
     &MARCdelbiblio( $dbh, $bibid, 0 );
 }
 
@@ -3007,6 +3012,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.64  2006/11/22 16:02:52  tipaul
+# fix for #1177 = removal of additionnal authors & bibliosubjects
+#
 # Revision 1.115.2.63  2006/11/22 13:58:11  tipaul
 # there are some strange problems with mysql_fetchrow_hashref, that reorders silently the hashref returned.
 # This hack fixes them by retrieving the results in an array & rebuilding the MARC record from that.
