@@ -18,6 +18,12 @@
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
 <input class="submit" type="submit" title="go to <!-- TMPL_VAR name="bibliotitle" -->" value="View Biblio Record" /></form>
 
+<!-- TMPL_IF NAME="routing" -->
+<form class="inline" method="get" action="/cgi-bin/koha/bull/routing.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<input class="submit" type="submit" title="Routing list" value="Routing List" /></form>
+<!-- /TMPL_IF -->
+
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus" />
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->" />
@@ -127,7 +133,7 @@
 	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
 		<tr><th scope="row"><label for="manual-serialseq">Numbered:</label> </th>
 			<td>
-				 <input type="text" id="manual-serialseq" name="serialseq" size="30" maxlength="100" />
+				 <input type="text" id="manual-serialseq" name="serialseq" size="30" maxlength="100" value="<!-- TMPL_VAR NAME="missingseq" -->" />
 			</td>
 			</tr>
 	<tr>
@@ -136,15 +142,24 @@
 	</tr>
 			<tr><th scope="row"><label for="manual-planneddate">Expected On: </label></th>
 			<td>
-				<input type="text" id="manual-planneddate" name="planneddate" size="10" maxlength="15" />
+				<input type="text" id="manual-planneddate" name="planneddate" size="10" maxlength="15" value="<!-- TMPL_VAR NAME="missingdate" -->" />
 			</td></tr>
 			<tr><th scope="row"><label for="manual-status">Status:</label> </th>
 			<td>
-				<input type="hidden" id="serialid" name="serialid" value="0" />
-				<select id="manual-status" name="status" size="1">
+			
+			<!-- TMPL_IF NAME="frommissing" -->
+		                <input type="hidden" id="serialid" name="serialid" value="<!-- TMPL_VAR name="missingid" -->">
+                        <!-- TMPL_ELSE -->
+                                <input type="hidden" id="serialid" name="serialid" value="0">
+                        <!--/TMPL_IF-->
+                                <select id="manual-status" name="status" size="1">
+                                          <!-- TMPL_IF NAME="frommissing" -->
+                                                <option value="2" selected >Arrived</option>
+                                          <!-- TMPL_ELSE -->
 						<option value="2">Arrived</option>
 						<option value="3" selected>Late</option>
 						<option value="4">Missing</option>
+					  <!-- /TMPL_IF -->						
 				</select>
 			</td>
 		</tr>
@@ -191,6 +206,15 @@
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
 		<p>Subscription has expired. Last waiting issue status can't be changed. <a href="#" onclick="popup()">Renew</a> your subscription</p>
 	<!-- /TMPL_IF -->
+        <!-- TMPL_IF name="abouttoexpire" -->
+                <h3>Note: Subscription is about to expire next issue.</h3>
+                <script type="text/javascript">
+                <!--
+                alert("Subscription is about to expire next issue");
+                //-->
+                </script>
+        <!-- /TMPL_IF -->
+
 	</form></div><br>
 
 	<div class="data"><form method="post" name="f" action="statecollection.pl">

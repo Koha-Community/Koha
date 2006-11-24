@@ -10,6 +10,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
+use Date::Manip;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -18,15 +19,22 @@ my $sth;
 # my $id;
 my ($template, $loggedinuser, $cookie, $subs);
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
-	$dow, $numberlength, $weeklength, $monthlength,
+        $firstacquidate, $dow, $irregularity, $sublength, $subtype, $numberpattern, $numberlength, $weeklength, $monthlength,
 	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-	$numberingmethod, $status, $biblionumber, $bibliotitle, $notes);
+	$numberingmethod, $status, $biblionumber, $bibliotitle, $callnumber, $notes, $hemisphere);
 
 $subscriptionid = $query->param('subscriptionid');
 
 if ($op eq 'modsubscription') {
+     my @irregular = $query->param('irregular');
+     my $irregular_count = @irregular;
+     for(my $i =0;$i<$irregular_count;$i++){
+       $irregularity .=$irregular[$i]."|";
+     }
+     $irregularity =~ s/\|$//;
+    
 	$auser = $query->param('user');
 	$librarian => $query->param('librarian'),
 	$cost = $query->param('cost');
@@ -35,10 +43,24 @@ if ($op eq 'modsubscription') {
 	$aqbudgetid = $query->param('aqbudgetid');
 	$startdate = format_date_in_iso($query->param('startdate'));
 	$periodicity = $query->param('periodicity');
+        $firstacquidate = format_date_in_iso($query->param('firstacquidate'));    
 	$dow = $query->param('dow');
+        $numberpattern = $query->param('numbering_pattern');
+    if(C4::Context->preference("RoutingSerials")){
+        $sublength = $query->param('sublength');
+        $subtype = $query->param('subtype');
+        if($subtype eq 'months'){
+	       $monthlength = $sublength;
+	} elsif ($subtype eq 'weeks'){
+	       $weeklength = $sublength;
+	} else {
+	       $numberlength = $sublength;
+	}
+    } else {
 	$numberlength = $query->param('numberlength');
 	$weeklength = $query->param('weeklength');
 	$monthlength = $query->param('monthlength');
+    }
 	$add1 = $query->param('add1');
 	$every1 = $query->param('every1');
 	$whenmorethan1 = $query->param('whenmorethan1');
@@ -59,14 +81,24 @@ if ($op eq 'modsubscription') {
 	$innerloop3 = $query->param('innerloop3');
 	$numberingmethod = $query->param('numberingmethod');
 	$status = 1;
+        $callnumber = $query->param('callnumber');
+        $hemisphere = $query->param('hemisphere');
 	$notes = $query->param('notes');
-    
+     if(C4::Context->preference("RoutingSerials")){
+	&old_modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
+					$periodicity,$firstacquidate,$dow,$irregularity,$numberpattern,$numberlength,$weeklength,$monthlength,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
+					$numberingmethod, $status, $biblionumber, $callnumber, $notes, $hemisphere, $subscriptionid);	 
+     } else {						     
 	&modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid);
+     }
 }
 
 if ($op eq 'del') {
@@ -92,6 +124,23 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
 my ($user, $cookie, $sessionID, $flags)
 	= checkauth($query, 0, {catalogue => 1}, "intranet");
 
+my $weekarrayjs='';
+my $count = 0;
+my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
+my $firstday = Date_DayOfYear($month,$day,$year);
+my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
+my $weekno = $wkno;
+for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
+                $count = $i;
+                if($wkno > 52){$year++; $wkno=1;}
+                if($count>365){$count=$i-365;}
+                my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+                my $output = "$y-$m-$d";
+                $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
+                $wkno++;
+        }
+chop($weekarrayjs);
+
 $template->param(
 	user => $subs->{auser},
 	librarian => $subs->{librarian},
@@ -102,10 +151,13 @@ $template->param(
 	bookfundid => $subs->{bookfundid},
 	startdate => format_date($subs->{startdate}),
 	periodicity => $subs->{periodicity},
+        firstacquidate => format_date($subs->{firstacquidate}),    
 	dow => $subs->{dow},
-	numberlength => $subs->{numberlength},
-	weeklength => $subs->{weeklength},
-	monthlength => $subs->{monthlength},
+        irregularity => $subs->{irregularity},
+        numberlength => $subs->{numberlength},
+        weeklength => $subs->{weeklength},
+        monthlength => $subs->{monthlength},
+        numberpattern => $subs->{numberpattern},
 	add1 => $subs->{add1},
 	every1 => $subs->{every1},
 	whenmorethan1 => $subs->{whenmorethan1},
@@ -132,8 +184,12 @@ $template->param(
 	subscriptionid => $subs->{subscriptionid},
 	serialslist => \@serialslist,
 	totalissues => $totalissues,
+        weekarrayjs => $weekarrayjs,
+        callnumber => $subs->{callnumber},
+        hemisphere => $hemisphere,
 	);
 $template->param(
+                        "numberpattern$subs->{numberpattern}" => 1,    
 			"periodicity$subs->{periodicity}" => 1,
 			"arrival$subs->{dow}" => 1,
 			intranetstylesheet => C4::Context->preference("intranetstylesheet"),

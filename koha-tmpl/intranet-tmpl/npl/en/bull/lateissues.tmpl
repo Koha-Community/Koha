@@ -4,7 +4,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-
+<!-- TMPL_IF NAME="lateissues" -->
 	<h1>Late issues</h1>
 	<div class="details">
 		<form action="lateissues.pl" method="post">
@@ -13,11 +13,13 @@
 				<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" -->; <!-- /TMPL_IF -->
 				<!-- TMPL_IF name="contemail" --><a href="mailto:<!-- TMPL_VAR name="contemail" -->"><!-- TMPL_VAR name="contemail" --></a><!-- /TMPL_IF -->
 			<input type="submit" value="Submit" class="submit" />
+			<a href="lateissues-excel.pl?supplierid=<!--TMPL_VAR NAME="supplierid"-->">Export Data</a>
 		</form>
 	</div>
 	<table>
 		<tr>
-			<th>Title</th>
+			<th>Supplier</th>
+			<th>Title</th>			
 			<th>Issue number</th>
 			<th>Late since</th>
 			<th colspan="2">&nbsp;</th>
@@ -28,6 +30,7 @@
 			<!-- TMPL_ELSE -->
 			<tr class="highlight">
 			<!-- /TMPL_IF -->
+			                <td><!-- TMPL_VAR name="name" --></td>
 			<td><!-- TMPL_IF name="Title" --><a href="/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->"><!-- TMPL_VAR name="Title" --></a><!-- /TMPL_IF --></td>
 					<td><!-- TMPL_VAR name="serialseq" --></td>
 					<td><!-- TMPL_VAR name="planneddate" --></td>
@@ -38,7 +41,43 @@
 						</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-</div>
+<!-- TMPL_ELSE -->
+       <p>There are currently no outstanding issues.</p>
+<!-- /TMPL_IF -->
 
+
+<!-- TMPL_IF NAME="missingissues" -->
+ 	<h1>Missing Issues</h1>
+ 	<table>
+ 		<tr>
+ 			<th>Supplier</th>
+ 			<th>Title</th>
+ 			<th>Issue number</th>
+ 			<th>Missing since</th>
+ 			<th>&nbsp;</th>
+ 		</tr>
+ 		<!-- TMPL_LOOP name="missingissues" -->
+ 			<tr>
+ 				<td>
+ 					<!-- TMPL_VAR name="name" -->
+ 				</td>
+ 				<td>
+ 					<!-- TMPL_VAR name="Title" -->
+ 				</td>
+ 				<td>
+ 					<!-- TMPL_VAR name="serialseq" -->
+ 				</td>
+ 				<td>
+ 					<!-- TMPL_VAR name="planneddate" -->
+ 				</td>
+ 				<td>
+ 					<a href="statecollection.pl?op=found&amp;planneddate=<!-- TMPL_VAR name="planneddate" -->&amp;missingissue=<!-- TMPL_VAR name="serialseq" -->&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Recieve</a>
+ 				</td>
+ 			</tr>
+ 		<!-- /TMPL_LOOP -->
+ 	</table>
+<!-- /TMPL_IF -->
+
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

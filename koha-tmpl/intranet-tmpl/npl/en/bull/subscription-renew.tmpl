@@ -1,9 +1,11 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<div id="main-compact">
+<!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+<div id="main">
 
 <h1>Subscription Renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
 
 <form name="f" method="post" action="subscription-renew.pl">
+<input type="hidden" name="op" value="renew">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
 	<div class="data">
 		<table><tr><th><label>Start Date: </label></th><td><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" /><input type="hidden" name="op" value="renew" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /></td></tr></table>	
 		
@@ -17,5 +19,14 @@
 </div>
 </form>
 </div>
+	<!-- TMPL_IF NAME="done" -->
+		<script type="text/javascript">
+		<!--
+		opener.document.location.reload();
+		self.close();
+		//-->
+		</script>
+	<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
 

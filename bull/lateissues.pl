@@ -18,23 +18,28 @@ my $query = new CGI;
 my $supplierid = $query->param('supplierid');
 my %supplierlist = getSupplierListWithLateIssues;
 my @select_supplier;
-push @select_supplier,"";
+
+my ($nothing,@supplierinfo)=bookseller($supplierid) if $supplierid;
+
 foreach my $supplierid (keys %supplierlist){
+        my ($count, @dummy) = GetLateIssues($supplierid);
+        my ($count2, @dummy2) = GetMissingIssues($supplierid);
+        my $counting = $count+$count2;
+        $supplierlist{$supplierid} = $supplierlist{$supplierid}." ($counting)";
 	push @select_supplier, $supplierid
 }
+
+my ($count, @lateissues) = GetLateIssues($supplierid);
+my ($count2, @missingissues) = GetMissingIssues($supplierid);
+
+
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-values   => \@select_supplier,
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
- 			-tabindex=>'',
 			-multiple => 0 );
 
-my @lateissues;
-@lateissues = GetLateIssues($supplierid) if $supplierid;
-my @supplierinfo;
-my $nothing;
-($nothing,@supplierinfo)=bookseller($supplierid) if $supplierid;
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/lateissues.tmpl",
@@ -48,6 +53,8 @@ my ($template, $loggedinuser, $cookie)
 $template->param(
 	CGIsupplier => $CGIsupplier,
 	lateissues => \@lateissues,
+        missingissues => \@missingissues,
+        supplierid => $supplierid,
 	phone => $supplierinfo[0]->{phone},
 	booksellerfax => $supplierinfo[0]->{booksellerfax},
 	contemail => $supplierinfo[0]->{contemail},

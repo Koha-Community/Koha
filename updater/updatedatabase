@@ -320,6 +320,8 @@ my %requiretables = (
 				status tinyint(4) NOT NULL default '0',
 				planneddate date NOT NULL default '0000-00-00',
 				publishedddate date NOT NULL default '0000-00-00',
+	                        routingnotes text,
+	                        claimdate date default NULL,
 				PRIMARY KEY  (serialid)
 				)",
     subscription => "(biblionumber int(11) NOT NULL default '0',
@@ -333,7 +335,10 @@ my %requiretables = (
 						monthlength tinyint(4) default '0',
 						numberlength tinyint(4) default '0',
 						periodicity tinyint(4) default '0',
+	                                        firstacquidate date default '0000-00-00',
 						dow varchar(100) default '',
+	                                        numberpattern int(4) default '0',
+	                                        irregularity varchar(255) default NULL,
 						numberingmethod varchar(100) default '',
 						notes text,
 						status varchar(100) NOT NULL default '',
@@ -355,6 +360,8 @@ my %requiretables = (
 						whenmorethan3 int(11) default 0,
 						setto3 int(11),
 						lastvalue3 int(11),
+	                                        hemisphere int(1) default '1',
+	                                        callnumber varchar(100) default NULL,
 						PRIMARY KEY  (subscriptionid)
 						)",
     subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
@@ -368,6 +375,13 @@ my %requiretables = (
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
 				)",
+    subscriptionroutinglist => "(routingid int(11) NOT NULL default null auto_increment,
+	                         subscriptionid int(11) NOT NULL default '0',
+	                         borrowernumber int(11) NOT NULL default '0',
+	                         ranking int(11) NOT NULL default '0',
+	                         numberpattern varchar(100) default null,
+	                         PRIMARY KEY  (routingid)
+	                     )",
     labels => "(labelid int(11) NOT NULL auto_increment,
                             itemnumber varchar(100) NOT NULL default '',
                             timestamp timestamp(14) NOT NULL,
@@ -1375,6 +1389,19 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
+            variable            => 'RoutingSerials',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                '
+                                        type' => 1
+            },
+            explanation =>
+'If set, you will have access to routing serials',
+            type => 'YesNo',
+        },  
+        {
+            uniquefieldrequired => 'variable',
             variable            => 'advancedMARCeditor',
             value               => '0',
             forceupdate         => {
@@ -2193,6 +2220,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.55  2006/11/24 00:23:22  bob_lyon
+# Adding in the updated files for the routing serials
+#
 # Revision 1.100.2.54  2006/08/31 14:37:04  tipaul
 # fix for :
 # http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1140

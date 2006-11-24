@@ -1,68 +1,86 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials Subscriptions<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscriptions <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
+<!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="main">
-<form action="bull-home.pl" method="post">
-	<table>
-		<caption>Serials Subscriptions</caption>
+	<h1 class="bull">Serials Management</h1>
+<!-- TMPL_IF NAME="routing" -->
+        <h3 class="bull">Search for Serial Routing List</h3>
+<!-- /TMPL_IF -->
+	<p>
+	<form action="bull-home.pl" method="post">
+        <input type="hidden" name="routing" value="<!-- TMPL_VAR
+NAME="routing" -->" />
+        <input type="hidden" name="searched" value="1" />
+
+	Title: <input type="text" size=20 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->"> or ISSN: <input type="text" size=11 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+	<input type="submit" value="Search" class="button">
+	</p>
+
+	<!-- TMPL_IF name="subscriptions" -->
+	<table cellpadding="0" cellspacing="0" border="0" class="collapse">
 		<tr>
-			<th>ISSN</th>
-			<th>Title</th>
-			<th>
-				Note
-			</td>
-			<th colspan="2">&nbsp;</th>
-		</tr>
-		<tr>
-			<td>
-				<input type="text" size="10" maxlength="11" name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->" title="type ISSN here to filter subscription" />
-			</td>
-			<td>
-				<input type="text" size="40" maxlength="40" name="title" value="<!-- TMPL_VAR name="title" -->" title="type a title -complete or partial- to filter subscription" />
-			</td>
-			<td>
-				&nbsp;
-			</td>
-			<td colspan="2">
-				<input type="submit" value="Filter" class="submit" title="set a filter on ISSN / title" />
-			</td>
+			<th class="cell-header">Title</th>
+			<th class="cell-header">ISSN</th>
+			<th class="cell-header"
+                  <!-- TMPL_IF NAME="routing" -->
+
+                  <!-- TMPL_ELSE -->
+                        colspan="2"
+                  <!-- /TMPL_IF -->
+                      >&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP name="subscriptions" -->
-			<!-- TMPL_IF name="toggle" -->
-				<tr class="highlight">
-				<!-- TMPL_ELSE -->
-				<tr>
-				<!-- /TMPL_IF -->
-					<td>
-					<!-- TMPL_IF name="ISSN" -->
-						<a href="bull/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="Issues history"><!-- TMPL_VAR name="ISSN" --></a>
-					<!-- /TMPL_IF -->
-					
+			<tr>
+				<td class="cell">
+					<!-- TMPL_VAR name="title" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
 				</td>
-				<td>
-						<!-- TMPL_IF name="title" -->
-						<!-- TMPL_VAR name="title" -->
-					<!-- TMPL_ELSE -->
-						|
-					<!-- /TMPL_IF -->
+				<td class="cell">
+					<!-- TMPL_VAR name="ISSN" -->
 				</td>
-					<td>
-								<!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+                  <!-- TMPL_IF NAME="routing" -->
+                                <td class="cell">
+                                        <a
+href="bull/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid"
+--><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Routing List</a>
+                                </td>
+                  <!-- TMPL_ELSE -->
+				<td class="cell">
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a>
 				</td>
-					<td>
-								<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="subscription detail">Detail</a>
+				<td class="cell">
+					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Receive</a>
 				</td>
-				<td>
-					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="receive issues for this subscription">Receive</a>
-				</td>
+                  <!-- /TMPL_IF -->
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	</form>
-	<p><form action="/cgi-bin/koha/bull/subscription-add.pl" method="get"><input type="submit" value="Add Subscription" class="submit" /></form></p>
+	<!-- TMPL_ELSE -->
+		<!-- TMPL_IF NAME="done_searched" -->
+			<p><b>Item not in subscriptions yet - please click 'Add a Subscription'</b></p>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+
+<br />
+<!-- TMPL_IF NAME="routing" -->
+<!-- TMPL_ELSE -->
+<p>Search for serials subscriptions first before adding a new one.</p>
+<p>
+	<a href="/cgi-bin/koha/bull/subscription-add.pl" class="button bull">Add subscription</a>
+</p>
+<h4 class="bull">
+	Notes:
+</h4>
+<ul>
+	<li>
+		The serials subscriptions module allows you to manage subscription arrivals and scheduling.
+	</li>
+	<li> 
+		<b>Before</b> each item can be issued, it must be entered into Koha through the Acquisitions process.
+	</li>
+</ul>
+<!-- /TMPL_IF -->	
 </div>
-
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-

@@ -3,6 +3,143 @@
 <!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
+<script type="text/javascript" language="javascript">
+<!--
+// the english words used in display purposes
+var text = new Array('Number','Volume','Issue','Month','Week','Starting with:','Rollover at:','Choose Hemisphere:','Northern','Southern',
+'Autumn','Winter','Spring','Summer','Fall','Season','Year');
+
+// common pre defined number patterns
+function num_pattern() {
+var patternchoice = '<!--TMPL_VAR NAME='numberpattern'-->';
+	switch(patternchoice){
+	case "2":
+		options(text[1],text[0],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "3":
+		options(text[1],text[0]);
+		irregularity();
+		display_table(0);
+		break;
+	case "4":
+		options(text[1],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "5":
+		options(text[0],text[2]);
+		irregularity();
+		display_table(0);
+		break;
+	case "6":
+		var d = new Date();
+		var sYear = d.getFullYear();
+		// options_seasons(text[15],sYear);
+		irregularity();
+		is_season = 1;
+		display_table(0);
+		break;
+	case "7":
+		display_table(1);
+		irregularity();
+		break;
+	case "8":
+	        options(text[16],text[3]);
+	        irregularity();
+		is_month = 1;
+		display_table(0);
+		break;
+	default:
+		options(text[0]);
+		irregularity();
+		display_table(0);
+		break;
+	}
+}
+
+function display_table(n) {
+	if(n==1){
+		document.getElementById("basetable").style.display = 'block';
+	} else {
+		document.getElementById("basetable").style.display = 'none';
+	}
+}
+
+// to dispaly the options section
+function options(x,y,z){
+var textbox = '';
+	// alert("X: "+x+"Y: "+y+"Z: "+z);
+	if(x){
+		document.f.xfield.value = x;
+		if(y){
+			document.f.yfield.value = y;
+			if(z){
+				document.f.zfield.value = z;
+			}
+		}
+	}
+}
+
+function irregularity(){
+	var periodicity = '<!-- TMPL_VAR NAME="periodicity"-->';
+	switch(periodicity){
+	case "1":
+		var names = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+		break;
+	case "2":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "3":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "4":
+		<!-- TMPL_IF NAME="weekarrayjs" -->
+		var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+		<!-- /TMPL_IF -->
+		break;
+	case "5":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "6":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "7":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "8":
+		var names = new Array('Autumn','Winter','Spring','Summer','Fall');
+		break;
+	case "9":
+		var names = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+		break;
+	case "10":
+		expected =1;
+		break;
+	default:
+		break;
+	}
+
+	<!-- TMPL_IF NAME="irregularity" -->
+	var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
+	var irregarray = irregular.split('|');
+	var irregtext = '<p>';
+	for(var i=0;i<irregarray.length;i++){
+		irregtext += names[i]+' &nbsp;';
+	}
+	irregtext += '</p>';
+	document.getElementById("irreg").innerHTML = irregtext;
+	<!-- /TMPL_IF -->
+}
+
+-->
+</script>
+
 <div id="main">
 <h1>Subscription Details:  <!-- TMPL_VAR name="bibliotitle" --></h1>
 <form class="inline" method="get" action="subscription-add.pl">
@@ -26,6 +163,15 @@
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
 <input type="submit" class="submit"  title="go to <!-- TMPL_VAR name="bibliotitle" -->" value="View Biblio Record" /></form>
 
+<form class="inline" method="get" action="/cgi-bin/koha/bull/routing.pl">
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+<!-- TMPL_IF NAME="routing" -->
+<input type="submit" class="submit" title="Edit Routing List" value="Edit Routing List" />
+<!-- TMPL_ELSE -->
+<input type="hidden" name="op" value="new" />
+<input type="submit" class="submit" title="Create Routing List" value="Create Routing List" />
+<!-- /TMPL_IF -->
+
 <form class="inline"><input type="submit" class="cancel" value="Delete Subscription" onclick="confirm_deletion(); return false;" /></form>
 
 <div class="data">
@@ -39,6 +185,7 @@
 </div>
 
 <div class="data">
+<form name="f">
 <table>	<caption>Planning</caption>
 	<tr><th scope="row">Beginnning date:</th><td> <!-- TMPL_VAR name="startdate" --></td></tr>
 	<tr><th scope="row">Frequency (*):</th><td>
@@ -76,6 +223,31 @@
 				1/2 Years
 		<!-- /TMPL_IF -->
 	</td></tr>
+	
+	<tr><th scope="row">Number Pattern:</th><td>
+		<!-- TMPL_IF name="numberpattern1" -->
+			Number
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern2" -->
+			Volume, Number, Issue
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern3" -->
+			Volume, Number
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern4" -->
+			Volume, Issue
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern5" -->
+			Number, Issue
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern6" -->
+			Seasonal only
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="numberpattern7" -->
+			None of the above
+		<!-- /TMPL_IF -->
+	</td></tr>	
+	
 	<tr><th scope="row">Arrives on:</th><td>
 		<!--TMPL_IF name="arrival1" -->
 			Monday
@@ -99,6 +271,56 @@
 				Sunday
 		<!-- /TMPL_IF --></table>
 </div>
+
+
+<table>
+<tr><td>&nbsp;</td>
+    <td align="right"><input type="text" name="xfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+       <!--TMPL_IF NAME="lastvalue2"-->
+           <td align="right"><input type="text" name="yfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+       <!--/TMPL_IF-->
+       <!--TMPL_IF NAME="lastvalue3"-->
+           <td align="right"><input type="text" name="zfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
+       <!--/TMPL_IF-->
+       </tr>
+       <tr><td>Starting with:</td>
+           <td align="center"><!--TMPL_VAR NAME="lastvalue1"--></td>
+       <!--TMPL_IF NAME="lastvalue2"-->
+           <td align="center">&nbsp;
+                       <!--TMPL_VAR NAME="lastvalue2"-->
+           </td>
+       <!--/TMPL_IF-->
+       <!--TMPL_IF NAME="lastvalue3"-->
+           <td align="center">&nbsp;
+                       <!--TMPL_VAR NAME="lastvalue3"-->
+           </td>
+       <!--/TMPL_IF-->
+       </tr>
+       <tr><td>Rollover:</td>
+           <td align="center">&nbsp;</td>
+       <!--TMPL_IF NAME="whenmorethan2"-->
+           <td align="center">&nbsp;
+                       <!--TMPL_VAR NAME="whenmorethan2"-->
+           </td>
+       <!--/TMPL_IF-->
+       <!--TMPL_IF NAME="whenmorethan3"-->
+           <td align="center">&nbsp;
+                       <!--TMPL_VAR NAME="whenmorethan3"-->
+           </td>
+       <!--/TMPL_IF-->
+       </tr>
+       </table>
+       <!-- TMPL_IF NAME="irregularity" -->
+       <p>Irregularity:
+               <div id="irreg"></div>
+       </p>
+       <!-- /TMPL_IF -->
+       <p>Begins on:</label>
+               <!--TMPL_VAR name="startdate" -->
+       </p>
+       </form>
+
+
 <div class="data">
 <table>	<caption>Subscription length</caption>
 	<tr><th scope="row">Number of issues:</th><td><!-- TMPL_VAR name="numberlength" --></td></tr>
@@ -106,7 +328,7 @@
 	<tr><th scope="row">Number of months:</th><td><!-- TMPL_VAR name="monthlength" --></td></tr></table>
 
 </div>
-<div class="data">
+<div class="data" id="basetable">
 	<h2>Numbering calculation</h2>
 		
 		<table><caption>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></caption>
@@ -213,5 +435,6 @@ function confirm_deletion() {
 		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
 	}
 }
+window.onload = num_pattern();
 </script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
