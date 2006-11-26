@@ -1524,6 +1524,64 @@ my %fielddefinitions = (
             default => '',
             extra   => ''
         },
+        {
+            field   => 'routingnotes',
+            type    => 'text',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+        {
+            field   => 'claimdate',
+            type    => 'date',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },	
+    ],
+    subscription => [
+        {
+            field   => 'firstacquidate',
+            type    => 'date',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '0000-00-00',
+            extra   => ''
+        },	    
+        {
+            field   => 'numberpattern',
+            type    => 'int(4)',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '0',
+            extra   => ''
+        },
+        {
+            field   => 'irregularity',
+            type    => 'varchar(255)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+        {
+            field   => 'hemisphere',
+            type    => 'int(1)',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '1',
+            extra   => ''
+        },
+        {
+            field   => 'callnumber',
+            type    => 'varchar(100)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
     ],
     biblioitems => [
         {
@@ -2220,6 +2278,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.56  2006/11/26 23:38:47  bob_lyon
+# Adding in new columns for serial and subscription tables so they update existing database tables
+#
 # Revision 1.100.2.55  2006/11/24 00:23:22  bob_lyon
 # Adding in the updated files for the routing serials
 #
