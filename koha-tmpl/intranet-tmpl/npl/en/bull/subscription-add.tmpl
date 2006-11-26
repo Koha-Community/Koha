@@ -685,9 +685,9 @@ function moreoptionsupdate(fieldnames,rollover){
 
 function check_input(e){
 	var unicode=e.charCode? e.charCode : e.keyCode
-	if (unicode!=8 && unicode !=46){ // if key isn't backspace or delete
+	if (unicode!=8 && unicode !=46 &&unicode!=9 && unicode !=13){ // if key isn't backspace or delete or tab or enter
 		if (unicode<48||unicode>57) { // if not a number
-			alert("Needs to be entered in digit form -eg 10");
+			alert("Needs to be entered in digit form - eg 10");
 			return false // disable key press
 		}
 	}
