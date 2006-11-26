@@ -69,7 +69,11 @@ my %tabsysprefs;
 	$tabsysprefs{LabelMARCView}="Catalogue";
 	$tabsysprefs{marc}="Catalogue";
 	$tabsysprefs{marcflavour}="Catalogue";
+
 	$tabsysprefs{serialsadditems}="Catalogue";
+    $tabsysprefs{RoutingSerials}="Catalogue";
+	$tabsysprefs{ReceiveBackIssues}="Catalogue";
+
 	$tabsysprefs{sortbynonfiling}="Catalogue";
 	$tabsysprefs{MARCOrgCode}="Catalogue";
 	$tabsysprefs{z3950AuthorAuthFields}="Catalogue";
