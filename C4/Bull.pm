@@ -326,6 +326,7 @@ sub newsubscription {
 	 				$numberingmethod, $status, $notes);
 	#then create the 1st waited number
 	my $subscriptionid = $dbh->{'mysql_insertid'};
+        if(!(defined($notes))){ $notes = ''; } # as librariannote can't be null
 	$sth = $dbh->prepare("insert into subscriptionhistory (biblionumber, subscriptionid, histstartdate, enddate, missinglist, recievedlist, opacnote, librariannote) values (?,?,?,?,?,?,?,?)");
 	$sth->execute($biblionumber, $subscriptionid, format_date_in_iso($startdate), 0, "", "", "", $notes);
 	# reread subscription to get a hash (for calculation of the 1st issue number)
@@ -1234,6 +1235,7 @@ sub old_newsubscription {
     #then create the 1st waited number
     my $subscriptionid = $dbh->{'mysql_insertid'};
     my $enddate        = GetSubscriptionExpirationDate($subscriptionid);
+    if(!(defined($notes))){ $notes = ''; } # as librariannote can't be null
 
     $sth =
         $dbh->prepare(
