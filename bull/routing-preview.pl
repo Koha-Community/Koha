@@ -17,7 +17,6 @@ use C4::Context;
 use HTML::Template;
 use C4::Search;
 use C4::Bull;
-use Data::Dumper;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
@@ -68,8 +67,6 @@ if($ok){
                                  AND cancellationdate is NULL AND (found <> 'F' or found is NULL)");
         $sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
         my $data = $sth->fetchrow_hashref;
-#	warn Dumper($data);
-#       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
 	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
 	    UpdateReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
         } else {

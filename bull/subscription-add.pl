@@ -52,7 +52,6 @@ for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         $wkno++;    
 }
 chop($weekarrayjs);
-# warn $weekarrayjs;
 
 my $sub_on;
 my @subscription_types = (

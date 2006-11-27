@@ -35,8 +35,6 @@ my $env;
 
 if($searchstring){
     my ($count, $members) = &BornameSearch($env, $searchstring, "surname", "advanced");
-    warn Dumper($count);
-    warn Dumper($members);
     
     $template->param(
 	subscriptionid => $subscriptionid,

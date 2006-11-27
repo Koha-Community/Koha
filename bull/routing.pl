@@ -16,7 +16,6 @@ use C4::Context;
 use HTML::Template;
 use C4::Search;
 use C4::Bull;
-use Data::Dumper;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
@@ -46,9 +45,6 @@ my $subs = getsubscription($subscriptionid);
 my ($count,@serials) = old_getserials($subscriptionid);
 my ($serialdates) = getlatestserials($subscriptionid,$count);
 
-use Data::Dumper;
-warn "count $count";
-warn Dumper($serialdates);
 my @dates;
 my $i=0;
 foreach my $dateseq (@$serialdates) {
@@ -62,7 +58,6 @@ foreach my $dateseq (@$serialdates) {
         }
         $i++;
 }
-warn Dumper(@dates);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/routing.tmpl",
@@ -107,7 +102,7 @@ for(my $i=0;$i<$routing;$i++){
     
     push(@results, $data);
 }
-# warn Dumper(@results);
+
 # for adding routing list
 my $new;
 if ($op eq 'new') {
