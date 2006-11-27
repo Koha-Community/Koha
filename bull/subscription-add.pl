@@ -277,9 +277,19 @@ if(C4::Context->preference("RoutingSerials")){
            }
            push( @sub_type_data, \%row );
         }    
-    $template->param(subtype => \@sub_type_data,
- 	         weekarrayjs => $weekarrayjs,
-	         weekno => $weekno,
+        my $dateformat;
+        my $dateformatcode = C4::Context->preference('dateformat');
+        if($dateformatcode eq 'US' || $dateformatcode eq 'us'){
+            $dateformat = '%m/%d/%Y';
+        } elsif ($dateformatcode eq 'ISO' || $dateformatcode eq 'iso'){
+            $dateformat = '%Y/%m/%d';
+        } else {
+            $dateformat = '%d/%m/%Y';
+        }
+        $template->param(subtype => \@sub_type_data,
+                    weekarrayjs => $weekarrayjs,
+                    weekno => $weekno,
+                    dateformat => $dateformat,
 	);
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
