@@ -181,7 +181,7 @@ $template->param(
 	biblionumber => $subs->{biblionumber},
 	bibliotitle => $subs->{bibliotitle},
 	notes => $subs->{notes},
-	subscriptionid => $subs->{subscriptionid},
+	subscriptionid => $subscriptionid,
 	serialslist => \@serialslist,
 	totalissues => $totalissues,
         weekarrayjs => $weekarrayjs,
