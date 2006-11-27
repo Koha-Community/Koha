@@ -372,6 +372,7 @@ my %requiretables = (
 							recievedlist longtext NOT NULL,
 							opacnote varchar(150) NOT NULL default '',
 							librariannote varchar(150) NOT NULL default '',
+	                                                lastbranch varchar(15) default NULL,
 							PRIMARY KEY  (subscriptionid),
 							KEY biblionumber (biblionumber)
 				)",
@@ -1593,6 +1594,16 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
+    subscriptionhistory => [
+        {
+            field   => 'lastbranch',
+            type    => 'varchar(15)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => ''
+        },
+    ],    
     auth_header =>[
         {
             field => 'authtrees',
@@ -2278,6 +2289,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.57  2006/11/27 04:24:17  bob_lyon
+# Adding in column to track the last branch used for a serial to save librarian having to select each time
+#
 # Revision 1.100.2.56  2006/11/26 23:38:47  bob_lyon
 # Adding in new columns for serial and subscription tables so they update existing database tables
 #
