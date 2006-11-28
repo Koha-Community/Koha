@@ -1570,7 +1570,7 @@ sub old_serialchangestatus {
 		                $sth->execute($subscriptionid);
 		                my $val = $sth->fetchrow_hashref;
 		                # next date (calculated from actual date & frequency parameters)
-		                my $nextplanneddate = Get_Next_Date($planneddate,$val);
+		                my $nextplanneddate = GetNextDate($planneddate,$val);
 		                # next issue number
 		        #       my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
 		                my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3) = New_Get_Next_Seq($val,$nextplanneddate);
