@@ -4,6 +4,15 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
+<!-- TMPL_IF NAME="parameter_check" -->
+<h2 class="error">Error:</h2>
+<p>The following koha2marclinks need to be set for this to work properly:</p>
+<ul>
+<!-- TMPL_LOOP NAME="parameter_check" -->
+<li><!-- TMPL_VAR NAME="errorline" -->
+<!-- /TMPL_LOOP -->
+</ul>
+<!-- /TMPL_IF -->
 <div class="data"><h1>Receive Issues for <!-- TMPL_VAR name="bibliotitle" --></h1>
 
 <form class="inline" method="get" action="subscription-detail.pl">
