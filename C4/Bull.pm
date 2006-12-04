@@ -56,7 +56,8 @@ Give all XYZ functions
 			&getSupplierListWithLateIssues &GetLateIssues &GetMissingIssues
                         &getroutinglist &delroutingmember &addroutingmember &reorder_members
                         &check_routing &getsupplierbyserialid &updateClaim &removeMissingIssue &abouttoexpire
-                        &old_getserials &old_newsubscription &old_modsubscription &old_serialchangestatus);
+                        &old_getserials &old_newsubscription &old_modsubscription &old_serialchangestatus
+                        &is_able_to_receive);
 
 # for removing the missing issue sequence from the box on check-in page
 sub removeMissingIssue {
@@ -694,6 +695,36 @@ sub newissue {
     (serialseq,subscriptionid,biblionumber,status,publisheddate,planneddate) 
   VALUES (?,?,?,?,?,?)");
 	$sth->execute($serialseq,$subscriptionid,$biblionumber,$status,$publisheddate, $planneddate);
+}
+=head2 is_able_to_receive
+
+   is_able_to_receive();
+   contains an array of kohafields to check
+   my @fields = ('items.dateaccessioned','items.notforloan','items.location','items.itemnotes',
+                 'items.itemcallnumber','items.holdingbranch','items.homebranch','items.barcode');
+   returns nothing or an array indicating which koha2marklins are not set for the serialsitemize subroutine
+=cut
+
+sub is_able_to_receive {
+        my @fields = ('items.dateaccessioned','items.notforloan','items.location','items.itemnotes','items.itemcallnumber','items.holdingbranch','items.homebranch','items.barcode');
+        my @errors;
+        for(my $i=0;$i<@fields;$i++){
+	    my $dbh= C4::Context->dbh;
+	    my $sth=$dbh->prepare("SELECT tagfield,tagsubfield
+                                   FROM marc_subfield_structure
+                                   WHERE kohafield = ?");
+            $sth->execute($fields[$i]);
+            my $data=$sth->fetchrow_hashref;
+            if($data->{'tagfield'} && $data->{'tagsubfield'}){
+		# is ok
+	    } else {
+		my %line;
+		$line{"errorline"} = $fields[$i];
+		push @errors,\%line;
+	    }
+            $sth->finish;
+        }
+        return @errors;
 }
 
 =head2 serialsitemize

@@ -204,11 +204,13 @@ if (C4::Context->preference("serialsadditems")){
 	$template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
 }
 
+my @parameter_check = is_able_to_receive();
 
 $template->param(
                         user => $auser,    
 			serialslist => \@serialslist,
-                        count => $count,    
+                        count => $count,
+                        parameter_check => \@parameter_check,    
 			biblionumber => $subscription->{biblionumber},
 			histstartdate => format_date($solhistory->{'histstartdate'}),
 			enddate => format_date($solhistory->{'enddate'}),
