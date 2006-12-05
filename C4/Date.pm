@@ -4,7 +4,7 @@ package C4::Date;
 
 use strict;
 use C4::Context;
-use Date::Manip;
+use Date::Calc qw(Parse_Date Decode_Date_EU Decode_Date_US Time_to_Date check_date);
 
 require Exporter;
 
@@ -61,30 +61,34 @@ sub format_date
 		return "";
 	}
 
-	my $dateformat = get_date_format();
-
-	if ( $dateformat eq "us" )
-	{
-		Date_Init("DateFormat=US");
-		$olddate = ParseDate($olddate);
-		$newdate = UnixDate($olddate,'%m/%d/%Y');
-	}
-	elsif ( $dateformat eq "metric" )
-	{
-		Date_Init("DateFormat=metric");
-		$olddate = ParseDate($olddate);
-		$newdate = UnixDate($olddate,'%d/%m/%Y');
-	}
-	elsif ( $dateformat eq "iso" )
-	{
-		Date_Init("DateFormat=iso");
-		$olddate = ParseDate($olddate);
-		$newdate = UnixDate($olddate,'%Y-%m-%d');
-	}
-	else
-	{
-		return "Invalid date format: $dateformat. Please change in system preferences";
-	}
+    warn $olddate;
+#     $olddate=~s#/|\.|-##g;
+    my ($year,$month,$day)=Parse_Date($olddate);
+    ($year,$month,$day)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+# 	warn "$olddate annee $year mois $month jour $day";
+    if ($year>0 && $month>0){
+      my $dateformat = get_date_format();
+      $dateformat="metric" if (index(":",$olddate)>0);
+      if ( $dateformat eq "us" )
+      {
+          $newdate = sprintf("%02d/%02d/%04d",$month,$day,$year);
+      }
+      elsif ( $dateformat eq "metric" )
+      {
+          $newdate = sprintf("%02d/%02d/%04d",$day,$month,$year);
+      }
+      elsif ( $dateformat eq "iso" )
+      {
+  # 		Date_Init("DateFormat=iso");
+          $newdate = sprintf("%04d-%02d-%02d",$year,$month,$day);
+      }
+      else
+      {
+          return "Invalid date format: $dateformat. Please change in system preferences";
+      }
+      warn "newdate :$newdate";
+    }
+    return $newdate;
 }
 
 sub format_date_in_iso
@@ -98,28 +102,44 @@ sub format_date_in_iso
         }
                 
         my $dateformat = get_date_format();
-
+        my ($year,$month,$day);
+        my @date;
+        my $tmpolddate=$olddate;
+        $tmpolddate=~s#/|\.|-|\\##g;
+        $dateformat="metric" if (index(":",$olddate)>0);
         if ( $dateformat eq "us" )
         {
-                Date_Init("DateFormat=US");
-                $olddate = ParseDate($olddate);
+          ($month,$day,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+          if ($month>0 && $day >0){
+                @date = Decode_Date_US($tmpolddate);
+          } else {
+            @date=($year, $month,$day)
+          }
         }
         elsif ( $dateformat eq "metric" )
         {
-                Date_Init("DateFormat=metric");
-                $olddate = ParseDate($olddate);
+          ($day,$month,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+          if ($month>0 && $day >0){
+                @date = Decode_Date_EU($tmpolddate);
+          } else {
+            @date=($year, $month,$day)
+          }
         }
         elsif ( $dateformat eq "iso" )
         {
-                Date_Init("DateFormat=iso");
-                $olddate = ParseDate($olddate);
+          ($year,$month,$day)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+          if ($month>0 && $day >0){
+            @date=($year, $month,$day) if (check_date($year,$month,$day));
+          } else {
+            @date=($year, $month,$day)
+          }
         }
         else
         {
-                return "9999-99-99";
+           return "9999-99-99";
         }
 
-	$newdate = UnixDate($olddate, '%Y-%m-%d');
+	$newdate = sprintf("%04d-%02d-%02d",$date[0],$date[1],$date[2]);
 
 	return $newdate;
 }

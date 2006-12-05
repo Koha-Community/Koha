@@ -19,6 +19,8 @@ my $subscriptionid = $query->param('subscriptionid');
 my $auser = $query->param('user');
 my $histstartdate = format_date_in_iso($query->param('histstartdate'));
 my $enddate = format_date_in_iso($query->param('enddate'));
+warn "param :".$query->param('histstartdate')."format_date_in_iso".$histstartdate;
+warn "param :".$query->param('enddate')."format_date_in_iso".$enddate;
 my $recievedlist = $query->param('recievedlist');
 my $missinglist = $query->param('missinglist');
 my $opacnote = $query->param('opacnote');
@@ -63,7 +65,7 @@ if ($op eq 'serialchangestatus') {
 		
 		my ($oldstatus) = $sth->fetchrow;
 		if ($serialids[$i]) {
-            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso("today"));
+            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):sprintf("%04d-%02d-%02d",Date::Calc::Today));
                     if(C4::Context->preference("RoutingSerials")){
 			old_serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
 		    } else {
@@ -88,7 +90,7 @@ if ($op eq 'serialchangestatus') {
 			}
 		} else {
 			# add a special issue
-            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):format_date_in_iso("today"));
+            my $planneddate = ($planneddates[$i]?format_date_in_iso($planneddates[$i]):sprintf("%04d-%02d-%02d",Date::Calc::Today));
 			if ($serialseqs[$i]) {
               newissue($serialseqs[$i],$subscriptionid,$subscription->{bibnum},$status[$i],format_date_in_iso($publisheddates[$i]),$planneddate);
               my $rq=$dbh->prepare("SELECT LAST_INSERT_ID()");

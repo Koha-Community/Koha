@@ -22,8 +22,8 @@ package C4::Members;
 use strict;
 require Exporter;
 use C4::Context;
-use Date::Manip;
 use C4::Date;
+use Date::Calc qw(Add_Delta_YM);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -129,17 +129,24 @@ sub newmember {
 	my (%data) = @_;
 	my $dbh = C4::Context->dbh;
 	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-	$data{'joining'} = &ParseDate("today") unless $data{'joining'};
-	$data{'joining'}=format_date_in_iso($data{'joining'});
+	if ($data{'joining'}){
+      $data{'joining'}=format_date_in_iso($data{'joining'});
+    } else {
+      $data{'joining'} = sprintf("%04d-%02d-%02d",Date::Calc::Today);
+    }
 	# if expirydate is not set, calculate it from borrower category subscription duration
-	unless ($data{'expiry'}) {
-		my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
-		$sth->execute($data{'categorycode'});
-		my ($enrolmentperiod) = $sth->fetchrow;
-		$enrolmentperiod = 12 unless ($enrolmentperiod);
-		$data{'expiry'} = &DateCalc($data{'joining'},"$enrolmentperiod years");
+	if ($data{'expiry'}) {
+      $data{'expiry'}=format_date_in_iso($data{'expiry'});
+    } else {
+      my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+      $sth->execute($data{'categorycode'});
+      my ($enrolmentperiod) = $sth->fetchrow;
+      $enrolmentperiod = 1 unless ($enrolmentperiod);
+      my ($y,$m,$d)=split /-/,$data{'joining'};
+      foreach(Add_Delta_YM($y,$m,$d,$enrolmentperiod,0)){warn "$_\t";}
+      warn "".$enrolmentperiod;
+      $data{'expiry'} = sprintf("%04d-%02d-%02d",Add_Delta_YM($y,$m,$d,$enrolmentperiod,0));
 	}
-	$data{'expiry'}=format_date_in_iso($data{'expiry'});
 # 	$data{'borrowernumber'}=NewBorrowerNumber();
 	my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 	firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,

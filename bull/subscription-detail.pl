@@ -10,7 +10,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
-use Date::Manip;
+use Date::Calc;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -126,15 +126,16 @@ my ($user, $cookie, $sessionID, $flags)
 
 my $weekarrayjs='';
 my $count = 0;
-my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
-my $firstday = Date_DayOfYear($month,$day,$year);
-my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
+my ($year, $month, $day) = Date::Calc::Today;
+my $firstday = Day_of_Year($month,$day,$year);
+my $wkno = Week_of_Year($month,$day,$year,1); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
                 $count = $i;
                 if($wkno > 52){$year++; $wkno=1;}
                 if($count>365){$count=$i-365;}
-                my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+#                 my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+                my ($y,$m,$d) = Add_Delta_Days($year,1,1, $count - 1);
                 my $output = "$y-$m-$d";
                 $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
                 $wkno++;
