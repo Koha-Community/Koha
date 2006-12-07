@@ -87,7 +87,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $val=count_items($record);
-$template->param("candelete"=>1) if ($val==0||C4::Context->userenv->{flags} eq "1");
+$template->param("candelete"=>1) if ($val==0||(C4::Context->userenv && C4::Context->userenv->{flags} eq "1"));
 
 #Getting the list of all frameworks
 my $queryfwk =$dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
