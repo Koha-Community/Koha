@@ -3,27 +3,23 @@
 <!-- TMPL_INCLUDE name="intranet-nav.inc" -->
 
 <div id="main">
-
-	<h1>
-			Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> Invoice <i><!-- TMPL_VAR NAME="invoice" --></i>
-	</h1>
+	<h1>Receipt parcel for <em><!-- TMPL_VAR NAME="name" --></em></h1>
 	
-<ul>
-<li>Invoice: <!-- TMPL_VAR name="invoice" --></li>
-<li>Received by: <!-- TMPL_VAR name="user" --></li>
-<li>Date: <!-- TMPL_VAR name="formatteddatereceived"--></li>
-</ul>
+	<ul class="notes">
+		<li><strong>Invoice:</strong> <!-- TMPL_VAR NAME="invoice" --></li>
+        <li><strong>Date:</strong> <!-- TMPL_VAR name="formatteddatereceived"--></li>
+	</ul>
 	
+	<div class="basket">
 	<h2> Items in parcel</h2>
-	<h5>
-	<!-- TMPL_VAR NAME="countreceived" --> bibliographic record(s) received
-	</h5>
+	<p>
+	<!-- TMPL_VAR NAME="countreceived" --> records received
+	</p>
+	
 	<table>
 		<tr>
 			<th>Basket</th>
-			<th>ISBN</th>
 			<th>Title</th>
-			<th>Author</th>
 			<th>Est. cost</th>
 			<th>Qty ordered</th>
 			<th>P&amp;P</th>
@@ -32,51 +28,40 @@
 			<th>Total</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop_received" -->
-			<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-				<td><!-- TMPL_VAR NAME="basketno" --></td>
-				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&amp;datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-				<td><!-- TMPL_VAR NAME="author" --></td>
-				<td><!-- TMPL_VAR NAME="ecost" --></td>
-				<td><!-- TMPL_VAR NAME="quantity" --></td>
-				<td>&nbsp;</td>
-				<td><!-- TMPL_VAR NAME="unitprice" --></td>
-				<td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
-				<td><!-- TMPL_VAR NAME="total" --></td>
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td></td>
+				<td class="number"><!-- TMPL_VAR NAME="unitprice" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="total" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 		<tr>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th><!-- TMPL_VAR NAME="tototal" --></th>
-		</tr>
-		<tr>
-			<td colspan="7" rowspan="2">
-			<div class="help"><h3>HELP</h3>
-				<p>The total at the bottom of the page should be within a few cents of the total for the invoice.</p></div>
+			<td colspan="5" rowspan="3">
+			&nbsp;
 			</td>
-			<td colspan="2" scope="row">GST</td>
+			<td colspan="2" class="total"><b>GST:</b></td>
 			<td><!-- TMPL_VAR NAME="gst" --></td>
 		</tr>
 		<tr>
-			<td colspan="2" scope="row">FREIGHT</td>
+			<td colspan="2" class="total"><b>FREIGHT:</b></td>
 			<td><!-- TMPL_VAR NAME="freight" --></td>
 		</tr>
 		<tr>
-			<td colspan="2" scope="row">TOTAL</td>
+			<td colspan="2" class="total"><b>TOTAL:</b></td>
 			<td><!-- TMPL_VAR NAME="grandtot" --></td>
 		</tr>
 	</table>
+	<div class="help">
+	<strong>Note: </strong>The total at the bottom of the page should be within a few cents of the total for the invoice.
+	</div>
+	</div>
 	
-	<div class="data">
-	<h2>Pending orders </h2>
+	<div class="basket">
+	<h2> Pending orders </h2>
 		<form action="/cgi-bin/koha/acqui/acquire.pl">
 			<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
 			<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
@@ -85,26 +70,29 @@
 			
 			<b>Search ISBN or Title:</b> <input type="text" size="25" name="recieve">
 		</form>
-	</div>
-
-	<table>
+	<p>
+	<form action="" method="get" name="orderform">
+	
+	<table class="small">
 		<tr>
 			<th>Basket</th>
-			<th>ISBN</th>
 			<th>Title</th>
-			<th>Author</th>
+			<th>Ordered</th>
+			<th>Received</th>
+			<th>&nbsp;</th>
 		</tr>
-		<!-- TMPL_VAR NAME="countpending" -->
+		<!-- TMPL_VAR NAME="countpending" --> lines
 		<!-- TMPL_LOOP NAME="loop_orders" -->
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
-				<td><!-- TMPL_VAR NAME="basketno" --></td>
-				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&amp;catview=yes""><!-- TMPL_VAR NAME="title" --></a></td>
-				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><!-- TMPL_VAR NAME="title" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+                <td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&catview=yes" class="button acquisition">Recieve</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	</div>
-
 </div>
+
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

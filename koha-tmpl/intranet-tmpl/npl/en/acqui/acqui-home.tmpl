@@ -26,9 +26,13 @@
 <!-- currencies-->
 <div class="details">
 <!-- TMPL_IF NAME="loop_currency" -->
-<table>
-	<caption>Exchange Rates</caption>
+<h4>Currencies</h4>
+<!-- TMPL_ELSE -->
+<h4>No Currencies Configured</h4>
+<!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="loop_currency" -->
+<table>
 	<!-- TMPL_LOOP name="loop_currency" -->
 		<tr>
 			<th>
@@ -40,16 +44,13 @@
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
-</table><input type="submit" class="submit" value="Save Exchange Rate" />
-<!-- TMPL_ELSE --><form action="/cgi-bin/koha/admin/currency.pl" method="post">
-        <input type="hidden" name="op" value="add_form" /><input type="submit" class="submit" value="Add Currency" />
-
-        </form><!-- /TMPL_IF -->
+</table><input type="submit" class="submit" value="Update Exchange Rates" /><!-- /TMPL_IF -->
+<a href="/cgi-bin/koha/admin/currency.pl?op=add_form">Add Currency</a>
 </div>
 
 <!-- suggestions -->
 <div class="details">
-	<h3>Pending Suggestions</h3>
+	<h4>Pending Suggestions</h4>
 		<!-- TMPL_IF name="suggestion" -->
 			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage Suggestions</a>
 		<!-- TMPL_ELSE -->
