@@ -63,6 +63,7 @@ orders, basket and parcels.
    &GetHistory
   &ModOrder &ModReceiveOrder 
   &GetSingleOrder
+  &bookseller
 );
 
 
@@ -957,6 +958,39 @@ sub GetHistory {
         }
     }
     return \@order_loop, $total_qty, $total_price, $total_qtyreceived;
+}
+
+#------------------------------------------------------------#
+
+=head3 bookseller
+
+=over 4
+
+($count, @results) = &bookseller($searchstring);
+
+Looks up a book seller. C<$searchstring> may be either a book seller
+ID, or a string to look for in the book seller's name.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of of the
+aqbooksellers table in the Koha database.
+
+=back
+
+=cut
+
+sub bookseller {
+        my ($searchstring) = @_;
+        my $dbh            = C4::Context->dbh;
+        my $sth            =
+        $dbh->prepare("Select * from aqbooksellers where name like ? or id = ?");
+        $sth->execute( "$searchstring%", $searchstring );
+        my @results;
+        while ( my $data = $sth->fetchrow_hashref ) {
+	            push( @results, $data );
+	        }
+        $sth->finish;
+        return ( scalar(@results), @results );
 }
 
 END { }    # module clean-up code here (global destructor)
