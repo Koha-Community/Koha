@@ -14,7 +14,7 @@ my $query = new CGI;
 
 my $serialid = $query->param('serialid');
 my $op = $query->param('op');
-my $claimletter = $query->param('claimletter');
+# my $claimletter = $query->param('claimletter');
 my $supplierid = $query->param('supplierid');
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
@@ -26,8 +26,8 @@ foreach my $supplierid (keys %supplierlist){
 	push @select_supplier, $supplierid
 }
 
-my @select_letter = (1,2,3,4);
-my %letters = (1=>'Claim Form 1',2=>'Claim Form 2',3=>'Claim Form 3',4=>'Claim Form 4');
+# my @select_letter = (1,2,3,4);
+# my %letters = (1=>'Claim Form 1',2=>'Claim Form 2',3=>'Claim Form 3',4=>'Claim Form 4');
 my ($count2, @missingissues) = GetMissingIssues($supplierid,$serialid);
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
@@ -37,12 +37,12 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-size     => 1,
 			-multiple => 0 );
 
-my $CGIletter=CGI::scrolling_list( -name     => 'claimletter',
-			-values   => \@select_letter,
-			-default  => $claimletter,
-			-labels   => \%letters,
-			-size     => 1,
-			-multiple => 0 );
+# my $CGIletter=CGI::scrolling_list( -name     => 'claimletter',
+#			-values   => \@select_letter,
+#			-default  => $claimletter,
+#			-labels   => \%letters,
+#			-size     => 1,
+#			-multiple => 0 );
 my ($singlesupplier,@supplierinfo);
 if($supplierid){
    ($singlesupplier,@supplierinfo)=bookseller($supplierid);
@@ -69,11 +69,11 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param(
 	CGIsupplier => $CGIsupplier,
-    	CGIletter => $CGIletter,
+#    	CGIletter => $CGIletter,
         preview => $preview,
         missingissues => \@missingissues,
         supplierid => $supplierid,
-        claimletter => $claimletter,
+#       claimletter => $claimletter,
         singlesupplier => $singlesupplier,
         supplierloop => \@supplierinfo,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
