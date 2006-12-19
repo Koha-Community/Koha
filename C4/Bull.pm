@@ -783,19 +783,24 @@ sub serialsitemize {
 #     warn "biblionumber : ".$data->{biblionumber};
 	my $bibid=MARCfind_MARCbibid_from_oldbiblionumber($dbh,$data->{biblionumber});
 	my $fwk=MARCfind_frameworkcode($dbh,$bibid);
-	if ($info->{barcode}){
-		my @errors;
-		my $exists = itemdata($info->{'barcode'});
+        my $exists;
+        my @errors;
+        # altered to allow for those that don't wish to use barcodes
+        if ($info->{barcode}){
+		$exists = itemdata($info->{'barcode'});
 		push @errors,"barcode_not_unique" if($exists);
+	}
 		unless ($exists){
 			my $marcrecord = MARC::Record->new();
-			my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.barcode",$fwk);
+		        if ($info->{barcode}){
+			    my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.barcode",$fwk);
 # 			warn "items.barcode : $tag , $subfield";
-			my $newField = MARC::Field->new(
+			    my $newField = MARC::Field->new(
 				"$tag",'','',
 				"$subfield" => $info->{barcode}
-			);
-			$marcrecord->insert_fields_ordered($newField);
+			    );
+			    $marcrecord->insert_fields_ordered($newField);
+			}
 			if ($info->{branch}){
 				my ($tag,$subfield)=MARCfind_marc_from_kohafield($dbh,"items.homebranch",$fwk);
 # 				warn "items.homebranch : $tag , $subfield";
@@ -888,7 +893,6 @@ sub serialsitemize {
 			return 1;
 		}
 		return (0,@errors);
-	}
 }
 
 sub delissue {
