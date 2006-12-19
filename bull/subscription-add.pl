@@ -12,7 +12,7 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use HTML::Template;
 use C4::Bull;
-use Date::Calc;
+use Date::Calc qw(:all);
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -39,8 +39,8 @@ my ($template, $loggedinuser, $cookie)
 my $weekarrayjs='';
 my $count = 0;
 my ($year, $month, $day) = Date::Calc::Today;
-my $firstday = Day_of_Year($month,$day,$year);
-my $wkno = Week_of_Year($month,$day,$year,1); # week starting monday
+my $firstday = Day_of_Year($year,$month,$day);
+my $wkno = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         $count = $i;
