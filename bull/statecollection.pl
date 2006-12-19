@@ -11,6 +11,7 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Bull;
 use HTML::Template;
+use Date::Calc qw(:all);
 
 my $query = new CGI;
 my $op = $query->param('op');
