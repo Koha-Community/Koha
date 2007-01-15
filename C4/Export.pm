@@ -33,7 +33,7 @@ sub export_bibs_by_date_to_file {
         where (datecreated >= ? and datecreated <= ?)
         and (biblio.biblionumber = biblioitems.biblionumber)
         and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-        and (marc_biblio.biblionumber = biblio.biblionumber) limit 2"
+        and (marc_biblio.biblionumber = biblio.biblionumber)"
     );
     $sth->execute( $start_date, $end_date );
 
