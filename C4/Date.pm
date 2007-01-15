@@ -61,7 +61,7 @@ sub format_date
 		return "";
 	}
 
-    warn $olddate;
+#     warn $olddate;
 #     $olddate=~s#/|\.|-##g;
     my ($year,$month,$day)=Parse_Date($olddate);
     ($year,$month,$day)=split /-|\/|\.|:/,$olddate unless ($year && $month);
@@ -86,7 +86,7 @@ sub format_date
       {
           return "Invalid date format: $dateformat. Please change in system preferences";
       }
-      warn "newdate :$newdate";
+#       warn "newdate :$newdate";
     }
     return $newdate;
 }
