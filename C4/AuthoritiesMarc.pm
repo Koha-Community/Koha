@@ -195,6 +195,7 @@ sub authoritysearch {
 		chop $tags_using_authtype;
 		my $reported_tag;
 		# if the library has a summary defined, use it. Otherwise, build a standard one
+		$summary=BuildSummary($record,$summary);
 		if ($summary) {
 			my @fields = $record->fields();
             		$reported_tag = '$9'.$result[$counter];
@@ -532,7 +533,7 @@ sub AUTHaddauthority {
 #  existing authids in the records. I've adjusted below to account for this instance --JF.
 	if ($authid) {
 		$dbh->do("lock tables auth_header WRITE,auth_subfield_table WRITE, auth_word WRITE, stopwords READ");
-		my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode) values (?,now(),?)");
+		my $sth=$dbh->prepare("insert ignore into auth_header (authid,datecreated,authtypecode) values (?,now(),?)");
 		$sth->execute($authid,$authtypecode);
 		$sth->finish;
 # if authid empty => true add, find a new authid number
@@ -1132,8 +1133,6 @@ sub FindDuplicate {
 sub BuildSummary{
 	my $record = shift @_;
 	my $summary = shift @_;
-    ##TODO : use langages from authorised_values
-    ## AND Thesaurii from auth_types
 	my %language;
 	$language{'fre'}="Français";
 	$language{'eng'}="Anglais";
@@ -1187,33 +1186,49 @@ sub BuildSummary{
 			}
 			# rejected form(s)
 			foreach my $field ($record->field('3..')) {
-			  $notes.= '<span class="note">'.$field->subfield('a')."</span>\n";
+			  $notes.= '<span class="note">'.$field->subfield('a')."</span>";
 			}
 			foreach my $field ($record->field('4..')) {
 			  my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : " if ($field->subfield('2'));
-			  $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+			  $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- ";
 			}
 			# see :
 			foreach my $field ($record->field('5..')) {
 		        
 				if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-				  $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				  $broaderterms.= '<span class="BT">';
+#                   $broaderterms.='<a href="detail.pl?authid='.$field->subfield('3').'">';
+                  $broaderterms.=$field->subfield('a');
+#                   $broaderterms.="</a>";
+                  $broaderterms.="</span> -- ";
 				} elsif (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'h')){
-				  $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				  $narrowerterms.= '<span class="NT">';
+#                   $narrowerterms.='<a href="detail.pl?authid='.$field->subfield('3').'">';
+                  $narrowerterms.=$field->subfield('a');
+#                   $narrowerterms.="</a>";
+                  $narrowerterms.="</span> -- ";
 				} elsif ($field->subfield('a')) {
-				  $seealso.= '<span class="RT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+				  $seealso.= '<span class="RT">';
+#                   $seealso.= '<a href="detail.pl?authid='.$field->subfield('3').'">';
+                  $seealso.= $field->subfield('a');
+#                   $seealso.= "</a>";
+                  $seealso.= "</span> -- ";
 				}
 			}
 			# // form
 			foreach my $field ($record->field('7..')) {
 				my $lang = substr($field->subfield('8'),3,3);
-				$seeheading.= '<span class="langue"> En '.$language{$lang}.' : </span><span class="OT"> '.$field->subfield('a')."</span><br />\n";	
+				$seeheading.= '<span class="langue"> En '.$language{$lang}.' : </span><span class="OT"> '.$field->subfield('a')."</span>\n";	
 			}
             $broaderterms =~s/-- \n$//;
             $narrowerterms =~s/-- \n$//;
             $seealso =~s/-- \n$//;
             $see =~s/-- \n$//;
-			$summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+			$summary = "<b>";
+#             $summary.= "<a href=\"detail.pl?authid=$authid\">";
+            $summary.=$heading;
+#             $summary.="</a>";
+            $summary.="</b><br />".($notes?"$notes <br />":"");
 			$summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
 			$summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
 			$summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
@@ -1335,6 +1350,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.25  2007/01/15 17:56:43  hdl
+# Bug Fixing authtrees
+#
 # Revision 1.9.2.24  2006/08/10 12:42:33  tipaul
 # warn commenting + some bugfixes I forgot to commit (for authorities editing)
 #

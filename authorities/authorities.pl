@@ -330,16 +330,16 @@ if ($op eq "add") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $record;
-	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+ 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1"||C4::Context->preference('marcflavour') eq "UNIMARC") {
         my %indicators;
         for (my $i=0;$i<=$#ind_tag;$i++) {
             $indicators{$ind_tag[$i]} = $indicator[$i];
         }
         $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	} else {
-        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-	}
+ 	} else {
+         my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+ 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+ 	}
 	warn "REC : ".$record->as_formatted;
         # 
 # MARC::Record built => now, record in DB
@@ -376,16 +376,16 @@ if ($op eq "add") {
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $record;
-	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
+	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1" ||C4::Context->preference('marcflavour') eq "UNIMARC") {
         my %indicators;
         for (my $i=0;$i<=$#ind_tag;$i++) {
             $indicators{$ind_tag[$i]} = $indicator[$i];
         }
         $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	} else {
-        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-	}
+ 	} else {
+         my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+ 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+ 	}
 	warn "REC : ".$record->as_formatted;
 	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
 	$record->append_fields($field);
