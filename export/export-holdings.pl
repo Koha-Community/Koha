@@ -14,8 +14,6 @@ my $format     = $query->param("op");
 my $start_date = $query->param("from");
 my $end_date   = $query->param("to");
 
-my $start_date = '2006-08-30';
-my $end_date   = '2006-08-31';
 my $filename   = "export.$format";
 
 if ($format) {
