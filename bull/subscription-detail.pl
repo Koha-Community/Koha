@@ -128,7 +128,7 @@ my $weekarrayjs='';
 my $count = 0;
 my ($year, $month, $day) = Date::Calc::Today;
 my $firstday = Day_of_Year($year,$month,$day);
-my $wkno = Week_of_Year($year,$month,$day); # week starting monday
+my ($year2,$wkno) = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
                 $count = $i;
@@ -142,51 +142,14 @@ for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         }
 chop($weekarrayjs);
 
+$subs->{startdate}=format_date($subs->{startdate});
+$subs->{firstacquidate}=format_date($subs->{firstacquidate});
 $template->param(
-	user => $subs->{auser},
-	librarian => $subs->{librarian},
-	aqbooksellerid => $subs->{aqbooksellerid},
-	aqbooksellername => $subs->{aqbooksellername},
-	cost => $subs->{cost},
-	aqbudgetid => $subs->{aqbudgetid},
-	bookfundid => $subs->{bookfundid},
-	startdate => format_date($subs->{startdate}),
-	periodicity => $subs->{periodicity},
-        firstacquidate => format_date($subs->{firstacquidate}),    
-	dow => $subs->{dow},
-        irregularity => $subs->{irregularity},
-        numberlength => $subs->{numberlength},
-        weeklength => $subs->{weeklength},
-        monthlength => $subs->{monthlength},
-        numberpattern => $subs->{numberpattern},
-	add1 => $subs->{add1},
-	every1 => $subs->{every1},
-	whenmorethan1 => $subs->{whenmorethan1},
-	innerloop1 => $subs->{innerloop1},
-	setto1 => $subs->{setto1},
-	lastvalue1 => $subs->{lastvalue1},
-	add2 => $subs->{add2},
-	every2 => $subs->{every2},
-	whenmorethan2 => $subs->{whenmorethan2},
-	setto2 => $subs->{setto2},
-	lastvalue2 => $subs->{lastvalue2},
-	innerloop2 => $subs->{innerloop2},
-	add3 => $subs->{add3},
-	every3 => $subs->{every3},
-	whenmorethan3 => $subs->{whenmorethan3},
-	setto3 => $subs->{setto3},
-	lastvalue3 => $subs->{lastvalue3},
-	innerloop3 => $subs->{innerloop3},
-	numberingmethod => $subs->{numberingmethod},
-	status => $subs->{status},
-	biblionumber => $subs->{biblionumber},
-	bibliotitle => $subs->{bibliotitle},
-	notes => $subs->{notes},
+  %{$subs},
 	subscriptionid => $subscriptionid,
 	serialslist => \@serialslist,
 	totalissues => $totalissues,
         weekarrayjs => $weekarrayjs,
-        callnumber => $subs->{callnumber},
         hemisphere => $hemisphere,
 	);
 $template->param(

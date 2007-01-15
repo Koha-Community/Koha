@@ -590,7 +590,7 @@ sub getserials {
 	while((my $line = $sth->fetchrow_hashref) && $counter <$syspref_counter) {
 		$counter++;
 		$line->{"status".$line->{status}} = 1; # fills a "statusX" value, used for template status select list
-		$line->{"publisheddate"} = format_date($line->{"publisheddate"});
+        $line->{"publisheddate"} = format_date($line->{"publisheddate"});
 		$line->{"planneddate"} = format_date($line->{"planneddate"});
 		push @serials,$line;
 	}

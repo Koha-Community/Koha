@@ -40,7 +40,7 @@ my $weekarrayjs='';
 my $count = 0;
 my ($year, $month, $day) = Date::Calc::Today;
 my $firstday = Day_of_Year($year,$month,$day);
-my $wkno = Week_of_Year($year,$month,$day); # week starting monday
+my ($year2,$wkno) = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         $count = $i;
@@ -61,24 +61,7 @@ my @sub_type_data;
 if ($op eq 'mod') {
 	my $subscriptionid = $query->param('subscriptionid');
 	my $subs = &getsubscription($subscriptionid);
-	$auser = $subs->{'user'};
-	$librarian => $subs->{'librarian'},
-	$cost = $subs->{'cost'};
-	$aqbooksellerid = $subs->{'aqbooksellerid'};
-	$aqbooksellername = $subs->{'aqbooksellername'};
-	$bookfundid = $subs->{'bookfundid'};
-	$aqbudgetid = $subs->{'aqbudgetid'};
-	$startdate = $subs->{'startdate'};
-	$firstacquidate = $subs->{'firstacquidate'};    
-	$periodicity = $subs->{'periodicity'};
-	$dow = $subs->{'dow'};
-        $irregularity = $subs->{'irregularity'};
-        $numberpattern = $subs->{'numberpattern'};
-	$numberlength = $subs->{'numberlength'};
-	$weeklength = $subs->{'weeklength'};
-	$monthlength = $subs->{'monthlength'};
-
-        if($monthlength > 0){
+    if($monthlength > 0){
 	    $sublength = $monthlength;
 	    $sub_on = $subscription_types[2];
 	} elsif ($weeklength>0){
@@ -100,77 +83,17 @@ if ($op eq 'mod') {
            }
            push( @sub_type_data, \%row );
         }
+		$subs->{startdate}=format_date($subs->{startdate});
+		$subs->{firstacquidate}=format_date($subs->{firstacquidate});
     
-	$add1 = $subs->{'add1'};
-	$every1 = $subs->{'every1'};
-	$whenmorethan1 = $subs->{'whenmorethan1'};
-	$setto1 = $subs->{'setto1'};
-	$lastvalue1 = $subs->{'lastvalue1'};
-	$innerloop1 = $subs->{'innerloop1'};
-	$add2 = $subs->{'add2'};
-	$every2 = $subs->{'every2'};
-	$whenmorethan2 = $subs->{'whenmorethan2'};
-	$setto2 = $subs->{'setto2'};
-	$lastvalue2 = $subs->{'lastvalue2'};
-	$innerloop2 = $subs->{'innerloop2'};
-	$add3 = $subs->{'add3'};
-	$every3 = $subs->{'every3'};
-	$whenmorethan3 = $subs->{'whenmorethan3'};
-	$setto3 = $subs->{'setto3'};
-	$lastvalue3 = $subs->{'lastvalue3'};
-	$innerloop3 = $subs->{'innerloop3'};
-	$numberingmethod = $subs->{'numberingmethod'};
-	$status = $subs->{status};
-	$biblionumber = $subs->{'biblionumber'};
-	$bibliotitle = $subs->{'bibliotitle'};
-        $callnumber = $subs->{'callnumber'};
-	$notes = $subs->{'notes'};
-        $hemisphere = $subs->{'hemisphere'};
 	$template->param(
 		$op => 1,
-		user => $auser,
-		librarian => $librarian,
-		aqbooksellerid => $aqbooksellerid,
-		aqbooksellername => $aqbooksellername,
-		cost => $cost,
-		aqbudgetid => $aqbudgetid,
-		bookfundid => $bookfundid,
-		startdate => format_date($startdate),
-		firstacquidate => format_date($firstacquidate),	    
-		periodicity => $periodicity,
-		dow => $dow,
-	        irregularity => $irregularity,
-	        numberpattern => $numberpattern,
+        %{$subs},
 		sublength => $sublength,
 	        subtype => \@sub_type_data,
-		add1 => $add1,
-		every1 => $every1,
-		whenmorethan1 => $whenmorethan1,
-		setto1 => $setto1,
-		lastvalue1 => $lastvalue1,
-		innerloop1 => $innerloop1,
-		add2 => $add2,
-		every2 => $every2,
-		whenmorethan2 => $whenmorethan2,
-		setto2 => $setto2,
-		lastvalue2 => $lastvalue2,
-		innerloop2 => $innerloop2,
-		add3 => $add3,
-		every3 => $every3,
-		whenmorethan3 => $whenmorethan3,
-		setto3 => $setto3,
-		lastvalue3 => $lastvalue3,
-		innerloop3 => $innerloop3,
-		numberingmethod => $numberingmethod,
-		status => $status,
-		biblionumber => $biblionumber,
-		bibliotitle => $bibliotitle,
-	        callnumber => $callnumber,
-		notes => $notes,
 		subscriptionid => $subscriptionid,
 	        weekarrayjs => $weekarrayjs,
 	        weekno => $weekno,
-	        hemisphere => $hemisphere,
 		);
 
 	$template->param(
@@ -251,15 +174,15 @@ if(C4::Context->preference("RoutingSerials")){
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-					$numberingmethod, $status, $callnumber, $notes, $hemisphere
+					"$numberingmethod", "$status", $callnumber, $notes, $hemisphere
 				);
     } else {
 	$subscriptionid = newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-					$numberingmethod, $status, $notes
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
+					"$numberingmethod", "$status", $notes
 				);	
 	
 	}
