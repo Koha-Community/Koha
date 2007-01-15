@@ -1,0 +1,54 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: MARC Export<!-- TMPL_INCLUDE NAME="doc-head-close-calendar.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+
+
+
+<h1>MARC biblio export</h1>
+	<div id="main">
+		<h2 class="parameters">Select start and End dates for holdings export</h2>
+		<form method="post">
+<table cellspacing="0" cellpadding="0" border="0">
+		<tr>
+		<td>From <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" >
+                                            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />
+                                        <script type="text/javascript">
+                                            Calendar.setup({
+                                                inputField     :    "from",
+                                                ifFormat       :    "%Y-%m-%d",
+                                                button         :    "buttonfrom1",
+                                                align          :    "Tl"
+                                            });
+                                        </script>
+			</td>
+
+			<td width=20></td>
+
+			<td>To <input type="text" size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" >
+                                            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonto1" style="cursor: pointer;"  />
+                                        <script type="text/javascript">
+                                            Calendar.setup({
+                                                inputField     :    "to",
+                                                ifFormat       :    "%Y-%m-%d",
+                                                button         :    "buttonto1",
+                                                align          :    "Tl"
+                                            });
+                                        </script>
+			</td>
+			<td width=20></td>
+			<td>
+			<select name="op"  size="1">
+			<option value="csv">CSV</option>
+			<option value="xml">XML</option>
+			</select> <input type="submit" value="Export" class="button parameters">
+
+</td>
+</tr>
+
+
+			</table>
+		</form>
+	</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
