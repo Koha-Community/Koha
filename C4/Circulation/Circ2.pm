@@ -36,6 +36,7 @@ use C4::Reserves2;
 use C4::Koha;
 use C4::Biblio;
 use C4::Accounts;
+use C4::Calendar::Calendar;
 use Date::Manip;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -899,9 +900,17 @@ sub issuebook {
 		my $datedue=time+($loanlength)*86400;
 		my @datearr = localtime($datedue);
 		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-		if ($date) {
-			$dateduef=$date;
-		}
+
+		# now calling addDate() from Calendar.pm (Tumer's holiday module).
+        my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
+        my ($yeardue, $monthdue, $daydue) = split /-/, $dateduef;
+        ($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
+        $dateduef = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
+
+        if ($date) {
+            $dateduef=$date;
+        }
+		
 		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
 		if (C4::Context->preference('ReturnBeforeExpiry') && $dateduef gt $borrower->{expiry}) {
 			$dateduef=$borrower->{expiry};
