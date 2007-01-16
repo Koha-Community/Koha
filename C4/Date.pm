@@ -4,6 +4,11 @@ package C4::Date;
 
 use strict;
 use C4::Context;
+use DateTime;
+use DateTime::Format::ISO8601;
+use DateTime::Format::Strptime;
+use DateTime::Format::Duration;
+use POSIX qw(ceil floor);
 use Date::Calc
   qw(Parse_Date Decode_Date_EU Decode_Date_US Time_to_Date check_date);
 
@@ -19,6 +24,9 @@ $VERSION = 0.01;
   &display_date_format
   &format_date
   &format_date_in_iso
+  &get_date_format_string_for_DHTMLcalendar
+  &DATE_diff &DATE_Add
+  &get_today &DATE_Add_Duration &DATE_obj &get_duration
 );
 
 sub get_date_format {
@@ -138,4 +146,77 @@ sub format_date_in_iso {
 
     return $newdate;
 }
+
+sub DATE_diff {
+## returns 1 if date1>date2 0 if date1==date2 -1 if date1<date2
+    my ( $date1, $date2 ) = @_;
+    my $dt1  = DateTime::Format::ISO8601->parse_datetime($date1);
+    my $dt2  = DateTime::Format::ISO8601->parse_datetime($date2);
+    my $diff = DateTime->compare( $dt1, $dt2 );
+    return $diff;
+}
+
+sub DATE_Add {
+## $amount in days
+    my ( $date, $amount ) = @_;
+    my $dt1 = DateTime::Format::ISO8601->parse_datetime($date);
+    $dt1->add( days => $amount );
+    return $dt1->ymd;
+}
+
+sub DATE_Add_Duration {
+## Similar as above but uses Duration object as amount --used heavily in serials
+    my ( $date, $amount ) = @_;
+    my $dt1 = DateTime::Format::ISO8601->parse_datetime($date);
+    $dt1->add_duration($amount);
+    return $dt1->ymd;
+}
+
+sub get_today {
+    my $dt = DateTime->today;
+    return $dt->ymd;
+}
+
+sub DATE_obj {
+
+    # only send iso dates to this
+    my $date    = shift;
+    my $parser  = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+    my $newdate = $parser->parse_datetime($date);
+    return $newdate;
+}
+
+sub get_duration {
+    my $period = shift;
+
+    my $parse;
+    if ( $period =~ /ays/ ) {
+        $parse = "\%e days";
+    }
+    elsif ( $period =~ /week/ ) {
+        $parse = "\%W weeks";
+    }
+    elsif ( $period =~ /year/ ) {
+        $parse = "\%Y years";
+    }
+    elsif ( $period =~ /onth/ ) {
+        $parse = "\%m months";
+    }
+
+    my $parser   = DateTime::Format::Duration->new( pattern => $parse );
+    my $duration = $parser->parse_duration($period);
+
+    return $duration;
+
+}
+
+sub DATE_subtract {
+    my ( $date1, $date2 ) = @_;
+    my $dt1  = DateTime::Format::ISO8601->parse_datetime($date1);
+    my $dt2  = DateTime::Format::ISO8601->parse_datetime($date2);
+    my $dur  = $dt2->subtract_datetime_absolute($dt1);             ## in seconds
+    my $days = $dur->seconds / ( 60 * 60 * 24 );
+    return floor($days);
+}
+
 1;
