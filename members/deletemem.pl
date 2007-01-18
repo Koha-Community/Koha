@@ -38,7 +38,7 @@ use C4::Auth;
 my $input = new CGI;
 
 my $flagsrequired;
-$flagsrequired->{borrower}=1;
+$flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 
