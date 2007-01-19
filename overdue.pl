@@ -27,6 +27,7 @@ use HTML::Template;
 use C4::Auth;
 use C4::Koha;
 use C4::Acquisition;
+use C4::Date;
 
 my $input = new CGI;
 my $type=$input->param('type');
@@ -116,16 +117,19 @@ my $title;
 my $author;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
+$todaysdate=format_date($todaysdate);
 
 my $dbh = C4::Context->dbh;
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
-my $strsth="select date_due,concat(surname,' ', firstname) as borrower, borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author,borrowers.borrowernumber from issues
-LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber 
-LEFT JOIN items ON issues.itemnumber=items.itemnumber
-LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
-LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber 
+my $strsth="select date_due,concat(surname,' ', firstname) as borrower, 
+  borrowers.phone, borrowers.emailaddress,issues.itemnumber, biblio.title, biblio.author,borrowers.borrowernumber 
+  from issues
+LEFT JOIN borrowers ON (issues.borrowernumber=borrowers.borrowernumber )
+LEFT JOIN items ON (issues.itemnumber=items.itemnumber)
+LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
+LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber )
 where isnull(returndate) ";
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
 $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
@@ -150,6 +154,7 @@ $sth->execute();
 my @overduedata;
 while (my $data=$sth->fetchrow_hashref) {
   $duedate=$data->{'date_due'};
+  $duedate = format_date($duedate);
   $itemnum=$data->{'itemnumber'};
 
   $name=$data->{'borrower'};
@@ -178,4 +183,4 @@ $template->param(todaysdate        => $todaysdate,
 		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(), $template->output;
