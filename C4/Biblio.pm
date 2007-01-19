@@ -1765,59 +1765,61 @@ sub OLDmodsubject {
 }    # sub modsubject
 
 sub OLDmodbibitem {
+# modified by rhariram to fix koha bug 1230
+# See http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1230
     my ( $dbh, $biblioitem ) = @_;
     my $query;
+    my $sth;
 
-    $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
-    $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
-    $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
-    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
-    $biblioitem->{'publishercode'} =
-      $dbh->quote( $biblioitem->{'publishercode'} );
-    $biblioitem->{'publicationyear'} =
-      $dbh->quote( $biblioitem->{'publicationyear'} );
-    $biblioitem->{'classification'} =
-      $dbh->quote( $biblioitem->{'classification'} );
-    $biblioitem->{'dewey'}       = $dbh->quote( $biblioitem->{'dewey'} );
-    $biblioitem->{'subclass'}    = $dbh->quote( $biblioitem->{'subclass'} );
-    $biblioitem->{'illus'}       = $dbh->quote( $biblioitem->{'illus'} );
-    $biblioitem->{'pages'}       = $dbh->quote( $biblioitem->{'pages'} );
-    $biblioitem->{'volumeddesc'} = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'volumedate'} = $dbh->quote( $biblioitem->{'volumedate'} );
-    $biblioitem->{'bnotes'}      = $dbh->quote( $biblioitem->{'bnotes'} );
-    $biblioitem->{'size'}        = $dbh->quote( $biblioitem->{'size'} );
-    $biblioitem->{'place'}       = $dbh->quote( $biblioitem->{'place'} );
-    $biblioitem->{'volume'}       = $dbh->quote( $biblioitem->{'volume'} );
-    $biblioitem->{'number'}       = $dbh->quote( $biblioitem->{'number'} );
-    $biblioitem->{'lccn'}       = $dbh->quote( $biblioitem->{'lccn'} );
+    $query = "";
+    $sth   =
+      $dbh->prepare(
+    "Update biblioitems set
+	itemtype        = ?,
+	url             = ?,
+	isbn            = ?,
+	issn            = ?,
+	publishercode   = ?,
+	publicationyear = ?,
+	classification  = ?,
+	dewey           = ?,
+	subclass        = ?,
+	illus           = ?,
+	pages           = ?,
+	volumeddesc     = ?,
+	volumedate     = ?,
+	notes 		= ?,
+	size		= ?,
+	place		= ?,
+	volume		= ?,
+	number		= ?,
+	lccn		= ?
+	where biblioitemnumber = ?"
+    );
 
-    $query = "Update biblioitems set
-itemtype        = $biblioitem->{'itemtype'},
-url             = $biblioitem->{'url'},
-isbn            = $biblioitem->{'isbn'},
-issn            = $biblioitem->{'issn'},
-publishercode   = $biblioitem->{'publishercode'},
-publicationyear = $biblioitem->{'publicationyear'},
-classification  = $biblioitem->{'classification'},
-dewey           = $biblioitem->{'dewey'},
-subclass        = $biblioitem->{'subclass'},
-illus           = $biblioitem->{'illus'},
-pages           = $biblioitem->{'pages'},
-volumeddesc     = $biblioitem->{'volumeddesc'},
-volumedate     = $biblioitem->{'volumedate'},
-notes 		= $biblioitem->{'bnotes'},
-size		= $biblioitem->{'size'},
-place		= $biblioitem->{'place'},
-volume		= $biblioitem->{'volume'},
-number		= $biblioitem->{'number'},
-lccn		= $biblioitem->{'lccn'}
-
-where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
-
-    $dbh->do($query);
-    if ( $dbh->errstr ) {
-        warn "$query";
-    }
+    $sth->execute(
+	$biblioitem->{'itemtype'},
+	$biblioitem->{'url'},
+	$biblioitem->{'isbn'},
+	$biblioitem->{'issn'},
+	$biblioitem->{'publishercode'},
+	$biblioitem->{'publicationyear'},
+	$biblioitem->{'classification'},
+	$biblioitem->{'dewey'},
+	$biblioitem->{'subclass'},
+	$biblioitem->{'illus'},
+	$biblioitem->{'pages'},
+	$biblioitem->{'volumeddesc'},
+	$biblioitem->{'volumedate'},
+	$biblioitem->{'bnotes'},
+	$biblioitem->{'size'},
+	$biblioitem->{'place'},
+	$biblioitem->{'volume'},
+	$biblioitem->{'number'},
+	$biblioitem->{'lccn'},
+	$biblioitem->{'biblioitemnumber'}
+    );
+    $sth->finish;
 }    # sub modbibitem
 
 sub OLDmodnote {
@@ -3012,6 +3014,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.65  2007/01/19 09:11:35  rangi
+# Applying patch to fix bug 1230
+# On editing marc entry: Publisher fields(tag 260) NOT stored as utf8 in mysql
+#
 # Revision 1.115.2.64  2006/11/22 16:02:52  tipaul
 # fix for #1177 = removal of additionnal authors & bibliosubjects
 #
