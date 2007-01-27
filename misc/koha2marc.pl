@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 use C4::Context;
 use CGI;
 use DBI;
@@ -13,14 +12,17 @@ GetOptions(
 	'c' => \$confirm,
 	'd' => \$delete,
 );
-
 my $dbh = C4::Context->dbh;
 if ($delete) {
 	print "deleting MARC tables\n";
 	$dbh->do("delete from marc_biblio");
+	$dbh->do("alter table marc_biblio auto_increment=1");
 	$dbh->do("delete from marc_subfield_table");
+	$dbh->do("alter table marc_subfield_table auto_increment=1");
 	$dbh->do("delete from marc_blob_subfield");
+	$dbh->do("alter table marc_blob_subfield auto_increment=1");
 	$dbh->do("delete from marc_word");
+	$dbh->do("alter table marc_word auto_increment=1");
 }
 
 my $userid=$ENV{'REMOTE_USER'};
@@ -36,7 +38,7 @@ while (($biblionumber) = $sth->fetchrow) {
 	$sthbiblioitem->execute($biblionumber);
 	($biblioitemnumber) = $sthbiblioitem->fetchrow;
 	$MARC =  &MARCkoha2marcBiblio($dbh,$biblionumber,$biblioitemnumber);
-	$bibid = &MARCaddbiblio($dbh,$MARC,$biblionumber);
+	$bibid = &MARCaddbiblio($dbh,$MARC,$biblionumber,'');
 	# now, search items, and add them...
 	$sthitems->execute($biblionumber);
 	while (($itemnumber) = $sthitems->fetchrow) {
