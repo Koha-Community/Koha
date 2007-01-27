@@ -51,7 +51,7 @@ if ( !$biblio->{'title'} ) {
 else {
     $biblionumber = &newbiblio($biblio);
     &newsubtitle( $biblionumber, $biblio->{'subtitle'} );
-    my $error = modsubject( $biblionumber, 1, @subjects );
     modaddauthor( $biblionumber, @authors );
+    my $error = modsubject( $biblionumber, 1, @subjects );
     print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber");
 }    # else
