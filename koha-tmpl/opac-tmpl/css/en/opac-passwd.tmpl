@@ -10,7 +10,7 @@
 	Passwords do not match.  Please re-type your new password.
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME= "ShortPass" -->
-	Your new password must be at least 6 characters long
+	Your new password must be at least <!-- TMPL_VAR NAME="MinPasswordLength" --> characters long
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME= "WrongPass" -->
 	Your current password was entered incorrectly.  If this problem persists, please ask a librarian to re-set your password for you.	
