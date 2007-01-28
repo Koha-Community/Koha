@@ -44,9 +44,17 @@ my $i=0;
 foreach (sort keys %$issues) {
     $i++;
 }
+my $MinPasswordLength = (C4::Context->preference("MinPasswordLength") ? 
+		                                            C4::Context->preference("MinPasswordLength") :5
+		                                            );
 
 my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $newpassword = $input->param('newpassword');
+if (length($newpassword) < $MinPasswordLength && $newpassword ne ''){
+	$template->param('ShortPass' => '1');
+	$template->param('MinPasswordLength' => $MinPasswordLength );
+	$newpassword = '';
+}
 
 if ( $newpassword ) {
 	my $digest=md5_base64($input->param('newpassword'));
@@ -66,7 +74,7 @@ if ( $newpassword ) {
     my $userid = $bor->{'userid'};
 
     my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    my $length=int(rand(2))+4;
+    my $length=int(rand(2))+$MinPasswordLength;
     my $defaultnewpassword='';
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
