@@ -918,7 +918,7 @@ sub issuebook {
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;
 		$iteminformation->{'issues'}++;
-		$sth=$dbh->prepare("update items set issues=? where itemnumber=?");
+		$sth=$dbh->prepare("update items set issues=?,datelastborrowed = now() where itemnumber=?");
 		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
 		$sth->finish;
 		&itemseen($iteminformation->{'itemnumber'});
