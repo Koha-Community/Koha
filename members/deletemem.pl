@@ -54,9 +54,10 @@ my $i=0;
 foreach (sort keys %$issues) {
 	$i++;
 }
+my $userenv = C4::Context->userenv;
 my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 if (C4::Context->preference("IndependantBranches")) {
-	my $userenv = C4::Context->userenv;
+	
 	unless ($userenv->{flags} == 1){
 		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
 #			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
@@ -70,14 +71,15 @@ my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
 $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-
-if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
+my $bor = getpatroninformation(\%env, $member,'');
+my $accessflags = $bor->{'authflags'};
+if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne '' || ($accessflags->{'superlibrarian'} && $userenv->{flags} != 1)){
 	my ($template, $borrowernumber, $cookie)
 		= get_template_and_user({template_name => "members/deletemem.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {borrower => 1},
+					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
 	#   print $input->header;
@@ -90,6 +92,9 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 	}
 	if ($data ne '') {
 		$template->param(guarantees => 1);
+	}
+	if ($accessflags->{'superlibrarian'} && $userenv->{flags} != 1){
+	  $template->param(superlibrarian => 'Member is a superlibrarian, and you are not');
 	}
 # 	print "<table border=1>";
 # 	if ($i > 0){
