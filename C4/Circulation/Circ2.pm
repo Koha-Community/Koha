@@ -428,7 +428,7 @@ The item was eligible to be transferred. Barring problems communicating with the
 #'
 # FIXME - This function tries to do too much, and its API is clumsy.
 # If it didn't also return books, it could be used to change the home
-# branch of a book while the book is on loan.
+# branch of a book while the book is on loan. - Your idea, my fix.
 #
 # Is there any point in returning the item information? The caller can
 # look that up elsewhere if ve cares.
@@ -466,12 +466,15 @@ sub transferbook {
 		$messages->{'DestinationEqualsHolding'} = 1;
 		$dotransfer = 0;
 	}
-	# check if it is still issued to someone, return it...
-	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-	if ($currentborrower) {
-		returnbook($barcode, $fbr);
-		$messages->{'WasReturned'} = $currentborrower;
-	}
+	# Depreciated - check if it is still issued to someone, return it...
+    # returnbook here, sends it into a loop. And, by doing this, it enables
+    # this sub to be used to transfer books between branches while the book is
+    # on loan.
+#	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+#	if ($currentborrower) {
+#		returnbook($barcode, $fbr);
+#		$messages->{'WasReturned'} = $currentborrower;
+#	}
 	# find reserves.....
 	# FIXME - Don't call &CheckReserves unless $ignoreRs is true.
 	# That'll save a database query.
