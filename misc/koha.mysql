@@ -939,7 +939,7 @@ CREATE TABLE marc_subfield_structure (
   isurl tinyint(1) default NULL,
   hidden tinyint(1) default NULL,
   frameworkcode varchar(4) NOT NULL default '',
-  seealso varchar(255) default NULL,
+  seealso text default NULL,
   link varchar(80) default NULL,
   PRIMARY KEY  (frameworkcode,tagfield,tagsubfield),
   KEY tab (frameworkcode,tab),
