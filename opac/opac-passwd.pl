@@ -40,7 +40,9 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     debug => 1,
 			     });
-
+my $MinPasswordLength = (C4::Context->preference("MinPasswordLength") ? 
+		                                            C4::Context->preference("MinPasswordLength") :5
+		                                            );
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 my $sth = $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
@@ -48,7 +50,7 @@ my $sth = $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=
 if ( $query->param('Oldkey') && $query->param('Newkey') && $query->param('Confirm') ){
 	if ( goodkey($dbh,$borrowernumber, $query->param('Oldkey')) ){
 		if ( $query->param('Newkey') eq $query->param('Confirm') &&
-			length($query->param('Confirm')) > 5 ){ # Record password
+			length($query->param('Confirm')) >= $MinPasswordLength ){ # Record password
 			my $clave = md5_base64($query->param('Newkey'));
 			$sth->execute($clave,$borrowernumber);
 			$template->param('password_updated' => '1');
@@ -57,10 +59,11 @@ if ( $query->param('Oldkey') && $query->param('Newkey') && $query->param('Confir
 			$template->param('Ask_data' => '1');
 			$template->param('Error_messages' => '1');
 			$template->param('PassMismatch' => '1');
-		}elsif (length($query->param('Confirm')) <= 5 ){
+		}elsif (length($query->param('Confirm')) < $MinPasswordLength ){
 			$template->param('Ask_data' => '1');
 			$template->param('Error_messages' => '1');
 			$template->param('ShortPass' => '1');
+			$template->param('MinPasswordLength' => $MinPasswordLength );
 		}else{
 			$template->param('Error_messages' => '1');
 		} 
