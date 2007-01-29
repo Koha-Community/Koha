@@ -25,7 +25,7 @@
 <li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->+site:worldcatlibraries.org">Other Libraries(WorldCat)</a></li>
 <li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li></ul></div>
 </div>
-<h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
+<h2><!-- TMPL_VAR NAME="title" --></h2><!-- TMPL_LOOP NAME="subtitles" --><!-- TMPL_IF NAME="subtitle" --> <h3 class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></h3><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
 <!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
 
 
