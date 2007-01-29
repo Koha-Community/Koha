@@ -915,7 +915,7 @@ sub CatSearch  {
 			$query="select *,biblio.author,biblio.biblionumber from
 							biblio
 							left join additionalauthors
-							on additionalauthors.biblionumber =biblio.biblionumber
+							on ( additionalauthors.biblionumber =biblio.biblionumber )
 							where
 							((biblio.author like ? or biblio.author like ? or
 							additionalauthors.author like ? or additionalauthors.author
@@ -986,7 +986,7 @@ sub CatSearch  {
 					my $i=1;
 					$query="select biblio.biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp,subtitle from biblio
 					left join bibliosubtitle on
-					biblio.biblionumber=bibliosubtitle.biblionumber
+					( biblio.biblionumber=bibliosubtitle.biblionumber )
 					where
 					(((title like ? or title like ?)";
 					@bind=("$key[0]%","% $key[0]%");
@@ -1302,7 +1302,7 @@ sub ItemInfo {
 	my ($env,$biblionumber,$type) = @_;
 	my $dbh   = C4::Context->dbh;
 	my $query = "SELECT *,items.notforloan as itemnotforloan FROM items, biblio, biblioitems 
-					left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
+					left join itemtypes on ( biblioitems.itemtype = itemtypes.itemtype )
 					WHERE items.biblionumber = ?
 					AND biblioitems.biblioitemnumber = items.biblioitemnumber
 					AND biblio.biblionumber = items.biblionumber";
@@ -1489,13 +1489,14 @@ the first one is considered.
 sub bibdata {
 	my ($bibnum, $type) = @_;
 	my $dbh   = C4::Context->dbh;
-	my $sth   = $dbh->prepare("Select *, biblioitems.notes AS bnotes, biblio.notes
-								from biblio, biblioitems
-								left join bibliosubtitle on
-								biblio.biblionumber = bibliosubtitle.biblionumber
-								left join itemtypes on biblioitems.itemtype=itemtypes.itemtype
-								where biblio.biblionumber = ?
-								and biblioitems.biblionumber = biblio.biblionumber");
+    my $sth   = $dbh->prepare("
+                 SELECT * , biblioitems.notes AS bnotes, biblio.notes
+                FROM biblio
+                LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
+                WHERE biblio.biblionumber = ?
+                AND biblioitems.biblionumber = biblio.biblionumber ");
+
 	$sth->execute($bibnum);
 	my $data;
 	$data  = $sth->fetchrow_hashref;
