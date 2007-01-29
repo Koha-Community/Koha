@@ -381,9 +381,9 @@ if (C4::Context->preference("sortbynonfiling")) {
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice empty value.
 	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblioitems.*,biblio.*, marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
-							FROM biblio, marc_biblio 
-							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
-							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
+							FROM  marc_biblio , biblio
+							LEFT JOIN biblioitems on ( biblio.biblionumber = biblioitems.biblionumber )
+							LEFT JOIN itemtypes on (itemtypes.itemtype=biblioitems.itemtype)
 							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
         my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
 	my @finalresult = ();
