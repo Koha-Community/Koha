@@ -85,9 +85,7 @@ $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
-my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
-warn $todaysdate;
-
+my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]))
 # check and see if we should print
  if ($barcode eq ''  && $print eq 'maybe'){
  	$print = 'yes';
@@ -201,7 +199,6 @@ if ($borrower) {
 		my $issuedate = $issueslist->{$it}->{'timestamp'};
 		$issuedate = substr($issuedate, 0, 10);
 		$issuedate=~s/-//g;
-		warn $issuedate;
 		if ($todaysdate == $issuedate) {
 			push @todaysissues, $issueslist->{$it};
 		} else {
