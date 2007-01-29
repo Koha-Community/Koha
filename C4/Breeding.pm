@@ -72,6 +72,7 @@ where isbn=? and title=?");
 	my $notmarcrecord = 0;
         my $breedingid;
 	for (my $i=0;$i<=$#marcarray;$i++) {
+		$breedingid=0;
 		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
 		my @warnings = $marcrecord->warnings();
 		if (scalar($marcrecord->fields()) == 0) {
