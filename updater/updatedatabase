@@ -1454,6 +1454,17 @@ my %tabledata = (
             type => 'YesNo',
             value =>0,
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'LibraryAddress',
+            forceupdate         => {
+                'explanation' => 1,
+                'type'        => 1
+            },
+            value       => '',
+            explanation => 'The library physical adddress - for displaying in print slip',
+            type        => 'Textarea'
+        },  
 
     ],
 
@@ -2289,6 +2300,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.58  2007/01/31 20:39:03  bob_lyon
+# adding in style changes to the print slip receipt layout
+#
 # Revision 1.100.2.57  2006/11/27 04:24:17  bob_lyon
 # Adding in column to track the last branch used for a serial to save librarian having to select each time
 #

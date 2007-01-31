@@ -176,6 +176,8 @@ for (my $i=0;$i<$count;$i++){
 	} else {
 		$row{'norenew'}=0;
 	}
+        $row{'today'}= format_date($today);
+    
 	push (@issuedata, \%row);
 }
 
@@ -193,6 +195,9 @@ foreach my $reserveline (@$reserves) {
 	push (@reservedata, \%row);
 }
 
+my $libraryaddress = C4::Context->preference("LibraryAddress");
+$libraryaddress =~ s/\r/\<br\>/g;
+
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
@@ -205,6 +210,8 @@ $template->param(
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
 		patronimages => C4::Context->preference("patronimages"),
+                libraryaddress => $libraryaddress,
+                today => $today,
 		 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
