@@ -847,7 +847,7 @@ sub checkperlmodules {
 				push @missing,"You will need PDF::API2 for barcode generator";
 			}
 	}
-	unless (eval {require GD::Barcorde})   { 
+	unless (eval {require GD::Barcode})   { 
 			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing,"You will need GD::Barcode for the new barcode generator";
 			}
