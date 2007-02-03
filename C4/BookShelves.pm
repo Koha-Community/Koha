@@ -57,7 +57,10 @@ items to and from bookshelves.
 			&AddToShelf			&AddToShelfFromBiblio
 			&RemoveFromShelf	&AddShelf				&ModifShelf 
 			&RemoveShelf		&ShelfPossibleAction
-				);
+			&GetPhysicalShelfList		&GetPhysicalShelfContents		&GetPhysicalShelf
+			&AddToPhysicalShelf
+			&RemoveFromPhysicalShelf	&AddPhysicalShelf				&ModifPhysicalShelf 
+			&RemovePhysicalShelf		&PhysicalShelfPossibleAction	);
 
 my $dbh = C4::Context->dbh;
 
@@ -290,12 +293,209 @@ sub RemoveShelf {
     }
 }
 
+######################### Physical Shelf System ###################
+=item PhysicalShelfPossibleAction
+
+=over 4
+
+=item C<$loggedinuser,$barcode,$action>
+
+$action can be "view" or "manage".
+
+Returns 1 if the user can do the $action in the $shelfnumber shelf.
+Returns 0 otherwise.
+
+=back
+
+=cut
+sub PhysicalShelfPossibleAction {
+	my ($loggedinuser,$barcode,$action)= @_;
+	my $sth = $dbh->prepare("select owner,category from Physicalbookshelf where barcode=?");
+	$sth->execute($shelfnumber, $barcode);
+	my ($owner,$category) = $sth->fetchrow;
+	return 1 if (($category>=3 or $owner eq $loggedinuser) && $action eq 'manage');
+	return 1 if (($category>= 2 or $owner eq $loggedinuser) && $action eq 'view');
+	return 0;
+}
+
+=item GetPhysicalShelfList
+
+  $physicalshelflist = &GetPhysicalShelfList();
+
+Looks up the virtual bookshelves, and returns a summary. C<$physicalshelflist>
+is a arrayref of hashes.
+
+=back
+
+=cut
+
+sub GetPhysicalShelfList {
+	my ($owner,$mincategory) = @_;
+	# mincategory : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
+	# bookshelves of the owner are always selected, whatever the category
+	my $sth=$dbh->prepare("SELECT		physicalbookshelf.barcode, physicalbookshelf.shelfname,owner,surname,firstname,category,
+							count(physicalshelfcontents.itemnumber) as count
+								FROM		physicalbookshelf
+								LEFT JOIN	physicalshelfcontents
+								ON		physicalbookshelf.barcode = physicalshelfcontents.barcode
+								left join borrowers on physicalbookshelf.owner = borrowers.borrowernumber
+								where owner=? or category>=?
+								GROUP BY	physicalbookshelf.barcode order by shelfname");
+    $sth->execute($owner,$mincategory);
+    my @shelflist;
+    while (defined(my $shelf = $sh->fetchrow_hashref())) { push @shelflist, $shelf; }
+	return(\@shelflist);
+}
+
+sub GetPhysicalShelf {
+	my ($barcode) = @_;
+	my $sth=$dbh->prepare("select barcode, shelfname, owner, category from physicalbookshelf where barcode=?");
+	$sth->execute($barcode);
+	return $sth->fetchrow;
+}
+=item GetPhysicalShelfContents
+
+  $itemlist = &GetPhysicalShelfContents($env, $barcode);
+
+Looks up information about the contents of virtual bookshelf number
+C<$shelfnumber>.
+
+Returns a reference-to-array, whose elements are references-to-hash,
+as returned by C<&getiteminformation>.
+
+C<$env> is an enviroment variable that some subroutines use. It should be a reference to a hash. Getiteminformation
+stores a apierror into C<$env-E<gt>{apierror} if no barcode or no itemnumber is passed, instead of returning a error
+message. Otherwise ignored.
+
+=cut
+#'
+sub GetPhysicalShelfContents {
+    my ($env, $barcode) = @_;
+    my @itemlist;
+    my $sth=$dbh->prepare("select itemnumber from physicalshelfcontents where barcode=? order by itemnumber");
+    $sth->execute($barcode);
+    while (my ($itemnumber) = $sth->fetchrow) {
+	my ($item) = getiteminformation($env, $itemnumber, 0);
+	push (@itemlist, $item);
+    }
+    return (\@itemlist);
+}
+
+=item AddToShelf
+
+  &AddToShelf($env, $itemnumber, $barcode);
+
+Adds item number C<$itemnumber> to physical bookshelf number
+C<$shelfnumber>, unless that item is already on any shelf.
+
+C<$env> is ignored.
+
+=cut
+#'
+sub AddToPhysicalShelf {
+	my ($env, $itemnumber, $shelfnumber, $barcode) = @_;
+	return unless $itemnumber;
+	my $sth=$dbh->prepare("select * from physicalshelfcontents where itemnumber=?");
+
+	$sth->execute($shelfnumber, $itemnumber);
+	if ($sth->rows) {
+# already on shelf
+	} else {
+		$sth=$dbh->prepare("insert into physicalshelfcontents (barcode, itemnumber, flags) values (?, ?, 0)");
+		$sth->execute($barcode, $itemnumber);
+	}
+}
+
+=item RemoveFromPhysicalShelf
+
+  &RemoveFromPhysicalShelf($env, $itemnumber, $barcode);
+
+Removes item number C<$itemnumber> from physical bookshelf with barcode
+C<$barcode>. If the item wasn't on that bookshelf to begin with,
+nothing happens.
+
+C<$env> is ignored.
+
+=cut
+#'
+sub RemoveFromPhysicalShelf {
+    my ($env, $itemnumber, $barcode) = @_;
+    my $sth=$dbh->prepare("delete from physicalshelfcontents where barcode=? and itemnumber=?");
+    $sth->execute($barcode,$itemnumber);
+}
+
+=item AddPhysicalShelf
+
+  ($status, $msg) = &AddPhysicalShelf($env, $shelfname, $barcode, $owner, $category);
+
+Creates a new virtual bookshelf with name C<$shelfname>.
+
+Returns a two-element array, where C<$status> is 0 if the operation
+was successful, or non-zero otherwise. C<$msg> is "Done" in case of
+success, or an error message giving the reason for failure.
+
+C<$env> is ignored.
+
+=cut
+
+sub AddPhysicalShelf {
+    my ($env, $shelfname, $barcode, $owner, $category) = @_;
+    my $sth=$dbh->prepare("select * from phychicalbookshelf where shelfname=?");
+	$sth->execute($shelfname);
+    if ($sth->rows) {
+		return(1, "Shelf \"$shelfname\" already exists");
+    } else {
+		$sth=$dbh->prepare("insert into physicalbookshelf (shelfname, barcode, owner, category) values (?,?,?)");
+		$sth->execute($shelfname, $barcode, $owner, $category);
+		return (0, "Done",$barcode);
+    }
+}
+
+sub ModifPhysicalShelf {
+	my ($barcode, $newbarcode, $shelfname, $owner, $category) = @_;
+	my $sth = $dbh->prepare("update physicbookshelf set shelfname=?,owner=?,category=?, barcode=? where barcode=?");
+	$sth->execute($shelfname,$owner,$category, $newbarcode, $barcode);
+}
+
+=item RemovePhysicalShelf
+
+  ($status, $msg) = &RemovePhysicalShelf($env, $barcode);
+
+Deletes physical bookshelf barcode C<$barcode>. The bookshelf must
+be empty.
+
+Returns a two-element array, where C<$status> is 0 if the operation
+was successful, or non-zero otherwise. C<$msg> is "Done" in case of
+success, or an error message giving the reason for failure.
+
+C<$env> is ignored.
+
+=cut
+#'
+sub RemovePhysicalShelf {
+    my ($env, $shelfnumber) = @_;
+    my $sth=$dbh->prepare("select count(*) from physicalshelfcontents where barcode=?");
+	$sth->execute($shelfnumber);
+    my ($count)=$sth->fetchrow;
+    if ($count) {
+	return (1, "Shelf has $count items on it.  Please remove all items before deleting this shelf.");
+    } else {
+	$sth=$dbh->prepare("delete from physicalbookshelf where barcode=?");
+	$sth->execute($shelfnumber);
+	return (0, "Done");
+    }
+}
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;
 
 #
 # $Log$
+# Revision 1.15.2.1  2007/02/03 08:42:10  genji
+# PhysicalBookShelves code added, to support an offshoot of virtual bookshelves. The idea, each physical shelf has a unique barcode. any one item can only exist in one shelf. Potential augmentation to item.location.
+#
 # Revision 1.15  2004/12/16 11:30:58  tipaul
 # adding bookshelf features :
 # * create bookshelf on the fly
