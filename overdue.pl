@@ -117,7 +117,6 @@ my $title;
 my $author;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
-$todaysdate=format_date($todaysdate);
 
 my $dbh = C4::Context->dbh;
 $bornamefilter =~s/\*/\%/g;
@@ -137,18 +136,13 @@ $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
 $strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
 $strsth.=" && borrowers.flags = '".$borflagsfilter."' " if ($borflagsfilter ne " ") ;
 $strsth.=" && issues.branchcode = '".$branchfilter."' " if($branchfilter) ;
-# my $bornamefilter=$input->param('borname');
-# my $borcatfilter=$input->param('borcat');
-# my $itemtypefilter=$input->param('itemtype');
-# my $borflagsfilter=$input->param('borflags');
-# my $branchfilter=$input->param('branch');
 if ($order eq "borrower"){
 	$strsth.=" order by borrower,date_due " ;
 } else {
 	$strsth.=" order by date_due,borrower ";
 }
 my $sth=$dbh->prepare($strsth);
-warn "overdue.pl : query string ".$strsth;
+#warn "overdue.pl : query string ".$strsth;
 $sth->execute();
 
 my @overduedata;
@@ -176,6 +170,7 @@ while (my $data=$sth->fetchrow_hashref) {
 }
 
 $sth->finish;
+$todaysdate=format_date($todaysdate);
 $template->param(todaysdate        => $todaysdate,
 		overdueloop       => \@overduedata,
 		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
