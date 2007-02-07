@@ -102,13 +102,13 @@ if ($op ne "do_search"){
 	my @oResult;
 	my $s=0;
 							
-	if ($isbn ne "/" || $issn ne "/") {
+	if ($isbn || $issn) {
 		$attr='1=7';
 #         warn "isbn : $isbn";
 		$term=$isbn if ($isbn ne "/");
 		$term=$issn if ($issn ne "/");
 	} elsif ($title ne "/") {
-		$attr='1=4 @attr 4=1  ';
+		$attr='1=4 ';
 		$term=$title;
 	} elsif ($author ne "/") {
 		$attr='1=1003';
@@ -116,7 +116,7 @@ if ($op ne "do_search"){
 	} 
 
 	my $query="\@attr $attr \"$term\"";	
-#     warn "query ".$query;
+    warn "query ".$query;
 	foreach my $servid (@id){
 		my $sth=$dbh->prepare("select * from z3950servers where id=?");
 		$sth->execute($servid);
