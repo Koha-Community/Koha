@@ -1560,7 +1560,9 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 sub bibitemdata {
     my ($bibitem) = @_;
     my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select *,biblioitems.notes as bnotes from biblio, biblioitems,itemtypes where biblio.biblionumber = biblioitems.biblionumber and biblioitemnumber = ? and biblioitems.itemtype = itemtypes.itemtype");
+    my $sth   = $dbh->prepare("Select *,biblioitems.notes as bnotes from biblio, biblioitems
+        LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype
+        where biblio.biblionumber = biblioitems.biblionumber and biblioitemnumber = ? ");
     my $data;
 
     $sth->execute($bibitem);
@@ -2353,9 +2355,9 @@ sub bibitems {
                         itemtypes.*,
                         MIN(items.itemlost)        as itemlost,
                         MIN(items.dateaccessioned) as dateaccessioned
-                          FROM biblioitems, itemtypes, items
+                          FROM biblioitems, items
+                          LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
                          WHERE biblioitems.biblionumber     = ?
-                           AND biblioitems.itemtype         = itemtypes.itemtype
                            AND biblioitems.biblioitemnumber = items.biblioitemnumber
                       GROUP BY items.biblioitemnumber");
     my $count = 0;
