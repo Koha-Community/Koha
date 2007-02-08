@@ -311,7 +311,7 @@ Returns 0 otherwise.
 sub PhysicalShelfPossibleAction {
 	my ($loggedinuser,$barcode,$action)= @_;
 	my $sth = $dbh->prepare("select owner,category from Physicalbookshelf where barcode=?");
-	$sth->execute($shelfnumber, $barcode);
+	$sth->execute($barcode);
 	my ($owner,$category) = $sth->fetchrow;
 	return 1 if (($category>=3 or $owner eq $loggedinuser) && $action eq 'manage');
 	return 1 if (($category>= 2 or $owner eq $loggedinuser) && $action eq 'view');
@@ -343,7 +343,7 @@ sub GetPhysicalShelfList {
 								GROUP BY	physicalbookshelf.barcode order by shelfname");
     $sth->execute($owner,$mincategory);
     my @shelflist;
-    while (defined(my $shelf = $sh->fetchrow_hashref())) { push @shelflist, $shelf; }
+    while (defined(my $shelf = $sth->fetchrow_hashref())) { push @shelflist, $shelf; }
 	return(\@shelflist);
 }
 
@@ -493,6 +493,10 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.15.2.2  2007/02/08 09:53:02  tipaul
+# BUGFIX : 2 errors that are risen during compilation.
+# This should NEVER happend. Please check that what you commit works, when you play with unstable branch it's important, when you play with stable branch, it's MANDATORY !
+#
 # Revision 1.15.2.1  2007/02/03 08:42:10  genji
 # PhysicalBookShelves code added, to support an offshoot of virtual bookshelves. The idea, each physical shelf has a unique barcode. any one item can only exist in one shelf. Potential augmentation to item.location.
 #
