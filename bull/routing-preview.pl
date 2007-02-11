@@ -40,7 +40,7 @@ if($edit){
     
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my $subs = getsubscription($subscriptionid);
-my ($count,@serials) = getserials($subscriptionid);
+my ($count,@serials) = old_getserials($subscriptionid);
 my ($template, $loggedinuser, $cookie);
 
 if($ok){
