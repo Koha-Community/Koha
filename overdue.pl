@@ -142,7 +142,6 @@ if ($order eq "borrower"){
 	$strsth.=" order by date_due,borrower ";
 }
 my $sth=$dbh->prepare($strsth);
-#warn "overdue.pl : query string ".$strsth;
 $sth->execute();
 
 my @overduedata;
