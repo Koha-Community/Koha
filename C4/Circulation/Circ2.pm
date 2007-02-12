@@ -36,7 +36,6 @@ use C4::Reserves2;
 use C4::Koha;
 use C4::Biblio;
 use C4::Accounts;
-use C4::Calendar::Calendar;
 use Date::Manip;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -428,7 +427,7 @@ The item was eligible to be transferred. Barring problems communicating with the
 #'
 # FIXME - This function tries to do too much, and its API is clumsy.
 # If it didn't also return books, it could be used to change the home
-# branch of a book while the book is on loan. - Your idea, my fix.
+# branch of a book while the book is on loan.
 #
 # Is there any point in returning the item information? The caller can
 # look that up elsewhere if ve cares.
@@ -466,15 +465,12 @@ sub transferbook {
 		$messages->{'DestinationEqualsHolding'} = 1;
 		$dotransfer = 0;
 	}
-	# Depreciated - check if it is still issued to someone, return it...
-    # returnbook here, sends it into a loop. And, by doing this, it enables
-    # this sub to be used to transfer books between branches while the book is
-    # on loan.
-#	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-#	if ($currentborrower) {
-#		returnbook($barcode, $fbr);
-#		$messages->{'WasReturned'} = $currentborrower;
-#	}
+	# check if it is still issued to someone, return it...
+	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+	if ($currentborrower) {
+		returnbook($barcode, $fbr);
+		$messages->{'WasReturned'} = $currentborrower;
+	}
 	# find reserves.....
 	# FIXME - Don't call &CheckReserves unless $ignoreRs is true.
 	# That'll save a database query.
@@ -903,17 +899,9 @@ sub issuebook {
 		my $datedue=time+($loanlength)*86400;
 		my @datearr = localtime($datedue);
 		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-
-		# now calling addDate() from Calendar.pm (Tumer's holiday module).
-        my $calendar = C4::Calendar::Calendar->new(branchcode => $borrower->{'branchcode'});
-        my ($yeardue, $monthdue, $daydue) = split /-/, $dateduef;
-        ($daydue, $monthdue, $yeardue) = $calendar->addDate($daydue, $monthdue, $yeardue, $loanlength);
-        $dateduef = "$yeardue-".sprintf ("%0.2d", $monthdue)."-". sprintf("%0.2d",$daydue);
-
-        if ($date) {
-            $dateduef=$date;
-        }
-		
+		if ($date) {
+			$dateduef=$date;
+		}
 		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
 		if (C4::Context->preference('ReturnBeforeExpiry') && $dateduef gt $borrower->{expiry}) {
 			$dateduef=$borrower->{expiry};
