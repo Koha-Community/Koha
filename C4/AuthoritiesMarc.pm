@@ -1350,8 +1350,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.9.2.25  2007/01/15 17:56:43  hdl
-# Bug Fixing authtrees
+# Revision 1.9.2.24.2.1  2007/02/12 10:05:13  toins
+# Commiting BUG FIX for 2.2.7.1.
+#
+# Previous log was :
+# 	Bug Fixing authtrees
 #
 # Revision 1.9.2.24  2006/08/10 12:42:33  tipaul
 # warn commenting + some bugfixes I forgot to commit (for authorities editing)

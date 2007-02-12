@@ -72,34 +72,32 @@ my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
 my $record;
 if (C4::Context->preference("AuthDisplayHierarchy")){
-#   warn "displayhiereachy";
   my $trees=BuildUnimarcHierarchies($authid);
-#    warn "trees :$trees";
+#   warn "trees :$trees";
   my @trees = split /;/,$trees ;
   push @trees,$trees unless (@trees);
   my @loophierarchies;
   foreach my $tree (@trees){
-#      warn "tree :$tree";
+#     warn "tree :$tree";
 
     my @tree=split /,/,$tree;
     push @tree,$tree unless (@tree);
     my $cnt=0;
     my @loophierarchy;
     foreach my $element (@tree){
-#        warn "tree :$element";
+#       warn "tree :$element";
       my %cell;
       my $elementdata = AUTHgetauthority($dbh,$element);
       $record= $elementdata if ($authid==$element);
       push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
       $cnt++;
     }
-#     use Data::Dumper;warn Dumper(@loophierarchy);
     push @loophierarchies, { 'loopelement' =>\@loophierarchy};
   }
-  $template->param(
-    'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
-    'loophierarchies' =>\@loophierarchies,
-  );
+    $template->param(
+      'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
+      'loophierarchies' =>\@loophierarchies,
+    );
 } else {
   $record=AUTHgetauthority($dbh,$authid);
 }

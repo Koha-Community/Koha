@@ -336,10 +336,10 @@ if ($op eq "add") {
             $indicators{$ind_tag[$i]} = $indicator[$i];
         }
         $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
- 	} else {
-         my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
- 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
- 	}
+	} else {
+        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
 	warn "REC : ".$record->as_formatted;
         # 
 # MARC::Record built => now, record in DB
@@ -382,10 +382,10 @@ if ($op eq "add") {
             $indicators{$ind_tag[$i]} = $indicator[$i];
         }
         $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
- 	} else {
-         my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
- 		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
- 	}
+	} else {
+        my $xml = AUTHhtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+		$record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
+	}
 	warn "REC : ".$record->as_formatted;
 	my $field = MARC::Field->new("$addedfield",'','','a'=> "");
 	$record->append_fields($field);
