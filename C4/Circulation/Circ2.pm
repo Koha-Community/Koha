@@ -466,11 +466,14 @@ sub transferbook {
 		$dotransfer = 0;
 	}
 	# check if it is still issued to someone, return it...
-	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-	if ($currentborrower) {
-		returnbook($barcode, $fbr);
-		$messages->{'WasReturned'} = $currentborrower;
-	}
+    # this sub to be used to transfer books between branches while the book is
+    # on loan.
+#	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+#	if ($currentborrower) {
+#		returnbook($barcode, $fbr);
+#		$messages->{'WasReturned'} = $currentborrower;
+#	}
+
 	# find reserves.....
 	# FIXME - Don't call &CheckReserves unless $ignoreRs is true.
 	# That'll save a database query.
