@@ -3014,9 +3014,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.115.2.65  2007/01/19 09:11:35  rangi
-# Applying patch to fix bug 1230
-# On editing marc entry: Publisher fields(tag 260) NOT stored as utf8 in mysql
+# Revision 1.115.2.64.2.1  2007/02/12 10:12:49  toins
+# Commiting BUG FIX for 2.2.7.1.
+#
+# ( Applying patch to fix bug 1230.On editing marc entry: Publisher fields(tag 260) NOT stored as utf8 in mysql)
 #
 # Revision 1.115.2.64  2006/11/22 16:02:52  tipaul
 # fix for #1177 = removal of additionnal authors & bibliosubjects
