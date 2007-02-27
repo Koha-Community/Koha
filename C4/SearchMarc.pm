@@ -659,7 +659,7 @@ sub getMARCsubjects {
 		$maxtag = "699";
 	} else {           # assume unimarc if not marc21
 		$mintag = "600";
-		$maxtag = "699";
+		$maxtag = "611";
 	}
 	my $sth=$dbh->prepare("SELECT `subfieldvalue`,`subfieldcode`,`tagorder`,`tag` FROM `marc_subfield_table` WHERE `bibid`= ? AND `subfieldcode` NOT IN ('2','3','4','6','8') AND `tag` BETWEEN ? AND ? ORDER BY `tagorder`,`subfieldorder`");
 	# Subfield exclusion for $2, $4, $6, $8 protects against searching for
