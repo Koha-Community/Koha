@@ -60,7 +60,7 @@ my $tab;
 $sth = $dbh->prepare("select tagfield,tab from marc_subfield_structure where kohafield=\"biblioitems.biblioitemnumber\"");
 $sth->execute;
 my ($res2,$tab2) = $sth->fetchrow;
-if ($res && $res2 && ($res eq $res2) && $tab==-1 && $tab2==-1) {
+if ($res && $res2 && $tab==-1 && $tab2==-1) {
 	$template->param(biblionumber => 0);
 } else {
 	$template->param(biblionumber => 1);
