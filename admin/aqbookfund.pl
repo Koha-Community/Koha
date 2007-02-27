@@ -123,14 +123,6 @@ for (my $i=0;$i<$count2;$i++){
 	$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
 }
 
-my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
-			-values   => \@select_branch,
-			-labels   => \%select_branches,
-			-size     => 1,
-			-tabindex=>'',
-			-multiple => 0 );
-$template->param(CGIbranch => $CGIbranch);
-
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
@@ -139,11 +131,28 @@ if ($op eq 'add_form') {
 	my $header;
 	if ($bookfundid) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
+		my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup,branchcode from aqbookfund where bookfundid=?");
 		$sth->execute($bookfundid);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
+        my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+                    -values   => \@select_branch,
+                    -labels   => \%select_branches,
+                    -size     => 1,
+                    -tabindex=>'',
+                    -default=> $data->{branchcode},
+                    -multiple => 0 );
+        $template->param(CGIbranch => $CGIbranch);
+	    } else {
+            my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+                        -values   => \@select_branch,
+                        -labels   => \%select_branches,
+                        -size     => 1,
+                        -tabindex=>'',
+                        -multiple => 0 );
+            $template->param(CGIbranch => $CGIbranch);
 	    }
+	    
 	if ($bookfundid) {
 	    $header = "Modify book fund";
 	    $template->param('header-is-modify-p' => 1);
@@ -152,7 +161,7 @@ if ($op eq 'add_form') {
 	    $template->param('header-is-add-p' => 1);
 	}
 	$template->param('use-header-flags-p' => 1);
-	$template->param(header => $header); # NOTE deprecated
+# 	$template->param(header => $header); # NOTE deprecated
 	my $add_or_modify=0;
 	if ($bookfundid) {
 	    $add_or_modify=1;
