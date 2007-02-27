@@ -661,7 +661,7 @@ sub getMARCsubjects {
 		$mintag = "600";
 		$maxtag = "699";
 	}
-	my $sth=$dbh->prepare("SELECT `subfieldvalue`,`subfieldcode`,`tagorder`,`tag` FROM `marc_subfield_table` WHERE `bibid`= ? AND `subfieldcode` NOT IN ('2','4','6','8') AND `tag` BETWEEN ? AND ? ORDER BY `tagorder`,`subfieldorder`");
+	my $sth=$dbh->prepare("SELECT `subfieldvalue`,`subfieldcode`,`tagorder`,`tag` FROM `marc_subfield_table` WHERE `bibid`= ? AND `subfieldcode` NOT IN ('2','3','4','6','8') AND `tag` BETWEEN ? AND ? ORDER BY `tagorder`,`subfieldorder`");
 	# Subfield exclusion for $2, $4, $6, $8 protects against searching for
 	# variant data in otherwise invariant authorised subject headings when all
 	# returned subfields are used to form a query for matching subjects.  One
