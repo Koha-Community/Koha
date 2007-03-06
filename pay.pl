@@ -37,6 +37,15 @@ use HTML::Template;
 
 my $input=new CGI;
 
+my($template, $loggedinuser, $cookie)
+    = get_template_and_user ({ template_name => "members/pay.tmpl",
+                    query => $input,
+                    type => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired => {borrowers => 1},
+                    debug => 1,
+                    });
+
 #print $input->header;
 my $bornum=$input->param('bornum');
 if ($bornum eq ''){
@@ -80,14 +89,6 @@ my %env;
 $env{'branchcode'}=$user;
 my $total=$input->param('total');
 if ($check ==0){
-	my($template, $loggedinuser, $cookie)
-		= get_template_and_user ({ template_name => "members/pay.tmpl",
-					   query => $input,
-					   type => "intranet",
-					   authnotrequired => 0,
-					   flagsrequired => {borrowers => 1},
-					   debug => 1,
-					 });
 	if ($total ne ''){
 		recordpayment(\%env,$bornum,$total);
 	}
