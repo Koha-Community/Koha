@@ -922,7 +922,7 @@ sub AUTHaddword {
 			values (?,concat(?,?),?,?,?,soundex(?))");
     foreach my $word (@words) {
 # we record only words longer than 2 car and not in stopwords hash
-	if (length($word)>2 and !($stopwords->{uc($word)})) {
+	if (length($word)>=2 and !($stopwords->{uc($word)})) {
 	    $sth->execute($authid,$tag,$subfieldid,$tagorder,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
 		warn "ERROR ==> insert into auth_word (authid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($authid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
@@ -1350,6 +1350,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.24.2.2  2007/03/06 15:14:22  tipaul
+# bugfix for indexing 2 letter words correctly
+#
 # Revision 1.9.2.24.2.1  2007/02/12 10:05:13  toins
 # Commiting BUG FIX for 2.2.7.1.
 #
