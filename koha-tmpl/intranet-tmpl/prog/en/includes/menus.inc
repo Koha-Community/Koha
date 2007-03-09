@@ -34,7 +34,7 @@ intranet</a></h3>
     </ul>
     <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_catalogue" -->
-                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+                <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a>
                 <ul>
                     <li>
                         <form name="searchform" method="get" action="/cgi-bin/koha/catalogue/search.pl" id="searchform">

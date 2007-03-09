@@ -1,4 +1,4 @@
-package C4::Date
+package C4::Date;
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
