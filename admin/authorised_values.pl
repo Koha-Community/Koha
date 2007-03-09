@@ -23,7 +23,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Search;
+
 use C4::Context;
 
 
@@ -58,7 +58,7 @@ my ($template, $borrowernumber, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1, management => 1},
+			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
 my $pagesize=20;
@@ -84,14 +84,14 @@ if ($op eq 'add_form') {
 	} else {
 		$data->{'category'} = $input->param('category');
 	}
-	if ($searchfield) {
-		$template->param(action => "Modify authorised value");
+	if ($id) {
+		$template->param(action_modify => 1);
 		$template->param('heading-modify-authorized-value-p' => 1);
 	} elsif ( ! $data->{'category'} ) {
-		$template->param(action => "Add new category");
+		$template->param(action_add_category => 1);
 		$template->param('heading-add-new-category-p' => 1);
 	} else {
-		$template->param(action => "Add authorised value");
+		$template->param(action_add_value => 1);
 		$template->param('heading-add-authorized-value-p' => 1);
 	}
 	$template->param('use-heading-flags-p' => 1);
@@ -125,7 +125,7 @@ if ($op eq 'add_form') {
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	
+	$id = $input->param('id') unless $id;
 	$template->param(searchfield => $searchfield,
 							Tvalue => $data->{'authorised_value'},
 							id =>$id,
@@ -136,10 +136,10 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
+	my $id = $input->param('id');
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
 	$sth->finish;
-	
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
 	exit;
 
@@ -158,6 +158,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$searchfield) {
@@ -203,5 +204,8 @@ if ($op eq 'add_form') {
 		);
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

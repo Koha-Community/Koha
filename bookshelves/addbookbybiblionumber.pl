@@ -1,8 +1,7 @@
 #!/usr/bin/perl
+
 #script to provide bookshelf management
-# WARNING: This file uses 4-character tabs!
 #
-# $Header$
 #
 # Copyright 2000-2002 Katipo Communications
 #
@@ -21,17 +20,55 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
+=head1 NAME
+
+    addbookbybiblionumber.pl
+
+=head1 DESCRIPTION
+
+    This script allow to add a book in a virtual shelf from a biblionumber.
+
+=head1 CGI PARAMETERS
+
+=over 4
+
+=item biblionumber
+
+    The biblionumber
+
+=item shelfnumber
+
+    the shelfnumber where to add the book.
+
+=item newbookshelf
+
+    if this parameter exists, then it must be equals to the name of the shelf
+    to add.
+
+=item category
+
+    if this script has to add a shelf, it add one with this category.
+
+=back
+
+=cut
+
 use strict;
-use C4::Search;
 use C4::Biblio;
 use CGI;
+use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
 
-my $env;
+#use it only to debug !
+use CGI::Carp qw/fatalsToBrowser/;
+use warnings;
+
 my $query = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $shelfnumber = $query->param('shelfnumber');
@@ -40,52 +77,73 @@ my $category = $query->param('category');
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bookshelves/addbookbybiblionumber.tmpl",
-							query => $query,
-							type => "intranet",
-							authnotrequired => 0,
-							flagsrequired => {catalogue => 1},
-						});
+                            query => $query,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {catalogue => 1},
+                        });
 
-my $x; # for trash
-($x,$x,$shelfnumber) = AddShelf('',$newbookshelf,$loggedinuser,$category) if $newbookshelf;
+$shelfnumber = AddShelf($newbookshelf,$loggedinuser,$category) if $newbookshelf;
 
-if ($shelfnumber) {
-	&AddToShelfFromBiblio($env, $biblionumber, $shelfnumber);
-	print "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
-	exit;
-} else {
+if ($shelfnumber || ($shelfnumber == -1)) { # the shelf already exist.
+    &AddToShelfFromBiblio($biblionumber, $shelfnumber);
+    print "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
+    exit;
+} else {    # this shelf doesn't already exist.
+    my  ( $bibliocount, @biblios )  = GetBiblio($biblionumber);
 
-	my  ( $bibliocount, @biblios )  = getbiblio($biblionumber);
+    my ($shelflist) = GetShelves($loggedinuser,3);
+    my @shelvesloop;
+    my %shelvesloop;
+    foreach my $element (sort keys %$shelflist) {
+        push (@shelvesloop, $element);
+        $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
+    }
 
-	my ($shelflist) = GetShelfList($loggedinuser,3);
-	my @shelvesloop;
-	my %shelvesloop;
-	foreach my $element (sort keys %$shelflist) {
-			push (@shelvesloop, $element);
-			$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
-	}
+    my $CGIbookshelves=CGI::scrolling_list(
+                -name     => 'shelfnumber',
+                -values   => \@shelvesloop,
+                -labels   => \%shelvesloop,
+                -size     => 1,
+                -tabindex=>'',
+                -multiple => 0 );
 
-	my $CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
-				-values   => \@shelvesloop,
-				-labels   => \%shelvesloop,
-				-size     => 1,
-	 			-tabindex=>'',
-				-multiple => 0 );
+    $template->param(
+                biblionumber => $biblionumber,
+                title => $biblios[0]->{'title'},
+                author => $biblios[0]->{'author'},
+                CGIbookshelves => $CGIbookshelves,
+                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+                IntranetNav => C4::Context->preference("IntranetNav"),
+                );
 
-	$template->param(biblionumber => $biblionumber,
-						title => $biblios[0]->{'title'},
-						author => $biblios[0]->{'author'},
-						CGIbookshelves => $CGIbookshelves,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-						);
-
-	output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output;
 }
+
 # $Log$
-# Revision 1.5  2006/09/27 21:19:21  tgarip1957
-# Finalized XML version for intranet
+# Revision 1.6  2007/03/09 14:32:26  tipaul
+# rel_3_0 moved to HEAD
+#
+# Revision 1.4.2.6  2006/12/18 16:35:17  toins
+# removing use HTML::Template from *.pl.
+#
+# Revision 1.4.2.5  2006/12/05 11:35:29  toins
+# Biblio.pm cleaned.
+# additionalauthors, bibliosubject, bibliosubtitle tables are now unused.
+# Some functions renamed according to the coding guidelines.
+#
+# Revision 1.4.2.4  2006/11/30 18:23:51  toins
+# theses scripts don't need to use C4::Search.
+#
+# Revision 1.4.2.3  2006/10/30 09:48:19  tipaul
+# samll bugfix to create a bookshelf correctly
+#
+# Revision 1.4.2.2  2006/08/30 16:13:54  toins
+# correct an error in the "if condition".
+#
+# Revision 1.4.2.1  2006/08/30 15:59:14  toins
+# Code cleaned according to coding guide lines.
 #
 # Revision 1.4  2006/07/04 14:36:51  toins
 # Head & rel_2_2 merged
@@ -99,23 +157,6 @@ if ($shelfnumber) {
 #
 # Revision 1.3.2.2  2006/02/05 21:45:25  kados
 # Adds support for intranetstylesheet system pref in Koha scripts
-#
-# Revision 1.3.2.1  2006/02/04 21:26:47  kados
-# Adds support for intranetcolorstylesheet
-#
-# Revision 1.3  2004/12/15 17:28:22  tipaul
-# adding bookshelf features :
-# * create bookshelf on the fly
-# * modify a bookshelf (this being not finished, will commit the rest soon)
-#
-# Revision 1.2  2004/11/19 16:31:30  tipaul
-# bugfix for bookshelves not in official CVS
-#
-# Revision 1.1.2.2  2004/03/10 15:08:18  tipaul
-# modifying shelves : introducing category of shelf : private, public, free for all
-#
-# Revision 1.1.2.1  2004/02/19 10:14:36  tipaul
-# new feature : adding book to bookshelf from biblio detail screen.
 #
 
 # Local Variables:

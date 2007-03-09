@@ -17,14 +17,13 @@
 
 # $Id$
 
-
 =head1 NAME
 
 histsearch.pl
 
 =head1 DESCRIPTION
-this script offer a interface to search among order.
 
+this script offer a interface to search among order.
 
 =head1 CGI PARAMETERS
 
@@ -52,39 +51,47 @@ to filter on ended date.
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;       # get_template_and_user
+use C4::Auth;    # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Acquisition;
 
-my $input = new CGI;
-my $title = $input->param('title');
-my $author = $input->param('author');
-my $name = $input->param('name');
+my $input          = new CGI;
+my $title          = $input->param('title');
+my $author         = $input->param('author');
+my $name           = $input->param('name');
 my $from_placed_on = $input->param('fromplacedon');
-my $to_placed_on = $input->param('toplacedon');
+my $to_placed_on   = $input->param('toplacedon');
 
 my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/histsearch.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
-			     debug => 1,
-			     });
-my ($order_loop,$total_qty,$total_price,$total_qtyreceived)= &GetHistory($title,$author,$name,$from_placed_on,$to_placed_on);
-$template->param(suggestions_loop => $order_loop,
-				total_qty => $total_qty,
-				total_qtyreceived => $total_qtyreceived,
-				total_price => sprintf  ("%.2f",$total_price),
-				numresults => scalar(@$order_loop),
-				title => $title,
-				author => $author,
-				name => $name,
-				from_placed_on =>$from_placed_on,
-				to_placed_on =>$to_placed_on,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/histsearch.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 1 },
+        debug           => 1,
+    }
 );
+
+my ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) =
+  &GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
+  
+$template->param(
+    suggestions_loop        => $order_loop,
+    total_qty               => $total_qty,
+    total_qtyreceived       => $total_qtyreceived,
+    total_price             => sprintf( "%.2f", $total_price ),
+    numresults              => scalar(@$order_loop),
+    title                   => $title,
+    author                  => $author,
+    name                    => $name,
+    from_placed_on          => $from_placed_on,
+    to_placed_on            => $to_placed_on,
+    intranetcolorstylesheet =>
+      C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;

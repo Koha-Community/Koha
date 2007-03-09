@@ -52,21 +52,23 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Acquisition;
+use C4::Letters;
+use C4::Branch; # GetBranches
 
-my $query = new CGI;
+my $input = new CGI;
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user(
                 {template_name => "acqui/lateorders.tmpl",
-				query => $query,
+				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
 				flagsrequired => {acquisition => 1},
 				debug => 1,
 				});
 
-my $supplierid = $query->param('supplierid');
-my $delay = $query->param('delay');
-my $branch = $query->param('branch');
+my $supplierid = $input->param('supplierid');
+my $delay = $input->param('delay');
+my $branch = $input->param('branch');
 
 #default value for delay
 $delay = 30 unless $delay;
@@ -88,22 +90,6 @@ my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 
 $template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
 
-my $branches = GetBranches;
-
-my @branchloop;
-foreach my $thisbranch (sort keys %$branches) {
-	my %row =(value => $thisbranch,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-			);
-	push @branchloop, \%row;
-}
-my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
-				-values   => \@branchloop,
-				-labels   => $branches,
-				-size     => 1,
- 				-tabindex=>'',
-				-multiple => 0 );
-
 my @lateorders = GetLateOrders($delay,$supplierid,$branch);
 my $count = scalar @lateorders;
 
@@ -111,12 +97,25 @@ my $total;
 foreach my $lateorder (@lateorders){
 	$total+=$lateorder->{subtotal};
 }
+
+my @letters;
+my $letters=GetLetters("claimacquisition");
+foreach (keys %$letters){
+ push @letters ,{code=>$_,name=>$letters->{$_}};
+}
+
+$template->param(letters=>\@letters) if (@letters);
+my $op=$input->param("op");
+if ($op eq "send_alert"){
+  my @ordernums=$input->param("claim_for");
+  SendAlerts('claimacquisition',\@ordernums,$input->param("letter_code"));
+}
+
 $template->param(delay=>$delay) if ($delay);
 $template->param(
-	branchloop => \@branchloop,
 	CGIsupplier => $CGIsupplier,
 	lateorders => \@lateorders,
 	total=>$total,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 	);
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

@@ -23,7 +23,6 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Auth;
 use CGI;
-use C4::Search;
 use C4::Context;
 
 
@@ -86,10 +85,18 @@ if ($op eq 'add_form') {
 	my $data;
 	my $dbh = C4::Context->dbh;
 	my $more_subfields = $input->param("more_subfields")+1;
+	# builds kohafield tables
+	my @kohafields;
+	push @kohafields, "";
+	my $sth2=$dbh->prepare("SHOW COLUMNS from auth_header");
+	$sth2->execute;
+	while ((my $field) = $sth2->fetchrow_array) {
+		push @kohafields, "auth_header.".$field;
+	}
 	
 	# build authorised value list
-
-my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
+	$sth2->finish;
+	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	$sth2->execute;
 	my @authorised_values;
 	push @authorised_values,"";
@@ -98,6 +105,16 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	}
 	push (@authorised_values,"branches");
 	push (@authorised_values,"itemtypes");
+    
+    # build thesaurus categories list
+    $sth2->finish;
+    $sth2 = $dbh->prepare("select authtypecode from auth_types");
+    $sth2->execute;
+    my @authtypes;
+    push @authtypes, "";
+    while ( ( my $authtypecode ) = $sth2->fetchrow_array ) {
+        push @authtypes, $authtypecode;
+    }
 
 	# build value_builder list
 	my @value_builder=('');
@@ -107,9 +124,9 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	# on a standard install, /cgi-bin need to be added. 
 	# test one, then the other
 	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-	unless (opendir(DIR, "$cgidir/value_builder")) {
+	unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
 		$cgidir = C4::Context->intranetdir;
-		opendir(DIR, "$cgidir/value_builder") || die "can't opendir $cgidir/value_builder: $!";
+		opendir(DIR, "$cgidir/cataloguing/value_builder") || die "can't opendir $cgidir/value_builder: $!";
 	} 
 	while (my $line = readdir(DIR)) {
 		if ($line =~ /\.pl$/) {
@@ -134,26 +151,28 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id=>"tab$i",
-					-values=>['-1','0','1','2','3','4','5','6','7','8','9'],
-					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1','2' =>'2','3'=>'3','4'=>'4',
-									'5' =>'5','6'=>'6','7'=>'7',
-									'8' =>'8','9'=>'9',},
+					-values=>['-1','0'],
+					-labels => {'-1' =>'ignore','0'=>'0',
+									},
 					-default=>$data->{'tab'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
 					-id=>"ohidden$i",
-					-values=>['0','2'],
-					-labels => {'0'=>'Show','2' =>'Hide',},
+					-values=>['0','1','2'],
+					-labels => {'0'=>'Show','1'=>'Show Collapsed',
+									'2' =>'Hide',
+									},
 					-default=>substr($data->{'hidden'},0,1),
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
 					-id=>"ihidden$i",
-					-values=>['0','2'],
-					-labels => {'0'=>'Show',
+					-values=>['0','1','2'],
+					-labels => {'0'=>'Show','1'=>'Show Collapsed',
 									'2' =>'Hide',
 									},
 					-default=>substr($data->{'hidden'},1,1),
@@ -166,7 +185,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 					-labels => {'0'=>'Show','1'=>'Show Collapsed',
 									'2' =>'Hide',
 									},
-					-default=>substr($data->{'hidden'},2,1),
+					-default=>substr($data->{'hidden'}."  ",2,1),
 					-size=>1,
 					-multiple=>0,
 					);
@@ -174,11 +193,27 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
+		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
+					-id=>"kohafield$i",
+					-values=> \@kohafields,
+					-default=> "$data->{'kohafield'}",
+					-size=>1,
+					-multiple=>0,
+					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
 					-id=>'authorised_value',
 					-values=> \@authorised_values,
 					-default=>$data->{'authorised_value'},
 					-size=>1,
+		 			-tabindex=>'',
+					-multiple=>0,
+					);
+		$row_data{frameworkcode}  = CGI::scrolling_list(-name=>'frameworkcode',
+					-id=>'frameworkcode',
+					-values=> \@authtypes,
+					-default=>$data->{'frameworkcode'},
+					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
@@ -186,6 +221,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 					-values=> \@value_builder,
 					-default=>$data->{'value_builder'},
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		
@@ -220,19 +256,21 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
-					-id=>"tab$i",
-					-values=>['-1','0','1','2','3','4','5','6','7','8','9'],
-					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1','2' =>'2','3'=>'3','4'=>'4',
-									'5' =>'5','6'=>'6','7'=>'7',
-									'8' =>'8','9'=>'9',},
+					-id => "tab$i",
+					-values=>['-1','0'],
+					-labels => {'-1' =>'ignore','0'=>'0',
+									},
 					-default=>"",
 					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
 					-id=>"ohidden$i",
-					-values=>['0','2'],
-					-labels => {'0'=>'Show','2' =>'Hide',},
+					-values=>['0','1','2'],
+					-labels => {'0'=>'Show','1'=>'Show Collapsed',
+									'2' =>'Hide',
+									},
 					-default=>"0",
 					-size=>1,
 					-multiple=>0,
@@ -240,8 +278,10 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 
 		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
 					-id=>"ihidden$i",
-					-values=>['0','2'],
-					-labels => {'0'=>'Show','2' =>'Hide',},
+					-values=>['0','1','2'],
+					-labels => {'0'=>'Show','1'=>'Show Collapsed',
+									'2' =>'Hide',
+									},
 					-default=>"0",
 					-size=>1,
 					-multiple=>0,
@@ -276,11 +316,34 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 			-checked => '',
 			-value => 1,
 			-label => '');
-		
+		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
+					-id => "kohafield$i",
+					-values=> \@kohafields,
+					-default=> "",
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{frameworkcode}  = CGI::scrolling_list(-name=>'frameworkcode',
+					-id=>'frameworkcode',
+					-values=> \@authtypes,
+					-default=>$data->{'frameworkcode'},
+					-size=>1,
+		 			-tabindex=>'',
+					-multiple=>0,
+					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
 					-id => 'authorised_value',
 					-values=> \@authorised_values,
 					-size=>1,
+		 			-tabindex=>'',
+					-multiple=>0,
+					);
+		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
+					-id=>'value_builder',
+					-values=> \@value_builder,
+					-default=>$data->{'value_builder'},
+					-size=>1,
+		 			-tabindex=>'',
 					-multiple=>0,
 					);
 		$row_data{link} = CGI::checkbox( -name => "link",
@@ -296,7 +359,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	$template->param('use-heading-flags-p' => 1);
 	$template->param('heading-edit-subfields-p' => 1);
 	$template->param(action => "Edit subfields",
-							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\">$tagfield",
+							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />$tagfield",
 							loop => \@loop_data,
 							more_subfields => $more_subfields,
 							more_tag => $tagfield);
@@ -307,20 +370,21 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace auth_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl, link)
-									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl, link)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
+	my @kohafield		= $input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
-	#my @hidden		= $input->param('hidden');
 	my @hidden;
 	my @ohidden		= $input->param('ohidden');
 	my @ihidden		= $input->param('ihidden');
 	my @ehidden		= $input->param('ehidden');
 	my @authorised_values	= $input->param('authorised_value');
-#	my $authtypecodes	= $input->param('authtypecode');
+	my $authtypecode	= $input->param('authtypecode');
+	my @frameworkcodes	= $input->param('frameworkcode');
 	my @value_builder	=$input->param('value_builder');
 	my @link		=$input->param('link');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
@@ -331,33 +395,33 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		my $libopac			=$libopac[$i];
 		my $repeatable		=$input->param("repeatable$i")?1:0;
 		my $mandatory		=$input->param("mandatory$i")?1:0;
-
+		my $kohafield		=$kohafield[$i];
 		my $tab				=$tab[$i];
 		my $seealso				=$seealso[$i];
 		my $authorised_value		=$authorised_values[$i];
-#		my $authtypecode		=$authtypecodes;
+		my $frameworkcode		=$frameworkcodes[$i];
 		my $value_builder=$value_builder[$i];
 		my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
 		my $link = $input->param("link$i")?1:0;
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
-				$sth->execute ($tagfield,
-									$tagsubfield,
-									$liblibrarian,
-									$libopac,
-									$repeatable,
-									$mandatory,
-									$tab,
-									$seealso,
-									$authorised_value,
-									$authtypecode,
-									$value_builder,
-									$hidden,
-									$isurl,
-									
-
-	 $link,
+				$sth->execute($authtypecode,
+                              $tagfield,
+                              $tagsubfield,
+                              $liblibrarian,
+                              $libopac,
+                              $repeatable,
+                              $mandatory,
+                              $kohafield,
+                              $tab,
+                              $seealso,
+                              $authorised_value,
+                              $frameworkcode,
+                              $value_builder,
+                              $hidden,
+                              $isurl,
+                              $link,
 					      );
 			}
 		}
@@ -413,6 +477,7 @@ my	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
 		$row_data{tagsubfield} = $results->[$i]{'tagsubfield'};
 		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
+		$row_data{kohafield} = $results->[$i]{'kohafield'};
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};

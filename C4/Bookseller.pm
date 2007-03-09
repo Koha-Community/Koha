@@ -50,15 +50,11 @@ a bookseller.
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
 #-------------------------------------------------------------------#
 
-=head3 GetBookSeller
-
-=over 4
+=head2 GetBookSeller
 
 @results = &GetBookSeller($searchstring);
 
@@ -67,8 +63,6 @@ ID, or a string to look for in the book seller's name.
 
 C<@results> is an array of references-to-hash, whose keys are the fields of of the
 aqbooksellers table in the Koha database.
-
-=back
 
 =cut
 
@@ -93,20 +87,16 @@ sub GetBookSeller {
 
 #-----------------------------------------------------------------#
 
-=head3 GetBooksellersWithLateOrders
-
-=over 4
+=head2 GetBooksellersWithLateOrders
 
 %results = &GetBooksellersWithLateOrders;
 
 Searches for suppliers with late orders.
 
-=back
-
 =cut
 
 sub GetBooksellersWithLateOrders {
-    my $delay = shift;
+    my ($delay,$branch) = @_;
     my $dbh   = C4::Context->dbh;
 
 # FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
@@ -147,9 +137,7 @@ sub GetBooksellersWithLateOrders {
 
 #--------------------------------------------------------------------#
 
-=head3 AddBookseller
-
-=over 4
+=head2 AddBookseller
 
 $id = &AddBookseller($bookseller);
 
@@ -158,8 +146,6 @@ keys are the fields of the aqbooksellers table in the Koha database.
 All fields must be present.
 
 Returns the ID of the newly-created bookseller.
-
-=back
 
 =cut
 
@@ -197,20 +183,18 @@ sub AddBookseller {
     );
 
     # return the id of this new supplier
-    my $query = "
+    $query = "
         SELECT max(id)
         FROM   aqbooksellers
     ";
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute;
     return scalar($sth->fetchrow);
 }
 
 #-----------------------------------------------------------------#
 
-=head3 ModSupplier
-
-=over 4
+=head2 ModSupplier
 
 &ModSupplier($bookseller);
 
@@ -222,8 +206,6 @@ The entry to modify is determined by C<$bookseller-E<gt>{id}>.
 The easiest way to get all of the necessary fields is to look up a
 book seller with C<&booksellers>, modify what's necessary, then call
 C<&ModSupplier> with the result.
-
-=back
 
 =cut
 
@@ -260,14 +242,11 @@ sub ModBookseller {
     $sth->finish;
 }
 
-
 END { }    # module clean-up code here (global destructor)
 
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 

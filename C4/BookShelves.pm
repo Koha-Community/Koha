@@ -26,14 +26,10 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Circulation::Circ2;
-use C4::AcademicInfo;
-use C4::Search;
-use C4::Date;
-use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
@@ -55,56 +51,31 @@ items to and from bookshelves.
 
 =cut
 
-@ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio
-				&RemoveFromShelf &AddShelf &RemoveShelf
-				&ShelfPossibleAction
+@ISA    = qw(Exporter);
+@EXPORT = qw(
+        &GetShelves &GetShelfContents &GetShelf
 
-				&GetShelfListExt &AddShelfExt &EditShelfExt &RemoveShelfExt 
-				&GetShelfInfo &GetShelfContentsExt &RemoveFromShelfExt 
-				&GetShelfListOfExt &AddToShelfExt
-				
-				&AddRequestToShelf &CountShelfRequest &GetShelfRequests 
-				&RejectShelfRequest &CatalogueShelfRequest &GetShelfRequestOwner
-				&GetShelfRequest);
+        &AddToShelf &AddToShelfFromBiblio &AddShelf
 
-	
-my $dbh;
-	 $dbh = C4::Context->dbh;
+        &ModShelf
+        &ShelfPossibleAction
+        &DelFromShelf &DelShelf
+);
 
-=item ShelfPossibleAction
+my $dbh = C4::Context->dbh;
 
-=over 4
+=item GetShelves
 
-=item C<$loggedinuser,$shelfnumber,$action>
-
-$action can be "view" or "manage".
-
-Returns 1 if the user can do the $action in the $shelfnumber shelf.
-Returns 0 otherwise.
-
-=back
-
-=cut
-sub ShelfPossibleAction {
-	my ($loggedinuser,$shelfnumber,$action)= @_;
-	my $sth = $dbh->prepare("select owner,category from bookshelf where shelfnumber=?");
-	$sth->execute($shelfnumber);
-	my ($owner,$category) = $sth->fetchrow;
-	return 1 if (($category>=3 or $owner eq $loggedinuser) && $action eq 'manage');
-	return 1 if (($category>= 2 or $owner eq $loggedinuser) && $action eq 'view');
-	return 0;
-}
-
-=item GetShelfList
-
-  $shelflist = &GetShelfList();
+  $shelflist = &GetShelves($owner, $mincategory);
   ($shelfnumber, $shelfhash) = each %{$shelflist};
 
 Looks up the virtual bookshelves, and returns a summary. C<$shelflist>
 is a reference-to-hash. The keys are the bookshelf numbers
 (C<$shelfnumber>, above), and the values (C<$shelfhash>, above) are
 themselves references-to-hash, with the following keys:
+
+C<mincategory> : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
+bookshelves of the owner are always selected, whatever the category
 
 =over 4
 
@@ -119,155 +90,242 @@ The number of books on that bookshelf.
 =back
 
 =cut
+
 #'
 # FIXME - Wouldn't it be more intuitive to return a list, rather than
 # a reference-to-hash? The shelf number can be just another key in the
 # hash.
-sub GetShelfList {
-	my ($owner,$mincategory) = @_;
-	# mincategory : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
-	# bookshelves of the owner are always selected, whatever the category
-	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
-							count(shelfcontents.itemnumber) as count
-								FROM		bookshelf
-								LEFT JOIN	shelfcontents
-								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
-								left join borrowers on bookshelf.owner = borrowers.borrowernumber
-								
-								where owner=? or category>=?
-								GROUP BY	bookshelf.shelfnumber order by shelfname");
-    $sth->execute($owner,$mincategory);
-    my %shelflist;
-    while (my ($shelfnumber, $shelfname,$owner,$surname,$firstname,$category,$count) = $sth->fetchrow) {
-	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
-	$shelflist{$shelfnumber}->{'count'}=$count;
-	$shelflist{$shelfnumber}->{'owner'}=$owner;
-	$shelflist{$shelfnumber}->{'surname'} = $surname;
-	$shelflist{$shelfnumber}->{'firstname'} = $firstname;
-	$shelflist{$shelfnumber}->{'category'} = $category;
-	
-	
-    }
 
-    return(\%shelflist);
+sub GetShelves {
+    my ( $owner, $mincategory ) = @_;
+
+    my $query = qq(
+        SELECT bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,bookshelf.category,
+               count(shelfcontents.itemnumber) as count
+        FROM   bookshelf
+            LEFT JOIN   shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
+            LEFT JOIN   borrowers ON bookshelf.owner = borrowers.borrowernumber
+        WHERE  owner=? OR category>=?
+        GROUP BY bookshelf.shelfnumber
+        ORDER BY bookshelf.category, bookshelf.shelfname, borrowers.firstname, borrowers.surname
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $owner, $mincategory );
+    my %shelflist;
+    while (
+        my (
+            $shelfnumber, $shelfname, $owner, $surname,
+            $firstname,   $category,  $count
+        )
+        = $sth->fetchrow
+      )
+    {
+        $shelflist{$shelfnumber}->{'shelfname'} = $shelfname;
+        $shelflist{$shelfnumber}->{'count'}     = $count;
+        $shelflist{$shelfnumber}->{'category'}  = $category;
+        $shelflist{$shelfnumber}->{'owner'}     = $owner;
+        $shelflist{$shelfnumber}->{'surname'}     = $surname;
+        $shelflist{$shelfnumber}->{'firstname'}   = $firstname;
+    }
+    return ( \%shelflist );
+}
+
+=item GetShef
+
+  (shelfnumber,shelfname,owner,category) = &GetShelf($shelfnumber);
+
+Looks up information about the contents of virtual bookshelf number
+C<$shelfnumber>
+
+Returns the database's information on 'bookshelf' table.
+
+=cut
+
+sub GetShelf {
+    my ($shelfnumber) = @_;
+    my $query = qq(
+        SELECT shelfnumber,shelfname,owner,category
+        FROM   bookshelf
+        WHERE  shelfnumber=?
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute($shelfnumber);
+    return $sth->fetchrow;
 }
 
 =item GetShelfContents
 
-  $itemlist = &GetShelfContents($env, $shelfnumber);
+  $itemlist = &GetShelfContents($shelfnumber);
 
 Looks up information about the contents of virtual bookshelf number
 C<$shelfnumber>.
 
 Returns a reference-to-array, whose elements are references-to-hash,
-as returned by C<&getiteminformation>.
-
-I don't know what C<$env> is.
+as returned by C<C4::Circ2::getiteminformation>.
 
 =cut
+
 #'
 sub GetShelfContents {
-    my ($env, $shelfnumber) = @_;
+    my ( $shelfnumber ) = @_;
     my @itemlist;
-    my $sth=$dbh->prepare("select itemnumber from shelfcontents where shelfnumber=? order by itemnumber");
+    my $query =
+       " SELECT itemnumber
+         FROM   shelfcontents
+         WHERE  shelfnumber=?
+         ORDER BY itemnumber
+       ";
+    my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
-    while (my ($itemnumber) = $sth->fetchrow) {
-	my ($item) = getiteminformation($env, $itemnumber, 0);
-	push (@itemlist, $item);
+    my $sth2 = $dbh->prepare("
+        SELECT biblio.*,biblioitems.* FROM items 
+            LEFT JOIN biblio on items.biblionumber=biblio.biblionumber
+            LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
+        WHERE items.itemnumber=?"
+    );
+    while ( my ($itemnumber) = $sth->fetchrow ) {
+        $sth2->execute($itemnumber);
+        my $item = $sth2->fetchrow_hashref;
+        $item->{'itemnumber'}=$itemnumber;
+        push( @itemlist, $item );
     }
-    return (\@itemlist);
-}
-
-=item AddToShelf
-
-  &AddToShelf($env, $itemnumber, $shelfnumber);
-
-Adds item number C<$itemnumber> to virtual bookshelf number
-C<$shelfnumber>, unless that item is already on that shelf.
-
-C<$env> is ignored.
-
-=cut
-#'
-sub AddToShelf {
-	my ($env, $itemnumber, $shelfnumber) = @_;
-	return unless $itemnumber;
-	my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
-
-	$sth->execute($shelfnumber, $itemnumber);
-	if ($sth->rows) {
-# already on shelf
-	} else {
-		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values (?, ?, 0)");
-		$sth->execute($shelfnumber, $itemnumber);
-	}
-}
-sub AddToShelfFromBiblio {
-	my ($env, $biblionumber, $shelfnumber) = @_;
-	return unless $biblionumber;
-	my $sth = $dbh->prepare("select itemnumber from items where biblionumber=?");
-	$sth->execute($biblionumber);
-	my ($itemnumber) = $sth->fetchrow;
-	$sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
-	$sth->execute($shelfnumber, $itemnumber);
-	if ($sth->rows) {
-# already on shelf
-	} else {
-		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags,biblionumber) values (?, ?, 0,?)");
-		$sth->execute($shelfnumber, $itemnumber,$biblionumber);
-	}
-}
-
-=item RemoveFromShelf
-
-  &RemoveFromShelf($env, $itemnumber, $shelfnumber);
-
-Removes item number C<$itemnumber> from virtual bookshelf number
-C<$shelfnumber>. If the item wasn't on that bookshelf to begin with,
-nothing happens.
-
-C<$env> is ignored.
-
-=cut
-#'
-sub RemoveFromShelf {
-    my ($env, $itemnumber, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=? and itemnumber=?");
-    $sth->execute($shelfnumber,$itemnumber);
+    return ( \@itemlist );
 }
 
 =item AddShelf
 
-  ($status, $msg) = &AddShelf($env, $shelfname);
+  $shelfnumber = &AddShelf( $shelfname, $owner, $category);
 
-Creates a new virtual bookshelf with name C<$shelfname>.
+Creates a new virtual bookshelf with name C<$shelfname>, owner C<$owner> and category
+C<$category>.
 
-Returns a two-element array, where C<$status> is 0 if the operation
-was successful, or non-zero otherwise. C<$msg> is "Done" in case of
-success, or an error message giving the reason for failure.
-
-C<$env> is ignored.
+Returns a code to know what's happen.
+    * -1 : if this bookshelf already exist.
+    * $shelfnumber : if success.
 
 =cut
-#'
-# FIXME - Perhaps this could/should return the number of the new bookshelf
-# as well?
+
 sub AddShelf {
-    my ($env, $shelfname,$owner,$category) = @_;
-    my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
-	$sth->execute($shelfname);
-    if ($sth->rows) {
-	return(1, "Shelf \"$shelfname\" already exists");
-    } else {
-	$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
-	$sth->execute($shelfname,$owner,$category);
-	return (0, "Done");
+    my ( $shelfname, $owner, $category ) = @_;
+    my $query = qq(
+        SELECT *
+        FROM   bookshelf
+        WHERE  shelfname=? AND owner=?
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute($shelfname,$owner);
+    if ( $sth->rows ) {
+        return (-1);
+    }
+    else {
+        my $query = qq(
+            INSERT INTO bookshelf
+                (shelfname,owner,category)
+            VALUES (?,?,?)
+        );
+        $sth = $dbh->prepare($query);
+        $sth->execute( $shelfname, $owner, $category );
+        my $shelfnumber = $dbh->{'mysql_insertid'};
+        return ($shelfnumber);
     }
 }
 
-=item RemoveShelf
+=item AddToShelf
 
-  ($status, $msg) = &RemoveShelf($env, $shelfnumber);
+  &AddToShelf($itemnumber, $shelfnumber);
+
+Adds item number C<$itemnumber> to virtual bookshelf number
+C<$shelfnumber>, unless that item is already on that shelf.
+
+=cut
+
+#'
+sub AddToShelf {
+    my ( $itemnumber, $shelfnumber ) = @_;
+    return unless $itemnumber;
+    my $query = qq(
+        SELECT *
+        FROM   shelfcontents
+        WHERE  shelfnumber=? AND itemnumber=?
+    );
+    my $sth = $dbh->prepare($query);
+
+    $sth->execute( $shelfnumber, $itemnumber );
+    unless ( $sth->rows ) {
+        # already on shelf
+        my $query = qq(
+            INSERT INTO shelfcontents
+                (shelfnumber, itemnumber, flags)
+            VALUES
+                (?, ?, 0)
+        );
+        $sth = $dbh->prepare($query);
+        $sth->execute( $shelfnumber, $itemnumber );
+    }
+}
+
+=item AddToShelfFromBiblio
+ 
+    &AddToShelfFromBiblio($biblionumber, $shelfnumber)
+
+    this function allow to add a book into the shelf number $shelfnumber
+    from biblionumber.
+
+=cut
+
+sub AddToShelfFromBiblio {
+    my ( $biblionumber, $shelfnumber ) = @_;
+    return unless $biblionumber;
+    my $query = qq(
+        SELECT itemnumber
+        FROM   items
+        WHERE  biblionumber=?
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my ($itemnumber) = $sth->fetchrow;
+    $query = qq(
+        SELECT *
+        FROM   shelfcontents
+        WHERE  shelfnumber=? AND itemnumber=?
+    );
+    $sth = $dbh->prepare($query);
+    $sth->execute( $shelfnumber, $itemnumber );
+    unless ( $sth->rows ) {
+        # "already on shelf";
+        my $query =qq(
+            INSERT INTO shelfcontents
+                (shelfnumber, itemnumber, flags)
+            VALUES
+                (?, ?, 0)
+        );
+        $sth = $dbh->prepare($query);
+        $sth->execute( $shelfnumber, $itemnumber );
+    }
+}
+
+=item ModShelf
+
+ModShelf($shelfnumber, $shelfname, $owner, $category )
+
+Modify the value into bookshelf table with values given on input arg.
+
+=cut
+
+sub ModShelf {
+    my ( $shelfnumber, $shelfname, $owner, $category ) = @_;
+    my $query = qq(
+        UPDATE bookshelf
+        SET    shelfname=?,owner=?,category=?
+        WHERE  shelfnumber=?
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $shelfname, $owner, $category, $shelfnumber );
+}
+
+=item DelShelf
+
+  ($status) = &DelShelf($shelfnumber);
 
 Deletes virtual bookshelf number C<$shelfnumber>. The bookshelf must
 be empty.
@@ -276,391 +334,77 @@ Returns a two-element array, where C<$status> is 0 if the operation
 was successful, or non-zero otherwise. C<$msg> is "Done" in case of
 success, or an error message giving the reason for failure.
 
-C<$env> is ignored.
+=cut
+
+
+=item ShelfPossibleAction
+
+ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
+
+C<$loggedinuser,$shelfnumber,$action>
+
+$action can be "view" or "manage".
+
+Returns 1 if the user can do the $action in the $shelfnumber shelf.
+Returns 0 otherwise.
 
 =cut
-#'
-sub RemoveShelf {
-    my ($env, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
-	$sth->execute($shelfnumber);
-    my ($count)=$sth->fetchrow;
-    if ($count) {
-	return (1, "Shelf has $count items on it.  Please remove all items before deleting this shelf.");
-    } else {
-	$sth=$dbh->prepare("delete from bookshelf where shelfnumber=?");
-	$sth->execute($shelfnumber);
-	return (0, "Done");
-    }
-}
 
-sub GetShelfListOfExt {
-	my ($owner) = @_;
-	my $sth;
-	if ($owner) {
-		$sth = $dbh->prepare("SELECT	* FROM bookshelf WHERE (owner = ?) or category>=2 ORDER BY shelfname");
-		$sth->execute($owner);
-	} else {
-		$sth = $dbh->prepare("SELECT	* FROM bookshelf where category<2 ORDER BY shelfname");
-		$sth->execute();
-	}
-	
-	my $sth2 = $dbh->prepare("SELECT count(biblionumber) as bibliocount FROM shelfcontents WHERE (shelfnumber = ?)");
-	
-	my @results;
-	while (my $row = $sth->fetchrow_hashref) {
-		$sth2->execute($row->{'shelfnumber'});
-		$row->{'bibliocount'} = $sth2->fetchrow;
-		if ($row->{'category'} == 1) {
-			$row->{'private'} = 1;
-		} else {
-			$row->{'public'} = 1;
-		}
-		push @results, $row;
-	}
-    return \@results;
-}
-
-sub GetShelfListExt {
-	my ($owner,$mincategory,$id_intitution, $intra) = @_;
-
-	my $sth1 = $dbh->prepare("SELECT * FROM careers WHERE id_institution = ?");
-	$sth1->execute($id_intitution);
-	my @results;
-
-	my $total_shelves = 0;
-	while (my $row1 = $sth1->fetchrow_hashref) {
-		
-		my @shelves;
-		my $sth2;
-		if ($intra) {
-			$sth2=$dbh->prepare("SELECT		
-									bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
-									count(shelfcontents.biblionumber) as count
-								FROM 
-									bookshelf
-									LEFT JOIN shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
-									LEFT JOIN borrowers ON bookshelf.owner = borrowers.borrowernumber	
-								    LEFT JOIN bookshelves_careers ON bookshelves_careers.shelfnumber = bookshelf.shelfnumber
-								WHERE 
-									(id_career = ?) 
-								GROUP BY bookshelf.shelfnumber 
-								ORDER BY shelfname");
-			$sth2->execute($row1->{'id_career'});
-		
-		} else {
-			$sth2=$dbh->prepare("SELECT		
-									bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname, category,
-									count(shelfcontents.biblionumber) as count
-								FROM 
-									bookshelf
-									LEFT JOIN shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
-									LEFT JOIN borrowers ON bookshelf.owner = borrowers.borrowernumber	
-								    LEFT JOIN bookshelves_careers ON bookshelves_careers.shelfnumber = bookshelf.shelfnumber
-								WHERE 
-									(owner = ? OR category >= ?) AND (id_career = ?) 
-								GROUP BY bookshelf.shelfnumber 
-								ORDER BY shelfname");
-			$sth2->execute($owner,$mincategory,$row1->{'id_career'});
-		}
-		
-		$row1->{'shelfcount'} = 0;
-		while (my $row2 = $sth2->fetchrow_hashref) {
-			if ($owner == $row2->{'owner'}) {
-				$row2->{'canmanage'} = 1;
-			}
-			if ($row2->{'category'} == 1) {
-				$row2->{'private'} = 1;
-			} else {
-				$row2->{'public'} = 1;
-			}
-			$row1->{'shelfcount'}++;
-			$total_shelves++; 
-			push @shelves, $row2;
-		}
-		$row1->{'shelvesloop'} = \@shelves;
-		push @results, $row1;
-	}
-
-    return($total_shelves, \@results);
-}
-
-sub AddShelfExt {
-    my ($shelfname,$owner,$category,$careers) = @_;
-    my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfname = ?");
-	$sth->execute($shelfname);
-    if ($sth->rows) {
-		return 0;
-    } else {
-		$sth = $dbh->prepare("INSERT INTO bookshelf (shelfname,owner,category) VALUES (?,?,?)");
-		$sth->execute($shelfname,$owner,$category);
-		my $shelfnumber = $dbh->{'mysql_insertid'};
-
-		foreach my $row (@{$careers}) {
-			$sth = $dbh->prepare("INSERT INTO bookshelves_careers VALUES (?,?)");
-			$sth->execute($shelfnumber, $row);
-		}
-		return $shelfnumber;
-    }
-}
-
-sub EditShelfExt {
-    my ($shelfnumber,$shelfname,$category,$careers) = @_;
-    my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfname = ? AND NOT shelfnumber = ? ");
-	$sth->execute($shelfname, $shelfnumber);
-    if ($sth->rows) {
-		return 0;
-    } else {
-		$sth = $dbh->prepare("UPDATE bookshelf SET shelfname = ?, category = ? WHERE shelfnumber = ?");
-		$sth->execute($shelfname,$category,$shelfnumber);
-		
-		$sth = $dbh->prepare("DELETE FROM bookshelves_careers WHERE shelfnumber = ?");
-		$sth->execute($shelfnumber);
-
-		foreach my $row (@{$careers}) {
-			$sth = $dbh->prepare("INSERT INTO bookshelves_careers VALUES (?,?)");
-			$sth->execute($shelfnumber, $row);
-		}
-		return $shelfnumber;
-    }
-}
-
-
-sub RemoveShelfExt {
-    my ($shelfnumber) = @_;
-	my $sth = $dbh->prepare("DELETE FROM bookshelves_careers WHERE shelfnumber = ?");
-	$sth->execute($shelfnumber);
-	my $sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ?");
-	$sth->execute($shelfnumber);
-	$sth = $dbh->prepare("DELETE FROM bookshelf WHERE shelfnumber = ?");
-	$sth->execute($shelfnumber);
-	return 1;
-}
-
-sub GetShelfInfo {
-	my ($shelfnumber, $owner) = @_;
-	my $sth = $dbh->prepare("SELECT * FROM bookshelf WHERE shelfnumber = ?");
-	$sth->execute($shelfnumber);
-	my $result = $sth->fetchrow_hashref;
-	
-	if ($result->{'owner'} == $owner) {
-		$result->{'canmanage'} = 1;
-	}
-
-	my $sth = $dbh->prepare("SELECT id_career FROM bookshelves_careers WHERE shelfnumber = ?");
-	$sth->execute($shelfnumber);
-	my @careers;
-	while (my $row = $sth->fetchrow) {
-		push @careers, $row;
-	}
-	$result->{'careers'} = \@careers;
-	return $result;
-}
-
-sub GetShelfContentsExt {
-    my ($shelfnumber) = @_;
-    my $sth = $dbh->prepare("SELECT biblionumber FROM shelfcontents WHERE shelfnumber = ? ORDER BY biblionumber");
+sub ShelfPossibleAction {
+    my ( $user, $shelfnumber, $action ) = @_;
+    my $query = qq(
+        SELECT owner,category
+        FROM   bookshelf
+        WHERE  shelfnumber=?
+    );
+    my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
-	my @biblios;
-	my $even = 0;
-    while (my ($biblionumber) = $sth->fetchrow) {
-	my $biblio=ZEBRA_readyXML_noheader($dbh,$biblionumber);
-	my  $xmlrecord=XML_xml2hash($biblio);
-	push @biblios,$xmlrecord;
-     }	
-my ($facets,@results)=parsefields($dbh,"opac",@biblios);
-    
-    return (\@results);
+    my ( $owner, $category ) = $sth->fetchrow;
+    return 1 if (($category >= 3 or $owner eq $user) && $action eq 'manage' );
+    return 1 if (($category >= 2 or $owner eq $user) && $action eq 'view' );
+    return 0;
 }
 
-sub RemoveFromShelfExt {
-    my ($biblionumber, $shelfnumber) = @_;
-    my $sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
-    $sth->execute($shelfnumber,$biblionumber);
+=item DelFromShelf
+
+  &DelFromShelf( $itemnumber, $shelfnumber);
+
+Removes item number C<$itemnumber> from virtual bookshelf number
+C<$shelfnumber>. If the item wasn't on that bookshelf to begin with,
+nothing happens.
+
+=cut
+
+#'
+sub DelFromShelf {
+    my ( $itemnumber, $shelfnumber ) = @_;
+    my $query = qq(
+        DELETE FROM shelfcontents
+        WHERE  shelfnumber=? AND itemnumber=?
+    );
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $shelfnumber, $itemnumber );
 }
 
-sub AddToShelfExt {
-	my ($biblionumber, $shelfnumber) = @_;
-	my $sth = $dbh->prepare("SELECT * FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
-	$sth->execute($shelfnumber, $biblionumber);
-	if ($sth->rows) {
-		return 0
-	} else {
-		$sth = $dbh->prepare("INSERT INTO shelfcontents (shelfnumber, biblionumber) VALUES (?, ?)");
-		$sth->execute($shelfnumber, $biblionumber);
-	}
+=head2 DelShelf
+
+  $Number = DelShelf($shelfnumber);
+
+    this function delete the shelf number, and all of it's content
+
+=cut
+
+#'
+sub DelShelf {
+    my ( $shelfnumber ) = @_;
+        my $sth = $dbh->prepare("DELETE FROM bookshelf WHERE shelfnumber=?");
+        $sth->execute($shelfnumber);
+        return 0;
 }
 
-sub AddRequestToShelf {
-	my ($shelfnumber, $requestType, $requestName, $comments) = @_;
-	my $sth = $dbh->prepare("INSERT INTO shelf_requests (shelfnumber, request_name, request_type, status, request_date, comments) VALUES (?,?,?,?, CURRENT_DATE(),?)");
-	$sth->execute($shelfnumber, $requestName, $requestType, "PENDING", $comments);
-	return $dbh->{'mysql_insertid'};
-}
-
-sub CountShelfRequest {
-	my ($shelfnumber, $status) = @_;
-	my $sth;
-	if ($shelfnumber) {
-		$sth = $dbh->prepare("SELECT count(idRequest) FROM shelf_requests WHERE shelfnumber = ? AND status = ?");
-		$sth->execute($shelfnumber, $status);
-	} else {
-		$sth = $dbh->prepare("SELECT count(idRequest) FROM shelf_requests WHERE status = ?");
-		$sth->execute($status);
-	}
-	my ($count) = $sth->fetchrow_array;
-	return $count;
-}
-
-sub GetShelfRequests {
-	my ($shelfnumber, $status, $type) = @_;
-	my @params;
-	my $query = "SELECT * FROM shelf_requests SR INNER JOIN bookshelf BS ON SR.shelfnumber = BS.shelfnumber WHERE status = ?";
-	push @params, $status;
-	if ($shelfnumber) {
-		$query.= " AND shelfnumber = ?";
-		push @params, $shelfnumber;
-	}
-	if ($type) {
-		$query.= " AND request_type = ?";
-		push @params, $type;
-	}
-	$query.= " ORDER BY SR.shelfnumber, SR.request_date";
-	my $sth = $dbh->prepare($query);
-	$sth->execute(@params);
-	my @results;
-
-	my $color = 0;
-	while (my $row = $sth->fetchrow_hashref) {
-		my $borrdata = borrdata('',$row->{'owner'});
-		$row->{'surname'} = $borrdata->{'surname'};
-		$row->{'firstname'} = $borrdata->{'firstname'};
-		$row->{'cardnumber'} = $borrdata->{'cardnumber'};
-		$row->{'request_date'} = format_date($row->{'request_date'});
-		$row->{$row->{'request_type'}} = 1;
-		$row->{$row->{'status'}} = 1;
-		$row->{'color'} = $color = not $color;
-		push @results, $row;
-	}
-	return (\@results);
-}
-
-sub RejectShelfRequest {
-	my ($idRequest) = @_;
-	#get the type and name request
-	my $sth = $dbh->prepare("SELECT request_type, request_name FROM shelf_requests WHERE idRequest = ?");
-	$sth->execute($idRequest);
-	my ($request_type, $request_name) = $sth->fetchrow_array;	
-	#if the request is a file, then unlink the file
-	if ($request_type eq 'file') {
-		unlink($ENV{'DOCUMENT_ROOT'}."/uploaded-files/shelf-files/$idRequest-$request_name");
-	}
-	#change tha request status to REJECTED
-	$sth = $dbh->prepare("UPDATE shelf_requests SET status = ? WHERE idRequest = ?");
-	$sth->execute("REJECTED", $idRequest);
-	return 1;
-}
-
-sub GetShelfRequestOwner {
-	my ($idRequest) = @_;
-	my $sth = $dbh->prepare("SELECT owner FROM shelf_requests R INNER JOIN bookshelf S ON R.shelfnumber = S.shelfnumber WHERE idRequest = ?");
-	$sth->execute($idRequest);
-	my ($owner) = $sth->fetchrow_array;	
-	my $bordata = &borrdata(undef, $owner);
-	#print "Content-type: text/plain \n\n  --- $owner ----- $bordata->{'emailaddress'}" ;
-	return ($bordata);
-}
-
-sub GetShelfRequest {
-	my ($idRequest) = @_;
-	my $sth = $dbh->prepare("SELECT * FROM shelf_requests R INNER JOIN bookshelf S ON R.shelfnumber = S.shelfnumber WHERE idRequest = ?");
-	$sth->execute($idRequest);
-	my $request_data = $sth->fetchrow_hashref;	
-	return $request_data;
-}
-
-sub CatalogueShelfRequest {
-	my ($idRequest, $shelfnumber, $biblionumber) = @_;
-	#find the last request status 
-	my $sth = $dbh->prepare("SELECT status, biblionumber FROM shelf_requests WHERE idRequest = ?");
-	$sth->execute($idRequest);
-	my ($prev_status, $prev_biblionumber) = $sth->fetchrow_array;
-	#if the status was not seted, inserts an entry in shelfcontents	
-	if ($prev_status ne "CATALOGUED") {
-		$sth = $dbh->prepare("INSERT INTO shelfcontents (shelfnumber, biblionumber) VALUES (?,?)");
-		$sth->execute($shelfnumber, $biblionumber);		
-	#if the request was previously catalogued, delete the entry in shelfcontens
-	} elsif ($prev_status ne "REJECTED") {
-		$sth = $dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber = ? AND biblionumber = ?");
-		$sth->execute($shelfnumber, $prev_biblionumber);		
-	}
-	#change the status to catalogued
-	$sth = $dbh->prepare("UPDATE shelf_requests SET status = ?, biblionumber = ? WHERE idRequest = ?");
-	$sth->execute("CATALOGUED", $biblionumber, $idRequest);
-	return 1;
-}
-
-END { }       # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 
 1;
-
-#
-# $Log$
-# Revision 1.19  2006/11/06 21:01:43  tgarip1957
-# Bug fixing and complete removal of Date::Manip
-#
-# Revision 1.18  2006/09/06 16:21:03  tgarip1957
-# Clean up before final commits
-#
-# Revision 1.13  2004/03/11 16:06:20  tipaul
-# *** empty log message ***
-#
-# Revision 1.11.2.2  2004/02/19 10:15:41  tipaul
-# new feature : adding book to bookshelf from biblio detail screen.
-#
-# Revision 1.11.2.1  2004/02/06 14:16:55  tipaul
-# fixing bugs in bookshelves management.
-#
-# Revision 1.11  2003/12/15 10:57:08  slef
-# DBI call fix for bug 662
-#
-# Revision 1.10  2003/02/05 10:05:02  acli
-# Converted a few SQL statements to use ? to fix a few strange SQL errors
-# Noted correct tab size
-#
-# Revision 1.9  2002/10/13 08:29:18  arensb
-# Deleted unused variables.
-# Removed trailing whitespace.
-#
-# Revision 1.8  2002/10/10 04:32:44  arensb
-# Simplified references.
-#
-# Revision 1.7  2002/10/05 09:50:10  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.6.2.1  2002/10/04 02:24:43  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.6  2002/09/23 13:50:30  arensb
-# Fixed missing bit in POD.
-#
-# Revision 1.5  2002/09/22 17:29:17  arensb
-# Added POD.
-# Added some FIXME comments.
-# Removed useless trailing whitespace.
-#
-# Revision 1.4  2002/08/14 18:12:51  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.3  2002/07/02 17:48:06  tonnesen
-# Merged in updates from rel-1-2
-#
-# Revision 1.2.2.1  2002/06/26 20:46:48  tonnesen
-# Inserting some changes I made locally a while ago.
-#
-#
 
 __END__
 
@@ -675,3 +419,48 @@ Koha Developement team <info@koha.org>
 C4::Circulation::Circ2(3)
 
 =cut
+
+#
+# $Log$
+# Revision 1.20  2007/03/09 14:31:47  tipaul
+# rel_3_0 moved to HEAD
+#
+# Revision 1.15.8.10  2007/01/25 13:18:15  tipaul
+# checking that a bookshelf with the same name AND OWNER does not exist before creating it
+#
+# Revision 1.15.8.9  2006/12/15 17:37:52  toins
+# removing a function used only once.
+#
+# Revision 1.15.8.8  2006/12/14 17:22:55  toins
+# bookshelves work perfectly with mod_perl and are cleaned.
+#
+# Revision 1.15.8.7  2006/12/13 19:46:41  hdl
+# Some bug fixing.
+#
+# Revision 1.15.8.6  2006/12/11 17:10:06  toins
+# fixing some bugs on bookshelves.
+#
+# Revision 1.15.8.5  2006/12/07 16:45:43  toins
+# removing warn compilation. (perl -wc)
+#
+# Revision 1.15.8.4  2006/11/23 09:05:01  tipaul
+# enable removal of a bookshelf even if there are items inside
+#
+# Revision 1.15.8.3  2006/10/30 09:50:20  tipaul
+# removing getiteminformations (using direct SQL, as we are in a .pm, so it's "legal")
+#
+# Revision 1.15.8.2  2006/08/31 16:03:52  toins
+# Add Pod to DelShelf
+#
+# Revision 1.15.8.1  2006/08/30 15:59:14  toins
+# Code cleaned according to coding guide lines.
+#
+# Revision 1.15  2004/12/16 11:30:58  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf name & status
+#
+# Revision 1.14  2004/12/15 17:28:23  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf (this being not finished, will commit the rest soon)

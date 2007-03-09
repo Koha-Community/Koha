@@ -23,15 +23,13 @@ require Exporter;
 use CGI;
 use C4::Koha;
 use C4::Auth;
-use HTML::Template;
+
 use C4::Context;
-use C4::Search;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Acquisition;
-#use C4::SearchMarc;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
 # Creates a scrolling list with the associated default value.
@@ -88,8 +86,7 @@ if ( $op eq "do_search" ) {
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { borrowers => 1 },
-            flagsrequired   => { catalogue => 1 },
+            flagsrequired   => { tools => 1 },
             debug           => 1,
         }
     );
@@ -149,9 +146,10 @@ if ( $op eq "do_search" ) {
     for ( $i = 0 ; $i <= ( $total - 1 ) ; $i++ )
     {    #total-1 coz the array starts at 0
             #warn $i;
-            #warn Dumper $results->[$i]{'bibid'};
+
         my $type         = 'intra';
-        my @item_results = &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
+        my @item_results =
+          &GetItemsInfo( $results->[$i]{'biblionumber'}, $type );
 
         foreach my $item (@item_results) {
 
@@ -183,7 +181,7 @@ else {
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
+            flagsrequired   => { tools => 1 },
             debug           => 1,
         }
     );

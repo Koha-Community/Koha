@@ -4,22 +4,6 @@
 #written 20/02/2002 by paul.poulain@free.fr
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
-# ALGO :
-# this script use an $op to know what to do.
-# if $op is empty or none of the above values,
-#	- the default screen is build (with all records, or filtered datas).
-#	- the   user can clic on add, modify or delete record.
-# if $op=add_form
-#	- if primkey exists, this is a modification,so we read the $primkey record
-#	- builds the add/modify form
-# if $op=add_validate
-#	- the user has just send datas, so we create/modify the record
-# if $op=delete_form
-#	- we show the record having primkey=$primkey and ask for deletion validation form
-# if $op=delete_confirm
-#	- we delete the record having primkey=$primkey
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -37,140 +21,197 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+=head1 systempreferences.pl
+
+ALGO :
+ this script use an $op to know what to do.
+ if $op is empty or none of the above values,
+    - the default screen is build (with all records, or filtered datas).
+    - the   user can clic on add, modify or delete record.
+ if $op=add_form
+    - if primkey exists, this is a modification,so we read the $primkey record
+    - builds the add/modify form
+ if $op=add_validate
+    - the user has just send datas, so we create/modify the record
+ if $op=delete_form
+    - we show the record having primkey=$primkey and ask for deletion validation form
+ if $op=delete_confirm
+    - we delete the record having primkey=$primkey
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
+use C4::Languages;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Search;
 use C4::Context;
+
+
+# FIXME, shouldnt we store this stuff in the systempreferences table? 
 
 my %tabsysprefs;
 # Acquisitions
-	$tabsysprefs{acquisitions}="Acquisitions";
-	$tabsysprefs{gist}="Acquisitions";
+    $tabsysprefs{acquisitions}="Acquisitions";
+    $tabsysprefs{gist}="Acquisitions";
 # Admin
-	$tabsysprefs{dateformat}="Admin";
-	$tabsysprefs{insecure}="Admin";
-	$tabsysprefs{KohaAdmin}="Admin";
-# Authorities
-	$tabsysprefs{authoritysep}="Authorities";
-# Catalogue
-	$tabsysprefs{advancedMARCEditor}="Catalogue";
-	$tabsysprefs{autoBarcode}="Catalogue";
-	$tabsysprefs{hide_marc}="Catalogue";
-	$tabsysprefs{IntranetBiblioDefaultView} = "Catalogue";
-	$tabsysprefs{ISBD}="Catalogue";
-	$tabsysprefs{itemcallnumber}="Catalogue";
-	$tabsysprefs{LabelMARCView}="Catalogue";
-	$tabsysprefs{marc}="Catalogue";
-	$tabsysprefs{marcflavour}="Catalogue";
-	$tabsysprefs{serialsadditems}="Catalogue";
-	$tabsysprefs{sortbynonfiling}="Catalogue";
-	$tabsysprefs{MARCOrgCode}="Catalogue";
-	$tabsysprefs{z3950AuthorAuthFields}="Catalogue";
-	$tabsysprefs{z3950NormalizeAuthor}="Catalogue";
-	$tabsysprefs{SQLorZEBRA}="Catalogue";
-	
-# Circulation
-	$tabsysprefs{maxoutstanding}="Circulation";
-	$tabsysprefs{maxreserves}="Circulation";
-	$tabsysprefs{noissuescharge}="Circulation";
-	$tabsysprefs{patronimages}="Circulation";
-	$tabsysprefs{printcirculationslips}="Circulation";
-	$tabsysprefs{ReturnBeforeExpiry}="Circulation";
-	$tabsysprefs{allowrenewalsbefore}="Circulation";
-	$tabsysprefs{defaultBranch}="Circulation";
-	$tabsysprefs{strictrenewals}="Circulation";
-# Intranet
-	$tabsysprefs{TemplateEncoding}="Intranet";
-	$tabsysprefs{template}="Intranet";
-	$tabsysprefs{intranetstylesheet}="Intranet";
-	$tabsysprefs{IntranetNav}="Intranet";
-	$tabsysprefs{intranetcolorstylesheet}="Intranet";
-	$tabsysprefs{Activate_Log}="Intranet";
-	$tabsysprefs{allowrenewalsbefore}="Intranet";
-	
-	$tabsysprefs{zebrawait}="Intranet";
-	$tabsysprefs{retrieve_from}="Intranet";
-	$tabsysprefs{batchMode}="Intranet";
-	
-# Members
-	$tabsysprefs{automembernum}="Members";
-	$tabsysprefs{checkdigit}="Members";
-	$tabsysprefs{NotifyBorrowerDeparture}="Members";
-# OPAC
-	$tabsysprefs{AmazonAssocTag}="OPAC";
-	$tabsysprefs{AmazonContent}="OPAC";
-	$tabsysprefs{AmazonDevKey}="OPAC";
-	$tabsysprefs{AnonSuggestions}="OPAC";
-	$tabsysprefs{BiblioDefaultView}="OPAC";
-	$tabsysprefs{Disable_Dictionary}="OPAC";
-	$tabsysprefs{hidelostitems}="OPAC";
-	$tabsysprefs{LibraryName}="OPAC";
-	$tabsysprefs{opacbookbag}="OPAC";
-	$tabsysprefs{opaccolorstylesheet}="OPAC";
-	$tabsysprefs{opaccredits}="OPAC";
-	$tabsysprefs{opaclanguages}="OPAC";
-	$tabsysprefs{opaclanguagesdisplay}="OPAC";
-	$tabsysprefs{opaclargeimage}="OPAC";
-	$tabsysprefs{opaclayoutstylesheet}="OPAC";
-	$tabsysprefs{OpacNav}="OPAC";
-	$tabsysprefs{OpacPasswordChange}="OPAC";
-	$tabsysprefs{opacreadinghistory}="OPAC";
-	$tabsysprefs{opacsmallimage}="OPAC";
-	$tabsysprefs{opacstylesheet}="OPAC";
-	$tabsysprefs{opacthemes}="OPAC";
-	$tabsysprefs{opacuserlogin}="OPAC";
-	$tabsysprefs{SubscriptionHistory}="OPAC";
-	$tabsysprefs{suggestion}="OPAC";
-	$tabsysprefs{virtualshelves}="OPAC";
-	$tabsysprefs{opacheader}="OPAC";
-	$tabsysprefs{allowrenewsfromopac}="OPAC";
+    $tabsysprefs{dateformat}="Admin";
+    $tabsysprefs{delimiter}="Admin";
+    $tabsysprefs{IndependantBranches}="Admin";
+    $tabsysprefs{insecure}="Admin";
+    $tabsysprefs{KohaAdmin}="Admin";
+    $tabsysprefs{KohaAdminEmailAddress}="Admin";
+    $tabsysprefs{MIME}="Admin";
+    $tabsysprefs{timeout}="Admin";
+    $tabsysprefs{Intranet_includes}="Admin";
+    $tabsysprefs{AutoLocation}="Admin";
 
+# Authorities
+    $tabsysprefs{authoritysep}="Authorities";
+    $tabsysprefs{AuthDisplayHierarchy}="Authorities";
+# Catalogue
+    $tabsysprefs{advancedMARCEditor}="Catalogue";
+    $tabsysprefs{autoBarcode}="Catalogue";
+    $tabsysprefs{hide_marc}="Catalogue";
+    $tabsysprefs{IntranetBiblioDefaultView} = "Catalogue";
+    $tabsysprefs{ISBD}="Catalogue";
+    $tabsysprefs{itemcallnumber}="Catalogue";
+    $tabsysprefs{kohaspsuggest} = "Catalogue";
+    $tabsysprefs{LabelMARCView}="Catalogue";
+    $tabsysprefs{marc}="Catalogue";
+    $tabsysprefs{marcflavour}="Catalogue";
+    $tabsysprefs{serialsadditems}="Catalogue";
+    $tabsysprefs{sortbynonfiling}="Catalogue";
+    $tabsysprefs{MARCOrgCode}="Catalogue";
+    $tabsysprefs{z3950AuthorAuthFields}="Catalogue";
+    $tabsysprefs{z3950NormalizeAuthor}="Catalogue";
+    $tabsysprefs{Stemming}="Catalogue";
+    $tabsysprefs{WeightFields}="Catalogue";
+    $tabsysprefs{expandedSearchOption}="Catalogue";
+    
+# Circulation
+    $tabsysprefs{maxoutstanding}="Circulation";
+    $tabsysprefs{maxreserves}="Circulation";
+    $tabsysprefs{noissuescharge}="Circulation";
+    $tabsysprefs{IssuingInProcess}="Circulation";
+    $tabsysprefs{patronimages}="Circulation";
+    $tabsysprefs{printcirculationslips}="Circulation";
+    $tabsysprefs{ReturnBeforeExpiry}="Circulation";
+    $tabsysprefs{SpecifyDueDate}="Circulation";
+    $tabsysprefs{AutomaticItemReturn}="Circulation";
+    $tabsysprefs{ReservesMaxPickUpDelay}="Circulation";
+    $tabsysprefs{TransfersMaxDaysWarning}="Circulation";
+    $tabsysprefs{useDaysMode}="Circulation";
+
+# Intranet
+    $tabsysprefs{TemplateEncoding}="Intranet";
+    $tabsysprefs{template}="Intranet";
+    $tabsysprefs{intranetstylesheet}="Intranet";
+    $tabsysprefs{IntranetNav}="Intranet";
+    $tabsysprefs{intranetcolorstylesheet}="Intranet";
+    $tabsysprefs{intranetuserjs}="Intranet";
+# Members
+    $tabsysprefs{automembernum}="Members";
+    $tabsysprefs{checkdigit}="Members";
+    $tabsysprefs{intranetreadinghistory}="Members";
+    $tabsysprefs{NotifyBorrowerDeparture}="Members";
+    $tabsysprefs{memberofinstitution}="Members";
+    $tabsysprefs{ReadingHistory}="Members";
+    $tabsysprefs{BorrowerMandatoryField}="Members";
+    $tabsysprefs{borrowerRelationship}="Members";
+    $tabsysprefs{BorrowersTitles}="Members";    
+    $tabsysprefs{patronimages}="Members";
+    
+# OPAC
+    $tabsysprefs{AmazonAssocTag}="OPAC";
+    $tabsysprefs{AmazonContent}="OPAC";
+    $tabsysprefs{AmazonDevKey}="OPAC";
+    $tabsysprefs{BiblioDefaultView}="OPAC";
+    $tabsysprefs{LibraryName}="OPAC";
+    $tabsysprefs{opaccolorstylesheet}="OPAC";
+    $tabsysprefs{opaccredits}="OPAC";
+    $tabsysprefs{opaclanguages}="OPAC";
+    $tabsysprefs{opaclargeimage}="OPAC";
+    $tabsysprefs{opaclayoutstylesheet}="OPAC";
+    $tabsysprefs{OpacNav}="OPAC";
+    $tabsysprefs{opacsmallimage}="OPAC";
+    $tabsysprefs{opacstylesheet}="OPAC";
+    $tabsysprefs{opacthemes}="OPAC";
+    $tabsysprefs{opacuserjs}="OPAC";
+    $tabsysprefs{SubscriptionHistory}="OPAC";
+    $tabsysprefs{opacheader}="OPAC";
+    
+# OPACFeatures
+    $tabsysprefs{Disable_Dictionary}="OPACFeatures";
+    $tabsysprefs{hidelostitems}="OPACFeatures";
+    $tabsysprefs{opacbookbag}="OPACFeatures";
+    $tabsysprefs{opaclanguagesdisplay}="OPACFeatures";
+    $tabsysprefs{OpacPasswordChange}="OPACFeatures";
+    $tabsysprefs{opacreadinghistory}="OPACFeatures";
+    $tabsysprefs{virtualshelves}="OPACFeatures";
+    $tabsysprefs{RequestOnOpac}="OPACFeatures";
+    $tabsysprefs{reviewson}="OPACFeatures";
+    $tabsysprefs{OpacTopissues}="OPACFeatures";
+    $tabsysprefs{OpacAuthorities}="OPACFeatures";
+    $tabsysprefs{OpacCloud}="OPACFeatures";
+    $tabsysprefs{opacuserlogin}="OPACFeatures";
+    $tabsysprefs{AnonSuggestions}="OPACFeatures";
+    $tabsysprefs{suggestion}="OPACFeatures";
+    $tabsysprefs{OpacTopissue}="OPACFeatures";
+    $tabsysprefs{OpacBrowser}="OPACFeatures";
+
+# LOGFeatures
+    $tabsysprefs{CataloguingLog}  = "LOGFeatures";
+    $tabsysprefs{BorrowersLog}    = "LOGFeatures";
+    $tabsysprefs{SubscriptionLog} = "LOGFeatures";
+    $tabsysprefs{IssueLog}        = "LOGFeatures";
+    $tabsysprefs{ReturnLog}       = "LOGFeatures";
+    $tabsysprefs{LetterLog}       = "LOGFeatures";
+    $tabsysprefs{FinesLog}        = "LOGFeatures";
+    
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my @results;
-	my $cnt=0;
-	if ($type){
-		foreach my $syspref (sort keys %tabsysprefs){
-			if ($tabsysprefs{$syspref} eq $type){
-				my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
-				$sth->execute($syspref);
-				while (my $data=$sth->fetchrow_hashref){
-					$data->{value} =~ s/</&lt;/g;
-					$data->{value} =~ s/>/&lt;/g;
-					$data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
-					push(@results,$data);
-					$cnt++;
-				}
-				$sth->finish;
-			}
-		}
-	} else {
-		my $strsth ="Select variable,value,explanation,type,options from systempreferences where variable not in (";  
-		foreach my $syspref (keys %tabsysprefs){
-			$strsth .= $dbh->quote($syspref).",";
-		}
-		$strsth =~ s/,$/) /;
-		$strsth .= " order by variable";
-		#warn $strsth;
-		my $sth=$dbh->prepare($strsth);
-		$sth->execute();
-		while (my $data=$sth->fetchrow_hashref){
-			$data->{value}=substr($data->{value},0,100);
-			push(@results,$data);
-			$cnt++;
-		}
-		$sth->finish;
-	}
-	return ($cnt,\@results);
+    my ($env,$searchstring,$type)=@_;
+    my $dbh = C4::Context->dbh;
+    $searchstring=~ s/\'/\\\'/g;
+    my @data=split(' ',$searchstring);
+    my $count=@data;
+    my @results;
+    my $cnt=0;
+    if ($type){
+        foreach my $syspref (sort keys %tabsysprefs){
+            if ($tabsysprefs{$syspref} eq $type){
+                my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
+                $sth->execute($syspref);
+                while (my $data=$sth->fetchrow_hashref){
+                    $data->{value} =~ s/</&lt;/g;
+                    $data->{value} =~ s/>/&gt;/g;
+                    $data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
+                    push(@results,$data);
+                    $cnt++;
+                }
+                $sth->finish;
+            }
+        }
+    } else {
+        my $strsth ="Select variable,value,explanation,type,options from systempreferences where variable not in (";
+        foreach my $syspref (keys %tabsysprefs){
+            $strsth .= $dbh->quote($syspref).",";
+        }
+        $strsth =~ s/,$/) /;
+        $strsth .= " order by variable";
+        my $sth=$dbh->prepare($strsth);
+        $sth->execute();
+        while (my $data=$sth->fetchrow_hashref){
+            $data->{value}=substr($data->{value},0,100);
+            push(@results,$data);
+            $cnt++;
+        }
+        $sth->finish;
+    }
+    return ($cnt,\@results);
 }
 
 my $input = new CGI;
@@ -180,76 +221,76 @@ my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/systempreferences.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {parameters => 1},
+                 debug => 1,
+                 });
 my $pagesize=100;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
 if ($op) {
 $template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+                        $op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+                        else              => 1); # we show only the TMPL_VAR names $op
 }
 
 if ($op eq 'update_and_reedit') {
-	foreach ($input->param) {
-	}
-	my $value='';
-	if (my $currentorder=$input->param('currentorder')) {
-		my @currentorder=split /\|/, $currentorder;
-		my $orderchanged=0;
-		foreach my $param ($input->param) {
-			if ($param=~m#up-(\d+).x#) {
-				my $temp=$currentorder[$1];
-				$currentorder[$1]=$currentorder[$1-1];
-				$currentorder[$1-1]=$temp;
-				$orderchanged=1;
-				last;
-			} elsif ($param=~m#down-(\d+).x#) {
-				my $temp=$currentorder[$1];
-				$currentorder[$1]=$currentorder[$1+1];
-				$currentorder[$1+1]=$temp;
-				$orderchanged=1;
-				last;
-			}
-		}
-		$value=join ' ', @currentorder;
-		if ($orderchanged) {
-			$op='add_form';
-			$template->param(script_name => $script_name,
-							$op              => 1); # we show only the TMPL_VAR names $op
-		} else {
-			$op='';
-			$searchfield='';
-			$template->param(script_name => $script_name,
-							else              => 1); # we show only the TMPL_VAR names $op
-		}
-	}
-	my $dbh = C4::Context->dbh;
-	my $query="select * from systempreferences where variable=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($input->param('variable'));
-	if ($sth->rows) {
-		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
-			$sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
-			$sth->finish;
-		}
+    foreach ($input->param) {
+    }
+    my $value='';
+    if (my $currentorder=$input->param('currentorder')) {
+        my @currentorder=split /\|/, $currentorder;
+        my $orderchanged=0;
+        foreach my $param ($input->param) {
+            if ($param=~m#up-(\d+).x#) {
+                my $temp=$currentorder[$1];
+                $currentorder[$1]=$currentorder[$1-1];
+                $currentorder[$1-1]=$temp;
+                $orderchanged=1;
+                last;
+            } elsif ($param=~m#down-(\d+).x#) {
+                my $temp=$currentorder[$1];
+                $currentorder[$1]=$currentorder[$1+1];
+                $currentorder[$1+1]=$temp;
+                $orderchanged=1;
+                last;
+            }
+        }
+        $value=join ' ', @currentorder;
+        if ($orderchanged) {
+            $op='add_form';
+            $template->param(script_name => $script_name,
+                            $op              => 1); # we show only the TMPL_VAR names $op
+        } else {
+            $op='';
+            $searchfield='';
+            $template->param(script_name => $script_name,
+                            else              => 1); # we show only the TMPL_VAR names $op
+        }
+    }
+    my $dbh = C4::Context->dbh;
+    my $query="select * from systempreferences where variable=?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($input->param('variable'));
+    if ($sth->rows) {
+        unless (C4::Context->config('demo') eq 1) {
+            my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
+            $sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
+            $sth->finish;
+        }
     } else {
-		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
-			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
-			$sth->finish;
-		}
-	}
-	$sth->finish;
+        unless (C4::Context->config('demo') eq 1) {
+            my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
+            $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
+            $sth->finish;
+        }
+    }
+    $sth->finish;
 
 }
 
@@ -257,168 +298,167 @@ if ($op eq 'update_and_reedit') {
 # called by default. Used to create form to add or  modify a record
 
 if ($op eq 'add_form') {
-	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
-	if ($searchfield) {
-		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
-		$sth->execute($searchfield);
-		$data=$sth->fetchrow_hashref;
-		$sth->finish;
-		$template->param(modify => 1);
-	}
+    #---- if primkey exists, it's a modify action, so read values to modify...
+    my $data;
+    if ($searchfield) {
+        my $dbh = C4::Context->dbh;
+        my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
+        $sth->execute($searchfield);
+        $data=$sth->fetchrow_hashref;
+        $sth->finish;
+        $template->param(modify => 1);
+    }
 
-	my @options;
-	foreach my $option (split(/\|/, $data->{'options'})) {
-		my $selected='0';
-		$option eq $data->{'value'} and $selected=1;
-		push @options, { option => $option, selected => $selected };
-	}
-	if ($data->{'type'} eq 'Choice') {
-		$template->param('type-choice' => 1);
-	} elsif ($data->{'type'} eq 'YesNo') {
-		$template->param('type-yesno' => 1);
-		$data->{'value'}=C4::Context->boolean_preference($data->{'variable'});
-		($data->{'value'} eq '1') ? ($template->param('value-yes'=>1)) : ($template->param('value-no'=>1));
-	} elsif ($data->{'type'} eq 'Integer') {
-		$template->param('type-free' => 1);
-		$template->param('fieldlength' => $data->{'options'});
-	} elsif ($data->{'type'} eq 'Textarea') {
-		$template->param('type-textarea' => 1);
-		$data->{options} =~ /(.*)\|(.*)/;
-		$template->param('cols' => $1, 'rows' => $2);;
-	} elsif ($data->{'type'} eq 'Float') {
-		$template->param('type-free' => 1);
-		$template->param('fieldlength' => $data->{'options'});
-	} elsif ($data->{'type'} eq 'Themes') {
-		$template->param('type-choice' => 1);
-		my $type='';
-		($data->{'variable'}=~m#opac#i) ? ($type='opac') : ($type='intranet');
-		@options=();
-		my $currently_selected_themes;
-		my $counter=0;
-		foreach my $theme (split /\s+/, $data->{'value'}) {
-		    push @options, { option => $theme, counter => $counter };
-		    $currently_selected_themes->{$theme}=1;
-		    $counter++;
-		}
-		foreach my $theme (getallthemes($type)) {
-			my $selected='0';
-			next if $currently_selected_themes->{$theme};
-			push @options, { option => $theme, counter => $counter };
-			$counter++;
-		}
-	} elsif ($data->{'type'} eq 'Languages') {
-		$template->param('type-choice' => 1);
-		my $type='';
-		@options=();
-		my $currently_selected_languages;
-		my $counter=0;
-		foreach my $language (split /\s+/, $data->{'value'}) {
-		    next if $language eq 'images';
-		    push @options, { option => $language, counter => $counter };
-		    $currently_selected_languages->{$language}=1;
-		    $counter++;
-		}
-		foreach my $language (getalllanguages()) {
-			next if $language eq 'images';
-			my $selected='0';
-			next if $currently_selected_languages->{$language};
-			push @options, { option => $language, counter => $counter };
-			$counter++;
-		}
-	} else {
-		$template->param('type-free' => 1);
-		$template->param('fieldlength' => $data->{'options'}>0?$data->{'options'}:60);
-	}
-	$template->param(explanation => $data->{'explanation'},
-			 value => $data->{'value'},
-			 type => $data->{'type'},
-			 options => \@options,
-			 preftype => $data->{'type'},
-			 prefoptions => $data->{'options'},
-			 searchfield => $searchfield);
+    my @options;
+    foreach my $option (split(/\|/, $data->{'options'})) {
+        my $selected='0';
+        $option eq $data->{'value'} and $selected=1;
+        push @options, { option => $option, selected => $selected };
+    }
+    if ($data->{'type'} eq 'Choice') {
+        $template->param('type-choice' => 1);
+    } elsif ($data->{'type'} eq 'YesNo') {
+        $template->param('type-yesno' => 1);
+        $data->{'value'}=C4::Context->boolean_preference($data->{'variable'});
+        ($data->{'value'} eq '1') ? ($template->param('value-yes'=>1)) : ($template->param('value-no'=>1));
+    } elsif ($data->{'type'} eq 'Integer') {
+        $template->param('type-free' => 1);
+        $template->param('fieldlength' => $data->{'options'});
+    } elsif ($data->{'type'} eq 'Textarea') {
+        $template->param('type-textarea' => 1);
+        $data->{options} =~ /(.*)\|(.*)/;
+        $template->param('cols' => $1, 'rows' => $2);;
+    } elsif ($data->{'type'} eq 'Float') {
+        $template->param('type-free' => 1);
+        $template->param('fieldlength' => $data->{'options'});
+    } elsif ($data->{'type'} eq 'Themes') {
+        $template->param('type-choice' => 1);
+        my $type='';
+        ($data->{'variable'}=~m#opac#i) ? ($type='opac') : ($type='intranet');
+        @options=();
+        my $currently_selected_themes;
+        my $counter=0;
+        foreach my $theme (split /\s+/, $data->{'value'}) {
+            push @options, { option => $theme, counter => $counter };
+            $currently_selected_themes->{$theme}=1;
+            $counter++;
+        }
+        foreach my $theme (getallthemes($type)) {
+            my $selected='0';
+            next if $currently_selected_themes->{$theme};
+            push @options, { option => $theme, counter => $counter };
+            $counter++;
+        }
+    } elsif ($data->{'type'} eq 'Languages') {
+        $template->param('type-choice' => 1);
+        my $type='';
+        @options=();
+        my $currently_selected_languages;
+        my $counter=0;
+        foreach my $language (split /\s+/, $data->{'value'}) {
+            next if $language eq 'images';
+            push @options, { option => $language, counter => $counter };
+            $currently_selected_languages->{$language}=1;
+            $counter++;
+        }
+		my $langavail = getTranslatedLanguages();
+        foreach my $language (@$langavail) {
+            my $selected='0';
+            next if $currently_selected_languages->{$language->{'language_code'}};
+			#FIXME: could add language_name and language_locale_name for better display
+            push @options, { option => $language->{'language_code'}, counter => $counter };
+            $counter++;
+        }
+    } else {
+        $template->param('type-free' => 1);
+        $template->param('fieldlength' => $data->{'options'}>0?$data->{'options'}:60);
+    }
+    $template->param(explanation => $data->{'explanation'},
+             value => $data->{'value'},
+             type => $data->{'type'},
+             options => \@options,
+             preftype => $data->{'type'},
+             prefoptions => $data->{'options'},
+             searchfield => $searchfield);
 
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from systempreferences where variable=?");
-	$sth->execute($input->param('variable'));
-	if ($sth->rows) {
-		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
-			$sth->execute($input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
-			$sth->finish;
-		}
-	} else {
-		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
-			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
-			$sth->finish;
-		}
-	}
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=".$tabsysprefs{$input->param('variable')}."\"></html>";
-	exit;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from systempreferences where variable=?");
+    $sth->execute($input->param('variable'));
+    if ($sth->rows) {
+        unless (C4::Context->config('demo') eq 1) {
+            my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
+            $sth->execute($input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
+            $sth->finish;
+        }
+    } else {
+        unless (C4::Context->config('demo') eq 1) {
+            my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
+            $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
+            $sth->finish;
+        }
+    }
+    $sth->finish;
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=".$tabsysprefs{$input->param('variable')}."\"></html>";
+    exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
-	$sth->execute($searchfield);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
-	$template->param(searchfield => $searchfield,
-							Tvalue => $data->{'value'},
-							);
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
+    $sth->execute($searchfield);
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
+    $template->param(searchfield => $searchfield,
+                            Tvalue => $data->{'value'},
+                            );
 
-													# END $OP eq DELETE_CONFIRM
+                                                    # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("delete from systempreferences where variable=?");
-	$sth->execute($searchfield);
-	$sth->finish;
-													# END $OP eq DELETE_CONFIRMED
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("delete from systempreferences where variable=?");
+    $sth->execute($searchfield);
+    $sth->finish;
+                                                    # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	#Adding tab management for system preferences
-	my $tab=$input->param('tab');
-	
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,$tab);
-	my $toggle=0;
-	my @loop_data = ();
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 0){
-			$toggle=1;
-	  	} else {
-			$toggle=0;
-	  	}
-		my %row_data;  # get a fresh hash for the row data
-		$row_data{variable} = $results->[$i]{'variable'};
-		$row_data{value} = $results->[$i]{'value'};
-		$row_data{explanation} = $results->[$i]{'explanation'};
-		$row_data{toggle} = $toggle;
-		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
-		push(@loop_data, \%row_data);
-	}
-	$tab=($tab?$tab:"Others");
-	$template->param(loop => \@loop_data, $tab => 1);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param("<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param("a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
-	}
+    #Adding tab management for system preferences
+    my $tab=$input->param('tab');
+    
+    my $env;
+    my ($count,$results)=StringSearch($env,$searchfield,$tab);
+    my $toggle=0;
+    my @loop_data = ();
+    for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+          if ($toggle eq 0){
+            $toggle=1;
+          } else {
+            $toggle=0;
+          }
+        my %row_data;  # get a fresh hash for the row data
+        $row_data{variable} = $results->[$i]{'variable'};
+        $row_data{value} = $results->[$i]{'value'};
+        $row_data{explanation} = $results->[$i]{'explanation'};
+        $row_data{toggle} = $toggle;
+        $row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
+        $row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
+        push(@loop_data, \%row_data);
+    }
+    $tab=($tab?$tab:"Others");
+    $template->param(loop => \@loop_data, $tab => 1);
+    if ($offset>0) {
+        my $prevpage = $offset-$pagesize;
+        $template->param("<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
+    }
+    if ($offset+$pagesize<$count) {
+        my $nextpage =$offset+$pagesize;
+        $template->param("a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
+    }
+    $template->param(        tab => $tab,
+            );
 } #---- END $OP eq DEFAULT
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 output_html_with_http_headers $input, $cookie, $template->output;

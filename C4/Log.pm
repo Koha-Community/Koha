@@ -29,7 +29,7 @@ require Exporter;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
@@ -50,7 +50,7 @@ The functions in this module perform various functions in order to log all the o
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&logaction &logstatus &displaylog);
+@EXPORT = qw(&logaction &GetLogStatus &displaylog &GetLogs);
 
 =item logaction
 
@@ -59,26 +59,43 @@ The functions in this module perform various functions in order to log all the o
 Adds a record into action_logs table to report the different changes upon the database
 
 =cut
+
 #'
-sub logaction{
+sub logaction {
   my ($usernumber,$modulename, $actionname, $objectnumber, $infos)=@_;
-	$usernumber='' unless $usernumber;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
-	$sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
-	$sth->finish;
+    $usernumber='' unless $usernumber;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
+    $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
+    $sth->finish;
 }
 
-=item logstatus
+=item GetLogStatus
 
-  &logstatus;
+  $status = GetLogStatus;
 
-returns True If Activate_Log variable is equal to On
-Activate_Log is a system preference Variable
+C<$status> is a hasref like this example:
+    $hash = {
+        BorrowersLog   => 1,
+        CataloguingLog => 0,
+        IssueLog       => 0,
+        ...
+    }
+
 =cut
+
 #'
-sub logstatus{
-	return C4::Context->preference("Activate_Log");
+sub GetLogStatus {
+    my %hash;
+    $hash{BorrowersLog}    = C4::Context->preference("BorrowersLog");
+    $hash{CataloguingLog}  = C4::Context->preference("CataloguingLog");
+    $hash{IssueLog}        = C4::Context->preference("IssueLog");
+    $hash{ReturnLog}       = C4::Context->preference("CataloguingLog");
+    $hash{SubscriptionLog} = C4::Context->preference("CataloguingLog");
+    $hash{LetterLog}       = C4::Context->preference("LetterLog");
+    $hash{FinesLog}       = C4::Context->preference("FinesLog");
+    
+    return \%hash;
 }
 
 =item displaylog
@@ -86,104 +103,149 @@ sub logstatus{
   &displaylog($modulename, @filters);
   $modulename is the name of the module on which the user wants to display logs
   @filters is an optional table of hash containing :
-  	- name : the name of the variable to filter
-	- value : the value of the filter.... May be with * joker
+      - name : the name of the variable to filter
+    - value : the value of the filter.... May be with * joker
 
 returns a table of hash containing who did what on which object at what time
 
 =cut
+
 #'
-sub displaylog{
-  my ($modulename, @filters)=@_;
-	my $dbh = C4::Context->dbh;
-	my $strsth;
-	if ($modulename eq "catalogue"){
-		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
-		$strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
-		$strsth .= " FROM borrowers,action_logs ";
-		$strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
-	
-		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-		$strsth .=" AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
-		if (@filters){
-			foreach my $filter (@filters){
-				if ($filter->{name} =~ /user/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND borrowers.surname like ".$filter->{value};
-				}elsif ($filter->{name} =~ /title/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND biblio.title like ".$filter->{value};
-				}elsif ($filter->{name} =~ /author/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND biblio.author like ".$filter->{value};
-				}
-			}
-		}
-	} elsif ($modulename eq "acqui")  {
-		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
-		$strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
-		$strsth .= "FROM borrowers,action_logs ";
-		$strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
-	
-		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-		$strsth .= "AND action_logs.module = 'acqui.simple' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
-		if (@filters){
-			foreach my $filter (@filters){
-				if ($filter->{name} =~ /user/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND borrowers.surname like ".$filter->{value};
-				}elsif ($filter->{name} =~ /title/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND biblio.title like ".$filter->{value};
-				}elsif ($filter->{name} =~ /author/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND biblio.author like ".$filter->{value};
-				}
-			}
-		}
-	} elsif ($modulename eq "members"){
-		$strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
-		$strsth .= "bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid,";
-		$strsth .= "FROM borrowers,action_logs,borrowers as bor2 ";
-	
-		$strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-		$strsth .= "AND action_logs.module = 'members' AND action_logs.object=bor2.borrowernumber ";# if ($modulename eq "acqui.simple");
-		if (@filters){
-			foreach my $filter (@filters){
-				if ($filter->{name} =~ /user/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND borrowers.surname like ".$filter->{value};
-				}elsif ($filter->{name} =~ /surname/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND bor2.surname like ".$filter->{value};
-				}elsif ($filter->{name} =~ /firstname/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND bor2.firsntame like ".$filter->{value};
-				}elsif ($filter->{name} =~ /cardnumber/){
-					$filter->{value}=~s/\*/%/g;
-					$strsth .= " AND bor2.cardnumber like ".$filter->{value};
-				}
-			}
-		}
-	}
-# 	warn "displaylog :".$strsth;
-	if ($strsth){
-		my $sth=$dbh->prepare($strsth);
-		$sth->execute;
-		my @results;
-		my $count;
-		my $hilighted=1;
-		while (my $data = $sth->fetchrow_hashref){
-			$data->{hilighted} = ($hilighted>0);
-			$data->{info} =~ s/\n/<br\/>/g;
-			$data->{day} = format_date($data->{timestamp});
-			push @results, $data;
-			$count++;
-			$hilighted = -$hilighted;
-		}
-		return ($count, \@results);
-	} else {return 0;}
+sub displaylog {
+  my ($modulename, @filters) = @_;
+    my $dbh = C4::Context->dbh;
+    my $strsth;
+    if ($modulename eq "catalogue"){
+        $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+        $strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
+        $strsth .= " FROM borrowers,action_logs ";
+        $strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
+    
+        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+        $strsth .=" AND action_logs.module = 'cataloguing' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+        if (@filters) {
+            foreach my $filter (@filters) {
+                if ($filter->{name} =~ /user/) {
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND borrowers.surname like ".$filter->{value};
+                } elsif ($filter->{name} =~ /title/) {
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND biblio.title like ".$filter->{value};
+                } elsif ($filter->{name} =~ /author/) {
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND biblio.author like ".$filter->{value};
+                }
+            }
+        }
+    } elsif ($modulename eq "acqui") {
+        $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+        $strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
+        $strsth .= "FROM borrowers,action_logs ";
+        $strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
+    
+        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+        $strsth .= "AND action_logs.module = 'cataloguing' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+        if (@filters){
+            foreach my $filter (@filters){
+                if ($filter->{name} =~ /user/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND borrowers.surname like ".$filter->{value};
+                }elsif ($filter->{name} =~ /title/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND biblio.title like ".$filter->{value};
+                }elsif ($filter->{name} =~ /author/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND biblio.author like ".$filter->{value};
+                }
+            }
+        }
+    } elsif ($modulename eq "members"){
+        $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
+        $strsth .= "bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid,";
+        $strsth .= "FROM borrowers,action_logs,borrowers as bor2 ";
+    
+        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
+        $strsth .= "AND action_logs.module = 'members' AND action_logs.object=bor2.borrowernumber ";# if ($modulename eq "acqui.simple");
+        if (@filters){
+            foreach my $filter (@filters){
+                if ($filter->{name} =~ /user/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND borrowers.surname like ".$filter->{value};
+                }elsif ($filter->{name} =~ /surname/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND bor2.surname like ".$filter->{value};
+                }elsif ($filter->{name} =~ /firstname/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND bor2.firsntame like ".$filter->{value};
+                }elsif ($filter->{name} =~ /cardnumber/){
+                    $filter->{value}=~s/\*/%/g;
+                    $strsth .= " AND bor2.cardnumber like ".$filter->{value};
+                }
+            }
+        }
+    }
+    
+    if ($strsth){
+        my $sth=$dbh->prepare($strsth);
+        $sth->execute;
+        my @results;
+        my $count;
+        my $hilighted=1;
+        while (my $data = $sth->fetchrow_hashref){
+            $data->{hilighted} = ($hilighted>0);
+            $data->{info} =~ s/\n/<br\/>/g;
+            $data->{day} = format_date($data->{timestamp});
+            push @results, $data;
+            $count++;
+            $hilighted = -$hilighted;
+        }
+        return ($count, \@results);
+    } else {return 0;}
 }
+
+=head2 GetLogs
+
+$logs = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
+
+Return: 
+C<$logs> is a ref to a hash which containts all columns from action_logs
+
+=cut
+
+sub GetLogs {
+    my $datefrom = shift;
+    my $dateto   = shift;
+    my $user     = shift;
+    my $module   = shift;
+    my $action   = shift;
+    my $object   = shift;
+    my $info     = shift;
+    
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        SELECT *
+        FROM   action_logs
+        WHERE 1
+    ";
+    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$datefrom."\" " if $datefrom;
+    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$dateto."\" " if $dateto;
+    $query .= " AND user LIKE \"%".$user."%\" "     if $user;
+    $query .= " AND module LIKE \"%".$module."%\" " if $module;
+    $query .= " AND action LIKE \"%".$action."%\" " if $action;
+    $query .= " AND object LIKE \"%".$object."%\" " if $object;
+    $query .= " AND info LIKE \"%".$info."%\" "     if $info;
+    
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    
+    my @logs;
+    while( my $row = $sth->fetchrow_hashref ) {
+        $row->{$row->{module}} = 1;
+        push @logs , $row;
+    }
+    return \@logs;
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

@@ -27,94 +27,103 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Auth;
-use HTML::Template;
+
 use PDF::API2;
 use PDF::API2::Page;
-use PDF::API2::PDF::Utils;
+use PDF::API2::Util;
 use C4::Interface::CGI::Output;
 
 # This function returns the path to deal with the correct files, considering
 # templates set and language.
 sub getPath {
-	my $type = shift @_;
-	my $templatesSet = C4::Context->preference('template');
-	my $lang = C4::Context->preference('opaclanguages');
-	if ($type eq "intranet") {
-		return "$ENV{'DOCUMENT_ROOT'}/intranet-tmpl/$templatesSet/$lang";
-	} else {
-		return "$ENV{'DOCUMENT_ROOT'}/opac-tmpl/$templatesSet/$lang";
-	}
+    my $type         = shift @_;
+    my $templatesSet = C4::Context->preference('template');
+    my $lang         = C4::Context->preference('opaclanguages');
+    if ( $type eq "intranet" ) {
+        return "$ENV{'DOCUMENT_ROOT'}/intranet-tmpl/$templatesSet/$lang";
+    }
+    else {
+        return "$ENV{'DOCUMENT_ROOT'}/opac-tmpl/$templatesSet/$lang";
+    }
 }
 
 # Load a configuration file.
 sub loadConfFromFile {
-  my $fileName = shift @_;
-	my %keyValues;
-	open FILE, "<$fileName";
-	while (<FILE>) {
-		chomp;
-		if (/\s*([\w_]*)\s*=\s*([\[\]\<\>\w_\s:@,\.-]*)\s*/) {
-			$keyValues{$1} = $2;
-		}
-	}
-	close FILE;
-	return %keyValues;
+    my $fileName = shift @_;
+    my %keyValues;
+    open FILE, "<$fileName";
+    while (<FILE>) {
+        chomp;
+        if (/\s*([\w_]*)\s*=\s*([\[\]\<\>\w_\s:@,\.-]*)\s*/) {
+            $keyValues{$1} = $2;
+        }
+    }
+    close FILE;
+    return %keyValues;
 }
 
 # Save settings to a configuration file.
 sub saveConfToFile {
-	my $fileName = shift @_;
-	my %keyValues = %{shift @_};
-	my $i;
-	open FILE, ">$fileName";			
-	my $i;
-	foreach $i (keys(%keyValues)) {
-    print FILE $i." = ".$keyValues{$i}."\n";
-	}
-	close FILE;
+    my $fileName  = shift @_;
+    my %keyValues = %{ shift @_ };
+    my $i;
+    open FILE, ">$fileName";
+    my $i;
+    foreach $i ( keys(%keyValues) ) {
+        print FILE $i . " = " . $keyValues{$i} . "\n";
+    }
+    close FILE;
 }
 
 # Creates a CGI object and take his parameters
 my $input = new CGI;
 
-if ($input->param('saveSettings')) {
-	my $labelConf = &getPath("intranet")."/includes/labelConfig/itemsLabelConfig.conf";
-	my %newConfiguration = (pageType => $input->param('pageType'), 	
-							columns => $input->param('columns'), 		
-							rows => $input->param('rows'), 	
-							systemDpi => $input->param('systemDpi'), 	
-							labelWidth => $input->param('labelWidth'), 	
-							labelHeigth => $input->param('labelHeigth'),	
-							marginBottom => $input->param('marginBottom'), 	
-							marginLeft => $input->param('marginLeft')); 	
-	saveConfToFile($labelConf, \%newConfiguration);
-	print $input->redirect('/cgi-bin/koha/barcodes/barcodes.pl')
+if ( $input->param('saveSettings') ) {
+    my $labelConf =
+      &getPath("intranet") . "/includes/labelConfig/itemsLabelConfig.conf";
+    my %newConfiguration = (
+        pageType     => $input->param('pageType'),
+        columns      => $input->param('columns'),
+        rows         => $input->param('rows'),
+        systemDpi    => $input->param('systemDpi'),
+        labelWidth   => $input->param('labelWidth'),
+        labelHeigth  => $input->param('labelHeigth'),
+        marginBottom => $input->param('marginBottom'),
+        marginLeft   => $input->param('marginLeft')
+    );
+    saveConfToFile( $labelConf, \%newConfiguration );
+    print $input->redirect('/cgi-bin/koha/barcodes/barcodes.pl');
 }
 
 # Get the template to use
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "barcodes/printerConfig.tmpl",
-			                 type => "intranet",
-			                 query => $input,
-			                 authnotrequired => 0,
-			                 flagsrequired => {parameters => 1},
-					         debug => 1,
-			               });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "barcodes/printerConfig.tmpl",
+        type            => "intranet",
+        query           => $input,
+        authnotrequired => 0,
+        flagsrequired   => { tools => 1 },
+        debug           => 1,
+    }
+);
 
-my $filenameConf = &getPath("intranet")."/includes/labelConfig/itemsLabelConfig.conf";
+my $filenameConf =
+  &getPath("intranet") . "/includes/labelConfig/itemsLabelConfig.conf";
 my %labelConfig = &loadConfFromFile($filenameConf);
 
-$template->param(COLUMNS => $labelConfig{'columns'});
-$template->param(ROWS => $labelConfig{'rows'});
-$template->param(SYSTEM_DPI => $labelConfig{'systemDpi'});
-$template->param(LABEL_WIDTH => $labelConfig{'labelWidth'});
-$template->param(LABEL_HEIGTH => $labelConfig{'labelHeigth'});
-$template->param(MARGIN_TOP => $labelConfig{'marginBottom'});
-$template->param(MARGIN_LEFT => $labelConfig{'marginLeft'});
-$template->param(SCRIPT_NAME => '/cgi-bin/koha/barcodes/printerConfig.pl');
-$template->param("$labelConfig{'pageType'}" => 1);
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+$template->param( COLUMNS      => $labelConfig{'columns'} );
+$template->param( ROWS         => $labelConfig{'rows'} );
+$template->param( SYSTEM_DPI   => $labelConfig{'systemDpi'} );
+$template->param( LABEL_WIDTH  => $labelConfig{'labelWidth'} );
+$template->param( LABEL_HEIGTH => $labelConfig{'labelHeigth'} );
+$template->param( MARGIN_TOP   => $labelConfig{'marginBottom'} );
+$template->param( MARGIN_LEFT  => $labelConfig{'marginLeft'} );
+$template->param( SCRIPT_NAME  => '/cgi-bin/koha/barcodes/printerConfig.pl' );
+$template->param( "$labelConfig{'pageType'}" => 1 );
+$template->param(
+    intranetcolorstylesheet =>
+      C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+);
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -35,7 +35,6 @@ my @params=$input->param;
 foreach my $param (@params){
 	if ($param ne 'type' && $param !~ /submit/){
 		my $data=$input->param($param);
-#		warn "$data / $param";
 		ModCurrencies($param,$data);
 }
 }

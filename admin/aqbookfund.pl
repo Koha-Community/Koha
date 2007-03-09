@@ -52,20 +52,21 @@ C<op> can be equal to:
 
 use strict;
 use CGI;
-use C4::Output;
+use C4::Branch; # GetBranches
 use List::Util qw/min/;
 use C4::Auth;
 use C4::Koha;
 use C4::Context;
 use C4::Bookfund;
+use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Search;
 use C4::Date;
 
 my $dbh = C4::Context->dbh;
 my $input = new CGI;
 my $script_name="/cgi-bin/koha/admin/aqbookfund.pl";
 my $bookfundid=$input->param('bookfundid');
+my $branchcodeid=$input->param('branchcode')|'';
 my $pagesize = 10;
 my $op = $input->param('op') || '';
 
@@ -75,7 +76,7 @@ my ($template, $borrowernumber, $cookie)
          query => $input,
          type => "intranet",
          authnotrequired => 0,
-         flagsrequired => {parameters => 1, management => 1},
+         flagsrequired => {parameters => 1},
          debug => 1,
         }
     );
@@ -101,7 +102,7 @@ if ($op eq 'add_form') {
 	my $dataaqbookfund;
 	my $header;
 	if ($bookfundid) {
-    	$dataaqbookfund = GetBookFund($bookfundid);
+    	$dataaqbookfund = GetBookFund($bookfundid,$branchcodeid);
 	}
 	if ($bookfundid) {
 	    $header = "Modify book fund";
@@ -111,7 +112,7 @@ if ($op eq 'add_form') {
 	    $template->param('header-is-add-p' => 1);
 	}
 	$template->param('use-header-flags-p' => 1);
-	$template->param(header => $header); 
+	$template->param(header => $header); # NOTE deprecated
 	my $add_or_modify=0;
 	if ($bookfundid) {
 	    $add_or_modify=1;
@@ -119,7 +120,7 @@ if ($op eq 'add_form') {
 	$template->param(add_or_modify => $add_or_modify);
 	$template->param(bookfundid =>$bookfundid);
 	$template->param(bookfundname =>$dataaqbookfund->{'bookfundname'});
-warn $dataaqbookfund->{'bookfundname'};
+
         my @branchloop;
         foreach my $branchcode (sort keys %{$branches}) {
             my $row = {
@@ -127,7 +128,9 @@ warn $dataaqbookfund->{'bookfundname'};
                 branchname => $branches->{$branchcode}->{branchname},
             };
 
-            if ( $bookfundid    && $dataaqbookfund->{branchcode} eq $branchcode) {
+            if (defined $bookfundid
+                and defined $dataaqbookfund->{branchcode}
+                and $dataaqbookfund->{branchcode} eq $branchcode) {
                 $row->{selected} = 1;
             }
 
@@ -143,21 +146,21 @@ warn $dataaqbookfund->{'bookfundname'};
 elsif ($op eq 'add_validate') {
 	my $bookfundid = uc $input->param('bookfundid');
 
-    my $number = Countbookfund($bookfundid);
+    my $number = Countbookfund($bookfundid,$branchcodeid);
 
     my $bookfund_already_exists = $number > 0 ? 1 : 0;
 
     if ($bookfund_already_exists) {
         my $bookfundname = $input->param('bookfundname');
         my $branchcode = $input->param('branchcode') || undef;
-
-        ModBookFund($bookfundname,$branchcode,$bookfundid);
+         warn "name :$bookfundname branch:$branchcode";
+        ModBookFund($bookfundname,$bookfundid,$branchcode);
     }
     else {
         NewBookFund(
             $bookfundid,
             $input->param('bookfundname'),
-            $input->param('branchcode')
+            $input->param('branchcode')||''
         );
     }
     $input->redirect('aqbookfund.pl');
@@ -167,16 +170,17 @@ elsif ($op eq 'add_validate') {
 # called by default form, used to confirm deletion of data in DB
 
 elsif ($op eq 'delete_confirm') {
-    my $data = GetBookFund($bookfundid);
+    my $data = GetBookFund($bookfundid,$branchcodeid);
 	$template->param(bookfundid => $bookfundid);
 	$template->param(bookfundname => $data->{'bookfundname'});
+	$template->param(branchcode => $data->{'branchcode'});
 } # END $OP eq DELETE_CONFIRM
 
 
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 elsif ($op eq 'delete_confirmed') {
-    DelBookFund(uc($input->param('bookfundid')));
+    DelBookFund(uc($input->param('bookfundid')),$branchcodeid);
 
 }# END $OP eq DELETE_CONFIRMED
 

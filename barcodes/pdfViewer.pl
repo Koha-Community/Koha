@@ -27,14 +27,14 @@ use C4::Context;
 use CGI;
 
 # This script take a pdf filename as a parameter and output it to the browser.
-my $cgi = new CGI;
-my $filename = "barcodes.pdf";
+my $cgi         = new CGI;
+my $filename    = "barcodes.pdf";
 my $tmpFileName = $cgi->param('tmpFileName');
 print "Content-Disposition: attachment; filename = $filename\n\n";
-print $cgi->header(-type => 'application/pdf'),
-      $cgi->start_html(-title=>"Codify to PDF");
+print $cgi->header( -type => 'application/pdf' ),
+  $cgi->start_html( -title => "Codify to PDF" );
 open fh, "<$tmpFileName";
 while (<fh>) {
- print;
+    print;
 }
 print $cgi->end_html();

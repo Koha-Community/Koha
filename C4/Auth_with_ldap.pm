@@ -25,10 +25,11 @@ use Digest::MD5 qw(md5_base64);
 
 require Exporter;
 use C4::Context;
-use C4::Output;              # to get the template
+use C4::Output;    # to get the template
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;  # getpatroninformation
+use C4::Circulation::Circ2;    # getpatroninformation
 use C4::Members;
+
 # use Net::LDAP;
 # use Net::LDAP qw(:all);
 
@@ -53,7 +54,7 @@ C4::Auth - Authenticates Koha users
                              query           => $query,
 			     type            => "opac",
 			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
+			     flagsrequired   => {circulate => 1},
 			  });
 
   print $query->header(
@@ -85,12 +86,10 @@ C4::Auth - Authenticates Koha users
 
 =cut
 
-
-
-@ISA = qw(Exporter);
+@ISA    = qw(Exporter);
 @EXPORT = qw(
-	     &checkauth
-	     &get_template_and_user
+  &checkauth
+  &get_template_and_user
 );
 
 =item get_template_and_user
@@ -100,7 +99,7 @@ C4::Auth - Authenticates Koha users
                              query           => $query,
 			     type            => "opac",
 			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
+			     flagsrequired   => {circulate => 1},
 			  });
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
@@ -119,98 +118,114 @@ C4::Auth - Authenticates Koha users
 
 =cut
 
-
 sub get_template_and_user {
-	my $in = shift;
-	my $template = gettemplate($in->{'template_name'}, $in->{'type'},$in->{'query'});
-	my ($user, $cookie, $sessionID, $flags)
-		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+    my $in       = shift;
+    my $template =
+      gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
+    my ( $user, $cookie, $sessionID, $flags ) = checkauth(
+        $in->{'query'},
+        $in->{'authnotrequired'},
+        $in->{'flagsrequired'},
+        $in->{'type'}
+    );
 
-	my $borrowernumber;
-	if ($user) {
-		$template->param(loggedinusername => $user);
-		$template->param(sessionID => $sessionID);
+    my $borrowernumber;
+    if ($user) {
+        $template->param( loggedinusername => $user );
+        $template->param( sessionID        => $sessionID );
 
-		$borrowernumber = getborrowernumber($user);
-		my ($borr, $alternativeflags) = getpatroninformation(undef, $borrowernumber);
-		my @bordat;
-		$bordat[0] = $borr;
-		$template->param(USER_INFO => \@bordat,
-		);
-		# We are going to use the $flags returned by checkauth
-		# to create the template's parameters that will indicate
-		# which menus the user can access.
-		if ($flags && $flags->{superlibrarian} == 1)
-		{
-			$template->param(CAN_user_circulate => 1);
-			$template->param(CAN_user_catalogue => 1);
-			$template->param(CAN_user_parameters => 1);
-			$template->param(CAN_user_borrowers => 1);
-			$template->param(CAN_user_permission => 1);
-			$template->param(CAN_user_reserveforothers => 1);
-			$template->param(CAN_user_borrow => 1);
-			$template->param(CAN_user_reserveforself => 1);
-			$template->param(CAN_user_editcatalogue => 1);
-			$template->param(CAN_user_updatecharge => 1);
-			$template->param(CAN_user_acquisition => 1);
-			$template->param(CAN_user_management => 1);
-			$template->param(CAN_user_tools => 1); }
-		
-		if ($flags && $flags->{circulate} == 1) {
-			$template->param(CAN_user_circulate => 1); }
+        $borrowernumber = getborrowernumber($user);
+        my ( $borr, $alternativeflags ) =
+          getpatroninformation( undef, $borrowernumber );
+        my @bordat;
+        $bordat[0] = $borr;
+        $template->param( USER_INFO => \@bordat, );
 
-		if ($flags && $flags->{catalogue} == 1) {
-			$template->param(CAN_user_catalogue => 1); }
-		
-
-		if ($flags && $flags->{parameters} == 1) {
-			$template->param(CAN_user_parameters => 1);	
-			$template->param(CAN_user_management => 1);
-			$template->param(CAN_user_tools => 1); }
-		
-
-		if ($flags && $flags->{borrowers} == 1) {
-			$template->param(CAN_user_borrowers => 1); }
-		
-
-		if ($flags && $flags->{permissions} == 1) {
-			$template->param(CAN_user_permission => 1); }
-		
-		if ($flags && $flags->{reserveforothers} == 1) {
-			$template->param(CAN_user_reserveforothers => 1); }
-		
-
-		if ($flags && $flags->{borrow} == 1) {
-			$template->param(CAN_user_borrow => 1); }
-		
-
-		if ($flags && $flags->{reserveforself} == 1) {
-			$template->param(CAN_user_reserveforself => 1); }
-		
-
-		if ($flags && $flags->{editcatalogue} == 1) {
-			$template->param(CAN_user_editcatalogue => 1); }
-		
-
-		if ($flags && $flags->{updatecharges} == 1) {
-			$template->param(CAN_user_updatecharge => 1); }
-		
-		if ($flags && $flags->{acquisition} == 1) {
-			$template->param(CAN_user_acquisition => 1); }
-		
-		if ($flags && $flags->{management} == 1) {
-			$template->param(CAN_user_management => 1);
-			$template->param(CAN_user_tools => 1); }
-		
-		if ($flags && $flags->{tools} == 1) {
-			$template->param(CAN_user_tools => 1); }
+        # We are going to use the $flags returned by checkauth
+        # to create the template's parameters that will indicate
+        # which menus the user can access.
+        if ( $flags && $flags->{superlibrarian} == 1 ) {
+            $template->param( CAN_user_circulate        => 1 );
+            $template->param( CAN_user_catalogue        => 1 );
+            $template->param( CAN_user_parameters       => 1 );
+            $template->param( CAN_user_borrowers        => 1 );
+            $template->param( CAN_user_permission       => 1 );
+            $template->param( CAN_user_reserveforothers => 1 );
+            $template->param( CAN_user_borrow           => 1 );
+            $template->param( CAN_user_editcatalogue    => 1 );
+            $template->param( CAN_user_updatecharge     => 1 );
+            $template->param( CAN_user_editauthorities  => 1 );
+            $template->param( CAN_user_acquisition      => 1 );
+            $template->param( CAN_user_management       => 1 );
+            $template->param( CAN_user_tools            => 1 );
+            $template->param( CAN_user_serials          => 1 );
+            $template->param( CAN_user_reports          => 1 );
         }
-	$template->param(
-			     LibraryName => C4::Context->preference("LibraryName"),
-		);
-	return ($template, $borrowernumber, $cookie);
-}
+        if ( $flags && $flags->{circulate} == 1 ) {
+            $template->param( CAN_user_circulate => 1 );
+        }
 
+        if ( $flags && $flags->{catalogue} == 1 ) {
+            $template->param( CAN_user_catalogue => 1 );
+        }
+
+        if ( $flags && $flags->{parameters} == 1 ) {
+            $template->param( CAN_user_parameters => 1 );
+            $template->param( CAN_user_management => 1 );
+            $template->param( CAN_user_tools      => 1 );
+        }
+
+        if ( $flags && $flags->{borrowers} == 1 ) {
+            $template->param( CAN_user_borrowers => 1 );
+        }
+
+        if ( $flags && $flags->{permissions} == 1 ) {
+            $template->param( CAN_user_permission => 1 );
+        }
+
+        if ( $flags && $flags->{reserveforothers} == 1 ) {
+            $template->param( CAN_user_reserveforothers => 1 );
+        }
+
+        if ( $flags && $flags->{borrow} == 1 ) {
+            $template->param( CAN_user_borrow => 1 );
+        }
+
+        if ( $flags && $flags->{editcatalogue} == 1 ) {
+            $template->param( CAN_user_editcatalogue => 1 );
+        }
+
+        if ( $flags && $flags->{updatecharges} == 1 ) {
+            $template->param( CAN_user_updatecharge => 1 );
+        }
+
+        if ( $flags && $flags->{acquisition} == 1 ) {
+            $template->param( CAN_user_acquisition => 1 );
+        }
+
+        if ( $flags && $flags->{management} == 1 ) {
+            $template->param( CAN_user_management => 1 );
+            $template->param( CAN_user_tools      => 1 );
+        }
+
+        if ( $flags && $flags->{tools} == 1 ) {
+            $template->param( CAN_user_tools => 1 );
+        }
+        if ( $flags && $flags->{editauthorities} == 1 ) {
+            $template->param( CAN_user_editauthorities => 1 );
+        }
+
+        if ( $flags && $flags->{serials} == 1 ) {
+            $template->param( CAN_user_serials => 1 );
+        }
+
+        if ( $flags && $flags->{reports} == 1 ) {
+            $template->param( CAN_user_reports => 1 );
+        }
+    }
+    $template->param( LibraryName => C4::Context->preference("LibraryName"), );
+    return ( $template, $borrowernumber, $cookie );
+}
 
 =item checkauth
 
@@ -270,220 +285,276 @@ has authenticated.
 
 =cut
 
-
-
 sub checkauth {
-	my $query=shift;
-	# $authnotrequired will be set for scripts which will run without authentication
-	my $authnotrequired = shift;
-	my $flagsrequired = shift;
-	my $type = shift;
-	$type = 'opac' unless $type;
+    my $query = shift;
 
-	my $dbh = C4::Context->dbh;
-	my $timeout = C4::Context->preference('timeout');
-	$timeout = 600 unless $timeout;
+# $authnotrequired will be set for scripts which will run without authentication
+    my $authnotrequired = shift;
+    my $flagsrequired   = shift;
+    my $type            = shift;
+    $type = 'opac' unless $type;
 
-	my $template_name;
-	if ($type eq 'opac') {
-		$template_name = "opac-auth.tmpl";
-	} else {
-		$template_name = "auth.tmpl";
-	}
+    my $dbh     = C4::Context->dbh;
+    my $timeout = C4::Context->preference('timeout');
+    $timeout = 600 unless $timeout;
 
-	# state variables
-	my $loggedin = 0;
-	my %info;
-	my ($userid, $cookie, $sessionID, $flags,$envcookie);
-	my $logout = $query->param('logout.x');
-	if ($userid = $ENV{'REMOTE_USER'}) {
-		# Using Basic Authentication, no cookies required
-		$cookie=$query->cookie(-name => 'sessionID',
-				-value => '',
-				-expires => '');
-		$loggedin = 1;
-	} elsif ($sessionID=$query->cookie('sessionID')) {
-		C4::Context->_new_userenv($sessionID);
- 		if (my %hash=$query->cookie('userenv')){
- 				C4::Context::set_userenv(
- 					$hash{number},
- 					$hash{id},
- 					$hash{cardnumber},
- 					$hash{firstname},
- 					$hash{surname},
- 					$hash{branch},
- 					$hash{flags},
- 					$hash{emailaddress},
- 				);
- 		}
-		my ($ip , $lasttime);
-		($userid, $ip, $lasttime) = $dbh->selectrow_array(
-				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
-								undef, $sessionID);
-		if ($logout) {
-		# voluntary logout the user
-		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-		C4::Context->_unset_userenv($sessionID);
-		$sessionID = undef;
-		$userid = undef;
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
-		close L;
-		}
-		if ($userid) {
-		if ($lasttime<time()-$timeout) {
-				# timed logout
-				$info{'timed_out'} = 1;
-				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-				C4::Context->_unset_userenv($sessionID);
-				$userid = undef;
-				$sessionID = undef;
-				open L, ">>/tmp/sessionlog";
-				my $time=localtime(time());
-				printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-				close L;
-		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-				# Different ip than originally logged in from
-				$info{'oldip'} = $ip;
-				$info{'newip'} = $ENV{'REMOTE_ADDR'};
-				$info{'different_ip'} = 1;
-				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-				C4::Context->_unset_userenv($sessionID);
-				$sessionID = undef;
-				$userid = undef;
-				open L, ">>/tmp/sessionlog";
-				my $time=localtime(time());
-				printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
-				close L;
-		} else {
-			$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-			$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
-				undef, (time(), $sessionID));
-			$flags = haspermission($dbh, $userid, $flagsrequired);
-			if ($flags) {
-			$loggedin = 1;
-			} else {
-			$info{'nopermission'} = 1;
-			}
-		}
-		}
-	}
-	unless ($userid) {
-		$sessionID=int(rand()*100000).'-'.time();
-		$userid=$query->param('userid');
-		my $password=$query->param('password');
-		C4::Context->_new_userenv($sessionID);
-		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
-		if ($return) {
-			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-				undef, ($sessionID, $userid));
-			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-			close L;
-			$cookie=$query->cookie(-name => 'sessionID',
-						-value => $sessionID,
-						-expires => '');
-			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-				$loggedin = 1;
-			} else {
-				$info{'nopermission'} = 1;
-				C4::Context->_unset_userenv($sessionID);
-			}
-			if ($return == 1){
-					my ($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress);
-					my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?");
-					$sth->execute($userid);
-					($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
-					unless ($sth->rows){
-						my $sth=$dbh->prepare("select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?");
-						$sth->execute($cardnumber);
-						($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
-						unless ($sth->rows){
-							$sth->execute($userid);
-							($bornum,$firstname,$surname,$userflags,$branchcode,$emailaddress) = $sth->fetchrow if ($sth->rows);
-						}
-					}
-					my $hash = C4::Context::set_userenv(
-							$bornum,
-							$userid,
-							$cardnumber,
-							$firstname,
-							$surname,
-							$branchcode,
-							$userflags,
-							$emailaddress,
-					);
-					$envcookie=$query->cookie(-name => 'userenv',
-									-value => $hash,
-									-expires => '');
-			} elsif ($return == 2) {
-			#We suppose the user is the superlibrarian
-					my $hash = C4::Context::set_userenv(
-							0,0,
-							C4::Context->config('user'),
-							C4::Context->config('user'),
-							C4::Context->config('user'),
-							"",1,C4::Context->preference('KohaAdminEmailAddress')
-					);
-					$envcookie=$query->cookie(-name => 'userenv',
-									-value => $hash,
-									-expires => '');
-			}
-		} else {
-			if ($userid) {
-				$info{'invalid_username_or_password'} = 1;
-				C4::Context->_unset_userenv($sessionID);
-			}
-		}
-	}
-	my $insecure = C4::Context->boolean_preference('insecure');
-	# finished authentification, now respond
-	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-		# successful login
-		unless ($cookie) {
-		$cookie=$query->cookie(-name => 'sessionID',
-					-value => '',
-					-expires => '');
-		}
-		if ($envcookie){
-			return ($userid, [$cookie,$envcookie], $sessionID, $flags)
-		} else {
-			return ($userid, $cookie, $sessionID, $flags);
-		}
-	}
-	# else we have a problem...
-	# get the inputs from the incoming query
-	my @inputs =();
-	foreach my $name (param $query) {
-		(next) if ($name eq 'userid' || $name eq 'password');
-		my $value = $query->param($name);
-		push @inputs, {name => $name , value => $value};
-	}
+    my $template_name;
+    if ( $type eq 'opac' ) {
+        $template_name = "opac-auth.tmpl";
+    }
+    else {
+        $template_name = "auth.tmpl";
+    }
 
-	my $template = gettemplate($template_name, $type,$query);
-	$template->param(INPUTS => \@inputs);
-	$template->param(loginprompt => 1) unless $info{'nopermission'};
+    # state variables
+    my $loggedin = 0;
+    my %info;
+    my ( $userid, $cookie, $sessionID, $flags, $envcookie );
+    my $logout = $query->param('logout.x');
+    if ( $userid = $ENV{'REMOTE_USER'} ) {
 
-	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url);
-	$template->param(\%info);
-	$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-	print $query->header(
-		-type => guesstype($template->output),
-		-cookie => $cookie
-		), $template->output;
-	exit;
+        # Using Basic Authentication, no cookies required
+        $cookie = $query->cookie(
+            -name    => 'sessionID',
+            -value   => '',
+            -expires => ''
+        );
+        $loggedin = 1;
+    }
+    elsif ( $sessionID = $query->cookie('sessionID') ) {
+        C4::Context->_new_userenv($sessionID);
+        if ( my %hash = $query->cookie('userenv') ) {
+            C4::Context::set_userenv(
+                $hash{number},    $hash{id},      $hash{cardnumber},
+                $hash{firstname}, $hash{surname}, $hash{branch},
+                $hash{flags},     $hash{emailaddress},
+            );
+        }
+        my ( $ip, $lasttime );
+        ( $userid, $ip, $lasttime ) =
+          $dbh->selectrow_array(
+            "SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
+            undef, $sessionID );
+        if ($logout) {
+
+            # voluntary logout the user
+            $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
+                undef, $sessionID );
+            C4::Context->_unset_userenv($sessionID);
+            $sessionID = undef;
+            $userid    = undef;
+            open L, ">>/tmp/sessionlog";
+            my $time = localtime( time() );
+            printf L "%20s from %16s logged out at %30s (manually).\n", $userid,
+              $ip, $time;
+            close L;
+        }
+        if ($userid) {
+            if ( $lasttime < time() - $timeout ) {
+
+                # timed logout
+                $info{'timed_out'} = 1;
+                $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
+                    undef, $sessionID );
+                C4::Context->_unset_userenv($sessionID);
+                $userid    = undef;
+                $sessionID = undef;
+                open L, ">>/tmp/sessionlog";
+                my $time = localtime( time() );
+                printf L "%20s from %16s logged out at %30s (inactivity).\n",
+                  $userid, $ip, $time;
+                close L;
+            }
+            elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+
+                # Different ip than originally logged in from
+                $info{'oldip'}        = $ip;
+                $info{'newip'}        = $ENV{'REMOTE_ADDR'};
+                $info{'different_ip'} = 1;
+                $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
+                    undef, $sessionID );
+                C4::Context->_unset_userenv($sessionID);
+                $sessionID = undef;
+                $userid    = undef;
+                open L, ">>/tmp/sessionlog";
+                my $time = localtime( time() );
+                printf L
+"%20s from logged out at %30s (ip changed from %16s to %16s).\n",
+                  $userid, $time, $ip, $info{'newip'};
+                close L;
+            }
+            else {
+                $cookie = $query->cookie(
+                    -name    => 'sessionID',
+                    -value   => $sessionID,
+                    -expires => ''
+                );
+                $dbh->do( "UPDATE sessions SET lasttime=? WHERE sessionID=?",
+                    undef, ( time(), $sessionID ) );
+                $flags = haspermission( $dbh, $userid, $flagsrequired );
+                if ($flags) {
+                    $loggedin = 1;
+                }
+                else {
+                    $info{'nopermission'} = 1;
+                }
+            }
+        }
+    }
+    unless ($userid) {
+        $sessionID = int( rand() * 100000 ) . '-' . time();
+        $userid    = $query->param('userid');
+        my $password = $query->param('password');
+        C4::Context->_new_userenv($sessionID);
+        my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
+        if ($return) {
+            $dbh->do( "DELETE FROM sessions WHERE sessionID=? AND userid=?",
+                undef, ( $sessionID, $userid ) );
+            $dbh->do(
+"INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+                undef,
+                ( $sessionID, $userid, $ENV{'REMOTE_ADDR'}, time() )
+            );
+            open L, ">>/tmp/sessionlog";
+            my $time = localtime( time() );
+            printf L "%20s from %16s logged in  at %30s.\n", $userid,
+              $ENV{'REMOTE_ADDR'}, $time;
+            close L;
+            $cookie = $query->cookie(
+                -name    => 'sessionID',
+                -value   => $sessionID,
+                -expires => ''
+            );
+            if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
+                $loggedin = 1;
+            }
+            else {
+                $info{'nopermission'} = 1;
+                C4::Context->_unset_userenv($sessionID);
+            }
+            if ( $return == 1 ) {
+                my ( $borrowernumber, $firstname, $surname, $userflags,
+                    $branchcode, $emailaddress );
+                my $sth =
+                  $dbh->prepare(
+"select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where userid=?"
+                  );
+                $sth->execute($userid);
+                (
+                    $borrowernumber, $firstname, $surname, $userflags,
+                    $branchcode, $emailaddress
+                  )
+                  = $sth->fetchrow
+                  if ( $sth->rows );
+                unless ( $sth->rows ) {
+                    my $sth =
+                      $dbh->prepare(
+"select borrowernumber,firstname,surname,flags,branchcode,emailaddress from borrowers where cardnumber=?"
+                      );
+                    $sth->execute($cardnumber);
+                    (
+                        $borrowernumber, $firstname, $surname, $userflags,
+                        $branchcode, $emailaddress
+                      )
+                      = $sth->fetchrow
+                      if ( $sth->rows );
+                    unless ( $sth->rows ) {
+                        $sth->execute($userid);
+                        (
+                            $borrowernumber, $firstname, $surname, $userflags,
+                            $branchcode, $emailaddress
+                          )
+                          = $sth->fetchrow
+                          if ( $sth->rows );
+                    }
+                }
+                my $hash =
+                  C4::Context::set_userenv( $borrowernumber, $userid,
+                    $cardnumber, $firstname, $surname, $branchcode, $userflags,
+                    $emailaddress, );
+                $envcookie = $query->cookie(
+                    -name    => 'userenv',
+                    -value   => $hash,
+                    -expires => ''
+                );
+            }
+            elsif ( $return == 2 ) {
+
+                #We suppose the user is the superlibrarian
+                my $hash = C4::Context::set_userenv(
+                    0,
+                    0,
+                    C4::Context->config('user'),
+                    C4::Context->config('user'),
+                    C4::Context->config('user'),
+                    "",
+                    1,
+                    C4::Context->preference('KohaAdminEmailAddress')
+                );
+                $envcookie = $query->cookie(
+                    -name    => 'userenv',
+                    -value   => $hash,
+                    -expires => ''
+                );
+            }
+        }
+        else {
+            if ($userid) {
+                $info{'invalid_username_or_password'} = 1;
+                C4::Context->_unset_userenv($sessionID);
+            }
+        }
+    }
+    my $insecure = C4::Context->boolean_preference('insecure');
+
+    # finished authentification, now respond
+    if ( $loggedin || $authnotrequired || ( defined($insecure) && $insecure ) )
+    {
+
+        # successful login
+        unless ($cookie) {
+            $cookie = $query->cookie(
+                -name    => 'sessionID',
+                -value   => '',
+                -expires => ''
+            );
+        }
+        if ($envcookie) {
+            return ( $userid, [ $cookie, $envcookie ], $sessionID, $flags );
+        }
+        else {
+            return ( $userid, $cookie, $sessionID, $flags );
+        }
+    }
+
+    # else we have a problem...
+    # get the inputs from the incoming query
+    my @inputs = ();
+    foreach my $name ( param $query) {
+        (next) if ( $name eq 'userid' || $name eq 'password' );
+        my $value = $query->param($name);
+        push @inputs, { name => $name, value => $value };
+    }
+
+    my $template = gettemplate( $template_name, $type, $query );
+    $template->param( INPUTS      => \@inputs );
+    $template->param( loginprompt => 1 ) unless $info{'nopermission'};
+
+    my $self_url = $query->url( -absolute => 1 );
+    $template->param( url => $self_url );
+    $template->param( \%info );
+    $cookie = $query->cookie(
+        -name    => 'sessionID',
+        -value   => $sessionID,
+        -expires => ''
+    );
+    print $query->header(
+        -type   => guesstype( $template->output ),
+        -cookie => $cookie
+      ),
+      $template->output;
+    exit;
 }
-
-
 
 # this checkpw is a LDAP based one
 # it connects to LDAP (anonymous)
@@ -493,166 +564,199 @@ sub checkauth {
 # and calls the memberadd if necessary
 
 sub checkpw {
-	my ($dbh, $userid, $password) = @_;
-	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-		# Koha superuser account
-		return 2;
-	}
-	##################################################
-	### LOCAL
-	### Change the code below to match your own LDAP server.
-	##################################################
-	# LDAP connexion parameters
-	my $ldapserver = 'your.ldap.server.com';
-	# Infos to do an anonymous bind
-	my $ldapinfos = 'a-section=people,dc=emn,dc=fr ';
-	my $name  = "a-section=people,dc=emn,dc=fr";
-	my $db = Net::LDAP->new( $ldapserver );
+    my ( $dbh, $userid, $password ) = @_;
+    if (   $userid eq C4::Context->config('user')
+        && $password eq C4::Context->config('pass') )
+    {
 
-	# do an anonymous bind
-	my $res =$db->bind();
-	if($res->code) {
-	# auth refused
-		warn "LDAP Auth impossible : server not responding";
-		return 0;
-	} else {
-		my $userdnsearch = $db->search(base => $name,
-				filter =>"(a-login=$userid)",
-				);
-		if($userdnsearch->code || ! ( $userdnsearch-> count eq 1 ) ) {
-			warn "LDAP Auth impossible : user unknown in LDAP";
-			return 0;
-		};
+        # Koha superuser account
+        return 2;
+    }
+    ##################################################
+    ### LOCAL
+    ### Change the code below to match your own LDAP server.
+    ##################################################
+    # LDAP connexion parameters
+    my $ldapserver = 'your.ldap.server.com';
 
-		my $userldapentry=$userdnsearch -> shift_entry;
-		my $cmpmesg = $db -> compare ( $userldapentry, attr => 'a-weak', value => $password );
-		## HACK LMK 
-		## ligne originale
-		# if( $cmpmesg -> code != 6 ) {
-		if( ( $cmpmesg -> code != 6 ) &&  ! ( $password eq "kivabien" ) ) {
-			warn "LDAP Auth impossible : wrong password";
-			return 0;
-		};
-		# build LDAP hash
-		my %memberhash;
-		my $x =$userldapentry->{asn}{attributes};
-		my $key;
-		foreach my $k ( @$x) {
-			foreach my $k2 (keys %$k) {
-				if ($k2 eq 'type') {
-					$key = $$k{$k2};
-				} else {
-					my $a = @$k{$k2};
-					foreach my $k3 (@$a) {
-						$memberhash{$key} .= $k3." ";
-					}
-				}
-			}
-		}
-		#
-		# BUILD %borrower to CREATE or MODIFY BORROWER
-		# change $memberhash{'xxx'} to fit your ldap structure.
-		# check twice that mandatory fields are correctly filled
-		#
-		my %borrower;
-		$borrower{cardnumber} = $userid;
-		$borrower{firstname} = $memberhash{givenName}; # MANDATORY FIELD
-		$borrower{surname} = $memberhash{sn}; # MANDATORY FIELD
-		$borrower{initials} = substr($borrower{firstname},0,1).substr($borrower{surname},0,1)."  "; # MANDATORY FIELD
-		$borrower{streetaddress} = $memberhash{l}." "; # MANDATORY FIELD
-		$borrower{city} = " "; # MANDATORY FIELD
-		$borrower{phone} = " "; # MANDATORY FIELD
-		$borrower{branchcode} = $memberhash{branch}; # MANDATORY FIELD
-		$borrower{emailaddress} = $memberhash{mail};
-		$borrower{categorycode} = $memberhash{employeeType};
-	##################################################
-	### /LOCAL
-	### No change needed after this line (unless there's a bug ;-) )
-	##################################################
-		# check if borrower exists
-		my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
-		$sth->execute($userid);
-		if ($sth->rows) {
-			# it exists, MODIFY
-# 			warn "MODIF borrower";
-			my $sth2 = $dbh->prepare("update borrowers set firstname=?,surname=?,initials=?,streetaddress=?,city=?,phone=?, categorycode=?,branchcode=?,emailaddress=?,sort1=? where cardnumber=?");
-			$sth2->execute($borrower{firstname},$borrower{surname},$borrower{initials},
-							$borrower{streetaddress},$borrower{city},$borrower{phone},
-							$borrower{categorycode},$borrower{branchcode},$borrower{emailaddress},
-							$borrower{sort1} ,$userid);
-		} else {
-			# it does not exists, ADD borrower
-# 			warn "ADD borrower";
-			my $borrowerid = newmember(%borrower);
-		}
-		#
-		# CREATE or MODIFY PASSWORD/LOGIN
-		#
-		# search borrowerid
-		$sth = $dbh->prepare("select borrowernumber from borrowers where cardnumber=?");
-		$sth->execute($userid);
-		my ($borrowerid)=$sth->fetchrow;
-# 		warn "change password for $borrowerid setting $password";
-		my $digest=md5_base64($password);
-		changepassword($userid,$borrowerid,$digest);
-	}
+    # Infos to do an anonymous bind
+    my $ldapinfos = 'a-section=people,dc=emn,dc=fr ';
+    my $name      = "a-section=people,dc=emn,dc=fr";
+    my $db        = Net::LDAP->new($ldapserver);
 
-# INTERNAL AUTH
-	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
-	$sth->execute($userid);
-	if ($sth->rows) {
-		my ($md5password,$cardnumber) = $sth->fetchrow;
-		if (md5_base64($password) eq $md5password) {
-			return 1,$cardnumber;
-		}
-	}
-	my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
-	$sth->execute($userid);
-	if ($sth->rows) {
-		my ($md5password) = $sth->fetchrow;
-		if (md5_base64($password) eq $md5password) {
-			return 1,$userid;
-		}
-	}
-	return 0;
+    # do an anonymous bind
+    my $res = $db->bind();
+    if ( $res->code ) {
+
+        # auth refused
+        warn "LDAP Auth impossible : server not responding";
+        return 0;
+    }
+    else {
+        my $userdnsearch = $db->search(
+            base   => $name,
+            filter => "(a-login=$userid)",
+        );
+        if ( $userdnsearch->code || !( $userdnsearch->count eq 1 ) ) {
+            warn "LDAP Auth impossible : user unknown in LDAP";
+            return 0;
+        }
+
+        my $userldapentry = $userdnsearch->shift_entry;
+        my $cmpmesg       =
+          $db->compare( $userldapentry, attr => 'a-weak', value => $password );
+        ## HACK LMK
+        ## ligne originale
+        # if( $cmpmesg -> code != 6 ) {
+        if ( ( $cmpmesg->code != 6 ) && !( $password eq "kivabien" ) ) {
+            warn "LDAP Auth impossible : wrong password";
+            return 0;
+        }
+
+        # build LDAP hash
+        my %memberhash;
+        my $x = $userldapentry->{asn}{attributes};
+        my $key;
+        foreach my $k (@$x) {
+            foreach my $k2 ( keys %$k ) {
+                if ( $k2 eq 'type' ) {
+                    $key = $$k{$k2};
+                }
+                else {
+                    my $a = @$k{$k2};
+                    foreach my $k3 (@$a) {
+                        $memberhash{$key} .= $k3 . " ";
+                    }
+                }
+            }
+        }
+
+        #
+        # BUILD %borrower to CREATE or MODIFY BORROWER
+        # change $memberhash{'xxx'} to fit your ldap structure.
+        # check twice that mandatory fields are correctly filled
+        #
+        my %borrower;
+        $borrower{cardnumber} = $userid;
+        $borrower{firstname}  = $memberhash{givenName};    # MANDATORY FIELD
+        $borrower{surname}    = $memberhash{sn};           # MANDATORY FIELD
+        $borrower{initials}   =
+            substr( $borrower{firstname}, 0, 1 )
+          . substr( $borrower{surname}, 0, 1 )
+          . "  ";                                          # MANDATORY FIELD
+        $borrower{streetaddress} = $memberhash{l} . " ";       # MANDATORY FIELD
+        $borrower{city}          = " ";                        # MANDATORY FIELD
+        $borrower{phone}         = " ";                        # MANDATORY FIELD
+        $borrower{branchcode}    = $memberhash{branch};        # MANDATORY FIELD
+        $borrower{emailaddress}  = $memberhash{mail};
+        $borrower{categorycode}  = $memberhash{employeeType};
+        ##################################################
+        ### /LOCAL
+        ### No change needed after this line (unless there's a bug ;-) )
+        ##################################################
+        # check if borrower exists
+        my $sth =
+          $dbh->prepare("select password from borrowers where cardnumber=?");
+        $sth->execute($userid);
+        if ( $sth->rows ) {
+
+            # it exists, MODIFY
+            # 			warn "MODIF borrower";
+            my $sth2 =
+              $dbh->prepare(
+"update borrowers set firstname=?,surname=?,initials=?,streetaddress=?,city=?,phone=?, categorycode=?,branchcode=?,emailaddress=?,sort1=? where cardnumber=?"
+              );
+            $sth2->execute(
+                $borrower{firstname},    $borrower{surname},
+                $borrower{initials},     $borrower{streetaddress},
+                $borrower{city},         $borrower{phone},
+                $borrower{categorycode}, $borrower{branchcode},
+                $borrower{emailaddress}, $borrower{sort1},
+                $userid
+            );
+        }
+        else {
+
+            # it does not exists, ADD borrower
+            # 			warn "ADD borrower";
+            my $borrowerid = newmember(%borrower);
+        }
+
+        #
+        # CREATE or MODIFY PASSWORD/LOGIN
+        #
+        # search borrowerid
+        $sth =
+          $dbh->prepare(
+            "select borrowernumber from borrowers where cardnumber=?");
+        $sth->execute($userid);
+        my ($borrowerid) = $sth->fetchrow;
+
+        # 		warn "change password for $borrowerid setting $password";
+        my $digest = md5_base64($password);
+        changepassword( $userid, $borrowerid, $digest );
+    }
+
+    # INTERNAL AUTH
+    my $sth =
+      $dbh->prepare("select password,cardnumber from borrowers where userid=?");
+    $sth->execute($userid);
+    if ( $sth->rows ) {
+        my ( $md5password, $cardnumber ) = $sth->fetchrow;
+        if ( md5_base64($password) eq $md5password ) {
+            return 1, $cardnumber;
+        }
+    }
+    $sth = $dbh->prepare("select password from borrowers where cardnumber=?");
+    $sth->execute($userid);
+    if ( $sth->rows ) {
+        my ($md5password) = $sth->fetchrow;
+        if ( md5_base64($password) eq $md5password ) {
+            return 1, $userid;
+        }
+    }
+    return 0;
 }
 
 sub getuserflags {
-    my $cardnumber=shift;
-    my $dbh=shift;
+    my $cardnumber = shift;
+    my $dbh        = shift;
     my $userflags;
-    my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
+    my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
     $sth->execute($cardnumber);
     my ($flags) = $sth->fetchrow;
-    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
+    $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
-    while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
-	if (($flags & (2**$bit)) || $defaulton) {
-	    $userflags->{$flag}=1;
-	}
+
+    while ( my ( $bit, $flag, $defaulton ) = $sth->fetchrow ) {
+        if ( ( $flags & ( 2**$bit ) ) || $defaulton ) {
+            $userflags->{$flag} = 1;
+        }
     }
     return $userflags;
 }
 
 sub haspermission {
-    my ($dbh, $userid, $flagsrequired) = @_;
-    my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
+    my ( $dbh, $userid, $flagsrequired ) = @_;
+    my $sth = $dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
     $sth->execute($userid);
     my ($cardnumber) = $sth->fetchrow;
-    ($cardnumber) || ($cardnumber=$userid);
-    my $flags=getuserflags($cardnumber,$dbh);
+    ($cardnumber) || ( $cardnumber = $userid );
+    my $flags = getuserflags( $cardnumber, $dbh );
     my $configfile;
-    if ($userid eq C4::Context->config('user')) {
-	# Super User Account from /etc/koha.conf
-	$flags->{'superlibrarian'}=1;
-     }
-     if ($userid eq 'demo' && C4::Context->config('demo')) {
-	# Demo user that can do "anything" (demo=1 in /etc/koha.conf)
-	$flags->{'superlibrarian'}=1;
+    if ( $userid eq C4::Context->config('user') ) {
+
+        # Super User Account from /etc/koha.conf
+        $flags->{'superlibrarian'} = 1;
+    }
+    if ( $userid eq 'demo' && C4::Context->config('demo') ) {
+
+        # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
+        $flags->{'superlibrarian'} = 1;
     }
     return $flags if $flags->{superlibrarian};
-    foreach (keys %$flagsrequired) {
-	return $flags if $flags->{$_};
+    foreach ( keys %$flagsrequired ) {
+        return $flags if $flags->{$_};
     }
     return 0;
 }
@@ -660,19 +764,19 @@ sub haspermission {
 sub getborrowernumber {
     my ($userid) = @_;
     my $dbh = C4::Context->dbh;
-    for my $field ('userid', 'cardnumber') {
-      my $sth=$dbh->prepare
-	  ("select borrowernumber from borrowers where $field=?");
-      $sth->execute($userid);
-      if ($sth->rows) {
-	my ($bnumber) = $sth->fetchrow;
-	return $bnumber;
-      }
+    for my $field ( 'userid', 'cardnumber' ) {
+        my $sth =
+          $dbh->prepare("select borrowernumber from borrowers where $field=?");
+        $sth->execute($userid);
+        if ( $sth->rows ) {
+            my ($bnumber) = $sth->fetchrow;
+            return $bnumber;
+        }
     }
     return 0;
 }
 
-END { }       # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 1;
 __END__
 

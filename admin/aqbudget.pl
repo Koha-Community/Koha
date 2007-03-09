@@ -39,20 +39,22 @@
 
 use strict;
 use CGI;
+use C4::Branch; # GetBranches
 use List::Util qw/min/;
+
 use C4::Date;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Context;
-use C4::Interface::CGI::Output;
-use C4::Search;
-use C4::Koha;
 use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Koha;
 
 my $input = new CGI;
 my $script_name="/cgi-bin/koha/admin/aqbudget.pl";
 my $bookfundid=$input->param('bookfundid');
 my $aqbudgetid=$input->param('aqbudgetid');
+my $branchcodeid=$input->param('branchcode');
 my $pagesize = 20;
 my $op = $input->param('op');
 
@@ -96,7 +98,8 @@ SELECT aqbudgetid,
        budgetamount,
        aqbudget.branchcode
   FROM aqbudget
-    INNER JOIN aqbookfund ON aqbudget.bookfundid = aqbookfund.bookfundid
+    INNER JOIN aqbookfund ON (aqbudget.bookfundid = aqbookfund.bookfundid AND
+      aqbudget.branchcode = aqbookfund.branchcode)
   WHERE aqbudgetid = ?
 ';
         $sth=$dbh->prepare($query);
@@ -111,11 +114,12 @@ SELECT aqbookfund.branchcode,
        aqbookfund.bookfundname
   FROM aqbookfund
     LEFT JOIN branches ON aqbookfund.branchcode = branches.branchcode
-  WHERE bookfundid = ?
+  WHERE bookfundid = ? AND aqbookfund.branchcode=?
 ';
     $sth=$dbh->prepare($query);
     $sth->execute(
         defined $aqbudgetid ? $dataaqbudget->{bookfundid} : $bookfundid,
+        $branchcodeid
     );
     $dataaqbookfund=$sth->fetchrow_hashref;
     $sth->finish;
@@ -123,12 +127,14 @@ SELECT aqbookfund.branchcode,
     if (defined $aqbudgetid) {
         $template->param(
             bookfundid => $dataaqbudget->{'bookfundid'},
+            branchcode => $dataaqbudget->{'branchcode'},
             bookfundname => $dataaqbudget->{'bookfundname'}
         );
     }
     else {
         $template->param(
             bookfundid => $bookfundid,
+            branchcode => $dataaqbookfund->{'branchcode'},
             bookfundname => $dataaqbookfund->{bookfundname},
         );
     }
@@ -197,7 +203,7 @@ UPDATE aqbudget
             format_date_in_iso($input->param('startdate')),
             format_date_in_iso($input->param('enddate')),
             $input->param('budgetamount'),
-            $input->param('branch') || undef,
+            $input->param('branch') || '',
             $aqbudgetid,
         );
         $sth->finish;
@@ -216,7 +222,7 @@ INSERT
             format_date_in_iso($input->param('startdate')),
             format_date_in_iso($input->param('enddate')),
             $input->param('budgetamount'),
-            $input->param('branch') || undef,
+            $input->param('branch') || '',
         );
         $sth->finish;
     }

@@ -1,10 +1,8 @@
 package C4::Output;
-# $Id$
 
 #package to deal with marking up output
 #You will need to edit parts of this pm
 #set the value of path to be where your html lives
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -23,6 +21,10 @@ package C4::Output;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
+# NOTE: I'm pretty sure this module is deprecated in favor of
+# templates.
 
 use strict;
 require Exporter;
@@ -33,7 +35,7 @@ use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
@@ -45,124 +47,126 @@ C4::Output - Functions for managing templates
 
 =cut
 
-@ISA = qw(Exporter);
+@ISA    = qw(Exporter);
 @EXPORT = qw(
-		&themelanguage &gettemplate setlanguagecookie pagination_bar
-		);
+  &themelanguage &gettemplate setlanguagecookie pagination_bar
+);
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
-my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
+my $path = C4::Context->config('intrahtdocs') . "/default/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub gettemplate {
-	my ($tmplbase, $opac, $query) = @_;
-if (!$query){
-  warn "no query in gettemplate";
-  }
-	my $htdocs;
-	if ($opac ne "intranet") {
-		$htdocs = C4::Context->config('opachtdocs');
-	} else {
-		$htdocs = C4::Context->config('intrahtdocs');
-	}
+    my ( $tmplbase, $opac, $query ) = @_;
+    if ( !$query ) {
+        warn "no query in gettemplate";
+    }
+    my $htdocs;
+    if ( $opac ne "intranet" ) {
+        $htdocs = C4::Context->config('opachtdocs');
+    }
+    else {
+        $htdocs = C4::Context->config('intrahtdocs');
+    }
     my $path = C4::Context->preference('intranet_includes') || 'includes';
-#    warn "PATH : $path";
-my $filter=sub {
-#my $win=shift;
-$_=~s /\xef\xbb\xbf//g;
-};
-	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac, $query);
-	my $opacstylesheet = C4::Context->preference('opacstylesheet');
-	
-my $template = HTML::Template::Pro->new(filename      => "$htdocs/$theme/$lang/$tmplbase", case_sensitive=>1, 
-				   die_on_bad_params => 0,
-				   global_vars       => 1,
-				   path              => ["$htdocs/$theme/$lang/$path"]);
 
-	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
-							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-							theme => $theme,
-							opacstylesheet => $opacstylesheet,
-							opaccolorstylesheet => C4::Context->preference('opaccolorstylesheet'),
-							opacsmallimage => C4::Context->preference('opacsmallimage'),
-							lang => $lang);
+    #    warn "PATH : $path";
+    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $opac, $query );
+    my $opacstylesheet = C4::Context->preference('opacstylesheet');
+    my $template       = HTML::Template::Pro->new(
+        filename          => "$htdocs/$theme/$lang/$tmplbase",
+        die_on_bad_params => 1,
+        global_vars       => 1,
+        case_sensitive    => 1,
+        path              => ["$htdocs/$theme/$lang/$path"]
+    );
 
-        
-	return $template;
+    $template->param(
+        themelang => ( $opac ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
+          . "/$theme/$lang",
+        interface => ( $opac ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
+        theme => $theme,
+        opacstylesheet      => $opacstylesheet,
+        opaccolorstylesheet => C4::Context->preference('opaccolorstylesheet'),
+        opacsmallimage      => C4::Context->preference('opacsmallimage'),
+        lang                => $lang
+    );
+
+    return $template;
 }
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-  my ($htdocs, $tmpl, $section, $query) = @_;
-#   if (!$query) {
-#     warn "no query";
-#   }
-  my $dbh = C4::Context->dbh;
-  my @languages;
-  my @themes;
-my ($theme, $lang);
-  if ($section eq "intranet"){
-    $lang=$query->cookie('KohaOpacLanguage');
+    my ( $htdocs, $tmpl, $section, $query ) = @_;
 
-  if ($lang){
-  
-    push @languages,$lang;
-    @themes = split " ", C4::Context->preference("template");
-  } 
-  else {
-    @languages = split " ", C4::Context->preference("opaclanguages");
-    @themes = split " ", C4::Context->preference("template");
+    #   if (!$query) {
+    #     warn "no query";
+    #   }
+    my $dbh = C4::Context->dbh;
+    my @languages;
+    my @themes;
+    if ( $section eq "intranet" ) {
+        @languages = split " ", C4::Context->preference("opaclanguages");
+        @themes    = split " ", C4::Context->preference("template");
     }
- }else{
-   $lang=$query->cookie('KohaOpacLanguage');
+    else {
 
-  if ($lang){
-  
-    push @languages,$lang;
-    @themes = split " ", C4::Context->preference("opacthemes");
-  } 
-  else {
-    @languages = split " ", C4::Context->preference("opaclanguages");
-    @themes = split " ", C4::Context->preference("opacthemes");
+      # we are in the opac here, what im trying to do is let the individual user
+      # set the theme they want to use.
+      # and perhaps the them as well.
+        my $lang = $query->cookie('KohaOpacLanguage');
+        if ($lang) {
+
+            push @languages, $lang;
+            @themes = split " ", C4::Context->preference("opacthemes");
+        }
+        else {
+            @languages = split " ", C4::Context->preference("opaclanguages");
+            @themes    = split " ", C4::Context->preference("opacthemes");
+        }
     }
-}
 
-  
-# searches through the themes and languages. First template it find it returns.
-# Priority is for getting the theme right.
+    my ( $theme, $lang );
+
+ # searches through the themes and languages. First template it find it returns.
+ # Priority is for getting the theme right.
   THEME:
-  foreach my $th (@themes) {
-    foreach my $la (@languages) {
-	for (my $pass = 1; $pass <= 2; $pass += 1) {
-	  $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-	  if (-e "$htdocs/$th/$la/$tmpl") {
-	      $theme = $th;
-	      $lang = $la;
-	      last THEME;
-	  }
-	last unless $la =~ /[-_]/;
-	}
+    foreach my $th (@themes) {
+        foreach my $la (@languages) {
+            for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
+                $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+                if ( -e "$htdocs/$th/$la/$tmpl" ) {
+                    $theme = $th;
+                    $lang  = $la;
+                    last THEME;
+                }
+                last unless $la =~ /[-_]/;
+            }
+        }
     }
-  }
-  if ($theme and $lang) {
-    return ($theme, $lang);
-  } else {
-    return ('default', 'en');
-  }
+    if ( $theme and $lang ) {
+        return ( $theme, $lang );
+    }
+    else {
+        return ( 'prog', 'en' );
+    }
 }
-
 
 sub setlanguagecookie {
-   my ($query,$language,$uri)=@_;
-   my $cookie=$query->cookie(-name => 'KohaOpacLanguage',
-                                           -value => $language,
-					   -expires => '');
-   print $query->redirect(-uri=>$uri,
-   -cookie=>$cookie);
-}				   
+    my ( $query, $language, $uri ) = @_;
+    my $cookie = $query->cookie(
+        -name    => 'KohaOpacLanguage',
+        -value   => $language,
+        -expires => ''
+    );
+    print $query->redirect(
+        -uri    => $uri,
+        -cookie => $cookie
+    );
+}
 
 =item pagination_bar
 
@@ -184,126 +188,126 @@ This function returns HTML, without any language dependency.
 =cut
 
 sub pagination_bar {
-    my ($base_url, $nb_pages, $current_page, $startfrom_name) = @_;
+    my ( $base_url, $nb_pages, $current_page, $startfrom_name ) = @_;
 
     # how many pages to show before and after the current page?
     my $pages_around = 2;
 
     my $url =
-        $base_url
-        .($base_url =~ m/&/ ? '&amp;' : '?')
-        .$startfrom_name.'='
-        ;
+      $base_url . ( $base_url =~ m/&/ ? '&amp;' : '?' ) . $startfrom_name . '=';
 
     my $pagination_bar = '';
 
     # current page detection
-    if (not defined $current_page) {
+    if ( not defined $current_page ) {
         $current_page = 1;
     }
 
     # navigation bar useful only if more than one page to display !
-    if ($nb_pages > 1) {
+    if ( $nb_pages > 1 ) {
+
         # link to first page?
-        if ($current_page > 1) {
-            $pagination_bar.=
-                "\n".'&nbsp;'
-                .'<a href="'.$url.'1" rel="start">'
-                .'&lt;&lt;'
-                .'</a>'
-                ;
+        if ( $current_page > 1 ) {
+            $pagination_bar .=
+                "\n" . '&nbsp;'
+              . '<a href="'
+              . $url
+              . '1" rel="start">'
+              . '&lt;&lt;' . '</a>';
         }
         else {
-            $pagination_bar.=
-                "\n".'&nbsp;<span class="inactive">&lt;&lt;</span>';
+            $pagination_bar .=
+              "\n" . '&nbsp;<span class="inactive">&lt;&lt;</span>';
         }
 
         # link on previous page ?
-        if ($current_page > 1) {
+        if ( $current_page > 1 ) {
             my $previous = $current_page - 1;
 
-            $pagination_bar.=
-                "\n".'&nbsp;'
-                .'<a href="'
-                .$url.$previous
-                .'" rel="prev">'
-                .'&lt;'
-                .'</a>'
-                ;
+            $pagination_bar .=
+                "\n" . '&nbsp;'
+              . '<a href="'
+              . $url
+              . $previous
+              . '" rel="prev">' . '&lt;' . '</a>';
         }
         else {
-            $pagination_bar.=
-                "\n".'&nbsp;<span class="inactive">&lt;</span>';
+            $pagination_bar .=
+              "\n" . '&nbsp;<span class="inactive">&lt;</span>';
         }
 
-        my $min_to_display = $current_page - $pages_around;
-        my $max_to_display = $current_page + $pages_around;
+        my $min_to_display      = $current_page - $pages_around;
+        my $max_to_display      = $current_page + $pages_around;
         my $last_displayed_page = undef;
 
-        for my $page_number (1..$nb_pages) {
-            if ($page_number == 1
+        for my $page_number ( 1 .. $nb_pages ) {
+            if (
+                   $page_number == 1
                 or $page_number == $nb_pages
-                or ($page_number >= $min_to_display and $page_number <= $max_to_display)
-            ) {
-                if (defined $last_displayed_page
-                    and $last_displayed_page != $page_number - 1
-                ) {
-                    $pagination_bar.=
-                        "\n".'&nbsp;<span class="inactive">...</span>'
-                        ;
+                or (    $page_number >= $min_to_display
+                    and $page_number <= $max_to_display )
+              )
+            {
+                if ( defined $last_displayed_page
+                    and $last_displayed_page != $page_number - 1 )
+                {
+                    $pagination_bar .=
+                      "\n" . '&nbsp;<span class="inactive">...</span>';
                 }
 
-                if ($page_number == $current_page) {
-                    $pagination_bar.=
-                        "\n".'&nbsp;'
-                        .'<span class="currentPage">'.$page_number.'</span>'
-                        ;
+                if ( $page_number == $current_page ) {
+                    $pagination_bar .=
+                        "\n" . '&nbsp;'
+                      . '<span class="currentPage">'
+                      . $page_number
+                      . '</span>';
                 }
                 else {
-                    $pagination_bar.=
-                        "\n".'&nbsp;'
-                        .'<a href="'.$url.$page_number.'">'.$page_number.'</a>'
-                        ;
+                    $pagination_bar .=
+                        "\n" . '&nbsp;'
+                      . '<a href="'
+                      . $url
+                      . $page_number . '">'
+                      . $page_number . '</a>';
                 }
                 $last_displayed_page = $page_number;
             }
         }
 
         # link on next page?
-        if ($current_page < $nb_pages) {
+        if ( $current_page < $nb_pages ) {
             my $next = $current_page + 1;
 
-            $pagination_bar.=
-                "\n".'&nbsp;<a href="'.$url.$next.'" rel="next">'
-                .'&gt;'
-                .'</a>'
-                ;
+            $pagination_bar .= "\n"
+              . '&nbsp;<a href="'
+              . $url
+              . $next
+              . '" rel="next">' . '&gt;' . '</a>';
         }
         else {
-            $pagination_bar.=
-                "\n".'&nbsp;<span class="inactive">&gt;</span>'
-                ;
+            $pagination_bar .=
+              "\n" . '&nbsp;<span class="inactive">&gt;</span>';
         }
 
         # link to last page?
-        if ($current_page != $nb_pages) {
-            $pagination_bar.=
-                "\n".'&nbsp;<a href="'.$url.$nb_pages.'" rel="last">'
-                .'&gt;&gt;'
-                .'</a>'
-                ;
+        if ( $current_page != $nb_pages ) {
+            $pagination_bar .= "\n"
+              . '&nbsp;<a href="'
+              . $url
+              . $nb_pages
+              . '" rel="last">'
+              . '&gt;&gt;' . '</a>';
         }
         else {
-            $pagination_bar.=
-                "\n".'&nbsp;<span class="inactive">&gt;&gt;</span>';
+            $pagination_bar .=
+              "\n" . '&nbsp;<span class="inactive">&gt;&gt;</span>';
         }
     }
 
     return $pagination_bar;
 }
 
-
-END { }       # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 
 1;
 __END__

@@ -1,6 +1,4 @@
 #!/usr/bin/perl
-# WARNING: This file uses 4-character tabs!
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -26,122 +24,102 @@ use C4::Output;
 use C4::Auth;
 use C4::Print;
 use C4::Interface::CGI::Output;
-use HTML::Template;
-use DBI;
 use C4::Koha;
-
+use C4::Branch; # GetBranches
 
 # this is a reorganisation of circulationold.pl
 # dividing it up into three scripts......
 # this will be the first one that chooses branch and printer settings....
 
 #general design stuff...
-my $headerbackgroundcolor='#99cc33';
-my $circbackgroundcolor='#ffffcc';
-my $circbackgroundcolor='white';
-my $linecolor1='#ffffcc';
-my $linecolor2='white';
-my $backgroundimage="/images/background-mem.gif";
 
 # try to get the branch and printer settings from the http....
 my %env;
-my $query=new CGI;
-my $branches=GetBranches('IS');
-my $printers=getprinters(\%env);
-my $branch=$query->param('branch');
-my $printer=$query->param('printer');
+my $query    = new CGI;
+my $branches = GetBranches();
+my $printers = GetPrinters( \%env );
+my $branch   = $query->param('branch');
+my $printer  = $query->param('printer');
 
-($branch) || ($branch=$query->cookie('branch'));
-($printer) || ($printer=$query->cookie('printer'));
+my %cookie = $query->cookie('userenv');
+($branch)  || ( $branch  = $cookie{'branch'} );
+($printer) || ( $printer = $cookie{'printer'} );
 
-($branches->{$branch}) || ($branch=(keys %$branches)[0]);
-($printers->{$printer}) || ($printer=(keys %$printers)[0]);
-
+( $branches->{$branch} )  || ( $branch  = ( keys %$branches )[0] );
+( $printers->{$printer} ) || ( $printer = ( keys %$printers )[0] );
 
 # is you force a selection....
-my $oldbranch = $branch;
+my $oldbranch  = $branch;
 my $oldprinter = $printer;
 
-#$branch='';
-#$printer='';
-
-
-$env{'branchcode'}=$branch;
-$env{'printer'}=$printer;
-$env{'queue'}=$printer;
+$env{'branchcode'} = $branch;
+$env{'printer'}    = $printer;
+$env{'queue'}      = $printer;
 
 # set up select options....
-my $branchcount=0;
-my $printercount=0;
+my $branchcount  = 0;
+my $printercount = 0;
 my @branchloop;
-foreach my $br (keys %$branches) {
-    next unless $br =~ /\S/;
-    #(next) unless ($branches->{$_}->{'IS'}); # FIXME disabled to fix bug 202
+foreach my $br ( keys %$branches ) {
+    next unless $br =~ /\S/; # next unless $br is not blank.
+
     $branchcount++;
-	my %branch;
-	$branch{selected}=($br eq $oldbranch);
-	$branch{name}=$branches->{$br}->{'branchname'};
-	$branch{value}=$br;
-    push(@branchloop,\%branch);
+    my %branch;
+    $branch{selected} = ( $br eq $oldbranch );
+    $branch{name}     = $branches->{$br}->{'branchname'};
+    $branch{value}    = $br;
+    push( @branchloop, \%branch );
 }
 my @printerloop;
-foreach (keys %$printers) {
-    (next) unless ($_);
+foreach ( keys %$printers ) {
+    (next) unless ($_); # next unless if this printer is blank.
     $printercount++;
-	my %printer;
-	$printer{selected}=($_ eq $oldprinter);
-	$printer{name}=$printers->{$_}->{'printername'};
-	$printer{value}=$_;
-    push(@printerloop,\%printer);
+    my %printer;
+    $printer{selected} = ( $_ eq $oldprinter );
+    $printer{name}     = $printers->{$_}->{'printername'};
+    $printer{value}    = $_;
+    push( @printerloop, \%printer );
 }
 
 # if there is only one....
 my $printername;
 my $branchname;
 
-my $oneprinter=($printercount==1) ;
-my $onebranch=($branchcount==1) ;
-if ($printercount==1) {
-    my ($tmpprinter)=keys %$printers;
-	$printername=$printers->{$tmpprinter}->{printername};
+my $oneprinter = ( $printercount == 1 );
+my $onebranch  = ( $branchcount == 1 );
+if ( $printercount == 1 ) {
+    my ($tmpprinter) = keys %$printers;
+    $printername = $printers->{$tmpprinter}->{printername};
 }
-if ($branchcount==1) {
-    my ($tmpbranch)=keys %$branches;
-	$branchname=$branches->{$tmpbranch}->{branchname};
+if ( $branchcount == 1 ) {
+    my ($tmpbranch) = keys %$branches;
+    $branchname = $branches->{$tmpbranch}->{branchname};
 }
 
-
-#############################################################################################
+################################################################################
 # Start writing page....
 # set header with cookie....
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "circ/selectbranchprinter.tmpl",
-							query => $query,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => {circulate => 1},
-                         });
-$template->param(headerbackgroundcolor => $headerbackgroundcolor,
-							backgroundimage => $backgroundimage,
-							oneprinter => $oneprinter,
-							onebranch => $onebranch,
-							printername => $printername,
-							branchname => $branchname,
-							printerloop => \@printerloop,
-							branchloop => \@branchloop,
-							intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-							);
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "circ/selectbranchprinter.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => 1 },
+    }
+);
+$template->param(
+    oneprinter              => $oneprinter,
+    onebranch               => $onebranch,
+    printername             => $printername,
+    branchname              => $branchname,
+    printerloop             => \@printerloop,
+    branchloop              => \@branchloop,
+    intranetcolorstylesheet =>
+      C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+);
 
-my $branchcookie=$query->cookie(-name => 'branch', -value => "$branch", -expires => '+1y');
-my $printercookie=$query->cookie(-name => 'printer', -value => "$printer", -expires => '+1y');
-
-my $cookies=[$cookie,$branchcookie, $printercookie]; 
-output_html_with_http_headers $query, $cookies, $template->output;
-
-
-# Local Variables:
-# tab-width: 4
-# End:
+output_html_with_http_headers $query, $cookie, $template->output;

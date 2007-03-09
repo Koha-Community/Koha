@@ -25,22 +25,52 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AuthoritiesMarc;
-use C4::Biblio;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
-use Encode;
 
+use MARC::File::USMARC;
+use MARC::File::XML;
+use C4::Biblio;
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
-my $input = new CGI;
-my $z3950 = $input->param('z3950');
-my $logstatus=C4::Context->preference('Activate_log');
-my $xml;
+
 my $itemtype; # created here because it can be used in build_authorized_values_list sub
 
+=item find_value
 
+    ($indicators, $value) = find_value($tag, $subfield, $record,$encoding);
 
+Find the given $subfield in the given $tag in the given
+MARC::Record $record.  If the subfield is found, returns
+the (indicators, value) pair; otherwise, (undef, undef) is
+returned.
+
+=cut
+
+sub find_value {
+	my ($tagfield,$insubfield,$record,$encoding) = @_;
+	my @result;
+	my $indicator;
+	if ($tagfield <10) {
+		if ($record->field($tagfield)) {
+			push @result, $record->field($tagfield)->data();
+		} else {
+			push @result,"";
+		}
+	} else {
+		foreach my $field ($record->field($tagfield)) {
+			my @subfields = $field->subfields();
+			foreach my $subfield (@subfields) {
+				if (@$subfield[0] eq $insubfield) {
+				push @result,@$subfield[1];
+							$indicator = $field->indicator(1).$field->indicator(2);
+				}
+			}
+		}
+	}
+	return($indicator,@result);
+}
 
 
 =item build_authorized_values_list
@@ -96,6 +126,7 @@ sub build_authorized_values_list ($$$$$) {
 				-labels   => \%authorised_lib,
 				-override => 1,
 				-size     => 1,
+	 			-tabindex=>'',
 				-multiple => 0 );
 }
 
@@ -104,11 +135,11 @@ sub build_authorized_values_list ($$$$$) {
  builds the <input ...> entry for a subfield.
 =cut
 sub create_input () {
-	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth,$id) = @_;	
-	my $dbh=C4::Context->dbh;
+	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	# must be encoded as utf-8 before it reaches the editor
+       my $dbh=C4::Context->dbh;
 	$value =~ s/"/&quot;/g;
 	my %subfield_data;
-	$subfield_data{id}=$id;
 	$subfield_data{tag}=$tag;
 	$subfield_data{subfield}=$subfield;
 	$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
@@ -116,261 +147,145 @@ sub create_input () {
 	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	$subfield_data{index} = $i;
 	$subfield_data{visibility} = "display:none" if (substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) gt "0") ; #check parity
 	# it's an authorised field
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
-	# it's linking authority field to another authority
+	# it's a thesaurus / authority field
+	} elsif ($tagslib->{$tag}->{$subfield}->{frameworkcode}) {
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"67\" maxlength=\"255\" DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{frameworkcode}."&index=$i',$i)\">...</a>";
 	} elsif ($tagslib->{$tag}->{$subfield}->{link}) {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff;'\" tabindex=\"1\" type=\"text\" name=\"field_value\" id=\"field_value$id\" value=\"$value\" size=\"40\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:Dopop('../authorities/auth_linker.pl?index=$id',$id);\">...</a>";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff;'\" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"40\" maxlength=\"255\" DISABLE READONLY> <a  style=\"cursor: help;\" href=\"javascript:Dopop('../authorities/auth_linker.pl?index=$i',$i)\">...</a>";
 	
 		# it's a plugin field
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
 		# (the cgidir differs)
-		my $cgidir = C4::Context->intranetdir ."/cgi-bin/value_builder";
+		my $cgidir = C4::Context->intranetdir ."/cgi-bin/cataloguing/value_builder";
 		unless (opendir(DIR, "$cgidir")) {
-			$cgidir = C4::Context->intranetdir."/value_builder";
+			$cgidir = C4::Context->intranetdir."/cataloguing/value_builder";
 		} 
 		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'}; 
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
-		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\"  name=\"field_value\" id=\"field_value$id\"  value=\"$value\" size=\"40\" maxlength=\"255\" DISABLE READONLY OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+		$subfield_data{marc_value}="<input tabindex=\"1\" type=\"text\" name=\"field_value\"  value=\"$value\" size=\"40\" maxlength=\"255\" OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i); \"> <a  style=\"cursor: help;\" href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" id=\"field_value$id\"  value=\"$value\">";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"hidden\" name=\"field_value\" value=\"$value\">";
 	} elsif  (substr($tagslib->{$tag}->{$subfield}->{'hidden'},2,1) gt "1") {
 
-		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" id=\"field_value$id\"   value=\"$value\" size=\"40\" maxlength=\"255\" >";
+		$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"40\" maxlength=\"255\" >";
 	# it's a standard field
 	} else {
 		if (length($value) >100) {
-			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" id=\"field_value$id\"  cols=\"40\" rows=\"5\" >$value</textarea>";
+			$subfield_data{marc_value}="<textarea tabindex=\"1\" name=\"field_value\" cols=\"40\" rows=\"5\" >$value</textarea>";
 		} else {
-			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" id=\"field_value$id\"  value=\"$value\" size=\"50\">"; #"
+			$subfield_data{marc_value}="<input onblur=\"this.style.backgroundColor='#ffffff';\" onfocus=\"this.style.backgroundColor='#ffffff'; \" tabindex=\"1\" type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\">"; #"
 		}
 	}
 	return \%subfield_data;
 }
 
-sub build_tabs  ($$$;$){
-    my($template, $xmlhash, $dbh,$addedfield) = @_;
+sub build_tabs ($$$$) {
+    my($template, $record, $dbh,$encoding) = @_;
     # fill arrays
     my @loop_data =();
     my $tag;
     my $i=0;
-my $id=100;
-my ($authidtagfield,$authidtagsubfield)=MARCfind_marc_from_kohafield("authid","authorities");
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
 		where category=? order by lib");
-my $author;
-my $controlfields;
-my $leader;
-if ($xmlhash){
- $author=$xmlhash->{'datafield'};
- $controlfields=$xmlhash->{'controlfield'};
- $leader=$xmlhash->{'leader'};
-}
-    my @BIG_LOOP;
-my %built;
+
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		my @loop_data = ();
 		foreach my $tag (sort(keys (%{$tagslib}))) {
 			my $indicator;
-				# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
-				# if MARC::Record is empty => use tab as master loop.
-	if ($xmlhash) {
-			####
-		
-			my %tagdefined;
-			my %definedsubfields;
-			my $hiddenrequired;
-			my ($ind1,$ind2);
-			
-		 if ($tag>9){
-			next if ($tag eq $authidtagfield); #we do not want authid to duplicate
-
-			foreach my $data (@$author){							
-					$hiddenrequired=0;
+	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
+	# if MARC::Record is empty => use tab as master loop.
+			if ($record ne -1 && ($record->field($tag) || $tag eq '000')) {
+				my @fields;
+				if ($tag ne '000') {
+					@fields = $record->field($tag);
+				} else {
+					push @fields,$record->leader();
+				}
+				foreach my $field (@fields)  {
 					my @subfields_data;
-					undef %definedsubfields;
-   	 			 if ($data->{'tag'} eq $tag){
-					$tagdefined{$tag}=1 ;
-					   if ($built{$tag}==1){
-						$hiddenrequired=1;
-					    }
-					    $ind1="  ";
-					      $ind2="  ";		
-					      foreach my $subfieldcode ( $data->{'subfield'}){
-		   				 foreach my $code ( @$subfieldcode){	
-							next if ($tagslib->{$tag}->{$code->{'code'}}->{tab} ne $tabloop);						
-							my $subfield=$code->{'code'}  ;
-							my $value=$code->{'content'};
-							$definedsubfields{$tag.$subfield}=1 ;
-							 $built{$tag}=1;
-							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$xmlhash,$authorised_values_sth,$id)) ;
-							$i++ ;
-		   				}
-					      } ##each subfield
-					    $ind1=$data->{'ind1'};
-					    $ind2=	$data->{'ind2'};
-					  
-					if ($hiddenrequired && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
-						my @hiddensubfields_data;
+					if ($tag<10) {
+						my ($value,$subfield);
+						if ($tag ne '000') {
+							$value=$field->data();
+							$subfield="@";
+						} else {
+							$value = $field;
+							$subfield='@';
+						}
+						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+					#	next if ($tagslib->{$tag}->{$subfield}->{kohafield} eq 'auth_header.authid');
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+						$i++;
+					} else {
+						my @subfields=$field->subfields();
+						foreach my $subfieldcount (0..$#subfields) {
+							my $subfield=$subfields[$subfieldcount][0];
+							my $value=$subfields[$subfieldcount][1];
+							next if (length $subfield !=1);
+							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+							$i++;
+						}
+					}
+# now, loop again to add parameter subfield that are not in the MARC::Record
+					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
+						next if (length $subfield !=1);
+						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+						next if ($tag<10);
+						next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) gt "1")  ); #check for visibility flag
+						next if (defined($field->subfield($subfield)));
+						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
+						$i++;
+					}
+					if ($#subfields_data >= 0) {
 						my %tag_data;
-						push(@hiddensubfields_data, &create_input('','','',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
+						$tag_data{tag} = $tag;
+						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
+						$tag_data{indicator} = $record->field($tag)->indicator(1). $record->field($tag)->indicator(2) if ($tag>=10);
+						$tag_data{subfield_loop} = \@subfields_data;
+						if ($tag<10) {
+                                                	$tag_data{fixedfield} = 1;
+                                        	}
+
+						push (@loop_data, \%tag_data);
+					}
+# If there is more than 1 field, add an empty hidden field as separator.
+					if ($#fields >=1 && $#loop_data >=0 && $loop_data[$#loop_data]->{'tag'} eq $tag) {
+						my @subfields_data;
+						my %tag_data;
+						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
 						$tag_data{tag} = '';
 						$tag_data{tag_lib} = '';
 						$tag_data{indicator} = '';
-						$tag_data{subfield_loop} = \@hiddensubfields_data;
-						push (@loop_data, \%tag_data);
-						$i++;
-					}
-					# now, loop again to add parameter subfield that are not in the MARC::Record
-					
-					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
-						next if (length $subfield !=1);
-						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-						next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) >1)  ); #check for visibility flag
-						next if ($definedsubfields{$tag.$subfield} );
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
-						$definedsubfields{$tag.$subfield}=1;
-						$i++;
-					}
-					if ($#subfields_data >= 0) {
-						my %tag_data;
-						$tag_data{tag} = $tag;
-						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
-						$tag_data{indicator} = $ind1.$ind2 if ($tag>=10);
-						$tag_data{subfield_loop} = \@subfields_data;
-						push (@loop_data, \%tag_data);
-						
-					}
-					$id++;
-  	  			     }## if tag matches
-			
-			}#eachdata
- 		}else{ ## tag <10
-			next if ($tag eq $authidtagfield); #we do not want authid to duplicate
-
-			        if ($tag eq "000" || $tag eq "LDR"){
-					my $subfield="@";
-					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-					my @subfields_data;
-					my $value=$leader->[0] if $leader->[0];
-					$tagdefined{$tag}=1 ;
-					push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$xmlhash,$authorised_values_sth,$id));					
-					$i++;
-					if ($#subfields_data >= 0) {
-						my %tag_data;
-						$tag_data{tag} = $tag;
-						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
-						$tag_data{subfield_loop} = \@subfields_data;
-                                                			$tag_data{fixedfield} = 1;
-						push (@loop_data, \%tag_data);
-					}
-			         }else{
-	   			 foreach my $control (@$controlfields){
-					my $subfield="@";
-					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-					next if ($tagslib->{$tag} eq $authidtagfield);
-					my @subfields_data;
-					if ($control->{'tag'} eq $tag){
-						$hiddenrequired=0;
-						$tagdefined{$tag}=1;
-						 if ($built{$tag}==1){$hiddenrequired=1;}
-						my $value=$control->{'content'} ;
-						$definedsubfields{$tag.'@'}=1;
-						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$xmlhash,$authorised_values_sth,$id));					
-						$i++;
-					
-					   	$built{$tag}=1;
-					###hiddenrequired
-					if ($#subfields_data >= 0) {
-						my %tag_data;
-						$tag_data{tag} = $tag;
-						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
-						$tag_data{subfield_loop} = \@subfields_data;
-						$tag_data{fixedfield} = 1;
-						push (@loop_data, \%tag_data);
-					}
-					$id++;
-					}## tag matches
-	  			 }# each control
-			       }
-   			}##tag >9
-
-
-			##### Any remaining tag
-				my @subfields_data;
-				# now, loop again to add parameter subfield that are not in the MARC::Record
-					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
-						next if ($tagdefined{$tag} );
-						next if (length $subfield !=1);
-						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-						next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) > 1) ); #check for visibility flag
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
-						$tagdefined{$tag.$subfield}=1;
-						$i++;
-					}
-					if ($#subfields_data >= 0) {
-						my %tag_data;
-						$tag_data{tag} = $tag;
-						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
-						$tag_data{indicator} = $ind1.$ind2 if ($tag>=10);
 						$tag_data{subfield_loop} = \@subfields_data;
 						if ($tag<10) {
-                                                			$tag_data{fixedfield} = 1;
-                                        				}
-
+       		                                        $tag_data{fixedfield} = 1;
+	                    			}
 						push (@loop_data, \%tag_data);
-					}
-
-					
-					if ($addedfield eq $tag) {
-						my %tag_data;
-						my @subfields_data;
-						$id++;
-						$tagdefined{$tag}=1 ;
-						foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
-						next if (length $subfield !=1);
-						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-						next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) >1)  ); #check for visibility flag
-						$addedfield="";	
-						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
 						$i++;
-							}
-						if ($#subfields_data >= 0) {
-						$tag_data{tag} = $tag;
-						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
-						$tag_data{indicator} = ' ' if ($tag>=10);
-						$tag_data{subfield_loop} = \@subfields_data;
-							if ($tag<10) {
-                                                				$tag_data{fixedfield} = 1;
-                                        					}
-						push (@loop_data, \%tag_data);
-											
-						}
-				
 					}
-				
-	# if breeding is empty
+				}
+	
 			} else {
 				my @subfields_data;
 				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 					next if (length $subfield !=1);
-					next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) >1)  ); #check for visibility flag
+					next if ((substr($tagslib->{$tag}->{$subfield}->{hidden},2,1) gt "1")  ); #check for visibility flag
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$xmlhash,$authorised_values_sth,$id));
+					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
 				}
 				if ($#subfields_data >= 0) {
@@ -387,17 +302,9 @@ my %built;
 					push (@loop_data, \%tag_data);
 				}
 			}
-		$id++;
+		}
+		$template->param($tabloop."XX" =>\@loop_data);
 	}
-	if ($#loop_data >=0) {
-            my %big_loop_line;
-            $big_loop_line{number}=$tabloop;
-            $big_loop_line{innerloop}=\@loop_data;
-            push @BIG_LOOP,\%big_loop_line;
-            }	
-#		$template->param($tabloop."XX" =>\@loop_data);
-		$template->param(BIG_LOOP => \@BIG_LOOP);
-}## tab loop
 }
 
 
@@ -421,7 +328,7 @@ sub build_hidden_data () {
 	    $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 	    $subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	    $subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-	    $subfield_data{marc_value}="<input type=\"hidden\"  name=\"field_value[]\">";
+	    $subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value[]\">";
 	    push(@loop_data, \%subfield_data);
 	    $i++
 	}
@@ -432,9 +339,9 @@ sub build_hidden_data () {
 #          MAIN 
 #=========================
 my $input = new CGI;
+my $z3950 = $input->param('z3950');
 my $error = $input->param('error');
 my $authid=$input->param('authid'); # if authid exists, it's a modif, not a new authority.
-my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
 my $nonav = $input->param('nonav');
 my $myindex = $input->param('index');
@@ -450,24 +357,21 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
+			     flagsrequired => {editauthorities => 1},
 			     debug => 1,
 			     });
 $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,);
 $tagslib = AUTHgettagslib($dbh,1,$authtypecode);
-
-my $xmlhash;
-my $xml;
-$xmlhash = XMLgetauthorityhash($dbh,$authid) if ($authid);
-
-
+my $record=-1;
+my $encoding="";
+$record = AUTHgetauthority($dbh,$authid) if ($authid);
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
 my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;
 if ($authid) {
 	$is_a_modif=1;
-	($oldauthnumtagfield,$oldauthnumtagsubfield) = MARCfind_marc_from_kohafield("authid","authorities");
-	($oldauthtypetagfield,$oldauthtypetagsubfield) = MARCfind_marc_from_kohafield("authtypecode","authorities");
+	($oldauthnumtagfield,$oldauthnumtagsubfield) = &AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode);
+	($oldauthtypetagfield,$oldauthtypetagsubfield) = &AUTHfind_marc_from_kohafield($dbh,"auth_header.authtypecode",$authtypecode);
 }
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -481,56 +385,47 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-## check for malformed xml -- non UTF-8 like (MARC8) will break xml without warning
-### This usually happens with data coming from other Z3950 servers
-## Slows the saving process so comment out at your own risk
-eval{
- $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);	
-};
-
- if ($@){
-warn $@;
- $template->param(error             =>1,xmlerror=>1,);
-goto FINAL;
-  };	# check for a duplicate
-###Authorities need the XML header unlike biblios
-$xml='<?xml version="1.0" encoding="UTF-8"?>'.$xml;
-  my $xmlhash=XML_xml2hash_onerecord($xml);
-	my ($duplicateauthid,$duplicateauthvalue) = C4::AuthoritiesMarc::FindDuplicateauth($xmlhash,$authtypecode) if ($op eq "add") && (!$is_a_modif);
-#warn "duplicate:$duplicateauthid,$duplicateauthvalue";	
+	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+#     warn $record->as_formatted;
+	warn $xml;
+	my $record=MARC::Record->new_from_xml($xml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
+	$record->encoding('UTF-8');
+	#warn $record->as_formatted;
+	# check for a duplicate
+	my ($duplicateauthid,$duplicateauthvalue) = C4::AuthoritiesMarc::FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+warn "duplicate:$duplicateauthid,$duplicateauthvalue";	
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
-	# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
+# it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
 	if (!$duplicateauthid or $confirm_not_duplicate) {
 # warn "noduplicate";
 		if ($is_a_modif ) {	
-			$authid=AUTHmodauthority($dbh,$authid,$xmlhash,$authtypecode);
+			$authid=AUTHmodauthority($dbh,$authid,$record,$authtypecode,1);		
 		} else {
-		$authid = AUTHaddauthority($dbh,$xmlhash,'',$authtypecode);
+		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 
 		}
 	# now, redirect to detail page
-		if ($nonav){
+# 		if ($nonav){
 #warn ($myindex,$nonav);
-		print $input->redirect("auth_finder.pl?index=$myindex&nonav=$nonav&authtypecode=$authtypecode");
-		}else{
-		print $input->redirect("detail.pl?nonav=$nonav&authid=$authid");
-		}
+# 		print $input->redirect("auth_finder.pl?index=$myindex&nonav=$nonav&authtypecode=$authtypecode");
+# 		}else{
+		print $input->redirect("detail.pl?authid=$authid");
+# 		}
 		exit;
-	} else {
-FINAL:
-#warn "duplicate";
+ 	} else {
 	# it may be a duplicate, warn the user and do nothing
-		build_tabs ($template, $xmlhash, $dbh);
-		build_hidden_data;
-		$template->param(authid =>$authid,
-			duplicateauthid				=> $duplicateauthid,
-			duplicateauthvalue				=> $duplicateauthvalue,
-			 );
-	}
+ 		build_tabs ($template, $record, $dbh,$encoding);
+ 		build_hidden_data;
+ 		$template->param(authid =>$authid,
+ 			duplicateauthid				=> $duplicateauthid,
+ 			duplicateauthvalue				=> $duplicateauthvalue,
+ 			 );
+ 	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
 #------------------------------------------------------------------------------------------------------------------------------
 	my $addedfield = $input->param('addfield_field');
+	my $tagaddfield_subfield = $input->param('addfield_subfield');
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
 	my @values = $input->param('field_value');
@@ -538,10 +433,12 @@ FINAL:
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
 	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
-	$xml='<?xml version="1.0" encoding="UTF-8"?>'.$xml;
-	my $xmlhash=XML_xml2hash_onerecord($xml);
+	my $record=MARC::Record->new_from_xml($xml,'UTF-8');
+	$record->encoding('UTF-8');
 	# adding an empty field
-	build_tabs ($template, $xmlhash, $dbh,$addedfield);
+	my $field = MARC::Field->new("$addedfield",'','','$tagaddfield_subfield' => "");
+	$record->append_fields($field);
+	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
 		authid                       => $authid,);
@@ -560,22 +457,23 @@ if ($op eq "duplicate")
 	{
 		$authid = "";
 	}
-	build_tabs ($template, $xmlhash, $dbh);
+	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(oldauthtypetagfield=>$oldauthtypetagfield, oldauthtypetagsubfield=>$oldauthtypetagsubfield,
 		oldauthnumtagfield=>$oldauthnumtagfield, oldauthnumtagsubfield=>$oldauthnumtagsubfield,
 		authid                      => $authid , authtypecode=>$authtypecode,	);
 }
 
+#unless ($op) {
+#	warn "BUILDING";
+#	build_tabs ($template, $record, $dbh,$encoding);
+#	build_hidden_data;
+#}
 $template->param(
 	authid                       => $authid,
 	authtypecode => $authtypecode,
 	linkid=>$linkid,
-			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		advancedMARCEditor => C4::Context->preference("advancedMARCEditor"),
-		);
+	);
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
@@ -590,5 +488,9 @@ foreach my $thisauthtype (keys %$authtypes) {
 
 $template->param(authtypesloop => \@authtypesloop,
 				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-				nonav=>$nonav,);
+				hide_marc => C4::Context->preference('hide_marc'),
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+				);
 output_html_with_http_headers $input, $cookie, $template->output;

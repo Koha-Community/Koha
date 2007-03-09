@@ -21,6 +21,7 @@ package C4::Input; #assumes C4/Input
 use strict;
 require Exporter;
 use C4::Context;
+use CGI;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -190,12 +191,14 @@ sub buildCGIsort {
 	if ($sth->rows>0){
 		my @values;
 		my %labels;
-		for (my $i =0;$i<=$sth->rows;$i++){
+		
+		for (my $i =0;$i<$sth->rows;$i++){
 			my $results = $sth->fetchrow_hashref;
  			push @values, $results->{authorised_value};
  			$labels{$results->{authorised_value}}=$results->{lib};
 		}
- 		$CGISort= CGI::scrolling_list(
+ 		unshift(@values,"");
+		$CGISort= CGI::scrolling_list(
  					-name => $input_name,
  					-values => \@values,
  					-labels => \%labels,

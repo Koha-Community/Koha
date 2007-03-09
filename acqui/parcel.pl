@@ -54,26 +54,29 @@ To filter the results list on this given date.
 =back
 
 =cut
-use strict;
+
 use C4::Auth;
 use C4::Acquisition;
 use C4::Bookseller;
-use C4::Bookfund;
 use C4::Biblio;
+use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
 use C4::Date;
-use Time::localtime;
 
+use strict;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
-my $basketno=$input->param('basketno');
 my @booksellers=GetBookSeller($supplierid);
 my $count = scalar @booksellers;
 
-my @datetoday = localtime();
-my $date = (1900+$datetoday[5])."-".($datetoday[4]+1)."-". $datetoday[3];
+my $invoice=$input->param('invoice') || '';
+my $freight=$input->param('freight');
+my $gst=$input->param('gst');
+my $datereceived=$input->param('datereceived') || format_date(join "-",Date::Calc::Today());
+my $code=$input->param('code');
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
                  query => $input,
@@ -82,104 +85,82 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 1},
                  debug => 1,
 });
+my @parcelitems=GetParcel($supplierid,$invoice,$datereceived);
+my $countlines = scalar @parcelitems;
 
-my @booksellers=GetBookSeller($supplierid);
-
-my $gstreg=$booksellers[0]->{gstreg};
-my $incgst=$booksellers[0]->{'invoiceincgst'};
-my $invcurrency=$booksellers[0]->{'invoiceprice'};
-my $discount=$booksellers[0]->{'discount'};
-my $currencyrate;
-# get currencies (for exchange rates calcs if needed)
-my @rates = GetCurrencies();
-my $count = scalar @rates;
-
-for ( my $i = 0 ; $i < $count ; $i++ ) {
- if ($rates[$i]->{'currency'} eq $invcurrency){
-    $currencyrate     = $rates[$i]->{'rate'};
-   }
-}
-my $me=C4::Context->userenv;
-my $user=$me->{'cardnumber'};
 my $totalprice=0;
 my $totalfreight=0;
 my $totalquantity=0;
-my $totaldiscount=0;
 my $total;
 my $tototal;
 my $toggle;
-my $totalgst;
-my $totaltoreceive;
-my $totaltoprice;
-my $totaltogst;
-my $totaltodiscount;
-my @loop_orders;
-my $countpendings;
-my $invoice;
-##Receiving a single basket or all baskets of a supplier
-unless($basketno){
+my @loop_received = ();
+for (my $i=0;$i<$countlines;$i++){
+    $total=($parcelitems[$i]->{'unitprice'} + $parcelitems[$i]->{'freight'}) * $parcelitems[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
+    $parcelitems[$i]->{'unitprice'}+=0;
+    my %line;
+    if ($toggle==0){
+        $line{color}='#EEEEEE';
+        $toggle=1;
+    } else {
+            $line{color}='white';
+            $toggle=0;
+    }
+    %line = %{$parcelitems[$i]};
+    $line{invoice} = $invoice;
+    $line{gst} = $gst;
+    $line{total} = $total;
+    $line{supplierid} = $supplierid;
+    push @loop_received, \%line;
+    $totalprice+=$parcelitems[$i]->{'unitprice'};
+    $totalfreight+=$parcelitems[$i]->{'freight'};
+    $totalquantity+=$parcelitems[$i]->{'quantityreceived'};
+    $tototal+=$total;
+}
 my $pendingorders = GetPendingOrders($supplierid);
-$countpendings = scalar @$pendingorders;
-foreach my $pendingorder (@$pendingorders){
- my @orders=GetOrders($pendingorder->{basketno});
-  foreach my $order(@orders){
-  $order->{toreceive}=$order->{quantity} - $order->{quantityreceived};
-  $totalquantity+=$order->{quantity};
-  $totaltoreceive+=$order->{toreceive};
-  $totalprice+=$order->{rrp}*$order->{quantity};
-  $totaltoprice+=$order->{rrp}*$order->{toreceive};
-  $totalgst+=(($order->{rrp}*$order->{quantity}) -($order->{rrp}*$order->{quantity}*$order->{discount}/100))* $order->{gst}/100;
-  $totaltogst+=(($order->{rrp}*$order->{toreceive}) -($order->{rrp}*$order->{toreceive}*$order->{discount}/100))* $order->{gst}/100;
-  $totaldiscount +=$order->{rrp}*$order->{quantity}*$order->{discount}/100;
-  $totaltodiscount +=$order->{rrp}*$order->{toreceive}*$order->{discount}/100;
-  $order->{actualrrp}=sprintf( "%.2f",$order->{rrp}/$currencyrate);
-	push @loop_orders, $order;
-  }	
-}
-  
-}else{
-## one basket
-$countpendings=1;
+my $countpendings = scalar @$pendingorders;
 
-my @orders=GetOrders($basketno);
-  foreach my $order(@orders){
-$invoice=$order->{booksellerinvoicenumber} unless $invoice;
-  $order->{toreceive}=$order->{quantity} - $order->{quantityreceived};
-  $totalquantity+=$order->{quantity};
-  $totaltoreceive+=$order->{toreceive};
-  $totalprice+=$order->{rrp}*$order->{quantity};
-  $totaltoprice+=$order->{rrp}*$order->{toreceive};
-  $totalgst+=(($order->{rrp}*$order->{quantity}) -($order->{rrp}*$order->{quantity}*$order->{discount}/100))* $order->{gst}/100;
-  $totaltogst+=(($order->{rrp}*$order->{toreceive}) -($order->{rrp}*$order->{toreceive}*$order->{discount}/100))* $order->{gst}/100;
-  $totaldiscount +=$order->{rrp}*$order->{quantity}*$order->{discount}/100;
-  $totaltodiscount +=$order->{rrp}*$order->{toreceive}*$order->{discount}/100;
-  $order->{actualrrp}=sprintf( "%.2f",$order->{rrp}/$currencyrate);
-	push @loop_orders, $order;
-  }	
+my @loop_orders = ();
+for (my $i=0;$i<$countpendings;$i++){
+    my %line;
+    if ($toggle==0){
+        $line{color}='#EEEEEE';
+        $toggle=1;
+    } else {
+            $line{color}='white';
+            $toggle=0;
+    }
+    %line = %{$pendingorders->[$i]};
+    $line{ecost} = sprintf("%.2f",$line{ecost});
+    $line{unitprice} = sprintf("%.2f",$line{unitprice});
+    $line{invoice} = $invoice;
+    $line{gst} = $gst;
+    $line{total} = $total;
+    $line{supplierid} = $supplierid;
+    push @loop_orders, \%line;
 }
-undef $invcurrency if ($currencyrate ==1);
 
-$template->param( invoice=>$invoice,
-                        date => format_date($date),
+$totalfreight=$freight;
+$tototal=$tototal+$freight;
+
+$template->param(invoice => $invoice,
+						datereceived => $datereceived,
+						formatteddatereceived => format_date($datereceived),
                         name => $booksellers[0]->{'name'},
                         supplierid => $supplierid,
+                        gst => $gst,
+                        freight => $freight,
+                        invoice => $invoice,
+                        countreceived => $countlines,
+                        loop_received => \@loop_received,
                         countpending => $countpendings,
                         loop_orders => \@loop_orders,
- 	          user=>$user,
-	         totalquantity=>$totalquantity,
-	         totaltoreceive=>$totaltoreceive,
-	          totalprice=>sprintf( "%.2f",$totalprice),
-	         totalactual =>sprintf( "%.2f",$totaltoprice/$currencyrate),
-                        totalgst=>sprintf( "%.2f",$totalgst),
-                        actualgst=>sprintf( "%.2f",$totaltogst/$currencyrate),
-		totaldiscount=>sprintf( "%.2f",$totaldiscount),
-		actualdiscount=>sprintf( "%.2f",$totaltodiscount/$currencyrate),	
-		total=>sprintf( "%.2f",$totalprice+$totalgst-$totaldiscount),
-		gstreg=>$gstreg,
-                            gstrate=>C4::Context->preference('gist')*100,
-		currencyrate=>$currencyrate,
-		incgst =>$incgst,
-		invcurrency=>$invcurrency ,
+                        totalprice => $totalprice,
+                        totalfreight => $totalfreight,
+                        totalquantity => $totalquantity,
+                        tototal => $tototal,
+                        gst => $gst,
+                        grandtot => $tototal+$gst,
                         intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         IntranetNav => C4::Context->preference("IntranetNav"),

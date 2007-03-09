@@ -25,9 +25,9 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
-use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -68,7 +68,7 @@ $template->param(script_name => $script_name,
 						$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+						'else'              => 1); # we show only the TMPL_VAR names $op
 }
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -83,7 +83,7 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-#	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
+	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
 	$template->param(authtypecode => $authtypecode,
 							authtypetext => $data->{'authtypetext'},
 							auth_tag_to_report => $data->{'auth_tag_to_report'},
@@ -170,6 +170,10 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?offset=".$nextpage);
 	}
 } #---- END $OP eq DEFAULT
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:

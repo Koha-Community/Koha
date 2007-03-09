@@ -83,14 +83,13 @@ $data{'listprice'}=$input->param('list_currency');
 $data{'invoiceprice'}=$input->param('invoice_currency');
 $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
-$data{'invoiceincgst'}=$input->param('invoiceincgst');
+$data{'invoiceincgst'}=$input->param('invoice_gst');
 $data{'discount'}=$input->param('discount');
-my $id=$input->param('id');
-if ($data{'id'} != 0){
-  ModBookseller(\%data);
+if ($data{'id'}){
+    ModBookseller(\%data);
 } else {
-  $id=AddBookseller(\%data);
+    $data{id}=AddBookseller(\%data);
 }
 
 #redirect to booksellers.pl
-print $input->redirect("booksellers.pl?supplier=$id");
+print $input->redirect("booksellers.pl?supplier=".$data{id});

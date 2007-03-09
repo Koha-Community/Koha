@@ -90,7 +90,7 @@ bookfund use to pay this order.
 
 =item C<ecost>
 
-=item C<gst>
+=item C<GST>
 
 =item C<budget>
 
@@ -115,12 +115,19 @@ if it is an order from an existing suggestion : the id of this suggestion.
 use strict;
 use CGI;
 use C4::Auth;
+use C4::Output;
 use C4::Acquisition;
 use C4::Suggestions;
 use C4::Biblio;
+use C4::Output;
 use C4::Interface::CGI::Output;
 
+
+
+#use Date::Manip;
+
 my $input = new CGI;
+
 # get_template_and_user used only to check auth & get user id
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -132,7 +139,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
 
 # get CGI parameters
 my $ordnum       = $input->param('ordnum');
@@ -147,79 +153,80 @@ my $itemtype      = $input->param('format');
 my $quantity      = $input->param('quantity');
 my $listprice     = $input->param('list_price');
 my $branch        = $input->param('branch');
-my $discount=$input->param('discount');
 if ( $listprice eq '' ) {
     $listprice = 0;
 }
 my $series = $input->param('series');
 my $notes         = $input->param('notes');
-my $bookfundid      = $input->param('bookfundid');
+my $bookfund      = $input->param('bookfund');
 my $sort1         = $input->param('sort1');
 my $sort2         = $input->param('sort2');
 my $rrp           = $input->param('rrp');
 my $ecost         = $input->param('ecost');
-my $gst           = $input->param('gstrate');
+my $gst           = $input->param('GST');
 my $budget        = $input->param('budget');
-my $unitprice         = $input->param('unitprice');
+my $cost          = $input->param('cost');
 my $sub           = $input->param('sub');
-my $purchaseordernumber       = $input->param('purchaseordernumber');
+my $invoice       = $input->param('invoice');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
-my $donation      = $input->param('donation');
 my $user          = $input->remote_user;
-my $biblionumber=$input->param('biblionumber');
+
+#warn "CREATEBIBITEM =  $input->param('createbibitem')";
+#warn Dumper $input->param('createbibitem');
 my $createbibitem = $input->param('createbibitem');
 
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been se to 0 by the librarian
-my $dbh=C4::Context->dbh;
-
-if ($quantity ne '0'){
+my $biblionumber=$input->param('biblionumber');
+my $bibitemnum;
+if ( $quantity ne '0' ) {
     #check to see if biblio exists
     if ( $existing eq 'no' ) {
-        #if it doesnt its created on template
+
+        #if it doesnt create it
+        my $record = Koha2Marc(
+            {
+                "biblio.title"              => "$title",
+                "biblio.author"             => "$author",
+                "biblio.copyrightdate"      => $copyrightdate ? $copyrightdate : "",
+                "biblio.series"             => $series        ? $series        : "",
+                "biblioitems.itemtype"      => $itemtype ? $itemtype : "",
+                "biblioitems.isbn"          => $isbn ? $isbn : "",
+                "biblioitems.publishercode" => $publishercode ? $publishercode : "",
+            });
+        # create the record in catalogue, with framework ''
+        ($biblionumber,$bibitemnum) = AddBiblio($record,'');
+
         # change suggestion status if applicable
         if ($suggestionid) {
-my $data=GetSuggestion($suggestionid);
-
- my $biblio={title=>$data->{title},author=>$data->{author},publishercode=>$data->{publishercode},copyrightdate=>$data->{copyrightdate},isbn=>$data->{isbn},place=>$data->{place},};
-my $xmlhash=XMLkoha2marc($dbh,$biblio,"biblios");
-$biblionumber = NEWnewbiblio($dbh,$xmlhash,"");
-
-            ModStatus( $suggestionid, 'ORDERED', '', $biblionumber,$input );
+            ModStatus( $suggestionid, 'ORDERED', '', $biblionumber );
         }
-    }## biblio didnot exist now created
-
-    
-
-   
+    }
+    # if we already have $ordnum, then it's an ordermodif
     if ($ordnum) {
-
-        # 		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
         ModOrder(
             $title,   $ordnum,   $quantity,     $listprice,
             $biblionumber,  $basketno, $booksellerid, $loggedinuser,
-            $notes,   $bookfundid,    $rrp,
-            $ecost,   $gst,      $budget,       $unitprice,
-            $purchaseordernumber, $sort1,    $sort2,$discount,$branch
+            $notes,   $bookfund, $bibitemnum,   $rrp,
+            $ecost,   $gst,      $budget,       $cost,
+            $invoice, $sort1,    $sort2
         );
     }
-    else {
+    else { # else, it's a new line
         ( $basketno, $ordnum ) = NewOrder(
             $basketno,  $biblionumber,       $title,        $quantity,
             $listprice, $booksellerid, $loggedinuser, $notes,
-            $bookfundid,    $rrp,          $ecost,
-            $gst,       $budget,       $unitprice,         $sub,
-            $purchaseordernumber,   $sort1,        $sort2, $discount,$branch
+            $bookfund,  $bibitemnum,   $rrp,          $ecost,
+            $gst,       $budget,       $cost,         $sub,
+            $invoice,   $sort1,        $sort2
         );
     }
-
 }
-else {
-#    $biblionumber = $input->param('biblionumber');
-    DelOrder( $biblionumber, $ordnum,$loggedinuser );
+else { # qty=0, delete the line
+    $biblionumber = $input->param('biblionumber');
+    DelOrder( $biblionumber, $ordnum );
 }
-
 print $input->redirect("basket.pl?basketno=$basketno");

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright 2006 Katipo Communications
 #                                     
@@ -64,15 +64,14 @@ SELECT quantity,
       ON aqorderbreakdown.ordernumber = aqorders.ordernumber
     INNER JOIN aqbasket
       ON aqbasket.basketno = aqorders.basketno
-    LEFT JOIN biblio
-      ON biblio.biblionumber = aqorders.biblionumber
+    LEFT JOIN biblioitems
+      ON biblioitems.biblioitemnumber = aqorders.biblioitemnumber
   WHERE bookfundid = ?
     AND budgetdate >= ?
     AND budgetdate < ?
     AND (datecancellationprinted IS NULL
          OR datecancellationprinted = \'0000-00-00\')
 ';
-##warn $query;
 my $sth = $dbh->prepare($query);
 $sth->execute( $bookfund, $start, $end );
 my @commited_loop;
@@ -97,6 +96,6 @@ $template->param(
     total        => $total
 );
 $sth->finish;
-#$dbh->disconnect;
+$dbh->disconnect;
 
 output_html_with_http_headers $input, $cookie, $template->output;

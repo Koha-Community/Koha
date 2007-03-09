@@ -25,7 +25,9 @@ use C4::Date;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
+    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
+};
 
 =head1 NAME
 
@@ -44,6 +46,7 @@ This module provides the functions needed to admin the news channels and its cat
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
+  &GetNewsToDisplay
   &news_channels &get_new_channel &del_channels &add_channel &update_channel
   &news_channels_categories &get_new_channel_category &del_channels_categories
   &add_channel_category &update_channel_category &news_channels_by_category
@@ -73,26 +76,26 @@ of references to hash, which has the news_channels and news_channels_categories 
 =cut
 
 sub news_channels {
-	my ($channel_name, $id_category, $unclassified) = @_;
-	my $dbh = C4::Context->dbh;
-	my @channels;
-	my $query = "SELECT * FROM news_channels LEFT JOIN news_channels_categories ON news_channels.id_category = news_channels_categories.id_category";
-	if ( ($channel_name ne '') && ($id_category ne '') ) {
-		$query.= " WHERE channel_name like '" . $channel_name . "%' AND news_channels.id_category = " . $id_category;
-	} elsif ($channel_name ne '')  {
-		$query.= " WHERE channel_name like '" . $channel_name . "%'";
-	} elsif ($id_category ne '') {
-		$query.= " WHERE news_channels.id_category = " . $id_category;
-	} elsif ($unclassified) {
-		$query.= " WHERE news_channels.id_category IS NULL ";
-	}
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
-	while (my $row = $sth->fetchrow_hashref) {
-		push @channels, $row;
-	}
-	$sth->finish;
-	return (scalar(@channels), @channels);
+    my ($channel_name, $id_category, $unclassified) = @_;
+    my $dbh = C4::Context->dbh;
+    my @channels;
+    my $query = "SELECT * FROM news_channels LEFT JOIN news_channels_categories ON news_channels.id_category = news_channels_categories.id_category";
+    if ( ($channel_name ne '') && ($id_category ne '') ) {
+        $query.= " WHERE channel_name like '" . $channel_name . "%' AND news_channels.id_category = " . $id_category;
+    } elsif ($channel_name ne '')  {
+        $query.= " WHERE channel_name like '" . $channel_name . "%'";
+    } elsif ($id_category ne '') {
+        $query.= " WHERE news_channels.id_category = " . $id_category;
+    } elsif ($unclassified) {
+        $query.= " WHERE news_channels.id_category IS NULL ";
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @channels, $row;
+    }
+    $sth->finish;
+    return (scalar(@channels), @channels);
 }
 
 =item news_channels_by_category
@@ -120,260 +123,297 @@ Additionally the last index of results has a reference to all the news channels 
 =cut
 
 sub news_channels_by_category {
-	
-	my ($categories_count, @results) = &news_channels_categories();
-	foreach my $row (@results) {
+    
+    my ($categories_count, @results) = &news_channels_categories();
+    foreach my $row (@results) {
 
-		my ($channels_count, @channels) = &news_channels('', $row->{'id_category'});
-		$row->{'channels_count'} = $channels_count;
-		$row->{'channels'} = \@channels;
-	}
+        my ($channels_count, @channels) = &news_channels('', $row->{'id_category'});
+        $row->{'channels_count'} = $channels_count;
+        $row->{'channels'} = \@channels;
+    }
 
-	my ($channels_count, @channels) = &news_channels('', '', 1);
-	my %row;
-	$row{'id_category'} = -1;
-	$row{'unclassified'} = 1;
-	$row{'channels_count'} = $channels_count;
-	$row{'channels'} = \@channels;
-	push @results, \%row;
+    my ($channels_count, @channels) = &news_channels('', '', 1);
+    my %row;
+    $row{'id_category'} = -1;
+    $row{'unclassified'} = 1;
+    $row{'channels_count'} = $channels_count;
+    $row{'channels'} = \@channels;
+    push @results, \%row;
 
-	return (scalar(@results), @results);
+    return (scalar(@results), @results);
 }
 
 sub get_new_channel {
-	my ($id) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM news_channels WHERE id = ?");
-	$sth->execute($id);
-	my $channel = $sth->fetchrow_hashref;
-	$sth->finish;
-	return $channel;
+    my ($id) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM news_channels WHERE id = ?");
+    $sth->execute($id);
+    my $channel = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $channel;
 }
 
 sub del_channels {
-	my ($ids) = @_;
-	if ($ids ne '') {
-		my $dbh = C4::Context->dbh;
-		my $sth = $dbh->prepare("DELETE FROM news_channels WHERE id IN ($ids) ");
-		$sth->execute();
-		$sth->finish;
-		return $ids;
-	}
-	return 0;
+    my ($ids) = @_;
+    if ($ids ne '') {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("DELETE FROM news_channels WHERE id IN ($ids) ");
+        $sth->execute();
+        $sth->finish;
+        return $ids;
+    }
+    return 0;
 }
 
 sub add_channel {
-	my ($name, $url, $id_category, $notes) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("INSERT INTO news_channels (channel_name, url, id_category, notes) VALUES (?,?,?,?)");
-	$sth->execute($name, $url, $id_category, $notes);
-	$sth->finish;
-	return 1;
+    my ($name, $url, $id_category, $notes) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO news_channels (channel_name, url, id_category, notes) VALUES (?,?,?,?)");
+    $sth->execute($name, $url, $id_category, $notes);
+    $sth->finish;
+    return 1;
 }
 
 sub update_channel {
-	my ($id, $name, $url, $id_category, $notes) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("UPDATE news_channels SET channel_name = ?,  url = ?, id_category = ?, notes = ? WHERE id = ?");
-	$sth->execute($name, $url, $id_category, $notes, $id);
-	$sth->finish;
-	return 1;
+    my ($id, $name, $url, $id_category, $notes) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("UPDATE news_channels SET channel_name = ?,  url = ?, id_category = ?, notes = ? WHERE id = ?");
+    $sth->execute($name, $url, $id_category, $notes, $id);
+    $sth->finish;
+    return 1;
 }
 
 sub news_channels_categories {
-	my $dbh = C4::Context->dbh;
-	my @categories;
-	my $query = "SELECT * FROM news_channels_categories";
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
-	while (my $row = $sth->fetchrow_hashref) {
-		push @categories, $row;
-	}
-	$sth->finish;
-	return (scalar(@categories), @categories);
+    my $dbh = C4::Context->dbh;
+    my @categories;
+    my $query = "SELECT * FROM news_channels_categories";
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @categories, $row;
+    }
+    $sth->finish;
+    return (scalar(@categories), @categories);
 
 }
 
 sub get_new_channel_category {
-	my ($id) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM news_channels_categories WHERE id_category = ?");
-	$sth->execute($id);
-	my $category = $sth->fetchrow_hashref;
-	$sth->finish;
-	return $category;
+    my ($id) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM news_channels_categories WHERE id_category = ?");
+    $sth->execute($id);
+    my $category = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $category;
 }
 
 sub del_channels_categories {
-	my ($ids) = @_;
-	if ($ids ne '') {
-		my $dbh = C4::Context->dbh;
-		my $sth = $dbh->prepare("UPDATE news_channels SET id_category = NULL WHERE id_category IN ($ids) "); 
-		$sth->execute();
-		$sth = $dbh->prepare("DELETE FROM news_channels_categories WHERE id_category IN ($ids) ");
-		$sth->execute();
-		$sth->finish;
-		return $ids;
-	}
-	return 0;
+    my ($ids) = @_;
+    if ($ids ne '') {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("UPDATE news_channels SET id_category = NULL WHERE id_category IN ($ids) ");
+        $sth->execute();
+        $sth = $dbh->prepare("DELETE FROM news_channels_categories WHERE id_category IN ($ids) ");
+        $sth->execute();
+        $sth->finish;
+        return $ids;
+    }
+    return 0;
 }
 
 sub add_channel_category {
-	my ($name) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("INSERT INTO news_channels_categories (category_name) VALUES (?)");
-	$sth->execute($name);
-	$sth->finish;
-	return 1;
+    my ($name) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO news_channels_categories (category_name) VALUES (?)");
+    $sth->execute($name);
+    $sth->finish;
+    return 1;
 }
 
 sub update_channel_category {
-	my ($id, $name) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("UPDATE news_channels_categories SET category_name = ? WHERE id_category = ?");
-	$sth->execute($name, $id);
-	$sth->finish;
-	return 1;
+    my ($id, $name) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("UPDATE news_channels_categories SET category_name = ? WHERE id_category = ?");
+    $sth->execute($name, $id);
+    $sth->finish;
+    return 1;
 }
 
-
 sub add_opac_new {
-	my ($title, $new, $lang) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("INSERT INTO opac_news (title, new, lang) VALUES (?,?,?)");
-	$sth->execute($title, $new, $lang);
-	$sth->finish;
-	return 1;
+    my ($title, $new, $lang, $expirationdate, $number) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO opac_news (title, new, lang, expirationdate, number) VALUES (?,?,?,?,?)");
+    $sth->execute($title, $new, $lang, $expirationdate, $number);
+    $sth->finish;
+    return 1;
 }
 
 sub upd_opac_new {
-	my ($idnew, $title, $new, $lang) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("UPDATE opac_news SET title = ?, new = ?, lang = ? WHERE idnew = ?");
-	$sth->execute($title, $new, $lang, $idnew);
-	$sth->finish;
-	return 1;
+    my ($idnew, $title, $new, $lang, $expirationdate, $number) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+        UPDATE opac_news SET 
+            title = ?,
+            new = ?,
+            lang = ?,
+            expirationdate = ?,
+            number = ?
+        WHERE idnew = ?
+    ");
+    $sth->execute($title, $new, $lang, $expirationdate,$number,$idnew);
+    $sth->finish;
+    return 1;
 }
 
 sub del_opac_new {
-	my ($ids) = @_;
-	if ($ids) {
-		my $dbh = C4::Context->dbh;
-		my $sth = $dbh->prepare("DELETE FROM opac_news WHERE idnew IN ($ids)");
-		$sth->execute();
-		$sth->finish;
-		return 1;
-	} else {
-		return 0;
-	}
+    my ($ids) = @_;
+    if ($ids) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("DELETE FROM opac_news WHERE idnew IN ($ids)");
+        $sth->execute();
+        $sth->finish;
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 sub get_opac_new {
-	my ($idnew) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM opac_news WHERE idnew = ?");
-	$sth->execute($idnew);
-	my $data = $sth->fetchrow_hashref;
-	$data->{$data->{'lang'}} = 1;
-	$sth->finish;
-	return $data;
+    my ($idnew) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM opac_news WHERE idnew = ?");
+    $sth->execute($idnew);
+    my $data = $sth->fetchrow_hashref;
+    $data->{$data->{'lang'}} = 1;
+    $sth->finish;
+    return $data;
 }
 
 sub get_opac_news {
-	my ($limit, $lang) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT *, DATE_FORMAT(timestamp,'%Y-%m-%d') AS newdate FROM opac_news";
-	if ($lang) {
-		$query.= " WHERE lang = '" .$lang ."' ";
-	}
-	$query.= " ORDER BY timestamp DESC ";
-	#if ($limit) {
-	#	$query.= "LIMIT 0, " . $limit;
-	#}
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
-	my @opac_news;
-	my $count = 0;
-	while (my $row = $sth->fetchrow_hashref) {
-		if ((($limit) && ($count < $limit)) || (!$limit)) {
-			$row->{'newdate'} = format_date($row->{'newdate'});
-			push @opac_news, $row;	
-		}
-		$count++;
-	}
-	return ($count, \@opac_news);
+    my ($limit, $lang) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_news";
+    if ($lang) {
+        $query.= " WHERE lang = '" .$lang ."' ";
+    }
+    $query.= " ORDER BY timestamp DESC ";
+    #if ($limit) {
+    #    $query.= "LIMIT 0, " . $limit;
+    #}
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @opac_news;
+    my $count = 0;
+    while (my $row = $sth->fetchrow_hashref) {
+        if ((($limit) && ($count < $limit)) || (!$limit)) {
+            $row->{'newdate'} = format_date($row->{'newdate'});
+            push @opac_news, $row;
+        }
+        $count++;
+    }
+    return ($count, \@opac_news);
+}
+
+=head2 GetNewsToDisplay
+    
+    $news = &GetNewsToDisplay($lang);
+    C<$news> is a ref to an array which containts
+    all news with expirationdate > today or expirationdate is null.
+    
+=cut
+
+sub GetNewsToDisplay {
+    my $lang = shift;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+     SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
+     FROM   opac_news
+     WHERE   (
+        expirationdate > CURRENT_DATE()
+        OR    expirationdate IS NULL
+        OR    expirationdate = '00-00-0000'
+      )
+      AND   lang = ?
+      ORDER BY number
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($lang);
+    my @results;
+    while ( my $row = $sth->fetchrow_hashref ){
+        push @results, $row;
+    }
+    return \@results;
 }
 
 ### get electronic databases
 
 sub add_opac_electronic {
-	my ($title, $edata, $lang,$image,$href,$section) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("INSERT INTO opac_electronic (title, edata, lang,image,href,section) VALUES (?,?,?,?,?,?)");
-	$sth->execute($title, $edata, $lang,$image,$href,$section);
-	$sth->finish;
-	return 1;
+    my ($title, $edata, $lang,$image,$href,$section) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO opac_electronic (title, edata, lang,image,href,section) VALUES (?,?,?,?,?,?)");
+    $sth->execute($title, $edata, $lang,$image,$href,$section);
+    $sth->finish;
+    return 1;
 }
 
 sub upd_opac_electronic {
-	my ($idelectronic, $title, $edata, $lang, $image, $href,$section) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("UPDATE opac_electronic SET title = ?, edata = ?, lang = ? , image=?, href=? ,section=? WHERE idelectronic = ?");
-	$sth->execute($title, $edata, $lang, $image,$href ,$section, $idelectronic);
-	$sth->finish;
-	return 1;
+    my ($idelectronic, $title, $edata, $lang, $image, $href,$section) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("UPDATE opac_electronic SET title = ?, edata = ?, lang = ? , image=?, href=? ,section=? WHERE idelectronic = ?");
+    $sth->execute($title, $edata, $lang, $image,$href ,$section, $idelectronic);
+    $sth->finish;
+    return 1;
 }
 
 sub del_opac_electronic {
-	my ($ids) = @_;
-	if ($ids) {
-		my $dbh = C4::Context->dbh;
-		my $sth = $dbh->prepare("DELETE FROM opac_electronic WHERE idelectronic IN ($ids)");
-		$sth->execute();
-		$sth->finish;
-		return 1;
-	} else {
-		return 0;
-	}
+    my ($ids) = @_;
+    if ($ids) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("DELETE FROM opac_electronic WHERE idelectronic IN ($ids)");
+        $sth->execute();
+        $sth->finish;
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 sub get_opac_electronic {
-	my ($idelectronic) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM opac_electronic WHERE idelectronic = ?");
-	$sth->execute($idelectronic);
-	my $data = $sth->fetchrow_hashref;
-	$data->{$data->{'lang'}} = 1;
-	$data->{$data->{'section'}} = 1;
-	$sth->finish;
-	return $data;
+    my ($idelectronic) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM opac_electronic WHERE idelectronic = ?");
+    $sth->execute($idelectronic);
+    my $data = $sth->fetchrow_hashref;
+    $data->{$data->{'lang'}} = 1;
+    $data->{$data->{'section'}} = 1;
+    $sth->finish;
+    return $data;
 }
 
 sub get_opac_electronics {
-	my ($section, $lang) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT *, DATE_FORMAT(timestamp, '%Y-%m-%d') AS newdate FROM opac_electronic";
-	if ($lang) {
-		$query.= " WHERE lang = '" .$lang ."' ";
-	}
-	if ($section) {
-		$query.= " and section= '" . $section."' ";
-	}
-	$query.= " ORDER BY title ";
-	
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
-	my @opac_electronic;
-	my $count = 0;
-	while (my $row = $sth->fetchrow_hashref) {
-		$row->{'newdate'}=format_date($row->{'newdate'});
-			push @opac_electronic, $row;	
+    my ($section, $lang) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_electronic";
+    if ($lang) {
+        $query.= " WHERE lang = '" .$lang ."' ";
+    }
+    if ($section) {
+        $query.= " and section= '" . $section."' ";
+    }
+    $query.= " ORDER BY title ";
+    
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @opac_electronic;
+    my $count = 0;
+    while (my $row = $sth->fetchrow_hashref) {
+            push @opac_electronic, $row;
 
-		
-		$count++;
-	}
+    
+        $count++;
+    }
 
-	return ($count,\@opac_electronic);
+    return ($count,\@opac_electronic);
 }
 END { }    # module clean-up code here (global destructor)
 

@@ -1,3 +1,4 @@
+package C4::Context;
 # Copyright 2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -16,17 +17,19 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id$
-package C4::Context;
 use strict;
 use DBI;
-use C4::Boolean;
+use ZOOM;
 use XML::Simple;
+
+use C4::Boolean;
+
 use vars qw($VERSION $AUTOLOAD),
-	qw($context),
-	qw(@context_stack);
+    qw($context),
+    qw(@context_stack);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-		shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
+        shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
 =head1 NAME
 
@@ -39,7 +42,13 @@ C4::Context - Maintain and manipulate the context of a Koha script
   use C4::Context("/path/to/koha.xml");
 
   $config_value = C4::Context->config("config_variable");
+
+  $koha_preference = C4::Context->preference("preference");
+
   $db_handle = C4::Context->dbh;
+
+  $Zconn = C4::Context->Zconn;
+
   $stopwordhash = C4::Context->stopwords;
 
 =head1 DESCRIPTION
@@ -80,77 +89,84 @@ environment variable to the pathname of a configuration file to use.
 # reference-to-hash with the following fields:
 #
 # config
-#	A reference-to-hash whose keys and values are the
-#	configuration variables and values specified in the config
-#	file (/etc/koha.xml).
+#    A reference-to-hash whose keys and values are the
+#    configuration variables and values specified in the config
+#    file (/etc/koha.xml).
 # dbh
-#	A handle to the appropriate database for this context.
+#    A handle to the appropriate database for this context.
 # dbh_stack
-#	Used by &set_dbh and &restore_dbh to hold other database
-#	handles for this context.
+#    Used by &set_dbh and &restore_dbh to hold other database
+#    handles for this context.
 # Zconn
-# 	A connection object for the Zebra server
+#     A connection object for the Zebra server
 
 use constant CONFIG_FNAME => "/etc/koha.xml";
-				# Default config file, if none is specified
+                # Default config file, if none is specified
 
-$context = undef;		# Initially, no context is set
-@context_stack = ();		# Initially, no saved contexts
+$context = undef;        # Initially, no context is set
+@context_stack = ();        # Initially, no saved contexts
 
-# read_config_file
-# Reads the specified Koha config file. Returns a reference-to-hash
-# whose keys are the configuration variables, and whose values are the
-# configuration values (duh).
-# Returns undef in case of error.
-#
-# Revision History:
-# 2004-08-10 A. Tarallo: Added code that checks if a variable is already
-# assigned and prints a message, otherwise create a new entry in the hash to
-# be returned. 
-# Also added code that complaints if finds a line that isn't a variable 
-# assignmet and skips the line.
-# Added a quick hack that makes the translation between the db_schema
-# and the DBI driver for that schema.
-#
-sub read_config_file
-{
-	my $fname = shift;	# Config file to read
+=item read_config_file
 
-	my $retval = {};	# Return value: ref-to-hash holding the
-				# configuration
+=over 4
 
-my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen']);
+Reads the specified Koha config file. 
 
-	return $koha;
+Returns an object containing the configuration variables. The object's
+structure is a bit complex to the uninitiated ... take a look at the
+koha.xml file as well as the XML::Simple documentation for details. Or,
+here are a few examples that may give you what you need:
+
+The simple elements nested within the <config> element:
+
+    my $pass = $koha->{'config'}->{'pass'};
+
+The <listen> elements:
+
+    my $listen = $koha->{'listen'}->{'biblioserver'}->{'content'};
+
+The elements nested within the <server> element:
+
+    my $ccl2rpn = $koha->{'server'}->{'biblioserver'}->{'cql2rpn'};
+
+Returns undef in case of error.
+
+=back
+
+=cut
+
+sub read_config_file {
+    my $fname = shift;    # Config file to read
+    my $retval = {};    # Return value: ref-to-hash holding the configuration
+    my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen']);
+    return $koha;
 }
 
 # db_scheme2dbi
 # Translates the full text name of a database into de appropiate dbi name
 # 
-sub db_scheme2dbi
-{
-	my $name = shift;
+sub db_scheme2dbi {
+    my $name = shift;
 
-	for ($name) {
+    for ($name) {
 # FIXME - Should have other databases. 
-		if (/mysql/i) { return("mysql"); }
-		if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
-		if (/oracle/i) { return("Oracle"); }
-	}
-	return undef; 		# Just in case
+        if (/mysql/i) { return("mysql"); }
+        if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
+        if (/oracle/i) { return("Oracle"); }
+    }
+    return undef;         # Just in case
 }
 
-sub import
-{
-	my $package = shift;
-	my $conf_fname = shift;		# Config file name
-	my $context;
+sub import {
+    my $package = shift;
+    my $conf_fname = shift;        # Config file name
+    my $context;
 
-	# Create a new context from the given config file name, if
-	# any, then set it as the current context.
-	$context = new C4::Context($conf_fname);
-	return undef if !defined($context);
-	$context->set_context;
+    # Create a new context from the given config file name, if
+    # any, then set it as the current context.
+    $context = new C4::Context($conf_fname);
+    return undef if !defined($context);
+    $context->set_context;
 }
 
 =item new
@@ -170,42 +186,37 @@ that, use C<&set_context>.
 #'
 # Revision History:
 # 2004-08-10 A. Tarallo: Added check if the conf file is not empty
-sub new
-{
-	my $class = shift;
-	my $conf_fname = shift;		# Config file to load
-	my $self = {};
+sub new {
+    my $class = shift;
+    my $conf_fname = shift;        # Config file to load
+    my $self = {};
 
-	# check that the specified config file exists and is not empty
-	undef $conf_fname unless 
-	    (defined $conf_fname && -e $conf_fname && -s $conf_fname);
-	# Figure out a good config file to load if none was specified.
-	if (!defined($conf_fname))
-	{
-		# If the $KOHA_CONF environment variable is set, use
-		# that. Otherwise, use the built-in default.
-		$conf_fname = $ENV{"KOHA_CONF"} || CONFIG_FNAME;
-	}
-		# Load the desired config file.
-	$self = read_config_file($conf_fname);
-	$self->{"config_file"} = $conf_fname;
+    # check that the specified config file exists and is not empty
+    undef $conf_fname unless 
+        (defined $conf_fname && -e $conf_fname && -s $conf_fname);
+    # Figure out a good config file to load if none was specified.
+    if (!defined($conf_fname))
+    {
+        # If the $KOHA_CONF environment variable is set, use
+        # that. Otherwise, use the built-in default.
+        $conf_fname = $ENV{"KOHA_CONF"} || CONFIG_FNAME;
+    }
+        # Load the desired config file.
+    $self = read_config_file($conf_fname);
+    $self->{"config_file"} = $conf_fname;
+    
+    warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
+    return undef if !defined($self->{"config"});
 
+    $self->{"dbh"} = undef;        # Database handle
+    $self->{"Zconn"} = undef;    # Zebra Connections
+    $self->{"stopwords"} = undef; # stopwords list
+    $self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
+    $self->{"userenv"} = undef;        # User env
+    $self->{"activeuser"} = undef;        # current active user
 
-	
-	warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
-	return undef if !defined($self->{"config"});
-
-	$self->{"dbh"} = undef;		# Database handle
-	$self->{"Zconn"} = undef;	# Zebra Connection
-	$self->{"Zconnauth"} = undef;	# Zebra Connection for updating
-	$self->{"stopwords"} = undef; # stopwords list
-	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
-	$self->{"attrfromkohafield"} = undef; # the hash with relations between koha table fields and Bib1-attributes
-	$self->{"userenv"} = undef;		# User env
-	$self->{"activeuser"} = undef;		# current active user
-
-	bless $self, $class;
-	return $self;
+    bless $self, $class;
+    return $self;
 }
 
 =item set_context
@@ -228,32 +239,32 @@ operations. To restore the previous context, use C<&restore_context>.
 #'
 sub set_context
 {
-	my $self = shift;
-	my $new_context;	# The context to set
+    my $self = shift;
+    my $new_context;    # The context to set
 
-	# Figure out whether this is a class or instance method call.
-	#
-	# We're going to make the assumption that control got here
-	# through valid means, i.e., that the caller used an instance
-	# or class method call, and that control got here through the
-	# usual inheritance mechanisms. The caller can, of course,
-	# break this assumption by playing silly buggers, but that's
-	# harder to do than doing it properly, and harder to check
-	# for.
-	if (ref($self) eq "")
-	{
-		# Class method. The new context is the next argument.
-		$new_context = shift;
-	} else {
-		# Instance method. The new context is $self.
-		$new_context = $self;
-	}
+    # Figure out whether this is a class or instance method call.
+    #
+    # We're going to make the assumption that control got here
+    # through valid means, i.e., that the caller used an instance
+    # or class method call, and that control got here through the
+    # usual inheritance mechanisms. The caller can, of course,
+    # break this assumption by playing silly buggers, but that's
+    # harder to do than doing it properly, and harder to check
+    # for.
+    if (ref($self) eq "")
+    {
+        # Class method. The new context is the next argument.
+        $new_context = shift;
+    } else {
+        # Instance method. The new context is $self.
+        $new_context = $self;
+    }
 
-	# Save the old context, if any, on the stack
-	push @context_stack, $context if defined($context);
+    # Save the old context, if any, on the stack
+    push @context_stack, $context if defined($context);
 
-	# Set the new context
-	$context = $new_context;
+    # Set the new context
+    $context = $new_context;
 }
 
 =item restore_context
@@ -267,19 +278,19 @@ Restores the context set by C<&set_context>.
 #'
 sub restore_context
 {
-	my $self = shift;
+    my $self = shift;
 
-	if ($#context_stack < 0)
-	{
-		# Stack underflow.
-		die "Context stack underflow";
-	}
+    if ($#context_stack < 0)
+    {
+        # Stack underflow.
+        die "Context stack underflow";
+    }
 
-	# Pop the old context and set it.
-	$context = pop @context_stack;
+    # Pop the old context and set it.
+    $context = pop @context_stack;
 
-	# FIXME - Should this return something, like maybe the context
-	# that was current when this was called?
+    # FIXME - Should this return something, like maybe the context
+    # that was current when this was called?
 }
 
 =item config
@@ -300,33 +311,46 @@ C<C4::Config-E<gt>new> will not return it.
 #'
 sub config
 {
-	my $self = shift;
-	my $var = shift;		# The config variable to return
+    my $self = shift;
+    my $var = shift;        # The config variable to return
 
-	return undef if !defined($context->{"config"});
-			# Presumably $self->{config} might be
-			# undefined if the config file given to &new
-			# didn't exist, and the caller didn't bother
-			# to check the return value.
+    return undef if !defined($context->{"config"});
+            # Presumably $self->{config} might be
+            # undefined if the config file given to &new
+            # didn't exist, and the caller didn't bother
+            # to check the return value.
 
-	# Return the value of the requested config variable
-	return $context->{"config"}->{$var};
+    # Return the value of the requested config variable
+    return $context->{"config"}->{$var};
 }
-=item zebraconfig
-$serverdir=C4::Context->zebraconfig("biblioserver")->{directory};
-
-returns the zebra server specific details for different zebra servers
-similar to C4:Context->config
-=cut
 
 sub zebraconfig
 {
-	my $self = shift;
-	my $var = shift;		# The config variable to return
+    my $self = shift;
+    my $var = shift;        # The config variable to return
 
-	return undef if !defined($context->{"server"});
-	# Return the value of the requested config variable
-	return $context->{"server"}->{$var};
+    return undef if !defined($context->{"server"});
+            # Presumably $self->{config} might be
+            # undefined if the config file given to &new
+            # didn't exist, and the caller didn't bother
+            # to check the return value.
+
+    # Return the value of the requested config variable
+    return $context->{"server"}->{$var};
+}
+sub zebraoptions
+{
+    my $self = shift;
+    my $var = shift;        # The config variable to return
+
+    return undef if !defined($context->{"serverinfo"});
+            # Presumably $self->{config} might be
+            # undefined if the config file given to &new
+            # didn't exist, and the caller didn't bother
+            # to check the return value.
+
+    # Return the value of the requested config variable
+    return $context->{"serverinfo"}->{$var};
 }
 =item preference
 
@@ -344,27 +368,31 @@ variable is not set, or in case of error, returns the undefined value.
 # this function should cache the results it finds.
 sub preference
 {
-	my $self = shift;
-	my $var = shift;		# The system preference to return
-	my $retval;			# Return value
-	my $dbh = C4::Context->dbh;	# Database handle
-	my $sth;			# Database query handle
+    my $self = shift;
+    my $var = shift;        # The system preference to return
+    my $retval;            # Return value
+    my $dbh = C4::Context->dbh;    # Database handle
+    if ($dbh){
+    my $sth;            # Database query handle
 
-	# Look up systempreferences.variable==$var
-	$retval = $dbh->selectrow_array(<<EOT);
-		SELECT	value
-		FROM	systempreferences
-		WHERE	variable='$var'
-		LIMIT	1
+    # Look up systempreferences.variable==$var
+    $retval = $dbh->selectrow_array(<<EOT);
+        SELECT    value
+        FROM    systempreferences
+        WHERE    variable='$var'
+        LIMIT    1
 EOT
-	return $retval;
+    return $retval;
+    } else {
+      return 0
+    }
 }
 
 sub boolean_preference ($) {
-	my $self = shift;
-	my $var = shift;		# The system preference to return
-	my $it = preference($self, $var);
-	return defined($it)? C4::Boolean::true_p($it): undef;
+    my $self = shift;
+    my $var = shift;        # The system preference to return
+    my $it = preference($self, $var);
+    return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
 # AUTOLOAD
@@ -378,93 +406,121 @@ sub boolean_preference ($) {
 # encourage people to use it.
 sub AUTOLOAD
 {
-	my $self = shift;
+    my $self = shift;
 
-	$AUTOLOAD =~ s/.*:://;		# Chop off the package name,
-					# leaving only the function name.
-	return $self->config($AUTOLOAD);
+    $AUTOLOAD =~ s/.*:://;        # Chop off the package name,
+                    # leaving only the function name.
+    return $self->config($AUTOLOAD);
 }
 
 =item Zconn
 
 $Zconn = C4::Context->Zconn
-$Zconnauth = C4::Context->Zconnauth
+
 Returns a connection to the Zebra database for the current
 context. If no connection has yet been made, this method 
 creates one and connects.
 
+C<$self> 
+
+C<$server> one of the servers defined in the koha.xml file
+
+C<$async> whether this is a asynchronous connection
+
+C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
+
+
 =cut
 
 sub Zconn {
-        my $self = shift;
-my $server=shift;
-my $syntax=shift;
-	my $Zconn;
-	$context->{"Zconn"} = &new_Zconn($server,$syntax);
-	return $context->{"Zconn"};
-  
+    my $self=shift;
+    my $server=shift;
+    my $async=shift;
+    my $auth=shift;
+    my $piggyback=shift;
+    my $syntax=shift;
+    if ( defined($context->{"Zconn"}->{$server}) ) {
+        return $context->{"Zconn"}->{$server};
+
+    # No connection object or it died. Create one.
+    }else {
+        $context->{"Zconn"}->{$server} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
+        return $context->{"Zconn"}->{$server};
+    }
 }
 
-sub Zconnauth {
-        my $self = shift;
-my $server=shift;
-my $syntax=shift;
-	my $Zconnauth;
-##We destroy each connection made so create a new one	
-		$context->{"Zconnauth"} = &new_Zconnauth($server,$syntax);
-		return $context->{"Zconnauth"};
-		
-}
+=item _new_Zconn
 
+$context->{"Zconn"} = &_new_Zconn($server,$async);
 
+Internal function. Creates a new database connection from the data given in the current context and returns it.
 
-=item new_Zconn
+C<$server> one of the servers defined in the koha.xml file
 
-Internal helper function. creates a new database connection from
-the data given in the current context and returns it.
+C<$async> whether this is a asynchronous connection
+
+C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 
 =cut
 
-sub new_Zconn {
-use ZOOM;
-my $server=shift;
-my $syntax=shift;
-$syntax="xml" unless $syntax;
-my $Zconn;
-my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
-my $o = new ZOOM::Options();
-$o->option(async => 1);
-$o->option(preferredRecordSyntax => $syntax); ## in case we use MARC
-$o->option(databaseName=>$context->{"config"}->{$server});
+sub _new_Zconn {
+    my ($server,$async,$auth,$piggyback,$syntax) = @_;
 
-my $o2= new ZOOM::Options();
+    my $tried=0; # first attempt
+    my $Zconn; # connection object
+    $server = "biblioserver" unless $server;
+    $syntax = "usmarc" unless $syntax;
 
- $Zconn=create ZOOM::Connection($o);
-	$Zconn->connect($context->{"config"}->{"hostname"},$port);
-	
-	return $Zconn;
+    my $host = $context->{'listen'}->{$server}->{'content'};
+    my $user = $context->{"serverinfo"}->{$server}->{"user"};
+    my $servername = $context->{"config"}->{$server};
+    my $password = $context->{"serverinfo"}->{$server}->{"password"};
+    warn "server:$server servername :$servername host:$host";
+    retry:
+    eval {
+        # set options
+        my $o = new ZOOM::Options();
+        $o->option(async => 1) if $async;
+        $o->option(count => $piggyback) if $piggyback;
+        $o->option(cqlfile=> $context->{"server"}->{$server}->{"cql2rpn"});
+        $o->option(cclfile=> $context->{"serverinfo"}->{$server}->{"ccl2rpn"});
+        $o->option(preferredRecordSyntax => $syntax);
+        $o->option(elementSetName => "F"); # F for 'full' as opposed to B for 'brief'
+        $o->option(user=>$user) if $auth;
+        $o->option(password=>$password) if $auth;
+        $o->option(databaseName => ($servername?$servername:"biblios"));
+
+        # create a new connection object
+        $Zconn= create ZOOM::Connection($o);
+
+        # forge to server
+        $Zconn->connect($host, 0);
+
+        # check for errors and warn
+        if ($Zconn->errcode() !=0) {
+            warn "something wrong with the connection: ". $Zconn->errmsg();
+        }
+
+    };
+#     if ($@) {
+#         # Koha manages the Zebra server -- this doesn't work currently for me because of permissions issues
+#         # Also, I'm skeptical about whether it's the best approach
+#         warn "problem with Zebra";
+#         if ( C4::Context->preference("ManageZebra") ) {
+#             if ($@->code==10000 && $tried==0) { ##No connection try restarting Zebra
+#                 $tried=1;
+#                 warn "trying to restart Zebra";
+#                 my $res=system("zebrasrv -f $ENV{'KOHA_CONF'} >/koha/log/zebra-error.log");
+#                 goto "retry";
+#             } else {
+#                 warn "Error ", $@->code(), ": ", $@->message(), "\n";
+#                 $Zconn="error";
+#                 return $Zconn;
+#             }
+#         }
+#     }
+    return $Zconn;
 }
-
-## Zebra handler with write permission
-sub new_Zconnauth {
-use ZOOM;
-my $server=shift;
-my $syntax=shift;
-$syntax="xml" unless $syntax;
-my $Zconnauth;
-my ($tcp,$host,$port)=split /:/,$context->{"listen"}->{$server}->{"content"};
-my $o = new ZOOM::Options();
-#$o->option(async => 1);
-$o->option(preferredRecordSyntax => $syntax);
-$o->option(user=>$context->{"config"}->{"zebrauser"});
-$o->option(password=>$context->{"config"}->{"zebrapass"});
-$o->option(databaseName=>$context->{"config"}->{$server});
- $o->option(charset=>"UTF8");
- $Zconnauth=create ZOOM::Connection($o);
-$Zconnauth->connect($context->config("hostname"),$port);
-return $Zconnauth;
-}
-
 
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
@@ -472,27 +528,24 @@ return $Zconnauth;
 # returns it.
 sub _new_dbh
 {
-	##correct name for db_schme		
-	my $db_driver;
-	if ($context->config("db_scheme")){
-	$db_driver=db_scheme2dbi($context->config("db_scheme"));
-	}else{
-	$db_driver="mysql";
-	}
+    ##correct name for db_schme        
+    my $db_driver;
+    if ($context->config("db_scheme")){
+    $db_driver=db_scheme2dbi($context->config("db_scheme"));
+    }else{
+    $db_driver="mysql";
+    }
 
-	my $db_name   = $context->config("database");
-	my $db_host   = $context->config("hostname");
-	my $db_user   = $context->config("user");
-	my $db_passwd = $context->config("pass");
-	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
-			    $db_user, $db_passwd);
-	# Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
-	###DBD::Mysql 3.0.7 has an intermittent bug for dbh->do so change to dbh->prepare
-	my $sth=$dbh->prepare("set NAMES 'utf8'");
-	$sth->execute();
-	$sth->finish;
-
-	return $dbh;
+    my $db_name   = $context->config("database");
+    my $db_host   = $context->config("hostname");
+    my $db_user   = $context->config("user");
+    my $db_passwd = $context->config("pass");
+    my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
+                $db_user, $db_passwd);
+    # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
+    # this is better than modifying my.cnf (and forcing all communications to be in utf8)
+     $dbh->do("set NAMES 'utf8'") if ($dbh);
+    return $dbh;
 }
 
 =item dbh
@@ -513,18 +566,18 @@ possibly C<&set_dbh>.
 #'
 sub dbh
 {
-	my $self = shift;
-	my $sth;
+    my $self = shift;
+    my $sth;
 
-	if (defined($context->{"dbh"})) {
-	    $sth=$context->{"dbh"}->prepare("select 1");
-	    return $context->{"dbh"} if (defined($sth->execute));
-	}
+    if (defined($context->{"dbh"})) {
+        $sth=$context->{"dbh"}->prepare("select 1");
+        return $context->{"dbh"} if (defined($sth->execute));
+    }
 
-	# No database handle or it died . Create one.
-	$context->{"dbh"} = &_new_dbh();
+    # No database handle or it died . Create one.
+    $context->{"dbh"} = &_new_dbh();
 
-	return $context->{"dbh"};
+    return $context->{"dbh"};
 }
 
 =item new_dbh
@@ -543,9 +596,9 @@ connect to so that the caller doesn't have to know.
 #'
 sub new_dbh
 {
-	my $self = shift;
+    my $self = shift;
 
-	return &_new_dbh();
+    return &_new_dbh();
 }
 
 =item set_dbh
@@ -568,15 +621,15 @@ C<$my_dbh> is assumed to be a good database handle.
 #'
 sub set_dbh
 {
-	my $self = shift;
-	my $new_dbh = shift;
+    my $self = shift;
+    my $new_dbh = shift;
 
-	# Save the current database handle on the handle stack.
-	# We assume that $new_dbh is all good: if the caller wants to
-	# screw himself by passing an invalid handle, that's fine by
-	# us.
-	push @{$context->{"dbh_stack"}}, $context->{"dbh"};
-	$context->{"dbh"} = $new_dbh;
+    # Save the current database handle on the handle stack.
+    # We assume that $new_dbh is all good: if the caller wants to
+    # screw himself by passing an invalid handle, that's fine by
+    # us.
+    push @{$context->{"dbh_stack"}}, $context->{"dbh"};
+    $context->{"dbh"} = $new_dbh;
 }
 
 =item restore_dbh
@@ -591,19 +644,19 @@ C<C4::Context-E<gt>set_dbh>.
 #'
 sub restore_dbh
 {
-	my $self = shift;
+    my $self = shift;
 
-	if ($#{$context->{"dbh_stack"}} < 0)
-	{
-		# Stack underflow
-		die "DBH stack underflow";
-	}
+    if ($#{$context->{"dbh_stack"}} < 0)
+    {
+        # Stack underflow
+        die "DBH stack underflow";
+    }
 
-	# Pop the old database handle and set it.
-	$context->{"dbh"} = pop @{$context->{"dbh_stack"}};
+    # Pop the old database handle and set it.
+    $context->{"dbh"} = pop @{$context->{"dbh_stack"}};
 
-	# FIXME - If it is determined that restore_context should
-	# return something, then this function should, too.
+    # FIXME - If it is determined that restore_context should
+    # return something, then this function should, too.
 }
 
 =item marcfromkohafield
@@ -620,61 +673,33 @@ C<C4::Context-E<gt>marcfromkohafield> twice, you will get the same hash without 
 #'
 sub marcfromkohafield
 {
-	my $retval = {};
+    my $retval = {};
 
-	# If the hash already exists, return it.
-	return $context->{"marcfromkohafield"} if defined($context->{"marcfromkohafield"});
+    # If the hash already exists, return it.
+    return $context->{"marcfromkohafield"} if defined($context->{"marcfromkohafield"});
 
-	# No hash. Create one.
-	$context->{"marcfromkohafield"} = &_new_marcfromkohafield();
+    # No hash. Create one.
+    $context->{"marcfromkohafield"} = &_new_marcfromkohafield();
 
-	return $context->{"marcfromkohafield"};
+    return $context->{"marcfromkohafield"};
 }
-
 
 # _new_marcfromkohafield
-# Internal helper function (not a method!). 
+# Internal helper function (not a method!). This creates a new
+# hash with stopwords
 sub _new_marcfromkohafield
 {
-	my $dbh = C4::Context->dbh;
-	my $marcfromkohafield;
-	my $sth = $dbh->prepare("select kohafield,tagfield,tagsubfield,recordtype from koha_attr where tagfield is not null  ");
-	$sth->execute;
-	while (my ($kohafield,$tagfield,$tagsubfield,$recordtype) = $sth->fetchrow) {
-		my $retval = {};
-		$marcfromkohafield->{$recordtype}->{$kohafield} = [$tagfield,$tagsubfield];
-	}
-	
-	return $marcfromkohafield;
+    my $dbh = C4::Context->dbh;
+    my $marcfromkohafield;
+    my $sth = $dbh->prepare("select frameworkcode,kohafield,tagfield,tagsubfield from marc_subfield_structure where kohafield > ''");
+    $sth->execute;
+    while (my ($frameworkcode,$kohafield,$tagfield,$tagsubfield) = $sth->fetchrow) {
+        my $retval = {};
+        $marcfromkohafield->{$frameworkcode}->{$kohafield} = [$tagfield,$tagsubfield];
+    }
+    return $marcfromkohafield;
 }
 
-
-#item attrfromkohafield
-#To use as a hash of koha to z3950 attributes
-sub _new_attrfromkohafield
-{
-	my $dbh = C4::Context->dbh;
-	my $attrfromkohafield;
-	my $sth2 = $dbh->prepare("select kohafield,attr from koha_attr" );
-	$sth2->execute;
-	while (my ($kohafield,$attr) = $sth2->fetchrow) {
-		my $retval = {};
-		$attrfromkohafield->{$kohafield} = $attr;
-	}
-	return $attrfromkohafield;
-}
-sub attrfromkohafield
-{
-	my $retval = {};
-
-	# If the hash already exists, return it.
-	return $context->{"attrfromkohafield"} if defined($context->{"attrfromkohafield"});
-
-	# No hash. Create one.
-	$context->{"attrfromkohafield"} = &_new_attrfromkohafield();
-
-	return $context->{"attrfromkohafield"};
-}
 =item stopwords
 
   $dbh = C4::Context->stopwords;
@@ -689,15 +714,15 @@ C<C4::Context-E<gt>stopwords> twice, you will get the same hash without real DB 
 #'
 sub stopwords
 {
-	my $retval = {};
+    my $retval = {};
 
-	# If the hash already exists, return it.
-	return $context->{"stopwords"} if defined($context->{"stopwords"});
+    # If the hash already exists, return it.
+    return $context->{"stopwords"} if defined($context->{"stopwords"});
 
-	# No hash. Create one.
-	$context->{"stopwords"} = &_new_stopwords();
+    # No hash. Create one.
+    $context->{"stopwords"} = &_new_stopwords();
 
-	return $context->{"stopwords"};
+    return $context->{"stopwords"};
 }
 
 # _new_stopwords
@@ -705,16 +730,16 @@ sub stopwords
 # hash with stopwords
 sub _new_stopwords
 {
-	my $dbh = C4::Context->dbh;
-	my $stopwordlist;
-	my $sth = $dbh->prepare("select word from stopwords");
-	$sth->execute;
-	while (my $stopword = $sth->fetchrow_array) {
-		my $retval = {};
-		$stopwordlist->{$stopword} = uc($stopword);
-	}
-	$stopwordlist->{A} = "A" unless $stopwordlist;
-	return $stopwordlist;
+    my $dbh = C4::Context->dbh;
+    my $stopwordlist;
+    my $sth = $dbh->prepare("select word from stopwords");
+    $sth->execute;
+    while (my $stopword = $sth->fetchrow_array) {
+        my $retval = {};
+        $stopwordlist->{$stopword} = uc($stopword);
+    }
+    $stopwordlist->{A} = "A" unless $stopwordlist;
+    return $stopwordlist;
 }
 
 =item userenv
@@ -733,10 +758,22 @@ set_userenv is called in Auth.pm
 #'
 sub userenv
 {
-	my $var = $context->{"activeuser"};
-	return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
-	return 0;
-	warn "NO CONTEXT for $var";
+    my $var = $context->{"activeuser"};
+    return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+    # insecure=1 management
+    if ($context->{"dbh"} && $context->preference('insecure')) {
+        my %insecure;
+        $insecure{flags} = '16382';
+        $insecure{branchname} ='Insecure',
+        $insecure{number} ='0';
+        $insecure{cardnumber} ='0';
+        $insecure{id} = 'insecure';
+        $insecure{branch} = 'INS';
+        $insecure{emailaddress} = 'test@mode.insecure.com';
+        return \%insecure;
+    } else {
+        return 0;
+    }
 }
 
 =item set_userenv
@@ -751,25 +788,25 @@ C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB ac
 set_userenv is called in Auth.pm
 
 =cut
+
 #'
 sub set_userenv{
-	my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress,$branchprinter)= @_;
-	my $var=$context->{"activeuser"};
-	my $cell = {
-		"number"     => $usernum,
-		"id"         => $userid,
-		"cardnumber" => $usercnum,
-#		"firstname"  => $userfirstname,
-#		"surname"    => $usersurname,
+    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress)= @_;
+    my $var=$context->{"activeuser"};
+    my $cell = {
+        "number"     => $usernum,
+        "id"         => $userid,
+        "cardnumber" => $usercnum,
+        "firstname"  => $userfirstname,
+        "surname"    => $usersurname,
 #possibly a law problem
-		"branch"     => $userbranch,
-		"branchname" => $branchname,
-		"flags"      => $userflags,
-		"emailaddress"	=> $emailaddress,
-		"branchprinter" => $branchprinter,
-	};
-	$context->{userenv}->{$var} = $cell;
-	return $cell;
+        "branch"     => $userbranch,
+        "branchname" => $branchname,
+        "flags"      => $userflags,
+        "emailaddress"    => $emailaddress,
+    };
+    $context->{userenv}->{$var} = $cell;
+    return $cell;
 }
 
 =item _new_userenv
@@ -788,9 +825,9 @@ _new_userenv is called in Auth.pm
 #'
 sub _new_userenv
 {
-	shift;
-	my ($sessionID)= @_;
- 	$context->{"activeuser"}=$sessionID;
+    shift;
+    my ($sessionID)= @_;
+     $context->{"activeuser"}=$sessionID;
 }
 
 =item _unset_userenv
@@ -800,12 +837,13 @@ sub _new_userenv
 Destroys the hash for activeuser user environment variables.
 
 =cut
+
 #'
 
 sub _unset_userenv
 {
-	my ($sessionID)= @_;
-	undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
+    my ($sessionID)= @_;
+    undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
 }
 
 
@@ -827,57 +865,112 @@ Specifies the configuration file to read.
 
 =head1 SEE ALSO
 
-DBI(3)
-
-=head1 AUTHOR
+=head1 AUTHORS
 
 Andrew Arensburger <arensb at ooblick dot com>
 
+Joshua Ferraro <jmf at liblime dot com>
+
 =cut
+
 # $Log$
-# Revision 1.50  2006/11/06 21:01:43  tgarip1957
-# Bug fixing and complete removal of Date::Manip
+# Revision 1.51  2007/03/09 14:31:47  tipaul
+# rel_3_0 moved to HEAD
 #
-# Revision 1.49  2006/10/20 01:20:56  tgarip1957
-# A new Date.pm to use for all date calculations. Mysql date calculations removed from Circ2.pm, all modules free of DateManip, a new get_today function to call in allscripts, and some bug cleaning in authorities.pm
+# Revision 1.43.2.10  2007/02/09 17:17:56  hdl
+# Managing a little better database absence.
+# (preventing from BIG 550)
 #
-# Revision 1.48  2006/10/01 21:48:54  tgarip1957
-# Field weighting applied to ranked searches. A new facets table in mysql db
+# Revision 1.43.2.9  2006/12/20 16:50:48  tipaul
+# improving "insecure" management
 #
-# Revision 1.47  2006/09/27 19:53:52  tgarip1957
-# Finalizing main components. All koha modules are now working with the new XML API
+# WARNING KADOS :
+# you told me that you had some libraries with insecure=ON (behind a firewall).
+# In this commit, I created a "fake" user when insecure=ON. It has a fake branch. You may find better to have the 1st branch in branch table instead of a fake one.
 #
-# Revision 1.46  2006/09/06 16:21:03  tgarip1957
-# Clean up before final commits
+# Revision 1.43.2.8  2006/12/19 16:48:16  alaurin
+# reident programs, and adding branchcode value in reserves2
 #
-# Revision 1.43  2006/08/10 12:49:37  toins
-# sync with dev_week.
+# Revision 1.43.2.7  2006/12/06 21:55:38  hdl
+# Adding zebraoptions for servers to get serverinfos in Context.pm
+# Using this function in rebuild_zebra.pl
 #
-# Revision 1.42  2006/07/04 14:36:51  toins
-# Head & rel_2_2 merged
+# Revision 1.43.2.6  2006/11/24 21:18:31  kados
+# very minor changes, no functional ones, just comments, etc.
 #
-# Revision 1.41  2006/05/20 14:36:09  tgarip1957
-# Typo error. Missing '>'
+# Revision 1.43.2.5  2006/10/30 13:24:16  toins
+# fix some minor POD error.
 #
-# Revision 1.40  2006/05/20 14:28:02  tgarip1957
-# Adding support to read zebra database name from config files
+# Revision 1.43.2.4  2006/10/12 21:42:49  hdl
+# Managing multiple zebra connections
 #
-# Revision 1.39  2006/05/19 09:52:54  alaurin
-# committing new feature ip and printer management
-# adding two fields in branches table (branchip,branchprinter)
+# Revision 1.43.2.3  2006/10/11 14:27:26  tipaul
+# removing a warning
 #
-# branchip : if the library enter an ip or ip range any librarian that connect from computer in this ip range will be temporarly affected to the corresponding branch .
+# Revision 1.43.2.2  2006/10/10 15:28:16  hdl
+# BUG FIXING : using database name in Zconn if defined and not hard coded value
 #
-# branchprinter : the library  can select a default printer for a branch
+# Revision 1.43.2.1  2006/10/06 13:47:28  toins
+# Synch with dev_week.
+#  /!\ WARNING :: Please now use the new version of koha.xml.
 #
-# Revision 1.38  2006/05/14 00:22:31  tgarip1957
-# Adding support for getting details of different zebra servers
+# Revision 1.18.2.5.2.14  2006/09/24 15:24:06  kados
+# remove Zebraauth routine, fold the functionality into Zconn
+# Zconn can now take several arguments ... this will probably
+# change soon as I'm not completely happy with the readability
+# of the current format ... see the POD for details.
 #
-# Revision 1.37  2006/05/13 19:51:39  tgarip1957
-# Now reads koha.xml rather than koha.conf.
-# koha.xml contains both the koha configuration and zebraserver configuration.
-# Zebra connection is modified to allow connection to authority zebra as well.
-# It will break head if koha.conf is not replaced with koha.xml
+# cleaning up Biblio.pm, removing unnecessary routines.
+#
+# DeleteBiblio - used to delete a biblio from zebra and koha tables
+#     -- checks to make sure there are no existing issues
+#     -- saves backups of biblio,biblioitems,items in deleted* tables
+#     -- does commit operation
+#
+# getRecord - used to retrieve one record from zebra in piggyback mode using biblionumber
+# brought back z3950_extended_services routine
+#
+# Lots of modifications to Context.pm, you can now store user and pass info for
+# multiple servers (for federated searching) using the <serverinfo> element.
+# I'll commit my koha.xml to demonstrate this or you can refer to the POD in
+# Context.pm (which I also expanded on).
+#
+# Revision 1.18.2.5.2.13  2006/08/10 02:10:21  kados
+# Turned warnings on, and running a search turned up lots of warnings.
+# Cleaned up those ...
+#
+# removed getitemtypes from Koha.pm (one in Search.pm looks newer)
+# removed itemcount from Biblio.pm
+#
+# made some local subs local with a _ prefix (as they were redefined
+# elsewhere)
+#
+# Add two new search subs to Search.pm the start of a new search API
+# that's a bit more scalable
+#
+# Revision 1.18.2.5.2.10  2006/07/21 17:50:51  kados
+# moving the *.properties files to intranetdir/etc dir
+#
+# Revision 1.18.2.5.2.9  2006/07/17 08:05:20  tipaul
+# there was a hardcoded link to /koha/etc/ I replaced it with intranetdir config value
+#
+# Revision 1.18.2.5.2.8  2006/07/11 12:20:37  kados
+# adding ccl and cql files ... Tumer, if you want to fit these into the
+# config file by all means do.
+#
+# Revision 1.18.2.5.2.7  2006/06/04 22:50:33  tgarip1957
+# We do not hard code cql2rpn conversion file in context.pm our koha.xml configuration file already describes the path for this file.
+# At cql searching we use method CQL not CQL2RPN as the cql2rpn conversion file is defined at server level
+#
+# Revision 1.18.2.5.2.6  2006/06/02 23:11:24  kados
+# Committing my working dev_week. It's been tested only with
+# searching, and there's quite a lot of config stuff to set up
+# beforehand. As things get closer to a release, we'll be making
+# some scripts to do it for us
+#
+# Revision 1.18.2.5.2.5  2006/05/28 18:49:12  tgarip1957
+# This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
+# Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to
 #
 # Revision 1.36  2006/05/09 13:28:08  tipaul
 # adding the branchname and the librarian name in every page :

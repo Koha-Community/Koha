@@ -25,8 +25,11 @@
 use strict;
 use C4::Auth;
 use C4::Koha;
+use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
+
+
 use C4::Acquisition;
 use C4::Bookfund;
 use C4::Bookseller;
@@ -78,9 +81,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $basket = GetBasket($basketno);
-$basket->{authorisedbyname};
+
 # FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
+# warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my @booksellers = GetBookSeller($booksellerid);
 my $count2 = scalar @booksellers;
@@ -108,27 +112,32 @@ $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
 my ( $count, @results );
 @results  = GetOrders( $basketno, $order );
 $count = scalar @results;
+
 my $line_total;     # total of each line
-my $gist =C4::Context->preference('gist');           # GST 
+my $sub_total;      # total of line totals
+my $gist;           # GST
+my $grand_total;    # $subttotal + $gist
 my $toggle = 0;
+
 
 # my $line_total_est; # total of each line
 my $sub_total_est;      # total of line totals
 my $gist_est;           # GST
-my $grand_total_est;    # $subttotal + $gist_est - $disc_est
-my $disc_est;
+my $grand_total_est;    # $subttotal + $gist
+
 my $qty_total;
 
 my @books_loop;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-     $line_total = $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
-    $sub_total_est += $line_total ;
-   $disc_est +=$line_total *$results[$i]->{'discount'}/100;
-   $gist_est +=($line_total  - ($line_total *$results[$i]->{'discount'}/100))*$results[$i]->{'gst'}/100;
-   
-   
+    my $rrp = $results[$i]->{'listprice'};
+    $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
+
+    $sub_total_est += $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
+    $line_total = $results[$i]->{'quantity'} * $results[$i]->{'ecost'};
+    $sub_total += $line_total;
     $qty_total += $results[$i]->{'quantity'};
     my %line;
+    %line=%{$results[$i]};
    if ( $toggle == 0 ) {
         $line{color} = '#EEEEEE';
         $toggle = 1;
@@ -137,31 +146,20 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{color} = 'white';
         $toggle = 0;
     }
-    $line{ordernumber}      = $results[$i]->{'ordernumber'};
-    $line{publishercode}    = $results[$i]->{'publishercode'};
-    $line{isbn}             = $results[$i]->{'isbn'};
-    $line{booksellerid}     = $booksellers[0]->{'id'};
     $line{basketno}         = $basketno;
-    $line{title}            = $results[$i]->{'title'};
-    $line{notes}            = $results[$i]->{'notes'};
-    $line{author}           = $results[$i]->{'author'};
     $line{i}                = $i;
-    $line{rrp}              = sprintf( "%.2f", $results[$i]->{'rrp'} );
-    $line{ecost}            = sprintf( "%.2f", $results[$i]->{'ecost'} );
-      $line{discount}            = sprintf( "%.2f", $results[$i]->{'discount'} );
-    $line{quantity}         = $results[$i]->{'quantity'};
-    $line{quantityrecieved} = $results[$i]->{'quantityreceived'};
+    $line{rrp}              = sprintf( "%.2f", $line{'rrp'} );
+    $line{ecost}            = sprintf( "%.2f", $line{'ecost'} );
     $line{line_total}       = sprintf( "%.2f", $line_total );
-    $line{biblionumber}     = $results[$i]->{'biblionumber'};
-    $line{bookfundid}       = $results[$i]->{'bookfundid'};
     $line{odd}              = $i % 2;
-if  ($line{quantityrecieved}>0){$line{donotdelete}=1;}
     push @books_loop, \%line;
-$template->param(purchaseordernumber    => $results[0]->{'purchaseordernumber'},
-		booksellerinvoicenumber=>$results[0]->{booksellerinvoicenumber},);
 }
-$grand_total_est =  sprintf( "%.2f", $sub_total_est - $disc_est+$gist_est );
-
+my $prefgist = C4::Context->preference("gist");
+$gist            = sprintf( "%.2f", $sub_total * $prefgist );
+$grand_total     = $sub_total + $gist;
+$grand_total_est =
+  $sub_total_est + sprintf( "%.2f", $sub_total_est * $prefgist );
+$gist_est = sprintf( "%.2f", $sub_total_est * $prefgist );
 $template->param(
     basketno         => $basketno,
     creationdate     => format_date( $basket->{creationdate} ),
@@ -178,10 +176,11 @@ $template->param(
     entrydate        => format_date( $results[0]->{'entrydate'} ),
     books_loop       => \@books_loop,
     count            => $count,
+    sub_total        => $sub_total,
     gist             => $gist,
-    sub_total_est    =>  sprintf( "%.2f",$sub_total_est),
-    gist_est         =>  sprintf( "%.2f",$gist_est),
-    disc_est	=> sprintf( "%.2f",$disc_est),
+    grand_total      => $grand_total,
+    sub_total_est    => $sub_total_est,
+    gist_est         => $gist_est,
     grand_total_est  => $grand_total_est,
     currency         => $booksellers[0]->{'listprice'},
     qty_total        => $qty_total,

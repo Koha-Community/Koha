@@ -1,289 +1,215 @@
 #!/usr/bin/perl
 
-#----------------------------------------------------------------------
-# this script is really divided into 2 differenvt section,
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
 
-# the first section creates, and defines the new PDF file the barcodes
-# using PDF::Reuse::Barcode, then saves the file to disk.
+# $Id$
 
-# the second section then opens the pdf file off disk, and places the spline label
-# text in the left-most column of the page. then save the file again.
+=head1 label-print-pdf.pl
 
-# the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
+ this script is really divided into 2 differenvt section,
 
-#use lib '/usr/local/hlt/intranet/modules';
-#use C4::Context("/etc/koha-hlt.conf");
+ the first section creates, and defines the new PDF file the barcodes
+ using PDF::Reuse::Barcode, then saves the file to disk.
 
-#use strict;
+ the second section then opens the pdf file off disk, and places the spline label
+ text in the left-most column of the page. then save the file again.
+
+ the reason for this goofyness, it that i couldnt find a single perl package that handled both barcodes and decent text placement.
+
+=cut
+
+use strict;
 use CGI;
 use C4::Labels;
 use C4::Auth;
-use C4::Serials;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use HTML::Template;
+
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
-use PDF::Report;
-use Data::Dumper;
+use POSIX;
+use C4::Labels;
+use Acme::Comment;
 
-#use Acme::Comment;
-#use Data::Dumper;
 
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
-
-my $spine_text = "";
+my $spine_text  = "";
 
 # get the printing settings
-
-my $conf_data   = get_label_options();
-my @resultsloop = get_label_items();
-
-warn Dumper $conf_data;
-
-
+my $template     = GetActiveLabelTemplate();
+my $conf_data    = get_label_options();
+my @resultsloop  = get_label_items();
 my $barcodetype  = $conf_data->{'barcodetype'};
 my $printingtype = $conf_data->{'printingtype'};
-my $guidebox  = $conf_data->{'guidebox'};
-my $startrow     = $conf_data->{'startrow'};
+my $guidebox     = $conf_data->{'guidebox'};
+my $start_label  = $conf_data->{'startlabel'};
+my $fontsize     = $template->{'fontsize'};
+my $units        = $template->{'units'};
 
-if (!$printingtype) {
-	$printingtype = 'both';
-}
+warn "UNITS $units";
+warn "fontsize = $fontsize";
 
-warn $printingtype;
-warn $guidebox;
+my $unitvalue = GetUnitsValue($units);
+warn $unitvalue;
+warn $units;
 
+my $tmpl_code = $template->{'tmpl_code'};
+my $tmpl_desc = $template->{'tmpl_desc'};
 
-#warn Dumper @resultsloop;
+my $page_height  = ( $template->{'page_height'} * $unitvalue );
+my $page_width   = ( $template->{'page_width'} * $unitvalue );
+my $label_height = ( $template->{'label_height'} * $unitvalue );
+my $label_width  = ( $template->{'label_width'} * $unitvalue );
+my $spine_width  = ( $template->{'label_width'} * $unitvalue );
+my $circ_width   = ( $template->{'label_width'} * $unitvalue );
+my $top_margin   = ( $template->{'topmargin'} * $unitvalue );
+my $left_margin  = ( $template->{'leftmargin'} * $unitvalue );
+my $colspace     = ( $template->{'colgap'} * $unitvalue );
+my $rowspace     = ( $template->{'rowgap'} * $unitvalue );
 
-# dimensions of gaylord paper
+my $label_cols = $template->{'cols'};
+my $label_rows = $template->{'rows'};
+
+my $text_wrap_cols = GetTextWrapCols( $fontsize, $label_width );
+
+warn $label_cols, $label_rows;
+
+# set the paper size
 my $lowerLeftX  = 0;
 my $lowerLeftY  = 0;
-my $upperRightX = 612;
-my $upperRightY = 792;
+my $upperRightX = $page_width;
+my $upperRightY = $page_height;
 
-#----------------------------------
-# setting up the pdf doc
+prInitVars();
+$| = 1;
+print STDOUT "Content-Type: application/pdf \r\n\r\n";
+prFile();
 
-#remove the file before write, for testing
-unlink "$htdocs_path/barcodes/new.pdf";
+prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
-prFile("$htdocs_path/barcodes/new.pdf");
-prLogDir("$htdocs_path/barcodes");
+# later feature, change the font-type and size?
+prFont('C');    # Just setting a font
+prFontSize($fontsize);
 
-#prMbox ( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
-prMbox( 0, 0, 612, 792 );
+my $margin           = $top_margin;
+my $left_text_margin = 3;
 
-prFont('Times-Roman');    # Just setting a font
-prFontSize(10);
+my $str;
 
-my $margin = 36;
+#warn "STARTROW = $startrow\n";
 
-my $label_height = 90;
-my $spine_width  = 72;
-my $circ_width   = 207;
-my $colspace     = 27;
+#my $page_break_count = $startrow;
+my $codetype = 'Code39';
 
-my $x_pos_spine = 36;
-my $x_pos_circ1 = 135;
-my $x_pos_circ2 = 369;
+#do page border
+#drawbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
-my $pageheight = 792;
-
-warn "STARTROW = $startrow\n";
-
-#my $y_pos_initial = ( ( 792 - 36 ) - 90 );
-my $y_pos_initial = ( ( $pageheight - $margin ) - $label_height );
-my $y_pos_initial_startrow =
-  ( ( $pageheight - $margin ) - ( $label_height * $startrow ) );
-
-my $y_pos = $y_pos_initial_startrow;
-
-warn "Y POS INITAL : $y_pos_initial";
-warn "Y POS : $y_pos";
-warn "Y START ROW = $y_pos_initial_startrow";
-
-my $rowspace         = 36;
-my $page_break_count = $startrow;
-my $codetype         = 'Code39';
-
-# do border---------------
-my $str = "q\n";    # save the graphic state
-$str .= "4 w\n";                # border color red
-$str .= "0.0 0.0 0.0  RG\n";    # border color red
-$str .= "1 1 1 rg\n";           # fill color blue
-$str .= "0 0 612 792 re\n";     # a rectangle
-$str .= "B\n";                  # fill (and a little more)
-$str .= "Q\n";                  # save the graphic state
-
-# do border---------------
-
-prAdd($str);
 my $item;
+my ( $i, $i2 );    # loop counters
 
-# for loop
+# big row loop
 
-my $i2 = 1;
+warn " $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY";
+warn "$label_rows, $label_cols\n";
+warn "$label_height, $label_width\n";
+warn "$page_height, $page_width\n";
+
+my ( $rowcount, $colcount, $x_pos, $y_pos, $rowtemp, $coltemp );
+
+if ( $start_label eq 1 ) {
+    $rowcount = 1;
+    $colcount = 1;
+    $x_pos    = $left_margin;
+    $y_pos    = ( $page_height - $top_margin - $label_height );
+}
+
+else {
+    $rowcount = ceil( $start_label / $label_cols );
+    $colcount = ( $start_label - ( ( $rowcount - 1 ) * $label_cols ) );
+
+    $x_pos = $left_margin + ( $label_width * ( $colcount - 1 ) ) +
+      ( $colspace * ( $colcount - 1 ) );
+
+    $y_pos = $page_height - $top_margin - ( $label_height * $rowcount ) -
+      ( $rowspace * ( $rowcount - 1 ) );
+
+}
+
+warn "ROW COL $rowcount, $colcount";
+
+#my $barcodetype = 'Code39';
+
 foreach $item (@resultsloop) {
-    if ( $i2 == 1  && $guidebox  == 1) {
-        draw_boundaries(
-            $x_pos_spine, $x_pos_circ1,  $x_pos_circ2, $y_pos,
-            $spine_width, $label_height, $circ_width
-        );
+
+    warn "-----------------";
+    if ($guidebox) {
+        drawbox( $x_pos, $y_pos, $label_width, $label_height );
     }
 
-    #warn Dumper $item->{'itemtype'};
-    #warn "COUNT = $cnt1";
+    if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
+        if ($guidebox) {
+            drawbox( $x_pos, $y_pos, $label_width, $label_height );
+        }
 
-    #building up spine text
-    my $line        = 75;
-    my $line_spacer = 16;
-
-    $DB::single = 1;
-
-    warn
-"COUNT=$i2, PBREAKCNT=$page_break_count, X,Y POS x=$x_pos_circ1, y=$y_pos";
- if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
-    build_circ_barcode( $x_pos_circ1, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'}, \$item );
-    build_circ_barcode( $x_pos_circ2, $y_pos, $item->{'barcode'},
-        $conf_data->{'barcodetype'}, \$item );
-}
-# added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
-# i think its embedding extra fonts in the pdf file.
-#	mode => 'graphic',
-
-    $y_pos = ( $y_pos - $label_height );
-
-    # the gaylord labels have 8 rows per sheet, this pagebreaks after 8 rows
-    if ( $page_break_count == 8 ) {
-        prPage();
-
-        #warn "############# PAGEBREAK ###########";
-        $page_break_count = 0;
-        $i2               = 0;
-        $y_pos            = $y_pos_initial;
+        DrawSpineText( $y_pos, $label_height, $fontsize, $x_pos,
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
+        CalcNextLabelPos();
     }
-    $page_break_count++;
-    $i2++;
-}
-############## end of loop
 
+    if ( $printingtype eq 'barcode' || $printingtype eq 'both' ) {
+        if ($guidebox) {
+            drawbox( $x_pos, $y_pos, $label_width, $label_height );
+        }
 
+        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width,
+            $item->{'barcode'}, $barcodetype );
+        CalcNextLabelPos();
+    }
+
+}    # end for item loop
 prEnd();
 
-#----------------------------------------------------------------------------
-# this second section of the script uses a diff perl class than the previous section
-# it opens the 'new.pdf' file that the previous section has just saved
+print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");
 
-if ( $printingtype eq 'spine' || $printingtype eq 'both' ) {
+sub CalcNextLabelPos {
+    if ( $colcount lt $label_cols ) {
 
-    $file = "$htdocs_path/barcodes/new.pdf";
-
-    my $pdf = new PDF::Report( File => $file );
-
-    # my $pdf = new PDF::Report(PageSize => "letter",
-    #                                  PageOrientation => "Landscape");
-
-    #$pdf->newpage($nopage);
-    my $pagenumber = 1;
-    $pdf->openpage($pagenumber);
-
-    ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
-
-    #warn "PAGE DIM = $pagewidth, $pageheight";
-    #warn "Y START ROW = $y_pos_initial_startrow";
-    my $y_pos = ( $y_pos_initial_startrow + 90 );
-
-    #my $y_pos = ( $y_pos_initial_startrow  );
-    #warn "Y POS = $y_pos";
-
-    # now needed now we are using centerString().
-    #$pdf->setAlign('left');
-    
-    # SET THE FONT SIZE
-    $pdf->setSize(9);
-
-    my $page_break_count = $startrow;
-
-    #warn "INIT PAGEBREAK COUNT = $page_break_count";
-
-    #warn "#----------------------------------\n";
-    #warn "INIT VPOS = $vPos, hPos = $hPos";
-
-    my $vPosSpacer     = 15;
-    my $start_text_pos = 39;   # ( 36 - 5 = 31 ) 5 is an inside border for text.
-    my $spine_label_text_with = 67;
-
-    foreach $item (@resultsloop) {
-
-        #warn Dumper $item;
-        #warn "START Y_POS=$y_pos";
-        my $firstrow = 0;
-
-        $pdf->setAddTextPos( $start_text_pos, ( $y_pos - 20 ) )
-          ;                    # INIT START POS
-        ( $hPos, $vPos ) = $pdf->getAddTextPos();
-
-        my $hPosEnd = ( $hPos + $spine_label_text_with );    # 72
-        if ( $conf_data->{'dewey'} && $item->{'dewey'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'dewey'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-
-        if ( $conf_data->{'isbn'} && $item->{'isbn'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'isbn'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-
-        if ( $conf_data->{'class'} && $item->{'classification'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos,
-                $item->{'classification'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-
-        if ( $conf_data->{'itemtype'} && $item->{'itemtype'} ) {
-            ( $hPos, $vPos1 ) = $pdf->getAddTextPos();
-            $pdf->centerString( $hPos, $hPosEnd, $vPos, $item->{'itemtype'} );
-            $vPos = $vPos - $vPosSpacer;
-        }
-
-        #$pdf->drawRect(
-        #    $x_pos_spine, $y_pos,
-        #    ( $x_pos_spine + $spine_width ),
-        #    ( $y_pos - $label_height )
-        #);
-
-        $y_pos = ( $y_pos - $label_height );
-
-        #warn "END LOOP Y_POS =$y_pos";
-        #    warn "PAGECOUNT END LOOP=$page_break_count";
-        if ( $page_break_count == 8 ) {
-            $pagenumber++;
-            $pdf->openpage($pagenumber);
-
-            #warn "############# PAGEBREAK ###########";
-            $page_break_count = 0;
-            $i2               = 0;
-            $y_pos            = ( $y_pos_initial + 90 );
-        }
-
-        $page_break_count++;
-        $i2++;
-
-        #warn "#----------------------------------\n";
-
+        #        warn "new col";
+        $x_pos = ( $x_pos + $label_width + $colspace );
+        $colcount++;
     }
-    $DB::single = 1;
-    $pdf->saveAs($file);
+
+    else {
+        $x_pos = $left_margin;
+        if ( $rowcount eq $label_rows ) {
+
+            #            warn "new page";
+            prPage();
+            $y_pos    = ( $page_height - $top_margin - $label_height );
+            $rowcount = 1;
+        }
+        else {
+
+            #            warn "new row";
+            $y_pos = ( $y_pos - $rowspace - $label_height );
+            $rowcount++;
+        }
+        $colcount = 1;
+    }
 }
 
-#------------------------------------------------
-
-print $cgi->redirect("/intranet-tmpl/barcodes/new.pdf");

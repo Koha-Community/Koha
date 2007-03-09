@@ -18,58 +18,71 @@
 # $Id$
 
 =head1 NAME
+
 newordersuggestion.pl
 
 =head1 DESCRIPTION
+
 this script allow to add an order from a existing suggestion.
+The suggestion must have 'ACCEPTED' as status.
 
 =head1 CGI PARAMETERS
 
 =over 4
 
 =item basketno
-the number of this basket.
+
+    the number of this basket.
 
 =item booksellerid
-the bookseller who sells this record.
+
+    the bookseller who sells this record.
 
 =item title
-the title of this record suggested.
+
+    to filter on title when searching among ACCEPTED suggestion.
 
 =item author
-the author of this suggestion.
+
+    to filter on author when searching among ACCEPTED suggestion.
 
 =item note
-this param allow to enter a note with this suggestion.
+
+    to filter on note when searching among ACCEPTED suggestion.
 
 =item copyrightdate
-the copyright date for this suggestion.
 
 =item publishercode
 
 =item volumedesc
 
 =item publicationyear
+
 the publication year of this record.
 
 =item place
 
 =item isbn
+
 the isbn of this suggestion.
 
 =item duplicateNumber
+
 is the biblionumber to put to the new suggestion.
 
 =item suggestionid
+
 the id of the suggestion to select.
 
 =item op
+
 can be equal to
     * connectDuplicate :
         then call to the function : ConnectSuggestionAndBiblio.
         i.e set the biblionumber of this suggestion.
     * else :
         is the default value.
+
 =back
 
 =cut
@@ -77,96 +90,54 @@ can be equal to
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;       # get_template_and_user
+use C4::Auth;    # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Suggestions;
 use C4::Biblio;
-use C4::Search;
 
 my $input = new CGI;
 
-my $basketno = $input->param('basketno');
-my $supplierid = $input->param('booksellerid');
-my $title = $input->param('title');
-my $author = $input->param('author');
-my $note = $input->param('note');
-my $copyrightdate =$input->param('copyrightdate');
-my $publishercode = $input->param('publishercode');
-my $volumedesc = $input->param('volumedesc');
-my $publicationyear = $input->param('publicationyear');
-my $place = $input->param('place');
-my $isbn = $input->param('isbn');
+# getting the CGI params
+my $basketno        = $input->param('basketno');
+my $supplierid      = $input->param('booksellerid');
+my $author          = $input->param('author');
+my $title           = $input->param('title');
+my $publishercode   = $input->param('publishercode');
+my $op              = $input->param('op');
+my $suggestionid    = $input->param('suggestionid');
 my $duplicateNumber = $input->param('duplicateNumber');
-my $suggestionid = $input->param('suggestionid');
 
-my $status = 'ACCEPTED'; # the suggestion had to be accepeted before to order it.
-my $suggestedbyme = -1; # search ALL suggestors
-my $op = $input->param('op');
 $op = 'else' unless $op;
 
 my $dbh = C4::Context->dbh;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "acqui/newordersuggestion.tmpl",
-			     type => "intranet",
-			     query => $input,
-			     authnotrequired => 1,
-			     flagsrequired => {acquisition => 1},
-			 });
-
-if ($op eq 'connectDuplicate') {
-	ConnectSuggestionAndBiblio($suggestionid,$duplicateNumber);
-}
-my $suggestions_loop= &SearchSuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
-foreach (@$suggestions_loop) {
-	unless ($_->{biblionumber}) {
-		my (@kohafields, @and_or, @value, @relation,  $offset,$length);
-		# search on biblio.title
-		if ($_->{title}) {
-			push @kohafields, "title";
-			push @and_or, "\@and";
-			push @relation, "\@attr 5=1";
-			push @value, $_->{title};
-		}
-		if ($_->{author}) {
-			push @kohafields, "author";
-			push @and_or, "\@and";
-			push @relation, "";
-			push @value, $_->{author};
-		}
-		# ... and on publicationyear.
-		if ($_->{publicationyear}) {
-			push @kohafields, "copyrightdate";
-			push @and_or, "\@and";
-			push @relation, "";
-			push @value, $_->{publicationyear};
-		}
-		# ... and on publisher.
-		if ($_->{publishercode}) {
-			push @kohafields, "publishercode";
-			push @and_or, "\@and";
-			push @relation, "";
-			push @value, $_->{publishercode};
-		}
-	
-		my ($nbresult,$facets,@finalresult) = ZEBRAsearch_kohafields(\@kohafields,\@value,\@relation,"",\@and_or,0,"",0,1);
-
-		# there is at least 1 result => return the 1st one
-		if ($nbresult) {
-			$_->{duplicateBiblionumber} = $finalresult[0]->{biblionumber};
-		}
-	}
-}
-$template->param(suggestions_loop => $suggestions_loop,
-				title => $title,
-				author => $author,
-				publishercode => $publishercode,
-				status => $status,
-				suggestedbyme => $suggestedbyme,
-				basketno => $basketno,
-				supplierid => $supplierid,
-				"op_$op" => 1,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/newordersuggestion.tmpl",
+        type            => "intranet",
+        query           => $input,
+        authnotrequired => 1,
+        flagsrequired   => { acquisition => 1 },
+    }
 );
+
+if ( $op eq 'connectDuplicate' ) {
+    ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
+}
+
+# getting all suggestions.
+my $suggestions_loop =
+  &SearchSuggestion( $borrowernumber, $author, $title, $publishercode,'ACCEPTED',
+    -1 );
+
+$template->param(
+    suggestions_loop        => $suggestions_loop,
+    basketno                => $basketno,
+    supplierid              => $supplierid,
+    "op_$op"                => 1,
+    intranetcolorstylesheet =>
+      C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;

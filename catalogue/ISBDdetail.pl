@@ -26,8 +26,7 @@ ISBDdetail.pl : script to show a biblio in ISBD format
 
 =head1 DESCRIPTION
 
-This script needs a biblionumber in bib parameter (bibnumber
-from koha style DB.  Automaticaly maps to marc biblionumber).
+This script needs a biblionumber as parameter 
 
 =head1 FUNCTIONS
 
@@ -35,118 +34,159 @@ from koha style DB.  Automaticaly maps to marc biblionumber).
 
 =cut
 
-
 use strict;
-
+require Exporter;
 use C4::Auth;
 use C4::Context;
-use C4::AuthoritiesMarc;
+use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use C4::Biblio;
-use C4::Acquisition;
 use C4::Koha;
+use C4::Biblio;
+use C4::Branch;     # GetBranchDetail
+use C4::Serials;    # CountSubscriptionFromBiblionumber
 
-my $query=new CGI;
 
-my $dbh=C4::Context->dbh;
+#---- Internal function
 
-my $biblionumber=$query->param('biblionumber');
+sub get_authorised_value_desc ($$$$$$$) {
+    my ( $itemtype, $tagslib, $tag, $subfield, $value, $framework, $dbh ) = @_;
 
-my $itemtype = &MARCfind_frameworkcode($dbh,$biblionumber);
-my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
+    #---- branch
+    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+        return GetBranchDetail($value)->{branchname};
+    }
 
-my $record =XMLgetbibliohash($dbh,$biblionumber);
+    #---- itemtypes
+    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+        my $itemtypedef = getitemtypeinfo($itemtype);
+        return $itemtypedef->{description};
+    }
+
+    #---- "true" authorized value
+    my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
+    if ( $category ne "" ) {
+        my $sth =
+          $dbh->prepare(
+"select lib from authorised_values where category = ? and authorised_value = ?"
+          );
+        $sth->execute( $category, $value );
+        my $data = $sth->fetchrow_hashref;
+        return $data->{'lib'};
+    }
+    else {
+        return $value;    # if nothing is found return the original value
+    }
+}
+# ------
+
+
+my $query = new CGI;
+my $dbh = C4::Context->dbh;
+
+my $biblionumber = $query->param('biblionumber');
+my $itemtype     = &MARCfind_frameworkcode($biblionumber);
+my $tagslib      = &MARCgettagslib( $dbh, 1, $itemtype );
+
+my $record = GetMarcBiblio($biblionumber);
+
 # open template
-my ($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "catalogue/ISBDdetail.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 1,
-			     debug => 1,
-			     });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "catalogue/ISBDdetail.tmpl",
+        query         => $query,
+        type          => "intranet",
+        debug         => 1,
+    }
+);
 
 my $ISBD = C4::Context->preference('ISBD');
+
+# my @blocs = split /\@/,$ISBD;
+# my @fields = $record->fields();
 my $res;
-	my $bloc = $ISBD;
-	my $blocres;
-	foreach my $isbdfield (split /#/,$bloc) {
-		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
-		my $fieldvalue=$1;
-		my $textbefore=$2;
-		my $analysestring=$3;
-		my $textafter=$4;
-		if ($fieldvalue>0) {
-			my $hasputtextbefore=0;
-			
-				my $calculated = $analysestring;
-				my $tag = $fieldvalue;
-				if ($tag<10) {
-				my $value=XML_readline_onerecord($record,"","",$tag);
-				my $subfieldcode = "@";
-						my $subfieldvalue = get_authorised_value_desc($tag, "", $value, '', $dbh);;
-						my $tagsubf = $tag.$subfieldcode;
-						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
-					
-				} else {
-					my @subf = XML_readline_withtags($record,"","",$tag);
-				
-					for my $i (0..$#subf) {
-						my $subfieldcode = $subf[$i][0];
-						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);;
-						my $tagsubf = $tag.$subfieldcode;
-						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
-					}
-					# field builded, store the result
-					if ($calculated && !$hasputtextbefore) { # put textbefore if not done
-						$blocres .=$textbefore;
-						$hasputtextbefore=1
-					}
-					# remove punctuation at start
-					$calculated =~ s/^( |;|:|\.|-)*//g;
-					$blocres.=$calculated;
-				}
-			
-			$blocres .=$textafter if $hasputtextbefore;
-		} else {
-			$blocres.=$isbdfield;
-		}
-	}
-	$res.=$blocres;
+
+# foreach my $bloc (@blocs) {
+#     $bloc =~ s/\n//g;
+my $bloc = $ISBD;
+my $blocres;
+foreach my $isbdfield ( split /#/, $bloc ) {
+
+    #         $isbdfield= /(.?.?.?)/;
+    $isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
+    my $fieldvalue    = $1;
+    my $textbefore    = $2;
+    my $analysestring = $3;
+    my $textafter     = $4;
+
+    #         warn "==> $1 / $2 / $3 / $4";
+    #         my $fieldvalue=substr($isbdfield,0,3);
+    if ( $fieldvalue > 0 ) {
+
+   #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
+   #             warn "FV : $fieldvalue";
+        my $hasputtextbefore = 0;
+        foreach my $field ( $record->field($fieldvalue) ) {
+            my $calculated = $analysestring;
+            my $tag        = $field->tag();
+            if ( $tag < 10 ) {
+            }
+            else {
+                my @subf = $field->subfields;
+                for my $i ( 0 .. $#subf ) {
+                    my $subfieldcode  = $subf[$i][0];
+                    my $subfieldvalue =
+                      get_authorised_value_desc( $itemtype,$tagslib, $tag, $subf[$i][0],
+                        $subf[$i][1], '', $dbh );
+                    my $tagsubf = $tag . $subfieldcode;
+                    $calculated =~
+s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
+                }
+
+                # field builded, store the result
+                if ( $calculated && !$hasputtextbefore )
+                {    # put textbefore if not done
+                    $blocres .= $textbefore;
+                    $hasputtextbefore = 1;
+                }
+
+                # remove punctuation at start
+                $calculated =~ s/^( |;|:|\.|-)*//g;
+                $blocres .= $calculated;
+            }
+        }
+        $blocres .= $textafter if $hasputtextbefore;
+    }
+    else {
+        $blocres .= $isbdfield;
+    }
+}
+$res .= $blocres;
+
 # }
 $res =~ s/\{(.*?)\}//g;
 $res =~ s/\\n/\n/g;
 $res =~ s/\n/<br\/>/g;
+
 # remove empty ()
 $res =~ s/\(\)//g;
-$template->param(ISBD => $res,
-				biblionumber => $biblionumber);
+
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
+ 
+if ($subscriptionsnumber) {
+    my $subscriptions     = GetSubscriptionsFromBiblionumber($biblionumber);
+    my $subscriptiontitle = $subscriptions->[0]{'bibliotitle'};
+    $template->param(
+        subscriptionsnumber => $subscriptionsnumber,
+        subscriptiontitle   => $subscriptiontitle,
+    );
+}
+
+$template->param (
+    ISBD                => $res,
+    biblionumber        => $biblionumber,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
-sub get_authorised_value_desc ($$$$$) {
-   my($tag, $subfield, $value, $framework, $dbh) = @_;
-
-   #---- branch
-    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchname($value);
-    }
-
-   #---- itemtypes
-   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-       return ItemType($value);
-    }
-
-   #---- "true" authorized value
-   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
-   if ($category ne "") {
-       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
-       $sth->execute($category, $value);
-       my $data = $sth->fetchrow_hashref;
-       return $data->{'lib'};
-   } else {
-       return $value; # if nothing is found return the original value
-   }
-}

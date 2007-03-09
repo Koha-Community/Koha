@@ -40,12 +40,14 @@
 
 use strict;
 use CGI;
+
+use List::Util qw/min/;
+
+use C4::Koha;
 use C4::Context;
 use C4::Output;
-use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -66,10 +68,9 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('description');
-my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/itemtypes.pl";
 my $itemtype=$input->param('itemtype');
-my $pagesize=20;
+my $pagesize=10;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
@@ -77,7 +78,7 @@ my ($template, $borrowernumber, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1, management => 1},
+			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
 
@@ -96,32 +97,127 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($itemtype) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select itemtype,description,renewalsallowed,rentalcharge,notforloan from itemtypes where itemtype=?");
+		my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
 		$sth->execute($itemtype);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	$template->param(itemtype => $itemtype,
-							description => $data->{'description'},
-							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
-							notforloan => $data->{'notforloan'}
-							);
-;
+	# build list of images
+	my $imagedir_filesystem = getitemtypeimagedir();
+    my $imagedir_web = getitemtypeimagesrc();
+    opendir(DIR, $imagedir_filesystem)
+        or warn "can't opendir ".$imagedir_filesystem.": ".$!;
+	my @imagelist;
+	my $i=0;
+	my $image_per_line=12;
+	while (my $line = readdir(DIR)) {
+	    $i++;
+		if ($line =~ /\.(gif|png)$/i) {
+		    if($i==$image_per_line){
+		        $i=0;
+		        push @imagelist,{KohaImage => '',KohaImageSrc => ''};
+		    }
+		    else{
+                push( @imagelist,
+                    {
+                        KohaImage => $line,
+                        KohaImageSrc => $imagedir_web.'/'.$line,
+                        checked => $line eq $data->{imageurl} ? 1 : 0,
+                    }
+                );
+            }
+		}
+	}
+	closedir DIR;
+
+    my $remote_image = undef;
+    if (defined $data->{imageurl} and $data->{imageurl} =~ m/^http/) {
+        $remote_image = $data->{imageurl};
+    }
+
+	$template->param(
+        itemtype => $itemtype,
+        description => $data->{'description'},
+        renewalsallowed => $data->{'renewalsallowed'},
+        rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
+        notforloan => $data->{'notforloan'},
+        imageurl => $data->{'imageurl'},
+        template => C4::Context->preference('template'),
+        summary => $data->{summary},
+        IMAGESLOOP => \@imagelist,
+        remote_image => $remote_image,
+    );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan) values (?,?,?,?,?)");
-	$sth->execute(
-		$input->param('itemtype'),$input->param('description'),
-		$input->param('renewalsallowed'),$input->param('rentalcharge'),
-		$input->param('notforloan')?1:0);
-	$sth->finish;
+    
+    my $modif='';
+    my $query = "
+        SELECT itemtype
+        FROM   itemtypes
+        WHERE  itemtype = ?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($itemtype);
+    if($sth->fetchrow){
+        $modif = 1;
+    }
+    
+    if($modif){  # it 's a modification
+        my $query = '
+            UPDATE itemtypes
+            SET    description = ?
+                 , renewalsallowed = ?
+                 , rentalcharge = ?
+                 , notforloan = ?
+                 , imageurl = ?
+                 , summary = ?
+            WHERE itemtype = ?
+        ';
+        my $sth=$dbh->prepare($query);
+	       $sth->execute(
+                $input->param('description'),
+		        $input->param('renewalsallowed'),
+                $input->param('rentalcharge'),
+		        ($input->param('notforloan') ? 1 : 0),
+                ($input->param('image') eq 'removeImage'
+                        ?''
+                        :($input->param('image') eq 'remoteImage' 
+                            ? $input->param('remoteImage')
+                            :$input->param('image')."")
+                ),
+                $input->param('summary'),
+		        $input->param('itemtype')
+            );
+    }
+    else { # add a new itemtype & not modif an old
+        my $query = "
+            INSERT INTO itemtypes
+                (itemtype,description,renewalsallowed,rentalcharge, notforloan, imageurl,summary)
+            VALUES
+                (?,?,?,?,?,?,?);
+            ";
+        my $sth=$dbh->prepare($query);
+	    $sth->execute(
+	    $input->param('itemtype'),
+        $input->param('description'),
+	    $input->param('renewalsallowed'),
+        $input->param('rentalcharge'),
+		$input->param('notforloan') ? 1 : 0,
+            $input->param('image') eq 'removeImage'
+            ? undef
+            : $input->param('image') eq 'remoteImage'
+                ? $input->param('remoteImage')
+                : $input->param('image'),
+        $input->param('summary'),
+        );
+    }
+    
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;
-													# END $OP eq ADD_VALIDATE
+										# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
@@ -143,9 +239,10 @@ if ($op eq 'add_form') {
 	$sth->finish;
 
 	$template->param(itemtype => $itemtype,
-							description => $data->{'description'},
-							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => sprintf("%.2f",$data->{'rentalcharge'}),
+							description => $data->{description},
+							renewalsallowed => $data->{renewalsallowed},
+							rentalcharge => sprintf("%.2f",$data->{rentalcharge}),
+							imageurl => $data->{imageurl},
 							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -164,35 +261,45 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle=0;
-	my @loop_data;
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row_data;
-		if ($toggle eq 0){
-			$toggle=1;
-		} else {
-			$toggle=0;
-		}
-		$row_data{toggle} = $toggle;
-		$row_data{itemtype} = $results->[$i]{itemtype};
-		$row_data{description} = $results->[$i]{description};
-		$row_data{renewalsallowed} = $results->[$i]{renewalsallowed};
-		$row_data{notforloan} = $results->[$i]{notforloan};
-		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{rentalcharge});
-		push(@loop_data, \%row_data);
-	}
-	$template->param(loop => \@loop_data);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
-	}
+    my $env;
+    my ($count,$results)=StringSearch($env,$searchfield,'web');
+
+    my $page = $input->param('page') || 1;
+    my $first = ($page - 1) * $pagesize;
+
+    # if we are on the last page, the number of the last word to display
+    # must not exceed the length of the results array
+    my $last = min(
+        $first + $pagesize - 1,
+        scalar @{$results} - 1,
+    );
+
+    my $toggle = 0;
+    my @loop;
+    foreach my $result (@{$results}[$first .. $last]) {
+        my $itemtype = $result;
+        $itemtype->{toggle} = ($toggle++%2 eq 0 ? 1 : 0);
+        $itemtype->{imageurl} =
+            getitemtypeimagesrcfromurl($itemtype->{imageurl});
+        $itemtype->{rentalcharge} = sprintf('%.2f', $itemtype->{rentalcharge});
+
+        push(@loop, $itemtype);
+    }
+
+    $template->param(
+        loop => \@loop,
+        pagination_bar => pagination_bar(
+            $script_name,
+            getnbpages(scalar @{$results}, $pagesize),
+            $page,
+            'page'
+        )
+    );
 } #---- END $OP eq DEFAULT
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:

@@ -23,8 +23,8 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Output;
-use C4::Search;
-use C4::Authorities;
+
+use C4::AuthoritiesMarc;
 
 my $input = new CGI;
 my $search_category=$input->param('search_category');
@@ -152,6 +152,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {
@@ -200,6 +201,7 @@ if ($op eq 'add_form') {
 			-values=> \@category_list,
 			-default=>"$search_category",
 			-size=>1,
+ 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$search_category) {
@@ -262,5 +264,8 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
 	}
 } #---- END $OP eq DEFAULT
-
+$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -39,28 +39,22 @@ parameters tables.
 
 
 use strict;
+require Exporter;
 use C4::AuthoritiesMarc;
 use C4::Auth;
 use C4::Context;
+use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
+use MARC::Record;
 use C4::Koha;
+# use C4::Biblio;
+# use C4::Catalogue;
 
 
 my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
-my $nonav = $query->param('nonav');
-my $authid = $query->param('authid');
-my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
-my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
-
-my $xmlhash =XMLgetauthorityhash($dbh,$authid);
-
-my ($count) = AUTHcount_usage($authid);
-
-#chop;
 
 # open template
 my ($template, $loggedinuser, $cookie)
@@ -72,97 +66,104 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+my $authid = $query->param('authid');
+
+
+
+my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
+my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
+
+my $record;
+if (C4::Context->preference("AuthDisplayHierarchy")){
+  my $trees=BuildUnimarcHierarchies($authid);
+  my @trees = split /;/,$trees ;
+  push @trees,$trees unless (@trees);
+  my @loophierarchies;
+  foreach my $tree (@trees){
+    my @tree=split /,/,$tree;
+    push @tree,$tree unless (@tree);
+    my $cnt=0;
+    my @loophierarchy;
+    foreach my $element (@tree){
+      my %cell;
+      my $elementdata = AUTHgetauthority($dbh,$element);
+      $record= $elementdata if ($authid==$element);
+      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
+      $cnt++;
+    }
+    push @loophierarchies, { 'loopelement' =>\@loophierarchy};
+  }
+  $template->param(
+    'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
+    'loophierarchies' =>\@loophierarchies,
+  );
+} else {
+  $record=AUTHgetauthority($dbh,$authid);
+}
+my $count = AUTHcount_usage($authid);
+
+# find the marc field/subfield used in biblio by this authority
+my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+$sth->execute($authtypecode);
+my $biblio_fields;
+while (my ($tagfield) = $sth->fetchrow) {
+	$biblio_fields.= $tagfield."9,";
+}
+chop $biblio_fields;
+
 
 # fill arrays
 my @loop_data =();
 my $tag;
-if ($xmlhash){
 # loop through each tab 0 through 9
-my $author=$xmlhash->{'datafield'};
-my $controlfields=$xmlhash->{'controlfield'};
-my $leader=$xmlhash->{'leader'};
-for (my $tabloop = 0; $tabloop<10;$tabloop++) {
+# for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # loop through each tag
-	my @loop_data =();
-	my @subfields_data;
-
-	# deal with leader 
-	unless (($tagslib->{'000'}->{'@'}->{tab}  ne $tabloop)  || (substr($tagslib->{'000'}->{'@'}->{hidden},1,1)>0)) {
-		
+my @fields = $record->fields();
+my @loop_data =();
+foreach my $field (@fields) {
+		my @subfields_data;
+	# if tag <10, there's no subfield, use the "@" trick
+	if ($field->tag()<10) {
+		next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
 		my %subfield_data;
-		$subfield_data{marc_value}=$leader->[0] ;
+		$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
+		$subfield_data{marc_value}=$field->data();
+		$subfield_data{marc_subfield}='@';
+		$subfield_data{marc_tag}=$field->tag();
 		push(@subfields_data, \%subfield_data);
+	} else {
+		my @subf=$field->subfields;
+# loop through each subfield
+		for my $i (0..$#subf) {
+			$subf[$i][0] = "@" unless $subf[$i][0];
+			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
+			my %subfield_data;
+			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
+			if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
+				$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+			} else {
+				$subfield_data{marc_value}=$subf[$i][1];
+			}
+            $subfield_data{short_desc} = substr(
+                $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib},
+                0, 20
+            );
+            $subfield_data{long_desc} =
+              $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
+			$subfield_data{marc_subfield}=$subf[$i][0];
+			$subfield_data{marc_tag}=$field->tag();
+			push(@subfields_data, \%subfield_data);
+		}
+	}
+	if ($#subfields_data>=0) {
 		my %tag_data;
-		$tag_data{tag}='000 -'. $tagslib->{'000'}->{lib};
-		my @tmp = @subfields_data;
-		$tag_data{subfield} = \@tmp;
+		$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+		$tag_data{subfield} = \@subfields_data;
 		push (@loop_data, \%tag_data);
-		undef @subfields_data;
 	}
-	##Controlfields
-		
-		 foreach my $control (@$controlfields){
-			my %subfield_data;
-			my %tag_data;
-			next if ($tagslib->{$control->{'tag'}}->{'@'}->{tab}  ne $tabloop);
-			next if (substr($tagslib->{$control->{'tag'}}->{'@'}->{hidden},1,1)>0);			
-			$subfield_data{marc_value}=$control->{'content'} ;
-			push(@subfields_data, \%subfield_data);
-				if (C4::Context->preference('hide_marc')) {
-					$tag_data{tag}=$tagslib->{$control->{'tag'}}->{lib};
-				} else {
-					$tag_data{tag}=$control->{'tag'}.' -'. $tagslib->{$control->{'tag'}}->{lib};
-				}			
-			my @tmp = @subfields_data;
-			$tag_data{subfield} = \@tmp;
-			push (@loop_data, \%tag_data);
-			undef @subfields_data;
-		}
-	my $previoustag;
-	my %datatags;
-	my $i=0;
-	foreach my $data (@$author){
-		$datatags{$i++}=$data->{'tag'};
-		 foreach my $subfield ( $data->{'subfield'}){
-		     foreach my $code ( @$subfield){
-			next if ($tagslib->{$data->{'tag'}}->{$code->{'code'}}->{tab}  ne $tabloop);
-			next if (substr($tagslib->{$data->{'tag'}}->{$code->{'code'}}->{hidden},1,1)>0);
-			my %subfield_data;
-			my $value=$code->{'content'};
-			$subfield_data{marc_lib}=$tagslib->{$data->{'tag'}}->{$code->{'code'}}->{lib};
-			$subfield_data{link}=$tagslib->{$data->{'tag'}}->{$code->{'code'}}->{link};
-			if ($tagslib->{$data->{'tag'}}->{$code->{'code'}}->{isurl}) {
-				$subfield_data{marc_value}="<a href=\"$value]\">$value</a>";
-			} else {
-			$subfield_data{marc_value}=get_authorised_value_desc($data->{'tag'}, $code->{'code'}, $value, '', $dbh);
-			}
-			$subfield_data{marc_subfield}=$code->{'code'};
-			$subfield_data{marc_tag}=$data->{'tag'};
-			push(@subfields_data, \%subfield_data);
-		     }### $code
-		
-		
-		if ($#subfields_data>=0) {
-			my %tag_data;
-			if (($datatags{$i} eq $datatags{$i-1}) && (C4::Context->preference('LabelMARCView') eq 'economical')) {
-				$tag_data{tag}="";
-			} else {
-				if (C4::Context->preference('hide_marc')) {
-					$tag_data{tag}=$tagslib->{$data->{'tag'}}->{lib};
-				} else {
-					$tag_data{tag}=$data->{'tag'}.' -'. $tagslib->{$data->{'tag'}}->{lib};
-				}
-			}
-			my @tmp = @subfields_data;
-			$tag_data{subfield} = \@tmp;
-			push (@loop_data, \%tag_data);
-			undef @subfields_data;
-		}
-	      }### each $subfield
-	}
-
-	$template->param($tabloop."XX" =>\@loop_data);
 }
+$template->param("0XX" =>\@loop_data);
+
 my $authtypes = getauthtypes;
 my @authtypesloop;
 foreach my $thisauthtype (keys %$authtypes) {
@@ -175,36 +176,13 @@ foreach my $thisauthtype (keys %$authtypes) {
 }
 
 $template->param(authid => $authid,
-				count => $count,
-				authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-				authtypecode => $authtypes->{$authtypecode}{'authtypecode'},
-				authtypesloop => \@authtypesloop);
-$template->param(nonav =>$nonav);
-}### if $xmlash exist
+		count => $count,
+		biblio_fields => $biblio_fields,
+		authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
+		authtypesloop => \@authtypesloop,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 output_html_with_http_headers $query, $cookie, $template->output;
 
-sub get_authorised_value_desc ($$$$$) {
-   my($tag, $subfield, $value, $framework, $dbh) = @_;
-
-   #---- branch
-    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchname($value);
-    }
-
-   #---- itemtypes
-   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-       return ItemType($value);
-    }
-
-   #---- "true" authorized value
-   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
-   if ($category ne "") {
-       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
-       $sth->execute($category, $value);
-       my $data = $sth->fetchrow_hashref;
-       return $data->{'lib'};
-   } else {
-       return $value; # if nothing is found return the original value
-   }
-}

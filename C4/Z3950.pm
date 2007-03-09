@@ -29,9 +29,9 @@ package C4::Z3950;
 use strict;
 
 # standard or CPAN modules used
+use DBI;
 
 # Koha modules used
-use C4::Context;
 use C4::Input;
 use C4::Biblio;
 
@@ -42,7 +42,7 @@ require Exporter;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
@@ -305,8 +305,11 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
-# Revision 1.13  2006/09/06 16:21:03  tgarip1957
-# Clean up before final commits
+# Revision 1.14  2007/03/09 14:31:47  tipaul
+# rel_3_0 moved to HEAD
+#
+# Revision 1.10.10.1  2006/12/22 15:09:54  toins
+# removing C4::Database;
 #
 # Revision 1.10  2003/10/01 15:08:14  tipaul
 # fix fog bug #622 : processz3950queue fails

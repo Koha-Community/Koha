@@ -23,7 +23,8 @@ use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-$VERSION = 0.01;
+# set the version for version checking
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
@@ -46,8 +47,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
 Review.pm provides many routines for manipulating reviews.
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
@@ -99,7 +98,6 @@ sub updatereview {
     my $sth = $dbh->prepare($query);
     $sth->execute( $review, 0, $borrowernumber, $biblionumber );
     $sth->finish();
-
 }
 
 sub numberofreviews {
@@ -151,7 +149,6 @@ sub getallreviews {
 
 Takes a reviewid and marks that review approved
 
-
 =cut
 
 sub approvereview {
@@ -171,7 +168,6 @@ sub approvereview {
 
 Takes a reviewid and deletes it
 
-
 =cut
 
 sub deletereview {
@@ -186,8 +182,6 @@ sub deletereview {
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 

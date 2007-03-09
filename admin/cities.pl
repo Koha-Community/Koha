@@ -21,8 +21,7 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
-use C4::Search;
-use HTML::Template;
+
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -54,7 +53,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1, management => 1},
+			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
 

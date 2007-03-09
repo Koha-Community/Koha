@@ -55,15 +55,11 @@ They allow to get and/or set some informations for a specific budget or currency
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
 #-------------------------------------------------------------#
 
-=head3 GetBookFund
-
-=over 4
+=head2 GetBookFund
 
 $dataaqbookfund = &GetBookFund($bookfundid);
 
@@ -73,12 +69,12 @@ return:
 C<$dataaqbookfund> is a hashref full of bookfundid, bookfundname, bookfundgroup,
 and branchcode.
 
-=back
-
 =cut
 
 sub GetBookFund {
     my $bookfundid = shift;
+    my $branchcode = shift;
+    $branchcode=($branchcode?$branchcode:'');
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT
@@ -88,16 +84,15 @@ sub GetBookFund {
             branchcode
         FROM aqbookfund
         WHERE bookfundid = ?
-    ";
+        AND branchcode = ?";
     my $sth=$dbh->prepare($query);
-$sth->execute($bookfundid);
-    return $sth->fetchrow_hashref;
+    $sth->execute($bookfundid,$branchcode);
+    my $data=$sth->fetchrow_hashref;
+    return $data;
 }
 
 
 =head3 GetBookFundsId
-
-=over 4
 
 $sth = &GetBookFundsId
 Read on aqbookfund table and execute a simple SQL query.
@@ -108,15 +103,13 @@ this function by using, for example, $sth->fetchrow_hashref;
 
 C<@results> is an array of id existing on the database.
 
-=back
-
 =cut
 
 sub GetBookFundsId {
     my @bookfundids_loop;
     my $dbh= C4::Context->dbh;
     my $query = "
-        SELECT bookfundid
+        SELECT bookfundid,branchcode
         FROM aqbookfund
     ";
     my $sth = $dbh->prepare($query);
@@ -128,8 +121,6 @@ sub GetBookFundsId {
 
 =head3 GetBookFunds
 
-=over 4
-
 @results = &GetBookFunds;
 
 Returns a list of all book funds.
@@ -137,25 +128,22 @@ Returns a list of all book funds.
 C<@results> is an array of references-to-hash, whose keys are fields from the aqbookfund and aqbudget tables of the Koha database. Results are ordered
 alphabetically by book fund name.
 
-=back
-
 =cut
 
 sub GetBookFunds {
     my ($branch) = @_;
     my $dbh      = C4::Context->dbh;
     my $userenv  = C4::Context->userenv;
-    my $branch   = $userenv->{branch};
     my $strsth;
 
-    if ( $branch  ) {
+    if ( $branch ne '' ) {
         $strsth = "
         SELECT *
         FROM   aqbookfund,aqbudget
         WHERE  aqbookfund.bookfundid=aqbudget.bookfundid
-            AND startdate<=now()
+            AND startdate<now()
             AND enddate>now()
-            AND (aqbookfund.branchcode IS NULL OR aqbookfund.branchcode='' OR aqbookfund.branchcode= ? )
+            AND (aqbookfund.branchcode='' OR aqbookfund.branchcode= ? )
       GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
     }
     else {
@@ -170,7 +158,7 @@ sub GetBookFunds {
         ";
     }
     my $sth = $dbh->prepare($strsth);
-    if ( $branch  ) {
+    if ( $branch ne '' ) {
         $sth->execute($branch);
     }
     else {
@@ -188,16 +176,12 @@ sub GetBookFunds {
 
 =head3 GetCurrencies
 
-=over 4
-
 @currencies = &GetCurrencies;
 
 Returns the list of all known currencies.
 
 C<$currencies> is a array; its elements are references-to-hash, whose
 keys are the fields from the currency table in the Koha database.
-
-=back
 
 =cut
 
@@ -221,14 +205,10 @@ sub GetCurrencies {
 
 =head3 GetBookFundBreakdown
 
-=over 4
-
 ( $spent, $comtd ) = &GetBookFundBreakdown( $id, $year, $start, $end );
 
 returns the total comtd & spent for a given bookfund, and a given year
 used in acqui-home.pl
-
-=back
 
 =cut
 
@@ -262,8 +242,8 @@ sub GetBookFundBreakdown {
         }
         else {
 
-            my $leftover = $data->{'quantity'} - $data->{'quantityreceived'};
-            $spent += ( $data->{'unitprice'} ) * $data->{'quantityreceived'};
+            my $leftover = $data->{'quantity'} - ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
+            $spent += ( $data->{'unitprice'} ) * ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
 
         }
     }
@@ -271,10 +251,10 @@ sub GetBookFundBreakdown {
     # then do a seperate query for commited totals, (pervious single query was
     # returning incorrect comitted results.
 
-    my $query = "
+    $query = "
         SELECT  quantity,datereceived,freight,unitprice,
                 listprice,ecost,quantityreceived AS qrev,
-                subscription,biblio.title,itemtype,aqorders.biblionumber,
+                subscription,title,itemtype,aqorders.biblionumber,
                 aqorders.booksellerinvoicenumber,
                 quantity-quantityreceived AS tleft,
                 aqorders.ordernumber AS ordnum,entrydate,budgetdate,
@@ -282,7 +262,7 @@ sub GetBookFundBreakdown {
         FROM    aqorderbreakdown,
                 aqbasket,
                 aqorders
-        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
+        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
         WHERE   bookfundid=?
             AND aqorders.ordernumber=aqorderbreakdown.ordernumber
             AND aqorders.basketno=aqbasket.basketno
@@ -290,7 +270,7 @@ sub GetBookFundBreakdown {
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
     ";
 
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute( $id, $start, $end );
 
     my $comtd;
@@ -315,13 +295,9 @@ sub GetBookFundBreakdown {
 
 =head3 NewBookFund
 
-=over 4
-
 &NewBookFund(bookfundid, bookfundname, branchcode);
 
 this function create a new bookfund into the database.
-
-=back
 
 =cut 
 
@@ -337,34 +313,31 @@ sub NewBookFund{
             (?, ?, ?)
     ";
     my $sth=$dbh->prepare($query);
-    $sth->execute($bookfundid,$bookfundname,$branchcode);
+    $sth->execute($bookfundid,$bookfundname,"$branchcode");
 }
 
 #-------------------------------------------------------------#
 
 =head3 ModBookFund
 
-=over 4
-
 &ModBookFund($bookfundname,$branchcode,$bookfundid);
 this function update the bookfundname and the branchcode on aqbookfund table
 on database.
 
-=back
-
 =cut
 
 sub ModBookFund {
-    my ($bookfundname,$branchcode,$bookfundid) = @_;
+    my ($bookfundname,$bookfundid,$branchcode) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqbookfund
-        SET    bookfundname = ?,
-               branchcode = ?
+        SET    bookfundname = ?
         WHERE  bookfundid = ?
+        AND branchcode= ?
     ";
+    warn "name : $bookfundname";
     my $sth=$dbh->prepare($query);
-    $sth->execute($bookfundname,$branchcode,$bookfundid);
+    $sth->execute($bookfundname,$bookfundid,"$branchcode");
 # budgets depending on a bookfund must have the same branchcode
 # if the bookfund branchcode is set
     if (defined $branchcode) {
@@ -381,14 +354,11 @@ sub ModBookFund {
 
 =head3 SearchBookFund
 
-=over 4
 @results = SearchBookFund(
         $bookfundid,$filter,$filter_bookfundid,
         $filter_bookfundname,$filter_branchcode);
 
 this function searchs among the bookfunds corresponding to our filtering rules.
-
-=back
 
 =cut
 
@@ -408,7 +378,7 @@ sub SearchBookFund {
                 bookfundgroup,
                 branchcode
         FROM aqbookfund
-        WHERE 1 = 1 ";
+        WHERE 1 ";
 
     if ($filter) {
         if ($filter_bookfundid) {
@@ -439,13 +409,9 @@ sub SearchBookFund {
 
 =head3 ModCurrencies
 
-=over 4
-
 &ModCurrencies($currency, $newrate);
 
 Sets the exchange rate for C<$currency> to be C<$newrate>.
-
-=back
 
 =cut
 
@@ -465,28 +431,26 @@ sub ModCurrencies {
 
 =head3 Countbookfund
 
-=over 4
-
 $number = Countbookfund($bookfundid);
 
 this function count the number of bookfund with id given on input arg.
 return :
 the result of the SQL query as a number.
 
-=back
-
 =cut
 
 sub Countbookfund {
     my $bookfundid = shift;
+    my $branchcode = shift;
     my $dbh = C4::Context->dbh;
     my $query ="
         SELECT COUNT(*)
-        FROM   aqbookfund
+        FROM  aqbookfund
         WHERE bookfundid = ?
+        AND   branchcode = ?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute($bookfundid);
+    $sth->execute($bookfundid,$branchcode);
     return $sth->fetchrow;
 }
 
@@ -495,8 +459,6 @@ sub Countbookfund {
 
 =head3 ConvertCurrency
 
-=over 4
-
 $foreignprice = &ConvertCurrency($currency, $localprice);
 
 Converts the price C<$localprice> to foreign currency C<$currency> by
@@ -504,8 +466,6 @@ dividing by the exchange rate, and returns the result.
 
 If no exchange rate is found, C<&ConvertCurrency> assumes the rate is one
 to one.
-
-=back
 
 =cut
 
@@ -520,7 +480,7 @@ sub ConvertCurrency {
     my $sth = $dbh->prepare($query);
     $sth->execute($currency);
     my $cur = ( $sth->fetchrow_array() )[0];
-    if ( $cur == 0 ) {
+    unless($cur) {
         $cur = 1;
     }
     return ( $price / $cur );
@@ -530,30 +490,28 @@ sub ConvertCurrency {
 
 =head3 DelBookFund
 
-=over 4
-
 &DelBookFund($bookfundid);
 this function delete a bookfund which has $bokfundid as parameter on aqbookfund table and delete the approriate budget.
-
-=back
 
 =cut
 
 sub DelBookFund {
     my $bookfundid = shift;
+    my $branchcode=shift;
     my $dbh = C4::Context->dbh;
     my $query = "
         DELETE FROM aqbookfund
         WHERE bookfundid=?
+        AND branchcode=?
     ";
     my $sth=$dbh->prepare($query);
-    $sth->execute($bookfundid);
+    $sth->execute($bookfundid,$branchcode);
     $sth->finish;
     $query = "
-        DELETE FROM aqbudget where bookfundid=?
+        DELETE FROM aqbudget where bookfundid=? and branchcode=?
     ";
     $sth=$dbh->prepare($query);
-    $sth->execute($bookfundid);
+    $sth->execute($bookfundid,$branchcode);
     $sth->finish;
 }
 
@@ -562,8 +520,6 @@ END { }    # module clean-up code here (global destructor)
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 
