@@ -77,6 +77,7 @@ function Check(f) {
 		<tr><td><label for="authtypetext">Description</label></td><td><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->" /></td></tr>
 		<tr><td><label for="summary">Summary</label></td><td><textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea></td></tr>
 		<tr><td><label for="auth_tag_to_report">Report tag</label></td><td><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</td></tr></table>
+	<input type="hidden" name="op" value="add_validate" />
 	<p><input type="submit" value="OK" onclick="Check(this.form); return false;" />
 			</p>
 	</form>
@@ -111,7 +112,7 @@ function Check(f) {
 	<tr>
 		<th>Code</th>
 		<th>Description</th>
-		<th>summary</th>
+		<th>Summary</th>
 		<th>Tag reported</th>
 		<th>&nbsp;</th>
 		<th>Edit</th>

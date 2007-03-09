@@ -1,11 +1,10 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-top.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
 <!-- TMPL_UNLESS name="popup" -->
 	<h1 class="serial">Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button serial">Back to biblio</a>
+	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
@@ -48,7 +47,6 @@
 			<!-- /TMPL_LOOP -->
 		</table>
 	</div>
-</div>
 	<!--/TMPL_LOOP -->
 <script language="JavaScript" type="text/javascript">
 active(<!-- TMPL_VAR name="yearmin" -->);
@@ -65,6 +63,6 @@ function active(numlayer)
 	}
 }
 
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-
+</script>
+</body>
+</html>

@@ -1,12 +1,14 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->NEULIS -- Users: Create Manual Invoice<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Patrons: Create Manual Invoice<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-<form class="inline" action="maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
-	<div class="data"><table>
+
+
+<form action="/cgi-bin/koha/members/maninvoice.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
+	<table>
 	<caption>Manual Invoice</caption>
-	<tr><th>User</th><td><!-- TMPL_VAR Name="user" --></td></tr>
-	<tr><th>Type</th><td><select name="type">
+	<tr><th scope="row">Borrowernumber</th><td><!-- TMPL_VAR Name="borrowernumber" --></td></tr>
+	<tr><th scope="row">Type</th><td><select name="type">
 <option value="L">Lost Item</option>
 <option value="F">Fine</option>
 <option value="A">Account Management Fee</option>
@@ -14,11 +16,14 @@
 <option value="M">Sundry</option>
 <option value="REF">Cash Refund</option>
 </select></td></tr>
-	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
-	<tr><th>Amount</th><td>YTL<input type="text" name="amount" /></td></tr>
-	</table></div>
-<input type="submit" name="add" value="Add Charge" class="submit" />
-</form> <form class="inline" action="boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Cancel" /></form>
+	<tr><th scope="row">Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th scope="row">Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th scope="row">Amount</th><td>$<input type="text" name="amount" /></td></tr>
+	</table>
+<input type="submit" name="add" value="Add Charge" />
+</form>
+
+<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" /><input type="submit" value="Cancel" /></form>
 
 
 

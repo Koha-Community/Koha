@@ -1,85 +1,145 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> -- Library Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Library Catalog
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
-<div id="main">
-
-<div>
-
-<!-- TMPL_IF NAME="loggedinusername" -->
-<!-- TMPL_ELSE -->
-<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
-<h3>Log in to Check Your Account</h3>
-<p><label for="userid">Card Number:</label><input type="text" id="userid" size="10" name="userid" /></p>
-<p><label for="password">Password:</label> <input type="password" id="password" size="10" name="password" /></p>
-<p><input type="submit" value="Log In" class="submit" /></p>
-</form>
+<!-- TMPL_IF name="koha_news_count" -->
+<div id="news">
+    <table>
+    <!-- TMPL_LOOP name="koha_news" -->
+    <tr>
+        <th>
+            <!-- TMPL_VAR name="title" -->
+        </th>
+        <tr><td>
+                <p><!-- TMPL_VAR name="new" --></p>
+                <p><i>(published on <!-- TMPL_VAR name="newdate" -->)</i></p>
+            </td></tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+</div>
 <!-- /TMPL_IF -->
 
-<form action="/cgi-bin/koha/opac-search.pl">
-<h3>Search the Library Catalog</h3>
-<p>
-<label for="value">Enter Keyword(s):</label>
-			<input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="marclist" value="" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="text" size="27" name="value" id="value" /></p>
-		<p><input type="submit" value="Search" class="submit" /></p>
-		<p>
-			<a href="/cgi-bin/koha/opac-search.pl">Advanced Search (More Options)</a>
-		</p>
-
-	</form>
+<div id="opac-main-search">
+<h1>Search our catalogue</h1>
+    <ul><li>
+    <label for="masthead_search">Query the catalogue</label>
+    <form name="searchform" method="POST" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+        <input type="text" name="q" style="width: 30%;"/>
+        <input type="submit" value="Search" class="submit" />
+    </form>
+    <i>(<a href="/cgi-bin/koha/opac-search.pl">more search options</a>)</i>
+    </li>
+    <!-- TMPL_IF name="OpacBrowser" -->
+        <li><a href="/cgi-bin/koha/opac-browser.pl">Browse the Catalogue</a>, through a hierarchy of subjects</li>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="OpacAuthorities" -->
+        <li>Query the <a href="/cgi-bin/koha/opac-authorities-home.pl">authorities</a></li>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="OpacCloud" -->
+        <li>Dig into <a href="/cgi-bin/koha/opac-tags_subject.pl">tag cloud</a></li>
+    <!-- /TMPL_IF -->
+        <li>
+            <form name="recent-acqui" action="/cgi-bin/koha/opac-main.pl" method="POST">
+                <label for="recentacqui">Get the last</label>
+                <input id="recentacqui" type="text" name="recentacqui" value="30" size="3"/>
+                acquisitions
+                <input type="submit" value=" OK " />
+        </li>
+    </ul>
 </div>
 
-<div>
-	<h3>Recent acquisitions</h3>
-	<form action="/cgi-bin/koha/opac-search.pl">
-		<p>
-			<!-- TMPL_VAR name="CGIitemtype" --><input type="hidden" name="marclist" value="biblioitems.itemtype" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="=" />
-			<input type="hidden" name="op" value="do_search" />
-			<input type="hidden" name="type" value="opac" />
-			<input type="hidden" name="orderby" value="biblio.timestamp" />
-			<input type="hidden" name="desc_or_asc" value="desc" />
-			acquired in the last
-			<input type="text" name="desc_or_asc" size="3" value="30" />
-			days
-			<input type="submit" value="Search" class="submit" />
-		</p>
-	</form>
+<!-- TMPL_IF NAME="languages" -->
+<div id="opac-main-changelanguage">
+    <h1>Change language</h1>
+    <ul>
+    <form action="/cgi-bin/koha/changelanguage.pl" method="POST">
+        <label for="selectlang">Set language to</label>
+        <select id="selectlang" name="language" onchange="javascript:submit();">
+            <!-- TMPL_LOOP NAME="languages" -->
+                <option value="<TMPL_VAR NAME="language">">
+                    <!-- TMPL_VAR NAME="language" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+        </select>
+    </form>
+    </ul>
 </div>
-	
-<!-- TMPL_IF NAME="loggedinusername" -->
-<div>
-<h3>You're logged in as <em><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em> (<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)<!-- /TMPL_LOOP --></h3>
+<!-- /TMPL_IF -->
 
-<ul><li><a href="/cgi-bin/koha/opac-user.pl">my library home</a> </li> <li> <a href="/cgi-bin/koha/opac-account.pl">my fines</a> </li> <li> 
-	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a> </li> <li> <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a>	<!-- TMPL_IF NAME="opacreadinghistory" --></li> <li> <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> </li> <li> <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" --></li> <li> <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></li></ul>
-		<!-- TMPL_IF name="textmessaging"-->
-			<h3>Message from the library</h3>
-			<p class="error"><!-- TMPL_VAR name="textmessaging" --></p>
-		<!-- /TMPL_IF -->
-<form method="post" action="/cgi-bin/koha/opac-logout.pl">
-<p><input type="submit" class="submit" name="logout" value="Log Out" /></p>
-</form>
-</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="recentacquiloop"-->
+    <div class="searchresults">
+        <table>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Author
+            </th>
+            <th>
+                copyright
+            </th>
+            <th>
+                publication year
+            </th>
+            <th>
+                Date
+            </th>
+        </tr>
+        <!-- TMPL_LOOP NAME="recentacquiloop" -->
+        <tr>
+            <td>
+                <p>
+                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                    <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                    <!-- TMPL_IF NAME="title"-->
+                        <!-- TMPL_VAR NAME="title" -->
+                    <!-- TMPL_ELSE -->
+                        <span class="problem">(no title)</span>
+                    <!-- /TMPL_IF -->
+                    </a>
+                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                    <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                    <!-- TMPL_IF NAME="title"-->
+                        <!-- TMPL_VAR NAME="title" -->
+                    <!-- TMPL_ELSE -->
+                        <span class="problem">(no title)</span>
+                    <!-- /TMPL_IF -->
+                    </a>
+                    <!-- TMPL_ELSE -->
+                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                    <!-- TMPL_IF NAME="title"-->
+                        <!-- TMPL_VAR NAME="title" -->
+                    <!-- TMPL_ELSE -->
+                        <span class="problem">(no title)</span>
+                    <!-- /TMPL_IF -->
+                    </a>
+                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
+                </p>
+            </td>
+            <td>
+                <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->">
+                    <!-- TMPL_VAR NAME="author" -->
+                </a>
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="copyrightdate" -->
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="publicationyear" -->
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="timestamp" -->
+            </td>
+        </tr>
+        <!-- /TMPL_LOOP -->
+        </table>
+     </div>
+<!-- /TMPL_IF -->
 
-	<!-- TMPL_IF NAME="opaclanguagesdisplay" --><div class="content-block">
-	<h4 class="inline">Change Language:</h3>
-	<form action="/cgi-bin/koha/changelanguage.pl" method="post" class="inline">
-		<select name="language">
-			<!-- TMPL_LOOP NAME="languages" -->
-				<option value="<TMPL_VAR NAME="language">"><!-- TMPL_VAR NAME="language" --></option>
-			<!-- /TMPL_LOOP -->
-		</select>
-		<input type="submit" value="Switch" class="submit">
-	</form></div><!-- /TMPL_IF -->
-</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

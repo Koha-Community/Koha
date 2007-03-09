@@ -1,13 +1,9 @@
-<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE name="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 <!-- TMPL_INCLUDE name="navigation.inc" -->
 
-<!--CONTENT-->
-<ul><li>	 <a href="/cgi-bin/koha/opac-account.pl">my fines</a> </li> <li> 
-	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a>		<!-- TMPL_IF name="OpacPasswordChange" --> </li> <li> <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a> <!-- /TMPL_IF --><!-- TMPL_IF NAME="opacreadinghistory" --></li> <li> <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> </li> <li> <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" --></li> <li> <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></li></ul>
-
-<div id="main">
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
 <h3>Updating Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h3>
 <p>Please make any necessary changes to your record.  Submitting the form will notify a library staff member, who will make the changes permanent.</p>
@@ -18,22 +14,26 @@
 
 <tr><th><label for="firstname">First Name</label></th><td><input id="firstname" type="text"  size="25" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname"></td></tr>
 
-<tr><th><label for="streetaddress">Mailing Address</label></th><td><input id="streetaddress" type="text"  size="25" value="<!-- TMPL_VAR name="streetaddress" -->"  name="streetaddress"></td></tr>
+<tr>
+    <th><label for="streetaddress">Mailing Address</label></th>
+    <td>
+        <textarea id="streetaddress" cols="25"  name="streetaddress"><!--TMPL_VAR NAME="streetnumber"--> <!-- TMPL_VAR name="address" --> <!-- TMPL_VAR NAME="zipcode"--></textarea>
+    </td>
+</tr>
 
 <tr><th><label for="city">City, State</label></th><td><input id="city" type="text"  size="25" value="<!-- TMPL_VAR name="city" -->"  name="city"></td></tr>
 
 <tr><th><label for="phone">Home Phone</label></th><td><input id="phone" type="text"  size="25" value="<!-- TMPL_VAR name="phone" -->"  name="phone"></td></tr>
 
-<tr><th><label for="faxnumber">Work/Fax phone</label></th><td><input id="faxnumber"  type="text"  size="25" value="<!-- TMPL_VAR name="faxnumber" -->"  name="faxnumber"></td></tr>
+<tr><th><label for="faxnumber">Work/Fax phone</label></th><td><input id="faxnumber"  type="text"  size="25" value="<!-- TMPL_VAR name="fax" -->"  name="faxnumber"></td></tr>
 
-<tr><th><label for="emailaddress">Email</label></th><td><input id="emailaddress" type="text"  size="40" value="<!-- TMPL_VAR name="emailaddress" -->"  name="emailaddress"></td></tr>
+<tr><th><label for="emailaddress">Email</label></th><td><input id="emailaddress" type="text"  size="25" value="<!-- TMPL_VAR name="email" -->"  name="emailaddress"></td></tr>
 </table>
 <p>Clicking 'Submit Changes' will send an email to a library staff member with the information you've entered.  You will then be returned to your patron record.</p>
 <p><input type="submit" value="Submit Changes"></p>
 </form>
 
-
 <!-- /TMPL_LOOP -->
-</div>
+
 </body>
 </html>

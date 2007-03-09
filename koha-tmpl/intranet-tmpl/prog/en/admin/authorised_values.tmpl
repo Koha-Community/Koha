@@ -1,31 +1,39 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+
+
 
 <!-- TMPL_IF name="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorised values admin<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_IF name="add_form" -->
+	<h1>
+	   <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF -->
+	</h1>
 	<form class="inline" action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
-	<table>
-	<caption><!-- TMPL_VAR name="action" --></caption>
-	<tr>
-		<th><label for="category">Category</label></th>
-		<td><!-- TMPL_VAR name="category" --></td>
-	</tr>
-	<tr>
-		<th><label for="authorised_value">Authorised value</label></th>
-		<td><input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" /></td>
-	</tr>
-	<tr>
-		<th><label for="lib">Description</label></th>
-		<td><input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" /></td>
-	</tr>
-	</table><input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
-			<input type="submit" value="<!-- TMPL_VAR name="action" -->" /></form> <form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="get"><input type="submit" value="Cancel and Return to Authorized Values" /></form>
+        <table>
+        <tr>
+            <th><label for="category">Category</label></th>
+            <td><!-- TMPL_VAR name="category" --></td>
+        </tr>
+        <tr>
+            <th><label for="authorised_value">Authorised value</label></th>
+            <td><input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" /></td>
+        </tr>
+        <tr>
+            <th><label for="lib">Description</label></th>
+            <td><input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" /></td>
+        </tr>
+        </table>
+        <input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+        <input type="submit" value="Save" />
+    </form>
+    <form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="get"><input type="submit" value="Cancel and Return to Authorized Values" /></form>
 <!-- /TMPL_IF -->
 
 
@@ -42,7 +50,7 @@
 	</table>
 	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
-		<input type="hidden" name="id" value="<!-- TMPL_VAR name=" id " -->" />
+		<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Confirm Deletion" /></form> <form class="inline" action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
 <!-- /TMPL_IF -->
 
@@ -79,12 +87,10 @@ the subfield is not entered through a free field, but though a list of authorise
 	<input type="submit" value="&lt;&lt; Previous Page" /></form>
 <!-- /TMPL_IF --> 
 
-<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-<input type="hidden" name="op" value="add_form">
-<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
-<input type="submit" value="Add Authorised value" /></form> 
-
-<form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="get"><input type="hidden" value="add_form" name="op" /><input type="submit" value="Add New Category" /></form>
+<div id="action">
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=<!-- TMPL_VAR NAME="category" -->">Add Authorised value for <!-- TMPL_VAR name="category" --></a>
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Add New Category</a>
+</div>
 
 <!-- TMPL_IF NAME="nextpage" -->
 <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">

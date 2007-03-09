@@ -4,7 +4,6 @@
 
 <h1 ><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Late issues</h1>
 	<div id="acqui_lateorders">
-		<form action="lateorders.pl" method="post">
 		<table>
 			<tr>
 				<th>Supplier</th>
@@ -19,9 +18,11 @@
 				<th>Total cost</th>
 				<th>Budget</th>
 				<th>&nbsp;</th>
+				<th>&nbsp;</th>
 			</tr>
 			<tr>
 					<td class="doNotPrint">
+                        <form action="lateorders.pl" method="post">
 						<!-- TMPL_VAR name="CGIsupplier" -->
 					</td>
 					<td> &nbsp;</td>
@@ -31,19 +32,24 @@
 					<td colspan="2">
 						&nbsp;
 					</td>
-					<td class="doNotPrint">
-						<select name="branch">
-						<!-- TMPL_LOOP name="branchloop" -->
-							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option>
-						<!-- /TMPL_LOOP -->
-						</select>
-					</td>
-					<td colspan="5">
+					<td colspan="6">
 						&nbsp;
 					</td>
 					
-					<td class="doNotPrint">
+					
+                    <td class="doNotPrint">
 						<input type="submit" value="filter" />
+                        </form>
+					</td>
+					<td class="doNotPrint">
+                        <form name="claim" method="post">
+                        <input type="hidden" name="op" value="send_alert" />
+                        <select name="letter_code" >
+                          <!--TMPL_LOOP Name="letters"-->
+                            <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
+                          <!--/TMPL_LOOP -->
+                        </select>
+						<input type="submit" value="Claim Order" />
 					</td>
 			</tr>
 			<!-- TMPL_LOOP name="lateorders" -->
@@ -58,7 +64,9 @@
 						<!-- TMPL_VAR name="latesince" -->
 					</td>
 					<td align="center" class="doNotPrint">
-						<!-- TMPL_VAR name="basketno" -->
+						<a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->">
+						    <!-- TMPL_VAR name="basketno" -->
+						</a>
 					</td>
 					<td >
 						<b><!-- TMPL_VAR name="title" --></b>
@@ -86,6 +94,9 @@
 					<td class="doNotPrint">
 						&nbsp;
 					</td>
+					<td class="doNotPrint">
+						<input type="checkbox" name="claim_for" value="<!--TMPL_VAR Name="ordernumber" -->" />
+					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr> 
@@ -103,9 +114,15 @@
 					<th>
 						<!-- TMPL_VAR name="total" -->
 					</th>
+					<td colspan="2">
+                        &nbsp;
+					</td>
+					<td>
+						<input type="submit" value="Claim Order" />
+                        </form>
+					</td>
 			</tr>
 		</table>
-		</form>
 	</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

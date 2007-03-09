@@ -71,9 +71,9 @@ Koha -- System Administration: Book Funds
       <!-- /TMPL_IF -->
     </td>
     <td>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Edit</a>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Delete</a>
-      <a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Add budget</a>
+      <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Edit</a>
+      <a href="<!-- TMPL_VAR name="scriptname" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Delete</a>
+      <a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Add budget</a>
       <!-- TMPL_IF NAME="has_budgets" -->
       <a href="aqbudget.pl?filter_bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Show budgets</a>
       <!-- /TMPL_IF -->
@@ -190,8 +190,12 @@ Koha -- System Administration: Book Funds
       <td>
         <select name="branchcode">
           <option value="">None</option>
-  <!-- TMPL_LOOP NAME="branches" -->  
-          <option value="<!-- TMPL_VAR NAME="branchcode" -->"  <!-- TMPL_IF NAME="selected" -->selected="selected" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+  <!-- TMPL_LOOP NAME="branches" -->
+    <!-- TMPL_IF NAME="selected" -->
+          <option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+    <!-- TMPL_ELSE -->
+          <option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+    <!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
       </td>
     </tr>
@@ -200,7 +204,6 @@ Koha -- System Administration: Book Funds
 
   <p>
     <input type="button" value="Submit" onclick="Check(this.form); return false;" />
-    <input type="reset" value="Reset" />
   </p>
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
@@ -221,6 +224,10 @@ Koha -- System Administration: Book Funds
     <td><!-- TMPL_VAR name="bookfundid" --></td>
   </tr>
   <tr>
+    <th>Branch</th>
+    <td><!-- TMPL_VAR name="branchcode" --></td>
+  </tr>
+  <tr>
     <th>Name</th>
     <td><!-- TMPL_VAR name="bookfundname" --></td>
   </tr>
@@ -233,6 +240,7 @@ Koha -- System Administration: Book Funds
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
   <input type="hidden" name="op" value="delete_confirmed" />
   <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
+  <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" -->" />
 
   <div id="action">
     <input type="submit" value="Delete this Fund" />

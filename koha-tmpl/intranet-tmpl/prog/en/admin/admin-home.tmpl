@@ -3,107 +3,91 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 
-<div id="main">
-<h1>NEULIS Administration</h1>
-<div class="menu">
+<h1>Koha Administration</h1>
+
 <table>
 <caption>System Preferences</caption>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></th>
+	<td><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></td>
 	<td>Change essential system preferences like MARC flavor, date format, administrator e-mail, and templates.</td>
 </tr>
 </table>
 <table>
-<caption>System parameters </caption>
+<caption>For best results, configure these parameters in the order they appear</caption>
 <tr>
-<th class="header" colspan="2">For best results, configure these parameters in the order they appear</th>
+<th colspan="2">Basic parameters</th>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/koha-news.pl">OPAC news</a></th>
-	<td>Manage the news in the OPAC main page.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/opac-electronic.pl">OPAC electronic</a></th>
-	<td>Manage the online OPAC databases.</td>
-</tr>
-	<tr>
-	<th><a href="/cgi-bin/koha/admin/institutions-careers.pl">Faculties-courses</a></th>
-	<td>Add courses to faculties.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/viewlog.pl">View Logs</a></th>
-	<td>View Logs.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/holidays/holidays.pl?branch=MAIN">Holiday Management</a></th>
-	<td>Set the days library is closed for circulation purposes.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></th>
+	<td><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></td>
 	<td>The different branches you manage with this Koha server.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></th>
+	<td><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></td>
 	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
+	<td><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></td>
 	<td>Define exchange rates.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></th>
+	<td><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></td>
 	<td>Define item types.</td>
 </tr>
+
 <tr>
-	<th><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></th>
+<th colspan="2">Patrons and circulation</th>
+</tr>
+<tr>
+	<td><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></td>
 	<td>Define the categories of borrowers.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></th>
+	<td><a href="/cgi-bin/koha/admin/cities.pl">City</a></td>
+	<td>Define cities. Fill it to get a list of cities to create your patrons quicker.</td>
+</tr>	
+<tr>
+	<td><a href="/cgi-bin/koha/admin/roadtype.pl" >Road Type</a>
+	</td>
+	<td>Define road types. Fill this table to get a list of road types (will help Geographic stats)</td>
+</tr>
+<tr>
+	<td><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></td>
 	<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></th>
+<th colspan="2">Catalogue</th>
+</tr>
+<tr>
+	<td><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></td>
 	<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/authtypes.pl">Authorities Structure</a></th>
+	<td><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus Structure</a></td>
 	<td>Define categories and thesaurus/authority MARC structure.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/biblios_framework.pl">Biblio framework (MARC structure)</a></th>
+	<td><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio framework (MARC structure)</a></td>
 	<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/holdingstagstructure.pl">Holdings framework (MARC structure)</a></th>
-	<td>the frameworks defined for theholdings MARC editor. (Complements the Biblios framework)</td>
+	<td><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></td>
+	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/koha_attr.pl">Links MARC - ZEBRA</a></th>
-	<td>Define links between the ZEBRA DB and the MARC one. </td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></th>
+	<td><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></td>
 	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
 
 <tr>
-<th colspan="2" class="header">Various parameters</th>
+<th colspan="2">Various parameters</th>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></th>
+	<td><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></td>
 	<td>Printers (UNIX paths).</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></th>
-	<td>Words deleted during searches.</td>
-</tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></th>
+	<td><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></td>
 	<td>Servers to query for MARC data.</td>
 </tr>
 </table>
-
-
-</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

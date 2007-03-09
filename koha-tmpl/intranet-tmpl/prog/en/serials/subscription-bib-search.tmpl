@@ -1,74 +1,10 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<div id="main-compact">
-
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <h1>Catalogue search</h1>
 
 <form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="post">
-	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="type" value="intranet" />
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-	<div class="data">
-		<table>
-		<caption>Search on</caption>
-		<tr><th scope="row"><label for="keyword">Search</label></th><td>
-			
-			<input type="hidden" name="and_or" value="@and" />
-			<input type="hidden" name="relation" value="@attr 5=1" /> 
-			<input type="text" id="keyword" name="value"> 
-		</td><td><select align="right" id="kohafield" name="kohafield" size="1">
-				<option value="any">Any field</option>
-				<option value="title">Title</option>
-				<option value="Author">Author</option>
-				<option value="ISSN">ISSN</option>
-			</select></td></tr>
-		<tr><th scope="row"><label for="itemtype">Itemtype</label></th><td>
-			<!-- TMPL_VAR name="CGIitemtype" -->
-			<input type="hidden" name="kohafield" value="itemtype" />
-			<input type="hidden" name="value" value="<!-- TMPL_VAR name="category" -->">
-		
-			<input type="hidden" name="and_or" value="@and" />
-			<input type="hidden" name="relation" value="@attr 5=1" />
-
-			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->" />
-		</td></tr>
-	</div>
-	<div class="data">
-		<tr><th scope="row"><label for="resultsperpage">Results per page :</label></th><td>
-			<select align="right" id="resultsperpage" name="resultsperpage" size="1">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="50">50</option>
-			</select></td><td>
-		<label for="orderby">Ordered by</label>
-			<select id="orderby" name="order" size="1">
-				<option value="title i<">Title</option>
-				<option value="author i<">Author</option>
-					</select>
-		</td></tr>
-		</table>
-		<p>
-			<input type="submit" value="Start search" class="submit" />
-			
-		</p>
-	</div>
+    <input type="hidden" name="op" value="do_search" />
+    <input type="hidden" name="type" value="intranet" />
+    <label for="q">Keyword</label>
+    <input type="text" id="q"  name="q" />
+    <input type="submit" value="Search" />
 </form>
-
-<script language="Javascript" type="text/javascript">
-function AddStatement() {
-
-	document.forms['f'].op.value="AddStatement";
-	document.f.submit();
-}
-
-function PopupSuggestion() {
-    var strQuery="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-		    strQuery += " "+document.f.value[i].value;
-		}
-	}
-	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-</script>
-</div>

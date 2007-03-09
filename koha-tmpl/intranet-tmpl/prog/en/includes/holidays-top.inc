@@ -50,6 +50,7 @@
 
 	// This function shows the "Show Holiday" panel //
 	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description) {
+		
 		var panel = document.getElementById('showHoliday');
 		panel.style.display = 'inline';
 		document.getElementById('newHoliday').style.display = 'none';
@@ -60,9 +61,10 @@
 		document.getElementById('showDay').value = day;
 		document.getElementById('showMonth').value = month;
 		document.getElementById('showYear').value = year;
-		document.getElementById('showTitle').value = title;
 		document.getElementById('showDescription').value = description;
 		document.getElementsByName('showWeekday')[0].value = weekDay;
+		document.getElementById('showTitle').value = title;
+		
 		if (exceptionPosibility == 1) {
 			document.getElementById('exceptionPosibility').style.display = 'inline';
 		} else {

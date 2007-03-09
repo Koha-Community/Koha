@@ -1,217 +1,328 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Details for: <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Details for: <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
-<div id="main">
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<div id="action">
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a><!-- TMPL_ELSE --><img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Book Cover Image" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
-
-
-<ul>
-<!-- TMPL_UNLESS NAME="norequests" --><li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Place Reserve</a></li><!-- /TMPL_UNLESS -->
-<li><a class="detail" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></li>
-<!-- Hide from NPL --> <li><a class="isbd" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li> <!-- Hide from NPL -->
-<li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Print</a></li>
-<!-- TMPL_IF name="virtualshelves" --><li><a class="shelf" href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to My Book List</a></li><!-- /TMPL_IF -->
-<li><a class="cart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to My Book Bag</a></li>
-</ul>
-
-
-<h4>Search for this title in:</h4>
-<ul>
-<li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->+site:worldcatlibraries.org">Other Libraries(WorldCat)</a></li>
-<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li></ul>
-
-<h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></h2>
-<!-- TMPL_IF NAME="author" --><h3>By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
-
-<table>
-
-<!-- TMPL_UNLESS NAME="MARCNOTES" -->
-
-<!-- TMPL_IF NAME="notes" -->
-<tr><th scope="row">Notes:</th><td><!-- TMPL_VAR NAME="notes" --></td></tr><!-- /TMPL_IF -->
-
+<!-- TMPL_UNLESS NAME="norequests" -->
+	<!-- TMPL_IF NAME="RequestOnOpac" -->
+		<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+		Place Reserve
+		</a>
+	<!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
-	
-<!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
-
-<!-- TMPL_IF name="subjects" --><tr><th>Subject(s):</th><td><!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></td></tr><!-- /TMPL_IF -->
-
-<!-- /TMPL_UNLESS -->
-
-<!-- TMPL_IF NAME="MARCNOTES" -->
-		<tr>
-			<th scope="row">Detailed notes:</th>
-			<td scope="row"><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnote" --></li><!-- /TMPL_LOOP --></ul></td></tr>
-	<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="MARCSUBJCTS" -->
-		<tr>
-			<th scope="row">Related links:</th>
-			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-							<!-- TMPL_IF name="linkvalue" -->
-								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="link" -->&amp;and_or=and&amp;operator==&amp;value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
-							<!-- TMPL_ELSE -->
-								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
-							<!-- /TMPL_IF -->
-
-<!-- /TMPL_LOOP --></ul></td></tr>
-	<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="item_description" -->
-<tr>
-<th scope="row">Item Description (from Amazon.com):</th>
-<td><ul><li><!-- TMPL_VAR NAME="item_description" --></li></ul></td></tr>
+        <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            MARC View
+        </a>
+        <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            ISBD
+        </a>
+        <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Print
+        </a>
+<!-- TMPL_IF name="virtualshelves" -->
+    <!-- TMPL_IF NAME="loggedinusername" -->
+        <a href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Add to My Book List
+        </a>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-
-
-
-<!-- TMPL_IF NAME="abstract" --><tr><th scope="row">Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="copyrightdate" -->
-    <tr><th scope="row">Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
-<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="seriestitle" --><tr><th scope="row">Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="isbn" -->
-	    <tr><th scope="row">ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="lccn" -->
-	    <tr><th scope="row">LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="publishercode" -->
-	    <tr><th scope="row">Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="pages" -->
-	<tr><th scope="row">Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
-<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
- <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
- <tr><th scope="row">Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP -->
-</table>
-<table>
-<!-- TMPL_IF NAME="MARCURLS" -->
-		<tr><th scope="row">Related URLs: </th><td><ul><!-- TMPL_LOOP NAME="MARCURLS" --><li><a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="MARCURL" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
-	<!-- /TMPL_IF -->
-</table>
-<br clear="right" />
+        <a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Add to My Book Bag
+        </a>
 </div>
 
-<!-- TMPL_IF NAME="ITEM_RESULTS" -->
-<table>
-<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
-<tr><!-- <th>&nbsp;</th> -->
-<th>Type/Format</th>
-<th>Call Number</th>
-<th>Location</th>
-<th>Status</th>
-<th>Due Date</th>
-<th>Last Seen</th>
-<!-- <th>Barcode</th> --></tr>
-<tbody>
-<!--INFORMATION ROWS-->
-<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-<tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
-<td><!-- TMPL_VAR NAME="classification" --></td>
-				<td>
-					<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
-					<!-- TMPL_IF name="itemcallnumber" -->
-						(<!-- TMPL_VAR NAME="itemcallnumber" -->)
-					<!-- /TMPL_IF -->
-				</td>
-				<td>
-					<!-- TMPL_IF name="datedue" -->
-						On loan
-					<!-- TMPL_ELSE -->
-						<!-- TMPL_IF name="notforloantext" -->
-							<!-- TMPL_VAR name="notforloantext" -->
-						<!-- TMPL_ELSE -->
-							Available
-						<!-- /TMPL_IF -->
-					<!-- /TMPL_IF -->
-				</td>
-<td><!-- TMPL_VAR NAME="datedue" --></td>
-<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>
-<!-- /TMPL_LOOP -->
-</tbody>
-</table>
-<!-- TMPL_ELSE -->
-<table><tr><td>No copies available.</td></tr></table>
+<div id="catalogue_detail_biblio">
+    <!-- TMPL_IF NAME="AmazonContent" -->
+        <!-- TMPL_IF NAME="isbn" -->
+        <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+            <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" />
+        </a><!-- TMPL_ELSE -->
+        <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Book Cover Image" />
+        <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-	<!-- TMPL_IF name="subscriptionsnumber" -->
-		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
-		<!-- TMPL_LOOP Name="subscriptions" -->
-				<!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR Name="subscriptionnotes"--> </p><!-- /TMPL_IF -->
-				<!--TMPL_IF Name="latestserials"-->
-				<p> The three latest issues related to this subscription:</p>
-				<table>
-				<!--TMPL_LOOP Name="latestserials"-->
-					<tr>
-						<td>
-							<!--TMPL_VAR Name="serialseq"-->
-						</td>
-						<td>
-							<!--TMPL_VAR Name="planneddate"-->
-						</td>
-						<td>
-							<!--TMPL_IF Name="status1"-->Waited
-							<!--TMPL_ELSE -->
-								<!-- TMPL_IF Name="status2"-->Arrived
-								<!--TMPL_ELSE -->
-									<!-- TMPL_IF Name="status3"-->Late
-									<!--TMPL_ELSE -->
-										<!-- TMPL_IF Name="status4"-->Missing
-										<!--TMPL_ELSE -->
-											<!-- TMPL_IF Name="status5"-->Not Issued
-											<!--/TMPL_IF-->
-										<!--/TMPL_IF-->
-									<!--/TMPL_IF-->
-								<!--/TMPL_IF-->
-							<!--/TMPL_IF-->
-						</td>
-					</tr>
-				<!--/TMPL_LOOP -->
-				</table>
-				<!-- /TMPL_IF -->
-		<!-- /TMPL_LOOP -->
-		<p> For more information: View a record of <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">this subscription's issues</a></p>
- 	<!-- /TMPL_IF -->
+    <h1>
+        <!-- TMPL_VAR NAME="title" -->
+        <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
+        <!-- TMPL_VAR NAME="class" -->
+    </h1>
+    
+    <!-- TMPL_IF name="subtitles" -->
+    <p><label><b>Subtitle(s):</b></label>
+        <!-- TMPL_LOOP name="subtitles" -->
+        <!-- TMPL_VAR NAME="subtitle" --> ;
+        <!-- /TMPL_LOOP -->
+        &nbsp;
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="author" -->
+    <p><label><b>Author: </b></label>
+        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->">
+            <!-- TMPL_VAR NAME="author" -->&nbsp;
+        </a>
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MARCAUTHORS" -->
+    <p><label><b>Additional Author:</b></label>
+        <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
+        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->">
+            <!-- TMPL_VAR NAME="value" -->
+        </a>&nbsp;
+        <!-- /TMPL_LOOP -->
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="illus" -->
+    <p><label><b>Illus:</b></label><!-- TMPL_VAR name="illus" -->&nbsp;</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="publishercode" -->
+    <p><label><b>Published by :</b></label>
+        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
+            <!-- TMPL_VAR NAME="publishercode" -->
+        </a>&nbsp;
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="publicationyear" -->
+    <p><label><b>in</b></label><!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</p>
+    <!-- /TMPL_IF -->
+    <p>
+        <!-- TMPL_IF name="pages" --> <label><b>Size: </b></label><!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+        <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->&nbsp;
+    </p>
+    <!-- TMPL_IF name="isbn" -->
+    <p><label><b>ISBN: </b></label><!-- TMPL_VAR NAME="isbn" -->&nbsp;</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="issn" -->
+    <p><label><b>ISSN:</b></label><!-- TMPL_VAR NAME="issn" -->&nbsp;</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="seriestitle" -->
+    <p><label><b>Collection: </b></label>
+        <!-- TMPL_VAR NAME="seriestitle" -->
+        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
+        <!-- TMPL_VAR name="volumedesc" -->&nbsp;
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MARCSUBJCTS" -->
+    <p><label><b>Subjects: </b></label></p>
+    <p>
+        <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+        <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
+        &nbsp;
+        <!-- /TMPL_LOOP -->
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="copyrightdate" -->
+    <p><label><b>Year : </b></label><!-- TMPL_VAR NAME="copyrightdate" --></p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MARCNOTES" -->
+    <p><label><b>Notes: </b></label></p>
+    <p>
+        <!-- TMPL_LOOP NAME="MARCNOTES" -->
+        <p>- <!-- TMPL_VAR NAME="marcnote" --></p>
+        <!-- /TMPL_LOOP -->
+    </p>
+    <!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="notes" -->
+    <p><label><b>Notes: </b></label><!-- TMPL_VAR NAME="notes" --></p>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="unititle" -->
+    <p><label><b>Alt title: </b></label><!-- TMPL_VAR NAME="unititle" --></p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="classification" -->
+    <p><label><b>classification:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="dewey" -->
+    <p><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --></p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="URLS" -->
+    <p><label><b>URL: </b></label>
+        <!-- TMPL_LOOP name="URLS" -->
+        <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
+        <!-- /TMPL_LOOP -->
+    </p>
+    <!-- /TMPL_IF -->
+    <p><label><b>Item type : </b></label>
+        <!-- TMPL_IF name="description" -->
+        <!-- TMPL_VAR name="description" -->
+        <!-- TMPL_ELSE -->
+        <!-- TMPL_VAR NAME="itemtype" -->
+        <!-- /TMPL_IF -->
+    </p>
+</div>
+
+<!-- TMPL_IF name="count" -->
+<div id="catalogue_detail_items">
+    <h2><!-- TMPL_VAR NAME="count" --> items</h2>
+    <table>
+        <tr>
+            <th>Item type</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Date Due</th>
+            <th>Volume</th>
+        </tr>
+        <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+        <tr>
+            <td><!-- TMPL_VAR NAME="description" --></td>
+            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+            <td>
+                <!-- TMPL_IF name="datedue" -->
+                On issue to <!-- TMPL_VAR NAME="cardnumber" -->
+                <!-- TMPL_ELSE -->
+                <!-- TMPL_IF name="notforloan" -->
+                <!-- TMPL_VAR name="notforloan" -->
+                <!-- TMPL_ELSE -->
+                <!-- TMPL_IF name="itemlost"-->
+                Item lost
+                <!-- TMPL_ELSE -->
+                <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+            </td>
+            <td><!-- TMPL_VAR NAME="datedue" --></td>
+            <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+            <!-- TMPL_IF NAME="type" -->
+            <td>
+                <a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
+            </td>
+            <!-- /TMPL_IF -->
+        </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+</div>
+<!-- TMPL_ELSE -->
+<p>we don't have any physical item for this document</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="subscriptionsnumber" -->
+<div id="catalogue_detail_subscriptions">
+    <h2>This is a serial subscription</h2>
+    <p> (We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p>
+    <!-- TMPL_LOOP Name="subscriptions" -->
+    <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
+    <!--TMPL_IF NAME="latestserials"-->
+    <p> The three latest issues related to this subscription:</p>
+    <table>
+        <tr>
+            <th>Issue #</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Note</th>
+            <!--TMPL_LOOP Name="latestserials"-->
+            <tr>
+                <td>
+                    <!--TMPL_VAR Name="serialseq"-->
+                </td>
+                <td>
+                    <!--TMPL_VAR Name="planneddate"-->
+                </td>
+                <td>
+                    <!--TMPL_IF Name="status1"-->Waited
+                    <!--TMPL_ELSE -->
+                    <!-- TMPL_IF Name="status2"-->Arrived
+                    <!--TMPL_ELSE -->
+                    <!-- TMPL_IF Name="status3"-->Late
+                    <!--TMPL_ELSE -->
+                    <!-- TMPL_IF Name="status4"-->Missing
+                    <!--TMPL_ELSE -->
+                    <!-- TMPL_IF Name="status5"-->Not Issued
+                    <!--/TMPL_IF-->
+                    <!--/TMPL_IF-->
+                    <!--/TMPL_IF-->
+                    <!--/TMPL_IF-->
+                    <!--/TMPL_IF-->
+                </td>
+                <td>
+                    <!--TMPL_VAR Name="notes"-->
+                </td>
+            </tr>
+            <!--/TMPL_LOOP -->
+        </table>
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="reviewson" -->
+    <!-- TMPL_IF NAME="reviews" -->
+    <h2>Reviews by members:</h2>
+        <!--TMPL_LOOP NAME="reviews"-->
+        <p>
+            <b>
+                Review by
+                <!--TMPL_VAR NAME="title"-->
+                <!--TMPL_VAR NAME="surname"-->
+                <!--TMPL_VAR NAME="firstname"-->
+            </b>
+            <br />
+            <small>
+                <!--TMPL_VAR NAME="datereviewed"-->
+            </small>
+        </p>
+        <p>
+          <!--TMPL_VAR NAME="review"-->
+        </p>
+        <br />
+        <!--/TMPL_LOOP-->
+    <!-- TMPL_ELSE  -->
+        <b>No reviews has been writed on this biblio.</b>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="loggedinusername" -->
+        <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
+            Write or modify your reviews on this biblio.
+        </a>
+    <!-- TMPL_ELSE -->
+        <br /><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to write a review here.
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
 <div id="itemReviews">
         <h2>Amazon Reader Reviews:</h2>
         <h4>
-	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	<!-- TMPL_IF NAME="isbn" -->
-		<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">Add your own review</a></h4>
-	<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP --><br/>
+    <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+    <!-- TMPL_IF NAME="isbn" -->
+        <a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">Add your own review</a></h4>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP --><br/>
 
         <!-- TMPL_IF NAME="rating" -->
-        	<h4>Rating (from Amazon.com):</h4>
-		<div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
+            <h4>Rating (from Amazon.com):</h4>
+        <div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
 
-		<!-- TMPL_LOOP NAME="REVIEWS" -->
-        	<div class="content_set">
-        	<!-- TMPL_IF NAME="summary" -->
-			<h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
-        	<!-- /TMPL_IF -->
-        	<!-- TMPL_IF NAME="comment" -->
-        		<p><!-- TMPL_VAR NAME="comment" -->
-        	</p><!-- /TMPL_IF -->
-        	</div>
-	<!-- /TMPL_LOOP -->
-	<!-- TMPL_ELSE -->
+        <!-- TMPL_LOOP NAME="AMAZONREVIEWS" -->
+            <div class="content_set">
+            <!-- TMPL_IF NAME="summary" -->
+            <h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="comment" -->
+                <p><!-- TMPL_VAR NAME="comment" -->
+            </p><!-- /TMPL_IF -->
+            </div>
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
 
-	<div class="content_set">
-	<p class="error"> Sorry, there are no reviews available for this title. </p>
-	</div>
+    <div class="content_set">
+    <p class="error"> Sorry, there are no reviews available for this title. </p>
+    </div>
 
-	<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 </div> <!-- itemReviews -->
 <!-- /TMPL_IF-->
 
-</div>
+<script language="javascript" type="text/javascript">
+    function Dopop(link) {
+        newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+    }
+    function confirm_deletion() {
+        var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+        if ( is_confirmed ) {
+            window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
+        }
+    }
+</script>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

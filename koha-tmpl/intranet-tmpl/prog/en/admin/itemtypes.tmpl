@@ -36,9 +36,9 @@ Item Types Administration
   <feldset>
     <legend>
   <!-- TMPL_IF name="itemtype" -->
-      Modify item type
+      <h3>Modify item type</h3>
   <!-- TMPL_ELSE -->
-      Add item type
+      <h3>Add item type</h3>
   <!-- /TMPL_IF -->
     </legend>
 
@@ -59,10 +59,10 @@ Item Types Administration
   <!-- TMPL_ELSE -->
       <tr>
         <th>
-          <label for="">Item type</label>
+          <label for="itemtype">Item type</label>
         </th>
         <td>
-          <input type="text" name="itemtype" size="6" maxlength="4" onblur="toUC(this)" />
+          <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" />
         </td>
       </tr>
   <!-- /TMPL_IF -->
@@ -84,9 +84,15 @@ Item Types Administration
     <!-- TMPL_IF name="checked" -->
               <input type="radio" name="image" value="<!-- TMPL_VAR name="KohaImage" -->" checked="checked" />
     <!-- TMPL_ELSE -->
+              <!-- TMPL_IF NAME="KohaImage" --> <!-- to delete the radio button if there is no image after -->
               <input type="radio" name="image" value="<!-- TMPL_VAR name="KohaImage" -->" />
+              <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->">
+        <!-- TMPL_IF NAME="KohaImageSrc" -->
+              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="">
+        <!-- TMPL_ELSE -->
+              <br />
+        <!-- /TMPL_IF -->
             </label>
   <!-- /TMPL_LOOP -->
           </p>
@@ -151,6 +157,16 @@ Item Types Administration
           <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" />
         </td>
       </tr><!--  /Hide from NPL -->
+      <tr>
+        <th>
+          <label for="rentalcharge">Summary</label>
+        </th>
+        <td><p>Enter a summary that will overwrite the default one in search results lists</p>
+          <p><textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea></p>
+          <p>Example, for a website itemtype : </p>
+          <p><b>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</b> will show the link just below the title</p>
+        </td>
+      </tr>
     </table>
 
     <p id="action">

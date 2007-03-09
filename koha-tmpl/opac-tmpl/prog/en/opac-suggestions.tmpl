@@ -1,155 +1,109 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- 
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- 
 <!-- TMPL_IF name="op_add" -->Enter a new purchase suggestion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="op_else" -->Purchase Suggestions<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
-<div id="main">
 <!-- TMPL_IF name="op_add" -->
-	<h1>Enter a new purchase suggestion</h1>
+    <h1>Enter a new purchase suggestion</h1>
 
-	<p>Fill this form to suggest the library a new acquisition. You will be emailed when the library processes your purchase suggestion</p>
-	<p>No fields are mandatory. Enter whatever information you have. The "Notes" field can be used to provide any additional information.</p>
-	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-	<table>
-	<tr><th scope="row"><label for="">Title</label></th><td><input type="text" id="title" name="title" size="50" maxlentgh="80" /></td></tr>
-	<tr><th scope="row"><label for="">Author</label></th><td><input type="text" id="author" name="author" size="50" maxlength="80" /></td></tr>
-	<tr><th scope="row"><label for="">Copyright date</label></th><td><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></td></tr>
-	<tr><th scope="row"><label for="">Publisher</label></th><td><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></td></tr>
-	<tr><th scope="row"><label for="">Notes</label></th><td><textarea name="note" id="note" rows="5" cols="40"></textarea></td></tr>
-	</table>
-		<p><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /></p>
-	</form>
+    <p>Fill this form to suggest the library a new acquisition. You will be emailed when the library processes your purchase suggestion</p>
+    <p>No fields are mandatory. Enter whatever information you have. The "Notes" field can be used to provide any additional information.</p>
+    <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+    <table>
+    <tr><th scope="row"><label for="">Summary</label></th><td><input type="text" id="title" name="title" size="50" maxlentgh="80" /></td></tr>
+    <tr><th scope="row"><label for="">Author</label></th><td><input type="text" id="author" name="author" size="50" maxlength="80" /></td></tr>
+    <tr><th scope="row"><label for="">Copyright date</label></th><td><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></td></tr>
+    <tr><th scope="row"><label for="">Publisher</label></th><td><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></td></tr>
+    <tr><th scope="row"><label for="">Notes</label></th><td><textarea name="note" id="note" rows="5" cols="40"></textarea></td></tr>
+    </table>
+        <p><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /></p>
+    </form>
 
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-	<h1>Purchase Suggestions</h1>
-	<!-- TMPL_IF NAME="suggestions_loop" -->
-	<table>
-		<tr>
-			<th>&nbsp;</th>
-			<th>Title</th>
-			<th>Author</th>
-			<th>&copy;</th>
-			<th>Publisher</th>
-			<th>Status</th>
-			<th>Suggested by</th>
-			<th>Managed by</th>
-			<th>Note</th>
-		</tr>
-		<tr>
-			<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-				<th>
-					Filter by:
-				</th>
-				<td>
-					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
-				</td>
-				<td>
-					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" />
-				</td>
-				<td>
-					&nbsp;
-				</td>
-				<td>
-					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
-				</td>
-				<td>
-<select name="status">
-						<option value="">Any</option>
-						<!-- TMPL_IF name="ASKED" -->
-							<option value="ASKED" selected="selected">Requested</option>
-						<!-- TMPL_ELSE -->
-							<option value="ASKED">Asked</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="ACCEPTED" -->
-							<option value="ACCEPTED" selected="selected">Accepted</option>
-						<!-- TMPL_ELSE -->
-							<option value="ACCEPTED">Accepted</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="ORDERED" -->
-							<option value="ORDERED" selected="selected">Ordered</option>
-						<!-- TMPL_ELSE -->
-							<option value="ORDERED">Ordered</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="REJECTED" -->
-							<option value="REJECTED" selected="selected">Declined</option>
-						<!-- TMPL_ELSE -->
-							<option value="REJECTED">Declined</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="AVAILABLE" -->
-							<option value="AVAILABLE" selected="selected">Available</option>
-						<!-- TMPL_ELSE -->
-							<option value="AVAILABLE">Available</option>
-						<!-- /TMPL_IF -->
-					</select>
-				</td>
-				<td>
-					<select name="suggestedbyme">
-						<!-- TMPL_IF NAME="suggestedbyme" --><option value="1" selected="selected"><!-- TMPL_ELSE --><option value="1"><!-- /TMPL_IF -->Me</option>
-						<!-- TMPL_UNLESS name="suggestedbyme" --><option value="0" selected="selected"><!-- TMPL_ELSE --><option value="0"><!-- /TMPL_UNLESS -->Anybody</option>
-					</select>
-				</td>
-				<td>
-					&nbsp;
-				</td>
-				<td>
-					<input type="submit" value="Set Filter" />
-				</td>
-			</form>
-		</tr>
-		<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-			<input type="hidden" name="op" value="delete_confirm" />
-		<!-- TMPL_LOOP NAME="suggestions_loop" -->
-			<!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-				<td>
-					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
-				</td>
-				<td>
-					<!-- TMPL_VAR NAME="title" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR NAME="author" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR NAME="copyrightdate" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="publishercode" -->
-				</td>
-				<td>
-					<!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="ORDERED" -->Ordered by the library<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="REJECTED" -->Suggestion declined<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
-				</td>
-				<td>
-					<!-- TMPL_VAR name="note" -->
-				</td>
-			</tr>
-		<!-- /TMPL_LOOP -->
-		<tr>
-			<td colspan="9">
-				<input type="submit" value="Delete Checked Items" />
-			</td>
-		</tr>
-		</form>
-	</table>
-	<!-- TMPL_ELSE --><div class="content-block">There are no pending purchase suggestions</div><!-- /TMPL_IF -->
-	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-		<input type="hidden" name="op" value="add" />
-		<input type="submit" value="Enter a new purchase suggestion" />
-	</form>
-	<p>Note : if you're viewing purchase suggestions submitted by anybody, the results will contain only <em>new</em> purchase suggestions. Suggestions being processed by a librarian will not be shown.</p>
+    <h1>Purchase Suggestions</h1>
+    <!-- TMPL_IF NAME="suggestions_loop" -->
+    <table>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Summary</th>
+            <th>Status</th>
+            <th>Suggested by</th>
+            <th>Managed by</th>
+            <th>Note</th>
+        </tr>
+        <tr>
+            <form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
+                <th>
+                    Filter by:
+                </th>
+                <td>
+                    <input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
+                </td>
+                <td>
+                &nbsp;
+                </td>
+                <td>
+                    <select name="suggestedbyme">
+                        <option value="0">Anyone</option>
+                        <option value="1">Me</option>
+                    </select>
+                </td>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input type="submit" value="Set Filter" />
+                </td>
+            </form>
+        </tr>
+        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirm" />
+        <!-- TMPL_LOOP NAME="suggestions_loop" -->
+            <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+                <td>
+                    <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
+                </td>
+                <td>
+                    <p><!-- TMPL_VAR NAME="title" --></p>
+                    <p><!-- TMPL_IF name="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="copyrightdate" --> - <!-- TMPL_VAR NAME="copyrightdate" -->,<!-- /TMPL_IF --> 
+                        <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                    </p>
+                </td>
+                <td>
+                    <!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="ACCEPTED" -->Accepted by the library<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="ORDERED" -->Ordered by the library<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="REJECTED" -->Suggestion declined <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="reason" -->(<!-- TMPL_VAR name="reason" -->)<!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                </td>
+                <td>
+					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+                </td>
+                <td>
+                    <!-- TMPL_VAR name="note" -->
+                </td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+        <tr>
+            <td colspan="9">
+                <input type="submit" value="Delete Checked Items" />
+            </td>
+        </tr>
+        </form>
+    </table>
+    <!-- TMPL_ELSE --><div class="content-block">There are no pending purchase suggestions</div><!-- /TMPL_IF -->
+    <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+        <input type="hidden" name="op" value="add" />
+        <input type="submit" value="Enter a new purchase suggestion" />
+    </form>
 <!-- /TMPL_IF -->
-</div>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

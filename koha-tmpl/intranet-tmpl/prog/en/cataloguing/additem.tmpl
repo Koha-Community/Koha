@@ -1,161 +1,130 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_UNLESS NAME="fromserials"-->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
-<!--/TMPL_UNLESS-->
-<h1>Items for Record <!-- TMPL_VAR name="biblionumber" -->:</h1><h2><!-- TMPL_VAR name="title" -->, <!-- TMPL_VAR name="author" --></h2>
-	
-<!--TMPL_UNLESS NAME="fromserials"-->	
-<div class="tabitem">
-<form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate this Record" /></form></div> <div class="tabitem"><form action="/cgi-bin/koha/catalogue/detail.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form> <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View MARC in Catalog"></form>  <form action="/cgi-bin/koha/catalogue/ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View ISBD in Catalog"></form></div>
-<!--/TMPL_UNLESS-->
-<!-- TMPL_IF name="book_on_loan" -->
- 	         <div class="error">ERROR: This book is on LOAN DO NOT DELETE!</div>
- 	 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="non_utf8" -->
- 	         <div class="error">ERROR: This record contains non UTF-8 chatacters correct and resave!!</div>
- 	 <!-- /TMPL_IF -->
- <!-- TMPL_IF name="barcode_not_unique" -->
- 	         <div class="error">ERROR: Barcode already exists!</div>
- 	 <!-- /TMPL_IF -->
-<!--TMPL_UNLESS NAME="fromserials"-->
-	<!-- TMPL_IF name="item_loop" -->
-			<div name="10XX" id="10XX">
-			<table class="editing">
-			<caption>Existing Items</caption>
-				<tr>
-					<!-- TMPL_LOOP NAME="item_header_loop" -->
-						<th><!-- TMPL_VAR NAME="header_value" --></th>
-					<!-- /TMPL_LOOP -->
-					<th colspan="2">&nbsp;</th>
-				</tr>
-					<!-- TMPL_LOOP NAME="item_loop" -->
-					<tr>
-						<!-- TMPL_VAR NAME="item_value" -->
-						<td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
-						<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Delete</a></td>
-					</tr>
-					<!-- /TMPL_LOOP -->
-			</table>
-			</div>
 
-	<!-- /TMPL_IF -->
-<!--/TMPL_UNLESS-->
-	<form method="post" action="additem.pl" name="f">
-	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
-	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">	
-	<input type="hidden" name="fromserials" value="<!--TMPL_VAR NAME="fromserials"-->">
-	<input type="hidden" name="serialid" value="<!--TMPL_VAR NAME="serialid"-->">
-	<input type="hidden" name="itemnumber" value="<!--TMPL_VAR NAME="itemnumber"-->">
-	<div class="data">
-	<table>
-		<caption><!-- TMPL_IF name="opisadd" -->Add New Item<!-- TMPL_ELSE -->Update Item<!-- /TMPL_IF --></caption>
-	<!-- TMPL_LOOP NAME="item" -->
-			<tr style="<!-- TMPL_VAR NAME='hidden' -->;">
-					<th><label><!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label></th>
-					<td><!-- TMPL_VAR NAME="marc_value" -->
-					<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
-					<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
-					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->"></td>
-			</tr>		
-<!-- /TMPL_LOOP -->
-		</table>
-	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-	 <!-- TMPL_IF name="barcode_not_unique" -->
- 	         <div class="error">ERROR: Barcode already exists!</div>
- 	 <!-- /TMPL_IF -->
-	
-	<!-- TMPL_IF name="opisadd" -->
-	<input type="button" value="Add item" onClick="Check(this.form)" accesskey="w" class="submit">
-	<!-- TMPL_ELSE -->
-	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
-	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
-	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-	<input type="button" value="Save Changes" onClick="Check(this.form)" accesskey="w" class="submit">
-	<!-- /TMPL_IF -->
-	</form>
+
+<h1>Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
+
+<div id="action">
+    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
+        Edit Bibliographic Record
+    </a>
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
+        Normal view
+    </a>
+    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
+        View MARC in Catalog
+    </a>
+    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
+        View ISBD in Catalog
+    </a>
 </div>
 
+<div id="cataloguing_additem_itemlist">
+    <form method="post" action="additem.pl" name="f">
+    <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_IF name="item_loop" -->
+        <h2>Existing items</h2>
+        <table>
+            <tr>
+                <!-- TMPL_LOOP NAME="item_header_loop" -->
+                    <th>
+                        <!-- TMPL_VAR NAME="header_value" -->
+                    </th>
+                <!-- /TMPL_LOOP -->
+                <th colspan="2">&nbsp;</th>
+            </tr>
+                <!-- TMPL_LOOP NAME="item_loop" -->
+                <tr>
+                    <!-- TMPL_VAR NAME="item_value" -->
+                    <td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
+                    <td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Delete</a></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+    <!-- /TMPL_IF -->
+</div>
+
+<div id="cataloguing_additem_newitem">
+    <!-- TMPL_IF name="opisadd" -->
+        <h2>Add Item</h2>
+    <!-- TMPL_ELSE -->
+        <h2>Edit Item</h2>
+    <!-- /TMPL_IF -->	
+        <!-- TMPL_LOOP NAME="item" -->
+            <p>
+                <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+                <!-- TMPL_VAR NAME="marc_value" -->
+                <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+                <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+            </p>
+        <!-- /tmpl_loop -->
+    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <!-- TMPL_IF name="barcode_not_unique" -->
+        ERROR : Barcode already exists !
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="opisadd" -->
+    <input type="button" value="Add item"  onClick="Check(this.form)" accesskey="w" />
+    <!-- TMPL_ELSE -->
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <input type="button" value="Save Changes" onClick="Check(this.form)" accesskey="w" />
+    <!-- /TMPL_IF -->
+    </form>
+
 <script language="JavaScript" type="text/javascript">
-
-	
-	<!--TMPL_IF name="exit"-->
-var	finished=CloseMe(<!--TMPL_VAR NAME="serialid"-->,<!--TMPL_VAR NAME="itemnumber"-->,"<!--TMPL_VAR NAME="holdingbranch"-->");
-	<!--/TMPL_IF-->
-
 function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
-	for (i=10; i < 11 ; i++ ) {
-		ong = i+"XX";
-			link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
-			document.getElementById(link).style.backgroundColor="#11AA11";
-			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
-		} else {
-			document.getElementById(ong).style.visibility="hidden";
-			document.getElementById(link).style.backgroundColor="#FFFFFF";
-			document.getElementById(link).style.backgroundImage="";
-		}
-	}
+    for (i=10; i < 11 ; i++ ) {
+        ong = i+"XX";
+            link = "link"+i;
+        if (numlayer==i) {
+            document.getElementById(ong).style.visibility="visible";
+            document.getElementById(link).style.backgroundColor="#11AA11";
+            document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
+        } else {
+            document.getElementById(ong).style.visibility="hidden";
+            document.getElementById(link).style.backgroundColor="#FFFFFF";
+            document.getElementById(link).style.backgroundImage="";
+        }
+    }
 }
 function Check(f) {
-	var total_errors=0;
+    var total_errors=0;
 //	alert(f.field_value.length);
-	for (i=0 ; i<f.field_value.length ; i++) {
+    for (i=0 ; i<f.field_value.length ; i++) {
 //	alert (f.field_value[i].value);
-		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-			document.getElementById("error"+i).style.backgroundColor="#FF0000";
-			total_errors++;
-		} else {
+        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+            document.getElementById("error"+i).style.backgroundColor="#FF0000";
+            total_errors++;
+        } else {
 //			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-		}
-	}
-	var alertString2;
-	if (total_errors==0) {
-		document.f.submit();
-	} else {
-		alertString2  = _("Form not submitted because of the following problem(s)");
-		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
-		alert(alertString2);
-	}
+        }
+    }
+    var alertString2;
+    if (total_errors==0) {
+        document.f.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+        alert(alertString2);
+    }
 }
 function Dopop(link,i) {
-	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+    defaultvalue=document.forms[0].field_value[i].value;
+    newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function confirm_deletion(biblionumber,itemnumber) {
-	var is_confirmed = confirm(_('Do you confirm item deletion?'));
-	if (is_confirmed) {
-	window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
-	}
+    var is_confirmed = confirm(_('Are you sure you want to delete this item?'));
+    if (is_confirmed) {
+    window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
+    }
 }
-function CloseMe(serialid,itemnumber,holdingbranch) {
-	if( serialid==000){
-	 itemcount = opener.document.getElementsByName('itemcount');
-	bibliocount=opener.document.getElementsByName('bibliocount');
-	addcount=opener.document.getElementById(<!--TMPL_VAR NAME="biblionumber"-->);
-	      for (var s=0; s<itemcount.length; s++){
-		 if  (bibliocount.item(s).value==<!--TMPL_VAR NAME="biblionumber"-->){
-		 itemcount.item(s).value=itemcount.item(s).value -1;
-			if ( itemcount.item(s).value==0){
-			addcount.style.display= "none";
-			self.close();
-			return false;
-			}
-		}
-	     }
-	return true;
-	}
-	var myfield = opener.document.getElementById('serial'+serialid);
-	 myfield.value = itemnumber;
-	var myfield = opener.document.getElementById('holdingbranch'+serialid);
-	 myfield.value = holdingbranch;
-	self.close();
-return false;
-	}
 </script>
-
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

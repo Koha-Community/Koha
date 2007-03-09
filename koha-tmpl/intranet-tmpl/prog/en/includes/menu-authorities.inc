@@ -13,3 +13,5 @@ function searchauthority() {
 	window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>
+
+<div id="main">

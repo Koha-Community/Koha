@@ -3,15 +3,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-<!-- TMPL_INCLUDE NAME="javascript/members.js" -->
-
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add adult member (step <!-- TMPL_VAR NAME="step" -->)
+		Add adult member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify adult member
+		Modify adult member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -19,7 +17,7 @@
 		<p>
 		<form name="form_double">
 			<div id="problem">
-				Duplicate suspected 
+				Duplicate suspected
 				<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >Detail</a>
 				Duplicate ?
 				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a> 
@@ -36,7 +34,7 @@
 	<!--/TMPL_IF-->
 		
 		<!-- TMPL_IF Name="nok" -->
-		<!--<h1>ERREUR</h1>-->
+		<!--<h1>ERROR</h1>-->
 		<div id="problem">
 			<p>The following fields are wrong. Please fix it/them</p>
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
@@ -47,11 +45,12 @@
                         <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
+	
 
 	<!-- TMPL_IF NAME="step_1"-->
 <form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 <!-- 		field always hidden in different form (1,2,3) -->
-	<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
+	<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
 	<input type="hidden" name="FormFieldList" value="surname|select_city|othernames|initials|title|cardnumber|firstname|dateofbirth|sort1|sort2">
 	<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 	<input type="hidden" name="type" value="borrowers">
@@ -61,7 +60,6 @@
 	<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 	<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 	<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-	<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 	<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 	
@@ -126,14 +124,10 @@
 		<!-- TMPL_ELSE -->
 			<label>
 		<!-- /TMPL_IF-->
-		Title</label>
-		<select  name="title" >
-			<option <!-- TMPL_VAR NAME="title_selected_ " --> value="" >Select a value</option>
-			<option value="Mlle" <!-- TMPL_VAR NAME="title_Mlle" -->>Mlle</option>
-			<option value="Mme" <!-- TMPL_VAR NAME="title_Mme" -->>Mme</option>
-			<option value="Mr" <!-- TMPL_VAR NAME="title_Mr" --> >M.</option>
-		</select>
+		Civility</label>
+		<!-- TMPL_VAR NAME="borrotitlepopup" -->
 		</p>
+
 		<p>
 		<!-- TMPL_IF NAME="mandatorysurname" -->
 		<label style="font-weight:bold">
@@ -159,7 +153,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Date of Birth</label>
-			<input type="text" name="dateofbirth" size="20" onBlur="CheckDate(document.form.dateofbirth.value);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
+			<input type="text" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryinitials" -->
@@ -183,8 +177,13 @@
 	<fieldset id="memberentry_identity">
 		<legend>Borrower type</legend>
 		<p>
-		<label>Select a category</label>
-		<!-- TMPL_VAR NAME="catcodepopup" -->
+		<!-- TMPL_IF NAME="catcodepopup" -->
+			    <label>Category</label>
+			    <!-- TMPL_VAR NAME="catcodepopup" -->
+			<!-- TMPL_ELSE -->
+			    <span class="problem">There is no category type to add an Adult.</span>
+			        <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
+			<!-- /TMPL_IF -->
 		</p>
 		<!-- TMPL_IF NAME="city_cgipopup" -->	
 		<p>
@@ -234,7 +233,7 @@
 <!-- TMPL_IF NAME="step_2"-->
 <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 	<!-- 		field always hidden in different form (1,2,3) -->
-	<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
+	<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
 	<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|city|B_address|B_zipcode|B_city|phone|phonepro|mobile|email|emailpro|fax">
 	<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 	<input type="hidden" name="type" value="borrowers">
@@ -244,7 +243,6 @@
 	<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 	<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 	<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-	<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 	<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 
@@ -460,7 +458,7 @@
 <!-- TMPL_IF NAME="step_3"-->
 <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 	<!-- 		field always hidden in different form (1,2,3) -->
-	<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
+	<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
 	<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password">
 	<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 	<input type="hidden" name="type" value="borrowers">
@@ -470,7 +468,6 @@
 	<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 	<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 	<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-	<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 	<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 
@@ -520,7 +517,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Arrival date</label>
-			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onblur="CheckDate(document.form.dateenrolled.value);" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
+			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
@@ -530,7 +527,7 @@
 			<!-- /TMPL_IF-->
 			Expiry date</label>
 			<input type="text" name="dateexpiry" maxlength="10"  size="10"
-							onblur="CheckDate(document.form.dateexpiry.value);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
+							onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->
@@ -539,7 +536,7 @@
 				<label>
 			<!-- /TMPL_IF-->	
 			OPAC note</label>
-			<textarea  name="opacnote" cols="70" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
+			<textarea  name="opacnote" cols="40" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryborrowernotes" -->	
@@ -548,7 +545,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Library note</label>
-			<textarea name="borrowernotes" cols="70" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
+			<textarea name="borrowernotes" cols="40" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		</p>
 	</fieldset>
 	<fieldset id="memberentry_userid">
@@ -581,7 +578,7 @@
 		</p>
 		<!--this zones are not necessary in modif mode -->
 		<!-- TMPL_UNLESS NAME="opadd" -->
-			<h1>Warning</h1>
+			<h2>Warning</h2>
 			<!-- TMPL_LOOP NAME="flagloop" -->
 			<p>
 				<label class="borrowers_labels_title"><!-- TMPL_VAR NAME="html" --></label>

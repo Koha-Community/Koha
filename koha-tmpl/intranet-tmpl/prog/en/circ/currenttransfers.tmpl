@@ -24,14 +24,14 @@
 				<td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" --> check this transfer<!-- /TMPL_IF --></td>
 				<td>
 					<p>
-						<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+						<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
 						&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
 						<br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
 					</p>
 				</td>
 				<td>
 				<!-- TMPL_IF NAME="borrowername" -->
-					<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+					<p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
 				<!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
 	<!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
 					</p>
@@ -43,10 +43,10 @@
 				</td>
 				<td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
 				<td>
-				<form name="dotransfer" action="currenttransfers.pl" method="post">
+				<!--<form name="dotransfer" action="currenttransfers.pl" method="post">
 						<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
 				<input type="submit" value="Cancel this transfer">
-				</form>
+				</form>-->
 				</td>	
 			</tr>
 		<!-- /TMPL_LOOP -->	

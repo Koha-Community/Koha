@@ -6,26 +6,26 @@
 <!-- TMPL_IF NAME="showfulllink" -->
 <ul>
 	<li>Showing All Items</li>
-	<li><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show Last 50 Items Only</a></li>
+	<li><a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show Last 50 Items Only</a></li>
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
 	<li>Showing Last 50 Items</li>
-	<li><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show All Items</a></li>
+	<li><a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a></li>
 </ul>
 <!-- /TMPL_IF -->
 <h1>Reading Record for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
 <table>
 <tr>
 	<th>
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
+		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
 	</th>
 	<th>
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
+		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
 	</th>
 	<th>Call No.</th>
 	<th>
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
+		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
@@ -35,7 +35,7 @@
 <tr>
 <!-- /TMPL_IF -->
 	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
- 		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
+ 		<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
 	</td>
 	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
  		<!-- TMPL_VAR name="author" -->
@@ -46,6 +46,6 @@
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<form action="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" value="Return to Patron Record" /></form>
+<form action="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Return to Patron Record" /></form>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reports --<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc"-->
+<!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -35,14 +36,10 @@
 	<h2>Other stats</h2>
 	<p>on catalogue</p>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/inventory.pl">Inventory/Stocktaking</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
 	</ul>
 	<p>on issues</p>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/stats.pl?time=yesterday">Till Reconciliation:</a> Daily Report (yesterday)</li>
-		<li><a href="/cgi-bin/koha/reports/stats.pl?time=today">Till Reconciliation:</a> Daily Report (today)</li>
-		<li><a href="/cgi-bin/koha/reports/overdue.pl">Overdue items</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Issues by borrower category</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
 	</ul>

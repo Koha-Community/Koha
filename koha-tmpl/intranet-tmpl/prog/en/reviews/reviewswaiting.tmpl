@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-    Reviews waiting for Approval --
+Reviews waiting for Approval --
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
@@ -23,10 +23,10 @@
             &nbsp;
         </th>
     </tr>
-<!-- TMPL_LOOP NAME="reviews" -->
+    <!-- TMPL_LOOP NAME="reviews" -->
     <tr>
         <td>
-            <!-- TMPL_VAR NAME="surname" --> 
+            <!-- TMPL_VAR NAME="surname" -->
             <!-- TMPL_VAR NAME="firstname" -->
         </td>
         <td>
@@ -36,14 +36,14 @@
             <!-- TMPL_VAR NAME="review" -->
         </td>
         <td>
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Approve</a> | 
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Approve</a> |
             <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Delete</a>
         </td>
     </tr>
-<!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
 </table>
 <!-- TMPL_ELSE -->
-    <b>No reviews has been writed.</b>
+<b>No review has to be approved or deleted.</b>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

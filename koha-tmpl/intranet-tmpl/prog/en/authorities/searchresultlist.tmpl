@@ -1,108 +1,64 @@
-﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+Koha -- Authorities -- Search result list 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
 
-	<h1 class="authority">Authority search results</h1>
-	<div id="resultnumber">
-		<p>
-			<!-- TMPL_IF name="displayprev" -->
-				<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0">
-				</a>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_LOOP NAME="numbers" -->
-				<!-- TMPL_IF name="highlight" -->
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
-				<!-- TMPL_ELSE -->
-					<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0">
-					</a>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-			<!-- TMPL_IF name="displaynext" -->
-				<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0">
-				</a>
-				<!-- /TMPL_IF -->
-		</p>
-		<p>
-			<!-- TMPL_IF name="total" -->
-			&nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br><br>
-			<!-- TMPL_ELSE -->
-			&nbsp;No results found.<br>
-			<!-- /TMPL_IF -->
-		</p>
-	</div>
-	<div id="resultlist">
-		<table>
-			<tr>
-				<th class="authority">Summary</th>
-				<th class="authority">Used in</th>
-				<th class="authority">Authid/Delete</th>
-				
-			</tr>
-			<!-- TMPL_LOOP NAME="result" -->
-				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
-				
-					<td><!-- TMPL_VAR NAME="summary" --></td>
-					<td><a href="/cgi-bin/koha/catalogue/catalogue-search.pl?kohafield=authid&amp;value=<!-- TMPL_VAR NAME="authid" -->&amp;op=do_search&amp;zoom=1" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)</a></td>
-					
-					<td><!-- TMPL_VAR NAME="authid" -->&nbsp;
-						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:do_delete('authorities-home.pl?op=delete&authid=<!-- TMPL_VAR NAME="authid" -->')">Delete</a>
-						<!-- /TMPL_UNLESS -->
-					</td>
-					
-				</tr>
-			<!-- /TMPL_LOOP -->
-		</table>
-	</div>
-	<div id="resultnumber">
-		<p>
-			<!-- TMPL_IF name="displayprev" -->
-				<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0">
-				</a>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_LOOP NAME="numbers" -->
-				<!-- TMPL_IF name="highlight" -->
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
-				<!-- TMPL_ELSE -->
-					<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0">
-					</a>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-			<!-- TMPL_IF name="displaynext" -->
-				<a href="authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;stype=author&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0">
-				</a>
-				<!-- /TMPL_IF -->
-		</p>
-	</div>	
-<form name"m" id="m">
+<h1 class="authority">Authority search results</h1>
 
-From:<input type="text" size="10" name="mergefrom" id="mergefrom" value=""/>&nbsp;&nbsp;To:<input type="text" size="10" id="mergeto" name="mergeto" value=""/>
-<input type="button" class="submit" value="Merge" onclick="do_merge(); return false;" /></form>
-					
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<p id="authorities_searchresultlist_current_page_info">
+<!-- TMPL_IF name="total" -->
+  Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" -->
+<!-- TMPL_ELSE -->
+  No results found.
+<!-- /TMPL_IF -->
+</p>
 
+<div id="authorities_searchresultlist_results">
+  <table>
+    <tr>
+      <th>Summary</th>
+<!-- TMPL_UNLESS name="isEDITORS" -->
+      <th>Used in</th>
+<!-- /TMPL_UNLESS -->
+      <th>View</th>
+      <th>Delete</th>
+    </tr>
+<!-- TMPL_LOOP NAME="result" -->
+    <tr>
+      <td><a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->"><!-- TMPL_VAR NAME="summary" --></a></td>
+  <!-- TMPL_UNLESS name="isEDITORS" -->
+      <td>
+        <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=<!--TMPL_VAR Name="authid" -->" class="button authority"><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
+      </td>
+  <!-- /TMPL_UNLESS -->
+      <td>
+        <a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Authority number <!-- TMPL_VAR NAME="authid" --></a>
+      </td>
+      <td>
+  <!-- TMPL_UNLESS name="used" -->
+        <a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">Delete</a>
+  <!-- /TMPL_UNLESS -->
+      </td>
+    </tr>
+<!-- /TMPL_LOOP -->
+  </table>
+</div>
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
 <script language="JavaScript" type="text/javascript" >
-function do_delete(page)
-{
-window.location = page;
-}
-function do_merge(page)
-{
 
-X = document.forms['m'].elements['mergefrom'].value;
-	Y = document.forms['m'].elements['mergeto'].value;
-var is_confirmed = confirm('Merging from ID:'+X+'  to ID: '+Y+' .Confirm?');
+function confirm_deletion(id) {
+	
+	var is_confirmed = confirm('Are you sure you want to delete this authority?');
 	if (is_confirmed) {
-window.location="authorities-home.pl?op=merge&mergefrom="+X+"&mergeto="+Y;
-}
+		window.location="authorities-home.pl?op=delete&amp;authid="+id;
+	}
 }
 </script>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

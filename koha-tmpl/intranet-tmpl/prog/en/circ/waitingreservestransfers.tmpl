@@ -8,8 +8,6 @@
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 
-<h1>Circulation: Transfers To do</h1>
-
 <div id="mainbloc">
 	<h1>Transfers to do <!-- TMPL_VAR NAME="show_date" --></h1>
 	<div id="resultlist">
@@ -31,13 +29,13 @@
 				<td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve over <!-- /TMPL_IF --></td>
 				<td>
 					<p>
-						<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+						<a href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
 						&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
 						<br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
 					</p>
 				</td>
 				<td>
-					<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+					<p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
 				<!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
 	<!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
 					</p>

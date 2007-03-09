@@ -2,6 +2,7 @@
 Koha -- Circulation
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 <script language="JavaScript">
 function check() {
@@ -33,14 +34,14 @@ if (document.form.alreadyreserved.value == "1"){
 }
 
 if (count_reserv == "0"){
-		msg += _("- Please select a document to reserve\n");
+		msg += ("- Please select a document to reserve\n");
 }
 if (count_reserv >= "2"){
-		msg += _("- You can select only one type of document\n by item, or by the first item returned\n");
+		msg += ("- You can select only one type of document\n by item, or by the first item returned\n");
 }
 
 if (alreadyreserved > "0"){
-		msg += _("- This borrower had already reserved this document\n Please cancel the previous reserve first \n");
+		msg += ("- This borrower had already reserved this document\n Please cancel the previous reserve first \n");
 }
 
 	if (msg == "") return(true);
@@ -50,81 +51,83 @@ if (alreadyreserved > "0"){
 	}
 }
 </script>
-
-
+<!-- TMPL_IF NAME="messagetransfert" -->
+		<div>
+				<h2>Reserve find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
+			<p>This documen is reserved by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please put this document in transfer .
+			</p>
+			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
+				<input type="submit" class="button circulation">
+			</form>
+		</div>
+	<!-- /TMPL_IF -->
 <h1>Request for reserve</h1>
 
 <fieldset>
   <legend>Biblio informations</legend>
   <ul>
-    <li>Title: <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="bib" -->"><!-- TMPL_VAR NAME="title" --></a></li>
-    <li>Author: <!-- TMPL_VAR NAME="author" --></li>
+    <p><label>Title: </label><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
+    <p><label>Author: </label><!-- TMPL_VAR NAME="author" --></p>
   </ul>
 </fieldset>
 
 <!-- TMPL_UNLESS NAME="cardnumber"-->
-<form action="request.pl?bib=<!-- TMPL_VAR NAME="bib" -->" method="post" onSubmit="request.pl" name="getborrower">
-  <fieldset>
-    <legend>Member search</legend>
-  <!-- TMPL_UNLESS name="CGIselectborrower" -->
-    <table>
-      <tr>
-        <th>Member (number or name)</th>
-        <td>
-          <input type="text" size="20" name="findborrower">
-        </td>
-      </tr>
-    </table>
-
-    <div id="action">
-    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="bib"-->">
-     <input type="submit" value="Search">
-    </div>
-  <!-- TMPL_ELSE -->
-    <!-- TMPL_VAR NAME="CGIselectborrower" -->
-
-    <div id="action">
-    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="bib"-->">
-     <input type="submit" value="Select">
-    </div>
-  <!-- /TMPL_UNLESS -->
-
-  </fieldset>
+<form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onSubmit="request.pl" name="getborrower">
+    <fieldset>
+        <legend>Member search</legend>
+    <!-- TMPL_UNLESS name="CGIselectborrower" -->
+            <p>
+            <label>Member (number or name)</label>
+            <input type="text" size="20" name="findborrower">
+            </p>
+        <div id="action">
+            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->">
+            <input type="submit" value="Search">
+        </div>
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_VAR NAME="CGIselectborrower" -->
+        <div id="action">
+            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->">
+            <input type="submit" value="Select">
+        </div>
+    <!-- /TMPL_UNLESS -->
+    
+    </fieldset>
 </form>
 <!-- TMPL_ELSE -->
     
   <!-- TMPL_IF NAME="maxreserves" -->
-      <br>
+    <br>
     <p class="problem">
-      <label class="label100"><u>Too many reserves</u></label>
+      <label><u>Too many reserves</u></label>
       Currently, this member has <!-- TMPL_VAR NAME="borrowerreservs" --> active reserves.
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="expiry" -->
-    <br>			
+    <br>
     <p class="problem">
-      <label class="label100"><u>Expired card</u></label>
+      <label>Expired card</label>
       The card of this member is expired
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="diffbranch" -->			
     <p class="problem">
-      <label class="label100"><u>Localisation</u></label>
+      <label>Localisation</label>
       The borrower isn't in is own library
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="alreadyreserved" -->			
     <p class="problem">
-      <label class="label100"><u>Operation can be make</u></label>
-      This borrower had already make a reserv for this document
+      <label>Operation can be make</label>
+      This borrower had already make a reserve for this document
     </p>
     <!-- /TMPL_IF -->
 
   <!-- TMPL_IF NAME="messageborrower" -->
-    <div class="problem">Carrefull,there is no borrower with this name, Please, try an other </div> 
+    <div class="problem">Carrefull,there is no borrower with this name, Please, try an other </div>
   <!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
 
@@ -133,57 +136,30 @@ if (alreadyreserved > "0"){
     <legend>Reservation properties</legend>
 
     <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->">
-    <input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="bib" -->">
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
     <input type="hidden" name="type" value="str8">
     <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->">
-
-    <table>
-      <tr>
-        <th>Member</th>
-        <td>
-<!-- TMPL_IF NAME="cardnumber"-->
-          <!-- TMPL_VAR NAME="borrowersurname" --> <!-- TMPL_VAR NAME="borrowerfirstname" -->
-          (card number: <!--  TMPL_VAR NAME="cardnumber" -->)
-<!-- TMPL_ELSE -->
-          Not defined yet
-<!-- /TMPL_IF -->
-        </td>
-      </tr>
-      
-      <tr>
-        <th><label for="priority">Priority</label></th>
-        <td>
-          <select name="rank-request">
-<!-- TMPL_LOOP Name="optionloop" -->
-  <!-- TMPL_IF Name="selected" -->
-            <option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option>
-  <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option>
-  <!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-          </select>
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label>Notes</label>
-        </th>
-        <td>
-          <textarea name="notes" cols="40" rows="5"></textarea>
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label>Place of retreat</label>
-        </th>
-        <td>
-          <!-- TMPL_VAR NAME="CGIbranch" -->
-        </td>
-      </tr>
-
-    </table>
+    <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->">
+    <p><label>Member</label>
+        <!-- TMPL_IF NAME="cardnumber"-->
+            <!-- TMPL_VAR NAME="borrowersurname" --> <!-- TMPL_VAR NAME="borrowerfirstname" -->
+            (card number: <!--  TMPL_VAR NAME="cardnumber" -->)
+        <!-- TMPL_ELSE -->
+            Not defined yet
+        <!-- /TMPL_IF -->
+    </p>
+    <p>
+    <label for="priority">Priority</label>
+     	<b> <!-- TMPL_VAR Name="fixedRank" --> </b>
+    </p>
+    <p>
+        <label>Notes</label>
+        <textarea name="notes" cols="20" rows="2"></textarea>
+    </p>
+    <p>
+        <label>Pickup at</label>
+        <!-- TMPL_VAR NAME="CGIbranch" -->
+    </p>
   </fieldset>
 
   <fieldset>
@@ -193,26 +169,29 @@ if (alreadyreserved > "0"){
       <li>Item type: <!-- TMPL_VAR NAME="description" --></li>
       <li>Publication year: <!-- TMPL_VAR NAME="publicationyear" --></li>
     </ul>
-    
+
     <table>
       <tr>
-        <th>Item number</th>
+        <th>Barcode</th>
         <th>Home branch</th>
         <th>Holding branch</th>
+        <th>Call number</th>
         <th>Information</th>
+        <th>Cancel a Reserve</th>
       </tr>
   <!-- TMPL_LOOP Name="itemloop" -->
       <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
         <td>
-          <!-- TMPL_VAR NAME="barcode" -->
+        	<!-- TMPL_VAR NAME="barcode" --> 
         </td>
         <td>
-          <!-- TMPL_VAR NAME="homebranchname" -->
+          <!-- TMPL_VAR NAME="homebranch" -->
         </td>
         <td>
-    <!-- TMPL_IF NAME="holdingbranchname" -->
-          <!-- TMPL_VAR NAME="holdingbranchname" -->
-    <!-- /TMPL_IF -->
+          <!-- TMPL_VAR NAME="holdingbranch" -->
+        </td>
+        <td>
+          <!-- TMPL_VAR NAME="itemcallnumber" -->
         </td>
         <td>
     <!-- TMPL_IF Name="date_due" -->
@@ -243,6 +222,25 @@ if (alreadyreserved > "0"){
           to : <!-- TMPL_VAR NAME="transfertto" -->, the : <!-- TMPL_VAR NAME="transfertwhen" -->
     <!-- /TMPL_IF -->
         </td>
+        <td>
+        <!-- TMPL_IF NAME="reservedate"-->
+		<!-- TMPL_IF NAME="nocancel" -->
+			Can't be cancelled, when item on transfert
+			<!-- TMPL_ELSE -->
+			<a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?'))    
+                                   {return true;}
+                else {return false;}">Cancel A reserve
+        	 <span> Item reserved for :
+        	 	<!-- TMPL_VAR NAME="ReservedForSurname" -->  <!-- TMPL_VAR NAME="ReservedForFirstname" -->
+        	 <br>
+        	 expected at :	<!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
+        	 </span>
+        	 </a>
+		<!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+        	No reserves
+        <!-- /TMPL_IF -->
+        </td>
       </tr>
   <!-- /TMPL_LOOP --> <!-- itemloop -->
     </table>
@@ -257,13 +255,14 @@ if (alreadyreserved > "0"){
     
     <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
     <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->">
+  
   </fieldset>
 
   <div id="actions">
 <!-- TMPL_IF NAME="cardnumber"-->
     <input type="submit" value="Reserve">
 <!-- TMPL_ELSE -->
-    <input type="submit" value="Reserve" disabled="disabled" style="background-color: gray;">
+    <input type="submit" value="Reserve" value="Reserve" disabled="disabled" style="background-color: gray;" disabled="disabled"  title="Search member first">
 <!-- /TMPL_IF -->
   </div>
 
@@ -272,7 +271,7 @@ if (alreadyreserved > "0"){
 <!-- TMPL_IF name="reserveloop" -->
 <form name="T<!-- TMPL_VAR NAME="time" -->" action="modrequest.pl" method="post">
   <fieldset>
-    <legend>Modify existing reserves</legend>
+    <legend>Queue list</legend>
     
     <table>
       <tr>
@@ -291,24 +290,26 @@ if (alreadyreserved > "0"){
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
             <option value="W" selected>Waiting</option>
-    <!-- /TMPL_IF -->
-              
-    <!-- TMPL_LOOP Name="optionloop" -->
-            <option value="<!-- TMPL_VAR NAME="num" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
-              <!-- TMPL_VAR NAME="num" -->
+    	<!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="priority" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+              <!-- TMPL_VAR NAME="priority" -->
             </option>
-    <!-- /TMPL_LOOP -->
+        <!-- /TMPL_IF -->
             <option value="del">del</option>
           </select>
         </td>
         <td>
-          <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowernumber" --></a>
+          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" ><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a>
         </td>
         <td><!-- TMPL_VAR NAME="notes" --></td>
         <td><!-- TMPL_VAR NAME="date" --></td>
         <td>
     <!-- TMPL_IF Name="wait" -->
+    	<!-- TMPL_IF NAME="atdestination" -->
           Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+          <!-- TMPL_ELSE -->
+          Document will be transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+         <!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
           <select name="pickup">
       <!-- TMPL_LOOP Name="branchloop" -->
@@ -325,8 +326,13 @@ if (alreadyreserved > "0"){
         </td>
         <td>
     <!-- TMPL_IF Name="wait" -->
-          <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=''biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;">
-            <!-- TMPL_VAR NAME="barcode" -->
+          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
+                <!-- TMPL_IF NAME="barcodenumber" -->
+                    <!-- TMPL_VAR NAME="barcodenumber" -->
+                    <input type="hidden" name="itemnumber" value=<!-- TMPL_VAR NAME="itemnumber" -->>
+                <!-- TMPL_ELSE -->
+                    No Barcode
+                <!-- /TMPL_IF -->
           </a>
     <!-- TMPL_ELSE -->
       <!-- TMPL_IF Name="constrainttypea" -->
@@ -341,9 +347,8 @@ if (alreadyreserved > "0"){
       </tr>
   <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
       <tr>
-        <td colspan="6" align="right">
-          Cancel a reserve with select
-          <input type="image" name="submit" value="Reserv" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2rightarrow.png">
+        <td colspan="6">
+          <input type="submit" name="submit" value="Cancel reserve(s)" border="0">
         </td>
       </tr>
     </table>

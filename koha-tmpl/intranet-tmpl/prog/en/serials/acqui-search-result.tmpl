@@ -1,7 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit -- Select supplier<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
 <h1>Supplier Search Results</h1>
 <h2>You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
+
+<div class="searchresults">
+<!-- TMPL_IF NAME="loop_suppliers" -->
 <table>
 	<tr>
 		<th>Book seller</th>
@@ -10,18 +12,22 @@
 	<!-- TMPL_LOOP name="loop_suppliers" -->
 		<tr>
 			<td><!-- TMPL_VAR name="name" --></td>
-			<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">Get It !</td>
+			<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR NAME="aqbooksellerid" -->,'<!--  TMPL_VAR escape="URL" NAME="name" -->')">Get It !</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
+<!-- /TMPL_IF -->
+    <br />
+    <a href="javascript:back();">Perform a new search</a>
+</div>
 
-<script language="Javascript">
+<script type="text/javascript" language="Javascript">
 
 function GetIt(aqbooksellerid,name)
 {
   opener.document.f.aqbooksellerid.value = aqbooksellerid;
   opener.document.f.aqbooksellername.value = name;
-  self.close();
+  window.close();
 }
 </script>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+

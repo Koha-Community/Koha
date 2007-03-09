@@ -17,17 +17,18 @@
 	</select>
 
 
-<label for="printer">Choose a Network Printer:</label>
-<!--printerselection-->
-<select name="printer" id="printer">
-	<!-- TMPL_LOOP Name="printerloop" -->
-		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
-	<!-- /TMPL_LOOP -->
-	</select>
-<input type="hidden" name="setcookies" value="1" />
-<input type="submit" value="Submit" name="changesettings" />
+<!-- TMPL_IF Name="printerloop" -->
+    <label for="printer">Choose a Network Printer:</label>
+    <!--printerselection-->
+    <select name="printer" id="printer">
+        <!-- TMPL_LOOP Name="printerloop" -->
+            <option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+        <!-- /TMPL_LOOP -->
+        </select>
+<!-- /TMPL_IF -->
+    <input type="hidden" name="setcookies" value="1" />
+    <input type="submit" value="Submit" name="changesettings" />
 </form>
-
 
 
 <!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

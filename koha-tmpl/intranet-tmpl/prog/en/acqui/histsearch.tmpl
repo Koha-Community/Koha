@@ -88,7 +88,13 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="suggestions_loop" -->
 				<tr>
-					<td>&nbsp;</td>
+					<td>
+					    <!-- TMPL_IF NAME="invoicenumber" -->
+					        <a href="/cgi-bin/koha/acqui/parcel.pl?code=<!-- TMPL_VAR NAME="invoicenumber"-->&supplierid=<!-- TMPL_VAR NAME="id"-->&datereceived=<!-- TMPL_VAR NAME="datereceived" -->">Parcel</a>
+					    <!-- TMPL_ELSE -->
+					        &nbsp;
+					    <!-- /TMPL_IF -->
+					</td>
 					<td><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="name" --></td>

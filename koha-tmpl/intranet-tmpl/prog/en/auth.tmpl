@@ -1,5 +1,12 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF --><!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF --><!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF -->
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="login">
+<h1><a href="" title=""><span class="hide">Log in to Koha</span></a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesn"t have permission --><h3>Login Error</h3>
 <p>Sorry, Koha doesn"t think you have permission for this page.</p>
@@ -23,21 +30,20 @@
 
 <!-- TMPL_IF NAME="loginprompt" -->
 <!-- login prompt time-->
-
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="mainform" id="mainform">
 <!-- TMPL_LOOP NAME="INPUTS" -->
-  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+    <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->
-
-<table>
-	<caption>Log In to Koha</caption>
-    <tr><th scope="row"><label for="userid">Cardnumber:</label></th><td><input name="userid" id="userid" /></td></tr>
-    <tr><th scope="row"><label for="password">Password:</label></th><td><input type="password" name="password" id="password" /></td></tr>
-    </table>
-<p><input type="submit" value="Submit" /></p>
+<p>
+<label>Username:<br />
+<input type="text" name="userid" id="userid" class="input" value="" size="20" tabindex="10" /></label>
+</p>
+<p>
+<label>Password:<br />
+<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="20" /></label>
+</p>    
+<p class="submit"><input type="submit" value="Login &raquo;" /></p>
 </form>
 
-
 <!-- /TMPL_IF -->
-
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

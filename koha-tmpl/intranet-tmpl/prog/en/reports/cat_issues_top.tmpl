@@ -1,4 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reports --<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+
+
+<!-- TMPL_IF NAME="do_it" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -6,22 +11,19 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
-
-
-<!-- TMPL_IF NAME="do_it" -->
 <script language="JavaScript" type="text/javascript">
 function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Koha : Top <!-- TMPL_VAR NAME="limit"--> List On Catalogue Issues </h1>
+		<h1>Top <!-- TMPL_VAR NAME="limit"--> List On Catalogue Issues </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
 					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF-->
 		
 		<table>
 			<tr >
@@ -43,7 +45,7 @@ function Dopop(link) {
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../MARCdetail.pl?bib=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- TMPL_ELSE -->Item<!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
 							</td>
@@ -52,11 +54,11 @@ function Dopop(link) {
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
-				<!-- /TMPL_LOOP NAME="looprow" -->
+				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Koha : Top List On Catalogue Issues  </h1>
+	<h1>Top List On Catalogue Issues</h1>
 	<form method="post">
 	
 	<table>

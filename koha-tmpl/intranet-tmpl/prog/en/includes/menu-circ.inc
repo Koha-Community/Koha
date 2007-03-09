@@ -1,10 +1,21 @@
 <div id="submenu">
-    <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
+    <li>
     <a href="/cgi-bin/koha/circ/circulation.pl">Issues</a>
     <a href="/cgi-bin/koha/circ/returns.pl">Returns</a>
     <a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a>
     <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set branch</a>
-    <a href="/cgi-bin/koha/circ/branchreserves.pl">Waiting reserves</a>
-    <a href="/cgi-bin/koha/circ/waitingreservestransfers.pl">Transfers to do</a>
-    <a href="/cgi-bin/koha/circ/currenttransfers.pl">Transfers to recieve</a>
+    </li>
+    <li>
+    Reserves <a href="/cgi-bin/koha/circ/reserve.pl">Pending</a>
+    <a href="/cgi-bin/koha/circ/branchreserves.pl">Waiting</a>
+    Transfers <a href="/cgi-bin/koha/circ/waitingreservestransfers.pl">to do</a>
+    <a href="/cgi-bin/koha/circ/currenttransfers.pl">to recieve</a>
+    </li>
+    <li>
+	Overdues <a href="/cgi-bin/koha/circ/overdue.pl">Items</a>
+    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Claims</a>
+    Daily <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Reconciliation</a>
+    </li>
 </div>
+
+<div id="main">

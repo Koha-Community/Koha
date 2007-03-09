@@ -25,14 +25,10 @@
 				<td><!-- TMPL_VAR NAME="code" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
 				<td>
-					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=<!-- TMPL_VAR name="module" -->&amp;code=<!-- TMPL_VAR NAME="code" -->">
-						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0">
-					</a>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=<!-- TMPL_VAR name="module" -->&amp;code=<!-- TMPL_VAR NAME="code" -->">Edit</a>
 				</td>
 				<td>
-					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">
-						<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
-					</a>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">Delete</a>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
@@ -150,46 +146,36 @@
 			<p>
 				<label class="label100">Koha module:</label>
 				<select name="module">
-					<!-- TMPL_IF name="acquisition" -->
-						<option value="acquisition" selected>Acquisition</option>
-					<!-- TMPL_ELSE -->
-						<option value="acquisition">Acquisition</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="catalogue" -->
-						<option value="catalogue" selected>Catalogue</option>
-					<!-- TMPL_ELSE -->
-						<option value="catalogue">Catalogue</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="serial" -->
+						<!--TMPL_IF Name="catalogue"-->
+                        <option value="catalogue" selected>Catalogue</option>
+						<!--TMPL_ELSE-->
+                        <option value="catalogue" >Catalogue</option>
+                        <!--/TMPL_IF-->
+						<!--TMPL_IF Name="Serial"-->
 						<option value="serial" selected>Serial</option>
-					<!-- TMPL_ELSE -->
+						<!--TMPL_ELSE-->
 						<option value="serial">Serial</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="circulation" -->
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="claimacquisition"-->
+						<option value="claimacquisition" selected>Claim Acquisition</option>
+						<!--TMPL_ELSE-->
+						<option value="claimacquisition">Claim Acquisition</option>
+						<!--/TMPL_IF -->
+						<!--TMPL_IF Name="claimissues"-->
+						<option value="claimissues" selected>Claim Issues</option>
+						<!--TMPL_ELSE-->
+						<option value="claimissues">Claim Issues</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="circulation"-->
 						<option value="circulation" selected>Circulation</option>
-					<!-- TMPL_ELSE -->
+						<!--TMPL_ELSE-->
 						<option value="circulation">Circulation</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="members" -->
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="members"-->
 						<option value="members" selected>Members</option>
-					<!-- TMPL_ELSE -->
+						<!--TMPL_ELSE-->
 						<option value="members">Members</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="authorities" -->
-						<option value="authorities" selected>Authorities</option>
-					<!-- TMPL_ELSE -->
-						<option value="authorities">Authorities</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="reports" -->
-						<option value="reports" selected>Reports</option>
-					<!-- TMPL_ELSE -->
-						<option value="reports">Reports</option>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="parameters" -->
-						<option value="parameters" selected>Parameters</option>
-					<!-- TMPL_ELSE -->
-						<option value="parameters">Parameters</option>
-					<!-- /TMPL_IF -->
+						<!--/TMPL_IF-->
 				</select>
 			</p>
 			<p>
@@ -200,15 +186,37 @@
 		<!-- TMPL_IF NAME="adding" -->
 			<p>
 				<label class="label100">Koha module:</label>
-				<select name="module">
-						<option value="acquisition">Acquisition</option>
-						<option value="catalogue">Catalogue</option>
+				<select name="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
+						<!--TMPL_IF Name="catalogue"-->
+                        <option value="catalogue" selected>Catalogue</option>
+						<!--TMPL_ELSE-->
+                        <option value="catalogue" >Catalogue</option>
+                        <!--/TMPL_IF-->
+						<!--TMPL_IF Name="serial"-->
+						<option value="serial" selected>Serial</option>
+						<!--TMPL_ELSE-->
 						<option value="serial">Serial</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="claimacquisition"-->
+						<option value="claimacquisition" selected>Claim Acquisition</option>
+						<!--TMPL_ELSE-->
+						<option value="claimacquisition">Claim Acquisition</option>
+						<!--/TMPL_IF -->
+						<!--TMPL_IF Name="claimissues"-->
+						<option value="claimissues" selected>Claim Issues</option>
+						<!--TMPL_ELSE-->
+						<option value="claimissues">Claim Issues</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="circulation"-->
+						<option value="circulation" selected>Circulation</option>
+						<!--TMPL_ELSE-->
 						<option value="circulation">Circulation</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="members"-->
+						<option value="members" selected>Members</option>
+						<!--TMPL_ELSE-->
 						<option value="members">Members</option>
-						<option value="authorities">Authorities</option>
-						<option value="reports">Reports</option>
-						<option value="parameters">Parameters</option>
+						<!--/TMPL_IF-->
 				</select>
 			</p>
 			<p>
@@ -217,21 +225,22 @@
 		<!-- /TMPL_IF -->
 		
 		<p>
-			<label class="label100">Name:</label><input type="text" name="name" size="100" value="<!-- TMPL_VAR NAME="name" -->">
+			<label class="label100">Name:</label><input type="text" name="name" size="60" value="<!-- TMPL_VAR NAME="name" -->">
 		</p>
 		<p>
-			<label class="label100">Title (mail subject):</label><input type="text" name="title" size="100" value="<!-- TMPL_VAR NAME="title" -->">
+			<label class="label100">Title (mail subject):</label><input type="text" name="title" size="60" value="<!-- TMPL_VAR NAME="title" -->">
 		</p>
 		<p>
 			<label class="label100">Content (mail content):</label>
 		</p>
-		<p><textarea name="content" cols="80" rows="10"><!-- TMPL_VAR NAME="content" --></textarea>
-		<input type="button" name="insert" value="&lt;&lt;" onclick="insertValueQuery()" title="Insert" />
-		<select name="SQLfieldname" size=10>
+		<p>		
+		<select name="SQLfieldname" size=9>
 			<!-- TMPL_LOOP name="SQLfieldname" -->
 				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
 			<!-- /TMPL_LOOP -->
 		</select>
+        <input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insert" />
+        <textarea name="content" cols="100" rows="15"><!-- TMPL_VAR NAME="content" --></textarea>
 		</p>
 		<p><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
 		</form>

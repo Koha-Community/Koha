@@ -1,4 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reports --<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -10,13 +11,13 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Koha : Issues Average Period statistics </h1>
+		<h1>Issues Average Period statistics </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
 					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF-->
 		
 		<table>
 			<tr >
@@ -31,7 +32,7 @@
 						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->

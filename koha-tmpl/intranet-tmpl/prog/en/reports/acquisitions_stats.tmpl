@@ -1,4 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reports --<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -10,13 +11,13 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Koha : Acquisitions statistics </h1>
-		<!-- TMPL_IF NAME="loopfilter"-->
+		<h1>Acquisitions statistics </h1>
+     		<!-- TMPL_IF NAME="loopfilter" -->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
+					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --> <!-- TMPL_VAR NAME="crit"--> =<!--  TMPL_VAR NAME="filter" --><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF NAME="loopfilter" -->
 		
 		<table>
 			<tr >
@@ -54,7 +55,7 @@
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Koha : Acquisitions statistics </h1>
+	<h1>Acquisitions statistics</h1>
 	<form method="post">
 	<table>
 		<thead>
@@ -219,7 +220,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr class="hilighted">
-				<td>Book Seller</td>
+				<td>Supplier</td>
 				<td><input type="radio" name="Line" value="aqbooksellers.name" /></td>
 				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
 				<td ><!-- TMPL_VAR NAME="CGIBookSeller" --></td>

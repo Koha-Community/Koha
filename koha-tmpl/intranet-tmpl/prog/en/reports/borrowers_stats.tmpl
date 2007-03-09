@@ -1,4 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Reports --<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -10,13 +11,13 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Koha : Borrowers statistics </h1>
+		<h1>Borrowers statistics</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
 					<p> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF -->
 		<table>
 			<tr >
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
@@ -41,7 +42,7 @@
 							<!-- TMPL_VAR NAME="totalrow" -->
 						</td>
 					</tr>
-				<!-- /TMPL_LOOP NAME="looprow" -->
+				<!-- /TMPL_LOOP  -->
 				<tr >
 					<th>TOTAL</th>
 					<!-- TMPL_LOOP NAME="loopfooter" -->

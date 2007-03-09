@@ -30,6 +30,7 @@
 	<!-- /TMPL_IF -->
 	<!-- TMPL_UNLESS NAME="message" -->
 	<div id="resultlist">
+	    <!-- TMPL_IF NAME="reserveloop" -->
 		<table>
 		<tr>
 			<th class="circulation" colspan="5">Reserves of your library</th>
@@ -46,13 +47,13 @@
 					<td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve Over <!-- /TMPL_IF --></td>
 					<td>
 						<p>
-							<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+							<a href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
 							&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
 							<br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
 						</p>
 					</td>
 					<td>
-						<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+						<p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
 					<!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
 		<!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
 						</p>
@@ -64,18 +65,19 @@
 							<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
 							<input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->">
 							<input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->">
-							<input type="submit" 
-								<!-- TMPL_IF NAME="dotransfer" -->
-							value="Cancel reserve and return this document" 
+							<!-- TMPL_IF NAME="dotransfer" -->
+							<input type="submit" value="Cancel reserve and return to : <!-- TMPL_VAR NAME="homebranch" -->"> 
 							<!-- TMPL_ELSE -->
-							value="Cancel reserve" 
+							<input type="submit" value="Cancel reserve" >
 						<!-- /TMPL_IF -->
-						>
 						</form>
 					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
+		<!-- TMPL_ELSE -->
+		    <b>No reserve found.</b>
+		<!-- /TMPL_IF -->
 	</div>
 	<!-- /TMPL_UNLESS -->
 </div>

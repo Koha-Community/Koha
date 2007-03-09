@@ -1,42 +1,128 @@
-﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+Koha -- Authorities
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
 
+<fieldset id="authorities_authorities_home_search">
+  <legend>Authority search</legend>
 
-<form name="f" method="post">
-	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="type" value="intranet" />
-	<input type="hidden" name="stype" value="author" />
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-<div class="data"><table>
-<caption>Authority search</caption>
-<tr><th><label for="authtypecode">Authority type</label></th><td><select id="authtypecode" name="authtypecode"  >
-			<!-- TMPL_LOOP NAME="authtypesloop" -->
-				<option value="<!-- TMPL_VAR NAME="value" -->" >
-					<!-- TMPL_VAR NAME="authtypetext" -->
-				</option>
-			<!-- /TMPL_LOOP -->
-			</select></td></tr>
-<tr><th><label id="mainentry">Main entry</label></th><td><select name="operator" id="mainentry">
-				<option value="all">All words</option>
-				<option value="phrase">Phrase</option>
-			</select> <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-			<input type="hidden" name="marclist" value="mainentry" />
-			
-			</td></tr>			
-<tr><th><label for="anywhere">Anywhere</label></th><td><select name="operator" id="anywhere">
-				<option value="all">All words</option>
-				<option value="phrase">Phrase</option>
-			</select> <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
-			<input type="hidden" name="marclist" value="">
-			
-			</td></tr></table></div>
-		<p>
-			<input type="submit" value="Start search" class="submit">
-		</p>
-</form>
+  <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
+    <input type="hidden" name="op" value="do_search">
+    <input type="hidden" name="type" value="intranet">
+    <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
 
+    <table>
+      <tr>
+        <th>
+          <label for="authtypecode">Search on</label>
+        </th>
+        <td colspan="2">
+          <select id="authtypecode" name="authtypecode">
+<!-- TMPL_LOOP NAME="authtypesloop" -->
+  <!-- TMPL_IF name="selected" -->
+            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+  <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="authtypetext" --></option>
+  <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="value_mainmainentry">Main entry ($a only)</label>
+          <input type="hidden" name="marclist" value="mainmainentry">
+        </th>
+        <td>
+          <select name="operator">
+	    <option value="contains">contains</option>
+	    <option value="start">start by</option>
+            <option value="is">is exactly</option>
+	  </select>
+        </td>
+        <td>
+          <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="value_mainentry">Main entry</label>
+          <input type="hidden" name="marclist" value="mainentry">
+          <input type="hidden" name="and_or" value="and">
+          <input type="hidden" name="excluding" value="">
+        </th>
+        <td>
+          <select name="operator">
+	    <option value="contains">contains</option>
+	    <option value="start">start by</option>
+            <option value="is">is exactly</option>
+	  </select>
+        </td>
+        <td>
+          <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+        </td>
+      </tr>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+      <tr>
+        <th>
+          <label for="value_anywhere">Anywhere</label>
+          <input type="hidden" name="marclist" value="">
+          <input type="hidden" name="and_or" value="and">
+          <input type="hidden" name="excluding" value="">
+        </th>
+        <td>
+          <select name="operator">
+            <option value="contains">contains</option>
+            <option value="start">start by</option>
+            <option value="is">is exactly</option>
+          </select>
+        </td>
+        <td>
+          <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+        </td>
+      </tr>
+    </table>
+    
+    <div id="action">
+          Order by :<select name="orderby">
+         <option value="">None</option>
+	    <option value="HeadingAsc">Heading Ascendant</option>
+	    <option value="HeadingDsc">Heading Descendant</option>
+	  </select>
+      <input type="submit" value="Start search">
+    </div>
+  </form>
+</fieldset>
+    
+<fieldset id="authorities_authorities_home_add">
+  <legend>Add authority</legend>
 
+  <form name="f2" method="post" action="authorities.pl">
+    <table>
+      <tr>
+        <th>
+          <label for="add_authtypecode">Authority type</label>
+        </th>
+        <td>
+          <select id="add_authtypecode" name="authtypecode">
+<!-- TMPL_LOOP name="authtypesloop" -->
+  <!-- TMPL_IF name="selected" -->
+            <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="authtypetext" --></option>
+  <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="authtypetext" --></option>
+  <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <div id="action">
+      <input type="submit" value="Add" class="button authority">
+    </div>
+  </form>
+</fieldset>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

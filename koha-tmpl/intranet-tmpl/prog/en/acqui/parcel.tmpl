@@ -2,171 +2,109 @@
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
-<script type="text/javascript">
-function docalculate(){
-  //collect values
-received=document.getElementsByName('received');
- actual=document.getElementsByName('actual');
- freight=document.getElementsByName('freight');
-discounts=document.getElementsByName('discount');
-gstrate=document.getElementsByName('gstrate');
-totalreceived=0;
-totalactual=0;
-totalfreight=0;
-totaldiscount=0;
-totalgst=0;
-	for (var s=0; s<received.length; s++){
-		receivedvalue =received.item(s).value;	
-		totalreceived +=(receivedvalue*1);
-		thisactual =actual.item(s).value*receivedvalue;
-		totalactual +=thisactual;
-		totalfreight +=freight.item(s).value*receivedvalue;
-		thisdiscount =thisactual*discounts.item(s).value/100;
-		totaldiscount +=thisdiscount;
-		totalgst +=(thisactual - thisdiscount)*gstrate.item(s).value/100;
-	}
- document.f.totalreceived.value=totalreceived*1;
- document.f.totalactual.value=totalactual;
- document.f.totalfreight.value=totalfreight*1;
-document.f.actualdiscount.value=totaldiscount;
-includesgst=parseInt(document.f.incgst.value);
- if(includesgst>0){
- document.f.actualgst.value="-inc.-";
- }else{
- document.f.actualgst.value=totalgst;
-}
-document.f.freightgst.value=totalfreight*document.f.freightgstrate.value/100;
-disct=0;
- if ( document.f.actualgst.value>0){
-disct= document.f.actualgst.value;
-}
-document.f.actualtotal.value=totalactual + -totaldiscount +disct*1;
-document.f.actualfreight.value=totalfreight+ document.f.freightgst.value*1;
-document.f.invoicetotal.value=document.f.actualfreight.value*1 +document.f.actualtotal.value*1;
-<!--TMPL_IF NAME="invcurrency"-->
-document.f.localtotal.value=document.f.invoicetotal.value*<!--TMPL_VAR NAME="currencyrate"-->;
-<!--/TMPL_IF-->
-  return true;
-}
-function updatetotal(){
-document.f.actualtotal.value= document.f.totalactual.value - document.f.actualdiscount.value + document.f.actualgst.value*1;
-document.f.invoicetotal.value=document.f.actualfreight.value*1+document.f.actualtotal.value*1;
-<!--TMPL_IF NAME="invcurrency"-->
-document.f.localtotal.value=document.f.invoicetotal.value*<!--TMPL_VAR NAME="currencyrate"-->;
-<!--/TMPL_IF-->
-  return true;
-}
-function checkform(){
-if (document.f.invoice.value==""){
-alert ("You need a suppliers Invoice number!");
-return false;
-}
-if ( document.f.totalreceived.value==0 || document.f.totalreceived.value==""){
-alert ("no items entered as received !");
-return false;
-}
-document.f.submit();
-}
-</script>
+
     <h1>
-                 Orders being recieved from <!-- TMPL_VAR NAME="name" -->
-      
+        <!-- TMPL_IF name="date" -->
+            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"-->Parcel <i><!-- TMPL_VAR NAME="invoice" --></i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="date" --></i>
+        <!-- TMPL_ELSE -->
+            orders not yet recieved for <!-- TMPL_VAR NAME="name" -->
+        <!-- /TMPL_IF -->
     </h1>
- <form action="finishreceive.pl" method="post" name="orderform" id="f">
-<input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
-<div >
-<p>Received By: <!-- TMPL_VAR NAME="user" --></p>
-<p>   Suppliers Invoice No: <input type="text" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
-    
-    Date received:  <input type="text" name="datereceived" value="<!-- TMPL_VAR NAME="date" -->" /></p>
+<div id="acqui_recieve_summary">
+    <p>Parcel: <!-- TMPL_VAR NAME="invoice" --></p>
+    <p>Received by: <!-- TMPL_VAR NAME="loggedinusername" --></p>
+    <p>On: <!-- TMPL_VAR NAME="datereceived" --></p>
 </div>
-<div >
+<div id="acqui_recieve_recievelist">
     <h2>Recieve list</h2>
-   <input type="hidden" name="incgst" value="<!--TMPL_VAR NAME="incgst"-->" />
-  <input type="hidden" name="currencyrate" value="<!--TMPL_VAR NAME="currencyrate"-->" />
-    <table >
-	<tr>Rate of tax used for P&P:<input type="text" size="2" name="freightgstrate" value="<!--TMPL_VAR NAME="gstrate"-->" />%</td>
-        <tr> <th align="left">Basket/Order</th>
-             <th class="acquisition">ISBN</th>
-            <th class="acquisition">Title</th>
-            <th class="acquisition">Price</th>
-	  <th class="acquisition">Actual <!--TMPL_VAR NAME="invcurrency"--></th>
-            <th class="acquisition">P&amp;P <!--TMPL_VAR NAME="invcurrency"--></th>
-            <th class="acquisition">Qty</th>
-	 <th class="acquisition">Received</th>
-            
+    <form action="" method="get" name="orderform">
+    <table>
+        <tr>
+            <th class="acquisition">BASKET</th>
+            <th class="acquisition">Summary</th>
+            <th class="acquisition">QTY ordered</th>
+            <th class="acquisition">Est Cost</th>
+            <th class="acquisition">ACTUAL</th>
+            <th class="acquisition">P&amp;P</th>
+            <th class="acquisition">QTY received</th>
+            <th class="acquisition">TOTAL</th>
         </tr>
-        <!-- TMPL_LOOP NAME="loop_orders" -->
-            <tr><input type="hidden" name="ordernumber" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
-	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-	<input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
-                <td ><!-- TMPL_VAR NAME="basketno" -->/<!-- TMPL_VAR NAME="ordernumber" --></td>
-                <td><!-- TMPL_VAR NAME="isbn" --></td>
-                <td><!-- TMPL_VAR NAME="title" --></td>
-                <td align="right"><!-- TMPL_VAR NAME="rrp" --></td>
-                <td align="right"> <input type="text" size="2" name="actual" value="<!-- TMPL_VAR NAME="actualrrp" -->" onChange="docalculate();"/></td>
-	  <td align="right"> <input type="text" size="2" name="freight" value="0.00" onChange="docalculate();"/></td>
+        <!-- TMPL_LOOP NAME="loop_received" -->
+            <tr>
+                <td><!-- TMPL_VAR NAME="basketno" --></td>
+                <td><a href="orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;daterecieved=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a>
+                <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
+                </td>
                 <td><!-- TMPL_VAR NAME="quantity" --></td>
-	<td> <input type="text" size="2" name="received" value="<!-- TMPL_VAR NAME="toreceive" -->" onChange="docalculate();"/></td>
-                <input type="hidden" name="discount" value="<!--TMPL_VAR NAME="discount"-->" />
-	<input type="hidden" name="gstrate" value="<!--TMPL_VAR NAME="gst"-->" />
+                <td><!-- TMPL_VAR NAME="ecost" --></td>
+                <td><!-- TMPL_VAR NAME="unitprice" --></td>
+                <td></td>
+                <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
+                <td><!-- TMPL_VAR NAME="total" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
         <tr>
-            <td ></td>
-            <td></td>
-            <th class="acquisition" align="right">SubTotals</th>
-            <td align="right"><b><!-- TMPL_VAR NAME="totalprice" --></b></td>
-	<td align="right"><b><input type="text" name="totalactual" size="2" value="<!-- TMPL_VAR NAME="totalactual" -->" /></b></td>
-            <td align="right"><b><input type="text" size="2" name="totalfreight" /></b></th>
-            <td ><b><!-- TMPL_VAR NAME="totalquantity" --></b></td>
-	 <td ><b><input type="text" size="2" name="totalreceived" value="<!-- TMPL_VAR NAME="totaltoreceive" -->" READONLY /></b></td>
-          
+            <th class="acquisition" colspan="3"></th>
+            <th class="acquisition">SUBTOTALS</th>
+            <th class="acquisition"><!-- TMPL_VAR NAME="totalprice" --></th>
+            <th class="acquisition"><!-- TMPL_VAR NAME="totalfreight" --></th>
+            <th class="acquisition"><!-- TMPL_VAR NAME="totalquantity" --></th>
+            <th class="acquisition"><!-- TMPL_VAR NAME="tototal" --></th>
         </tr>
-	 <!--TMPL_IF NAME="totaldiscount"-->    <tr>
-           <td >&nbsp;</td>
-            <td>&nbsp;</td>
-  <th class="acquisition" align="right">- Discount</th>
-            <td align="right"><b><!-- TMPL_VAR NAME="totaldiscount" --></b></td>
-	<td align="right"><b><input type="text" name="actualdiscount" size="2" value="<!-- TMPL_VAR NAME="actualdiscount" -->" onChange="updatetotal();"/></b></td>
-        </tr><!--/TMPL_IF-->
-     <!--TMPL_IF NAME="gstreg"-->    <tr>
-           <td >&nbsp;</td>
-            <td>&nbsp;</td>
-  <th class="acquisition" align="right">Tax</th>
-            <td align="right"><b><!-- TMPL_VAR NAME="totalgst" --></b></td>
-	<td align="right"><b><input type="text" name="actualgst" size="2" value="<!-- TMPL_VAR NAME="actualgst" -->"/></b></td>
-	<td align="right"><b><input type="text" name="freightgst" size="2"  /></td></b>
-        </tr><!--/TMPL_IF-->
         <tr>
-	 <td >&nbsp;</td>
-            <td>&nbsp;</td>
-            <th class="acquisition" align="right">Totals</th>
-            <td align="right"><b><!-- TMPL_VAR NAME="total" --></b></td>
-	<td align="right"><b><input type="text" name="actualtotal" size="2" value="<!-- TMPL_VAR NAME="actualtotal" -->"   onChange="updatetotal();"/></b></td>
-	<td align="right"><b><input type="text" name="actualfreight" size="2"  onChange="updatetotal();"/></b></td>
+            <td colspan="5">
+            <b>HELP</b>
+                <p>The total at the bottom of the page should be within a few cents of the total for the invoice.</p>
+            </td>
+            <td colspan="2"><b>GST</b></td>
+            <td><!-- TMPL_VAR NAME="gst" --></td>
         </tr>
-	<tr>
-	<td >&nbsp;</td>
-	<td >&nbsp;</td>
-            <th class="acquisition" align="right" colspan="5">Invoice Total <!--TMPL_VAR NAME="invcurrency"--></th>         
-	<td ><b><input type="text" name="invoicetotal" size="4"  /></b></td>
+        <tr>
+        <td colspan="5">&nbsp;</td>
+            <td colspan="2"><b>TOTAL</b></td>
+            <td><!-- TMPL_VAR NAME="grandtot" --></td>
         </tr>
-	<!--TMPL_IF NAME="invcurrency"-->
-	<tr>
-	<td >&nbsp;</td>
-	<td >&nbsp;</td>
-            <th class="acquisition" align="right" colspan="5">Invoice Total </th>         
-	<td ><b><input type="text" name="localtotal" size="4"  /></b></td>
-        </tr>
-	<!--/TMPL_IF-->
     </table>
-Note: P&P is per item. If you have a total freight fill the Total P&P only.!
-	<p><input type="button" value="Receive" onClick="checkform();" /></p>
     </form>
 </div>
-<script>
-updatetotal();
-</script>
+<div id="acqui_recieve_search">
+    <h2>Add a book to the receipt</h2>
+    <form action="/cgi-bin/koha/acqui/orderreceive.pl">
+        <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
+        <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
+        <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
+        <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
+        <p><b>Search ISBN or Title:</b> <input type="text" size="25" name="recieve" /></p>
+    </form>
+    <table> <caption>or select a pending orders</caption>
+        <tr>
+            <th class="acquisition">BASKET</th>
+            <th class="acquisition">Summary</th>
+            <th class="acquisition">Est. Cost</th>
+            <th class="acquisition">P&amp;P</th>
+            <th class="acquisition">QTY Ordered</th>
+            <th class="acquisition">QTY</th>
+            <th class="acquisition">TOTAL</th>
+        </tr>
+        <!-- TMPL_LOOP NAME="loop_orders" -->
+            <tr>
+                <td><!-- TMPL_VAR NAME="basketno" --></td>
+                <td>
+                  <a href="orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;daterecieved=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a>
+                <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
+                </td>
+                <td><!-- TMPL_VAR NAME="unitprice" --></td>
+                <td></td>
+                <td><!-- TMPL_VAR NAME="quantity" --></td>
+                <td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+                <td><!-- TMPL_VAR NAME="ecost" --></td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+     </table>
+</div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
  

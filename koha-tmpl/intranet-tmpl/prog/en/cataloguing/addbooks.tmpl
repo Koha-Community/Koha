@@ -1,41 +1,119 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging Home<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
 	<h1>Catalog Maintenance</h1>
 	<!-- TMPL_IF name="noitemsfound" -->
-		<font color="red" size="4">No items found</font>
+		No items found
 	<!-- /TMPL_IF -->
 	
-	<div class="data">
-		<form action="isbnsearch.pl">
-		<table>
-		<caption>Search Existing Records</caption>
-		<tr><th><label for="title">Title</label></th>
-		<td>		<input type="text" name="title" id="title"size="35" /></td></tr>
-		<tr><th><label for="isbn">ISBN</label></th>
-		<td><input type="text" name="isbn" id="isbn"size="35" /></td></tr>		
-		</table></div>
-				<p><input type="submit" value="Search" class="submit" /></p>
-				<div class="help"><ul class="notes"><li>If the ISBN is found into the database, that record will be retrieved and can be modified.</li>
-	<li>If the ISBN is found in the reservoir, it will be retrieved and a full record added.</li>
-	<li>Otherwise, a record can be added from scratch.</li></ul></div>
+<h2>Search Existing Records</h2>
+<div id="addbooks_search">
+	<form name="search" action="addbooks.pl">
+        <label for="q">Search the catalog: </label>
+        <input id="q" type="text"  size="25"   name="q" />
+        <input type="submit" value="search">
+	</form>
+</div>
+<div id="addbooks_add_without_search">
+	<!-- TMPL_IF NAME="NOTMARC" -->
+		<form action="addbiblio.pl">
+			<input type="submit" value="Add Record Without Search" />
 		</form>
+	<!-- TMPL_ELSE -->
+		<form name="f" action="addbiblio.pl" method="post">
+		<h2>Create a Blank Bibliographic Record</h2>
+		<p>
+			<label for="frameworkcode">Choose a Framework:</label>
+			<select name="frameworkcode" id="frameworkcode">
+				<option value="">Default</option>
+				<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+					<option value="<!-- TMPL_VAR NAME="value" -->">
+						<!-- TMPL_VAR NAME="frameworktext" -->
+					</option>
+				<!-- /TMPL_LOOP -->
+			</select>
+			<input type="submit" value="Add Record Without Search" />
+		</p>
+		</form>
+			<!-- /TMPL_IF -->
+</div>
 
-		<!-- TMPL_IF name="noitemsfound" -->
-				<form action="addbiblio.pl" method="post">
-		<div class="data"><table>
-		<caption>Create a Blank Bibliographic Record</caption>
-		<tr><th><label for="frameworkcode">Choose a Framework:</label></th><td><select name="frameworkcode" id="frameworkcode">
-						<option value="">Default</option>
-						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
-							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
-						<!-- /TMPL_LOOP -->
-					</select> <input type="submit" value="Add Record Without Search" class="submit" /></td></tr>
-		</table></div></form>
-			
-		<!-- /TMPL_IF -->
 
+<!-- display the search results -->
 
+<!-- TMPL_IF NAME="total"-->
+<!-- TMPL_VAR NAME="total"--> Results found in catalogue.
+<div class="searchresults">
+    <table>
+    <tr>
+       <th>Title</th>
+       <th>Author</th>
+       <th>publisher</th>
+       <th>Publication year</th>
+    </tr>
+    <!-- TMPL_LOOP NAME="resultsloop" -->
+        <tr>
+            <td>
+                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                    <!-- TMPL_VAR NAME="title" -->
+                </a>
+                <br />
+                <small><!-- TMPL_VAR NAME="subtitle" --></small>
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="author" -->
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="publishercode" -->
+            </td>
+            <td>
+                <!-- TMPL_VAR NAME="publicationyear" -->
+            </td>
+        </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+</div>
+<!-- TMPL_ELSE -->
+    <b>No Result found in catalogue.</b>
+    <!-- TMPL_IF NAME="error" -->
+        Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
+<div id="searchresult-breeding">
+    <h2>Biblios in reservoir</h2>
+    <!-- TMPL_IF name="breeding_loop" -->
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>coming from</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            <!-- TMPL_LOOP NAME="breeding_loop" -->
+            <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+                <td><!-- TMPL_VAR NAME="title" --></a>
+                <td><!-- TMPL_VAR NAME="author" --></td>
+                <td><!-- TMPL_VAR NAME="isbn" --></td>
+                <td><!-- TMPL_VAR NAME="file" --></td>
+                <!-- TMPL_IF NAME="NOTMARC" -->
+                                    
+                <!-- TMPL_ELSE -->
+                <td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
+                <!-- /TMPL_IF -->
+            </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+    <!-- TMPL_ELSE -->
+    <p>None</p>
+    <!-- /TMPL_IF -->
+</div>
+<script type="text/JavaScript">
+    document.search.q.focus();
+</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -3,15 +3,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-<!-- TMPL_INCLUDE NAME="javascript/members.js" -->
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add professional member (step <!-- TMPL_VAR NAME="step" -->)
+		Add professional member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify professional member
+		Modify professional member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -31,7 +30,7 @@
 		</p>	
 		<!--/TMPL_IF-->
 	<!--/TMPL_IF-->
-	<!-- TMPL_IF Name="NOK" -->
+	<!-- TMPL_IF Name="nok" -->
 		<h1>ERROR</h1>
 		<div id="problem">
 			<p>The following fields are wrong. Please fix it/them</p>
@@ -47,7 +46,7 @@
 <!-- TMPL_IF NAME="step_1"--><!--BEGIN OF TEST IF NOT collectivity BUT IN 1 STEP-->
 <form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 		<!-- 		field always hidden in different form (1,2,3) -->
-		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
+		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
 		<input type="hidden" name="FormFieldList" value="surname|select_city|othernames|initials|title|cardnumber|firstname|dateofbirth|sort1|sort2">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
@@ -57,7 +56,6 @@
 		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" >
-		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
 
@@ -81,7 +79,7 @@
 		<input type="hidden" name="B_city"  value="<!-- TMPL_VAR NAME="B_city" -->">
 		<input type="hidden" name="B_phone"  value="<!-- TMPL_VAR NAME="B_phone" -->"> 
 		<input type="hidden" name="fax"  value="<!-- TMPL_VAR NAME="fax" -->"> 	
-		<textarea style="display:none;" name="contactnotes" cols="70" rows="3"  ><!-- TMPL_VAR NAME="contactnotes" --></textarea>
+		<textarea style="display:none;" name="contactnote" cols="70" rows="3"  ><!-- TMPL_VAR NAME="contactnote" --></textarea>
 
 <!-- 		from form 3 -->
 		<input type="hidden" name="dateenrolled"  value="<!-- TMPL_VAR NAME="dateenrolled" -->">
@@ -101,7 +99,7 @@
 	<!-- TMPL_VAR NAME="member" -->
 	<p>
 		<!-- TMPL_IF NAME="mandatorycardnumber" -->
-		<label class="borrowers_mandafield">
+		<label style="font-weight:bold">
 		<!--TMPL_ELSE-->
 		<label>
 		<!-- /TMPL_IF-->
@@ -125,13 +123,8 @@
 		<!-- TMPL_ELSE -->
 			<label>
 		<!-- /TMPL_IF-->
-		Title</label>
-		<select  name="title" >
-			<option <!-- TMPL_VAR NAME="title_selected_ " --> value="" >Select a value</option>
-			<option value="Mlle" <!-- TMPL_VAR NAME="title_Mlle" -->>Mlle</option>
-			<option value="Mme" <!-- TMPL_VAR NAME="title_Mme" -->>Mme</option>
-			<option value="Mr" <!-- TMPL_VAR NAME="title_Mr" --> >M.</option>
-		</select>
+		Civility</label>
+		<!-- TMPL_VAR NAME="borrotitlepopup" -->
 		</p>
 		<p>
 		<!-- TMPL_IF NAME="mandatorysurname" -->
@@ -158,7 +151,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Date of Birth</label>
-			<input type="text" name="dateofbirth" size="20" onBlur="CheckDate(document.form.dateofbirth.value);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
+			<input type="text" name="dateofbirth" size="20" onBlur="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryinitials" -->
@@ -182,8 +175,14 @@
 	<fieldset id="memberentry_identity">
 		<legend>Borrower type</legend>
 		<p>
-		<label>Select a category</label>
-		<!-- TMPL_VAR NAME="catcodepopup" -->
+    <!-- TMPL_IF NAME="catcodepopup" -->
+			    <label>Category</label>
+			    <!-- TMPL_VAR NAME="catcodepopup" -->
+			<!-- TMPL_ELSE -->
+			    <span class="problem">There is no category type to add a Professional.</span>
+			        <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
+			     
+			<!-- /TMPL_IF -->
 		</p>
 		<!-- TMPL_IF NAME="city_cgipopup" -->	
 		<p>
@@ -235,8 +234,8 @@
 	
 <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 		<!-- 		field always hidden in different form (1,2,3) -->
-		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
-		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|city|contactname|phone|phonepro|mobile|email|emailpro|B_zipcode|B_phone|B_address|B_city|relationship|fax|contactnotes">
+		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
+		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|city|contactname|phone|phonepro|mobile|email|emailpro|B_zipcode|B_phone|B_address|B_city|relationship|fax|contactnote">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
@@ -245,7 +244,6 @@
 		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 	
@@ -284,7 +282,7 @@
 
 	<p>
 		<!-- TMPL_IF NAME="mandatorycardnumber" -->
-		<label class="borrowers_mandafield">
+		<label style="font-weight:bold">
 		<!-- TMPL_ELSE -->
 		<label>
 		<!-- /TMPL_IF-->
@@ -295,7 +293,7 @@
 		<legend>Professional address</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorystreetnumber" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->	
@@ -305,7 +303,7 @@
 			<!-- TMPL_IF NAME="road_cgipopup" -->
 				<p>
 				<!-- TMPL_IF NAME="mandatorystreettype" -->
-					<label class="borrowers_mandafield">
+					<label style="font-weight:bold">
 				<!--TMPL_ELSE-->
 					<label>
 				<!-- /TMPL_IF-->
@@ -315,7 +313,7 @@
 			<!--/TMPL_IF-->	
 		<p>
 			<!-- TMPL_IF NAME="mandatoryaddress" -->
-			<label class="borrowers_mandafield">
+			<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->	
@@ -323,8 +321,8 @@
 			<input type="text" name="address" size="34" value="<!-- TMPL_VAR NAME="address" -->">
 		</p>
 		<p>
-			<!-- TMPL_IF NAME="mandatoryaddress2" -->
-				<label class="borrowers_mandafield">
+			<!-- TMPL_IF NAME="mandatoryaddress2s" -->
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -333,7 +331,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryzipcode" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -342,7 +340,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorycity" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -351,7 +349,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorybranchcode" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -363,7 +361,7 @@
 		<legend>Professional contact</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryphone" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -372,7 +370,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryphonepro" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -381,7 +379,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorymobile" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -391,7 +389,7 @@
 		<p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryemail" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -400,7 +398,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryemailpro" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -409,7 +407,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryefax" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 				<label>
 			<!-- /TMPL_IF-->
@@ -421,7 +419,7 @@
 		<legend>Structure</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorycontactname" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -430,20 +428,21 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryrelationship" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 				<label>
 			<!-- /TMPL_IF-->
 			Relation</label>
 			<select name="relationship" size="1">
-						<!-- TMPL_LOOP NAME="relshiploop" -->
-							<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
-						<!-- /TMPL_LOOP -->
+				<option> </option>
+				<!-- TMPL_LOOP NAME="relshiploop" -->
+					<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
+				<!-- /TMPL_LOOP -->
 			</select>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryB_address" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -452,7 +451,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryB_zipcode" -->
-			<label class="borrowers_mandafield">
+			<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 			<label>
 			<!-- /TMPL_IF-->	
@@ -460,7 +459,7 @@
 			<input type="text" maxlength="5" name="B_zipcode" size="5" value="<!-- TMPL_VAR NAME="B_zipcode" -->">
 		</p>
 			<!-- TMPL_IF NAME="mandatoryB_city" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -469,7 +468,7 @@
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryB_phone" -->
-				<label class="borrowers_mandafield">
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
@@ -477,18 +476,18 @@
 			<input type="text" name="B_phone" size="20" value="<!-- TMPL_VAR NAME="B_phone" -->">
 		</p>
 		<p>
-			<!-- TMPL_IF NAME="mandatorycontactnotes" -->
-				<label class="borrowers_mandafield">
+			<!-- TMPL_IF NAME="mandatorycontactnote" -->
+				<label style="font-weight:bold">
 			<!-- TMPL_ELSE -->
 				<label>
 			<!-- /TMPL_IF-->
 			Notes</label>
-			<textarea  name="contactnotes" cols="70" rows="2"   ><!-- TMPL_VAR NAME="contactnotes" --></textarea>
+			<textarea  name="contactnote" cols="70" rows="2"   ><!-- TMPL_VAR NAME="contactnote" --></textarea>
 		</p>
 	</fieldset>
 		<div>
-		<input type="button" class="borrowers_button" name="etapeprec1" value="Etape precedente" onclick="check_form_borrowers(0);">
-		<input type="button" class="borrowers_button" name="etapesuiv3" onclick="check_form_borrowers('3')" value="Etape suivante"></div>
+		<input type="button" class="borrowers_button" name="etapeprec1" value="previous step" onclick="check_form_borrowers(0);">
+		<input type="button" class="borrowers_button" name="etapesuiv3" onclick="check_form_borrowers('3')" value="next step"></div>
 	</p>
 </form>
 <!-- ############################END FORM PROFESSIONAL############################################"-->
@@ -497,7 +496,7 @@
 <!-- TMPL_IF NAME="step_3"-->
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 		<!-- 		field always hidden in different form (1,2,3) -->
-		<input type="hidden" name="BorrowerMandatoryfield" value="<!--TMPL_VAR NAME="BorrowerMandatoryfield"-->">
+		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
 		<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password">
 		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
 		<input type="hidden" name="type" value="borrowers">
@@ -507,7 +506,6 @@
 		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-		<input type="hidden" name="flags" value="<!-- TMPL_VAR NAME="flags" -->" />
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 		
@@ -545,7 +543,7 @@
 		<input type="hidden" name="B_city"  value="<!-- TMPL_VAR NAME="B_city" -->">
 		<input type="hidden" name="B_phone"  value="<!-- TMPL_VAR NAME="B_phone" -->"> 
 		<input type="hidden" name="fax"  value="<!-- TMPL_VAR NAME="fax" -->"> 	
-		<textarea style="display:none;" name="contactnotes" cols="70" rows="3"  ><!-- TMPL_VAR NAME="contactnotes" --></textarea>
+		<textarea style="display:none;" name="contactnote" cols="70" rows="3"  ><!-- TMPL_VAR NAME="contactnote" --></textarea>
 	
 		<!-- TMPL_IF NAME="opadd" -->
 			<input type="hidden" name="op" value="add">
@@ -554,7 +552,7 @@
 		<!-- /TMPL_IF -->
 		<p>
 			<!-- TMPL_IF NAME="mandatorycardnumber" -->
-			<label  class="borrowers_mandafield">
+			<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 			<label>
 			<!-- /TMPL_IF-->
@@ -570,7 +568,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Arrival date</label>
-			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onblur="CheckDate(document.form.dateenrolled.value);" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
+			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
@@ -580,7 +578,7 @@
 			<!-- /TMPL_IF-->
 			Expiry date</label>
 			<input type="text" name="dateexpiry" maxlength="10"  size="10"
-							onblur="CheckDate(document.form.dateexpiry.value);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
+							onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->
@@ -589,7 +587,7 @@
 				<label>
 			<!-- /TMPL_IF-->	
 			OPAC note</label>
-			<textarea  name="opacnote" cols="70" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
+			<textarea  name="opacnote" cols="40" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryborrowernotes" -->	
@@ -598,7 +596,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Library note</label>
-			<textarea name="borrowernotes" cols="70" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
+			<textarea name="borrowernotes" cols="40" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		</p>
 	</fieldset>
 	<fieldset id="memberentry_userid">
@@ -631,7 +629,7 @@
 		</p>
 		<!--this zones are not necessary in modif mode -->
 		<!-- TMPL_UNLESS NAME="opadd" -->
-			<h1>Warning</h1>
+			<h2>Warning</h2>
 			<!-- TMPL_LOOP NAME="flagloop" -->
 			<p>
 				<label class="borrowers_labels_title"><!-- TMPL_VAR NAME="html" --></label>

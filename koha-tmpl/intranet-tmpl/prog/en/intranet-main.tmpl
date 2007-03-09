@@ -1,99 +1,25 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha Intranet Home<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<h1>Koha Intranet Home</h1>
-<ul>
-	<li>Circulation
-		<ul>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl">Issues</a></li>
-			<li><a href="/cgi-bin/koha/circ/returns.pl">Returns</a></li>
-			<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
-			<li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set branch</a></li>
-			<li><a href="/cgi-bin/koha/circ/branchreserves.pl">Waiting reserves</a></li>
-			<li><a href="/cgi-bin/koha/circ/waitingreservestransfers.pl">Transfers to do</a></li>
-			<li><a href="/cgi-bin/koha/circ/currenttransfers.pl">Transfers to recieve</a></li>
-		</ul>
-	</li>
-	<li>Members
-		<ul>
-			<li><a href="/cgi-bin/koha/members/members-home.pl">Search</a></li>
- 			<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A"/>Add adult</a></li>
- 			<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C"/>Add child</a></li>
- 			<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=P"/>Add prof</a></li>
- 			<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=I"/>Add org</a></li>
-		</ul>
-	</li>
-	<li>Catalogue
-		<ul>
-			<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li>
-			<li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li>
-		</ul>
-	</li>
-	<li>Cataloging
-<ul>
-			<li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></li>
-			<li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add Full MARC Record</a></li>
-</ul></li>
-<li>Acquisitions<ul>
-<li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li><li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></li>
-<li><a href="/cgi-bin/koha/acqui/histsearch.pl">Search Order History</a></li>
-<li><a href="/cgi-bin/koha/import/breeding.pl">Import to reservoir</a></li><li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li></ul>
-	</li>
-	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-	<li>Accounts and Reports
-		<ul>
-			<li>Catalogue Statistics
-				<ul>
-					<li><a href="/cgi-bin/koha/reports/inventory.pl">Inventory/Stocktaking</a></li>
-					<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
-				</ul>
-			</li>
-			<li>Circulation Statistics
-				<ul>
-					<li><a href="/cgi-bin/koha/reports/stats.pl?time=yesterday">Till Reconcipation: Daily Report (yesterday)</a></li>
-					<li><a href="/cgi-bin/koha/reports/stats.pl?time=today">Till Reconcipation: Daily Report (today)</a></li>
-					<li><a href="/cgi-bin/koha/reports/overdue.pl">Overdue items</a></li>
-				</ul>
-			</li>
-			<li>Statistics Wizards
-				<ul>
-					<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
-					<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Borrowers</a></li>
-					<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue</a></li>
-					<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
-				</ul>
-			</li>
-			<li>Top Lists
-				<ul>
-					<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Most issuing Borrowers</a></li>
-					<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most issued items</a></li>
-				</ul>
-			</li>
-		</ul>
-	</li>
-	<li>Koha Administration
-		<ul>
-		<li><a href="/cgi-bin/koha/admin/admin-home.pl">Tools</a></li>
-		<li><a href="/cgi-bin/koha/admin/admin-home.pl">System Administration Home</a></li>
-		<li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li>
-		<li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes generator</a></li>
-		</ul>
-	</li>
-</ul>
-<div id="news">
-	<h1>News</h1>
-	<!-- TMPL_LOOP name="koha_news" -->
-			<table>
-				<tr>
-				<th>
-					<!-- TMPL_VAR NAME="title" --></th>
-					<td>
-					<!-- TMPL_VAR NAME="new" -->
-					</td>
-				<td>
-						<!-- TMPL_VAR NAME="newdate" --> 
-					</td>
-				</tr>
-			</table>
-	<!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    Koha Intranet Home
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+
+<div id="main">
+    <h1>Welcome to Koha</h1>
+    
+        <!-- TMPL_IF name="koha_news_count" -->
+            <p><!-- TMPL_VAR name="koha_news_count" --> recent news</p>
+            <table>
+            <!-- TMPL_LOOP name="koha_news" -->
+                <tr>
+                <th>
+                    on <!-- TMPL_VAR name="newdate" -->, <!-- TMPL_VAR name="title" -->
+                </th>
+                <tr><td>
+                    <p><!-- TMPL_VAR name="new" --></p>
+                </td></tr>
+            <!-- /TMPL_LOOP -->
+            </table>
+        <!-- /TMPL_IF -->
 </div>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

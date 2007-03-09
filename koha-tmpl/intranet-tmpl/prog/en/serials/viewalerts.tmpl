@@ -1,5 +1,6 @@
-<!-- TMPL_INCLUDE NAME="serials-top.inc" -->
-
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- View alerts<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 <div id="mainbloc">
 		<h1 class="serial">Alert subscribers for <!-- TMPL_VAR name="bibliotitle" --></h1>
 		<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial">subscription</a>
@@ -14,7 +15,7 @@
 			<!-- TMPL_LOOP NAME="alertloop" -->
 				<tr>
 					<td><!-- TMPL_VAR name="name" --></td>
-					<td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber">" class="button serial">View</a></td>
+					<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber">" class="button serial">View</a></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 			</table>

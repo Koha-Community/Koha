@@ -1,15 +1,12 @@
-<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Personal Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Personal Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
 <!-- TMPL_INCLUDE name="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 <!-- TMPL_INCLUDE name="navigation.inc" -->
 
-
 <!--CONTENT-->
-<div id="main">
-<h2>Personal Details: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
 
-<ul><li>	 <a href="/cgi-bin/koha/opac-account.pl">my fines</a> </li> <li> 
-	<a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a>		<!-- TMPL_IF name="OpacPasswordChange" --> </li> <li> <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a> <!-- /TMPL_IF --><!-- TMPL_IF NAME="opacreadinghistory" --></li> <li> <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> </li> <li> <a href="/cgi-bin/koha/opac-shelves.pl" class="button">my book lists</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" --></li> <li> <a href="/cgi-bin/koha/opac-suggestions.pl">purchase suggestions</a><!-- /TMPL_IF --></li></ul>
+    <!-- TMPL_INCLUDE name="usermenu.inc" -->
+<h2>Personal Details: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
 
 
 <table>
@@ -22,19 +19,19 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 <h3>Contact Details</h3>
 
 <table>
-<tr><th scope="row">Mailing Address:</th><td><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></td></tr>
+<tr><th scope="row">Mailing Address:</th><td><!-- TMPL_VAR NAME="address" -->, <!-- TMPL_VAR NAME="city" --></td></tr>
 
-<tr><th scope="row">Permanent Address:</th><td> <!-- TMPL_VAR NAME="altstreetaddress" -->, <!-- TMPL_VAR NAME="altcity" --></td></tr>
+<tr><th scope="row">Permanent Address:</th><td> <!-- TMPL_VAR NAME="B_address" -->, <!-- TMPL_VAR NAME="B_city" --></td></tr>
 
 <tr><th scope="row">Phone (Home):</th><td><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">Phone (Daytime):</th><td><!-- TMPL_IF NAME="phoneday" --><!-- TMPL_VAR NAME="phoneday" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">Phone (Daytime):</th><td><!-- TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">Fax:</th><td><!-- TMPL_IF NAME="faxnumber" --><!-- TMPL_VAR NAME="faxnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">Fax:</th><td><!-- TMPL_IF NAME="fax" --><!-- TMPL_VAR NAME="fax" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">E-mail:</th><td><!-- TMPL_IF NAME="emailaddress" --><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">E-mail:</th><td><!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">Textmessaging:</th><td><!-- TMPL_IF NAME="textmessaging" --><!-- TMPL_VAR NAME="textmessaging" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">Textmessaging:</th><td><!-- TMPL_IF NAME="opacnote" --><!-- TMPL_VAR NAME="opacnote" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 </table>
 
 
@@ -44,16 +41,13 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 
 <tr><th scope="row">Membership Category:</th><td>  <!-- TMPL_VAR NAME="categorycode" --></td></tr>
 
-<!-- <td>Area:</th><td>  <!-- TMPL_VAR NAME="area" --></td> -->
-
 <!-- <td>Fee:</th><td>  /year, Paid</td> -->
 
 <tr><th scope="row">Joined:</th><td><!-- TMPL_VAR NAME="dateenrolled" --></td></tr>
 
-<tr><th scope="row">Expires:</th><td><!-- TMPL_VAR NAME="expiry" --></td></tr>
+<tr><th scope="row">Expires:</th><td><!-- TMPL_VAR NAME="dateexpiry" --></td></tr>
 
 <!-- TMPL_IF NAME="joiningbranch" --><tr><th>Joining Branch:</th><td><!-- TMPL_VAR NAME="joiningbranch" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></table>
-
 
 
 <h3>Identity Details</h3>
@@ -62,25 +56,24 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 
 <tr><th scope="row">Sex:</th><td><!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr></table>
 
-
 <h3>Alternate Contact Details</h3>
-
-
+<!-- TMPL_IF NAME="contactname"-->
 <table><tr><th scope="row">Alternate Contact:</th><td> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">Phone:</th><td> <!-- TMPL_IF NAME="altphone" --><!-- TMPL_VAR NAME="altphone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">Phone:</th><td> <!-- TMPL_IF NAME="B_phone" --><!-- TMPL_VAR NAME="B_phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
-<tr><th scope="row">Relationship:</th><td> <!-- TMPL_IF NAME="altrelationship" --><!-- TMPL_VAR NAME="altrelationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </td></tr>
+<tr><th scope="row">Relationship:</th><td> <!-- TMPL_IF NAME="relationship" --><!-- TMPL_VAR NAME="relationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </td></tr>
 
-<tr><th scope="row">Notes:</th><td> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr>
+<tr><th scope="row">Notes:</th><td> <!-- TMPL_IF NAME="contactnote" --><!-- TMPL_VAR NAME="contactnote" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr>
 
-<tr><th scope="row">Guarantor:</th><td> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr></table>
+<tr><th scope="row">Guarantor:</th><td> <!-- TMPL_IF NAME="guarantorid" --><!-- TMPL_VAR NAME="guarantorid" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr></table>
 
+<!-- TMPL_ELSE -->
+No alternate contact.<br /><br />
+<!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
 <input type="submit" name="Modify" value="Modify Your Record" />
 </form>
 
-</div>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->
